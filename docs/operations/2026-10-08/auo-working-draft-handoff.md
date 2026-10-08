@@ -4,7 +4,7 @@ This branch starts at the pushed PR306 documentation head
 f020a2530c7b0e67d689103e639549f6429c3d15. It adds a readable real-data AUO
 working draft in docs/research/2026-10-08-auo-working-draft/article.md rather than
 another framework or fixture. Seven existing candidate-deep-research-v1 sections are
-reused. Core narrative is approximately4,200 Han characters, with8-quarter/24-month
+reused. Current editorial narrative is4,420 Han characters (original checkpoint4,222), with8-quarter/24-month
 tables and technical figures generated from the unchanged accepted data inputs.
 
 Source context now constrains adoption/share/ASP/margin/timing hypotheses: Intel silicon
@@ -41,12 +41,33 @@ was pursued for each documentation SHA.
 VM-only admission:initial visible free27,356,250,112bytes, whole workspace5,831,127,040bytes,
 cgroup memory.max34,359,738,368bytes / CPU400000100000. Project hard disk quota unknown.
 The task is bounded30minutes, one item, no heavy suite or new application code; existing normal
-web build and historical integration/type/lint remain historical results, not reruns. Actual
-lightweight arithmetic/content/byte checks and process RSS/disk measurements are in the new
-sanitized .agent/reports receipt. VPS heavy-work capacity does not block this admitted VM work.
+web build and historical integration/type/lint remain historical results, not reruns. At initial a38 checkpoint these checks were pending and the receipt was not yet in that tree.
+They subsequently completed61 content/clock/table/immutable-byte checks,4 existing-function sensitivity
+checks and9 fresh-process private-file hashes. Exact sanitized receipt:
+.agent/reports/2026-10-08T082600Z-auo-working-draft-validation.json (committed aftera38).
+The original pending metadata is retained as history, not a claim of completed checks ata38. VPS heavy-work capacity does not block this admitted VM work.
 
 Financial and market scoped unsigned reviews establish their stated evidence/math scope,
 not maker-test certification, protected attestation or article/thesis/strategy approval.
-Root will arrange independent exact draft review and a PR. This branch is unmerged and undeployed;
+Root created PR307 at https://github.com/Kaichen9527/stockinsider/pull/307; independent exact difference review is pending. This branch is unmerged and undeployed;
 AUO complete forecasts/article qualification, second-company research, live handoff and production
 business roundtrip remain open.
+
+
+## Editorial review successor
+
+Astra requested fair period comparison and an actual in-tree receipt for a38. The successor
+explicitly retains Q1 operating−636 to Q2+218 as genuine QoQ improvement while distinguishing
+YoY decline and negative TTM from proof of sustainability. Engineering terms moved to methods/
+handoff; asset/cycle cross-check is not asserted as investment truth or a bar to conditional
+forward EPS/PE once inputs exist. Tables, sensitivity parameters and immutable datasets are unchanged.
+Originala38 article/receipt/private export remain traceable; revised prose awaits scoped difference review.
+No App build or unrelated suite was rerun.
+
+Actual editorial successor receipt: docs/research/2026-10-08-auo-working-draft/editorial-validation.json.
+23/23 lightweight checks, zero fail/skip;73 table lines byte-identical to a38,24 references defined,
+28 typed paragraphs cited. Original61-check receipt applies to a38; it is not relabeled as a
+new article run. The first delta-check tool used the wrong ancestor for a later-added receipt
+and stopped; the corrected comparison uses committed16562c1, with this failure retained.
+This manual editing continuation exceeded the original30-minute engineering window; it is
+not automatic model budget acceptance. No full forecast, article approval or live handoff.

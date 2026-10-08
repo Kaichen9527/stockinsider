@@ -1,15 +1,14 @@
 {
   "schemaVersion": "manual-auo-working-draft-local-file-hashes-v1",
-  "articleSubjectCommit": "a38ccf9a831fce46d7bd4385acba397d735816ca",
   "articleContentReviewApproved": false,
   "files": {
     "README.md": {
-      "bytes": 2152,
-      "sha256": "0d0477c74d1d0891a1a146b0eb5c0ef0c6214de65d1d7f5144025d209a819cfe"
+      "bytes": 3133,
+      "sha256": "f7fd527a3cf87bd88f1e30b35310d672a25ce4af8e41f9274c4fac02e97f5bb8"
     },
     "article.md": {
-      "bytes": 24484,
-      "sha256": "30f4bd5c12199c1b48730a4697dfc6a6832deb494c5fe4c75e37d029ccfaca3e"
+      "bytes": 25076,
+      "sha256": "90309611783a5d6ce3e2c7fc59eafa2e9cae864a9abb56fda924c1b9fce76168"
     },
     "content-validation.json": {
       "bytes": 4901,
@@ -20,8 +19,12 @@
       "sha256": "301492d3fe0292f2317f97b4ab389cd8456753ec525c1675a52428637ce49109"
     },
     "draft-metadata.json": {
-      "bytes": 1513,
-      "sha256": "91bdb0db766168056f2bc331e10382f439e38053d467408c877334805a150dbd"
+      "bytes": 2295,
+      "sha256": "5690b3e77d83a5392b161216afb8483319990c7da07e5ede52f5708e3af5d741"
+    },
+    "editorial-validation.json": {
+      "bytes": 4559,
+      "sha256": "b2a5f8d2e7fe0f30a0da09e3ee8128530f974af31f314382470ae9b4042d6af1"
     },
     "public-context-relay.json": {
       "bytes": 7460,
@@ -43,5 +46,8 @@
       "bytes": 1098,
       "sha256": "fec04cf2b7c3d980fa90f032ad4616946480979568dab28d9a597298a277045e"
     }
-  }
+  },
+  "originalArticleSubjectCommit": "a38ccf9a831fce46d7bd4385acba397d735816ca",
+  "articleSubject": "editorial successor bytes identified by files.article.md SHA256; containing commit supplied after commit",
+  "editorialValidation": "editorial-validation.json"
 }

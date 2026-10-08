@@ -30,5 +30,18 @@
   "independentSourceReadingApprovalOfArticle": false,
   "sourceLedger": "source-ledger.json",
   "authoredAt": "2026-10-08T08:20:17.057931+00:00",
-  "checkpointValidationStatus": "article and generated tables saved; final lightweight citation/clock/immutable-byte verification pending"
+  "checkpointValidationStatus": "original a38 lightweight validation complete; editorial successor delta checks complete; independent difference review pending",
+  "checkpointValidationHistory": [
+    {
+      "subjectCommit": "a38ccf9a831fce46d7bd4385acba397d735816ca",
+      "status": "article and generated tables saved; final lightweight citation/clock/immutable-byte verification pending"
+    },
+    {
+      "validationReceipt": ".agent/reports/2026-10-08T082600Z-auo-working-draft-validation.json",
+      "status": "completed61 lightweight checks/4 sensitivity/9 private-file hashes; original article subjecta38ccf9"
+    }
+  ],
+  "editorialRevisionAt": "2026-10-08T08:30:37.429029+00:00",
+  "editorialRevisionReason": "ordinary reader language, fair QoQ/YoY/TTM comparison, conditional EPS/PE alongside asset/cycle approach; no dataset/table/arithmetic changes",
+  "editorialValidation": "editorial-validation.json"
 }
