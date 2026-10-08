@@ -200,3 +200,18 @@ These entries add to the dated historical ledger; prior pending rows are not sil
 
 ExistingCodexVM remains the implementation/heavy-test environment; VPSdisk does not block these tasks. Latest Slice1repair receipt measured sampledRSS1.54GB/taskdisk1.60GB/free23.50GB,4CPU/32GiB cgroup; filesystemfree is not projectquota proof. NoVPS or Macunique research data deleted during these increments. No strategy profit claim.
 
+
+## October9 00:20 Taipei — actual claim and review repairs
+
+See docs/operations/2026-10-09/progress-convergence-0020.md for exact subjects, evidence attribution and defects. Prior dated pending entries are retained as history, not current completion assertions.
+
+- [x] Converged dev4868472 actual25TAP positive observed claim/input/restart; earlier21TAP closed window kept distinct.78focused/112integration/types/lint/build maker evidence; no model/article publication.
+- [ ] Repair observed service INSERT lineage bypass, expired cross-scope slot and recaptured admission clock; independent3P2 requestchanges prevents release.
+- [x] Final outbox2ebb independent8/8; monitor d309 explicitCI membership/44tests; paper09a independent20/20plus4probes and releaseidentity1/1.
+- [ ] PaperVMchecks, real heldcompanyaction entitlements, live monitoring/renewal/schedules remain open.
+- [ ] Insider4b3 candidate78lightcases is not approved: durablecapacityreservation, FIFO/growingfile input and escapedprojectionpage bounds require3P2repairs plus actualPG/HTTP/FD/build.
+- [x] Add PR324 clockimplementation6a94498,9unit0skip, unchangedproductionSQL/sourceidentity; close reviewer-reported errorpathdeadline/secondsformat in maker.
+- [ ] Finalclockreview and actualLinuxPGopen/closed/restart/threeoriginalsuites/type/lint/build; do not call originalCIrepaired before these pass.
+- [ ] Firstpublication64f7 actualroleexecution/independentreview/submission, sourcebreadth, fullcandidatePITstrategy/forwardtrials, protectedapproval, reviewedmerge/deploy and fiveactualtradingdays remain open.
+
+Continue on existing CodexVM; VPSheavycapacity is not a development stop condition. No new VPS or Mac unique-data deletion, mainmerge, productionmigration, publication, scheduleactivation or profitclaim.
