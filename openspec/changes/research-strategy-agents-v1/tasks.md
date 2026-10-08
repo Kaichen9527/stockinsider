@@ -121,9 +121,10 @@ VPS→Cloud→review→authenticated business-result acceptance.
 - [ ] Live author dispatch, durable draft, independent budgeted article review,
   AUO and second-company publication, production deployment and five trading
   days remain open. Input preparation is not the six-role completion claim.
-- [ ] Fresh production automation defect: financial upload has no write lease
-  before private receipt registration; worker HTTP path also lacks a lease.
-  Repair and verify guarded acquire/release before retrying official documents.
+- [x] Financial upload/worker HTTP entry write-lease defect repaired at3953e7c;
+  independent19cases,104financialtests and329researchtests pass without skips.
+- [ ] Production document receipt/facts/terminal-state acceptance after genuine
+  protected merge/deploy; no official ingest was retried by this increment.
 
 October8 readonly capacity:15,240,617,984 available bytes; root filesystem
 76,887,154,688bytes. Still below the20.40GB heavy-work floor. No cleanup,
