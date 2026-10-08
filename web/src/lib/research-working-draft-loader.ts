@@ -8,7 +8,7 @@ const folders = { '2409':'2026-10-08-auo-four-segment-model', '2383':'2026-10-08
 export function workingDraftPreviewEnabled(env: Record<string, string | undefined>): boolean {
   return env.DATA_MODE === 'demo' && env.RESEARCH_WORKING_DRAFT_PREVIEW === 'enabled';
 }
-async function boundedFile(root: string, relative: string): Promise<Buffer> {
+export async function readBoundedWorkingDraftArtifact(root: string, relative: string): Promise<Buffer> {
   const parts = relative.split('/');
   if (parts.some(p => !p || p === '..' || p === '.')) throw new Error('invalid fixed path');
   let current = root;
@@ -17,7 +17,11 @@ async function boundedFile(root: string, relative: string): Promise<Buffer> {
     const stat = await lstat(current);
     if (!stat.isDirectory() || stat.isSymbolicLink()) throw new Error('draft directory boundary');
   }
-  const handle = await open(path.join(root, relative), constants.O_RDONLY | constants.O_NOFOLLOW);
+  const filename = path.join(root, relative), leaf = await lstat(filename);
+  if (!leaf.isFile() || leaf.isSymbolicLink()) throw new Error('draft non-regular leaf');
+  // NONBLOCK also closes the lstat/open race: a replacement FIFO never waits
+  // for a writer before the authoritative descriptor fstat rejects it.
+  const handle = await open(filename, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
   try {
     const before = await handle.stat({bigint:true});
     if (!before.isFile() || before.size > BigInt(512_000)) throw new Error('draft file bound');
@@ -38,7 +42,7 @@ export async function loadReadOnlyWorkingDraft(root: string, symbol: string) {
   if (symbol !== '2409' && symbol !== '2383') throw new Error('unsupported draft symbol');
   const folder = `docs/research/${folders[symbol]}`;
   const files = ['article.md','draft-metadata.json','model-results.json','hashes.json'];
-  const raws = await Promise.all(files.map(file => boundedFile(root, `${folder}/${file}`)));
+  const raws = await Promise.all(files.map(file => readBoundedWorkingDraftArtifact(root, `${folder}/${file}`)));
   const hash = (raw: Buffer) => createHash('sha256').update(raw).digest('hex');
   const meta = JSON.parse(raws[1].toString()), model = JSON.parse(raws[2].toString()), manifest = JSON.parse(raws[3].toString());
   for (let i = 0; i < 3; i++) {

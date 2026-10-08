@@ -7,3 +7,6 @@
 - [ ] Exact successor independently reviewed.
 
 Still pending: formal controlled author submission, live business handoff, production qualification/publication/strategy and source-controller1978 integration. None implied by this display increment.
+
+- [x] Independent12e29b7 FIFO P2 reproduced then fixed: nonblocking descriptor with nofollow/regular-file checks;13focused and actual HTTP/browser/types/lint/build pass.
+- [ ] FIFO successor independently reviewed; earlier pending history retained.
