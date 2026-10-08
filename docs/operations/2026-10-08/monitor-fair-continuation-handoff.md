@@ -75,3 +75,10 @@ Three additional acceptance cases fail against10123e0; the complete successor
 suite passes44/44 without skips. A14-33 boundary receipt retains these failures
 and new source hashes. This supplements the initial40 and clock-repair41 receipts,
 without rewriting their historical outcomes. Final exact-source review is pending.
+
+Independent review approved exact5dff99070ad2eb90dd8faeabd61ce20711b059d9:
+44cases0fail/0skip plus reviewer-owned actual-clock, midnight and unearned-progress
+probes. Four source hashes match the14-33 receipt; all three findings are closed.
+This is unsigned scoped code evidence. Normal VMbuild/integration and production
+daily coverage remain unverified. Draft#320 records this boundary. This later
+documentation update does not modify the four reviewed code/test files.
