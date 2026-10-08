@@ -234,7 +234,7 @@ function replaceSnapshotEvents(data:Record<string,Row[]>,snapshot:Row,events:Row
 test('anchor action context uses corrected zero-event head and ignores old, future and other-exchange events', async()=>{
   const {data,request}=fixture(true,false,239);
   const old=data[tables.snapshots].at(-1)!;
-  const correction={...old,snapshot_id:id(99001),collected_at:'2026-09-24T10:00:00+00:00',recorded_at:'2026-09-24T10:01:00Z'};
+  const correction:Row={...old,snapshot_id:id(99001),collected_at:'2026-09-24T10:00:00+00:00',recorded_at:'2026-09-24T10:01:00Z'};
   data[tables.snapshots].push(correction);
   data[tables.feeds].push(...data[tables.feeds].filter(row=>row.snapshot_id===old.snapshot_id).map(row=>({...row,snapshot_id:correction.snapshot_id,recorded_at:correction.recorded_at})));
   replaceSnapshotEvents(data,correction,[]);
