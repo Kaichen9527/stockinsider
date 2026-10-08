@@ -90,7 +90,10 @@ export function sourceControllerUrl(raw: string): URL {
   if (url.protocol !== 'https:' || url.port && url.port !== '443' || url.hash
     || raw !== url.toString() || sanitizePublicSourceUrl(raw) !== raw)
     throw new Error('source_controller_url_rejected');
+  const appleEpisode = url.hostname === 'podcasts.apple.com' && /^\/[a-z]{2}\/podcast\/[^/]+\/id\d+$/.test(url.pathname)
+    && [...url.searchParams].length === 1 && url.searchParams.has('i');
   for (const [key,value] of url.searchParams) {
+    if (appleEpisode && key === 'i' && /^\d{1,20}$/.test(value)) continue;
     if (!['v','id','articleid'].includes(key) || !/^[A-Za-z0-9_-]{1,100}$/u.test(value))
       throw new Error('source_controller_url_rejected');
   }

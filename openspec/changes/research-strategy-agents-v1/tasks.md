@@ -173,3 +173,8 @@ Recorded at 2026-10-08T16:41:41+08:00; attributed result relayed by the authoriz
 No App build or new source/data/code work was performed for this documentation archive.
 The review subject is exact f6, not the later docs head. No protected attestation or
 protected evidence ref was minted; PR307 remains unmerged and undeployed.
+
+
+## 2026-10-08 current source-cohort checkpoint
+
+1978 current observations now consumed by the existing bounded relay/controller and native guarded inbox harness; 40 source +12 native maker tests zero skip, types/lint/normal build pass. Three industry records persisted and replay accepted zero; authority remains empty, priority409 research_priority_read_failed and Top20 null. See source-cohort-consumer-handoff.md and observed-source-cohort-consumer-v1/tasks.md for remaining profile/intake/insider work. Root reports preview4aa unsigned scoped repair approval; earlier P2 pending history above is preserved. This is not publication, strategy, protected attestation or automatic role-budget acceptance. VM work continues independently of VPS heavy capacity.

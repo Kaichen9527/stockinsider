@@ -101,9 +101,74 @@ function fullBoundary(relay,social,classification,timed,now) {
     if(!Object.values(row).every(v=>typeof v==='string'))throw new Error('discovery_relay_classification_invalid');}
 }
 
+/** Broader current observation only; never a formal roster or trading grant.
+ * Large raw-byte references are admitted solely for the fixed official CFI surface.
+ * Selected JSON retains the ordinary controller's2MB/recursive credential boundary. */
+export function reconcileObservedResearchCohort(legacy, scope, now) {
+  if (!scope) return {members:legacy.members, evidence:null, excluded:null};
+  assertSourcePacketBoundary(scope);
+  only(scope,['schemaVersion','recordedAt','sources','companyMasterReferenceCommit','legacyClassificationReferenceCommit',
+    'encoding','parseDiagnostic','counts','newlyClassifiedOrdinarySymbols','rows','trustedAuthorityActivated',
+    'currentTradingEligibilityVerified','historicalPITEligible','limits']);
+  if (scope.schemaVersion!=='stockinsider-observed-official-security-scope-reconciliation-v1'
+    || scope.trustedAuthorityActivated!==false || scope.currentTradingEligibilityVerified!==false
+    || scope.historicalPITEligible!==false || scope.encoding!=='cp950_strict'
+    || !Array.isArray(scope.sources) || scope.sources.length!==1 || !Array.isArray(scope.rows) || scope.rows.length>5000
+    || !Array.isArray(scope.limits) || !scope.limits.every(v=>typeof v==='string')
+    || !Array.isArray(scope.newlyClassifiedOrdinarySymbols)
+    || !/^[0-9a-f]{40}$/.test(scope.companyMasterReferenceCommit)
+    || !/^[0-9a-f]{40}$/.test(scope.legacyClassificationReferenceCommit))throw new Error('discovery_relay_scope_invalid');
+  clockChain([scope.recordedAt,now]);
+  const source=scope.sources[0];
+  only(source,['label','url','attemptedAt','observedAt','httpStatus','status','resolvedUrl','bytes','sha256']);
+  if (source.url!=='https://isin.twse.com.tw/isin/C_public.jsp?strMode=2' || source.resolvedUrl!==source.url
+    || source.status!=='read_success' || source.httpStatus!==200 || !SHA.test(source.sha256)
+    || !Number.isInteger(source.bytes) || source.bytes<1 || source.bytes>12_000_000)throw new Error('discovery_relay_scope_receipt_invalid');
+  clockChain([source.attemptedAt,source.observedAt,scope.recordedAt,now]);
+  const seen=new Set(), legacyTwse=new Map(legacy.members.filter(r=>r.exchange==='TWSE').map(r=>[r.symbol,r]));
+  const members=[],excluded=[],added=[];let innovation=0,restrictedCfi=0;
+  for(const row of scope.rows) {
+    only(row,['symbol','name','isin','listingDateText','marketText','sectorText','cfi','note','sourceSection','classification','legacyStrictCfiMatched']);
+    if(!['symbol','name','isin','listingDateText','marketText','sectorText','cfi','note','sourceSection','classification'].every(k=>typeof row[k]==='string')
+      || typeof row.legacyStrictCfiMatched!=='boolean' || !/^\d{4,6}$/.test(row.symbol) || seen.has(row.symbol))throw new Error('discovery_relay_scope_row_invalid');
+    seen.add(row.symbol);
+    const ordinary=/^ES[A-Z]{4}$/.test(row.cfi) && /^\d{4}$/.test(row.symbol) && ['股票','創新板'].includes(row.sourceSection);
+    if(ordinary) {
+      if(row.classification!=='ordinary_equity_research_candidate' || row.legacyStrictCfiMatched!==legacyTwse.has(row.symbol))throw new Error('discovery_relay_scope_classification_invalid');
+      const old=legacyTwse.get(row.symbol);
+      if(old && (old.cfi!==row.cfi || old.isin!==row.isin || old.name!==row.name))throw new Error('discovery_relay_scope_legacy_mismatch');
+      if(!old)added.push(row.symbol);
+      if(row.sourceSection==='創新板')innovation++;
+      if(row.cfi!=='ESVUFR')restrictedCfi++;
+      members.push({symbol:row.symbol,name:row.name,exchange:'TWSE',cfi:row.cfi,isin:row.isin,
+        listingDate:row.listingDateText,sector:row.sectorText,observedAt:source.observedAt,sourceSection:row.sourceSection});
+    } else {
+      if(row.classification!=='non_ordinary_tdr' || row.sourceSection!=='臺灣存託憑證(TDR)' || !/^ED[A-Z]{4}$/.test(row.cfi)
+        || row.legacyStrictCfiMatched!==false)throw new Error('discovery_relay_scope_classification_invalid');
+      excluded.push({symbol:row.symbol,cfi:row.cfi,sourceSection:row.sourceSection,reason:'non_ordinary_tdr'});
+    }
+  }
+  for(const symbol of legacyTwse.keys())if(!members.some(r=>r.symbol===symbol))throw new Error('discovery_relay_scope_legacy_missing');
+  const tpex=legacy.members.filter(r=>r.exchange==='TPEX'), tpexSource=legacy.sources.find(r=>r.url==='https://isin.twse.com.tw/isin/C_public.jsp?strMode=4');
+  if(!tpexSource)throw new Error('discovery_relay_scope_tpex_missing');
+  for(const row of tpex){if(seen.has(row.symbol))throw new Error('discovery_relay_scope_duplicate_symbol');members.push({...row,observedAt:tpexSource.observedAt,sourceSection:'legacy TPEX stock observation'});}
+  const counts={twseMasterMatched:scope.rows.length,twseOrdinaryResearchCandidates:members.length-tpex.length,
+    twseInnovationBoard:innovation,twseOrdinaryAdditionalTransferRestrictionCfi:restrictedCfi,
+    twseTdrExcludedFromOrdinaryScope:excluded.length,unchangedObservedTpexOrdinary:tpex.length,
+    reconciledObservedOrdinaryResearchCohort:members.length,legacyStrictObservedCohort:legacy.members.length};
+  only(scope.counts,Object.keys(counts));
+  if(Object.keys(counts).some(k=>counts[k]!==scope.counts[k]) || added.length!==scope.newlyClassifiedOrdinarySymbols.length
+    || added.some(v=>!scope.newlyClassifiedOrdinarySymbols.includes(v)))throw new Error('discovery_relay_scope_count_mismatch');
+  return {members,excluded,evidence:{schemaVersion:scope.schemaVersion,recordedAt:scope.recordedAt,counts,
+    sourceReferences:[{url:source.url,observedAt:source.observedAt,responseBytes:source.bytes,responseSha256:source.sha256},
+      {...project(tpexSource,['url','observedAt','responseBytes','responseSha256'])}],
+    rawSourceHashesVerifiedByVm:false,selectedPacketHash:researchCanonicalHash(scope),trustedAuthorityActivated:false,
+    currentTradingEligibilityVerified:false,historicalPITEligible:false}};
+}
+
 /** Consume the attributed, reviewed relay; never invent publication clocks or
  * upgrade the observed classification list to the production authority registry. */
-export function prepareDiscoveryRelay(relay, social, classification, now = new Date().toISOString(), timed = null) {
+export function prepareDiscoveryRelay(relay, social, classification, now = new Date().toISOString(), timed = null, securityScope = null) {
   fullBoundary(relay,social,classification,timed,now);
   if (relay?.schemaVersion !== 'stockinsider-attributed-discovery-evidence-relay-v1'
     || !Array.isArray(relay.sourceRows) || relay.sourceRows.length < 1 || relay.sourceRows.length > 19
@@ -116,10 +181,12 @@ export function prepareDiscoveryRelay(relay, social, classification, now = new D
       || !['TWSE','TPEX'].includes(row.exchange)) throw new Error('discovery_relay_classification_invalid');
     symbols.add(row.symbol);
   }
+  const cohort = reconcileObservedResearchCohort(classification,securityScope,now);
+  const cohortSymbols=new Set(cohort.members.map(r=>r.symbol));
   const scopes = relay.sourceRows.map(row => {
     if (row.readStatus !== 'read_success' || row.publishedAt !== null || row.access !== 'public'
       || !/^[0-9a-f]{64}$/u.test(row.responseSha256) || !Number.isInteger(row.responseBytes)
-      || row.symbols.some(symbol => !symbols.has(symbol))
+      || row.symbols.some(symbol => !cohortSymbols.has(symbol))
       || row.subjectScope === 'industry_context' && row.symbols.length !== 0)
       throw new Error('discovery_relay_source_invalid');
     return {id:row.id,platform:row.sourcePlatform,url:row.sourceUrl,
@@ -172,12 +239,13 @@ export function prepareDiscoveryRelay(relay, social, classification, now = new D
   }
   const controllerInput={runId:randomUUID(),scopes,priorItems:[]};
   validateSourceControllerInput(controllerInput,now);
-  return {controllerInput, observationUniverse:classification.members.map(row=>({symbol:row.symbol,exchange:row.exchange,
+  return {controllerInput, observationUniverse:cohort.members.map(row=>({symbol:row.symbol,exchange:row.exchange,
+    cfi:row.cfi,sourceSection:row.sourceSection||null,observedAt:row.observedAt||classification.sources.find(r=>r.url.includes(row.exchange==='TWSE'?'market=1':'strMode=4'))?.observedAt||null,
     scopeStatus:relay.proposedCompanyScope.includes(row.symbol) ? 'needs_evidence' : 'not_assessed',
     reason:relay.proposedCompanyScope.includes(row.symbol) ? 'publication_instant_and_trusted_authority_missing' : 'outside_this_bounded_company_assessment',
     pricePhase:'unknown'})),trustedCandidateUniverse:false,top20:null,
     top20Gap:'trusted_authority_not_activated; observed classification is not the server official roster',
-    excludedNonCommon:null,originalSocialObservation:{
+    excludedNonCommon:cohort.excluded,classificationEvidence:cohort.evidence,originalSocialObservation:{
       schemaVersion:social.schemaVersion,recordedAt:social.recordedAt,availabilityConclusion:social.availabilityConclusion,
       publicationUsable:false,allRepliesRead:false,timedRead:project(social.timedRead,SOCIAL_TIMED_KEYS),
       earlierObservedSurfaceNotes:social.earlierObservedSurfaceNotes.map(row=>project(row,['url','status','exactReadClockNotCaptured','replyScope','replyPublishedAtDom','replySummary','summary','publishedAt'])),
@@ -187,8 +255,10 @@ export function prepareDiscoveryRelay(relay, social, classification, now = new D
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
-    if(![6,7].includes(process.argv.length)) throw new Error('discovery_relay_arguments_invalid');
-    const argv=process.argv.slice(2);const output=argv.pop();const [relayFile,socialFile,classificationFile,timedFile]=argv;
+    const argv=process.argv.slice(2);let scopeFile=null;
+    if(argv[0]==='--security-scope'){argv.shift();scopeFile=argv.shift();if(!scopeFile||!path.isAbsolute(scopeFile))throw new Error('discovery_relay_absolute_paths_required');}
+    if(![4,5].includes(argv.length))throw new Error('discovery_relay_arguments_invalid');
+    const output=argv.pop();const [relayFile,socialFile,classificationFile,timedFile]=argv;
     if(![relayFile,socialFile,classificationFile,output].every(path.isAbsolute)) throw new Error('discovery_relay_absolute_paths_required');
     const values=[];
     for(const name of [relayFile,socialFile,classificationFile,...(timedFile ? [timedFile] : [])]) {
@@ -196,9 +266,10 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
       if(bytes.length>2_000_000) throw new Error('discovery_relay_file_bound');
       values.push(JSON.parse(bytes.toString('utf8')));
     }
-    const prepared=prepareDiscoveryRelay(values[0],values[1],values[2],new Date().toISOString(),values[3] || null);
+    let scope=null;if(scopeFile){const bytes=await readFile(scopeFile);if(bytes.length>2_000_000)throw new Error('discovery_relay_file_bound');scope=JSON.parse(bytes.toString('utf8'));}
+    const prepared=prepareDiscoveryRelay(values[0],values[1],values[2],new Date().toISOString(),values[3] || null,scope);
     const run=await executeSourceController(prepared.controllerInput);
-    const result={prepared,run,recordedAt:new Date().toISOString(),relayHashes:values.map(researchCanonicalHash)};
+    const result={prepared,run,recordedAt:new Date().toISOString(),relayHashes:[...values,...(scope?[scope]:[])].map(researchCanonicalHash)};
     const handle=await open(output,'wx',0o600);
     try {await handle.writeFile(JSON.stringify(result,null,2)+'\n');await handle.sync();}finally{await handle.close();}
     console.log(JSON.stringify({scopeCount:run.receipts.length,inboxItems:run.inboxRequest.items.length,

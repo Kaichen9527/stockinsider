@@ -76,8 +76,8 @@ const KOL_SEEDS = [
       telegramUrl: 'https://t.me/s/Gooaye',
       podcastName: '股癌 Gooaye',
       rssUrl: 'https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml',
-      spotifyUrl: 'https://open.spotify.com/show/6xkNsQwVfWaB6MvdYhD5pW',
-      appleUrl: 'https://podcasts.apple.com/tw/podcast/%E8%82%A1%E7%99%8C/id1535838033',
+      spotifyUrl: 'https://open.spotify.com/show/1zWxx5pKk0XBEzMupVC7UZ',
+      appleUrl: 'https://podcasts.apple.com/tw/podcast/%E8%82%A1%E7%99%8C/id1500839292',
     },
   },
   {
