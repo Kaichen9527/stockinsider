@@ -44,8 +44,9 @@ test('consumes server membership held-first, accounts expiry, and never renews o
   assert.equal(saved.allTechnicalSnapshotsSaved, true);
   assert.equal(saved.outcomes.every(item => !item.entryResearchEligible), true); // Breakout != eligibility.
   assert.equal(saved.monthlyReviewsDue[0].disposition, 'independent_review_required');
-  for (const field of ['independentRenewalsPerformed', 'paperRiskProcessed', 'actualOrders', 'automaticRetry', 'fairResumeImplemented'])
+  for (const field of ['independentRenewalsPerformed', 'paperRiskProcessed', 'actualOrders', 'automaticRetry'])
     assert.equal(saved[field], false);
+  assert.equal(saved.fairResumeImplemented, true); // Approved additive continuation contract.
   assert.equal(saved.modelCalls, 0);
   const { receiptHash, ...material } = saved;
   assert.equal(receiptHash, researchCanonicalHash(material));

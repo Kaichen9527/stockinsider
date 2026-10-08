@@ -17,7 +17,8 @@ is an integrity check for trusted local artifacts, not an external signature or
 proof against a malicious local operator.
 
 The predecessor journal must have one coherent request/response trace ending
-in the same `batch_verified` receipt followed by `response_saved`. An uncertain,
+in `batch_verified` and `response_saved`, each binding the complete receipt hash
+without duplicating the complete cumulative receipt inside the journal. An uncertain,
 truncated, failed, mismatched, future-dated, previous-day, different-source or
 different-origin predecessor is rejected before any HTTP request. No operation
 with an uncertain mutation outcome is automatically retried. Every new run still
