@@ -9,8 +9,8 @@ Change only test-support process collection and its real-PG caller. All existing
 ## Required behavior
 
 - Return collected exit code/signal/stdout/stderr only after `close`, including data received after `exit`.
-- A spawn or stream error rejects. A null exit code is never converted to zero.
-- Bound each stream to64KiB and total wait to30seconds. On violation, reject, terminate only the original live child handle with SIGKILL and destroy its pipes, and never report success. After leader exit do not signal an old PID; keep the bounded drain deadline.
+- A spawn or stream error rejects; install error handling before stream validation, including absent-stream failed spawns. A null exit code is never converted to zero.
+- Bound each stream to64KiB and total wait to30seconds. On violation, reject, terminate only the original live child handle with a positive safe PID using SIGKILL and destroy its pipes, and never report success. After leader exit do not signal an old PID; keep the bounded drain deadline.
 - Timer completion and process events cannot settle twice. Normal completion clears the timer. Use a monotonic elapsed deadline and recheck it on close so a delayed timer cannot admit a late successful result.
 - Caller attaches rejection handling immediately before the PgSleep barrier and cancels outstanding collections on any barrier or later failure.
 - Preserve complete error diagnostics within the cap and keep SQL assertions meaningful. Exceeding cap/deadline is an explicit harness failure.

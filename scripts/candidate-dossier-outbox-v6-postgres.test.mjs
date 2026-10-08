@@ -245,7 +245,7 @@ test('piped child bounds an inherited pipe that remains open after leader exit',
 
 function fakePipedChild() {
   const child=new EventEmitter(); child.stdout=new PassThrough(); child.stderr=new PassThrough();
-  child.exitCode=null; child.signalCode=null; child.kills=0; child.kill=()=>{child.kills++;return true;};
+  child.pid=123456; child.exitCode=null; child.signalCode=null; child.kills=0; child.kill=()=>{child.kills++;return true;};
   return child;
 }
 
@@ -269,5 +269,15 @@ test('piped child captures post-exit data, clears timer, and rejects stream erro
     if(kind==='stream') broken.stderr.emit('error',new Error('broken stream')); else attempt.cancel();
     await rejected; assert.equal(broken.kills,1); assert.equal(broken.stderr.destroyed,true);
     broken.emit('close',0,null); broken.emit('error',new Error('late'));
+  }
+});
+
+test('piped child never signals a failed spawn without a positive PID and handles late errors', async () => {
+  for (const pid of [undefined, 0, -1]) {
+    const child=fakePipedChild(); child.pid=pid; child.stdout=null; child.stderr=null;
+    const collection=collectPipedChild(child);
+    await assert.rejects(collection.result,/piped_child_streams_required/);
+    assert.equal(child.kills,0);
+    assert.doesNotThrow(()=>child.emit('error',new Error('late failed spawn')));
   }
 });
