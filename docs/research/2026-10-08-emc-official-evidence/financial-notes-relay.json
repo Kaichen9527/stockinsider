@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "stockinsider-attributed-official-financial-notes-relay-v1",
+  "symbol": "2383",
+  "recordedAt": "2026-10-08T12:08:29.997535+00:00",
+  "source": {
+    "label": "2026q2",
+    "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/115/273512_115Q2_%E5%90%88%E4%BD%B5_%E5%AE%8C%E7%A8%BF%E8%B2%A1%E5%A0%B1_IMSv1-%E9%9B%BB%E5%AD%90%E6%9B%B8_IMSv1.pdf",
+    "attemptedAt": "2026-10-08T09:21:30.333371+00:00",
+    "httpStatus": 200,
+    "status": "read_success",
+    "bytes": 1113066,
+    "sha256": "245b41f9f54c9542ffac64141d546fde0f28d0537d9f36307028b081318e0f20",
+    "observedAt": "2026-10-08T09:21:30.635619+00:00",
+    "rawFile": "2026q2.pdf",
+    "textSha256": "1e784f0272aec1e423499f9e962778caf86f702a9556bdbf42d594a045e0abc6"
+  },
+  "amountUnit": "TWD_thousands",
+  "shareUnit": "thousand_shares",
+  "columnPeriods": [
+    "2026Q2",
+    "2025Q2",
+    "2026H1",
+    "2025H1"
+  ],
+  "earningsPerShareNotes": {
+    "pdfPages": [
+      25,
+      26
+    ],
+    "basicOwnersProfit": [
+      9873398,
+      3477879,
+      15213191,
+      6946779
+    ],
+    "basicWeightedShares": [
+      358321,
+      347145,
+      358321,
+      346902
+    ],
+    "convertibleAfterTaxNumeratorAdjustment": [
+      0,
+      -30322,
+      0,
+      -12319
+    ],
+    "dilutedOwnersProfit": [
+      9873398,
+      3447557,
+      15213191,
+      6934460
+    ],
+    "convertibleAdditionalShares": [
+      0,
+      11140,
+      0,
+      11382
+    ],
+    "employeeAdditionalShares": [
+      96,
+      273,
+      176,
+      440
+    ],
+    "dilutedWeightedShares": [
+      358417,
+      358558,
+      358497,
+      358724
+    ],
+    "reportedBasicEps": [
+      27.55,
+      10.02,
+      42.46,
+      20.03
+    ],
+    "reportedDilutedEps": [
+      27.55,
+      9.62,
+      42.44,
+      19.33
+    ]
+  },
+  "consolidatedProductRevenue": {
+    "pdfPages": [
+      26,
+      27
+    ],
+    "2026Q2": {
+      "prepreg": 19101540,
+      "copperCladLaminate": 27867033,
+      "other": 306621,
+      "total": 47275194
+    },
+    "2026H1": {
+      "prepreg": 32586020,
+      "copperCladLaminate": 47224213,
+      "other": 532222,
+      "total": 80342455
+    }
+  },
+  "nonOperatingNotes": {
+    "pdfPages": [
+      28,
+      29
+    ],
+    "bankInterestIncome": [
+      63444,
+      66010,
+      133335,
+      108831
+    ],
+    "fxGainLoss": [
+      72137,
+      -313976,
+      69449,
+      -279671
+    ],
+    "otherGainsLossesTotal": [
+      140432,
+      -128230,
+      271467,
+      64261
+    ],
+    "interestExpenseBeforeCapitalization": [
+      156649,
+      114354,
+      294583,
+      221914
+    ],
+    "capitalizedInterest": [
+      4341,
+      0,
+      7037,
+      0
+    ],
+    "financeCost": [
+      152308,
+      114354,
+      287546,
+      221914
+    ]
+  },
+  "limits": [
+    "These are reported period weighted shares, not October outstanding shares or verified future shares. Carrying a baseline forward remains an explicit research assumption.",
+    "Product revenue categories do not disclose M8/M9 contribution, grade-specific margin or utilization; do not invent those splits.",
+    "Net non-operating actuals can be reconciled with note components. Removing FX or other gains for normalized EPS requires tax and attribution assumptions, not direct subtraction from owners EPS.",
+    "Current and comparative convertible numerator adjustments and employee shares differ; do not reuse a simple constant dilution ratio.",
+    "Existing original source acquisition clocks/hashes retained; this extraction first made October8 and cannot be backdated to report availability."
+  ]
+}
