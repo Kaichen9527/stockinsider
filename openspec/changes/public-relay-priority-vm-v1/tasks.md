@@ -1,0 +1,7 @@
+- [x] Public relay precision/rights/outcome validation and adversarial coverage.
+- [x] Existing authenticated inbox/priority bounded local consumer with replay fencing.
+- [x] Actual corrected attributed summaries consumed locally; missing precision retained.
+- [x] Final affected suite 117/117 zero skip and isolated PostgreSQL persistence/restart acceptance.
+- [ ] Successor types/lint/normal build (earlier pass preserved; final edits pending).
+- [ ] Independent exact code review and draft PR delivery.
+- [ ] Genuine complete-roster local app ranking/Top20 (blocked by missing authority RPCs; not fabricated).
