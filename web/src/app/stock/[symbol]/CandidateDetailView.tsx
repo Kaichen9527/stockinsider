@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReadOnlyResearchDraft, WorkingDraftBlock } from "@/lib/research-working-draft";
 import type { CandidateDetailPayload } from "@/lib/candidate-detail";
 import { sanitizePublicSourceUrl } from "@/lib/public-source-url.ts";
 import CandidateHistoryChart from "@/lib/candidate-history-chart";
@@ -296,12 +297,47 @@ function EvidenceSources({ detail }: { detail: CandidateDetailPayload }) {
   );
 }
 
-export function DeepResearchView({ article, sourceLinks, layoutPreview = false }: {
+function WorkingResearchView({draft}: {draft: ReadOnlyResearchDraft}) {
+  const sources = new Map(draft.sources.map(s => [s.key, s]));
+  const inline = (text: string) => text.split(/(\[[A-Z]+\])/g).map((part,i) => {
+    const match = /^\[([A-Z]+)\]$/.exec(part), source = match ? sources.get(match[1]) : null;
+    return source?.url ? <a key={i} href={source.url} target="_blank" rel="noopener noreferrer" className="text-orange-700 underline underline-offset-2">{part}</a> : <span key={i}>{part.replace(/\*\*/g,'')}</span>;
+  });
+  const renderBlocks = (blocks: WorkingDraftBlock[]) => blocks.map((block,index) => block.kind === 'paragraph'
+    ? <p key={index} className="max-w-4xl whitespace-pre-wrap leading-8 text-stone-700 dark:text-stone-300">{inline(block.text)}</p>
+    : <div key={index} className="overflow-x-auto"><table className="w-full border-collapse text-right text-sm" aria-label="工作稿可重算表格">
+      <thead><tr>{block.headers.map((h,i)=><th key={i} className="border-b border-line p-3">{h}</th>)}</tr></thead>
+      <tbody>{block.rows.map((row,i)=><tr key={i}>{row.map((cell,j)=><td key={j} className="border-b border-line/70 p-3 whitespace-nowrap">{cell}</td>)}</tr>)}</tbody>
+    </table></div>);
+  return <article aria-labelledby="deep-research-title" data-research-state="working_draft">
+    <header className="border-b border-line pb-5">
+      <p className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">唯讀、未發布研究工作稿。條件財測仍有假設與缺口，不代表合理價或進場批准。</p>
+      <p className="research-kicker mt-4">DEEP RESEARCH · {draft.symbol} · {dateLabel(draft.authoredAt)}</p>
+      <h1 id="deep-research-title" className="mt-2 text-2xl font-semibold">{draft.title}</h1>
+      <p className="mt-3 leading-8">{inline(draft.summary)}</p>
+      <p className="mt-2 text-xs text-stone-500">作者核對時間 {draft.authoredAt}；證據截點 {draft.evidenceCutoffAt}。當下研究，非歷史提前發現。</p>
+    </header>
+    <nav aria-label="文章章節" className="my-5 flex flex-wrap gap-2 text-sm">{draft.sections.map(s=><a key={s.key} href={`#research-${s.key}`} className="rounded-full border border-line px-3 py-2">{s.title}</a>)}</nav>
+    <div className="space-y-10">{draft.sections.map(s=><section key={s.key} id={`research-${s.key}`}><h2 className="text-xl font-semibold">{s.title}</h2><div className="mt-4 space-y-5">{renderBlocks(s.blocks)}</div></section>)}</div>
+    <details className="mt-8 rounded-2xl border border-line p-5"><summary className="cursor-pointer font-semibold">背景、完整計算表與方法缺口</summary><div className="mt-4 space-y-5">{renderBlocks(draft.appendix)}</div></details>
+    <details className="mt-5 rounded-2xl border border-line p-5"><summary className="cursor-pointer font-semibold">來源與版本核對</summary>
+      <ul className="mt-4 space-y-3 text-sm">{draft.sources.map(s=><li key={s.key}>{s.url ? <a href={s.url} target="_blank" rel="noopener noreferrer" className="underline">[{s.key}] {s.title} · {s.url}</a> : <span>[{s.key}] {s.title}（本機歷史參照，無公開來源連結）</span>}<span className="ml-2 text-stone-500">精確發布時間未由此稿核實</span></li>)}</ul>
+      <p className="mt-4 break-all text-xs">文章 SHA256 {draft.articleSha256}；計算版本 {draft.modelCanonicalHash}。這些是版本核對，不是正式研究資格。</p>
+    </details>
+  </article>;
+}
+
+export function DeepResearchView({ article, sourceLinks, layoutPreview = false, draft }: {
   article: Pick<NonNullable<CandidateDetailPayload['deepResearch']>,
     'summary' | 'authoredAt' | 'evidenceCutoffAt' | 'sections' | 'scenarios' | 'companyBackground'> | null;
   sourceLinks: NonNullable<CandidateDetailPayload['deepResearchSources']>;
   layoutPreview?: boolean;
+  draft?: ReadOnlyResearchDraft;
 }) {
+  if (draft) {
+    if (article) throw new Error("exclusive research display state");
+    return <WorkingResearchView draft={draft}/>;
+  }
   if (!article) return null;
   const sources = new Map(sourceLinks.map((source) => [source.id, source]));
   const sourceNumbers = new Map(sourceLinks.map((source, index) => [source.id, index + 1]));
@@ -313,7 +349,7 @@ export function DeepResearchView({ article, sourceLinks, layoutPreview = false }
     <article className="mt-8" aria-labelledby="deep-research-title">
       <div className="border-b border-line pb-5">
         {layoutPreview ? <p className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
-          版面預覽：沿用 2026-09-25 友達示範文章的已標日期內容。新流程尚未完成財測、獨立審查與正式發布；本頁沒有新目標價或進場訊號。
+          版面預覽：沿用 {dateLabel(article.authoredAt)} 示範文章的已標日期內容。此頁不代表正式發布或進場批准。
         </p> : null}
         <p className="research-kicker">DEEP RESEARCH · {dateLabel(article.authoredAt)}</p>
         <h2 id="deep-research-title" className="mt-2 text-2xl font-semibold">產業變化、獲利傳導與進場判斷</h2>
@@ -379,7 +415,7 @@ export function DeepResearchView({ article, sourceLinks, layoutPreview = false }
             </tr>
           ))}</tbody>
         </table>
-      </section> : <p className="mt-8 rounded-lg border border-line p-4 text-sm">財測與估值：等待新三事業財務橋接及獨立審查；請勿將舊版價位當作本流程結論。</p>}
+      </section> : <p className="mt-8 rounded-lg border border-line p-4 text-sm">財測與估值：此版本尚無可展示的完整情境，請勿將舊版價位當作新結論。</p>}
       <details className="mt-8 rounded-2xl border border-line p-5">
         <summary className="cursor-pointer font-semibold">了解公司與財務假設</summary>
         {article.companyBackground ? <p className="mt-4 whitespace-pre-wrap leading-7">{article.companyBackground}</p> : null}
