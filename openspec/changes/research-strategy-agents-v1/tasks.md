@@ -178,8 +178,6 @@ protected evidence ref was minted; PR307 remains unmerged and undeployed.
 ## 2026-10-08 current source-cohort checkpoint
 
 1978 current observations now consumed by the existing bounded relay/controller and native guarded inbox harness; 40 source +12 native maker tests zero skip, types/lint/normal build pass. Three industry records persisted and replay accepted zero; authority remains empty, priority409 research_priority_read_failed and Top20 null. See source-cohort-consumer-handoff.md and observed-source-cohort-consumer-v1/tasks.md for remaining profile/intake/insider work. Root reports preview4aa unsigned scoped repair approval; earlier P2 pending history above is preserved. This is not publication, strategy, protected attestation or automatic role-budget acceptance. VM work continues independently of VPS heavy capacity.
-<<<<<<< HEAD
-=======
 
 ## October8 15:15UTC convergence — scoped code vs live operation
 
@@ -217,7 +215,6 @@ See docs/operations/2026-10-09/progress-convergence-0020.md for exact subjects, 
 - [ ] Firstpublication64f7 actualroleexecution/independentreview/submission, sourcebreadth, fullcandidatePITstrategy/forwardtrials, protectedapproval, reviewedmerge/deploy and fiveactualtradingdays remain open.
 
 Continue on existing CodexVM; VPSheavycapacity is not a development stop condition. No new VPS or Mac unique-data deletion, mainmerge, productionmigration, publication, scheduleactivation or profitclaim.
->>>>>>> 9ac2479 (docs: record actual claim acceptance and independent repair backlog)
 
 ### VM checkpoint after 00:20 historical ledger (2026-10-09 Taipei)
 
