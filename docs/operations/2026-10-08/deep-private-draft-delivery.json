@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "research-deep-private-draft-delivery-v1",
+  "recordedAt": "2026-10-08T06:39:53.027145+00:00",
+  "testedCodeCommit": "06dc3cd41dd6d6ee64381c507ac15c60ca86229d",
+  "codeAndValidationHead": "34a4461dbb7b3ea69d95d0b90e38bf18b69aa0df",
+  "branch": "codex/deep-private-draft-oct08",
+  "push": "successful",
+  "requestedPrBase": "codex/financial-document-write-lease-oct08",
+  "draftPrCreated": false,
+  "draftPrError": "gh pr create: POST https://api.github.com/graphql: Forbidden",
+  "prDescriptionSha256": "b733a6ec1105b8846bf66f79a1ecf354df8e860d6e95bfe0142c4ac4ed384b69",
+  "validationReceiptSha256": "f34f9ecb9a9a1cfb2997f155d696dbbbdcca58d6d5acc0ebb30e4d4cdcbad8b0",
+  "independentReview": "pending",
+  "originalCheckoutCommit": "9cce0516f73ad81a1497d4a9278a9b9d77c118d3",
+  "originalCheckoutClean": true,
+  "deployment": false,
+  "productionRoundtripVerified": false
+}
