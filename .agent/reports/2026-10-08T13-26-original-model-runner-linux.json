@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "stockinsider-original-model-runner-linux-supplement-v1",
+  "recordedAt": "2026-10-08T13:27:16.800445Z",
+  "codeSubject": "b1d96eb96156d3e1394615bb32c7a2d7ef90b661",
+  "checkoutDocsHeadBeforeSupplement": "a2d6055eb0f01949d455e4b5072ca3636a05ad35",
+  "testFile": "scripts/model-runner-v3/model-runner-v3.test.js",
+  "testFileSha256": "3221ad5c017de418d79bf31b8d58bf0e3d9251d88568e691620b9a8075c793bb",
+  "tests": {
+    "total": 23,
+    "pass": 19,
+    "fail": 4,
+    "skip": 0
+  },
+  "stage": {
+    "stage": "original-model-runner",
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "scripts/run-node22.js",
+      "--test",
+      "scripts/model-runner-v3/model-runner-v3.test.js"
+    ],
+    "startedAt": "2026-10-08T13:25:22.274Z",
+    "completedAt": "2026-10-08T13:25:22.997Z",
+    "elapsedSeconds": 0.7238966469885781,
+    "exitCode": 1,
+    "sampledAggregateRssPeakBytes": 119074816,
+    "observedTaskDiskPeakBytes": 1267281920,
+    "availableBeforeBytes": 25059127296,
+    "availableAfterBytes": 25059086336,
+    "guardTermination": null
+  },
+  "failures": [
+    {
+      "test": 12,
+      "name": "host pin fixture has an exact hash-bound format",
+      "error": "ROUTING_BLOCKED",
+      "diagnosis": "verifyCurrentNode at hostPreflight.js222 requires platform/architecture; actual linux/x64 versus fixture darwin/arm64"
+    },
+    {
+      "test": 16,
+      "name": "disabled doctor accepts only the exact successor and rejects historical selectors",
+      "error": "child exit1 expected0",
+      "diagnosis": "doctor stderr empty in assertion; underlying child stdout not retained by this test, exact doctor rejection reason not independently reconstructed"
+    },
+    {
+      "test": 18,
+      "name": "pinned Codex blocks filesystem/DNS/network paths",
+      "error": "ROUTING_BLOCKED at copyAuthenticationMaterial",
+      "diagnosis": "metadata-only subsequent lstat found operating-account auth source absent ENOENT; no auth bytes available to read/copy"
+    },
+    {
+      "test": 19,
+      "name": "pinned Codex propagates network denials before actual model attempt",
+      "error": "real-model worker status1, stderr routing or host preflight blocked",
+      "diagnosis": "worker refused; precise internal branch not exposed; no successful live model/oracle execution claimed"
+    }
+  ],
+  "metadataOnlyDiagnosis": {
+    "actualPlatform": "linux",
+    "actualArchitecture": "x64",
+    "pinnedPlatform": "darwin",
+    "pinnedArchitecture": "arm64",
+    "authSourceExists": false,
+    "authLstatError": "ENOENT",
+    "authContentRead": false
+  },
+  "artifacts": [
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/original-model-runner.log",
+      "bytes": 8930,
+      "sha256": "d7cbd709e2137f2e0c899727287b98aee6da657937260bdf0f494e2fd10a04eb"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/original-model-runner.time",
+      "bytes": 887,
+      "sha256": "2a966a1e857d324615df5c7fd2d17b7017ad1c19fcfc86604227e11979792e65"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/original-model-runner.json",
+      "bytes": 549,
+      "sha256": "f44fb52d9916942405158d6c2738f8e07522dc31f4d2b570b6fd0e768a21a58b"
+    }
+  ],
+  "earlierFiveFileTests": {
+    "pass": 62,
+    "fail": 0,
+    "skip": 0,
+    "coversThisFile": false
+  },
+  "normalBuildRerunForDocsSupplement": false,
+  "protectedMarkerExternallyAdded": false,
+  "hostFixtureModified": false,
+  "authenticationSuppliedOrCopied": false,
+  "ownerAuthorityGranted": false,
+  "modelCallSucceeded": false,
+  "originalCiFixed": false,
+  "protectedAttestation": false
+}
