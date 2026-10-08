@@ -67,13 +67,21 @@ BEGIN
  END IF;
  RETURN result;
 END $$;
+-- Fail closed beyond PostgreSQL microsecond precision; never truncate an ordering clock.
+CREATE FUNCTION public.research_observed_instant_v1(value text) RETURNS timestamptz LANGUAGE plpgsql IMMUTABLE SET search_path=pg_catalog AS $$
+DECLARE parsed timestamptz;
+BEGIN
+ IF value IS NULL OR value !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}T(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]([.][0-9]{1,6})?(Z|[+-][0-9]{2}:[0-9]{2})$' THEN RAISE EXCEPTION 'observed_clock_invalid'; END IF;
+ parsed:=value::timestamptz;IF NOT isfinite(parsed) THEN RAISE EXCEPTION 'observed_clock_invalid'; END IF;
+ RETURN parsed;
+END $$;
 CREATE FUNCTION public.admit_research_observed_roster_v1(p_snapshot_hash text,p_canonical_packet text)
  RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog AS $$
 DECLARE packet jsonb; payload jsonb; request jsonb; member jsonb; source jsonb;
  existing public.research_observed_roster_snapshots_v1%ROWTYPE;
  company public.research_observed_companies_v1%ROWTYPE;
  now_clock timestamptz; latest timestamptz; mappings jsonb:='[]'; mapping_hash text;
- n integer; excluded_n integer; matching_n integer; legacy jsonb; scope jsonb;
+ n integer; excluded_n integer; matching_n integer; legacy jsonb; scope jsonb; expected_members jsonb; expected_excluded jsonb; source_attempted timestamptz; source_observed timestamptz; scope_recorded timestamptz; legacy_recorded timestamptz;
 BEGIN
  IF p_snapshot_hash IS NULL OR p_snapshot_hash !~ '^[a-f0-9]{64}$' OR p_canonical_packet IS NULL OR octet_length(p_canonical_packet)>2000000 THEN RAISE EXCEPTION 'observed_admission_shape_invalid'; END IF;
  packet:=p_canonical_packet::jsonb; payload:=packet->'payload';request:=packet->'request';legacy:=request->'legacyClassification';scope:=request->'securityScope';
@@ -102,6 +110,28 @@ BEGIN
   OR legacy->'trustedAuthorityActivated' IS DISTINCT FROM 'false'::jsonb OR scope->'trustedAuthorityActivated' IS DISTINCT FROM 'false'::jsonb
   OR legacy->'historicalPITEligible' IS DISTINCT FROM 'false'::jsonb OR scope->'historicalPITEligible' IS DISTINCT FROM 'false'::jsonb
   OR legacy->'currentTradingEligibilityVerified' IS DISTINCT FROM 'false'::jsonb OR scope->'currentTradingEligibilityVerified' IS DISTINCT FROM 'false'::jsonb THEN RAISE EXCEPTION 'observed_raw_boundary_invalid'; END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_object_keys(legacy) k WHERE k NOT IN('schemaVersion','recordedAt','sources','scope','historicalPITEligible','currentTradingEligibilityVerified','trustedAuthorityActivated','members'))
+  OR EXISTS(SELECT 1 FROM jsonb_object_keys(scope) k WHERE k NOT IN('schemaVersion','recordedAt','sources','companyMasterReferenceCommit','legacyClassificationReferenceCommit','encoding','parseDiagnostic','counts','newlyClassifiedOrdinarySymbols','rows','trustedAuthorityActivated','currentTradingEligibilityVerified','historicalPITEligible','limits'))
+  OR jsonb_typeof(legacy->'members') IS DISTINCT FROM 'array' OR jsonb_typeof(legacy->'sources') IS DISTINCT FROM 'array' OR jsonb_array_length(legacy->'sources') IS DISTINCT FROM 2
+  OR jsonb_typeof(scope->'rows') IS DISTINCT FROM 'array' OR jsonb_array_length(scope->'rows')>5000 OR jsonb_typeof(scope->'newlyClassifiedOrdinarySymbols') IS DISTINCT FROM 'array'
+  OR jsonb_typeof(payload->'sourceReferences') IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'observed_raw_shape_invalid'; END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(scope->'rows')r CROSS JOIN unnest(ARRAY['symbol','name','isin','listingDateText','marketText','sectorText','cfi','note','sourceSection','classification'])k WHERE jsonb_typeof(r->k) IS DISTINCT FROM 'string')
+  OR EXISTS(SELECT 1 FROM jsonb_array_elements(scope->'rows')r WHERE jsonb_typeof(r->'legacyStrictCfiMatched') IS DISTINCT FROM 'boolean' OR EXISTS(SELECT 1 FROM jsonb_object_keys(r)k WHERE k NOT IN('symbol','name','isin','listingDateText','marketText','sectorText','cfi','note','sourceSection','classification','legacyStrictCfiMatched')))
+  OR EXISTS(SELECT 1 FROM jsonb_array_elements(legacy->'members')r CROSS JOIN unnest(ARRAY['symbol','name','exchange','cfi','isin','listingDate','sector'])k WHERE jsonb_typeof(r->k) IS DISTINCT FROM 'string')
+  OR EXISTS(SELECT 1 FROM jsonb_array_elements(legacy->'members')r WHERE EXISTS(SELECT 1 FROM jsonb_object_keys(r)k WHERE k NOT IN('symbol','name','exchange','cfi','isin','listingDate','sector')))
+  OR EXISTS(SELECT 1 FROM jsonb_array_elements(payload->'members')r WHERE btrim(r->>'name')='' OR r->>'isin' !~ '^[A-Z0-9]{12}$') THEN RAISE EXCEPTION 'observed_raw_row_schema_invalid'; END IF;
+ IF jsonb_typeof(legacy->'scope') IS DISTINCT FROM 'string' OR scope->>'companyMasterReferenceCommit' IS NULL OR scope->>'companyMasterReferenceCommit' !~ '^[a-f0-9]{40}$' OR scope->>'legacyClassificationReferenceCommit' IS NULL OR scope->>'legacyClassificationReferenceCommit' !~ '^[a-f0-9]{40}$'
+  OR jsonb_typeof(scope->'limits') IS DISTINCT FROM 'array' OR EXISTS(SELECT 1 FROM jsonb_array_elements(scope->'limits')v WHERE jsonb_typeof(v)<>'string') THEN RAISE EXCEPTION 'observed_raw_metadata_invalid'; END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(legacy->'sources') WITH ORDINALITY AS sources(r,ord) WHERE
+  EXISTS(SELECT 1 FROM jsonb_object_keys(r)k WHERE k NOT IN('url','observedAt','responseBytes','responseSha256','selectedCount'))
+  OR r->>'url' IS DISTINCT FROM CASE WHEN ord=1 THEN 'https://isin.twse.com.tw/isin/class_main.jsp?Page=&issuetype=1&market=1' ELSE 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=4' END
+  OR r->>'responseSha256' IS NULL OR r->>'responseSha256' !~ '^[a-f0-9]{64}$'
+  OR jsonb_typeof(r->'responseBytes') IS DISTINCT FROM 'number' OR r->>'responseBytes' !~ '^[0-9]+$' OR (r->>'responseBytes')::bigint NOT BETWEEN 1 AND 4000000
+  OR r->'selectedCount' IS DISTINCT FROM to_jsonb((SELECT count(*) FROM jsonb_array_elements(legacy->'members')m WHERE m->>'exchange'=CASE WHEN ord=1 THEN 'TWSE' ELSE 'TPEX' END))) THEN RAISE EXCEPTION 'observed_legacy_receipt_invalid'; END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(scope->'sources')r WHERE EXISTS(SELECT 1 FROM jsonb_object_keys(r)k WHERE k NOT IN('label','url','attemptedAt','observedAt','httpStatus','status','resolvedUrl','bytes','sha256')) OR jsonb_typeof(r->'bytes') IS DISTINCT FROM 'number' OR r->>'bytes' !~ '^[0-9]+$' OR jsonb_typeof(r->'httpStatus') IS DISTINCT FROM 'number') THEN RAISE EXCEPTION 'observed_scope_receipt_shape_invalid'; END IF;
+ IF payload->'sourceReferences' IS DISTINCT FROM jsonb_build_array(
+  jsonb_build_object('url',scope#>'{sources,0,url}','observedAt',scope#>'{sources,0,observedAt}','responseBytes',scope#>'{sources,0,bytes}','responseSha256',scope#>'{sources,0,sha256}'),
+  jsonb_build_object('url',legacy#>'{sources,1,url}','observedAt',legacy#>'{sources,1,observedAt}','responseBytes',legacy#>'{sources,1,responseBytes}','responseSha256',legacy#>'{sources,1,responseSha256}')) THEN RAISE EXCEPTION 'observed_source_projection_mismatch'; END IF;
  n:=jsonb_array_length(payload->'members');excluded_n:=jsonb_array_length(payload->'excluded');
  IF n<1 OR n>5000 OR excluded_n>5000 OR jsonb_array_length(payload->'sourceReferences')<>2 THEN RAISE EXCEPTION 'observed_admission_count_invalid'; END IF;
  IF payload->>'classificationHash'<>encode(extensions.digest(convert_to(public.research_observed_canonical_json_v1(jsonb_build_object('members',payload->'members','excluded',payload->'excluded')),'UTF8'),'sha256'),'hex')
@@ -109,37 +139,64 @@ BEGIN
  -- Serialize identity/snapshot admissions; all DB clocks are captured after this lock.
  PERFORM pg_advisory_xact_lock(hashtextextended('research_observed_admission_v1',0));now_clock:=clock_timestamp();
  SELECT * INTO existing FROM public.research_observed_roster_snapshots_v1 WHERE snapshot_hash=p_snapshot_hash;
- IF FOUND THEN
-  IF existing.canonical_packet<>p_canonical_packet THEN RAISE EXCEPTION 'observed_replay_bytes_mismatch'; END IF;
-  RETURN jsonb_build_object('snapshotHash',existing.snapshot_hash,'mappingDigest',existing.mapping_digest,'includedCount',existing.included_count,'excludedCount',existing.excluded_count,'receivedAt',existing.received_at,'latestObservedAt',existing.latest_observed_at,'idempotentReplay',true,'researchQualified',false,'strategyApproved',false,'entryEligible',false);
- END IF;
+ scope_recorded:=public.research_observed_instant_v1(scope->>'recordedAt');legacy_recorded:=public.research_observed_instant_v1(legacy->>'recordedAt');
+ source_attempted:=public.research_observed_instant_v1(scope#>>'{sources,0,attemptedAt}');source_observed:=public.research_observed_instant_v1(scope#>>'{sources,0,observedAt}');
+ IF source_attempted>source_observed OR source_observed>scope_recorded OR scope_recorded>now_clock OR legacy_recorded>now_clock THEN RAISE EXCEPTION 'observed_source_clock_chain_invalid'; END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(legacy->'sources') r WHERE public.research_observed_instant_v1(r->>'observedAt')>legacy_recorded) THEN RAISE EXCEPTION 'observed_legacy_source_clock_chain_invalid'; END IF;
+ IF scope->>'encoding' IS DISTINCT FROM 'cp950_strict' OR jsonb_array_length(scope->'sources') IS DISTINCT FROM 1 OR jsonb_typeof(scope->'counts') IS DISTINCT FROM 'object' THEN RAISE EXCEPTION 'observed_raw_scope_invalid'; END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(legacy->'members')r WHERE r->>'exchange' NOT IN('TWSE','TPEX') OR r->>'cfi' IS DISTINCT FROM 'ESVUFR' OR r->>'symbol' !~ '^[1-9][0-9]{3}$') OR (SELECT count(DISTINCT r->>'symbol')FROM jsonb_array_elements(legacy->'members')r) IS DISTINCT FROM jsonb_array_length(legacy->'members') THEN RAISE EXCEPTION 'observed_legacy_member_invalid'; END IF;
+ IF (SELECT count(DISTINCT r->>'symbol')FROM jsonb_array_elements(scope->'rows')r) IS DISTINCT FROM jsonb_array_length(scope->'rows') THEN RAISE EXCEPTION 'observed_raw_symbol_duplicate'; END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(scope->'rows')r WHERE r->'legacyStrictCfiMatched' IS DISTINCT FROM to_jsonb(EXISTS(SELECT 1 FROM jsonb_array_elements(legacy->'members')l WHERE l->>'exchange'='TWSE' AND l->>'symbol'=r->>'symbol'))) OR EXISTS(SELECT 1 FROM jsonb_array_elements(legacy->'members')l WHERE l->>'exchange'='TWSE' AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(scope->'rows')r WHERE r->>'symbol'=l->>'symbol' AND r->>'cfi'=l->>'cfi' AND r->>'isin'=l->>'isin' AND r->>'name'=l->>'name')) THEN RAISE EXCEPTION 'observed_legacy_crosscheck_invalid'; END IF;
+ -- Reconstruct all derived columns and exclusions from the original request. A self-consistent caller hash is not a classifier receipt.
+ SELECT coalesce(jsonb_agg(projection.member ORDER BY projection.member->>'symbol'),'[]') INTO expected_members FROM (
+  SELECT jsonb_build_object('symbol',r->'symbol','name',r->'name','exchange','TWSE','isin',r->'isin','cfi',r->'cfi','listingDate',r->'listingDateText','sector',r->'sectorText','observedAt',scope#>'{sources,0,observedAt}','sourceSection',r->'sourceSection') member FROM jsonb_array_elements(scope->'rows')r WHERE r->>'sourceSection' IN('股票','創新板') AND r->>'cfi' ~ '^ES[A-Z]{4}$' AND r->>'symbol' ~ '^[1-9][0-9]{3}$'
+  UNION ALL
+  SELECT r||jsonb_build_object('observedAt',legacy#>'{sources,1,observedAt}','sourceSection','legacy TPEX stock observation') FROM jsonb_array_elements(legacy->'members')r WHERE r->>'exchange'='TPEX'
+ )projection;
+ SELECT coalesce(jsonb_agg(jsonb_build_object('symbol',r->'symbol','cfi',r->'cfi','sourceSection',r->'sourceSection','reason','non_ordinary_tdr') ORDER BY r->>'symbol'),'[]') INTO expected_excluded FROM jsonb_array_elements(scope->'rows')r WHERE r->>'sourceSection'='臺灣存託憑證(TDR)' AND r->>'cfi' ~ '^ED[A-Z]{4}$';
+ IF expected_members IS DISTINCT FROM payload->'members' OR expected_excluded IS DISTINCT FROM payload->'excluded' THEN RAISE EXCEPTION 'observed_classifier_output_mismatch'; END IF;
+ IF scope->'counts' IS DISTINCT FROM jsonb_build_object(
+  'twseMasterMatched',jsonb_array_length(scope->'rows'),'twseOrdinaryResearchCandidates',jsonb_array_length(expected_members)-(SELECT count(*)FROM jsonb_array_elements(legacy->'members')r WHERE r->>'exchange'='TPEX'),
+  'twseInnovationBoard',(SELECT count(*)FROM jsonb_array_elements(scope->'rows')r WHERE r->>'sourceSection'='創新板'),
+  'twseOrdinaryAdditionalTransferRestrictionCfi',(SELECT count(*)FROM jsonb_array_elements(scope->'rows')r WHERE r->>'sourceSection' IN('股票','創新板') AND r->>'cfi'<>'ESVUFR'),
+  'twseTdrExcludedFromOrdinaryScope',jsonb_array_length(expected_excluded),'unchangedObservedTpexOrdinary',(SELECT count(*)FROM jsonb_array_elements(legacy->'members')r WHERE r->>'exchange'='TPEX'),
+  'reconciledObservedOrdinaryResearchCohort',jsonb_array_length(expected_members),'legacyStrictObservedCohort',jsonb_array_length(legacy->'members')) THEN RAISE EXCEPTION 'observed_derived_counts_mismatch'; END IF;
+ IF jsonb_array_length(scope->'newlyClassifiedOrdinarySymbols') IS DISTINCT FROM (SELECT count(*) FROM jsonb_array_elements(scope->'rows')r WHERE r->>'sourceSection' IN('股票','創新板') AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(legacy->'members')l WHERE l->>'exchange'='TWSE' AND l->>'symbol'=r->>'symbol')) OR EXISTS(SELECT 1 FROM jsonb_array_elements(scope->'rows')r WHERE r->>'sourceSection' IN('股票','創新板') AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(legacy->'members')l WHERE l->>'exchange'='TWSE' AND l->>'symbol'=r->>'symbol') AND NOT (scope->'newlyClassifiedOrdinarySymbols' @> jsonb_build_array(r->'symbol'))) THEN RAISE EXCEPTION 'observed_derived_additions_mismatch'; END IF;
+
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(scope->'rows') r WHERE (
+   (r->>'sourceSection' IN('股票','創新板') AND r->>'cfi' ~ '^ES[A-Z]{4}$' AND r->>'symbol' ~ '^[1-9][0-9]{3}$' AND r->>'classification'='ordinary_equity_research_candidate') OR
+   (r->>'sourceSection'='臺灣存託憑證(TDR)' AND r->>'cfi' ~ '^ED[A-Z]{4}$' AND r->>'classification'='non_ordinary_tdr' AND r->'legacyStrictCfiMatched'='false'::jsonb)) IS NOT TRUE) THEN RAISE EXCEPTION 'observed_raw_classification_invalid'; END IF;
  latest:='-infinity';
  FOR source IN SELECT value FROM jsonb_array_elements(payload->'sourceReferences') LOOP
-  IF source->>'url' NOT IN('https://isin.twse.com.tw/isin/C_public.jsp?strMode=2','https://isin.twse.com.tw/isin/C_public.jsp?strMode=4') OR source->>'responseSha256' !~ '^[a-f0-9]{64}$'
+  IF source->>'url' IS NULL OR source->>'responseSha256' IS NULL OR source->>'responseBytes' IS NULL OR source->>'url' NOT IN('https://isin.twse.com.tw/isin/C_public.jsp?strMode=2','https://isin.twse.com.tw/isin/C_public.jsp?strMode=4') OR source->>'responseSha256' !~ '^[a-f0-9]{64}$'
    OR (source->>'responseBytes')::bigint<1 OR (source->>'responseBytes')::bigint>(CASE WHEN source->>'url' LIKE '%strMode=2' THEN 12000000 ELSE 4000000 END)
-   OR (source->>'observedAt')::timestamptz>now_clock THEN RAISE EXCEPTION 'observed_source_receipt_invalid'; END IF;
+   OR public.research_observed_instant_v1(source->>'observedAt')>now_clock THEN RAISE EXCEPTION 'observed_source_receipt_invalid'; END IF;
   IF source->>'url'='https://isin.twse.com.tw/isin/C_public.jsp?strMode=2' THEN
    IF source->>'responseSha256' IS DISTINCT FROM scope#>>'{sources,0,sha256}' OR source->>'responseBytes' IS DISTINCT FROM scope#>>'{sources,0,bytes}' OR source->>'observedAt' IS DISTINCT FROM scope#>>'{sources,0,observedAt}'
     OR scope#>>'{sources,0,url}' IS DISTINCT FROM source->>'url' OR scope#>>'{sources,0,resolvedUrl}' IS DISTINCT FROM source->>'url' OR scope#>>'{sources,0,status}' IS DISTINCT FROM 'read_success' OR scope#>>'{sources,0,httpStatus}' IS DISTINCT FROM '200'
-    OR (scope#>>'{sources,0,attemptedAt}')::timestamptz>(source->>'observedAt')::timestamptz THEN RAISE EXCEPTION 'observed_source_binding_invalid'; END IF;
+    OR public.research_observed_instant_v1(scope#>>'{sources,0,attemptedAt}')>public.research_observed_instant_v1(source->>'observedAt') THEN RAISE EXCEPTION 'observed_source_binding_invalid'; END IF;
   ELSE
    IF source->>'responseSha256' IS DISTINCT FROM legacy#>>'{sources,1,responseSha256}' OR source->>'responseBytes' IS DISTINCT FROM legacy#>>'{sources,1,responseBytes}' OR source->>'observedAt' IS DISTINCT FROM legacy#>>'{sources,1,observedAt}' OR legacy#>>'{sources,1,url}' IS DISTINCT FROM source->>'url' THEN RAISE EXCEPTION 'observed_source_binding_invalid'; END IF;
   END IF;
-  latest:=greatest(latest,(source->>'observedAt')::timestamptz);
+  latest:=greatest(latest,public.research_observed_instant_v1(source->>'observedAt'));
  END LOOP;
- IF (legacy->>'recordedAt')::timestamptz>now_clock OR (scope->>'recordedAt')::timestamptz>now_clock THEN RAISE EXCEPTION 'observed_roster_future'; END IF;
+ IF public.research_observed_instant_v1(legacy->>'recordedAt')>now_clock OR public.research_observed_instant_v1(scope->>'recordedAt')>now_clock THEN RAISE EXCEPTION 'observed_roster_future'; END IF;
  -- Recompute inclusion from the supplied official classification rows, not caller membership flags.
  SELECT count(*) INTO matching_n FROM jsonb_array_elements(scope->'rows') r WHERE r->>'sourceSection' IN('股票','創新板') AND r->>'cfi' ~ '^ES[A-Z]{4}$' AND r->>'symbol' ~ '^[1-9][0-9]{3}$';
  matching_n:=matching_n+(SELECT count(*) FROM jsonb_array_elements(legacy->'members') r WHERE r->>'exchange'='TPEX' AND r->>'cfi'='ESVUFR');
  IF matching_n<>n OR excluded_n<>(SELECT count(*) FROM jsonb_array_elements(scope->'rows') r WHERE r->>'sourceSection'='臺灣存託憑證(TDR)' AND r->>'cfi' ~ '^ED[A-Z]{4}$') THEN RAISE EXCEPTION 'observed_membership_count_mismatch'; END IF;
+ IF existing.snapshot_hash IS NOT NULL THEN
+  IF existing.canonical_packet<>p_canonical_packet THEN RAISE EXCEPTION 'observed_replay_bytes_mismatch'; END IF;
+  RETURN jsonb_build_object('snapshotHash',existing.snapshot_hash,'mappingDigest',existing.mapping_digest,'includedCount',existing.included_count,'excludedCount',existing.excluded_count,'receivedAt',existing.received_at,'latestObservedAt',existing.latest_observed_at,'idempotentReplay',true,'researchQualified',false,'strategyApproved',false,'entryEligible',false);
+ END IF;
  FOR member IN SELECT value FROM jsonb_array_elements(payload->'members') LOOP
   IF member->>'exchange'='TWSE' THEN
    SELECT count(*) INTO matching_n FROM jsonb_array_elements(scope->'rows') r WHERE r->>'symbol'=member->>'symbol' AND r->>'name'=member->>'name' AND r->>'isin'=member->>'isin' AND r->>'cfi'=member->>'cfi' AND r->>'sourceSection'=member->>'sourceSection' AND r->>'sourceSection' IN('股票','創新板');
   ELSIF member->>'exchange'='TPEX' THEN
    SELECT count(*) INTO matching_n FROM jsonb_array_elements(legacy->'members') r WHERE r->>'exchange'='TPEX' AND r->>'symbol'=member->>'symbol' AND r->>'name'=member->>'name' AND r->>'isin'=member->>'isin' AND r->>'cfi'=member->>'cfi';
   ELSE RAISE EXCEPTION 'observed_exchange_invalid'; END IF;
-  IF (member->>'observedAt')::timestamptz IS DISTINCT FROM (SELECT (r->>'observedAt')::timestamptz FROM jsonb_array_elements(payload->'sourceReferences')r WHERE r->>'url'=CASE WHEN member->>'exchange'='TWSE' THEN 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=2' ELSE 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=4' END) THEN RAISE EXCEPTION 'observed_member_clock_binding_invalid'; END IF;
-  IF matching_n<>1 OR member->>'cfi' !~ '^ES[A-Z]{4}$' OR (member->>'observedAt')::timestamptz>now_clock THEN RAISE EXCEPTION 'observed_member_binding_invalid'; END IF;
+  IF public.research_observed_instant_v1(member->>'observedAt') IS DISTINCT FROM (SELECT (r->>'observedAt')::timestamptz FROM jsonb_array_elements(payload->'sourceReferences')r WHERE r->>'url'=CASE WHEN member->>'exchange'='TWSE' THEN 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=2' ELSE 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=4' END) THEN RAISE EXCEPTION 'observed_member_clock_binding_invalid'; END IF;
+  IF matching_n<>1 OR member->>'cfi' !~ '^ES[A-Z]{4}$' OR public.research_observed_instant_v1(member->>'observedAt')>now_clock THEN RAISE EXCEPTION 'observed_member_binding_invalid'; END IF;
   SELECT * INTO company FROM public.research_observed_companies_v1 WHERE market='TW' AND symbol=member->>'symbol';
   IF FOUND THEN
    IF company.exchange<>member->>'exchange' OR company.isin<>member->>'isin' OR company.issuer_name<>member->>'name' THEN RAISE EXCEPTION 'observed_issuer_conflict'; END IF;
@@ -157,7 +214,7 @@ BEGIN
  RETURN jsonb_build_object('snapshotHash',p_snapshot_hash,'mappingDigest',mapping_hash,'includedCount',n,'excludedCount',excluded_n,'receivedAt',now_clock,'latestObservedAt',latest,'idempotentReplay',false,'researchQualified',false,'strategyApproved',false,'entryEligible',false);
 END $$;
 ALTER FUNCTION public.admit_research_observed_roster_v1(text,text) OWNER TO research_observed_rpc_owner;
-REVOKE ALL ON FUNCTION public.research_observed_canonical_json_v1(jsonb),public.reject_research_observed_mutation_v1(),public.admit_research_observed_roster_v1(text,text) FROM PUBLIC,anon,authenticated,service_role;
-GRANT EXECUTE ON FUNCTION public.research_observed_canonical_json_v1(jsonb) TO research_observed_rpc_owner;
+REVOKE ALL ON FUNCTION public.research_observed_instant_v1(text),public.research_observed_canonical_json_v1(jsonb),public.reject_research_observed_mutation_v1(),public.admit_research_observed_roster_v1(text,text) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.research_observed_instant_v1(text),public.research_observed_canonical_json_v1(jsonb) TO research_observed_rpc_owner;
 GRANT EXECUTE ON FUNCTION public.admit_research_observed_roster_v1(text,text) TO service_role;
 COMMIT;

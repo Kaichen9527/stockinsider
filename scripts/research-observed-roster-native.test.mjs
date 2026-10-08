@@ -1,4 +1,6 @@
 import test from 'node:test';
+import {createHash}from 'node:crypto';
+import {researchCanonicalHash}from '../web/src/lib/research-agent-qualification.ts';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,6 +18,21 @@ test('real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL
    const dbCanonical=sql(`SELECT public.research_observed_canonical_json_v1('${result.canonicalPacket.replaceAll("'","''")}'::jsonb)`);
    if(dbCanonical!==result.canonicalPacket){let i=0;while(dbCanonical[i]===result.canonicalPacket[i])i++;throw Error('canonical_mismatch_at_'+i+':'+JSON.stringify([dbCanonical.slice(i-30,i+50),result.canonicalPacket.slice(i-30,i+50)]));}
    const verify=(name,fn)=>t.test(name,fn);
+   const canonical=value=>value===null||typeof value!=='object'?JSON.stringify(value):Array.isArray(value)?`[${value.map(canonical).join(',')}]`:`{${Object.entries(value).sort(([a],[b])=>a.localeCompare(b)).map(([k,v])=>`${JSON.stringify(k)}:${canonical(v)}`).join(',')}}`;
+   for(const [name,mutate]of [
+    ['sector',p=>{p.payload.members[0].sector='forged-sector';}],
+    ['listingDate',p=>{p.payload.members[0].listingDate='1900/01/01';}],
+    ['TPEXsourceSection',p=>{p.payload.members.find(m=>m.exchange==='TPEX').sourceSection='invented section';}],
+    ['excludedSymbolReason',p=>{p.payload.excluded[0].symbol='9999';p.payload.excluded[0].reason='invented exclusion';}],
+    ['observedAfterRecordedMicrosecond',p=>{p.request.securityScope.recordedAt='2026-10-08T12:21:15.657942+00:00';}],
+    ['missingRecordedAt',p=>{delete p.request.securityScope.recordedAt;}],
+    ['infiniteRecordedAt',p=>{p.request.securityScope.recordedAt='infinity';}],
+   ])await verify(`direct service RPC rejects ${name} despite recomputed trusted-content labels`,async()=>{
+    const packet=JSON.parse(result.canonicalPacket);mutate(packet);packet.payload.classificationHash=researchCanonicalHash({members:packet.payload.members,excluded:packet.payload.excluded});
+    const bytes=canonical(packet);const hash=createHash('sha256').update(bytes).digest('hex');
+    const response=await rpc('admit_research_observed_roster_v1',{p_snapshot_hash:hash,p_canonical_packet:bytes});
+    assert.notEqual(response.status,200,`direct RPC accepted ${name}`);
+   });
    await verify('unauthenticated observed endpoint401 and malformed authenticated packet400',async()=>{
     const r=await fetch(origin+'api/internal/research-observed-roster',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});assert.equal(r.status,401);
     const bad=await post('api/internal/research-observed-roster',{...body,trusted:true});assert.equal(bad.status,400);
@@ -49,7 +66,7 @@ test('real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL
     for(const table of ['stocks','stock_instruments_v3','stock_sector_assignments_v3',...report.readOnlyDependencyTables])assert.equal(sql(`SELECT count(*)FROM ${table}`),'0');
     const r=await post('api/internal/research-priority-run',{...priorityRequest,assessments:[]});assert.equal(r.status,409);
    });
-   report.observedChecks=6;report.observedResearchOnlyIdentities=1978;report.optionalFormalMappings=0;
+   report.observedChecks=13;report.observedResearchOnlyIdentities=1978;report.optionalFormalMappings=0;
   }});
- assert.equal(report.passed,true);assert.equal(report.observedChecks,6);
+ assert.equal(report.passed,true);assert.equal(report.observedChecks,13);
 });

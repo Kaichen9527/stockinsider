@@ -20,3 +20,12 @@
 
 - [x] Exact25ce3a5 final types/lint/normalbuild; final-checks receipt14:32, independent code review still pending.
 - [ ] Next separate Slice2/3 implementation; no job/input/Top20 completion inferred from Slice1 admission.
+
+
+### Slice1 direct-service RPC review repair
+
+- [x] Preserve exact31a7ddd request-changes and maker red direct-RPC evidence; reviewer did not execute PG.
+- [x] DB reconstruction/whole sorted member and excluded projections, required finite microsecond clock chains; no silent precision truncation.
+- [x] Real guarded1978/concurrent/restart/ACL green acceptance23TAP/22checks, zero skip; seven direct adversarial RPC regressions.
+- [ ] Independent exact successor review; Slice2/3 positive scoped priority/job/claim/input remain separate and pending.
+- [ ] Keep old EP8 publication versus current acquisition explicit without altering priority scoring weights.
