@@ -178,3 +178,25 @@ protected evidence ref was minted; PR307 remains unmerged and undeployed.
 ## 2026-10-08 current source-cohort checkpoint
 
 1978 current observations now consumed by the existing bounded relay/controller and native guarded inbox harness; 40 source +12 native maker tests zero skip, types/lint/normal build pass. Three industry records persisted and replay accepted zero; authority remains empty, priority409 research_priority_read_failed and Top20 null. See source-cohort-consumer-handoff.md and observed-source-cohort-consumer-v1/tasks.md for remaining profile/intake/insider work. Root reports preview4aa unsigned scoped repair approval; earlier P2 pending history above is preserved. This is not publication, strategy, protected attestation or automatic role-budget acceptance. VM work continues independently of VPS heavy capacity.
+
+## October8 15:15UTC convergence — scoped code vs live operation
+
+These entries add to the dated historical ledger; prior pending rows are not silently promoted to complete. All new PRs remain draft/unmerged. Main/production/schedules were not changed.
+
+- [x] AUO four-segment and EMC company-specific, recalculable manual research models/articles, plus one shared working-draft renderer (PR310/312/313), independently reviewed within stated scopes. Actual Cloud desktop/mobile draft rendering measured; these are not genuine leased author/reviewer publications or qualified entry recommendations.
+- [x] Three actual public industry summaries admitted via guarded isolated source inbox with restart/exact replay; observed1978-company/10TDR-exclusion scope retained. No fictional company hypotheses or formalstocks authority (PR315/316).
+- [x] Official TWSE/TPEx insider row schemas, identity/date/trust fields and partial-coverage health repaired at2cca2f8 (PR319): maker60tests inclPG; independent59tests+probes. Public raw capture attribution retained separately from VM parsing.
+- [ ] Insider market coverage still resets on changed whole-response hash. Bounded immutable snapshot/CAS/freshness contract53bdeed is under requirements review; not implemented. A partial successful batch is not complete platform coverage.
+- [x] Immutable observed-company roster Slice1 repaired at635cb97 (PR321): maker23TAP/22checks incldirectRPC+types/lint/build; independent10puretests+full1978/10projection+staticSQL review, noP1/P2. Static independent SQL review is not independently rerunPG.
+- [ ] Observed Slice2 scoped ranking/atomic first-discovery/enqueue/currentDB-week shared quota and Slice3 typed claim/input are still in progress on existingVM. Formalpriority still lacks the actual formal roster; do not invent authority to bypass it.
+- [x] Daily technical fair continuation code5dff990 independently approved44tests+probes; docheadac0b0565, PR320. No starvation from the first32symbols when trusted cycle continuation is used; explicitHTTPfailure is not a saved technical snapshot.
+- [ ] MonitorVM integration/build, actual daily schedule, monthly independent renewal and held-position runtime acceptance remain open.
+- [x] Inactive native JSONL parser1afdd69 (PR317) and process lifecycle0825db4 (PR318) independently validated50and81cases respectively, plus scoped probes. Original Linux platform/auth failures retained; neither activates native runner or protected authority. VM compatibility verification queued.
+- [x] Original GitHub run35888990201 audit saved: test9JSONL passed; actualfail12hostdev/inode mismatch and16doctor. Exact executable component/doctor check remain unproved; no speculation promoted to root cause.
+- [x] Existing outbox race harness pipe collection repaired atde57358 (PR322). Oldrealchild regression failed; maker and independentMacPG17.10+collector7/7passed0skip. AllSQLrace/status/regex/count expectations unchanged. VMregression/normalbuild queued; originalCIcausality not proved.
+- [ ] First-publication v2 requirements64f7 approved; actual leased author/durable draft/independent budgeted review/fenced submission still pending implementation and genuine role execution. ManualAUO/EMCarticles are not substituted for role evidence.
+- [ ] Actual platform content breadth (KOLvideo/audio/social/broker), fair newsource coverage, exactPIT price/benchmark/corporateactions, fullcandidate strategy/forward trials and user-approved strategy adoption are not complete.
+- [ ] Exact protected requirements/architecture/review authority graph, reviewed mergecommit, productionmigration/deploy, schedule enablement and fiveactualtradingdays remain open. OrdinaryGitHubproduct-runtime successes are not protectedapproval. PR315ordinaryCIharness failure has a separate proposed repairPR322; it was not blindly rerun.
+
+ExistingCodexVM remains the implementation/heavy-test environment; VPSdisk does not block these tasks. Latest Slice1repair receipt measured sampledRSS1.54GB/taskdisk1.60GB/free23.50GB,4CPU/32GiB cgroup; filesystemfree is not projectquota proof. NoVPS or Macunique research data deleted during these increments. No strategy profit claim.
+
