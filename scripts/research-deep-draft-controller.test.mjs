@@ -139,3 +139,43 @@ test('DF13 no backdated current clock or future author clock is accepted',async(
     f.setClock(clock);await assert.rejects(deepControllerCommand(f.args,f.local),/deep_draft/);
   });
 });
+test('DF14 rewritten staged draft before commit must not be reported persisted',async()=>fixture(async f=>{
+  await assert.rejects(deepControllerCommand(f.args,{...f.local,checkpoint:async name=>{
+    if(name==='before_commit') await fs.appendFile(f.file('artifact/draft.json'),'x');
+  }}),/deep_draft/);
+  await assert.rejects(fs.stat(f.file('artifact/commit.json')),/ENOENT/);
+}));
+test('DF15 replaced output directory must reject and never write into replacement',async()=>fixture(async f=>{
+  await assert.rejects(deepControllerCommand(f.args,{...f.local,checkpoint:async name=>{
+    if(name==='prepared-input.json') {
+      await fs.rename(f.file('artifact'),f.file('artifact.saved'));
+      await fs.mkdir(f.file('artifact'),{mode:0o700});
+    }
+  }}),/deep_draft/);
+  assert.deepEqual(await fs.readdir(f.file('artifact')),[]);
+  assert.deepEqual(await fs.readdir(f.file('artifact.saved')),['prepared-input.json']);
+}));
+test('DF16 staged file replacement or restored-byte rewrite rejects before marker',async()=>{
+  for(const mode of ['replace','restore']) await fixture(async f=>{
+    await assert.rejects(deepControllerCommand(f.args,{...f.local,checkpoint:async name=>{
+      if(name==='before_commit') {
+        const target=f.file('artifact/handoff.json'),raw=await fs.readFile(target);
+        if(mode==='replace') {await fs.rename(target,target+'.saved');await fs.writeFile(target,raw,{mode:0o600});}
+        else {await fs.appendFile(target,'x');await fs.writeFile(target,raw);}
+      }
+    }}),/deep_draft/);
+    await assert.rejects(fs.stat(f.file('artifact/commit.json')),/ENOENT/);
+  });
+});
+test('DF17 post-marker corruption rejects writer and fresh-process inspection consistently',async()=>fixture(async f=>{
+  await assert.rejects(deepControllerCommand(f.args,{...f.local,checkpoint:async name=>{
+    if(name==='after_commit') await fs.appendFile(f.file('artifact/handoff.json'),'x');
+  }}),/deep_draft/);
+  const receipt=JSON.parse(await fs.readFile(f.file('artifact/commit.json'))).receiptHash;
+  const script=`import {deepControllerCommand} from ${JSON.stringify(new URL('./research-deep-controller.mjs',import.meta.url).href)};
+    try {await deepControllerCommand(${JSON.stringify(['inspectDraft','--output',f.file('artifact'),'--receipt-hash',receipt])},
+      {source:()=>({commit:'${source}',dirty:false}),now:()=> '${later}'});console.log(JSON.stringify({accepted:true}));}
+    catch(error){console.log(JSON.stringify({accepted:false,error:error.message}));}`;
+  const restarted=JSON.parse(execFileSync(process.execPath,['--experimental-strip-types','--input-type=module','-e',script],{encoding:'utf8',env:{PATH:'/usr/bin:/bin'}}));
+  assert.equal(restarted.accepted,false);assert.match(restarted.error,/deep_draft/);
+}));
