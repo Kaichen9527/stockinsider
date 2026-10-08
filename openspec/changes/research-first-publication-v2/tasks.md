@@ -37,3 +37,16 @@ Historical pending entries above remain as original planning state. Root relayed
 - [ ] Complete the original bundle/outbox/submission transaction and shared reader under the approved64f7 contract.
 
 Final maker counts/provenance are in research-input-preparation-vm-handoff.md and its timestamped receipt; partial/root-reported history above remains unchanged.
+
+ndependent reviewer dispatch/result/handoff with original budgets/deadlines; explicit unavailable outcome where needed.
+- [ ] Same outbox/submission/receipt atomic v2 publication and append-only withdrawal/supersession.
+- [ ] Real native guarded HTTP/PG/transaction/restart/adversarial tests; development fixtures distinguished from genuine role proof.
+- [ ] Shared desktop/mobile readable preview; related tests/types/lint/build/resource and exact independent code review.
+- [ ] Actual new author/reviewer/publication business roundtrip when lawful identity/dispatch exists; no retrospective manual-work receipts.
+- [ ] Separately reviewed protected merge/deploy/schedules and five real trading days; strategy effectiveness remains unproven.
+
+## Oct08 incremental checkpoint (historical pending items retained)
+
+- Original64f7 requirement/architecture amendment has root-attributed unsigned approval; this is not protected approval.
+- Observed scoped job/input has real25TAP positive acceptance but two subsequent independent Slice2/3P2 findings remain to repair. It is not approved code completion.
+- Fixed AUO/EMC pure financial recalculation implemented and66related tests/types/lint/normal build passed. Exact code review pending; unsealed calculation only. Full YTD bridge, immutable input/source fence, paragraph linkage, trusted dispatch/review and same-outbox publication remain incomplete.
