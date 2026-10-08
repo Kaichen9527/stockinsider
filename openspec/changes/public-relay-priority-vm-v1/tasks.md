@@ -16,3 +16,9 @@
 - [ ] Independent successor exact code approval.
 - [ ] Native local PostgREST/app workflow (exploration paused; verified binary only).
 - [ ] Legal official authority ingestion and complete-roster ranking/Top20; no observed roster promotion.
+
+### Native successor checkpoint (earlier pending rows retained)
+- [x] Root-reported unsigned scoped exact d19 code approval; 132 maker tests not independently Mac-rerun.
+- [x] Separately authorized native Next/Supabase/PostgREST/PG profile, real RPCs, guarded inbox, restart/dedup, eleven cases zero skips and types/lint/normal build.
+- [ ] Independent exact review of new native harness; complete legitimate authority and required ancillary profile before ranking/Top20.
+- See `native-local-inbox-dataplane-v1/tasks.md` and `docs/operations/2026-10-08/native-local-inbox-dataplane-handoff.md`; no production/strategy attestation implied.
