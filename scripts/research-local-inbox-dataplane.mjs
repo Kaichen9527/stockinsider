@@ -107,6 +107,23 @@ export async function localInboxProfile(root) {
   }
   await select('migrations/20260724_source_led_opportunity_engine_v3.sql', 'CREATE TABLE IF NOT EXISTS stock_instruments_v3 (');
   await select('migrations/20260724_source_led_opportunity_engine_v3.sql', 'CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (');
+  // Read dependencies only: preserve every existing FK/constraint verbatim.
+  // Empty dependency tables do not grant a publication/job/authority writer.
+  const readDependencies = [
+    ['migrations/20260831_candidate_shadow_performance.sql','candidate_research_runs'],
+    ['migrations/20260901_source_research_shadow_v2.sql','market_evidence_snapshots'],
+    ['migrations/20260901_source_research_shadow_v2.sql','candidate_detail_snapshots'],
+    ['migrations/20260906_candidate_dossier_v4.sql','candidate_dossier_bundles'],
+    ['migrations/20260901_source_research_shadow_v2.sql','candidate_research_dossiers'],
+    ['migrations/20260906_candidate_dossier_v4.sql','candidate_dossier_submission_receipts'],
+    ['migrations/20260929_research_agent_state_v1.sql','research_priority_runs_v1'],
+    ['migrations/20260907_02_candidate_financial_documents_v6.sql','candidate_issuer_document_domains_v6'],
+    ['migrations/20260929_research_deep_jobs_v1.sql','research_deep_jobs_v1'],
+  ];
+  for (const [file,name] of readDependencies) {
+    await select(file, `CREATE TABLE IF NOT EXISTS public.${name} (`);
+    parts.push(`ALTER TABLE public.${name} ENABLE ROW LEVEL SECURITY; REVOKE ALL ON public.${name} FROM PUBLIC,anon,authenticated,service_role; GRANT SELECT ON public.${name} TO service_role; CREATE POLICY local_priority_read_only ON public.${name} FOR SELECT TO service_role USING(true);`);
+  }
   const routines = [];
   for (const [file, name, signature] of [
     ['migrations/20260901_source_research_shadow_v2.sql','candidate_research_stock_authority','timestamptz'],
@@ -118,7 +135,7 @@ export async function localInboxProfile(root) {
     routines.push({ name, signature, body });
     parts.push(`REVOKE ALL ON FUNCTION public.${name}(${signature}) FROM PUBLIC,anon,authenticated; GRANT EXECUTE ON FUNCTION public.${name}(${signature}) TO service_role;`);
   }
-  return { sql: parts.join('\n'), definitions, routines };
+  return { sql: parts.join('\n'), definitions, routines, readOnlyTables:readDependencies.map(([,name])=>name) };
 }
 
 /** Runs only in the existing Node test-runner loopback projection boundary.
@@ -153,6 +170,8 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
     const profile = await localInboxProfile(root); sql(profile.sql);
     sql('ALTER TABLE source_raw_documents ENABLE ROW LEVEL SECURITY; CREATE POLICY local_inbox_service_only ON source_raw_documents TO service_role USING(true) WITH CHECK(true); GRANT USAGE ON SCHEMA public TO anon,service_role; GRANT SELECT,INSERT ON source_raw_documents TO service_role;');
     report.installedDefinitions = profile.definitions;
+    report.developmentProfileSqlSha256 = hash(profile.sql);
+    report.readOnlyDependencyTables = profile.readOnlyTables;
     report.installedRoutines = profile.routines.map(({name,signature,body}) => {
       const row = JSON.parse(sql(`SELECT json_build_object('name',proname,'body',prosrc,'securityDefiner',prosecdef,'searchPath',proconfig,'serviceExecute',has_function_privilege('service_role',oid,'EXECUTE'),'anonExecute',has_function_privilege('anon',oid,'EXECUTE')) FROM pg_proc WHERE oid='public.${name}(${signature})'::regprocedure`));
       assert.equal(row.body, body); assert.equal(row.securityDefiner,true); assert.equal(row.serviceExecute,true); assert.equal(row.anonExecute,false);
@@ -201,6 +220,8 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
     const post = (endpoint, payload, authenticated=true) => fetch(origin+endpoint,{method:'POST',headers:{'content-type':'application/json',...(authenticated?{authorization:`Bearer ${key}`}:{})},body:JSON.stringify(payload),redirect:'error',signal:AbortSignal.timeout(15000)});
     await check('unauthorized real Next inbox returns 401 without a DB write',async()=>{
       const r=await post('api/internal/research-inbox',run.inboxRequest,false);assert.equal(r.status,401);assert.equal(sql('SELECT count(*) FROM source_raw_documents'),'0');report.checks.push('unauthorized_401_zero_write');
+      const priority=await post('api/internal/research-priority-run',{...run.priorityRequest,assessments:[]},false);
+      assert.equal(priority.status,401);assert.equal(sql('SELECT count(*) FROM research_priority_runs_v1'),'0');
     });
     await check('real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries',async()=>{
       const r=await post('api/internal/research-inbox',run.inboxRequest);assert.equal(r.status,200);const result=await r.json();assert.equal(result.accepted,3);
@@ -213,6 +234,26 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
       assert.equal(r.status,401);
       const call=await fetch(base+'rpc/research_source_heads_page_v1',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({p_cutoff:run.asOf,p_offset:0,p_limit:500}),signal:AbortSignal.timeout(15000),redirect:'error'});
       assert.equal(call.status,401);report.checks.push('anonymous_table_rpc_denied');
+    });
+    await check('ancillary priority dependencies are empty and service read-only with no authority writes',async()=>{
+      const privileges=profile.readOnlyTables.map(name=>JSON.parse(sql(`SELECT json_build_object('table','${name}','serviceSelect',has_table_privilege('service_role','public.${name}','SELECT'),'serviceInsert',has_table_privilege('service_role','public.${name}','INSERT'),'serviceUpdate',has_table_privilege('service_role','public.${name}','UPDATE'),'serviceDelete',has_table_privilege('service_role','public.${name}','DELETE'),'anonSelect',has_table_privilege('anon','public.${name}','SELECT'),'authenticatedSelect',has_table_privilege('authenticated','public.${name}','SELECT'))`)));
+      assert.ok(privileges.every(row=>row.serviceSelect && !row.serviceInsert && !row.serviceUpdate && !row.serviceDelete && !row.anonSelect && !row.authenticatedSelect));
+      report.dependencyPrivileges=privileges;
+      report.dependencyPolicies=profile.readOnlyTables.map(name=>JSON.parse(sql(`SELECT json_build_object('table','${name}','rlsEnabled',c.relrowsecurity,'command',p.cmd,'roles',p.roles,'qual',p.qual,'withCheck',p.with_check) FROM pg_class c JOIN pg_namespace n ON c.relnamespace=n.oid JOIN pg_policies p ON p.schemaname=n.nspname AND p.tablename=c.relname WHERE n.nspname='public' AND c.relname='${name}' AND p.policyname='local_priority_read_only'`)));
+      assert.ok(report.dependencyPolicies.every(row=>row.rlsEnabled && row.command==='SELECT' && row.roles.length===1 && row.roles[0]==='service_role' && row.qual==='true' && row.withCheck===null));
+      const base=`http://127.0.0.1:${apiPort}/rest/v1/`;
+      for(const table of ['candidate_issuer_document_domains_v6','research_deep_jobs_v1']) {
+        let r=await fetch(base+table+'?select=*',{redirect:'error',signal:AbortSignal.timeout(15000)});assert.equal(r.status,401);
+        r=await fetch(base+table+'?select=*',{headers:{authorization:`Bearer ${bearer}`},redirect:'error',signal:AbortSignal.timeout(15000)});assert.equal(r.status,200);assert.deepEqual(await r.json(),[]);
+      }
+      for(const method of ['POST','PATCH','DELETE']) {
+        const r=await fetch(base+'candidate_issuer_document_domains_v6?host=eq.synthetic.invalid',{method,headers:{authorization:`Bearer ${bearer}`,'content-type':'application/json'},...(method==='DELETE'?{}:{body:JSON.stringify({note:'synthetic ACL probe'})}),redirect:'error',signal:AbortSignal.timeout(15000)});
+        assert.equal(r.status,403);
+      }
+      const r=await post('api/internal/research-priority-run',{...run.priorityRequest,assessments:[]});assert.equal(r.status,409);assert.equal((await r.json()).error,'research_priority_official_roster_missing');
+      report.initialPriorityFailure='research_priority_official_roster_missing';
+      report.unchangedEmptyTables=Object.fromEntries([...profile.readOnlyTables,'stocks','stock_instruments_v3','stock_sector_assignments_v3'].map(name=>[name,Number(sql(`SELECT count(*) FROM public.${name}`))]));
+      assert.ok(Object.values(report.unchangedEmptyTables).every(count=>count===0));report.checks.push('ancillary_read_only_empty_authority');
     });
     await check('guarded stock-master entry refuses an absent production writer identity',async()=>{
       const r=await post('api/internal/taiwan-data-refresh',{datasets:['stock_master'],phase:'final',symbols:[]});
@@ -233,12 +274,12 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
       assert.equal(r.status,200);assert.equal((await r.json()).accepted,0);assert.equal(sql('SELECT jsonb_agg(row_to_json(d) ORDER BY document_url) FROM source_raw_documents d'),before);report.postgresRestartUnchanged=true;report.inboxReplayAccepted=0;report.checks.push('restart_dedup');
     });
     await check('priority fails honestly and consumer restart fences an uncertain submission',async()=>{
-      const r=await post('api/internal/research-priority-run',{...run.priorityRequest,assessments:[]});report.priorityStatus=r.status;report.priorityFailure=await r.json();assert.equal(report.priorityFailure.ok,false);
+      const r=await post('api/internal/research-priority-run',{...run.priorityRequest,assessments:[]});report.priorityStatus=r.status;report.priorityFailure=await r.json();assert.equal(r.status,409);assert.equal(report.priorityFailure.error,'research_priority_official_roster_missing');
       const args=['--controller',path.join(artifacts,'controller.json'),'--assessments',path.join(artifacts,'assessments.json'),'--origin',origin,'--journal',path.join(artifacts,'journal')];
       await assert.rejects(sourcePriorityCommand(args,{env:{INTERNAL_API_KEY:key}}),/priority_rejected_or_uncertain/);
       await assert.rejects(sourcePriorityCommand(args,{env:{INTERNAL_API_KEY:key}}),/uncertain_submission/);assert.equal(sql('SELECT count(*) FROM source_raw_documents'),'3');report.checks.push('priority_blocked_restart_fenced');
     });
-    assert.equal(report.checks.length,8,'local_profile_incomplete_checks');
+    assert.equal(report.checks.length,9,'local_profile_incomplete_checks');
     report.passed=true;
   } catch(error) {report.failure=safe(error.message);throw error;}
   finally {

@@ -11,6 +11,11 @@ test('local profile selects existing SQL and never seeds observed authority or i
   assert.ok(profile.routines.every(row=>row.body.length>200));
   assert.doesNotMatch(profile.sql,/INSERT INTO|trusted\s*=\s*true/iu);
   assert.ok(profile.definitions.every(row=>/^[0-9a-f]{64}$/.test(row.definitionSha256)));
+  assert.equal(profile.readOnlyTables.length,9);
+  assert.ok(profile.readOnlyTables.includes('candidate_issuer_document_domains_v6'));
+  assert.ok(profile.readOnlyTables.includes('research_deep_jobs_v1'));
+  assert.match(profile.sql,/receipt_id UUID REFERENCES public.candidate_dossier_submission_receipts/u);
+  assert.doesNotMatch(profile.sql,/GRANT (?:ALL|INSERT|UPDATE|DELETE) ON public\./u);
 });
 test('local child environment excludes inherited credentials and production writer identity',()=>{
   const env=localProcessEnvironment({PATH:'/usr/bin',HTTPS_PROXY:'https://proxy.invalid',SSL_CERT_FILE:'/test/ca.pem',INTERNAL_API_KEY:'synthetic',SUPABASE_SERVICE_ROLE_KEY:'synthetic',STOCKINSIDER_WRITER_RELEASE_ID:'a'.repeat(40)});
@@ -26,7 +31,7 @@ test('actual attributed relay through real local Next/Supabase/PostgREST/Postgre
     postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,
     check:(name,fn)=>t.test(name,fn),
   });
-  assert.equal(report.passed,true);assert.equal(report.checks.length,8);
+  assert.equal(report.passed,true);assert.equal(report.checks.length,9);
 });
 
 // Synthetic memory-only values; never real environment credentials.

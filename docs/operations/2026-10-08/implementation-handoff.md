@@ -98,3 +98,8 @@ GitHub draft PRs310/311/312/313/314 preserve separate source scopes. Ordinary CI
 ## 2026-10-08 current source-cohort checkpoint
 
 1978 current observations now consumed by the existing bounded relay/controller and native guarded inbox harness; 40 source +12 native maker tests zero skip, types/lint/normal build pass. Three industry records persisted and replay accepted zero; authority remains empty, priority409 research_priority_read_failed and Top20 null. See source-cohort-consumer-handoff.md and observed-source-cohort-consumer-v1/tasks.md for remaining profile/intake/insider work. Root reports preview4aa unsigned scoped repair approval; earlier P2 pending history above is preserved. This is not publication, strategy, protected attestation or automatic role-budget acceptance. VM work continues independently of VPS heavy capacity.
+
+
+## 2026-10-08 native priority read-profile successor
+
+A separate minimal real-SQL/SELECT-only ACL profile now returns exact401 unauthorized and409 research_priority_official_roster_missing before/after PG restart, replacing the earlier read_failed only in this new profile. Native13/13 zero skip, types/lint/normal build pass; stocks/instrument/sector and nine ancillary tables remain empty. See priority-local-read-profile-handoff.md and the13-24 receipt; old receipts retained. Root-reported875 unsigned40+17 source approval does not cover this new profile. Observed identity/roster admission and positive job/claim/input require a separate reviewed contract; directstocks admission was withdrawn and never implemented. Insider fixes remain queued.
