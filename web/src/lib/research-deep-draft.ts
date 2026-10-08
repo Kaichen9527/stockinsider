@@ -51,7 +51,7 @@ function articleShape(value: unknown) {
 }
 
 export type DeepAuthorHandoff = {
-  schemaVersion: 'research-deep-author-handoff-v1'; preparedReceiptHash: string; inputHash: string;
+  schemaVersion: 'research-deep-author-handoff-v1' | 'research-deep-author-handoff-v2'; researchIdentity?: import('./research-deep-claim-context.ts').ResearchIdentityV2; preparedReceiptHash: string; inputHash: string;
   job: ResearchDeepClaimContext['job']; modelReservation: ResearchDeepClaimContext['modelReservation'];
   articleHash: string | null; dataCutoff: string; financialCutoff: string | null;
   proposedRequest: {action:'handoffModel';owner:string;jobId:string;attempt:number;articleHash:string} | null;
@@ -65,7 +65,8 @@ export function buildPrivateDeepDraft(input: {prepared:unknown;model:unknown;exp
   original:{originalRequestHash:string;owner:string;observedAt:string;context?:ResearchDeepClaimContext};controllerSourceCommit:string;now:string}) {
   const p=exact(input.prepared,['schemaVersion','sourceCommit','requestHash','originalRequestHash','packet','preparedAt','modelCalls','modelDispatched','authoritativePublication','receiptHash']);
   const {receiptHash,...preparedMaterial}=p;
-  ensure(p.schemaVersion==='research-deep-prepared-input-v1' && SOURCE.test(String(p.sourceCommit))
+  const observed=p.schemaVersion==='research-deep-prepared-input-v2';
+  ensure((observed || p.schemaVersion==='research-deep-prepared-input-v1') && SOURCE.test(String(p.sourceCommit))
     && HASH.test(String(p.requestHash)) && HASH.test(input.expectedPreparedHash)
     && receiptHash===input.expectedPreparedHash && receiptHash===researchCanonicalHash(preparedMaterial)
     && p.originalRequestHash===input.original.originalRequestHash && p.modelCalls===0
@@ -73,16 +74,20 @@ export function buildPrivateDeepDraft(input: {prepared:unknown;model:unknown;exp
   const packet=row(p.packet), job=row(packet.job), modelReservation=row(packet.modelReservation);
   const preparedAt=String(p.preparedAt), now=researchDeepInstant(input.now);
   ensure(researchDeepInstant(input.original.observedAt)<=researchDeepInstant(preparedAt) && researchDeepInstant(preparedAt)<=now);
-  const context=validateResearchDeepClaimContext({schemaVersion:'research-deep-claim-context-v1',observedAt:packet.dataCutoff,
-    job,modelReservation,modelCompletion:null},{owner:input.original.owner,now:preparedAt});
+  const identity=observed ? row(packet.researchIdentity):null;
+  const scopeFields=observed ? {scope:'research_observed_v1' as const,snapshotHash:String(identity!.snapshotHash)}:{};
+  if(observed) ensure(input.original.context?.schemaVersion==='research-deep-claim-context-v2');
+  const context=validateResearchDeepClaimContext({schemaVersion:observed ? 'research-deep-claim-context-v2':'research-deep-claim-context-v1',observedAt:packet.dataCutoff,job,modelReservation,modelCompletion:null,...(observed ? {researchIdentity:identity}:{})},{owner:input.original.owner,...scopeFields,now:preparedAt});
   validateResearchDeepAuthorInput(packet,context,preparedAt);
   if(input.original.context) {
-    const original=validateResearchDeepClaimContext(input.original.context,{owner:input.original.owner,now:input.original.context.observedAt});
+    const original=validateResearchDeepClaimContext(input.original.context,{owner:input.original.owner,...scopeFields,now:input.original.context.observedAt});
     ensure(original.modelCompletion===null && researchCanonicalHash(original.job)===researchCanonicalHash(job)
-      && researchCanonicalHash(original.modelReservation)===researchCanonicalHash(modelReservation));
+      && researchCanonicalHash(original.modelReservation)===researchCanonicalHash(modelReservation)
+      && (!observed || original.schemaVersion==='research-deep-claim-context-v2' && researchCanonicalHash(original.researchIdentity)===researchCanonicalHash(identity)));
   }
-  const m=exact(input.model,['schemaVersion','preparedReceiptHash','inputHash','job','modelReservation','article']);
-  ensure(m.schemaVersion==='research-deep-model-draft-v1' && m.preparedReceiptHash===receiptHash && m.inputHash===packet.inputHash
+  const m=exact(input.model,['schemaVersion','preparedReceiptHash','inputHash','job','modelReservation','article',...(observed ? ['researchIdentity']:[])]);
+  if(observed) ensure(researchCanonicalHash(m.researchIdentity)===researchCanonicalHash(identity));
+  ensure(m.schemaVersion===(observed ? 'research-deep-model-draft-v2':'research-deep-model-draft-v1') && m.preparedReceiptHash===receiptHash && m.inputHash===packet.inputHash
     && researchCanonicalHash(m.job)===researchCanonicalHash(job) && researchCanonicalHash(m.modelReservation)===researchCanonicalHash(modelReservation));
   const a=articleShape(m.article);
   ensure(a.symbol===job.symbol && a.evidenceCutoffAt===packet.dataCutoff
@@ -96,7 +101,7 @@ export function buildPrivateDeepDraft(input: {prepared:unknown;model:unknown;exp
     } else refs(v);
   }};
   refs(a);
-  const gaps:string[]=[];
+  const gaps:string[]=observed ? ['observed_publication_contract_pending']:[];
   if(!packet.financial || !facts.length) gaps.push('financial_input_missing');
   if((packet.gaps as Row[]).length) gaps.push('prepared_source_or_financial_gaps_retained');
   if(researchDeepInstant(a.authoredAt)>=researchDeepInstant(modelReservation.leaseExpiresAt)
@@ -116,14 +121,14 @@ export function buildPrivateDeepDraft(input: {prepared:unknown;model:unknown;exp
   catch(error) { gaps.push(error instanceof Error && /^deep_article_[a-z_]+$/u.test(error.message) ? error.message : 'article_contract_incomplete'); }
   const articleHash=validated?.articleHash ?? null;
   const status=validated && gaps.length===0 ? 'contract_valid_pending_review' as const : 'incomplete' as const;
-  const handoff:DeepAuthorHandoff={schemaVersion:'research-deep-author-handoff-v1',preparedReceiptHash:String(receiptHash),inputHash:String(packet.inputHash),
+  const handoff:DeepAuthorHandoff={schemaVersion:observed ? 'research-deep-author-handoff-v2':'research-deep-author-handoff-v1',...(context.schemaVersion==='research-deep-claim-context-v2' ? {researchIdentity:context.researchIdentity}:{}),preparedReceiptHash:String(receiptHash),inputHash:String(packet.inputHash),
     job:context.job,modelReservation:context.modelReservation,articleHash,dataCutoff:String(packet.dataCutoff),
     financialCutoff:packet.financial===null ? null : String(row(packet.financial).asOf),
     proposedRequest:status==='contract_valid_pending_review' && now<researchDeepInstant(context.job.leaseExpiresAt)
       && now<researchDeepInstant(context.modelReservation.leaseExpiresAt)
       ? {action:'handoffModel',owner:context.job.owner,jobId:context.job.jobId,attempt:context.job.attempt,articleHash:articleHash!} : null,
     requiresLiveStatusCheck:true,requiresIndependentReview:true,submissionEligible:false,authoritativePublication:false,strategyApproved:false};
-  return {schemaVersion:'research-deep-private-draft-v1',controllerSourceCommit:input.controllerSourceCommit,
+  return {schemaVersion:observed ? 'research-deep-private-draft-v2':'research-deep-private-draft-v1',...(context.schemaVersion==='research-deep-claim-context-v2' ? {researchIdentity:context.researchIdentity}:{}),controllerSourceCommit:input.controllerSourceCommit,
     preparedSourceCommit:p.sourceCommit,preparedReceiptHash:receiptHash,inputHash:packet.inputHash,preparedAt:p.preparedAt,
     acceptedAt:input.now,job:context.job,modelReservation:context.modelReservation,dataCutoff:packet.dataCutoff,
     discovery:packet.discovery,financialIdentity:packet.financial===null ? null : {bundleId:row(packet.financial).bundleId,

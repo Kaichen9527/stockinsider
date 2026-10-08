@@ -42,3 +42,13 @@ Real native acceptance20/20TAP (19checks plus parent), related five-file regress
 Receipt: .agent/reports/2026-10-08T15-31-observed-priority-slice2-vm.json. This manual window began15:02:16.842996Z, deadline15:32:16.842996Z; sealing timestamps are recorded rather than treated as automated model budget. Actual five-file test membership is explicit in its command receipt; no existing ordinary CI run is claimed to include new observed/insider tests. Package membership audit/wiring is queued for the separate converged development branch, along with approved insider2cca, monitor successor d309, outboxde573 and native0825.
 
 Remaining: Slice3 typed observed claim/context/author input and original lease/model reservation binding; publication64f7 implementation; independent Slice2 code review; actual positive formal-authority/crossscope-after-mapping runtime; true Monday wall-clock migration acceptance. Formal publication/strategy products remain zero, no model reservation or live author/reviewer execution. The partial installed test profile is not a full production migration attestation. Source-head overflow fails closed at the explicit bound instead of truncating. No VPS operations, deployment, main merge or publication occurred.
+
+
+### Slice3 converged v2 implementation checkpoint
+
+- [x] Normally merge approved insider2cca/monitor d309/outbox2ebb, preserving Slice2 SHA and historical receipts.
+- [x] Add explicit observed v2 claim/context/input, closed hash/identity, original reservation clock and formal RPC scope fences.
+- [x] Connect existing controller/private writer with scoped journal/preparation and incomplete typed handoff; synthetic compatibility78/78 and converged112/112,0skip.
+- [x] Real PG/HTTP Taipei midnight refusal21/21TAP with zero budget consumed; not a positive claim/input acceptance.
+- [ ] Positive native claim/input in a lawful real admission window; independent exact code review.
+- [ ] Approved64f7 first-publication implementation, trusted actual role dispatch/review, qualification/strategy/deployment (not inferred from compatibility).

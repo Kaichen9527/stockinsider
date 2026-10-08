@@ -10,7 +10,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-
 const SOURCE_COLUMNS = `${ASSOCIATION_DOCUMENT_COLUMNS},summary`;
 const MAX_BYTES = 1_048_576;
 export type AuthorInputRequest = { owner: string; jobId: string; attempt: number; reservationId: string;
-  bundleId: string | null; sourceDocumentIds: string[] };
+  bundleId: string | null; sourceDocumentIds: string[]; scope?: 'research_observed_v1'; snapshotHash?: string };
 function ensure(ok: unknown): asserts ok { if (!ok) throw new Error('research_deep_input_invalid'); }
 function row(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }
 function safeText(value: unknown, max: number): value is string {
@@ -23,7 +23,9 @@ function publicUrl(value: unknown): value is string {
 }
 export function parseAuthorInputRequest(value: unknown): AuthorInputRequest {
   const input = row(value);
-  ensure(Object.keys(input).sort().join(',') === 'attempt,bundleId,jobId,owner,reservationId,sourceDocumentIds');
+  const observed = input.scope === 'research_observed_v1';
+  ensure(Object.keys(input).sort().join(',') === (observed ? 'attempt,bundleId,jobId,owner,reservationId,scope,snapshotHash,sourceDocumentIds' : 'attempt,bundleId,jobId,owner,reservationId,sourceDocumentIds'));
+  if(observed) ensure(typeof input.snapshotHash==='string' && /^[a-f0-9]{64}$/u.test(input.snapshotHash));
   ensure(typeof input.owner === 'string' && /^[A-Za-z0-9:_-]{3,120}$/u.test(input.owner)
     && typeof input.jobId === 'string' && UUID.test(input.jobId)
     && Number.isInteger(input.attempt) && Number(input.attempt) >= 1 && Number(input.attempt) <= 3
@@ -34,7 +36,7 @@ export function parseAuthorInputRequest(value: unknown): AuthorInputRequest {
     && new Set(input.sourceDocumentIds).size === input.sourceDocumentIds.length);
   return { owner: input.owner, jobId: input.jobId, attempt: input.attempt as number,
     reservationId: input.reservationId, bundleId: input.bundleId as string | null,
-    sourceDocumentIds: [...input.sourceDocumentIds].sort() };
+    sourceDocumentIds: [...input.sourceDocumentIds].sort(), ...(observed ? {scope:'research_observed_v1' as const,snapshotHash:input.snapshotHash as string}: {}) };
 }
 
 /** Trusted controller preparation only; never dispatches a model or writes. */
@@ -54,7 +56,7 @@ export async function loadResearchDeepAuthorInput(db: Pick<SupabaseClient, 'from
   };
   const active = async () => {
     ensure(!abort.signal.aborted);
-    const context = await loadResearchDeepClaimContext(db, { owner: input.owner, jobId: input.jobId, attempt: input.attempt }, abort.signal);
+    const context = await loadResearchDeepClaimContext(db, { owner: input.owner, jobId: input.jobId, attempt: input.attempt, scope:input.scope, snapshotHash:input.snapshotHash }, abort.signal);
     ensure(!abort.signal.aborted && context && context.modelCompletion === null
       && context.modelReservation.reservationId === input.reservationId);
     return context;
@@ -66,8 +68,10 @@ export async function loadResearchDeepAuthorInput(db: Pick<SupabaseClient, 'from
     ensure(runRows.length === 1 && runRows[0].run_id === context.job.priorityRunId
       && typeof runRows[0].input_hash === 'string' && /^[a-f0-9]{64}$/u.test(runRows[0].input_hash)
       && researchDeepInstant(runRows[0].as_of) <= researchDeepInstant(cutoff));
+    if(context.schemaVersion==='research-deep-claim-context-v2') ensure(runRows[0].input_hash===context.researchIdentity.priorityInputHash && researchDeepInstant(runRows[0].as_of)===researchDeepInstant(context.researchIdentity.priorityAsOf));
     const gaps: Array<{ documentId?: string; reason: string }> = [];
     let financial: null | { bundleId: string; revisionId: string; inputHash: string; asOf: string; availableAt: string; facts: Row[] } = null;
+    if (input.bundleId && context.schemaVersion==='research-deep-claim-context-v2') ensure(context.researchIdentity.stockId !== null);
     if (input.bundleId) {
       const bundles = await read(db.from('candidate_dossier_bundles')
         .select('bundle_id,revision_id,published_revision_id,input_hash,symbol,payload,queued_at')
@@ -85,6 +89,7 @@ export async function loadResearchDeepAuthorInput(db: Pick<SupabaseClient, 'from
           && researchDeepInstant(detail.as_of) <= researchDeepInstant(detail.available_at)
           && researchDeepInstant(detail.available_at) <= researchDeepInstant(cutoff));
         ensure(typeof detail.stock_id === 'string' && UUID.test(detail.stock_id));
+        if(context.schemaVersion==='research-deep-claim-context-v2') ensure(detail.stock_id===context.researchIdentity.stockId);
         const issuer = await read(db.from('stocks').select('id,symbol').eq('id', detail.stock_id)
           .eq('symbol', context.job.symbol).limit(2).abortSignal(abort.signal), 2);
         const published = await read(db.from('candidate_daily_stage_snapshots').select('detail_revision_id,stock_id,created_at')
@@ -173,8 +178,10 @@ export async function loadResearchDeepAuthorInput(db: Pick<SupabaseClient, 'from
     }
     const current = await active();
     ensure(researchCanonicalHash({ job: context.job, model: context.modelReservation })
-      === researchCanonicalHash({ job: current.job, model: current.modelReservation }));
-    const material = { schemaVersion: 'research-deep-author-input-v1', dataCutoff: cutoff,
+      === researchCanonicalHash({ job: current.job, model: current.modelReservation })
+      && researchCanonicalHash(context) === researchCanonicalHash({...current,observedAt:context.observedAt}));
+    const material = { schemaVersion: context.schemaVersion==='research-deep-claim-context-v2' ? 'research-deep-author-input-v2' : 'research-deep-author-input-v1', dataCutoff: cutoff,
+      ...(context.schemaVersion==='research-deep-claim-context-v2' ? {researchIdentity:context.researchIdentity}:{}),
       discovery: { runId: context.job.priorityRunId, asOf: runRows[0].as_of, inputHash: runRows[0].input_hash },
       job: context.job, modelReservation: context.modelReservation, financial, sources, gaps,
       requiresIndependentReview: true, modelDispatched: false, authoritativePublication: false,
@@ -194,8 +201,10 @@ export async function loadResearchDeepAuthorInput(db: Pick<SupabaseClient, 'from
 export function validateResearchDeepAuthorInput(value: unknown,
   context: import('./research-deep-claim-context.ts').ResearchDeepClaimContext, now: string) {
   const packet = row(value);
-  ensure(Object.keys(packet).sort().join(',') === 'authoritativePublication,dataCutoff,discovery,financial,financialForecastComplete,gaps,inputHash,job,modelDispatched,modelReservation,requiresIndependentReview,schemaVersion,sourceSelectionComplete,sources');
-  ensure(packet.schemaVersion === 'research-deep-author-input-v1' && context.modelCompletion === null
+  const observed=context.schemaVersion==='research-deep-claim-context-v2';
+  ensure(Object.keys(packet).sort().join(',') === (observed ? 'authoritativePublication,dataCutoff,discovery,financial,financialForecastComplete,gaps,inputHash,job,modelDispatched,modelReservation,requiresIndependentReview,researchIdentity,schemaVersion,sourceSelectionComplete,sources' : 'authoritativePublication,dataCutoff,discovery,financial,financialForecastComplete,gaps,inputHash,job,modelDispatched,modelReservation,requiresIndependentReview,schemaVersion,sourceSelectionComplete,sources'));
+  if(observed) ensure(researchCanonicalHash(packet.researchIdentity)===researchCanonicalHash(context.researchIdentity));
+  ensure(packet.schemaVersion === (observed ? 'research-deep-author-input-v2' : 'research-deep-author-input-v1') && context.modelCompletion === null
     && packet.modelDispatched === false && packet.authoritativePublication === false
     && packet.requiresIndependentReview === true && packet.financialForecastComplete === false
     && packet.sourceSelectionComplete === false && typeof packet.inputHash === 'string'
@@ -212,6 +221,7 @@ export function validateResearchDeepAuthorInput(value: unknown,
     && discovery.runId === context.job.priorityRunId && typeof discovery.inputHash === 'string'
     && /^[a-f0-9]{64}$/u.test(discovery.inputHash)
     && researchDeepInstant(discovery.asOf) <= researchDeepInstant(packet.dataCutoff));
+  if(observed) ensure(discovery.inputHash===context.researchIdentity.priorityInputHash && researchDeepInstant(discovery.asOf)===researchDeepInstant(context.researchIdentity.priorityAsOf));
   ensure(Array.isArray(packet.gaps) && packet.gaps.length <= 64 && packet.gaps.every(g => {
     const gap = row(g);
     return Object.keys(gap).every(key => ['documentId', 'reason'].includes(key))

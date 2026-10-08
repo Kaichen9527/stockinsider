@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-export type ResearchDeepClaimContext = {
+export type ResearchDeepClaimContextV1 = {
   schemaVersion: 'research-deep-claim-context-v1';
   observedAt: string;
   job: { jobId: string; symbol: string; priorityRunId: string; attempt: number; owner: string; leaseExpiresAt: string };
@@ -8,7 +8,10 @@ export type ResearchDeepClaimContext = {
     startedAt: string; leaseExpiresAt: string };
   modelCompletion: null | { outcome: 'completed' | 'failed'; resultHash: string; completedAt: string };
 };
-type Expected = { owner: string; jobId?: string; attempt?: number; now?: string };
+export type ResearchIdentityV2 = { scope: 'research_observed_v1'; researchCompanyId: string; snapshotHash: string; mappingDigest: string; stockId: string | null; priorityInputHash: string; snapshotReceivedAt: string; snapshotObservedAt: string; priorityAsOf: string };
+export type ResearchDeepClaimContextV2 = Omit<ResearchDeepClaimContextV1, 'schemaVersion'> & { schemaVersion: 'research-deep-claim-context-v2'; researchIdentity: ResearchIdentityV2 };
+export type ResearchDeepClaimContext = ResearchDeepClaimContextV1 | ResearchDeepClaimContextV2;
+type Expected = { owner: string; jobId?: string; attempt?: number; now?: string; scope?: 'research_observed_v1'; snapshotHash?: string };
 type Row = Record<string, unknown>;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
 const OWNER = /^[a-zA-Z0-9:_-]{3,120}$/u;
@@ -64,6 +67,19 @@ function expectedIdentity(expected: Expected) {
  * must retain both original deadlines and must not rerun a completed model. */
 export function validateResearchDeepClaimContext(value: unknown, expected: Expected): ResearchDeepClaimContext {
   expectedIdentity(expected);
+  const candidate = record(value);
+  if (candidate.schemaVersion === 'research-deep-claim-context-v2') {
+    const scoped = exact(value, ['schemaVersion', 'observedAt', 'job', 'modelReservation', 'modelCompletion', 'researchIdentity']);
+    const identity = exact(scoped.researchIdentity, ['scope','researchCompanyId','snapshotHash','mappingDigest','stockId','priorityInputHash','snapshotReceivedAt','snapshotObservedAt','priorityAsOf']);
+    ensure(expected.scope === 'research_observed_v1' && expected.snapshotHash === identity.snapshotHash && identity.scope === expected.scope
+      && UUID.test(string(identity.researchCompanyId)) && HASH.test(string(identity.snapshotHash)) && HASH.test(string(identity.mappingDigest))
+      && HASH.test(string(identity.priorityInputHash)) && (identity.stockId === null || UUID.test(string(identity.stockId)))
+      && instant(identity.snapshotReceivedAt) <= instant(identity.priorityAsOf) && instant(identity.snapshotObservedAt) <= instant(identity.priorityAsOf)
+      && instant(identity.priorityAsOf) <= instant(scoped.observedAt));
+    validateResearchDeepClaimContext({schemaVersion:'research-deep-claim-context-v1',observedAt:scoped.observedAt,job:scoped.job,modelReservation:scoped.modelReservation,modelCompletion:scoped.modelCompletion}, {...expected,scope:undefined,snapshotHash:undefined});
+    return scoped as ResearchDeepClaimContextV2;
+  }
+  ensure(expected.scope === undefined && expected.snapshotHash === undefined);
   const context = exact(value, ['schemaVersion', 'observedAt', 'job', 'modelReservation', 'modelCompletion']);
   ensure(context.schemaVersion === 'research-deep-claim-context-v1');
   const job = exact(context.job, ['jobId', 'symbol', 'priorityRunId', 'attempt', 'owner', 'leaseExpiresAt']);
@@ -100,7 +116,7 @@ function one(result: { data: unknown; error: unknown }): Row {
 }
 
 /** Only finite, owner-scoped SELECTs. Never claims, renews, completes, or writes. */
-export async function loadResearchDeepClaimContext(db: Pick<SupabaseClient, 'from'>,
+export async function loadResearchDeepClaimContext(db: Pick<SupabaseClient, 'from'> & Partial<Pick<SupabaseClient,'rpc'>>,
   expected: Expected, signal?: AbortSignal): Promise<ResearchDeepClaimContext | null> {
   expectedIdentity(expected);
   const read = async (query: PromiseLike<{ data: unknown; error: unknown }> & { abortSignal?: (signal: AbortSignal) => PromiseLike<{ data: unknown; error: unknown }> }) => {
@@ -109,6 +125,14 @@ export async function loadResearchDeepClaimContext(db: Pick<SupabaseClient, 'fro
     if (signal?.aborted) throw new Error('research_deep_claim_context_aborted');
     return result;
   };
+  if (expected.scope !== undefined) {
+    ensure(expected.scope === 'research_observed_v1' && HASH.test(string(expected.snapshotHash)) && db.rpc);
+    const response = await read(db.rpc('read_research_observed_claim_v2', {p_owner:expected.owner,p_snapshot_hash:expected.snapshotHash,p_job_id:expected.jobId ?? null,p_attempt:expected.attempt ?? null}));
+    ensure(!response.error);
+    if (response.data === null) return null;
+    return validateResearchDeepClaimContext(response.data, {...expected,now:expected.now ?? new Date().toISOString()});
+  }
+  ensure(expected.snapshotHash === undefined);
   const queryTime = expected.now ?? new Date().toISOString();
   let query = db.from('research_deep_jobs_v1').select(JOB_FIELDS)
     .eq('research_scope', 'formal_v1').eq('lease_owner', expected.owner).eq('status', 'running').gt('lease_expires_at', queryTime);

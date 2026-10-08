@@ -14,7 +14,7 @@ const read=name=>JSON.parse(fs.readFileSync(path.join(directory,name),'utf8'));
 const body={legacyClassification:read('observed-security-classification.json'),securityScope:read('official-security-scope-reconciliation.json')};
 const enabled=process.env.RESEARCH_LOCAL_DATAPLANE_VERIFY==='enabled';
 test('real observed priority accounts1978 and admits an old public company research lead without formal identity',{skip:!enabled&&'explicit isolated profile not enabled',timeout:120000},async t=>{
- const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,check:(name,fn)=>t.test(name,fn),
+ const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,observedClaim:process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled',check:(name,fn)=>t.test(name,fn),
  afterBaseline:async({sql,sqlAsync,post,rpc,report,restart,priorityRequest})=>{
   const prepared=prepareObservedRosterAdmission(body);let receipt;
   await t.test('guarded1978 admission retains formal stocks count zero',async()=>{
@@ -105,6 +105,46 @@ test('real observed priority accounts1978 and admits an old public company resea
    const boundaries=sql("SELECT (date_trunc('week','2026-10-11T15:59:59.999999Z'::timestamptz AT TIME ZONE'Asia/Taipei')::date)::text||','||(date_trunc('week','2026-10-11T16:00:00Z'::timestamptz AT TIME ZONE'Asia/Taipei')::date)::text");assert.equal(boundaries,'2026-10-05,2026-10-12');
    report.lockClock={afterActualLockWait:true,releaseClock:release,admissionClock:admitted,realMondayWallClockNotCrossed:true,mondayBoundaryExpressionChecked:true};
   });
+  if(process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled') {
+   const owner='isolated-observed-author';let context,packet;
+   const fits=sql("SELECT research_model_lease_fits_day_v1(clock_timestamp())")==='t';
+   if(!fits){await t.test('real Taiwan midnight reservation refusal retains queued job and consumes no model budget',async()=>{const response=await post('api/internal/research-deep-job',{action:'claim',owner,...scope});const data=await response.json();assert.equal(response.status,200);assert.equal(data.context,null);assert.equal(sql('SELECT count(*)FROM research_model_reservations_v1'),'0');assert.equal(sql("SELECT status FROM research_deep_jobs_v1"),'queued');report.observedClaim={actualTaipeiMidnightBudgetRefusal:true,positiveClaimInputNotAttempted:true,modelBudgetSeconds:0};});return;}
+   await t.test('guarded v2 claim reserves original real model budget with research-only company identity',async()=>{
+    const response=await post('api/internal/research-deep-job',{action:'claim',owner,...scope});const data=await response.json();assert.equal(response.status,200,JSON.stringify(data));context=data.context;
+    assert.equal(context.schemaVersion,'research-deep-claim-context-v2');assert.equal(context.job.jobId,report.observedPositive.jobId);assert.equal(context.researchIdentity.researchCompanyId,report.observedPositive.researchCompanyId);assert.equal(context.researchIdentity.stockId,null);assert.equal(context.researchIdentity.snapshotHash,scope.snapshotHash);
+    assert.equal(sql('SELECT count(*)FROM research_model_reservations_v1'),'1');assert.equal(sql('SELECT sum(reserved_seconds)FROM research_model_reservations_v1'),'1800');assert.equal(context.job.leaseExpiresAt,context.modelReservation.leaseExpiresAt);assert.equal(sql('SELECT count(*)FROM stocks'),'0');
+   });
+   await t.test('v1 status cannot see observed claim; restart status preserves same attempt and original deadlines',async()=>{
+    const formal=await post('api/internal/research-deep-job',{action:'status',owner});assert.equal(formal.status,200);assert.equal((await formal.json()).context,null);
+    restart();let response;for(let i=0;i<15;i++){response=await post('api/internal/research-deep-job',{action:'status',owner,...scope,jobId:context.job.jobId,attempt:context.job.attempt});if(response.status===200)break;await new Promise(r=>setTimeout(r,100));}
+    assert.equal(response.status,200);const recovered=(await response.json()).context;assert.deepEqual(recovered.job,context.job);assert.deepEqual(recovered.modelReservation,context.modelReservation);assert.deepEqual(recovered.researchIdentity,context.researchIdentity);
+    const duplicate=await post('api/internal/research-deep-job',{action:'claim',owner,...scope});assert.equal((await duplicate.json()).context,null);assert.equal(sql('SELECT count(*)FROM research_model_reservations_v1'),'1');
+   });
+   await t.test('actual author v2 input retains real EP8 document and missing financial/publication gaps',async()=>{
+    const response=await post('api/internal/research-deep-job',{action:'input',owner,...scope,jobId:context.job.jobId,attempt:context.job.attempt,reservationId:context.modelReservation.reservationId,bundleId:null,sourceDocumentIds:[report.ep8.documentId]});const data=await response.json();assert.equal(response.status,200,JSON.stringify(data));packet=data.packet;
+    assert.equal(packet.schemaVersion,'research-deep-author-input-v2');assert.deepEqual(packet.researchIdentity,context.researchIdentity);assert.equal(packet.financial,null);assert.ok(packet.gaps.some(g=>g.reason==='dossier_not_selected'));assert.equal(packet.sources.length,1);assert.equal(packet.sources[0].documentId,report.ep8.documentId);assert.equal(sourceControllerInstant(packet.sources[0].publishedAt),sourceControllerInstant(report.ep8.publishedAt));assert.equal(packet.financialForecastComplete,false);assert.equal(packet.authoritativePublication,false);
+    report.observedClaim={jobId:context.job.jobId,reservationId:context.modelReservation.reservationId,attempt:context.job.attempt,deadline:context.job.leaseExpiresAt,inputHash:packet.inputHash,schemaVersion:packet.schemaVersion,modelBudgetSeconds:1800,modelActuallyExecuted:false,publicationEligible:false};
+   });
+   await t.test('direct v1 completion/review/publication RPCs reject observed job without completing budget or writing outbox',async()=>{
+    const job=context.job.jobId,attempt=context.job.attempt,res=context.modelReservation.reservationId;
+    for(const [name,args]of [
+     ['handoff_research_deep_model_v1',{p_job_id:job,p_owner:owner,p_attempt:attempt,p_article_hash:'a'.repeat(64)}],
+     ['finish_research_model_v1',{p_reservation:res,p_owner:owner,p_outcome:'completed',p_result_hash:'a'.repeat(64)}],
+     ['finish_research_deep_job_v2',{p_job_id:job,p_owner:owner,p_attempt:attempt,p_success:false,p_receipt_id:null,p_reason:'synthetic-invalid-scope'}],
+     ['claim_candidate_deep_outbox_v1',{p_deep_job_id:job,p_deep_owner:owner,p_deep_attempt:attempt,p_revision_id:job,p_input_hash:'a'.repeat(64),p_outbox_owner:owner}],
+     ['record_budgeted_deep_review_v1',{p_job_id:job,p_attempt:attempt,p_reservation_id:res,p_review:{}}],
+    ]){const response=await rpc(name,args);assert.notEqual(response.status,200,name);}
+    assert.equal(sql('SELECT count(*)FROM research_model_completions_v1'),'0');assert.equal(sql('SELECT count(*)FROM candidate_dossier_outbox_v5'),'0');assert.equal(sql('SELECT status FROM research_deep_jobs_v1'),'running');
+   });
+   await t.test('cross snapshot, anonymous, missing explicit scope and unmapped publication refuse',async()=>{
+    assert.equal((await post('api/internal/research-deep-job',{action:'status',owner,...scope},false)).status,401);
+    const foreign=await post('api/internal/research-deep-job',{action:'status',owner,...scope,snapshotHash:'0'.repeat(64),jobId:context.job.jobId,attempt:1});assert.equal((await foreign.json()).context,null);
+    const stripped=await post('api/internal/research-deep-job',{action:'input',owner,jobId:context.job.jobId,attempt:1,reservationId:context.modelReservation.reservationId,bundleId:null,sourceDocumentIds:[report.ep8.documentId]});assert.equal(stripped.status,409);
+    const forbidden=await post('api/internal/research-deep-job',{action:'claimPublication',owner,...scope,jobId:context.job.jobId,attempt:1});assert.equal(forbidden.status,400);
+    const forged=await rpc('read_research_observed_claim_v2',{p_owner:'foreign-owner',p_snapshot_hash:scope.snapshotHash,p_job_id:context.job.jobId,p_attempt:1});assert.equal(await forged.json(),null);assert.equal(sql('SELECT count(*)FROM stocks'),'0');assert.equal(sql('SELECT count(*)FROM candidate_dossier_submission_receipts'),'0');
+   });
+  }
+
  }});
  assert.equal(report.passed,true);assert.equal(report.observedPositive.novelty,0);assert.equal(report.observedPositive.notCurrentCatalyst,true);
 });

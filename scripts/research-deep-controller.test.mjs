@@ -245,3 +245,21 @@ test('prepare rejects packet hash/owner/deadline/rights/extra fields and missing
       body.action === 'status' ? success() : { rejected: false, body: { ok: true, packet: inputPacket() } } }), /input_unavailable/);
   });
 });
+
+
+test('explicit observed claim journal recovers scoped context, prepares v2 and privately saves incomplete draft',async()=>fixture(async({file,args,dependencies})=>{
+ const identity={scope:'research_observed_v1',researchCompanyId:id,snapshotHash:'a'.repeat(64),mappingDigest:'c'.repeat(64),stockId:null,priorityInputHash:'d'.repeat(64),snapshotReceivedAt:'2026-10-05T00:00:00Z',snapshotObservedAt:'2026-10-04T23:00:00Z',priorityAsOf:'2026-10-05T00:30:00Z'};
+ const scoped={...context(),schemaVersion:'research-deep-claim-context-v2',researchIdentity:identity};let posts=0;
+ const material={schemaVersion:'research-deep-author-input-v2',researchIdentity:identity,dataCutoff:clock,discovery:{runId:id,asOf:identity.priorityAsOf,inputHash:identity.priorityInputHash},job:scoped.job,modelReservation:scoped.modelReservation,financial:null,sources:[],gaps:[{reason:'dossier_not_selected'},{reason:'sources_not_selected'}],requiresIndependentReview:true,modelDispatched:false,authoritativePublication:false,sourceSelectionComplete:false,financialForecastComplete:false};
+ const deps={...dependencies,post:async(_url,body)=>{posts++;assert.equal(body.scope,'research_observed_v1');assert.equal(body.snapshotHash,identity.snapshotHash);return {rejected:false,body:body.action==='input' ? {ok:true,packet:{...material,inputHash:researchCanonicalHash(material)}} : {ok:true,context:scoped,gap:null}};}};
+ const claimed=await deepControllerCommand([...args(),'--snapshot-hash',identity.snapshotHash],deps);assert.equal(claimed.context.schemaVersion,'research-deep-claim-context-v2');
+ const recovered=await deepControllerCommand(args('recover'),deps);assert.deepEqual(recovered.context.job,scoped.job);
+ const prepared=await deepControllerCommand(['prepare','--origin','https://example.org','--owner',workerOwner,'--output',file('prepared.json'),'--journal',file('prepared.jsonl'),'--request-journal',file('claim.jsonl'),'--bundle-id','none','--source-ids','none'],deps);
+ assert.equal(prepared.schemaVersion,'research-deep-prepared-input-v2');
+ const model={schemaVersion:'research-deep-model-draft-v2',preparedReceiptHash:prepared.receiptHash,inputHash:prepared.packet.inputHash,job:scoped.job,modelReservation:scoped.modelReservation,researchIdentity:identity,article:{schemaVersion:'candidate-deep-research-v1',symbol:'2409',evidenceCutoffAt:clock,authoredAt:'2026-10-05T01:19:00Z',summary:'Synthetic incomplete compatibility draft, not company research.',sections:[],catalysts:[],scenarios:[]}};
+ await fs.writeFile(file('model.json'),JSON.stringify(model)+'\n',{mode:0o600});const before=posts;
+ const saved=await deepControllerCommand(['draft','--origin','https://example.org','--owner',workerOwner,'--request-journal',file('claim.jsonl'),'--prepared-input',file('prepared.json'),'--prepared-hash',prepared.receiptHash,'--model-output',file('model.json'),'--output',file('artifact')],{...deps,now:()=>model.article.authoredAt,post:()=>{throw Error('no post permitted');}});
+ assert.equal(saved.draftPersisted,true);assert.equal(saved.handoffState,'incomplete');assert.equal(posts,before);
+ const draft=JSON.parse(await fs.readFile(file('artifact/draft.json'),'utf8'));assert.deepEqual(draft.researchIdentity,identity);assert.equal(draft.handoff.schemaVersion,'research-deep-author-handoff-v2');assert.equal(draft.handoff.proposedRequest,null);
+ const inspect=await deepControllerCommand(['inspectDraft','--output',file('artifact'),'--receipt-hash',saved.receiptHash],{...deps,now:()=>model.article.authoredAt});assert.equal(inspect.replayed,true);assert.equal(inspect.handoffState,'incomplete');
+}));

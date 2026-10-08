@@ -37,6 +37,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: 'research_deep_input_unavailable' }, { status: 409 });
     }
   }
+  const observed = body.scope === 'research_observed_v1';
+  if (Object.hasOwn(body,'scope') || Object.hasOwn(body,'snapshotHash')) {
+    const keys=action==='status' ? ['action','owner','scope','snapshotHash',...(Object.hasOwn(body,'jobId') ? ['jobId','attempt']:[])] : ['action','owner','scope','snapshotHash'];
+    if(!observed || !['claim','status'].includes(action) || typeof body.snapshotHash!=='string' || !/^[a-f0-9]{64}$/u.test(body.snapshotHash) || Object.keys(body).sort().join(',')!==keys.sort().join(',')) return NextResponse.json({ok:false,error:'research_deep_scope_invalid'},{status:400});
+  }
+  const scopeFields=observed ? {scope:'research_observed_v1' as const,snapshotHash:body.snapshotHash as string}:{};
   if (action === 'status') {
     const hasJob = Object.hasOwn(body, 'jobId'), hasAttempt = Object.hasOwn(body, 'attempt');
     if (hasJob !== hasAttempt || (hasJob && (typeof body.jobId !== 'string' || !UUID.test(body.jobId)
@@ -45,7 +51,7 @@ export async function POST(request: Request) {
     }
     try {
       const context = await loadResearchDeepClaimContext(getSupabaseServerClient(), {
-        owner, ...(hasJob ? { jobId: body.jobId as string, attempt: body.attempt as number } : {}),
+        owner, ...scopeFields, ...(hasJob ? { jobId: body.jobId as string, attempt: body.attempt as number } : {}),
       });
       return NextResponse.json({ ok: true, context, gap: context ? null : 'no_active_owned_job' });
     } catch {
@@ -57,7 +63,16 @@ export async function POST(request: Request) {
     const policy = { maxConcurrentModels: 1, maxMinutesPerJob: 30, maxModelMinutesPerTaipeiDay: 120,
       maxNewDeepStudiesPerTaipeiWeek: 5 };
     try {
-      const result = await db.rpc('claim_research_deep_job_v1', { p_owner: owner });
+      const result = observed ? await db.rpc('claim_research_observed_job_v2', {p_owner:owner,p_snapshot_hash:body.snapshotHash}) : await db.rpc('claim_research_deep_job_v1', { p_owner: owner });
+      if(observed) {
+        if(result.error) throw new Error('claim_unconfirmed');
+        if(result.data===null) return NextResponse.json({ok:true,job:null,context:null,gap:'no_claimable_job',policy});
+        const raw=result.data as {job?:{jobId?:string;attempt?:number}};
+        if(!raw.job || !raw.job.jobId || !Number.isInteger(raw.job.attempt)) throw new Error('claim_identity_unconfirmed');
+        const context=await loadResearchDeepClaimContext(db,{owner,...scopeFields,jobId:raw.job.jobId,attempt:raw.job.attempt});
+        if(!context || context.schemaVersion!=='research-deep-claim-context-v2') throw new Error('claim_context_unconfirmed');
+        return NextResponse.json({ok:true,context,gap:null,policy,job:{job_id:context.job.jobId,symbol:context.job.symbol,priority_run_id:context.job.priorityRunId,attempt:context.job.attempt,lease_expires_at:context.job.leaseExpiresAt}});
+      }
       if (result.error || !Array.isArray(result.data) || result.data.length > 1) throw new Error('claim_unconfirmed');
       if (!result.data.length) return NextResponse.json({ ok: true, job: null, context: null, gap: 'no_claimable_job', policy });
       const claimed = result.data[0] as Row;

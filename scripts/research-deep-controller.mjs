@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
-import { validateResearchDeepClaimContext } from '../web/src/lib/research-deep-claim-context.ts';
+import { researchDeepInstant, validateResearchDeepClaimContext } from '../web/src/lib/research-deep-claim-context.ts';
 import { validateResearchDeepAuthorInput } from '../web/src/lib/research-deep-author-input.ts';
 import { jsonPost } from './research-monitor-controller.mjs';
 import { privateDraftCommand } from './research-deep-draft-controller.mjs';
@@ -50,12 +50,13 @@ async function recoveryRequest(filename, owner, origin, source) {
     if (!text.endsWith('\n')) throw new Error('deep_controller_recovery_journal_incomplete');
     const entries = text.trimEnd().split('\n').map(line => JSON.parse(line));
     const first = entries[0]; const request = first?.request;
-    if (first?.phase !== 'request_pending' || !request || request.schemaVersion !== 'research-deep-request-v1'
+    if (first?.phase !== 'request_pending' || !request || !['research-deep-request-v1','research-deep-request-v2'].includes(request.schemaVersion)
       || request.action !== 'claim' || request.workerOwner !== owner || request.origin !== origin
       || typeof request.claimId !== 'string' || !UUID.test(request.claimId)
       || request.owner !== `${owner}:${request.claimId}`
       || request.sourceCommit !== source || first.requestHash !== researchCanonicalHash(request)
-      || Object.keys(request).sort().join(',') !== 'action,claimId,observedAt,origin,owner,schemaVersion,sourceCommit,workerOwner'
+      || Object.keys(request).sort().join(',') !== (request.schemaVersion==='research-deep-request-v2' ? 'action,claimId,observedAt,origin,owner,schemaVersion,scope,snapshotHash,sourceCommit,workerOwner' : 'action,claimId,observedAt,origin,owner,schemaVersion,sourceCommit,workerOwner')
+      || request.schemaVersion==='research-deep-request-v2' && (request.scope!=='research_observed_v1' || !/^[a-f0-9]{64}$/u.test(request.snapshotHash || ''))
       || !Number.isFinite(Date.parse(request.observedAt))) throw new Error('deep_controller_recovery_binding_invalid');
     const verified = entries.filter(row => row.phase === 'response_verified');
     if (verified.length > 1) throw new Error('deep_controller_recovery_journal_invalid');
@@ -69,7 +70,7 @@ async function recoveryRequest(filename, owner, origin, source) {
       || !Number.isInteger(job.attempt) || job.attempt < 1 || job.attempt > 3))
       throw new Error('deep_controller_recovery_job_invalid');
     return { originalRequestHash: first.requestHash, owner: request.owner, claimId: request.claimId,
-      observedAt: request.observedAt, ...(verified[0]?.saved?.context ? {context:verified[0].saved.context} : {}),
+      observedAt: request.observedAt, ...(request.schemaVersion==='research-deep-request-v2' ? {scope:request.scope,snapshotHash:request.snapshotHash}:{}), ...(verified[0]?.saved?.context ? {context:verified[0].saved.context} : {}),
       ...(job ? { jobId: job.jobId, attempt: job.attempt } : {}) };
   } finally { await handle.close(); }
 }
@@ -85,7 +86,8 @@ export async function deepControllerCommand(args, dependencies = {}) {
       ? error.message : 'deep_draft_private_artifact_unavailable');}
   }
   const flags = new Map();
-  const names = action === 'claim' ? ['--origin', '--owner', '--output', '--journal']
+  const observedClaim=action==='claim' && tail.includes('--snapshot-hash');
+  const names = action === 'claim' ? ['--origin', '--owner', '--output', '--journal',...(observedClaim ? ['--snapshot-hash']:[])]
     : action === 'recover' ? ['--origin', '--owner', '--output', '--journal', '--request-journal']
     : action === 'prepare' ? ['--origin', '--owner', '--output', '--journal', '--request-journal', '--bundle-id', '--source-ids'] : [];
   if (!names.length || tail.length !== names.length * 2) throw new Error('deep_controller_arguments_invalid');
@@ -93,6 +95,7 @@ export async function deepControllerCommand(args, dependencies = {}) {
     if (!names.includes(tail[i]) || flags.has(tail[i])) throw new Error('deep_controller_arguments_invalid');
     flags.set(tail[i], tail[i + 1]);
   }
+  if(observedClaim && !/^[a-f0-9]{64}$/u.test(flags.get('--snapshot-hash') || '')) throw new Error('deep_controller_scope_invalid');
   const origin = originUrl(flags.get('--origin')); const owner = flags.get('--owner');
   if (typeof owner !== 'string' || !OWNER.test(owner)) throw new Error('deep_controller_owner_invalid');
   const paths = names.filter(name => name.endsWith('journal') || name === '--output').map(name => flags.get(name));
@@ -115,7 +118,8 @@ export async function deepControllerCommand(args, dependencies = {}) {
   // Reusing a stable worker label must never make an old lost response recover
   // a different, later claim. Only this original opaque owner is queried.
   const claimOwner = recovered?.owner ?? `${owner}:${claimId}`;
-  const request = { schemaVersion: 'research-deep-request-v1', sourceCommit: source.commit,
+  const scopeFields = recovered?.scope ? {scope:recovered.scope,snapshotHash:recovered.snapshotHash} : observedClaim ? {scope:'research_observed_v1',snapshotHash:flags.get('--snapshot-hash')}:{};
+  const request = { schemaVersion: scopeFields.scope ? 'research-deep-request-v2' : 'research-deep-request-v1', ...scopeFields, sourceCommit: source.commit,
     origin: origin.href, workerOwner: owner, owner: claimOwner, claimId, action, observedAt: clock };
   const requestHash = researchCanonicalHash(request);
   const journal = await open(flags.get('--journal'), 'wx', 0o600);
@@ -126,8 +130,8 @@ export async function deepControllerCommand(args, dependencies = {}) {
     await log({ phase: 'request_pending', request, requestHash,
       originalRequestHash: recovered?.originalRequestHash ?? null });
     sending = true;
-    const body = action === 'claim' ? { action: 'claim', owner: claimOwner }
-      : { action: 'status', owner: claimOwner, ...(recovered?.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}) };
+    const body = action === 'claim' ? { action: 'claim', owner: claimOwner, ...scopeFields }
+      : { action: 'status', owner: claimOwner, ...scopeFields, ...(recovered?.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}) };
     const reply = await (dependencies.post || jsonPost)(new URL('/api/internal/research-deep-job', origin).href, body, key, 15_000);
     if (reply.rejected) {
       // A claim may have committed before a server's context lookup failed.
@@ -140,13 +144,13 @@ export async function deepControllerCommand(args, dependencies = {}) {
     if (!envelope || envelope.ok !== true || !Object.hasOwn(envelope, 'context'))
       throw new Error('deep_controller_response_invalid');
     const context = envelope.context === null ? null : validateResearchDeepClaimContext(envelope.context,
-      { owner: claimOwner, ...(recovered?.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}), now: now() });
-    if (context && (Date.parse(context.observedAt) > Date.parse(now())
-      || Date.parse(now()) - Date.parse(context.observedAt) > 120_000)) throw new Error('deep_controller_response_clock_invalid');
+      { owner: claimOwner, ...scopeFields, ...(recovered?.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}), now: now() });
+    if (context && (researchDeepInstant(context.observedAt) > researchDeepInstant(now())
+      || researchDeepInstant(now()) - researchDeepInstant(context.observedAt) > 120_000_000n)) throw new Error('deep_controller_response_clock_invalid');
     if (context === null && envelope.gap !== (action === 'claim' ? 'no_claimable_job' : 'no_active_owned_job'))
       throw new Error('deep_controller_missing_gap');
     if (context && envelope.gap !== null) throw new Error('deep_controller_context_gap_conflict');
-    const receipt = { schemaVersion: 'research-deep-controller-receipt-v1', sourceCommit: source.commit,
+    const receipt = { schemaVersion:scopeFields.scope ? 'research-deep-controller-receipt-v2':'research-deep-controller-receipt-v1', sourceCommit: source.commit,
       requestHash, originalRequestHash: recovered?.originalRequestHash ?? null, action,
       context, gap: context ? null : envelope.gap, observedAt: now(), modelDispatchable: false,
       modelCalls: 0, draftPersisted: false, authoritativePublication: false, strategyApproved: false,
@@ -169,7 +173,8 @@ async function prepareInput(flags, { origin, source, now, key, recovered, post }
   if ((bundleId !== null && !UUID.test(bundleId)) || ids.length > 30
     || ids.some(id => !UUID.test(id)) || new Set(ids).size !== ids.length)
     throw new Error('deep_controller_input_selection_invalid');
-  const request = { action: 'prepare', originalRequestHash: recovered.originalRequestHash,
+  const scopeFields=recovered.scope ? {scope:recovered.scope,snapshotHash:recovered.snapshotHash}:{};
+  const request = { ...scopeFields, action: 'prepare', originalRequestHash: recovered.originalRequestHash,
     sourceCommit: source.commit, owner: recovered.owner, origin: origin.href, observedAt: now(), bundleId, sourceDocumentIds: ids };
   const journal = await open(flags.get('--journal'), 'wx', 0o600); let output;
   const log = async row => { await journal.writeFile(JSON.stringify(row) + '\n'); await journal.sync(); };
@@ -177,13 +182,13 @@ async function prepareInput(flags, { origin, source, now, key, recovered, post }
     output = await open(flags.get('--output'), 'wx', 0o600);
     await log({ phase: 'input_pending', requestHash: researchCanonicalHash(request), request });
     const status = await post(new URL('/api/internal/research-deep-job', origin).href,
-      { action: 'status', owner: recovered.owner, ...(recovered.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}) }, key, 15_000);
+      { action: 'status', owner: recovered.owner, ...scopeFields, ...(recovered.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}) }, key, 15_000);
     if (status.rejected || status.body?.ok !== true || status.body.gap !== null) throw new Error('input_status_unavailable');
-    const context = validateResearchDeepClaimContext(status.body.context, { owner: recovered.owner,
+    const context = validateResearchDeepClaimContext(status.body.context, { owner: recovered.owner, ...scopeFields,
       ...(recovered.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}), now: now() });
     if (context.modelCompletion !== null) throw new Error('input_model_already_completed');
     const reply = await post(new URL('/api/internal/research-deep-job', origin).href, {
-      action: 'input', owner: recovered.owner, jobId: context.job.jobId, attempt: context.job.attempt,
+      action: 'input', owner: recovered.owner, ...scopeFields, jobId: context.job.jobId, attempt: context.job.attempt,
       reservationId: context.modelReservation.reservationId, bundleId, sourceDocumentIds: ids }, key, 15_000);
     if (reply.rejected || reply.body?.ok !== true) throw new Error('input_unavailable');
     const packet = validateResearchDeepAuthorInput(reply.body.packet, context, now());
@@ -193,7 +198,7 @@ async function prepareInput(flags, { origin, source, now, key, recovered, post }
       || ids.some(id => !packet.sources.some(s => s.documentId === id) && !packet.gaps.some(g => g.documentId === id))
       || bundleId !== null && !packet.financial && !packet.gaps.some(g => g.reason === 'dossier_missing'))
       throw new Error('input_selection_mismatch');
-    const material = { schemaVersion: 'research-deep-prepared-input-v1', sourceCommit: source.commit,
+    const material = { schemaVersion:scopeFields.scope ? 'research-deep-prepared-input-v2':'research-deep-prepared-input-v1', sourceCommit: source.commit,
       requestHash: researchCanonicalHash(request), originalRequestHash: recovered.originalRequestHash, packet,
       preparedAt: now(), modelCalls: 0, modelDispatched: false, authoritativePublication: false };
     const saved = { ...material, receiptHash: researchCanonicalHash(material) };

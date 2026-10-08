@@ -140,7 +140,7 @@ export async function localInboxProfile(root) {
 
 /** Runs only in the existing Node test-runner loopback projection boundary.
  * Uses real Next, Supabase client, PostgREST and PostgreSQL; no DB/client injection. */
-export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgrestBin, check = async (_name, fn) => fn(), observedRoster = false, observedPriority = false, afterBaseline = null }) {
+export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgrestBin, check = async (_name, fn) => fn(), observedRoster = false, observedPriority = false, observedClaim = false, afterBaseline = null }) {
   assert.equal(process.env.NODE_TEST_CONTEXT, 'child-v8', 'local_profile_requires_node_test_runner');
   for (const value of [root, artifacts, pgBin, postgrestBin]) assert.ok(path.isAbsolute(value));
   const environment = localProcessEnvironment();
@@ -175,6 +175,21 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
     }
     if (observedPriority) {
       const migration=await readFile(path.join(root,'migrations/20261008_research_observed_priority_v1.sql'),'utf8');sql(migration);report.observedPriorityMigrationSha256=hash(migration);
+    }
+    if (observedClaim) {
+      const state=await readFile(path.join(root,'migrations/20260929_research_agent_state_v1.sql'),'utf8');
+      const jobs=await readFile(path.join(root,'migrations/20260929_research_deep_jobs_v1.sql'),'utf8');
+      const dossier=await readFile(path.join(root,'migrations/20260906_candidate_dossier_v4.sql'),'utf8');const mutationAt=dossier.indexOf('CREATE OR REPLACE FUNCTION public.reject_candidate_dossier_revision_mutation_v4()');
+      assert.ok(mutationAt>=0);const immutable=dossier.slice(mutationAt,dossier.indexOf('$$;',mutationAt)+3);
+      report.observedClaimDependencySourceHashes={state:hash(state),jobs:hash(jobs),dossier:hash(dossier),immutableDefinition:hash(immutable)};
+      sql(immutable + state.slice(state.indexOf('CREATE TABLE IF NOT EXISTS public.research_model_reservations_v1 ('),state.indexOf('CREATE TABLE IF NOT EXISTS public.research_first_discoveries_v1 (')));
+      sql(jobs.slice(jobs.indexOf('CREATE TABLE IF NOT EXISTS public.research_deep_job_attempts_v1 ('),jobs.indexOf('CREATE OR REPLACE FUNCTION public.enqueue_research_deep_jobs_v1(')));
+      sql(`ALTER TABLE research_deep_job_attempts_v1 ENABLE ROW LEVEL SECURITY;REVOKE ALL ON research_deep_job_attempts_v1 FROM PUBLIC,anon,authenticated,service_role;GRANT SELECT ON research_deep_job_attempts_v1 TO service_role;CREATE POLICY local_attempts_read ON research_deep_job_attempts_v1 FOR SELECT TO service_role USING(true);CREATE POLICY local_model_read ON research_model_reservations_v1 FOR SELECT TO service_role USING(true);CREATE POLICY local_completion_read ON research_model_completions_v1 FOR SELECT TO service_role USING(true);`);
+      const routine=state.slice(state.indexOf('CREATE OR REPLACE FUNCTION public.research_evidence_heads_v1('));
+      sql(routine.slice(0,routine.indexOf('$function$;')+'$function$;'.length));
+      sql('REVOKE ALL ON FUNCTION research_evidence_heads_v1(uuid[],timestamptz) FROM PUBLIC,anon,authenticated;GRANT EXECUTE ON FUNCTION research_evidence_heads_v1(uuid[],timestamptz) TO service_role;');
+      const outbox=await readFile(path.join(root,'migrations/20260907_candidate_dossier_outbox_v5.sql'),'utf8');const at=outbox.indexOf('CREATE TABLE IF NOT EXISTS public.candidate_dossier_outbox_v5 (');sql(outbox.slice(at,outbox.indexOf('\n);',at)+4));
+      const migration=await readFile(path.join(root,'migrations/20261008_research_observed_claim_v2.sql'),'utf8');sql(migration);report.observedClaimMigrationSha256=hash(migration);
     }
     report.installedDefinitions = profile.definitions;
     report.developmentProfileSqlSha256 = hash(profile.sql);
