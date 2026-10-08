@@ -48,3 +48,18 @@ observations within that day, not simultaneous validity. Operator-started fresh
 cycles may recheck companies sooner. This does not renew theses, approve a
 strategy, process paper risk or activate a schedule. Production/runtime and five
 real trading-day acceptance remain outstanding.
+
+## Independent real-clock defect repair
+
+Independent review ofd495c69 reproduced a normal sequence that fixed-clock tests
+missed: the first request is logged before the server creates its worklist cutoff.
+The predecessor validator incorrectly used that later cutoff as the lower bound
+of every earlier log. Actual loopback HTTP with25ms server delay rejected the
+second batch before transport. The trace now validates order from its own first
+observation; server cutoff and cycle metadata remain separate clock bindings.
+
+The new actual-clock acceptance fails againstd495c69 and passes the successor.
+All41 focused cases pass with zero failures/skips. The original40-case maker
+receipt remains intact; a separate14-28 repair receipt records this red→green
+result and updated source hashes. Independent final code approval, VM integration
+and normal build are still required.

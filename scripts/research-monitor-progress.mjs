@@ -109,7 +109,9 @@ export async function readMonitorPredecessor({ outputPath, journalPath, sourceCo
       || loaded.worklistHash !== receipt.worklistHash
       || researchCanonicalHash(loaded.worklist) !== receipt.worklistHash
       || loaded.worklist.asOf !== receipt.worklistAsOf) fail();
-    let lastClock = Date.parse(receipt.cycleStartedAt);
+    // The request log normally precedes the server-created worklist asOf.
+    // Trace order starts at its own first observation, not that later cutoff.
+    let lastClock = -Infinity;
     for (const line of lines) {
       if (!instant(line.observedAt) || Date.parse(line.observedAt) < lastClock
         || Date.parse(line.observedAt) > Date.parse(now)) fail();

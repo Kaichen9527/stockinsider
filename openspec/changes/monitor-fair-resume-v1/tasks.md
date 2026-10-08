@@ -5,6 +5,7 @@
 - [x] Implement closed predecessor validation and bounded private-file reading.
 - [x] Implement fresh-worklist continuation, cumulative audit and fairness.
 - [x] Maker focused40 tests0fail/0skip including loopback HTTP and fsync faults.
+- [x] Independent real-clock P2 reproduced and repaired; successor41 cases0skip.
 - [ ] Focused adversarial and loopback HTTP tests, exact-code independent review.
 - [ ] Cloud integration/type/lint/build and draft PR.
 - [ ] Production runtime and complete daily monitoring acceptance after release.

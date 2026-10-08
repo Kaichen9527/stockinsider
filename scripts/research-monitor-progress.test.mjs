@@ -228,3 +228,24 @@ test('real HTTP multi-batch continuation fetches fresh membership and never forw
     assert.equal(requests.filter(row => !row.path.endsWith('worklist')).every(row => Object.keys(row.input).join(',') === 'symbol'), true);
   } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
 }));
+
+test('real clocks: request log precedes delayed server worklist cutoff and continuation remains valid', () => fixture(async f => {
+  const server = createServer(async (request, reply) => {
+    let body = ''; for await (const chunk of request) body += chunk;
+    const input = JSON.parse(body);
+    if (request.url.endsWith('worklist')) await new Promise(resolve => setTimeout(resolve, 25));
+    const now = new Date().toISOString();
+    reply.setHeader('content-type', 'application/json');
+    reply.end(JSON.stringify(request.url.endsWith('worklist') ? list(35, 2, now) : snapshot(input.symbol, now)));
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  try {
+    const origin = `http://127.0.0.1:${server.address().port}`;
+    const dependencies = { ...f.dependencies, now: () => new Date().toISOString() }; delete dependencies.post;
+    const first = await monitorControllerCommand(f.args('one', null, origin), dependencies);
+    const trace = (await fs.readFile(f.file('one.jsonl'), 'utf8')).trim().split('\n').map(line => JSON.parse(line));
+    assert.ok(Date.parse(trace[0].observedAt) < Date.parse(first.worklistAsOf));
+    const second = await monitorControllerCommand(f.args('two', 'one', origin), dependencies);
+    assert.equal(second.outcomes.length, 3); assert.equal(second.allCurrentSymbolsAccounted, true);
+  } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+}));
