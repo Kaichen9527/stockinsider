@@ -48,3 +48,9 @@ Private local test log SHA256 (raw logs not committed):
   "/tmp/stockinsider-paper-anchor-green.log": "ef1146a7ae4cadc091638cc5af8cd4814bfbe089fcde6b8239939f6c74169ff0"
 }
 ```
+
+## Independent review and release identity follow-up
+
+Independent unsigned code review approved exact7a2a8df5d85c1f6061c8e3960b926b8574952552: independent20/20zero skip plus four isolation/failure probes; no new P1/P2. VM type/lint/build remain pending.
+
+Ordinary CI run37804927182 failed at Taipei23:58: the same four positive-reservation cases in three existing PG suites encountered the legitimate late-day guard. It additionally exposed a stale generated execution-source identity after the two production-source edits. The supported generator now records only those two changed source hashes and their aggregate codeHash4ff97130999ee66808e05d1a253cece453141bc704c8050a581b955f4205e664. ParameterHash and all database policy entries are unchanged. Generator --check and release-identity test pass1/1zero skip. This refresh records source identity; it does not activate/approve a strategy or cure the independent clock-test issue. The generated file is a sixth scoped file added after the original five-file checkpoint.
