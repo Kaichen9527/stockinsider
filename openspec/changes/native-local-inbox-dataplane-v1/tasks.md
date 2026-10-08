@@ -21,3 +21,8 @@ Root reports unsigned scoped data passes through AUO head 1b25393ad4b3790e6ca427
 - [x] Synthetic split-credential repro preserves old failure; full joined logs redacted before persistence.
 - [x] All arbitrary two-chunk split points and one-character chunks; final native12/12 zero skip, type/lint/normal build.
 - [ ] Independent exact successor review; no prior native approval inferred.
+
+
+## 2026-10-08 native priority read-profile successor
+
+A separate minimal real-SQL/SELECT-only ACL profile now returns exact401 unauthorized and409 research_priority_official_roster_missing before/after PG restart, replacing the earlier read_failed only in this new profile. Native13/13 zero skip, types/lint/normal build pass; stocks/instrument/sector and nine ancillary tables remain empty. See priority-local-read-profile-handoff.md and the13-24 receipt; old receipts retained. Root-reported875 unsigned40+17 source approval does not cover this new profile. Observed identity/roster admission and positive job/claim/input require a separate reviewed contract; directstocks admission was withdrawn and never implemented. Insider fixes remain queued.
