@@ -6,13 +6,38 @@
   "branch": "codex/deep-private-draft-oct08",
   "push": "successful",
   "requestedPrBase": "codex/financial-document-write-lease-oct08",
-  "draftPrCreated": false,
-  "draftPrError": "gh pr create: POST https://api.github.com/graphql: Forbidden",
+  "draftPrCreated": true,
   "prDescriptionSha256": "b733a6ec1105b8846bf66f79a1ecf354df8e860d6e95bfe0142c4ac4ed384b69",
   "validationReceiptSha256": "f34f9ecb9a9a1cfb2997f155d696dbbbdcca58d6d5acc0ebb30e4d4cdcbad8b0",
-  "independentReview": "pending",
+  "independentReview": "pending; existing Astra reviewer assigned read-only review of exact testedCodeCommit",
   "originalCheckoutCommit": "9cce0516f73ad81a1497d4a9278a9b9d77c118d3",
   "originalCheckoutClean": true,
   "deployment": false,
-  "productionRoundtripVerified": false
+  "productionRoundtripVerified": false,
+  "updatedAt": "2026-10-08T06:43:49.625735+00:00",
+  "initialCloudDraftPrError": "gh pr create: POST https://api.github.com/graphql: Forbidden",
+  "draftPrUrl": "https://github.com/Kaichen9527/stockinsider/pull/304",
+  "draftPrCreatedBy": "source thread using existing local GitHub authorization; reported by delegation",
+  "cloudPrRetryPerformed": false,
+  "integration": {
+    "tests": 342,
+    "pass": 342,
+    "fail": 0,
+    "skip": 0,
+    "rerun": true,
+    "initialRun": {
+      "tests": 342,
+      "pass": 341,
+      "fail": 1,
+      "skip": 0,
+      "failure": "Existing candidate-dossier-outbox-v6-postgres.test.mjs:138 expected research_thesis_head_changed but received empty stderr. Assertions unchanged; confirming full run passed; intermittent failure not claimed fixed."
+    }
+  },
+  "initialVerificationToolFailures": [
+    "Exit127: npm missing from minimal PATH; corrected using existing runtime.",
+    "du sampling raced temporary directory deletion; corrected wrapper; original logs retained."
+  ],
+  "actualCompanyResearchCompleted": false,
+  "formalAuthorHandoffCompleted": false,
+  "continuationState": "await independent review; no code changes or VM verification in this update"
 }

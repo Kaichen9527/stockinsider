@@ -21,3 +21,11 @@ Actual checks/resource measurements and code file hashes are recorded in .agent/
 ## Next-stage hosted reader relay
 
 The sanitized relay is saved as deep-private-draft-public-preparation-relay.json beside this file. Acquisition was root-hosted-web-reader at 2026-10-08T06:26:50Z, not this VM HTTP controller. Supplied date precision and independence-root labels are preserved as relay labels, not fabricated database source IDs or wire hashes. Body reads, index reads, unusable PDF text and failed fetches remain distinct. It creates no official inbox, job or reservation and is not complete financial research. AUO and Intel material does not establish an Intel order. Full financial tables, eight quarters, 24 monthly revenues, nonoperating/one-off bridge, current customer/competitor/order checks, official price context and a second company remain outstanding.
+
+## Delivery and review update
+
+Draft PR [#304](https://github.com/Kaichen9527/stockinsider/pull/304) was created by the source thread using its existing local GitHub authorization, with base codex/financial-document-write-lease-oct08. The initial Cloud GraphQL Forbidden remains in the delivery history; no duplicate PR creation was retried. The existing independent Astra reviewer is assigned read-only review of exact code commit 06dc3cd41dd6d6ee64381c507ac15c60ca86229d. This documentation update changes no program code and performs no new VM validation or VPS operation. Await that review before continuing VM verification.
+
+The confirming full research suite passed 342/342 with zero skips, including isolated PostgreSQL. The initial PATH exit127, temporary-directory du sampler failure and first integration result (341 pass, one PostgreSQL race assertion failure, zero skips) remain recorded. The unchanged suite passed on rerun; the intermittent race is not claimed fixed. Typecheck, lint and normal build results remain those of the original acceptance run.
+
+Real company research, authenticated live-status checking and formal author handoff remain incomplete. Synthetic draft acceptance does not establish paid model work, independent review completion, publication, strategy approval or a production VPS→Cloud business roundtrip. The immutable acceptance receipt and hosted preparation relay are unchanged.
