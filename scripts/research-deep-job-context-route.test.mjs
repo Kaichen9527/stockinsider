@@ -3,6 +3,9 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import vm from 'node:vm';
 import test from 'node:test';
+import { candidateDossierBundleId, candidateDossierInputHash } from '../web/src/lib/candidate-dossier-contract.ts';
+import { validateResearchDeepAuthorInput } from '../web/src/lib/research-deep-author-input.ts';
+import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
 import ts from '../web/node_modules/typescript/lib/typescript.js';
 
 // Acceptance criteria: DCC-RT-01 auth first; 02 durable claim context; 03 read-only
@@ -24,6 +27,8 @@ const HASH = 'a'.repeat(64);
 const TABLE = {
   jobs: 'research_deep_jobs_v1', attempts: 'research_deep_job_attempts_v1',
   reservations: 'research_model_reservations_v1', completions: 'research_model_completions_v1',
+  priority: 'research_priority_runs_v1', bundles: 'candidate_dossier_bundles', documents: 'source_raw_documents',
+  stocks: 'stocks', published: 'candidate_daily_stage_snapshots',
 };
 const ENV = {
   INTERNAL_API_KEY: 'fixture-internal-only', CRON_SECRET: 'fixture-cron-only',
@@ -69,6 +74,7 @@ function database(rows, options = {}) {
       function execute(single = false) {
         if (result) return result;
         calls.selects.push({ table, columns, filters: [...filters], limit });
+        if (options.hangTable === table) return new Promise(() => {});
         if (options.throwTable === table) throw new Error('fixture-private-database-diagnostic');
         if (options.errorTable === table) {
           result = { data: null, error: { message: 'fixture-private-database-diagnostic' } };
@@ -81,6 +87,13 @@ function database(rows, options = {}) {
           if (op === 'lt') return row[key] < value;
           if (op === 'lte') return row[key] <= value;
           if (op === 'in') return value.includes(row[key]);
+          if (op === 'or') {
+            value = key;
+            const root = JSON.parse(value.slice('metadata->>canonical_url.eq.'.length, value.indexOf(',and(')));
+            const pattern = JSON.parse(value.slice(value.indexOf('document_url.match.') + 'document_url.match.'.length, -1));
+            return row.metadata?.canonical_url === root || row.metadata?.canonical_url == null && new RegExp(pattern).test(row.document_url);
+          }
+          if (op === 'contains') return Object.entries(value).every(([name, item]) => row[key]?.[name] === item);
           throw new Error(`unsupported query operator ${op}`);
         })).slice(0, limit).map((row) => {
           assert.equal(typeof columns, 'string', 'SELECT columns are required');
@@ -97,24 +110,28 @@ function database(rows, options = {}) {
       const query = {
         select(value) { columns = value; return query; },
         limit(value) { limit = value; return query; },
-        order() { return query; },
+        order() { return query; }, abortSignal() { return query; },
         maybeSingle: async () => execute(true), single: async () => execute(true),
         then(resolve, reject) { return Promise.resolve().then(() => execute()).then(resolve, reject); },
       };
-      for (const op of ['eq', 'gt', 'gte', 'lt', 'lte', 'in']) {
+      for (const op of ['eq', 'gt', 'gte', 'lt', 'lte', 'in', 'contains', 'or']) {
         query[op] = (key, value) => { filters.push([op, key, value]); return query; };
       }
       return query;
     },
-    async rpc(name, args) {
+    rpc(name, args) {
+      const result = (async () => {
       calls.rpc.push({ name, args: structuredClone(args) });
       if (options.rpcThrows) throw new Error('fixture-private-database-diagnostic');
       if (options.rpcError) return { data: null, error: { message: options.rpcError } };
+      if (name === 'research_evidence_heads_v1') return { data: options.heads || args.p_ids.map(id => ({ id, headId: id, retracted: false, superseded: false })), error: null };
       if (name === 'claim_research_deep_job_v1') {
         return { data: options.claimData === undefined ? [claimRow()] : options.claimData, error: null };
       }
       return { data: name === 'claim_candidate_deep_outbox_v1'
         ? [{ job_id: RECEIPT, lease_expires_at: DEADLINE }] : true, error: null };
+      })();
+      return Object.assign(result, { abortSignal: () => result });
     },
   };
   return { db, calls };
@@ -122,7 +139,7 @@ function database(rows, options = {}) {
 
 async function run({ body = { action: 'status', owner: OWNER }, rows = fixture(),
   headers = { authorization: `Bearer ${ENV.INTERNAL_API_KEY}` }, env = ENV, now = NOW,
-  invalidBody = false, afterSelect, ...dbOptions } = {}) {
+  invalidBody = false, afterSelect, timerMax, ...dbOptions } = {}) {
   let currentTime = now;
   const { db, calls } = database(rows, { ...dbOptions,
     afterSelect: (state) => afterSelect?.({ ...state, setTime: (value) => { currentTime = value; } }),
@@ -140,6 +157,8 @@ async function run({ body = { action: 'status', owner: OWNER }, rows = fixture()
     '@/lib/supabase-server': { getSupabaseServerClient() { calls.client++; return db; } },
   };
   function load(name) {
+    if (name === 'crypto') return crypto;
+    if (name.startsWith('./')) name = '@/lib/' + name.slice(2).replace(/\.ts$/u, '');
     if (name in adapters) return adapters[name];
     assert.ok(name.startsWith('@/lib/'), `unexpected dependency ${name}`);
     if (cache.has(name)) return cache.get(name);
@@ -154,7 +173,7 @@ async function run({ body = { action: 'status', owner: OWNER }, rows = fixture()
       module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022,
     } }).outputText;
     vm.runInNewContext(compiled, { exports, require: load, Date: Clock,
-      process: { env: { ...env } }, Buffer, JSON, URL, Request, Headers });
+      process: { env: { ...env } }, Buffer, JSON, URL, Request, Headers, AbortController, setTimeout: timerMax ? (callback, delay) => setTimeout(callback, Math.min(delay, timerMax)) : setTimeout, clearTimeout });
   }
   const route = {};
   evaluate(fs.readFileSync(new URL('../web/src/app/api/internal/research-deep-job/route.ts', import.meta.url), 'utf8'), route);
@@ -419,7 +438,7 @@ test('DCC-RT-19 status rejects missing, mismatched, duplicate, or unreadable dur
     const { response, calls } = await run({ rows });
     assertUnavailable(response); assertReadOnly(calls);
   }
-  for (const table of Object.values(TABLE)) {
+  for (const table of [TABLE.jobs, TABLE.attempts, TABLE.reservations, TABLE.completions]) {
     const { response, calls } = await run({ errorTable: table });
     assertUnavailable(response); assertReadOnly(calls);
   }
@@ -460,4 +479,192 @@ test('DCC-RT-21 existing handoff, finish, and publication retain their authentic
     assert.equal(response.status, 200); assert.equal(response.body.ok, true);
     assert.deepEqual(calls.rpc, [{ name, args }]); assert.equal(calls.selects.length, 0);
   }
+});
+
+const SOURCE_ID = '20000000-0000-4000-8000-000000000001';
+const FACT_ID = '20000000-0000-4000-8000-000000000002';
+const ROOT_URL = 'https://example.com/company-outlook';
+function inputFixture() {
+  const rows = fixture();
+  rows[TABLE.priority] = [{ run_id: PRIORITY, as_of: START, input_hash: HASH }];
+  rows[TABLE.stocks] = [{ id: OTHER_JOB, symbol: '2330' }];
+  rows[TABLE.published] = [{ stock_id: OTHER_JOB, detail_revision_id: REVISION, created_at: START }];
+  const detail = { id: REVISION, stock_id: OTHER_JOB, stocks: { symbol: '2330', name: 'fixture' },
+    as_of: START, available_at: START, fact_ids: [FACT_ID], sections: [{ text: 'DO_NOT_EXPORT_DOSSIER_PROSE' }] };
+  const facts = [{ fact_id: FACT_ID, stock_id: OTHER_JOB, fact_key: 'revenue', period_end: '2026-06-30',
+    value: 100, unit: 'TWD million', as_of: START, available_at: START, source_url: 'https://example.com/financial',
+    provenance: { private_payload: 'DO_NOT_EXPORT_PROVENANCE' } }];
+  const hash = candidateDossierInputHash(detail, facts), bundle = candidateDossierBundleId(hash);
+  rows[TABLE.bundles] = [{ bundle_id: bundle, revision_id: REVISION, published_revision_id: REVISION,
+    input_hash: hash, symbol: '2330', payload: { detail, facts }, queued_at: START }];
+  rows[TABLE.documents] = [{ id: SOURCE_ID, platform: 'research_inbox_ptt', document_url: ROOT_URL,
+    published_at: START, collected_at: START, symbols: ['2330'], canonical_content_hash: HASH,
+    content_semantics: 'editorial_discussion', summary: 'A bounded synthetic outlook summary.',
+    content_text: 'DO_NOT_EXPORT_FULL_SOURCE', metadata: { canonical_url: ROOT_URL, content_hash: HASH,
+      acquisition_mode: 'local_codex_research_inbox', first_observed_at: START, revision_observed_at: START,
+      content_form: 'research_summary', acquisition_method: 'public_document', claim_status: 'rumor',
+      visibility: 'public', rights_boundary: 'public_citation', subject_scope: 'company_mentions' } }];
+  return { rows, body: { action: 'input', owner: OWNER, jobId: JOB, attempt: 1,
+    reservationId: RESERVATION, bundleId: bundle, sourceDocumentIds: [SOURCE_ID] } };
+}
+
+test('DAI-01 real input route exports only bounded facts/summary with live reservation and separate cutoffs', async () => {
+  const { response, calls } = await run(inputFixture());
+  assert.equal(response.status, 200);
+  const packet = response.body.packet;
+  assert.equal(validateResearchDeepAuthorInput(packet, expectedContext(), NOW), packet);
+  assert.equal(packet.dataCutoff, NOW);
+  assert.equal(packet.discovery.asOf, START);
+  assert.equal(packet.financial.facts[0].value, 100);
+  assert.equal(packet.sources[0].claimStatus, 'rumor');
+  assert.equal(packet.sources[0].publishable, true);
+  assert.deepEqual(packet.gaps, []);
+  assert.equal(packet.modelDispatched, false);
+  assert.equal(packet.financialForecastComplete, false);
+  assert.equal(packet.sourceSelectionComplete, false);
+  const { inputHash, ...material } = packet;
+  assert.equal(inputHash, researchCanonicalHash(material));
+  assert.ok(!JSON.stringify(packet).includes('DO_NOT_EXPORT'));
+  assert.ok(calls.selects.every(q => q.columns !== '*' && !q.columns.includes('content_text') && q.limit <= 50));
+  assert.deepEqual(calls.rpc.map(c => c.name), ['research_evidence_heads_v1']);
+});
+
+test('DAI-02 auth and exact input validation happen before all database access', async () => {
+  for (const mutate of [f => f.body.extra = 'bad', f => f.body.sourceDocumentIds = Array(31).fill(SOURCE_ID),
+    f => f.body.owner = [OWNER], f => f.body.attempt = '1', f => f.body.bundleId = undefined]) {
+    const f = inputFixture(); mutate(f);
+    const { response, calls } = await run(f);
+    assert.equal(response.status, 400); assert.equal(calls.client, 0);
+  }
+  const { response, calls } = await run({ ...inputFixture(), headers: {} });
+  assert.equal(response.status, 401); assert.equal(calls.client, 0); assert.equal(calls.body, 0);
+});
+
+test('DAI-03 wrong reservation and a completed model cannot prepare another dispatch input', async () => {
+  for (const change of [f => f.body.reservationId = OTHER_RESERVATION,
+    f => f.rows[TABLE.completions].push({ reservation_id: RESERVATION, owner: OWNER,
+      outcome: 'completed', result_hash: HASH, finished_at: '2026-10-05T00:05:00.000Z' })]) {
+    const f = inputFixture(); change(f);
+    const { response, calls } = await run(f);
+    assert.equal(response.status, 409);
+    assert.ok(!calls.selects.some(q => q.table === TABLE.bundles));
+    assert.deepEqual(calls.rpc, []);
+  }
+});
+
+test('DAI-04 denied, withdrawn, malformed rights, future microsecond and unrelated company stay explicit gaps', async () => {
+  const cases = [
+    ['denied', d => d.metadata.claim_status = 'denied'],
+    ['retracted', d => d.metadata.retracted_at = START],
+    ['rights_invalid', d => d.metadata.acquisition_method = ['public_document']],
+    ['claim_status_invalid', d => d.metadata.claim_status = ['rumor']],
+    ['clock_invalid', d => { d.collected_at = '2026-10-05T00:10:00.000001Z'; d.metadata.revision_observed_at = d.collected_at; }],
+    ['company_mismatch', d => d.symbols = ['2409']],
+    ['bounded_inbox_summary_required', d => d.summary = 'x'.repeat(601)],
+    ['bounded_inbox_summary_required', d => d.summary = 'api_key=synthetic-secret'],
+    ['parent_unresolved', d => d.metadata.parent_source_url = 'https://example.com/unread-parent'],
+  ];
+  for (const [reason, change] of cases) {
+    const f = inputFixture(); change(f.rows[TABLE.documents][0]);
+    const { response } = await run(f);
+    assert.equal(response.status, 200, reason);
+    assert.deepEqual(response.body.packet.sources, [], reason);
+    assert.ok(response.body.packet.gaps.some(g => g.reason === reason), reason);
+  }
+});
+
+test('DAI-05 authenticated summary remains internal; industry is context without company/order attribution', async () => {
+  const f = inputFixture(); const doc = f.rows[TABLE.documents][0];
+  Object.assign(doc.metadata, { visibility: 'authenticated_summary', rights_boundary: 'bounded_summary_only',
+    acquisition_method: 'authenticated_browser_summary', timed_excerpts: [], subject_scope: 'industry_context' });
+  doc.symbols = [];
+  const { response } = await run(f);
+  assert.equal(response.status, 200);
+  assert.equal(response.body.packet.sources[0].publishable, false);
+  assert.equal(response.body.packet.sources[0].companyEvidence, false);
+});
+
+test('DAI-06 stale RPC head and equal-clock conflicting sibling cannot slip into author input', async () => {
+  const f = inputFixture();
+  let result = await run({ ...f, heads: [{ id: SOURCE_ID, headId: OTHER_JOB, superseded: false, retracted: false }] });
+  assert.equal(result.response.body.packet.gaps[0].reason, 'source_head_changed');
+  f.rows[TABLE.documents].push({ ...structuredClone(f.rows[TABLE.documents][0]), id: OTHER_JOB,
+    summary: 'A different summary at the same observation clock.' });
+  result = await run(f);
+  assert.equal(result.response.body.packet.gaps[0].reason, 'source_conflicting_head');
+  assert.deepEqual(result.response.body.packet.sources, []);
+});
+
+test('DAI-07 immutable dossier hash, issuer, published identity and clocks are verified', async () => {
+  for (const change of [f => f.rows[TABLE.bundles][0].payload.facts[0].value = 900,
+    f => f.rows[TABLE.bundles][0].published_revision_id = OTHER_JOB,
+    f => f.rows[TABLE.bundles][0].queued_at = '2026-10-05T00:10:00.000001Z',
+    f => f.rows[TABLE.priority][0].as_of = DEADLINE,
+    f => f.rows[TABLE.stocks][0].symbol = '2409', f => f.rows[TABLE.published] = []]) {
+    const f = inputFixture(); change(f);
+    const { response } = await run(f); assert.equal(response.status, 409);
+    assert.equal(response.body.error, 'research_deep_input_unavailable');
+  }
+});
+
+test('DAI-08 absent selections are explicit gaps, never a complete financial forecast', async () => {
+  const f = inputFixture(); f.body.bundleId = null; f.body.sourceDocumentIds = [];
+  const { response } = await run(f);
+  assert.equal(response.status, 200);
+  assert.deepEqual(response.body.packet.gaps.map(g => g.reason), ['dossier_not_selected', 'sources_not_selected']);
+  assert.equal(response.body.packet.financial, null);
+});
+
+test('DAI-09 ownership changes during preparation invalidate the entire packet', async () => {
+  const f = inputFixture();
+  const { response } = await run({ ...f, afterSelect: ({ table, rows }) => {
+    if (table === TABLE.documents) rows[TABLE.jobs][0].lease_owner = 'fixture-new-owner';
+  } });
+  assert.equal(response.status, 409); assert.equal(response.body.packet, undefined);
+});
+
+test('DAI-10 source read failure cannot be reported as no new sources', async () => {
+  const { response } = await run({ ...inputFixture(), errorTable: TABLE.documents });
+  assert.equal(response.status, 409); assert.equal(response.body.packet, undefined);
+});
+
+
+test('DAI-11 deadline rejects a stalled source read even when transport ignores cancellation', async () => {
+  const began = Date.now();
+  const { response } = await run({ ...inputFixture(), timerMax: 20, hangTable: TABLE.documents });
+  assert.equal(response.status, 409); assert.equal(response.body.packet, undefined);
+  assert.ok(Date.now() - began < 1000);
+});
+
+
+test('DAI-12 fallback revision URLs cannot hide a contradictory same-clock sibling', async () => {
+  const f = inputFixture(); const original = f.rows[TABLE.documents][0];
+  const sibling = structuredClone(original); sibling.id = OTHER_JOB;
+  delete sibling.metadata.canonical_url;
+  sibling.document_url = `${ROOT_URL}#si-revision-${HASH.slice(0, 16)}`;
+  sibling.summary = 'Conflicting legacy revision summary.';
+  f.rows[TABLE.documents].push(sibling);
+  const { response } = await run(f);
+  assert.equal(response.status, 200);
+  assert.deepEqual(response.body.packet.sources, []);
+  assert.equal(response.body.packet.gaps[0].reason, 'source_conflicting_head');
+});
+
+test('DAI-13 precise clocks survive packet serialization and reject invalid microsecond sibling ordering', async () => {
+  const f = inputFixture(); const original = f.rows[TABLE.documents][0];
+  original.published_at = '2026-10-05T00:00:00.000001Z';
+  original.metadata.first_observed_at = '2026-10-05T00:00:00.000002Z';
+  original.metadata.revision_observed_at = '2026-10-05T00:00:00.000005Z';
+  original.collected_at = '2026-10-05T00:00:00.000006Z';
+  let result = await run(f);
+  assert.equal(result.response.status, 200);
+  assert.equal(result.response.body.packet.sources[0].publishedAt, original.published_at);
+  assert.equal(result.response.body.packet.sources[0].revisionObservedAt, original.metadata.revision_observed_at);
+  validateResearchDeepAuthorInput(result.response.body.packet, expectedContext(), NOW);
+  const sibling = structuredClone(original); sibling.id = OTHER_JOB;
+  sibling.metadata.first_observed_at = '2026-10-05T00:00:00.000007Z';
+  f.rows[TABLE.documents].push(sibling);
+  result = await run(f);
+  assert.deepEqual(result.response.body.packet.sources, []);
+  assert.equal(result.response.body.packet.gaps[0].reason, 'source_conflicting_head');
 });

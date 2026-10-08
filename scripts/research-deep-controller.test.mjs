@@ -168,3 +168,80 @@ test('actual local HTTP lost response recovers identical reservation without a s
     assert.equal(claims, 1); assert.equal(statuses, 1); assert.equal(result.context.modelReservation.reservationId, id);
   } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
 }));
+
+function inputPacket() {
+  const c = context();
+  const material = { schemaVersion: 'research-deep-author-input-v1', dataCutoff: clock,
+    discovery: { runId: id, asOf: c.modelReservation.startedAt, inputHash: 'a'.repeat(64) },
+    job: c.job, modelReservation: c.modelReservation, financial: null, sources: [],
+    gaps: [{ reason: 'dossier_not_selected' }, { reason: 'sources_not_selected' }],
+    requiresIndependentReview: true, modelDispatched: false, authoritativePublication: false,
+    sourceSelectionComplete: false, financialForecastComplete: false };
+  return { ...material, inputHash: researchCanonicalHash(material) };
+}
+function prepareArgs(args) {
+  return [...args('recover').map((s, i) => i === 0 ? 'prepare' : s), '--bundle-id', 'none', '--source-ids', 'none'];
+}
+test('prepare consumes original claim journal, observes status and fetches input without another claim', async () => fixture(async ({ file, args, dependencies }) => {
+  await deepControllerCommand(args(), { ...dependencies, post: async () => success() });
+  const seen = [];
+  const saved = await deepControllerCommand(prepareArgs(args), { ...dependencies, post: async (_url, body) => {
+    seen.push(body);
+    assert.match(await fs.readFile(file('recover.jsonl'), 'utf8'), /input_pending/);
+    return body.action === 'status' ? success() : { rejected: false, body: { ok: true, packet: inputPacket() } };
+  } });
+  assert.deepEqual(seen, [{ action: 'status', owner, jobId: id, attempt: 1 },
+    { action: 'input', owner, jobId: id, attempt: 1, reservationId: id, bundleId: null, sourceDocumentIds: [] }]);
+  assert.equal(saved.packet.job.owner, owner); assert.equal(saved.sourceCommit, source);
+  assert.equal(saved.modelCalls, 0); assert.equal(saved.authoritativePublication, false);
+  const { receiptHash, ...material } = saved; assert.equal(receiptHash, researchCanonicalHash(material));
+  assert.equal((await fs.stat(file('recover.json'))).mode & 0o777, 0o600);
+  assert.equal((await fs.readFile(file('recover.json'), 'utf8')).includes(key), false);
+}));
+
+test('prepare lost response uses only status and input, never a new claim or reservation', async () => fixture(async ({ file, args, dependencies }) => {
+  await assert.rejects(deepControllerCommand(args(), { ...dependencies, post: async () => { throw new Error('lost'); } }));
+  let calls = 0;
+  await assert.rejects(deepControllerCommand(prepareArgs(args), { ...dependencies, post: async (_url, body) => {
+    calls++; assert.ok(['status', 'input'].includes(body.action));
+    if (body.action === 'status') { assert.deepEqual(body, { action: 'status', owner }); return success(); }
+    throw new Error(key);
+  } }), /input_unavailable/);
+  assert.equal(calls, 2);
+  const journal = await fs.readFile(file('recover.jsonl'), 'utf8');
+  assert.match(journal, /input_unavailable/); assert.equal(journal.includes(key), false);
+  assert.equal(await fs.readFile(file('recover.json'), 'utf8'), '');
+}));
+
+test('prepare refuses completed work before fetching any input', async () => fixture(async ({ args, dependencies }) => {
+  await deepControllerCommand(args(), { ...dependencies, post: async () => success() });
+  let calls = 0;
+  await assert.rejects(deepControllerCommand(prepareArgs(args), { ...dependencies, post: async (_url, body) => {
+    calls++; assert.equal(body.action, 'status'); const reply = success();
+    reply.body.context.modelCompletion = { outcome: 'completed', resultHash: 'a'.repeat(64), completedAt: clock };
+    return reply;
+  } }), /input_unavailable/);
+  assert.equal(calls, 1);
+}));
+
+test('prepare rejects packet hash/owner/deadline/rights/extra fields and missing selection accounting', async () => {
+  for (const change of [p => p.inputHash = 'f'.repeat(64),
+    p => p.job.owner = 'foreign-owner', p => p.modelReservation.leaseExpiresAt = '2026-10-05T02:00:00Z',
+    p => p.dataCutoff = '2026-10-05T01:01:00.000001Z', p => p.extra = key,
+    p => p.sourceSelectionComplete = true, p => p.financial = { rawBody: 'not allowed' }]) {
+    await fixture(async ({ file, args, dependencies }) => {
+      await deepControllerCommand(args(), { ...dependencies, post: async () => success() });
+      const packet = inputPacket(); change(packet);
+      if (packet.inputHash !== 'f'.repeat(64)) { const { inputHash, ...material } = packet; void inputHash; packet.inputHash = researchCanonicalHash(material); }
+      await assert.rejects(deepControllerCommand(prepareArgs(args), { ...dependencies, post: async (_url, body) =>
+        body.action === 'status' ? success() : { rejected: false, body: { ok: true, packet } } }), /input_unavailable/);
+      assert.equal(await fs.readFile(file('recover.json'), 'utf8'), '');
+    });
+  }
+  await fixture(async ({ args, dependencies }) => {
+    await deepControllerCommand(args(), { ...dependencies, post: async () => success() });
+    const selected = prepareArgs(args); selected[selected.length - 1] = id;
+    await assert.rejects(deepControllerCommand(selected, { ...dependencies, post: async (_url, body) =>
+      body.action === 'status' ? success() : { rejected: false, body: { ok: true, packet: inputPacket() } } }), /input_unavailable/);
+  });
+});

@@ -104,3 +104,27 @@ Cloud exact139f6ef compatibility passed37/37 under Node22.14 with measured
 32GiB cgroup/four-core allocation and335MiB sampled process-group RSS. This
 confirms one bounded synthetic development run, not the still-open live
 VPS→Cloud→review→authenticated business-result acceptance.
+
+## October 8 author input increment
+
+- [x] Existing guarded deep-job route prepares bounded, rights-aware research
+  input for its exact active owner/job/attempt/reservation; no new claim,
+  reservation, extension, model call or publication. Actual immutable dossier
+  identity, issuer and published-stage proof are verified before numeric export.
+- [x] Original private claim journal drives trusted `prepare`; selection,
+  hashes, source rights and original budget deadlines remain bound. Discovery
+  cutoff and later research cutoff are separate. Every selected source is
+  accounted for; invalid/withdrawn/conflicting sources stay explicit gaps.
+- [x] Independent review found and repaired fallback revision URL and
+  microsecond sibling chronology defects. 50 route/CLI cases and final321
+  integrated tests pass without skips; types pass, lint has0errors/33existing warnings.
+- [ ] Live author dispatch, durable draft, independent budgeted article review,
+  AUO and second-company publication, production deployment and five trading
+  days remain open. Input preparation is not the six-role completion claim.
+- [ ] Fresh production automation defect: financial upload has no write lease
+  before private receipt registration; worker HTTP path also lacks a lease.
+  Repair and verify guarded acquire/release before retrying official documents.
+
+October8 readonly capacity:15,240,617,984 available bytes; root filesystem
+76,887,154,688bytes. Still below the20.40GB heavy-work floor. No cleanup,
+production data mutation or expansion was performed by this increment.

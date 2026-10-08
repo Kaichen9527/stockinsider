@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "unsigned-development-validation-v1",
+  "sourceCommit": "9610514ce52bcbac29e77b9c0ae80828e2da69d4",
+  "parent": "19bfba8f7d24ab2cebe5dbdbc59d7d4880fa167d",
+  "tests": {
+    "passed": 321,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typecheck": "passed",
+  "lint": {
+    "errors": 0,
+    "preexistingWarnings": 33
+  },
+  "build": "passed",
+  "independentReview": {
+    "agent": "/root/author_input_review_oct08",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "decision": "approved_unsigned_scoped",
+    "independentTestsPassed": 50,
+    "repairedFindings": [
+      "legacy_revision_url_sibling_gap",
+      "microsecond_sibling_ordering_and_export"
+    ]
+  },
+  "protectedApproval": false,
+  "merged": false,
+  "deployed": false,
+  "modelDispatched": false,
+  "logHashes": {
+    "stockinsider-author-integrated-oct08.log": "841dfd210aed48e08cf6c62f589c401bc88609198f9fc8d6f5464ca025673b85",
+    "stockinsider-author-types-oct08.log": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+    "stockinsider-author-lint-oct08.log": "4a13415a64c750e27b2e34d389d96e7b1b952909139acb919eaefd7838587879",
+    "stockinsider-author-build-oct08.log": "14d1c8761f03989c86de1abf658491f537b9e288eaf03b956cb16aeb9a26757c"
+  },
+  "vps": {
+    "measuredOn": "2026-10-08",
+    "filesystemBytes": 76887154688,
+    "availableBytes": 15240617984,
+    "heavyAdmissionPassed": false,
+    "deletedByThisIncrement": 0
+  }
+}

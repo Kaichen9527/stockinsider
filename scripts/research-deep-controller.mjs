@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
 import { validateResearchDeepClaimContext } from '../web/src/lib/research-deep-claim-context.ts';
+import { validateResearchDeepAuthorInput } from '../web/src/lib/research-deep-author-input.ts';
 import { jsonPost } from './research-monitor-controller.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
@@ -77,7 +78,8 @@ export async function deepControllerCommand(args, dependencies = {}) {
   const [action, ...tail] = args;
   const flags = new Map();
   const names = action === 'claim' ? ['--origin', '--owner', '--output', '--journal']
-    : action === 'recover' ? ['--origin', '--owner', '--output', '--journal', '--request-journal'] : [];
+    : action === 'recover' ? ['--origin', '--owner', '--output', '--journal', '--request-journal']
+    : action === 'prepare' ? ['--origin', '--owner', '--output', '--journal', '--request-journal', '--bundle-id', '--source-ids'] : [];
   if (!names.length || tail.length !== names.length * 2) throw new Error('deep_controller_arguments_invalid');
   for (let i = 0; i < tail.length; i += 2) {
     if (!names.includes(tail[i]) || flags.has(tail[i])) throw new Error('deep_controller_arguments_invalid');
@@ -95,8 +97,9 @@ export async function deepControllerCommand(args, dependencies = {}) {
   const source = (dependencies.source || exactSource)();
   if (source.dirty || !SOURCE.test(source.commit)) throw new Error('deep_controller_clean_source_required');
   const now = dependencies.now || (() => new Date().toISOString());
-  const recovered = action === 'recover'
+  const recovered = ['recover', 'prepare'].includes(action)
     ? await recoveryRequest(flags.get('--request-journal'), owner, origin.href, source.commit) : null;
+  if (action === 'prepare') return prepareInput(flags, { origin, owner, source, now, key, recovered, post: dependencies.post || jsonPost });
   const clock = now();
   if (!Number.isFinite(Date.parse(clock))) throw new Error('deep_controller_clock_invalid');
   const claimId = recovered?.claimId ?? (dependencies.claimId || randomUUID)();
@@ -151,10 +154,55 @@ export async function deepControllerCommand(args, dependencies = {}) {
     throw new Error(sending ? 'deep_controller_outcome_uncertain_recover_status' : 'deep_controller_output_unavailable');
   } finally { await output?.close(); await journal.close(); }
 }
+
+async function prepareInput(flags, { origin, source, now, key, recovered, post }) {
+  const bundleId = flags.get('--bundle-id') === 'none' ? null : flags.get('--bundle-id');
+  const ids = flags.get('--source-ids') === 'none' ? [] : flags.get('--source-ids').split(',');
+  if ((bundleId !== null && !UUID.test(bundleId)) || ids.length > 30
+    || ids.some(id => !UUID.test(id)) || new Set(ids).size !== ids.length)
+    throw new Error('deep_controller_input_selection_invalid');
+  const request = { action: 'prepare', originalRequestHash: recovered.originalRequestHash,
+    sourceCommit: source.commit, owner: recovered.owner, origin: origin.href, observedAt: now(), bundleId, sourceDocumentIds: ids };
+  const journal = await open(flags.get('--journal'), 'wx', 0o600); let output;
+  const log = async row => { await journal.writeFile(JSON.stringify(row) + '\n'); await journal.sync(); };
+  try {
+    output = await open(flags.get('--output'), 'wx', 0o600);
+    await log({ phase: 'input_pending', requestHash: researchCanonicalHash(request), request });
+    const status = await post(new URL('/api/internal/research-deep-job', origin).href,
+      { action: 'status', owner: recovered.owner, ...(recovered.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}) }, key, 15_000);
+    if (status.rejected || status.body?.ok !== true || status.body.gap !== null) throw new Error('input_status_unavailable');
+    const context = validateResearchDeepClaimContext(status.body.context, { owner: recovered.owner,
+      ...(recovered.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}), now: now() });
+    if (context.modelCompletion !== null) throw new Error('input_model_already_completed');
+    const reply = await post(new URL('/api/internal/research-deep-job', origin).href, {
+      action: 'input', owner: recovered.owner, jobId: context.job.jobId, attempt: context.job.attempt,
+      reservationId: context.modelReservation.reservationId, bundleId, sourceDocumentIds: ids }, key, 15_000);
+    if (reply.rejected || reply.body?.ok !== true) throw new Error('input_unavailable');
+    const packet = validateResearchDeepAuthorInput(reply.body.packet, context, now());
+    if ((packet.financial && packet.financial.bundleId !== bundleId)
+      || packet.sources.some(s => !ids.includes(s.documentId))
+      || packet.gaps.some(g => g.documentId !== undefined && !ids.includes(g.documentId))
+      || ids.some(id => !packet.sources.some(s => s.documentId === id) && !packet.gaps.some(g => g.documentId === id))
+      || bundleId !== null && !packet.financial && !packet.gaps.some(g => g.reason === 'dossier_missing'))
+      throw new Error('input_selection_mismatch');
+    const material = { schemaVersion: 'research-deep-prepared-input-v1', sourceCommit: source.commit,
+      requestHash: researchCanonicalHash(request), originalRequestHash: recovered.originalRequestHash, packet,
+      preparedAt: now(), modelCalls: 0, modelDispatched: false, authoritativePublication: false };
+    const saved = { ...material, receiptHash: researchCanonicalHash(material) };
+    if (JSON.stringify(saved).includes(key)) throw new Error('input_credential_fragment');
+    await output.writeFile(JSON.stringify(saved, null, 2) + '\n'); await output.sync();
+    await log({ phase: 'input_saved', receiptHash: saved.receiptHash });
+    return saved;
+  } catch {
+    await log({ phase: 'input_unavailable', automaticRetry: false, claimMutated: false });
+    throw new Error('deep_controller_input_unavailable');
+  } finally { await output?.close(); await journal.close(); }
+}
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const result = await deepControllerCommand(process.argv.slice(2));
-    console.log(JSON.stringify({ receiptHash: result.receiptHash, gap: result.gap, leaseRecovered: Boolean(result.context),
+    console.log(JSON.stringify({ receiptHash: result.receiptHash, gap: result.gap ?? null, leaseRecovered: Boolean(result.context), inputPrepared: Boolean(result.packet),
       modelDispatchable: false, authoritativePublication: false }));
   } catch (error) { console.error(JSON.stringify({ ok: false, error: error instanceof Error ? error.message : 'deep_controller_failed' })); process.exitCode = 1; }
 }
