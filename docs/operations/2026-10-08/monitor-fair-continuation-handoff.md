@@ -82,3 +82,8 @@ probes. Four source hashes match the14-33 receipt; all three findings are closed
 This is unsigned scoped code evidence. Normal VMbuild/integration and production
 daily coverage remain unverified. Draft#320 records this boundary. This later
 documentation update does not modify the four reviewed code/test files.
+
+
+## CI membership correction
+
+A post-review audit found the normal research-agents command listed the old controller test but omitted the new progress test file. The source-level44-case review remains valid; earlier ordinary CI success must not be read as execution of those44cases. This successor explicitly adds research-monitor-progress.test.mjs adjacent to the controller suite, preserving all expectations and other suite members. Existing workflow paths already include research-*.test.mjs and package.json. No product-code change or protected-gate change. Actual CI on this successor and VM integration/build remain required.
