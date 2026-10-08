@@ -1,0 +1,214 @@
+{
+  "schemaVersion": "stockinsider-native-planner-linux-verification-v1",
+  "recordedAt": "2026-10-08T13:17:10.751740Z",
+  "subjectCommit": "b1d96eb96156d3e1394615bb32c7a2d7ef90b661",
+  "subjectWebTree": "a95cf75a86377a1f49c0bb54d2883e4c9b87f80a",
+  "priorWebTree": "a95cf75a86377a1f49c0bb54d2883e4c9b87f80a",
+  "nodeVersion": "22.14.0",
+  "tests": {
+    "pass": 62,
+    "fail": 0,
+    "skip": 0
+  },
+  "types": "pass",
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 33
+  },
+  "normalBuild": "pass",
+  "stages": [
+    {
+      "stage": "planner-focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/opportunity-v3/native-1d92-install-plan.test.mjs",
+        "scripts/opportunity-v3/native-successor-contract.test.mjs",
+        "scripts/opportunity-v3/host-recovery-install-plan.test.mjs",
+        "scripts/opportunity-v3/host-recovery-packet.test.mjs",
+        "scripts/opportunity-v3/protected-external-gate-worker.test.mjs"
+      ],
+      "startedAt": "2026-10-08T13:13:34.219Z",
+      "completedAt": "2026-10-08T13:13:35.872Z",
+      "elapsedSeconds": 1.6526602669910062,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 178319360,
+      "observedTaskDiskPeakBytes": 1248165888,
+      "availableBeforeBytes": 25181855744,
+      "availableAfterBytes": 25181835264,
+      "guardTermination": null
+    },
+    {
+      "stage": "planner-types",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--project",
+        "web/tsconfig.json"
+      ],
+      "startedAt": "2026-10-08T13:14:16.330Z",
+      "completedAt": "2026-10-08T13:14:31.600Z",
+      "elapsedSeconds": 15.270233857998392,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1115893760,
+      "observedTaskDiskPeakBytes": 1248194560,
+      "availableBeforeBytes": 25181831168,
+      "availableAfterBytes": 25180508160,
+      "guardTermination": null
+    },
+    {
+      "stage": "planner-lint",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T13:14:54.808Z",
+      "completedAt": "2026-10-08T13:15:19.181Z",
+      "elapsedSeconds": 24.37266828599968,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1583484928,
+      "observedTaskDiskPeakBytes": 1249517568,
+      "availableBeforeBytes": 25180504064,
+      "availableAfterBytes": 25163800576,
+      "guardTermination": null
+    },
+    {
+      "stage": "planner-build",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T13:15:49.343Z",
+      "completedAt": "2026-10-08T13:15:55.492Z",
+      "elapsedSeconds": 6.148387171997456,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 882618368,
+      "observedTaskDiskPeakBytes": 1266221056,
+      "availableBeforeBytes": 25163796480,
+      "availableAfterBytes": 25162756096,
+      "guardTermination": null
+    }
+  ],
+  "measurementMethod": "100ms process-group RSS sampling plus GNU time -v; short-lived/reparented processes may be missed; du task checkout+artifact allocation, not unique shared dependency bytes",
+  "cgroupMemoryMaxBytes": 34359738368,
+  "cgroupCpuMax": "400000 100000",
+  "configuredProjectDiskQuota": "unknown; df is filesystem availability, not project quota",
+  "changedFiles": [
+    {
+      "path": "docs/engineering/host-recovery-20261008/successor-installation/README.md",
+      "bytes": 11729,
+      "sha256": "a43bf9974ef88895b56bdbd14ffbd7f3023a4c14d5d8642c7b5514eee0b8ba18"
+    },
+    {
+      "path": "docs/engineering/host-recovery-20261008/successor-installation/entrypoint-observation.json",
+      "bytes": 2899,
+      "sha256": "a42804c6c1a84bdb2ad08e480979530f8bb5c6f405a9dc4ade06d181f8d3d16b"
+    },
+    {
+      "path": "docs/engineering/host-recovery-20261008/successor-installation/source-facts-1d92.json",
+      "bytes": 2699,
+      "sha256": "7dd015469853502fbfbfc41fefd798b9eb66420768d361a80c93bbf2237726e1"
+    },
+    {
+      "path": "docs/engineering/host-recovery-20261008/successor-installation/unsigned-plan-1d92.json",
+      "bytes": 4798,
+      "sha256": "e8e6bc1f5067d0bec58819f012bf55b94f9e285b4ebfdaf134262783a8077117"
+    },
+    {
+      "path": "scripts/opportunity-v3/native-1d92-install-plan.mjs",
+      "bytes": 14195,
+      "sha256": "6a4828805d6548b21d464f15d49750f985d29f0146f8d7aa1c6c3b7ef9427d53"
+    },
+    {
+      "path": "scripts/opportunity-v3/native-1d92-install-plan.test.mjs",
+      "bytes": 13137,
+      "sha256": "5d9fc8c63c88267f922035450c733e5199f9980de0331b87133ab4736f0c4737"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-build.json",
+      "bytes": 513,
+      "sha256": "4d55e49df34a8b71dc371932580f5b01b8c087f3bbe26a633dbd5f10f034b777"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-build.log",
+      "bytes": 5555,
+      "sha256": "758dd4de9e1fcd37ec31354b5fe3b457ff072fa0e28b3a6d9d9acc24a9e6c747"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-build.time",
+      "bytes": 823,
+      "sha256": "ae2d3652127651a143379db03ee35bd073d5c232170932ff6e2e57d623ed667a"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-focused.json",
+      "bytes": 784,
+      "sha256": "64acc9bbaf71db8e71a610a5aeaadce6d3856a5fd402bee2296156d3c2d62834"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-focused.log",
+      "bytes": 15940,
+      "sha256": "fb3d41efbd56f1f01f27f771f8f6a6b17f70b34196c50d682aa482ec1f490e91"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-focused.time",
+      "bytes": 1071,
+      "sha256": "139148d19d471ebfff78c9359b7d47e8bf16a9ae235ada7af2d654a4d508cfbb"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-lint.json",
+      "bytes": 512,
+      "sha256": "04dff872d21bd230f72947c0bf2a63355d81861e851f060472bb8a14bb73f2d9"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-lint.log",
+      "bytes": 4697,
+      "sha256": "909a60dc95b40946fc3b925a5106e5f4310a060778a73c3c56e03a3a6683c8b3"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-lint.time",
+      "bytes": 821,
+      "sha256": "eee50fa80e80c8274ac1e4c775c1de91a5e51964bba59b4f81ca85948fbb90cb"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-types.json",
+      "bytes": 545,
+      "sha256": "81a42a2ca2edf476a63ded240e6763dd2e4703f8650f6bd323e13b201f626212"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/cloud-native-planner-artifacts-oct08/planner-types.time",
+      "bytes": 849,
+      "sha256": "7bd3828df8358bcdaa4bb4e12693831264868ab98624a94c206ef9e3d043d2f5"
+    }
+  ],
+  "independentReview": {
+    "attribution": "root source thread reports independent unsigned inactive-code approval",
+    "subject": "b1d96eb96156d3e1394615bb32c7a2d7ef90b661",
+    "reviewerTests": 10,
+    "makerLinuxTestsIndependentlyRerun": false
+  },
+  "activationPerformed": false,
+  "externalAuthorityGranted": false,
+  "installationPerformed": false,
+  "signingPerformed": false,
+  "liveModelOracle": false,
+  "limits": [
+    "Linux synthetic contract compatibility only, no full Mac native runner/codesign/Gatekeeper claim",
+    "No owner grant, external authority, registry install or activation",
+    "acceptance-traceability not in these five files; prior 52 pass/1 fail GOV-004 missing protected-external-harness-v1 remains unresolved",
+    "No production/VPS operations or protected attestation generated"
+  ]
+}
