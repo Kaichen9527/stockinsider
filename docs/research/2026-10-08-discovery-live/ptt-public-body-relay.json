@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "stockinsider-ptt-public-body-relay-v1",
+  "recordedAt": "2026-10-08T13:12:24.944125+00:00",
+  "acquisition": "Actual root Mac public PTT HTML after focused search; no over18 cookie or login used",
+  "rightsScope": "Concise original summaries and public post/source metadata only; no IP addresses, full article, images, private content or credentials exported",
+  "scope": "Two specific posts and first20 public reply contents per post; not daily/global PTT completeness",
+  "items": [
+    {
+      "source": {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1788949430.A.41E.html",
+        "attemptedAt": "2026-10-08T13:08:11.872615+00:00",
+        "httpStatus": 200,
+        "resolvedUrl": "https://www.ptt.cc/bbs/Stock/M.1788949430.A.41E.html",
+        "bytes": 16650,
+        "sha256": "6642169ddebba0ac9934a0ec77108541b24bbd69db79dad8bfff321486f2274c",
+        "outcome": "read_success",
+        "articleMetaValues": [
+          "Redbeansauce (今日起醫聲)",
+          "Stock",
+          "[標的] 2409 友達 開盤手速空？ 討論",
+          "Wed Sep  9 18:23:48 2026"
+        ],
+        "replyLineCount": 43,
+        "requiresOver18": false,
+        "observedAt": "2026-10-08T13:08:13.751772+00:00"
+      },
+      "authorHandle": "Redbeansauce",
+      "kind": "original_anonymous_discussion",
+      "symbols": [
+        "2409"
+      ],
+      "summary": "原創討論將友達與8月底康寧展出、營收與價量連結，但作者只是討論做空；已讀前20則回覆意見分歧，沒有客戶或訂單證明。",
+      "summarySha256": "43080e8c0a91edd66d0d5f0f189b73f1297c92711d295c04c470c353b46ffab6",
+      "summaryHashScope": "original concise summary, not source response",
+      "publishedAt": null,
+      "sourcePublicationDisplay": "Wed Sep  9 18:23:48 2026",
+      "publicationPrecision": "source display seconds without explicit timezone; no UTC instant invented",
+      "firstObservedAt": "2026-10-08T13:08:13.751772+00:00",
+      "revisionObservedAt": "2026-10-08T13:08:13.751772+00:00",
+      "parentSourceUrl": null,
+      "parentSourceRead": false,
+      "rootRelationship": "Original discussion distinct from news; commentary is not independent confirmation of Intel cooperation",
+      "replyHtmlMarkerCount": 43,
+      "replyContentsRead": 20,
+      "replyReadScope": "First20 displayed push-content spans from actual current HTML, not exhaustive reply analysis or independent sources",
+      "claimStatus": "unverified_hypothesis",
+      "independentBusinessConfirmationsAdded": 0,
+      "historicalAvailabilityProven": false,
+      "pointInTimeBacktestEligible": false
+    },
+    {
+      "source": {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1790911210.A.9C2.html",
+        "attemptedAt": "2026-10-08T13:08:11.874247+00:00",
+        "httpStatus": 200,
+        "resolvedUrl": "https://www.ptt.cc/bbs/Stock/M.1790911210.A.9C2.html",
+        "bytes": 15144,
+        "sha256": "44166025530ca3afdbdc1d41412744716bb419ec4eff01b93c00ab8447df24ce",
+        "outcome": "read_success",
+        "articleMetaValues": [
+          "ann16 (NNNNNNNNN)",
+          "Stock",
+          "[新聞] 友達將於29日擧行第3季法說會",
+          "Fri Oct  2 11:20:08 2026"
+        ],
+        "replyLineCount": 27,
+        "requiresOver18": false,
+        "observedAt": "2026-10-08T13:08:13.784939+00:00"
+      },
+      "authorHandle": "ann16",
+      "kind": "news_repost_plus_anonymous_commentary",
+      "symbols": [
+        "2409"
+      ],
+      "summary": "貼文轉述友達第三季法說時間，另由發文者加上看多價格與玻璃、MicroLED、Intel合作主張。新聞部分與使用者評論必須分開，評論未提供新合約或客戶確認；前20則回覆也有質疑。",
+      "summarySha256": "248bc9a3314b24a66d248b818f43c32d4a29deddae73b044d24273bc4a72e719",
+      "summaryHashScope": "original concise summary, not source response",
+      "publishedAt": null,
+      "sourcePublicationDisplay": "Fri Oct  2 11:20:08 2026",
+      "publicationPrecision": "source display seconds without explicit timezone; no UTC instant invented",
+      "firstObservedAt": "2026-10-08T13:08:13.784939+00:00",
+      "revisionObservedAt": "2026-10-08T13:08:13.784939+00:00",
+      "parentSourceUrl": "https://reurl.cc/yW48yq",
+      "parentSourceRead": false,
+      "rootRelationship": "Quoted news and added anonymous opinion; shortened news link not resolved/read in this probe",
+      "replyHtmlMarkerCount": 27,
+      "replyContentsRead": 20,
+      "replyReadScope": "First20 displayed push-content spans from actual current HTML, not exhaustive reply analysis or independent sources",
+      "claimStatus": "unverified_hypothesis",
+      "independentBusinessConfirmationsAdded": 0,
+      "historicalAvailabilityProven": false,
+      "pointInTimeBacktestEligible": false
+    }
+  ],
+  "formalQualification": false,
+  "publicationAuthority": false,
+  "activeCollectorIntegration": false,
+  "platformEnabledByProbe": false,
+  "researchImplication": "Preserve both skeptical original discussion and bullish repost commentary as research hypotheses. Existing availability is first observed Oct8; do not pretend the system knew these posts in September or that reply counts confirm orders. News source and anonymous technical claims require independent verification.",
+  "privateRawDirectory": "/Users/kaerchen/.cache/stockinsider-workspaces/research-evidence/2026-10-08/ptt-public-body-oct08"
+}
