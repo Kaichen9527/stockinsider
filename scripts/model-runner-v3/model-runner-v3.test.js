@@ -249,10 +249,10 @@ ordinaryTest('operation and resource identities are deterministic and bound', ()
     resourceAttemptOrdinal: 0,
   }), /^[a-f0-9]{64}$/);
   assert.equal(MODEL_RUNNER_IDENTITY_SHA256.length, 64);
-  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 890);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.160.0']);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.8']);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.22']);
+  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 898);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.162.0-alpha.2']);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.9']);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.24']);
   for (const relativePath of ['execution.js', 'journalStore.js']) {
     const implementation = fs.readFileSync(path.join(__dirname, relativePath), 'utf8');
     assert.match(implementation, new RegExp(MODEL_RUNNER_IDENTITY_SHA256, 'u'));
@@ -324,8 +324,8 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
   const fixture = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json');
   assert.equal(fs.statSync(fixture).size, PIN_FIXTURE_BYTES);
   const pins = loadHostPins(fixture);
-  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.22');
-  assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.160.0');
+  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.24');
+  assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.162.0-alpha.2');
   assert.equal(verifyCurrentNode(pins), true);
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-pins-'));
   const altered = path.join(directory, 'pins.json');
@@ -392,8 +392,8 @@ ordinaryTest('version probes admit only closed known sandbox diagnostics', () =>
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, ''), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, denial), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}`), stdout);
-  assert.equal(validatedVersionOutput(codex, 'codex-cli 0.160.0\n', aliasWarning),
-    'codex-cli 0.160.0\n');
+  assert.equal(validatedVersionOutput(codex, 'codex-cli 0.162.0-alpha.2\n', aliasWarning),
+    'codex-cli 0.162.0-alpha.2\n');
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, denial.trimEnd()));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}${denial}`));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}unexpected\n`));
@@ -515,7 +515,7 @@ ordinaryTest('disabled doctor accepts only the exact successor and rejects histo
     process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH = '1';
     const doctor = path.resolve(__dirname, '../opportunity-v3/doctor.mjs');
     const compatible = spawnSync(process.execPath, [doctor, '--expect-mode', 'disabled', '--require-host-pin',
-      'model-runner-host-pins-v3.22'], { encoding: 'utf8', env: process.env });
+      'model-runner-host-pins-v3.24'], { encoding: 'utf8', env: process.env });
     assert.equal(compatible.status, 0, compatible.stderr);
     assert.equal(JSON.parse(compatible.stdout).checks.requested.status, 'pass');
     const rejected = spawnSync(process.execPath, [doctor, '--expect-mode', 'disabled', '--require-host-pin',
@@ -1119,7 +1119,7 @@ ordinaryTest('successor never resumes old ready reviewed recovery or sealed stat
   try {
     const parsed = parsedManifest(), task = parsed.manifest.tasks[0];
     const filename = statePath(root, parsed, task);
-    assert.ok(filename.includes('/runtime/model-runner-v3-sol61-astra-v1/'));
+    assert.ok(filename.includes('/runtime/model-runner-v3-sol61-astra-v2/'));
     const initial = readState(filename, parsed, task);
     fs.mkdirSync(path.dirname(filename), { recursive: true });
     for (const state of ['proposal_ready', 'review_passed', 'recovery_required', 'verified']) {

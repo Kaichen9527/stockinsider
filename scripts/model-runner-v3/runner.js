@@ -10,19 +10,19 @@ const { loadHostPins, verifyCurrentNode } = require('./hostPreflight');
 const { executeOperation, readState, statePath, repositoryRoot } = require('./execution');
 
 const MODEL_RUNNER_IDENTITY = [
-  ['approvalPolicy', 'never'], ['codexVersion', '0.160.0'], ['contractVersion', 'model-runner-v3.8'],
+  ['approvalPolicy', 'never'], ['codexVersion', '0.162.0-alpha.2'], ['contractVersion', 'model-runner-v3.9'],
   ['gitVersion', '2.50.1 (Apple Git-155)'], ['hardIsolationClaims', ['external_user_read', 'authoritative_write', 'command_network']],
-  ['hostPinFixtureSha256', '0c4f60b1db8aaf77b7be9fa1d81b3d2c719465736fc10b29d3d10640e2ef17f2'],
-  ['hostPinVersion', 'model-runner-host-pins-v3.22'], ['journalVersion', 'model-runner-journal-v3.5'],
+  ['hostPinFixtureSha256', 'fc76b082ae4fbe9284f888d94ac459547cfb50bfa180ad864e27952fecfd5022'],
+  ['hostPinVersion', 'model-runner-host-pins-v3.24'], ['journalVersion', 'model-runner-journal-v3.5'],
   ['manifestVersion', 'loop-model-manifest-v3.7'], ['nodeVersion', 'v22.14.0'],
   ['permissionProfileVersion', 'model-runner-permissions-v3.6'], ['promptPolicyVersion', 'model-runner-prompt-v3.5'],
   ['requestProtocol', 'loop-model-v3.5'], ['resultProtocol', 'loop-model-result-v3.5'],
   ['routingVersion', 'model-runner-routing-v3.7'], ['sourceViewVersion', 'model-runner-source-view-v3.5'],
-  ['stateNamespace', 'model-runner-v3-sol61-astra-v1'], ['trustedApplyVersion', 'model-runner-trusted-apply-v3.5'],
+  ['stateNamespace', 'model-runner-v3-sol61-astra-v2'], ['trustedApplyVersion', 'model-runner-trusted-apply-v3.5'],
 ];
-const MODEL_RUNNER_IDENTITY_SHA256 = 'a2bf72cabbab4afd3749c3b2c7dede71f97ce2182d2ea674d0f62e140c456c4f';
+const MODEL_RUNNER_IDENTITY_SHA256 = 'fdc18db72738748139bc457503b7541c5ba0daee306b1fda1525e038493d6a03';
 
-assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 890 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
+assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 898 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
 
 function parseArguments(argv) {
   assert(argv.length >= 1, 2);

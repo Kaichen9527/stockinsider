@@ -1,0 +1,110 @@
+{
+  "schema": "stockinsider-recovery-bounded-observation-v1",
+  "observedAt": "2026-10-08T09:53:33Z",
+  "authority": "unsigned_readonly_observation_only",
+  "humanAuthorization": "continue_preparation_and_review_without_protection_bypass",
+  "cryptographicOwnerGrantObserved": false,
+  "scopeLimit": "public Git refs, PR metadata/reviews/comments, immutable source and native file/signature metadata; no credential read or off-host authority discovery",
+  "protectedMain": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "recoverySubject": "e94d21f9fe05dc436211a2458ea59adb52195e26",
+  "installerProposal": "73e0aed1b6303c0fc4470b85d751717d225d0fa4",
+  "pullRequests": [
+    {
+      "number": 288,
+      "state": "open",
+      "draft": true,
+      "head": "e94d21f9fe05dc436211a2458ea59adb52195e26",
+      "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "mergeableState": "blocked",
+      "commentCount": 0,
+      "reviewCount": 0
+    },
+    {
+      "number": 295,
+      "state": "open",
+      "draft": true,
+      "head": "73e0aed1b6303c0fc4470b85d751717d225d0fa4",
+      "base": "e94d21f9fe05dc436211a2458ea59adb52195e26",
+      "mergeableState": "unstable",
+      "commentCount": 0,
+      "reviewCount": 0
+    }
+  ],
+  "ruleset": {
+    "id": 20177392,
+    "enforcement": "active",
+    "bypassActors": [],
+    "currentUserCanBypass": "never",
+    "requiredContext": "stockinsider-v3-gate-root",
+    "integrationId": 15368
+  },
+  "exactReviewRefsObserved": {
+    "e94d21f9fe05dc436211a2458ea59adb52195e26": false,
+    "73e0aed1b6303c0fc4470b85d751717d225d0fa4": false
+  },
+  "native": {
+    "path": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+    "expectedSha256": "6b582e8813ce7e8ed4c52814ee5cf230dba647bf2292df747a4003f2657ef201",
+    "observedSha256": "cb4e4994627e770800a940b42969c77855a3fc09a6e60b02aa6319f670d6b6ab",
+    "expectedStat": {
+      "device": 16777232,
+      "inode": 199114789,
+      "size": 241555024,
+      "uid": 501,
+      "gid": 80
+    },
+    "observedStat": {
+      "device": 16777232,
+      "inode": 204774021,
+      "size": 245160576,
+      "uid": 501,
+      "gid": 20,
+      "mode": "100755"
+    },
+    "signatureMetadata": {
+      "identifier": "codex",
+      "teamIdentifier": "2DC432GLL2",
+      "cdHash": "b466a2b6d25d4ea321c8cd253bd3436b1142b1b1"
+    },
+    "freshFullSignatureVerification": false,
+    "executableInvoked": false,
+    "matchesFrozenSubject": false
+  },
+  "existingOtherScopedAuthority": {
+    "source": "scripts/runtime/reviewed-runtime-installer-cli.js",
+    "schema": "stockinsider-runtime-activation-authority-v2",
+    "mutation": "tracked_runtime_activation",
+    "keyReference": "keychain:stockinsider-runtime:activation-authority-hmac",
+    "keyPresenceChecked": false,
+    "keyValueRead": false,
+    "scope": "auth-source-worker-cli.js and auth-source-dag.json launchd runtime",
+    "ledgerScope": "authority nonce, not host-recovery predecessor",
+    "hostRecoveryAuthority": false
+  },
+  "immutableSources": [
+    {
+      "path": "scripts/runtime/reviewed-runtime-installer-cli.js",
+      "commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "sha256": "03520c3484b9c1745b5aa434da5c8ff3b1b521785c01b8aa2f2fb79aeda72caf"
+    },
+    {
+      "path": "scripts/runtime/production-authority-bootstrap-cli.js",
+      "commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "sha256": "b347ab7170e27da24c9bebd5b90f9822c346f480bb6e4b1b13430421724e9137"
+    },
+    {
+      "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs",
+      "commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "sha256": "0906ca3c1cbcac003f0708fd753ec0726874e57a5d68282bd051ca6bd2a2b68c"
+    },
+    {
+      "path": ".github/workflows/source-led-opportunity-external-gate.yml",
+      "commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "sha256": "a9573672c1e56833e5f59ae98d33eea5755d5cee9eb36231919b4e592be9d286"
+    }
+  ],
+  "activationAllowed": false,
+  "protectedGatePassed": false,
+  "productionMutation": false,
+  "testsRerun": false
+}
