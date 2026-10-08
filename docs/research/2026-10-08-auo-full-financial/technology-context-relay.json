@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "stockinsider-attributed-technology-context-v1",
+  "symbol": "2409",
+  "recordedAt": "2026-10-08T09:56:23.179195+00:00",
+  "observer": "root-public-https-reader",
+  "actualAttempts": [
+    {
+      "label": "intel-micro-led-patent-a1",
+      "url": "https://patents.google.com/patent/US20240079530A1/en",
+      "attemptedAt": "2026-10-08T09:46:32.229396+00:00",
+      "httpStatus": 200,
+      "finalUrl": "https://patents.google.com/patent/US20240079530A1/en",
+      "status": "read_success",
+      "bytes": 329995,
+      "sha256": "43ed08d2fd991575654d32e536f0a52edb0b45820236da7d201db42e887fe665",
+      "observedAt": "2026-10-08T09:46:32.516562+00:00",
+      "rawFile": "intel-micro-led-patent-a1.html"
+    },
+    {
+      "label": "intel-glass-2023",
+      "url": "https://www.intel.com/content/www/us/en/newsroom/news/intel-unveils-industry-leading-glass-substrates.html",
+      "attemptedAt": "2026-10-08T09:46:32.230015+00:00",
+      "status": "read_failed",
+      "errorType": "URLError",
+      "httpStatus": null,
+      "observedAt": "2026-10-08T09:46:32.387512+00:00"
+    },
+    {
+      "label": "auo-semicon-2026",
+      "url": "https://www.auo.com/en-global/New_Archive/detail/News_Archive_Product_20260831",
+      "attemptedAt": "2026-10-08T09:46:32.388043+00:00",
+      "httpStatus": 200,
+      "finalUrl": "https://www.auo.com/en-global/New_Archive/detail/News_Archive_Product_20260831",
+      "status": "read_success",
+      "bytes": 59051,
+      "sha256": "b2c71aeca973971e1280d3d6e9eb697654cb0b8c9aaa94a7e12eca4bd940dee9",
+      "observedAt": "2026-10-08T09:46:32.802933+00:00",
+      "rawFile": "auo-semicon-2026.html"
+    },
+    {
+      "label": "intel-lens-search-clue",
+      "url": "https://newsroom.intel.com/new-technologies/intel-and-lens-technology-collaborate-to-enable-advanced-semiconductor-packaging-for-the-ai-era",
+      "attemptedAt": "2026-10-08T09:46:32.520258+00:00",
+      "status": "read_failed",
+      "errorType": "URLError",
+      "httpStatus": null,
+      "observedAt": "2026-10-08T09:46:33.020076+00:00"
+    }
+  ],
+  "entries": [
+    {
+      "id": "intel-patent-a1",
+      "source": {
+        "label": "intel-micro-led-patent-a1",
+        "url": "https://patents.google.com/patent/US20240079530A1/en",
+        "attemptedAt": "2026-10-08T09:46:32.229396+00:00",
+        "httpStatus": 200,
+        "finalUrl": "https://patents.google.com/patent/US20240079530A1/en",
+        "status": "read_success",
+        "bytes": 329995,
+        "sha256": "43ed08d2fd991575654d32e536f0a52edb0b45820236da7d201db42e887fe665",
+        "observedAt": "2026-10-08T09:46:32.516562+00:00",
+        "rawFile": "intel-micro-led-patent-a1.html"
+      },
+      "publicationDateOnly": "2024-03-07",
+      "publicationInstant": null,
+      "publicationPrecision": "date",
+      "document": "US20240079530A1",
+      "kind": "published_patent_application_text",
+      "summary": "Google Patents呈現Intel原始受讓人的申請公開文本：玻璃內嵌晶粒、TGV供電與Micro LED配置；背景及實施例包含外觀與運作狀態顯示用途。此文本不能證明友達參與或AI光互連量產訂單。",
+      "inference": "專利技術相近是可查假說，不能把發光封裝專利直接等同友達MicroLED CPO系統；商業化情境仍需客戶、系統測試、量產與歸屬收益證據。",
+      "limits": [
+        "Publication application text, not verified current legal status or the later reported B2 grant.",
+        "Google listed-assignee/legal-status metadata is qualified by the site itself.",
+        "No inference that Intel lacks any other optical communications patents or partnerships.",
+        "First observation October8; no backfilled discovery lead."
+      ]
+    },
+    {
+      "id": "auo-semicon-revalidated",
+      "source": {
+        "label": "auo-semicon-2026",
+        "url": "https://www.auo.com/en-global/New_Archive/detail/News_Archive_Product_20260831",
+        "attemptedAt": "2026-10-08T09:46:32.388043+00:00",
+        "httpStatus": 200,
+        "finalUrl": "https://www.auo.com/en-global/New_Archive/detail/News_Archive_Product_20260831",
+        "status": "read_success",
+        "bytes": 59051,
+        "sha256": "b2c71aeca973971e1280d3d6e9eb697654cb0b8c9aaa94a7e12eca4bd940dee9",
+        "observedAt": "2026-10-08T09:46:32.802933+00:00",
+        "rawFile": "auo-semicon-2026.html"
+      },
+      "publicationDateOnly": "2026-08-31",
+      "publicationInstant": null,
+      "publicationPrecision": "date",
+      "kind": "issuer_technology_statement",
+      "summary": "友達官方描述最遠10公尺的Micro LED互連，提供巨量轉移、RDL、光耦合及架構整合；夥伴包括富采、鼎元、達興、康寧。GCS結合康寧玻璃與友達RDL，TGV、金屬化及可靠度仍逐步推進。",
+      "inference": "研究須分開Micro LED光通訊與GCS封裝兩條商業化路徑；已展示合作生態圈不等於Intel訂單，也不能將各公司全部收入重複加至友達。",
+      "limits": [
+        "Company technology claims, not independently measured comparative performance.",
+        "The read announcement does not disclose Intel customer/order, realized capacity, yield or price.",
+        "The cited125C/lifetime specifications concern Micro LED light sources, not proof of whole-system qualification."
+      ]
+    }
+  ],
+  "unverifiedSearchClues": [
+    {
+      "id": "intel-lens-search-only",
+      "url": "https://newsroom.intel.com/new-technologies/intel-and-lens-technology-collaborate-to-enable-advanced-semiconductor-packaging-for-the-ai-era",
+      "stage": "search_result_only_body_unread",
+      "claimedPublicationDateFromSearch": "2026-07-24",
+      "claimedPublicationDateVerified": false,
+      "summary": "搜尋結果出現Intel與Lens Technology玻璃封裝合作標題；原文讀取失敗，保留為替代供應鏈待查線索。",
+      "excludedFromConfirmedPartnerCount": true,
+      "excludedFromFinancialModel": true
+    }
+  ],
+  "readLimitations": [
+    "Root raw-byte acquisition failed for Intel2023 glass roadmap and Intel-Lens search clue; these are failures, not no-news or denials.",
+    "Hosted web reader opened Intel2023 glass announcement but failed Intel-Lens body and US12733303B2; no raw-byte receipt or current grant verification claimed for those reads.",
+    "Only necessary public paraphrases and numeric identifiers retained; raw successful pages stay private.",
+    "This is research context, not inbox import, official authority activation, verified customer order, research qualification or publication approval."
+  ]
+}
