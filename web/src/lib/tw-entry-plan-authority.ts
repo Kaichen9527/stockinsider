@@ -17,9 +17,17 @@ export type TwEntryAuthorityRequest = {
   stockId: string; symbol: string; exchange: Exchange; signalSession: string; cutoff: string;
   forwardCalendar?: TwEntryForwardCalendar | null;
 };
+export type TwEntryAnchorAction = {
+  schema: 'tw-entry-anchor-action-v1'; status: 'verified';
+  symbol: string; exchange: Exchange; session: string; cutoff: string;
+  snapshotId: string; sessionAuthorityId: string; datasetHash: string; sourceDatasetRevision: string;
+  event: { kind: 'ex_right_dividend' | 'capital_reduction' | 'par_value_change'; sourceRowRef: string } | null;
+};
 export type TwEntryAuthorityResult = {
   bars: TwEntryBar[]; calendar: TwEntryCalendar | null; priceBasis: TwEntryPriceBasis | null;
   sourceDatasetRevision: string; availableAt: string; missingData: string[];
+  /** Missing/null is unavailable; event:null is a proved zero-event selected head. */
+  anchorAction?: TwEntryAnchorAction | null;
 };
 const HISTORY = 240;
 const DAY = 86_400_000;
@@ -247,7 +255,7 @@ function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRe
  * never a replacement of the candidate's existing formal policy or raw chart. */
 export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<TwEntryAuthorityResult> {
   const base: TwEntryAuthorityResult = { bars: [], calendar: null, priceBasis: null, sourceDatasetRevision: `${VERSION}:unavailable`,
-    availableAt: request.cutoff, missingData: [] };
+    availableAt: request.cutoff, missingData: [], anchorAction: null };
   try {
     requireAuthority(UUID.test(request.stockId) && /^\d{4}$/u.test(request.symbol) && ['TWSE', 'TPEX'].includes(request.exchange)
       && date(request.signalSession) && Number.isFinite(timestamp(request.cutoff)), 'entry_authority_request_invalid');
@@ -308,7 +316,16 @@ export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, r
     const priceBasis: TwEntryPriceBasis = { kind: 'adjusted_to_signal_session', anchorSession: signalSession,
       adjustmentVersion: 'tw-corporate-action-v3.1', adjustmentEvidenceHash: hash(evidenceHashes), status: 'verified' };
     const calendar = forwardCalendar(shared, request);
-    return { bars, calendar, priceBasis, sourceDatasetRevision: `${VERSION}:${hash([evidenceHashes, calendar.version])}`,
+    const sourceDatasetRevision = `${VERSION}:${hash([evidenceHashes, calendar.version])}`;
+    const snapshot = shared.snapshots.get(signalSession)!;
+    const event = shared.events.get(text(snapshot.snapshot_id))!.find(row => row.symbol === request.symbol);
+    const anchorAction: TwEntryAnchorAction = {
+      schema: 'tw-entry-anchor-action-v1', status: 'verified', symbol: request.symbol, exchange,
+      session: signalSession, cutoff, snapshotId: text(snapshot.snapshot_id),
+      sessionAuthorityId: text(snapshot.session_authority_id), datasetHash: text(snapshot.dataset_hash), sourceDatasetRevision,
+      event: event ? { kind: event.event_kind as NonNullable<TwEntryAnchorAction['event']>['kind'], sourceRowRef: text(event.source_row_ref) } : null,
+    };
+    return { bars, calendar, priceBasis, sourceDatasetRevision, anchorAction,
       availableAt: maxTime(calendar.knownAt, ...bars.map((bar) => bar.availableAt)), missingData: [] };
   } catch (error) {
     return { ...base, missingData: [error instanceof Error && /^[a-z0-9_]+$/u.test(error.message) ? error.message : 'entry_authority_read_failed'] };
