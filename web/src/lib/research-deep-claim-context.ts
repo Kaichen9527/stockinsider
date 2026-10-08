@@ -111,7 +111,7 @@ export async function loadResearchDeepClaimContext(db: Pick<SupabaseClient, 'fro
   };
   const queryTime = expected.now ?? new Date().toISOString();
   let query = db.from('research_deep_jobs_v1').select(JOB_FIELDS)
-    .eq('lease_owner', expected.owner).eq('status', 'running').gt('lease_expires_at', queryTime);
+    .eq('research_scope', 'formal_v1').eq('lease_owner', expected.owner).eq('status', 'running').gt('lease_expires_at', queryTime);
   if (expected.jobId !== undefined) query = query.eq('job_id', expected.jobId).eq('attempts', expected.attempt);
   const jobs = rows(await read(query.limit(2)));
   if (!jobs.length) return null;
@@ -135,7 +135,7 @@ export async function loadResearchDeepClaimContext(db: Pick<SupabaseClient, 'fro
   // attempt into the new owner's context. This remains an observation, not a
   // transaction or authority to bypass the existing guarded mutation fences.
   const current = one(await read(db.from('research_deep_jobs_v1').select(JOB_FIELDS)
-    .eq('job_id', job.job_id).eq('attempts', job.attempts).eq('lease_owner', expected.owner)
+    .eq('research_scope', 'formal_v1').eq('job_id', job.job_id).eq('attempts', job.attempts).eq('lease_owner', expected.owner)
     .eq('status', 'running').limit(2)));
   ensure(JOB_FIELDS.split(',').every(key => current[key] === job[key]));
   const observedAt = expected.now ?? new Date().toISOString();

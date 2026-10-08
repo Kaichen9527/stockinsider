@@ -1,0 +1,461 @@
+{
+  "schemaVersion": "observed-priority-slice2-development-v1",
+  "recordedAt": "2026-10-08T15:31:52.000831+00:00",
+  "branch": "codex/observed-priority-jobs-oct08",
+  "base": "635cb97fca2963effff6ea660c8f66f97f6eed17",
+  "manualWindow": {
+    "startedAt": "2026-10-08T15:02:16.842996+00:00",
+    "deadline": "2026-10-08T15:32:16.842996+00:00",
+    "manualEngineeringOnly": true,
+    "base": "635cb97fca2963effff6ea660c8f66f97f6eed17"
+  },
+  "sources": {
+    "migrations/20261008_research_observed_priority_v1.sql": {
+      "bytes": 24644,
+      "sha256": "cc7518de30f9f566f739fa9db956e9dc667a671e126ec36799ad6cba46f0c025"
+    },
+    "scripts/research-observed-priority-native.test.mjs": {
+      "bytes": 17753,
+      "sha256": "a8a61d70db816937f432b1293f345a1c93f99b3b711e2816f3b5f975c20f5ff6"
+    },
+    "scripts/research-local-inbox-dataplane.mjs": {
+      "bytes": 29095,
+      "sha256": "6b28e6079bd26781392edec78d35b371f82591d56acf7591a78916ac60a7558a"
+    },
+    "scripts/research-deep-job-context-route.test.mjs": {
+      "bytes": 37838,
+      "sha256": "79c0a7441aa4e6b5a4d41cae34c22497dba1adbd413f6a1f1e8c5d6cca9049f3"
+    },
+    "web/src/lib/research-observed-priority.ts": {
+      "bytes": 3297,
+      "sha256": "29d7c13a9dab594c70337b36d75f5c2429b19894e7e08dd2cfb2ecd04d03c0fb"
+    },
+    "web/src/lib/research-observed-priority.test.ts": {
+      "bytes": 2934,
+      "sha256": "2208145ee5bb6b75b7da23b5716a12ee38f843ec808111240dbf6ba54f5965ca"
+    },
+    "web/src/lib/research-deep-claim-context.ts": {
+      "bytes": 9998,
+      "sha256": "4197b8ac87be72e44e81d274699a7bf24b40b347d58e07952d5eb1d2a9ed2e11"
+    },
+    "web/src/lib/research-discovery-price-enrichment.ts": {
+      "bytes": 29821,
+      "sha256": "8e726ba2bfedaa5f71d814c43562c28d435dd6f6b6b73686c5cc504cfb176822"
+    },
+    "web/src/app/api/internal/research-priority-run/route.ts": {
+      "bytes": 19133,
+      "sha256": "5e463b93dee1546d21385b0b391a192db3011976be379cf6fe7fb0b0a8f2d5dd"
+    }
+  },
+  "stages": {
+    "pg3": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg3",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T15:20:08.422Z",
+      "completedAt": "2026-10-08T15:20:39.362Z",
+      "elapsedSeconds": 30.939963674987666,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 715735040,
+      "observedTaskDiskPeakBytes": 1498468352,
+      "availableBeforeBytes": 23349694464,
+      "availableAfterBytes": 23284129792,
+      "guardTermination": null
+    },
+    "build-seal": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build-seal",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T15:30:58.704Z",
+      "completedAt": "2026-10-08T15:31:05.509Z",
+      "elapsedSeconds": 6.805045835004421,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 930574336,
+      "observedTaskDiskPeakBytes": 1579839488,
+      "availableBeforeBytes": 23202242560,
+      "availableAfterBytes": 23201308672,
+      "guardTermination": null
+    },
+    "normal-build-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T15:30:31.775Z",
+      "completedAt": "2026-10-08T15:30:31.990Z",
+      "elapsedSeconds": 0.21498541500477586,
+      "exitCode": 254,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 1579823104,
+      "availableBeforeBytes": 23202254848,
+      "availableAfterBytes": 23202246656,
+      "guardTermination": null
+    },
+    "lint-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T15:30:05.174Z",
+      "completedAt": "2026-10-08T15:30:31.595Z",
+      "elapsedSeconds": 26.4205257279973,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1498333184,
+      "observedTaskDiskPeakBytes": 1563652096,
+      "availableBeforeBytes": 23218429952,
+      "availableAfterBytes": 23202258944,
+      "guardTermination": null
+    },
+    "build-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T15:18:19.593Z",
+      "completedAt": "2026-10-08T15:18:26.862Z",
+      "elapsedSeconds": 7.269095534997177,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1343913984,
+      "observedTaskDiskPeakBytes": 1430016000,
+      "availableBeforeBytes": 23352061952,
+      "availableAfterBytes": 23349702656,
+      "guardTermination": null
+    },
+    "related": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "related",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-observed-priority.test.ts",
+        "web/src/lib/research-agent-priority.test.ts",
+        "web/src/lib/research-discovery-price-enrichment.test.ts",
+        "web/src/lib/research-deep-claim-context.test.ts",
+        "scripts/research-deep-job-context-route.test.mjs"
+      ],
+      "startedAt": "2026-10-08T15:21:46.181Z",
+      "completedAt": "2026-10-08T15:21:54.812Z",
+      "elapsedSeconds": 8.630860283999937,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 470753280,
+      "observedTaskDiskPeakBytes": 1497997312,
+      "availableBeforeBytes": 23284125696,
+      "availableAfterBytes": 23284080640,
+      "guardTermination": null
+    },
+    "build": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T15:05:03.228Z",
+      "completedAt": "2026-10-08T15:05:13.600Z",
+      "elapsedSeconds": 10.37203193300229,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1504600064,
+      "observedTaskDiskPeakBytes": 1287913472,
+      "availableBeforeBytes": 23494164480,
+      "availableAfterBytes": 23483248640,
+      "guardTermination": null
+    },
+    "pg-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T15:22:52.622Z",
+      "completedAt": "2026-10-08T15:23:27.738Z",
+      "elapsedSeconds": 35.116028457006905,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 881635328,
+      "observedTaskDiskPeakBytes": 1564110848,
+      "availableBeforeBytes": 23284076544,
+      "availableAfterBytes": 23218479104,
+      "guardTermination": null
+    },
+    "s2-type": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "s2-type",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T15:02:28.168Z",
+      "completedAt": "2026-10-08T15:02:34.035Z",
+      "elapsedSeconds": 5.866896628998802,
+      "exitCode": 2,
+      "sampledAggregateRssPeakBytes": 748871680,
+      "observedTaskDiskPeakBytes": 1286049792,
+      "availableBeforeBytes": 23496040448,
+      "availableAfterBytes": 23494168576,
+      "guardTermination": null
+    },
+    "pure-real": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pure-real",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-observed-priority.test.ts"
+      ],
+      "startedAt": "2026-10-08T15:16:06.965Z",
+      "completedAt": "2026-10-08T15:16:07.384Z",
+      "elapsedSeconds": 0.4182276829960756,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 105943040,
+      "observedTaskDiskPeakBytes": 1429995520,
+      "availableBeforeBytes": 23352082432,
+      "availableAfterBytes": 23352074240,
+      "guardTermination": null
+    },
+    "related-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "related-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-observed-priority.test.ts",
+        "web/src/lib/research-agent-priority.test.ts",
+        "web/src/lib/research-discovery-price-enrichment.test.ts",
+        "web/src/lib/research-deep-claim-context.test.ts",
+        "scripts/research-deep-job-context-route.test.mjs"
+      ],
+      "startedAt": "2026-10-08T15:29:22.145Z",
+      "completedAt": "2026-10-08T15:29:32.521Z",
+      "elapsedSeconds": 10.375439650000772,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 527511552,
+      "observedTaskDiskPeakBytes": 1563607040,
+      "availableBeforeBytes": 23218475008,
+      "availableAfterBytes": 23218446336,
+      "guardTermination": null
+    },
+    "pg2": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg2",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T15:12:18.547Z",
+      "completedAt": "2026-10-08T15:12:50.293Z",
+      "elapsedSeconds": 31.745381126005668,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 739491840,
+      "observedTaskDiskPeakBytes": 1430499328,
+      "availableBeforeBytes": 23417655296,
+      "availableAfterBytes": 23352102912,
+      "guardTermination": null
+    },
+    "types-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T15:29:48.290Z",
+      "completedAt": "2026-10-08T15:29:52.064Z",
+      "elapsedSeconds": 3.7744750650017522,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 569180160,
+      "observedTaskDiskPeakBytes": 1563639808,
+      "availableBeforeBytes": 23218442240,
+      "availableAfterBytes": 23218434048,
+      "guardTermination": null
+    },
+    "pg1": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg1",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T15:06:53.342Z",
+      "completedAt": "2026-10-08T15:07:23.934Z",
+      "elapsedSeconds": 30.5924758730107,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 803631104,
+      "observedTaskDiskPeakBytes": 1364942848,
+      "availableBeforeBytes": 23483232256,
+      "availableAfterBytes": 23417663488,
+      "guardTermination": null
+    },
+    "pure": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pure",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-observed-priority.test.ts"
+      ],
+      "startedAt": "2026-10-08T15:15:12.198Z",
+      "completedAt": "2026-10-08T15:15:12.613Z",
+      "elapsedSeconds": 0.41493891600111965,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 122544128,
+      "observedTaskDiskPeakBytes": 1429983232,
+      "availableBeforeBytes": 23352078336,
+      "availableAfterBytes": 23352070144,
+      "guardTermination": null
+    }
+  },
+  "nativeAcceptanceReceipt": {
+    "path": "/workspace/cloud-observed-priority-artifacts-oct08/pg-final-run/acceptance-receipt.json",
+    "bytes": 23936,
+    "sha256": "cf8604c1ccaeb6341382dab0bba902deab8bb1300e227499f5a0985e5db0c0a8"
+  },
+  "nativeResults": {
+    "observedEmpty": {
+      "runId": "330e5fe8-6d20-48f6-9b12-8beade49866f",
+      "inputHash": "cc32fac5bd847e9d1c090771bde58e3dcb355a1b5bd80769acb63564b2abef1f",
+      "accountedCount": 1978,
+      "queueLength": 0
+    },
+    "ep8": {
+      "documentId": "6538ff1b-0a47-4f9f-bb23-a239a2b4db07",
+      "sourceUrl": "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999",
+      "publishedAt": "2026-03-16T22:30:00Z",
+      "firstObservedAt": "2026-10-08T12:31:55.622917+00:00",
+      "acquisition": "attributed Mac relay, not VM HTTP",
+      "scope": "public publisher description only; not episode audio/transcript",
+      "controllerRunHash": "7e5bbcee524811daa28e1fc97880c2a7bc3ff6235618ac71add1ee5b289c1b51"
+    },
+    "observedPositive": {
+      "runId": "ba98bd7f-ae49-49ff-905f-4beae33b9233",
+      "inputHash": "ce25b3d3ccba7338c1bdfe93d9e4b89f57e2480302eeef52aefc6f5aca8e1442",
+      "queue": [
+        {
+          "symbol": "5347",
+          "lane": "general",
+          "score": 11.76,
+          "scoreStatus": "partial_source_failure",
+          "independentRootCount": 1,
+          "rootIds": [
+            "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999"
+          ],
+          "missingPlatforms": [
+            "broker",
+            "bulltalk",
+            "facebook",
+            "instagram",
+            "investanchors",
+            "news",
+            "official",
+            "ptt",
+            "threads",
+            "twse_insider",
+            "youtube"
+          ],
+          "inProgress": false,
+          "disposition": "queued",
+          "policyVersion": "research-priority-v1"
+        }
+      ],
+      "jobId": "ff6e05f1-72f1-4f8d-99db-4920fa2abe16",
+      "researchCompanyId": "917763c2-2f66-45f7-a560-c787fbc946df",
+      "novelty": 0,
+      "profitImpact": 0,
+      "notCurrentCatalyst": true,
+      "claimInputCompleted": false
+    },
+    "scopeBoundary": {
+      "formalIdentityRows": 0,
+      "formalProducts": 0,
+      "modelReserved": false,
+      "liveRolesExecuted": false,
+      "legacyAuthorityActivated": false
+    },
+    "pastCutoffAdmissionWeeks": {
+      "syntheticEmptyFormalFixtures": true,
+      "rollbackOnly": true,
+      "oldAsOfWeeks": 2,
+      "currentDbWeek": true,
+      "companyJobsAdded": 0
+    },
+    "quotaBoundary": {
+      "syntheticRollbackOnly": true,
+      "fifthAllowedSixthRejected": true,
+      "callerPastCreatedAtIgnored": true,
+      "sameIssuerRejected": true,
+      "formalPositiveAuthorityNotTested": true
+    },
+    "lockClock": {
+      "afterActualLockWait": true,
+      "releaseClock": "2026-10-08 15:23:24.625269+00",
+      "admissionClock": "2026-10-08 15:23:24.625558+00",
+      "realMondayWallClockNotCrossed": true,
+      "mondayBoundaryExpressionChecked": true
+    }
+  },
+  "counts": {
+    "nativeTap": 20,
+    "nativeChecks": 19,
+    "related": 84,
+    "skip": 0
+  },
+  "limits": {
+    "cgroupMemoryMaxBytes": 34359738368,
+    "cgroupCpuMax": "400000 100000",
+    "projectDiskQuotaConfirmed": false,
+    "singleHeavyRssGuardBytes": 8589934592
+  },
+  "notCompleted": [
+    "Slice3 claim/input",
+    "live model author/reviewer",
+    "publication",
+    "strategy qualification",
+    "actual Monday wall-clock crossing",
+    "formal positive authority",
+    "ordinary CI new-test membership"
+  ],
+  "productionImported": false,
+  "protectedApproval": false
+}

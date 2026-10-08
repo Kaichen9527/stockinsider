@@ -295,7 +295,7 @@ function supplementaryObservation(read: DiscoveryPriceRead, candidate: Discovery
  * server-selected currentRun: its queue/active symbols consume the shared read
  * budget first. Existing first receipts are never upgraded or backfilled. */
 export async function loadDiscoveryPriceEnrichment(client: Client, candidates: DiscoveryPriceCandidate[], asOf: string,
-  options: { reader?: typeof readDiscoveryRawQuote; monotonicNow?: () => number;
+  options: { reader?: typeof readDiscoveryRawQuote; monotonicNow?: () => number; firstDiscoveryTable?:'research_first_discoveries_v1'|'research_observed_first_discoveries_v1';
     currentRun?: { serverClock: string; prioritySymbols: string[] } } = {}) {
   if (!discoveryInstant(asOf) || candidates.length > DISCOVERY_PRICE_BOUNDS.candidates
     || new Set(candidates.map((row)=>row.symbol)).size !== candidates.length
@@ -316,7 +316,7 @@ export async function loadDiscoveryPriceEnrichment(client: Client, candidates: D
     let bytes = 0;
     for (let from=0;from<=DISCOVERY_PRICE_BOUNDS.firstRows;from+=500) {
       const count=Math.min(500,DISCOVERY_PRICE_BOUNDS.firstRows+1-from);
-      const result=await client.from('research_first_discoveries_v1')
+      const result=await client.from(options.firstDiscoveryTable||'research_first_discoveries_v1')
         .select('symbol,run_id,first_seen_at,captured_at,snapshot').lte('captured_at',asOf)
         .order('symbol').range(from,from+count-1).abortSignal(abort.signal);
       if(result.error || !Array.isArray(result.data)) throw new Error('first_discovery_registry_read_failed');

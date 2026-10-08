@@ -1,3 +1,4 @@
+import {parseResearchPriorityScope,readObservedPriorityRoster} from '@/lib/research-observed-priority';
 import { NextResponse } from 'next/server';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { getSupabaseServerClient } from '@/lib/supabase-server';
@@ -48,11 +49,12 @@ export async function POST(request: Request) {
   const asOf = String(body?.asOf || '');
   const attemptsRaw = body?.sourceAttempts;
   const assessmentsRaw = body?.assessments;
-  if (!body || Object.keys(body).some((key) => !['asOf','sourceAttempts','assessments'].includes(key))
+  if (!body || Object.keys(body).some((key) => !['asOf','sourceAttempts','assessments','scope','snapshotHash'].includes(key))
     || !instant(asOf) || Date.parse(asOf) > Date.now() || !Array.isArray(attemptsRaw)
     || attemptsRaw.length > 50 || !Array.isArray(assessmentsRaw) || assessmentsRaw.length > 5000) {
     return NextResponse.json({ ok: false, error: 'research_priority_request_invalid' }, { status: 400 });
   }
+  let scope;try{scope=parseResearchPriorityScope(body);}catch{return NextResponse.json({ok:false,error:'research_priority_scope_invalid'},{status:400});}
   const attempts: ResearchSourceAttempt[] = [];
   for (const item of attemptsRaw) {
     const row = item as Row;
@@ -100,14 +102,15 @@ export async function POST(request: Request) {
   }
   const db = getSupabaseServerClient();
   try {
+    const observed=scope.kind==='research_observed_v1'?await readObservedPriorityRoster(db,scope.snapshotHash,asOf):null;
     const [official, screened, documents, domains, activeJobs] = await Promise.all([
-      pages<Row>(async (from, to) => {
+      observed?Promise.resolve(observed.rows):pages<Row>(async (from, to) => {
         const result = await db.rpc('candidate_research_stock_authority_page', {
           p_cutoff: asOf, p_page_offset: from, p_page_limit: to - from + 1,
         });
         return { data: result.data as Row[] | null, error: result.error };
       }, 5000),
-      loadPublishedCandidateSymbols(db, asOf),
+      observed?Promise.resolve([]):loadPublishedCandidateSymbols(db, asOf),
       pages<Row>(async (from, to) => {
         // The bounded head query includes corrections to old roots. A rolling
         // raw-document window would silently forget a prior discovery/retraction.
@@ -123,7 +126,7 @@ export async function POST(request: Request) {
       }, 5000),
       pages<Row>(async (from, to) => {
         const result = await db.from('research_deep_jobs_v1').select('symbol,status')
-          .in('status', ['queued', 'running']).lte('created_at', asOf).order('job_id').range(from, to);
+          .eq('research_scope',scope.kind).in('status', ['queued', 'running']).lte('created_at', asOf).order('job_id').range(from, to);
         return { data: result.data, error: result.error };
       }, 5000),
     ]);
@@ -136,7 +139,7 @@ export async function POST(request: Request) {
     const symbols = new Set([...screened, ...roster.keys()]);
     const rootsBySymbol = new Map<string, ResearchSourceRoot[]>();
     const activeSymbols = new Set(activeJobs.map((job) => String(job.symbol)));
-    for (const symbol of activeSymbols) symbols.add(symbol);
+    for (const symbol of activeSymbols) if(!observed||roster.has(symbol))symbols.add(symbol);
     for (const document of documents) {
       if (!hasDirectCompanyMentionScope(document)) continue;
       for (const rawSymbol of Array.isArray(document.symbols) ? document.symbols : []) {
@@ -194,7 +197,7 @@ export async function POST(request: Request) {
       symbol: row.symbol, stockId: String(roster.get(row.symbol)?.stock_id || ''),
       exchange: String(roster.get(row.symbol)?.exchange || ''), firstSeenAt: row.firstSeenAt,
       hasDiscoveryEvidence: row.hasDiscoveryEvidence,
-    })), asOf, {currentRun:{serverClock:new Date().toISOString(),
+    })), asOf, {firstDiscoveryTable:observed?'research_observed_first_discoveries_v1':'research_first_discoveries_v1',currentRun:{serverClock:new Date().toISOString(),
       prioritySymbols:[...new Set([...run.queue.map((row)=>row.symbol),
         ...candidates.filter((candidate)=>candidate.inProgress).map((candidate)=>candidate.symbol).sort()])]}});
     if (priceEnrichment.accountedCount !== run.accountedCount || priceEnrichment.supplementAccountedCount !== run.accountedCount) throw new Error('research_priority_price_accounting_mismatch');
@@ -208,22 +211,31 @@ export async function POST(request: Request) {
       supplementaryObservation:priceEnrichment.supplements.get(row.symbol)!,
       ...(associations.get(row.symbol)?.length ? { sourceAssociations: associations.get(row.symbol)!,
         associationObservedAt, hasResearchCue: associations.get(row.symbol)!.some((item) => item.hasResearchCue) } : {}) }));
-    const inputHash = researchCanonicalHash({ asOf, attempts, candidates, evidenceRows, excluded });
+    const inputHash = researchCanonicalHash({ asOf, attempts, candidates, evidenceRows, excluded,
+      ...(observed?{scope,scopeReceipt:observed.receipt}: {}) });
+    let runId:string;let queued:{data:unknown;error?:unknown};let discoveries:{data:unknown;error?:unknown};let replay:unknown;
+    if(observed){
+      const result=await db.rpc('store_observed_research_priority_v1',{p_snapshot_hash:scope.kind==='research_observed_v1'?scope.snapshotHash:null,p_as_of:asOf,p_input_hash:inputHash,p_attempts:attempts,p_rows:evidenceRows,p_queue:run.queue,p_scope_receipt:observed.receipt});
+      if(result.error||!result.data)throw Error('research_priority_store_failed');
+      runId=String(result.data.runId);queued={data:result.data.newDeepResearchJobs};discoveries={data:result.data.firstDiscoveryCaptures};replay=result.data.idempotentReplay;
+    }else{
     const stored = await db.from('research_priority_runs_v1').insert({
       as_of: asOf, policy_version: run.policyVersion, input_hash: inputHash,
       expected_count: run.expectedCount, accounted_count: run.accountedCount,
       source_attempts: attempts, rows: evidenceRows, research_queue: run.queue,
     }).select('run_id').single();
     if (stored.error && stored.error.code !== '23505') throw new Error('research_priority_store_failed');
-    const replay = stored.error ? await db.from('research_priority_runs_v1')
+    replay = stored.error ? await db.from('research_priority_runs_v1')
       .select('run_id').eq('policy_version', run.policyVersion).eq('input_hash', inputHash).maybeSingle() : null;
-    if (replay?.error || (replay && !replay.data)) throw new Error('research_priority_replay_failed');
-    const runId = String(stored.data?.run_id || replay?.data?.run_id || '');
-    const queued = await db.rpc('enqueue_research_deep_jobs_v1', { p_run_id: runId });
+    if ((replay as Row|null)?.error || (replay && !(replay as Row).data)) throw new Error('research_priority_replay_failed');
+    runId = String(stored.data?.run_id || ((replay as Row|null)?.data as Row|null)?.run_id || '');
+    queued = await db.rpc('enqueue_research_deep_jobs_v1', { p_run_id: runId });
     if (queued.error) throw new Error('research_priority_job_enqueue_failed');
-    const discoveries = await db.rpc('capture_research_first_discoveries_v1', { p_run_id: runId });
+    discoveries = await db.rpc('capture_research_first_discoveries_v1', { p_run_id: runId });
     if (discoveries.error) throw new Error('research_priority_discovery_capture_failed');
+    }
     return NextResponse.json({ ok: true, runId,
+      ...(observed?{scope:'research_observed_v1',snapshotHash:observed.receipt.snapshotHash,scopeReceipt:observed.receipt,researchQualified:false,strategyApproved:false,entryEligible:false,sourceTemporalInterpretation:'firstObservedAt is acquisition freshness, not publication novelty or increased market attention; no historical PIT',sourcePublicationClocks:candidates.flatMap(c=>c.roots.map(root=>({symbol:c.symbol,rootId:root.rootId,publishedAt:root.publishedAt,firstObservedAt:root.firstObservedAt,revisionObservedAt:root.revisionObservedAt||root.firstObservedAt})))}:{}),
       asOf, inputHash, expectedCount: run.expectedCount, accountedCount: run.accountedCount,
       priceEnrichment: { policyVersion: priceEnrichment.policyVersion, expectedCount: priceEnrichment.expectedCount,
         accountedCount: priceEnrichment.accountedCount, supplementAccountedCount:priceEnrichment.supplementAccountedCount, admittedReads: priceEnrichment.admittedReads,
@@ -237,7 +249,7 @@ export async function POST(request: Request) {
         .map(([symbol, items]) => ({ symbol, associationObservedAt, associations: items })) } : {}),
       idempotentReplay: Boolean(replay) });
   } catch (error) {
-    const safeErrors = new Set(['research_priority_read_failed', 'research_priority_source_bound_exceeded',
+    const safeErrors = new Set(['research_priority_read_failed', 'research_priority_source_bound_exceeded','research_observed_roster_read_failed','research_observed_roster_receipt_changed',
       'research_priority_official_roster_missing', 'research_priority_association_company_not_in_roster',
       'research_priority_price_accounting_mismatch', 'research_priority_store_failed', 'research_priority_replay_failed',
       'research_priority_job_enqueue_failed', 'research_priority_discovery_capture_failed', 'research_association_clock_invalid']);

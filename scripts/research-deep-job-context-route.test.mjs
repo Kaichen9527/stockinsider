@@ -37,7 +37,7 @@ const ENV = {
 
 function fixture() {
   return {
-    [TABLE.jobs]: [{ job_id: JOB, symbol: '2330', priority_run_id: PRIORITY,
+    [TABLE.jobs]: [{ job_id: JOB, symbol: '2330', priority_run_id: PRIORITY, research_scope:'formal_v1',
       status: 'running', attempts: 1, lease_owner: OWNER, lease_expires_at: DEADLINE }],
     [TABLE.attempts]: [{ id: '10000000-0000-4000-8000-000000000008', job_id: JOB,
       attempt: 1, owner: OWNER, claimed_at: START, lease_expires_at: DEADLINE }],
@@ -648,6 +648,17 @@ test('DAI-12 fallback revision URLs cannot hide a contradictory same-clock sibli
   assert.equal(response.status, 200);
   assert.deepEqual(response.body.packet.sources, []);
   assert.equal(response.body.packet.gaps[0].reason, 'source_conflicting_head');
+});
+
+test('DCC-RT observed-only jobs cannot enter the legacy formal context', async () => {
+  const rows = fixture();
+  rows[TABLE.jobs][0].research_scope = 'research_observed_v1';
+  const result = await run({ rows });
+  assert.equal(result.response.status, 200);
+  assert.deepEqual(result.response.body, { ok: true, context: null, gap: 'no_active_owned_job' });
+  assertReadOnly(result.calls);
+  const claimed = await run({ rows, body: { action: 'claim', owner: OWNER }, claimData: [claimRow()] });
+  assertUnavailable(claimed.response, 'claim');
 });
 
 test('DAI-13 precise clocks survive packet serialization and reject invalid microsecond sibling ordering', async () => {

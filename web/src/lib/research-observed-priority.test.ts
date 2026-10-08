@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {parseResearchPriorityScope,readObservedPriorityRoster}from './research-observed-priority.ts';
+import type {SupabaseClient}from '@supabase/supabase-js';
+const hash='a'.repeat(64),asOf='2026-10-08T15:00:00Z';
+const member={research_company_id:'11111111-1111-4111-8111-111111111111',symbol:'5347',exchange:'TPEX',isin:'TW0005347009',name:'世界先進',sector:'半導體',cfi:'ESVUFR',observed_at:'2026-10-08T09:04:00Z'};
+const receipt={snapshotHash:hash,mappingDigest:'b'.repeat(64),classifierHash:'c'.repeat(64),classificationHash:'d'.repeat(64),schemaVersion:'research-observed-roster-admission-v1',receivedAt:'2026-10-08T14:00:00Z',latestObservedAt:'2026-10-08T12:00:00Z',includedCount:1};
+const client=(pages:unknown[])=>({rpc:async()=>({data:pages.shift(),error:null})})as unknown as Pick<SupabaseClient,'rpc'>;
+test('omitted scope stays formal, observed is explicit hash-bound',()=>{assert.deepEqual(parseResearchPriorityScope({}),{kind:'formal_v1'});assert.deepEqual(parseResearchPriorityScope({scope:'research_observed_v1',snapshotHash:hash}),{kind:'research_observed_v1',snapshotHash:hash});});
+for(const body of [{snapshotHash:hash},{scope:'formal_v1',snapshotHash:hash},{scope:'research_observed_v1'},{scope:'automatic'},{scope:'research_observed_v1',snapshotHash:'not-a-hash'}])test(`no implicit fallback for ${JSON.stringify(body)}`,()=>assert.throws(()=>parseResearchPriorityScope(body),/scope_invalid/));
+test('bounded receipt reader retains research identity, not a formal stock grant',async()=>{const r=await readObservedPriorityRoster(client([{...receipt,members:[member]}]),hash,asOf);assert.equal(r.rows.length,1);assert.equal(r.rows[0].research_company_id,member.research_company_id);assert.equal(r.rows[0].stock_id,undefined);});
+test('microsecond-future receipt and observed member reject without truncation',async()=>{for(const data of [{...receipt,receivedAt:'2026-10-08T15:00:00.000001Z',members:[member]},{...receipt,members:[{...member,observed_at:'2026-10-08T15:00:00.000001Z'}]}])await assert.rejects(()=>readObservedPriorityRoster(client([data]),hash,asOf));});
+test('missing count, duplicate and extra authority fields fail closed',async()=>{for(const data of [{...receipt,includedCount:2,members:[member]},{...receipt,includedCount:2,members:[member,member]},{...receipt,trustedAuthorityActivated:true,members:[member]},{...receipt,members:[{...member,entryEligible:true}]}])await assert.rejects(()=>readObservedPriorityRoster(client([data]),hash,asOf));});
+test('unknown classifier hash, UUID and invalid exchange fail closed',async()=>{for(const data of [{...receipt,classifierHash:null,members:[member]},{...receipt,members:[{...member,research_company_id:'request-supplied-id'}]},{...receipt,members:[{...member,exchange:'arbitrary'}]}])await assert.rejects(()=>readObservedPriorityRoster(client([data]),hash,asOf));});
