@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "manual-auo-working-draft-local-file-hashes-v1",
+  "articleSubjectCommit": "a38ccf9a831fce46d7bd4385acba397d735816ca",
+  "articleContentReviewApproved": false,
+  "files": {
+    "README.md": {
+      "bytes": 2152,
+      "sha256": "0d0477c74d1d0891a1a146b0eb5c0ef0c6214de65d1d7f5144025d209a819cfe"
+    },
+    "article.md": {
+      "bytes": 24484,
+      "sha256": "30f4bd5c12199c1b48730a4697dfc6a6832deb494c5fe4c75e37d029ccfaca3e"
+    },
+    "content-validation.json": {
+      "bytes": 4901,
+      "sha256": "1725a097e0ef43936ea8dc8114149550985e070cca345ba9ef09054e26c2cf3a"
+    },
+    "corporate-action-relay.json": {
+      "bytes": 876,
+      "sha256": "301492d3fe0292f2317f97b4ab389cd8456753ec525c1675a52428637ce49109"
+    },
+    "draft-metadata.json": {
+      "bytes": 1513,
+      "sha256": "91bdb0db766168056f2bc331e10382f439e38053d467408c877334805a150dbd"
+    },
+    "public-context-relay.json": {
+      "bytes": 7460,
+      "sha256": "19575e2dca815abfd561289657aea10f72d3c40cb828f803738c000be834ac8a"
+    },
+    "public-news-clue-relay.json": {
+      "bytes": 2054,
+      "sha256": "5d7195fb79c4f376823e5846f84412e0d8000f5a48e18a526158ba51c6beef83"
+    },
+    "reverse-sensitivity.json": {
+      "bytes": 1021,
+      "sha256": "96d272adbf86c0c7a0e58b9bba52b32deb5ec95d0407563b9dbb56007b73ba95"
+    },
+    "source-ledger.json": {
+      "bytes": 43369,
+      "sha256": "2fb892c8ff3557648ffd4c6a312691acf969be3ade2d41c8af39e6404980ea19"
+    },
+    "table-calculations.json": {
+      "bytes": 1098,
+      "sha256": "fec04cf2b7c3d980fa90f032ad4616946480979568dab28d9a597298a277045e"
+    }
+  }
+}
