@@ -15,6 +15,7 @@ const { readablePath, promptPathAllowed, sourceViewIdentity } = require('./sourc
 const { codexArgs, profileToml, sanitizedEnvironment } = require('./codexAdapter');
 const { validatePatch } = require('./patchParser');
 const { sealResult } = require('./seal');
+const { terminalResultFromJsonl } = require('./jsonlParser');
 const { commitMessage, resultRef } = require('./trustedGit');
 const { operationKey } = require('./transactionJournal');
 const {
@@ -137,35 +138,6 @@ function promptFor(request) {
     'Inspect only the materialized read-only view and return exactly one terminal JSON object as the final agent message.',
     canonicalJson(request),
   ].join('\n\n');
-}
-
-function terminalResultFromJsonl(stdout) {
-  assert(Buffer.byteLength(stdout) <= 16_777_216 && !stdout.includes('\0'), 12);
-  let terminal = null;
-  let completed = false;
-  for (const line of stdout.split('\n')) {
-    if (!line) continue;
-    assert(Buffer.byteLength(line) <= 1_048_576 && !completed, 12);
-    let event;
-    try {
-      event = parseJsonWithNoDuplicateKeys(line);
-    } catch {
-      throw new RunnerError(12);
-    }
-    if (event.type === 'item.completed' && event.item?.type === 'agent_message') {
-      try {
-        terminal = parseJsonWithNoDuplicateKeys(event.item.text);
-      } catch {
-        // Progress messages are allowed.
-      }
-    } else if (event.type === 'turn.completed') {
-      completed = true;
-    } else if (event.type === 'error' || event.type === 'turn.failed') {
-      throw new RunnerError(10);
-    }
-  }
-  assert(completed && terminal, 12);
-  return terminal;
 }
 
 function authenticationSourcePath() {
@@ -606,6 +578,7 @@ async function executeModel({
   onExit = () => {},
   verifyHostFn = verifyCurrentNode,
   spawnFn = spawn,
+  terminalProtocol = 'loop-model-result-v3.5',
 }) {
   // Bind the actual spawn to the request's operation and role, not merely a
   // two-model allowlist. No caller may swap the maker into the reviewer slot.
@@ -699,7 +672,7 @@ async function executeModel({
         return;
       }
       try {
-        resolve(terminalResultFromJsonl(Buffer.concat(stdout).toString('utf8')));
+        resolve(terminalResultFromJsonl(Buffer.concat(stdout), { terminalProtocol, operation: request.operation }));
       } catch (error) {
         reject(error);
       }
