@@ -10,3 +10,9 @@
 - [ ] Shared desktop/mobile readable preview; related tests/types/lint/build/resource and exact independent code review.
 - [ ] Actual new author/reviewer/publication business roundtrip when lawful identity/dispatch exists; no retrospective manual-work receipts.
 - [ ] Separately reviewed protected merge/deploy/schedules and five real trading days; strategy effectiveness remains unproven.
+
+## Oct08 incremental checkpoint (historical pending items retained)
+
+- Original64f7 requirement/architecture amendment has root-attributed unsigned approval; this is not protected approval.
+- Observed scoped job/input has real25TAP positive acceptance but two subsequent independent Slice2/3P2 findings remain to repair. It is not approved code completion.
+- Fixed AUO/EMC pure financial recalculation implemented and66related tests/types/lint/normal build passed. Exact code review pending; unsealed calculation only. Full YTD bridge, immutable input/source fence, paragraph linkage, trusted dispatch/review and same-outbox publication remain incomplete.
