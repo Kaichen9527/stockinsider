@@ -17,6 +17,7 @@ BEGIN
  SELECT *INTO j FROM public.research_deep_jobs_v1 WHERE research_scope='research_observed_v1'AND observed_snapshot_hash=p_snapshot_hash AND lease_owner=p_owner AND status='running'AND lease_expires_at>n AND(p_job_id IS NULL OR(job_id=p_job_id AND attempts=p_attempt));IF NOT FOUND THEN RETURN NULL;END IF;
  SELECT *INTO r FROM public.research_priority_runs_v1 WHERE run_id=j.priority_run_id AND research_scope=j.research_scope AND observed_snapshot_hash=j.observed_snapshot_hash;
  IF NOT FOUND THEN RAISE EXCEPTION 'observed_claim_run_changed';END IF;
+ IF NOT EXISTS(SELECT 1 FROM public.research_observed_priority_store_receipts_v1 receipt WHERE receipt.run_id=r.run_id AND receipt.stored_run_hash=encode(sha256(convert_to(to_jsonb(r)::text,'UTF8')),'hex'))THEN RAISE EXCEPTION 'observed_claim_store_lineage_missing';END IF;
  SELECT *INTO s FROM public.research_observed_roster_snapshots_v1 WHERE snapshot_hash=j.observed_snapshot_hash;
  IF NOT FOUND OR s.received_at>r.as_of OR s.latest_observed_at>r.as_of OR r.as_of>n OR NOT EXISTS(SELECT 1 FROM public.research_observed_roster_members_v1 WHERE snapshot_hash=j.observed_snapshot_hash AND research_company_id=j.research_company_id AND symbol=j.symbol) OR NOT EXISTS(SELECT 1 FROM public.research_deep_admission_charges_v1 WHERE job_id=j.job_id AND issuer_key='TW:'||j.symbol) THEN RAISE EXCEPTION 'observed_claim_membership_changed';END IF;
  IF j.stock_id IS NOT NULL AND NOT EXISTS(SELECT 1 FROM public.stocks WHERE id=j.stock_id AND symbol=j.symbol AND market='TW')THEN RAISE EXCEPTION 'observed_claim_mapping_changed';END IF;
@@ -36,10 +37,7 @@ DECLARE j public.research_deep_jobs_v1;m public.research_model_reservations_v1;
 BEGIN
  IF p_owner IS NULL OR p_owner !~ '^[A-Za-z0-9:_-]{3,120}$' OR p_snapshot_hash IS NULL OR p_snapshot_hash !~ '^[a-f0-9]{64}$'THEN RAISE EXCEPTION 'observed_claim_identity_invalid';END IF;
  PERFORM pg_advisory_xact_lock(2409,6002);
- -- Seal expired attempt as failed; its immutable attempt and budget stay consumed.
- INSERT INTO public.research_model_completions_v1(reservation_id,owner,outcome,result_hash)
- SELECT r.reservation_id,r.owner,'failed',encode(sha256(convert_to('deep_lease_expired','UTF8')),'hex')FROM public.research_model_reservations_v1 r JOIN public.research_deep_jobs_v1 x ON r.role='company_research'AND r.work_key='deep:'||x.job_id||':'||x.attempts WHERE x.research_scope='research_observed_v1'AND x.status='running'AND x.lease_expires_at<=clock_timestamp() ON CONFLICT(reservation_id)DO NOTHING;
- UPDATE public.research_deep_jobs_v1 SET status=CASE WHEN attempts>=3 THEN 'failed'ELSE 'queued'END,terminal_reason=CASE WHEN attempts>=3 THEN 'lease_expired_max_attempts'ELSE terminal_reason END,lease_owner=NULL,lease_expires_at=NULL,finished_at=CASE WHEN attempts>=3 THEN clock_timestamp()ELSE NULL END WHERE research_scope='research_observed_v1'AND status='running'AND lease_expires_at<=clock_timestamp();
+ PERFORM public.reap_expired_research_deep_jobs_v2();
  IF EXISTS(SELECT 1 FROM public.research_deep_jobs_v1 WHERE status='running'AND lease_expires_at>clock_timestamp())THEN RETURN NULL;END IF;
  SELECT *INTO j FROM public.research_deep_jobs_v1 WHERE research_scope='research_observed_v1'AND observed_snapshot_hash=p_snapshot_hash AND status='queued'AND attempts<3 ORDER BY week_start,queue_rank,created_at,job_id FOR UPDATE SKIP LOCKED LIMIT 1;
  IF NOT FOUND THEN RETURN NULL;END IF;
