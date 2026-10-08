@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "stockinsider-public-publisher-surface-observation-v1",
+  "recordedAt": "2026-10-08T11:57:19.445085+00:00",
+  "observer": "root-Codex-in-app-browser",
+  "browserReadWindowUtc": [
+    "2026-10-08T11:54:57Z",
+    "2026-10-08T11:56:01Z"
+  ],
+  "exactFirstObservedAt": null,
+  "httpBodyHash": null,
+  "sourceAcquisition": "read-only visible public browser state; no raw HTTP/hash attestation",
+  "rssAttempts": [
+    {
+      "label": "gooaye",
+      "url": "https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml",
+      "attemptedAt": "2026-10-08T10:16:02.299863+00:00",
+      "status": "read_failed",
+      "errorType": "HTTPError",
+      "observedAt": "2026-10-08T10:16:02.881955+00:00"
+    },
+    {
+      "label": "investaddict",
+      "url": "https://feeds.soundon.fm/podcasts/686ddd56-9b4d-4585-8e9d-31e722f989cf.xml",
+      "attemptedAt": "2026-10-08T10:16:02.300664+00:00",
+      "status": "read_failed",
+      "errorType": "HTTPError",
+      "observedAt": "2026-10-08T10:16:02.877138+00:00"
+    }
+  ],
+  "observations": [
+    {
+      "url": "https://linktr.ee/gooaye",
+      "status": "public_entry_read_success",
+      "scope": "publisher profile and expanded podcast/episode link chooser",
+      "publisher": "Gooaye 股癌 / 謝孟恭",
+      "links": {
+        "appleShow": "https://podcasts.apple.com/tw/podcast/gooaye-%E8%82%A1%E7%99%8C/id1500839292",
+        "spotifyShow": "https://open.spotify.com/show/1zWxx5pKk0XBEzMupVC7UZ",
+        "telegram": "https://t.me/Gooaye"
+      },
+      "visibleRecentEpisodeLabels": [
+        "EP703 / October7",
+        "EP702 / October3",
+        "EP701 / September30"
+      ],
+      "limits": [
+        "Episode list is metadata, not listened/transcribed content",
+        "Only this visible publisher surface checked; no claim of all episodes/platform availability"
+      ]
+    },
+    {
+      "url": "https://podcasts.apple.com/us/podcast/ep703/id1500839292?i=1000793618868",
+      "status": "public_description_read_success",
+      "scope": "EP703 publicly displayed description and information; no audio/transcript",
+      "publicationTimeSourceClaim": "2026-10-07T08:09:00Z",
+      "publicationPrecision": "UI displays minute precision; seconds are not certified",
+      "episodeNumber": 703,
+      "displayedDurationMinutes": 51,
+      "publisherEpisodeUrl": "https://player.soundon.fm/p/954689a5-3096-43a4-a80b-7810b219cef3/episodes/0b071f57-45ba-47d3-9f15-2129a0c645a8",
+      "summary": "最新集公開說明主要是日常引言及贊助介紹，未讀取節目音訊或逐字稿。不能根據這段說明判定整集沒有投資標的，也不能將廣告中的股票比喻算成投資論點。",
+      "companyMentionsAssessedInFullEpisode": null,
+      "contentAnalysisComplete": false
+    }
+  ],
+  "repositoryMismatch": {
+    "file": "web/src/lib/research-v2.ts",
+    "seedAppleId": "1535838033",
+    "publisherLinkedAppleId": "1500839292",
+    "seedSpotifyShowId": "6xkNsQwVfWaB6MvdYhD5pW",
+    "publisherLinkedSpotifyShowId": "1zWxx5pKk0XBEzMupVC7UZ",
+    "codeChanged": false
+  },
+  "limits": [
+    "Both original RSS reads failed; error type HTTPError retained. That original attempt did not record the status code; do not invent one or report no new episodes.",
+    "Browser success is public entry/description only; no audio download, playback/transcription, login/cookies, private/member content or source activation.",
+    "No exact publication/first-observation instant, raw bytes/hash, source identity, research qualification or formal source authority fabricated.",
+    "Follow-up may correct only the two directly verified publisher IDs after ordinary code review/tests; remaining social handles are not verified by this observation."
+  ]
+}
