@@ -67,3 +67,18 @@ The migration is still an **unapplied candidate**. Reapplying it over a prior ex
 New orchestrator contract red:2pass/4fail (`/tmp/insider-reservation-red.log`); green:6pass. Combined lightweight suite:84pass/0skip; TypeScript pass; changed module/route lint0errors0warnings. Actual PG/transport remains **not executed locally**. The PG harness now covers the112MiB stranding counterexample, exact/+1 actual+reserved128MiB and32slots, shared subscriptions, old consumed-token replay after a newer token exists, and refusal to bind an old token to the new run. Retained-capacity fixtures are explicitly synthetic disposable owner-installed rows; they are not official source acquisition or production authority.
 
 All three independent findings still require reviewer/VM closure. The root reported a narrow unsigned pass of173b6b7 for CLI/projection static code only, with actual PG/PostgREST outstanding. Default activation, shared migration plan, capacity/transport measurements and production build remain open.
+
+## Actual guarded stack harness prepared (not executed by maker)
+
+`scripts/research-insider-dataplane.test.mjs` starts a separate real PostgreSQL/PostgREST16.3/normal built Next stack under the existing Node test-runner loopback configuration. It verifies the pinned PostgREST archive/binary, installs selected tracked dependency DDL verbatim with explicit service-role fixture ACL, and installs the new migration verbatim. It seeds only synthetic raw snapshots through the actual admission RPC; all five pins exist before guarded source-sync, so that fixture does not request official-host acquisition.
+
+Planned executable checks: unauthorized401/no documents; actual existing document writer + DB CAS over three1001-row rounds; first collected_at and original five IDs preserved on replay; actual12MiB raw/16MiBbase64+envelope admission over PostgREST and +1 rejection; escaped-control500row admission rejection with no partial raw activation. It records database/relation/WAL bytes and **end-of-test** Node memory, not a peak-RAM guarantee. Separate VM process monitoring remains required for peak20GBresident/4GBtemporary/8GBreserve acceptance.
+
+```
+RESEARCH_LOCAL_DATAPLANE_PG_BIN=/path/to/pg/bin \
+RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN=/path/to/pinned/postgrest \
+RESEARCH_LOCAL_DATAPLANE_ARTIFACTS=/private/new-insider-acceptance-directory \
+node --experimental-strip-types --test scripts/research-insider-dataplane.test.mjs
+```
+
+No missing-tool skip: Linux, built Next artifact and tool paths are mandatory. The artifact directory must be new. Test keys/JWT exist only for the disposable loopback fixture and are omitted/redacted from persisted reports. No inherited production keys, official roster, stock rows, model/approval authority or platform credentials are imported. This is a narrow source/lease/ledger dependency profile, not a full reviewed production schema or installed-policy attestation. Maker syntax-checked the harness only; successful transport/Next/PG execution is **not yet claimed**.
