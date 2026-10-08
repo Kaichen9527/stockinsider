@@ -38,3 +38,5 @@ P3總權益166,902扣NCI12,505得共同股東權益推算154,397；股東權益�
 [dataset.json](dataset.json)、[source-ledger.json](source-ledger.json)、[calculation-results.json](calculation-results.json) 與 [hash-manifest.json](hash-manifest.json) 提供逐點、逐季收據。日期若只來自URL或簡報標示，並非精確發布時刻；mutable PDF只確定目前reader可見，所有歷史PIT eligibility皆為false。不能把2025文件中的2024比較欄倒填成2024已知。保留既有403／hosted reader失敗，不宣稱全來源啟用或完整研究完成。
 
 來源聊天另回報 Astra 獨立目視四份官方P1，確認八季讀值、比較欄與符號一致；四份PDF合計3,320,065bytes保留在Mac，未轉存VM。這是unsigned來源讀值核對，exact dataset commit尚待獨立比對，不是投資論點或protected attestation批准；追溯見unsigned-source-visual-review-relay.json。
+
+後續Astra對exact head7678cc91e1da8a60055ce5be189b5b603f5fe944／data debed842cbc432ef62f8915eea085d6d9f1b66fe完成unsigned scoped資料approval：八季104獨立目視值與dataset/CSV零差，4份Mac PDF bytes/SHA一致，9個±1百萬元差保留；月額和／YoY／README與3file bytehash+35canonicalhash核對一致。未含月營收原表或P3目視、附註、normalized earnings、論點或發布批准，沒有Mac重型測試。追溯見unsigned-exact-dataset-review-relay.json；原dataset/hash不變。PR305由root建立，base為codex/deep-private-draft-oct08。
