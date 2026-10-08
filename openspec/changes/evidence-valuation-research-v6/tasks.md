@@ -34,3 +34,28 @@
       research-ready; prove the real 2409 acquisition-to-publication path.
 - [ ] Reclaim only verified disposable shared-VPS cache/releases, remeasure capacity after
       every batch and prepare an expansion cost decision if the 19 GiB threshold remains unmet.
+
+## 2026-10-08 scoped VM milestones (additive progress; broad tasks above remain open)
+
+- [x] PR304 private prepared-input → durable draft → typed handoff proposal implemented at
+      exact1243ee1313ac1d6ff3995ff5920cc2c3fad269e8; focused114/integration346 zero skip,
+      types/lint/build passed, A/B integrity defects repaired and unsigned scoped Astra review received.
+- [ ] Authenticate current live job/reservation and complete actual dispatch/handoff and independent budgeted article review.
+- [x] PR305 real financial evidence relay and VM calculations:24 consecutive revenue months,
+      8 distinct quarterly core income columns, precision-interval checks, immutable sources/hashes;
+      unsigned exact financial-data review recorded separately from research-content approval.
+- [x] Market evidence branch c16bc52271eaf733b7ca69d0cc747d123a5d2ad6:268 stock/268 TAIEX rows,
+      49 data/formula groups,30 canonical/7 byte hashes, cross-process reproduction and normal web build;
+      actual VM CPU/RAM/disk measured. Preserve one proxy403 and attributed Mac acquisition.
+- [x] Preserve TWSE response-level +/-/X, ** and daily-statistics semantics separately from selectedRows;
+      empty row notes do not establish absence of company actions. Dataset remains immutable.
+- [x] Receive unsigned scoped Astra review for exact market c16bc52271eaf733b7ca69d0cc747d123a5d2ad6:
+      raw28/selected strings3216/provenance536/byte hashes7/canonical30 and independent formula recomputation match;
+      no maker-test certification, protected attestation or article/strategy approval.
+- [x] Prepare seven-section AUO real-evidence writing map using the existing article/valuation contracts.
+- [ ] Complete AUO actual narrative, forecasts, normalized earnings, attributable common-equity bridge,
+      adjusted market context, formal citations and independent content review; keep incomplete until supported.
+- [ ] Complete second-company research, strategy validation and actual production business roundtrip.
+
+These PRs/branches are unmerged and undeployed. No task here approves strategy, publication or schedules.
+VPS capacity only blocks heavy work on the VPS; VM development/research admission uses VM resources.
