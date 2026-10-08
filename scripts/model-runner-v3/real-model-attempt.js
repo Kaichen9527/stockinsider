@@ -42,6 +42,7 @@ async function runRealModelAttempt() {
           acceptanceCriteria: ['One exact JSON object and no tool call.'],
         },
         timeout: 90,
+        terminalProtocol: 'model-runner-oracle-v2',
       });
       if (JSON.stringify(result) !== JSON.stringify(terminal)) {
         throw new Error('real model attempt returned an unexpected terminal object');
