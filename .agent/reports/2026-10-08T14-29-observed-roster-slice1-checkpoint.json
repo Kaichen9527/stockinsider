@@ -1,0 +1,374 @@
+{
+  "schemaVersion": "observed-roster-slice1-checkpoint-v1",
+  "recordedAt": "2026-10-08T14:30:36.162093+00:00",
+  "base": "86b807392290fc6dffb9e4ad9285e88744900e30",
+  "branch": "codex/observed-roster-admission-oct08",
+  "manualIncrement": {
+    "startedAt": "2026-10-08T14:00:18Z",
+    "deadline": "2026-10-08T14:30:18Z",
+    "interruptedBy": "insider082fcfe two-P2 repair, separateworktree 2cca2f8",
+    "automaticModelBudgetOrLeaseAcceptance": false
+  },
+  "passed": {
+    "prepareCases": 10,
+    "unchangedRelayCompatibilityCases": 16,
+    "nativeTapIncludingParent": 16,
+    "nativeActualChecks": 15,
+    "nativeSkip": 0,
+    "nativeFail": 0,
+    "normalWebBuild": "passed before later SQL/test/harness-only corrections; final recheck pending"
+  },
+  "actualNative": {
+    "guardedHttp1978ResearchCompanies": true,
+    "concurrentAdmissions": 4,
+    "snapshotsCreated": 1,
+    "excludedTdr": 10,
+    "original1946Unmodified": true,
+    "restartReplay": true,
+    "formalStockWrites": 0,
+    "formalAuthorityWrites": 0,
+    "formalPriorityStatus": 409,
+    "formalPriorityReason": "research_priority_official_roster_missing",
+    "jobClaimInputCompleted": false
+  },
+  "pending": [
+    "final types/lint/build after final harness/SQL changes",
+    "independent exact code review",
+    "observed scoped priority/globalDBclock quota/Slice2",
+    "typed observed deepjob/claim/input Slice3",
+    "approved64f7 first-publication v2"
+  ],
+  "failuresPreserved": [
+    "initial missing generated modules",
+    "outside-root dependency symlink build rejected; own link replaced by existing dependency hardlinks",
+    "outside-web-root classifier import build rejected; existing classifier factored unchanged into web shared module",
+    "SQL CASE syntax",
+    "isolated SQL diagnostic E2BIG; moved SQL test input to stdin",
+    "Chinese UTF8 split-chunk corruption in local compatibility forwarding; strict hashes rejected until byte forwarding fixed"
+  ],
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "prepare",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "web/src/lib/research-observed-roster.test.ts"
+      ],
+      "startedAt": "2026-10-08T14:03:10.913Z",
+      "completedAt": "2026-10-08T14:03:11.568Z",
+      "elapsedSeconds": 0.6556857050018152,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 135589888,
+      "observedTaskDiskPeakBytes": 33456128,
+      "availableBeforeBytes": 24821215232,
+      "availableAfterBytes": 24821207040,
+      "guardTermination": null,
+      "measurementSha256": "af55054683f68a50a9d81efa270b29406a4cb68cbd26636160d3fb3251dd4429",
+      "logSha256": "4709c408e2cd20a9f49cdd7307f3b3fcdd5785024abbe229ccb120a6d55a7274"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "startedAt": "2026-10-08T14:08:57.199Z",
+      "completedAt": "2026-10-08T14:09:16.300Z",
+      "elapsedSeconds": 19.101128042995697,
+      "exitCode": 2,
+      "sampledAggregateRssPeakBytes": 1324134400,
+      "observedTaskDiskPeakBytes": 35229696,
+      "availableBeforeBytes": 24821190656,
+      "availableAfterBytes": 24816697344,
+      "guardTermination": null,
+      "measurementSha256": "bc7e4c6a498bc44c3da216c28ac0fbc2f9dd3aded1aef0d57fcd57a4adfeac30",
+      "logSha256": "b0a71cb6a0cd75db128feba4f3e52f4cc7c4ca501b56722bfe6249d7e419e6e0"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T14:09:16.332Z",
+      "completedAt": "2026-10-08T14:09:17.786Z",
+      "elapsedSeconds": 1.4536541840061545,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 215138304,
+      "observedTaskDiskPeakBytes": 38232064,
+      "availableBeforeBytes": 24816693248,
+      "availableAfterBytes": 24816254976,
+      "guardTermination": null,
+      "measurementSha256": "a0d8ae94e3887fc97d9fd4456798afa41802b936eee91088893710e181001dc3",
+      "logSha256": "e6e79d436603a12c33591d38119699739faf3024260a24f840f62b2e0bdde13d"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T14:10:17.627Z",
+      "completedAt": "2026-10-08T14:10:38.839Z",
+      "elapsedSeconds": 21.212505536997924,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 1662222336,
+      "observedTaskDiskPeakBytes": 1189998592,
+      "availableBeforeBytes": 24805056512,
+      "availableAfterBytes": 24571944960,
+      "guardTermination": null,
+      "measurementSha256": "a35a4b1b0bf030a417410313875c4f829c85f11e4155dcb0889c0acb5b99f06d",
+      "logSha256": "1dae3a7dde383001384a0514f61fda207ee9b34d9c122d3b875ee2f44bfe29f7"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "prepare-shared",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "web/src/lib/research-observed-roster.test.ts"
+      ],
+      "startedAt": "2026-10-08T14:11:45.888Z",
+      "completedAt": "2026-10-08T14:11:46.619Z",
+      "elapsedSeconds": 0.7304234199982602,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 137056256,
+      "observedTaskDiskPeakBytes": 1190010880,
+      "availableBeforeBytes": 24571932672,
+      "availableAfterBytes": 24571924480,
+      "guardTermination": null,
+      "measurementSha256": "d01341ec23a14bd336b6f00c9b7ce3d1f4f9bc7b9f2d71a7d0c228f928f2ba1b",
+      "logSha256": "e06e478593edeedd5d611e9a6cc80d1e1284a6d173bec9b099a5479462ca8f92"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "shared-compat",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-discovery-relay-prepare.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:11:46.661Z",
+      "completedAt": "2026-10-08T14:11:47.958Z",
+      "elapsedSeconds": 1.2971458209940465,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 147992576,
+      "observedTaskDiskPeakBytes": 1190035456,
+      "availableBeforeBytes": 24571920384,
+      "availableAfterBytes": 24571908096,
+      "guardTermination": null,
+      "measurementSha256": "3fba7c02ff9cf657677170e3c02e9b7292763b115051e95c2ee7e1392fd9d12e",
+      "logSha256": "ed473276f2a3fc5959e1df1ee11a712988f5c89bbb3cb35c763fe4fab6168b67"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-final",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T14:11:47.994Z",
+      "completedAt": "2026-10-08T14:12:11.122Z",
+      "elapsedSeconds": 23.127222632989287,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1626714112,
+      "observedTaskDiskPeakBytes": 1200021504,
+      "availableBeforeBytes": 24571904000,
+      "availableAfterBytes": 24471343104,
+      "guardTermination": null,
+      "measurementSha256": "43709711e15e2785691bc9cff12142239c341a6aa8133bdb37ee813e60c4d289",
+      "logSha256": "31c8ae0f39ad1b0d94d504a5485858a6cb7e7ab7a620021ed91bc5333ed2f19c"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-first",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:25:18.322Z",
+      "completedAt": "2026-10-08T14:25:20.163Z",
+      "elapsedSeconds": 1.8415155819966458,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 207269888,
+      "observedTaskDiskPeakBytes": 1331052544,
+      "availableBeforeBytes": 24458162176,
+      "availableAfterBytes": 24416546816,
+      "guardTermination": null,
+      "measurementSha256": "51ae65a0d07e835cead117922b18d18ae2c8ecd9dcd50ed7748aa6341b930ad8",
+      "logSha256": "a3177d5b6cdcfe9c72d51be16b0ec036f320f097b67049a4bc37b0a64790e778"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-syntax-fix",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:26:03.673Z",
+      "completedAt": "2026-10-08T14:26:14.905Z",
+      "elapsedSeconds": 11.231673593007145,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 467316736,
+      "observedTaskDiskPeakBytes": 1376366592,
+      "availableBeforeBytes": 24416542720,
+      "availableAfterBytes": 24372396032,
+      "guardTermination": null,
+      "measurementSha256": "b5fdc72f135c582956f113245e7b2a2ed2fc6533d8f335b4dabcf9fe8248b913",
+      "logSha256": "920e4176226cb5bcde4081708e2e2af0ef335ddc006e564188ceeb32d8d89bbb"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-canonical-diagnostic",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:27:20.134Z",
+      "completedAt": "2026-10-08T14:27:27.244Z",
+      "elapsedSeconds": 7.109452455013525,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 394985472,
+      "observedTaskDiskPeakBytes": 1418768384,
+      "availableBeforeBytes": 24372391936,
+      "availableAfterBytes": 24329990144,
+      "guardTermination": null,
+      "measurementSha256": "596a65a8b4bda6057d932cd8efb10f6ccfca14143afdb68af652456cab587bd4",
+      "logSha256": "54c677c6d534b92f2c40ca9ceae2760ed3d4ccbdc8372e8071d9b59945251ca9"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-canonical-stdin",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:27:43.924Z",
+      "completedAt": "2026-10-08T14:27:55.100Z",
+      "elapsedSeconds": 11.175386009010253,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 476123136,
+      "observedTaskDiskPeakBytes": 1472528384,
+      "availableBeforeBytes": 24329986048,
+      "availableAfterBytes": 24285863936,
+      "guardTermination": null,
+      "measurementSha256": "0bbab5ac016e50c8c7b1cb66a52cb184e5877d7e32646290a156dd90c1b21f7a",
+      "logSha256": "d12ddc522ed3302fab0a661c1409ac8883d492d3d8780b79c06f910ba3d613f4"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-binding-diagnostic",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:28:30.501Z",
+      "completedAt": "2026-10-08T14:28:42.138Z",
+      "elapsedSeconds": 11.636889130997588,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 484102144,
+      "observedTaskDiskPeakBytes": 1518714880,
+      "availableBeforeBytes": 24285859840,
+      "availableAfterBytes": 24241725440,
+      "guardTermination": null,
+      "measurementSha256": "b4f2e343456cbb1f135e3995a4e6f0f99e9865dc233fa9f4d883f1b6513e7dc1",
+      "logSha256": "c941cdb9d27cfa661302bc194181e7e85da889edf1f89d3423f96a40be606346"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-utf8-fix",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:28:56.421Z",
+      "completedAt": "2026-10-08T14:29:08.932Z",
+      "elapsedSeconds": 12.51097391199437,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 451117056,
+      "observedTaskDiskPeakBytes": 1556455424,
+      "availableBeforeBytes": 24241721344,
+      "availableAfterBytes": 24197599232,
+      "guardTermination": null,
+      "measurementSha256": "dcbe43bf556fdb177b3df35cfe8f57dd01e20461a8b4792db20c175da101e46f",
+      "logSha256": "d6c8b53b1aee6901626b55ed3fb2673d39b84f15e583f9ea402fe165336282ec"
+    }
+  ],
+  "codeFiles": [
+    {
+      "path": "web/src/lib/research-observed-roster.ts",
+      "bytes": 5109,
+      "sha256": "6feabf5f45a932499e2529788003e13881664a2075a006933579483198b12168"
+    },
+    {
+      "path": "web/src/lib/research-observed-roster.test.ts",
+      "bytes": 2741,
+      "sha256": "508ea70c6208ab149a6ebf5c150d8afcb9f075d6c1247d15cd4cbff0a9872bb0"
+    },
+    {
+      "path": "web/src/lib/research-observed-classifier.mjs",
+      "bytes": 6394,
+      "sha256": "9eb59b03bd3b89cbe9813a93f49dc2247e5d7e12a6e31e145d042fef493f8f63"
+    },
+    {
+      "path": "web/src/app/api/internal/research-observed-roster/route.ts",
+      "bytes": 1592,
+      "sha256": "2b7eb31b6f8d9014b7ad79cd3ed499daba7c2d42a838bc6a1622cc4d32152b55"
+    },
+    {
+      "path": "migrations/20261008_research_observed_roster_v1.sql",
+      "bytes": 17733,
+      "sha256": "612203d5acef6edf432f793aed6868cb09212dffd078e5c8b2dae36bf773783d"
+    },
+    {
+      "path": "scripts/research-observed-roster-native.test.mjs",
+      "bytes": 6174,
+      "sha256": "4b0b8fb23ff722da0d53b55fd30723436dcb869f42ccf9bf5a5ba27b2451f1d4"
+    },
+    {
+      "path": "scripts/research-local-inbox-dataplane.mjs",
+      "bytes": 27953,
+      "sha256": "180b5751378ca3a6ec4131a776f671e9bb4019f4e5173ee3006423758c088409"
+    },
+    {
+      "path": "scripts/research-discovery-relay-prepare.mjs",
+      "bytes": 18746,
+      "sha256": "9bf23c4e4434c5de78983d2a501c870ad8f3e316f717b779fd0b7ce7e743ae99"
+    }
+  ],
+  "resource": {
+    "memoryMax": 34359738368,
+    "cpuMax": "400000 100000",
+    "sampledRssPeakBytes": 1662222336,
+    "taskDiskPeakBytes": 1556455424,
+    "fsAvailableLast": 24197599232,
+    "actualDiskQuota": "unknown, df not quota"
+  },
+  "limits": [
+    "all data is research-only current observations, nohistoricalPIT/eligibility",
+    "raw official bytehashes remain attributedMac relay, not VM rehash",
+    "synthetic local role-key/HTTP profile, noactual author/reviewer dispatch",
+    "native/monitor successors queued, not used for formal authority or protections"
+  ]
+}

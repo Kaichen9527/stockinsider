@@ -140,7 +140,7 @@ export async function localInboxProfile(root) {
 
 /** Runs only in the existing Node test-runner loopback projection boundary.
  * Uses real Next, Supabase client, PostgREST and PostgreSQL; no DB/client injection. */
-export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgrestBin, check = async (_name, fn) => fn() }) {
+export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgrestBin, check = async (_name, fn) => fn(), observedRoster = false, afterBaseline = null }) {
   assert.equal(process.env.NODE_TEST_CONTEXT, 'child-v8', 'local_profile_requires_node_test_runner');
   for (const value of [root, artifacts, pgBin, postgrestBin]) assert.ok(path.isAbsolute(value));
   const environment = localProcessEnvironment();
@@ -151,7 +151,7 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
   const cluster = path.join(artifacts, 'cluster'); const pgPort = await reservePort();
   const pgrstPort = await reservePort(); const apiPort = await reservePort(); const appPort = await reservePort();
   const exec = (name, args) => execFileSync(path.join(pgBin, name), args, { env:environment, encoding: 'utf8', stdio: ['ignore','pipe','pipe'], timeout: 20000 }).trim();
-  const sql = query => exec('psql', ['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(pgPort),'-d','postgres','-c',query]);
+  const sql = query => execFileSync(path.join(pgBin,'psql'), ['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(pgPort),'-d','postgres','-f','-'], {env:environment,encoding:'utf8',input:query,stdio:['pipe','pipe','pipe'],timeout:20000,maxBuffer:4*1024*1024}).trim();
   const pgStart = () => exec('pg_ctl', ['-D',cluster,'-l',path.join(artifacts,'postgres.log'),'-o',`-h '' -k ${socket} -p ${pgPort}`,'-w','start']);
   const pgStop = () => exec('pg_ctl', ['-D',cluster,'-m','fast','-w','stop']);
   const key = randomBytes(32).toString('hex'); const secret = randomBytes(48).toString('hex');
@@ -169,6 +169,9 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
     sql('CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN; CREATE ROLE local_postgrest LOGIN NOINHERIT; GRANT service_role,anon TO local_postgrest; CREATE SCHEMA extensions; CREATE EXTENSION pgcrypto WITH SCHEMA extensions;');
     const profile = await localInboxProfile(root); sql(profile.sql);
     sql('ALTER TABLE source_raw_documents ENABLE ROW LEVEL SECURITY; CREATE POLICY local_inbox_service_only ON source_raw_documents TO service_role USING(true) WITH CHECK(true); GRANT USAGE ON SCHEMA public TO anon,service_role; GRANT SELECT,INSERT ON source_raw_documents TO service_role;');
+    if (observedRoster) {
+      const migration=await readFile(path.join(root,'migrations/20261008_research_observed_roster_v1.sql'),'utf8');sql(migration);report.observedRosterMigrationSha256=hash(migration);
+    }
     report.installedDefinitions = profile.definitions;
     report.developmentProfileSqlSha256 = hash(profile.sql);
     report.readOnlyDependencyTables = profile.readOnlyTables;
@@ -186,7 +189,7 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
       try {
         if(!req.url.startsWith('/rest/v1/')) {res.writeHead(404);res.end();return;}
         const target=`http://127.0.0.1:${pgrstPort}/${req.url.slice('/rest/v1/'.length)}`;
-        let body='';for await(const b of req){body+=b;if(body.length>2_000_000)throw new Error('body_bound');}
+        const requestChunks=[];let requestBytes=0;for await(const b of req){requestBytes+=b.length;if(requestBytes>2_000_000)throw new Error('body_bound');requestChunks.push(b);}const body=Buffer.concat(requestChunks);
         const headers={...req.headers};delete headers.host;delete headers.connection;delete headers['content-length'];
         const response=await fetch(target,{method:req.method,headers,body:['GET','HEAD'].includes(req.method)?undefined:body,redirect:'error',signal:AbortSignal.timeout(15000)});
         const chunks=[];let total=0;for await(const chunk of response.body ?? []){total+=chunk.length;assert.ok(total<=4_000_000);chunks.push(chunk);}const bytes=Buffer.concat(chunks);
@@ -280,6 +283,7 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
       await assert.rejects(sourcePriorityCommand(args,{env:{INTERNAL_API_KEY:key}}),/uncertain_submission/);assert.equal(sql('SELECT count(*) FROM source_raw_documents'),'3');report.checks.push('priority_blocked_restart_fenced');
     });
     assert.equal(report.checks.length,9,'local_profile_incomplete_checks');
+    if (afterBaseline) await afterBaseline({sql,post,rpc,origin,priorityRequest:run.priorityRequest,apiOrigin:`http://127.0.0.1:${apiPort}/rest/v1/`,report,restart:()=>{pgStop();pgStart();}});
     report.passed=true;
   } catch(error) {report.failure=safe(error.message);throw error;}
   finally {
