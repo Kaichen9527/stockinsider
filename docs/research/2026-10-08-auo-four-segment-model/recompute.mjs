@@ -14,13 +14,29 @@ const keys=['display','mobility','vertical','other'];
 const close=(a,b,tolerance=1e-6)=>assert.ok(Math.abs(a-b)<=tolerance,`bridge mismatch ${a} / ${b}`);
 export const scenarioInputs={
   bear:{q3Weights:[.94,.98,1.01,1],growth:[[-.04,-.03,0,-.05],[-.10,-.02,0,-.05],[.01,.01,.01,0],[-.01,.01,.01,0],[.01,.01,.01,0]],
-    grossMargins:[.06,.19,.20,.07],opMargins:[-.045,.02,.035,-.075],quarterMarginStep:0,interestIncome:225,financeCosts:-700,otherIncome:450,equityMethodProfit:0,fxAndOtherRecurring:-100,taxRate:.25,taxFloor:150,nci:200,futureDilution:.01},
+    grossMargins:[.06,.19,.20,.07],opMargins:[-.045,.02,.035,-.075],quarterMarginStep:0,interestIncome:225,financeCosts:-700,otherIncome:450,equityMethodProfit:0,fxAndOtherRecurring:-100,taxRate:.25,taxFloor:150,nci:200,potentialSharesRatio:.01},
   base:{q3Weights:[.97,1,1.03,1],growth:[[-.01,.02,.03,0],[-.05,-.02,.01,0],[.03,.03,.03,0],[-.01,.02,.03,0],[.02,.03,.04,0]],
-    grossMargins:[.08,.20,.22,.08],opMargins:[-.03,.04,.06,-.065],quarterMarginStep:.002,interestIncome:250,financeCosts:-650,otherIncome:650,equityMethodProfit:100,fxAndOtherRecurring:0,taxRate:.22,taxFloor:300,nci:450,futureDilution:.01},
+    grossMargins:[.08,.20,.22,.08],opMargins:[-.03,.04,.06,-.065],quarterMarginStep:.002,interestIncome:250,financeCosts:-650,otherIncome:650,equityMethodProfit:100,fxAndOtherRecurring:0,taxRate:.22,taxFloor:300,nci:450,potentialSharesRatio:.01},
   bull:{q3Weights:[.98,1.02,1.05,1],growth:[[.02,.04,.05,.01],[-.02,0,.02,0],[.04,.04,.05,.01],[.01,.04,.05,.01],[.03,.04,.05,.01]],
-    grossMargins:[.10,.22,.24,.09],opMargins:[-.01,.05,.075,-.055],quarterMarginStep:.003,interestIncome:275,financeCosts:-625,otherIncome:700,equityMethodProfit:250,fxAndOtherRecurring:0,taxRate:.20,taxFloor:300,nci:650,futureDilution:.015},
+    grossMargins:[.10,.22,.24,.09],opMargins:[-.01,.05,.075,-.055],quarterMarginStep:.003,interestIncome:275,financeCosts:-625,otherIncome:700,equityMethodProfit:250,fxAndOtherRecurring:0,taxRate:.20,taxFloor:300,nci:650,potentialSharesRatio:.015},
 };
-export function forecastQuarter(period,revenueRows,assumption,index,shares) {
+// Potential shares here carry no numerator adjustment (share-award sensitivity).
+// They are excluded when they would decrease loss per share. Issued ordinary
+// shares remain in the weighted denominator even for a loss.
+export function weightedOrdinaryShares(opening, issuance, fractionOutstanding){
+  assert.ok([opening,issuance,fractionOutstanding].every(Number.isFinite));
+  assert.ok(opening>0&&issuance>=0&&fractionOutstanding>=0&&fractionOutstanding<=1);
+  return opening+issuance*fractionOutstanding;
+}
+export function conditionalEps(owners,ordinary,potential=0){
+  assert.ok([owners,ordinary,potential].every(Number.isFinite)&&ordinary>0&&potential>=0);
+  const included=owners>0?potential:0;
+  return {ordinaryWeightedSharesMillionAssumed:ordinary,potentialWeightedSharesMillionAssumed:potential,
+    potentialIncludedMillion:included,antiDilutiveExcludedMillion:potential-included,
+    dilutedSharesMillionAssumed:ordinary+included,basicEpsConditional:owners/ordinary,
+    dilutedEpsConditional:owners/(ordinary+included),shareAssumption:'no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified'};
+}
+export function forecastQuarter(period,revenueRows,assumption,index,shares,potential=0) {
   assert.equal(revenueRows.length,4);
   assert.ok(revenueRows.every(x=>Number.isFinite(x)&&x>=0));
   assert.ok(Number.isFinite(shares)&&shares>0);
@@ -48,12 +64,11 @@ export function forecastQuarter(period,revenueRows,assumption,index,shares) {
   return {period,status:period==='2026Q3'?'known_monthly_total_unknown_profit_and_mix':'research_forecast',segments,revenue,grossProfit,operatingExpenses,operatingProfit,
     interestIncome:assumption.interestIncome,financeCosts:assumption.financeCosts,otherIncome:assumption.otherIncome,
     equityMethodProfit:assumption.equityMethodProfit,fxAndOtherRecurring:assumption.fxAndOtherRecurring,nonOperating,pretaxProfit,
-    taxExpense,nonControllingNetProfit:assumption.nci,netProfit,ownersNetProfit,dilutedSharesMillionAssumed:shares,
-    dilutedEpsConditional:ownersNetProfit/shares,oneOffGainsIncluded:0,newCpoGcsRevenueAssumed:null,
+    taxExpense,nonControllingNetProfit:assumption.nci,netProfit,ownersNetProfit,...conditionalEps(ownersNetProfit,shares,potential),oneOffGainsIncluded:0,newCpoGcsRevenueAssumed:null,
     existingHelper:{operatingIncome:existing.operatingIncome,pretaxIncome:existing.pretaxIncome,ownersBeforeTaxFloor:existing.normalizedNetIncome},
     additionalJurisdictionTaxAssumed:taxExpense-Math.max(pretaxProfit,0)*assumption.taxRate};
 }
-function aggregate(rows,shares){const result={};for(const key of ['revenue','grossProfit','operatingExpenses','operatingProfit','nonOperating','pretaxProfit','taxExpense','netProfit','nonControllingNetProfit','ownersNetProfit'])result[key]=sum(rows.map(r=>r[key]));return {...result,dilutedSharesMillionAssumed:shares,dilutedEpsConditional:result.ownersNetProfit/shares};}
+function aggregate(rows,shares,potential=0){const result={};for(const key of ['revenue','grossProfit','operatingExpenses','operatingProfit','nonOperating','pretaxProfit','taxExpense','netProfit','nonControllingNetProfit','ownersNetProfit'])result[key]=sum(rows.map(r=>r[key]));return {...result,...conditionalEps(result.ownersNetProfit,shares,potential)};}
 export function buildModel(financial,historical,monthly,market,asOf,context={}){
   assert.equal(financial.amountUnit,'TWD_thousands');assert.equal(historical.amountUnit,'TWD_thousands');
   const cutoff=sourceControllerInstant(asOf);
@@ -73,13 +88,13 @@ export function buildModel(financial,historical,monthly,market,asOf,context={}){
   const scenarios=Object.entries(scenarioInputs).map(([id,a])=>{
     let previous=q2Seg.revenue.map((x,i)=>x*a.q3Weights[i]);const guidanceImpliedTotal=sum(previous),scale=q3Total/guidanceImpliedTotal;
     previous=previous.map(x=>x*scale);
-    const quarters=periods.map((period,i)=>{if(i)previous=previous.map((x,k)=>x*(1+a.growth[i-1][k]));return forecastQuarter(period,previous,a,i,knownShares*(period.startsWith('2027')?1+a.futureDilution:1));});
+    const quarters=periods.map((period,i)=>{if(i)previous=previous.map((x,k)=>x*(1+a.growth[i-1][k]));return forecastQuarter(period,previous,a,i,knownShares,period.startsWith('2027')?knownShares*a.potentialSharesRatio:0);});
     const forecastH2=aggregate(quarters.slice(0,2),knownShares);
     const year2026=aggregate([actualH1,forecastH2],knownShares);
     // Future weighted shares are explicit assumptions, not June30 issued shares.
-    const year2027=aggregate(quarters.slice(2),knownShares*(1+a.futureDilution));
-    const forwardShares=knownShares*(1+a.futureDilution/2);
-    const nextFour=aggregate(quarters.slice(0,4),forwardShares);
+    const year2027=aggregate(quarters.slice(2),knownShares,knownShares*a.potentialSharesRatio);
+    const forwardPotential=knownShares*a.potentialSharesRatio/2;
+    const nextFour=aggregate(quarters.slice(0,4),knownShares,forwardPotential);
     return {id,assumptions:a,guidanceImpliedQ3Total:guidanceImpliedTotal,monthlyTotalReconciliationScale:scale,
       consolidatedGuidanceDifference:q3Total-guidanceImpliedTotal,quarters,
       calendar2026:{...year2026,composition:'reportedH1 + forecastQ3Q4; historical oneoffs retained; not normalized'},

@@ -1,10 +1,10 @@
-# 友達：四部門獲利開始轉向，但現價仍需要另一段證據
+# 友達：合併Q2轉盈，但現價仍需要另一段證據
 
-**示範研究工作稿。四部門條件財測已可重算，未來稀釋、合理倍數與商業化證據仍待核實；暫不提供合理價或批准進場。** 研究截點為2026/10/8，屬當下觀測，不能作歷史提前發現的證明。[F] [H] [M]
+**示範研究工作稿。四部門條件財測已可重算，未來稀釋、合理倍數與商業化證據仍待核實；暫不提供合理價或批准進場。** 研究截點為2026/10/8，屬當下觀測，不能作歷史提前發現的證明。[F] [H] [HH] [M]
 
 ## 一、先看新變化：不是沒有改善，而是改善還不夠持續
 
-**核對值／推論。** 10/8原始收盤36.60元，市場已經給了轉型期待。新取得的完整財报使問題比上一稿更清楚：Q1合併營業虧損635.61百萬元，Q2轉為營業利益218.33百萬元，這是真實季度改善；但Q2同比營業利益仍下降，最近四個已公告季度營業虧損合計4,116.90百萬元。既不能把正EPS誤當本業已持續改善，也不能用負TTM否認最近一季轉盈。[F] [H]
+**核對值／推論。** 10/8原始收盤36.60元，市場已經給了轉型期待。新取得的完整財报使問題比上一稿更清楚：Q1合併營業虧損635.61百萬元，Q2轉為營業利益218.33百萬元，這是真實季度改善；但Q2同比營業利益仍下降，最近四個已公告季度營業虧損合計4,116.90百萬元。既不能把正EPS誤當本業已持續改善，也不能用負TTM否認最近一季轉盈。[F] [H] [HH]
 
 **推論。** 現在要檢查的是改善從哪個部門來、能否在下半年延續，以及最後有多少利潤屬普通股東。車用與垂直事業確實有正營業利益，顯示與Other仍虧損。若只把三個策略支柱的利益相加，Q2會得到427.99百萬元；納入Other後才是218.33。忽略Other不只是少一列背景資料，而是會把合併本業獲利近乎放大一倍。[F] [G]
 
@@ -30,11 +30,11 @@
 
 ## 三、傳聞、客戶與訂單：保留線索，但不重複計票
 
-**傳聞／來源陳述。** 經濟日報同一記者組合的9/20與9/21報導，是相關報導而非兩次獨立客戶確認；報導當時Intel不評論，友達先前提到未具名合作方。PC Gamer及LEDinside沿用前述媒體線索，不能再各算一張確認票。這些材料值得保留，卻沒有具名採購、合約或量產收入；有限查詢也不能證明現在全網沒有更新。[N]
+**傳聞／來源陳述。** 經濟日報同一記者組合的9/20與9/21報導，是相關報導而非兩次獨立客戶確認；報導當時Intel不評論，友達先前提到未具名合作方。PC Gamer及LEDinside沿用前述媒體線索，不能再各算一張確認票。這些材料值得保留，卻沒有具名採購、合約或量產收入；有限查詢也不能證明現在全網沒有更新。[N] [NN] [PC] [LED]
 
-**核對／推論。** 新讀Intel專利申請公開文本，支持玻璃內嵌晶粒、TGV供電與MicroLED的技術描述，例子包含外觀與運作狀態顯示用途。它既不能證明友達參與，也不能單憑技術相近就推出AI資料通訊性能或Intel訂單；後續授權版及目前法律狀態尚未完整核對。專利、公司展示與媒體傳聞應各自保留功能，而不是連成一條沒有缺口的量產證據链。[T]
+**核對／推論。** 新讀Intel專利申請公開文本，支持玻璃內嵌晶粒、TGV供電與MicroLED的技術描述，例子包含外觀與運作狀態顯示用途。它既不能證明友達參與，也不能單憑技術相近就推出AI資料通訊性能或Intel訂單；後續授權版及目前法律狀態尚未完整核對。專利、公司展示與媒體傳聞應各自保留功能，而不是連成一條沒有缺口的量產證據链。[P]
 
-**来源陳述／推論。** 車載方面，Visteon披露的business wins明確不是firm orders；跨11客戶推出或導入24項產品也沒有披露量產規模。對友達，設計獲選要經車廠產量、每車搭載、拉貨、價格與費用吸收才到利潤。Omdia對中國車載出貨份額的預測則約束樂觀市占及ASP，屬預測而非AUO已失單的實績。兩者合看，移動事業可以成長，但不能預設收入與毛利會同比例提升。[I]
+**来源陳述／推論。** 車載方面，Visteon披露的business wins明確不是firm orders；跨11客戶推出或導入24項產品也沒有披露量產規模。對友達，設計獲選要經車廠產量、每車搭載、拉貨、價格與費用吸收才到利潤。Omdia對中國車載出貨份額的預測則約束樂觀市占及ASP，屬預測而非AUO已失單的實績。兩者合看，移動事業可以成長，但不能預設收入與毛利會同比例提升。[V] [OM]
 
 ## 四、獲利傳導：四部門、稅與NCI要在同一條橋
 
@@ -58,7 +58,7 @@
 
 |情境|2026收入|2026條件EPS|2027收入|2027條件EPS|未公告四季條件EPS|
 |---|---:|---:|---:|---:|---:|
-|悲觀|271,692.44|-0.30|247,969.63|-0.55|-0.60|
+|悲觀|271,692.44|-0.30|247,969.63|-0.56|-0.60|
 |中性|274,142.99|0.06|270,580.18|0.33|0.16|
 |樂觀|275,769.90|0.33|289,393.11|0.96|0.71|
 
@@ -67,9 +67,9 @@
 
 **推論／反證。** 中性2027收入其實略低於本稿2026合計，營業利益卻改善，主要依賴組合與利潤率而非總收入高速成長。這使驗證重點更集中：若垂直與車載毛利沒有提高，或研發及整合費用仍比收入快，這個分支就應下修。Q3各部門分配亦只能暫按研究權重：共同縮放到已知月營收後，不再保證七月所說的每個部門方向都成立；縮放差額是未知組合的標記，不是已核實的實際部門衰退。[F] [G]
 
-**期間／情境。** 2026為已報H1加研究H2，保留上半年已認列 gain，不能叫正常化年度EPS；2027是四個預測季；往後四個未公告季是2026Q3至2027Q2，不等於從10/8起的滾動十二月。2026沿用已披露稀釋股數作假設，2027增加1%或1.5%稀釋，往後四季以兩個2026季度及兩個2027季度的假設股數取均值。這些是可改、可重算的假設，並非已核實未來股數。[F]
+**期間／情境。** 2026為已報H1加研究H2，保留上半年已認列 gain，不能叫正常化年度EPS；2027是四個預測季；往後四個未公告季是2026Q3至2027Q2，不等於從10/8起的滾動十二月。2026沿用已披露稀釋股數作假設，2027不假設新普通股發行，另測試1%或1.5%潛在股數；這是沒有分子調整的股份獎酬敏感度，盈利期間納入，虧損期間按反稀釋原則排除。往後四季的潛在股數按兩個2026季度無新增、兩個2027季度有新增作時間加權，再依整段獲利決定是否納入。這些是可改、可重算的假設，並非已核實未來股數。[F]
 
-**核算／期間。** 損益流量可從年度減九個月求Q4，但EPS不能如此相減：各期間平均股數及稀釋規則可能不同。本稿先加歸母利益，再除明示年度或四季假設分母，不用四個圓整EPS湊年度數字。2025Q4未取得該季精確稀釋分母時，也不將累計EPS差寫成已公告單季稀釋EPS。[H] [F]
+**核算／期間。** 損益流量可從年度減九個月求Q4，但EPS不能如此相減：各期間平均股數及稀釋規則可能不同。本稿先加歸母利益，再除明示年度或四季假設分母，不用四個圓整EPS湊年度數字。2025Q4未取得該季精確稀釋分母時，也不將累計EPS差寫成已公告單季稀釋EPS。[H] [HH] [F]
 
 **反證。** 中性2027營業利益約4,197.58百萬元，已較目前TTM改善很多，但歸母還受稅與NCI扣減；若費用不能被新增收入吸收，或垂直成長主要來自非控制比例較高的子公司，EPS就會低於情境。凌華納入合併改變營收口徑，不等於新增收入100%歸母；若只是合併範圍變動而非有機需求，收入增幅也不該提高遠期倍數。[F] [O]
 
@@ -124,14 +124,21 @@ Q1部門附註的業外134,187與稅前−501,421千元，各比損益表多1千
 缺口包括未來精確稀釋、分部毛利／費用、交易日稅及處分歸屬、當前期末股數、完整公司行動／日曆／籌碼、CPO/GCS商業輸入及合理倍數。台光電不同產業模型留下一增量，不能把本檔結果宣稱泛化已完成。本文與原稿分開保存，示範、未發布、未批准策略。
 
 [F]: https://www.auo.com/upload/media/ir/Financial_Information/2Q2026_TC.pdf "2Q26完整財報P6損益、P52EPS、P68–69部門、P30–31處分；必要值與hash見financial-relay"
-[H]: https://www.auo.com/upload/media/ir/Financial_Information/1Q2026_TC.pdf "八季完整損益來源與各期間見historical-income-relay；Q4流量年度減九月，不相減EPS"
+[H]: https://www.auo.com/upload/media/ir/Financial_Information/4Q2025_TC.pdf "2025年度及2024比較欄；Q4流量年度減九月，不相減EPS"
+[HH]: https://www.auo.com/upload/media/ir/Financial_Information/3Q2025_TC.pdf "2025Q3及九個月；含2024比較欄"
 [G]: https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Handout_English.pdf "7/30法說，P6–8；指引非實績"
 [O]: https://www.auo.com/upload/media/ir/Financial_Information/2Q2026_TC.pdf "六月底所有權，見ownership-relay；非交易日稅後歸屬認證"
-[T]: https://www.auo.com/en-global/New_Archive/detail/News_Archive_Product_20260831 "技術展示；專利原文https://patents.google.com/patent/US20240079530A1/en，見technology-context-relay"
+[T]: https://www.auo.com/en-global/New_Archive/detail/News_Archive_Product_20260831 "技術展示，不是專利或订单證據"
 [R]: https://www.auo.com/upload/media/ir/2026_Consolidated.pdf "mutable月營收，當下重建，原始發布瞬間未知"
 [M]: https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=2409 "14月268根官方欄位relay及未調整指標"
-[N]: ../2026-10-08-auo-working-draft/public-news-clue-relay.json "EDN相關報導與LEDinside同源限制；PC Gamer歸屬見原source-ledger"
-[I]: ../2026-10-08-auo-working-draft/public-context-relay.json "Intel OCI、Visteon、Omdia有限官方公開摘要及精度"
+[P]: https://patents.google.com/patent/US20240079530A1/en "Intel申請公開文本，非已核授權或商業訂單"
+[N]: https://money.udn.com/money/story/5612/9766943 "9/20同記者組報導，時區精度限制保留"
+[NN]: https://money.udn.com/money/story/5612/9766808 "9/21相關報導，非獨立第二次確認"
+[PC]: https://www.pcgamer.com/hardware/gaming-monitors/intel-reportedly-collaborating-with-auo-on-microled-panels-which-could-help-make-the-ultimate-display-tech-more-mainstream/ "引用經濟日報的延伸解讀"
+[LED]: https://www.ledinside.com.tw/news/20260929-40811.html "前述媒體線索的延伸，非新訂單"
+[I]: https://www.intel.com/content/www/us/en/newsroom/news/intel-unveils-first-integrated-optical-io-chiplet.html "2024矽光子OCI原型，非AUO產品"
+[V]: https://investors.visteon.com/investors/investor-news/news-details/2026/Visteon-Announces-Second-Quarter-2026-Financial-Results-and-200-Million-Accelerated-Share-Repurchase-Program/default.aspx "wins非firm orders；launch未披露量產規模"
+[OM]: https://omdia.tech.informa.com/pr/2026/sep/china-based-panel-makers-to-capture-65percent-of-automotive-display-shipments-in-2h26 "產業預測及選定情境，非AUO已失單"
 [A]: https://www.auo.com/en-global/shareholder_information/index/distribution_information "单笔0.4元現金股利，非全部公司行動"
 [L]: ../../../web/src/lib/auo-deep-dive-v1.ts "舊紙上劇本參照；不是本次簽章／歷史發布證明"
 
