@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "manual-emc-conditional-research-draft-v1",
+  "status": "draft/incomplete",
+  "symbol": "2383",
+  "baseSubject": "13a038450d538c1e4463e05bdec8a16ab14b0522",
+  "evidenceSubjects": [
+    "ab2fda19ecea49796a802fddbe1795edbdb74f17",
+    "4b3f4201af02b419c10c22c8b35e7d3de1477856"
+  ],
+  "review": "root-relayed Astra unsigned scoped DATA pass; exactmodel/article review pending",
+  "cutoffAt": "2026-10-08T12:12:00Z",
+  "authoredAndCheckedAt": "2026-10-08T12:16:10.051875+00:00",
+  "modelCanonicalHash": "74b1b5e797578c0752f869b4438b6be2d305e0e2347f24685cd4a8761cc855b8",
+  "articleSha256": "762f27593c28114644e9b7fb90b8a6d8a392b855a2bd5d44e2025fc114159822",
+  "mainBodyHan": 4468,
+  "published": false,
+  "historicalPITEligible": false,
+  "productionImported": false,
+  "strategyApproved": false,
+  "researchQualified": false,
+  "targetPrice": null,
+  "job": null,
+  "reservation": null,
+  "preparedInputId": null,
+  "futureSharesVerified": false,
+  "preview": "not yet integrated, next bounded scope"
+}

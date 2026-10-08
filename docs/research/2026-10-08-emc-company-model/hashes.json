@@ -1,0 +1,55 @@
+{
+  "canonicalModelHash": "74b1b5e797578c0752f869b4438b6be2d305e0e2347f24685cd4a8761cc855b8",
+  "files": [
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/README.md",
+      "bytes": 3823,
+      "sha256": "12c89b70f018c0a4e4cb39cf692958862860fcbc6af81f17d7e2c0a2870081d5"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/article-template.md",
+      "bytes": 18274,
+      "sha256": "5e607a501832aefa644c2b757668504fc93a637ccaaac675fd53184e811a64f3"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/article.md",
+      "bytes": 20855,
+      "sha256": "762f27593c28114644e9b7fb90b8a6d8a392b855a2bd5d44e2025fc114159822"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/draft-metadata.json",
+      "bytes": 1022,
+      "sha256": "ed25a06b16efeffda5d4205b6fca2943c8eaac2b3efa42720b7a40f5ebdb832d"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/model-results.json",
+      "bytes": 54054,
+      "sha256": "05f87b0dc9b3d2f7ace792046c79ff4d1c47feee0ddd2a9e57cf5eb50f64876a"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+      "bytes": 16927,
+      "sha256": "11087f534c828d1d563a6168886a8cb22ff9221b795884505376d1652532f805"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/source-ledger.json",
+      "bytes": 1720,
+      "sha256": "634706a92e05e3c05ff6e88853dd77d2c63436a40aab0551ccc83910104713b7"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/verify-output.py",
+      "bytes": 4156,
+      "sha256": "fcfa4e4d16fe6b7a0df9720a44a71af296c8b067af397fe45837e3681e2ff93e"
+    },
+    {
+      "file": "scripts/lib/research-model-article.mjs",
+      "bytes": 728,
+      "sha256": "2dbcc7e7c46dfe5aece331cc281fc39b1d63687925dea6597ead95bbb3b29112"
+    },
+    {
+      "file": "scripts/research-emc-company-model.test.mjs",
+      "bytes": 6952,
+      "sha256": "a71378c05dc49324d79c67609da8ca1ec75f1640d9ee9d8e5d229afed97a31c2"
+    }
+  ]
+}
