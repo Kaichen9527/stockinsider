@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "unsigned-scoped-code-review-relay-v1",
+  "recordedAt": "2026-10-08T06:58:14.975950+00:00",
+  "reportedBy": "source thread delegation",
+  "reviewer": "existing independent Astra reviewer",
+  "reviewedCodeCommit": "1243ee1313ac1d6ff3995ff5920cc2c3fad269e8",
+  "result": "unsigned_scoped_approval",
+  "scope": "private draft artifact integrity and unchanged identity/expiry/authority contracts",
+  "summary": "A/B closed; pre/post-commit bytes/inode/ctime checks and inspect/replay directory boundaries consistent; no other actionable defects; Linux procfs limitation explicit. Reviewer checked receipt SHA and program hashes; no Mac test rerun.",
+  "reportedValidation": {
+    "focused": "114/114",
+    "integration": "346/346",
+    "skip": 0,
+    "types": "pass",
+    "lint": "pass",
+    "build": "pass"
+  },
+  "referenceResultVerbatim": "Unsigned scoped approval：1243ee1313ac1d6ff3995ff5920cc2c3fad269e8。focused114/114 integration346/346零skip，types/lint/buildpass。",
+  "protectedAttestation": false,
+  "protectedEvidenceRefCreated": false,
+  "deploymentApproval": false,
+  "liveHandoffVerified": false,
+  "researchContentReviewed": false,
+  "reviewerMacTestsRerun": false,
+  "validationReceiptSha256": "aa35fa203a2a1501f4371502168cb658f426f8234081ef19aa85b377ac159e54"
+}
