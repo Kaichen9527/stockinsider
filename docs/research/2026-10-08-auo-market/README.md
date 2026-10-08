@@ -51,4 +51,6 @@ python3 docs/research/2026-10-08-auo-market/verify-hashes.py
 
 去掉 `--check` 僅以 create-only 建立新的 dataset；既有輸出存在即拒覆寫。`hashes.json` 包含 input、計算器、dataset、README 的本地 byte hash、dataset canonical hash，以及28份 selectedRows canonical hashes。`verify-hashes.py` 確認 bytes/SHA256；`--check` 用既有repo canonical helper 重驗全部所列 canonical hashes。財務 dataset/hash 不變。
 
-這輪僅資料/分析計算，沒有 App 修改，依授權未重跑 App build。Node22 strip-types / module-type 警告保留；未為消警告改 package/config。實際資源／精確 commit 與測量方法在 `.agent/reports/` sanitized 收據；私有完整 log 留 VM evidence 目錄。不是正式研究完整完成、VM collector 已啟用、VPS↔Cloud 業務往返或 protected attestation。
+這輪沒有 App 修改，但依驗收更正，新研究計算腳本仍需正常 web build。對資料/計算 commit `e9af6710f36cd007819d52c91c065ef96a56bdaa` 執行正常 `npm run build`，最終 2026-10-08T07:44:11.201Z–07:44:46.935Z、35.73秒、exit0。PR305金融基底95b5a5c與市場分支完整 `web` Git tree 均為 `743559fb2d5e850c08a355cf091461c16ce8a30d`（`web/src` tree=`67080b226c28dc4e5830794e247bd1c50feba3cf`），此 build 作兩批相同 App tree 的共用驗收，不把舊346整合/型別/lint說成本輪重跑。
+
+先前三次 build failure 皆保留：外部 node_modules symlink 被 Turbopack 拒絕；複製既有依賴後 sandbox PostCSS worker bind被拒；取得執行權限後舊 .next cache 仍回放同錯。只移開本輪自建可重建 cache，再用相同 build 指令成功；未改 package/config、未 install、未部署、未啟動正式服務。Node22 strip-types / module-type 警告保留。實際資源／精確 commit 與測量方法在 `.agent/reports/` sanitized 收據；私有完整 log 留 VM evidence 目錄。不是正式研究完整完成、VM collector 已啟用、VPS↔Cloud 業務往返或 protected attestation。
