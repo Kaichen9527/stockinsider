@@ -36,3 +36,5 @@ P3總權益166,902扣NCI12,505得共同股東權益推算154,397；股東權益�
 執行 `python3 docs/research/2026-10-08-auo/recompute.py`，再以Node22及 `--experimental-strip-types` 執行同目錄 `hash-receipts.mjs`、`verify-evidence.mjs`。109個數值／來源格式／精度檢查及38個檔案／canonical hash檢查通過；六個輸出重跑bytes一致。這些是資料檢查，不是新產品tests。可選 `arithmetic-companion.ipynb` 供檢視；VM沒有notebook kernel，實際執行的是獨立腳本。
 
 [dataset.json](dataset.json)、[source-ledger.json](source-ledger.json)、[calculation-results.json](calculation-results.json) 與 [hash-manifest.json](hash-manifest.json) 提供逐點、逐季收據。日期若只來自URL或簡報標示，並非精確發布時刻；mutable PDF只確定目前reader可見，所有歷史PIT eligibility皆為false。不能把2025文件中的2024比較欄倒填成2024已知。保留既有403／hosted reader失敗，不宣稱全來源啟用或完整研究完成。
+
+來源聊天另回報 Astra 獨立目視四份官方P1，確認八季讀值、比較欄與符號一致；四份PDF合計3,320,065bytes保留在Mac，未轉存VM。這是unsigned來源讀值核對，exact dataset commit尚待獨立比對，不是投資論點或protected attestation批准；追溯見unsigned-source-visual-review-relay.json。
