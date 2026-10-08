@@ -1,37 +1,30 @@
 {
   "schemaVersion": "research-deep-private-draft-delivery-v1",
   "recordedAt": "2026-10-08T06:39:53.027145+00:00",
-  "testedCodeCommit": "06dc3cd41dd6d6ee64381c507ac15c60ca86229d",
+  "testedCodeCommit": "1243ee1313ac1d6ff3995ff5920cc2c3fad269e8",
   "codeAndValidationHead": "34a4461dbb7b3ea69d95d0b90e38bf18b69aa0df",
   "branch": "codex/deep-private-draft-oct08",
   "push": "successful",
   "requestedPrBase": "codex/financial-document-write-lease-oct08",
   "draftPrCreated": true,
   "prDescriptionSha256": "b733a6ec1105b8846bf66f79a1ecf354df8e860d6e95bfe0142c4ac4ed384b69",
-  "validationReceiptSha256": "f34f9ecb9a9a1cfb2997f155d696dbbbdcca58d6d5acc0ebb30e4d4cdcbad8b0",
+  "validationReceiptSha256": "aa35fa203a2a1501f4371502168cb658f426f8234081ef19aa85b377ac159e54",
   "independentReview": "pending; existing Astra reviewer assigned read-only review of exact testedCodeCommit",
   "originalCheckoutCommit": "9cce0516f73ad81a1497d4a9278a9b9d77c118d3",
   "originalCheckoutClean": true,
   "deployment": false,
   "productionRoundtripVerified": false,
-  "updatedAt": "2026-10-08T06:43:49.625735+00:00",
+  "updatedAt": "2026-10-08T06:51:54.962030+00:00",
   "initialCloudDraftPrError": "gh pr create: POST https://api.github.com/graphql: Forbidden",
   "draftPrUrl": "https://github.com/Kaichen9527/stockinsider/pull/304",
   "draftPrCreatedBy": "source thread using existing local GitHub authorization; reported by delegation",
   "cloudPrRetryPerformed": false,
   "integration": {
-    "tests": 342,
-    "pass": 342,
+    "tests": 346,
+    "pass": 346,
     "fail": 0,
     "skip": 0,
-    "rerun": true,
-    "initialRun": {
-      "tests": 342,
-      "pass": 341,
-      "fail": 1,
-      "skip": 0,
-      "failure": "Existing candidate-dossier-outbox-v6-postgres.test.mjs:138 expected research_thesis_head_changed but received empty stderr. Assertions unchanged; confirming full run passed; intermittent failure not claimed fixed."
-    }
+    "postgres": "cached PG17 isolated temporary clusters"
   },
   "initialVerificationToolFailures": [
     "Exit127: npm missing from minimal PATH; corrected using existing runtime.",
@@ -39,5 +32,39 @@
   ],
   "actualCompanyResearchCompleted": false,
   "formalAuthorHandoffCompleted": false,
-  "continuationState": "await independent review; no code changes or VM verification in this update"
+  "continuationState": "integrity correction tested; pending further independent review; no production gate conclusion",
+  "previousReviewedCodeCommit": "06dc3cd41dd6d6ee64381c507ac15c60ca86229d",
+  "initialAcceptanceReceiptSha256": "f34f9ecb9a9a1cfb2997f155d696dbbbdcca58d6d5acc0ebb30e4d4cdcbad8b0",
+  "currentValidationReceiptPath": ".agent/reports/2026-10-08T064500Z-deep-draft-integrity-validation.json",
+  "initialAcceptanceIntegration": {
+    "tests": 342,
+    "pass": 342,
+    "fail": 0,
+    "skip": 0
+  },
+  "integrityReproduction": {
+    "program": "unchanged exact06dc3cd code; only DF14/DF15 added before reproduction",
+    "tests": 2,
+    "pass": 0,
+    "fail": 2,
+    "skip": 0,
+    "assertion": "Missing expected rejection",
+    "cases": [
+      "DF14 staged draft append before_commit",
+      "DF15 output rename/replacement after prepared-input.json"
+    ],
+    "originalLog": "see immutable integrity validation receipt"
+  },
+  "externalProtectedGateStatus": {
+    "reportedBy": "source thread delegation",
+    "head": "50d28efcaf179fa197bec2ce5c1a2e37dd6467f7",
+    "runId": "37739252502",
+    "bootstrap": "success",
+    "requirementsArchitectureExactReview": "prepare failed: remote ref not found",
+    "missingRef": "refs/heads/evidence/source-led-opportunity-v3-exact-review-50d28efcaf179fa197bec2ce5c1a2e37dd6467f7",
+    "productModelProtectedCodeGatesRan": false,
+    "appliesToSuccessorHead": false,
+    "evidenceFabricated": false,
+    "gatePolicyModified": false
+  }
 }

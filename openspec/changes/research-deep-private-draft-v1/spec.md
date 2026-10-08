@@ -14,3 +14,7 @@ Authorized extension of research-strategy-agents-v1 and research-deep-consumer-v
 ## Acceptance
 
 DF01 delayed save; DF02 duplicate and new-process restart; DF03 binding/cutoff rejection; DF04 trusted prepared/journal integrity; DF05 fabricated citations/authority/secrets; DF06 missing forecasts; DF07 rights/gaps; DF08 file boundaries; DF09 partial commit; DF10 corruption/replay mismatch; DF11 producer rewrite; DF12 expired retention; DF13 clock consistency.
+
+## Review-requested integrity cases
+
+Existing acceptance expectations remain unchanged. Add DF14 staged draft rewrite immediately before commit; DF15 output directory rename/replacement immediately after the first artifact; DF16 same-byte inode replacement and restored-byte mutation; DF17 post-marker corruption with fresh-process inspection rejection. All cases require fail-closed persistence, with no writes redirected into a replacement directory. Artifact operations remain bound to an opened directory inode and final success rechecks actual disk bytes, identities and the committed manifest.
