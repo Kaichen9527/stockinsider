@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "auo-market-documentation-update-v1",
+  "recordedAt": "2026-10-08T15:58:55.467616+08:00",
+  "baseCommit": "c16bc52271eaf733b7ca69d0cc747d123a5d2ad6",
+  "scope": "documents/source-note metadata/review relay/tasks/handoff/article preparation only",
+  "reviewedMarketSubject": "c16bc52271eaf733b7ca69d0cc747d123a5d2ad6",
+  "marketReview": "source-thread-relayed unsigned scoped Astra approval",
+  "protectedFilesByteIdentical": {
+    "docs/research/2026-10-08-auo-market/dataset.json": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582",
+    "docs/research/2026-10-08-auo-market/root-market-relay.json": "6b59d3daa60e17b79a0f2fab80a1c5b2a8083ecdbbf6cdf0a985551be1467d98",
+    "docs/research/2026-10-08-auo-market/october-stock-day-relay.json": "bfc44df7a1108fe6eef94492f37e2a890973330522094819b75fe8b758ac9217",
+    "docs/research/2026-10-08-auo-market/vm-canary.json": "05d6d0898d210740cb09eb72e744e5152f561994837f7d05a9ed0ec48c1eefb7",
+    "docs/research/2026-10-08-auo-market/recompute-market.mjs": "ad51426ae845347309bae7e16c8270c3c1ff48ba21983fff04a2926f9e27e2dd",
+    "docs/research/2026-10-08-auo-market/verify-hashes.py": "4fac0215350c354ba1ddf7035a100baeb61d46db967f3067b140a5344bfc670a",
+    "docs/research/2026-10-08-auo/dataset.json": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+    ".agent/reports/2026-10-08T074500Z-auo-market-evidence-validation.json": "06a0c784032324a6f2bba653531fa425d2effbdadf39f46aaf783d52e177dde5"
+  },
+  "unchangedCompleteWebTree": "743559fb2d5e850c08a355cf091461c16ce8a30d",
+  "localByteHashManifestFiles": 10,
+  "canonicalHashesRecomputedThisTurn": false,
+  "canonicalDatasetHashUnchanged": "82410d4700b39287ce8ead9893e279decf25e8b92b4aa2a536cf24023ddbc71a",
+  "heavyTestsRunThisTurn": false,
+  "buildRunThisTurn": false,
+  "datasetRewritten": false,
+  "appCodeChanged": false,
+  "originalReceiptsPreserved": true,
+  "articlePreparedAsValidatedPayload": false,
+  "liveHandoffCompleted": false,
+  "researchOrStrategyApproved": false,
+  "mergeOrDeployment": false
+}

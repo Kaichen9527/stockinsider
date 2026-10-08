@@ -27,8 +27,20 @@
       "sha256": "4fac0215350c354ba1ddf7035a100baeb61d46db967f3067b140a5344bfc670a"
     },
     "README.md": {
-      "bytes": 6897,
-      "sha256": "493236a3d621f4ce8396d77d72f6a18d3012a3226aff7322265972a5bc6787c5"
+      "bytes": 9171,
+      "sha256": "abfb175cc5d8530647d58216f3f1cc485c424fa84a0ad1b28ef864393e256081"
+    },
+    "source-notes-relay.json": {
+      "bytes": 1878,
+      "sha256": "4cac1a3804039f4a5f649abfa83ffc777ab6a9e89d0527dfa68b28d3c60fadee"
+    },
+    "unsigned-exact-market-review-relay.json": {
+      "bytes": 1664,
+      "sha256": "409922cd11382a7c5cdc9b434ac0aad7a117f6d68d54ad04a71d5f6ffe303d4e"
+    },
+    "auo-article-preparation.md": {
+      "bytes": 6141,
+      "sha256": "70f92ee4174c4dfd69b0f96164857915ce104f8e8b89f5a6689980bf3acdf209"
     }
   },
   "datasetCanonicalHash": "82410d4700b39287ce8ead9893e279decf25e8b92b4aa2a536cf24023ddbc71a",
@@ -62,5 +74,7 @@
     "index/202609": "7e96614744ff95df02e77d00c3e3917dc70af3e3b1bf474d5540bc81217238ea",
     "stock/202610": "c838919ded1cb4a5ee687d2aff8e3ae49ad7b352f976aff90b3a502b349ad300",
     "index/202610": "790d269b0aa0d5d7b61c2749afd09cff6f0a68fdac1b79562deb1f25694508ed"
-  }
+  },
+  "documentationRevisionBase": "c16bc52271eaf733b7ca69d0cc747d123a5d2ad6",
+  "documentationRevisionScope": "response-level notes, attributed unsigned review and article preparation; dataset/calculator unchanged"
 }

@@ -12,6 +12,16 @@ VM 在 2026-10-08T07:23:06.986068Z 對 TWSE STOCK_DAY 正常 TLS/no redirect 做
 
 股票成交量單位為股、成交金額為 TWD、價格為 TWD/股，TAIEX 為價格指數點數。268 根股票及 268 筆指數日期完全同序；第一筆 2025-09-01，最新觀察日期 2026-10-08。所有 source observation 均晚於該日期常態 13:30 台北收盤；此 clock check **不等於官方日曆／最新完成交易日核對**。不補休市缺日，也不把每個 weekday 當交易日。
 
+## TWSE 頂層 notes 補充（文件 relay）
+
+來源聊天補充原始 TWSE response 頂層說明，另存 `source-notes-relay.json`；selectedRows 並非完整 raw response，dataset 與原始 relay 均保持不變。
+
+- 漲跌價差 `+`／`-`／`X` 分別表示漲／跌／**不比價**；`X0.00` 不解讀為與前一原始收盤完全相等。
+- 註記 `**` 表示恢復買賣日因變更面額或 ETF 分割／反分割，而與最近成交價有比例轉換。這是一般欄位語意，不推論 AUO 已發生其中哪一種事件。
+- 當日統計包含一般、零股、盤後定價及鉅額交易，不包含拍賣、標購。這份成交股數與量比沿用官方該統計口徑，不能稱為純一般盤中交易量。
+
+逐列空註記**不等於沒有公司行動**。7/30 `X0.00` 原貌、原價差與公司行動調整缺口继续保留；不補調整價，不把 raw price return 改稱 total return。root 回報既有 Astra 已獨立核對原始28檔；後續 exact `c16bc52` 市場實作／dataset 審查亦收到 unsigned scoped approval（见下節）。這份 metadata relay 不宣稱 VM 已取得 raw bytes，也不擴大審查批准範圍。
+
 ## 可重算原始序列診斷
 
 | 項目 | 原始未調整值 |
@@ -54,3 +64,9 @@ python3 docs/research/2026-10-08-auo-market/verify-hashes.py
 這輪沒有 App 修改，但依驗收更正，新研究計算腳本仍需正常 web build。對資料/計算 commit `e9af6710f36cd007819d52c91c065ef96a56bdaa` 執行正常 `npm run build`，最終 2026-10-08T07:44:11.201Z–07:44:46.935Z、35.73秒、exit0。PR305金融基底95b5a5c與市場分支完整 `web` Git tree 均為 `743559fb2d5e850c08a355cf091461c16ce8a30d`（`web/src` tree=`67080b226c28dc4e5830794e247bd1c50feba3cf`），此 build 作兩批相同 App tree 的共用驗收，不把舊346整合/型別/lint說成本輪重跑。
 
 先前三次 build failure 皆保留：外部 node_modules symlink 被 Turbopack 拒絕；複製既有依賴後 sandbox PostCSS worker bind被拒；取得執行權限後舊 .next cache 仍回放同錯。只移開本輪自建可重建 cache，再用相同 build 指令成功；未改 package/config、未 install、未部署、未啟動正式服務。Node22 strip-types / module-type 警告保留。實際資源／精確 commit 與測量方法在 `.agent/reports/` sanitized 收據；私有完整 log 留 VM evidence 目錄。不是正式研究完整完成、VM collector 已啟用、VPS↔Cloud 業務往返或 protected attestation。
+
+## Exact 市場 review：後續 unsigned scoped結果
+
+來源聊天提供既有獨立 Astra 對 exact `c16bc52271eaf733b7ca69d0cc747d123a5d2ad6` 的 unsigned scoped approval；逐項見 `unsigned-exact-market-review-relay.json`。28原始JSON bytes/SHA吻合、3216個選取字串對relay零差，536筆stock/index bars、28ledger、536逐列provenance、7filehash／30canonical均核對。Astra由原始資料獨立重算SMA、MA斜率、20日中位量比、WilderATR、首零seed RSI、OBV、MACD及相對報酬，均吻合；X0.00、公司行動／raw限制和null資格保留。頂層notes補充是nonblocking。
+
+這是有歸屬的unsigned資料／算式review，不把Astra讀資料與獨立重算稱為認證maker測試執行，亦不是VM取得raw bytes、protectedattestation、文章／策略／部署批准。批准綁定原exact c16bc52，不自動涵蓋後續修改。PR306：<https://github.com/Kaichen9527/stockinsider/pull/306>。此次只改文件與notes/review metadata，原dataset、計算程式及歷史驗收收據不變；文件manifest的README雜湊更新另有版本定位。

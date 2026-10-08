@@ -45,3 +45,26 @@ The successor code and check/resource results are recorded in .agent/reports/202
 For old PR head 50d28efcaf179fa197bec2ce5c1a2e37dd6467f7, protected run 37739252502/bootstrap succeeded, while requirements/architecture/exact-review failed in prepare because refs/heads/evidence/source-led-opportunity-v3-exact-review-50d28efcaf179fa197bec2ce5c1a2e37dd6467f7 did not exist (remote ref not found). Product/model protected code gates had not run. This is source-thread-reported missing version-specific external review evidence, not a VM test or VPS capacity failure. No evidence ref or gate policy was fabricated/modified. It is not a conclusion about the successor head.
 
 The source thread also reported a hosted-reader retry of 2Q26_Finance_Statement_English.pdf yielding four-page PDF metadata, but unusable text (dashes) and no observable screenshot pixels. This is appended in deep-private-draft-relay-followups.json; the original HTTP500 entry is preserved. It verifies no financial table or new number and is not a VM fetch. Actual VM PDF acquisition/rendering and nonoperating/tax/noncontrolling bridge verification remain next-stage research, alongside eight quarters and 24 months.
+
+## Later scoped completion and research progress (history above retained)
+
+The source thread subsequently supplied unsigned scoped Astra approval for exact code
+1243ee1313ac1d6ff3995ff5920cc2c3fad269e8. A/B were independently rechecked; final focused114/114
+and integration346/346 have zero skips, with types/lint/normal build passing. This closes the
+local integrity review task, not protected attestation, deployment, live dispatch, authenticated
+handoff or article-content review. PR304 remains unmerged and undeployed.
+
+Separate PR305 evidence adds24 monthly revenues and8 quarterly core income-statement columns
+from attributed public-reader relays, with VM arithmetic/precision checks and unsigned exact
+financial-data review. It does not complete notes, normalized earnings, forecasts or an article.
+Market head c16bc52271eaf733b7ca69d0cc747d123a5d2ad6 adds268 stock/index sessions,
+49 checks and a normal build with actual CPU/RAM/disk measurement. Its exact independent review
+subsequently returned unsigned scoped approval for c16bc52; see the market review relay for
+raw28-file, selected-string and independent formula scope. This does not certify maker-test execution
+or approve article content or strategy. VM public canaries failed
+proxy CONNECT403; Mac reads and VM arithmetic remain distinguishable.
+
+The next bounded writing map is docs/research/2026-10-08-auo-market/auo-article-preparation.md.
+Use the existing article and private-draft contracts; do not invent prepared inputs, source IDs,
+job/reservation or scenario numbers. Missing evidence leaves draft/incomplete. VPS heavy-work
+capacity is a VPS limitation, not a blocker for admitted isolated VM work.

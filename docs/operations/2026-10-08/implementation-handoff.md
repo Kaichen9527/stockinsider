@@ -37,3 +37,38 @@ Three orphan AppleDouble files for already-removed deployments were verified by 
 Published development PRs are#302(author input) and#303(financial lease). Ordinary #302 runtime/diagnostic checks pass; necessary protected reviews still fail at missing exact-head evidence. Neither PR has been merged or deployed. Official document retries, actual article authorship/review/publication, full-market strategy evidence and five genuine trading days remain unfinished.
 
 Post-cleanup health checks confirmed web/Nginx/PostgreSQL active and PostgreSQL accepting connections. Homepage and2409GETs return200. Preview HEAD with the actual public Host5.104.83.211 returns200 at/preview/auo-2409; the trailing slash correctly redirects308 to that path. The default loopback Host is a different virtual host and its308 is not a preview outage. These availability checks do not replace desktop/mobile content QA. Actual saved automation fields were reread and the corrected window/port verified; next scheduled operation remains unaccepted. The configuration and health receipts are saved alongside the exact cleanup log.
+
+## Subsequent isolated VM milestones — 2026-10-08 (historical status above preserved)
+
+| Milestone | Implemented / measured scope | Still outstanding |
+|---|---|---|
+| PR304 private durable author draft | Code1243ee1313ac1d6ff3995ff5920cc2c3fad269e8 binds original prepared input/job/owner/attempt/reservation/clocks, uses existing article validator, saves private durable files and typed handoff proposal. A/B disk-integrity repairs reproduced then fixed; focused114/integration346 zero skip, types/lint/build pass; unsigned scoped Astra review received. | No live dispatch, authenticated current status fence, formal author handoff, paid model work or protected attestation. |
+| PR305 financial evidence | Data debed842cbc432ef62f8915eea085d6d9f1b66fe;24 real monthly consolidated revenues and8 core income-statement quarters plus common-equity inputs. VM precision-interval/arithmetic checks; source and exact data unsigned reviews have separate scopes. Review docs95b5a5cc97b1bfad0b0e406d8271f7207c63b288. | Full notes/segments/normalized and diluted earnings, ending common shares, forecasts, thesis/content review remain missing. |
+| Market evidence | Head c16bc52271eaf733b7ca69d0cc747d123a5d2ad6;268 stock/268 TAIEX same dates,49 data/formula groups,30 canonical/7 byte hashes and exact cross-process reproduction. Single bounded TWSE VM canary CONNECT403 retained; acquisition comes from attributed Mac selected-field relay. Normal npm run build passes35.73s after recorded dependency/cache/environment failures. | Exact c16bc52 market implementation/data received unsigned scoped Astra approval:raw28/strings3216/provenance536/hash7+30 and independent recomputation. Not maker-test certification, protected attestation or article/strategy approval. Company actions/adjusted prices, official calendar and institutional flows remain incomplete; phase unknown, no automatic entry. |
+
+Market normal build covers the unchanged complete web tree743559fb2d5e850c08a355cf091461c16ce8a30d
+shared with the PR305 financial base; historical346 integration/type/lint were not rerun for the
+market batch. Node22.14.0, visible nproc5, cgroup CPU400000/100000 (4-core quota),
+memory.max34359738368bytes (32GiB); sampled process-group RSS peak1545478144bytes,
+GNU time process max1414660096bytes. Observed worktree/private-artifact disk peak1309007872bytes,
+whole workspace5800169472bytes; visible free filesystem28666478592→27387207680bytes.
+Filesystem free/total is not a confirmed Project disk guarantee. These are actual VM measurements,
+not VPS admission checks; no resource guard terminated work.
+
+PR304/PR305 and the market branch are unmerged and undeployed; no new schedules, strategy
+approval, publication or production business roundtrip are inferred. VPS capacity only limits
+heavy VPS operations and formal delivery on that host. It does not block VM features, evidence
+calculations or research writing admitted by VM resources. Historical capacity observations
+above remain historical, not a fresh VPS check.
+
+TWSE top-level notes now have a separate source-notes relay and README explanation: +/-/X
+means up/down/non-comparable; ** indicates a resumption price ratio conversion for face-value
+change or ETF split/reverse split; daily aggregates include regular, odd-lot, after-hours fixed-price
+and block trades, exclude auction/tender purchase. Empty row notes cannot exclude company actions.
+SelectedRows is not a complete raw response, and X0.00/unadjusted-return limitations persist.
+
+Next bounded VM task: organize a real AUO incomplete draft in the existing seven article sections,
+using docs/research/2026-10-08-auo-market/auo-article-preparation.md for evidence/citation/gap mapping.
+No source IDs, prepared-job bindings or financial forecasts may be fabricated to pass the article
+validator. Maker GPT-6.1 Sol High / independent GPT-6 Astra High review remains the amended split.
+Full AUO/second-company articles, valuation/strategy qualification and live handoff are unfinished.
