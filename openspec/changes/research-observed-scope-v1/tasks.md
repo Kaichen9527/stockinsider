@@ -10,3 +10,10 @@
 
 - [x] Amend authoritative DB-clock Taiwan admission week after f11e4c architecture P2; exact replay and legacy charges preserved.
 - [ ] Independently review amended spec and execute past-cutoff/concurrency/replay/Taiwan-week-boundary regressions in Slice2.
+
+### Slice1 14:29 VM checkpoint
+
+- [x] Implement isolated immutable research identities/snapshots/members and guarded atomic admission; no formal stocks writes.
+- [x] Real1978 HTTP/PG/replay/concurrency/ACL acceptance; old1946 unchanged, formal409 retained.
+- [ ] Final types/lint/build after final harness/SQL corrections and exact code review.
+- [ ] Slice2 DB-clock/global quota/scoped priority; Slice3 typed job/claim/input; approved publication64f7 follows separately.
