@@ -3,6 +3,8 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
+import { carryMonitorProgress, disposition, monitorCycleDate, MONITOR_JOURNAL_BYTES,
+  MONITOR_RECEIPT_BYTES, readMonitorPredecessor } from './research-monitor-progress.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const MAX_BYTES = 4_000_000;
@@ -130,15 +132,19 @@ function projectSnapshot(value, expectedSymbol, asOf, now) {
 export async function monitorControllerCommand(args, dependencies = {}) {
   const [action, ...tail] = args;
   const flags = new Map();
-  if (action !== 'batch' || tail.length !== 6) throw new Error('monitor_controller_arguments_invalid');
+  if (action !== 'batch' || ![6, 10].includes(tail.length)) throw new Error('monitor_controller_arguments_invalid');
   for (let index = 0; index < tail.length; index += 2) {
-    if (!['--origin', '--output', '--journal'].includes(tail[index]) || flags.has(tail[index]))
+    if (!['--origin', '--output', '--journal', '--previous-output', '--previous-journal'].includes(tail[index]) || flags.has(tail[index]))
       throw new Error('monitor_controller_arguments_invalid');
     flags.set(tail[index], tail[index + 1]);
   }
   const origin = originUrl(flags.get('--origin'));
   const outputPath = flags.get('--output'); const journalPath = flags.get('--journal');
-  if (!path.isAbsolute(outputPath || '') || !path.isAbsolute(journalPath || '') || outputPath === journalPath)
+  const previousOutput = flags.get('--previous-output'); const previousJournal = flags.get('--previous-journal');
+  const paths = [outputPath, journalPath, ...((previousOutput || previousJournal) ? [previousOutput, previousJournal] : [])];
+  if (paths.some(file => !path.isAbsolute(file || ''))
+    || new Set(paths.map(file => path.resolve(file))).size !== paths.length
+    || flags.size !== (previousOutput ? 5 : 3))
     throw new Error('monitor_controller_distinct_absolute_paths_required');
   const env = dependencies.env || process.env;
   const key = env.INTERNAL_API_KEY;
@@ -150,9 +156,16 @@ export async function monitorControllerCommand(args, dependencies = {}) {
   const now = dependencies.now || (() => new Date().toISOString());
   const monotonic = dependencies.monotonic || (() => performance.now());
   const post = dependencies.post || jsonPost;
+  const previous = previousOutput ? await readMonitorPredecessor({ outputPath: previousOutput,
+    journalPath: previousJournal, sourceCommit: source.commit, origin: origin.href, now: now() }) : null;
+  if (previous) validateMonitorWorklist({ ok: true, ...previous.worklist }, previous.receipt.worklistAsOf);
   const journal = await open(journalPath, 'wx', 0o600);
-  let output; let pending = null;
-  const log = async value => { await journal.writeFile(JSON.stringify(value) + '\n'); await journal.sync(); };
+  let output; let pending = null; let journalBytes = 0;
+  const log = async value => {
+    const line = JSON.stringify(value) + '\n'; journalBytes += Buffer.byteLength(line);
+    if (journalBytes > MONITOR_JOURNAL_BYTES) throw new Error('monitor_controller_journal_bound');
+    await journal.writeFile(line); await journal.sync();
+  };
   const started = monotonic();
   const timeout = () => Math.min(15_000, Math.floor(BATCH_MS - (monotonic() - started)));
   try {
@@ -168,12 +181,22 @@ export async function monitorControllerCommand(args, dependencies = {}) {
     const loaded = await post(new URL('/api/internal/research-monitor-worklist', origin).href, {}, key, firstTimeout);
     if (loaded.rejected) throw new Error('monitor_controller_worklist_rejected');
     const worklist = validateMonitorWorklist(loaded.body, now());
+    if (monitorCycleDate(worklist.asOf) !== monitorCycleDate(now())
+      || previous && (researchCanonicalHash(previous.worklist.bookHeads) !== researchCanonicalHash(worklist.bookHeads)
+        || monitorCycleDate(worklist.asOf) !== previous.receipt.cycleDate
+        || Date.parse(worklist.asOf) < Date.parse(previous.receipt.worklistAsOf))) {
+      pending = null;
+      throw new Error('monitor_controller_cycle_boundary_changed');
+    }
     const worklistHash = researchCanonicalHash(worklist);
     await log({ phase: 'worklist_verified', worklist, worklistHash, sourceCommit: source.commit, observedAt: now() });
     pending = null;
     const outcomes = [];
+    const progress = carryMonitorProgress(previous, worklist);
+    const visited = new Set(progress.map(row => row[0]));
     let stopReason = null;
     for (const item of worklist.technicalSymbols) {
+      if (visited.has(item.symbol)) continue;
       if (outcomes.length >= MAX_TASKS || timeout() < 1000) { stopReason = outcomes.length >= MAX_TASKS ? 'batch_task_bound' : 'batch_deadline'; break; }
       pending = item.symbol;
       await log({ phase: 'request_pending', operation: 'technical_snapshot', symbol: item.symbol, worklistHash, observedAt: now() });
@@ -190,21 +213,36 @@ export async function monitorControllerCommand(args, dependencies = {}) {
         { symbol: item.symbol }, key, remaining);
       const result = reply.rejected ? { symbol: item.symbol, status: 'server_rejected', httpStatus: reply.status }
         : { symbol: item.symbol, status: 'snapshot_saved', ...projectSnapshot(reply.body, item.symbol, worklist.asOf, now()) };
-      await log({ phase: 'response_verified', result, worklistHash, observedAt: now() });
+      if (reply.rejected && (!Number.isInteger(reply.status) || reply.status < 400 || reply.status > 599))
+        throw new Error('monitor_controller_rejection_invalid');
+      const observedAt = now();
+      await log({ phase: 'response_verified', result, worklistHash, observedAt });
+      progress.push(disposition(item, result, observedAt)); visited.add(item.symbol);
       outcomes.push(result); pending = null;
     }
-    const attempted = new Set(outcomes.map(item => item.symbol));
-    const deferred = worklist.technicalSymbols.filter(item => !attempted.has(item.symbol))
+    const deferred = worklist.technicalSymbols.filter(item => !visited.has(item.symbol))
       .map(item => ({ symbol: item.symbol, existingPaperPosition: item.existingPaperPosition, reason: stopReason }));
-    const receipt = { schemaVersion: 'research-monitor-batch-v1', sourceCommit: source.commit,
-      worklistHash, worklistAsOf: worklist.asOf, observedAt: now(), totalSymbols: worklist.technicalSymbols.length,
+    const completedAt = now();
+    if (monitorCycleDate(completedAt) !== monitorCycleDate(worklist.asOf)
+      || Date.parse(completedAt) < Date.parse(worklist.asOf)
+      || previous && Date.parse(completedAt) < Date.parse(previous.receipt.observedAt))
+      throw new Error('monitor_controller_cycle_clock_changed');
+    const receipt = { schemaVersion: 'research-monitor-batch-v2', sourceCommit: source.commit,
+      origin: origin.href, cycleDate: monitorCycleDate(worklist.asOf),
+      cycleStartedAt: previous?.receipt.cycleStartedAt || worklist.asOf,
+      predecessorReceiptHash: previous?.receipt.receiptHash || null,
+      worklistHash, worklistAsOf: worklist.asOf, observedAt: completedAt, totalSymbols: worklist.technicalSymbols.length,
       outcomes, deferred, monthlyReviewsDue: worklist.monthlyReviewsDue, allTechnicalSnapshotsSaved: deferred.length === 0
-        && outcomes.every(item => item.status === 'snapshot_saved'),
+        && progress.every(row => row[3] === 'snapshot_saved'),
+      allCurrentSymbolsAccounted: deferred.length === 0,
+      progress: progress.sort((a, b) => a[0].localeCompare(b[0])),
       independentRenewalsPerformed: false, paperRiskProcessed: false, actualOrders: false,
-      modelCalls: 0, automaticRetry: false, fairResumeImplemented: false };
+      modelCalls: 0, automaticRetry: false, fairResumeImplemented: true };
     const saved = { ...receipt, receiptHash: researchCanonicalHash(receipt) };
-    await log({ phase: 'batch_verified', saved, observedAt: now() });
-    await output.writeFile(JSON.stringify(saved, null, 2) + '\n'); await output.sync();
+    const encoded = JSON.stringify(saved, null, 2) + '\n';
+    if (Buffer.byteLength(encoded) > MONITOR_RECEIPT_BYTES) throw new Error('monitor_controller_receipt_bound');
+    await log({ phase: 'batch_verified', receiptHash: saved.receiptHash, observedAt: now() });
+    await output.writeFile(encoded); await output.sync();
     await log({ phase: 'response_saved', receiptHash: saved.receiptHash, observedAt: now() });
     return saved;
   } catch {

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "stockinsider-monitor-fair-boundary-repair-evidence-v1",
+  "recordedAt": "2026-10-08T14:32:31.145998+00:00",
+  "independentlyRejectedSource": "d495c69deb9b606a8bb91cf189aa31b65df0ac83",
+  "priorClockRepairSource": "10123e0410572833d8d535dc852ea7ea86706ede",
+  "verificationLevel": "maker-lightweight-synthetic-and-loopback-http",
+  "findings": [
+    "P2 continuation request crossing Taipei midnight after predecessor validation must reject old progress before snapshot writes.",
+    "First batch has no ancestor: cumulative progress must derive exactly from current outcomes.",
+    "Current disposition observation time must bind response_verified log time."
+  ],
+  "red": {
+    "source": "10123e0410572833d8d535dc852ea7ea86706ede",
+    "selectedTests": 3,
+    "failed": 3,
+    "skipped": 0,
+    "exitCode": 1
+  },
+  "green": {
+    "passed": 44,
+    "failed": 0,
+    "skipped": 0
+  },
+  "sourceHashes": {
+    "scripts/research-monitor-controller.mjs": "3904a71b624087b2a221960670de9957b257520645d59cd8588552840c0f5dd1",
+    "scripts/research-monitor-progress.mjs": "c08a6963ade6de08d9af84f10765142997c46e324a918f5d7115a0607a0c4315",
+    "scripts/research-monitor-controller.test.mjs": "c922235bb36d5d8c7badc08a64e6423cf3b0cdba8e18bb0003fd175662f8db6d",
+    "scripts/research-monitor-progress.test.mjs": "4c0f7b974936972fd2cf7e55a9f8992d239a8d682819e4af837be5be03d7a2af"
+  },
+  "previousClockRepairReceiptSha256": "138bd803d4ee49e6fefb9e1e484dc3632e456511efd9e6f258afb6bfaade6175",
+  "normalBuildVerified": false,
+  "vmIntegrationVerified": false,
+  "independentFinalCodeReviewPassed": false,
+  "productionWrites": false,
+  "actualOrders": false,
+  "modelsDispatched": 0
+}
