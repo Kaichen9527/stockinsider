@@ -6,11 +6,12 @@ export type InsiderEvidence = {
   sourceUrl: string; transferMethod: string | null;
   currentShares: number | null; comparablePriorShares: number | null;
   declaredShares: number | null; confirmedShares: number | null;
+  trustShares?: number | null;
 };
 export function buildInsiderEvidence(input: InsiderEvidence) {
   if (!/^\d{4}$/u.test(input.symbol) || !input.person || !input.role || !input.reportPeriod
     || new URL(input.sourceUrl).protocol !== 'https:'
-    || [input.currentShares, input.comparablePriorShares, input.declaredShares, input.confirmedShares]
+    || [input.currentShares, input.comparablePriorShares, input.declaredShares, input.confirmedShares, input.trustShares ?? null]
       .some((value) => value !== null && (!Number.isFinite(value) || value < 0))) throw new Error('insider_evidence_invalid');
   const revisionHash = createHash('sha256').update(JSON.stringify(input)).digest('hex');
   const identity = createHash('sha256').update(JSON.stringify([

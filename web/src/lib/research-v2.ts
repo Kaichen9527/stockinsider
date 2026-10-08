@@ -18,6 +18,7 @@ import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 import { isExpectedPttArticleMissing } from './ptt-policy';
 import { buildInsiderEvidence } from './research-insider-evidence';
+import { OFFICIAL_INSIDER_DATASETS, fetchOfficialInsiderRows, validateOfficialInsiderResponseRows, parseOfficialInsiderRow, insiderPage, type InsiderCursor } from './research-insider-official';
 import { normalizeResearchPlatform } from './research-source-registry';
 import { parsePublicBrokerEps } from './research-broker-estimate';
 import { fetchPinnedHttpsText, isPublicNetworkAddress } from './pinned-https-fetch';
@@ -3655,13 +3656,6 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
   };
 }
 
-function parseTwNumber(value: unknown) {
-  const text = compactText(value).replace(/[,\s]/g, '');
-  if (!text) return null;
-  const parsed = Number(text);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
 function parseRocDateToIso(input: unknown) {
   const digits = compactText(input).replace(/\D/g, '');
   if (digits.length < 6) return null;
@@ -3694,29 +3688,14 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
   const entity = await upsertSourceEntity({
     platform: 'twse_insider',
     entityType: 'site',
-    displayName: 'TWSE 內部人持股揭露',
+    displayName: '官方上市／上櫃內部人揭露（公發另列）',
     sourceKey: 'site.twse.insider',
     profileUrl: 'https://openapi.twse.com.tw/',
   });
 
-  const datasets = [
-    {
-      url: 'https://openapi.twse.com.tw/v1/opendata/t187ap11_L',
-      kind: 'holding',
-      label: '上市公司董監事持股餘額',
-    },
-    {
-      url: 'https://openapi.twse.com.tw/v1/opendata/t187ap11_P',
-      kind: 'holding',
-      label: '公發公司董監事持股餘額',
-    },
-    {
-      url: 'https://openapi.twse.com.tw/v1/opendata/t187ap12_L',
-      kind: 'transfer',
-      label: '內部人持股轉讓申報',
-    },
-  ] as const;
-
+  const datasets = OFFICIAL_INSIDER_DATASETS;
+  const supabase = getSupabaseServerClient();
+  const pendingCursors: Array<{scope: string; previous: string | null; next: InsiderCursor}> = [];
   const records: Array<{
     sourceEntityId: string;
     platform: string;
@@ -3730,41 +3709,37 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
     confidence: number;
     metadata: Record<string, unknown>;
   }> = [];
-  const datasetOutcomes: Array<{ url: string; status: 'success' | 'failed'; rows: number; reason: string | null }> = [];
+  const datasetOutcomes: Array<{ url: string; status: 'success' | 'failed'; rows: number; reason: string | null; coverage?: Record<string, unknown> }> = [];
 
   for (const dataset of datasets) {
+    const recordsBeforeDataset = records.length;
     try {
-      const rows = await fetch(dataset.url, {
-        headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', accept: 'application/json' },
-        signal: AbortSignal.timeout(20_000),
-      }).then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`)))) as Row[];
-      if (!Array.isArray(rows)) throw new Error('twse_insider_schema_not_array');
-      if (rows.length > 0 && !rows.some((row) => row && typeof row === 'object' && '公司代號' in row)) {
-        throw new Error('twse_insider_schema_missing_company_symbol');
+      const response = await fetchOfficialInsiderRows(dataset);
+      validateOfficialInsiderResponseRows(response.rows, dataset);
+      const scope = dataset.url;
+      let previous: string | null = null;
+      let cursor: InsiderCursor | null = null;
+      if (!symbolContext) {
+        const saved = await supabase.from('source_connector_cursors').select('cursor_value')
+          .eq('connector', 'twse_insider_v1').eq('scope_key', scope).maybeSingle();
+        if (saved.error) throw new Error(`insider_cursor_read_failed:${saved.error.message}`);
+        previous = saved.data?.cursor_value || null;
+        cursor = previous ? JSON.parse(previous) as InsiderCursor : null;
       }
-      const selected = rows
-            .filter((row) => {
-              if (!symbolContext) return true;
-              return compactText(row['公司代號']) === symbolContext.symbol;
-            })
-            .slice(0, symbolContext ? 60 : 500);
-      for (const row of selected) {
-        const symbol = compactText(row['公司代號']);
-        if (!/^[1-9]\d{3}$/.test(symbol)) continue;
-        const companyName = compactText(row['公司名稱']) || symbol;
-        const role = compactText(row['職稱'] || row['申報人身分']) || '內部人';
-        const person = compactText(row['姓名']) || '未揭露';
-        const issueDate = compactText(row['出表日期']) || compactText(row['申報日期']) || '';
-        const publishedAt = parseRocDateToIso(issueDate);
-        const currentHolding = parseTwNumber(row['目前持股']);
-        const transferMethod = compactText(row['預定轉讓方式及股數-轉讓方式']);
-        const transferShares = parseTwNumber(row['預定轉讓方式及股數-擬轉讓股數']);
+      const page = insiderPage(response.rows, response.hash, cursor, symbolContext?.symbol);
+      let excludedRows = 0;
+      for (const row of page.rows) {
+        const parsed = parseOfficialInsiderRow(row, dataset);
+        if (!parsed) { excludedRows += 1; continue; }
+        const { symbol, companyName, role, person, outputDate: issueDate,
+          publishedAt, currentShares: currentHolding, transferMethod, declaredShares: transferShares } = parsed;
         const evidence = buildInsiderEvidence({
           kind: dataset.kind === 'transfer' ? 'transfer_declaration' : 'holding_snapshot',
-          symbol, person, role, reportPeriod: issueDate || 'unknown_period',
-          sourceUrl: dataset.url, transferMethod: transferMethod || null,
+          symbol, person, role, reportPeriod: parsed.reportPeriod,
+          sourceUrl: dataset.url, transferMethod,
           currentShares: currentHolding, comparablePriorShares: null,
           declaredShares: transferShares, confirmedShares: null,
+          trustShares: parsed.trustShares,
         });
         const sentimentLabel = 'neutral' as const;
         const summary =
@@ -3783,10 +3758,18 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
           sentimentLabel,
           confidence: dataset.kind === 'transfer' ? 0.58 : 0.66,
           metadata: {
-            connector: 'openapi_twse',
+            connector: 'official_insider_v1',
             dataset: dataset.url,
-            issue_date: issueDate || null,
-            report_period_status: issueDate ? 'published_period' : 'unknown_period_observed_only',
+            market: dataset.market,
+            issue_date: issueDate,
+            publication_precision: parsed.publicationPrecision,
+            source_report_period: parsed.sourcePeriod,
+            report_period_status: parsed.sourcePeriod ? 'reported_month_not_publication' : 'declaration_date_only',
+            attempted_at: response.attemptedAt,
+            observed_at: response.observedAt,
+            response_sha256: response.hash,
+            response_bytes: response.bytes,
+            trust_shares: parsed.trustShares,
             role,
             person,
             canonical_url: dataset.url,
@@ -3801,11 +3784,14 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
         platform: 'twse_insider',
         sourceEntityId: String(entity.id),
         targetUrl: dataset.url,
-        status: selected.length > 0 ? 'success' : 'partial',
-        notes: `${dataset.label} rows=${selected.length}`,
+        status: page.coverage === 'response_partial' || page.rows.length === excludedRows ? 'partial' : 'success',
+        notes: `${dataset.label} processed=${page.processedRows} excluded=${excludedRows} remaining=${page.remainingRows}; ${page.coverage}`,
       });
-      datasetOutcomes.push({ url: dataset.url, status: 'success', rows: selected.length, reason: null });
+      datasetOutcomes.push({ url: dataset.url, status: 'success', rows: page.rows.length - excludedRows, reason: null,
+        coverage: { snapshot_sha256: response.hash, response_bytes: response.bytes, cursor_before: cursor, cursor_after: page.nextCursor, total_rows: page.totalRows, processed_rows: page.processedRows, excluded_rows: excludedRows, remaining_rows: page.remainingRows, status: page.coverage, snapshot_reset: page.snapshotReset, next_offset: page.nextCursor?.offset ?? null, absence_scope: 'retrieved_response_only_not_historical_transactions' } });
+      if (page.nextCursor) pendingCursors.push({scope, previous, next: page.nextCursor});
     } catch (error) {
+      records.splice(recordsBeforeDataset);
       datasetOutcomes.push({ url: dataset.url, status: 'failed', rows: 0, reason: (error as Error).message.slice(0, 500) });
       await createSourceAudit({
         connectorRunId,
@@ -3829,6 +3815,19 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
   }
 
   const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(records, 'twse_insider', symbolContext));
+  // Never advance after failed document persistence. Compare-and-set prevents concurrent older pages regressing progress.
+  for (const pending of pendingCursors) {
+    const values = {connector: 'twse_insider_v1', scope_key: pending.scope,
+      cursor_value: JSON.stringify(pending.next), observed_at: new Date().toISOString(),
+      metadata: {scope: 'bounded_current_response', full_market_analyzed: false}};
+    const saved = pending.previous === null
+      ? await supabase.from('source_connector_cursors').insert(values).select('cursor_value')
+      : await supabase.from('source_connector_cursors').update(values).eq('connector', values.connector)
+        .eq('scope_key', pending.scope).eq('cursor_value', pending.previous).select('cursor_value');
+    if (saved.error || !saved.data?.length) throw new Error('insider_cursor_commit_failed_or_concurrent_replay');
+  }
+  const hasRemaining = datasetOutcomes.some(outcome => Number(outcome.coverage?.remaining_rows || 0) > 0);
+
   await upsertCredentialRegistry('twse_insider', count > 0 ? 'valid' : 'invalid', {
     credential_ref: 'public_openapi',
     metadata: { mode: 'openapi_twse', records_written: count, dataset_outcomes: datasetOutcomes },
@@ -3846,7 +3845,7 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
     confidence: 0.63,
   });
   await finishAgentRun(agentRunId, failedDatasets > 0 ? 'failed' : 'success', { connector: 'twse_insider', records_written: count, symbol: symbolContext?.symbol || null, dataset_outcomes: datasetOutcomes });
-  await finishConnectorRun(connectorRunId, failedDatasets > 0 ? 'partial' : count > 0 ? 'success' : 'partial', count, {
+  await finishConnectorRun(connectorRunId, failedDatasets > 0 || hasRemaining ? 'partial' : count > 0 ? 'success' : 'partial', count, {
     metadata: {
       entity_id: entity.id,
       crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
@@ -3858,8 +3857,9 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
   return {
     connector: 'twse_insider', recordsWritten: count, fetchedPosts: datasetOutcomes.reduce((sum, outcome) => sum + outcome.rows, 0), entityId: String(entity.id),
     errorCode: failedDatasets > 0 ? `twse_insider_dataset_failures:${failedDatasets}` : null,
-    degradedReason: failedDatasets > 0 ? 'twse_insider_partial_schema_or_transport_failure' : null,
+    degradedReason: failedDatasets > 0 ? 'twse_insider_partial_schema_or_transport_failure' : hasRemaining ? 'insider_bounded_response_pages_remaining' : null,
     sessionMode: 'not_applicable' as const,
+    metadata: { dataset_outcomes: datasetOutcomes, full_market_analyzed: false },
   };
 }
 
