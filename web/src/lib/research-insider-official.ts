@@ -98,5 +98,5 @@ export async function fetchOfficialInsiderRows(dataset:OfficialInsiderDataset,tr
   if(!Array.isArray(rows))throw new Error('insider_schema_not_array');
   if(rows.length>50000 || rows.some(row=>!row||typeof row!=='object'||Array.isArray(row)))throw new Error('insider_schema_row_limit_or_shape');
   validateOfficialInsiderResponseRows(rows as Row[],dataset);
-  return {rows:rows as Row[],bytes,attemptedAt,observedAt,hash:createHash('sha256').update(raw).digest('hex')};
+  return {raw,rows:rows as Row[],bytes,attemptedAt,observedAt,hash:createHash('sha256').update(raw).digest('hex')};
 }

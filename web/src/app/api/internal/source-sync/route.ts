@@ -1,3 +1,4 @@
+import { validateInsiderSnapshotRequest, type InsiderSnapshotRequest, type InsiderSnapshotProgress } from '@/lib/research-insider-snapshot';
 import { NextResponse } from 'next/server';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { runPodcastSync, runSourceSync } from '@/lib/research-v2';
@@ -109,7 +110,7 @@ async function recordPolicyBlock(connector: string, attemptedAt: string) {
   return { policy, terminalReason };
 }
 
-async function executeConnector(connector: string, dryRun: boolean, symbol: string): Promise<SourceResult> {
+async function executeConnector(connector: string, dryRun: boolean, symbol: string, insiderSnapshot?: InsiderSnapshotRequest): Promise<SourceResult> {
   const policy = sourceExecutionPolicy(connector);
   const attemptedAt = new Date().toISOString();
   if (policy.disposition !== 'active') {
@@ -138,15 +139,24 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
             valid_matches: Number(result.validMatches || 0),
           },
         }))
-      : await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}) });
+      : await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}), ...(insiderSnapshot ? { insiderSnapshot } : {}) });
     const result = publicResult(raw, policy.licenseBasis);
+    const snapshot = (raw as typeof raw & { metadata?: { insider_snapshot?: InsiderSnapshotProgress } }).metadata?.insider_snapshot;
+    if (insiderSnapshot && (!snapshot || snapshot.schema !== 'insider_snapshot_progress_v1' || snapshot.runId !== insiderSnapshot.runId)) throw new Error('insider_snapshot_result_binding');
+    // Cached processing has its own completion clock; source cadence uses acquisition only.
+    const freshnessAt = snapshot?.originalSourceObservedAt || attemptedAt;
+    const staleSnapshot = Boolean(snapshot && (policy.cadenceHours === null || Date.parse(freshnessAt) + policy.cadenceHours * 3_600_000 <= Date.now()));
+    if (staleSnapshot && snapshot?.outcome === 'coverage_complete') {
+      result.degradedReason = 'insider_snapshot_stale_refresh_pending';
+      result.terminalReason = 'partial';
+    }
     if (!dryRun) {
       await recordSourceRunLedger({
         externalRunId: result.runId,
         connector,
         expectedAt: attemptedAt,
         attemptedAt,
-        succeededAt: ['success', 'successful_empty', 'duplicate_only'].includes(result.terminalReason) ? new Date().toISOString() : null,
+        succeededAt: snapshot ? (snapshot.liveAcquisitions.length > 0 && !staleSnapshot ? freshnessAt : null) : ['success', 'successful_empty', 'duplicate_only'].includes(result.terminalReason) ? new Date().toISOString() : null,
         fetched: result.fetched,
         matched: result.matched,
         newCount: result.new,
@@ -157,7 +167,7 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
         terminalDetail: result.errorCode || result.degradedReason || null,
         parserVersion: PARSER_VERSION,
         policy,
-        nextExpectedAt: nextExpectedAt(attemptedAt, policy.cadenceHours),
+        nextExpectedAt: nextExpectedAt(freshnessAt, policy.cadenceHours),
         metadata: {
           ...(((raw as typeof raw & { metadata?: Record<string, unknown> }).metadata) || {}),
           symbol: symbol || null,
@@ -188,7 +198,8 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
         terminalDetail: error.message.slice(0, 500),
         parserVersion: PARSER_VERSION,
         policy,
-        nextExpectedAt: nextExpectedAt(attemptedAt, policy.cadenceHours),
+        nextExpectedAt: insiderSnapshot ? null : nextExpectedAt(attemptedAt, policy.cadenceHours),
+        metadata: insiderSnapshot ? { acquisition_run_id: insiderSnapshot.runId, processing_only_failure: true } : undefined,
       });
     }
     throw error;
@@ -208,6 +219,13 @@ export async function POST(req: Request) {
     const connector = body?.connector ? String(body.connector) : (searchParams.get('connector') || 'telegram');
     const dryRun = Boolean(body?.dryRun);
     const symbol = (body?.symbol ? String(body.symbol) : (searchParams.get('symbol') || '')).toUpperCase();
+    let insiderSnapshot: InsiderSnapshotRequest | undefined;
+    if (body?.insiderSnapshot !== undefined) {
+      if (req.method !== 'POST' || connector !== 'twse_insider' || symbol || dryRun || Object.keys(body).some(key => !['connector', 'insiderSnapshot'].includes(key)))
+        return NextResponse.json({ ok: false, error: 'insider_snapshot_scope_invalid' }, { status: 400 });
+      try { insiderSnapshot = validateInsiderSnapshotRequest(body.insiderSnapshot); }
+      catch { return NextResponse.json({ ok: false, error: 'insider_snapshot_request_invalid' }, { status: 400 }); }
+    }
     if (!dryRun) {
       leaseOwner = await acquireProductionWriteLease(3_600);
       if (!leaseOwner) return NextResponse.json({ ok: false, error: 'production_write_cycle_already_running' }, { status: 409 });
@@ -273,7 +291,7 @@ export async function POST(req: Request) {
       }, { status: ok ? 200 : 502 });
     }
 
-    const result = await executeConnector(connector, dryRun, symbol);
+    const result = await executeConnector(connector, dryRun, symbol, insiderSnapshot);
     const accepted = ['success', 'successful_empty', 'duplicate_only'].includes(result.terminalReason);
     return NextResponse.json({
       ok: accepted,
