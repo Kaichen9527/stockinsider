@@ -27,3 +27,9 @@ Successor validation: 132/132 zero fail/skip, including real isolated PostgreSQL
 The original nominal 09:00–09:30 increment was not silently extended: delivery/push continued past its nominal deadline, and final successor checks/review repairs use the user's separately authorized new bounded increment. No job/model lease was extended or automatic budget acceptance claimed.
 
 New native data-plane exploration was paused on review findings. PostgREST 16.3 was obtained by ordinary proxy-preserving verified HTTPS and its existing repo-pinned archive SHA256 4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d matched. Native Next/Supabase/PostgREST workflow is not yet executed; its unfinished harness is private and excluded from the commit. No new DB feature/schema/authority was installed. Earlier adapter-based local PG acceptance remains accurately scoped. PR308 was created/attached by root; this Cloud's one GraphQL create attempt was Forbidden and was not retried. Successor code awaits independent exact review, not approved production/strategy attestation.
+
+## Native successor and review attribution — 2026-10-08
+
+Earlier pending history above is retained. Root reported Astra unsigned scoped code approval of exact d19ea16609f5337c97626faf4ce41765a187177d: complete input credential rejection, timed receipt binding, high-precision clocks and stale observed-summary rejection, three industry items/replay zero. Its 132 tests remain maker evidence, not Mac reruns or protected attestation. That subject is unchanged.
+
+A separate new branch implements actual native Next/Supabase/PostgREST/PostgreSQL acceptance, eleven tests zero skips, real source-head/authority routines, restart/dedup and honest priority/roster blockers. See [native checkpoint](native-local-inbox-dataplane-handoff.md). Native harness review and complete legitimate ranking remain pending; old adapter-based acceptance is not relabeled as native.
