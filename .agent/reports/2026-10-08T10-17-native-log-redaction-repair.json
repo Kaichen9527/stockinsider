@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "native-log-chunk-redaction-repair-v1",
+  "recordedAt": "2026-10-08T10:17:39.593517+00:00",
+  "reviewSubject": "322bdcebbbf8acb26141a89684b307ad9aee0cd7",
+  "finding": "P2 per-chunk replacement can reconstruct a credential when log chunks are joined before persistence",
+  "reproducer": "Same old join-only persistence behavior extracted into an exported helper for synthetic regression; original subject remains immutable. One failing case at split1. No real environment credentials used or actual leakage observed.",
+  "fix": "Full joined log replacement of internal key/service JWT/JWT secret before wx0600 log persistence; no immediate raw log forwarding",
+  "regression": {
+    "allSyntheticTwoChunkSplitPoints": 107,
+    "alsoChecks": "one-character chunks across all three synthetic values",
+    "pass": 12,
+    "fail": 0,
+    "skip": 0
+  },
+  "stages": {
+    "redact-before": {
+      "stage": "redact-before",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-name-pattern",
+        "joined log",
+        "scripts/research-local-inbox-dataplane.test.mjs"
+      ],
+      "startedAt": "2026-10-08T10:14:52.192Z",
+      "completedAt": "2026-10-08T10:14:52.597Z",
+      "elapsedSeconds": 0.4047318350058049,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 114622464,
+      "observedTaskDiskPeakBytes": 1483444224,
+      "availableBeforeBytes": 25809772544,
+      "availableAfterBytes": 25809764352,
+      "guardTermination": null
+    },
+    "redact-native": {
+      "stage": "redact-native",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-local-inbox-dataplane.test.mjs"
+      ],
+      "startedAt": "2026-10-08T10:15:17.459Z",
+      "completedAt": "2026-10-08T10:15:23.716Z",
+      "elapsedSeconds": 6.2571177759964485,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 349884416,
+      "observedTaskDiskPeakBytes": 1524969472,
+      "availableBeforeBytes": 25809760256,
+      "availableAfterBytes": 25768247296,
+      "guardTermination": null
+    },
+    "redact-types": {
+      "stage": "redact-types",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "web/tsconfig.json"
+      ],
+      "startedAt": "2026-10-08T10:15:39.148Z",
+      "completedAt": "2026-10-08T10:15:41.896Z",
+      "elapsedSeconds": 2.7471714799903566,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 497606656,
+      "observedTaskDiskPeakBytes": 1524973568,
+      "availableBeforeBytes": 25768243200,
+      "availableAfterBytes": 25768239104,
+      "guardTermination": null
+    },
+    "redact-lint": {
+      "stage": "redact-lint",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T10:15:41.924Z",
+      "completedAt": "2026-10-08T10:16:04.714Z",
+      "elapsedSeconds": 22.789725705006276,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1876070400,
+      "observedTaskDiskPeakBytes": 1524989952,
+      "availableBeforeBytes": 25768235008,
+      "availableAfterBytes": 25768222720,
+      "guardTermination": null
+    },
+    "redact-build": {
+      "stage": "redact-build",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T10:16:04.741Z",
+      "completedAt": "2026-10-08T10:16:10.577Z",
+      "elapsedSeconds": 5.83687307900982,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1165246464,
+      "observedTaskDiskPeakBytes": 1524998144,
+      "availableBeforeBytes": 25768218624,
+      "availableAfterBytes": 25767440384,
+      "guardTermination": null
+    }
+  },
+  "sourceFiles": [
+    {
+      "path": "scripts/research-local-inbox-dataplane.mjs",
+      "sha256": "01c9c0b7374e7f7896167f3e0874f2bd23c9c02bae6d3353fd12cf613c014111"
+    },
+    {
+      "path": "scripts/research-local-inbox-dataplane.test.mjs",
+      "sha256": "f5395774beab3ca2c599323cfd044b9c94dde07188d26bd9ba695c7280d74e3d"
+    }
+  ],
+  "artifactManifest": [
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-before.json",
+      "bytes": 591,
+      "sha256": "1171b9526e20349db4e98b81801b6ae452a6501b3de29ff184a19eaadfc43489"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-before.log",
+      "bytes": 1599,
+      "sha256": "3869ee59b941177539c0f584f0cbb5361a50d57465381d174477f126bff5931f"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-before.time",
+      "bytes": 918,
+      "sha256": "ade9ed149c473ae5c81d6699bfa80cfc3737ad9dd84e9d8ab146e9049f1348a0"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-native.json",
+      "bytes": 546,
+      "sha256": "ef159bffc547becfd4afc7d10ded73cf512088d5d66a57f7e974fdd7b1f6c166"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-native.log",
+      "bytes": 3356,
+      "sha256": "38a0bb9a6b9c2b4faf1815a689c81d6f832341cfd788902173b263c2af0e99a1"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-native.time",
+      "bytes": 856,
+      "sha256": "0809af83dc077a21b51ed7e1bd13af29a58cfe8acfbe4a8613fad166ccc00d02"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-types.json",
+      "bytes": 536,
+      "sha256": "e8d15d5dbe105463ea749d3a3461e8e0c7fd37530b180964ed16e1b8dac20c83"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-types.time",
+      "bytes": 837,
+      "sha256": "5d08eed35ad9851bbbc1612cbfeeed6938abac391dd285416f51321b5e8afc46"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-lint.json",
+      "bytes": 512,
+      "sha256": "3cf75742f25da29c340fae88ed6fbb8802a009878560e4ac96992fe5f72f6c9f"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-lint.log",
+      "bytes": 4760,
+      "sha256": "33a71dbfe5b1ff029d709b11d89e069122c96d9632df4458dba81e58362697fe"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-lint.time",
+      "bytes": 820,
+      "sha256": "bab5418eb002b3f832196d70db21bdbfd7160d61b982182092cc134a38053a9d"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-build.json",
+      "bytes": 512,
+      "sha256": "49eed57530204dbd22f30fc40307e5bfca46bd7f8d3a3a00ce0493041e1375a5"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-build.log",
+      "bytes": 6411,
+      "sha256": "7c95c824d6945cd9e64a492cb5772686447ea34d70ed2ab0bf2de18493b52add"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/redact-build.time",
+      "bytes": 822,
+      "sha256": "66381ee142864d92e109fb1cbdc1ed39ca0c36ace80eab90ce3d6672b6730dcb"
+    }
+  ],
+  "limitations": [
+    "Independent exact successor review pending",
+    "No protected attestation or authority activation",
+    "Native industry-only persistence scope unchanged; complete Top20 still blocked"
+  ],
+  "oldReceiptsPreserved": true
+}

@@ -16,3 +16,8 @@
 ## Later input review attribution (documentation only)
 
 Root reports unsigned scoped data passes through AUO head 1b25393ad4b3790e6ca427bb3f6ab93fc622abd1, including d267 financials, ace912 historical/technology/ownership and 1b253 guidance. Preserve four-segment reconciliation (Other omitted on three-pillar slide), publication date precision and current-observation restrictions. Native tested subject remains 322bdcebbbf8acb26141a89684b307ad9aee0cd7; original evidence is immutable, no redundant tests/build run for this docs-only update. Next work is reproducible AUO/EMC models and focused articles; data review is not thesis/strategy/publication approval.
+
+## Native log review repair
+- [x] Synthetic split-credential repro preserves old failure; full joined logs redacted before persistence.
+- [x] All arbitrary two-chunk split points and one-character chunks; final native12/12 zero skip, type/lint/normal build.
+- [ ] Independent exact successor review; no prior native approval inferred.
