@@ -129,3 +129,27 @@ VPS→Cloud→review→authenticated business-result acceptance.
 October8 readonly capacity:15,240,617,984 available bytes; root filesystem
 76,887,154,688bytes. Still below the20.40GB heavy-work floor. No cleanup,
 production data mutation or expansion was performed by this increment.
+
+## October 8 latest scoped reconciliation (older combined checkboxes retained)
+
+The October5/8 unchecked items combine local code with live model/review/publication work.
+They remain open as end-to-end milestones; they no longer mean all constituent code is absent.
+
+- [x] Rights-aware PIT author-input preparation/consumer code completed and reviewed at
+     9610514ce52bcbac29e77b9c0ae80828e2da69d4; Cloud synthetic87/87 zero skip.
+     Authenticated route preparation is distinct from actual author dispatch.
+- [x] PR304 durable private draft/inspect/typed-handoff proposal code completed at
+     1243ee1313ac1d6ff3995ff5920cc2c3fad269e8; focused114/integration346 zero skip,
+     types/lint/build and unsigned scoped independent Astra review. Actual live handoff remains open.
+- [x] PR305 financial evidence+VM computations and PR306 raw market relay/formula checks
+     completed with their respective unsigned exact reviews, not article or strategy approval.
+- [x] Write a real-data AUO manual working draft using the existing seven sections and
+     unchanged8-quarter/24-month/268-bar inputs; retain incomplete forecast/citation/lease gaps.
+- [ ] Complete genuine live author dispatch, independent budgeted article review and fenced submission.
+- [ ] Complete AUO full valuation/forecasts/qualification, second-company article and strategy validation.
+- [ ] Protected release evidence, merge/deployment, production business roundtrip and five actual trading days.
+
+See docs/operations/2026-10-08/auo-working-draft-handoff.md for current exact scope and the
+source-thread-reported f020a253 protected-ref failure. The above VPS measurements are historical
+VPS-only heavy-work constraints; they do not block bounded development/research on the VM.
+No schedule, policy, source dataset or original receipt was changed by this reconciliation.
