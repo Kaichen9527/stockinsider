@@ -19,10 +19,10 @@ test('cross-role budget, revision heads and first-discovery gaps survive real Po
     const clock = createIsolatedPgClock();
     const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'stockinsider-source-budget-'));
     const cluster = path.join(temporary, 'cluster'); const port = 54000 + process.pid % 10000;
-    const run = (binary, args) => boundedPgCommand(path.join(binaries, binary), args, {
-      env: binary === 'pg_ctl' ? clock.childEnv : process.env, timeout: binary === 'psql' ? 5000 : 30_000,
+    const run = (binary, args, limits = {}) => boundedPgCommand(path.join(binaries, binary), args, {
+      env: binary === 'pg_ctl' ? clock.childEnv : process.env, timeout: binary === 'psql' ? (limits.timeout ?? 5000) : 30_000,
     });
-    const sql = (query) => run('psql', ['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',temporary,'-p',String(port),'-d','postgres','-c',query]);
+    const sql = (query, limits) => run('psql', ['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',temporary,'-p',String(port),'-d','postgres','-c',query], limits);
     try {
       run('initdb',['-D',cluster,'-A','trust','--no-instructions']);
       run('pg_ctl',['-D',cluster,'-l',path.join(temporary,'postgres.log'),'-o',`-h '' -k ${temporary} -p ${port}`,'-w','start']);

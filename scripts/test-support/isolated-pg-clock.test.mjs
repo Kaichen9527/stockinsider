@@ -18,7 +18,7 @@ test('Taipei date uses host instant, and one advancing offset is reused', () => 
   const before = { ...environment }; const clock = make();
   assert.equal(clock.targetAt, '2026-10-09T04:00:00.000Z');
   assert.equal(clock.offsetSeconds, 14520);
-  assert.equal(clock.childEnv.FAKETIME, '+14520s');
+  assert.equal(clock.childEnv.FAKETIME, '+14520');
   assert.equal(clock.childEnv.FAKETIME_DONT_FAKE_MONOTONIC, '1');
   assert.equal(clock.childEnv.NO_FAKE_STAT, '1');
   assert.equal(clock.childEnv.LD_PRELOAD, library);
@@ -66,6 +66,16 @@ test('canary uses one parent monotonic deadline', () => {
   assert.throws(() => verifyIsolatedPgClock(() => '1', make(), {
     now: () => 0, monotonic: () => tick++ * 16000,
   }), /clock_deadline/u);
+});
+test('expected SQL timeout cannot bypass final shared deadline; child budget is clamped', () => {
+  let elapsed = 0; const limits = []; const base = Date.parse('2026-10-08T23:58:00Z');
+  assert.throws(() => verifyIsolatedPgClock((query, options) => {
+    limits.push(options?.timeout); elapsed += 4000;
+    if (query.includes('statement_timeout')) throw new Error('canceling statement due to statement timeout');
+    if (query.includes('pg_sleep')) return '';
+    return String((base + make().offsetSeconds * 1000 + elapsed) / 1000);
+  }, make(), { now: () => base + elapsed, monotonic: () => elapsed }), /clock_deadline/u);
+  assert.deepEqual(limits, [5000, 5000, 5000, 3000]);
 });
 test('unpreloaded parent bounds hung commands and output', () => {
   const start = performance.now();

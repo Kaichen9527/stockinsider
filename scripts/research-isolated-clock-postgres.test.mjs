@@ -25,10 +25,10 @@ for (const [window, time] of [['open', '12:00:00'], ['closed', '23:43:00']]) {
     const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'si-clock-pg-'));
     const cluster = path.join(temporary, 'cluster');
     const port = 54000 + process.pid % 10000;
-    const run = (binary, args) => boundedPgCommand(path.join(bin, binary), args, {
-      env: binary === 'pg_ctl' ? clock.childEnv : process.env, timeout: binary === 'psql' ? 5000 : 30_000 });
-    const sql = query => run('psql', ['-X', '-A', '-t', '-v', 'ON_ERROR_STOP=1',
-      '-h', temporary, '-p', String(port), '-d', 'postgres', '-c', query]);
+    const run = (binary, args, limits = {}) => boundedPgCommand(path.join(bin, binary), args, {
+      env: binary === 'pg_ctl' ? clock.childEnv : process.env, timeout: binary === 'psql' ? (limits.timeout ?? 5000) : 30_000 });
+    const sql = (query, limits) => run('psql', ['-X', '-A', '-t', '-v', 'ON_ERROR_STOP=1',
+      '-h', temporary, '-p', String(port), '-d', 'postgres', '-c', query], limits);
     const start = () => run('pg_ctl', ['-D', cluster, '-l', path.join(temporary, 'postgres.log'),
       '-o', `-h '' -k ${temporary} -p ${port}`, '-w', 'start']);
     const stop = () => run('pg_ctl', ['-D', cluster, '-m', 'immediate', '-w', 'stop']);

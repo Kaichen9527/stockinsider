@@ -34,7 +34,7 @@ export function createIsolatedPgClock({ env = process.env, platform = process.pl
   const target = Date.parse(`${day}T${taipeiTime}+08:00`);
   const offsetSeconds = Math.round((target - instant) / 1000);
   const childEnv = Object.freeze({ ...env, LD_PRELOAD: library,
-    FAKETIME: `${offsetSeconds < 0 ? '' : '+'}${offsetSeconds}s`,
+    FAKETIME: `${offsetSeconds < 0 ? '' : '+'}${offsetSeconds}`,
     FAKETIME_DONT_FAKE_MONOTONIC: '1', NO_FAKE_STAT: '1', LC_ALL: 'C' });
   return Object.freeze({ mode: 'controlled_clock', childEnv, offsetSeconds,
     targetAt: new Date(target).toISOString(), libraryHash: createHash('sha256').update(bytes).digest('hex') });
@@ -53,10 +53,10 @@ export function verifyIsolatedPgClock(sql, clock, { now = Date.now,
   const deadline = monotonic() + 15_000;
   let calls = 0;
   const query = text => {
-    if (++calls > 6 || monotonic() >= deadline) throw new Error('pg_clock_deadline');
-    const result = sql(text);
-    if (monotonic() >= deadline) throw new Error('pg_clock_deadline');
-    return result;
+    const remaining = deadline - monotonic();
+    if (++calls > 6 || !Number.isFinite(remaining) || remaining < 1) throw new Error('pg_clock_deadline');
+    try { return sql(text, { timeout: Math.min(5000, Math.floor(remaining)) }); }
+    finally { if (monotonic() >= deadline) throw new Error('pg_clock_deadline'); }
   };
   const read = () => {
     const value = Number(query('SELECT extract(epoch FROM clock_timestamp())')) * 1000;
