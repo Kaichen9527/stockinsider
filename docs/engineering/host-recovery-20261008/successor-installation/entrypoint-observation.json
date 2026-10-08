@@ -1,0 +1,77 @@
+{
+  "schema": "stockinsider-successor-entrypoint-observation-v1",
+  "observedAt": "2026-10-08T12:36:46.799799+00:00",
+  "classification": "unsigned_authenticated_API_and_immutable_source_observation_not_authority",
+  "protectedMain": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "subject": "1d92e04e26c393c6d9c32b549854281e3f29f115",
+  "queries": [
+    {
+      "source": "GitHub authenticated repository Actions workflows API",
+      "observedRecoveryEntryPoint": null,
+      "protectedWorkflowId": 324989200,
+      "protectedWorkflowPath": ".github/workflows/source-led-opportunity-external-gate.yml",
+      "event": "pull_request_target"
+    },
+    {
+      "source": "GitHub authenticated repository ruleset 20177392 API",
+      "enforcement": "active",
+      "bypassActors": [],
+      "currentUserCanBypass": "never"
+    },
+    {
+      "source": "GitHub authenticated repository Actions variables API, names/timestamps projection only",
+      "totalCount": 0
+    },
+    {
+      "source": "GitHub authenticated environments API",
+      "environments": [
+        {
+          "name": "Production",
+          "protectionRules": []
+        }
+      ]
+    },
+    {
+      "source": "GitHub authenticated PR295/PR311 comments API",
+      "counts": {
+        "295": 0,
+        "311": 0
+      }
+    },
+    {
+      "source": "public refs matching recovery/successor/owner-grant/signer/registry",
+      "observedSignedGrantOrAuthorityRegistryRef": false
+    }
+  ],
+  "existingRegistry": {
+    "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/external-gate-release-registry-v1.json",
+    "kind": "protected bootstrap source hash registry",
+    "recoveryOwnerOrReviewerKeys": false
+  },
+  "otherScopedInstaller": {
+    "path": "scripts/runtime/reviewed-runtime-installer-cli.js",
+    "authenticatedMutation": "tracked_runtime_activation",
+    "reference": "keychain:stockinsider-runtime:activation-authority-hmac",
+    "scope": "auth-source runtime, not protected host-recovery worker/registry/base installation",
+    "credentialPresenceQueried": false,
+    "credentialValueRead": false
+  },
+  "actualProtectedFailure": {
+    "runId": 37775736497,
+    "subject": "1d92e04e26c393c6d9c32b549854281e3f29f115",
+    "bootstrap": "success",
+    "requirements": "failure",
+    "architecture": "failure",
+    "exactReview": "failure",
+    "root": "failure",
+    "codeGates": "skipped",
+    "failedStep": "Retrieve bootstrap and prepare detached subject",
+    "requirementsLog": [
+      "2026-10-08T12:17:09.6135172Z protected external gate worker failed: requirements active graph evidence source"
+    ]
+  },
+  "externalAuthorityEstablished": false,
+  "activationAllowed": false,
+  "protectedGatePassed": false,
+  "limits": "No global claim that undocumented off-host authority is absent. No credentials/signatures/keys read or generated. No workflow dispatched or protected state changed."
+}
