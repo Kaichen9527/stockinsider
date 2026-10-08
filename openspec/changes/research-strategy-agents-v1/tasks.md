@@ -153,3 +153,23 @@ See docs/operations/2026-10-08/auo-working-draft-handoff.md for current exact sc
 source-thread-reported f020a253 protected-ref failure. The above VPS measurements are historical
 VPS-only heavy-work constraints; they do not block bounded development/research on the VM.
 No schedule, policy, source dataset or original receipt was changed by this reconciliation.
+
+
+## October 8 AUO working-draft exact review archive
+
+Recorded at 2026-10-08T16:41:41+08:00; attributed result relayed by the authorized source thread.
+
+- [x] Astra independently reviewed exact `f6bd2958d348977593c1a4065b93fabd6f464b31` and gave
+  unsigned working-draft-only approval, with no new blocking findings. Both earlier
+  actionable editorial/receipt issues are closed. Scope: 11 file hashes, 73 table
+  lines, 24 reference definitions, seven original-input hashes and article/receipt
+  chronology. This is scoped difference review, not another maker test execution.
+- [x] Preserve prior pending/checkpoint history and freeze the reviewed article,
+  metadata, hash manifest and receipts; archive only in this ledger and handoff.
+- [ ] Full financial forecasts/research qualification, genuine budgeted live review
+  and fenced submission, publication/strategy approval and production roundtrip
+  remain open. Unsigned working-draft approval does not complete these milestones.
+
+No App build or new source/data/code work was performed for this documentation archive.
+The review subject is exact f6, not the later docs head. No protected attestation or
+protected evidence ref was minted; PR307 remains unmerged and undeployed.

@@ -71,3 +71,24 @@ new article run. The first delta-check tool used the wrong ancestor for a later-
 and stopped; the corrected comparison uses committed16562c1, with this failure retained.
 This manual editing continuation exceeded the original30-minute engineering window; it is
 not automatic model budget acceptance. No full forecast, article approval or live handoff.
+
+
+## Archived unsigned working-draft difference review
+
+Recorded at 2026-10-08T16:41:41+08:00. The authorized source thread relayed Astra's independent exact
+review of `f6bd2958d348977593c1a4065b93fabd6f464b31`: **unsigned working-draft-only approval**,
+with no new blocking findings; both previously actionable issues are closed.
+The reviewer independently checked 11 file hashes, 73 unchanged table lines,
+24 reference definitions, seven original-input hashes, and article/receipt chronology.
+This paragraph records the attributed review result; it is not a new maker test run.
+
+Earlier pending statements above remain as checkpoint history. This scoped result
+supersedes the difference-review pending status for the exact f6 subject only; it
+is not review of this later documentation-only commit. The reviewed article,
+metadata, hash manifest and receipts are unchanged by this archive.
+
+The approval is unsigned and limited to the working draft. It is not protected
+attestation, publication or strategy approval, full forecast/research qualification,
+live handoff or production roundtrip acceptance. No protected evidence ref, App
+build, source/data/code change, merge, deployment or schedule is part of this update.
+PR307 remains the existing delivery; the source thread updates its description.
