@@ -42,6 +42,10 @@ The successor code and check/resource results are recorded in .agent/reports/202
 
 ## External evidence status reported by source thread
 
+Latest observed PR head **b219ccc442a2db7a8568c34f6fcc7277727c1618** (root directly inspected; relayed to this VM): ordinary product-runtime and protected bootstrap succeeded. In protected run **37740607082**, requirements/architecture/exact-review failed at prepare because refs/heads/evidence/source-led-opportunity-v3-exact-review-b219ccc442a2db7a8568c34f6fcc7277727c1618 was missing (remote ref not found); protected product/model code gates were skipped. The unsigned scoped code approval of1243ee1 remains separate and does not satisfy this missing version-specific protected evidence. No evidence ref or gate was changed. These are results for b219ccc, not conclusions about this later metadata-only commit or the independent AUO data branch.
+
+Historical head status, retained for traceability:
+
 For old PR head 50d28efcaf179fa197bec2ce5c1a2e37dd6467f7, protected run 37739252502/bootstrap succeeded, while requirements/architecture/exact-review failed in prepare because refs/heads/evidence/source-led-opportunity-v3-exact-review-50d28efcaf179fa197bec2ce5c1a2e37dd6467f7 did not exist (remote ref not found). Product/model protected code gates had not run. This is source-thread-reported missing version-specific external review evidence, not a VM test or VPS capacity failure. No evidence ref or gate policy was fabricated/modified. It is not a conclusion about the successor head.
 
 The source thread also reported a hosted-reader retry of 2Q26_Finance_Statement_English.pdf yielding four-page PDF metadata, but unusable text (dashes) and no observable screenshot pixels. This is appended in deep-private-draft-relay-followups.json; the original HTTP500 entry is preserved. It verifies no financial table or new number and is not a VM fetch. Actual VM PDF acquisition/rendering and nonoperating/tax/noncontrolling bridge verification remain next-stage research, alongside eight quarters and 24 months.

@@ -14,7 +14,7 @@
   "originalCheckoutClean": true,
   "deployment": false,
   "productionRoundtripVerified": false,
-  "updatedAt": "2026-10-08T06:51:54.962030+00:00",
+  "updatedAt": "2026-10-08T07:16:19.299072+00:00",
   "initialCloudDraftPrError": "gh pr create: POST https://api.github.com/graphql: Forbidden",
   "draftPrUrl": "https://github.com/Kaichen9527/stockinsider/pull/304",
   "draftPrCreatedBy": "source thread using existing local GitHub authorization; reported by delegation",
@@ -56,16 +56,35 @@
     "originalLog": "see immutable integrity validation receipt"
   },
   "externalProtectedGateStatus": {
-    "reportedBy": "source thread delegation",
-    "head": "50d28efcaf179fa197bec2ce5c1a2e37dd6467f7",
-    "runId": "37739252502",
+    "reportedBy": "source thread delegation; root directly inspected GitHub",
+    "head": "b219ccc442a2db7a8568c34f6fcc7277727c1618",
+    "runId": "37740607082",
+    "ordinaryProductRuntime": "success",
     "bootstrap": "success",
     "requirementsArchitectureExactReview": "prepare failed: remote ref not found",
-    "missingRef": "refs/heads/evidence/source-led-opportunity-v3-exact-review-50d28efcaf179fa197bec2ce5c1a2e37dd6467f7",
+    "missingRef": "refs/heads/evidence/source-led-opportunity-v3-exact-review-b219ccc442a2db7a8568c34f6fcc7277727c1618",
     "productModelProtectedCodeGatesRan": false,
-    "appliesToSuccessorHead": false,
+    "productModelProtectedCodeGatesStatus": "skipped",
+    "unsignedScopedReviewIsProtectedAttestation": false,
+    "appliesToLaterMetadataCommit": false,
     "evidenceFabricated": false,
     "gatePolicyModified": false
   },
-  "unsignedReviewPath": "docs/operations/2026-10-08/deep-private-draft-unsigned-review.json"
+  "unsignedReviewPath": "docs/operations/2026-10-08/deep-private-draft-unsigned-review.json",
+  "externalProtectedGateHistory": [
+    {
+      "reportedBy": "source thread delegation",
+      "head": "50d28efcaf179fa197bec2ce5c1a2e37dd6467f7",
+      "runId": "37739252502",
+      "bootstrap": "success",
+      "requirementsArchitectureExactReview": "prepare failed: remote ref not found",
+      "missingRef": "refs/heads/evidence/source-led-opportunity-v3-exact-review-50d28efcaf179fa197bec2ce5c1a2e37dd6467f7",
+      "productModelProtectedCodeGatesRan": false,
+      "appliesToSuccessorHead": false,
+      "evidenceFabricated": false,
+      "gatePolicyModified": false
+    }
+  ],
+  "latestObservedPrHead": "b219ccc442a2db7a8568c34f6fcc7277727c1618",
+  "currentMetadataUpdateGateStatus": "not checked; previous observed-head status is version-specific"
 }
