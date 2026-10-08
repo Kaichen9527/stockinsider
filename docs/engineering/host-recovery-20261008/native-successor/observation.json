@@ -1,0 +1,219 @@
+{
+  "schema": "stockinsider-native-successor-host-observation-v1",
+  "observedAt": "2026-10-08T12:01:39.675192+00:00",
+  "status": "unsigned_candidate_host_evidence_not_activation",
+  "historicalSubject": "e94d21f9fe05dc436211a2458ea59adb52195e26",
+  "protectedPredecessor": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "fixture": {
+    "approvalAuthority": "user-authorized-v3.24-host-recovery-preparation",
+    "architecture": "arm64",
+    "checkpoint": "model_runner_v3",
+    "codexBundle": {
+      "bundleIdentifier": "com.openai.codex",
+      "cdHashFullSha256": "ca6e81c6ab0f3c8642c6917daf8fcbf687fd6bcb3818b09391e07a742141663b",
+      "designatedRequirement": "identifier \"com.openai.codex\" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"2DC432GLL2\"",
+      "path": "/Applications/ChatGPT.app",
+      "spctlSource": "Notarized Developer ID",
+      "stat": {
+        "device": "16777232",
+        "gid": 80,
+        "inode": "204773978",
+        "mode": "040755",
+        "size": "96",
+        "uid": 501
+      },
+      "teamIdentifier": "2DC432GLL2"
+    },
+    "executables": [
+      {
+        "name": "codex",
+        "path": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "realpath": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "sha256": "cb4e4994627e770800a940b42969c77855a3fc09a6e60b02aa6319f670d6b6ab",
+        "signing": {
+          "cdHashFullSha256": "b466a2b6d25d4ea321c8cd253bd3436b1142b1b1298ce4648b4da7fb71d297cd",
+          "designatedRequirement": "identifier codex and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"2DC432GLL2\"",
+          "identifier": "codex",
+          "teamIdentifier": "2DC432GLL2"
+        },
+        "stat": {
+          "device": "16777232",
+          "gid": 20,
+          "inode": "204774021",
+          "mode": "100755",
+          "size": "245160576",
+          "uid": 501
+        },
+        "version": "codex-cli 0.162.0-alpha.2"
+      },
+      {
+        "name": "git",
+        "path": "/usr/bin/git",
+        "realpath": "/usr/bin/git",
+        "sha256": "b8763cf250e607a778bb4603cecb5b90338814d0a3dfcba0d57b1de242f610e9",
+        "stat": {
+          "device": "16777232",
+          "gid": 0,
+          "inode": "1152921500312571562",
+          "mode": "100755",
+          "size": "118640",
+          "uid": 0
+        },
+        "version": "git version 2.50.1 (Apple Git-155)"
+      },
+      {
+        "name": "node",
+        "path": "/usr/local/bin/node",
+        "realpath": "/usr/local/bin/node",
+        "sha256": "c583851fc85e4618b2374cda13399d59d373ad7cebfc4b55160820b88dcce67b",
+        "stat": {
+          "device": "16777232",
+          "gid": 0,
+          "inode": "1802834",
+          "mode": "100755",
+          "size": "220243216",
+          "uid": 0
+        },
+        "version": "v22.14.0"
+      }
+    ],
+    "fixtureVersion": "model-runner-host-pins-v3.24",
+    "platform": "darwin"
+  },
+  "fixtureBytes": 2210,
+  "fixturePreLfSha256": "fc76b082ae4fbe9284f888d94ac459547cfb50bfa180ad864e27952fecfd5022",
+  "fixtureFileSha256": "a5d85c7d30fad640459615f164a58a4eef5d37ce4e57ae9d7e942b22dacc99d9",
+  "runnerIdentity": [
+    [
+      "approvalPolicy",
+      "never"
+    ],
+    [
+      "codexVersion",
+      "0.162.0-alpha.2"
+    ],
+    [
+      "contractVersion",
+      "model-runner-v3.9"
+    ],
+    [
+      "gitVersion",
+      "2.50.1 (Apple Git-155)"
+    ],
+    [
+      "hardIsolationClaims",
+      [
+        "external_user_read",
+        "authoritative_write",
+        "command_network"
+      ]
+    ],
+    [
+      "hostPinFixtureSha256",
+      "fc76b082ae4fbe9284f888d94ac459547cfb50bfa180ad864e27952fecfd5022"
+    ],
+    [
+      "hostPinVersion",
+      "model-runner-host-pins-v3.24"
+    ],
+    [
+      "journalVersion",
+      "model-runner-journal-v3.5"
+    ],
+    [
+      "manifestVersion",
+      "loop-model-manifest-v3.7"
+    ],
+    [
+      "nodeVersion",
+      "v22.14.0"
+    ],
+    [
+      "permissionProfileVersion",
+      "model-runner-permissions-v3.6"
+    ],
+    [
+      "promptPolicyVersion",
+      "model-runner-prompt-v3.5"
+    ],
+    [
+      "requestProtocol",
+      "loop-model-v3.5"
+    ],
+    [
+      "resultProtocol",
+      "loop-model-result-v3.5"
+    ],
+    [
+      "routingVersion",
+      "model-runner-routing-v3.7"
+    ],
+    [
+      "sourceViewVersion",
+      "model-runner-source-view-v3.5"
+    ],
+    [
+      "stateNamespace",
+      "model-runner-v3-sol61-astra-v2"
+    ],
+    [
+      "trustedApplyVersion",
+      "model-runner-trusted-apply-v3.5"
+    ]
+  ],
+  "runnerIdentityBytes": 898,
+  "runnerIdentitySha256": "fdc18db72738748139bc457503b7541c5ba0daee306b1fda1525e038493d6a03",
+  "checks": [
+    {
+      "command": [
+        "codesign",
+        "--verify",
+        "--strict",
+        "--verbose=2",
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+      ],
+      "exitCode": 0,
+      "result": "valid on disk; satisfies designated requirement"
+    },
+    {
+      "command": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=2",
+        "/Applications/ChatGPT.app"
+      ],
+      "exitCode": 0,
+      "result": "valid on disk; satisfies designated requirement"
+    },
+    {
+      "command": [
+        "spctl",
+        "--assess",
+        "--type",
+        "execute",
+        "--verbose=4",
+        "/Applications/ChatGPT.app"
+      ],
+      "exitCode": 0,
+      "result": "accepted; source=Notarized Developer ID"
+    },
+    {
+      "command": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "--version"
+      ],
+      "environment": "PATH/LANG/LC_ALL only; no credential-bearing HOME/CODEX_HOME",
+      "exitCode": 0,
+      "stdout": "codex-cli 0.162.0-alpha.2",
+      "stderr": ""
+    }
+  ],
+  "actualHostPreflight": true,
+  "modelInvoked": false,
+  "liveOraclesExecuted": false,
+  "protectedGatePassed": false,
+  "activationAllowed": false,
+  "ownerRecoveryGrant": null
+}
