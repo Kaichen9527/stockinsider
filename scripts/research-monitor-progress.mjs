@@ -117,6 +117,7 @@ export async function readMonitorPredecessor({ outputPath, journalPath, sourceCo
         || Date.parse(line.observedAt) > Date.parse(now)) fail();
       lastClock = Date.parse(line.observedAt);
     }
+    const responseClocks = new Map();
     for (const result of receipt.outcomes) {
       const request = lines[index++]; const response = lines[index++];
       if (!keys(request, ['phase', 'operation', 'symbol', 'worklistHash', 'observedAt'])
@@ -125,6 +126,7 @@ export async function readMonitorPredecessor({ outputPath, journalPath, sourceCo
         || !keys(response, ['phase', 'result', 'worklistHash', 'observedAt'])
         || response.phase !== 'response_verified' || response.worklistHash !== receipt.worklistHash
         || researchCanonicalHash(response.result) !== researchCanonicalHash(result)) fail();
+      responseClocks.set(result.symbol, response.observedAt);
     }
     // A timer may expire after request_pending was durably saved but before send.
     if (lines[index]?.phase === 'request_pending') {
@@ -146,9 +148,12 @@ export async function readMonitorPredecessor({ outputPath, journalPath, sourceCo
     for (const result of receipt.outcomes) {
       const member = members.get(result.symbol); const row = progress.get(result.symbol);
       if (!member || !row || outcomes.has(result.symbol)
+        || row[5] !== responseClocks.get(result.symbol)
         || researchCanonicalHash(disposition(member, result, row[5])) !== researchCanonicalHash(row)) fail();
       outcomes.add(result.symbol);
     }
+    // A first batch has no ancestor from which any disposition could be carried.
+    if (receipt.predecessorReceiptHash === null && receipt.progress.length !== outcomes.size) fail();
     for (const row of receipt.progress) {
       const member = members.get(row[0]);
       if (!member || member.existingPaperPosition !== row[1] || member.newEntryQualified !== row[2]

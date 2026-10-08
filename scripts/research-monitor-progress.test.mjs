@@ -125,6 +125,25 @@ test('changed book heads reject after fresh read and before snapshot writes', ()
   assert.match(await fs.readFile(f.file('two.jsonl'), 'utf8'), /not_sent_or_destination_failed/);
 }));
 
+for (const kind of ['unearned_first_progress', 'changed_response_observation']) {
+  test(`closed trace rejects ${kind} despite recomputed local integrity hashes`, () => fixture(async f => {
+    f.setList(list(1, 0));
+    await monitorControllerCommand(f.args('one'), f.dependencies);
+    const receipt = JSON.parse(await fs.readFile(f.file('one.json'), 'utf8'));
+    const lines = (await fs.readFile(f.file('one.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse);
+    if (kind === 'unearned_first_progress') {
+      receipt.outcomes = []; lines.splice(2, 2);
+    } else receipt.progress[0][5] = '2026-10-08T09:59:59.000Z';
+    const { receiptHash: _old, ...material } = receipt; receipt.receiptHash = researchCanonicalHash(material);
+    lines.at(-2).receiptHash = receipt.receiptHash; lines.at(-1).receiptHash = receipt.receiptHash;
+    await fs.writeFile(f.file('one.json'), JSON.stringify(receipt, null, 2) + '\n');
+    await fs.writeFile(f.file('one.jsonl'), lines.map(line => JSON.stringify(line)).join('\n') + '\n');
+    f.calls.length = 0;
+    await assert.rejects(monitorControllerCommand(f.args('two', 'one'), f.dependencies), /previous_progress_invalid/);
+    assert.equal(f.calls.length, 0);
+  }));
+}
+
 for (const kind of ['symlink', 'fifo', 'permissions', 'oversize']) {
   test(`private predecessor ${kind} rejects without blocking or transport`, () => fixture(async f => {
     await monitorControllerCommand(f.args('one'), f.dependencies);
@@ -195,6 +214,19 @@ test('clock crosses midnight after response: saved outcomes remain in journal bu
   f.calls.length = 0;
   await assert.rejects(monitorControllerCommand(f.args('two', 'one'), f.dependencies), /previous_progress_invalid/);
   assert.equal(f.calls.length, 0);
+}));
+
+test('continuation worklist request crossing midnight cannot carry yesterday dispositions', () => fixture(async f => {
+  const yesterday = '2026-10-08T15:59:59.000Z'; const today = '2026-10-08T16:00:00.000Z';
+  f.setNow(yesterday); f.setList(list(1, 0, yesterday));
+  await monitorControllerCommand(f.args('one'), f.dependencies);
+  const original = await fs.readFile(f.file('one.json'), 'utf8'); let calls = 0;
+  await assert.rejects(monitorControllerCommand(f.args('two', 'one'), { ...f.dependencies, post: async url => {
+    calls++; assert.ok(url.endsWith('worklist')); f.setNow(today);
+    return { rejected: false, body: list(1, 0, today) };
+  } }), /output_unavailable/);
+  assert.equal(calls, 1); assert.equal((await fs.stat(f.file('two.json'))).size, 0);
+  assert.equal(await fs.readFile(f.file('one.json'), 'utf8'), original);
 }));
 
 test('largest unique four-digit cohort plus monthly reviews and progress fits both file bounds', () => {

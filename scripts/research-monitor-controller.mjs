@@ -183,6 +183,7 @@ export async function monitorControllerCommand(args, dependencies = {}) {
     const worklist = validateMonitorWorklist(loaded.body, now());
     if (monitorCycleDate(worklist.asOf) !== monitorCycleDate(now())
       || previous && (researchCanonicalHash(previous.worklist.bookHeads) !== researchCanonicalHash(worklist.bookHeads)
+        || monitorCycleDate(worklist.asOf) !== previous.receipt.cycleDate
         || Date.parse(worklist.asOf) < Date.parse(previous.receipt.worklistAsOf))) {
       pending = null;
       throw new Error('monitor_controller_cycle_boundary_changed');

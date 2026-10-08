@@ -63,3 +63,15 @@ All41 focused cases pass with zero failures/skips. The original40-case maker
 receipt remains intact; a separate14-28 repair receipt records this red→green
 result and updated source hashes. Independent final code approval, VM integration
 and normal build are still required.
+
+The same independent review also reproduced a second P2: the continuation's
+worklist request could cross Taipei midnight after predecessor validation, carry
+yesterday's dispositions and emit a new-day success. Fresh worklist date must now
+equal the predecessor cycle date before any snapshot request. First-batch
+progress must exactly derive from that batch's responses; each new disposition
+time is bound to its own response_verified log, rather than to itself.
+
+Three additional acceptance cases fail against10123e0; the complete successor
+suite passes44/44 without skips. A14-33 boundary receipt retains these failures
+and new source hashes. This supplements the initial40 and clock-repair41 receipts,
+without rewriting their historical outcomes. Final exact-source review is pending.
