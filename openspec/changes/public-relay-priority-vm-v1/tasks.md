@@ -22,3 +22,8 @@
 - [x] Separately authorized native Next/Supabase/PostgREST/PG profile, real RPCs, guarded inbox, restart/dedup, eleven cases zero skips and types/lint/normal build.
 - [ ] Independent exact review of new native harness; complete legitimate authority and required ancillary profile before ranking/Top20.
 - See `native-local-inbox-dataplane-v1/tasks.md` and `docs/operations/2026-10-08/native-local-inbox-dataplane-handoff.md`; no production/strategy attestation implied.
+
+
+## 2026-10-08 current source-cohort checkpoint
+
+1978 current observations now consumed by the existing bounded relay/controller and native guarded inbox harness; 40 source +12 native maker tests zero skip, types/lint/normal build pass. Three industry records persisted and replay accepted zero; authority remains empty, priority409 research_priority_read_failed and Top20 null. See source-cohort-consumer-handoff.md and observed-source-cohort-consumer-v1/tasks.md for remaining profile/intake/insider work. Root reports preview4aa unsigned scoped repair approval; earlier P2 pending history above is preserved. This is not publication, strategy, protected attestation or automatic role-budget acceptance. VM work continues independently of VPS heavy capacity.

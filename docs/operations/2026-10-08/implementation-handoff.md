@@ -72,3 +72,29 @@ using docs/research/2026-10-08-auo-market/auo-article-preparation.md for evidenc
 No source IDs, prepared-job bindings or financial forecasts may be fabricated to pass the article
 validator. Maker GPT-6.1 Sol High / independent GPT-6 Astra High review remains the amended split.
 Full AUO/second-company articles, valuation/strategy qualification and live handoff are unfinished.
+
+
+## Latest convergence checkpoint — 2026-10-08 12:55 UTC
+
+The historical “next bounded task” above is superseded by this checkpoint. Work continues in the existing Cloud task, not gated on VPS free space. Whole-project completion is still false.
+
+| Delivery | Exact current evidence | Boundary / next action |
+|---|---|---|
+| AUO company-specific model/article, PR310 | 13a038450d538c1e4463e05bdec8a16ab14b0522; four segments, annual/next-four-quarter forecasts, source-linked focused article; scoped independent data/calculation/article pass | Still demonstration research direction, not published thesis or strategy qualification; unconfirmed CPO/GCS commercialization excluded from basic EPS. |
+| EMC second-industry model/article, PR312 | d0ea88729c94d705577c65589e5e6fcfec862fbc; P3 reverse P/E sensitivity corrected to conditional2027 diluted360.112605m share assumption; 17 model tests and395 independent Decimal checks | Original article/scenario EPS unchanged; current financial facts and conditional forecasts distinguished. No price target or trade qualification. |
+| Shared read-only preview, PR313 | 12e29b7df7740306caf5eb75e400cdc3b168166e; VM11preview tests, types/lint/build; actual HTTP524table cells/27citations; AUO/EMC desktop/mobile navigation/toggle/no overflow/no page errors | Independent14tests/SSR/compiled-route checks pass, but reviewer reproduced FIFO blocking-open P2. VM repair requested; review is REJECT pending exact repair. No external preview URL, production publish or IAB desktop/mobile verification is claimed. |
+| Native successor, PR311 | 1d92e04e26c393c6d9c32b549854281e3f29f115; actual Mac host/native evidence and scoped unsigned code review; VM receipt132f24b99881e716d3b2c642ac3073ca10d9f1c8 | Linux52named tests pass/1file-level GOV-004 missing protected harness failure. Bootstrap success does not cure requirements active graph evidence source failure in actual run37775736497. No installation/activation/protected PASS. |
+| Exact native installation planner, PR314 | b1d96eb96156d3e1394615bb32c7a2d7ef90b661; independent10light tests/hash/plan recomputation pass | Validation-only inactive proposal;24real external deployment fields still missing. Five-file VM regression queued after source increment. No new trust, keys, reservation or permissions. |
+| Whole observed stock cohort |35f0c24ee9a70ed4f088394048e3b81cc717da55; actual complete CFI classification plus official company masters | Observed1978=1085TWSE+893TPEX; old1946 preserved as historical subset, adding31innovation-board+3673TPK-KY and excluding10TDR. Not PIT/tradability/authority. Actual controller/consumer integration still pending. |
+| Source corrections |7ddc986 Gooaye publisher IDs;8ce31dbd AppleEP8 description; e9811c76 official insider schema;8292ed76 scoped Facebook public-post observation | Data reviews are unsigned scoped. Apple description is not transcript/member report/current catalyst. Facebook is one public post, same publisher as Threads, zero independent confirmations. Platform enablement remains unproven. |
+
+Actual insider bugs identified against official responses: full-market .slice(0,500) omits AUO/EMC (first rows7555/7884); transfer holding/share keys mismatch the official schema; holdings report period incorrectly uses output date instead of data month. August holdings are not recent completed trades; transfer declaration is not execution. Repair consumer and coverage accounting, not just relay files. Official9MB/10MB raw dataset references need a finite separate reference contract without raising the general article HTTP body limit or falsifying byte counts.
+
+Next committed work sequence: repair preview FIFO and obtain exact independent re-review; continue observed1978 cohort plus legitimate Apple episode query and insider consumer integration; run queued native planner regressions; then complete real isolated candidate/author business handoff using the existing guarded interfaces. Do not fabricate production-authority IDs to make local ranking pass. Six-role recurring workers, complete candidate outcomes/Top20, sanctioned roster intake, full-profile native DB ranking, controlled article submission, company-action-aware technical monitoring, independent strategy validation/two-ledger operation, protected merges/deploy, recurring schedules and five actual trading days remain unfinished. Profitability remains unproven.
+
+GitHub draft PRs310/311/312/313/314 preserve separate source scopes. Ordinary CI and unsigned scoped review are explicitly separate from required protected evidence. No main merge, production migration/deployment, VPS deletion, schedule activation or real trading occurred in this checkpoint. The user's existing cross-chat/reviewed-release authorization continues; further VM work must not stop for VPS capacity.
+
+
+## 2026-10-08 current source-cohort checkpoint
+
+1978 current observations now consumed by the existing bounded relay/controller and native guarded inbox harness; 40 source +12 native maker tests zero skip, types/lint/normal build pass. Three industry records persisted and replay accepted zero; authority remains empty, priority409 research_priority_read_failed and Top20 null. See source-cohort-consumer-handoff.md and observed-source-cohort-consumer-v1/tasks.md for remaining profile/intake/insider work. Root reports preview4aa unsigned scoped repair approval; earlier P2 pending history above is preserved. This is not publication, strategy, protected attestation or automatic role-budget acceptance. VM work continues independently of VPS heavy capacity.

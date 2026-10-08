@@ -181,13 +181,18 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
     const origin=`http://127.0.0.1:${appPort}/`;await ready(origin+'api/internal/research-inbox',next);
     const directory=path.join(root,'docs/research/2026-10-08-discovery-live');
     const values=await Promise.all(['public-source-relay.json','social-surface-observations.json','observed-security-classification.json','timed-public-source-relay.json'].map(f=>input(path.join(directory,f))));
-    const prepared=prepareDiscoveryRelay(values[0],values[1],values[2],new Date().toISOString(),values[3]);
-    assert.equal(prepared.observationUniverse.length,1946);
+    const securityScope=await input(path.join(directory,'official-security-scope-reconciliation.json'));
+    const prepared=prepareDiscoveryRelay(values[0],values[1],values[2],new Date().toISOString(),values[3],securityScope);
+    assert.equal(prepared.observationUniverse.length,1978);
+    assert.equal(values[2].members.length,1946);
+    assert.equal(prepared.excludedNonCommon.length,10);
+    report.classificationEvidence=prepared.classificationEvidence;
+    report.excludedNonCommon=prepared.excludedNonCommon;
     assert.ok(prepared.observationUniverse.every(row=>row.pricePhase==='unknown'));
     await save(path.join(artifacts,'observed-classification-status.json'),{
       trustedCandidateUniverse:false,top20:null,top20Gap:prepared.top20Gap,rows:prepared.observationUniverse,
     });
-    report.observedClassificationAccounting={total:1946,needsEvidence:prepared.observationUniverse.filter(row=>row.scopeStatus==='needs_evidence').length,
+    report.observedClassificationAccounting={total:1978,legacySnapshotTotal:1946,excludedTdr:10,needsEvidence:prepared.observationUniverse.filter(row=>row.scopeStatus==='needs_evidence').length,
       notAssessed:prepared.observationUniverse.filter(row=>row.scopeStatus==='not_assessed').length,qualified:0,ranked:0};
     const run=await executeSourceController(prepared.controllerInput); assert.equal(run.inboxRequest.items.length,3);
     report.sourceAttempts=run.receipts.map(row=>({id:row.scopeId,outcome:row.outcome}));

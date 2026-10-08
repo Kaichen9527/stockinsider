@@ -310,3 +310,9 @@ test('SC20 all acquired scopes resolve before roots, so reversed repost order ca
     assert.equal(ranked.rows[0].independentRootCount,0);
   }
 });
+
+test('Apple numeric episode query granted only on exact public podcast-show path, never general query keys',()=>{
+ assert.equal(sourceControllerUrl('https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=1000755002590').searchParams.get('i'),'1000755002590');
+ for(const url of ['https://example.org/us/podcast/ep8/id1872298769?i=1','https://podcasts.apple.com/evil?i=1','https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=1&i=2','https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=x','https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=1&track=2','https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=1&authorization=synthetic'])assert.throws(()=>sourceControllerUrl(url));
+ assert.equal(publicSourceGrant({id:'publisher-description-reference',scope:'description only, not transcript',platform:'podcast',method:'public_read',url:'https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=1000755002590',contentScope:'metadata_index',rights:{basis:'creator_published_index',checkedAt:'2026-10-08T13:00:00Z',checkedBy:'bounded'}}),false);
+});
