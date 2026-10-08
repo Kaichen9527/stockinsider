@@ -52,14 +52,16 @@
       "url": "https://podcasts.apple.com/us/podcast/ep703/id1500839292?i=1000793618868",
       "status": "public_description_read_success",
       "scope": "EP703 publicly displayed description and information; no audio/transcript",
-      "publicationTimeSourceClaim": "2026-10-07T08:09:00Z",
       "publicationPrecision": "UI displays minute precision; seconds are not certified",
       "episodeNumber": 703,
       "displayedDurationMinutes": 51,
       "publisherEpisodeUrl": "https://player.soundon.fm/p/954689a5-3096-43a4-a80b-7810b219cef3/episodes/0b071f57-45ba-47d3-9f15-2129a0c645a8",
       "summary": "最新集公開說明主要是日常引言及贊助介紹，未讀取節目音訊或逐字稿。不能根據這段說明判定整集沒有投資標的，也不能將廣告中的股票比喻算成投資論點。",
       "companyMentionsAssessedInFullEpisode": null,
-      "contentAnalysisComplete": false
+      "contentAnalysisComplete": false,
+      "publicationTimeText": "October 7, 2026 at 8:09 AM UTC",
+      "publicationMinute": "2026-10-07T08:09Z",
+      "exactPublishedAt": null
     }
   ],
   "repositoryMismatch": {
