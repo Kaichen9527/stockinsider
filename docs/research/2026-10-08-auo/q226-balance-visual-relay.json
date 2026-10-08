@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "public-financial-visual-verification-relay-v1",
+  "recordedAt": "2026-10-08T07:02:59Z",
+  "observedAt": null,
+  "actualRenderTime": null,
+  "originalMessageApproximateObservedAt": "2026-10-08T07:02:30+00:00",
+  "originalApproximateTimeIsNotVerified": true,
+  "metadataCorrection": "Source thread corrected hand-entered approximate observedAt. recordedAt is supplied clock; exact render observation time was not measured.",
+  "observer": "root-Mac-public-reader",
+  "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Finance_Statement_English.pdf",
+  "sourceSha256": "21d6e1473dd460356eca80b7577ca65e24ddd488ab8979e9931b71f4dde082cb",
+  "pageZeroBased": 2,
+  "visualPageInspected": true,
+  "periodEnd": "2026-06-30",
+  "unit": "TWD_million",
+  "balance": {
+    "cash": 53792,
+    "inventory": 40787,
+    "totalAssets": 377676,
+    "totalLiabilities": 210774,
+    "commonStockCapital": 75471,
+    "capitalSurplus": 45949,
+    "retainedEarnings": 32089,
+    "otherEquity": 889,
+    "nonControllingInterests": 12505,
+    "totalEquity": 166902
+  },
+  "caveats": [
+    "Balance is consolidated, include NCI; P/B common-owner book numerator must exclude NCI",
+    "Period-end outstanding common shares net of treasury are not provided by this page; basic EPS weighted-average7547million is not interchangeable P/B denominator",
+    "Commonstockcapital amount cannot automatically be assumed totaloutstanding sharesnettreasury",
+    "Normalization/holding percentages/internaleliminations/capexprojectvisibility notprovenbythispage",
+    "Acquisitionrootexternalpublicreader, not VM transport success; preserve printed rounding"
+  ]
+}

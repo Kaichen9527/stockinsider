@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "auo-analysis-hash-manifest-v1",
+  "algorithm": "existing researchCanonicalHash; each canonicalMaterialHash excludes its own field. Not a wire hash, protected attestation or imported research receipt.",
+  "files": [
+    {
+      "name": "dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+      "canonicalMaterialHash": "e6f9788a24be8a293e9727b5c60a01d0dae4d0b68ffee0aa873b17d041afc665"
+    },
+    {
+      "name": "source-ledger.json",
+      "bytes": 16927,
+      "sha256": "c4735102f8dd759db61f1d57c1a6579243ec548e3300af3130cefe1ba542384d",
+      "canonicalMaterialHash": "4646f29346fe376d70bb96fd0c5bde122ab698b89498ffb255abfaa3352fe04a"
+    },
+    {
+      "name": "calculation-results.json",
+      "bytes": 44266,
+      "sha256": "81c87f4b098ce279a14a6833d35a880b4158a6bf8d777d870a5ea31ca918e1a6",
+      "canonicalMaterialHash": "bc6264678dfe14f4df4fa3a75e19860c9b8c211c6e3fba53338609cce1d0af51"
+    }
+  ]
+}
