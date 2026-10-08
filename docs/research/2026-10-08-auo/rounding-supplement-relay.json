@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "public-financial-rounding-supplement-relay-v1",
+  "recordedAt": "2026-10-08T06:58:55.087067+00:00",
+  "reportedBy": "source thread delegation",
+  "observedAt": null,
+  "sourceObservationReference": "2026-10-08 06:52:48 UTC",
+  "sourceUrl": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+  "vmHttpAcquisition": false,
+  "publicationTime": null,
+  "mutableUrl": true,
+  "reportedInputs": {
+    "h1MonthlySum": 139921,
+    "h1ReportedCumulative": 139923,
+    "q2MonthlySum": 70890,
+    "h1MinusQ1ReportedCumulative": 70892
+  },
+  "q1CumulativeImpliedByRelayArithmetic": 69031,
+  "q1CumulativeImpliedNotNewSourceRead": true,
+  "roundingRule": "Use intervals for each independently rounded original value; do not impose fixed1million tolerance on every aggregate. Preserve both figures and require official quarterly statement for exact quarterly actual.",
+  "completeResearch": false,
+  "productionImported": false
+}

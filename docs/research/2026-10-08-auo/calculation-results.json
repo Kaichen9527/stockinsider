@@ -1,0 +1,1325 @@
+{
+  "schemaVersion": "auo-relay-recomputation-results-v1",
+  "counts": {
+    "pass": 109,
+    "fail": 0,
+    "skip": 0
+  },
+  "cases": [
+    {
+      "name": "24 month uniqueness and continuous order",
+      "pass": true,
+      "detail": {
+        "first": "2024-10",
+        "last": "2026-09"
+      }
+    },
+    {
+      "name": "declared consolidated units and bounded values",
+      "pass": true,
+      "detail": "Checks relay structure only; no original source column verification by VM."
+    },
+    {
+      "name": "observation preserved and no invented PIT",
+      "pass": true,
+      "detail": "2026-10-08T06:52:48Z"
+    },
+    {
+      "name": "8 complete monthly-derived quarter groups",
+      "pass": true,
+      "detail": "These are8 monthly sums, not8 financial-statement bridges."
+    },
+    {
+      "name": "12 monthly YoY pairs and4 quarterly YoY pairs",
+      "pass": true,
+      "detail": "Unadjusted consolidated reported-amount ratios only."
+    },
+    {
+      "name": "YoY recomputation 2025-10",
+      "pass": true,
+      "detail": {
+        "percent": "0.206008",
+        "baseRevenue": 20873
+      }
+    },
+    {
+      "name": "YoY recomputation 2025-11",
+      "pass": true,
+      "detail": {
+        "percent": "3.349529",
+        "baseRevenue": 23257
+      }
+    },
+    {
+      "name": "YoY recomputation 2025-12",
+      "pass": true,
+      "detail": {
+        "percent": "2.556795",
+        "baseRevenue": 24562
+      }
+    },
+    {
+      "name": "YoY recomputation 2026-01",
+      "pass": true,
+      "detail": {
+        "percent": "3.982812",
+        "baseRevenue": 21643
+      }
+    },
+    {
+      "name": "YoY recomputation 2026-02",
+      "pass": true,
+      "detail": {
+        "percent": "-16.666667",
+        "baseRevenue": 24606
+      }
+    },
+    {
+      "name": "YoY recomputation 2026-03",
+      "pass": true,
+      "detail": {
+        "percent": "0.649828",
+        "baseRevenue": 25853
+      }
+    },
+    {
+      "name": "YoY recomputation 2026-04",
+      "pass": true,
+      "detail": {
+        "percent": "-4.486127",
+        "baseRevenue": 23138
+      }
+    },
+    {
+      "name": "YoY recomputation 2026-05",
+      "pass": true,
+      "detail": {
+        "percent": "-1.402159",
+        "baseRevenue": 24177
+      }
+    },
+    {
+      "name": "YoY recomputation 2026-06",
+      "pass": true,
+      "detail": {
+        "percent": "13.821732",
+        "baseRevenue": 21922
+      }
+    },
+    {
+      "name": "YoY recomputation 2026-07",
+      "pass": true,
+      "detail": {
+        "percent": "-2.643024",
+        "baseRevenue": 20923
+      }
+    },
+    {
+      "name": "YoY recomputation 2026-08",
+      "pass": true,
+      "detail": {
+        "percent": "-5.855984",
+        "baseRevenue": 24539
+      }
+    },
+    {
+      "name": "YoY recomputation 2026-09",
+      "pass": true,
+      "detail": {
+        "percent": "-4.258540",
+        "baseRevenue": 24445
+      }
+    },
+    {
+      "name": "independent rounding intervals 2026-Jan-Jun",
+      "pass": true,
+      "detail": {
+        "period": "2026-Jan-Jun",
+        "monthlySum": 139921,
+        "reportedCumulative": 139923,
+        "deltaMonthlyMinusCumulative": -2,
+        "reportedCumulativeProvenance": "root rounding supplement",
+        "monthlySumRoundingInterval": {
+          "lower": "139918",
+          "upper": "139924",
+          "lowerInclusive": true,
+          "upperInclusive": false,
+          "assumption": "each original amount independently rounded to nearest TWD_million; exact source precision not verified by VM"
+        },
+        "reportedCumulativeRoundingInterval": {
+          "lower": "139922.5",
+          "upper": "139923.5",
+          "lowerInclusive": true,
+          "upperInclusive": false,
+          "assumption": "each original amount independently rounded to nearest TWD_million; exact source precision not verified by VM"
+        },
+        "possibleAbsoluteDifferenceUnderIndependentRounding": "3.5",
+        "exactMatch": false,
+        "notProvenRoundingCause": true
+      }
+    },
+    {
+      "name": "independent rounding intervals 2026-Jan-Aug",
+      "pass": true,
+      "detail": {
+        "period": "2026-Jan-Aug",
+        "monthlySum": 183393,
+        "reportedCumulative": 183394,
+        "deltaMonthlyMinusCumulative": -1,
+        "reportedCumulativeProvenance": "earlier root AUO20260909 preparation relay",
+        "monthlySumRoundingInterval": {
+          "lower": "183389",
+          "upper": "183397",
+          "lowerInclusive": true,
+          "upperInclusive": false,
+          "assumption": "each original amount independently rounded to nearest TWD_million; exact source precision not verified by VM"
+        },
+        "reportedCumulativeRoundingInterval": {
+          "lower": "183393.5",
+          "upper": "183394.5",
+          "lowerInclusive": true,
+          "upperInclusive": false,
+          "assumption": "each original amount independently rounded to nearest TWD_million; exact source precision not verified by VM"
+        },
+        "possibleAbsoluteDifferenceUnderIndependentRounding": "4.5",
+        "exactMatch": false,
+        "notProvenRoundingCause": true
+      }
+    },
+    {
+      "name": "independent rounding intervals 2026-Jan-Sep",
+      "pass": true,
+      "detail": {
+        "period": "2026-Jan-Sep",
+        "monthlySum": 206797,
+        "reportedCumulative": 206798,
+        "deltaMonthlyMinusCumulative": -1,
+        "reportedCumulativeProvenance": "root current relay caveat",
+        "monthlySumRoundingInterval": {
+          "lower": "206792.5",
+          "upper": "206801.5",
+          "lowerInclusive": true,
+          "upperInclusive": false,
+          "assumption": "each original amount independently rounded to nearest TWD_million; exact source precision not verified by VM"
+        },
+        "reportedCumulativeRoundingInterval": {
+          "lower": "206797.5",
+          "upper": "206798.5",
+          "lowerInclusive": true,
+          "upperInclusive": false,
+          "assumption": "each original amount independently rounded to nearest TWD_million; exact source precision not verified by VM"
+        },
+        "possibleAbsoluteDifferenceUnderIndependentRounding": "5",
+        "exactMatch": false,
+        "notProvenRoundingCause": true
+      }
+    },
+    {
+      "name": "Q2 monthly and cumulative-difference rounding overlap",
+      "pass": true,
+      "detail": {
+        "period": "2026-Q2",
+        "monthlySum": 70890,
+        "reportedCumulativeDifference": 70892,
+        "q1CumulativeImpliedByRelayArithmetic": 69031,
+        "q1ValueIsNotANewSourceRead": true,
+        "monthlySumInterval": {
+          "lower": "70888.5",
+          "upper": "70891.5",
+          "lowerInclusive": true,
+          "upperInclusive": false,
+          "assumption": "each original amount independently rounded to nearest TWD_million; exact source precision not verified by VM"
+        },
+        "cumulativeDifferenceInterval": {
+          "lower": "70891.0",
+          "upper": "70893.0",
+          "lowerInclusive": false,
+          "upperInclusive": false
+        },
+        "overlap": {
+          "lower": "70891.0",
+          "upper": "70891.5"
+        },
+        "officialQuarterStatementRevenue": 70891,
+        "doNotForceEquality": true,
+        "officialRevenueProvenance": "root-Mac P1 visual relay; not VM fetch"
+      }
+    },
+    {
+      "name": "4Q25 bridge gross",
+      "pass": true,
+      "detail": {
+        "computed": 7525,
+        "reported": 7525,
+        "delta": 0,
+        "unit": "TWD_million"
+      }
+    },
+    {
+      "name": "4Q25 bridge operating",
+      "pass": true,
+      "detail": {
+        "computed": -1893,
+        "reported": -1893,
+        "delta": 0,
+        "unit": "TWD_million"
+      }
+    },
+    {
+      "name": "4Q25 bridge pretax",
+      "pass": true,
+      "detail": {
+        "computed": 2889,
+        "reported": 2889,
+        "delta": 0,
+        "unit": "TWD_million"
+      }
+    },
+    {
+      "name": "4Q25 bridge net",
+      "pass": true,
+      "detail": {
+        "computed": 2923,
+        "reported": 2923,
+        "delta": 0,
+        "unit": "TWD_million"
+      }
+    },
+    {
+      "name": "4Q25 bridge owners and NCI",
+      "pass": true,
+      "detail": {
+        "computed": 2923,
+        "reported": 2923,
+        "delta": 0,
+        "unit": "TWD_million"
+      }
+    },
+    {
+      "name": "4Q25 bridge Q425 monthly versus reported revenue",
+      "pass": true,
+      "detail": {
+        "computed": 70142,
+        "reported": 70142,
+        "delta": 0,
+        "unit": "TWD_million"
+      }
+    },
+    {
+      "name": "4Q25 basic EPS round to0.01",
+      "pass": true,
+      "detail": {
+        "ratio": "0.3818735921558235060288856499",
+        "rounded": "0.38",
+        "unit": "TWD_per_share"
+      }
+    },
+    {
+      "name": "quarter bridge 2024-Q3 gross",
+      "pass": true,
+      "detail": {
+        "equation": "gross",
+        "computedFromPrintedInputs": 8454,
+        "printedResult": 8454,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2024-Q3 operating",
+      "pass": true,
+      "detail": {
+        "equation": "operating",
+        "computedFromPrintedInputs": -310,
+        "printedResult": -310,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2024-Q3 pretax",
+      "pass": true,
+      "detail": {
+        "equation": "pretax",
+        "computedFromPrintedInputs": -595,
+        "printedResult": -595,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2024-Q3 net",
+      "pass": true,
+      "detail": {
+        "equation": "net",
+        "computedFromPrintedInputs": -923,
+        "printedResult": -923,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2024-Q3 attribution",
+      "pass": true,
+      "detail": {
+        "equation": "attribution",
+        "computedFromPrintedInputs": -923,
+        "printedResult": -923,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter basic EPS 2024-Q3",
+      "pass": true,
+      "detail": {
+        "computedFromPrintedAmounts": "-0.1207616066770996348461137194",
+        "rounded": "-0.12",
+        "printed": -0.12,
+        "unit": "TWD_per_share",
+        "sourceFiguresAlreadyRounded": true
+      }
+    },
+    {
+      "name": "quarter basic EPS precision interval 2024-Q3",
+      "pass": true,
+      "detail": {
+        "ratioLower": "-0.1208346918813172481252037822",
+        "ratioUpper": "-0.1206885310034556953771924105",
+        "printedEpsLower": "-0.125",
+        "printedEpsUpper": "-0.115",
+        "displayPrecision": "money/shares1million; EPS0.01TWD; tie convention not established"
+      }
+    },
+    {
+      "name": "quarter source relay integrity metadata 2024-Q3",
+      "pass": true,
+      "detail": {
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/3Q25_Finance_Statement_English.pdf",
+        "sourceByteHashFormatOnly": true,
+        "pdfByteHashVerifiedByVm": false,
+        "observedAt": "2026-10-08T07:01:10.605242+00:00"
+      }
+    },
+    {
+      "name": "quarter bridge 2024-Q4 gross",
+      "pass": true,
+      "detail": {
+        "equation": "gross",
+        "computedFromPrintedInputs": 5446,
+        "printedResult": 5446,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2024-Q4 operating",
+      "pass": true,
+      "detail": {
+        "equation": "operating",
+        "computedFromPrintedInputs": -3322,
+        "printedResult": -3323,
+        "delta": 1,
+        "exactPrintedEquality": false,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2024-Q4 pretax",
+      "pass": true,
+      "detail": {
+        "equation": "pretax",
+        "computedFromPrintedInputs": 3019,
+        "printedResult": 3019,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2024-Q4 net",
+      "pass": true,
+      "detail": {
+        "equation": "net",
+        "computedFromPrintedInputs": 1787,
+        "printedResult": 1787,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2024-Q4 attribution",
+      "pass": true,
+      "detail": {
+        "equation": "attribution",
+        "computedFromPrintedInputs": 1787,
+        "printedResult": 1787,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter basic EPS 2024-Q4",
+      "pass": true,
+      "detail": {
+        "computedFromPrintedAmounts": "0.2111371935315597287428273344",
+        "rounded": "0.21",
+        "printed": 0.21,
+        "unit": "TWD_per_share",
+        "sourceFiguresAlreadyRounded": true
+      }
+    },
+    {
+      "name": "quarter basic EPS precision interval 2024-Q4",
+      "pass": true,
+      "detail": {
+        "ratioLower": "0.2110582252070157136336962900",
+        "ratioUpper": "0.2112161721552005216824258233",
+        "printedEpsLower": "0.205",
+        "printedEpsUpper": "0.215",
+        "displayPrecision": "money/shares1million; EPS0.01TWD; tie convention not established"
+      }
+    },
+    {
+      "name": "quarter source relay integrity metadata 2024-Q4",
+      "pass": true,
+      "detail": {
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/4Q25_Finance_Statement_English.pdf",
+        "sourceByteHashFormatOnly": true,
+        "pdfByteHashVerifiedByVm": false,
+        "observedAt": "2026-10-08T07:01:10.605242+00:00"
+      }
+    },
+    {
+      "name": "monthly to printed quarterly revenue 2024-Q4",
+      "pass": true,
+      "detail": {
+        "monthlySum": 68692,
+        "printedQuarter": 68692,
+        "delta": 0,
+        "roundingDifferenceLimit": "2",
+        "printedQuarterIsSeparatePeriodValue": true
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q1 gross",
+      "pass": true,
+      "detail": {
+        "equation": "gross",
+        "computedFromPrintedInputs": 8779,
+        "printedResult": 8778,
+        "delta": 1,
+        "exactPrintedEquality": false,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q1 operating",
+      "pass": true,
+      "detail": {
+        "equation": "operating",
+        "computedFromPrintedInputs": 1140,
+        "printedResult": 1141,
+        "delta": -1,
+        "exactPrintedEquality": false,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q1 pretax",
+      "pass": true,
+      "detail": {
+        "equation": "pretax",
+        "computedFromPrintedInputs": 4488,
+        "printedResult": 4487,
+        "delta": 1,
+        "exactPrintedEquality": false,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q1 net",
+      "pass": true,
+      "detail": {
+        "equation": "net",
+        "computedFromPrintedInputs": 3259,
+        "printedResult": 3259,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q1 attribution",
+      "pass": true,
+      "detail": {
+        "equation": "attribution",
+        "computedFromPrintedInputs": 3259,
+        "printedResult": 3259,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter basic EPS 2025-Q1",
+      "pass": true,
+      "detail": {
+        "computedFromPrintedAmounts": "0.4308698495748855461085676913",
+        "rounded": "0.43",
+        "printed": 0.43,
+        "unit": "TWD_per_share",
+        "sourceFiguresAlreadyRounded": true
+      }
+    },
+    {
+      "name": "quarter basic EPS precision interval 2025-Q1",
+      "pass": true,
+      "detail": {
+        "ratioLower": "0.4307762736250081747433130600",
+        "ratioUpper": "0.4309634377657139119628491072",
+        "printedEpsLower": "0.425",
+        "printedEpsUpper": "0.435",
+        "displayPrecision": "money/shares1million; EPS0.01TWD; tie convention not established"
+      }
+    },
+    {
+      "name": "quarter source relay integrity metadata 2025-Q1",
+      "pass": true,
+      "detail": {
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/1Q26_Finance_Statement_English.pdf",
+        "sourceByteHashFormatOnly": true,
+        "pdfByteHashVerifiedByVm": false,
+        "observedAt": "2026-10-08T07:01:10.605242+00:00"
+      }
+    },
+    {
+      "name": "monthly to printed quarterly revenue 2025-Q1",
+      "pass": true,
+      "detail": {
+        "monthlySum": 72102,
+        "printedQuarter": 72102,
+        "delta": 0,
+        "roundingDifferenceLimit": "2",
+        "printedQuarterIsSeparatePeriodValue": true
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q2 gross",
+      "pass": true,
+      "detail": {
+        "equation": "gross",
+        "computedFromPrintedInputs": 9362,
+        "printedResult": 9362,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q2 operating",
+      "pass": true,
+      "detail": {
+        "equation": "operating",
+        "computedFromPrintedInputs": 1504,
+        "printedResult": 1504,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q2 pretax",
+      "pass": true,
+      "detail": {
+        "equation": "pretax",
+        "computedFromPrintedInputs": 2134,
+        "printedResult": 2133,
+        "delta": 1,
+        "exactPrintedEquality": false,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q2 net",
+      "pass": true,
+      "detail": {
+        "equation": "net",
+        "computedFromPrintedInputs": 1904,
+        "printedResult": 1904,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q2 attribution",
+      "pass": true,
+      "detail": {
+        "equation": "attribution",
+        "computedFromPrintedInputs": 1904,
+        "printedResult": 1904,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter basic EPS 2025-Q2",
+      "pass": true,
+      "detail": {
+        "computedFromPrintedAmounts": "0.2581158076056711276003710083",
+        "rounded": "0.26",
+        "printed": 0.26,
+        "unit": "TWD_per_share",
+        "sourceFiguresAlreadyRounded": true
+      }
+    },
+    {
+      "name": "quarter basic EPS precision interval 2025-Q2",
+      "pass": true,
+      "detail": {
+        "ratioLower": "0.2580324610798277575356078172",
+        "ratioUpper": "0.2581991651759093619558735838",
+        "printedEpsLower": "0.255",
+        "printedEpsUpper": "0.265",
+        "displayPrecision": "money/shares1million; EPS0.01TWD; tie convention not established"
+      }
+    },
+    {
+      "name": "quarter source relay integrity metadata 2025-Q2",
+      "pass": true,
+      "detail": {
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Finance_Statement_English.pdf",
+        "sourceByteHashFormatOnly": true,
+        "pdfByteHashVerifiedByVm": false,
+        "observedAt": "2026-10-08T07:00:04.520030+00:00"
+      }
+    },
+    {
+      "name": "monthly to printed quarterly revenue 2025-Q2",
+      "pass": true,
+      "detail": {
+        "monthlySum": 69237,
+        "printedQuarter": 69237,
+        "delta": 0,
+        "roundingDifferenceLimit": "2",
+        "printedQuarterIsSeparatePeriodValue": true
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q3 gross",
+      "pass": true,
+      "detail": {
+        "equation": "gross",
+        "computedFromPrintedInputs": 6690,
+        "printedResult": 6690,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q3 operating",
+      "pass": true,
+      "detail": {
+        "equation": "operating",
+        "computedFromPrintedInputs": -1806,
+        "printedResult": -1806,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q3 pretax",
+      "pass": true,
+      "detail": {
+        "equation": "pretax",
+        "computedFromPrintedInputs": -1068,
+        "printedResult": -1068,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q3 net",
+      "pass": true,
+      "detail": {
+        "equation": "net",
+        "computedFromPrintedInputs": -1097,
+        "printedResult": -1098,
+        "delta": 1,
+        "exactPrintedEquality": false,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q3 attribution",
+      "pass": true,
+      "detail": {
+        "equation": "attribution",
+        "computedFromPrintedInputs": -1097,
+        "printedResult": -1098,
+        "delta": 1,
+        "exactPrintedEquality": false,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter basic EPS 2025-Q3",
+      "pass": true,
+      "detail": {
+        "computedFromPrintedAmounts": "-0.1696038160858619318934676030",
+        "rounded": "-0.17",
+        "printed": -0.17,
+        "unit": "TWD_per_share",
+        "sourceFiguresAlreadyRounded": true
+      }
+    },
+    {
+      "name": "quarter basic EPS precision interval 2025-Q3",
+      "pass": true,
+      "detail": {
+        "ratioLower": "-0.1696813092161929371231696813",
+        "ratioUpper": "-0.1695263332229214971844981782",
+        "printedEpsLower": "-0.175",
+        "printedEpsUpper": "-0.165",
+        "displayPrecision": "money/shares1million; EPS0.01TWD; tie convention not established"
+      }
+    },
+    {
+      "name": "quarter source relay integrity metadata 2025-Q3",
+      "pass": true,
+      "detail": {
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/3Q25_Finance_Statement_English.pdf",
+        "sourceByteHashFormatOnly": true,
+        "pdfByteHashVerifiedByVm": false,
+        "observedAt": "2026-10-08T07:01:10.605242+00:00"
+      }
+    },
+    {
+      "name": "monthly to printed quarterly revenue 2025-Q3",
+      "pass": true,
+      "detail": {
+        "monthlySum": 69907,
+        "printedQuarter": 69908,
+        "delta": -1,
+        "roundingDifferenceLimit": "2",
+        "printedQuarterIsSeparatePeriodValue": true
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q4 gross",
+      "pass": true,
+      "detail": {
+        "equation": "gross",
+        "computedFromPrintedInputs": 7525,
+        "printedResult": 7525,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q4 operating",
+      "pass": true,
+      "detail": {
+        "equation": "operating",
+        "computedFromPrintedInputs": -1893,
+        "printedResult": -1893,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q4 pretax",
+      "pass": true,
+      "detail": {
+        "equation": "pretax",
+        "computedFromPrintedInputs": 2889,
+        "printedResult": 2889,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q4 net",
+      "pass": true,
+      "detail": {
+        "equation": "net",
+        "computedFromPrintedInputs": 2923,
+        "printedResult": 2923,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2025-Q4 attribution",
+      "pass": true,
+      "detail": {
+        "equation": "attribution",
+        "computedFromPrintedInputs": 2923,
+        "printedResult": 2923,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter basic EPS 2025-Q4",
+      "pass": true,
+      "detail": {
+        "computedFromPrintedAmounts": "0.3818735921558235060288856499",
+        "rounded": "0.38",
+        "printed": 0.38,
+        "unit": "TWD_per_share",
+        "sourceFiguresAlreadyRounded": true
+      }
+    },
+    {
+      "name": "quarter basic EPS precision interval 2025-Q4",
+      "pass": true,
+      "detail": {
+        "ratioLower": "0.3817820470354421994037760848",
+        "ratioUpper": "0.3819651494070098721261511959",
+        "printedEpsLower": "0.375",
+        "printedEpsUpper": "0.385",
+        "displayPrecision": "money/shares1million; EPS0.01TWD; tie convention not established"
+      }
+    },
+    {
+      "name": "quarter source relay integrity metadata 2025-Q4",
+      "pass": true,
+      "detail": {
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/4Q25_Finance_Statement_English.pdf",
+        "sourceByteHashFormatOnly": true,
+        "pdfByteHashVerifiedByVm": false,
+        "observedAt": "2026-10-08T07:01:10.605242+00:00"
+      }
+    },
+    {
+      "name": "monthly to printed quarterly revenue 2025-Q4",
+      "pass": true,
+      "detail": {
+        "monthlySum": 70142,
+        "printedQuarter": 70142,
+        "delta": 0,
+        "roundingDifferenceLimit": "2",
+        "printedQuarterIsSeparatePeriodValue": true
+      }
+    },
+    {
+      "name": "quarter bridge 2026-Q1 gross",
+      "pass": true,
+      "detail": {
+        "equation": "gross",
+        "computedFromPrintedInputs": 8183,
+        "printedResult": 8183,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2026-Q1 operating",
+      "pass": true,
+      "detail": {
+        "equation": "operating",
+        "computedFromPrintedInputs": -636,
+        "printedResult": -636,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2026-Q1 pretax",
+      "pass": true,
+      "detail": {
+        "equation": "pretax",
+        "computedFromPrintedInputs": -502,
+        "printedResult": -501,
+        "delta": -1,
+        "exactPrintedEquality": false,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2026-Q1 net",
+      "pass": true,
+      "detail": {
+        "equation": "net",
+        "computedFromPrintedInputs": -1039,
+        "printedResult": -1039,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2026-Q1 attribution",
+      "pass": true,
+      "detail": {
+        "equation": "attribution",
+        "computedFromPrintedInputs": -1040,
+        "printedResult": -1039,
+        "delta": -1,
+        "exactPrintedEquality": false,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter basic EPS 2026-Q1",
+      "pass": true,
+      "detail": {
+        "computedFromPrintedAmounts": "-0.1515834106267391016297866702",
+        "rounded": "-0.15",
+        "printed": -0.15,
+        "unit": "TWD_per_share",
+        "sourceFiguresAlreadyRounded": true
+      }
+    },
+    {
+      "name": "quarter basic EPS precision interval 2026-Q1",
+      "pass": true,
+      "detail": {
+        "ratioLower": "-0.1516597097992446829656131982",
+        "ratioUpper": "-0.1515071215634315998675057966",
+        "printedEpsLower": "-0.155",
+        "printedEpsUpper": "-0.145",
+        "displayPrecision": "money/shares1million; EPS0.01TWD; tie convention not established"
+      }
+    },
+    {
+      "name": "quarter source relay integrity metadata 2026-Q1",
+      "pass": true,
+      "detail": {
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Finance_Statement_English.pdf",
+        "sourceByteHashFormatOnly": true,
+        "pdfByteHashVerifiedByVm": false,
+        "observedAt": "2026-10-08T07:00:04.520030+00:00"
+      }
+    },
+    {
+      "name": "monthly to printed quarterly revenue 2026-Q1",
+      "pass": true,
+      "detail": {
+        "monthlySum": 69031,
+        "printedQuarter": 69031,
+        "delta": 0,
+        "roundingDifferenceLimit": "2",
+        "printedQuarterIsSeparatePeriodValue": true
+      }
+    },
+    {
+      "name": "quarter bridge 2026-Q2 gross",
+      "pass": true,
+      "detail": {
+        "equation": "gross",
+        "computedFromPrintedInputs": 9248,
+        "printedResult": 9248,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2026-Q2 operating",
+      "pass": true,
+      "detail": {
+        "equation": "operating",
+        "computedFromPrintedInputs": 218,
+        "printedResult": 218,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2026-Q2 pretax",
+      "pass": true,
+      "detail": {
+        "equation": "pretax",
+        "computedFromPrintedInputs": 2751,
+        "printedResult": 2751,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2026-Q2 net",
+      "pass": true,
+      "detail": {
+        "equation": "net",
+        "computedFromPrintedInputs": 2120,
+        "printedResult": 2120,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter bridge 2026-Q2 attribution",
+      "pass": true,
+      "detail": {
+        "equation": "attribution",
+        "computedFromPrintedInputs": 2120,
+        "printedResult": 2120,
+        "delta": 0,
+        "exactPrintedEquality": true,
+        "operandCount": 2,
+        "maximumAbsoluteDifferenceFrom3IndependentlyRoundedValues": "1.5",
+        "intervalsConsistent": true,
+        "assumption": "each original value independently rounded to nearest1million; does not verify exact underlying figures or rounding cause"
+      }
+    },
+    {
+      "name": "quarter basic EPS 2026-Q2",
+      "pass": true,
+      "detail": {
+        "computedFromPrintedAmounts": "0.1779515039088379488538492116",
+        "rounded": "0.18",
+        "printed": 0.18,
+        "unit": "TWD_per_share",
+        "sourceFiguresAlreadyRounded": true
+      }
+    },
+    {
+      "name": "quarter basic EPS precision interval 2026-Q2",
+      "pass": true,
+      "detail": {
+        "ratioLower": "0.1778734680357734349122225903",
+        "ratioUpper": "0.1780295501225733783873318757",
+        "printedEpsLower": "0.175",
+        "printedEpsUpper": "0.185",
+        "displayPrecision": "money/shares1million; EPS0.01TWD; tie convention not established"
+      }
+    },
+    {
+      "name": "quarter source relay integrity metadata 2026-Q2",
+      "pass": true,
+      "detail": {
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Finance_Statement_English.pdf",
+        "sourceByteHashFormatOnly": true,
+        "pdfByteHashVerifiedByVm": false,
+        "observedAt": "2026-10-08T07:00:04.520030+00:00"
+      }
+    },
+    {
+      "name": "monthly to printed quarterly revenue 2026-Q2",
+      "pass": true,
+      "detail": {
+        "monthlySum": 70890,
+        "printedQuarter": 70891,
+        "delta": -1,
+        "roundingDifferenceLimit": "2",
+        "printedQuarterIsSeparatePeriodValue": true
+      }
+    },
+    {
+      "name": "8 distinct consecutive real quarter bridge rows",
+      "pass": true,
+      "detail": "Income-statement P1 core columns only; no annual/FY duplicate or full-note completeness claim."
+    },
+    {
+      "name": "4Q25 visual statement matches original hosted handout relay",
+      "pass": true,
+      "detail": "Distinct source URLs retained; only relay values compared by VM."
+    },
+    {
+      "name": "Q226 statement revenue separate from monthly/cumulative estimates",
+      "pass": true,
+      "detail": "Do not overwrite reported quarterly revenue or monthly inputs."
+    },
+    {
+      "name": "printed quarter YoY recomputation 2025-Q3",
+      "pass": true,
+      "detail": {
+        "percent": "-10.083861",
+        "basis": "printed quarter revenue, independent of monthly sums"
+      }
+    },
+    {
+      "name": "printed quarter YoY recomputation 2025-Q4",
+      "pass": true,
+      "detail": {
+        "percent": "2.110872",
+        "basis": "printed quarter revenue, independent of monthly sums"
+      }
+    },
+    {
+      "name": "printed quarter YoY recomputation 2026-Q1",
+      "pass": true,
+      "detail": {
+        "percent": "-4.259244",
+        "basis": "printed quarter revenue, independent of monthly sums"
+      }
+    },
+    {
+      "name": "printed quarter YoY recomputation 2026-Q2",
+      "pass": true,
+      "detail": {
+        "percent": "2.388896",
+        "basis": "printed quarter revenue, independent of monthly sums"
+      }
+    },
+    {
+      "name": "P3 asset liability equity bridge",
+      "pass": true,
+      "detail": {
+        "computed": 166902,
+        "printedEquity": 166902
+      }
+    },
+    {
+      "name": "P3 owner equity component interval reconciliation",
+      "pass": true,
+      "detail": {
+        "totalEquityMinusNCI": 154397,
+        "commonOwnerComponentSum": 154398,
+        "delta": 1,
+        "sixIndependentPrintedValuesRoundingBound": "3",
+        "exactEquality": false
+      }
+    },
+    {
+      "name": "P/B refuses weighted EPS shares and approximate clock",
+      "pass": true,
+      "detail": "period-end outstanding common shares net treasury and verified market price; no EPS-weighted-share or stock-capital substitute"
+    }
+  ],
+  "roundingPolicy": "Assumed nearest-integer million intervals applied per original value, not a fixed aggregate tolerance; original source precision still needs acquisition.",
+  "dataSourceVerification": "relay arithmetic only; not VM source fetch or research qualification",
+  "canonicalMaterialHash": "bc6264678dfe14f4df4fa3a75e19860c9b8c211c6e3fba53338609cce1d0af51"
+}
