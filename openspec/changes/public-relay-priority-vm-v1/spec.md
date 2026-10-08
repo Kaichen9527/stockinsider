@@ -10,3 +10,6 @@ A bounded loopback-only consumer submits through existing authenticated endpoint
 journals before mutation and refuses automatic retry after uncertain completion.
 Expose the already computed per-candidate rows beside Top20; no score/strategy change.
 No production credentials, public write API, schema change, schedule or paid model API.
+
+
+Review amendment: the entire original relay envelope must pass recursive secret/prototype/size inspection and a strict field schema before whitelist projection. Every public summary carries attributed response SHA256/bytes/read-surface and matches exactly one successful acquisition receipt by URL/hash/bytes and full-precision start/observation clocks. This attests relay binding, not VM raw-byte acquisition. Real current local/public summary clocks obey start <= observed <= completed <= cutoff; historical firstObservedAt remains separate. Calendar/offset validation reuses the existing microsecond parser while preserving up to nanosecond comparison precision. No Date.parse truncation may admit a reversed acquisition or future/current summary.

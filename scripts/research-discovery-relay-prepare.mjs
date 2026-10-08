@@ -3,12 +3,108 @@ import { readFile, open } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { executeSourceController } from './research-source-controller.mjs';
-import { validateSourceControllerInput } from '../web/src/lib/research-source-attempt-controller.ts';
+import { validateSourceControllerInput, assertSourcePacketBoundary, sourceControllerInstant } from '../web/src/lib/research-source-attempt-controller.ts';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
+import { sanitizePublicSourceUrl } from '../web/src/lib/public-source-url.ts';
+
+const ROW_KEYS=['id','sourceUrl','publisher','sourcePlatform','subjectScope','symbols','industryTerms','summary','risk','claimStatus',
+  'access','publishedAt','publicationPrecision','sourcePublishedDate','attemptedAt','observedAt','responseSha256','responseBytes',
+  'readStatus','historicalPITEligible','readSurfaceUrl'];
+const ATTEMPT_KEYS=['name','label','url','attemptedAt','observedAt','acquisitionHost','authenticated','httpStatus','finalUrl',
+  'contentType','status','bytes','sha256','rowCount','errorClass','errorType','rawFile'];
+const SOCIAL_TIMED_KEYS=['attemptedAt','observedAt','readSurface','parentCanonicalUrl','parentAuthor','parentPublishedAtDom',
+  'parentVisibleDate','parentSummary','subjectScope','symbols','industryTerms','ownReplyStatus','ownReplyCanonicalUrl'];
+const SHA=/^[0-9a-f]{64}$/u;
+function only(value, allowed) {
+  if(!value || typeof value!=='object' || Array.isArray(value) || Object.keys(value).some(k=>!allowed.includes(k)))
+    throw new Error('discovery_relay_unknown_field');
+}
+const project=(value, allowed)=>Object.fromEntries(allowed.filter(key=>Object.hasOwn(value,key)).map(key=>[key,value[key]]));
+function clockChain(values) {
+  let clocks;try{clocks=values.map(sourceControllerInstant);}catch{throw new Error('discovery_relay_clock_invalid');}
+  if(clocks.some((at,i)=>i>0&&at<clocks[i-1]))throw new Error('discovery_relay_clock_invalid');
+}
+function publicUrl(value) {
+  try {const u=new URL(value);if(u.protocol==='https:' && !u.username && !u.password && !u.hash
+    && u.toString()===value && sanitizePublicSourceUrl(value)===value)return; }catch { /* reject below */ }
+  throw new Error('discovery_relay_url_invalid');
+}
+function sourceRows(packet, now) {
+  only(packet,['schemaVersion','recordedAt','sourceRows','attempts','notes','proposedCompanyScope','securityClassificationFile']);
+  if(!Array.isArray(packet.sourceRows) || !Array.isArray(packet.attempts) || packet.attempts.length>30
+    || !Array.isArray(packet.notes) || !packet.notes.every(v=>typeof v==='string')
+    || !Array.isArray(packet.proposedCompanyScope) || !packet.proposedCompanyScope.every(v=>typeof v==='string'&&/^\d{4}$/u.test(v)))throw new Error('discovery_relay_schema_invalid');
+  clockChain([packet.recordedAt,now]);
+  for(const attempt of packet.attempts) {
+    only(attempt,ATTEMPT_KEYS);publicUrl(attempt.url);
+    clockChain([attempt.attemptedAt,attempt.observedAt,packet.recordedAt,now]);
+    if(!['read_success','read_failed'].includes(attempt.status) || attempt.authenticated!==undefined&&attempt.authenticated!==false)
+      throw new Error('discovery_relay_attempt_invalid');
+    if(attempt.sha256!==undefined&&!SHA.test(attempt.sha256)
+      || attempt.bytes!==undefined&&(!Number.isInteger(attempt.bytes)||attempt.bytes<1||attempt.bytes>4_000_000)
+      || attempt.httpStatus!==undefined&&(!Number.isInteger(attempt.httpStatus)||attempt.httpStatus<100||attempt.httpStatus>599)
+      || ['name','label','acquisitionHost','contentType','errorClass','errorType','rawFile'].some(key=>attempt[key]!==undefined&&typeof attempt[key]!=='string'))
+      throw new Error('discovery_relay_attempt_invalid');
+    if(attempt.finalUrl!==undefined)publicUrl(attempt.finalUrl);
+    if(attempt.status==='read_success' && (attempt.httpStatus!==200 || !SHA.test(attempt.sha256)
+      || !Number.isInteger(attempt.bytes) || attempt.bytes<1 || attempt.bytes>4_000_000))throw new Error('discovery_relay_attempt_invalid');
+  }
+  for(const row of packet.sourceRows) {
+    only(row,ROW_KEYS);publicUrl(row.sourceUrl);
+    if(row.readSurfaceUrl!==undefined)publicUrl(row.readSurfaceUrl);
+    clockChain([row.attemptedAt,row.observedAt,packet.recordedAt,now]);
+    if(row.publishedAt!==null)clockChain([row.publishedAt,row.attemptedAt]);
+    if(!SHA.test(row.responseSha256) || !Number.isInteger(row.responseBytes) || row.responseBytes<1 || row.responseBytes>4_000_000
+      || row.historicalPITEligible!==false || !Array.isArray(row.symbols)
+      || !row.symbols.every(v=>typeof v==='string'&&/^\d{4}$/u.test(v))
+      || !Array.isArray(row.industryTerms) || !row.industryTerms.every(v=>typeof v==='string')
+      || !['company_mentions','industry_context'].includes(row.subjectScope)
+      || !['id','publisher','summary','risk','claimStatus','publicationPrecision','sourcePlatform'].every(key=>typeof row[key]==='string')
+      || row.sourcePublishedDate!==null&&typeof row.sourcePublishedDate!=='string')throw new Error('discovery_relay_acquisition_invalid');
+    const matches=packet.attempts.filter(a=>a.status==='read_success'&&a.httpStatus===200
+      && a.url===(row.readSurfaceUrl||row.sourceUrl) && a.sha256===row.responseSha256 && a.bytes===row.responseBytes
+      && sourceControllerInstant(a.attemptedAt)===sourceControllerInstant(row.attemptedAt)
+      && sourceControllerInstant(a.observedAt)===sourceControllerInstant(row.observedAt));
+    if(matches.length!==1)throw new Error('discovery_relay_acquisition_binding_invalid');
+  }
+}
+function fullBoundary(relay,social,classification,timed,now) {
+  // Inspect all upstream objects before projecting any subset. No input relay
+  // bypasses the same recursive secret/prototype/size boundary as the controller.
+  for(const packet of [relay,social,classification,...(timed?[timed]:[])])assertSourcePacketBoundary(packet);
+  sourceRows(relay,now);if(timed)sourceRows(timed,now);
+  only(social,['schemaVersion','recordedAt','platform','method','credentialsExported','privateContentRead','scope','timedRead',
+    'earlierObservedSurfaceNotes','availabilityConclusion','publicationUsable','historicalPITEligible','allRepliesRead',
+    'platformFullyEnabled','independentCompanyOrderConfirmations','notes']);
+  if(social.schemaVersion!=='stockinsider-social-surface-observation-v1' || social.credentialsExported!==false
+    || social.privateContentRead!==false || social.historicalPITEligible!==false || social.allRepliesRead!==false
+    || social.platformFullyEnabled!==false || social.independentCompanyOrderConfirmations!==0
+    || !Array.isArray(social.earlierObservedSurfaceNotes) || !Array.isArray(social.notes)
+    || !social.notes.every(v=>typeof v==='string'))throw new Error('discovery_relay_social_boundary_invalid');
+  only(social.timedRead,SOCIAL_TIMED_KEYS);
+  clockChain([social.timedRead.parentPublishedAtDom,social.timedRead.attemptedAt,social.timedRead.observedAt,social.recordedAt,now]);
+  for(const key of ['readSurface','parentCanonicalUrl','ownReplyCanonicalUrl'])publicUrl(social.timedRead[key]);
+  for(const row of social.earlierObservedSurfaceNotes) {
+    only(row,['url','status','exactReadClockNotCaptured','replyScope','replyPublishedAtDom','replySummary','summary','publishedAt']);publicUrl(row.url);
+    if(typeof row.status!=='string' || row.exactReadClockNotCaptured!==true
+      || ['replyScope','replySummary','summary'].some(key=>row[key]!==undefined&&typeof row[key]!=='string'))throw new Error('discovery_relay_social_boundary_invalid');
+    if(row.replyPublishedAtDom)clockChain([row.replyPublishedAtDom,now]);if(row.publishedAt)clockChain([row.publishedAt,now]);
+  }
+  only(classification,['schemaVersion','recordedAt','sources','scope','historicalPITEligible','currentTradingEligibilityVerified','trustedAuthorityActivated','members']);
+  if(classification.schemaVersion!=='stockinsider-observed-security-classification-relay-v1'
+    || classification.currentTradingEligibilityVerified!==false || !Array.isArray(classification.sources))throw new Error('discovery_relay_classification_invalid');
+  clockChain([classification.recordedAt,now]);
+  for(const row of classification.sources){only(row,['url','observedAt','responseBytes','responseSha256','selectedCount']);publicUrl(row.url);clockChain([row.observedAt,classification.recordedAt,now]);
+    if(!SHA.test(row.responseSha256)||!Number.isInteger(row.responseBytes)||row.responseBytes<1||row.responseBytes>4_000_000
+      ||!Number.isInteger(row.selectedCount)||row.selectedCount<0)throw new Error('discovery_relay_classification_invalid');}
+  for(const row of classification.members){only(row,['symbol','name','exchange','cfi','isin','listingDate','sector']);
+    if(!Object.values(row).every(v=>typeof v==='string'))throw new Error('discovery_relay_classification_invalid');}
+}
 
 /** Consume the attributed, reviewed relay; never invent publication clocks or
  * upgrade the observed classification list to the production authority registry. */
 export function prepareDiscoveryRelay(relay, social, classification, now = new Date().toISOString(), timed = null) {
+  fullBoundary(relay,social,classification,timed,now);
   if (relay?.schemaVersion !== 'stockinsider-attributed-discovery-evidence-relay-v1'
     || !Array.isArray(relay.sourceRows) || relay.sourceRows.length < 1 || relay.sourceRows.length > 19
     || classification?.trustedAuthorityActivated !== false || classification.historicalPITEligible !== false
@@ -31,6 +127,7 @@ export function prepareDiscoveryRelay(relay, social, classification, now = new D
       method:'public_summary_relay',contentScope:row.id === 'investanchors-public' ? 'metadata_index' : 'article_body',
       rights:{basis:'public_summary_relay',checkedAt:now,checkedBy:'authorized-VM-relay-boundary-review'},
       publicRelay:{observer:'authorized-mac-public-https-relay',observedAt:row.observedAt,
+        acquisition:{responseSha256:row.responseSha256,responseBytes:row.responseBytes,readSurfaceUrl:row.sourceUrl},
         publication:{precision:row.sourcePublishedDate ? 'date' : 'unknown',value:row.sourcePublishedDate || null},
         pendingSummary:row.summary},
       localRead:{attemptedAt:row.attemptedAt,completedAt:row.observedAt,outcome:'read_success'},
@@ -63,6 +160,7 @@ export function prepareDiscoveryRelay(relay, social, classification, now = new D
         method:'public_summary_relay',contentScope:'article_body',
         rights:{basis:'public_summary_relay',checkedAt:now,checkedBy:'authorized-VM-relay-boundary-review'},
         publicRelay:{observer:'authorized-mac-public-https-relay',observedAt:row.observedAt,
+          acquisition:{responseSha256:row.responseSha256,responseBytes:row.responseBytes,readSurfaceUrl:row.readSurfaceUrl},
           publication:{precision:'instant',value:row.publishedAt}},
         localRead:{attemptedAt:row.attemptedAt,completedAt:row.observedAt,readSurfaceUrl:row.readSurfaceUrl,outcome:'read_success'},
         summary:{sourcePlatform:row.sourcePlatform,sourceUrl:row.sourceUrl,author:row.publisher,publishedAt:row.publishedAt,
@@ -79,7 +177,11 @@ export function prepareDiscoveryRelay(relay, social, classification, now = new D
     reason:relay.proposedCompanyScope.includes(row.symbol) ? 'publication_instant_and_trusted_authority_missing' : 'outside_this_bounded_company_assessment',
     pricePhase:'unknown'})),trustedCandidateUniverse:false,top20:null,
     top20Gap:'trusted_authority_not_activated; observed classification is not the server official roster',
-    excludedNonCommon:null,originalSocialObservation:social,originalAcquisitionAttempts:[...relay.attempts,...(timed?.attempts || [])],
+    excludedNonCommon:null,originalSocialObservation:{
+      schemaVersion:social.schemaVersion,recordedAt:social.recordedAt,availabilityConclusion:social.availabilityConclusion,
+      publicationUsable:false,allRepliesRead:false,timedRead:project(social.timedRead,SOCIAL_TIMED_KEYS),
+      earlierObservedSurfaceNotes:social.earlierObservedSurfaceNotes.map(row=>project(row,['url','status','exactReadClockNotCaptured','replyScope','replyPublishedAtDom','replySummary','summary','publishedAt'])),
+    },originalAcquisitionAttempts:[...relay.attempts,...(timed?.attempts || [])].map(row=>project(row,ATTEMPT_KEYS.filter(key=>key!=='rawFile'))),
     rawSourceHashesVerifiedByVm:false,platformFullyEnabled:false,productionImported:false};
 }
 

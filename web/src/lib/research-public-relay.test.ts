@@ -1,17 +1,34 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { assembleSourceControllerRun, validateSourceControllerInput, type SourceScope } from './research-source-attempt-controller.ts';
+import { assembleSourceControllerRun, validateSourceControllerInput, sourceControllerInstant, type SourceScope } from './research-source-attempt-controller.ts';
 const now = '2026-10-08T09:00:00Z';
 function scope(): SourceScope {
   return { id:'public-news', platform:'news', url:'https://money.udn.com/money/story/5612/9766808',
     scope:'one attributed public summary, not all news',method:'public_summary_relay',contentScope:'article_body',
     rights:{basis:'public_summary_relay',checkedAt:now,checkedBy:'operator'},
     localRead:{attemptedAt:now,completedAt:now,outcome:'read_success'},
-    publicRelay:{observer:'public-reader',observedAt:now,publication:{precision:'instant',value:'2026-09-21T02:30:56+08:00'}},
+    publicRelay:{observer:'public-reader',observedAt:now,acquisition:{responseSha256:'a'.repeat(64),responseBytes:100,readSurfaceUrl:'https://money.udn.com/money/story/5612/9766808'},publication:{precision:'instant',value:'2026-09-21T02:30:56+08:00'}},
     summary:{sourcePlatform:'news',sourceUrl:'https://money.udn.com/money/story/5612/9766808',author:'public publisher',
       publishedAt:'2026-09-21T02:30:56+08:00',observedAt:now,symbols:['2409'],shortSummary:'合成測試摘要：合作傳聞尚無正式訂單確認。',
       catalyst:'僅供進一步研究核對。',risk:'轉載不增加獨立根源。',claimStatus:'rumor',visibility:'public',contentForm:'research_summary',acquisitionMethod:'public_document'} };
 }
+test('PR clock parser retains nanoseconds, validates the calendar and equivalent offset clocks',()=>{
+  assert.equal(sourceControllerInstant('2026-10-08T09:00:00.000000001Z')-sourceControllerInstant(now),BigInt(1));
+  assert.equal(sourceControllerInstant('2026-10-08T17:00:00.785051+08:00'),sourceControllerInstant('2026-10-08T09:00:00.785051Z'));
+  for(const value of ['2026-02-30T09:00:00Z','2026-10-08T25:00:00Z','2026-10-08T09:00:00.0000000001Z'])assert.throws(()=>sourceControllerInstant(value));
+});
+test('PR explicit completed reads reject a summary observed before this attempt, including the same millisecond',()=>{
+  for(const method of ['public_summary_relay','local_authorized_summary'] as const) for(const observed of ['2026-10-08T01:00:00Z','2026-10-08T08:59:59.999999999Z']) {
+    const s=scope();s.method=method;s.summary!.observedAt=observed;
+    if(method==='local_authorized_summary'){delete s.publicRelay;s.rights.basis='authorized_local_summary';s.summary!.visibility='authenticated_summary';s.summary!.acquisitionMethod='authenticated_browser_summary';}
+    else s.publicRelay!.observedAt=observed;
+    assert.throws(()=>run(s),/local_receipt_invalid|boundary_invalid|public_relay_invalid/);
+  }
+});
+test('PR historical first observation stays separate from a valid current read clock',()=>{
+  const s=scope();s.summary!.firstObservedAt='2026-09-22T09:00:00Z';s.summary!.revisionObservedAt=now;
+  const result=run(s);assert.equal(result.inboxRequest.items[0].firstObservedAt,'2026-09-22T09:00:00Z');assert.equal(result.inboxRequest.items[0].observedAt,now);
+});
 function run(s=scope(),priorItems: unknown[] = []) {
   return assembleSourceControllerRun({runId:'10000000-0000-4000-8000-000000000001',scopes:[s],priorItems} as Parameters<typeof assembleSourceControllerRun>[0],
     [{attemptedAt:s.localRead!.attemptedAt,completedAt:s.localRead!.completedAt || now,outcome:s.localRead!.outcome,httpStatus:null,bytes:0,responseHash:null,
