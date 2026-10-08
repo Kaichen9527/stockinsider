@@ -124,12 +124,19 @@ export async function POST(request: Request) {
         // Split/dividend ledger conversion needs the engine's explicit share and
         // cash terms. An adjusted chart factor is not sufficient to alter shares.
         {
-          const events = await db.from('opportunity_corporate_action_events_v3').select('snapshot_id,opportunity_corporate_action_snapshots_v3!inner(session_id)')
-            .eq('symbol', symbol).eq('opportunity_corporate_action_snapshots_v3.session_id', session).limit(1);
-          if (events.error) throw new Error(events.error.message);
-          if (events.data?.length) {
-            if (book.positions.some((position) => position.symbol === symbol))
-              throw new Error(`paper_corporate_action_reconciliation_required:${symbol}`);
+          const action = authority.anchorAction;
+          const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
+          const digest = /^[0-9a-f]{64}$/u;
+          if (!action || action.schema !== 'tw-entry-anchor-action-v1' || action.status !== 'verified'
+            || action.symbol !== symbol || action.exchange !== exchange || action.session !== session || action.cutoff !== asOf
+            || typeof authority.sourceDatasetRevision !== 'string' || !authority.sourceDatasetRevision || authority.sourceDatasetRevision.length > 128
+            || action.sourceDatasetRevision !== authority.sourceDatasetRevision
+            || !uuid.test(action.snapshotId) || !uuid.test(action.sessionAuthorityId) || !digest.test(action.datasetHash)
+            || action.event !== null && (!action.event || !['ex_right_dividend', 'capital_reduction', 'par_value_change'].includes(action.event.kind)
+              || !digest.test(action.event.sourceRowRef)))
+            throw new Error(`paper_anchor_action_context_invalid:${symbol}`);
+          if (action.event !== null) {
+            if (held) throw new Error(`paper_corporate_action_reconciliation_required:${symbol}`);
             corporateActionEntries.add(symbol);
           }
         }

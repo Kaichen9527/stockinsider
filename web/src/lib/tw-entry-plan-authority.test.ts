@@ -219,3 +219,54 @@ test('a recent share-changing action does not manufacture a comparable volume ra
   assert.equal(result.priceBasis, null);
   assert.deepEqual(result.bars, []);
 });
+
+function replaceSnapshotEvents(data:Record<string,Row[]>,snapshot:Row,events:Row[]) {
+  const owned=data[tables.feeds].filter(row=>row.snapshot_id===snapshot.snapshot_id).sort((a,b)=>Number(a.feed_ordinal)-Number(b.feed_ordinal));
+  for(const feed of owned) feed.parsed_row_count=events.filter(event=>event.feed_identity===feed.feed_identity).length;
+  data[tables.events]=data[tables.events].filter(row=>row.snapshot_id!==snapshot.snapshot_id).concat(events);
+  snapshot.declared_event_count=events.length;
+  snapshot.dataset_hash=hash(['corporate-action-snapshot-v3.1',snapshot.exchange,snapshot.session_id,snapshot.session_authority_id,
+    snapshot.corporate_action_version,snapshot.provider,String(snapshot.collected_at).replace(/Z$/u,'+00:00'),
+    owned.map(row=>[row.feed_identity,row.response_byte_count,row.response_sha256,row.parsed_row_count]),
+    events.map(row=>[row.symbol,row.event_kind,row.pre_action_reference_price,row.post_action_reference_price,row.feed_identity,row.source_row_ref])]);
+}
+
+test('anchor action context uses corrected zero-event head and ignores old, future and other-exchange events', async()=>{
+  const {data,request}=fixture(true,false,239);
+  const old=data[tables.snapshots].at(-1)!;
+  const correction:Row={...old,snapshot_id:id(99001),collected_at:'2026-09-24T10:00:00+00:00',recorded_at:'2026-09-24T10:01:00Z'};
+  data[tables.snapshots].push(correction);
+  data[tables.feeds].push(...data[tables.feeds].filter(row=>row.snapshot_id===old.snapshot_id).map(row=>({...row,snapshot_id:correction.snapshot_id,recorded_at:correction.recorded_at})));
+  replaceSnapshotEvents(data,correction,[]);
+  data[tables.snapshots].push({...old,snapshot_id:id(99002),collected_at:'2026-09-24T13:00:00+00:00',recorded_at:'2026-09-24T13:00:00Z'});
+  data[tables.snapshots].push({...old,snapshot_id:id(99003),exchange:'TPEX'});
+  const result=await loadTwEntryPlanAuthority(mockClient(data).client,request);
+  assert.deepEqual(result.missingData,[]);
+  assert.equal(result.anchorAction?.snapshotId,correction.snapshot_id);
+  assert.equal(result.anchorAction?.event,null);
+  assert.equal(result.anchorAction?.datasetHash,correction.dataset_hash);
+  assert.equal(result.anchorAction?.symbol,request.symbol);
+  assert.equal(result.anchorAction?.exchange,request.exchange);
+  assert.equal(result.anchorAction?.session,request.signalSession);
+  assert.equal(result.anchorAction?.cutoff,request.cutoff);
+  assert.equal(result.anchorAction?.sourceDatasetRevision,result.sourceDatasetRevision);
+});
+
+test('anchor action context retains a verified current event and fails closed on incomplete evidence',async()=>{
+  const {data,request}=fixture();const snapshot=data[tables.snapshots].at(-1)!;
+  const event={snapshot_id:snapshot.snapshot_id,event_ordinal:0,symbol:request.symbol,event_kind:'ex_right_dividend',
+    pre_action_reference_price:100,post_action_reference_price:99,feed_identity:feeds[0],daily_adjustment_factor:.99,
+    source_row_ref:hash(['corporate-action-source-row-v3.1',request.exchange,request.signalSession,request.symbol,'ex_right_dividend',100,99,feeds[0]]),recorded_at:'2026-09-24T08:00:00Z'};
+  replaceSnapshotEvents(data,snapshot,[event]);
+  const result=await loadTwEntryPlanAuthority(mockClient(data).client,request);
+  assert.deepEqual(result.missingData,[]);
+  assert.deepEqual(result.anchorAction?.event,{kind:'ex_right_dividend',sourceRowRef:event.source_row_ref});
+  for(const defect of ['feed','hash','ambiguous']){
+    const bad=structuredClone(data);
+    if(defect==='feed') bad[tables.feeds]=bad[tables.feeds].filter(row=>!(row.snapshot_id===snapshot.snapshot_id && row.feed_ordinal===0));
+    if(defect==='hash') bad[tables.snapshots].at(-1)!.dataset_hash='f'.repeat(64);
+    if(defect==='ambiguous') bad[tables.snapshots].push({...snapshot,snapshot_id:id(99004),dataset_hash:'f'.repeat(64)});
+    const failed=await loadTwEntryPlanAuthority(mockClient(bad).client,request);
+    assert.ok(failed.missingData.length,defect);assert.equal(failed.anchorAction,null,defect);
+  }
+});

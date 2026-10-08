@@ -24,7 +24,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "web/src/app/api/internal/research-paper-session/route.ts",
-      "sha256": "48e320c3d34706c0abaff483e05a14a396d1e3cb14271913c8b3f5eaeeb68e9b"
+      "sha256": "102af9121f151747d620aadafe17dde781c1952f10c74aec0f03c59ee89c6c7b"
     },
     {
       "path": "web/src/app/api/internal/research-technical-snapshot/route.ts",
@@ -108,7 +108,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "web/src/lib/tw-entry-plan-authority.ts",
-      "sha256": "9133a68decf95e5888c3c865a27ae1c40582293533a37e9f192a1aa24c0b3467"
+      "sha256": "711dc9c7da6dec9adb1f349ef9617494ef457f2d7ad1dd165adae49d5ed886e5"
     },
     {
       "path": "web/src/lib/tw-entry-plan-contract.ts",
@@ -243,7 +243,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     }
   ],
   "dependencyLockHash": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
-  "codeHash": "02b97f85fbe0d280a641033c5e6326926d614e239a650b1e49a2dc63db90ba10",
+  "codeHash": "4ff97130999ee66808e05d1a253cece453141bc704c8050a581b955f4205e664",
   "parameterMode": "fixed_baseline_source_bound",
   "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
   "parameterFiles": [
