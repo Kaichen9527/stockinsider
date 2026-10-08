@@ -12,6 +12,7 @@ on:
       - 'migrations/20260911*.sql'
       - 'migrations/20260929*.sql'
       - 'scripts/research-*.test.mjs'
+      - 'scripts/test-support/isolated-pg-clock*'
       - 'scripts/candidate-dossier-outbox-v6-postgres.test.mjs'
       - 'deployment/vps/**'
       - 'scripts/model-runner-v3/**'
@@ -76,13 +77,20 @@ jobs:
             package-lock.json
             web/package-lock.json
       - name: Install PostgreSQL
+        id: pg-clock
         run: |
           sudo apt-get update
-          sudo apt-get install --yes postgresql
+          sudo apt-get install --yes postgresql libfaketime
           postgres_bin="$(pg_config --bindir)"
           test -x "$postgres_bin/initdb"
           test -x "$postgres_bin/pg_ctl"
           echo "$postgres_bin" >> "$GITHUB_PATH"
+          clock_library="$(dpkg-query -L libfaketime | awk '/\/libfaketime\.so\.1$/ {print}')"
+          test -n "$clock_library"
+          test -f "$clock_library"
+          dpkg-query --show --showformat='${Package} ${Version}\n' libfaketime
+          sha256sum "$clock_library"
+          echo "library=$clock_library" >> "$GITHUB_OUTPUT"
       - name: Install root dependencies
         run: npm ci
       - uses: actions/setup-python@v5
@@ -100,7 +108,13 @@ jobs:
       - name: Verify candidate revision and historical date contracts
         run: npm run test:candidate-revision-history
       - name: Verify research agent contracts and real PostgreSQL recovery
+        env:
+          STOCKINSIDER_TEST_PG_CLOCK_LIBRARY: ${{ steps.pg-clock.outputs.library }}
         run: npm run test:research-agents
+      - name: Verify isolated PostgreSQL clock and unchanged day-end policy
+        env:
+          STOCKINSIDER_TEST_PG_CLOCK_LIBRARY: ${{ steps.pg-clock.outputs.library }}
+        run: node --test scripts/test-support/isolated-pg-clock.test.mjs scripts/research-isolated-clock-postgres.test.mjs
       - name: Install project-local Playwright Chromium
         working-directory: web
         run: ./node_modules/.bin/playwright install --with-deps chromium
