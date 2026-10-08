@@ -7,3 +7,6 @@
 - [ ] Independent code review and required VM focused/integration/types/lint/build/resources per slice.
 - [ ] Separate TWSE insider coverage/schema/period/unknown quantities and TPEX finite-key/placeholder repair.
 - [ ] Lawful publication reconciliation/lifecycle, complete strategy/consumer chain and production roundtrip; no alternate pipe.
+
+- [x] Amend authoritative DB-clock Taiwan admission week after f11e4c architecture P2; exact replay and legacy charges preserved.
+- [ ] Independently review amended spec and execute past-cutoff/concurrency/replay/Taiwan-week-boundary regressions in Slice2.
