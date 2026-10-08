@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stockinsider-attributed-official-financial-relay-v1",
   "symbol": "2383",
-  "recordedAt": "2026-10-08T09:24:28.622280+00:00",
+  "recordedAt": "2026-10-08T09:28:37.654569+00:00",
   "amountUnit": "TWD_thousands",
   "epsUnit": "TWD_per_share",
   "reports": [
@@ -114,7 +114,13 @@
         "nonControllingNetProfit": "8620    非控制權益                             (1,752)     -            (273)      -           (2,768)     -           (2,019)     -",
         "reportedBasicEps": "9750   基本每股盈餘(單位：新台幣元)           $                  27.55                   10.02                   42.46                   20.03",
         "reportedDilutedEps": "9850   稀釋每股盈餘(單位：新台幣元)           $                  27.55                    9.62                   42.44                   19.33"
-      }
+      },
+      "columnPeriods": [
+        "2026Q2",
+        "2025Q2",
+        "2026H1",
+        "2025H1"
+      ]
     },
     {
       "label": "2025q3",
@@ -225,7 +231,13 @@
         "nonControllingNetProfit": "8620    非控制權益                                 (999)     -           (1,564)      -           (3,018)     -           (5,130)     -",
         "reportedBasicEps": "9750   基本每股盈餘(單位：新台幣元)           $                    11.19                     7.30                   31.23                   20.14",
         "reportedDilutedEps": "9850   稀釋每股盈餘(單位：新台幣元)           $                    11.06                     7.25                   30.38                   19.94"
-      }
+      },
+      "columnPeriods": [
+        "2025Q3",
+        "2024Q3",
+        "2025YTD9",
+        "2024YTD9"
+      ]
     },
     {
       "label": "2024q3",
@@ -336,7 +348,13 @@
         "nonControllingNetProfit": "8620    非控制權益                            (1,564)      -           -          -           (5,130)     -           -           -",
         "reportedBasicEps": "9750   基本每股盈餘(單位：新台幣元)          $                    7.30                   6.04                   20.14                   10.50",
         "reportedDilutedEps": "9850   稀釋每股盈餘(單位：新台幣元)          $                    7.25                   5.79                   19.94                   10.03"
-      }
+      },
+      "columnPeriods": [
+        "2024Q3",
+        "2023Q3",
+        "2024YTD9",
+        "2023YTD9"
+      ]
     },
     {
       "label": "2025q4",
@@ -421,7 +439,11 @@
         "nonControllingNetProfit": "8620    非控制權益                              (4,019)    -              (9,464)     -",
         "reportedBasicEps": "9750   基本每股盈餘(單位：新台幣元)               $             41.67                       27.81",
         "reportedDilutedEps": "9850   稀釋每股盈餘(單位：新台幣元)               $             40.81                       27.30"
-      }
+      },
+      "columnPeriods": [
+        "2025FY",
+        "2024FY"
+      ]
     },
     {
       "label": "2024q4",
@@ -506,7 +528,11 @@
         "nonControllingNetProfit": "8620    非控制權益                              (9,464)    -              -           -",
         "reportedBasicEps": "9750   基本每股盈餘(單位：新台幣元)               $             27.81                       16.35",
         "reportedDilutedEps": "9850   稀釋每股盈餘(單位：新台幣元)               $             27.30                       15.75"
-      }
+      },
+      "columnPeriods": [
+        "2024FY",
+        "2023FY"
+      ]
     }
   ],
   "quarters": [
@@ -735,6 +761,205 @@
     "2024 comparative annual and third-quarter values cross-check across independently retrieved source files.",
     "No normalized EPS, forward EPS, target price, orders or historical availability inferred. First observations are 2026-10-08.",
     "Latest official dated capacity plan differs from undated website 5.25M page; neither proves current utilization, yields or output.",
-    "No authenticated database source IDs, authority activation, thesis qualification or publication approval asserted."
-  ]
+    "No authenticated database source IDs, authority activation, thesis qualification or publication approval asserted.",
+    "Independent scoped data review approved f7bc9b1 original numeric scope; explicit report columnPeriods added to prevent quarter/cumulative period confusion."
+  ],
+  "monthlyRevenue": {
+    "source": {
+      "label": "twse-2383-profile",
+      "url": "https://www.twse.com.tw/pdf/ch/2383_ch.pdf",
+      "attemptedAt": "2026-10-08T09:27:58.586996+00:00",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 369557,
+      "sha256": "658a44ad58bd691e6ec28a68c22fb0043b5e18734162b5b682f717c20c3ccabe",
+      "observedAt": "2026-10-08T09:27:58.821107+00:00",
+      "rawFile": "twse-2383-profile.pdf",
+      "textSha256": "b7c5d4b91bdd3dab491944d27d739554f28b4192bb984cd7f5d29828d5e2fbcf"
+    },
+    "documentProducedDate": "2026-10-08",
+    "publicationPrecision": "date_without_verified_zone",
+    "publishedAt": null,
+    "unit": "TWD",
+    "rows": [
+      {
+        "month": "2024-10",
+        "revenueTwd": 5817800000
+      },
+      {
+        "month": "2024-11",
+        "revenueTwd": 6336270000
+      },
+      {
+        "month": "2024-12",
+        "revenueTwd": 6410246000
+      },
+      {
+        "month": "2025-01",
+        "revenueTwd": 6986221000
+      },
+      {
+        "month": "2025-02",
+        "revenueTwd": 7029925000
+      },
+      {
+        "month": "2025-03",
+        "revenueTwd": 7668109000
+      },
+      {
+        "month": "2025-04",
+        "revenueTwd": 7191345000
+      },
+      {
+        "month": "2025-05",
+        "revenueTwd": 7277046000
+      },
+      {
+        "month": "2025-06",
+        "revenueTwd": 8035115000
+      },
+      {
+        "month": "2025-07",
+        "revenueTwd": 8372495000
+      },
+      {
+        "month": "2025-08",
+        "revenueTwd": 8764793000
+      },
+      {
+        "month": "2025-09",
+        "revenueTwd": 8008332000
+      },
+      {
+        "month": "2025-10",
+        "revenueTwd": 8074815000
+      },
+      {
+        "month": "2025-11",
+        "revenueTwd": 8129128000
+      },
+      {
+        "month": "2025-12",
+        "revenueTwd": 8704662000
+      },
+      {
+        "month": "2026-01",
+        "revenueTwd": 10862602000
+      },
+      {
+        "month": "2026-02",
+        "revenueTwd": 10193772000
+      },
+      {
+        "month": "2026-03",
+        "revenueTwd": 12010861000
+      },
+      {
+        "month": "2026-04",
+        "revenueTwd": 13923687000
+      },
+      {
+        "month": "2026-05",
+        "revenueTwd": 15618565000
+      },
+      {
+        "month": "2026-06",
+        "revenueTwd": 17732956000
+      },
+      {
+        "month": "2026-07",
+        "revenueTwd": 19206698000
+      },
+      {
+        "month": "2026-08",
+        "revenueTwd": 20145589000
+      },
+      {
+        "month": "2026-09",
+        "revenueTwd": 21532230000
+      }
+    ],
+    "supportingCompanyYearFiles": [
+      {
+        "label": "monthly2025",
+        "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Monthly_Revenue/EN/2025_Monthly_revenue_EN12.pdf",
+        "attemptedAt": "2026-10-08T09:27:58.861341+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 760623,
+        "sha256": "2baf50608ff7ac576a8bf5f981de98adc3cda2a9e87d1249b36e9273e0924f93",
+        "observedAt": "2026-10-08T09:27:59.019211+00:00",
+        "rawFile": "monthly2025.pdf",
+        "textSha256": "e2ab34a9a8b5a8e0e233e01300cc9122b77848c01c6472994524ab3e71e9d94b"
+      },
+      {
+        "label": "monthly2024",
+        "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Monthly_Revenue/EN/2024_Monthly_revenue_EN.pdf",
+        "attemptedAt": "2026-10-08T09:27:59.044023+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 224533,
+        "sha256": "23e25e6b5bf178143d89cc8e89bf319516d3e511fe2a5240611d3e581c5c37bd",
+        "observedAt": "2026-10-08T09:27:59.125475+00:00",
+        "rawFile": "monthly2024.pdf",
+        "textSha256": "837d45bbd3cfd63bf05a830e99e346157fbaf03fee831028ce67b56b370168cb"
+      }
+    ],
+    "reconciliation": [
+      {
+        "quarter": "2024Q4",
+        "sumMonthlyTwd": 18564316000,
+        "reportedFinancialTwd": 18562104000,
+        "differenceMonthlyMinusFinancialTwd": 2212000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2025Q1",
+        "sumMonthlyTwd": 21684255000,
+        "reportedFinancialTwd": 21680064000,
+        "differenceMonthlyMinusFinancialTwd": 4191000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2025Q2",
+        "sumMonthlyTwd": 22503506000,
+        "reportedFinancialTwd": 22507694000,
+        "differenceMonthlyMinusFinancialTwd": -4188000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2025Q3",
+        "sumMonthlyTwd": 25145620000,
+        "reportedFinancialTwd": 25145642000,
+        "differenceMonthlyMinusFinancialTwd": -22000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2025Q4",
+        "sumMonthlyTwd": 24908605000,
+        "reportedFinancialTwd": 24927178000,
+        "differenceMonthlyMinusFinancialTwd": -18573000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2026Q1",
+        "sumMonthlyTwd": 33067235000,
+        "reportedFinancialTwd": 33067261000,
+        "differenceMonthlyMinusFinancialTwd": -26000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2026Q2",
+        "sumMonthlyTwd": 47275208000,
+        "reportedFinancialTwd": 47275194000,
+        "differenceMonthlyMinusFinancialTwd": 14000,
+        "status": "difference_retained_not_explained"
+      }
+    ],
+    "notes": [
+      "Monthly preliminary sales and quarterly financial revenue are separate observations; differences retained, not forced to match.",
+      "Supporting year PDFs have different units: 2025 TWD thousands, 2024 TWD. Numeric reconciliation remains required; no forecast EPS from monthly data.",
+      "No current quote/technical qualification inferred from this dated profile; price cutoff October7 is older than acquired-at October8."
+    ]
+  }
 }
