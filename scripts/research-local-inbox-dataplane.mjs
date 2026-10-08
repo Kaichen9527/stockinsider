@@ -38,6 +38,13 @@ async function pinnedPostgrest(root, filename, env) {
   assert.match(version, /^PostgREST 16\.3(?:\s|$)/u);
   return {version, archiveBytes:raw.length, archiveSha256, binaryBytes:binary.length, binarySha256:hash(binary)};
 }
+export function redactLocalLogChunks(chunks, secrets) {
+  // Pipe chunk boundaries are arbitrary; a second pass must precede persistence.
+  return secrets.reduce((text, secret) => {
+    assert.ok(typeof secret === 'string' && secret.length > 0);
+    return text.replaceAll(secret, '[ephemeral credential]');
+  }, chunks.join(''));
+}
 async function input(filename) {
   const file = await open(filename, constants.O_RDONLY | constants.O_NOFOLLOW);
   try {
@@ -232,7 +239,7 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
   finally {
     await stop(next);if(compatibility)await new Promise(resolve=>compatibility.close(resolve));await stop(postgrest);if(running)pgStop();
     report.completedAt=new Date().toISOString();await save(path.join(artifacts,'acceptance-receipt.json'),report);
-    for(const [name,lines] of Object.entries(logs))await writeFile(path.join(artifacts,name+'.log'),lines.join(''),{flag:'wx',mode:0o600});
+    for(const [name,lines] of Object.entries(logs))await writeFile(path.join(artifacts,name+'.log'),redactLocalLogChunks(lines,[key,bearer,secret]),{flag:'wx',mode:0o600});
   }
   return report;
 }
