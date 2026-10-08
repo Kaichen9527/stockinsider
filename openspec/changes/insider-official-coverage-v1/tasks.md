@@ -1,0 +1,4 @@
+- [x] Record minimum contract and reviewed source packets.
+- [x] Red/green parser, paging and bounded-response regressions.
+- [x] Connect existing guarded source-sync; type/lint/normal build.
+- [ ] Resource receipt/exact code review; live collection and full-cycle coverage remain unverified.
