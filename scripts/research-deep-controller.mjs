@@ -8,6 +8,7 @@ import { researchCanonicalHash } from '../web/src/lib/research-agent-qualificati
 import { validateResearchDeepClaimContext } from '../web/src/lib/research-deep-claim-context.ts';
 import { validateResearchDeepAuthorInput } from '../web/src/lib/research-deep-author-input.ts';
 import { jsonPost } from './research-monitor-controller.mjs';
+import { privateDraftCommand } from './research-deep-draft-controller.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 // Reserve 37 characters for a unique claim identity within the API's 120 cap.
@@ -68,6 +69,7 @@ async function recoveryRequest(filename, owner, origin, source) {
       || !Number.isInteger(job.attempt) || job.attempt < 1 || job.attempt > 3))
       throw new Error('deep_controller_recovery_job_invalid');
     return { originalRequestHash: first.requestHash, owner: request.owner, claimId: request.claimId,
+      observedAt: request.observedAt, ...(verified[0]?.saved?.context ? {context:verified[0].saved.context} : {}),
       ...(job ? { jobId: job.jobId, attempt: job.attempt } : {}) };
   } finally { await handle.close(); }
 }
@@ -76,6 +78,12 @@ async function recoveryRequest(filename, owner, origin, source) {
  * dispatch, review, article submission, strategy approval or publication. */
 export async function deepControllerCommand(args, dependencies = {}) {
   const [action, ...tail] = args;
+  if(['draft','inspectDraft'].includes(action)) {
+    try {return await privateDraftCommand(args,{source:(dependencies.source || exactSource)(),
+      now:dependencies.now || (()=>new Date().toISOString()),recoverOriginal:recoveryRequest,checkpoint:dependencies.checkpoint});}
+    catch(error) {throw new Error(error instanceof Error && /^deep_draft_[a-z_]+$/u.test(error.message)
+      ? error.message : 'deep_draft_private_artifact_unavailable');}
+  }
   const flags = new Map();
   const names = action === 'claim' ? ['--origin', '--owner', '--output', '--journal']
     : action === 'recover' ? ['--origin', '--owner', '--output', '--journal', '--request-journal']
@@ -203,6 +211,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   try {
     const result = await deepControllerCommand(process.argv.slice(2));
     console.log(JSON.stringify({ receiptHash: result.receiptHash, gap: result.gap ?? null, leaseRecovered: Boolean(result.context), inputPrepared: Boolean(result.packet),
+      draftPersisted:Boolean(result.draftPersisted),handoffState:result.handoffState,leaseState:result.leaseState,
       modelDispatchable: false, authoritativePublication: false }));
   } catch (error) { console.error(JSON.stringify({ ok: false, error: error instanceof Error ? error.message : 'deep_controller_failed' })); process.exitCode = 1; }
 }
