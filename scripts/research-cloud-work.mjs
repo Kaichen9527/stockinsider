@@ -1,27 +1,34 @@
-import { readFile, open, realpath, statfs, mkdir, rmdir } from 'node:fs/promises';
+import { readFile, open, realpath, statfs, mkdir, rmdir, lstat } from 'node:fs/promises';
+import { constants } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { createCloudWork, validateCloudWork, createCloudResult, recomputeCloudArticle, verifyCloudResult } from '../web/src/lib/research-cloud-work.ts';
 import { assessCloudCapacity } from './research-cloud-capacity.mjs';
 
-async function jsonFile(filename) {
+export async function readCloudPrivateJson(filename, { openFile = open, statPath = lstat } = {}) {
   if (!path.isAbsolute(filename || '')) throw new Error('cloud_absolute_file_required');
-  const handle = await open(filename, 'r');
+  const handle = await openFile(filename, constants.O_RDONLY | constants.O_NONBLOCK | constants.O_NOFOLLOW);
   try {
     const info = await handle.stat();
-    if (!info.isFile() || info.size > 4_000_000) throw new Error('cloud_file_bound_invalid');
-    const buffer = Buffer.alloc(info.size); let offset = 0;
+    if (!info.isFile() || !Number.isSafeInteger(info.size) || info.size < 0 || info.size > 4_000_000)
+      throw new Error('cloud_file_bound_invalid');
+    const buffer = Buffer.alloc(info.size + 1); let offset = 0;
     while (offset < buffer.length) {
       const read = await handle.read(buffer, offset, buffer.length - offset, offset);
       if (!read.bytesRead) break;
       offset += read.bytesRead;
     }
-    const extra = await handle.read(Buffer.alloc(1), 0, 1, info.size);
-    if (offset !== info.size || extra.bytesRead) throw new Error('cloud_file_changed_during_read');
-    return JSON.parse(buffer.toString('utf8'));
+    const after = await handle.stat();
+    const currentPath = await statPath(filename);
+    const unchanged = candidate => candidate.isFile() && ['size', 'dev', 'ino', 'ctimeMs', 'mtimeMs']
+      .every(key => candidate[key] === info[key]);
+    if (offset !== info.size || !unchanged(after) || !unchanged(currentPath))
+      throw new Error('cloud_file_changed_during_read');
+    return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(buffer.subarray(0, offset)));
   } finally { await handle.close(); }
 }
+const jsonFile = readCloudPrivateJson;
 async function writeNew(filename, value) {
   if (!path.isAbsolute(filename || '')) throw new Error('cloud_absolute_file_required');
   const text = JSON.stringify(value, null, 2) + '\n';
