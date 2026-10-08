@@ -31,14 +31,22 @@ export function parseOfficialInsiderRow(row:Row,dataset:OfficialInsiderDataset) 
   if(!row || typeof row!=='object' || Array.isArray(row))throw new Error('insider_schema_invalid_row');
   const tpexTransfer=dataset.market==='TPEX'&&dataset.kind==='transfer';
   const symbolKey=tpexTransfer?'SecuritiesCompanyCode':'公司代號';
-  if(!(symbolKey in row))throw new Error('insider_schema_missing_symbol_key');
+  const nameKey=tpexTransfer?'CompanyName':'公司名稱';
+  const roleKey=dataset.kind==='holding'?'職稱':tpexTransfer?'申請人身分':'申報人身分';
+  const dateKey=tpexTransfer?'Date':'出表日期';
+  const required=[symbolKey,nameKey,roleKey,'姓名',dateKey,...(dataset.kind==='holding'
+    ? ['資料年月','目前持股']
+    : ['預定轉讓方式及股數-轉讓股數','目前持有股數-自有持股','目前持有股數-保留運用決定權信託股數','預定轉讓方式及股數-轉讓方式','有效轉讓期間'])];
+  for(const key of required)if(!Object.hasOwn(row,key)||typeof row[key]!=='string')throw new Error(`insider_schema_missing_or_invalid_key:${key}`);
+  // Validate the endpoint's schema and values even for excluded identities and known empty placeholders.
+  const outputDate=rocDate(row[dateKey]);
+  const currentShares=shares(row[dataset.kind==='holding'?'目前持股':'目前持有股數-自有持股']);
+  const trustShares=dataset.kind==='transfer'?shares(row['目前持有股數-保留運用決定權信託股數']):null;
+  const declaredShares=dataset.kind==='transfer'?shares(row['預定轉讓方式及股數-轉讓股數']):null;
   const symbol=text(row[symbolKey]);
   const person=text(row['姓名']);
-  const companyName=text(row[tpexTransfer?'CompanyName':'公司名稱']);
-  const role=text(row[dataset.kind==='holding'?'職稱':tpexTransfer?'申請人身分':'申報人身分']);
-  if(!symbol && !person && !companyName)return null; // Official current-response placeholder, not a transaction.
-  if(!/^[1-9]\d{3}$/u.test(symbol) || !person || !role || !companyName)return null;
-  const outputDate=rocDate(row[tpexTransfer?'Date':'出表日期']);
+  const companyName=text(row[nameKey]);
+  const role=text(row[roleKey]);
   const sourcePeriod=text(row['資料年月']);
   let reportPeriod='unknown_period';
   if(dataset.kind==='holding') {
@@ -48,14 +56,19 @@ export function parseOfficialInsiderRow(row:Row,dataset:OfficialInsiderDataset) 
     if(!('預定轉讓方式及股數-轉讓股數' in row) || !('目前持有股數-自有持股' in row))throw new Error('insider_schema_invalid_transfer');
     reportPeriod=text(row['有效轉讓期間']) || outputDate || 'unknown_period';
   }
+  if(!symbol && !person && !companyName && !role && dataset.kind==='transfer' && outputDate && currentShares===null && trustShares===null && declaredShares===null)return null;
+  if(!/^[1-9]\d{3}$/u.test(symbol) || !person || !role || !companyName)return null;
   return {symbol,person,role,companyName,reportPeriod,sourcePeriod:sourcePeriod||null,outputDate,
     publishedAt:null,publicationPrecision:outputDate?'date':'unknown',
-    currentShares:shares(row[dataset.kind==='holding'?'目前持股':'目前持有股數-自有持股']),
-    trustShares:dataset.kind==='transfer'?shares(row['目前持有股數-保留運用決定權信託股數']):null,
-    declaredShares:dataset.kind==='transfer'?shares(row['預定轉讓方式及股數-轉讓股數']):null,
+    currentShares, trustShares, declaredShares,
     transferMethod:dataset.kind==='transfer'?text(row['預定轉讓方式及股數-轉讓方式'])||null:null,
     confirmedShares:null,
   };
+}
+/** Schema validation covers the whole bounded response before page or symbol selection. */
+export function validateOfficialInsiderResponseRows(rows:Row[],dataset:OfficialInsiderDataset):void {
+  if(!Array.isArray(rows)||rows.length>50000)throw new Error('insider_schema_row_limit_or_shape');
+  for(const row of rows)parseOfficialInsiderRow(row,dataset);
 }
 export function insiderPage(rows:Row[],hash:string,cursor:InsiderCursor|null,symbol?:string) {
   if(!/^[a-f0-9]{64}$/u.test(hash) || rows.length>50000 || (cursor && (!/^[a-f0-9]{64}$/u.test(cursor.hash)||!Number.isSafeInteger(cursor.offset)||cursor.offset<0)))throw new Error('insider_cursor_invalid');
@@ -84,5 +97,6 @@ export async function fetchOfficialInsiderRows(dataset:OfficialInsiderDataset,tr
   const raw=Buffer.concat(chunks);const rows=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(raw));
   if(!Array.isArray(rows))throw new Error('insider_schema_not_array');
   if(rows.length>50000 || rows.some(row=>!row||typeof row!=='object'||Array.isArray(row)))throw new Error('insider_schema_row_limit_or_shape');
+  validateOfficialInsiderResponseRows(rows as Row[],dataset);
   return {rows:rows as Row[],bytes,attemptedAt,observedAt,hash:createHash('sha256').update(raw).digest('hex')};
 }

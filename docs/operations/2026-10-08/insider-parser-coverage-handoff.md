@@ -15,3 +15,9 @@ Observed architecture86b807392290fc6dffb9e4ad9285e88744900e30 is independently u
 ## Explicit snapshot coverage successor
 
 Per-dataset results now also expose snapshot_sha256, response_bytes and cursor_before/cursor_after with remaining_rows. Successor collector6/types/lint/normalbuild all pass; unchanged parser20/PG1 retained. Receipt .agent/reports/2026-10-08T13-59-insider-coverage-metadata.json supplements, never overwrites the original receipt.
+
+## 082fcfe two-P2 repair (unsigned review still pending)
+
+The original exact082fcfe review and failed probes are retained. Schema drift previously passed as excluded rows and advanced progress; zero-new incomplete replay could become successful_empty/duplicate_only. New required-key/string checks cover every bounded response before paging or symbol selection. Failure keeps the dataset cursor unchanged and excludes its uncommitted documents. Only present-field empty transfer placeholders are accepted as non-events. Remaining pages/dataset failures precede empty/duplicate success; actual route contract tests verify HTTP502 and succeededAt null while complete duplicate/empty outcomes still succeed.
+
+Measured red: parser21pass/6fail, collector6pass/3fail, health10pass/3fail. Final green:32parser +9collector +13health +5actual-handler synthetic-dependency route +1real PG cursor =60pass/0fail/0skip. Types passed after correcting a missing required test-field (first type failure preserved); lint0errors/33existing warnings; normal web build passed. Receipt .agent/reports/2026-10-08T14-23-insider-p2-repair-vm.json stores exact file/stage hashes, failures and resource measurements. Source-sync live HTTP/PG ingestion and official VM acquisition remain unverified; this is manual engineering, not automatic role-budget or lease acceptance. No old receipt/data overwritten. Observed Slice1 changes are preserved in a separate worktree; approved86 Slice2/3 and approved64f7 publication work remain next.

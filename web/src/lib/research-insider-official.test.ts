@@ -13,7 +13,7 @@ for(const symbol of ['2383','2409']) test(`actual TWSE selected ${symbol}`,()=>{
 test('actual TPEx26 selected and correct endpoint',()=>{assert.equal(OFFICIAL_INSIDER_DATASETS[3].url,otc.sources[0].url);for(const r of otc.selectedHoldings5347){assert.equal(parseOfficialInsiderRow(r.values,OFFICIAL_INSIDER_DATASETS[3])!.symbol,'5347');}assert.equal(otc.selectedHoldings5347.length,26);});
 test('actual transfer blank is null own/trust separated',()=>{const p=parseOfficialInsiderRow(tw.transfer.exampleRow.rawFields,transfer)!;assert.equal(p.declaredShares,null);assert.equal(p.currentShares,40781855);assert.equal(p.trustShares,0);assert.equal(p.publishedAt,null);assert.equal(p.confirmedShares,null);});
 test('populated true transfer key, not obsolete key',()=>{const row={...tw.transfer.exampleRow.rawFields,'預定轉讓方式及股數-轉讓股數':'1,500','預定轉讓方式及股數-擬轉讓股數':'999','目前持有股數-保留運用決定權信託股數':'500'};const p=parseOfficialInsiderRow(row,transfer)!;assert.equal(p.declaredShares,1500);assert.equal(p.trustShares,500);});
-test('TPEx placeholder is not event',()=>{assert.equal(parseOfficialInsiderRow({...otc.transferPlaceholder,Date:'1151007'},OFFICIAL_INSIDER_DATASETS[4]),null);});
+test('TPEx placeholder is not event',()=>{assert.equal(parseOfficialInsiderRow({...Object.fromEntries(otc.sources[1].firstRecordKeys.map((key:string)=>[key,''])),...otc.transferPlaceholder,Date:'1151007'},OFFICIAL_INSIDER_DATASETS[4]),null);});
 test('TPEx populated transfer uses distinct identity schema',()=>{const row={...tw.transfer.exampleRow.rawFields,SecuritiesCompanyCode:'5347',CompanyName:'世界',Date:'1151007',申請人身分:'董事',公司代號:undefined};const p=parseOfficialInsiderRow(row,OFFICIAL_INSIDER_DATASETS[4])!;assert.equal(p.symbol,'5347');assert.equal(p.outputDate,'2026-10-07');});
 test('unknown holding schema rejected',()=>{assert.throws(()=>parseOfficialInsiderRow({公司代號:'2409',公司名稱:'友達',姓名:'A',職稱:'董事'},holding),/schema/);});
 test('invalid dates and unsafe numbers rejected',()=>{for(const value of ['1151331','1150230'])assert.throws(()=>parseOfficialInsiderRow({...tw.holding.selectedRows[0].rawFields,出表日期:value},holding));assert.throws(()=>parseOfficialInsiderRow({...tw.holding.selectedRows[0].rawFields,目前持股:'-1'},holding));});
@@ -29,3 +29,17 @@ test('ungranted URLs rejected before transport',async()=>{let called=false;await
 test('redirected response cannot qualify',async()=>{const r=new Response('[]');Object.defineProperty(r,'redirected',{value:true});await assert.rejects(fetchOfficialInsiderRows(holding,async()=>r),/http/);});
 test('actual streamed oversized body rejected without trusting headers',async()=>{const stream=new ReadableStream({start(c){c.enqueue(new Uint8Array(12*1024*1024+1));c.close();}});await assert.rejects(fetchOfficialInsiderRows(holding,async()=>new Response(stream)),/size/);});
 test('row and cursor upper bounds refuse silent truncation',()=>{assert.throws(()=>insiderPage(Array(50001).fill({}),'a'.repeat(64),null),/cursor/);assert.throws(()=>insiderPage([], 'a'.repeat(64),{hash:'a'.repeat(64),offset:1}),/range/);});
+
+for(const key of ['職稱','姓名','公司名稱','公司代號','出表日期','資料年月','目前持股']) test(`required holding key/type ${key} fails closed`,()=>{
+ const row={...tw.holding.selectedRows[0].rawFields};delete row[key];row.position='董事';
+ assert.throws(()=>parseOfficialInsiderRow(row,holding),/schema/);
+ assert.throws(()=>parseOfficialInsiderRow({...tw.holding.selectedRows[0].rawFields,[key]:null},holding),/schema/);
+});
+
+for(const dataset of OFFICIAL_INSIDER_DATASETS) test(`endpoint required string schema ${dataset.market}/${dataset.kind}`,()=>{
+ const base=dataset.kind==='holding'?tw.holding.selectedRows[0].rawFields:dataset.market==='TPEX'
+  ? {...tw.transfer.exampleRow.rawFields,SecuritiesCompanyCode:'5347',CompanyName:'世界',Date:'1151007',申請人身分:'董事'}:tw.transfer.exampleRow.rawFields;
+ const keys=dataset.kind==='holding'?['公司代號','公司名稱','職稱','姓名','出表日期','資料年月','目前持股']
+  : [dataset.market==='TPEX'?'SecuritiesCompanyCode':'公司代號',dataset.market==='TPEX'?'CompanyName':'公司名稱',dataset.market==='TPEX'?'申請人身分':'申報人身分','姓名',dataset.market==='TPEX'?'Date':'出表日期','預定轉讓方式及股數-轉讓股數','目前持有股數-自有持股','目前持有股數-保留運用決定權信託股數','預定轉讓方式及股數-轉讓方式','有效轉讓期間'];
+ for(const key of keys){const row={...base};delete row[key];assert.throws(()=>parseOfficialInsiderRow(row,dataset),/schema/);assert.throws(()=>parseOfficialInsiderRow({...base,[key]:42},dataset),/schema/);}
+});

@@ -12,16 +12,16 @@ const otc=JSON.parse(readFileSync('docs/research/2026-10-08-discovery-live/tpex-
 function library(path){const exports={};vm.runInNewContext(ts.transpileModule(readFileSync(path,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require,Buffer,URL,Date,Response,TextDecoder,AbortSignal,fetch});return exports;}
 const official=library('web/src/lib/research-insider-official.ts');
 const evidence=library('web/src/lib/research-insider-evidence.ts');
-function harness({rows,prior=null,failWrite=false,failCursor=false}={}){
+function harness({rows,prior=null,failWrite=false,failCursor=false,zeroNew=false}={}){
  const cursors=new Map();if(prior)for(const d of official.OFFICIAL_INSIDER_DATASETS.filter(d=>d.kind==='holding'))cursors.set(d.url,prior);const written=[];const audits=[];let fetches=0;
  const client={from(table){assert.equal(table,'source_connector_cursors');const filters={};let mutation=null;let value;
   const query={select(){return query},eq(key,v){filters[key]=v;return query},maybeSingle:async()=>({data:cursors.has(filters.scope_key)?{cursor_value:cursors.get(filters.scope_key)}:null,error:null}),
    insert(v){mutation='insert';value=v;return query},update(v){mutation='update';value=v;return query},
    then(resolve,reject){return Promise.resolve().then(()=>{if(failCursor)return {error:{message:'synthetic CAS conflict'},data:null};if(mutation==='insert'&&cursors.has(value.scope_key))return {error:{message:'duplicate'},data:null};if(mutation==='update'&&filters.cursor_value!==cursors.get(value.scope_key))return {error:null,data:[]};cursors.set(value.scope_key,value.cursor_value);return {error:null,data:[{cursor_value:value.cursor_value}]};}).then(resolve,reject)}};return query;}};
  const context={...official,...evidence,Date,JSON,Number,String,Error,
-  fetchOfficialInsiderRows:async dataset=>{fetches++;const data=rows&&dataset.kind==='holding'?rows:(dataset.url===official.OFFICIAL_INSIDER_DATASETS[0].url?tw.holding.selectedRows.map(r=>r.rawFields):dataset.url===official.OFFICIAL_INSIDER_DATASETS[2].url?[tw.transfer.exampleRow.rawFields]:dataset.url===official.OFFICIAL_INSIDER_DATASETS[3].url?otc.selectedHoldings5347.map(r=>r.values):dataset.url===official.OFFICIAL_INSIDER_DATASETS[4].url?[{...otc.transferPlaceholder,Date:'1151007'}]:[]);return {rows:data,hash:'a'.repeat(64),bytes:123,attemptedAt:'2026-10-08T13:00:00Z',observedAt:'2026-10-08T13:00:01Z'};},
+  fetchOfficialInsiderRows:async dataset=>{fetches++;const data=rows&&dataset.kind==='holding'?rows:(dataset.url===official.OFFICIAL_INSIDER_DATASETS[0].url?tw.holding.selectedRows.map(r=>r.rawFields):dataset.url===official.OFFICIAL_INSIDER_DATASETS[2].url?[tw.transfer.exampleRow.rawFields]:dataset.url===official.OFFICIAL_INSIDER_DATASETS[3].url?otc.selectedHoldings5347.map(r=>r.values):dataset.url===official.OFFICIAL_INSIDER_DATASETS[4].url?[{...Object.fromEntries(otc.sources[1].firstRecordKeys.map((key)=>[key,''])),...otc.transferPlaceholder,Date:'1151007'}]:[]);return {rows:data,hash:'a'.repeat(64),bytes:123,attemptedAt:'2026-10-08T13:00:00Z',observedAt:'2026-10-08T13:00:01Z'};},
   getSupabaseServerClient:()=>client,startConnectorRun:async()=> 'run',startAgentRun:async()=> 'agent',upsertSourceEntity:async()=>({id:'synthetic-local-entity'}),
-  createSourceAudit:async audit=>audits.push(audit),upsertSourceRawDocuments:async docs=>{if(failWrite)throw Error('synthetic persistence failure');written.push(...docs);return docs.length;},
+  createSourceAudit:async audit=>audits.push(audit),upsertSourceRawDocuments:async docs=>{if(failWrite)throw Error('synthetic persistence failure');written.push(...docs);return zeroNew?0:docs.length;},
   filterSymbolScopedDocs:(docs,connector,scope)=>scope?docs.filter(d=>d.symbols.includes(scope.symbol)):docs,upsertCredentialRegistry:async()=>{},finishAgentRun:async()=>{},finishConnectorRun:async()=>{},
   writeAgentTask:async()=> 'task',writeAgentFinding:async()=>{},};
  vm.runInNewContext(ts.transpileModule(body,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText+'\nglobalThis.run=scrapeTwseInsider;',context);
@@ -33,3 +33,16 @@ test('market partial coverage and persisted next page are explicit',async()=>{co
 test('persistence failure never advances cursor',async()=>{const prior=JSON.stringify({hash:'a'.repeat(64),offset:0});const h=harness({failWrite:true,prior});await assert.rejects(h.run(),/persistence/);assert.equal(h.saved,prior);});
 test('CAS conflict rejects collector success after idempotent document writes',async()=>{const h=harness({failCursor:true});await assert.rejects(h.run(),/cursor_commit_failed/);assert.equal(h.saved,null);assert.ok(h.written.length>0);});
 test('existing source endpoint still authenticates and enforces production lease',()=>{const route=readFileSync('web/src/app/api/internal/source-sync/route.ts','utf8');assert.match(route,/requireInternalAuth\(req\)/);assert.match(route,/acquireProductionWriteLease/);});
+
+for(const symbol of [null,'2409']) test(`schema drift cannot complete/advance before symbol filtering ${symbol}`,async()=>{
+ const row={...tw.holding.selectedRows[0].rawFields};delete row['職稱'];row.position='董事';
+ const prior=JSON.stringify({hash:'a'.repeat(64),offset:0});const h=harness({rows:[row],prior});
+ const result=await h.run(symbol?{symbol}:undefined);
+ assert.equal(result.metadata.dataset_outcomes[0].status,'failed');
+ assert.equal(h.saved,prior);assert.equal(h.written.filter(d=>d.metadata.source_report_period).length,0);
+});
+test('schema drift outside current page refuses advance for the entire snapshot',async()=>{
+ const rows=Array.from({length:501},()=>({...tw.holding.selectedRows[0].rawFields}));delete rows[500]['姓名'];
+ const h=harness({rows});const result=await h.run();assert.equal(h.saved,null);
+ assert.equal(result.metadata.dataset_outcomes[0].status,'failed');assert.equal(h.written.filter(d=>d.metadata.source_report_period).length,0);
+});
