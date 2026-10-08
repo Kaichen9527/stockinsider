@@ -43,3 +43,19 @@ Private local artifact references (not uploaded raw logs):
 ```
 
 Remaining: independently review exact commit, execute native VM PostgreSQL and required normal web build, update PR. No unchanged CI rerun was requested.
+
+
+## Failed-spawn boundary successor
+
+Post-review probing found the missing-stream failure branch attempted child.kill without a positive spawned PID and returned before installing the child error listener. A controlled real failed-spawn probe on de57358 terminated its own test process with exit137; no application/VPS/provider process was targeted. The exact native low-level signal path is not inferred from that exit alone. A safe deterministic regression independently records the invalid kill attempt (1fail/0skip).
+
+The successor requires a positive safe PID before signalling and installs the error listener before stream validation. It never signals the absent spawn and handles late spawn errors. Updated actual MacPG+collector8/8pass0skip; fixed native failed-spawn/no-stream probe exits0 with piped_child_streams_required and no uncaught event. Original SQL assertions remain unchanged. Earlier de57358 review does not automatically approve this successor; renewed exact review and VM/build required.
+
+Successor source hashes:
+
+```json
+{
+  "scripts/test-support/collect-piped-child.mjs": "5e9fdc0f17224024cef9cea68fa8548261577d379ef42d4693068822f824a652",
+  "scripts/candidate-dossier-outbox-v6-postgres.test.mjs": "8b33bec792a73230813970d50e60b774139a555c3a1aa58d498cf727705073d3"
+}
+```

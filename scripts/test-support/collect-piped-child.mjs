@@ -21,7 +21,7 @@ export function collectPipedChild(child, {
     release();
     out.length = 0; err.length = 0;
     // Retain error listeners for late events. Never signal a leader after exit.
-    if (!leaderExited && child.exitCode == null && child.signalCode == null) {
+    if (!leaderExited && Number.isSafeInteger(child.pid) && child.pid > 0 && child.exitCode == null && child.signalCode == null) {
       try { child.kill('SIGKILL'); } catch { /* Original capture failure takes precedence. */ }
     }
     child.stdout?.destroy(); child.stderr?.destroy();
@@ -38,12 +38,13 @@ export function collectPipedChild(child, {
       chunks.push(bytes);
     });
   };
+  // Install before validation: failed spawn can emit error after streams are absent.
+  child.on('error', error => fail(error));
   if (!child.stdout || !child.stderr) {
     fail(new Error('piped_child_streams_required'));
     return { result, cancel: fail };
   }
   read(child.stdout, out, false); read(child.stderr, err, true);
-  child.on('error', error => fail(error));
   child.on('exit', () => { leaderExited = true; });
   child.on('close', (code, signal) => {
     if (settled) return;
