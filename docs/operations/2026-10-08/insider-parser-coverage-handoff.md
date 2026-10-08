@@ -11,3 +11,7 @@ Actual final checks:20parser +6collector +1realPostgres cursor test,27pass0fail0
 Receipt: .agent/reports/2026-10-08T13-56-insider-parser-coverage-vm.json. Stage hashes, failures and sampled resources are in that receipt; private logs/cache are retained under /workspace/cloud-insider-parser-artifacts-oct08. Initial sandbox PG/build failures, test fixture failures and TS2352 are preserved; final pass does not erase them. No production/VPS/secret reads/model dispatch/scheduling/authority activation.
 
 Observed architecture86b807392290fc6dffb9e4ad9285e88744900e30 is independently unsigned approved per root; next Slice1 starts after this frozen increment. Root owns publication-v2 spec; do not duplicate its design. Original model-runner Linux23cases19pass4fail remain retained. Root withdrew selector inconsistency suspicion: v3.24 positive/v3.9 negative is intentional; no pin/test changes. Separate newly found JSONL P1 fix awaits isolated successor verification and is not assumed to explain historical CI parser failure.
+
+## Explicit snapshot coverage successor
+
+Per-dataset results now also expose snapshot_sha256, response_bytes and cursor_before/cursor_after with remaining_rows. Successor collector6/types/lint/normalbuild all pass; unchanged parser20/PG1 retained. Receipt .agent/reports/2026-10-08T13-59-insider-coverage-metadata.json supplements, never overwrites the original receipt.

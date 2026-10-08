@@ -3786,7 +3786,7 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
         notes: `${dataset.label} processed=${page.processedRows} excluded=${excludedRows} remaining=${page.remainingRows}; ${page.coverage}`,
       });
       datasetOutcomes.push({ url: dataset.url, status: 'success', rows: page.rows.length - excludedRows, reason: null,
-        coverage: { total_rows: page.totalRows, processed_rows: page.processedRows, excluded_rows: excludedRows, remaining_rows: page.remainingRows, status: page.coverage, snapshot_reset: page.snapshotReset, next_offset: page.nextCursor?.offset ?? null, absence_scope: 'retrieved_response_only_not_historical_transactions' } });
+        coverage: { snapshot_sha256: response.hash, response_bytes: response.bytes, cursor_before: cursor, cursor_after: page.nextCursor, total_rows: page.totalRows, processed_rows: page.processedRows, excluded_rows: excludedRows, remaining_rows: page.remainingRows, status: page.coverage, snapshot_reset: page.snapshotReset, next_offset: page.nextCursor?.offset ?? null, absence_scope: 'retrieved_response_only_not_historical_transactions' } });
       if (page.nextCursor) pendingCursors.push({scope, previous, next: page.nextCursor});
     } catch (error) {
       datasetOutcomes.push({ url: dataset.url, status: 'failed', rows: 0, reason: (error as Error).message.slice(0, 500) });
