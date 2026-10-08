@@ -35,7 +35,7 @@ function string(value: unknown): string { ensure(typeof value === 'string'); ret
 
 /** Preserve PostgreSQL microseconds; Date.parse alone would accept a changed
  * sub-millisecond deadline, or silently normalize an invalid calendar date. */
-function instant(value: unknown): bigint {
+export function researchDeepInstant(value: unknown): bigint {
   const text = string(value);
   const parts = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,6}))?(Z|([+-])(\d{2}):(\d{2}))$/u.exec(text);
   ensure(parts);
@@ -46,6 +46,7 @@ function instant(value: unknown): bigint {
   const offset = (parts[4] === '-' ? -1 : 1) * (hours * 60 + minutes);
   return BigInt(local) * BigInt(1000) + BigInt((parts[2] || '').padEnd(6, '0')) - BigInt(offset) * BigInt(60_000_000);
 }
+const instant = researchDeepInstant;
 function taipeiDay(value: bigint): string {
   return new Date(Number(value / BigInt(1000)) + 8 * 3600_000).toISOString().slice(0, 10);
 }
@@ -100,13 +101,19 @@ function one(result: { data: unknown; error: unknown }): Row {
 
 /** Only finite, owner-scoped SELECTs. Never claims, renews, completes, or writes. */
 export async function loadResearchDeepClaimContext(db: Pick<SupabaseClient, 'from'>,
-  expected: Expected): Promise<ResearchDeepClaimContext | null> {
+  expected: Expected, signal?: AbortSignal): Promise<ResearchDeepClaimContext | null> {
   expectedIdentity(expected);
+  const read = async (query: PromiseLike<{ data: unknown; error: unknown }> & { abortSignal?: (signal: AbortSignal) => PromiseLike<{ data: unknown; error: unknown }> }) => {
+    if (signal?.aborted) throw new Error('research_deep_claim_context_aborted');
+    const result = await (signal && query.abortSignal ? query.abortSignal(signal) : query);
+    if (signal?.aborted) throw new Error('research_deep_claim_context_aborted');
+    return result;
+  };
   const queryTime = expected.now ?? new Date().toISOString();
   let query = db.from('research_deep_jobs_v1').select(JOB_FIELDS)
     .eq('lease_owner', expected.owner).eq('status', 'running').gt('lease_expires_at', queryTime);
   if (expected.jobId !== undefined) query = query.eq('job_id', expected.jobId).eq('attempts', expected.attempt);
-  const jobs = rows(await query.limit(2));
+  const jobs = rows(await read(query.limit(2)));
   if (!jobs.length) return null;
   ensure(jobs.length === 1);
   const job = jobs[0];
@@ -114,22 +121,22 @@ export async function loadResearchDeepClaimContext(db: Pick<SupabaseClient, 'fro
     && Number.isInteger(job.attempts) && Number(job.attempts) >= 1 && Number(job.attempts) <= 3);
   if (expected.jobId !== undefined) ensure(job.job_id === expected.jobId && job.attempts === expected.attempt);
   const workKey = `deep:${job.job_id}:${job.attempts}`;
-  const attempt = one(await db.from('research_deep_job_attempts_v1').select(ATTEMPT_FIELDS)
-    .eq('job_id', job.job_id).eq('attempt', job.attempts).eq('owner', expected.owner).limit(2));
-  const model = one(await db.from('research_model_reservations_v1').select(RESERVATION_FIELDS)
-    .eq('owner', expected.owner).eq('role', 'company_research').eq('work_key', workKey).limit(2));
+  const attempt = one(await read(db.from('research_deep_job_attempts_v1').select(ATTEMPT_FIELDS)
+    .eq('job_id', job.job_id).eq('attempt', job.attempts).eq('owner', expected.owner).limit(2)));
+  const model = one(await read(db.from('research_model_reservations_v1').select(RESERVATION_FIELDS)
+    .eq('owner', expected.owner).eq('role', 'company_research').eq('work_key', workKey).limit(2)));
   ensure(UUID.test(string(model.reservation_id)));
-  const completions = rows(await db.from('research_model_completions_v1').select(COMPLETION_FIELDS)
-    .eq('reservation_id', model.reservation_id).limit(2));
+  const completions = rows(await read(db.from('research_model_completions_v1').select(COMPLETION_FIELDS)
+    .eq('reservation_id', model.reservation_id).limit(2)));
   ensure(completions.length <= 1);
   const completion = completions[0] ?? null;
   if (completion) ensure(completion.reservation_id === model.reservation_id && completion.owner === expected.owner);
   // A completion or lease turnover while these reads run must not turn an old
   // attempt into the new owner's context. This remains an observation, not a
   // transaction or authority to bypass the existing guarded mutation fences.
-  const current = one(await db.from('research_deep_jobs_v1').select(JOB_FIELDS)
+  const current = one(await read(db.from('research_deep_jobs_v1').select(JOB_FIELDS)
     .eq('job_id', job.job_id).eq('attempts', job.attempts).eq('lease_owner', expected.owner)
-    .eq('status', 'running').limit(2));
+    .eq('status', 'running').limit(2)));
   ensure(JOB_FIELDS.split(',').every(key => current[key] === job[key]));
   const observedAt = expected.now ?? new Date().toISOString();
   const claimed = instant(attempt.claimed_at), jobDeadline = instant(job.lease_expires_at);

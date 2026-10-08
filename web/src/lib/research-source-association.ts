@@ -113,7 +113,7 @@ function versionSignature(document: Row) {
     acquisition: meta.acquisition_method ?? null, contentForm: meta.content_form ?? null });
 }
 /** Shared invariants for both the requested document and every latest sibling. */
-function documentInvariantProof(document: Row, cutoff: string): { proof: AssociationDocumentProof | null; gap: string | null } {
+export function documentInvariantProof(document: Row, cutoff: string): { proof: AssociationDocumentProof | null; gap: string | null } {
   const fail = (gap: string) => ({ proof: null, gap }); const meta = metadata(document); const root = canonical(document);
   if (!meta || !root || typeof document.id !== 'string' || !UUID.test(document.id)
     || typeof document.canonical_content_hash !== 'string' || !HASH.test(document.canonical_content_hash)
@@ -130,10 +130,12 @@ function documentInvariantProof(document: Row, cutoff: string): { proof: Associa
   if (meta.retracted_at != null) return fail('retracted');
   if (meta.claim_status === 'denied') return fail('denied');
   if (meta.parent_source_url != null && meta.parent_source_url !== root) return fail('parent_unresolved');
-  if (!['rumor', 'reported', 'confirmed'].includes(String(meta.claim_status))) return fail('claim_status_invalid');
-  if (document.content_semantics !== 'editorial_discussion' || !['research_summary', 'transcript_excerpt'].includes(String(meta.content_form))) return fail('substantive_content_missing');
+  if (typeof meta.claim_status !== 'string' || !['rumor', 'reported', 'confirmed'].includes(meta.claim_status)) return fail('claim_status_invalid');
+  if (document.content_semantics !== 'editorial_discussion' || typeof meta.content_form !== 'string'
+    || !['research_summary', 'transcript_excerpt'].includes(meta.content_form)) return fail('substantive_content_missing');
   const publicRights = meta.visibility === 'public' && meta.rights_boundary === 'public_citation'
-    && ['public_document', 'publisher_transcript', 'user_authorized_document'].includes(String(meta.acquisition_method));
+    && typeof meta.acquisition_method === 'string'
+    && ['public_document', 'publisher_transcript', 'user_authorized_document'].includes(meta.acquisition_method);
   const summaryRights = meta.visibility === 'authenticated_summary' && meta.rights_boundary === 'bounded_summary_only'
     && meta.acquisition_method === 'authenticated_browser_summary' && meta.content_form === 'research_summary'
     && (meta.timed_excerpts == null || Array.isArray(meta.timed_excerpts) && meta.timed_excerpts.length === 0);

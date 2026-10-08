@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { getSupabaseServerClient } from '@/lib/supabase-server';
 import { loadResearchDeepClaimContext } from '@/lib/research-deep-claim-context';
+import { loadResearchDeepAuthorInput, parseAuthorInputRequest } from '@/lib/research-deep-author-input';
 
 type Row = Record<string, unknown>;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
@@ -18,8 +19,23 @@ export async function POST(request: Request) {
   if (owner.length < 3 || owner.length > 120 || !/^[a-zA-Z0-9:_-]+$/u.test(owner)) {
     return NextResponse.json({ ok: false, error: 'research_deep_owner_invalid' }, { status: 400 });
   }
-  if (['claim', 'status'].includes(action) && typeof body.owner !== 'string') {
+  if (['claim', 'status', 'input'].includes(action) && typeof body.owner !== 'string') {
     return NextResponse.json({ ok: false, error: 'research_deep_owner_invalid' }, { status: 400 });
+  }
+  if (action === 'input') {
+    let input;
+    try {
+      const { action: _action, ...fields } = body; void _action;
+      input = parseAuthorInputRequest(fields);
+    } catch {
+      return NextResponse.json({ ok: false, error: 'research_deep_input_request_invalid' }, { status: 400 });
+    }
+    try {
+      const packet = await loadResearchDeepAuthorInput(getSupabaseServerClient(), input);
+      return NextResponse.json({ ok: true, packet });
+    } catch {
+      return NextResponse.json({ ok: false, error: 'research_deep_input_unavailable' }, { status: 409 });
+    }
   }
   if (action === 'status') {
     const hasJob = Object.hasOwn(body, 'jobId'), hasAttempt = Object.hasOwn(body, 'attempt');
