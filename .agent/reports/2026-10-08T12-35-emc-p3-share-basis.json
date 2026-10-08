@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "manual-emc-p3-correction-v1",
+  "recordedAt": "2026-10-08T12:34:57.629787+00:00",
+  "subjectBefore": "a7a96c2eec503ed7c06c1f601ba9ca4fa0449e98",
+  "reviewAttribution": "root relayed Astra UNSIGNED scoped working-draft/data/calculation PASS, P3 share-basis correction; not protected/publication/strategy",
+  "before": {
+    "stage": "emc-p3-before-permitted",
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "--experimental-strip-types",
+      "--test",
+      "scripts/research-emc-company-model.test.mjs"
+    ],
+    "startedAt": "2026-10-08T12:30:06.242Z",
+    "completedAt": "2026-10-08T12:30:06.646Z",
+    "elapsedSeconds": 0.4035038319998421,
+    "exitCode": 1,
+    "sampledAggregateRssPeakBytes": 130940928,
+    "observedTaskDiskPeakBytes": 1283092480,
+    "availableBeforeBytes": 25317617664,
+    "availableAfterBytes": 25317605376,
+    "guardTermination": null
+  },
+  "beforeTests": {
+    "pass": 16,
+    "fail": 1,
+    "skip": 0
+  },
+  "after": {
+    "stage": "preview-focused",
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "--experimental-strip-types",
+      "--test",
+      "web/src/lib/research-working-draft.test.ts",
+      "scripts/research-emc-company-model.test.mjs"
+    ],
+    "startedAt": "2026-10-08T12:33:26.748Z",
+    "completedAt": "2026-10-08T12:33:27.238Z",
+    "elapsedSeconds": 0.489688625006238,
+    "exitCode": 0,
+    "sampledAggregateRssPeakBytes": 204726272,
+    "observedTaskDiskPeakBytes": 1283149824,
+    "availableBeforeBytes": 25317560320,
+    "availableAfterBytes": 25317548032,
+    "guardTermination": null
+  },
+  "afterScope": "17 EMC and 10 preview tests; 27 pass/0 fail/0 skip",
+  "decimal": {
+    "stage": "emc-p3-decimal",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "docs/research/2026-10-08-emc-company-model/verify-output.py"
+    ],
+    "startedAt": "2026-10-08T12:34:10.186Z",
+    "completedAt": "2026-10-08T12:34:10.369Z",
+    "elapsedSeconds": 0.18282178600202315,
+    "exitCode": 0,
+    "sampledAggregateRssPeakBytes": 651264,
+    "observedTaskDiskPeakBytes": 1283170304,
+    "availableBeforeBytes": 25317539840,
+    "availableAfterBytes": 25317531648,
+    "guardTermination": null
+  },
+  "independentDecimalChecks": 395,
+  "articleBytesUnchanged": true,
+  "canonicalModelHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
+  "shareBasis": "2027 base assumed diluted360.112605m; PE40 rounded income54017m",
+  "nativePortableReceipt": ".agent/reports/2026-10-08T12-22-native-successor-linux.json on branch codex/native-successor-vm-verification-oct08, docshead132f24b99881e716d3b2c642ac3073ca10d9f1c8",
+  "nativePortableOutcome": {
+    "pass": 52,
+    "fail": 1,
+    "skip": 0,
+    "tracePreCaseRefusal": "GOV-004 missing protected-external-harness-v1; no protected trace cases executed"
+  },
+  "finalPreviewBuild": "pending this increment",
+  "qualified": false
+}
