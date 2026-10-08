@@ -1382,29 +1382,37 @@
     {
       "multipleTestParameter": 20,
       "eps": 300,
-      "netIncome": 107496,
-      "netMargin": 0.3948,
+      "netIncome": 108034,
+      "netMargin": 0.3968,
+      "shareBasis": "base2027 conditional diluted weighted shares; future assumption",
+      "sharesMillionAssumed": 360.11260500000003,
       "calibrated": false
     },
     {
       "multipleTestParameter": 30,
       "eps": 200,
-      "netIncome": 71664,
-      "netMargin": 0.2632,
+      "netIncome": 72023,
+      "netMargin": 0.2645,
+      "shareBasis": "base2027 conditional diluted weighted shares; future assumption",
+      "sharesMillionAssumed": 360.11260500000003,
       "calibrated": false
     },
     {
       "multipleTestParameter": 40,
       "eps": 150,
-      "netIncome": 53748,
-      "netMargin": 0.1974,
+      "netIncome": 54017,
+      "netMargin": 0.1984,
+      "shareBasis": "base2027 conditional diluted weighted shares; future assumption",
+      "sharesMillionAssumed": 360.11260500000003,
       "calibrated": false
     },
     {
       "multipleTestParameter": 50,
       "eps": 120,
-      "netIncome": 42999,
-      "netMargin": 0.1579,
+      "netIncome": 43214,
+      "netMargin": 0.1587,
+      "shareBasis": "base2027 conditional diluted weighted shares; future assumption",
+      "sharesMillionAssumed": 360.11260500000003,
       "calibrated": false
     }
   ],
@@ -1422,7 +1430,7 @@
     "Raw X0.00 on Aug28 prohibits total/economic-return claim; no approved entry",
     "No current broker consensus, calibrated multiples, current PB or target price"
   ],
-  "canonicalHash": "74b1b5e797578c0752f869b4438b6be2d305e0e2347f24685cd4a8761cc855b8",
+  "canonicalHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
   "inputManifest": [
     {
       "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",

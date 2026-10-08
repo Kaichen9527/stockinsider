@@ -25,6 +25,8 @@ for r in m['inputManifest']:
  b=(root/r['file']).read_bytes();assert len(b)==r['bytes']and hashlib.sha256(b).hexdigest()==r['sha256'];checks+=1
 for r in m['currentExpectationReverse']:
  base=m['scenarios'][1]['calendar2027'];required=D(r['mediaAttributedEps'])*D(base['dilutedSharesMillionAssumed']);pre=(required+D(base['nonControllingNetProfit']))/D('.76');check(required,r['requiredOwnersMillion']);check((pre-D(base['nonOperating']))/D('.26'),r['requiredRevenueAtBaseMargins']);check((pre-D(base['nonOperating'])+D(base['operatingExpenses']))/D(base['revenue']),r['requiredGrossMarginAtBaseRevenue'])
+for r in m['reversePriceSensitivity']:
+ base=m['scenarios'][1]['calendar2027'];denom=D(base['dilutedSharesMillionAssumed']);check(denom,r['sharesMillionAssumed']);required=D(m['price'])/D(r['multipleTestParameter'])*denom;assert abs(D(r['netIncome'])-required)<=D('.5');checks+=1;assert r['shareBasis']=='base2027 conditional diluted weighted shares; future assumption';check((required/D(base['revenue'])).quantize(D('.0001')),r['netMargin'])
 a=(p/'article.md').read_text();body=a.split('<details>')[0];count=sum('\u4e00'<=c<='\u9fff'for c in body);assert 4000<=count<=6000,count;checks+=1
 refs=set(re.findall(r'^\[([A-Z]+)\]: https://',a,re.M));assert set(re.findall(r'\[([A-Z]+)\]',body))<=refs;checks+=1
 print(json.dumps({'independentDecimalChecks':checks,'quarterBridges':18,'sourceHashes':5,'mainBodyHan':count,'citations':len(refs),'valuationApproved':False}))

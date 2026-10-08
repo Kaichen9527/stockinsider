@@ -19,3 +19,7 @@ Separate calendar2026 actualH1+forecastH2, calendar2027 forecast4quarters and fo
 Raw technical diagnostic uses existing `calculateTechnicalSnapshot`: first-close EMA seed, RSI initial14 actual deltas, ATR initial14 TRs excludes firstbar TR. This differs from AUO-market calculator seed conventions and is explicitly versioned; no silent switch. Aug28X0.00 remains named; no adjusted or total return, officialcompletecalendar/flows/benchmarkqualification/entry. Existing calendar helper can return diagnosticstale=false; that does not establish complete official source authority.
 
 Private focused/Decimal/types/lint/normalbuild receipts and failure chronology are listed in handoff/report. Web lint covers web source; newMJS/Python checked by executable focused/independent calculation and Node parsing. No app changes; no full unrelated suite rerun. Preview using existing read-only article contract is next scoped work; Markdown-only is not publication验收.
+
+## P3 sensitivity correction
+
+The 2027-base PE sensitivity now consistently uses assumed diluted weighted shares360.112605m; its shareBasis field labels the future assumption. PE40 requires rounded owners income54017m versus the original basic-basis53748m. Main article, scenario EPS and evidence remain unchanged. The original a7a96c2 snapshot and its unsigned scoped working-draft review remain historical; this successor correction awaits review.
