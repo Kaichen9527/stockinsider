@@ -230,3 +230,13 @@ model/draft/independent-review/submission consumer, followed by AUO and a differ
 industry end-to-end acceptance. Authentic external recovery, production role
 bootstrap and host capacity remain independent release barriers. All original
 unfinished product and forward-strategy work above remains open.
+
+## October8 continuation (supersedes current-state numbers only)
+
+See `../2026-10-08/implementation-handoff.md` for rights-aware author input
+at9610514 (draft #302), independently reviewed financial write-lease repair
+at3953e7c,329research/104financialpassingtests, and the existing dossier
+schedule's time/port corrections. Production remains9fd86fe; whole-host free
+space is15,240,617,984bytes, still below the existing heavy floor. Actual model
+execution, protected approval, production apply and five trading days remain
+open; no profitability or full-research completion is inferred.
