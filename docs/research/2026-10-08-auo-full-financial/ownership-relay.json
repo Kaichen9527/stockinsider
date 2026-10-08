@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "stockinsider-attributed-ownership-evidence-v1",
+  "symbol": "2409",
+  "recordedAt": "2026-10-08T10:01:52.750900+00:00",
+  "source": {
+    "label": "2026q2-consolidated-tc",
+    "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q2026_TC.pdf",
+    "attemptedAt": "2026-10-08T09:36:32.144541+00:00",
+    "httpStatus": 200,
+    "status": "read_success",
+    "bytes": 1578813,
+    "sha256": "94d74c75de96a6ec7b38d4d6c8a9f5d2d92750bf618543429b326ff6c95dcdb2",
+    "observedAt": "2026-10-08T09:36:32.926634+00:00",
+    "rawFile": "2026q2-consolidated-tc.pdf",
+    "textSha256": "5f69f4fba20a68e5ad98d9935d6f6feef25b384de72570b5e442a18fac792a6d"
+  },
+  "asOf": "2026-06-30",
+  "rows": [
+    {
+      "parent": "友達光電",
+      "child": "AUOLB",
+      "pdfPage": 12,
+      "equityPercentAsOf20260630": 100,
+      "sourceNumericLine": "友達光電    AUO (L) Corp. (AUOLB)            控股公司（馬來    100.00 %  100.00 %  100.00 %"
+    },
+    {
+      "parent": "AUOLB",
+      "child": "AUOSG",
+      "pdfPage": 15,
+      "equityPercentAsOf20260630": 100,
+      "sourceNumericLine": "AUOLB       AUO Singapore Pte. Ltd. (AUOSG)        控股及售後服務     100.00 %    100.00 %    100.00 %"
+    },
+    {
+      "parent": "AUOSG",
+      "child": "AUOXM",
+      "pdfPage": 16,
+      "equityPercentAsOf20260630": 100,
+      "sourceNumericLine": "AUOSG    友達光電（廈門）有限公司(AUOXM)                    製造及銷售公司    100.00 %   100.00 %   100.00 %"
+    },
+    {
+      "parent": "AUOXM",
+      "child": "BVXM",
+      "pdfPage": 17,
+      "equityPercentAsOf20260630": 100,
+      "sourceNumericLine": "AUOXM    景智電子（廈門）有限公司(BVXM)                      銷售及租賃公司   100.00 %   100.00 %   100.00 %"
+    },
+    {
+      "parent": "友達光電、康利投資及隆利投資",
+      "child": "達運精密",
+      "pdfPage": 13,
+      "equityPercentAsOf20260630": 41.05,
+      "sourceNumericLine": "友達光電、康 達運精密工業股份有限公司（達運精                          製造及銷售公司    41.05 %    41.05 %    41.05 %   註2"
+    },
+    {
+      "parent": "友達光電、康利投資及隆利投資",
+      "child": "凌華",
+      "pdfPage": 13,
+      "equityPercentAsOf20260630": 32.8,
+      "sourceNumericLine": "友達光電、康 凌華科技股份有限公司（凌華）                            研發、製造及銷    32.80 %    32.81 %    32.84 %   註2"
+    }
+  ],
+  "implications": [
+    "BVXM reported ownership path is four100-percent links toAUO; 達運精密 is consolidated with41.05-percent group holding. A consolidated asset gain is not automatically100-percent parent-attributable.",
+    "凌華 consolidated scope can differ from economic share32.80percent; consolidated sales growth must not be equated with same percentage owner earnings growth.",
+    "Holdings atJune30 do not establish exact transaction-date weights, tax deductions, participation rights, intercompany eliminations or later share changes."
+  ],
+  "normalizationRequirements": [
+    "Use disclosed transaction pretax gains with independently stated tax/attribution assumptions for a sensitivity only, until actual tax and parent attribution are established.",
+    "Never apply a single group ownership ratio to every segment or subtract full consolidated pretax gains from owner profit and label exact normalized EPS.",
+    "No commercial CPO/GCS order, yield, ASP or captured profit is inferred from corporate relationships."
+  ]
+}

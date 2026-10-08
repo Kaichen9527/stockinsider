@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "auo-model-attributed-source-ledger-v1",
+  "recordedAt": "2026-10-08T10:37:12.582786+00:00",
+  "allResearchLocatorsNotFormalIds": true,
+  "vmHttpSuccessClaimed": false,
+  "rawPdfsTransferred": false,
+  "newVmSourceRequests": 0,
+  "inputManifest": [
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-market/dataset.json",
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
+    }
+  ],
+  "upstreamApprovedEvidenceSubject": "1b25393ad4b3790e6ca427bb3f6ab93fc622abd1",
+  "sourceCustody": "Root public readers; raw PDF files private on Mac. VM verifies relay bytes only; source raw SHA is attributed.",
+  "publicationPrecision": "Exact financial publication instants unknown; issuer guidance date-only2026-07-30. ObservedAt preserved; no midnight inferred.",
+  "previousFailedReads": "Original AUO403 and hosted unreadable/retry events remain in earlier immutable ledgers",
+  "contextReferences": [
+    "../2026-10-08-auo-working-draft/public-context-relay.json",
+    "../2026-10-08-auo-working-draft/public-news-clue-relay.json",
+    "../2026-10-08-auo-working-draft/corporate-action-relay.json",
+    "../../../web/src/lib/auo-deep-dive-v1.ts"
+  ],
+  "approvalLimits": "Data unsigned scope only. New forecasts, prose, commercial assumptions and trading conclusions not independently approved."
+}

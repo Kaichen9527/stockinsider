@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "stockinsider-attributed-issuer-guidance-v1",
+  "symbol": "2409",
+  "recordedAt": "2026-10-08T10:07:42.007913+00:00",
+  "source": {
+    "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Handout_English.pdf",
+    "attemptedAt": "2026-10-08T10:06:45.382556+00:00",
+    "httpStatus": 200,
+    "status": "read_success",
+    "observedAt": "2026-10-08T10:06:46.293528+00:00",
+    "bytes": 1978871,
+    "sha256": "5dc95b6da2c72279258bf553bb06ec9aaeab85b1a4a8db96c6627d10f7384948",
+    "textSha256": "572665fa8a6b9576a038084c9a3127313df19b66dfc441b40871f6faa5cac0f8"
+  },
+  "publicationDateOnly": "2026-07-30",
+  "exactPublishedAt": null,
+  "visualInspection": {
+    "reader": "root-public-reader",
+    "pdfPages": [
+      6,
+      7,
+      8
+    ],
+    "renderScalePixels": 1500,
+    "textExtractionUsable": false
+  },
+  "guidance": {
+    "pdfPage": 8,
+    "targetPeriod": "2026Q3",
+    "type": "issuer_outlook_not_actual_or_order",
+    "mobility": "roughly_flat_qoq",
+    "verticalSolutions": "up_low_single_digit_percent_qoq",
+    "display": "modest_decline_qoq",
+    "other": null
+  },
+  "reportedProfitability": {
+    "pdfPage": 7,
+    "amountUnit": "TWD_million_rounded",
+    "periods": [
+      "2026Q2",
+      "2026H1"
+    ],
+    "mobilityOperatingProfit": [
+      768,
+      1243
+    ],
+    "mobilityOperatingMarginPercent": [
+      3.8,
+      3.1
+    ],
+    "verticalOperatingProfit": [
+      745,
+      1594
+    ],
+    "verticalOperatingMarginPercent": [
+      5.6,
+      6.3
+    ],
+    "displayOperatingProfit": [
+      -1085,
+      -2941
+    ],
+    "displayOperatingMarginPercent": [
+      -3.2,
+      -4.3
+    ],
+    "otherOmittedFromThisSlide": true
+  },
+  "reportedRevenueMix": {
+    "pdfPage": 6,
+    "unit": "percent_rounded",
+    "periods": [
+      "2025Q2",
+      "2025Q3",
+      "2025Q4",
+      "2026Q1",
+      "2026Q2"
+    ],
+    "other": [
+      4,
+      4,
+      4,
+      5,
+      4
+    ],
+    "display": [
+      53,
+      52,
+      50,
+      49,
+      48
+    ],
+    "vertical": [
+      15,
+      17,
+      17,
+      17,
+      19
+    ],
+    "mobility": [
+      28,
+      27,
+      29,
+      29,
+      29
+    ]
+  },
+  "analysisLimits": [
+    "Use the full statements exact four-segment values for totals; this three-pillar slide omits Other and rounds amounts.",
+    "Guidance is an issuer July30 outlook for Q3, not proof of realized segment sales or confirmed customer orders. Q3 consolidated monthly sales do not reveal its segment split or EPS.",
+    "Historical rounded revenue mix in the presentation does not restate historical four-segment profit disclosures; retain financial-report comparability warning.",
+    "Model any numerical translation of roughly-flat/low-single-digit/modest-decline explicitly as a research range, not quoted numeric company guidance.",
+    "No new CPO/GCS commercial revenue or Intel collaboration is implied."
+  ]
+}

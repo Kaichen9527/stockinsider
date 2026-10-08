@@ -1,0 +1,931 @@
+{
+  "schemaVersion": "auo-four-segment-model-vm-checkpoint-v1",
+  "recordedAt": "2026-10-08T10:39:35.906632+00:00",
+  "branch": "codex/auo-four-segment-model-oct08",
+  "base": "e2df0d04c7be3f8805ef3309f51b9c81de0fcfd1",
+  "incrementStartedAt": "2026-10-08T10:12:09Z",
+  "incrementDeadline": "2026-10-08T10:42:09Z",
+  "manualEngineeringOnly": true,
+  "automaticModelRoleBudgetAccepted": false,
+  "nativeRepairInterruption": {
+    "deliveredSubject": "8e0437e65ffd8d4ac5ca22c057b96879fe58b2ee",
+    "branch": "codex/local-inbox-dataplane-oct08",
+    "tests": 12,
+    "typeLintBuild": "pass",
+    "AUOCodeBaseStillE2": "The native repair is separate and should be integrated by root; this AUO branch does not revert or merge it."
+  },
+  "approvedDataSubject": "1b25393ad4b3790e6ca427bb3f6ab93fc622abd1",
+  "approvedDataByteComparisons": [
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189",
+      "matchesApprovedHead": true
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf",
+      "matchesApprovedHead": true
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb",
+      "matchesApprovedHead": true
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103",
+      "matchesApprovedHead": true
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6",
+      "matchesApprovedHead": true
+    }
+  ],
+  "approvalAttribution": "Astra unsigned scoped DATA approval via root; new model/article not approved",
+  "modelCanonicalHash": "8cb4a337d594f839f18b8d328d9c20cf00b2f25667f3060cc716d780460c0a68",
+  "articleSha256": "e4b40903361c32c820ea318032b24dc63cb98ca0b7a75e1eabfca6c3074dc512",
+  "resultFiles": [
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/README.md",
+      "bytes": 3173,
+      "sha256": "b62b4c08307e3c96c3062be21cc97382f3403a27a9c7f0fb482eeb0571dccdc7"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/article-template.md",
+      "bytes": 17660,
+      "sha256": "b512c9d38171b2274f41a4ef92a7dbd32b1e51f9da85e8f35aac9340177b3012"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/article.md",
+      "bytes": 19857,
+      "sha256": "e4b40903361c32c820ea318032b24dc63cb98ca0b7a75e1eabfca6c3074dc512"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json",
+      "bytes": 1213,
+      "sha256": "a1e37630eaccbeeea19e53024fe7cdaa7a1208d8b69aa2c7cea0cf4af58591ee"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 78175,
+      "sha256": "72e15fe44d09fd06117ae568ec58620335e38fe9457b5524ceffead66cf6c909"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+      "bytes": 16788,
+      "sha256": "bf3452356f10144de9fdda6aaca26d2dd8cd7fa3d2fff15101935d1684805e10"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/source-ledger.json",
+      "bytes": 2557,
+      "sha256": "73ba0b728a610f92a3b549c4e82bb87472552e0ebbedd2243daddc85782f225a"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/verify-output.py",
+      "bytes": 3597,
+      "sha256": "e82ac0e2b8ae3d8f21a6c35103cf353a9e643c1708c1a55f6efc91f340b88b01"
+    }
+  ],
+  "verification": {
+    "focusedNewCases": 13,
+    "existingSharedCases": 20,
+    "totalPass": 33,
+    "fail": 0,
+    "skip": 0,
+    "independentDecimalChecks": 223,
+    "mainChineseCharacters": 4063,
+    "citationDefinitions": 11,
+    "quarterBridges": 18,
+    "sourceManifestHashes": 7,
+    "typecheck": "pass on unchanged App tree",
+    "lint": "pass on unchanged App;33 existing warnings0errors; new root calculator verified by focused tests and syntax",
+    "normalBuild": "pass after final calculation code; final reference-spacing edit is docs only",
+    "newSyntaxChecks": "both new JS files pass"
+  },
+  "stages": {
+    "decimal-verify": {
+      "stage": "decimal-verify",
+      "command": [
+        "python3",
+        "docs/research/2026-10-08-auo-four-segment-model/verify-output.py"
+      ],
+      "startedAt": "2026-10-08T10:33:46.608Z",
+      "completedAt": "2026-10-08T10:33:46.792Z",
+      "elapsedSeconds": 0.18406679399777204,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 655360,
+      "observedTaskDiskPeakBytes": 1296969728,
+      "availableBeforeBytes": 25746542592,
+      "availableAfterBytes": 25746534400,
+      "guardTermination": null
+    },
+    "final-quarter-render": {
+      "stage": "final-quarter-render",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+        "2026-10-08T10:20:00Z"
+      ],
+      "startedAt": "2026-10-08T10:32:23.392Z",
+      "completedAt": "2026-10-08T10:32:23.680Z",
+      "elapsedSeconds": 0.28823025499877986,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 81399808,
+      "observedTaskDiskPeakBytes": 1296150528,
+      "availableBeforeBytes": 25747378176,
+      "availableAfterBytes": 25747369984,
+      "guardTermination": null
+    },
+    "sealed-decimal": {
+      "stage": "sealed-decimal",
+      "command": [
+        "python3",
+        "docs/research/2026-10-08-auo-four-segment-model/verify-output.py"
+      ],
+      "startedAt": "2026-10-08T10:35:39.265Z",
+      "completedAt": "2026-10-08T10:35:39.451Z",
+      "elapsedSeconds": 0.18614185400656424,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 655360,
+      "observedTaskDiskPeakBytes": 1297797120,
+      "availableBeforeBytes": 25745731584,
+      "availableAfterBytes": 25745723392,
+      "guardTermination": null
+    },
+    "lint": {
+      "stage": "lint",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T10:23:30.806Z",
+      "completedAt": "2026-10-08T10:23:53.791Z",
+      "elapsedSeconds": 22.98510410900053,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1309896704,
+      "observedTaskDiskPeakBytes": 1277771776,
+      "availableBeforeBytes": 25765761024,
+      "availableAfterBytes": 25749053440,
+      "guardTermination": null
+    },
+    "types": {
+      "stage": "types",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "startedAt": "2026-10-08T10:23:28.255Z",
+      "completedAt": "2026-10-08T10:23:30.777Z",
+      "elapsedSeconds": 2.5214868589973776,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 513597440,
+      "observedTaskDiskPeakBytes": 1276436480,
+      "availableBeforeBytes": 25767100416,
+      "availableAfterBytes": 25765765120,
+      "guardTermination": null
+    },
+    "model-render": {
+      "stage": "model-render",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+        "2026-10-08T10:20:00Z"
+      ],
+      "startedAt": "2026-10-08T10:28:19.065Z",
+      "completedAt": "2026-10-08T10:28:19.351Z",
+      "elapsedSeconds": 0.28556246700463817,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 66146304,
+      "observedTaskDiskPeakBytes": 1295290368,
+      "availableBeforeBytes": 25748221952,
+      "availableAfterBytes": 25748209664,
+      "guardTermination": null
+    },
+    "delivery-decimal": {
+      "stage": "delivery-decimal",
+      "command": [
+        "python3",
+        "docs/research/2026-10-08-auo-four-segment-model/verify-output.py"
+      ],
+      "startedAt": "2026-10-08T10:37:52.706Z",
+      "completedAt": "2026-10-08T10:37:52.887Z",
+      "elapsedSeconds": 0.1812550930044381,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 1298636800,
+      "availableBeforeBytes": 25744891904,
+      "availableAfterBytes": 25744883712,
+      "guardTermination": null
+    },
+    "final-tests": {
+      "stage": "final-tests",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-auo-four-segment-model.test.mjs"
+      ],
+      "startedAt": "2026-10-08T10:29:53.008Z",
+      "completedAt": "2026-10-08T10:29:53.420Z",
+      "elapsedSeconds": 0.4124750279879663,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 124047360,
+      "observedTaskDiskPeakBytes": 1295323136,
+      "availableBeforeBytes": 25748205568,
+      "availableAfterBytes": 25748197376,
+      "guardTermination": null
+    },
+    "accepted-render": {
+      "stage": "accepted-render",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+        "2026-10-08T10:20:00Z"
+      ],
+      "startedAt": "2026-10-08T10:31:01.810Z",
+      "completedAt": "2026-10-08T10:31:02.217Z",
+      "elapsedSeconds": 0.4065690310089849,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 94601216,
+      "observedTaskDiskPeakBytes": 1295335424,
+      "availableBeforeBytes": 25748193280,
+      "availableAfterBytes": 25748185088,
+      "guardTermination": null
+    },
+    "build": {
+      "stage": "build",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T10:23:53.819Z",
+      "completedAt": "2026-10-08T10:23:59.806Z",
+      "elapsedSeconds": 5.987482976008323,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1222516736,
+      "observedTaskDiskPeakBytes": 1294479360,
+      "availableBeforeBytes": 25749049344,
+      "availableAfterBytes": 25748275200,
+      "guardTermination": null
+    },
+    "final-build": {
+      "stage": "final-build",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T10:32:24.129Z",
+      "completedAt": "2026-10-08T10:32:30.020Z",
+      "elapsedSeconds": 5.890700035000918,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1169567744,
+      "observedTaskDiskPeakBytes": 1296179200,
+      "availableBeforeBytes": 25747349504,
+      "availableAfterBytes": 25746567168,
+      "guardTermination": null
+    },
+    "final-related": {
+      "stage": "final-related",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-auo-four-segment-model.test.mjs",
+        "web/src/lib/auo-deep-dive-model.test.ts"
+      ],
+      "startedAt": "2026-10-08T10:32:23.711Z",
+      "completedAt": "2026-10-08T10:32:24.100Z",
+      "elapsedSeconds": 0.3891481080063386,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 211607552,
+      "observedTaskDiskPeakBytes": 1296162816,
+      "availableBeforeBytes": 25747365888,
+      "availableAfterBytes": 25747353600,
+      "guardTermination": null
+    },
+    "delivery-tests": {
+      "stage": "delivery-tests",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-auo-four-segment-model.test.mjs",
+        "web/src/lib/auo-deep-dive-model.test.ts"
+      ],
+      "startedAt": "2026-10-08T10:37:52.282Z",
+      "completedAt": "2026-10-08T10:37:52.678Z",
+      "elapsedSeconds": 0.39577823400031775,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 194240512,
+      "observedTaskDiskPeakBytes": 1298620416,
+      "availableBeforeBytes": 25744908288,
+      "availableAfterBytes": 25744896000,
+      "guardTermination": null
+    },
+    "sealed-build": {
+      "stage": "sealed-build",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T10:35:39.482Z",
+      "completedAt": "2026-10-08T10:35:45.503Z",
+      "elapsedSeconds": 6.021185406993027,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1210126336,
+      "observedTaskDiskPeakBytes": 1297809408,
+      "availableBeforeBytes": 25745719296,
+      "availableAfterBytes": 25744941056,
+      "guardTermination": null
+    },
+    "final-render": {
+      "stage": "final-render",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+        "2026-10-08T10:20:00Z"
+      ],
+      "startedAt": "2026-10-08T10:29:52.684Z",
+      "completedAt": "2026-10-08T10:29:52.972Z",
+      "elapsedSeconds": 0.28803830199467484,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 79269888,
+      "observedTaskDiskPeakBytes": 1295310848,
+      "availableBeforeBytes": 25748217856,
+      "availableAfterBytes": 25748209664,
+      "guardTermination": null
+    },
+    "model-tests": {
+      "stage": "model-tests",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-auo-four-segment-model.test.mjs"
+      ],
+      "startedAt": "2026-10-08T10:23:00.914Z",
+      "completedAt": "2026-10-08T10:23:01.309Z",
+      "elapsedSeconds": 0.39504688000306487,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 109535232,
+      "observedTaskDiskPeakBytes": 1276387328,
+      "availableBeforeBytes": 25767124992,
+      "availableAfterBytes": 25767116800,
+      "guardTermination": null
+    },
+    "model-tests-full": {
+      "stage": "model-tests-full",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-auo-four-segment-model.test.mjs"
+      ],
+      "startedAt": "2026-10-08T10:23:27.845Z",
+      "completedAt": "2026-10-08T10:23:28.227Z",
+      "elapsedSeconds": 0.38190382199536543,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 128741376,
+      "observedTaskDiskPeakBytes": 1276416000,
+      "availableBeforeBytes": 25767112704,
+      "availableAfterBytes": 25767104512,
+      "guardTermination": null
+    },
+    "accepted-build": {
+      "stage": "accepted-build",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T10:31:02.680Z",
+      "completedAt": "2026-10-08T10:31:09.543Z",
+      "elapsedSeconds": 6.863122000999283,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 899805184,
+      "observedTaskDiskPeakBytes": 1295364096,
+      "availableBeforeBytes": 25748168704,
+      "availableAfterBytes": 25747386368,
+      "guardTermination": null
+    },
+    "sealed-render": {
+      "stage": "sealed-render",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+        "2026-10-08T10:20:00Z"
+      ],
+      "startedAt": "2026-10-08T10:35:38.531Z",
+      "completedAt": "2026-10-08T10:35:38.814Z",
+      "elapsedSeconds": 0.28290688901324756,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 85331968,
+      "observedTaskDiskPeakBytes": 1297768448,
+      "availableBeforeBytes": 25745760256,
+      "availableAfterBytes": 25745752064,
+      "guardTermination": null
+    },
+    "complete-build": {
+      "stage": "complete-build",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T10:34:30.654Z",
+      "completedAt": "2026-10-08T10:34:37.027Z",
+      "elapsedSeconds": 6.373162504998618,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 921415680,
+      "observedTaskDiskPeakBytes": 1297735680,
+      "availableBeforeBytes": 25746546688,
+      "availableAfterBytes": 25745764352,
+      "guardTermination": null
+    },
+    "sealed-related": {
+      "stage": "sealed-related",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-auo-four-segment-model.test.mjs",
+        "web/src/lib/auo-deep-dive-model.test.ts"
+      ],
+      "startedAt": "2026-10-08T10:35:38.844Z",
+      "completedAt": "2026-10-08T10:35:39.238Z",
+      "elapsedSeconds": 0.39377146599872503,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 206356480,
+      "observedTaskDiskPeakBytes": 1297780736,
+      "availableBeforeBytes": 25745747968,
+      "availableAfterBytes": 25745735680,
+      "guardTermination": null
+    },
+    "accepted-tests": {
+      "stage": "accepted-tests",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-auo-four-segment-model.test.mjs"
+      ],
+      "startedAt": "2026-10-08T10:31:02.248Z",
+      "completedAt": "2026-10-08T10:31:02.650Z",
+      "elapsedSeconds": 0.4018867869890528,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 122490880,
+      "observedTaskDiskPeakBytes": 1295347712,
+      "availableBeforeBytes": 25748180992,
+      "availableAfterBytes": 25748172800,
+      "guardTermination": null
+    },
+    "model-compute": {
+      "stage": "model-compute",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+        "2026-10-08T10:20:00Z"
+      ],
+      "startedAt": "2026-10-08T10:23:01.338Z",
+      "completedAt": "2026-10-08T10:23:01.620Z",
+      "elapsedSeconds": 0.2827362020034343,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 81854464,
+      "observedTaskDiskPeakBytes": 1276399616,
+      "availableBeforeBytes": 25767112704,
+      "availableAfterBytes": 25767100416,
+      "guardTermination": null
+    }
+  },
+  "privateStageManifest": [
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/accepted-build.json",
+      "bytes": 514,
+      "sha256": "3916f2044fc96dd9ca5dd1995f18a5bb4680e59bd8ca1fe8b2d1ecb3c782d13f"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/accepted-build.log",
+      "bytes": 6411,
+      "sha256": "c9b86e1186c0866469a75a4aadb9c39bce110aa0c1d6ece1d8f5cd88c62c9d5c"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/accepted-build.time",
+      "bytes": 822,
+      "sha256": "bd2185092d8fd1e68cfe24d22e4d293fe2efecb3c74dd29a4c6d724cb5824538"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/accepted-render.json",
+      "bytes": 575,
+      "sha256": "79f7d5e30d2039482925cbbb2fba061a3a5df50b718e53f34510a54ca2769f84"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/accepted-render.log",
+      "bytes": 1497,
+      "sha256": "6ffa1fbbfef6135e5a01318805cb7a3371ef7014d6eaf45c8973935e696ec0a5"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/accepted-render.time",
+      "bytes": 879,
+      "sha256": "55c71ea130fb09e45dd53cc606985cc493d6d5c0ac7ed2641c78bc85bddd4ad5"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/accepted-tests.json",
+      "bytes": 548,
+      "sha256": "30b8ddec4f2345094cc564d660aa702a564ff202881a96761b4c57278cf138b2"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/accepted-tests.log",
+      "bytes": 3240,
+      "sha256": "2942708370ffef4e6c2b0c5bc174984daea6550844aae64461b60680e4963092"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/accepted-tests.time",
+      "bytes": 851,
+      "sha256": "af8ea890caec413ddca638c29e91ac9f6e18be74ee1b53e7d19090e76612596f"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/build.json",
+      "bytes": 479,
+      "sha256": "796d788fce21b02f0968d74c2e7d99ce52ee59eabd339ef24920bf01f711b4f2"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/build.log",
+      "bytes": 6411,
+      "sha256": "5ddacaae8f3afdec1731e029b15174008276b94836b64e55561e6241183d6d53"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/build.time",
+      "bytes": 809,
+      "sha256": "b7fa6c3f488033b72335fd484159619ddbe6d4f2a221a33ded72a979d1555f06"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/complete-build.json",
+      "bytes": 514,
+      "sha256": "c4984dd1fdd5078b47ce67cf288e9c452f842a6ada734bb45d62a2863d289a1d"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/complete-build.log",
+      "bytes": 6411,
+      "sha256": "88547f2426db7ed9c57f45165129f8b94be4b5672fc5400147401466492963a7"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/complete-build.time",
+      "bytes": 822,
+      "sha256": "389b6f37a0f3f7cf8ef0e19abe432faf181ab2db7a5079ffb6aa8b4ce7580698"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/decimal-verify.json",
+      "bytes": 474,
+      "sha256": "0fd48cf6633159f0a780af9577e8c1dc8eb6485c319776c23d5b2f39cb42e16e"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/decimal-verify.log",
+      "bytes": 214,
+      "sha256": "722944b0f1f73c9ed48f60d733cd41d455be5d95e6fa58bdf369743acc96e903"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/decimal-verify.time",
+      "bytes": 787,
+      "sha256": "8b0f2ed18f53ccea8179449ec7d591feff737a1e42ce81d9c97663638ef03cba"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/delivery-decimal.json",
+      "bytes": 475,
+      "sha256": "c90e71a2723c5c45f37876934f1f54a3c7e0bf3647663a813b98e84ae63c7fb6"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/delivery-decimal.log",
+      "bytes": 214,
+      "sha256": "722944b0f1f73c9ed48f60d733cd41d455be5d95e6fa58bdf369743acc96e903"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/delivery-decimal.time",
+      "bytes": 788,
+      "sha256": "23cf23420ff15bc11f77d482bad019da024cbe57750513573e6078b553457162"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/delivery-tests.json",
+      "bytes": 596,
+      "sha256": "d98bff5927224bb4e89e799e2f20e273921b5ff4582bd8ecbf7484f4de4634b1"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/delivery-tests.log",
+      "bytes": 8095,
+      "sha256": "48747a4408ffca8bd3c76256939b96364158c63d0ca2f52d252012b2759ad9ce"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/delivery-tests.time",
+      "bytes": 893,
+      "sha256": "68b0c06b13adf8066aee3a4aa1d187795ec1fa6c9b826d95272f54ca5b6d637b"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-build.json",
+      "bytes": 512,
+      "sha256": "f7a60348e21992ba069825bfacf4579adecbd8353eb21e3d71f88a946252e2f8"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-build.log",
+      "bytes": 6411,
+      "sha256": "6c97549ed11553a59da35ccd4ce18b5fcf1c5e3a5e4515c4bd7f5ecefc85899e"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-build.time",
+      "bytes": 822,
+      "sha256": "c645160f7045df6bd15b88db4fa1836aebc550789592c0e8b0de23d90a41eb2a"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-quarter-render.json",
+      "bytes": 581,
+      "sha256": "1c5d2df93504e65bdda34a2339e256f795ab967143b47a6b53100c3533ca4908"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-quarter-render.log",
+      "bytes": 1497,
+      "sha256": "60441af18f4d83dbf76e7ea80da12c95dddf0b9bd10d8df89a8752d7f5113904"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-quarter-render.time",
+      "bytes": 879,
+      "sha256": "175401ec0960246cf2abf8391fe2e37d01298abb0bdcd7bb5b52fa75caed5c76"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-related.json",
+      "bytes": 594,
+      "sha256": "1a6731df2214fa2369c1b77cf7df68a4f22a8466cbb41d46a7d17e8abbc95e49"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-related.log",
+      "bytes": 7882,
+      "sha256": "64577f1652b50b442dd439729a0882ff23ec185a87ede2465cb17fc8c31a519d"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-related.time",
+      "bytes": 893,
+      "sha256": "3d3f349e09f7eb245703171090dba2f2bd05f5a7b32e46597612208fa3fe5fa6"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-render.json",
+      "bytes": 573,
+      "sha256": "3539169a4fe041fd54a06e535c2a9f5eecdabfc4153c991a012ef48c51c6f8fd"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-render.log",
+      "bytes": 1497,
+      "sha256": "8fba32999ff6eb39e3e5674ae662c5da7d0fc4de76fee78279a56d5cfa9ac825"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-render.time",
+      "bytes": 879,
+      "sha256": "730447620c0a00f088dc1169bc8c07a3f6c183e9d117401f81885a1d4d47a2a1"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-tests.json",
+      "bytes": 545,
+      "sha256": "4d2e05cdb312465e738073429e4ce0b074b6ec36319d59af8dabe8c9c1f29bcc"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-tests.log",
+      "bytes": 3820,
+      "sha256": "6b263b299bcb2c70b238a18905fa6151d79aa4b0f2ce556795d0e234dbfa0b7d"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/final-tests.time",
+      "bytes": 890,
+      "sha256": "5f0f1d9bf11bf36d8c6adffc84b9650ac908b0e34cc8a2edc2afadc375e07387"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/lint.json",
+      "bytes": 477,
+      "sha256": "f63d432652e92690bc625a5a72394301fe041da63f8c6b182677d449420ecf95"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/lint.log",
+      "bytes": 4760,
+      "sha256": "33a71dbfe5b1ff029d709b11d89e069122c96d9632df4458dba81e58362697fe"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/lint.time",
+      "bytes": 808,
+      "sha256": "fbfa33cbf44ecdcdfb79696c5af62ae194cebcff2e5ce38251b58665b1a78e80"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-compute.json",
+      "bytes": 573,
+      "sha256": "b4863bbf8599e915b062b4aa39593c675a74f4a032491fba65f07875f8f75e2f"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-compute.log",
+      "bytes": 1497,
+      "sha256": "8bb07e0c7290959115f26ad48e6d73ed50ec6cfe44dbd1277686baec90f2f538"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-compute.time",
+      "bytes": 879,
+      "sha256": "867c15f523c11bd38bf77e250fbe988f1c0a64e9818a7bad92d5bb5d31db7364"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-render.json",
+      "bytes": 573,
+      "sha256": "ec05b500e4f861b7ce03cf639e170ee54decfa1e1d7ca58f182a69768af8f1d1"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-render.log",
+      "bytes": 1506,
+      "sha256": "137e9fabfe3fc3fd54104d80ce122f732fb9b41308b838ac53ac1a3ddcee8d1e"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-render.time",
+      "bytes": 880,
+      "sha256": "23726a383d5f6575280fb026854db9eafe5de08f8e85c3bcda24e78e3e3265a8"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-tests-full.json",
+      "bytes": 551,
+      "sha256": "c89d4deb118eecf2dacd3354dd3e6b05d6b18b9e9f96f3c639c567a2249bab99"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-tests-full.log",
+      "bytes": 3006,
+      "sha256": "d4afcf788b885af7e1b00956bed1e4f159fa63b6f4ae1844056bbfdbcaa44d64"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-tests-full.time",
+      "bytes": 850,
+      "sha256": "83067eceed05d5aa7ca720a758b76967af0785f2665817fc57cba4c59c0fd29d"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-tests.json",
+      "bytes": 546,
+      "sha256": "783ed45d4fdf0586b7519fa0be1f027ee8933d66c5051d5f5f8da5e46487ebcb"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-tests.log",
+      "bytes": 273,
+      "sha256": "4df6878818f2195abcd0957d781f855db4fac428dec7e63d889a6b929a13fd22"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/model-tests.time",
+      "bytes": 851,
+      "sha256": "e657eb014e21218f1531974d378b089807029ada18adc35dd300da03bda64b3f"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/run-check.py",
+      "bytes": 3147,
+      "sha256": "1c92473684d1a83c529bfa254f9086ea627e093b024857b5c1942e136b5c0114"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-build.json",
+      "bytes": 513,
+      "sha256": "658f8aaa7d02ffcca9ebd7c77337ffe43e203cb402456e6628daed7a8348f94d"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-build.log",
+      "bytes": 6411,
+      "sha256": "8a05bf6998bc507547d4bb1bad947bd0f189a94f7178db727ba1fc1008d668ee"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-build.time",
+      "bytes": 822,
+      "sha256": "f8e58eed36cac90378604cfc9840eae94ffb06cc4cef959bb462836c70e53e2a"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-decimal.json",
+      "bytes": 474,
+      "sha256": "e7d021df6d097f10e371e96981c09ea60f4b766e1307d6e41fe8aadb4d003390"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-decimal.log",
+      "bytes": 214,
+      "sha256": "722944b0f1f73c9ed48f60d733cd41d455be5d95e6fa58bdf369743acc96e903"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-decimal.time",
+      "bytes": 787,
+      "sha256": "8b0f2ed18f53ccea8179449ec7d591feff737a1e42ce81d9c97663638ef03cba"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-related.json",
+      "bytes": 596,
+      "sha256": "7b99fac8b06161df214e42374ec8561eb1539d3a68b04469a11f2d00b24c735b"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-related.log",
+      "bytes": 8097,
+      "sha256": "b3cfb3e101b6bc4945a8dbe0b5da8ece107b79d7c4a140d529d030a421f6b61b"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-related.time",
+      "bytes": 893,
+      "sha256": "588f54a4bacf1b8fc961eb965630308125b1f8910b7f96d22b2f0927f367e626"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-render.json",
+      "bytes": 574,
+      "sha256": "bd83abbc99c2835d109347e6a5e5f8d43c1af0f89e63c6a1303158b2f15abc8b"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-render.log",
+      "bytes": 1497,
+      "sha256": "bba5c03a0d4e8b765d0486d377da16c724d6099edb0b5b1a4602024657b86286"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/sealed-render.time",
+      "bytes": 879,
+      "sha256": "efe89e081f426687cce9ebdea477e88f25a06710601ae8bbb7d8c3328648ef52"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/types.json",
+      "bytes": 490,
+      "sha256": "6013b26b77528cbd9541191f95fe3e332296801e5378a9525e7867d9b050ec52"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/cloud-auo-model-artifacts-oct08/types.time",
+      "bytes": 815,
+      "sha256": "4ccfa60001a4a0036ad4ca849ccc1554d3d1d550709b83bb127788753ded849a"
+    }
+  ],
+  "resources": {
+    "node": "22.14.0",
+    "cgroupMemoryMax": "34359738368",
+    "cgroupCpuMax": "400000 100000",
+    "peakSampledAggregateRssBytes": 1309896704,
+    "peakSampledTaskDiskBytes": 1298636800,
+    "workspaceAfterBytes": 7442518016,
+    "filesystemAvailableAfterBytes": 25744875520,
+    "configuredProjectDiskQuota": null,
+    "quotaNotInferredFromDf": true,
+    "method": "GNU time-v plus100ms process-group RSS; du1s. Samples can miss short peaks; stage.time files retained. One heavy job <=8GiB, task<4GB, workspace<20GB, available>8GB. VPS not used."
+  },
+  "failureHistory": [
+    {
+      "event": "initial recompute assertion",
+      "observedInThread": true,
+      "error": "expected display instead of source display_technology",
+      "fix": "corrected model label assertion; original source not edited",
+      "timedReceiptAvailable": false
+    },
+    {
+      "stage": "model-tests",
+      "event": "sandbox output showed only one file-level result; not counted as named-case acceptance",
+      "resolvedBy": "model-tests-full elevated subprocess output; then final33 named cases"
+    },
+    {
+      "stage": "final-tests",
+      "event": "eleven passed/one article-length failed at3957 mainCJK",
+      "resolvedBy": "meaningful EPS period/denominator explanation; final4063 mainCJK; no numerical output change"
+    }
+  ],
+  "newFunctions": [
+    "Bounded actual-evidence AUO four-segment scenario recompute with existing shared calculator",
+    "Independent Decimal verifier and same-result article/tables",
+    "Per-day raw old paper-target lifecycle; no original-time or actual-fill certification"
+  ],
+  "scenarioEps2027": {
+    "bear": -0.5510708722448909,
+    "base": 0.32806946193692343,
+    "bull": 0.956076048939644
+  },
+  "remaining": [
+    "Independent exact model/article review",
+    "Calibration of gross-margin/expense/tax/NCI/dilution assumptions andPE",
+    "Verified gain transaction-date tax/attribution, future share denominator, current ending shares",
+    "CPO/GCS capacity/yield/utilization/ASP and commercial orders remain missing",
+    "Corporate-action/calendar/flow completeness, qualified entry and formal publication",
+    "EMC model/article in the next bounded increment; overallGoal continues"
+  ],
+  "newVmPublicAcquisition": false,
+  "productionImported": false,
+  "strategyApproved": false,
+  "targetPrice": null,
+  "protectedAttestation": false
+}
