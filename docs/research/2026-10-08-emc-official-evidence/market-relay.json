@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stockinsider-attributed-official-market-relay-v1",
   "symbol": "2383",
-  "recordedAt": "2026-10-08T09:33:48.860900+00:00",
+  "recordedAt": "2026-10-08T09:48:10.459151+00:00",
   "priceUnit": "TWD",
   "volumeUnit": "shares",
   "adjustment": "raw_unadjusted",
@@ -209,7 +209,10 @@
       "volumeShares": 6612946,
       "turnoverTwd": 7684363545,
       "tradeCount": 17674,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "-65.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-02",
@@ -220,7 +223,10 @@
       "volumeShares": 3843099,
       "turnoverTwd": 4400820610,
       "tradeCount": 6514,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "-5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-03",
@@ -231,7 +237,10 @@
       "volumeShares": 2628346,
       "turnoverTwd": 3036726935,
       "tradeCount": 4124,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "+15.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-04",
@@ -242,7 +251,10 @@
       "volumeShares": 8270060,
       "turnoverTwd": 9207742320,
       "tradeCount": 13509,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "-50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-05",
@@ -253,7 +265,10 @@
       "volumeShares": 6042014,
       "turnoverTwd": 6951336705,
       "tradeCount": 7794,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "+50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-08",
@@ -264,7 +279,10 @@
       "volumeShares": 3623013,
       "turnoverTwd": 4210926600,
       "tradeCount": 5806,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "-20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-09",
@@ -275,7 +293,10 @@
       "volumeShares": 7887357,
       "turnoverTwd": 9701083995,
       "tradeCount": 15240,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "+80.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-10",
@@ -286,7 +307,10 @@
       "volumeShares": 5598958,
       "turnoverTwd": 7001348980,
       "tradeCount": 7753,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "+30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-11",
@@ -297,7 +321,10 @@
       "volumeShares": 8816136,
       "turnoverTwd": 11693867780,
       "tradeCount": 18242,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "+70.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-12",
@@ -308,7 +335,10 @@
       "volumeShares": 5641107,
       "turnoverTwd": 7550165485,
       "tradeCount": 8137,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "+20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-15",
@@ -319,7 +349,10 @@
       "volumeShares": 3697369,
       "turnoverTwd": 4865551075,
       "tradeCount": 6556,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "-30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-16",
@@ -330,7 +363,10 @@
       "volumeShares": 3637699,
       "turnoverTwd": 4746804900,
       "tradeCount": 11913,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "-30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-17",
@@ -341,7 +377,10 @@
       "volumeShares": 3917468,
       "turnoverTwd": 5128760220,
       "tradeCount": 5534,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "+30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-18",
@@ -352,7 +391,10 @@
       "volumeShares": 2944001,
       "turnoverTwd": 3863236510,
       "tradeCount": 5356,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "+20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-19",
@@ -363,7 +405,10 @@
       "volumeShares": 4139490,
       "turnoverTwd": 5416677050,
       "tradeCount": 10231,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "-45.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-22",
@@ -374,7 +419,10 @@
       "volumeShares": 1647675,
       "turnoverTwd": 2137868220,
       "tradeCount": 3842,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "+10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-23",
@@ -385,7 +433,10 @@
       "volumeShares": 4099125,
       "turnoverTwd": 5529215005,
       "tradeCount": 8481,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "+45.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-24",
@@ -396,7 +447,10 @@
       "volumeShares": 3479649,
       "turnoverTwd": 4518135090,
       "tradeCount": 9121,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "-50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-25",
@@ -407,7 +461,10 @@
       "volumeShares": 2226381,
       "turnoverTwd": 2828260340,
       "tradeCount": 7193,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "-40.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-26",
@@ -418,7 +475,10 @@
       "volumeShares": 2104093,
       "turnoverTwd": 2587820455,
       "tradeCount": 5575,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": "-30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-09-30",
@@ -429,7 +489,10 @@
       "volumeShares": 2779305,
       "turnoverTwd": 3437716805,
       "tradeCount": 4667,
-      "sourceMonth": "20250901"
+      "sourceMonth": "20250901",
+      "rawPriceChange": " 0.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-01",
@@ -440,7 +503,10 @@
       "volumeShares": 2375218,
       "turnoverTwd": 2956836745,
       "tradeCount": 4022,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "+5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-02",
@@ -451,7 +517,10 @@
       "volumeShares": 4348785,
       "turnoverTwd": 5600701055,
       "tradeCount": 7841,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "+65.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-03",
@@ -462,7 +531,10 @@
       "volumeShares": 2266621,
       "turnoverTwd": 2943142875,
       "tradeCount": 4078,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "+10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-07",
@@ -473,7 +545,10 @@
       "volumeShares": 6265409,
       "turnoverTwd": 8059377885,
       "tradeCount": 15834,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "-70.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-08",
@@ -484,7 +559,10 @@
       "volumeShares": 4854067,
       "turnoverTwd": 5806717720,
       "tradeCount": 13939,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "-40.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-09",
@@ -495,7 +573,10 @@
       "volumeShares": 3233734,
       "turnoverTwd": 3949991140,
       "tradeCount": 5605,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "+40.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-13",
@@ -506,7 +587,10 @@
       "volumeShares": 3712557,
       "turnoverTwd": 4412986800,
       "tradeCount": 10801,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "-35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-14",
@@ -517,7 +601,10 @@
       "volumeShares": 2742412,
       "turnoverTwd": 3267915345,
       "tradeCount": 7763,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "-30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-15",
@@ -528,7 +615,10 @@
       "volumeShares": 5401683,
       "turnoverTwd": 6157044440,
       "tradeCount": 12506,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "-30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-16",
@@ -539,7 +629,10 @@
       "volumeShares": 3627108,
       "turnoverTwd": 4173889910,
       "tradeCount": 6963,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": " 0.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-17",
@@ -550,7 +643,10 @@
       "volumeShares": 4231992,
       "turnoverTwd": 4688094115,
       "tradeCount": 11973,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "-35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-20",
@@ -561,7 +657,10 @@
       "volumeShares": 3897083,
       "turnoverTwd": 4366367020,
       "tradeCount": 6299,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "+20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-21",
@@ -572,7 +671,10 @@
       "volumeShares": 1555620,
       "turnoverTwd": 1766270630,
       "tradeCount": 3760,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "+5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-22",
@@ -583,7 +685,10 @@
       "volumeShares": 1784191,
       "turnoverTwd": 1989364345,
       "tradeCount": 3994,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "-10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-23",
@@ -594,7 +699,10 @@
       "volumeShares": 2426215,
       "turnoverTwd": 2703057340,
       "tradeCount": 4529,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "-5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-27",
@@ -605,7 +713,10 @@
       "volumeShares": 5411535,
       "turnoverTwd": 6302640566,
       "tradeCount": 9186,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "+50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-28",
@@ -616,7 +727,10 @@
       "volumeShares": 6728445,
       "turnoverTwd": 8202980689,
       "tradeCount": 12565,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "+90.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-29",
@@ -627,7 +741,10 @@
       "volumeShares": 5016245,
       "turnoverTwd": 6339504665,
       "tradeCount": 8491,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "-5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-30",
@@ -638,7 +755,10 @@
       "volumeShares": 3703785,
       "turnoverTwd": 4717684975,
       "tradeCount": 7579,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "+25.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-10-31",
@@ -649,7 +769,10 @@
       "volumeShares": 8702332,
       "turnoverTwd": 11837289620,
       "tradeCount": 18752,
-      "sourceMonth": "20251001"
+      "sourceMonth": "20251001",
+      "rawPriceChange": "+85.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-03",
@@ -660,7 +783,10 @@
       "volumeShares": 5890498,
       "turnoverTwd": 8288382190,
       "tradeCount": 11643,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-04",
@@ -671,7 +797,10 @@
       "volumeShares": 8531291,
       "turnoverTwd": 12678496100,
       "tradeCount": 15334,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+60.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-05",
@@ -682,7 +811,10 @@
       "volumeShares": 6133541,
       "turnoverTwd": 8787056768,
       "tradeCount": 13406,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "-30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-06",
@@ -693,7 +825,10 @@
       "volumeShares": 3601162,
       "turnoverTwd": 5207761035,
       "tradeCount": 6133,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-07",
@@ -704,7 +839,10 @@
       "volumeShares": 4626964,
       "turnoverTwd": 6404223830,
       "tradeCount": 11495,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "-80.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-10",
@@ -715,7 +853,10 @@
       "volumeShares": 2695273,
       "turnoverTwd": 3673581325,
       "tradeCount": 5783,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "-10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-11",
@@ -726,7 +867,10 @@
       "volumeShares": 4163786,
       "turnoverTwd": 5577392265,
       "tradeCount": 10297,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "-40.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-12",
@@ -737,7 +881,10 @@
       "volumeShares": 6163802,
       "turnoverTwd": 8484385545,
       "tradeCount": 10645,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+25.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-13",
@@ -748,7 +895,10 @@
       "volumeShares": 3322593,
       "turnoverTwd": 4538781480,
       "tradeCount": 6555,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-14",
@@ -759,7 +909,10 @@
       "volumeShares": 4781594,
       "turnoverTwd": 6639781122,
       "tradeCount": 8906,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-17",
@@ -770,7 +923,10 @@
       "volumeShares": 5649057,
       "turnoverTwd": 8285472280,
       "tradeCount": 9867,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+70.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-18",
@@ -781,7 +937,10 @@
       "volumeShares": 4537549,
       "turnoverTwd": 6273600100,
       "tradeCount": 11669,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "-100.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-19",
@@ -792,7 +951,10 @@
       "volumeShares": 3601315,
       "turnoverTwd": 4819689361,
       "tradeCount": 6824,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "-20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-20",
@@ -803,7 +965,10 @@
       "volumeShares": 5096439,
       "turnoverTwd": 7225683700,
       "tradeCount": 8704,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+100.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-21",
@@ -814,7 +979,10 @@
       "volumeShares": 5419114,
       "turnoverTwd": 7198876335,
       "tradeCount": 13629,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "-120.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-24",
@@ -825,7 +993,10 @@
       "volumeShares": 3784040,
       "turnoverTwd": 5010508590,
       "tradeCount": 4892,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-25",
@@ -836,7 +1007,10 @@
       "volumeShares": 5394717,
       "turnoverTwd": 7665470115,
       "tradeCount": 10830,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+130.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-26",
@@ -847,7 +1021,10 @@
       "volumeShares": 7359314,
       "turnoverTwd": 10919840480,
       "tradeCount": 11072,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-27",
@@ -858,7 +1035,10 @@
       "volumeShares": 3120888,
       "turnoverTwd": 4654389550,
       "tradeCount": 6593,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+25.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-11-28",
@@ -869,7 +1049,10 @@
       "volumeShares": 4316056,
       "turnoverTwd": 6615762165,
       "tradeCount": 8752,
-      "sourceMonth": "20251101"
+      "sourceMonth": "20251101",
+      "rawPriceChange": "+30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-01",
@@ -880,7 +1063,10 @@
       "volumeShares": 2990569,
       "turnoverTwd": 4440109875,
       "tradeCount": 7789,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "-50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-02",
@@ -891,7 +1077,10 @@
       "volumeShares": 3779186,
       "turnoverTwd": 5618442110,
       "tradeCount": 10444,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "-35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-03",
@@ -902,7 +1091,10 @@
       "volumeShares": 3440938,
       "turnoverTwd": 4959107180,
       "tradeCount": 6810,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "-10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-04",
@@ -913,7 +1105,10 @@
       "volumeShares": 2385273,
       "turnoverTwd": 3404804695,
       "tradeCount": 4720,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "-5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-05",
@@ -924,7 +1119,10 @@
       "volumeShares": 4304112,
       "turnoverTwd": 6327379880,
       "tradeCount": 8625,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "+70.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-08",
@@ -935,7 +1133,10 @@
       "volumeShares": 2234064,
       "turnoverTwd": 3330315145,
       "tradeCount": 4492,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "-10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-09",
@@ -946,7 +1147,10 @@
       "volumeShares": 1963921,
       "turnoverTwd": 2950739550,
       "tradeCount": 4430,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "+15.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-10",
@@ -957,7 +1161,10 @@
       "volumeShares": 4569960,
       "turnoverTwd": 7134733905,
       "tradeCount": 11727,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "+100.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-11",
@@ -968,7 +1175,10 @@
       "volumeShares": 4675458,
       "turnoverTwd": 7478625725,
       "tradeCount": 8517,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "-5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-12",
@@ -979,7 +1189,10 @@
       "volumeShares": 2675966,
       "turnoverTwd": 4290050620,
       "tradeCount": 4960,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "+10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-15",
@@ -990,7 +1203,10 @@
       "volumeShares": 2641880,
       "turnoverTwd": 4203695090,
       "tradeCount": 5440,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": " 0.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-16",
@@ -1001,7 +1217,10 @@
       "volumeShares": 4621237,
       "turnoverTwd": 7005332275,
       "tradeCount": 15215,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "-110.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-17",
@@ -1012,7 +1231,10 @@
       "volumeShares": 3562182,
       "turnoverTwd": 5402411347,
       "tradeCount": 5715,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": " 0.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-18",
@@ -1023,7 +1245,10 @@
       "volumeShares": 1749563,
       "turnoverTwd": 2616338410,
       "tradeCount": 3441,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "+5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-19",
@@ -1034,7 +1259,10 @@
       "volumeShares": 2430074,
       "turnoverTwd": 3757930115,
       "tradeCount": 4410,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "+50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-22",
@@ -1045,7 +1273,10 @@
       "volumeShares": 2386851,
       "turnoverTwd": 3800732630,
       "tradeCount": 5636,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "+50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-23",
@@ -1056,7 +1287,10 @@
       "volumeShares": 1428123,
       "turnoverTwd": 2301578690,
       "tradeCount": 3834,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "+15.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-24",
@@ -1067,7 +1301,10 @@
       "volumeShares": 3715694,
       "turnoverTwd": 6196717130,
       "tradeCount": 8671,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "+75.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-26",
@@ -1078,7 +1315,10 @@
       "volumeShares": 1801627,
       "turnoverTwd": 3007781820,
       "tradeCount": 5721,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "-50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-29",
@@ -1089,7 +1329,10 @@
       "volumeShares": 2017216,
       "turnoverTwd": 3361906750,
       "tradeCount": 3833,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "+35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-30",
@@ -1100,7 +1343,10 @@
       "volumeShares": 1393168,
       "turnoverTwd": 2296726070,
       "tradeCount": 4474,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": "-30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2025-12-31",
@@ -1111,7 +1357,10 @@
       "volumeShares": 2439589,
       "turnoverTwd": 4023024285,
       "tradeCount": 5987,
-      "sourceMonth": "20251201"
+      "sourceMonth": "20251201",
+      "rawPriceChange": " 0.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-02",
@@ -1122,7 +1371,10 @@
       "volumeShares": 3537708,
       "turnoverTwd": 5679597855,
       "tradeCount": 12070,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "-55.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-05",
@@ -1133,7 +1385,10 @@
       "volumeShares": 4265842,
       "turnoverTwd": 6936186710,
       "tradeCount": 7696,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-06",
@@ -1144,7 +1399,10 @@
       "volumeShares": 4350109,
       "turnoverTwd": 7294892105,
       "tradeCount": 8882,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+75.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-07",
@@ -1155,7 +1413,10 @@
       "volumeShares": 10456647,
       "turnoverTwd": 16515822535,
       "tradeCount": 33025,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "-115.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-08",
@@ -1166,7 +1427,10 @@
       "volumeShares": 4210851,
       "turnoverTwd": 6609539845,
       "tradeCount": 15573,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "-35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-09",
@@ -1177,7 +1441,10 @@
       "volumeShares": 3184351,
       "turnoverTwd": 5001999700,
       "tradeCount": 7856,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-12",
@@ -1188,7 +1455,10 @@
       "volumeShares": 3348576,
       "turnoverTwd": 5318295400,
       "tradeCount": 7040,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+45.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-13",
@@ -1199,7 +1469,10 @@
       "volumeShares": 3074410,
       "turnoverTwd": 4982763800,
       "tradeCount": 7327,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+25.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-14",
@@ -1210,7 +1483,10 @@
       "volumeShares": 2595477,
       "turnoverTwd": 4309163815,
       "tradeCount": 6270,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-15",
@@ -1221,7 +1497,10 @@
       "volumeShares": 5751542,
       "turnoverTwd": 9205746010,
       "tradeCount": 20425,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "-100.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-16",
@@ -1232,7 +1511,10 @@
       "volumeShares": 4158595,
       "turnoverTwd": 6661225360,
       "tradeCount": 8317,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+55.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-19",
@@ -1243,7 +1525,10 @@
       "volumeShares": 3928342,
       "turnoverTwd": 6192104320,
       "tradeCount": 11924,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "-45.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-20",
@@ -1254,7 +1539,10 @@
       "volumeShares": 2517558,
       "turnoverTwd": 4035608005,
       "tradeCount": 5911,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-21",
@@ -1265,7 +1553,10 @@
       "volumeShares": 3510961,
       "turnoverTwd": 5543267825,
       "tradeCount": 8813,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "-55.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-22",
@@ -1276,7 +1567,10 @@
       "volumeShares": 3886143,
       "turnoverTwd": 6378982050,
       "tradeCount": 11240,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+100.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-23",
@@ -1287,7 +1581,10 @@
       "volumeShares": 6140918,
       "turnoverTwd": 10740653485,
       "tradeCount": 17170,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+140.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-26",
@@ -1298,7 +1595,10 @@
       "volumeShares": 3270138,
       "turnoverTwd": 5737553675,
       "tradeCount": 12442,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "-60.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-27",
@@ -1309,7 +1609,10 @@
       "volumeShares": 3568216,
       "turnoverTwd": 6392548365,
       "tradeCount": 9320,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+80.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-28",
@@ -1320,7 +1623,10 @@
       "volumeShares": 4507607,
       "turnoverTwd": 8537506170,
       "tradeCount": 11070,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "+80.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-29",
@@ -1331,7 +1637,10 @@
       "volumeShares": 4284179,
       "turnoverTwd": 7798309400,
       "tradeCount": 18876,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "-110.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-01-30",
@@ -1342,7 +1651,10 @@
       "volumeShares": 3216573,
       "turnoverTwd": 5690199320,
       "tradeCount": 10170,
-      "sourceMonth": "20260101"
+      "sourceMonth": "20260101",
+      "rawPriceChange": "-45.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-02",
@@ -1353,7 +1665,10 @@
       "volumeShares": 3863878,
       "turnoverTwd": 6857690993,
       "tradeCount": 7487,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "+40.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-03",
@@ -1364,7 +1679,10 @@
       "volumeShares": 4101444,
       "turnoverTwd": 7499412920,
       "tradeCount": 9810,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "+70.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-04",
@@ -1375,7 +1693,10 @@
       "volumeShares": 6355031,
       "turnoverTwd": 12551548650,
       "tradeCount": 18435,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "+185.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-05",
@@ -1386,7 +1707,10 @@
       "volumeShares": 5986326,
       "turnoverTwd": 11782076980,
       "tradeCount": 20675,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "-90.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-06",
@@ -1397,7 +1721,10 @@
       "volumeShares": 6159201,
       "turnoverTwd": 11995046515,
       "tradeCount": 12041,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "-25.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-09",
@@ -1408,7 +1735,10 @@
       "volumeShares": 5697621,
       "turnoverTwd": 11706690980,
       "tradeCount": 13877,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "+155.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-10",
@@ -1419,7 +1749,10 @@
       "volumeShares": 3163230,
       "turnoverTwd": 6614751580,
       "tradeCount": 7295,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "+25.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-11",
@@ -1430,7 +1763,10 @@
       "volumeShares": 5309302,
       "turnoverTwd": 11463181110,
       "tradeCount": 10335,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "+90.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-23",
@@ -1441,7 +1777,10 @@
       "volumeShares": 4407490,
       "turnoverTwd": 9860572170,
       "tradeCount": 12765,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "-20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-24",
@@ -1452,7 +1791,10 @@
       "volumeShares": 3773757,
       "turnoverTwd": 8571942645,
       "tradeCount": 9074,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "+135.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-25",
@@ -1463,7 +1805,10 @@
       "volumeShares": 3740810,
       "turnoverTwd": 8982748550,
       "tradeCount": 8944,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "+110.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-02-26",
@@ -1474,7 +1819,10 @@
       "volumeShares": 4713847,
       "turnoverTwd": 11532931595,
       "tradeCount": 7877,
-      "sourceMonth": "20260201"
+      "sourceMonth": "20260201",
+      "rawPriceChange": "+20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-02",
@@ -1485,7 +1833,10 @@
       "volumeShares": 3331488,
       "turnoverTwd": 7929076350,
       "tradeCount": 11010,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-60.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-03",
@@ -1496,7 +1847,10 @@
       "volumeShares": 3063218,
       "turnoverTwd": 7209203085,
       "tradeCount": 10553,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-60.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-04",
@@ -1507,7 +1861,10 @@
       "volumeShares": 3828524,
       "turnoverTwd": 8514221195,
       "tradeCount": 14105,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-130.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-05",
@@ -1518,7 +1875,10 @@
       "volumeShares": 3883828,
       "turnoverTwd": 9135039140,
       "tradeCount": 8877,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "+175.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-06",
@@ -1529,7 +1889,10 @@
       "volumeShares": 2912192,
       "turnoverTwd": 6964516520,
       "tradeCount": 7709,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-09",
@@ -1540,7 +1903,10 @@
       "volumeShares": 3391849,
       "turnoverTwd": 7335727400,
       "tradeCount": 13760,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-185.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-10",
@@ -1551,7 +1917,10 @@
       "volumeShares": 3065582,
       "turnoverTwd": 7271580415,
       "tradeCount": 9871,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "+200.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-11",
@@ -1562,7 +1931,10 @@
       "volumeShares": 4829317,
       "turnoverTwd": 11879555650,
       "tradeCount": 11404,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "+75.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-12",
@@ -1573,7 +1945,10 @@
       "volumeShares": 5442114,
       "turnoverTwd": 14111345150,
       "tradeCount": 13117,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "+150.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-13",
@@ -1584,7 +1959,10 @@
       "volumeShares": 4417368,
       "turnoverTwd": 11854665823,
       "tradeCount": 11113,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "+105.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-16",
@@ -1595,7 +1973,10 @@
       "volumeShares": 4463265,
       "turnoverTwd": 11862232825,
       "tradeCount": 21652,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-120.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-17",
@@ -1606,7 +1987,10 @@
       "volumeShares": 2921492,
       "turnoverTwd": 7860790015,
       "tradeCount": 8847,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "+115.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-18",
@@ -1617,7 +2001,10 @@
       "volumeShares": 2925621,
       "turnoverTwd": 7912268795,
       "tradeCount": 7919,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": " 0.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-19",
@@ -1628,7 +2015,10 @@
       "volumeShares": 5842073,
       "turnoverTwd": 16662084605,
       "tradeCount": 15915,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "+190.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-20",
@@ -1639,7 +2029,10 @@
       "volumeShares": 4588550,
       "turnoverTwd": 12932826435,
       "tradeCount": 13202,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-80.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-23",
@@ -1650,7 +2043,10 @@
       "volumeShares": 3517744,
       "turnoverTwd": 9802872375,
       "tradeCount": 12041,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-15.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-24",
@@ -1661,7 +2057,10 @@
       "volumeShares": 3977982,
       "turnoverTwd": 10964759150,
       "tradeCount": 14793,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-110.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-25",
@@ -1672,7 +2071,10 @@
       "volumeShares": 3332111,
       "turnoverTwd": 9524535195,
       "tradeCount": 9784,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "+160.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-26",
@@ -1683,7 +2085,10 @@
       "volumeShares": 4555967,
       "turnoverTwd": 13540701748,
       "tradeCount": 11593,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "+100.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-27",
@@ -1694,7 +2099,10 @@
       "volumeShares": 2066364,
       "turnoverTwd": 5985026820,
       "tradeCount": 9318,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-30",
@@ -1705,7 +2113,10 @@
       "volumeShares": 3755290,
       "turnoverTwd": 10420318595,
       "tradeCount": 18176,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-125.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-03-31",
@@ -1716,7 +2127,10 @@
       "volumeShares": 5256642,
       "turnoverTwd": 14019630926,
       "tradeCount": 21082,
-      "sourceMonth": "20260301"
+      "sourceMonth": "20260301",
+      "rawPriceChange": "-185.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-01",
@@ -1727,7 +2141,10 @@
       "volumeShares": 3039597,
       "turnoverTwd": 8584813555,
       "tradeCount": 12612,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+260.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-02",
@@ -1738,7 +2155,10 @@
       "volumeShares": 4147382,
       "turnoverTwd": 11863395991,
       "tradeCount": 12418,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "-75.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-07",
@@ -1749,7 +2169,10 @@
       "volumeShares": 3251323,
       "turnoverTwd": 9450841170,
       "tradeCount": 8648,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+100.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-08",
@@ -1760,7 +2183,10 @@
       "volumeShares": 2230541,
       "turnoverTwd": 7060264415,
       "tradeCount": 9088,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+285.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-09",
@@ -1771,7 +2197,10 @@
       "volumeShares": 3254067,
       "turnoverTwd": 10616229620,
       "tradeCount": 10305,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-10",
@@ -1782,7 +2211,10 @@
       "volumeShares": 3018570,
       "turnoverTwd": 10198767760,
       "tradeCount": 10447,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+200.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-13",
@@ -1793,7 +2225,10 @@
       "volumeShares": 2472083,
       "turnoverTwd": 8300411300,
       "tradeCount": 12174,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "-95.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-14",
@@ -1804,7 +2239,10 @@
       "volumeShares": 3407745,
       "turnoverTwd": 12271082905,
       "tradeCount": 11989,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+280.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-15",
@@ -1815,7 +2253,10 @@
       "volumeShares": 3998854,
       "turnoverTwd": 15134494450,
       "tradeCount": 13142,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+205.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-16",
@@ -1826,7 +2267,10 @@
       "volumeShares": 2880746,
       "turnoverTwd": 11023679510,
       "tradeCount": 11575,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+25.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-17",
@@ -1837,7 +2281,10 @@
       "volumeShares": 2796395,
       "turnoverTwd": 10633043245,
       "tradeCount": 15507,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "-35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-20",
@@ -1848,7 +2295,10 @@
       "volumeShares": 3606415,
       "turnoverTwd": 13766771315,
       "tradeCount": 14726,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-21",
@@ -1859,7 +2309,10 @@
       "volumeShares": 2771442,
       "turnoverTwd": 10866762320,
       "tradeCount": 11084,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+100.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-22",
@@ -1870,7 +2323,10 @@
       "volumeShares": 2907731,
       "turnoverTwd": 11809686735,
       "tradeCount": 13448,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+115.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-23",
@@ -1881,7 +2337,10 @@
       "volumeShares": 4565537,
       "turnoverTwd": 19110108040,
       "tradeCount": 21916,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-24",
@@ -1892,7 +2351,10 @@
       "volumeShares": 4429294,
       "turnoverTwd": 19487669681,
       "tradeCount": 17793,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+375.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-27",
@@ -1903,7 +2365,10 @@
       "volumeShares": 5437579,
       "turnoverTwd": 25466732890,
       "tradeCount": 20060,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+255.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-28",
@@ -1914,7 +2379,10 @@
       "volumeShares": 4686444,
       "turnoverTwd": 20772148000,
       "tradeCount": 56415,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "-355.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-29",
@@ -1925,7 +2393,10 @@
       "volumeShares": 3600136,
       "turnoverTwd": 15652794716,
       "tradeCount": 16317,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+65.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-04-30",
@@ -1936,7 +2407,10 @@
       "volumeShares": 3472525,
       "turnoverTwd": 15926701156,
       "tradeCount": 17153,
-      "sourceMonth": "20260401"
+      "sourceMonth": "20260401",
+      "rawPriceChange": "+105.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-04",
@@ -1947,7 +2421,10 @@
       "volumeShares": 3046320,
       "turnoverTwd": 14263287170,
       "tradeCount": 15092,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+210.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-05",
@@ -1958,7 +2435,10 @@
       "volumeShares": 2020545,
       "turnoverTwd": 9461493525,
       "tradeCount": 19053,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "-25.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-06",
@@ -1969,7 +2449,10 @@
       "volumeShares": 3737170,
       "turnoverTwd": 18292990145,
       "tradeCount": 18882,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+220.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-07",
@@ -1980,7 +2463,10 @@
       "volumeShares": 2630939,
       "turnoverTwd": 13011764025,
       "tradeCount": 19277,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-08",
@@ -1991,7 +2477,10 @@
       "volumeShares": 2812108,
       "turnoverTwd": 13483465270,
       "tradeCount": 29132,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "-210.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-11",
@@ -2002,7 +2491,10 @@
       "volumeShares": 2728505,
       "turnoverTwd": 12896977185,
       "tradeCount": 13716,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+100.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-12",
@@ -2013,7 +2505,10 @@
       "volumeShares": 2661176,
       "turnoverTwd": 13219135825,
       "tradeCount": 13438,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-13",
@@ -2024,7 +2519,10 @@
       "volumeShares": 1933684,
       "turnoverTwd": 9490678615,
       "tradeCount": 10884,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-14",
@@ -2035,7 +2533,10 @@
       "volumeShares": 2342222,
       "turnoverTwd": 11817345315,
       "tradeCount": 12551,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "-10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-15",
@@ -2046,7 +2547,10 @@
       "volumeShares": 2616036,
       "turnoverTwd": 12454482490,
       "tradeCount": 32960,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "-305.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-18",
@@ -2057,7 +2561,10 @@
       "volumeShares": 3423889,
       "turnoverTwd": 15137126505,
       "tradeCount": 21588,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "-70.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-19",
@@ -2068,7 +2575,10 @@
       "volumeShares": 1920778,
       "turnoverTwd": 8732368195,
       "tradeCount": 11026,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "-10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-20",
@@ -2079,7 +2589,10 @@
       "volumeShares": 1950325,
       "turnoverTwd": 8634663015,
       "tradeCount": 15771,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "-140.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-21",
@@ -2090,7 +2603,10 @@
       "volumeShares": 2512472,
       "turnoverTwd": 11774126250,
       "tradeCount": 11771,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+295.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-22",
@@ -2101,7 +2617,10 @@
       "volumeShares": 3037648,
       "turnoverTwd": 15188295575,
       "tradeCount": 18741,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+315.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-25",
@@ -2112,7 +2631,10 @@
       "volumeShares": 1801298,
       "turnoverTwd": 9760185315,
       "tradeCount": 14706,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+500.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-26",
@@ -2123,7 +2645,10 @@
       "volumeShares": 2917258,
       "turnoverTwd": 15656253735,
       "tradeCount": 25164,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "-215.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-27",
@@ -2134,7 +2659,10 @@
       "volumeShares": 2342327,
       "turnoverTwd": 12711050610,
       "tradeCount": 12785,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+15.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-28",
@@ -2145,7 +2673,10 @@
       "volumeShares": 2289989,
       "turnoverTwd": 11958351295,
       "tradeCount": 22699,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "-250.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-05-29",
@@ -2156,7 +2687,10 @@
       "volumeShares": 3687942,
       "turnoverTwd": 18894538885,
       "tradeCount": 11241,
-      "sourceMonth": "20260501"
+      "sourceMonth": "20260501",
+      "rawPriceChange": "+65.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-01",
@@ -2167,7 +2701,10 @@
       "volumeShares": 2273627,
       "turnoverTwd": 11556925975,
       "tradeCount": 17071,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "-50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-02",
@@ -2178,7 +2715,10 @@
       "volumeShares": 2172811,
       "turnoverTwd": 10696306390,
       "tradeCount": 31120,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "-210.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-03",
@@ -2189,7 +2729,10 @@
       "volumeShares": 2199236,
       "turnoverTwd": 10756555770,
       "tradeCount": 18961,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "-30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-04",
@@ -2200,7 +2743,10 @@
       "volumeShares": 1722407,
       "turnoverTwd": 8312640340,
       "tradeCount": 15595,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": " 0.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-05",
@@ -2211,7 +2757,10 @@
       "volumeShares": 2909896,
       "turnoverTwd": 14022518030,
       "tradeCount": 19394,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "+55.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-08",
@@ -2222,7 +2771,10 @@
       "volumeShares": 2667787,
       "turnoverTwd": 12467924760,
       "tradeCount": 17954,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "-115.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-09",
@@ -2233,7 +2785,10 @@
       "volumeShares": 2437441,
       "turnoverTwd": 12143783630,
       "tradeCount": 14939,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "+295.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-10",
@@ -2244,7 +2799,10 @@
       "volumeShares": 2802050,
       "turnoverTwd": 14244593500,
       "tradeCount": 17288,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "-125.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-11",
@@ -2255,7 +2813,10 @@
       "volumeShares": 2793147,
       "turnoverTwd": 13974619575,
       "tradeCount": 13302,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "+155.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-12",
@@ -2266,7 +2827,10 @@
       "volumeShares": 4224358,
       "turnoverTwd": 20840035313,
       "tradeCount": 42102,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "-265.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-15",
@@ -2277,7 +2841,10 @@
       "volumeShares": 2220308,
       "turnoverTwd": 11120679755,
       "tradeCount": 12905,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "+200.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-16",
@@ -2288,7 +2855,10 @@
       "volumeShares": 2171931,
       "turnoverTwd": 11161870990,
       "tradeCount": 12420,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "+90.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-17",
@@ -2299,7 +2869,10 @@
       "volumeShares": 2440312,
       "turnoverTwd": 12416772625,
       "tradeCount": 15643,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "+80.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-18",
@@ -2310,7 +2883,10 @@
       "volumeShares": 1927746,
       "turnoverTwd": 10522532290,
       "tradeCount": 20011,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "+400.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-22",
@@ -2321,7 +2897,10 @@
       "volumeShares": 2030502,
       "turnoverTwd": 12040652720,
       "tradeCount": 17082,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "+225.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-23",
@@ -2332,7 +2911,10 @@
       "volumeShares": 2138552,
       "turnoverTwd": 11849352085,
       "tradeCount": 16697,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "-125.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-24",
@@ -2343,7 +2925,10 @@
       "volumeShares": 1757641,
       "turnoverTwd": 9596314445,
       "tradeCount": 13883,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "-140.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-25",
@@ -2354,7 +2939,10 @@
       "volumeShares": 1253427,
       "turnoverTwd": 7033509175,
       "tradeCount": 5861,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "+80.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-26",
@@ -2365,7 +2953,10 @@
       "volumeShares": 1391599,
       "turnoverTwd": 7509007250,
       "tradeCount": 9599,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "-385.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-29",
@@ -2376,7 +2967,10 @@
       "volumeShares": 953667,
       "turnoverTwd": 5119692240,
       "tradeCount": 5457,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "+195.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-06-30",
@@ -2387,7 +2981,10 @@
       "volumeShares": 1198968,
       "turnoverTwd": 6426833690,
       "tradeCount": 8941,
-      "sourceMonth": "20260601"
+      "sourceMonth": "20260601",
+      "rawPriceChange": "-60.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-01",
@@ -2398,7 +2995,10 @@
       "volumeShares": 989642,
       "turnoverTwd": 5450002915,
       "tradeCount": 7893,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "+145.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-02",
@@ -2409,7 +3009,10 @@
       "volumeShares": 983037,
       "turnoverTwd": 5475306155,
       "tradeCount": 5807,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "+120.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-03",
@@ -2420,7 +3023,10 @@
       "volumeShares": 3177228,
       "turnoverTwd": 18691825646,
       "tradeCount": 22013,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "+425.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-06",
@@ -2431,7 +3037,10 @@
       "volumeShares": 3511893,
       "turnoverTwd": 19665733290,
       "tradeCount": 49232,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-605.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-07",
@@ -2442,7 +3051,10 @@
       "volumeShares": 4028186,
       "turnoverTwd": 21640198790,
       "tradeCount": 25087,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-255.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-08",
@@ -2453,7 +3065,10 @@
       "volumeShares": 2642600,
       "turnoverTwd": 14217572400,
       "tradeCount": 11199,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "+95.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-09",
@@ -2464,7 +3079,10 @@
       "volumeShares": 1991369,
       "turnoverTwd": 10667561710,
       "tradeCount": 9053,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-13",
@@ -2475,7 +3093,10 @@
       "volumeShares": 1879346,
       "turnoverTwd": 9691705885,
       "tradeCount": 16321,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-170.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-14",
@@ -2486,7 +3107,10 @@
       "volumeShares": 2516884,
       "turnoverTwd": 12405419880,
       "tradeCount": 18709,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-155.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-15",
@@ -2497,7 +3121,10 @@
       "volumeShares": 1340831,
       "turnoverTwd": 6835177909,
       "tradeCount": 6806,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "+110.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-16",
@@ -2508,7 +3135,10 @@
       "volumeShares": 1350783,
       "turnoverTwd": 6680457895,
       "tradeCount": 9381,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-90.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-17",
@@ -2519,7 +3149,10 @@
       "volumeShares": 3166294,
       "turnoverTwd": 14640682465,
       "tradeCount": 30596,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-495.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-20",
@@ -2530,7 +3163,10 @@
       "volumeShares": 3220536,
       "turnoverTwd": 14161004110,
       "tradeCount": 12396,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-100.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-21",
@@ -2541,7 +3177,10 @@
       "volumeShares": 2947253,
       "turnoverTwd": 13943258832,
       "tradeCount": 11279,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "+435.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-22",
@@ -2552,7 +3191,10 @@
       "volumeShares": 2287942,
       "turnoverTwd": 11822162835,
       "tradeCount": 11625,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "+295.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-23",
@@ -2563,7 +3205,10 @@
       "volumeShares": 1471379,
       "turnoverTwd": 7535441046,
       "tradeCount": 7492,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-24",
@@ -2574,7 +3219,10 @@
       "volumeShares": 1978622,
       "turnoverTwd": 9595247940,
       "tradeCount": 16899,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-340.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-27",
@@ -2585,7 +3233,10 @@
       "volumeShares": 1443744,
       "turnoverTwd": 6879878135,
       "tradeCount": 6447,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "+60.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-28",
@@ -2596,7 +3247,10 @@
       "volumeShares": 2370592,
       "turnoverTwd": 10699855905,
       "tradeCount": 15390,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-405.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-29",
@@ -2607,7 +3261,10 @@
       "volumeShares": 3501983,
       "turnoverTwd": 14519060545,
       "tradeCount": 16759,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "-310.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-30",
@@ -2618,7 +3275,10 @@
       "volumeShares": 5459758,
       "turnoverTwd": 23409386575,
       "tradeCount": 12709,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "+215.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-07-31",
@@ -2629,7 +3289,10 @@
       "volumeShares": 1418920,
       "turnoverTwd": 6732775400,
       "tradeCount": 3210,
-      "sourceMonth": "20260701"
+      "sourceMonth": "20260701",
+      "rawPriceChange": "+430.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-03",
@@ -2640,7 +3303,10 @@
       "volumeShares": 4183768,
       "turnoverTwd": 21241674925,
       "tradeCount": 15611,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+235.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-04",
@@ -2651,7 +3317,10 @@
       "volumeShares": 2925218,
       "turnoverTwd": 14831829755,
       "tradeCount": 11149,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+160.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-05",
@@ -2662,7 +3331,10 @@
       "volumeShares": 2477774,
       "turnoverTwd": 13131142990,
       "tradeCount": 12319,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+105.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-06",
@@ -2673,7 +3345,10 @@
       "volumeShares": 1863164,
       "turnoverTwd": 9842448210,
       "tradeCount": 8864,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+60.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-07",
@@ -2684,7 +3359,10 @@
       "volumeShares": 1362847,
       "turnoverTwd": 7181005660,
       "tradeCount": 6820,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "-65.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-10",
@@ -2695,7 +3373,10 @@
       "volumeShares": 1972845,
       "turnoverTwd": 10554508135,
       "tradeCount": 9344,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-11",
@@ -2706,7 +3387,10 @@
       "volumeShares": 2826640,
       "turnoverTwd": 15337290470,
       "tradeCount": 14779,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+245.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-12",
@@ -2717,7 +3401,10 @@
       "volumeShares": 1635510,
       "turnoverTwd": 9250067810,
       "tradeCount": 13803,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+195.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-13",
@@ -2728,7 +3415,10 @@
       "volumeShares": 1568694,
       "turnoverTwd": 9008323515,
       "tradeCount": 10321,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "-40.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-14",
@@ -2739,7 +3429,10 @@
       "volumeShares": 2986895,
       "turnoverTwd": 18016995640,
       "tradeCount": 26555,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+475.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-17",
@@ -2750,7 +3443,10 @@
       "volumeShares": 1910755,
       "turnoverTwd": 12074118800,
       "tradeCount": 15657,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+185.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-18",
@@ -2761,7 +3457,10 @@
       "volumeShares": 2005998,
       "turnoverTwd": 12610595203,
       "tradeCount": 12841,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "-145.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-19",
@@ -2772,7 +3471,10 @@
       "volumeShares": 3119237,
       "turnoverTwd": 18535143740,
       "tradeCount": 20659,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "-325.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-20",
@@ -2783,7 +3485,10 @@
       "volumeShares": 2514908,
       "turnoverTwd": 14899646520,
       "tradeCount": 9047,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+105.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-21",
@@ -2794,7 +3499,10 @@
       "volumeShares": 2568603,
       "turnoverTwd": 14922544777,
       "tradeCount": 20745,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "-305.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-24",
@@ -2805,7 +3513,10 @@
       "volumeShares": 1846142,
       "turnoverTwd": 10212636500,
       "tradeCount": 19382,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "-250.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-25",
@@ -2816,7 +3527,10 @@
       "volumeShares": 1867477,
       "turnoverTwd": 10081442880,
       "tradeCount": 13359,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+165.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-26",
@@ -2827,7 +3541,10 @@
       "volumeShares": 1871519,
       "turnoverTwd": 10903340430,
       "tradeCount": 12027,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "+300.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-27",
@@ -2838,7 +3555,10 @@
       "volumeShares": 3476220,
       "turnoverTwd": 19383235125,
       "tradeCount": 40365,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "-395.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-08-28",
@@ -2849,7 +3569,10 @@
       "volumeShares": 1984693,
       "turnoverTwd": 10983116885,
       "tradeCount": 11742,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "X0.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "non_comparable"
     },
     {
       "date": "2026-08-31",
@@ -2860,7 +3583,10 @@
       "volumeShares": 1999204,
       "turnoverTwd": 10853317370,
       "tradeCount": 12155,
-      "sourceMonth": "20260801"
+      "sourceMonth": "20260801",
+      "rawPriceChange": "-5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-01",
@@ -2871,7 +3597,10 @@
       "volumeShares": 1770102,
       "turnoverTwd": 10025495805,
       "tradeCount": 11781,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "+155.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-02",
@@ -2882,7 +3611,10 @@
       "volumeShares": 1489933,
       "turnoverTwd": 8212389975,
       "tradeCount": 17262,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "-195.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-03",
@@ -2893,7 +3625,10 @@
       "volumeShares": 1640346,
       "turnoverTwd": 8893839305,
       "tradeCount": 14277,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "-155.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-04",
@@ -2904,7 +3639,10 @@
       "volumeShares": 1701788,
       "turnoverTwd": 9122954390,
       "tradeCount": 11633,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "+125.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-07",
@@ -2915,7 +3653,10 @@
       "volumeShares": 1515921,
       "turnoverTwd": 8279673870,
       "tradeCount": 9489,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "+80.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-08",
@@ -2926,7 +3667,10 @@
       "volumeShares": 1474956,
       "turnoverTwd": 7957811260,
       "tradeCount": 17712,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "-155.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-09",
@@ -2937,7 +3681,10 @@
       "volumeShares": 1752002,
       "turnoverTwd": 9612616445,
       "tradeCount": 11638,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "+35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-10",
@@ -2948,7 +3695,10 @@
       "volumeShares": 1367538,
       "turnoverTwd": 7352290390,
       "tradeCount": 8097,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": " 0.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-11",
@@ -2959,7 +3709,10 @@
       "volumeShares": 1100726,
       "turnoverTwd": 5884102330,
       "tradeCount": 9201,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "-10.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-14",
@@ -2970,7 +3723,10 @@
       "volumeShares": 1226363,
       "turnoverTwd": 6518989860,
       "tradeCount": 8884,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "-20.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-15",
@@ -2981,7 +3737,10 @@
       "volumeShares": 1525730,
       "turnoverTwd": 7960468005,
       "tradeCount": 23701,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "-230.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-16",
@@ -2992,7 +3751,10 @@
       "volumeShares": 1686031,
       "turnoverTwd": 8584953735,
       "tradeCount": 19651,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "-30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-17",
@@ -3003,7 +3765,10 @@
       "volumeShares": 5813349,
       "turnoverTwd": 27915409125,
       "tradeCount": 76222,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "-390.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-18",
@@ -3014,7 +3779,10 @@
       "volumeShares": 3783127,
       "turnoverTwd": 18481738060,
       "tradeCount": 22033,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "+195.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-21",
@@ -3025,7 +3793,10 @@
       "volumeShares": 2394262,
       "turnoverTwd": 11655101115,
       "tradeCount": 18700,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "+5.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-22",
@@ -3036,7 +3807,10 @@
       "volumeShares": 2101406,
       "turnoverTwd": 10362598540,
       "tradeCount": 24427,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "-35.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-23",
@@ -3047,7 +3821,10 @@
       "volumeShares": 2450930,
       "turnoverTwd": 12254335445,
       "tradeCount": 17175,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "+160.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-24",
@@ -3058,7 +3835,10 @@
       "volumeShares": 2346653,
       "turnoverTwd": 11846727845,
       "tradeCount": 14928,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "+30.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-29",
@@ -3069,7 +3849,10 @@
       "volumeShares": 2146878,
       "turnoverTwd": 10601319245,
       "tradeCount": 25566,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "-130.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-09-30",
@@ -3080,7 +3863,10 @@
       "volumeShares": 1549084,
       "turnoverTwd": 7715507295,
       "tradeCount": 10684,
-      "sourceMonth": "20260901"
+      "sourceMonth": "20260901",
+      "rawPriceChange": "+15.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-10-01",
@@ -3091,7 +3877,10 @@
       "volumeShares": 1363430,
       "turnoverTwd": 6698010765,
       "tradeCount": 15727,
-      "sourceMonth": "20261001"
+      "sourceMonth": "20261001",
+      "rawPriceChange": "+40.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-10-02",
@@ -3102,7 +3891,10 @@
       "volumeShares": 2397410,
       "turnoverTwd": 12276307445,
       "tradeCount": 17002,
-      "sourceMonth": "20261001"
+      "sourceMonth": "20261001",
+      "rawPriceChange": "+210.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-10-05",
@@ -3113,7 +3905,10 @@
       "volumeShares": 1316051,
       "turnoverTwd": 7478860700,
       "tradeCount": 14816,
-      "sourceMonth": "20261001"
+      "sourceMonth": "20261001",
+      "rawPriceChange": "+515.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-10-06",
@@ -3124,7 +3919,10 @@
       "volumeShares": 5086859,
       "turnoverTwd": 30343549150,
       "tradeCount": 33023,
-      "sourceMonth": "20261001"
+      "sourceMonth": "20261001",
+      "rawPriceChange": "+295.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-10-07",
@@ -3135,7 +3933,10 @@
       "volumeShares": 2968881,
       "turnoverTwd": 18187591940,
       "tradeCount": 32538,
-      "sourceMonth": "20261001"
+      "sourceMonth": "20261001",
+      "rawPriceChange": "-45.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     },
     {
       "date": "2026-10-08",
@@ -3146,7 +3947,10 @@
       "volumeShares": 1859243,
       "turnoverTwd": 11028217915,
       "tradeCount": 18888,
-      "sourceMonth": "20261001"
+      "sourceMonth": "20261001",
+      "rawPriceChange": "+50.00",
+      "rawRemark": "",
+      "sourceComparisonFlag": "no_special_price_change_flag_observed"
     }
   ],
   "notes": [
@@ -3154,6 +3958,15 @@
     "September request timeout retained, later successful retry separately clocked.",
     "Corporate actions and complete trading calendar not independently verified; raw-price returns must not be labeled total returns.",
     "No technical buy approval, calibrated valuation multiples, profit claim or formal publication.",
-    "Shared TAIEX input may be reused only after verified date and calculation-version alignment."
+    "Shared TAIEX input may be reused only after verified date and calculation-version alignment.",
+    "TWSE 2026-08-28 explicitly reports X0.00 (non-comparable). Every raw price-change and remark cell is retained, with a named-date comparison restriction; absence of other X flags is not proof of a complete corporate-action record."
+  ],
+  "comparisonRestrictedDates": [
+    {
+      "date": "2026-08-28",
+      "rawPriceChange": "X0.00",
+      "rawRemark": "",
+      "scope": "Observed TWSE non-comparable price-change flag; underlying company action and adjusted prices are not independently verified. Do not treat cross-boundary raw return as an economic/total return or silently ignore this event."
+    }
   ]
 }
