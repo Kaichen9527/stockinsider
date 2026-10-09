@@ -115,8 +115,8 @@ function instant(value: unknown): bigint | null {
     if (hours > 14 || minutes > 59 || (hours === 14 && minutes !== 0)) return null;
     offsetMinutes = (hours * 60 + minutes) * (match[3][0] === '+' ? 1 : -1);
   }
-  return BigInt(seconds) * 1000n + BigInt((match[2] || '').padEnd(6, '0'))
-    - BigInt(offsetMinutes) * 60_000_000n;
+  return BigInt(seconds) * BigInt(1000) + BigInt((match[2] || '').padEnd(6, '0'))
+    - BigInt(offsetMinutes) * BigInt(60_000_000);
 }
 
 /** Structural/clock binding of an authenticated controller report, NOT platform execution proof.
