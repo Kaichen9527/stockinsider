@@ -29,6 +29,50 @@ export type TwEntryAuthorityResult = {
   /** Missing/null is unavailable; event:null is a proved zero-event selected head. */
   anchorAction?: TwEntryAnchorAction | null;
 };
+export const TW_ENTRY_HISTORY_LIMITS = Object.freeze({ deadlineMs: 15_000, readBytes: 16 * 1024 * 1024 });
+export type TwEntryHistoricalAuthorityResult = {
+  bars: TwEntryBar[]; completedSessions: string[]; selectedCalendarRows: Row[];
+  priceBasis: TwEntryPriceBasis | null; sourceDatasetRevision: string;
+  availableAt: string; missingData: string[];
+  evidenceManifest: { prices: Row[]; snapshots: Row[]; feeds: Row[]; events: Row[] } | null;
+};
+type ReadScope = ReturnType<typeof createReadScope>;
+function createReadScope(parent?: AbortSignal) {
+  const controller = new AbortController(), deadline = performance.now() + TW_ENTRY_HISTORY_LIMITS.deadlineMs;
+  let reason = 'entry_authority_deadline', bytes = 0;
+  const abort = (code: string) => { reason = code; controller.abort(); };
+  const onParent = () => abort('entry_authority_aborted');
+  const timer = setTimeout(() => abort('entry_authority_deadline'), TW_ENTRY_HISTORY_LIMITS.deadlineMs);
+  parent?.addEventListener('abort', onParent, { once: true });
+  if (parent?.aborted) onParent();
+  const check = () => {
+    if (performance.now() >= deadline && !controller.signal.aborted) abort('entry_authority_deadline');
+    requireAuthority(!controller.signal.aborted, reason);
+  };
+  return {
+    signal: controller.signal,
+    check,
+    get bytes() { return bytes; },
+    charge(count: number) {
+      check(); bytes += count;
+      if (bytes > TW_ENTRY_HISTORY_LIMITS.readBytes) abort('entry_authority_byte_bound');
+      check();
+    },
+    async wait<T>(pending: PromiseLike<T>): Promise<T> {
+      check();
+      let listener: (() => void) | undefined;
+      try {
+        const failed = new Promise<never>((_resolve, reject) => {
+          listener = () => reject(new Error(reason));
+          controller.signal.addEventListener('abort', listener, { once: true });
+        });
+        const result = await Promise.race([pending, failed]); check(); return result;
+      } finally { if (listener) controller.signal.removeEventListener('abort', listener); }
+    },
+    fail() { if (!controller.signal.aborted) abort('entry_authority_read_failed'); },
+    close() { clearTimeout(timer); parent?.removeEventListener('abort', onParent); },
+  };
+}
 const HISTORY = 240;
 const DAY = 86_400_000;
 const HASH = /^[0-9a-f]{64}$/u;
@@ -59,12 +103,15 @@ function canonicalPgTimestamp(value: unknown) {
   requireAuthority(Number.isFinite(timestamp(raw)) && /\+00:00$/u.test(raw), 'corporate_action_timestamp_invalid');
   return raw.replace(/\.(\d*?)0+(?=\+00:00$)/u, (_match, digits: string) => digits ? `.${digits}` : '');
 }
-async function readRows(query: (from: number, to: number) => PromiseLike<{ data: Row[] | null; error: unknown }>, maximum: number) {
+async function readRows(query: (from: number, to: number) => PromiseLike<{ data: Row[] | null; error: unknown }> & { abortSignal(signal: AbortSignal): PromiseLike<{ data: Row[] | null; error: unknown }> }, maximum: number, scope: ReadScope) {
   const rows: Row[] = [];
   for (let from = 0; from <= maximum; from += 500) {
     const count = Math.min(500, maximum + 1 - from);
-    const result = await query(from, from + count - 1);
+    scope.check();
+    const result = await scope.wait(query(from, from + count - 1).abortSignal(scope.signal));
     requireAuthority(!result.error && Array.isArray(result.data), 'entry_authority_read_failed');
+    requireAuthority(result.data.length <= count, 'entry_authority_page_bound');
+    scope.charge(Buffer.byteLength(JSON.stringify(result.data), 'utf8'));
     rows.push(...result.data);
     requireAuthority(rows.length <= maximum, 'entry_authority_bound_exceeded');
     if (result.data.length < count) return rows;
@@ -103,7 +150,7 @@ export async function acquireTwEntryForwardCalendar(): Promise<TwEntryForwardCal
   } catch { return null; }
 }
 
-type SharedAuthority = { sessions: string[]; calendarRows: Map<string, Row>; calendarById: Map<string, Row>; snapshots: Map<string, Row>; events: Map<string, Row[]>; availableAt: string };
+type SharedAuthority = { sessions: string[]; calendarRows: Map<string, Row>; calendarById: Map<string, Row>; snapshots: Map<string, Row>; events: Map<string, Row[]>; availableAt: string; readBytes: number; feeds: Row[] };
 const sharedByClient = new WeakMap<object, Map<string, Promise<SharedAuthority>>>();
 function sharedAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest) {
   let cache = sharedByClient.get(client);
@@ -111,11 +158,18 @@ function sharedAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthori
   const key = `${request.exchange}:${request.signalSession}:${request.cutoff}`;
   if (!cache.has(key)) {
     if (cache.size >= 8) cache.clear();
-    cache.set(key, readSharedAuthority(client, request));
+    const ownerCache = cache;
+    const scope = createReadScope();
+    const pending: Promise<SharedAuthority> = readSharedAuthority(client, request, scope).then((result) => {
+      scope.check(); return { ...result, readBytes: scope.bytes };
+    }).catch((error) => {
+      if (ownerCache.get(key) === pending) ownerCache.delete(key); scope.fail(); throw error;
+    }).finally(() => scope.close());
+    cache.set(key, pending);
   }
   return cache.get(key)!;
 }
-async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<SharedAuthority> {
+async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest, scope: ReadScope): Promise<SharedAuthority> {
   const { exchange, cutoff, signalSession } = request;
   const lower = new Date(Date.parse(`${signalSession}T00:00:00Z`) - 550 * DAY).toISOString().slice(0, 10);
   const upper = new Date(Date.parse(`${signalSession}T00:00:00Z`) + 30 * DAY).toISOString().slice(0, 10);
@@ -123,7 +177,7 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
     .select('session_authority_id,session_id,market,open_at,close_at,status,provider,source_timestamp,collected_at,source_ref,recorded_at')
     .eq('market', exchange).gte('session_id', lower).lte('session_id', upper)
     .lte('source_timestamp', cutoff).lte('collected_at', cutoff).lte('recorded_at', cutoff)
-    .order('session_id').order('recorded_at', { ascending: false }).order('session_authority_id').range(from, to), 20_000);
+    .order('session_id').order('recorded_at', { ascending: false }).order('session_authority_id').range(from, to), 20_000, scope);
   requireAuthority(calendarRows.length, 'official_calendar_history_missing');
   for (const row of calendarRows) requireAuthority(date(row.session_id) && row.market === exchange && row.provider === exchange.toLowerCase()
     && UUID.test(text(row.session_authority_id)) && knownAt(row, cutoff)
@@ -137,7 +191,7 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
     .select('snapshot_id,exchange,session_id,session_authority_id,corporate_action_version,provider,collected_at,declared_event_count,dataset_hash,recorded_at')
     .eq('exchange', exchange).gt('session_id', sessions[0]).lte('session_id', signalSession)
     .lte('collected_at', cutoff).lte('recorded_at', cutoff)
-    .order('session_id').order('collected_at', { ascending: false }).order('recorded_at', { ascending: false }).order('snapshot_id').range(from, to), 10_000);
+    .order('session_id').order('collected_at', { ascending: false }).order('recorded_at', { ascending: false }).order('snapshot_id').range(from, to), 10_000, scope);
   for (const row of snapshots) requireAuthority(knownAt(row, cutoff, ['collected_at', 'recorded_at'])
     && row.exchange === exchange && row.provider === exchange.toLowerCase() && row.corporate_action_version === 'tw-corporate-action-v3.1'
     && UUID.test(text(row.snapshot_id)) && HASH.test(text(row.dataset_hash)), 'corporate_action_authority_invalid');
@@ -154,10 +208,10 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
     const [feedPage, eventPage] = await Promise.all([
       readRows((from, to) => client.from('opportunity_corporate_action_feed_evidence_v3')
         .select('snapshot_id,feed_ordinal,feed_identity,response_byte_count,response_sha256,parsed_row_count,recorded_at')
-        .in('snapshot_id', batch).lte('recorded_at', cutoff).order('snapshot_id').order('feed_ordinal').range(from, to), HISTORY * 3 - feeds.length),
+        .in('snapshot_id', batch).lte('recorded_at', cutoff).order('snapshot_id').order('feed_ordinal').range(from, to), HISTORY * 3 - feeds.length, scope),
       readRows((from, to) => client.from('opportunity_corporate_action_events_v3')
         .select('snapshot_id,event_ordinal,symbol,event_kind,pre_action_reference_price,post_action_reference_price,feed_identity,source_row_ref,daily_adjustment_factor,recorded_at')
-        .in('snapshot_id', batch).lte('recorded_at', cutoff).order('snapshot_id').order('event_ordinal').range(from, to), 30_000 - events.length),
+        .in('snapshot_id', batch).lte('recorded_at', cutoff).order('snapshot_id').order('event_ordinal').range(from, to), 30_000 - events.length, scope),
     ]);
     feeds.push(...feedPage); events.push(...eventPage);
   }
@@ -186,7 +240,8 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
       snapshot.corporate_action_version, snapshot.provider, canonicalPgTimestamp(snapshot.collected_at), feedTuples, eventTuples]), 'corporate_action_hash_mismatch');
     eventMap.set(text(snapshot.snapshot_id), snapshotEvents);
   }
-  return { sessions, calendarRows: heads, calendarById: new Map(calendarRows.map((row) => [text(row.session_authority_id), row])), snapshots: actionHeads, events: eventMap,
+  scope.check();
+  return { readBytes: scope.bytes, feeds, sessions, calendarRows: heads, calendarById: new Map(calendarRows.map((row) => [text(row.session_authority_id), row])), snapshots: actionHeads, events: eventMap,
     availableAt: maxTime(...sessions.map((session) => heads.get(session)!.recorded_at), ...selected.map((row) => row.recorded_at),
       ...feeds.map((row) => row.recorded_at), ...events.map((row) => row.recorded_at)) };
 }
@@ -253,13 +308,12 @@ function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRe
 
 /** Read-only producer adapter. Missing authority becomes an attachment data gap,
  * never a replacement of the candidate's existing formal policy or raw chart. */
-export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<TwEntryAuthorityResult> {
-  const base: TwEntryAuthorityResult = { bars: [], calendar: null, priceBasis: null, sourceDatasetRevision: `${VERSION}:unavailable`,
-    availableAt: request.cutoff, missingData: [], anchorAction: null };
-  try {
+function validateRequest(request: TwEntryAuthorityRequest) {
     requireAuthority(UUID.test(request.stockId) && /^\d{4}$/u.test(request.symbol) && ['TWSE', 'TPEX'].includes(request.exchange)
       && date(request.signalSession) && Number.isFinite(timestamp(request.cutoff)), 'entry_authority_request_invalid');
-    const shared = await sharedAuthority(client, request);
+}
+async function readHistoricalCore(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest,
+  shared: SharedAuthority, scope: ReadScope) {
     // The existing authority proves price factors, not share-volume factors.
     // A recent split/reduction can make raw volume ratios incomparable; do not
     // infer a share adjustment from a price adjustment (cash events differ).
@@ -276,7 +330,7 @@ export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, r
       .gte('session_id', shared.sessions[0]).lte('session_id', signalSession)
       .lte('source_timestamp', cutoff).lte('collected_at', cutoff).lte('recorded_at', cutoff)
       .order('session_id').order('source_timestamp', { ascending: false }).order('collected_at', { ascending: false })
-      .order('recorded_at', { ascending: false }).order('observation_id').range(from, to), 4000);
+      .order('recorded_at', { ascending: false }).order('observation_id').range(from, to), 4000, scope);
     for (const row of raw) requireAuthority(knownAt(row, cutoff) && row.stock_id === stockId && row.exchange === exchange
       && row.provider === exchange.toLowerCase() && UUID.test(text(row.observation_id))
       && text(row.source_ref).startsWith(`${exchange.toLowerCase()}-`)
@@ -315,6 +369,47 @@ export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, r
     });
     const priceBasis: TwEntryPriceBasis = { kind: 'adjusted_to_signal_session', anchorSession: signalSession,
       adjustmentVersion: 'tw-corporate-action-v3.1', adjustmentEvidenceHash: hash(evidenceHashes), status: 'verified' };
+    scope.check();
+    const selectedCalendarRows = shared.sessions.map((session) => shared.calendarRows.get(session)!);
+    const selectedPriceRows = shared.sessions.map((session) => heads.get(session)!);
+    const snapshots = shared.sessions.slice(1).map((session) => shared.snapshots.get(session)!);
+    const sourceDatasetRevision = `tw-entry-historical-authority-v1:${hash([evidenceHashes, selectedCalendarRows, snapshots])}`;
+    return { bars, completedSessions: [...shared.sessions], selectedCalendarRows, priceBasis,
+      sourceDatasetRevision, availableAt: maxTime(...bars.map((bar) => bar.availableAt)), missingData: [],
+      evidenceManifest: { prices: selectedPriceRows, snapshots, feeds: shared.feeds,
+        events: snapshots.flatMap((row) => shared.events.get(text(row.snapshot_id))!) }, evidenceHashes };
+}
+function missingCode(error: unknown) {
+  return error instanceof Error && /^[a-z0-9_]+$/u.test(error.message) ? error.message : 'entry_authority_read_failed';
+}
+/** Selected DB history and adjustments only; not proof of every expected session,
+ * latest-session freshness or next-session execution authority. Never cached. */
+export async function loadTwEntryHistoricalAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest,
+  options: { signal?: AbortSignal } = {}): Promise<TwEntryHistoricalAuthorityResult> {
+  const scope = createReadScope(options.signal);
+  try {
+    scope.check(); validateRequest(request);
+    const shared = await readSharedAuthority(client, request, scope);
+    const { evidenceHashes: _privateHashes, ...result } = await readHistoricalCore(client, request, shared, scope);
+    void _privateHashes; scope.check(); return result;
+  } catch (error) {
+    scope.fail();
+    return { bars: [], completedSessions: [], selectedCalendarRows: [], priceBasis: null,
+      sourceDatasetRevision: 'unavailable', availableAt: request.cutoff, missingData: [missingCode(error)], evidenceManifest: null };
+  } finally { scope.close(); }
+}
+
+export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<TwEntryAuthorityResult> {
+  const base: TwEntryAuthorityResult = { bars: [], calendar: null, priceBasis: null, sourceDatasetRevision: `${VERSION}:unavailable`, availableAt: request.cutoff, missingData: [], anchorAction: null };
+  const scope = createReadScope();
+  try {
+    validateRequest(request);
+    // Shared work owns its cancellation. A caller timeout never aborts another
+    // caller; rejected shared promises are evicted instead of poisoning cache.
+    const shared = await scope.wait(sharedAuthority(client, request));
+    scope.charge(shared.readBytes);
+    const { bars, priceBasis, evidenceHashes } = await readHistoricalCore(client, request, shared, scope);
+    const { cutoff, signalSession, exchange } = request;
     const calendar = forwardCalendar(shared, request);
     const sourceDatasetRevision = `${VERSION}:${hash([evidenceHashes, calendar.version])}`;
     const snapshot = shared.snapshots.get(signalSession)!;
@@ -325,9 +420,10 @@ export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, r
       sessionAuthorityId: text(snapshot.session_authority_id), datasetHash: text(snapshot.dataset_hash), sourceDatasetRevision,
       event: event ? { kind: event.event_kind as NonNullable<TwEntryAnchorAction['event']>['kind'], sourceRowRef: text(event.source_row_ref) } : null,
     };
+    scope.check();
     return { bars, calendar, priceBasis, sourceDatasetRevision, anchorAction,
       availableAt: maxTime(calendar.knownAt, ...bars.map((bar) => bar.availableAt)), missingData: [] };
   } catch (error) {
-    return { ...base, missingData: [error instanceof Error && /^[a-z0-9_]+$/u.test(error.message) ? error.message : 'entry_authority_read_failed'] };
-  }
+    scope.fail(); return { ...base, missingData: [missingCode(error)] };
+  } finally { scope.close(); }
 }
