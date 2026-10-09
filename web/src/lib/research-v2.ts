@@ -1,3 +1,4 @@
+import { processInsiderSnapshotRun, insiderSnapshotDependencies, type InsiderSnapshotRequest } from './research-insider-snapshot';
 import fs from 'fs/promises';
 import path from 'path';
 import { createHash, randomUUID } from 'crypto';
@@ -1320,6 +1321,7 @@ type SourceSyncRunShape = {
 };
 
 type SourceSyncOptions = {
+  insiderSnapshot?: InsiderSnapshotRequest;
   connector?: string;
   dryRun?: boolean;
   symbol?: string;
@@ -3677,6 +3679,33 @@ function parseRocDateToIso(input: unknown) {
   return null;
 }
 
+async function scrapeTwseInsiderSnapshot(request: InsiderSnapshotRequest) {
+  const connectorRunId = await startConnectorRun('source-sync', 'twse_insider', {
+    mode: 'immutable_official_snapshot_v1', acquisition_run_id: request.runId,
+  });
+  try {
+    const entity = await upsertSourceEntity({ platform: 'twse_insider', entityType: 'site',
+      displayName: '官方上市／上櫃內部人揭露（公發另列）', sourceKey: 'site.twse.insider',
+      profileUrl: 'https://openapi.twse.com.tw/' });
+    const progress = await processInsiderSnapshotRun(request, insiderSnapshotDependencies(async documents =>
+      upsertSourceRawDocuments(documents.map(document => ({ ...document, sourceEntityId: String(entity.id),
+        platform: 'twse_insider', contentSemantics: 'official_chip_evidence', sentimentLabel: 'neutral', confidence: 0.63 })))));
+    await finishConnectorRun(connectorRunId, progress.outcome === 'pages_remaining' ? 'partial' : 'success', progress.recordsWritten, {
+      metadata: { insider_snapshot: progress, source_freshness_at: progress.originalSourceObservedAt,
+        full_market_analyzed: false, legacy_cursor_status: 'legacy_snapshot_unavailable' },
+    });
+    return { connector: 'twse_insider', recordsWritten: progress.recordsWritten, fetchedPosts: progress.processedRows,
+      entityId: String(entity.id), sessionMode: 'not_applicable' as const, errorCode: null,
+      degradedReason: progress.outcome === 'pages_remaining' ? 'insider_bounded_response_pages_remaining' : null,
+      metadata: { insider_snapshot: progress, source_freshness_at: progress.originalSourceObservedAt,
+        full_market_analyzed: false, legacy_cursor_status: 'legacy_snapshot_unavailable' } };
+  } catch (error) {
+    await finishConnectorRun(connectorRunId, 'failed', 0, { error_summary: 'insider_snapshot_processing_stopped',
+      metadata: { acquisition_run_id: request.runId, uncertain_write_requires_explicit_same_run_resume: true } });
+    throw error;
+  }
+}
+
 async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null) {
   const connectorRunId = await startConnectorRun('source-sync', 'twse_insider', {
     mode: symbolContext ? 'openapi_twse_symbol' : 'openapi_twse',
@@ -3939,6 +3968,7 @@ export async function runReportIngest(options?: { dryRun?: boolean }) {
 
 export async function runSourceSync(options?: SourceSyncOptions): Promise<SourceSyncRunShape & { runId: string; dryRun: boolean }> {
   const connector = options?.connector || 'twse_insider';
+  if (options?.insiderSnapshot && (connector !== 'twse_insider' || options.symbol || options.dryRun)) throw new Error('insider_snapshot_scope_invalid');
   const dryRun = Boolean(options?.dryRun);
   const symbolContext = options?.symbol ? await resolveSymbolScopedStockContext(options.symbol) : null;
   const defaultSessionMode: SourceSyncRunShape['sessionMode'] = 'not_applicable';
@@ -3970,7 +4000,7 @@ export async function runSourceSync(options?: SourceSyncOptions): Promise<Source
     threads: scrapeThreads,
     telegram: scrapeTelegram,
     gdelt: scrapeGdeltMetadata,
-    twse_insider: scrapeTwseInsider,
+    twse_insider: (context) => options?.insiderSnapshot ? scrapeTwseInsiderSnapshot(options.insiderSnapshot) : scrapeTwseInsider(context),
   };
   const runner = mapping[connector];
   if (!runner) throw new Error(`unsupported connector: ${connector}`);
