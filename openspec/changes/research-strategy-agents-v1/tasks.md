@@ -234,3 +234,5 @@ Continue on existing CodexVM; VPSheavycapacity is not a development stop conditi
 - [x] Source-fence exact05a: independent original PG15/15 and prior ancestry/RR/replay counterexamples pass; unsigned scoped code approval, unsupported ancestry remains fail closed.
 - [x] Clock exact770: VM original three PG suites plus dedicated canaries6/6 zero skip. CI0cf pinned build/original research PG/dedicated canary steps pass; full downstream runtime is still running and earlier CI nm/Mac probe failures remain unexplained.
 - [ ] Complete genuine v2 role execution, independent article review and fenced submission; full source/strategy/production/schedule acceptance remains open. See progress-convergence-1235.md; no claim that the entire original plan is finished.
+
+- [x] Later final CI observation: exact0cf run37883620967 ordinary product/runtime succeeds, researchPG354/354 plus clock11/11 and types/lint/normal build pass, nine Playwright cases pass. Evaluation/native jobs skipped; protected approval and earlier intermittent failure causes are not inferred. Bounded metadata saved in clock-0cf-ordinary-ci.json.
