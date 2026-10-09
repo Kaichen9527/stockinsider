@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-09T11:03:59.297288+00:00",
+  "scope": "Natural-clock real-PG original lease recheck only; test-only development increment",
+  "subject": "b38d2826dcbb2678c696438eb83d980d2f50a16f",
+  "tree": "f021a1290dc5cd3edc40eac9b5d7429c7da1c1b1",
+  "base": "0fc4ee239c7bbebb2f221c6fa3f092c3f063cb02",
+  "pr": "https://github.com/Kaichen9527/stockinsider/pull/342",
+  "vmTestSubject": "8acc10e9a9e329892c57645fce6708d701fd97b3",
+  "vmReceiptCommit": "30a3a7e2ae4658c54b1286ddd8364a95220dbcb2",
+  "vmReceiptPath": ".agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm.json",
+  "vm": {
+    "postgres": "17.11",
+    "pass": 10,
+    "fail": 0,
+    "skip": 0,
+    "originalRawFilesHashVerified": 12,
+    "migrationHashesVerified": 4
+  },
+  "root": {
+    "postgres": "17.10 Homebrew",
+    "node": "22.14.0",
+    "pass": 10,
+    "fail": 0,
+    "skip": 0,
+    "missingPostgres": "explicit failure; zero skip",
+    "syntax": "pass",
+    "diffCheck": "pass",
+    "cleanup": "owned cluster stopped, zero child processes, scratch removed",
+    "rawEvidence": [
+      {
+        "path": ".agent/reports/2026-10-09T11-05-00Z-natural-lock-expiry-root-tap.txt",
+        "bytes": 34967,
+        "sha256": "22ae76b468a71efb90833a51161b3e1f089f06b777732d6acbfdbae171e7dac6"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T11-05-00Z-natural-lock-expiry-root-missing-pg.tap.txt",
+        "bytes": 1939,
+        "sha256": "9ecfdfd0d34d85ef0a2348c47b510a0ccf60e1a92aeab5631617ee9f3295968b"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T11-05-00Z-natural-lock-expiry-root-cleanup.json",
+        "bytes": 191,
+        "sha256": "020a9ee97c1d3744e1cb486d4503b5f05d503a4afe8b1ff621c645ac44a8eb75"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T11-05-00Z-natural-lock-expiry-root-children.json",
+        "bytes": 308472,
+        "sha256": "808d417aa1358d6b7b72f819d0325c27e49113e67d3e020f980229f8179729a8"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T11-05-00Z-natural-lock-expiry-root-pg.log.txt",
+        "bytes": 534310,
+        "sha256": "faaeb918be93b6793e24577027e454b5c3fc93f595cd1536719407203aa8f585"
+      }
+    ]
+  },
+  "review": {
+    "agent": "/root/astra_publication_review",
+    "kind": "unsigned scoped CODE PASS",
+    "exactSubject": "b38d2826dcbb2678c696438eb83d980d2f50a16f",
+    "p1": 0,
+    "p2": 0,
+    "independentHashFiles": 12,
+    "independentMigrationHashes": 4,
+    "reranPg": false,
+    "protectedApproval": false
+  },
+  "build": {
+    "rerun": false,
+    "reason": "Only new isolated test and root npm command. web/migrations unchanged from0fc; existing exact722 type/lint/normalbuild reused, not a newly executed build."
+  },
+  "publication": {
+    "main": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "mainMerged": false,
+    "productionDeployed": false,
+    "researchPublished": false,
+    "strategyApproved": false,
+    "integrationMerge": "pending GitHub checks at record time"
+  },
+  "limitations": [
+    "Synthetic initial6/20-second leases and seeded reserved seconds are not actual30-minute/model daily admission proof",
+    "120-second freshness boundary pending",
+    "Source commit orders/rights ABA pending",
+    "Response-loss recovery pending",
+    "Real role execution, existing publication transaction and actual discovery-price adapter pending",
+    "Protected/full release and future five trading days pending"
+  ]
+}

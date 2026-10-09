@@ -8,27 +8,32 @@ list is valid; research priority is not entry authority.
 
 ## Latest verified state — supersedes older checkpoints below
 
-Integration **0fc4ee239c7bbebb2f221c6fa3f092c3f063cb02** is pushed and clean;
-its tree exactly equals reviewed7221958b. PR341 is merged into that feature
-branch. Main remains169aad1; no production migration/deployment occurred.
+Integration0fc4ee239c7bbebb2f221c6fa3f092c3f063cb02 remains pushed/clean.
+Its tree equals reviewed7221958b; PR341 is merged into the feature branch.
+Main remains169aad1; no production migration or deployment occurred.
 
-- New source-linked business-article contract revalidates complete input and
-  reruns fixed AUO/EMC calculators. Tables carry computed values/units/periods;
-  gaps/assumptions stay explicit, P/E on losses is N/A and multiples are
-  uncalibrated sensitivity. The validator cannot publish or confer eligibility.
-- Root109related tests0fail/skip, typecheck, lint0errors/33existing warnings and
-  normalbuild pass. Independent reviewer40/40 plus adversarial probes passes
-  exact722. Three initialP2 and root37/3RED remain in immutable evidence; fixes
-  cover exclusive expiry, exact namespaced gaps and EPS share denominators.
-- Independently reviewed original-SQL PG byte test6/6 proves524288 exact/+1
-  rejection, full rollback/replay and joint four-count gate. Root verified14
-  original Git evidence hashes. Linux fixed clock is explicitly serialization
-  only; Mac did not rerun it and it proves no natural expiry/freshness.
-- Existing VM is active on one new natural-clock lock-wait expiry fixture from
-  2db, turn01a12043. It owns a separate new test file; no duplicate work assigned.
-- Genuine product author/reviewer execution, v2 original publication/reader,
-  actual61-session discovery price adapter and full protected release remain
-  incomplete. Engineering progress does not establish investment effectiveness.
+- New business article contract: root109related tests, types/lint/normalbuild
+  pass; independent40/40 plus adversarial checks pass exact722. Original three
+  P2 and37/3 RED are retained. Real author/reviewer/publication remains pending.
+- Complete-input byte boundary: original-SQL Linux PG6/6, exact524288/+1,
+  rollback/replay/joint count verified. Fixed clock is serialization-only.
+- Existing VM turn01a12043 completed; no running work or duplicate dispatch.
+  Natural-clock actual shared-source/global-deep lock waits now pass10/10 in
+  Cloud PG17.11 and separate Mac PG17.10. Live before expiry succeeds; job or
+  reservation expiry rejects seal/read/replay without changing11table hashes,
+  logical charges or seeded reserved budgets. Missing PG explicitly fails.
+- Exactb38d2826 test-only increment has unsigned independent CODE PASS,
+  zeroP1/P2; twelve original VM evidence and four migration hashes match.
+  PR342 targets integration only and awaits GitHub checks/feature merge at this
+  checkpoint. Runtime/migrations/ACL unchanged; exact722 web build reused.
+- Synthetic short initial leases prove original recheck, not production role
+  budget admission.120s freshness, source race/rights ABA and response-loss
+  remain pending. Genuine role execution, atomic v2 publication/reader, actual
+  61-session discovery price adapter and protected release are incomplete.
+
+Exact root/VM evidence and limitations are saved in
+`.agent/reports/2026-10-09T11-05-00Z-natural-lock-expiry-root.json`.
+Engineering evidence does not establish investment effectiveness.
 
 ## Earlier exact state (historical, retained for provenance)
 
