@@ -102,6 +102,31 @@ under independent review and final normalbuild verification at this checkpoint.
 These are pure helpers only: no DB assignment, actual model dispatch, v2 handoff,
 independent execution or published article is inferred.
 
+Final helper subject eeba1231545b17ccceb9e46b226b2b1e0eec735f received unsigned
+scoped CODE PASS from author_input_review_oct08:12unit cases,21extra clock
+probes and targeted compiler checks. Root ran14auth-regression cases, types,
+lint (0errors/33existing warnings) and normalbuild successfully. Integration
+merge047ffdeee24d236cffbf1e0cf70fb07c9d9499ef preserves the exact same tree
+36b67d736849012cb270b465afef04ac25e9229b as that reviewed/tested subject.
+This is a feature-branch integration, not main merge, protected acceptance or
+deployment. Its private assignment/actual execution/API work remains open.
+
+The9745 native1,978 consumer subcase passed and wrote a4,372,812-byte compact
+receipt, but the whole file was22pass/2fail: first discovery was already captured
+by the new earlier consumer case, while the later old priority case expected it
+again. Test-only successor d75ee25683adf287497dd793eb12e808ca5e659a explicitly
+asserts initial2captures for5347/6531, immutable whole discovery JSON on replay
+and later run, then0additional captures while preserving1new research job.
+Unsigned independent scoped test-only PASS confirms runtime/web blobs unchanged;
+actual native whole-file rerun remains pending. No runtime guard was loosened.
+
+Complete-input independent review at75a found a P2 early-return path bypassing
+current server mapping/hash validation for read/replay; the VM owns its repair.
+Its42-case maker total includes28pure cases and must not be read as42independent
+PG cases. Cumulative-byte rollback, lock-expiry/freshness, both source mutation
+commit orders/rights ABA and real lost-response reconciliation remain explicit
+acceptance gaps, alongside the compiled unavailable failure.
+
 The readonly release inventory covers1,011 changed files main169aad1→75d.
 Seventy distinct integration-manifest entries still match; five historical
 entries need successor/blob-to-review closure. The31PCR catalog/boundaries and
