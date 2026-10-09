@@ -215,3 +215,9 @@ See docs/operations/2026-10-09/progress-convergence-0020.md for exact subjects, 
 - [ ] Firstpublication64f7 actualroleexecution/independentreview/submission, sourcebreadth, fullcandidatePITstrategy/forwardtrials, protectedapproval, reviewedmerge/deploy and fiveactualtradingdays remain open.
 
 Continue on existing CodexVM; VPSheavycapacity is not a development stop condition. No new VPS or Mac unique-data deletion, mainmerge, productionmigration, publication, scheduleactivation or profitclaim.
+
+## 2026-10-09 12:05 Taipei continuation checkpoint
+
+- [x] Re-measured expandedVPS read-only:87.95GBavailable; app roots plus sharedPG3.389GB; currentservicesactive/home+preview200. Capacity is no longer the prior blocker. No deletion.
+- [x] Saved durable-vs-rebuildable placement matrix and truthful CI/VM/red-review progress in docs/operations/2026-10-09/progress-convergence-1205.md.
+- [ ] Repair actual insiderSQL and harnessverdict/deadline findings; independently accept observed43d repair; complete real roles/publication/strategies/protected release/schedules.
