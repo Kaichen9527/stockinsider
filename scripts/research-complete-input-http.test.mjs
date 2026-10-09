@@ -12,7 +12,7 @@ const roster={legacyClassification:read('observed-security-classification.json')
 const mapping=JSON.parse(fs.readFileSync(root+'/web/src/lib/research-complete-mapping.json'));
 for(const symbol of ['2409','2383'])test(`compiled complete-input ${symbol}, synthetic job, actual fixed financial inputs`,{timeout:120000},async t=>{
  const realFetch=globalThis.fetch;globalThis.fetch=(url,options)=>{const action=typeof options?.body==='string'&&options.body.length?JSON.parse(options.body).action:undefined;return realFetch(url,action==='sealResearchInput'||action==='readResearchInputRevision'?{...options,headers:{...options.headers,'x-research-input-version':'2'}}:options);};
- try {const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,observedClaim:true,check:(name,fn)=>t.test(name,fn),afterBaseline:async({post,sql,priorityRequest,report,restart})=>{
+ try {const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,observedClaim:true,testPgClockLibrary:process.env.STOCKINSIDER_TEST_PG_CLOCK_LIBRARY,check:(name,fn)=>t.test(name,fn),afterBaseline:async({post,sql,priorityRequest,report,restart,pgClock})=>{
   const prepared=prepareObservedRosterAdmission(roster),scope={scope:'research_observed_v1',snapshotHash:prepared.snapshotHash};
   let r=await post('api/internal/research-observed-roster',roster);assert.equal(r.status,200);
   const now=new Date(Date.now()-1000).toISOString();
@@ -47,11 +47,11 @@ for(const symbol of ['2409','2383'])test(`compiled complete-input ${symbol}, syn
    for(const patch of [{command:'never-run'},{clock:new Date().toISOString()},{financial:{} }])assert.equal((await post('api/internal/research-deep-job',{action:'sealResearchInput',...input,...patch})).status,400);
    assert.equal((await post('api/internal/research-deep-job',{action:'sealResearchInput',...input,owner:'another-owner'})).status,409);
   });
-  await t.test('actual restart reread persists and completed reservation refuses historical replay',async()=>{
+  await t.test('actual restart reread persists and expired reservation refuses historical replay',async()=>{
    restart();for(let n=0;n<20;n++){r=await post('api/internal/research-deep-job',{action:'readResearchInputRevision',...input});if(r.status===200)break;await new Promise(resolve=>setTimeout(resolve,100));}assert.equal(r.status,200);assert.equal((await r.json()).revision.input_hash,sealed.input_hash);
-   // The installed production reservation is append-only: terminate through its existing RPC.
-   // Expiry is separately covered by the minimal PG fixture; this HTTP case claims completion only.
-   sql(`SET ROLE service_role;SELECT finish_research_model_v1('${request.reservationId}','${owner}','failed','${'0'.repeat(64)}');`);assert.equal((await post('api/internal/research-deep-job',{action:'readResearchInputRevision',...input})).status,409);assert.equal(sql('SELECT count(*) FROM research_article_input_revisions_v2;'),'1');
+   // Advance only this disposable PG clock; preserve append-only reservation and scoped completion guards.
+   assert.ok(pgClock,'explicit reviewed isolated PG clock required');await pgClock.set('+1900');
+   assert.equal((await post('api/internal/research-deep-job',{action:'readResearchInputRevision',...input})).status,409);assert.equal(sql('SELECT count(*) FROM research_article_input_revisions_v2;'),'1');
   });
  }});assert.ok(report.completeInputHttp);
  }finally{globalThis.fetch=realFetch;}
