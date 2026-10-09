@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "private-author-result-maker-checkpoint-v1",
+  "subject": "b8c3df4d1c21b4aeee28341b6935302b42463f94",
+  "tree": "b360aeb3db772189c55eb69aeb6921233e1504e5",
+  "designSubject": "8cb30b99094010113561615fc9de13aa13130cb1",
+  "designReview": "unsigned scoped PASS by author_input_review_oct08",
+  "pullRequest": "https://github.com/Kaichen9527/stockinsider/pull/345",
+  "rootRelated": {
+    "pass": 101,
+    "fail": 0,
+    "skip": 0
+  },
+  "postgres": {
+    "version": "psql (PostgreSQL) 17.10 (Homebrew)",
+    "pass": 13,
+    "fail": 0,
+    "skip": 0,
+    "actualFixedAuoCalculation": true,
+    "actualPrivateSqlFences": true,
+    "upstreamSchemaIdentityJobFixtures": "synthetic isolated development profile"
+  },
+  "typecheck": "PASS",
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 33
+  },
+  "build": {
+    "exitCode": 0,
+    "buildId": "q2qBDNHioSmYl4TWvbdZS"
+  },
+  "originalFailureRetained": "initial ALTER FUNCTION list SQL syntax error; split into two statements, no acceptance changed",
+  "independentCodeReview": "pending",
+  "vmCompiledResultHttp": "pending turn dispatched; no duplicate author result runtime ownership",
+  "actualModelExecuted": false,
+  "reservationCompleted": false,
+  "publicationExecuted": false,
+  "researchQualified": false,
+  "strategyApproved": false,
+  "entryEligible": false,
+  "productionModified": false,
+  "evidence": [
+    {
+      "path": ".agent/reports/2026-10-09T13-35-author-result-checkpoint/pg-red1.log",
+      "bytes": 2658,
+      "sha256": "5b66cc9f4c8a3df4922d2f2aaff347090b3851fa643c282ad29a70c3b86ff8f8"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-35-author-result-checkpoint/pg.log",
+      "bytes": 5755,
+      "sha256": "b4e0b757b7de5aacf64d99dc8a297afab01d46757a74179bf3292f0328327564"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-35-author-result-checkpoint/related.log",
+      "bytes": 20874,
+      "sha256": "e8e3d2636796fdc9c5d0782af96db067de589a83a99b0c9120081124eee86588"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-35-author-result-checkpoint/unit.log",
+      "bytes": 2526,
+      "sha256": "578e4d8d72a8e59a79ac3a4d221beb6ee31c526ad87179b161f2b4ffff6fa2e2"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-35-author-result-checkpoint/types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-35-author-result-checkpoint/lint.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-35-author-result-checkpoint/build.log",
+      "bytes": 6500,
+      "sha256": "27bb3606803c615a443ab1b46bc1d8c921daab956d18ee0a2a150bdb6fa7d1b6"
+    }
+  ]
+}

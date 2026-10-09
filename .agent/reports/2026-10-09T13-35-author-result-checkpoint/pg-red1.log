@@ -1,0 +1,44 @@
+TAP version 13
+# (node:40559) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:40559) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-result.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# ERROR:  syntax error at or near ","
+# LINE 1: ...ad_research_author_result_v2(jsonb,uuid,text,text),public.re...
+#                                                              ^
+# Subtest: private author results against real original PG fences; synthetic execution, actual fixed AUO calculation
+not ok 1 - private author results against real original PG fences; synthetic execution, actual fixed AUO calculation
+  ---
+  duration_ms: 896.437292
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-result-postgres.test.mjs:22:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-result-weqhbb -p 55559 -d postgres
+    ERROR:  syntax error at or near ","
+    LINE 1: ...ad_research_author_result_v2(jsonb,uuid,text,text),public.re...
+                                                                 ^
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    genericNodeError (node:internal/errors:983:15)
+    wrappedFn (node:internal/errors:537:14)
+    checkExecSyncError (node:child_process:882:11)
+    execFileSync (node:child_process:918:15)
+    run (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-result-postgres.test.mjs:27:38)
+    sql (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-result-postgres.test.mjs:28:20)
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-result-postgres.test.mjs:49:7)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+  ...
+# Failure evidence retained at /tmp/si-result-weqhbb
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1108.329916

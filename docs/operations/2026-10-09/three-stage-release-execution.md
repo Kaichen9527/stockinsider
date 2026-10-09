@@ -39,6 +39,18 @@ main169aad1 remains unchanged. No production migration/deployment/publication.
   This proves a mechanism, not the original R1 writer. The existing authorized
   VM owns a single observed diagnostic and, within budget, successor native run.
   No overlapping runtime edits, namespace weakening or blind gate retries.
+- PR344 now16155a85 has reviewed explicit restart readiness, root/independent16
+  unit plus2 extra reviewer probes. VM receipt97eab4b9 reports native38/38 and
+  unit16/16, zero skip; root verified30 raw entries. Both companies account1978.
+  Earlier31bd34pass/4fail revealed exact503/57P01 database restart disconnect;
+  only that known startup response is now retried by the separate readiness probe.
+  Business calls remain single; old RED and unknown historicalR1 writer retained.
+- Draft PR345 subjectb8c3df4d implements private create-only author result receive/
+  read using original sources, assignments, deadlines and actual fixed calculator.
+  Reviewed design8cb30b99; root101related and13real PG pass, zero skip; type/lint
+  and normalbuild q2qBDNHioSmYl4TWvbdZS pass. Exact code review and VM native
+  result HTTP remain pending. All observations/prose/jobs are explicit synthetic
+  fixtures; no actual model, reservation handoff/completion, review or publication.
 - PR342 natural lock-expiry test remains open: Mac/Cloud10/10 and independent
   code review passed; ordinary diagnostic37921360805 now passed. Protected
   run37921360771 still lacks exactb38d review evidence. No repeat/bypass/merge.
@@ -47,7 +59,8 @@ main169aad1 remains unchanged. No production migration/deployment/publication.
   release and future five trading days are unfinished. Strategy profit unproven.
 
 Evidence: `.agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance.json`
-and `.agent/reports/2026-10-09T13-20-financial-parent-diagnostic/checkpoint.json`.
+and `.agent/reports/2026-10-09T13-20-financial-parent-diagnostic/checkpoint.json`,
+plus `.agent/reports/2026-10-09T13-35-author-result-checkpoint/checkpoint.json`.
 Engineering heartbeat continues; it does not enable the paused research schedule.
 
 ## Earlier exact state (historical, retained for provenance)
