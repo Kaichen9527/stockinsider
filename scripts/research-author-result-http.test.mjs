@@ -113,6 +113,7 @@ for(const symbol of ['2409','2383'])test(`compiled private author result ${symbo
    assert.deepEqual({...receiverValidated,calculatorExecutionHash:sourceCoreHash},sourceValidated,'only the core identity field changes before rehash');
    delete receiverValidated.articleHash;const expectedReceiverArticleHash=completeHash(receiverValidated);receiverValidated.articleHash=expectedReceiverArticleHash;
    assert.notEqual(expectedReceiverArticleHash,sourceValidated.articleHash);
+   fixture.request=structuredClone(fixture.request); // detach the shared fixture observation alias; preserve envelope
    fixture.request.observation.articleHash=expectedReceiverArticleHash;
    assert.deepEqual({...fixture.request,observation:{...fixture.request.observation,articleHash:originalFixture.request.observation.articleHash}},originalFixture.request,'raw article, all clocks and other bindings remain untouched');
    assert.deepEqual(fixture.envelope,originalFixture.envelope,'shared fixture envelope is untouched');
