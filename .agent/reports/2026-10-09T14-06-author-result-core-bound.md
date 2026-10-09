@@ -1,0 +1,11 @@
+# Single-core identity counterfactual native acceptance
+
+Runtime exact b8c3df4d; native test ba7e1306096256b711a3b09c8127ae195d05a82e /tree d4c0da0aec3013d009768af5f97cafabc9e8c7b6. Reused exact build13072b3b, AwvYbZjxpDludvMr16gWE,2070 files individually reverified before and after; runtime/SQL/package/harness/shared fixture unchanged. No rebuild.
+
+Final fresh native:52/52,zero skip,25 children each company plus2 parents. Each original source fingerprint observation is sent once and rejects409 with whole-state audit identical. Each new synthetic observation uses the actual guarded financialSupplement calculation.executionCodeHash, then independently recomputed validatedArticle.articleHash, and is sent once. Positive200 independently matches expected validated snapshot. Raw article, all clocks and other bindings remain identical. Both full1978 accounting and result read/replay/restart/withdrawal pass; one result per assignment, original preparation/complete-input charge/reservation1/completion0/formal rows unchanged. No actual models/publication/qualification.
+
+Prior afe native50/42/8 retained. New setup RED2/2 before services due self-selected socket label length retained. c1 raw52/44/8 retained: negative409 audit succeeds, positive request not sent because a shared observation alias violates unchanged-envelope assertion. Minimal own-test deep request clone preserves the original envelope/assertion; c2 is the targeted run, not a runtime-error retry loop. Business error responses never generically retried.
+
+Core provenance and both canonical/raw UTF8 request hashes are in JSON. source284921… vs guarded compileda9d36c…; only calculatorExecutionHash in the copied validated snapshot changes before rehash, only observation.articleHash in the wire request. No fixed runtime hash, ignored fingerprint or server rewriting. Raw profile stateAuditBefore for positive is misnamed after-insert capture; JSON explicitly derives true before from immediately preceding unchanged negative.after, without altering raw evidence.
+
+All49 raw entries copied and hashed. Max sampled aggregate RSS 656404480B; max scratch 1548722176B. Only4 exact stopped rebuildable PG clusters removed after preservation; owned process count0, free 13799501824B >8GiB reserve. This manual task is not model budget evidence. New test/receipt awaits independent root review.

@@ -1,0 +1,3750 @@
+{
+  "startedAt": "2026-10-09T14:04:04.980Z",
+  "postgrest": {
+    "version": "PostgREST 16.3",
+    "archiveBytes": 4519976,
+    "archiveSha256": "4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d",
+    "binaryBytes": 20502640,
+    "binarySha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+  },
+  "partialDevelopmentProfile": true,
+  "databaseAdapterInjected": false,
+  "officialAuthorityRowsSeeded": 0,
+  "observedRosterPromoted": false,
+  "modelReserved": false,
+  "productionImported": false,
+  "top20": null,
+  "checks": [
+    "unauthorized_401_zero_write",
+    "inbox_three_industry_only",
+    "anonymous_table_rpc_denied",
+    "ancillary_read_only_empty_authority",
+    "production_writer_not_fabricated",
+    "real_source_heads_cutoff",
+    "real_authority_empty",
+    "restart_dedup",
+    "priority_blocked_restart_fenced"
+  ],
+  "limitations": [
+    "Node test-runner controlled loopback configuration, not production runtime activation",
+    "Partial schema profile does not attest the complete installed migration policy",
+    "No official roster/sector authority has been ingested; Top20 remains blocked"
+  ],
+  "observedRosterMigrationSha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b",
+  "observedPriorityMigrationSha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3",
+  "observedClaimDependencySourceHashes": {
+    "state": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+    "jobs": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+    "dossier": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+    "immutableDefinition": "d2edbeae7c77f25924a3a9c21acb9ad65109cb0f1a6206aad83dff8d88b60985"
+  },
+  "observedClaimMigrationSha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2",
+  "installedDefinitions": [
+    {
+      "file": "supabase_schema.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS stocks (",
+      "sourceSha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3",
+      "definitionSha256": "b3d9d87b4dd2cd2570c657f6d9edeca9474409198f1ce2f2d4b143b313d1b1d2"
+    },
+    {
+      "file": "migrations/20260315_research_system_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS source_entities (",
+      "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+      "definitionSha256": "03c78b435837ecd782b14e36f8f51a7bdbeeefc130cb19d36bf3ff7120292f74"
+    },
+    {
+      "file": "migrations/20260315_research_system_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS source_raw_documents (",
+      "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+      "definitionSha256": "1ddf2e178a9dcbb5608535eaf32f9f508908ace0a804283f614e02c64338e7da"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "ALTER TABLE public.source_raw_documents",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "6f9cf89764e00a16dd2630f9aaa92be8c26e375c05bb738f9ac4638e8d914c52"
+    },
+    {
+      "file": "migrations/20260906_source_identity_v4.sql",
+      "marker": "ALTER TABLE public.source_raw_documents",
+      "sourceSha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+      "definitionSha256": "c1d15e7436fef37b0d959e009f50ac67c9588f43d2000f3b82424794bb5a7969"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE authority_status_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "de0456eee24d4a21f288f00843e1c7ea2bf26c4475e4035cfa976d98f38df541"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE stock_exchange_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "bb7c4a9dcf3cb5356c8dbd6b1e363d7532c19bed93e17528d1c8a0d129c7d73a"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE instrument_type_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "81cb876a7635be9f157396262a638bf6de5831b1e764a9c86a469c070f6b7afb"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE listing_status_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "03070b2edae9d1f1b2f15514852a6ae61d4b8e980fd7406bb05bedcb1d6d2a78"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE official_roster_provider_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "c85a62f8be9eca5f006ed60d7ee9e366246dc44678e32be2466f1129df37a61d"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE tw_market_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "be7acd6c47b936c20739f01bceec5a206b9cdfaed0cf9250bdb1c5a8883e8792"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE canonical_sector_key_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "e92dfaa281fddd0da3154e2429ebae9553fc96393289986ec30267722c8475b9"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS stock_instruments_v3 (",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "411f053cf5273c207fb1567a391c02986ce5b849128f2d3b47ac1cc85a2c4a3c"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "9c2b0c74ea924ef94f143b37d7de13b57e2c5530eebbbc0911cdaa5b676a5194"
+    },
+    {
+      "file": "migrations/20260831_candidate_shadow_performance.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_runs (",
+      "sourceSha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+      "definitionSha256": "c37f899abd5d57f924a8cd2c1bace068bb2dc5e539ae0809381c7ff6115973da"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.market_evidence_snapshots (",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "9f7b07f170febec813a9c67bba8e33338cf3ff5fa35de6e2df2cd9fc14578957"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_detail_snapshots (",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "2c2fc7a718d8f0335ca4f718bf7f71ff0d447639910811276c9a965d76981139"
+    },
+    {
+      "file": "migrations/20260906_candidate_dossier_v4.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_bundles (",
+      "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+      "definitionSha256": "49bfec32f5a5e712cc1158c391168699cf81876bcfb9dcbec3bcd30f33cb14c4"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_dossiers (",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "2151ab0e8433a794f4bed71fa4fcfea65ab3df045ad5c88b9c2a63912c7d0db0"
+    },
+    {
+      "file": "migrations/20260906_candidate_dossier_v4.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_submission_receipts (",
+      "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+      "definitionSha256": "5337c2d9217883181acbc053e205d78cb5d0b54605aca893790a07cc28f452c1"
+    },
+    {
+      "file": "migrations/20260929_research_agent_state_v1.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (",
+      "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+      "definitionSha256": "3418aa78ecbfaf879f426561e30cb35cd223fdfe5ba8f7d849e6dc36281579d7"
+    },
+    {
+      "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_issuer_document_domains_v6 (",
+      "sourceSha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+      "definitionSha256": "5d66b75c1bff55126ada62aaedcf489128769ef3ec3f1e390c6cf93267812845"
+    },
+    {
+      "file": "migrations/20260929_research_deep_jobs_v1.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.research_deep_jobs_v1 (",
+      "sourceSha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+      "definitionSha256": "f6b905d282b566dd2d80cd2cf19ec418e35a8951aa04004deecf801ddf9d3eb4"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority(",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "a6749bacb864ab7c6c61dd9b6cd2d1bdfcb4b09c40e99489ed8d072d84719e95"
+    },
+    {
+      "file": "migrations/20260906_authority_pagination_v2.sql",
+      "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority_page(",
+      "sourceSha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+      "definitionSha256": "e76a34cde20546b651b64713313ea63e784ee93be606c6804f0e2a32b5578598"
+    },
+    {
+      "file": "migrations/20260929_research_agent_state_v1.sql",
+      "marker": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(",
+      "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+      "definitionSha256": "088283446f2f3ded3deca7cc2e8328325abe4490470954219c2954850851d8cf"
+    }
+  ],
+  "developmentProfileSqlSha256": "666264467963b75fec638b685e4f2eae9081635f389c00b5472f2154647b9b39",
+  "readOnlyDependencyTables": [
+    "candidate_research_runs",
+    "market_evidence_snapshots",
+    "candidate_detail_snapshots",
+    "candidate_dossier_bundles",
+    "candidate_research_dossiers",
+    "candidate_dossier_submission_receipts",
+    "research_priority_runs_v1",
+    "candidate_issuer_document_domains_v6",
+    "research_deep_jobs_v1"
+  ],
+  "installedRoutines": [
+    {
+      "name": "candidate_research_stock_authority",
+      "bodySha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf",
+      "securityDefiner": true,
+      "searchPath": [
+        "search_path=public, pg_temp"
+      ],
+      "serviceExecute": true,
+      "anonExecute": false
+    },
+    {
+      "name": "candidate_research_stock_authority_page",
+      "bodySha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d",
+      "securityDefiner": true,
+      "searchPath": [
+        "search_path=public, pg_temp"
+      ],
+      "serviceExecute": true,
+      "anonExecute": false
+    },
+    {
+      "name": "research_source_heads_page_v1",
+      "bodySha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+      "securityDefiner": true,
+      "searchPath": [
+        "search_path=public, pg_temp"
+      ],
+      "serviceExecute": true,
+      "anonExecute": false
+    }
+  ],
+  "classificationEvidence": {
+    "schemaVersion": "stockinsider-observed-official-security-scope-reconciliation-v1",
+    "recordedAt": "2026-10-08T12:23:18.366811+00:00",
+    "counts": {
+      "twseMasterMatched": 1095,
+      "twseOrdinaryResearchCandidates": 1085,
+      "twseInnovationBoard": 31,
+      "twseOrdinaryAdditionalTransferRestrictionCfi": 1,
+      "twseTdrExcludedFromOrdinaryScope": 10,
+      "unchangedObservedTpexOrdinary": 893,
+      "reconciledObservedOrdinaryResearchCohort": 1978,
+      "legacyStrictObservedCohort": 1946
+    },
+    "sourceReferences": [
+      {
+        "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=2",
+        "observedAt": "2026-10-08T12:21:15.657943+00:00",
+        "responseBytes": 9063029,
+        "responseSha256": "920828356712b85375e504b4633446ad8af39f6f59eddbb7efc0f47e7ca54311"
+      },
+      {
+        "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=4",
+        "observedAt": "2026-10-08T09:04:35.607658+00:00",
+        "responseBytes": 3030198,
+        "responseSha256": "0a719dcffca37de025a3d5be17e83c39019d9d78ffb6e6992ca140b18707e65e"
+      }
+    ],
+    "rawSourceHashesVerifiedByVm": false,
+    "selectedPacketHash": "50fd3e96233b4a0386c09729371283c703f9e9ae147cc4bfd667914a8a753518",
+    "trustedAuthorityActivated": false,
+    "currentTradingEligibilityVerified": false,
+    "historicalPITEligible": false
+  },
+  "excludedNonCommon": [
+    {
+      "symbol": "9103",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "910322",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "9105",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "910861",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "9110",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "911608",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "911622",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "911868",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "912000",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "9136",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    }
+  ],
+  "observedClassificationAccounting": {
+    "total": 1978,
+    "legacySnapshotTotal": 1946,
+    "excludedTdr": 10,
+    "needsEvidence": 2,
+    "notAssessed": 1976,
+    "qualified": 0,
+    "ranked": 0
+  },
+  "sourceAttempts": [
+    {
+      "id": "investanchors-public",
+      "outcome": "metadata_only"
+    },
+    {
+      "id": "nittobo-electronic",
+      "outcome": "pending_publication_precision"
+    },
+    {
+      "id": "emc-products",
+      "outcome": "pending_publication_precision"
+    },
+    {
+      "id": "emc-production",
+      "outcome": "pending_publication_precision"
+    },
+    {
+      "id": "auo-tech",
+      "outcome": "pending_publication_precision"
+    },
+    {
+      "id": "threads-partial-surface",
+      "outcome": "read_failed"
+    },
+    {
+      "id": "telegram-investanchors-869",
+      "outcome": "item_ready"
+    },
+    {
+      "id": "telegram-investanchors-881",
+      "outcome": "item_ready"
+    },
+    {
+      "id": "telegram-investanchors-882",
+      "outcome": "item_ready"
+    }
+  ],
+  "controllerRunHash": "af18aad032edb0e01fc63282bec8690c3fea69c13e0588fa0c0bf7108a588315",
+  "inputCanonicalSymbols": [
+    {
+      "url": "https://t.me/investanchors/869",
+      "symbols": [],
+      "subjectScope": "industry_context"
+    },
+    {
+      "url": "https://t.me/investanchors/881",
+      "symbols": [],
+      "subjectScope": "industry_context"
+    },
+    {
+      "url": "https://t.me/investanchors/882",
+      "symbols": [],
+      "subjectScope": "industry_context"
+    }
+  ],
+  "distinctPublishers": 1,
+  "persistedDocuments": 3,
+  "dependencyPrivileges": [
+    {
+      "table": "candidate_research_runs",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "market_evidence_snapshots",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_detail_snapshots",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_dossier_bundles",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_research_dossiers",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_dossier_submission_receipts",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "research_priority_runs_v1",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_issuer_document_domains_v6",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "research_deep_jobs_v1",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    }
+  ],
+  "dependencyPolicies": [
+    {
+      "table": "candidate_research_runs",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "market_evidence_snapshots",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_detail_snapshots",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_dossier_bundles",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_research_dossiers",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_dossier_submission_receipts",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "research_priority_runs_v1",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_issuer_document_domains_v6",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "research_deep_jobs_v1",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    }
+  ],
+  "initialPriorityFailure": "research_priority_official_roster_missing",
+  "unchangedEmptyTables": {
+    "candidate_research_runs": 0,
+    "market_evidence_snapshots": 0,
+    "candidate_detail_snapshots": 0,
+    "candidate_dossier_bundles": 0,
+    "candidate_research_dossiers": 0,
+    "candidate_dossier_submission_receipts": 0,
+    "research_priority_runs_v1": 0,
+    "candidate_issuer_document_domains_v6": 0,
+    "research_deep_jobs_v1": 0,
+    "stocks": 0,
+    "stock_instruments_v3": 0,
+    "stock_sector_assignments_v3": 0
+  },
+  "rosterIngestionFailure": "writer_release_identity_missing",
+  "sourceHeads": 3,
+  "postgresRestartUnchanged": true,
+  "inboxReplayAccepted": 0,
+  "priorityStatus": 409,
+  "priorityFailure": {
+    "ok": false,
+    "error": "research_priority_official_roster_missing"
+  },
+  "authorPacketReadiness": [
+    {
+      "name": "prepare_research_input_v2",
+      "attempt": 1,
+      "status": 404,
+      "body": {
+        "code": "PGRST202",
+        "details": "Searched for the function public.prepare_research_input_v2 with parameter p_request or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.",
+        "hint": null,
+        "message": "Could not find the function public.prepare_research_input_v2(p_request) in the schema cache"
+      },
+      "elapsedMs": 4.413209999998799
+    },
+    {
+      "name": "prepare_research_input_v2",
+      "attempt": 2,
+      "status": 400,
+      "body": {
+        "code": "P0001",
+        "details": null,
+        "hint": null,
+        "message": "input_preparation_shape"
+      },
+      "elapsedMs": 113.83369900000253
+    },
+    {
+      "name": "candidate_research_stock_authority_page",
+      "attempt": 1,
+      "status": 503,
+      "body": {
+        "code": "57P01",
+        "details": null,
+        "hint": null,
+        "message": "terminating connection due to administrator command"
+      },
+      "elapsedMs": 4.426310000002559
+    },
+    {
+      "name": "candidate_research_stock_authority_page",
+      "attempt": 2,
+      "status": 200,
+      "body": [],
+      "elapsedMs": 113.71353700000327
+    },
+    {
+      "name": "candidate_research_stock_authority_page",
+      "attempt": 1,
+      "status": 503,
+      "body": {
+        "code": "57P01",
+        "details": null,
+        "hint": null,
+        "message": "terminating connection due to administrator command"
+      },
+      "elapsedMs": 4.852143000010983
+    },
+    {
+      "name": "candidate_research_stock_authority_page",
+      "attempt": 2,
+      "status": 200,
+      "body": [],
+      "elapsedMs": 116.43837000000349
+    }
+  ],
+  "completeInputHttp": {
+    "symbol": "2383",
+    "revisionId": "64850ad2-8fe0-4963-b521-2832df4d15cf",
+    "inputHash": "d909889810e7b8a3f91b622ec446058001139a83f0f3dad4d264384a465396de",
+    "charge": 99114,
+    "syntheticJobAndOwner": true,
+    "actualTrustedRoleExecution": false,
+    "financialVerified": false,
+    "dispatchReady": false
+  },
+  "authorPacketHttp": {
+    "symbol": "2383",
+    "packetHash": "6483e462be91ce99cf2e27083a523b7da0433c9a55887fbc60003f07896a348b",
+    "packetBytes": 78684,
+    "sourceCount": 1,
+    "sourceSealReceivedAt": "2026-10-09T14:04:22.275515+00:00",
+    "dbSealReceivedAt": "2026-10-09T14:04:22.275515+00:00",
+    "nodeReadAt": "2026-10-09T14:04:25.054Z",
+    "pgReadAt": "2026-10-09 14:04:25.062592+00",
+    "writingWindow": {
+      "assignedAt": "2026-10-09T14:04:24.333187+00:00",
+      "originalJobDeadline": "2026-10-09T14:34:21.449545+00:00",
+      "originalReservationDeadline": "2026-10-09T14:34:21.449545+00:00"
+    },
+    "syntheticSourceJobCredentials": true,
+    "actualFinancialRelayProjection": true,
+    "modelDispatched": false,
+    "researchQualified": false,
+    "stateAuditBefore": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101705,
+      "source_raw_documents": {
+        "count": 4,
+        "rowHash": "72e55a795732cf69a34e396047580b5ad7a0315599b4871737505bd5ba0c506b"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "fbff7d410ffa8d5f96cf55df13fdd8688be43c326701869ab5969f7e6e54e75b"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "6a5a3b7bb6426171353524fc7df1724bce321df9aac4e445c44f061438a33d63"
+      },
+      "research_author_results_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "ecac2bd926483047e239228c8401f99efca7fb60c0e5128c3e4a2727f8253e42"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "ede9add08c48ee7f68a19ff5f9b0834e41de0277496d293a970d72395d39e944"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "cfcc0daac931a228dde0bff0594a54096ae329ab33c9f5a6d272d4b6b18d4045"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "db479dd11792f56bb0c8197890357108ebc3a037e66c9f3d7970cb1808d0f8bb"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "2ef88f7db414682b827c07b07e4ffcdc39f12c5e026b0b168830d0e257271165"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "stateAuditAfter": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101705,
+      "source_raw_documents": {
+        "count": 4,
+        "rowHash": "72e55a795732cf69a34e396047580b5ad7a0315599b4871737505bd5ba0c506b"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "fbff7d410ffa8d5f96cf55df13fdd8688be43c326701869ab5969f7e6e54e75b"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "6a5a3b7bb6426171353524fc7df1724bce321df9aac4e445c44f061438a33d63"
+      },
+      "research_author_results_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "ecac2bd926483047e239228c8401f99efca7fb60c0e5128c3e4a2727f8253e42"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "ede9add08c48ee7f68a19ff5f9b0834e41de0277496d293a970d72395d39e944"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "cfcc0daac931a228dde0bff0594a54096ae329ab33c9f5a6d272d4b6b18d4045"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "db479dd11792f56bb0c8197890357108ebc3a037e66c9f3d7970cb1808d0f8bb"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "2ef88f7db414682b827c07b07e4ffcdc39f12c5e026b0b168830d0e257271165"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    }
+  },
+  "authorResultCounterfactual": {
+    "payloadHash": "583eb423dc02607d1e489a56f5bb1663f7f30b8e46294a31b0b59929f5c98286",
+    "sourceArticleHash": "6add282a93b4ad859eef1271c2bb3004740fdb48f1bb9a299ace6dea325be2c8",
+    "sourceCoreHash": "284921a74e8b58d75352f13608c02ff84bfce60d0c0a6c64ad14e8a97512431c",
+    "serverObservedCoreHash": "a9d36cfbab603802756fc49fe1d8c419353aa94eb650315b7a2502b7cf508dac",
+    "status": 409,
+    "responseBody": {
+      "ok": false,
+      "error": "research_author_result_unavailable",
+      "outcome": "uncertain",
+      "recoveryAction": "readAuthorResult",
+      "retryClaim": false
+    },
+    "before": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101705,
+      "source_raw_documents": {
+        "count": 4,
+        "rowHash": "72e55a795732cf69a34e396047580b5ad7a0315599b4871737505bd5ba0c506b"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "fbff7d410ffa8d5f96cf55df13fdd8688be43c326701869ab5969f7e6e54e75b"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "6a5a3b7bb6426171353524fc7df1724bce321df9aac4e445c44f061438a33d63"
+      },
+      "research_author_results_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "ecac2bd926483047e239228c8401f99efca7fb60c0e5128c3e4a2727f8253e42"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "ede9add08c48ee7f68a19ff5f9b0834e41de0277496d293a970d72395d39e944"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "cfcc0daac931a228dde0bff0594a54096ae329ab33c9f5a6d272d4b6b18d4045"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "db479dd11792f56bb0c8197890357108ebc3a037e66c9f3d7970cb1808d0f8bb"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "2ef88f7db414682b827c07b07e4ffcdc39f12c5e026b0b168830d0e257271165"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "after": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101705,
+      "source_raw_documents": {
+        "count": 4,
+        "rowHash": "72e55a795732cf69a34e396047580b5ad7a0315599b4871737505bd5ba0c506b"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "fbff7d410ffa8d5f96cf55df13fdd8688be43c326701869ab5969f7e6e54e75b"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "6a5a3b7bb6426171353524fc7df1724bce321df9aac4e445c44f061438a33d63"
+      },
+      "research_author_results_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "ecac2bd926483047e239228c8401f99efca7fb60c0e5128c3e4a2727f8253e42"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "ede9add08c48ee7f68a19ff5f9b0834e41de0277496d293a970d72395d39e944"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "cfcc0daac931a228dde0bff0594a54096ae329ab33c9f5a6d272d4b6b18d4045"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "db479dd11792f56bb0c8197890357108ebc3a037e66c9f3d7970cb1808d0f8bb"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "2ef88f7db414682b827c07b07e4ffcdc39f12c5e026b0b168830d0e257271165"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "businessAttempts": 1
+  },
+  "authorResultIdentityBinding": {
+    "sourceCoreHash": "284921a74e8b58d75352f13608c02ff84bfce60d0c0a6c64ad14e8a97512431c",
+    "serverObservedCoreHash": "a9d36cfbab603802756fc49fe1d8c419353aa94eb650315b7a2502b7cf508dac",
+    "sourceArticleHash": "6add282a93b4ad859eef1271c2bb3004740fdb48f1bb9a299ace6dea325be2c8",
+    "expectedReceiverArticleHash": "3263b0ac76932e4be0dead0b98bd1de28ad9f3c50291b49337d8b99cb18aa45e",
+    "sourceValidated": {
+      "schemaVersion": "validated-business-article-v2",
+      "validatorVersion": "business-article-contract-v2.1",
+      "calculatorExecutionHash": "284921a74e8b58d75352f13608c02ff84bfce60d0c0a6c64ad14e8a97512431c",
+      "sourceClosureHash": "79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f",
+      "article": {
+        "schemaVersion": "candidate-deep-research-v2",
+        "businessModel": "business_scenarios_v2",
+        "symbol": "2383",
+        "researchCompanyId": "eebf44e4-f60f-467a-a398-42a1e6000c95",
+        "inputRevisionId": "64850ad2-8fe0-4963-b521-2832df4d15cf",
+        "inputHash": "d909889810e7b8a3f91b622ec446058001139a83f0f3dad4d264384a465396de",
+        "authoredAt": "2026-10-09T14:04:29.395Z",
+        "evidenceCutoffAt": "2026-10-09T14:04:23.458558+00:00",
+        "summary": {
+          "id": "summary",
+          "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+          "kind": "inference",
+          "references": [
+            {
+              "kind": "calculation",
+              "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+            }
+          ]
+        },
+        "sections": [
+          {
+            "key": "market_expectation",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "market_expectation",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "industry_position",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "industry_position",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "rumors_and_orders",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "rumors_and_orders",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "earnings_transmission",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "earnings_transmission",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "valuation",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "valuation",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "entry_conditions",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "entry_conditions",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "next_evidence",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "next_evidence",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "catalysts": [
+          {
+            "name": "合成條件",
+            "stage": "discussion",
+            "paragraphIds": [
+              "earnings_transmission"
+            ],
+            "affectedBusiness": "既有業務",
+            "earliestFinancialPeriod": "2027",
+            "financialTransmission": "透過需求與產品組合推演收入和利潤，不代表已有客戶訂單。",
+            "strongestCounterEvidence": "競爭者的替代方案與價格壓力可能抵銷需求增加，尚未得到驗證。",
+            "falsifier": "若客戶未完成驗證或訂單延後，必須重新檢視收入與利潤假設。"
+          }
+        ],
+        "valuation": [
+          {
+            "scenarioId": "bear",
+            "period": "next_four_unreported",
+            "fiscalYear": null,
+            "peMultiple": 20,
+            "yearsToValue": 1,
+            "discountRate": 0.1,
+            "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。"
+          },
+          {
+            "scenarioId": "base",
+            "period": "next_four_unreported",
+            "fiscalYear": null,
+            "peMultiple": 20,
+            "yearsToValue": 1,
+            "discountRate": 0.1,
+            "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。"
+          },
+          {
+            "scenarioId": "bull",
+            "period": "next_four_unreported",
+            "fiscalYear": null,
+            "peMultiple": 20,
+            "yearsToValue": 1,
+            "discountRate": 0.1,
+            "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。"
+          }
+        ],
+        "tables": [
+          {
+            "id": "eps",
+            "title": "條件式EPS",
+            "rows": [
+              {
+                "label": "基本情境",
+                "reference": {
+                  "kind": "calculation",
+                  "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                }
+              }
+            ]
+          }
+        ],
+        "companyBackground": null
+      },
+      "calculation": {
+        "schemaVersion": "business-calculation-result-v2",
+        "calculatorId": "emc_ccl_v1",
+        "symbol": "2383",
+        "unit": "TWD_million",
+        "originalModelCutoff": "2026-10-08T12:12:00Z",
+        "researchCutoff": "2026-10-09T14:04:23.119Z",
+        "observations": [
+          {
+            "admittedAt": "2026-10-09T14:04:23.119Z",
+            "observedAt": "2026-10-08T09:28:37.654569+00:00",
+            "publication": {
+              "value": null,
+              "precision": "unknown"
+            },
+            "observationHash": "da9c4edeca3bef0378d4be502b0be599b7124d5b2857ac5c1306045d51e68ebd",
+            "sourceArtifactHash": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
+          },
+          {
+            "admittedAt": "2026-10-09T14:04:23.119Z",
+            "observedAt": "2026-10-08T09:48:10.459151+00:00",
+            "publication": {
+              "value": null,
+              "precision": "unknown"
+            },
+            "observationHash": "328934b20cdcbeb3f982ab8aa953d3038c2425588f8acbb9e28666dab3e88c2c",
+            "sourceArtifactHash": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
+          },
+          {
+            "admittedAt": "2026-10-09T14:04:23.119Z",
+            "observedAt": "2026-10-08T10:14:42.302070+00:00",
+            "publication": {
+              "value": null,
+              "precision": "unknown"
+            },
+            "observationHash": "38ced2810b617b6650740e5431a62b7cccd236ec1b27bfef6f0e3f3380bc1645",
+            "sourceArtifactHash": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
+          },
+          {
+            "admittedAt": "2026-10-09T14:04:23.119Z",
+            "observedAt": "2026-10-08T12:08:29.997535+00:00",
+            "publication": {
+              "value": null,
+              "precision": "unknown"
+            },
+            "observationHash": "57efc87225fd6db8e58aa5be2e8b469395e771d2b5cff4e0a011d83c931c1be8",
+            "sourceArtifactHash": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
+          },
+          {
+            "admittedAt": "2026-10-09T14:04:23.119Z",
+            "observedAt": "2026-10-08T12:06:23.721806+00:00",
+            "publication": {
+              "value": null,
+              "precision": "unknown"
+            },
+            "observationHash": "2ed0dc28779a9002236ee92b1e99b381f40b0626915b92f2115598de17c02e75",
+            "sourceArtifactHash": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
+          }
+        ],
+        "scenarios": [
+          {
+            "id": "bear",
+            "quarters": [
+              {
+                "period": "2026Q3",
+                "segments": null,
+                "revenue": 60884.517,
+                "grossProfit": 17656.50993,
+                "operatingExpenses": 5479.60653,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 12176.9034,
+                "pretaxProfit": 12026.9034,
+                "taxExpense": 3006.72585,
+                "netProfit": 9020.17755,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 9021.17755,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 25.17624574055107,
+                "dilutedEpsConditional": 25.17624574055107,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2026Q4",
+                "segments": null,
+                "revenue": 57840.29115,
+                "grossProfit": 16773.6844335,
+                "operatingExpenses": 5205.6262035,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 11568.058229999999,
+                "pretaxProfit": 11418.058229999999,
+                "taxExpense": 2854.5145574999997,
+                "netProfit": 8563.5436725,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 8564.5436725,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 23.901874778480746,
+                "dilutedEpsConditional": 23.901874778480746,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q1",
+                "segments": null,
+                "revenue": 52056.262035,
+                "grossProfit": 15096.315990149998,
+                "operatingExpenses": 4685.063583149999,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 10411.252407,
+                "pretaxProfit": 10261.252407,
+                "taxExpense": 2565.31310175,
+                "netProfit": 7695.93930525,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 7696.93930525,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 21.48056995054713,
+                "dilutedEpsConditional": 21.373701443330482,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q2",
+                "segments": null,
+                "revenue": 53097.3872757,
+                "grossProfit": 15398.242309952999,
+                "operatingExpenses": 4778.764854813,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 10619.477455139999,
+                "pretaxProfit": 10469.477455139999,
+                "taxExpense": 2617.3693637849997,
+                "netProfit": 7852.1080913549995,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 7853.1080913549995,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 21.91640481957518,
+                "dilutedEpsConditional": 21.807367979676798,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q3",
+                "segments": null,
+                "revenue": 54159.335021214,
+                "grossProfit": 15706.207156152059,
+                "operatingExpenses": 4874.3401519092595,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 10831.867004242798,
+                "pretaxProfit": 10681.867004242798,
+                "taxExpense": 2670.4667510606996,
+                "netProfit": 8011.400253182099,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 8012.400253182099,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 22.36095638598379,
+                "dilutedEpsConditional": 22.24970784675004,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q4",
+                "segments": null,
+                "revenue": 55242.52172163828,
+                "grossProfit": 16020.3312992751,
+                "operatingExpenses": 4971.826954947445,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 11048.504344327655,
+                "pretaxProfit": 10898.504344327655,
+                "taxExpense": 2724.626086081914,
+                "netProfit": 8173.878258245742,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 8174.878258245742,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 22.814398983720576,
+                "dilutedEpsConditional": 22.700894511164755,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              }
+            ],
+            "nextFourUnreported": {
+              "revenue": 223878.45746069998,
+              "grossProfit": 64924.752663602994,
+              "operatingExpenses": 20149.061171463,
+              "operatingProfit": 44775.691492139995,
+              "nonOperating": -600,
+              "pretaxProfit": 44175.691492139995,
+              "taxExpense": 11043.922873034999,
+              "netProfit": 33131.768619105,
+              "nonControllingNetProfit": -4,
+              "ownersNetProfit": 33135.768619105,
+              "ordinaryWeightedSharesMillionAssumed": 358.321,
+              "potentialWeightedSharesMillionAssumed": 0.8958025000000001,
+              "potentialIncludedMillion": 0.8958025000000001,
+              "antiDilutiveExcludedMillion": 0,
+              "dilutedSharesMillionAssumed": 359.21680250000003,
+              "basicEpsConditional": 92.47509528915414,
+              "dilutedEpsConditional": 92.24448407895675,
+              "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+              "periods": [
+                "2026Q3",
+                "2026Q4",
+                "2027Q1",
+                "2027Q2"
+              ],
+              "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+            },
+            "fullForecastYears": [
+              {
+                "year": "2027",
+                "revenue": 214555.50605355226,
+                "grossProfit": 62221.096755530154,
+                "operatingExpenses": 19309.995544819703,
+                "operatingProfit": 42911.10121071045,
+                "nonOperating": -600,
+                "pretaxProfit": 42311.10121071045,
+                "taxExpense": 10577.775302677612,
+                "netProfit": 31733.325908032843,
+                "nonControllingNetProfit": -4,
+                "ownersNetProfit": 31737.325908032843,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 88.57233013982669,
+                "dilutedEpsConditional": 88.13167178092208,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "periods": [
+                  "2027Q1",
+                  "2027Q2",
+                  "2027Q3",
+                  "2027Q4"
+                ],
+                "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+              }
+            ],
+            "partialYears": [
+              "2026"
+            ],
+            "calendarActualPlusForecast": {
+              "status": "incomplete",
+              "reason": "reported YTD bridge must be sealed separately; never add rounded EPS"
+            }
+          },
+          {
+            "id": "base",
+            "quarters": [
+              {
+                "period": "2026Q3",
+                "segments": null,
+                "revenue": 60884.517,
+                "grossProfit": 20396.313195000002,
+                "operatingExpenses": 4566.338775,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 15829.974420000002,
+                "pretaxProfit": 15829.974420000002,
+                "taxExpense": 3799.1938608000005,
+                "netProfit": 12030.780559200002,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 12031.780559200002,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 33.57821774107574,
+                "dilutedEpsConditional": 33.57821774107574,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2026Q4",
+                "segments": null,
+                "revenue": 63928.74285,
+                "grossProfit": 21416.12885475,
+                "operatingExpenses": 4794.65571375,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 16621.473141000002,
+                "pretaxProfit": 16621.473141000002,
+                "taxExpense": 3989.1535538400003,
+                "netProfit": 12632.319587160002,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 12633.319587160002,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 35.25698908844305,
+                "dilutedEpsConditional": 35.25698908844305,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q1",
+                "segments": null,
+                "revenue": 60732.305707499996,
+                "grossProfit": 20345.3224120125,
+                "operatingExpenses": 4554.9229280624995,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 15790.399483950001,
+                "pretaxProfit": 15790.399483950001,
+                "taxExpense": 3789.695876148,
+                "netProfit": 12000.703607802001,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 12001.703607802001,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 33.494279173707376,
+                "dilutedEpsConditional": 33.32764096886306,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q2",
+                "segments": null,
+                "revenue": 65590.8901641,
+                "grossProfit": 21972.9482049735,
+                "operatingExpenses": 4919.3167623075,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 17053.631442666003,
+                "pretaxProfit": 17053.631442666003,
+                "taxExpense": 4092.8715462398404,
+                "netProfit": 12960.759896426163,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 12961.759896426163,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 36.1735982441056,
+                "dilutedEpsConditional": 35.993630093637414,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q3",
+                "segments": null,
+                "revenue": 70838.161377228,
+                "grossProfit": 23730.78406137138,
+                "operatingExpenses": 5312.862103292099,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 18417.92195807928,
+                "pretaxProfit": 18417.92195807928,
+                "taxExpense": 4420.301269939027,
+                "netProfit": 13997.620688140254,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 13998.620688140254,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 39.06726284013567,
+                "dilutedEpsConditional": 38.8728983483937,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q4",
+                "segments": null,
+                "revenue": 75088.45105986168,
+                "grossProfit": 25154.631105053664,
+                "operatingExpenses": 5631.633829489626,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 19522.997275564037,
+                "pretaxProfit": 19522.997275564037,
+                "taxExpense": 4685.519346135369,
+                "netProfit": 14837.477929428667,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 14838.477929428667,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 41.41113116292002,
+                "dilutedEpsConditional": 41.205105634746296,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              }
+            ],
+            "nextFourUnreported": {
+              "revenue": 251136.45572159998,
+              "grossProfit": 84130.71266673601,
+              "operatingExpenses": 18835.234179119998,
+              "operatingProfit": 65295.478487616005,
+              "nonOperating": 0,
+              "pretaxProfit": 65295.478487616005,
+              "taxExpense": 15670.914837027842,
+              "netProfit": 49624.56365058817,
+              "nonControllingNetProfit": -4,
+              "ownersNetProfit": 49628.56365058817,
+              "ordinaryWeightedSharesMillionAssumed": 358.321,
+              "potentialWeightedSharesMillionAssumed": 0.8958025000000001,
+              "potentialIncludedMillion": 0.8958025000000001,
+              "antiDilutiveExcludedMillion": 0,
+              "dilutedSharesMillionAssumed": 359.21680250000003,
+              "basicEpsConditional": 138.50308424733177,
+              "dilutedEpsConditional": 138.15769002227609,
+              "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+              "periods": [
+                "2026Q3",
+                "2026Q4",
+                "2027Q1",
+                "2027Q2"
+              ],
+              "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+            },
+            "fullForecastYears": [
+              {
+                "year": "2027",
+                "revenue": 272249.8083086897,
+                "grossProfit": 91203.68578341104,
+                "operatingExpenses": 20418.735623151726,
+                "operatingProfit": 70784.95016025932,
+                "nonOperating": 0,
+                "pretaxProfit": 70784.95016025932,
+                "taxExpense": 16988.38803846224,
+                "netProfit": 53796.56212179709,
+                "nonControllingNetProfit": -4,
+                "ownersNetProfit": 53800.56212179709,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 150.1462714208687,
+                "dilutedEpsConditional": 149.39927504564048,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "periods": [
+                  "2027Q1",
+                  "2027Q2",
+                  "2027Q3",
+                  "2027Q4"
+                ],
+                "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+              }
+            ],
+            "partialYears": [
+              "2026"
+            ],
+            "calendarActualPlusForecast": {
+              "status": "incomplete",
+              "reason": "reported YTD bridge must be sealed separately; never add rounded EPS"
+            }
+          },
+          {
+            "id": "bull",
+            "quarters": [
+              {
+                "period": "2026Q3",
+                "segments": null,
+                "revenue": 60884.517,
+                "grossProfit": 21918.42612,
+                "operatingExpenses": 4261.916190000001,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 17656.50993,
+                "pretaxProfit": 17756.50993,
+                "taxExpense": 4083.9972839,
+                "netProfit": 13672.5126461,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 13673.5126461,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 38.15995335495268,
+                "dilutedEpsConditional": 38.15995335495268,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2026Q4",
+                "segments": null,
+                "revenue": 66972.96870000001,
+                "grossProfit": 24244.214669400004,
+                "operatingExpenses": 4688.107809000001,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 19556.106860400003,
+                "pretaxProfit": 19656.106860400003,
+                "taxExpense": 4520.904577892001,
+                "netProfit": 15135.202282508002,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 15136.202282508002,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 42.24201842065634,
+                "dilutedEpsConditional": 42.24201842065634,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q1",
+                "segments": null,
+                "revenue": 65633.50932600001,
+                "grossProfit": 23890.597394664004,
+                "operatingExpenses": 4594.345652820001,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 19296.251741844004,
+                "pretaxProfit": 19396.251741844004,
+                "taxExpense": 4461.137900624121,
+                "netProfit": 14935.113841219882,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 14936.113841219882,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+                "potentialIncludedMillion": 3.5832100000000002,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 361.90421000000003,
+                "basicEpsConditional": 41.683612853335084,
+                "dilutedEpsConditional": 41.27090381518325,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q2",
+                "segments": null,
+                "revenue": 73509.53044512002,
+                "grossProfit": 26904.488142913928,
+                "operatingExpenses": 5145.667131158402,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 21758.821011755525,
+                "pretaxProfit": 21858.821011755525,
+                "taxExpense": 5027.528832703771,
+                "netProfit": 16831.292179051754,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 16832.292179051754,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+                "potentialIncludedMillion": 3.5832100000000002,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 361.90421000000003,
+                "basicEpsConditional": 46.97545546884428,
+                "dilutedEpsConditional": 46.51035194935078,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q3",
+                "segments": null,
+                "revenue": 82330.67409853444,
+                "grossProfit": 30297.68806826067,
+                "operatingExpenses": 5763.147186897411,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 24534.54088136326,
+                "pretaxProfit": 24634.54088136326,
+                "taxExpense": 5665.9444027135505,
+                "netProfit": 18968.59647864971,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 18969.59647864971,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+                "potentialIncludedMillion": 3.5832100000000002,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 361.90421000000003,
+                "basicEpsConditional": 52.94023090650481,
+                "dilutedEpsConditional": 52.416070204460205,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q4",
+                "segments": null,
+                "revenue": 88917.1280264172,
+                "grossProfit": 32899.33736977436,
+                "operatingExpenses": 6224.198961849204,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 26675.138407925155,
+                "pretaxProfit": 26775.138407925155,
+                "taxExpense": 6158.281833822786,
+                "netProfit": 20616.85657410237,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 20617.85657410237,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+                "potentialIncludedMillion": 3.5832100000000002,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 361.90421000000003,
+                "basicEpsConditional": 57.54018484571758,
+                "dilutedEpsConditional": 56.97048004526493,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              }
+            ],
+            "nextFourUnreported": {
+              "revenue": 267000.52547112,
+              "grossProfit": 96957.72632697792,
+              "operatingExpenses": 18690.036782978405,
+              "operatingProfit": 78267.68954399953,
+              "nonOperating": 400,
+              "pretaxProfit": 78667.68954399953,
+              "taxExpense": 18093.568595119894,
+              "netProfit": 60574.120948879645,
+              "nonControllingNetProfit": -4,
+              "ownersNetProfit": 60578.120948879645,
+              "ordinaryWeightedSharesMillionAssumed": 358.321,
+              "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+              "potentialIncludedMillion": 1.7916050000000001,
+              "antiDilutiveExcludedMillion": 0,
+              "dilutedSharesMillionAssumed": 360.11260500000003,
+              "basicEpsConditional": 169.0610400977884,
+              "dilutedEpsConditional": 168.21994039580937,
+              "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+              "periods": [
+                "2026Q3",
+                "2026Q4",
+                "2027Q1",
+                "2027Q2"
+              ],
+              "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+            },
+            "fullForecastYears": [
+              {
+                "year": "2027",
+                "revenue": 310390.8418960717,
+                "grossProfit": 113992.11097561297,
+                "operatingExpenses": 21727.35893272502,
+                "operatingProfit": 92264.75204288795,
+                "nonOperating": 400,
+                "pretaxProfit": 92664.75204288795,
+                "taxExpense": 21312.89296986423,
+                "netProfit": 71351.85907302372,
+                "nonControllingNetProfit": -4,
+                "ownersNetProfit": 71355.85907302372,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+                "potentialIncludedMillion": 3.5832100000000002,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 361.90421000000003,
+                "basicEpsConditional": 199.13948407440176,
+                "dilutedEpsConditional": 197.16780601425916,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "periods": [
+                  "2027Q1",
+                  "2027Q2",
+                  "2027Q3",
+                  "2027Q4"
+                ],
+                "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+              }
+            ],
+            "partialYears": [
+              "2026"
+            ],
+            "calendarActualPlusForecast": {
+              "status": "incomplete",
+              "reason": "reported YTD bridge must be sealed separately; never add rounded EPS"
+            }
+          }
+        ],
+        "calculationAuthority": "unsealed_calculation_only",
+        "publishableResearch": false,
+        "researchQualified": false,
+        "strategyApproved": false,
+        "entryEligible": false,
+        "limitations": [
+          "source revisions, rights and financial authenticity require atomic DB sealing",
+          "no trusted author/reviewer execution proof",
+          "no calibrated multiple, target, physical capacity, yield, ASP or order assumption"
+        ]
+      },
+      "sources": [
+        {
+          "id": "0004cfdb-7ed1-4efc-8396-b3bebc3c258b",
+          "url": "https://example.invalid/synthetic-financial-http/2383",
+          "scope": "company_mentions",
+          "rights": "public_summary_only",
+          "rowHash": "3ee9b17f74e0e85735de2067444889730f1075b3bd547e9f87c6b8d28f5288f6",
+          "symbols": [
+            "2383"
+          ],
+          "retracted": false,
+          "admittedAt": "2026-10-09T14:04:22.275515+00:00",
+          "observedAt": "2026-10-09T14:04:09.292Z",
+          "superseded": false,
+          "publication": {
+            "raw": null,
+            "instant": null,
+            "timezone": null,
+            "precision": "unknown"
+          }
+        }
+      ],
+      "tables": [
+        {
+          "id": "eps",
+          "title": "條件式EPS",
+          "rows": [
+            {
+              "label": "基本情境",
+              "reference": {
+                "kind": "calculation",
+                "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+              },
+              "value": 138.15769002227609,
+              "unit": "TWD_per_share",
+              "periods": [
+                "2026Q3",
+                "2026Q4",
+                "2027Q1",
+                "2027Q2"
+              ],
+              "scenarioId": "base",
+              "valueStatus": "calculation"
+            }
+          ]
+        }
+      ],
+      "valuations": [
+        {
+          "scenarioId": "bear",
+          "period": "next_four_unreported",
+          "fiscalYear": null,
+          "peMultiple": 20,
+          "yearsToValue": 1,
+          "discountRate": 0.1,
+          "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。",
+          "periods": [
+            "2026Q3",
+            "2026Q4",
+            "2027Q1",
+            "2027Q2"
+          ],
+          "epsConditional": 92.24448407895675,
+          "peApplicable": true,
+          "futurePriceSensitivity": 1844.889681579135,
+          "presentValueSensitivity": 1677.1724377992134,
+          "valuationStatus": "uncalibrated_multiple_sensitivity",
+          "targetPrice": null
+        },
+        {
+          "scenarioId": "base",
+          "period": "next_four_unreported",
+          "fiscalYear": null,
+          "peMultiple": 20,
+          "yearsToValue": 1,
+          "discountRate": 0.1,
+          "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。",
+          "periods": [
+            "2026Q3",
+            "2026Q4",
+            "2027Q1",
+            "2027Q2"
+          ],
+          "epsConditional": 138.15769002227609,
+          "peApplicable": true,
+          "futurePriceSensitivity": 2763.1538004455215,
+          "presentValueSensitivity": 2511.9580004050194,
+          "valuationStatus": "uncalibrated_multiple_sensitivity",
+          "targetPrice": null
+        },
+        {
+          "scenarioId": "bull",
+          "period": "next_four_unreported",
+          "fiscalYear": null,
+          "peMultiple": 20,
+          "yearsToValue": 1,
+          "discountRate": 0.1,
+          "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。",
+          "periods": [
+            "2026Q3",
+            "2026Q4",
+            "2027Q1",
+            "2027Q2"
+          ],
+          "epsConditional": 168.21994039580937,
+          "peApplicable": true,
+          "futurePriceSensitivity": 3364.3988079161873,
+          "presentValueSensitivity": 3058.544370832897,
+          "valuationStatus": "uncalibrated_multiple_sensitivity",
+          "targetPrice": null
+        }
+      ],
+      "validationStatus": "contract_valid_only",
+      "originalModelCutoff": "2026-10-08T12:12:00Z",
+      "researchCutoff": "2026-10-09T14:04:23.458558+00:00",
+      "financialVerified": false,
+      "publishableResearch": false,
+      "researchQualified": false,
+      "strategyApproved": false,
+      "entryEligible": false,
+      "limitations": [
+        "prose/citation support and completeness require independent review",
+        "live source and assignment fences required at receive/publication",
+        "no verified normalized EPS or reported YTD bridge",
+        "no actual author/reviewer execution proof",
+        "multiples are sensitivity, not fair-value targets"
+      ],
+      "articleHash": "6add282a93b4ad859eef1271c2bb3004740fdb48f1bb9a299ace6dea325be2c8"
+    },
+    "receiverValidated": {
+      "schemaVersion": "validated-business-article-v2",
+      "validatorVersion": "business-article-contract-v2.1",
+      "calculatorExecutionHash": "a9d36cfbab603802756fc49fe1d8c419353aa94eb650315b7a2502b7cf508dac",
+      "sourceClosureHash": "79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f",
+      "article": {
+        "schemaVersion": "candidate-deep-research-v2",
+        "businessModel": "business_scenarios_v2",
+        "symbol": "2383",
+        "researchCompanyId": "eebf44e4-f60f-467a-a398-42a1e6000c95",
+        "inputRevisionId": "64850ad2-8fe0-4963-b521-2832df4d15cf",
+        "inputHash": "d909889810e7b8a3f91b622ec446058001139a83f0f3dad4d264384a465396de",
+        "authoredAt": "2026-10-09T14:04:29.395Z",
+        "evidenceCutoffAt": "2026-10-09T14:04:23.458558+00:00",
+        "summary": {
+          "id": "summary",
+          "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+          "kind": "inference",
+          "references": [
+            {
+              "kind": "calculation",
+              "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+            }
+          ]
+        },
+        "sections": [
+          {
+            "key": "market_expectation",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "market_expectation",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "industry_position",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "industry_position",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "rumors_and_orders",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "rumors_and_orders",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "earnings_transmission",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "earnings_transmission",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "valuation",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "valuation",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "entry_conditions",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "entry_conditions",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "next_evidence",
+            "title": "隔離驗收段落",
+            "paragraphs": [
+              {
+                "id": "next_evidence",
+                "text": "這是隔離的合約驗收段落，並非實際投資文章，財務推估仍需要驗證且不得當作已取得訂單。",
+                "kind": "inference",
+                "references": [
+                  {
+                    "kind": "calculation",
+                    "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "catalysts": [
+          {
+            "name": "合成條件",
+            "stage": "discussion",
+            "paragraphIds": [
+              "earnings_transmission"
+            ],
+            "affectedBusiness": "既有業務",
+            "earliestFinancialPeriod": "2027",
+            "financialTransmission": "透過需求與產品組合推演收入和利潤，不代表已有客戶訂單。",
+            "strongestCounterEvidence": "競爭者的替代方案與價格壓力可能抵銷需求增加，尚未得到驗證。",
+            "falsifier": "若客戶未完成驗證或訂單延後，必須重新檢視收入與利潤假設。"
+          }
+        ],
+        "valuation": [
+          {
+            "scenarioId": "bear",
+            "period": "next_four_unreported",
+            "fiscalYear": null,
+            "peMultiple": 20,
+            "yearsToValue": 1,
+            "discountRate": 0.1,
+            "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。"
+          },
+          {
+            "scenarioId": "base",
+            "period": "next_four_unreported",
+            "fiscalYear": null,
+            "peMultiple": 20,
+            "yearsToValue": 1,
+            "discountRate": 0.1,
+            "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。"
+          },
+          {
+            "scenarioId": "bull",
+            "period": "next_four_unreported",
+            "fiscalYear": null,
+            "peMultiple": 20,
+            "yearsToValue": 1,
+            "discountRate": 0.1,
+            "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。"
+          }
+        ],
+        "tables": [
+          {
+            "id": "eps",
+            "title": "條件式EPS",
+            "rows": [
+              {
+                "label": "基本情境",
+                "reference": {
+                  "kind": "calculation",
+                  "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+                }
+              }
+            ]
+          }
+        ],
+        "companyBackground": null
+      },
+      "calculation": {
+        "schemaVersion": "business-calculation-result-v2",
+        "calculatorId": "emc_ccl_v1",
+        "symbol": "2383",
+        "unit": "TWD_million",
+        "originalModelCutoff": "2026-10-08T12:12:00Z",
+        "researchCutoff": "2026-10-09T14:04:23.119Z",
+        "observations": [
+          {
+            "admittedAt": "2026-10-09T14:04:23.119Z",
+            "observedAt": "2026-10-08T09:28:37.654569+00:00",
+            "publication": {
+              "value": null,
+              "precision": "unknown"
+            },
+            "observationHash": "da9c4edeca3bef0378d4be502b0be599b7124d5b2857ac5c1306045d51e68ebd",
+            "sourceArtifactHash": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
+          },
+          {
+            "admittedAt": "2026-10-09T14:04:23.119Z",
+            "observedAt": "2026-10-08T09:48:10.459151+00:00",
+            "publication": {
+              "value": null,
+              "precision": "unknown"
+            },
+            "observationHash": "328934b20cdcbeb3f982ab8aa953d3038c2425588f8acbb9e28666dab3e88c2c",
+            "sourceArtifactHash": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
+          },
+          {
+            "admittedAt": "2026-10-09T14:04:23.119Z",
+            "observedAt": "2026-10-08T10:14:42.302070+00:00",
+            "publication": {
+              "value": null,
+              "precision": "unknown"
+            },
+            "observationHash": "38ced2810b617b6650740e5431a62b7cccd236ec1b27bfef6f0e3f3380bc1645",
+            "sourceArtifactHash": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
+          },
+          {
+            "admittedAt": "2026-10-09T14:04:23.119Z",
+            "observedAt": "2026-10-08T12:08:29.997535+00:00",
+            "publication": {
+              "value": null,
+              "precision": "unknown"
+            },
+            "observationHash": "57efc87225fd6db8e58aa5be2e8b469395e771d2b5cff4e0a011d83c931c1be8",
+            "sourceArtifactHash": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
+          },
+          {
+            "admittedAt": "2026-10-09T14:04:23.119Z",
+            "observedAt": "2026-10-08T12:06:23.721806+00:00",
+            "publication": {
+              "value": null,
+              "precision": "unknown"
+            },
+            "observationHash": "2ed0dc28779a9002236ee92b1e99b381f40b0626915b92f2115598de17c02e75",
+            "sourceArtifactHash": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
+          }
+        ],
+        "scenarios": [
+          {
+            "id": "bear",
+            "quarters": [
+              {
+                "period": "2026Q3",
+                "segments": null,
+                "revenue": 60884.517,
+                "grossProfit": 17656.50993,
+                "operatingExpenses": 5479.60653,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 12176.9034,
+                "pretaxProfit": 12026.9034,
+                "taxExpense": 3006.72585,
+                "netProfit": 9020.17755,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 9021.17755,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 25.17624574055107,
+                "dilutedEpsConditional": 25.17624574055107,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2026Q4",
+                "segments": null,
+                "revenue": 57840.29115,
+                "grossProfit": 16773.6844335,
+                "operatingExpenses": 5205.6262035,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 11568.058229999999,
+                "pretaxProfit": 11418.058229999999,
+                "taxExpense": 2854.5145574999997,
+                "netProfit": 8563.5436725,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 8564.5436725,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 23.901874778480746,
+                "dilutedEpsConditional": 23.901874778480746,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q1",
+                "segments": null,
+                "revenue": 52056.262035,
+                "grossProfit": 15096.315990149998,
+                "operatingExpenses": 4685.063583149999,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 10411.252407,
+                "pretaxProfit": 10261.252407,
+                "taxExpense": 2565.31310175,
+                "netProfit": 7695.93930525,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 7696.93930525,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 21.48056995054713,
+                "dilutedEpsConditional": 21.373701443330482,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q2",
+                "segments": null,
+                "revenue": 53097.3872757,
+                "grossProfit": 15398.242309952999,
+                "operatingExpenses": 4778.764854813,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 10619.477455139999,
+                "pretaxProfit": 10469.477455139999,
+                "taxExpense": 2617.3693637849997,
+                "netProfit": 7852.1080913549995,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 7853.1080913549995,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 21.91640481957518,
+                "dilutedEpsConditional": 21.807367979676798,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q3",
+                "segments": null,
+                "revenue": 54159.335021214,
+                "grossProfit": 15706.207156152059,
+                "operatingExpenses": 4874.3401519092595,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 10831.867004242798,
+                "pretaxProfit": 10681.867004242798,
+                "taxExpense": 2670.4667510606996,
+                "netProfit": 8011.400253182099,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 8012.400253182099,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 22.36095638598379,
+                "dilutedEpsConditional": 22.24970784675004,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q4",
+                "segments": null,
+                "revenue": 55242.52172163828,
+                "grossProfit": 16020.3312992751,
+                "operatingExpenses": 4971.826954947445,
+                "nonOperating": -150,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 50,
+                  "financeCost": -200,
+                  "fx": -100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 11048.504344327655,
+                "pretaxProfit": 10898.504344327655,
+                "taxExpense": 2724.626086081914,
+                "netProfit": 8173.878258245742,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 8174.878258245742,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 22.814398983720576,
+                "dilutedEpsConditional": 22.700894511164755,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              }
+            ],
+            "nextFourUnreported": {
+              "revenue": 223878.45746069998,
+              "grossProfit": 64924.752663602994,
+              "operatingExpenses": 20149.061171463,
+              "operatingProfit": 44775.691492139995,
+              "nonOperating": -600,
+              "pretaxProfit": 44175.691492139995,
+              "taxExpense": 11043.922873034999,
+              "netProfit": 33131.768619105,
+              "nonControllingNetProfit": -4,
+              "ownersNetProfit": 33135.768619105,
+              "ordinaryWeightedSharesMillionAssumed": 358.321,
+              "potentialWeightedSharesMillionAssumed": 0.8958025000000001,
+              "potentialIncludedMillion": 0.8958025000000001,
+              "antiDilutiveExcludedMillion": 0,
+              "dilutedSharesMillionAssumed": 359.21680250000003,
+              "basicEpsConditional": 92.47509528915414,
+              "dilutedEpsConditional": 92.24448407895675,
+              "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+              "periods": [
+                "2026Q3",
+                "2026Q4",
+                "2027Q1",
+                "2027Q2"
+              ],
+              "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+            },
+            "fullForecastYears": [
+              {
+                "year": "2027",
+                "revenue": 214555.50605355226,
+                "grossProfit": 62221.096755530154,
+                "operatingExpenses": 19309.995544819703,
+                "operatingProfit": 42911.10121071045,
+                "nonOperating": -600,
+                "pretaxProfit": 42311.10121071045,
+                "taxExpense": 10577.775302677612,
+                "netProfit": 31733.325908032843,
+                "nonControllingNetProfit": -4,
+                "ownersNetProfit": 31737.325908032843,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 88.57233013982669,
+                "dilutedEpsConditional": 88.13167178092208,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "periods": [
+                  "2027Q1",
+                  "2027Q2",
+                  "2027Q3",
+                  "2027Q4"
+                ],
+                "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+              }
+            ],
+            "partialYears": [
+              "2026"
+            ],
+            "calendarActualPlusForecast": {
+              "status": "incomplete",
+              "reason": "reported YTD bridge must be sealed separately; never add rounded EPS"
+            }
+          },
+          {
+            "id": "base",
+            "quarters": [
+              {
+                "period": "2026Q3",
+                "segments": null,
+                "revenue": 60884.517,
+                "grossProfit": 20396.313195000002,
+                "operatingExpenses": 4566.338775,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 15829.974420000002,
+                "pretaxProfit": 15829.974420000002,
+                "taxExpense": 3799.1938608000005,
+                "netProfit": 12030.780559200002,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 12031.780559200002,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 33.57821774107574,
+                "dilutedEpsConditional": 33.57821774107574,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2026Q4",
+                "segments": null,
+                "revenue": 63928.74285,
+                "grossProfit": 21416.12885475,
+                "operatingExpenses": 4794.65571375,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 16621.473141000002,
+                "pretaxProfit": 16621.473141000002,
+                "taxExpense": 3989.1535538400003,
+                "netProfit": 12632.319587160002,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 12633.319587160002,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 35.25698908844305,
+                "dilutedEpsConditional": 35.25698908844305,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q1",
+                "segments": null,
+                "revenue": 60732.305707499996,
+                "grossProfit": 20345.3224120125,
+                "operatingExpenses": 4554.9229280624995,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 15790.399483950001,
+                "pretaxProfit": 15790.399483950001,
+                "taxExpense": 3789.695876148,
+                "netProfit": 12000.703607802001,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 12001.703607802001,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 33.494279173707376,
+                "dilutedEpsConditional": 33.32764096886306,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q2",
+                "segments": null,
+                "revenue": 65590.8901641,
+                "grossProfit": 21972.9482049735,
+                "operatingExpenses": 4919.3167623075,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 17053.631442666003,
+                "pretaxProfit": 17053.631442666003,
+                "taxExpense": 4092.8715462398404,
+                "netProfit": 12960.759896426163,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 12961.759896426163,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 36.1735982441056,
+                "dilutedEpsConditional": 35.993630093637414,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q3",
+                "segments": null,
+                "revenue": 70838.161377228,
+                "grossProfit": 23730.78406137138,
+                "operatingExpenses": 5312.862103292099,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 18417.92195807928,
+                "pretaxProfit": 18417.92195807928,
+                "taxExpense": 4420.301269939027,
+                "netProfit": 13997.620688140254,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 13998.620688140254,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 39.06726284013567,
+                "dilutedEpsConditional": 38.8728983483937,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q4",
+                "segments": null,
+                "revenue": 75088.45105986168,
+                "grossProfit": 25154.631105053664,
+                "operatingExpenses": 5631.633829489626,
+                "nonOperating": 0,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 60,
+                  "financeCost": -160,
+                  "fx": 0,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 19522.997275564037,
+                "pretaxProfit": 19522.997275564037,
+                "taxExpense": 4685.519346135369,
+                "netProfit": 14837.477929428667,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 14838.477929428667,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 41.41113116292002,
+                "dilutedEpsConditional": 41.205105634746296,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              }
+            ],
+            "nextFourUnreported": {
+              "revenue": 251136.45572159998,
+              "grossProfit": 84130.71266673601,
+              "operatingExpenses": 18835.234179119998,
+              "operatingProfit": 65295.478487616005,
+              "nonOperating": 0,
+              "pretaxProfit": 65295.478487616005,
+              "taxExpense": 15670.914837027842,
+              "netProfit": 49624.56365058817,
+              "nonControllingNetProfit": -4,
+              "ownersNetProfit": 49628.56365058817,
+              "ordinaryWeightedSharesMillionAssumed": 358.321,
+              "potentialWeightedSharesMillionAssumed": 0.8958025000000001,
+              "potentialIncludedMillion": 0.8958025000000001,
+              "antiDilutiveExcludedMillion": 0,
+              "dilutedSharesMillionAssumed": 359.21680250000003,
+              "basicEpsConditional": 138.50308424733177,
+              "dilutedEpsConditional": 138.15769002227609,
+              "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+              "periods": [
+                "2026Q3",
+                "2026Q4",
+                "2027Q1",
+                "2027Q2"
+              ],
+              "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+            },
+            "fullForecastYears": [
+              {
+                "year": "2027",
+                "revenue": 272249.8083086897,
+                "grossProfit": 91203.68578341104,
+                "operatingExpenses": 20418.735623151726,
+                "operatingProfit": 70784.95016025932,
+                "nonOperating": 0,
+                "pretaxProfit": 70784.95016025932,
+                "taxExpense": 16988.38803846224,
+                "netProfit": 53796.56212179709,
+                "nonControllingNetProfit": -4,
+                "ownersNetProfit": 53800.56212179709,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+                "potentialIncludedMillion": 1.7916050000000001,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 360.11260500000003,
+                "basicEpsConditional": 150.1462714208687,
+                "dilutedEpsConditional": 149.39927504564048,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "periods": [
+                  "2027Q1",
+                  "2027Q2",
+                  "2027Q3",
+                  "2027Q4"
+                ],
+                "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+              }
+            ],
+            "partialYears": [
+              "2026"
+            ],
+            "calendarActualPlusForecast": {
+              "status": "incomplete",
+              "reason": "reported YTD bridge must be sealed separately; never add rounded EPS"
+            }
+          },
+          {
+            "id": "bull",
+            "quarters": [
+              {
+                "period": "2026Q3",
+                "segments": null,
+                "revenue": 60884.517,
+                "grossProfit": 21918.42612,
+                "operatingExpenses": 4261.916190000001,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 17656.50993,
+                "pretaxProfit": 17756.50993,
+                "taxExpense": 4083.9972839,
+                "netProfit": 13672.5126461,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 13673.5126461,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 38.15995335495268,
+                "dilutedEpsConditional": 38.15995335495268,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2026Q4",
+                "segments": null,
+                "revenue": 66972.96870000001,
+                "grossProfit": 24244.214669400004,
+                "operatingExpenses": 4688.107809000001,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 19556.106860400003,
+                "pretaxProfit": 19656.106860400003,
+                "taxExpense": 4520.904577892001,
+                "netProfit": 15135.202282508002,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 15136.202282508002,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 0,
+                "potentialIncludedMillion": 0,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 358.321,
+                "basicEpsConditional": 42.24201842065634,
+                "dilutedEpsConditional": 42.24201842065634,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q1",
+                "segments": null,
+                "revenue": 65633.50932600001,
+                "grossProfit": 23890.597394664004,
+                "operatingExpenses": 4594.345652820001,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 19296.251741844004,
+                "pretaxProfit": 19396.251741844004,
+                "taxExpense": 4461.137900624121,
+                "netProfit": 14935.113841219882,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 14936.113841219882,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+                "potentialIncludedMillion": 3.5832100000000002,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 361.90421000000003,
+                "basicEpsConditional": 41.683612853335084,
+                "dilutedEpsConditional": 41.27090381518325,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q2",
+                "segments": null,
+                "revenue": 73509.53044512002,
+                "grossProfit": 26904.488142913928,
+                "operatingExpenses": 5145.667131158402,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 21758.821011755525,
+                "pretaxProfit": 21858.821011755525,
+                "taxExpense": 5027.528832703771,
+                "netProfit": 16831.292179051754,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 16832.292179051754,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+                "potentialIncludedMillion": 3.5832100000000002,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 361.90421000000003,
+                "basicEpsConditional": 46.97545546884428,
+                "dilutedEpsConditional": 46.51035194935078,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q3",
+                "segments": null,
+                "revenue": 82330.67409853444,
+                "grossProfit": 30297.68806826067,
+                "operatingExpenses": 5763.147186897411,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 24534.54088136326,
+                "pretaxProfit": 24634.54088136326,
+                "taxExpense": 5665.9444027135505,
+                "netProfit": 18968.59647864971,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 18969.59647864971,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+                "potentialIncludedMillion": 3.5832100000000002,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 361.90421000000003,
+                "basicEpsConditional": 52.94023090650481,
+                "dilutedEpsConditional": 52.416070204460205,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              },
+              {
+                "period": "2027Q4",
+                "segments": null,
+                "revenue": 88917.1280264172,
+                "grossProfit": 32899.33736977436,
+                "operatingExpenses": 6224.198961849204,
+                "nonOperating": 100,
+                "nonOperatingBreakdown": {
+                  "bankInterest": 70,
+                  "financeCost": -170,
+                  "fx": 100,
+                  "otherGainsExFx": 100
+                },
+                "operatingProfit": 26675.138407925155,
+                "pretaxProfit": 26775.138407925155,
+                "taxExpense": 6158.281833822786,
+                "netProfit": 20616.85657410237,
+                "nonControllingNetProfit": -1,
+                "ownersNetProfit": 20617.85657410237,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+                "potentialIncludedMillion": 3.5832100000000002,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 361.90421000000003,
+                "basicEpsConditional": 57.54018484571758,
+                "dilutedEpsConditional": 56.97048004526493,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "estimatesOnly": true,
+                "newCommercialRevenue": {
+                  "status": "not_quantifiable",
+                  "value": null
+                },
+                "targetPrice": null
+              }
+            ],
+            "nextFourUnreported": {
+              "revenue": 267000.52547112,
+              "grossProfit": 96957.72632697792,
+              "operatingExpenses": 18690.036782978405,
+              "operatingProfit": 78267.68954399953,
+              "nonOperating": 400,
+              "pretaxProfit": 78667.68954399953,
+              "taxExpense": 18093.568595119894,
+              "netProfit": 60574.120948879645,
+              "nonControllingNetProfit": -4,
+              "ownersNetProfit": 60578.120948879645,
+              "ordinaryWeightedSharesMillionAssumed": 358.321,
+              "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+              "potentialIncludedMillion": 1.7916050000000001,
+              "antiDilutiveExcludedMillion": 0,
+              "dilutedSharesMillionAssumed": 360.11260500000003,
+              "basicEpsConditional": 169.0610400977884,
+              "dilutedEpsConditional": 168.21994039580937,
+              "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+              "periods": [
+                "2026Q3",
+                "2026Q4",
+                "2027Q1",
+                "2027Q2"
+              ],
+              "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+            },
+            "fullForecastYears": [
+              {
+                "year": "2027",
+                "revenue": 310390.8418960717,
+                "grossProfit": 113992.11097561297,
+                "operatingExpenses": 21727.35893272502,
+                "operatingProfit": 92264.75204288795,
+                "nonOperating": 400,
+                "pretaxProfit": 92664.75204288795,
+                "taxExpense": 21312.89296986423,
+                "netProfit": 71351.85907302372,
+                "nonControllingNetProfit": -4,
+                "ownersNetProfit": 71355.85907302372,
+                "ordinaryWeightedSharesMillionAssumed": 358.321,
+                "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+                "potentialIncludedMillion": 3.5832100000000002,
+                "antiDilutiveExcludedMillion": 0,
+                "dilutedSharesMillionAssumed": 361.90421000000003,
+                "basicEpsConditional": 199.13948407440176,
+                "dilutedEpsConditional": 197.16780601425916,
+                "shareBasis": "weighted ordinary issuance plus award-only potential shares without numerator adjustment; losses/zero exclude potential; future assumptions",
+                "periods": [
+                  "2027Q1",
+                  "2027Q2",
+                  "2027Q3",
+                  "2027Q4"
+                ],
+                "periodShareWeight": "equal-quarter weighting sensitivity, not reported annual IAS33 shares"
+              }
+            ],
+            "partialYears": [
+              "2026"
+            ],
+            "calendarActualPlusForecast": {
+              "status": "incomplete",
+              "reason": "reported YTD bridge must be sealed separately; never add rounded EPS"
+            }
+          }
+        ],
+        "calculationAuthority": "unsealed_calculation_only",
+        "publishableResearch": false,
+        "researchQualified": false,
+        "strategyApproved": false,
+        "entryEligible": false,
+        "limitations": [
+          "source revisions, rights and financial authenticity require atomic DB sealing",
+          "no trusted author/reviewer execution proof",
+          "no calibrated multiple, target, physical capacity, yield, ASP or order assumption"
+        ]
+      },
+      "sources": [
+        {
+          "id": "0004cfdb-7ed1-4efc-8396-b3bebc3c258b",
+          "url": "https://example.invalid/synthetic-financial-http/2383",
+          "scope": "company_mentions",
+          "rights": "public_summary_only",
+          "rowHash": "3ee9b17f74e0e85735de2067444889730f1075b3bd547e9f87c6b8d28f5288f6",
+          "symbols": [
+            "2383"
+          ],
+          "retracted": false,
+          "admittedAt": "2026-10-09T14:04:22.275515+00:00",
+          "observedAt": "2026-10-09T14:04:09.292Z",
+          "superseded": false,
+          "publication": {
+            "raw": null,
+            "instant": null,
+            "timezone": null,
+            "precision": "unknown"
+          }
+        }
+      ],
+      "tables": [
+        {
+          "id": "eps",
+          "title": "條件式EPS",
+          "rows": [
+            {
+              "label": "基本情境",
+              "reference": {
+                "kind": "calculation",
+                "pointer": "/scenarios/1/nextFourUnreported/dilutedEpsConditional"
+              },
+              "value": 138.15769002227609,
+              "unit": "TWD_per_share",
+              "periods": [
+                "2026Q3",
+                "2026Q4",
+                "2027Q1",
+                "2027Q2"
+              ],
+              "scenarioId": "base",
+              "valueStatus": "calculation"
+            }
+          ]
+        }
+      ],
+      "valuations": [
+        {
+          "scenarioId": "bear",
+          "period": "next_four_unreported",
+          "fiscalYear": null,
+          "peMultiple": 20,
+          "yearsToValue": 1,
+          "discountRate": 0.1,
+          "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。",
+          "periods": [
+            "2026Q3",
+            "2026Q4",
+            "2027Q1",
+            "2027Q2"
+          ],
+          "epsConditional": 92.24448407895675,
+          "peApplicable": true,
+          "futurePriceSensitivity": 1844.889681579135,
+          "presentValueSensitivity": 1677.1724377992134,
+          "valuationStatus": "uncalibrated_multiple_sensitivity",
+          "targetPrice": null
+        },
+        {
+          "scenarioId": "base",
+          "period": "next_four_unreported",
+          "fiscalYear": null,
+          "peMultiple": 20,
+          "yearsToValue": 1,
+          "discountRate": 0.1,
+          "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。",
+          "periods": [
+            "2026Q3",
+            "2026Q4",
+            "2027Q1",
+            "2027Q2"
+          ],
+          "epsConditional": 138.15769002227609,
+          "peApplicable": true,
+          "futurePriceSensitivity": 2763.1538004455215,
+          "presentValueSensitivity": 2511.9580004050194,
+          "valuationStatus": "uncalibrated_multiple_sensitivity",
+          "targetPrice": null
+        },
+        {
+          "scenarioId": "bull",
+          "period": "next_four_unreported",
+          "fiscalYear": null,
+          "peMultiple": 20,
+          "yearsToValue": 1,
+          "discountRate": 0.1,
+          "rationale": "未校準倍數僅為敏感度，不是合理價或目標價，仍需檢視成長與資本報酬。",
+          "periods": [
+            "2026Q3",
+            "2026Q4",
+            "2027Q1",
+            "2027Q2"
+          ],
+          "epsConditional": 168.21994039580937,
+          "peApplicable": true,
+          "futurePriceSensitivity": 3364.3988079161873,
+          "presentValueSensitivity": 3058.544370832897,
+          "valuationStatus": "uncalibrated_multiple_sensitivity",
+          "targetPrice": null
+        }
+      ],
+      "validationStatus": "contract_valid_only",
+      "originalModelCutoff": "2026-10-08T12:12:00Z",
+      "researchCutoff": "2026-10-09T14:04:23.458558+00:00",
+      "financialVerified": false,
+      "publishableResearch": false,
+      "researchQualified": false,
+      "strategyApproved": false,
+      "entryEligible": false,
+      "limitations": [
+        "prose/citation support and completeness require independent review",
+        "live source and assignment fences required at receive/publication",
+        "no verified normalized EPS or reported YTD bridge",
+        "no actual author/reviewer execution proof",
+        "multiples are sensitivity, not fair-value targets"
+      ],
+      "articleHash": "3263b0ac76932e4be0dead0b98bd1de28ad9f3c50291b49337d8b99cb18aa45e"
+    },
+    "changedField": "calculatorExecutionHash",
+    "requestDiff": [
+      "observation.articleHash"
+    ],
+    "sourceRequestHash": "583eb423dc02607d1e489a56f5bb1663f7f30b8e46294a31b0b59929f5c98286",
+    "receiverRequestHash": "3a210ab8e1d78dd60bb91f00243a3b3d0a244aa4eae45823394a8652658c5b4f",
+    "rawArticleHash": "bd07dd77504ae49f7869f20f9a488f91ba1810461e944371fe070e95bcfd72a6",
+    "syntheticControllerObservation": true,
+    "actualModelExecuted": false
+  },
+  "authorResultHttp": {
+    "symbol": "2383",
+    "resultHash": "04d4b7e6ddc25589429bb5924ef7d0f71d3eaa1267128b0b2d802529df0bd9cc",
+    "logicalBytes": 50473,
+    "receivedAt": "2026-10-09T14:04:31.721+00:00",
+    "responseBytes": 40621,
+    "syntheticObservationAndProse": true,
+    "actualFixedFinancialCalculation": true,
+    "actualModelDispatched": false,
+    "formalPublication": false,
+    "stateAuditBefore": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101705,
+      "source_raw_documents": {
+        "count": 4,
+        "rowHash": "72e55a795732cf69a34e396047580b5ad7a0315599b4871737505bd5ba0c506b"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "fbff7d410ffa8d5f96cf55df13fdd8688be43c326701869ab5969f7e6e54e75b"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "6a5a3b7bb6426171353524fc7df1724bce321df9aac4e445c44f061438a33d63"
+      },
+      "research_author_results_v2": {
+        "count": 1,
+        "rowHash": "d19487111143fbaddc94f6abcb8f69df510c2d3c90db2754a8e31e5132a104c5"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "ecac2bd926483047e239228c8401f99efca7fb60c0e5128c3e4a2727f8253e42"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "ede9add08c48ee7f68a19ff5f9b0834e41de0277496d293a970d72395d39e944"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "cfcc0daac931a228dde0bff0594a54096ae329ab33c9f5a6d272d4b6b18d4045"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "db479dd11792f56bb0c8197890357108ebc3a037e66c9f3d7970cb1808d0f8bb"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "2ef88f7db414682b827c07b07e4ffcdc39f12c5e026b0b168830d0e257271165"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "stateAuditAfter": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101705,
+      "source_raw_documents": {
+        "count": 4,
+        "rowHash": "72e55a795732cf69a34e396047580b5ad7a0315599b4871737505bd5ba0c506b"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "fbff7d410ffa8d5f96cf55df13fdd8688be43c326701869ab5969f7e6e54e75b"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "6a5a3b7bb6426171353524fc7df1724bce321df9aac4e445c44f061438a33d63"
+      },
+      "research_author_results_v2": {
+        "count": 1,
+        "rowHash": "d19487111143fbaddc94f6abcb8f69df510c2d3c90db2754a8e31e5132a104c5"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "ecac2bd926483047e239228c8401f99efca7fb60c0e5128c3e4a2727f8253e42"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "ede9add08c48ee7f68a19ff5f9b0834e41de0277496d293a970d72395d39e944"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "cfcc0daac931a228dde0bff0594a54096ae329ab33c9f5a6d272d4b6b18d4045"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "db479dd11792f56bb0c8197890357108ebc3a037e66c9f3d7970cb1808d0f8bb"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "2ef88f7db414682b827c07b07e4ffcdc39f12c5e026b0b168830d0e257271165"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "restartReadPreserved": true,
+    "withdrawalRejectedWithDraftPreserved": true,
+    "afterWithdrawalAudit": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101705,
+      "source_raw_documents": {
+        "count": 5,
+        "rowHash": "444e7022e9622c1064ffabd32483b671aed64627f9aa40abc703941bc06a4889"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "fbff7d410ffa8d5f96cf55df13fdd8688be43c326701869ab5969f7e6e54e75b"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "6a5a3b7bb6426171353524fc7df1724bce321df9aac4e445c44f061438a33d63"
+      },
+      "research_author_results_v2": {
+        "count": 1,
+        "rowHash": "d19487111143fbaddc94f6abcb8f69df510c2d3c90db2754a8e31e5132a104c5"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "ecac2bd926483047e239228c8401f99efca7fb60c0e5128c3e4a2727f8253e42"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "ede9add08c48ee7f68a19ff5f9b0834e41de0277496d293a970d72395d39e944"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "cfcc0daac931a228dde0bff0594a54096ae329ab33c9f5a6d272d4b6b18d4045"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "db479dd11792f56bb0c8197890357108ebc3a037e66c9f3d7970cb1808d0f8bb"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "2ef88f7db414682b827c07b07e4ffcdc39f12c5e026b0b168830d0e257271165"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 1,
+        "rowHash": "2b051360e8ae346094bf53f9a4f92919872b32ec0701565f8458d17e5574e786"
+      }
+    }
+  },
+  "authorPacketWithdrawal": {
+    "before": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101705,
+      "source_raw_documents": {
+        "count": 4,
+        "rowHash": "72e55a795732cf69a34e396047580b5ad7a0315599b4871737505bd5ba0c506b"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "fbff7d410ffa8d5f96cf55df13fdd8688be43c326701869ab5969f7e6e54e75b"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "6a5a3b7bb6426171353524fc7df1724bce321df9aac4e445c44f061438a33d63"
+      },
+      "research_author_results_v2": {
+        "count": 1,
+        "rowHash": "d19487111143fbaddc94f6abcb8f69df510c2d3c90db2754a8e31e5132a104c5"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "ecac2bd926483047e239228c8401f99efca7fb60c0e5128c3e4a2727f8253e42"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "ede9add08c48ee7f68a19ff5f9b0834e41de0277496d293a970d72395d39e944"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "cfcc0daac931a228dde0bff0594a54096ae329ab33c9f5a6d272d4b6b18d4045"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "db479dd11792f56bb0c8197890357108ebc3a037e66c9f3d7970cb1808d0f8bb"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "2ef88f7db414682b827c07b07e4ffcdc39f12c5e026b0b168830d0e257271165"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "afterWithdrawal": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101705,
+      "source_raw_documents": {
+        "count": 5,
+        "rowHash": "444e7022e9622c1064ffabd32483b671aed64627f9aa40abc703941bc06a4889"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "fbff7d410ffa8d5f96cf55df13fdd8688be43c326701869ab5969f7e6e54e75b"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "6a5a3b7bb6426171353524fc7df1724bce321df9aac4e445c44f061438a33d63"
+      },
+      "research_author_results_v2": {
+        "count": 1,
+        "rowHash": "d19487111143fbaddc94f6abcb8f69df510c2d3c90db2754a8e31e5132a104c5"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "ecac2bd926483047e239228c8401f99efca7fb60c0e5128c3e4a2727f8253e42"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "ede9add08c48ee7f68a19ff5f9b0834e41de0277496d293a970d72395d39e944"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "cfcc0daac931a228dde0bff0594a54096ae329ab33c9f5a6d272d4b6b18d4045"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "db479dd11792f56bb0c8197890357108ebc3a037e66c9f3d7970cb1808d0f8bb"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "2ef88f7db414682b827c07b07e4ffcdc39f12c5e026b0b168830d0e257271165"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 1,
+        "rowHash": "2b051360e8ae346094bf53f9a4f92919872b32ec0701565f8458d17e5574e786"
+      }
+    },
+    "afterRead": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101705,
+      "source_raw_documents": {
+        "count": 5,
+        "rowHash": "444e7022e9622c1064ffabd32483b671aed64627f9aa40abc703941bc06a4889"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "fbff7d410ffa8d5f96cf55df13fdd8688be43c326701869ab5969f7e6e54e75b"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "6a5a3b7bb6426171353524fc7df1724bce321df9aac4e445c44f061438a33d63"
+      },
+      "research_author_results_v2": {
+        "count": 1,
+        "rowHash": "d19487111143fbaddc94f6abcb8f69df510c2d3c90db2754a8e31e5132a104c5"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "ecac2bd926483047e239228c8401f99efca7fb60c0e5128c3e4a2727f8253e42"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "ede9add08c48ee7f68a19ff5f9b0834e41de0277496d293a970d72395d39e944"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "cfcc0daac931a228dde0bff0594a54096ae329ab33c9f5a6d272d4b6b18d4045"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "db479dd11792f56bb0c8197890357108ebc3a037e66c9f3d7970cb1808d0f8bb"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "2ef88f7db414682b827c07b07e4ffcdc39f12c5e026b0b168830d0e257271165"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 1,
+        "rowHash": "2b051360e8ae346094bf53f9a4f92919872b32ec0701565f8458d17e5574e786"
+      }
+    },
+    "originalSourceUnchanged": true,
+    "acceptedNewRevision": 1,
+    "packetHttpStatus": 409
+  },
+  "passed": true,
+  "completedAt": "2026-10-09T14:04:40.341Z"
+}

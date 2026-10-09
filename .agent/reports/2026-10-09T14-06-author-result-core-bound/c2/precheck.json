@@ -1,0 +1,11 @@
+{
+  "recordedAt": "2026-10-09T14:03:04.599740+00:00",
+  "freeBytes": 13676331008,
+  "all2070CompiledFilesUnchanged": true,
+  "artifactRoot": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/c2",
+  "socketPathBytes": {
+    "2409": 85,
+    "2383": 85
+  },
+  "priorFailure": "c1 positive failed alias invariant before positive HTTP; negative409 + all-state audit succeeded; no runtime response retry"
+}

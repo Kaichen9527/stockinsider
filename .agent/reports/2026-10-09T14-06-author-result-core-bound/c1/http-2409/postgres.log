@@ -1,0 +1,79 @@
+2026-10-09 14:00:39.297 UTC [188957] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-09 14:00:39.298 UTC [188957] LOG:  listening on Unix socket "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/c1/http-2409/socket/.s.PGSQL.46537"
+2026-10-09 14:00:39.300 UTC [188960] LOG:  database system was shut down at 2026-10-09 14:00:39 UTC
+2026-10-09 14:00:39.302 UTC [188957] LOG:  database system is ready to accept connections
+2026-10-09 14:00:40.678 UTC [189034] ERROR:  permission denied for table source_raw_documents
+2026-10-09 14:00:40.678 UTC [189034] STATEMENT:  WITH pgrst_source AS ( SELECT "public"."source_raw_documents"."id" FROM "public"."source_raw_documents"    )  SELECT null::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t), '[]') AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM ( SELECT * FROM pgrst_source ) _postgrest_t
+2026-10-09 14:00:40.687 UTC [189034] ERROR:  permission denied for function research_source_heads_page_v1
+2026-10-09 14:00:40.687 UTC [189034] STATEMENT:  WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_cutoff", "p_offset", "p_limit" FROM json_to_record(pgrst_payload.json_data) AS _("p_cutoff" timestamp with time zone, "p_offset" integer, "p_limit" integer) LIMIT 1) pgrst_body , LATERAL (SELECT "public"."research_source_heads_page_v1"("p_cutoff" := pgrst_body."p_cutoff", "p_offset" := pgrst_body."p_offset", "p_limit" := pgrst_body."p_limit") pgrst_scalar) pgrst_call) SELECT null::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t.pgrst_scalar), '[]') AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM (SELECT "research_source_heads_page_v1".* FROM "pgrst_source" AS "research_source_heads_page_v1"   ) _postgrest_t
+2026-10-09 14:00:40.908 UTC [189034] ERROR:  permission denied for table candidate_issuer_document_domains_v6
+2026-10-09 14:00:40.908 UTC [189034] STATEMENT:  WITH pgrst_source AS ( SELECT "public"."candidate_issuer_document_domains_v6".* FROM "public"."candidate_issuer_document_domains_v6"    )  SELECT null::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t), '[]') AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM ( SELECT * FROM pgrst_source ) _postgrest_t
+2026-10-09 14:00:40.915 UTC [189034] ERROR:  permission denied for table research_deep_jobs_v1
+2026-10-09 14:00:40.915 UTC [189034] STATEMENT:  WITH pgrst_source AS ( SELECT "public"."research_deep_jobs_v1".* FROM "public"."research_deep_jobs_v1"    )  SELECT null::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t), '[]') AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM ( SELECT * FROM pgrst_source ) _postgrest_t
+2026-10-09 14:00:40.928 UTC [189034] ERROR:  permission denied for table candidate_issuer_document_domains_v6
+2026-10-09 14:00:40.928 UTC [189034] STATEMENT:  WITH pgrst_source AS (INSERT INTO "public"."candidate_issuer_document_domains_v6"("note") SELECT "pgrst_body"."note" FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "note" FROM json_to_record(pgrst_payload.json_data) AS _("note" text) ) pgrst_body  RETURNING 1) SELECT '' AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, array[]::text[] AS header, ''::text AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM (SELECT * FROM pgrst_source) _postgrest_t
+2026-10-09 14:00:40.935 UTC [189034] ERROR:  permission denied for table candidate_issuer_document_domains_v6
+2026-10-09 14:00:40.935 UTC [189034] STATEMENT:  WITH pgrst_source AS (UPDATE "public"."candidate_issuer_document_domains_v6" SET "note" = "pgrst_body"."note" FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "note" FROM json_to_record(pgrst_payload.json_data) AS _("note" text) ) pgrst_body  WHERE  "public"."candidate_issuer_document_domains_v6"."host" = $2 RETURNING 1) SELECT '' AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, array[]::text[] AS header, ''::text AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM (SELECT * FROM pgrst_source) _postgrest_t
+2026-10-09 14:00:40.939 UTC [189034] ERROR:  permission denied for table candidate_issuer_document_domains_v6
+2026-10-09 14:00:40.939 UTC [189034] STATEMENT:  WITH pgrst_source AS (DELETE FROM "public"."candidate_issuer_document_domains_v6"  WHERE  "public"."candidate_issuer_document_domains_v6"."host" = $1 RETURNING 1) SELECT '' AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, array[]::text[] AS header, ''::text AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM (SELECT * FROM pgrst_source) _postgrest_t
+2026-10-09 14:00:41.273 UTC [188957] LOG:  received fast shutdown request
+2026-10-09 14:00:41.277 UTC [188957] LOG:  aborting any active transactions
+2026-10-09 14:00:41.277 UTC [189009] FATAL:  terminating connection due to administrator command
+2026-10-09 14:00:41.279 UTC [189077] FATAL:  terminating connection due to administrator command
+2026-10-09 14:00:41.280 UTC [188957] LOG:  background worker "logical replication launcher" (PID 188963) exited with exit code 1
+2026-10-09 14:00:41.282 UTC [189034] FATAL:  terminating connection due to administrator command
+2026-10-09 14:00:41.284 UTC [188958] LOG:  shutting down
+2026-10-09 14:00:41.284 UTC [188958] LOG:  checkpoint starting: shutdown immediate
+2026-10-09 14:00:41.354 UTC [188958] LOG:  checkpoint complete: wrote 279 buffers (1.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.066 s, total=0.071 s; sync files=206, longest=0.002 s, average=0.001 s; distance=1831 kB, estimate=1831 kB; lsn=0/16D4AB0, redo lsn=0/16D4AB0
+2026-10-09 14:00:41.357 UTC [188957] LOG:  database system is shut down
+2026-10-09 14:00:41.409 UTC [189114] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-09 14:00:41.410 UTC [189114] LOG:  listening on Unix socket "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/c1/http-2409/socket/.s.PGSQL.46537"
+2026-10-09 14:00:41.412 UTC [189117] LOG:  database system was shut down at 2026-10-09 14:00:41 UTC
+2026-10-09 14:00:41.415 UTC [189114] LOG:  database system is ready to accept connections
+2026-10-09 14:00:57.180 UTC [189194] ERROR:  input_preparation_shape
+2026-10-09 14:00:57.180 UTC [189194] CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+2026-10-09 14:00:57.180 UTC [189194] STATEMENT:  WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_request" FROM json_to_record(pgrst_payload.json_data) AS _("p_request" jsonb) LIMIT 1) pgrst_body , LATERAL (SELECT "public"."prepare_research_input_v2"("p_request" := pgrst_body."p_request") pgrst_scalar) pgrst_call) SELECT null::bigint AS total_result_set, 1 AS page_total, coalesce(json_agg(_postgrest_t.pgrst_scalar)->0, 'null') AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM (SELECT "prepare_research_input_v2".* FROM "pgrst_source" AS "prepare_research_input_v2"   ) _postgrest_t
+2026-10-09 14:01:01.719 UTC [189114] LOG:  received fast shutdown request
+2026-10-09 14:01:01.719 UTC [189114] LOG:  aborting any active transactions
+2026-10-09 14:01:01.722 UTC [189194] FATAL:  terminating connection due to administrator command
+2026-10-09 14:01:01.723 UTC [189114] LOG:  background worker "logical replication launcher" (PID 189120) exited with exit code 1
+2026-10-09 14:01:01.724 UTC [189131] FATAL:  terminating connection due to administrator command
+2026-10-09 14:01:01.728 UTC [189115] LOG:  shutting down
+2026-10-09 14:01:01.728 UTC [189115] LOG:  checkpoint starting: shutdown immediate
+2026-10-09 14:01:01.782 UTC [189115] LOG:  checkpoint complete: wrote 704 buffers (4.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.043 s, total=0.055 s; sync files=137, longest=0.004 s, average=0.001 s; distance=5479 kB, estimate=5479 kB; lsn=0/1C2E7E8, redo lsn=0/1C2E7E8
+2026-10-09 14:01:01.786 UTC [189114] LOG:  database system is shut down
+2026-10-09 14:01:01.846 UTC [189239] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-09 14:01:01.847 UTC [189239] LOG:  listening on Unix socket "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/c1/http-2409/socket/.s.PGSQL.46537"
+2026-10-09 14:01:01.849 UTC [189242] LOG:  database system was shut down at 2026-10-09 14:01:01 UTC
+2026-10-09 14:01:01.859 UTC [189239] LOG:  database system is ready to accept connections
+2026-10-09 14:01:09.610 UTC [189263] ERROR:  source_seal_invalidated_or_missing
+2026-10-09 14:01:09.610 UTC [189263] CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+	SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+	PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+	PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+	PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+	PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+2026-10-09 14:01:09.610 UTC [189263] STATEMENT:  WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_request" FROM json_to_record(pgrst_payload.json_data) AS _("p_request" jsonb) LIMIT 1) pgrst_body , LATERAL (SELECT "public"."read_research_article_input_revision_v2"("p_request" := pgrst_body."p_request") pgrst_scalar) pgrst_call) SELECT null::bigint AS total_result_set, 1 AS page_total, coalesce(json_agg(_postgrest_t.pgrst_scalar)->0, 'null') AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM (SELECT "read_research_article_input_revision_v2".* FROM "pgrst_source" AS "read_research_article_input_revision_v2"   ) _postgrest_t
+2026-10-09 14:01:09.783 UTC [189263] ERROR:  source_seal_invalidated_or_missing
+2026-10-09 14:01:09.783 UTC [189263] CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+	SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+	PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+	PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+	PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+	PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+2026-10-09 14:01:09.783 UTC [189263] STATEMENT:  WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_request" FROM json_to_record(pgrst_payload.json_data) AS _("p_request" jsonb) LIMIT 1) pgrst_body , LATERAL (SELECT "public"."read_research_article_input_revision_v2"("p_request" := pgrst_body."p_request") pgrst_scalar) pgrst_call) SELECT null::bigint AS total_result_set, 1 AS page_total, coalesce(json_agg(_postgrest_t.pgrst_scalar)->0, 'null') AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM (SELECT "read_research_article_input_revision_v2".* FROM "pgrst_source" AS "read_research_article_input_revision_v2"   ) _postgrest_t
+2026-10-09 14:01:09.899 UTC [189263] ERROR:  source_seal_invalidated_or_missing
+2026-10-09 14:01:09.899 UTC [189263] CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+	SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+	PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+	PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+	PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+	PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+2026-10-09 14:01:09.899 UTC [189263] STATEMENT:  WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_request" FROM json_to_record(pgrst_payload.json_data) AS _("p_request" jsonb) LIMIT 1) pgrst_body , LATERAL (SELECT "public"."read_research_article_input_revision_v2"("p_request" := pgrst_body."p_request") pgrst_scalar) pgrst_call) SELECT null::bigint AS total_result_set, 1 AS page_total, coalesce(json_agg(_postgrest_t.pgrst_scalar)->0, 'null') AS body, nullif(current_setting('response.headers', true), '') AS response_headers, nullif(current_setting('response.status', true), '') AS response_status, '' AS response_inserted FROM (SELECT "read_research_article_input_revision_v2".* FROM "pgrst_source" AS "read_research_article_input_revision_v2"   ) _postgrest_t
+2026-10-09 14:01:09.951 UTC [189239] LOG:  received fast shutdown request
+2026-10-09 14:01:09.951 UTC [189239] LOG:  aborting any active transactions
+2026-10-09 14:01:09.954 UTC [189239] LOG:  background worker "logical replication launcher" (PID 189245) exited with exit code 1
+2026-10-09 14:01:09.954 UTC [189240] LOG:  shutting down
+2026-10-09 14:01:09.955 UTC [189240] LOG:  checkpoint starting: shutdown immediate
+2026-10-09 14:01:09.964 UTC [189240] LOG:  checkpoint complete: wrote 36 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.006 s, total=0.010 s; sync files=27, longest=0.001 s, average=0.001 s; distance=10 kB, estimate=10 kB; lsn=0/1C311E8, redo lsn=0/1C311E8
+2026-10-09 14:01:09.967 UTC [189239] LOG:  database system is shut down
