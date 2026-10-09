@@ -127,6 +127,17 @@ class ClockBuildTest(unittest.TestCase):
         with self.assertRaisesRegex(clock.BuildFailure, 'archive_redirect_rejected'):
             clock.NoRedirect().redirect_request(None, None, None, None, None, None)
 
+    def test_managed_transport_proxy_is_preserved_without_credentials_or_fallback(self):
+        proxy = 'http://proxy:8080'
+        self.assertEqual(clock.configured_proxy({'HTTPS_PROXY': proxy, 'http_proxy': proxy}), {'https': proxy})
+        self.assertEqual(clock.configured_proxy({}), {})
+        for invalid in ('http://user:secret@proxy:8080', 'file:///tmp/socket',
+                        'http://proxy:8080/?credential=bad', 'http://proxy:bad', 'http://proxy/path'):
+            with self.assertRaises(clock.BuildFailure):
+                clock.configured_proxy({'HTTPS_PROXY': invalid})
+        with self.assertRaisesRegex(clock.BuildFailure, 'conflicting_transport_proxy'):
+            clock.configured_proxy({'HTTPS_PROXY': proxy, 'http_proxy': 'http://other:8080'})
+
     def test_download_size_and_alarm_restoration(self):
         class Response:
             status = 200

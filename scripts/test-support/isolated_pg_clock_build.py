@@ -12,6 +12,7 @@ import sys
 import tarfile
 import time
 import urllib.request
+import urllib.parse
 import io
 
 COMMIT = 'd475b925943ad404c6c728ac868dc73949e7281c'
@@ -50,6 +51,27 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         raise BuildFailure('archive_redirect_rejected')
 
 
+def configured_proxy(environment=os.environ):
+    # Preserve a managed environment's transport proxy/CA rather than attempting
+    # direct egress. Credentials are never accepted or logged. No direct retry.
+    values = {environment[key] for key in ('https_proxy', 'HTTPS_PROXY', 'http_proxy', 'HTTP_PROXY')
+              if environment.get(key)}
+    if len(values) > 1:
+        raise BuildFailure('conflicting_transport_proxy')
+    if not values:
+        return {}
+    value = values.pop()
+    parsed = urllib.parse.urlsplit(value)
+    if (parsed.scheme not in ('http', 'https') or not parsed.hostname or parsed.username is not None
+            or parsed.password is not None or parsed.path not in ('', '/') or parsed.query or parsed.fragment):
+        raise BuildFailure('credential_free_transport_proxy_required')
+    try:
+        parsed.port
+    except ValueError as error:
+        raise BuildFailure('transport_proxy_port') from error
+    return {'https': value}
+
+
 def download_archive():
     # A real parent-process alarm bounds the entire request, not each socket read.
     if signal.getitimer(signal.ITIMER_REAL) != (0.0, 0.0):
@@ -60,7 +82,7 @@ def download_archive():
     signal.signal(signal.SIGALRM, deadline)
     signal.setitimer(signal.ITIMER_REAL, 15)
     try:
-        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler(configured_proxy()), NoRedirect())
         request = urllib.request.Request(URL, headers={'User-Agent': 'StockInsider-test-clock/1'})
         with opener.open(request, timeout=15) as response:
             if response.status != 200 or response.geturl() != URL:

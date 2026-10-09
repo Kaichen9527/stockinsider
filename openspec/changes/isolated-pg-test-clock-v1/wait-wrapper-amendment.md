@@ -17,4 +17,6 @@ Build an isolated test library from unmodified officiallibfaketimev0.9.10source,
 
 ## Acceptance before claiming a fix
 
+Managed transport clarification: preserve the existing configured credential-freeHTTP(S)proxy andCA for the one pinneddownload. Validate proxyURLs, reject conflicting or credential-bearing values, and never retry direct egress after proxy/policy failure. Compiler subprocesses still receive only the minimal nonnetworkenvironment. This does not grant additional network access.
+
 Unitarchive/path/hash/size/duplicate/traversal/symlink/outputoverwrite/buildtimeout failures reject with no untrustedexecution. Add inherited MAKEFILES/MAKEFLAGS/compiler/linker/preload injection isolation tests and a timeout probe whose child outlives the make leader; verify owned descendants stop and unconfirmed shutdown preserves the directory. Actual LinuxPG17VM andPG16CI must pass originalthreePGsuites plus open/closed/restart/advancement/statementtimeout canary, zero skip. Re-run boundedCsignalprobe: positiveoffset handler must retain the same offset as before/afterwait; ordinary query timeouts stay near100ms. Verify builtlibrary does not export the excludedsleep/waitwrappers. Record resource/source/version/hash evidence. Independent exact-code review and normalbuild remain required; this amendment has no modelrole orproductionrelease authority.
