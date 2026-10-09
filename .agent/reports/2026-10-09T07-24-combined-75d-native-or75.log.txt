@@ -1,0 +1,131 @@
+TAP version 13
+# (node:141128) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:141128) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 135.641648
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 61.802043
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 10.889676
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 373.239462
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 31.674464
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 14.935331
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 4.726754
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 462.053794
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 84.486589
+      ...
+    # Subtest: direct service RPC rejects sector despite recomputed trusted-content labels
+    ok 10 - direct service RPC rejects sector despite recomputed trusted-content labels
+      ---
+      duration_ms: 565.831052
+      ...
+    # Subtest: direct service RPC rejects listingDate despite recomputed trusted-content labels
+    ok 11 - direct service RPC rejects listingDate despite recomputed trusted-content labels
+      ---
+      duration_ms: 508.988122
+      ...
+    # Subtest: direct service RPC rejects TPEXsourceSection despite recomputed trusted-content labels
+    ok 12 - direct service RPC rejects TPEXsourceSection despite recomputed trusted-content labels
+      ---
+      duration_ms: 460.129668
+      ...
+    # Subtest: direct service RPC rejects excludedSymbolReason despite recomputed trusted-content labels
+    ok 13 - direct service RPC rejects excludedSymbolReason despite recomputed trusted-content labels
+      ---
+      duration_ms: 470.656005
+      ...
+    # Subtest: direct service RPC rejects observedAfterRecordedMicrosecond despite recomputed trusted-content labels
+    ok 14 - direct service RPC rejects observedAfterRecordedMicrosecond despite recomputed trusted-content labels
+      ---
+      duration_ms: 471.453038
+      ...
+    # Subtest: direct service RPC rejects missingRecordedAt despite recomputed trusted-content labels
+    ok 15 - direct service RPC rejects missingRecordedAt despite recomputed trusted-content labels
+      ---
+      duration_ms: 460.73382
+      ...
+    # Subtest: direct service RPC rejects infiniteRecordedAt despite recomputed trusted-content labels
+    ok 16 - direct service RPC rejects infiniteRecordedAt despite recomputed trusted-content labels
+      ---
+      duration_ms: 486.31645
+      ...
+    # Subtest: unauthenticated observed endpoint401 and malformed authenticated packet400
+    ok 17 - unauthenticated observed endpoint401 and malformed authenticated packet400
+      ---
+      duration_ms: 41.746004
+      ...
+    # Subtest: 1978 real HTTP admission and four simultaneous exact replays have one immutable snapshot
+    ok 18 - 1978 real HTTP admission and four simultaneous exact replays have one immutable snapshot
+      ---
+      duration_ms: 2660.052092
+      ...
+    # Subtest: service/anonymous direct observed table access and mutation denied
+    ok 19 - service/anonymous direct observed table access and mutation denied
+      ---
+      duration_ms: 90.54324
+      ...
+    # Subtest: RPC wrong hash and altered canonical bytes reject without new identities
+    ok 20 - RPC wrong hash and altered canonical bytes reject without new identities
+      ---
+      duration_ms: 642.625164
+      ...
+    # Subtest: future source and secret packet rejected, original receivedAt survives restart/replay
+    ok 21 - future source and secret packet rejected, original receivedAt survives restart/replay
+      ---
+      duration_ms: 1134.844073
+      ...
+    # Subtest: formal stock/authority/publication/profile rows untouched, priority stillformal409
+    ok 22 - formal stock/authority/publication/profile rows untouched, priority stillformal409
+      ---
+      duration_ms: 127.603153
+      ...
+    1..22
+ok 1 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart
+  ---
+  duration_ms: 11655.870897
+  ...
+1..1
+# tests 23
+# suites 0
+# pass 23
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14717.426327

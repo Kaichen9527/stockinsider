@@ -1,0 +1,5 @@
+import json, pathlib, subprocess, sys
+root=pathlib.Path('/workspace/cloud-research-combined-27d-artifacts-oct09')
+data=json.loads((root/'combined-research-membership.json').read_text())
+label=sys.argv[1] if len(sys.argv)>1 else 'research-suite-combined-75d'
+raise SystemExit(subprocess.run(['/usr/bin/python3',str(root/'run-check.py'),label,*data['actualCommand']]).returncode)

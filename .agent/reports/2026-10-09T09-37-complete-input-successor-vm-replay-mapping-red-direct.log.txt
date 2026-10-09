@@ -1,0 +1,185 @@
+(node:153114) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:153114) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+TAP version 13
+# Subtest: canonical frozen vector 0
+ok 1 - canonical frozen vector 0
+  ---
+  duration_ms: 1.182224
+  ...
+# Subtest: canonical frozen vector 1
+ok 2 - canonical frozen vector 1
+  ---
+  duration_ms: 0.098408
+  ...
+# Subtest: canonical frozen vector 2
+ok 3 - canonical frozen vector 2
+  ---
+  duration_ms: 0.235516
+  ...
+# Subtest: canonical frozen vector 3
+ok 4 - canonical frozen vector 3
+  ---
+  duration_ms: 0.086922
+  ...
+# Subtest: canonical frozen vector 4
+ok 5 - canonical frozen vector 4
+  ---
+  duration_ms: 0.229938
+  ...
+# Subtest: canonical frozen vector 5
+ok 6 - canonical frozen vector 5
+  ---
+  duration_ms: 0.093841
+  ...
+# Subtest: canonical frozen vector 6
+ok 7 - canonical frozen vector 6
+  ---
+  duration_ms: 0.167853
+  ...
+# Subtest: canonical frozen vector 7
+ok 8 - canonical frozen vector 7
+  ---
+  duration_ms: 0.080862
+  ...
+# Subtest: canonical frozen vector 8
+ok 9 - canonical frozen vector 8
+  ---
+  duration_ms: 0.667657
+  ...
+# Subtest: canonical frozen vector 9
+ok 10 - canonical frozen vector 9
+  ---
+  duration_ms: 0.581518
+  ...
+# Subtest: canonical frozen vector 10
+ok 11 - canonical frozen vector 10
+  ---
+  duration_ms: 0.204118
+  ...
+# Subtest: canonical frozen vector 11
+ok 12 - canonical frozen vector 11
+  ---
+  duration_ms: 0.071257
+  ...
+# Subtest: canonical frozen vector 12
+ok 13 - canonical frozen vector 12
+  ---
+  duration_ms: 0.076095
+  ...
+# Subtest: canonical frozen vector 13
+ok 14 - canonical frozen vector 13
+  ---
+  duration_ms: 0.220563
+  ...
+# Subtest: canonical frozen vector 14
+ok 15 - canonical frozen vector 14
+  ---
+  duration_ms: 0.187282
+  ...
+# Subtest: strict JSON rejects {"a":1,"a":2}
+ok 16 - strict JSON rejects {"a":1,"a":2}
+  ---
+  duration_ms: 0.419874
+  ...
+# Subtest: strict JSON rejects {"a":1,"\\u0061":2}
+ok 17 - strict JSON rejects {"a":1,"\\u0061":2}
+  ---
+  duration_ms: 0.160643
+  ...
+# Subtest: strict JSON rejects {"x":NaN}
+ok 18 - strict JSON rejects {"x":NaN}
+  ---
+  duration_ms: 0.056105
+  ...
+# Subtest: strict JSON rejects {"x":1} trailing
+ok 19 - strict JSON rejects {"x":1} trailing
+  ---
+  duration_ms: 0.077187
+  ...
+# Subtest: strict JSON rejects "\\ud800"
+ok 20 - strict JSON rejects "\\ud800"
+  ---
+  duration_ms: 0.049064
+  ...
+# Subtest: strict JSON rejects "\\u0000"
+ok 21 - strict JSON rejects "\\u0000"
+  ---
+  duration_ms: 0.041413
+  ...
+# Subtest: non JSON value rejects Infinity
+ok 22 - non JSON value rejects Infinity
+  ---
+  duration_ms: 0.078218
+  ...
+# Subtest: non JSON value rejects NaN
+ok 23 - non JSON value rejects NaN
+  ---
+  duration_ms: 0.041182
+  ...
+# Subtest: non JSON value rejects ()=>{}
+ok 24 - non JSON value rejects ()=>{}
+  ---
+  duration_ms: 0.087181
+  ...
+# Subtest: non JSON value rejects undefined
+ok 25 - non JSON value rejects undefined
+  ---
+  duration_ms: 0.045829
+  ...
+# Subtest: 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+ok 26 - 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+  ---
+  duration_ms: 19.596465
+  ...
+# Subtest: closed ingress cannot select executable, financial body or clock
+ok 27 - closed ingress cannot select executable, financial body or clock
+  ---
+  duration_ms: 0.253913
+  ...
+# Subtest: schema constant and unknown nested fields reject
+ok 28 - schema constant and unknown nested fields reject
+  ---
+  duration_ms: 0.247884
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping false
+not ok 29 - old DB sealed mapping cannot bypass current mapping false
+  ---
+  duration_ms: 0.629069
+  location: '/workspace/cloud-research-converged-oct08/scripts/research-complete-input.test.mjs:12:32'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input.test.mjs:14:2)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping true
+not ok 30 - old DB sealed mapping cannot bypass current mapping true
+  ---
+  duration_ms: 0.251219
+  location: '/workspace/cloud-research-converged-oct08/scripts/research-complete-input.test.mjs:12:32'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input.test.mjs:14:2)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..30
+# tests 30
+# suites 0
+# pass 28
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 73.479965
