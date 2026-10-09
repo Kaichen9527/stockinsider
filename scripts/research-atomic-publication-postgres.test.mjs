@@ -180,12 +180,26 @@ async function publicationFixture(t,scenario='positive') {
     }
     if(scenario==='expires-waiting') {
       await check('original live lease expires while awaiting source fence; no extension or writes',async()=>{
-        const before=audit(),remaining=Number(sql(`SELECT extract(epoch FROM lease_expires_at-clock_timestamp()) FROM research_deep_jobs_v1 WHERE job_id=${q(f.input.jobId)};`));
-        assert.ok(remaining>0&&remaining<5.5,'bounded original fixture window remaining');
+        const before=audit(),remainingSQL=`SELECT extract(epoch FROM lease_expires_at-clock_timestamp()) FROM research_deep_jobs_v1 WHERE job_id=${q(f.input.jobId)};`;
+        let remaining=Number(sql(remainingSQL));
+        if(remaining>4) await new Promise(resolve=>setTimeout(resolve,(remaining-4)*1000));
+        remaining=Number(sql(remainingSQL));assert.ok(remaining>0&&remaining<4.5,'bounded original fixture window remaining');
         const b=asyncSQL(`SET application_name='publication-expiry-B';BEGIN;SELECT pg_advisory_xact_lock(610091002::bigint);SELECT pg_sleep(${remaining+0.1});COMMIT;`);
         await wait('publication-expiry-B','PgSleep');
         const a=asyncSQL(`SET application_name='publication-expiry-A';${rpc('publish_research_article_v2',Object.values(pubArgs))}`).then(()=>({ok:true}),e=>({ok:false,error:e.stderr}));
         await wait('publication-expiry-A','advisory');await b;const denied=await a;assert.equal(denied.ok,false);assert.match(denied.error,/research_author_handoff_claim|original_fence|claim_not_active|claim_unavailable|claim_missing/);assert.equal(audit(),before);
+      });passed=true;return;
+    }
+    if(scenario==='publication-first') {
+      await check('first uncommitted publication holds original source fence; later committed withdrawal preserves bytes',async()=>{
+        const before=JSON.parse(audit());
+        const a=asyncSQL(`SET application_name='first-publication-A';BEGIN;${rpc('publish_research_article_v2',Object.values(pubArgs))}SELECT pg_sleep(1);COMMIT;`);
+        await wait('first-publication-A','PgSleep');assert.equal(sql('SELECT count(*) FROM candidate_research_dossiers;'),'0');
+        const b=asyncSQL(`SET application_name='first-withdrawal-B';SET ROLE service_role;UPDATE source_raw_documents SET metadata=metadata||'{"visibility":"private"}' WHERE id=${q(f.source)};`);
+        await wait('first-withdrawal-B','advisory');const original=JSON.parse((await a).stdout.trim());await b;
+        assert.equal(original.researchState,'published');assert.equal(original.idempotentReplay,false);
+        const withdrawn=await publish();assert.equal(withdrawn.researchState,'withdrawn');assert.deepEqual(withdrawn.receipt,original.receipt);assert.deepEqual(withdrawn.content,original.content);
+        const after=JSON.parse(audit());for(const key of ['models','completions','inputs'])assert.deepEqual(after[key],before[key]);for(const key of ['bundles','outbox','dossiers','receipts'])assert.equal(after[key].length,1);
       });passed=true;return;
     }
     if(scenario!=='positive') {
@@ -225,12 +239,27 @@ async function publicationFixture(t,scenario='positive') {
       assert.equal(publication.researchQualified,false);assert.equal(publication.strategyApproved,false);assert.equal(publication.entryEligible,false);
       const publicBytes=JSON.stringify({content:publication.content,sources:publication.sourceReferences});for(const secret of [principal,pair.reviewerPrincipalId,ids.owner,'UNIQUE_PRIVATE_FULLTEXT_SENTINEL','controllerObservedStartAt','invocationId'])assert.ok(!publicBytes.includes(secret));
     });
-    await check('restart and dropped-response replay return original receipt without live claim',async()=>{
+    await check('legacy detail cannot disguise a v2 bundle or v2 dossier through direct service insert',()=>{
+      const stock=randomUUID(),detail=randomUUID(),legacyDossier=randomUUID(),bundle=publication.receipt.bundleId,dossier=publication.receipt.dossierId;
+      const prefix=`BEGIN;INSERT INTO stocks(id,symbol,market) VALUES(${q(stock)},'9999','TW');INSERT INTO candidate_detail_snapshots(id,stock_id,session_date,model_version,revision_hash) VALUES(${q(detail)},${q(stock)},'2026-10-09','synthetic-only',${q('f'.repeat(64))});`;
+      rejectSQL(prefix+`SET ROLE service_role;INSERT INTO candidate_research_dossiers(detail_snapshot_id,narrative_kind,content,validation_status,bundle_id,input_hash,bundle_hash,detail_payload_hash) VALUES(${q(detail)},'codex_enriched','{}','valid',${q(bundle)},${q(f.inputHash)},${q(f.inputHash)},${q(f.inputHash)});COMMIT;`,/research_publication_branch_mismatch/);
+      rejectSQL(prefix+`INSERT INTO candidate_research_dossiers(id,detail_snapshot_id,narrative_kind,content,validation_status) VALUES(${q(legacyDossier)},${q(detail)},'deterministic_fact','{}','valid');SET ROLE service_role;INSERT INTO candidate_dossier_submission_receipts(bundle_id,revision_id,input_hash,dossier_id,submission_hash,status) VALUES(${q(bundle)},${q(detail)},${q(f.inputHash)},${q(legacyDossier)},${q('e'.repeat(64))},'accepted');COMMIT;`,/research_publication_branch_mismatch/);
+      assert.equal(sql('SELECT count(*) FROM stocks;'),'0');
+      // Null legacy revision / mixed explicit v2 identity cannot pass union.
+      rejectSQL(`SET ROLE service_role;INSERT INTO candidate_research_dossiers(narrative_kind,content,validation_status) VALUES('codex_enriched','{}','valid');`,/research_dossier_revision_union_v2/);
+      rejectSQL(`SET ROLE service_role;INSERT INTO candidate_dossier_submission_receipts(bundle_id,input_hash,dossier_id,submission_hash,status,revision_kind,research_input_revision_id) VALUES(${q(bundle)},${q(f.inputHash)},${q(dossier)},${q('e'.repeat(64))},'accepted','research_input_v2',${q(f.inputRevisionId)});`,/research_publication_writer_required/);
+    });
+    await check('original valid legacy writer still publishes its own bundle after v2 migration',()=>{
+      const stock=randomUUID(),detail=randomUUID(),bundle=randomUUID(),before=audit();
+      const result=JSON.parse(sql(`BEGIN;INSERT INTO stocks(id,symbol,market) VALUES(${q(stock)},'9999','TW');INSERT INTO candidate_detail_snapshots(id,stock_id,session_date,model_version,revision_hash) VALUES(${q(detail)},${q(stock)},'2026-10-09','synthetic-legacy',${q('d'.repeat(64))});INSERT INTO candidate_daily_stage_snapshots VALUES(${q(detail)});INSERT INTO candidate_dossier_bundles(bundle_id,revision_id,published_revision_id,input_hash,symbol,payload) VALUES(${q(bundle)},${q(detail)},${q(detail)},${q('d'.repeat(64))},'9999','{}');SET ROLE service_role;SELECT to_jsonb(x) FROM record_candidate_dossier_submission_v4(${q(bundle)},${q(detail)},${q('d'.repeat(64))},${q('c'.repeat(64))},'{}','[]','[]','{}','valid','[]') x;ROLLBACK;`));
+      assert.equal(result.status,'accepted');assert.equal(audit(),before);
+    });
+    await check('restart and exact replay return original receipt without live claim',async()=>{
       const before=audit();run('pg_ctl',['-D',pg,'-m','fast','-w','stop']);active=false;start();
       const replay=await publish();assert.equal(replay.idempotentReplay,true);assert.deepEqual(replay.receipt,publication.receipt);assert.equal(audit(),before);
       const read=await runResearchPublication(db,{...request,action:'readResearchPublication'},principal,pair.reviewerPrincipalId,new FinancialDeadline());assert.deepEqual(read.receipt,publication.receipt);
     });
-    await check('accepted publication remains immutable on rights withdrawal, projection changes only research state',async()=>{
+    await check('completed replay holds source fence before withdrawal; original bytes remain immutable',async()=>{
       const before=JSON.parse(audit());
       const a=asyncSQL(`SET application_name='publication-first-A';BEGIN;${rpc('publish_research_article_v2',Object.values(pubArgs))}SELECT pg_sleep(1);COMMIT;`);
       await wait('publication-first-A','PgSleep');
@@ -251,4 +280,4 @@ async function publicationFixture(t,scenario='positive') {
     if(passed) fs.rmSync(tmp,{recursive:true,force:true});else console.error('preserved atomic publication failure:',tmp);
   }
 }
-for(const scenario of ['positive','new-revision','rights-ABA','unaccepted-review','paid-content','expires-waiting']) test('atomic publication: original private pipeline, synthetic reports — '+scenario,t=>publicationFixture(t,scenario));
+for(const scenario of ['positive','new-revision','rights-ABA','unaccepted-review','paid-content','expires-waiting','publication-first']) test('atomic publication: original private pipeline, synthetic reports — '+scenario,t=>publicationFixture(t,scenario));

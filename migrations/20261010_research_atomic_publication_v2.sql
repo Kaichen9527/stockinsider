@@ -89,7 +89,22 @@ CREATE FUNCTION public.fence_research_dossier_insert_v2() RETURNS trigger
 DECLARE i public.research_article_input_revisions_v2;a public.research_author_results_v2;r public.research_reviewer_results_v2;
  b public.candidate_dossier_bundles;d public.candidate_research_dossiers;
 BEGIN
- IF NEW.revision_kind='legacy_detail_v1' THEN RETURN NEW;END IF;
+ IF NEW.revision_kind='legacy_detail_v1' THEN
+  IF NEW.bundle_id IS NOT NULL THEN
+   SELECT * INTO b FROM public.candidate_dossier_bundles WHERE bundle_id=NEW.bundle_id;
+   IF b.bundle_id IS NULL OR b.revision_kind IS DISTINCT FROM 'legacy_detail_v1'
+    OR b.input_hash IS DISTINCT FROM NEW.input_hash THEN RAISE EXCEPTION 'research_publication_branch_mismatch';END IF;
+   IF TG_TABLE_NAME='candidate_research_dossiers' THEN
+    IF b.revision_id IS DISTINCT FROM NEW.detail_snapshot_id THEN RAISE EXCEPTION 'research_publication_branch_mismatch';END IF;
+   ELSE
+    SELECT * INTO d FROM public.candidate_research_dossiers WHERE id=NEW.dossier_id;
+    IF b.revision_id IS DISTINCT FROM NEW.revision_id OR d.id IS NULL OR d.revision_kind IS DISTINCT FROM 'legacy_detail_v1'
+     OR d.detail_snapshot_id IS DISTINCT FROM NEW.revision_id OR d.bundle_id IS DISTINCT FROM NEW.bundle_id OR d.input_hash IS DISTINCT FROM NEW.input_hash
+    THEN RAISE EXCEPTION 'research_publication_branch_mismatch';END IF;
+   END IF;
+  END IF;
+  RETURN NEW;
+ END IF;
  IF NEW.revision_kind IS DISTINCT FROM 'research_input_v2' OR current_user<>'research_observed_rpc_owner'
  THEN RAISE EXCEPTION 'research_publication_writer_required';END IF;
  SELECT * INTO i FROM public.research_article_input_revisions_v2 WHERE revision_id=NEW.research_input_revision_id;
