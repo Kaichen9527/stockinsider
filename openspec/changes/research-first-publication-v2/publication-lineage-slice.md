@@ -29,7 +29,9 @@ Never infer model execution, source rights or article quality from this lineage.
 
 ## Private write surface and legacy isolation
 
-No v2 production insert endpoint/RPC in this slice. BEFORE INSERT trigger requires
+No v2 production insert endpoint/RPC in this slice. Owner guards execute as
+SECURITY INVOKER, testing actual current_user before any definer helper; never
+put the owner comparison inside a SECURITY DEFINER trigger. BEFORE INSERT requires
 research_input_preparation_owner_v2 as current_user for a v2 bundle and
 research_observed_rpc_owner for a v2 outbox. Those existing NOLOGIN owners receive
 only required table INSERT/SELECT privileges; service_role direct v2 insertion,
