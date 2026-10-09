@@ -8,6 +8,7 @@ import { FinancialDeadline } from './research-financial-file-reader.ts';
 
 type Row = Record<string, unknown>;
 type AssignmentRequest = { action: 'assignAuthor' | 'readAuthorAssignment'; input: CompleteRequest; inputRevisionId: string; inputHash: string };
+type AuthorRequest = Omit<AssignmentRequest, 'action'> & { action: AssignmentRequest['action'] | 'readAuthorPacket' };
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/u;
 const HASH = /^[a-f0-9]{64}$/u;
 const assignmentKeys = ['assignment_id', 'job_id', 'attempt', 'reservation_id', 'input_revision_id', 'input_hash',
@@ -15,9 +16,9 @@ const assignmentKeys = ['assignment_id', 'job_id', 'attempt', 'reservation_id', 
   'assigned_at', 'reservation_started_at', 'reservation_expires_at', 'original_job_deadline'];
 function ensure(value: unknown): asserts value { if (!value) throw new Error('research_author_assignment_invalid'); }
 function object(value: unknown): Row { ensure(value && typeof value === 'object' && !Array.isArray(value)); return value as Row; }
-function parseRequest(value: Row): AssignmentRequest {
+function parseRequest(value: Row): AuthorRequest {
   ensure(Object.keys(value).sort().join(',') === ['action', 'input', 'inputHash', 'inputRevisionId'].sort().join(',')
-    && (value.action === 'assignAuthor' || value.action === 'readAuthorAssignment')
+    && (value.action === 'assignAuthor' || value.action === 'readAuthorAssignment' || value.action === 'readAuthorPacket')
     && typeof value.inputRevisionId === 'string' && UUID.test(value.inputRevisionId)
     && typeof value.inputHash === 'string' && HASH.test(value.inputHash));
   return { action: value.action, input: parseCompleteRequest(value.input), inputRevisionId: value.inputRevisionId, inputHash: value.inputHash };
@@ -61,14 +62,22 @@ export async function handleResearchAuthorAssignment(request: Request): Promise<
   if (!requireExactInternalBearer(request)) return Response.json({ ok: false, error: 'research_author_auth_required' }, { status: 401 });
   const identity = resolveResearchControllerIdentity(request, 'author');
   if (!identity.ok) return Response.json({ ok: false, error: identity.error }, { status: 401 });
-  const deadline = new FinancialDeadline(); let input: AssignmentRequest;
+  const deadline = new FinancialDeadline(); let input: AuthorRequest;
   try { input = parseRequest(await readCompleteBody(request, deadline)); }
   catch { deadline.controller.abort(); return Response.json({ ok: false, error: 'research_author_assignment_request_invalid' }, { status: 400 }); }
   try {
-    const assignment = await runResearchAuthorAssignment(getSupabaseServerClient(), input, identity.principalId, deadline);
+    if (input.action === 'readAuthorPacket') {
+      const { runResearchAuthorPacket, assertResearchAuthorPacketWindow } = await import('./research-author-packet.ts');
+      const result = await runResearchAuthorPacket(getSupabaseServerClient(), input, identity.principalId, deadline);
+      deadline.check(); const response = Response.json({ ok: true, ...result });
+      assertResearchAuthorPacketWindow(result.packet, deadline); return response;
+    }
+    const assignment = await runResearchAuthorAssignment(getSupabaseServerClient(), { ...input, action: input.action }, identity.principalId, deadline);
     deadline.check();
     return Response.json({ ok: true, assignment, dispatchReady: false, modelDispatched: false });
   } catch {
+    if (input.action === 'readAuthorPacket') return Response.json({ ok: false, error: 'research_author_packet_unavailable',
+      recoveryAction: 'readAuthorPacket', retryClaim: false }, { status: 409 });
     // RPC may have committed. Read the exact original assignment; never reserve again or renew clocks.
     return Response.json({ ok: false, error: 'research_author_assignment_unavailable', outcome: 'uncertain',
       recoveryAction: 'readAuthorAssignment', retryClaim: false }, { status: 409 });
