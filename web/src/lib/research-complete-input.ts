@@ -1,7 +1,6 @@
 import path from 'node:path';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import schema2409 from './research-complete-2409.schema.json' with { type: 'json' };
-import schema2383 from './research-complete-2383.schema.json' with { type: 'json' };
+import { schema2409, schema2383 } from './research-complete-schema-bundles.ts';
 import mapping from './research-complete-mapping.json' with { type: 'json' };
 import { financialInventory } from './research-financial-inventory.ts';
 import { loadResearchFinancialSupplement } from './research-financial-supplement.ts';

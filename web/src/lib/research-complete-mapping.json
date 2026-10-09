@@ -1,7 +1,7 @@
 {
   "schemaVersion": "research-complete-static-mapping-v2",
   "sourceClosureEncoding": "sorted_compact_utf8_json_metadata_v1",
-  "sourceClosureHash": "0c03db989f3bb11349869c29d634505ff3a2e3c7660a987c174674c9950c0502",
+  "sourceClosureHash": "ef95096ff64e63dd4def51fa1aa5ec608837100fbdad780274becda5463b40ff",
   "sourceClosure": [
     {
       "file": "web/package-lock.json",
@@ -45,8 +45,13 @@
     },
     {
       "file": "web/src/lib/research-complete-input.ts",
-      "bytes": 10616,
-      "sha256": "3a86c6d9db2345f7ec5507074b49bd90c886c22c785cefe9537787a90e9afd63"
+      "bytes": 10526,
+      "sha256": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d"
+    },
+    {
+      "file": "web/src/lib/research-complete-schema-bundles.ts",
+      "bytes": 463467,
+      "sha256": "ca5bc876d5820c3f910a4847c84f504a952896f7affe5d9e88a9f224df3b0d98"
     },
     {
       "file": "web/src/lib/research-deep-author-input.ts",
@@ -146,7 +151,7 @@
       "inventoryHash": "1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314",
       "historicalHash": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
       "modelCutoff": "2026-10-08T10:20:00Z",
-      "sourceClosureHash": "0c03db989f3bb11349869c29d634505ff3a2e3c7660a987c174674c9950c0502"
+      "sourceClosureHash": "ef95096ff64e63dd4def51fa1aa5ec608837100fbdad780274becda5463b40ff"
     },
     "2383": {
       "inventory": [
@@ -184,7 +189,7 @@
       "inventoryHash": "182992205534182b1e349da5c6806085574a3ca760273d0464f66eba6ce8c496",
       "historicalHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
       "modelCutoff": "2026-10-08T12:12:00Z",
-      "sourceClosureHash": "0c03db989f3bb11349869c29d634505ff3a2e3c7660a987c174674c9950c0502"
+      "sourceClosureHash": "ef95096ff64e63dd4def51fa1aa5ec608837100fbdad780274becda5463b40ff"
     }
   }
 }

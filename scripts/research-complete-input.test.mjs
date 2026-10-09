@@ -13,3 +13,10 @@ for(const seal of [false,true])test('old DB sealed mapping cannot bypass current
  let calls=0;const db={rpc(){calls++;return{abortSignal:async()=>({data:{status:'sealed',dispatchReady:false,canonical_payload:{researchIdentity:{symbol:'2409'}}},error:null})};}};
  await assert.rejects(runCompleteInput(db,replayRequest,seal,new FinancialDeadline(),'/must-not-read-replay'));assert.equal(calls,1);
 });
+
+// Compare all numeric/string schema tokens, not an approximate floating tolerance.
+test('static schema bundles exactly preserve both original numeric and Unicode schemas',async()=>{
+ const {schema2409,schema2383}=await import('../web/src/lib/research-complete-schema-bundles.ts');
+ for(const[symbol,schema]of[['2409',schema2409],['2383',schema2383]])assert.deepEqual(schema,JSON.parse(fs.readFileSync('web/src/lib/research-complete-'+symbol+'.schema.json','utf8')));
+ assert.equal(schema2409.properties.financialMaterial.properties.projection.properties.projected.properties.scenarios.prefixItems[1].properties.quarters.prefixItems[1].properties.segments.prefixItems[0].properties.revenue.const,31090.078766235238);
+});
