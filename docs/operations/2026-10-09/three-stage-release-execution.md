@@ -9,6 +9,30 @@ list is valid; research priority is not entry authority.
 ## Latest verified state — supersedes older checkpoints below
 
 
+### October 9 publication lineage CODE PASS and native assignment acceptance
+
+- Draft PR349 subject2878038e22362a1f09790ba5ded1b71cdbd114d5 received
+  unsigned scoped independentCODEPASS, noP1/P2. Existing bundle/outbox gain an
+  exclusive v1/v2 union with input/company/snapshot bindings; v2 remains private
+  and inert until its separately reviewed atomic writer. Root9realPG and10legacy
+  regression checks pass, independent10PG checks pass; type/lint/build pass
+  (build3uvi2ZrmgQFhKD2rigOel). Legacy retry/publication gates remain unchanged.
+- VM diagnostic843117ca on unchanged7f runtime/retained2074-file build passes
+  80/80compiledHTTP, zero failures/skips. Root verified45raw Git blobs by bytes/SHA.
+  Real-FS controls prove ancestor new-entry rejection; historical AUO writer is
+  still unknown. Old35/9RED and startupEEXISTRED remain saved. Two stopped PG
+  clusters alone were removed; VM still retains all evidence/builds.
+- Reviewer-result9136 native verification is now assigned to the same idle VM;
+  no overlapping build or runtime changes. Synthetic role fixtures are not genuine
+  model execution or publication. Next root implementation is actual current-run
+  price-window wiring; first-discovery snapshots/ranking remain immutable.
+- Removed only two unreferenced local .next rebuildable caches after exact-path,
+  symlink and lsof checks, about583MB logical. Source/dependencies/evidence remain.
+- Main169aad1 and production remain unchanged. Actual role dispatch, atomic
+  dossier/submission, shared reader, protected review/release and five future
+  trading days remain incomplete. This checkpoint does not claim ready to deploy.
+
+
 ### October 9 independent review-result CODE PASS
 
 - Final subject9136a09a75492ced1af9ba27a922c04ad23e0c39 received unsigned scoped

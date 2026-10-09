@@ -1,0 +1,29 @@
+{
+  "lsofReturn": 0,
+  "paths": [
+    "/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/.next",
+    "/Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/.next"
+  ],
+  "openReferences": [],
+  "recordedAt": "2026-10-09T15:12:41.457478+00:00",
+  "deleted": [
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/.next",
+      "buildId": "3Nv8J8RecOMwNqC3X4L6X",
+      "logicalBytes": 287517752,
+      "files": 4810,
+      "dev": 16777232,
+      "ino": 208443023,
+      "reason": "Unreferenced rebuildable previous Next build; source/tests/receipts/financial files retained"
+    },
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/.next",
+      "buildId": "j34-PPOPvJBuRZ0dB2yTY",
+      "logicalBytes": 295664104,
+      "files": 4833,
+      "dev": 16777232,
+      "ino": 209281135,
+      "reason": "Unreferenced rebuildable previous Next build; source/tests/receipts/financial files retained"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+TAP version 13
+# Subtest: outbox v6 fences stale workers and atomically closes accepted and rejected receipts
+ok 1 - outbox v6 fences stale workers and atomically closes accepted and rejected receipts
+  ---
+  duration_ms: 2387.077708
+  ...
+# Subtest: piped child waits for inherited stderr after the leader exits
+ok 2 - piped child waits for inherited stderr after the leader exits
+  ---
+  duration_ms: 224.80075
+  ...
+# Subtest: piped child preserves output and original normal/nonzero/signal exits
+ok 3 - piped child preserves output and original normal/nonzero/signal exits
+  ---
+  duration_ms: 89.407416
+  ...
+# Subtest: piped child explicitly fails spawn and output limits
+ok 4 - piped child explicitly fails spawn and output limits
+  ---
+  duration_ms: 43.69075
+  ...
+# Subtest: piped child bounds an inherited pipe that remains open after leader exit
+ok 5 - piped child bounds an inherited pipe that remains open after leader exit
+  ---
+  duration_ms: 202.032917
+  ...
+# Subtest: piped child rejects late close despite a delayed timer, and settles once
+ok 6 - piped child rejects late close despite a delayed timer, and settles once
+  ---
+  duration_ms: 0.344667
+  ...
+# Subtest: piped child captures post-exit data, clears timer, and rejects stream errors/cancel
+ok 7 - piped child captures post-exit data, clears timer, and rejects stream errors/cancel
+  ---
+  duration_ms: 0.284708
+  ...
+# Subtest: piped child never signals a failed spawn without a positive PID and handles late errors
+ok 8 - piped child never signals a failed spawn without a positive PID and handles late errors
+  ---
+  duration_ms: 0.22
+  ...
+# Subtest: deep publication preserves ordinary history and recovers rejected plus expired leases
+ok 9 - deep publication preserves ordinary history and recovers rejected plus expired leases
+  ---
+  duration_ms: 1581.536167
+  ...
+# Subtest: deep publication preserves ordinary history and recovers explicit_failure plus expired leases
+ok 10 - deep publication preserves ordinary history and recovers explicit_failure plus expired leases
+  ---
+  duration_ms: 1580.093958
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6192.448667
