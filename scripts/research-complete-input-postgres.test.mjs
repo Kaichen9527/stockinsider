@@ -6,7 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {promisify} from 'node:util';
-import {completeMaterial} from '../web/src/lib/research-complete-input.ts';
+import {completeMaterial,runCompleteInput,validateCompleteResponse} from '../web/src/lib/research-complete-input.ts';
 import {FinancialDeadline} from '../web/src/lib/research-financial-file-reader.ts';
 import {completeCanonical,completeHash} from '../web/src/lib/research-complete-canonical.ts';
 import mapping from '../web/src/lib/research-complete-mapping.json' with {type:'json'};
@@ -71,6 +71,16 @@ test('complete-input actual PG, shared preparations and original lease boundarie
    const saved=seal(req,material);assert.equal(saved.status,'sealed');assert.equal(saved.input_hash,completeHash(saved.canonical_payload));assert.equal(saved.canonical_payload.financial.material.projection.monthlyFacts.length,3);assert.ok(Object.values(saved.canonical_payload.capabilities).every(x=>x===false));assert.equal(saved.canonical_payload.evidenceStatus,'incomplete');assert.equal(sql('SELECT count(*) FROM stocks;'),'0');
    assert.equal(saved.logical_bytes,Buffer.byteLength(completeCanonical(req))+Buffer.byteLength(completeCanonical(saved.canonical_payload)));
    inputs.push({r,req,material,saved});
+  });
+  await t.test('application rereads current mapping and full payload without reopening fixed files',async()=>{
+   for(const x of inputs){const before=count();for(const sealOnly of [false,true]){const reread=await runCompleteInput(db,x.req,sealOnly,new FinancialDeadline(),'/cannot-open-files-on-replay');assert.equal(reread.input_hash,x.saved.input_hash);assert.deepEqual(reread.canonical_payload,x.saved.canonical_payload);}assert.equal(count(),before);
+    for(const mutate of [r=>{r.canonical_payload.researchIdentity.symbol='0000';},r=>{r.canonical_payload.capabilities.entryEligible=true;},r=>{r.canonical_payload.financial.material.projection.reportedFacts[0].value++;},r=>{r.canonical_payload.hashes.sourceClosureHash='0'.repeat(64);},r=>{r.canonical_request.expectedCalculatorExecutionHash='0'.repeat(64);r.request_hash=completeHash(r.canonical_request);},r=>{r.job_id=randomUUID();}]){
+     const response=structuredClone(read(x.req));mutate(response);response.input_hash=completeHash(response.canonical_payload);
+     const mock={rpc(){return{abortSignal:async()=>({data:response,error:null})};}};
+     await assert.rejects(runCompleteInput(mock,x.req,false,new FinancialDeadline(),'/cannot-read-financial'));
+    }
+    const response=read(x.req);response.input_hash='0'.repeat(64);assert.throws(()=>validateCompleteResponse(x.req,response));
+   }
   });
   await t.test('replay and read retain clocks and charges; changed request rejects',()=>{for(const x of inputs){const before=count();assert.deepEqual({...seal(x.req,null),replay:false},x.saved);assert.equal(read(x.req).input_hash,x.saved.input_hash);assert.equal(count(),before);assert.throws(()=>read({...x.req,preparationHash:'d'.repeat(64)}));}});
   await t.test('unknown nested, numeric, locator, clock and mapping material fails before insertion',()=>{for(const x of inputs){const r=unit();const p=prepare(r);const req={...x.req,jobId:r.jobId,reservationId:r.reservationId,preparationId:p.preparation_id,preparationHash:p.input_hash}; // unsupported company inherited5347 must reject

@@ -34,11 +34,41 @@ export async function completeMaterial(db:Pick<SupabaseClient,'rpc'>,request:Com
  const material={schemaVersion:'research-complete-financial-material-v2',symbol,artifactReadKnownAt:(projection.clocks as Row).currentLocalReadKnownAt,sourceClosureHash:mapping.sourceClosureHash,artifactInventoryHash:completeHash(financialInventory.companies[symbol].map(p=>({file:p.path,bytes:p.bytes,sha256:p.sha256}))),financialMaterial:{projection,calculation}};
  ensure(material.artifactInventoryHash===m.inventoryHash);validateCompleteSchema(material,(symbol==='2409'?schema2409:schema2383) as Row,String(material.artifactReadKnownAt));ensure(Buffer.byteLength(JSON.stringify(material))<=262144);deadline.check();return material;
 }
+const capabilityKeys=['financialVerified','dispatchReady','modelDispatched','publishableResearch','researchQualified','strategyApproved','entryEligible','historicalPITEligible'];
+function object(value:unknown):Row {ensure(value&&typeof value==='object'&&!Array.isArray(value));return value as Row;}
+function equal(a:unknown,b:unknown){ensure(completeHash(a)===completeHash(b));}
+/** Current application support is checked on every read, including an old DB replay.
+ * This does not open artifacts, renew a lease, or change the persisted clocks. */
+export function validateCompleteResponse(request:CompleteRequest,response:Row):void {
+ parseCompleteRequest(request);ensure(response.dispatchReady===false&&(response.status==='absent'||response.status==='sealed'));
+ let symbol:unknown;
+ if(response.status==='absent'){
+  const parent=object(response.preparation),old=object(parent.request),p=object(parent.payload);
+  const {sourceDocumentIds,bundleId,...lineage}=old;void sourceDocumentIds;ensure(bundleId===null);
+  const {preparationId,preparationHash,expectedArtifactManifestHash,expectedCalculatorExecutionHash,...wanted}=request;void expectedArtifactManifestHash;void expectedCalculatorExecutionHash;
+  equal(lineage,wanted);ensure(parent.preparation_id===preparationId&&parent.input_hash===preparationHash&&parent.dispatchReady===false&&p.scope===request.scope&&p.snapshotHash===request.snapshotHash&&p.modelDispatched===false);symbol=p.symbol;
+ }else{
+  const p=object(response.canonical_payload),identity=object(p.researchIdentity),prep=object(p.preparation),job=object(p.originalJob),reservation=object(p.originalReservation),hashes=object(p.hashes),financial=object(p.financial),clocks=object(p.clocks),capabilities=object(p.capabilities);
+  symbol=identity.symbol;ensure(response.job_id===request.jobId&&response.attempt===request.attempt&&response.reservation_id===request.reservationId&&response.preparation_id===request.preparationId&&response.research_scope===request.scope&&response.snapshot_hash===request.snapshotHash);
+  equal(response.canonical_request,request);ensure(response.request_hash===completeHash(request)&&response.input_hash===completeHash(p));
+  ensure(p.schemaVersion==='research-article-input-v2'&&p.assemblyStatus==='complete'&&p.evidenceStatus==='incomplete'&&p.producerAttribution==='internal_controller_asserted'&&prep.id===request.preparationId&&prep.inputHash===request.preparationHash&&hashes.preparationInputHash===request.preparationHash
+   &&identity.scope===request.scope&&identity.snapshotHash===request.snapshotHash&&identity.researchCompanyId===response.research_company_id&&job.jobId===request.jobId&&job.attempt===request.attempt&&job.owner===request.owner&&reservation.reservationId===request.reservationId);
+  ensure(Object.keys(capabilities).sort().join(',')===capabilityKeys.slice().sort().join(',')&&Object.values(capabilities).every(x=>x===false));
+  ensure(symbol==='2409'||symbol==='2383');const supported=mapping.companies[symbol],f=object(financial.material),projection=object(f.projection),calculation=object(f.calculation);
+  equal(financial.artifactInventory,supported.inventory);ensure(hashes.artifactInventoryHash===supported.inventoryHash&&hashes.sourceClosureHash===mapping.sourceClosureHash&&hashes.modelHistoricalCanonicalHash===supported.historicalHash
+   &&hashes.sourceManifestHash===completeHash(projection.sourceManifest)&&hashes.projectionHash===completeHash(projection)&&hashes.scenarioInputHash===completeHash(object(projection.projected).scenarios)&&hashes.resultHash===completeHash(calculation));
+  const material={schemaVersion:'research-complete-financial-material-v2',symbol,artifactReadKnownAt:clocks.artifactReadKnownAt,sourceClosureHash:hashes.sourceClosureHash,artifactInventoryHash:hashes.artifactInventoryHash,financialMaterial:f};
+  validateCompleteSchema(material,(symbol==='2409'?schema2409:schema2383)as Row,String(clocks.artifactReadKnownAt));
+ }
+ ensure(symbol==='2409'||symbol==='2383');ensure(request.expectedArtifactManifestHash===mapping.companies[symbol].inventoryHash&&request.expectedCalculatorExecutionHash===mapping.sourceClosureHash);
+}
 export async function runCompleteInput(db:Pick<SupabaseClient,'rpc'>,request:CompleteRequest,seal:boolean,deadline:FinancialDeadline,root?:string):Promise<Row>{
  const rpc=async(name:string,args:Row)=>{deadline.check();const response=await deadline.wait(db.rpc(name,args).abortSignal(deadline.controller.signal));ensure(!response.error&&response.data&&typeof response.data==='object');return response.data as Row;};
- const before=await rpc('read_research_article_input_revision_v2',{p_request:request});
- if(before.status!=='absent'||!seal)return before;
- const material=await completeMaterial(db,request,before.preparation as Row,deadline,root);
- const saved=await rpc('seal_research_article_input_revision_v2',{p_request:request,p_calculation:material});
- ensure(saved.status==='sealed'&&saved.dispatchReady===false&&typeof saved.input_hash==='string'&&completeHash(saved.canonical_payload)===saved.input_hash);deadline.check();return saved;
+ let phase='read_rpc';try {
+ const before=await rpc('read_research_article_input_revision_v2',{p_request:request});phase='read_validate';
+ validateCompleteResponse(request,before);deadline.check();if(before.status!=='absent'||!seal)return before;
+ phase='financial_calculation';const material=await completeMaterial(db,request,before.preparation as Row,deadline,root);
+ phase='seal_rpc';const saved=await rpc('seal_research_article_input_revision_v2',{p_request:request,p_calculation:material});
+ phase='seal_validate';validateCompleteResponse(request,saved);ensure(saved.status==='sealed');deadline.check();return saved;
+ }catch(error){console.error('research_complete_input_failure_phase',phase);throw error;}
 }
