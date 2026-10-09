@@ -267,3 +267,14 @@ Earlier dated checkboxes above preserve historical observations; this section su
 - [ ] Restore genuine protected authority/graph, then reviewed merge commits, production migration/deployment, verified product schedules and five actual trading days. Ordinary CI and unsigned reviews cannot substitute for this authority; future trading days cannot be compressed into fixtures.
 
 Development and heavy acceptance continue on the existing Codex VM. Progress, failures and evidence are committed to PR327; original AUO product heartbeat remains paused, separate from the active deduplicating engineering continuation.
+
+## 2026-10-09 14:24 Taipei — continued implementation
+
+- [x] PR333 VM queue artifact/PG and normal build receipts saved; exact85f8 ordinary CI519/516/0/3skip passes. Actual official positive refresh and protected release remain open.
+- [x] Independently reviewed cursor test discovery d4c0721 and controller-only Podcast index712140c merged into development integration24333aa;35/35 source tests and actual Mac metadata read retained. No audio/transcript/legacy-content grant or production platform enablement.
+- [x] Actual public broker PDF page5 checked and reviewed; unknown publication instant/closed host retained as pending, not fabricated historical intake.
+- [ ] Fetch/review exact financial supplement and complete one combined native/type/lint/build; durable complete input and genuine roles/publication still pending.
+- [ ] Repair archive delayed-open cancellation cleanup liability before VM measurement/eviction.
+- [ ] Complete remaining real source breadth, fair observed cohort, qualification/held positions/actions, all-candidate PIT/forward strategies, external protected authority, reviewed formal deployment and five real trading days.
+
+See progress-convergence-1424.md for actual subjects, failures, resource retention and continuation state. Earlier entries retain their original dates and limits.
