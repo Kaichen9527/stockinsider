@@ -1,0 +1,20 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "controls",
+  "command": [
+    "env",
+    "FINANCIAL_NAMESPACE_ARTIFACTS=/workspace/cloud-author-packet-artifacts-oct09/rdiag",
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "scripts/research-financial-parent-real-fs-diagnostic.mjs"
+  ],
+  "startedAt": "2026-10-09T15:00:19.278Z",
+  "completedAt": "2026-10-09T15:00:19.659Z",
+  "elapsedSeconds": 0.381814974010922,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 28471296,
+  "observedTaskDiskPeakBytes": 1289719808,
+  "availableBeforeBytes": 12421861376,
+  "availableAfterBytes": 12421746688,
+  "guardTermination": null
+}

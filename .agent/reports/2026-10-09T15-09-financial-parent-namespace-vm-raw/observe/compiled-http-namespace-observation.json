@@ -1,0 +1,19 @@
+{
+  "paths": [
+    "/workspace",
+    "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+    "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+    "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+    "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+    "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+    "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+    "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market"
+  ],
+  "events": [],
+  "changes": [],
+  "requests": [],
+  "polls": 11,
+  "failed": null,
+  "observedByPid": 197870,
+  "writerAttribution": "Only controlled writer operations have known PID; unsolicited namespace event writer remains unknown."
+}

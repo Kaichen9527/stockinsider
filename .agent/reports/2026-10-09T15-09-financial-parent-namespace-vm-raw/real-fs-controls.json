@@ -1,0 +1,3171 @@
+{
+  "sourceReaderSha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+  "runtimeModified": false,
+  "fsRecorder": "Process-local lstat passthrough records real returned stats; no mock values or guard changes.",
+  "pins": [
+    {
+      "path": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 88790,
+      "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-market/dataset.json",
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
+    }
+  ],
+  "cases": [
+    {
+      "kind": "stable",
+      "start": "2026-10-09T15:00:19.498Z",
+      "completedAt": "2026-10-09T15:00:19.524Z",
+      "accepted": true,
+      "before": [
+        {
+          "path": "/workspace",
+          "dev": "27",
+          "ino": "-9223372036854775761",
+          "size": "12288",
+          "mtimeNs": "1791557968609434512",
+          "ctimeNs": "1791557968609434512",
+          "mode": "16877"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "dev": "27",
+          "ino": "1835186",
+          "size": "4096",
+          "mtimeNs": "1791556579086102489",
+          "ctimeNs": "1791556579086102489",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "dev": "27",
+          "ino": "1841931",
+          "size": "4096",
+          "mtimeNs": "1791556412845916163",
+          "ctimeNs": "1791556412845916163",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "dev": "27",
+          "ino": "1841800",
+          "size": "4096",
+          "mtimeNs": "1791556412842890256",
+          "ctimeNs": "1791556412842890256",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "dev": "27",
+          "ino": "1841799",
+          "size": "4096",
+          "mtimeNs": "1791556412813901304",
+          "ctimeNs": "1791556412813901304",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "dev": "27",
+          "ino": "1841788",
+          "size": "4096",
+          "mtimeNs": "1791556412817901406",
+          "ctimeNs": "1791556412817901406",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "dev": "27",
+          "ino": "1841755",
+          "size": "4096",
+          "mtimeNs": "1791556412829901711",
+          "ctimeNs": "1791556412829901711",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "dev": "27",
+          "ino": "1841782",
+          "size": "4096",
+          "mtimeNs": "1791556412821901507",
+          "ctimeNs": "1791556412821901507",
+          "mode": "16832"
+        }
+      ],
+      "after": [
+        {
+          "path": "/workspace",
+          "dev": "27",
+          "ino": "-9223372036854775761",
+          "size": "12288",
+          "mtimeNs": "1791557968609434512",
+          "ctimeNs": "1791557968609434512",
+          "mode": "16877"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "dev": "27",
+          "ino": "1835186",
+          "size": "4096",
+          "mtimeNs": "1791556579086102489",
+          "ctimeNs": "1791556579086102489",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "dev": "27",
+          "ino": "1841931",
+          "size": "4096",
+          "mtimeNs": "1791556412845916163",
+          "ctimeNs": "1791556412845916163",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "dev": "27",
+          "ino": "1841800",
+          "size": "4096",
+          "mtimeNs": "1791556412842890256",
+          "ctimeNs": "1791556412842890256",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "dev": "27",
+          "ino": "1841799",
+          "size": "4096",
+          "mtimeNs": "1791556412813901304",
+          "ctimeNs": "1791556412813901304",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "dev": "27",
+          "ino": "1841788",
+          "size": "4096",
+          "mtimeNs": "1791556412817901406",
+          "ctimeNs": "1791556412817901406",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "dev": "27",
+          "ino": "1841755",
+          "size": "4096",
+          "mtimeNs": "1791556412829901711",
+          "ctimeNs": "1791556412829901711",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "dev": "27",
+          "ino": "1841782",
+          "size": "4096",
+          "mtimeNs": "1791556412821901507",
+          "ctimeNs": "1791556412821901507",
+          "mode": "16832"
+        }
+      ],
+      "changedAncestors": [],
+      "trueFilesystemLstatCaptureCount": 64,
+      "captures": [
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.498Z",
+          "monotonicMs": 115.143343,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.498Z",
+          "monotonicMs": 115.260169,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.498Z",
+          "monotonicMs": 115.362965,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.498Z",
+          "monotonicMs": 115.37992,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.498Z",
+          "monotonicMs": 115.394923,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.498Z",
+          "monotonicMs": 115.529406,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.498Z",
+          "monotonicMs": 115.54564,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.498Z",
+          "monotonicMs": 115.559882,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.500Z",
+          "monotonicMs": 116.687203,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.501Z",
+          "monotonicMs": 118.474471,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.505Z",
+          "monotonicMs": 122.179713,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.506Z",
+          "monotonicMs": 122.783825,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.506Z",
+          "monotonicMs": 122.884307,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.511Z",
+          "monotonicMs": 127.668057,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.511Z",
+          "monotonicMs": 127.777742,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.511Z",
+          "monotonicMs": 127.841508,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.511Z",
+          "monotonicMs": 127.889972,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.511Z",
+          "monotonicMs": 127.945275,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.512Z",
+          "monotonicMs": 128.658842,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.512Z",
+          "monotonicMs": 128.708817,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.512Z",
+          "monotonicMs": 128.760515,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.512Z",
+          "monotonicMs": 128.837181,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.512Z",
+          "monotonicMs": 128.888799,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.512Z",
+          "monotonicMs": 129.629307,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.513Z",
+          "monotonicMs": 129.702517,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.513Z",
+          "monotonicMs": 129.754836,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.513Z",
+          "monotonicMs": 129.794947,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.513Z",
+          "monotonicMs": 129.841016,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.515Z",
+          "monotonicMs": 132.349742,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.515Z",
+          "monotonicMs": 132.433609,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.515Z",
+          "monotonicMs": 132.508963,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.515Z",
+          "monotonicMs": 132.578598,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.515Z",
+          "monotonicMs": 132.644537,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.518Z",
+          "monotonicMs": 135.474138,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.518Z",
+          "monotonicMs": 135.562642,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.518Z",
+          "monotonicMs": 135.625226,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.519Z",
+          "monotonicMs": 135.677265,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.519Z",
+          "monotonicMs": 135.746609,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.520Z",
+          "monotonicMs": 137.130388,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.520Z",
+          "monotonicMs": 137.186232,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.520Z",
+          "monotonicMs": 137.25761,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.520Z",
+          "monotonicMs": 137.339904,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.520Z",
+          "monotonicMs": 137.572385,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.521Z",
+          "monotonicMs": 138.095625,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.521Z",
+          "monotonicMs": 138.176967,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.521Z",
+          "monotonicMs": 138.22487,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.521Z",
+          "monotonicMs": 138.268395,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.521Z",
+          "monotonicMs": 138.335006,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.522Z",
+          "monotonicMs": 139.007631,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.522Z",
+          "monotonicMs": 139.096355,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.522Z",
+          "monotonicMs": 139.152419,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.522Z",
+          "monotonicMs": 139.205309,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.522Z",
+          "monotonicMs": 139.244869,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.522Z",
+          "monotonicMs": 139.283798,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.522Z",
+          "monotonicMs": 139.323958,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.522Z",
+          "monotonicMs": 139.386232,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 140.958966,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 140.975491,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 140.985436,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 140.994129,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.002682,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.012807,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.022362,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "stable",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.030945,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "existing-sibling-inner-write",
+      "start": "2026-10-09T15:00:19.524Z",
+      "completedAt": "2026-10-09T15:00:19.540Z",
+      "accepted": true,
+      "before": [
+        {
+          "path": "/workspace",
+          "dev": "27",
+          "ino": "-9223372036854775761",
+          "size": "12288",
+          "mtimeNs": "1791557968609434512",
+          "ctimeNs": "1791557968609434512",
+          "mode": "16877"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "dev": "27",
+          "ino": "1835186",
+          "size": "4096",
+          "mtimeNs": "1791556579086102489",
+          "ctimeNs": "1791556579086102489",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "dev": "27",
+          "ino": "1841931",
+          "size": "4096",
+          "mtimeNs": "1791556412845916163",
+          "ctimeNs": "1791556412845916163",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "dev": "27",
+          "ino": "1841800",
+          "size": "4096",
+          "mtimeNs": "1791556412842890256",
+          "ctimeNs": "1791556412842890256",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "dev": "27",
+          "ino": "1841799",
+          "size": "4096",
+          "mtimeNs": "1791556412813901304",
+          "ctimeNs": "1791556412813901304",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "dev": "27",
+          "ino": "1841788",
+          "size": "4096",
+          "mtimeNs": "1791556412817901406",
+          "ctimeNs": "1791556412817901406",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "dev": "27",
+          "ino": "1841755",
+          "size": "4096",
+          "mtimeNs": "1791556412829901711",
+          "ctimeNs": "1791556412829901711",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "dev": "27",
+          "ino": "1841782",
+          "size": "4096",
+          "mtimeNs": "1791556412821901507",
+          "ctimeNs": "1791556412821901507",
+          "mode": "16832"
+        }
+      ],
+      "after": [
+        {
+          "path": "/workspace",
+          "dev": "27",
+          "ino": "-9223372036854775761",
+          "size": "12288",
+          "mtimeNs": "1791557968609434512",
+          "ctimeNs": "1791557968609434512",
+          "mode": "16877"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "dev": "27",
+          "ino": "1835186",
+          "size": "4096",
+          "mtimeNs": "1791556579086102489",
+          "ctimeNs": "1791556579086102489",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "dev": "27",
+          "ino": "1841931",
+          "size": "4096",
+          "mtimeNs": "1791556412845916163",
+          "ctimeNs": "1791556412845916163",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "dev": "27",
+          "ino": "1841800",
+          "size": "4096",
+          "mtimeNs": "1791556412842890256",
+          "ctimeNs": "1791556412842890256",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "dev": "27",
+          "ino": "1841799",
+          "size": "4096",
+          "mtimeNs": "1791556412813901304",
+          "ctimeNs": "1791556412813901304",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "dev": "27",
+          "ino": "1841788",
+          "size": "4096",
+          "mtimeNs": "1791556412817901406",
+          "ctimeNs": "1791556412817901406",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "dev": "27",
+          "ino": "1841755",
+          "size": "4096",
+          "mtimeNs": "1791556412829901711",
+          "ctimeNs": "1791556412829901711",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "dev": "27",
+          "ino": "1841782",
+          "size": "4096",
+          "mtimeNs": "1791556412821901507",
+          "ctimeNs": "1791556412821901507",
+          "mode": "16832"
+        }
+      ],
+      "changedAncestors": [],
+      "trueFilesystemLstatCaptureCount": 64,
+      "captures": [
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.447103,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.462065,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.472341,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.481224,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.489627,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.4982,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.506883,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.524Z",
+          "monotonicMs": 141.515476,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.525Z",
+          "monotonicMs": 141.833306,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.525Z",
+          "monotonicMs": 141.93537,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.525Z",
+          "monotonicMs": 142.071064,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.525Z",
+          "monotonicMs": 142.203504,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.525Z",
+          "monotonicMs": 142.254081,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.527Z",
+          "monotonicMs": 143.669667,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.530Z",
+          "monotonicMs": 146.716586,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.530Z",
+          "monotonicMs": 146.823277,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.530Z",
+          "monotonicMs": 146.888325,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.530Z",
+          "monotonicMs": 146.936508,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.530Z",
+          "monotonicMs": 147.506768,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.530Z",
+          "monotonicMs": 147.549252,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.530Z",
+          "monotonicMs": 147.579859,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.530Z",
+          "monotonicMs": 147.623815,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.531Z",
+          "monotonicMs": 147.678718,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.531Z",
+          "monotonicMs": 148.401168,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.531Z",
+          "monotonicMs": 148.446937,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.531Z",
+          "monotonicMs": 148.499807,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.531Z",
+          "monotonicMs": 148.533358,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.531Z",
+          "monotonicMs": 148.560949,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.533Z",
+          "monotonicMs": 149.828833,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.533Z",
+          "monotonicMs": 149.88629,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.533Z",
+          "monotonicMs": 149.916625,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.533Z",
+          "monotonicMs": 149.969545,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.533Z",
+          "monotonicMs": 150.018369,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.534Z",
+          "monotonicMs": 151.608769,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.535Z",
+          "monotonicMs": 151.669191,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.535Z",
+          "monotonicMs": 151.722731,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.535Z",
+          "monotonicMs": 151.75465,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.535Z",
+          "monotonicMs": 151.779257,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.535Z",
+          "monotonicMs": 152.141734,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.535Z",
+          "monotonicMs": 152.208415,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.535Z",
+          "monotonicMs": 152.25164,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.535Z",
+          "monotonicMs": 152.299963,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.535Z",
+          "monotonicMs": 152.37126,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.536Z",
+          "monotonicMs": 152.790573,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.536Z",
+          "monotonicMs": 152.91426,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.536Z",
+          "monotonicMs": 152.988212,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.536Z",
+          "monotonicMs": 153.036114,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.536Z",
+          "monotonicMs": 153.102134,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.537Z",
+          "monotonicMs": 154.310227,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.537Z",
+          "monotonicMs": 154.393913,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.537Z",
+          "monotonicMs": 154.439692,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.538Z",
+          "monotonicMs": 154.787507,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.538Z",
+          "monotonicMs": 154.850342,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.538Z",
+          "monotonicMs": 154.917504,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.538Z",
+          "monotonicMs": 154.96126,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.538Z",
+          "monotonicMs": 154.986438,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 156.920997,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 156.93621,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 156.94255,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 156.94919,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 156.9557,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 156.96253,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 156.96894,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "existing-sibling-inner-write",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 156.97537,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "common-ancestor-new-entry",
+      "start": "2026-10-09T15:00:19.540Z",
+      "completedAt": "2026-10-09T15:00:19.548Z",
+      "accepted": false,
+      "error": {
+        "message": "financial_parent_replaced",
+        "cleanup": null
+      },
+      "before": [
+        {
+          "path": "/workspace",
+          "dev": "27",
+          "ino": "-9223372036854775761",
+          "size": "12288",
+          "mtimeNs": "1791557968609434512",
+          "ctimeNs": "1791557968609434512",
+          "mode": "16877"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "dev": "27",
+          "ino": "1835186",
+          "size": "4096",
+          "mtimeNs": "1791556579086102489",
+          "ctimeNs": "1791556579086102489",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "dev": "27",
+          "ino": "1841931",
+          "size": "4096",
+          "mtimeNs": "1791556412845916163",
+          "ctimeNs": "1791556412845916163",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "dev": "27",
+          "ino": "1841800",
+          "size": "4096",
+          "mtimeNs": "1791556412842890256",
+          "ctimeNs": "1791556412842890256",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "dev": "27",
+          "ino": "1841799",
+          "size": "4096",
+          "mtimeNs": "1791556412813901304",
+          "ctimeNs": "1791556412813901304",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "dev": "27",
+          "ino": "1841788",
+          "size": "4096",
+          "mtimeNs": "1791556412817901406",
+          "ctimeNs": "1791556412817901406",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "dev": "27",
+          "ino": "1841755",
+          "size": "4096",
+          "mtimeNs": "1791556412829901711",
+          "ctimeNs": "1791556412829901711",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "dev": "27",
+          "ino": "1841782",
+          "size": "4096",
+          "mtimeNs": "1791556412821901507",
+          "ctimeNs": "1791556412821901507",
+          "mode": "16832"
+        }
+      ],
+      "after": [
+        {
+          "path": "/workspace",
+          "dev": "27",
+          "ino": "-9223372036854775761",
+          "size": "12288",
+          "mtimeNs": "1791557968609434512",
+          "ctimeNs": "1791557968609434512",
+          "mode": "16877"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "dev": "27",
+          "ino": "1835186",
+          "size": "4096",
+          "mtimeNs": "1791558019542726679",
+          "ctimeNs": "1791558019542726679",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "dev": "27",
+          "ino": "1841931",
+          "size": "4096",
+          "mtimeNs": "1791556412845916163",
+          "ctimeNs": "1791556412845916163",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "dev": "27",
+          "ino": "1841800",
+          "size": "4096",
+          "mtimeNs": "1791556412842890256",
+          "ctimeNs": "1791556412842890256",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "dev": "27",
+          "ino": "1841799",
+          "size": "4096",
+          "mtimeNs": "1791556412813901304",
+          "ctimeNs": "1791556412813901304",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "dev": "27",
+          "ino": "1841788",
+          "size": "4096",
+          "mtimeNs": "1791556412817901406",
+          "ctimeNs": "1791556412817901406",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "dev": "27",
+          "ino": "1841755",
+          "size": "4096",
+          "mtimeNs": "1791556412829901711",
+          "ctimeNs": "1791556412829901711",
+          "mode": "16832"
+        },
+        {
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "dev": "27",
+          "ino": "1841782",
+          "size": "4096",
+          "mtimeNs": "1791556412821901507",
+          "ctimeNs": "1791556412821901507",
+          "mode": "16832"
+        }
+      ],
+      "changedAncestors": [
+        {
+          "before": {
+            "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          },
+          "after": {
+            "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791558019542726679",
+            "ctimeNs": "1791558019542726679",
+            "mode": "16832"
+          }
+        }
+      ],
+      "trueFilesystemLstatCaptureCount": 58,
+      "captures": [
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.347361,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.358578,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.365348,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.371678,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.376655,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.382965,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.389354,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.397256,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.553792,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.603588,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.540Z",
+          "monotonicMs": 157.639512,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.541Z",
+          "monotonicMs": 157.668385,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.541Z",
+          "monotonicMs": 157.727254,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.542Z",
+          "monotonicMs": 158.769057,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.542Z",
+          "monotonicMs": 158.818501,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.542Z",
+          "monotonicMs": 158.898943,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.542Z",
+          "monotonicMs": 158.961227,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.542Z",
+          "monotonicMs": 159.024753,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.543Z",
+          "monotonicMs": 160.010981,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.543Z",
+          "monotonicMs": 160.126085,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.543Z",
+          "monotonicMs": 160.168569,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.543Z",
+          "monotonicMs": 160.194969,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.543Z",
+          "monotonicMs": 160.271164,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.544Z",
+          "monotonicMs": 160.736837,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.544Z",
+          "monotonicMs": 160.766471,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.544Z",
+          "monotonicMs": 160.837238,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.544Z",
+          "monotonicMs": 160.889948,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.544Z",
+          "monotonicMs": 160.921225,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.544Z",
+          "monotonicMs": 161.516954,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.544Z",
+          "monotonicMs": 161.57412,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.544Z",
+          "monotonicMs": 161.6071,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.544Z",
+          "monotonicMs": 161.630055,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.545Z",
+          "monotonicMs": 161.695143,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.546Z",
+          "monotonicMs": 163.175277,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.546Z",
+          "monotonicMs": 163.206604,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.546Z",
+          "monotonicMs": 163.285153,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.546Z",
+          "monotonicMs": 163.342419,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.546Z",
+          "monotonicMs": 163.372765,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.547Z",
+          "monotonicMs": 163.750335,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.547Z",
+          "monotonicMs": 163.80694,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.547Z",
+          "monotonicMs": 163.838438,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.547Z",
+          "monotonicMs": 163.860621,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.547Z",
+          "monotonicMs": 163.924588,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.547Z",
+          "monotonicMs": 164.230439,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.547Z",
+          "monotonicMs": 164.256859,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791556579086102489",
+            "ctimeNs": "1791556579086102489",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.547Z",
+          "monotonicMs": 164.328497,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.547Z",
+          "monotonicMs": 164.382779,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.547Z",
+          "monotonicMs": 164.419765,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.548Z",
+          "monotonicMs": 165.036446,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.548Z",
+          "monotonicMs": 165.09912,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791558019542726679",
+            "ctimeNs": "1791558019542726679",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace",
+          "at": "2026-10-09T15:00:19.548Z",
+          "monotonicMs": 165.501257,
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791557968609434512",
+            "ctimeNs": "1791557968609434512",
+            "mode": "16877"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09",
+          "at": "2026-10-09T15:00:19.548Z",
+          "monotonicMs": 165.514157,
+          "stat": {
+            "dev": "27",
+            "ino": "1835186",
+            "size": "4096",
+            "mtimeNs": "1791558019542726679",
+            "ctimeNs": "1791558019542726679",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs",
+          "at": "2026-10-09T15:00:19.548Z",
+          "monotonicMs": 165.522569,
+          "stat": {
+            "dev": "27",
+            "ino": "1841931",
+            "size": "4096",
+            "mtimeNs": "1791556412845916163",
+            "ctimeNs": "1791556412845916163",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research",
+          "at": "2026-10-09T15:00:19.548Z",
+          "monotonicMs": 165.530391,
+          "stat": {
+            "dev": "27",
+            "ino": "1841800",
+            "size": "4096",
+            "mtimeNs": "1791556412842890256",
+            "ctimeNs": "1791556412842890256",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model",
+          "at": "2026-10-09T15:00:19.548Z",
+          "monotonicMs": 165.538113,
+          "stat": {
+            "dev": "27",
+            "ino": "1841799",
+            "size": "4096",
+            "mtimeNs": "1791556412813901304",
+            "ctimeNs": "1791556412813901304",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-full-financial",
+          "at": "2026-10-09T15:00:19.548Z",
+          "monotonicMs": 165.545885,
+          "stat": {
+            "dev": "27",
+            "ino": "1841788",
+            "size": "4096",
+            "mtimeNs": "1791556412817901406",
+            "ctimeNs": "1791556412817901406",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo",
+          "at": "2026-10-09T15:00:19.548Z",
+          "monotonicMs": 165.553516,
+          "stat": {
+            "dev": "27",
+            "ino": "1841755",
+            "size": "4096",
+            "mtimeNs": "1791556412829901711",
+            "ctimeNs": "1791556412829901711",
+            "mode": "16832"
+          }
+        },
+        {
+          "label": "common-ancestor-new-entry",
+          "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/docs/research/2026-10-08-auo-market",
+          "at": "2026-10-09T15:00:19.548Z",
+          "monotonicMs": 165.561328,
+          "stat": {
+            "dev": "27",
+            "ino": "1841782",
+            "size": "4096",
+            "mtimeNs": "1791556412821901507",
+            "ctimeNs": "1791556412821901507",
+            "mode": "16832"
+          }
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "kind": "existing-sibling-inner-write",
+      "pid": 197813,
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/rdiag/controls/existing/inner-197813.txt",
+      "at": "2026-10-09T15:00:19.536Z",
+      "monotonicMs": 153.451661
+    },
+    {
+      "kind": "common-ancestor-new-entry",
+      "pid": 197813,
+      "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/.financial-namespace-controlled-197813",
+      "at": "2026-10-09T15:00:19.548Z",
+      "monotonicMs": 164.682321
+    }
+  ],
+  "historicalWriterProven": false,
+  "historicalAncestorChangedPathKnown": false,
+  "limitation": "Original RED retained no capture-time ancestor stats. Controlled mechanism evidence cannot identify the earlier writer."
+}

@@ -1,0 +1,6 @@
+(node:197813) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:197813) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-assignment-http-vm-oct09/web/src/lib/research-financial-inventory.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-assignment-http-vm-oct09/web/package.json.
+{"cases":[{"kind":"stable","accepted":true,"changedPaths":[],"captures":64},{"kind":"existing-sibling-inner-write","accepted":true,"changedPaths":[],"captures":64},{"kind":"common-ancestor-new-entry","accepted":false,"error":"financial_parent_replaced","changedPaths":["/workspace/cloud-reviewer-assignment-http-vm-oct09"],"captures":58}],"historicalWriterProven":false}
