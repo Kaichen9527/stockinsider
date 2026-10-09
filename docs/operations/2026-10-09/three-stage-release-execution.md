@@ -267,3 +267,26 @@ Independent mechanical6f review also passes: exactly the3reviewed962blobs merge
 into4eb without extra changes. None of these observations is final-release or
 real-model/publication approval. Goal remains active and planned product research
 schedules remain unaccepted. No production DB write,main merge or deployment.
+
+## Accepted native author assignment and development integration
+
+The fresh34f native rerun is34/34 PASS,zero fail/skip, with immutable VM receipt
+9af34e6e and original8,560-byte Git log independently hash-checked. Both companies
+pass first-admission concurrency/auth/replay/restart, AUO guarded append-only
+withdrawal and EMC expiry. Original6f32/2 RED remains retained. Runtime/web/harness/
+package/migrations match6f exactly; the34f test-only successor honestly reuses
+that compiled artifact. Existing independent reviewer returned unsigned scoped
+RECEIPT PASS; VM private profiles/build physical artifact were not read onMac.
+
+Integration2db7bdac has exactly34f tree2003ce08. PR339 is merged into development
+integration, while PR340 is still open/draft with its code already contained.
+Main is still169aad1. Protected run37916716791 stops at absent exact2db review
+evidence ref, so downstream code gates skip. No unchanged blind rerun and no
+main merge,production migration or deployment. Native assignment acceptance
+does not prove genuine model execution,article review or publication.
+
+Existing Cloud turn01a1202c is active on a separate bounded PG cumulative-byte
+exact/+1 and rollback fixture from2db. Root must not duplicate that task or edit
+its owned boundary test. Root may continue the nonoverlapping article contract.
+The Goal tool currently reports blocked despite this live engineering progress;
+this record observes that state and does not manufacture a resumed/completed goal.

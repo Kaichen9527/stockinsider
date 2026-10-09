@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-09T10:24:42.091069+00:00",
+  "integrationCommit": "2db7bdac696cfc416b7946a912229bf9e4dee102",
+  "tree": "2003ce08af0c98fa860f1249f3e578a1d7bc0769",
+  "testSubject": "34f658e6a3882883df7a67e2ee12a84ffe32ca12",
+  "runtimeBuildSubject": "6f20d4fee2b0b7f960e36e6e104605acf6ded55c",
+  "vmReceiptCommit": "9af34e6e8644667ada4f1bd8d2987322cb3881e7",
+  "gitLogVerified": {
+    "bytes": 8560,
+    "sha256": "5fbd2cc95a6c1d994d1120c884479b19d56015f07914940514fc1f369c5e8d93",
+    "pass": 34,
+    "fail": 0,
+    "skip": 0
+  },
+  "independentReview": "author_input_review_oct08 unsigned scoped RECEIPT PASS; Git log/test/runtime identity verified; no VM physical profile/build reread",
+  "originalRed": "6c2d81f04e685413130e6eb129a416d8e413430b retained32pass2fail",
+  "github": {
+    "main": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "pr339": "merged feature integration only",
+    "pr340": "open draft, code contained in2db",
+    "protectedRun": "37916716791",
+    "failure": "missing evidence/source-led-opportunity-v3-exact-review-2db7bdac696cfc416b7946a912229bf9e4dee102; downstream skipped"
+  },
+  "vmCurrent": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "turnId": "01a1202c-ceeb-71a4-99fb-a0cccaae0a28",
+    "status": "active",
+    "ownedTask": "actual PG cumulative524288-byte exact/+1 and rollback only; new test file; no duplicate dispatch"
+  },
+  "actualRoleExecution": false,
+  "publication": false,
+  "productionWrites": false,
+  "deployed": false,
+  "goalToolObservedStatus": "blocked (read-only observed; no status mutation or completion inferred)"
+}
