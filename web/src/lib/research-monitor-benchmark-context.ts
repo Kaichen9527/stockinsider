@@ -199,10 +199,13 @@ export async function loadMonitorBenchmarkContext(db: Pick<SupabaseClient, 'from
         ensure(result.count <= maximum, 'row_bound');
         ensure(expectedCount === undefined || expectedCount === result.count, 'read_incomplete');
         expectedCount = result.count;
-        for (let i = 0; i < result.data.length; i++)
-          readBytes += Buffer.byteLength(JSON.stringify(result.data[i]), 'utf8') + (rows.length + i > 0 ? 1 : 0);
-        ensure(readBytes <= MONITOR_BENCHMARK_LIMITS.readBytes, 'byte_bound');
-        rows.push(...result.data as Row[]); ensure(rows.length <= maximum, 'row_bound');
+        for (const row of result.data) {
+          record(row, keys);
+          readBytes += Buffer.byteLength(JSON.stringify(row), 'utf8') + (rows.length > 0 ? 1 : 0);
+          ensure(readBytes <= MONITOR_BENCHMARK_LIMITS.readBytes, 'byte_bound');
+          rows.push(row);
+        }
+        ensure(rows.length <= maximum, 'row_bound');
         ensure(rows.length <= expectedCount && (result.data.length === count || rows.length === expectedCount), 'read_incomplete');
         if (rows.length === expectedCount) return rows;
       }
