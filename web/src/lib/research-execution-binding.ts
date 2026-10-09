@@ -141,7 +141,33 @@ export function validateResearchExecutionObservation(
 ): { ok: true; observation: ResearchExecutionObservation; principalId: string } | Failure {
   const identity = resolveResearchControllerIdentity(request, expected.role, credentials);
   if (!identity.ok) return identity;
-  if (!HASH.test(expected.principalId) || identity.principalId !== expected.principalId) {
+  return validateObservationBinding(expected, candidate, identity.principalId);
+}
+
+/** Revalidate a saved controller report against current server configuration.
+ * Expected values (including original receivedAt) must come from private immutable
+ * context. This does not authenticate a request or grant publication/live-lease
+ * authority, and is NOT platform execution proof. Receive callers must use the
+ * authenticated wrapper above; never synthesize another role's HTTP Request.
+ */
+export function validateSavedResearchExecutionObservation(
+  expected: ResearchExecutionExpectation, candidate: unknown,
+  credentials: Credentials = configuredCredentials(),
+): { ok: true; observation: ResearchExecutionObservation; principalId: string } | Failure {
+  const principals = resolveConfiguredResearchControllerPrincipals(credentials);
+  if (!principals.ok) return principals;
+  if (expected.role !== 'author' && expected.role !== 'reviewer') {
+    return { ok: false, error: 'research_controller_authority_unavailable' };
+  }
+  return validateObservationBinding(expected, candidate,
+    expected.role === 'author' ? principals.authorPrincipalId : principals.reviewerPrincipalId);
+}
+
+/** Shared structural validation only; no caller can supply an auth bypass flag. */
+function validateObservationBinding(
+  expected: ResearchExecutionExpectation, candidate: unknown, principalId: string,
+): { ok: true; observation: ResearchExecutionObservation; principalId: string } | Failure {
+  if (!HASH.test(expected.principalId) || principalId !== expected.principalId) {
     return { ok: false, error: 'research_execution_principal_mismatch' };
   }
   if (!text(expected.workOwner) || expected.workOwner !== expected.originalLeaseOwner
@@ -186,12 +212,12 @@ export function validateResearchExecutionObservation(
     const author = expected.author;
     const authoredAt = instant(expected.articleAuthoredAt);
     if (!author || !HASH.test(author.principalId) || !UUID.test(author.threadId) || !text(author.invocationId)
-      || author.principalId === identity.principalId || author.threadId === row.threadId
+      || author.principalId === principalId || author.threadId === row.threadId
       || author.invocationId === row.invocationId || authoredAt === null || started < authoredAt) {
       return { ok: false, error: 'research_execution_not_independent' };
     }
   } else if (expected.author !== null || expected.articleAuthoredAt !== null) {
     return { ok: false, error: 'research_execution_binding_mismatch' };
   }
-  return { ok: true, observation: { ...row } as ResearchExecutionObservation, principalId: identity.principalId };
+  return { ok: true, observation: { ...row } as ResearchExecutionObservation, principalId };
 }
