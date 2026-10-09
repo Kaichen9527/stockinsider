@@ -4,9 +4,9 @@
 - [x] Document acquired_at/owner ABA limitation, separate controlled archive binding/generation, retained history/reservations and additive observer integration boundary.
 - [x] Propose lock/predicate profile, finite isolated PG/FD measurements, AFM-01..AFM-11 and honest negative-control/report semantics.
 - [x] Repair root-relayed e0b9 P2s in docs: require exact READ COMMITTED at all control entrypoints; add actual RR-before-revoke negative control and immutable authority-head/private invalidation-journal proposal for unchanged-lease authority ABA. No test execution is claimed.
-- [ ] Independent requirements/design re-review of this exact documentation commit; resolve amendments before code.
-- [ ] Implement only declared isolated harness/fixture paths after review; preserve meaningful REDs and no shared runtime changes.
-- [ ] Lightweight local fixtures, child lifecycle and report-failure tests.
+- [x] Root-relayed unsigned bounded DESIGN PASS on e77362c90bdb425782f12fe960250d154f6b357f/spec547ef3cc, resolving the two documentation P2s before code.
+- [x] Implement first subset in only the three declared harness/fixture paths; retain initial missing-module RED and explicit uncovered acceptance areas. No shared runtime changes.
+- [x] Nine lightweight local fixtures, real FD/hash/restart, child lifecycle and report-failure tests passed; actual PG is pending.
 - [ ] Independent exact harness/fixture code review.
 - [ ] Root VM queue actual PostgreSQL17 concurrent lock/ABA/principal tests and WAL/heap/TOAST/index/private-FD measurements; no skips or substituted mock PASS.
 - [ ] Record measured bounds, uncovered writers/privileges/persistence and source/profile/tool identities; productionReady remains false.

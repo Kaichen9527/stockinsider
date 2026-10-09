@@ -7,7 +7,7 @@ Parent5f46 remains frozen. This branch owns only new documentation at first:
 - openspec/changes/insider-archive-fence-measurement-v2/tasks.md
 - docs/operations/2026-10-09/insider-archive-fence-measurement-handoff.md
 
-After explicit unsigned independent requirements/design PASS, proposed code ownership is limited to scripts/insider-archive-measurement-v2.mjs, scripts/insider-archive-measurement-v2.test.mjs and scripts/fixtures/insider-archive-fence-v2.sql. These files do not exist in this proposal. No production migration is added, and no existing codec/store/lease/route/package file is modified. Root coordinates any future cross-owner work.
+After explicit unsigned independent requirements/design PASS, proposed code ownership is limited to scripts/insider-archive-measurement-v2.mjs, scripts/insider-archive-measurement-v2.test.mjs and scripts/fixtures/insider-archive-fence-v2.sql. The first isolated candidate now adds these three files, following root-relayed unsigned design PASS for exact e77362c. No production migration is added, and no existing codec/store/lease/route/package file is modified. Root coordinates any future cross-owner work.
 
 ## Steps
 
@@ -33,4 +33,6 @@ New private archive binding/attempt/history and eventually multi-purpose physica
 
 ## Independent P2 repair boundary
 
-The e0b9 proposal is superseded for review by this docs-only repair. No harness code exists yet. Isolation checks must precede replay/early return as well as mutations; lock acquisition does not repair a stale transaction snapshot. A file verification captures immutable authority head and private invalidation journal incarnation, not merely active=true. Newer active authority cannot revive that evidence. The fixture journal fingerprint is not a trusted registry or permission source; any unobserved transition, disabled observer/history loss or unreviewed writer leaves coverage incomplete and old verification unusable. Re-review is required before even the isolated implementation begins.
+The e0b9 proposal was superseded by e77362c, which received root-relayed unsigned design PASS. The three-file isolated harness candidate now awaits independent exact-code review. Isolation checks must precede replay/early return as well as mutations; lock acquisition does not repair a stale transaction snapshot. A file verification captures immutable authority head and private invalidation journal incarnation, not merely active=true. Newer active authority cannot revive that evidence. The fixture journal fingerprint is not a trusted registry or permission source; any unobserved transition, disabled observer/history loss or unreviewed writer leaves coverage incomplete and old verification unusable. The e77362c re-review passed before this isolated implementation began; no production integration authority follows from it.
+
+First execution boundary: local lightweight9/9 only. Freeze/review the harness before VM PG/large-FD execution. A successful implemented-subset report is not full AFM acceptance; publication-phase crash and snapshot/PIT integration remain explicit follow-up work. No full Mac build or PostgreSQL run occurred.
