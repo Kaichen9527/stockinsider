@@ -19,13 +19,15 @@ list is valid; research priority is not entry authority.
   Exact null-before, commit/read/replay/restart, concurrent one completion,
   source withdrawal, expiry/takeover and conflicting completion reject; old
   active-work result reader still rejects after completion. Independent code
-  review and normal build running; native handoff HTTP not yet complete.
+  review passed33independent light tests plus4counterexamples; normal build
+  8ewfdfJaY_Fu2Qchszgjd passed. Native handoff HTTP not yet complete.
 - PG1 SQL operator precedence RED and PG2 inconsistent synthetic claim-clock
   fixture RED are preserved. Corrected new fixture before preparation, without
   changing original reader or old acceptance. PG3 nineteen passed; final twenty
   includes incompatible original completion. Logs are in the timestamped report.
 - VM upstream private-result receiptafe260b7 preserves42pass/8fail native RED
-  on actualb8 normal buildAwvYbZjxpDludvMr16gWE,2070server files. Source fixture
+  on actualb8 normal buildAwvYbZjxpDludvMr16gWE,2070server files. Root
+  verified48 raw receipt files against their bytes/SHA. Source fixture
   calculated a different function-toString execution fingerprint from compiled
   receiver. Existing guarded financialSupplement returns actual compiled core
   fingerprint. VM is testing a single-variable negative/positive controller

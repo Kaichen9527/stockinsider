@@ -22,7 +22,11 @@
       "skip": 0
     },
     "types": "pass",
-    "lint": "pass, 33 pre-existing warnings"
+    "lint": "pass, 33 pre-existing warnings",
+    "normalBuild": {
+      "status": "pass",
+      "buildId": "8ewfdfJaY_Fu2Qchszgjd"
+    }
   },
   "redHistory": [
     "PG1 SQL operator precedence needed explicit JSON parentheses; no acceptance changed",
@@ -32,7 +36,7 @@
   "limitations": [
     "Synthetic upstream schema, credentials, observations and prose; actual fixed financial calculation and original observed claim/completion trigger",
     "No actual model dispatch, independent product review, publication, production migration/deployment",
-    "Scoped code review, normal build and native HTTP handoff still pending at checkpoint"
+    "Native HTTP handoff still pending; independent scope is not protected or publication approval"
   ],
   "upstreamVm": {
     "receipt": "afe260b7be4276161f31df9f3f9c530f6e36d9b9",
@@ -42,7 +46,8 @@
       "fail": 8,
       "skip": 0
     },
-    "status": "Source vs compiled calculator fingerprint mismatch diagnosed; counterfactual and correctly bound synthetic controller payload native acceptance in progress, no runtime weakening"
+    "status": "Source vs compiled calculator fingerprint mismatch diagnosed; counterfactual and correctly bound synthetic controller payload native acceptance in progress, no runtime weakening",
+    "rawReceiptFilesRootVerified": 48
   },
   "rawFiles": {
     "unit": {
@@ -76,6 +81,25 @@
     "lint": {
       "bytes": 4956,
       "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    "build": {
+      "bytes": 6501,
+      "sha256": "61321963881eec31aa943e4af7226afc689e9f64e68e17a9fbff1e5d2936aecd"
     }
-  }
+  },
+  "independentCode": {
+    "subject": "492729b349b4ffa6e6a28f9603de30e7ec9fba3e",
+    "tree": "08be2c4b0749c81fa7e421679539dbc6e889240e",
+    "status": "unsigned scoped CODE PASS",
+    "reviewer": "author_input_review_oct08",
+    "independentLightweightPass": 33,
+    "independentAdversarialPass": 4,
+    "pgBuildNativeNotRepeatedByReviewer": true
+  },
+  "ownedSyntheticFailedClusterCleanup": {
+    "path": "/tmp/si-handoff-DW1Kky",
+    "removed": true,
+    "logicalBytes": 43959202
+  },
+  "updatedAt": "2026-10-09T14:04:08.731429+00:00"
 }
