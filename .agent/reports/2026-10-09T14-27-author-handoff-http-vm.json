@@ -2883,10 +2883,49 @@
     }
   ],
   "cleanup": {
-    "ownedProcessesStoppedByHarness": true,
-    "postAcceptanceOwnedLiveProcessCount": 0,
-    "verificationPending": false,
-    "rebuildableCleanupAfterRemotePersistence": "planned exact worktree web/.next, copied web/node_modules, and h492/http-{2409,2383}/data; logs/receipts/source preserved"
+    "completedAt": "2026-10-09T14:29:38.275089+00:00",
+    "remoteReceiptPersistedBeforeCleanup": "e6ee3af74a451997bf1c6665efdcb0b4aab7145f",
+    "remoteVerifiedBy": "git ls-remote origin refs/heads/codex/author-handoff-http-vm-oct09",
+    "firstPrecheckFailure": "Local origin tracking ref missing; cleanup aborted without deletion. Read-only ls-remote confirmed exact remote head before retry.",
+    "ownedLiveProcessCount": 0,
+    "rawFilesVerified": 49,
+    "removedExactRebuildablePaths": [
+      {
+        "path": "/workspace/cloud-author-handoff-http-vm-oct09/web/.next",
+        "removedBytes": 328810496
+      },
+      {
+        "path": "/workspace/cloud-author-handoff-http-vm-oct09/web/node_modules",
+        "removedBytes": 918544384
+      },
+      {
+        "path": "/workspace/cloud-author-packet-artifacts-oct09/h492/http-2409/data",
+        "existed": false
+      },
+      {
+        "path": "/workspace/cloud-author-packet-artifacts-oct09/h492/http-2383/data",
+        "existed": false
+      },
+      {
+        "path": "/workspace/cloud-author-packet-artifacts-oct09/h492/http-2409/cluster",
+        "removedBytes": 64143360,
+        "postmasterPidAbsent": true
+      },
+      {
+        "path": "/workspace/cloud-author-packet-artifacts-oct09/h492/http-2383/cluster",
+        "removedBytes": 64143360,
+        "postmasterPidAbsent": true
+      }
+    ],
+    "freeBeforeBytes": 12358172672,
+    "freeAfterBytes": 13733830656,
+    "preserved": [
+      "All49 raw acceptance files with original bytes and hashes",
+      "Git source and checked receipts",
+      "All previous RED task evidence",
+      "Shared dependency targets and private original evidence"
+    ],
+    "compiledBuildRemovedAfterManifestPreserved": true
   },
   "limitations": [
     "Synthetic sources/jobs/controller credentials/observations/prose; actual pinned public relay financial projection only.",
