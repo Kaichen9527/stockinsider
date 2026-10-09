@@ -228,8 +228,8 @@ async function publicationFixture(t,scenario='positive') {
       rejectSQL('BEGIN ISOLATION LEVEL REPEATABLE READ;'+rpc('publish_research_article_v2',Object.values(pubArgs)),/research_publication_read_committed_required/);assert.equal(audit(),before);
     });
     await check('private company reader is NULL before publication, RC-only and inaccessible to public roles',()=>{
-      const before=audit();assert.equal(sql(rpc('read_research_company_publication_v2',[ids.company])),'null');
-      assert.equal(sql(rpc('read_research_company_publication_v2',[randomUUID()])),'null');
+      const before=audit();assert.equal(sql(`SET ROLE service_role;SELECT read_research_company_publication_v2(${q(ids.company)}::uuid) IS NULL;`),'t');
+      assert.equal(sql(`SET ROLE service_role;SELECT read_research_company_publication_v2(${q(randomUUID())}::uuid) IS NULL;`),'t');
       for(const role of ['anon','authenticated'])assert.throws(()=>sql(`SET ROLE ${role};SELECT read_research_company_publication_v2(${q(ids.company)});`),/permission denied/);
       assert.equal(sql("SELECT coalesce(bool_or(a.grantee=0 AND a.privilege_type='EXECUTE'),false) FROM pg_proc p CROSS JOIN LATERAL aclexplode(p.proacl) a WHERE p.oid='read_research_company_publication_v2(uuid)'::regprocedure;"),'f');
       rejectSQL('BEGIN ISOLATION LEVEL REPEATABLE READ;'+rpc('read_research_company_publication_v2',[ids.company]),/research_publication_view_request/);
