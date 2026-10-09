@@ -94,8 +94,16 @@ for(const symbol of ['2409','2383'])test(`compiled private author result ${symbo
   await t.test('actual result read before reception is null, no assignment or charge added',async()=>{
    const before=audit(),response=await post('api/internal/research-model-reservation',resultIdentity),body=await response.json();assert.equal(response.status,200,JSON.stringify(body));assert.equal(body.result,null);assert.equal(body.controllerReportOnly,true);assert.equal(body.modelDispatched,false);assert.equal(body.publishableResearch,false);assert.equal(audit(),before);
   });
+  await t.test('counterfactual original source fingerprint observation is rejected once with identical all-state audit',async()=>{
+   fixture=authorResultFixture(resultIdentity,sealed,packetResponse.packet);const before=audit();
+   assert.notEqual(fixture.envelope.validatedArticle.calculatorExecutionHash,serverObservedCoreHash);
+   const payloadHash=completeHash(fixture.request),response=await post('api/internal/research-model-reservation',fixture.request),body=await response.json();
+   assert.equal(response.status,409,JSON.stringify(body));assert.equal(body.error,'research_author_result_unavailable');assert.equal(body.retryClaim,false);assert.equal(audit(),before);
+   report.authorResultCounterfactual={payloadHash,sourceArticleHash:fixture.request.observation.articleHash,sourceCoreHash:fixture.envelope.validatedArticle.calculatorExecutionHash,serverObservedCoreHash,status:response.status,responseBody:body,before:JSON.parse(before),after:JSON.parse(audit()),businessAttempts:1};
+   fs.writeFileSync(process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol+'/source-core-counterfactual.json',JSON.stringify({request:fixture.request,receipt:report.authorResultCounterfactual}),{flag:'wx',mode:0o600});
+  });
   await t.test('synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result',async()=>{
-   fixture=authorResultFixture(resultIdentity,sealed,packetResponse.packet);const originalFixture=structuredClone(fixture);
+   const originalFixture=structuredClone(fixture);
    // This controller fixture was validated in source Node, whereas the receiver
    // independently validates with its compiled core. Bind the observed server
    // identity from the existing guarded diagnostic; do not bypass its equality.
@@ -108,7 +116,7 @@ for(const symbol of ['2409','2383'])test(`compiled private author result ${symbo
    fixture.request.observation.articleHash=expectedReceiverArticleHash;
    assert.deepEqual({...fixture.request,observation:{...fixture.request.observation,articleHash:originalFixture.request.observation.articleHash}},originalFixture.request,'raw article, all clocks and other bindings remain untouched');
    assert.deepEqual(fixture.envelope,originalFixture.envelope,'shared fixture envelope is untouched');
-   const identityBinding={sourceCoreHash,serverObservedCoreHash,sourceArticleHash:sourceValidated.articleHash,expectedReceiverArticleHash,sourceValidated,receiverValidated,changedField:'calculatorExecutionHash',requestDiff:['observation.articleHash'],rawArticleHash:completeHash(fixture.request.article),syntheticControllerObservation:true,actualModelExecuted:false};
+   const identityBinding={sourceCoreHash,serverObservedCoreHash,sourceArticleHash:sourceValidated.articleHash,expectedReceiverArticleHash,sourceValidated,receiverValidated,changedField:'calculatorExecutionHash',requestDiff:['observation.articleHash'],sourceRequestHash:completeHash(originalFixture.request),receiverRequestHash:completeHash(fixture.request),rawArticleHash:completeHash(fixture.request.article),syntheticControllerObservation:true,actualModelExecuted:false};
    fs.writeFileSync(process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol+'/single-core-identity-binding.json',JSON.stringify(identityBinding),{flag:'wx',mode:0o600});report.authorResultIdentityBinding=identityBinding;
    const before=JSON.parse(audit());
    const response=await post('api/internal/research-model-reservation',fixture.request),body=await response.json();assert.equal(response.status,200,JSON.stringify(body));responseResult=body;savedResult=body.result;assert.deepEqual(savedResult.payload.validatedArticle,receiverValidated,'receiver independently recalculates the expected compiled identity');
