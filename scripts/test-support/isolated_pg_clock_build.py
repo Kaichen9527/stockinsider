@@ -185,7 +185,8 @@ def bounded_command(arguments, cwd, timeout=30, output_limit=MAX_OUTPUT):
             while selector.get_map() or process.poll() is None:
                 remaining = until - time.monotonic()
                 if remaining <= 0:
-                    raise BuildFailure('build_deadline')
+                    raise BuildFailure('build_deadline:' + str(arguments[:2]) + ':'
+                                       + output.decode('utf-8', errors='replace')[-4096:])
                 for key, _event in selector.select(min(remaining, 0.1)):
                     chunk = os.read(key.fd, min(65536, output_limit + 1 - len(output)))
                     output.extend(chunk)
