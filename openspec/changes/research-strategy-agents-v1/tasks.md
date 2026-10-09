@@ -227,3 +227,10 @@ Continue on existing CodexVM; VPSheavycapacity is not a development stop conditi
 - [x] Recorded independentobservedapproval and snapshotoriginalPG16/16+Linuxjournal1/1 aftertwoactualSQLred→green repairs.
 - [x] Created/reread hourly engineeringheartbeat stockinsider; activeworkdedupe, preservedauthorization/rights/history, no falseproductenablement.
 - [ ] Repair/reviewpublicationancestorrights/RRisolation/exact-replayfindings; finishactualsnapshotHTTPstack; diagnoseCI-onlynmhang withoutfakeclockfallback; finishrealroles/strategies/protectedrelease/schedules. See progress-convergence-1222.md.
+
+## 2026-10-09 12:35 Taipei — actual transport and independent source-fence acceptance
+
+- [x] Snapshot exact d274: VM original PG16/16, Linux journal1/1 and real guarded Next/PostgREST/PG transport6/6, zero skip; types/lint/normal build passed. Exact source/build/resource receipts are sealed separately at c6e5b753. Synthetic fixture privileges are not production ACL or full-market coverage.
+- [x] Source-fence exact05a: independent original PG15/15 and prior ancestry/RR/replay counterexamples pass; unsigned scoped code approval, unsupported ancestry remains fail closed.
+- [x] Clock exact770: VM original three PG suites plus dedicated canaries6/6 zero skip. CI0cf pinned build/original research PG/dedicated canary steps pass; full downstream runtime is still running and earlier CI nm/Mac probe failures remain unexplained.
+- [ ] Complete genuine v2 role execution, independent article review and fenced submission; full source/strategy/production/schedule acceptance remains open. See progress-convergence-1235.md; no claim that the entire original plan is finished.

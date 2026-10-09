@@ -1,0 +1,25 @@
+# StockInsider — 2026-10-09 12:35 Taipei continuation
+
+This checkpoint updates the earlier dated ledger; it does not replace its red results. Work continues in the existing Codex VM. No main merge, production migration, deployment or product scheduler activation has occurred.
+
+## Actual implementation acceptance
+
+- Insider snapshot `d274726ee2824f09539cc9197b5acd8535553b75`: VM original PostgreSQL cases **16/16**, separate Linux journal **1/1**, and actual guarded Next → PostgREST 16.3 → PostgreSQL 17.11 transport **6/6**, all zero skip. Transport covers unauthorized 401 with no write, 1,001 rows over three rounds and four empty snapshots, exact replay without resetting acquisition time, 12 MiB raw / 16 MiB base64 admission and over-limit rejection, and atomic rejection of an oversized projection. Both SQL corrections and harness lifecycle/verdict repairs have independent unsigned scoped code approvals. PR #326 ordinary runtime CI also passes; protected requirements/architecture/exact-review still fail.
+- Snapshot exact checkout types, lint and normal production build passed. Lint retains 33 existing warnings. Build source web tree is `3f310512348cf79898a2cad162671d0493d4530b`, build ID `MJBWiU_0RzqvliZs1plFz`; no dotenv contents were read. Peak sampled aggregate RSS was 2,230,738,944 bytes during build; largest observed task disk was 1,345,310,720 bytes during actual transport. Sampling can miss short-lived or reparented processes. These are measured bounded VM tasks, not a long-term quota guarantee.
+- Snapshot transport uses synthetic preadmitted fixtures and explicit isolated service operations. Official raw transport, full-market completeness, installed production minimum privileges and default activation remain unaccepted. Preserve the prior `c96` 7-pass/9-fail and `6fd` 12-pass/4-fail receipts.
+- Publication source fence `05aebcb8e749a3cd32b5050de65331cf4424d452`: maker and independent original PostgreSQL suite **15/15**, zero skip. The independent reviewer also reran the two previously failing counterexamples: revoked parent / withdrawn grandparent reposts are refused, and an older REPEATABLE READ writer is refused before mutation. REPEATABLE READ and SERIALIZABLE seal/assert are refused; conflict replay and no-op update do not create spurious invalidations. Independent verdict is unsigned scoped code pass with no new P1/P2. Unsupported ancestry remains fail closed; this is a prerequisite, not genuine author/reviewer execution or publication authority.
+- Clock exact `77002376ae3a044046f3ba0c2284b259b996d9a6`: VM built the approved pinned unmodified library with `-UFAKE_SLEEP` in 0.94 seconds. The original three PostgreSQL suites plus dedicated open/closed/restart/100 ms statement-timeout canaries passed **6/6**, zero skip. Signal offsets agree at 0/+3600/−3600; same ELF direct/helper `nm` completed in 1–4 ms. The CI-specific `nm` hang was not reproduced or explained.
+- Clock successor `0cf40067b0279c429970f4cb98841dd2d4bd83e7`, PR #324 run `37883620967` / job `113668619510`: actual pinned clock build, original research/real-PG suite and dedicated clock canary steps pass. At this checkpoint the downstream full product/runtime step is still running. Failure-only trace did not execute in this passing build; prior two CI build failures and the root Mac descendant probe failure remain recorded. A later successful run does not establish their cause.
+
+## Durable receipts and next work
+
+VM documentation commit `c6e5b753b775931f553ade05b7078cd4cc10115c` preserves both actual receipts. Root fetched and parsed each JSON and independently checked its SHA-256:
+
+| Receipt | Bytes | SHA-256 |
+|---|---:|---|
+| `.agent/reports/2026-10-09T04-25-insider-d274-vm.json` | 7,107 | `1737acef810f84cc1361709aa2f3910be0c7ea9531f83af619268cee97bb0c29` |
+| `.agent/reports/2026-10-09T04-25-clock-770-vm.json` | 10,159 | `43ef5dca9f046a0661c58ccdff38f4f279ccf754feba3ed9fbf97ff2f4b2ed7b` |
+
+The VM continues with immutable v2 research inputs and the trusted role execution boundary, retaining original leases and shared budgets. Distinct genuine model executions, independent editorial review and fenced article submission are still required; synthetic executions and manual AUO/EMC working drafts cannot substitute for them. Remaining source breadth, complete point-in-time candidate strategy evidence, company-action entitlements, user-approved adoption, protected release, live schedules and five actual trading days remain open.
+
+The 11:57 expanded VPS observation and 12:05 storage-placement matrix remain current: approximately 87.95 GB available, with no new StockInsider deletion or configuration change. Rebuildable dependencies, builds, isolated test databases and bounded experiment scratch belong on the VM. Canonical stock history, research evidence, cohort/discovery records, necessary experiment results and ledgers remain durable; the entire shared PostgreSQL directory is not assumed exclusively StockInsider-owned.
