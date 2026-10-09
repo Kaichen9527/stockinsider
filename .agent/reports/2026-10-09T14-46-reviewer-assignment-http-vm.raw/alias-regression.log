@@ -1,0 +1,15 @@
+TAP version 13
+# Subtest: oversized negative fixture detaches shared original input, preserving every original binding
+ok 1 - oversized negative fixture detaches shared original input, preserving every original binding
+  ---
+  duration_ms: 1.200713
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 54.758184

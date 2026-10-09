@@ -1,0 +1,103 @@
+TAP version 13
+# (node:195247) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:195247) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-assignment-http-vm-oct09/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-assignment-http-vm-oct09/web/package.json.
+# Subtest: reviewer assignment: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+    # Subtest: no reviewer reservation before exact author handoff
+    ok 1 - no reviewer reservation before exact author handoff
+      ---
+      duration_ms: 104.512201
+      ...
+    # Subtest: server configuration author rotation, A-R swap and old-author-as-reviewer reject before reservation
+    ok 2 - server configuration author rotation, A-R swap and old-author-as-reviewer reject before reservation
+      ---
+      duration_ms: 102.811524
+      ...
+    # Subtest: global active fixture slot blocks with null and zero reservation/assignment writes
+    ok 3 - global active fixture slot blocks with null and zero reservation/assignment writes
+      ---
+      duration_ms: 301.320616
+      ...
+    # Subtest: original7200 daily budget blocks with no active slot or writes; synthetic temporary quota rows rollback
+    ok 4 - original7200 daily budget blocks with no active slot or writes; synthetic temporary quota rows rollback
+      ---
+      duration_ms: 88.015167
+      ...
+    # Subtest: injected assignment insertion failure rolls back original reservation and charge atomically
+    ok 5 - injected assignment insertion failure rolls back original reservation and charge atomically
+      ---
+      duration_ms: 218.232741
+      ...
+    # Subtest: concurrent exact admission creates one assignment and only one original1800 charge
+    ok 6 - concurrent exact admission creates one assignment and only one original1800 charge
+      ---
+      duration_ms: 179.532304
+      ...
+    # Subtest: actual calculator and selected public source packet, no principals/owner/fulltext/model dispatch
+    ok 7 - actual calculator and selected public source packet, no principals/owner/fulltext/model dispatch
+      ---
+      duration_ms: 251.928848
+      ...
+    # Subtest: exact admission/read/packet and actual PG restart preserve original bytes, clocks and budget
+    ok 8 - exact admission/read/packet and actual PG restart preserve original bytes, clocks and budget
+      ---
+      duration_ms: 1086.084074
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(v.source_seal_id)"
+# PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 35 at PERFORM
+# PL/pgSQL function read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) line 8 at assignment
+# ERROR:  research_author_handoff_claim
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 49 at RAISE
+# PL/pgSQL function read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) line 8 at assignment
+# ERROR:  research_author_handoff_claim
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 49 at RAISE
+# PL/pgSQL function read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) line 8 at assignment
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+    # Subtest: reviewer rotation cannot adopt existing assignment; old author reader stays rejected
+    ok 9 - reviewer rotation cannot adopt existing assignment; old author reader stays rejected
+      ---
+      duration_ms: 103.012468
+      ...
+    # Subtest: withdrawal/expiry/takeover fail inside transaction and rollback without altering original history
+    ok 10 - withdrawal/expiry/takeover fail inside transaction and rollback without altering original history
+      ---
+      duration_ms: 229.865187
+      ...
+    # Subtest: reviewer assignment immutable and service direct read/mutation denied
+    ok 11 - reviewer assignment immutable and service direct read/mutation denied
+      ---
+      duration_ms: 91.655607
+      ...
+    # Subtest: closed counter-review reservation rejects read/replay/packet without renewing or refunding
+    ok 12 - closed counter-review reservation rejects read/replay/packet without renewing or refunding
+      ---
+      duration_ms: 215.891377
+      ...
+    1..12
+ok 1 - reviewer assignment: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+  ---
+  duration_ms: 5230.434014
+  ...
+1..1
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5528.686634

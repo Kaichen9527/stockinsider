@@ -1,0 +1,20 @@
+{
+  "runtimeSubject": "7f6259e88f52622cc909653f217d41c820e7e7eb",
+  "testSubject": "be668ef056de44f8849571cf5d6769200874c9b7",
+  "testTree": "0013c337d70fd26a2d10ae3520dae3e575b265e1",
+  "webTree": "0a3da16d324baaa05af21384a8f79f08f931de38",
+  "runtimeInputsUnchanged": true,
+  "dotenvFilenameInventory": [
+    ".env.example",
+    "scraper/.env.example"
+  ],
+  "clockLibrarySha256": "483dfc28d0b87718ce50b48d382f03b8615fe861c5f859c958ddfc934fa0b3c6",
+  "nodeVersion": "v22.14.0",
+  "pgVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+  "runtimeBlobs": {
+    "web/src/lib/research-reviewer-assignment.ts": "3ff9ac14d3aa54939a5780ba460ff360f38ac482",
+    "migrations/20261009_research_reviewer_assignments_v2.sql": "d9c07b4f7c2d2293b1d6ec9a57f32fa7ab1fd261",
+    "scripts/research-local-inbox-dataplane.mjs": "2b8fea66a47e309b572403a3331ab136af51bd54",
+    "web/src/lib/research-execution-binding.ts": "afc66cbfba468ef0a4e9ca1f93f322a980e3636b"
+  }
+}

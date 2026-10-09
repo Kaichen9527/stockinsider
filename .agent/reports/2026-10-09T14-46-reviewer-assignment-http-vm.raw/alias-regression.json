@@ -1,0 +1,19 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "alias-regression",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "scripts/research-reviewer-assignment-http-fixture.test.mjs"
+  ],
+  "startedAt": "2026-10-09T14:43:08.689Z",
+  "completedAt": "2026-10-09T14:43:08.903Z",
+  "elapsedSeconds": 0.21358281999710016,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 27009024,
+  "observedTaskDiskPeakBytes": 1515679744,
+  "availableBeforeBytes": 12331057152,
+  "availableAfterBytes": 12331048960,
+  "guardTermination": null
+}

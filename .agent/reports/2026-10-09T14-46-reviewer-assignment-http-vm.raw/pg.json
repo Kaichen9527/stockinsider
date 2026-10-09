@@ -1,0 +1,20 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "pg",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-reporter=tap",
+    "scripts/research-reviewer-assignment-postgres.test.mjs"
+  ],
+  "startedAt": "2026-10-09T14:37:47.746Z",
+  "completedAt": "2026-10-09T14:37:53.418Z",
+  "elapsedSeconds": 5.671550690982258,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 189546496,
+  "observedTaskDiskPeakBytes": 957280256,
+  "availableBeforeBytes": 12775936000,
+  "availableAfterBytes": 12775923712,
+  "guardTermination": null
+}

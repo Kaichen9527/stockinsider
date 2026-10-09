@@ -1,0 +1,370 @@
+{
+  "symbol": "2409",
+  "mode": "read-only post-failure SQL audit; no application retries or new mutations",
+  "startedAt": "2026-10-09T14:43:53.610319+00:00",
+  "completedAt": "2026-10-09T14:43:53.739812+00:00",
+  "reconstructedOriginalSealRequest": {
+    "action": "sealResearchInput",
+    "owner": "synthetic-financial-http-owner",
+    "jobId": "e3ab473d-9044-4b64-8b72-d650d9b3059d",
+    "attempt": 1,
+    "reservationId": "d7d6f006-03e2-4135-9bd7-e241b4b6069c",
+    "scope": "research_observed_v1",
+    "snapshotHash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42",
+    "preparationId": "e35d8d27-0ce0-424f-8deb-2a0975166eb5",
+    "preparationHash": "27101737183721e85c4048f888d2d92facc2dd1ad7730f8f510875c6370faefc",
+    "expectedArtifactManifestHash": "1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314",
+    "expectedCalculatorExecutionHash": "79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"
+  },
+  "requestProvenance": "Derived from unchanged original persisted preparation request and exact Git mapping; original wire body was not separately captured.",
+  "counts": {
+    "stocks": 0,
+    "source_raw_documents": 4,
+    "stock_instruments_v3": 0,
+    "research_deep_jobs_v1": 1,
+    "research_source_seals_v2": 1,
+    "research_author_results_v2": 0,
+    "research_deep_job_attempts_v1": 1,
+    "research_model_completions_v1": 0,
+    "research_author_assignments_v2": 0,
+    "research_input_preparations_v2": 1,
+    "research_model_reservations_v1": 1,
+    "research_reviewer_assignments_v2": 0,
+    "research_article_input_revisions_v2": 0,
+    "research_source_seal_invalidations_v2": 0
+  },
+  "rowHashes": {
+    "stocks": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "source_raw_documents": "a65c93681f2e52b66b01c619f21888caadd4c61ab99a3a4ef78a6b5953a7def8",
+    "stock_instruments_v3": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "research_deep_jobs_v1": "8d675c53c6bcb46f419fce8a756b5af224711b2ba3ed8607a6ecc44476bbe8dd",
+    "research_source_seals_v2": "4218ad96df7d18b4f1dbff0a2362055b758d65bf15af1490f131dd634960c0ba",
+    "research_author_results_v2": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "research_deep_job_attempts_v1": "7469bd9feaab7e51d3b07f50307efc4b7cb46eab567d16df006afa5610466e18",
+    "research_model_completions_v1": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "research_author_assignments_v2": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "research_input_preparations_v2": "9fcc81de76fa24851b2c5836917f52535ec33451b9f69a11664ddaec1912178c",
+    "research_model_reservations_v1": "4e1593f98fbb92fca8d79707662ffc0ffbe03ab0f58ce8dda35c634f0e1d935f",
+    "research_reviewer_assignments_v2": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "research_article_input_revisions_v2": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "research_source_seal_invalidations_v2": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "originalRows": {
+    "stocks": [],
+    "source_raw_documents": [
+      {
+        "id": "0644b2a6-ba43-4f3f-a58a-364d6a985818",
+        "title": "REPORTED｜定錨公開貼文認為AI封裝尺寸與載板層數增加，可能拉高單顆晶片消耗的載板產能，並討論全球擴產及新製程的資本密集度。",
+        "summary": "定錨公開貼文認為AI封裝尺寸與載板層數增加，可能拉高單顆晶片消耗的載板產能，並討論全球擴產及新製程的資本密集度。",
+        "symbols": [],
+        "metadata": {
+          "risk": "這是7月公開分析，不是10月最新訂單確認；台系客戶、投資金額與獲利影響仍須回到公司資料查核。",
+          "catalyst": "供產業研究查核；不代表公司被提及或訂單確認。",
+          "visibility": "public",
+          "claim_status": "reported",
+          "content_form": "research_summary",
+          "content_hash": "d4726753c346e8d1dd76c5b197d074efecf3d5a80a3d8907dee65ac95623e56c",
+          "canonical_url": "https://t.me/investanchors/869",
+          "subject_scope": "industry_context",
+          "industry_terms": [
+            "EMIB",
+            "先進封裝",
+            "玻璃核心基板",
+            "載板"
+          ],
+          "timed_excerpts": [],
+          "rights_boundary": "public_citation",
+          "acquisition_mode": "local_codex_research_inbox",
+          "first_observed_at": "2026-10-08T09:18:07.785Z",
+          "parent_source_url": null,
+          "acquisition_method": "public_document",
+          "revision_observed_at": "2026-10-08T09:18:07.785Z"
+        },
+        "platform": "research_inbox_telegram",
+        "confidence": 0.65,
+        "external_id": null,
+        "collected_at": "2026-10-08T09:18:07.785+00:00",
+        "content_text": "定錨公開貼文認為AI封裝尺寸與載板層數增加，可能拉高單顆晶片消耗的載板產能，並討論全球擴產及新製程的資本密集度。\n催化：供產業研究查核；不代表公司被提及或訂單確認。\n風險：這是7月公開分析，不是10月最新訂單確認；台系客戶、投資金額與獲利影響仍須回到公司資料查核。",
+        "document_url": "https://t.me/investanchors/869#si-revision-d4726753c346e8d1",
+        "published_at": "2026-07-07T03:33:38+00:00",
+        "publisher_key": "telegram:investanchors",
+        "publisher_name": "InvestAnchors",
+        "sentiment_label": null,
+        "source_entity_id": null,
+        "stance_semantics": "neutral",
+        "content_semantics": "editorial_discussion",
+        "canonical_content_hash": "d4726753c346e8d1dd76c5b197d074efecf3d5a80a3d8907dee65ac95623e56c"
+      },
+      {
+        "id": "74401c76-8a2f-4f80-af9e-c4c99bc6e124",
+        "title": "REPORTED｜Synthetic company mention for isolated controller and financial calculator acceptance. Not a real source or an investmen",
+        "summary": "Synthetic company mention for isolated controller and financial calculator acceptance. Not a real source or an investment thesis.",
+        "symbols": [
+          "2409"
+        ],
+        "metadata": {
+          "risk": "No orders, qualification, or independent model execution.",
+          "catalyst": "No actual catalyst; developer fixture only.",
+          "visibility": "public",
+          "claim_status": "reported",
+          "content_form": "research_summary",
+          "content_hash": "cd45716504c6e18ace22c9a5a2b983487fcc86196fc043f50ac90d10b74cb0e3",
+          "canonical_url": "https://example.invalid/synthetic-financial-http/2409",
+          "subject_scope": "company_mentions",
+          "industry_terms": [],
+          "timed_excerpts": [],
+          "rights_boundary": "public_citation",
+          "acquisition_mode": "local_codex_research_inbox",
+          "first_observed_at": "2026-10-09T14:40:00.967Z",
+          "parent_source_url": null,
+          "acquisition_method": "public_document",
+          "revision_observed_at": "2026-10-09T14:40:00.967Z"
+        },
+        "platform": "research_inbox_threads",
+        "confidence": 0.65,
+        "external_id": null,
+        "collected_at": "2026-10-09T14:40:00.967+00:00",
+        "content_text": "Synthetic company mention for isolated controller and financial calculator acceptance. Not a real source or an investment thesis.\n催化：No actual catalyst; developer fixture only.\n風險：No orders, qualification, or independent model execution.",
+        "document_url": "https://example.invalid/synthetic-financial-http/2409#si-revision-cd45716504c6e18a",
+        "published_at": "2026-10-09T14:40:00.967+00:00",
+        "publisher_key": "threads:synthetic fixture, not a publisher observation",
+        "publisher_name": "synthetic fixture, not a publisher observation",
+        "sentiment_label": null,
+        "source_entity_id": null,
+        "stance_semantics": "neutral",
+        "content_semantics": "editorial_discussion",
+        "canonical_content_hash": "cd45716504c6e18ace22c9a5a2b983487fcc86196fc043f50ac90d10b74cb0e3"
+      },
+      {
+        "id": "cc050bf7-c774-4efb-853c-14247aa1d86a",
+        "title": "REPORTED｜定錨公開貼文將AI晶片測試需求連結到探針數增加、MEMS及高電流要求，也提出維修與清潔耗材可能受惠的方向。",
+        "summary": "定錨公開貼文將AI晶片測試需求連結到探針數增加、MEMS及高電流要求，也提出維修與清潔耗材可能受惠的方向。",
+        "symbols": [],
+        "metadata": {
+          "risk": "未點名台股公司，不能直接增加任何公司的獨立討論根源或當成訂單。未取得連結會員全文。",
+          "catalyst": "供產業研究查核；不代表公司被提及或訂單確認。",
+          "visibility": "public",
+          "claim_status": "reported",
+          "content_form": "research_summary",
+          "content_hash": "0de8effc657d7e00fb80e81d70cbda321f8544aeb7eb982e18e08275ead0f173",
+          "canonical_url": "https://t.me/investanchors/881",
+          "subject_scope": "industry_context",
+          "industry_terms": [
+            "CPO測試",
+            "MEMS",
+            "探針卡",
+            "高電流"
+          ],
+          "timed_excerpts": [],
+          "rights_boundary": "public_citation",
+          "acquisition_mode": "local_codex_research_inbox",
+          "first_observed_at": "2026-10-08T09:18:07.785Z",
+          "parent_source_url": null,
+          "acquisition_method": "public_document",
+          "revision_observed_at": "2026-10-08T09:18:07.785Z"
+        },
+        "platform": "research_inbox_telegram",
+        "confidence": 0.65,
+        "external_id": null,
+        "collected_at": "2026-10-08T09:18:07.785+00:00",
+        "content_text": "定錨公開貼文將AI晶片測試需求連結到探針數增加、MEMS及高電流要求，也提出維修與清潔耗材可能受惠的方向。\n催化：供產業研究查核；不代表公司被提及或訂單確認。\n風險：未點名台股公司，不能直接增加任何公司的獨立討論根源或當成訂單。未取得連結會員全文。",
+        "document_url": "https://t.me/investanchors/881#si-revision-0de8effc657d7e00",
+        "published_at": "2026-09-14T12:10:13+00:00",
+        "publisher_key": "telegram:investanchors",
+        "publisher_name": "InvestAnchors",
+        "sentiment_label": null,
+        "source_entity_id": null,
+        "stance_semantics": "neutral",
+        "content_semantics": "editorial_discussion",
+        "canonical_content_hash": "0de8effc657d7e00fb80e81d70cbda321f8544aeb7eb982e18e08275ead0f173"
+      },
+      {
+        "id": "e540f0de-1c64-44dd-8b05-d30bbf96b480",
+        "title": "REPORTED｜定錨公開貼文指出光引擎檢測可能影響封裝良率，並明說當時檢測流程及供應鏈尚在形成。",
+        "summary": "定錨公開貼文指出光引擎檢測可能影響封裝良率，並明說當時檢測流程及供應鏈尚在形成。",
+        "symbols": [],
+        "metadata": {
+          "risk": "沒有友達或其他台股客戶訂單確認。與同作者Threads相似內容屬同源傳播，不能算成另一獨立確認；未取得會員全文。",
+          "catalyst": "供產業研究查核；不代表公司被提及或訂單確認。",
+          "visibility": "public",
+          "claim_status": "reported",
+          "content_form": "research_summary",
+          "content_hash": "26abf50a3340205a79b2b297d9b55119a4f02fd0dd3768f1f9d7bbdbc3a1fb79",
+          "canonical_url": "https://t.me/investanchors/882",
+          "subject_scope": "industry_context",
+          "industry_terms": [
+            "CPO",
+            "光引擎",
+            "檢測",
+            "良率"
+          ],
+          "timed_excerpts": [],
+          "rights_boundary": "public_citation",
+          "acquisition_mode": "local_codex_research_inbox",
+          "first_observed_at": "2026-10-08T09:18:07.785Z",
+          "parent_source_url": null,
+          "acquisition_method": "public_document",
+          "revision_observed_at": "2026-10-08T09:18:07.785Z"
+        },
+        "platform": "research_inbox_telegram",
+        "confidence": 0.65,
+        "external_id": null,
+        "collected_at": "2026-10-08T09:18:07.785+00:00",
+        "content_text": "定錨公開貼文指出光引擎檢測可能影響封裝良率，並明說當時檢測流程及供應鏈尚在形成。\n催化：供產業研究查核；不代表公司被提及或訂單確認。\n風險：沒有友達或其他台股客戶訂單確認。與同作者Threads相似內容屬同源傳播，不能算成另一獨立確認；未取得會員全文。",
+        "document_url": "https://t.me/investanchors/882#si-revision-26abf50a3340205a",
+        "published_at": "2026-09-18T05:52:16+00:00",
+        "publisher_key": "telegram:investanchors",
+        "publisher_name": "InvestAnchors",
+        "sentiment_label": null,
+        "source_entity_id": null,
+        "stance_semantics": "neutral",
+        "content_semantics": "editorial_discussion",
+        "canonical_content_hash": "26abf50a3340205a79b2b297d9b55119a4f02fd0dd3768f1f9d7bbdbc3a1fb79"
+      }
+    ],
+    "stock_instruments_v3": [],
+    "research_deep_jobs_v1": [
+      {
+        "job_id": "e3ab473d-9044-4b64-8b72-d650d9b3059d",
+        "status": "running",
+        "symbol": "2409",
+        "attempts": 1,
+        "stock_id": null,
+        "created_at": "2026-10-09T14:40:13.643476+00:00",
+        "queue_rank": 1,
+        "receipt_id": null,
+        "week_start": "2026-10-05",
+        "finished_at": null,
+        "lease_owner": "synthetic-financial-http-owner",
+        "research_scope": "research_observed_v1",
+        "priority_run_id": "578a89af-211f-4a0d-bede-1a98ad9c37fc",
+        "terminal_reason": null,
+        "lease_expires_at": "2026-10-09T15:10:13.901462+00:00",
+        "research_company_id": "df585b3d-af04-40fd-ba35-879e93a96ca1",
+        "observed_snapshot_hash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42"
+      }
+    ],
+    "research_source_seals_v2": [
+      {
+        "cutoff": "2026-10-09T14:40:14.598717+00:00",
+        "seal_id": "e039e5fe-e94e-4c13-9d0d-a1fc03a6c86d",
+        "documents": [
+          {
+            "id": "74401c76-8a2f-4f80-af9e-c4c99bc6e124",
+            "root": "https://example.invalid/synthetic-financial-http/2409",
+            "rights": "public_citation",
+            "rowHash": "0ac0d35b458ab00f061f905a4a1fa46974da6b1565f75b9d43d5244a4949a4d2",
+            "observedAt": "2026-10-09T14:40:00.967+00:00",
+            "publishedAt": "2026-10-09T14:40:00.967+00:00"
+          }
+        ],
+        "received_at": "2026-10-09T14:40:14.811781+00:00",
+        "request_hash": "0e054fe9cc3a204378bd1f4e55567960cb85ec01cbed9fbd8ed3edea5df23d50"
+      }
+    ],
+    "research_author_results_v2": [],
+    "research_deep_job_attempts_v1": [
+      {
+        "id": "2e629575-ecce-46ed-8471-ed4c33496e04",
+        "owner": "synthetic-financial-http-owner",
+        "job_id": "e3ab473d-9044-4b64-8b72-d650d9b3059d",
+        "attempt": 1,
+        "claimed_at": "2026-10-09T14:40:13.903238+00:00",
+        "lease_expires_at": "2026-10-09T15:10:13.901462+00:00"
+      }
+    ],
+    "research_model_completions_v1": [],
+    "research_author_assignments_v2": [],
+    "research_input_preparations_v2": [
+      {
+        "job_id": "e3ab473d-9044-4b64-8b72-d650d9b3059d",
+        "attempt": 1,
+        "payload": {
+          "gaps": [
+            "financial_input_revision_missing",
+            "trusted_calculator_not_bound",
+            "original_model_not_selected",
+            "trusted_execution_authority_unavailable"
+          ],
+          "scope": "research_observed_v1",
+          "status": "draft_incomplete",
+          "symbol": "2409",
+          "stockId": null,
+          "financial": null,
+          "calculator": null,
+          "originalJob": {
+            "jobId": "e3ab473d-9044-4b64-8b72-d650d9b3059d",
+            "owner": "synthetic-financial-http-owner",
+            "attempt": 1,
+            "leaseExpiresAt": "2026-10-09T15:10:13.901462+00:00"
+          },
+          "snapshotHash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42",
+          "entryEligible": false,
+          "mappingDigest": "dc5ef91136aa3ab78d426b35aa85331e26cf7e7b6a75397a4bb2713f7589469b",
+          "priorityRunId": "578a89af-211f-4a0d-bede-1a98ad9c37fc",
+          "schemaVersion": "research-input-preparation-v2",
+          "researchCutoff": "2026-10-09T14:40:14.598717+00:00",
+          "sourceManifest": [
+            {
+              "id": "74401c76-8a2f-4f80-af9e-c4c99bc6e124",
+              "root": "https://example.invalid/synthetic-financial-http/2409",
+              "rights": "public_citation",
+              "rowHash": "0ac0d35b458ab00f061f905a4a1fa46974da6b1565f75b9d43d5244a4949a4d2",
+              "observedAt": "2026-10-09T14:40:00.967+00:00",
+              "publishedAt": "2026-10-09T14:40:00.967+00:00"
+            }
+          ],
+          "discoveryCutoff": "2026-10-09T14:40:01.981+00:00",
+          "modelDispatched": false,
+          "strategyApproved": false,
+          "priorityInputHash": "4a035c277d94a782e9bb56bcf9a4e7d5752c089dba5a143d067f41447fd66558",
+          "researchCompanyId": "df585b3d-af04-40fd-ba35-879e93a96ca1",
+          "researchQualified": false,
+          "originalModelCutoff": null,
+          "originalReservation": {
+            "startedAt": "2026-10-09T14:40:13.901462+00:00",
+            "reservationId": "d7d6f006-03e2-4135-9bd7-e241b4b6069c",
+            "leaseExpiresAt": "2026-10-09T15:10:13.901462+00:00"
+          },
+          "publishableResearch": false,
+          "sourceSelectionComplete": false
+        },
+        "request": {
+          "jobId": "e3ab473d-9044-4b64-8b72-d650d9b3059d",
+          "owner": "synthetic-financial-http-owner",
+          "scope": "research_observed_v1",
+          "attempt": 1,
+          "bundleId": null,
+          "snapshotHash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42",
+          "reservationId": "d7d6f006-03e2-4135-9bd7-e241b4b6069c",
+          "sourceDocumentIds": [
+            "74401c76-8a2f-4f80-af9e-c4c99bc6e124"
+          ]
+        },
+        "input_hash": "27101737183721e85c4048f888d2d92facc2dd1ad7730f8f510875c6370faefc",
+        "admitted_at": "2026-10-09T14:40:14.598717+00:00",
+        "request_hash": "25baf9bfe20eb1f91d3297ae6054eff4015c5e9cc4639286a44f0d623021fc01",
+        "logical_bytes": 2591,
+        "preparation_id": "e35d8d27-0ce0-424f-8deb-2a0975166eb5",
+        "reservation_id": "d7d6f006-03e2-4135-9bd7-e241b4b6069c",
+        "source_seal_id": "e039e5fe-e94e-4c13-9d0d-a1fc03a6c86d"
+      }
+    ],
+    "research_model_reservations_v1": [
+      {
+        "role": "company_research",
+        "owner": "synthetic-financial-http-owner",
+        "work_key": "deep:e3ab473d-9044-4b64-8b72-d650d9b3059d:1",
+        "started_at": "2026-10-09T14:40:13.901462+00:00",
+        "taipei_day": "2026-10-09",
+        "reservation_id": "d7d6f006-03e2-4135-9bd7-e241b4b6069c",
+        "lease_expires_at": "2026-10-09T15:10:13.901462+00:00",
+        "reserved_seconds": 1800
+      }
+    ],
+    "research_reviewer_assignments_v2": [],
+    "research_article_input_revisions_v2": [],
+    "research_source_seal_invalidations_v2": []
+  },
+  "actualModelDispatched": false
+}

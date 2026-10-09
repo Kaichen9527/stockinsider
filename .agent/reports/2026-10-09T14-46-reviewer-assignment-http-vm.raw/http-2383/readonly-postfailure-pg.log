@@ -1,0 +1,11 @@
+2026-10-09 14:43:53.878 UTC [196938] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-09 14:43:53.879 UTC [196938] LOG:  listening on Unix socket "/workspace/cloud-author-packet-artifacts-oct09/r7f/http-2383/socket/.s.PGSQL.36379"
+2026-10-09 14:43:53.882 UTC [196941] LOG:  database system was shut down at 2026-10-09 14:40:52 UTC
+2026-10-09 14:43:53.884 UTC [196938] LOG:  database system is ready to accept connections
+2026-10-09 14:43:53.986 UTC [196938] LOG:  received fast shutdown request
+2026-10-09 14:43:53.987 UTC [196938] LOG:  aborting any active transactions
+2026-10-09 14:43:53.988 UTC [196938] LOG:  background worker "logical replication launcher" (PID 196944) exited with exit code 1
+2026-10-09 14:43:53.989 UTC [196939] LOG:  shutting down
+2026-10-09 14:43:53.990 UTC [196939] LOG:  checkpoint starting: shutdown immediate
+2026-10-09 14:43:53.993 UTC [196939] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/1C548C8, redo lsn=0/1C548C8
+2026-10-09 14:43:53.996 UTC [196938] LOG:  database system is shut down

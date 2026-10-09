@@ -1,0 +1,65 @@
+TAP version 13
+(node:195222) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:195222) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-assignment-http-vm-oct09/web/src/lib/research-reviewer-assignment.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-assignment-http-vm-oct09/web/package.json.
+# Subtest: assignReviewer strict8192 byte body, header discrimination and UTF8
+ok 1 - assignReviewer strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 24.177346
+  ...
+# Subtest: readReviewerAssignment strict8192 byte body, header discrimination and UTF8
+ok 2 - readReviewerAssignment strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 4.719382
+  ...
+# Subtest: readReviewerPacket strict8192 byte body, header discrimination and UTF8
+ok 3 - readReviewerPacket strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 4.374942
+  ...
+# Subtest: body stall cancelled; expired read launches no I/O
+ok 4 - body stall cancelled; expired read launches no I/O
+  ---
+  duration_ms: 31.197161
+  ...
+# Subtest: author, cron, tester and unknown credentials cannot enter reviewer body/DB
+ok 5 - author, cron, tester and unknown credentials cannot enter reviewer body/DB
+  ---
+  duration_ms: 3.122402
+  ...
+# Subtest: 2409 actual fixed calculation, synthetic completed author and atomic reviewer transport
+ok 6 - 2409 actual fixed calculation, synthetic completed author and atomic reviewer transport
+  ---
+  duration_ms: 676.886473
+  ...
+# Subtest: 2383 actual fixed calculation, synthetic completed author and atomic reviewer transport
+ok 7 - 2383 actual fixed calculation, synthetic completed author and atomic reviewer transport
+  ---
+  duration_ms: 332.732105
+  ...
+# Subtest: server configuration and exact credential principal agree without constructing author impersonation
+ok 8 - server configuration and exact credential principal agree without constructing author impersonation
+  ---
+  duration_ms: 0.5695
+  ...
+# Subtest: author/reviewer rotations, credential interchange and old-author-as-reviewer change frozen authority
+ok 9 - author/reviewer rotations, credential interchange and old-author-as-reviewer change frozen authority
+  ---
+  duration_ms: 0.446744
+  ...
+# Subtest: same credential or cron/test/approval alias disables both configuration and request identity
+ok 10 - same credential or cron/test/approval alias disables both configuration and request identity
+  ---
+  duration_ms: 0.805206
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1344.624114

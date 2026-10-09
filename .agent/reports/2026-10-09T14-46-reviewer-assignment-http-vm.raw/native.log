@@ -1,0 +1,411 @@
+TAP version 13
+# (node:195841) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:195841) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-assignment-http-vm-oct09/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-assignment-http-vm-oct09/web/package.json.
+# Subtest: compiled independent reviewer assignment 2409, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 127.642265
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 90.093947
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 12.78068
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 448.301257
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 54.402311
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 10.510573
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 4.112077
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 471.932549
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 83.547787
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 347.026573
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 421.44172
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    not ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 532.988611
+      location: '/workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:47:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        {"ok":false,"error":"research_complete_input_unavailable","outcome":"uncertain","retryClaim":false}
+        
+        409 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 409
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:48:119)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:47:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    1..12
+not ok 1 - compiled independent reviewer assignment 2409, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 19806.16565
+  location: '/workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:16:37'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'revision_id')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    afterBaseline (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:51:79)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async verifyLocalInboxDataPlane (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+    async TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:18:20)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# {"field":"base Q4 display revenue, manual research assumption projection","actual":31090.078766235238,"expectedFrozen":31090.078766235238}
+# Subtest: compiled independent reviewer assignment 2383, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 138.204352
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 54.137033
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 9.044652
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 339.406693
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 28.23712
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 12.0314
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 4.080409
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 477.770464
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 87.771391
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 368.552647
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 456.937447
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 744.245323
+      ...
+    # Subtest: packet marker2 authentication and closed-body rejection leave all rows unchanged
+    ok 13 - packet marker2 authentication and closed-body rejection leave all rows unchanged
+      ---
+      duration_ms: 189.055895
+      ...
+    # Subtest: complete input without original author assignment cannot produce a packet
+    ok 14 - complete input without original author assignment cannot produce a packet
+      ---
+      duration_ms: 282.108119
+      ...
+    # Subtest: existing guarded author admission binds this original input without a new reservation
+    ok 15 - existing guarded author admission binds this original input without a new reservation
+      ---
+      duration_ms: 397.326874
+      ...
+    # Subtest: compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+    ok 16 - compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+      ---
+      duration_ms: 830.607001
+      ...
+    # Subtest: two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+    ok 17 - two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+      ---
+      duration_ms: 2947.014427
+      ...
+    # Subtest: result marker2 auth and closed body reject with unchanged original budget
+    ok 18 - result marker2 auth and closed body reject with unchanged original budget
+      ---
+      duration_ms: 71.405091
+      ...
+    # Subtest: actual result read before reception is null, no assignment or charge added
+    ok 19 - actual result read before reception is null, no assignment or charge added
+      ---
+      duration_ms: 1369.854247
+      ...
+    # Subtest: counterfactual original source fingerprint observation is rejected once with identical all-state audit
+    ok 20 - counterfactual original source fingerprint observation is rejected once with identical all-state audit
+      ---
+      duration_ms: 848.963406
+      ...
+    # Subtest: synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result
+    ok 21 - synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result
+      ---
+      duration_ms: 1506.226114
+      ...
+    # Subtest: changed article or observation single-shot rejected without modifying private draft
+    ok 22 - changed article or observation single-shot rejected without modifying private draft
+      ---
+      duration_ms: 2738.553788
+      ...
+    # Subtest: result exact read/reception replay and actual PG restart preserve full hash/clock/bytes and budget
+    ok 23 - result exact read/reception replay and actual PG restart preserve full hash/clock/bytes and budget
+      ---
+      duration_ms: 5523.764316
+      ...
+    # Subtest: separate reviewer bearer, closed body, mixed header, oversized body reject without writes
+    ok 24 - separate reviewer bearer, closed body, mixed header, oversized body reject without writes
+      ---
+      duration_ms: 71.923461
+      ...
+    # Subtest: reviewer read packet and assign before author handoff reject with zero writes
+    not ok 25 - reviewer read packet and assign before author handoff reject with zero writes
+      ---
+      duration_ms: 24.005122
+      location: '/workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:150:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        {"ok":false,"error":"research_reviewer_request_invalid"}
+        
+        400 !== 409
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 409
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:151:205)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:150:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+      ...
+    # Subtest: handoff exact header auth, closed six keys and result mismatch leave all state unchanged
+    not ok 26 - handoff exact header auth, closed six keys and result mismatch leave all state unchanged
+      ---
+      duration_ms: 51.193727
+      location: '/workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:156:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        400 !== 409
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 409
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:159:137)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:156:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+      ...
+    # Subtest: read before original reservation completion returns null without writing
+    not ok 27 - read before original reservation completion returns null without writing
+      ---
+      duration_ms: 27.297341
+      location: '/workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:161:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        {"ok":false,"error":"research_author_handoff_request_invalid"}
+        
+        400 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:162:104)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:161:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+      ...
+    # Subtest: single original author handoff adds only completion bound to recalculated article hash
+    not ok 28 - single original author handoff adds only completion bound to recalculated article hash
+      ---
+      duration_ms: 27.078635
+      location: '/workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:164:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        {"ok":false,"error":"research_author_handoff_request_invalid"}
+        
+        400 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:165:152)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:164:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+      ...
+    # Subtest: old author result active read rejects completed reservation and preserves private result
+    not ok 29 - old author result active read rejects completed reservation and preserves private result
+      ---
+      duration_ms: 22.784339
+      location: '/workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:171:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        {"ok":false,"error":"research_author_result_request_invalid"}
+        
+        400 !== 409
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 409
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:172:137)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:171:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+      ...
+    # Subtest: handoff exact read replay and actual PG restart preserve complete receipt bytes clock and charge
+    not ok 30 - handoff exact read replay and actual PG restart preserve complete receipt bytes clock and charge
+      ---
+      duration_ms: 22.346208
+      location: '/workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:174:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        {"ok":false,"error":"research_author_handoff_request_invalid"}
+        
+        400 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:175:204)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:174:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+      ...
+    1..30
+not ok 2 - compiled independent reviewer assignment 2383, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 36533.491574
+  location: '/workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:16:37'
+  failureType: 'testCodeFailure'
+  error: 'positive author handoff must succeed before dependent reviewer cases'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    afterBaseline (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:179:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async verifyLocalInboxDataPlane (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+    async TestContext.<anonymous> (file:///workspace/cloud-reviewer-assignment-http-vm-oct09/scripts/research-reviewer-assignment-http.test.mjs:18:20)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..2
+# tests 44
+# suites 0
+# pass 35
+# fail 9
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 59520.308074
