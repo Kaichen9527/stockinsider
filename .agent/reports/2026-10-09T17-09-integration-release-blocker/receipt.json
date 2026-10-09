@@ -1,0 +1,16 @@
+{
+  "observedAt": "2026-10-09T17:09:23.454206+00:00",
+  "source": "actual gh run view37962791757 --log-failed",
+  "subject": "0fdd66a5d71dd1121c3fe217e043d1241c3bc492",
+  "run": 37962791757,
+  "cause": "missing exact-review evidence remote ref; not a product test assertion",
+  "raw": {
+    "file": ".agent/reports/2026-10-09T17-09-integration-release-blocker/protected-failed.log",
+    "bytes": 35202,
+    "sha256": "95eeb6ed6b7cfd57a422d28bd705cf506f6e3b5b7029d25a3d1ecc74ace65d94"
+  },
+  "mainMerged": false,
+  "productionDeployed": false,
+  "automaticApprovalRejection": false,
+  "bypassed": false
+}
