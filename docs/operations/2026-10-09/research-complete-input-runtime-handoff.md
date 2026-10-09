@@ -1,0 +1,13 @@
+# Complete-input runtime checkpoint — 2026-10-09
+
+Code subject `3b8a7b4466a673aa8494ca5f8528a9a899fd1e9d` on `codex/research-complete-input-runtime-oct09`, based on the 23f923ff frozen design and reviewed 75d integrated runtime. This is maker evidence; independent code review remains pending.
+
+Implemented static nested AUO/EMC calculation schema, tagged canonical hashes, full source/code closure binding, immutable v2 SQL read/seal, shared original preparation count/byte cap and guarded existing deep-job versioned actions. Original lease, reservation, identity, sources and admission clocks are checked; exact replay does not re-charge. No stocks, formal authority, stage, model completion or published article is created. Financial assumptions remain attributed assumptions and all downstream capability flags stay false.
+
+Actual PG17 final 42/42 zero skip covers both companies, source withdrawal, original binding, replay/restart/expiry, table ACL and non-superuser service login, and competing old/new final admission. Typecheck, lint (0 errors,33 warnings) and normal build pass. Source/code/build provenance, logs and sampled capacity are in `.agent/reports/2026-10-09T08-58-complete-input-runtime-vm.json`. Build was on clean 3b8; subsequent change affects only the HTTP test wrapper.
+
+HTTP is **not accepted**. Earlier socket-length and DELETE502 test-wrapper errors are preserved. Restricting marker injection to string JSON fixes the wrapper and the baseline ACL tests pass in the actual escalated loopback profile. Final compiled test reports 22 pass/8 fail: both new seal requests return `research_complete_input_unavailable`, then dependent replay/restart checks lack a revision. Direct-PG success is not substituted for compiled API success. Cleanup ran for owned Next/PostgREST/PG; scratch/logs retained. No assertions, SQL guards or consumer files were relaxed.
+
+Next owned work: diagnose the compiled unavailable result with bounded sanitized detail and actual RPC/cache/FD evidence; finish HTTP and outstanding boundary coverage before independent acceptance. Then use the immutable revision in a genuinely assigned author/reviewer roundtrip. Trusted controller/provider identities, actual budgeted executions, and v2 dossier/bundle/outbox/submission linkage remain separate incomplete work. No manual draft or unsigned review is converted into role evidence. Root owns source consumer and PR creation; no main merge/deployment.
+
+The roughly30-minute manual window is recorded honestly; final receipt sealing can exceed it and is not automated model budget acceptance. No new heavy job started during sealing. The separately authorized consumer successor9745 acceptance follows sequentially in a separate worktree, never old4c.

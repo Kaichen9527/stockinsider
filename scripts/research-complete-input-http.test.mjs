@@ -11,7 +11,7 @@ const roster={legacyClassification:read('observed-security-classification.json')
 // calculator's Git relay inputs are actual attributed public financial data.
 const mapping=JSON.parse(fs.readFileSync(root+'/web/src/lib/research-complete-mapping.json'));
 for(const symbol of ['2409','2383'])test(`compiled complete-input ${symbol}, synthetic job, actual fixed financial inputs`,{timeout:120000},async t=>{
- const realFetch=globalThis.fetch;globalThis.fetch=(url,options)=>{const action=options?.body&&JSON.parse(options.body).action;return realFetch(url,action==='sealResearchInput'||action==='readResearchInputRevision'?{...options,headers:{...options.headers,'x-research-input-version':'2'}}:options);};
+ const realFetch=globalThis.fetch;globalThis.fetch=(url,options)=>{const action=typeof options?.body==='string'&&options.body.length?JSON.parse(options.body).action:undefined;return realFetch(url,action==='sealResearchInput'||action==='readResearchInputRevision'?{...options,headers:{...options.headers,'x-research-input-version':'2'}}:options);};
  try {const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,observedClaim:true,check:(name,fn)=>t.test(name,fn),afterBaseline:async({post,sql,priorityRequest,report,restart})=>{
   const prepared=prepareObservedRosterAdmission(roster),scope={scope:'research_observed_v1',snapshotHash:prepared.snapshotHash};
   let r=await post('api/internal/research-observed-roster',roster);assert.equal(r.status,200);
