@@ -1,0 +1,85 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {randomUUID} from 'node:crypto';
+const bin=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN;
+const q=v=>"'"+String(v).replaceAll("'","''")+"'";
+test('real PostgreSQL immutable input preparations, original leases and source fences (synthetic)',async t=>{
+ assert.ok(bin&&['initdb','pg_ctl','psql'].every(n=>fs.existsSync(path.join(bin,n))),'actual PostgreSQL required; unavailable is not a pass');
+ const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'si-publication-fence-'));const pg=path.join(tmp,'pg');const port=55000+process.pid%5000;let active=false;
+ const args=['-X','-qAt','-v','ON_ERROR_STOP=1','-h',tmp,'-p',String(port),'-d','postgres'];
+ const run=(n,a,input)=>execFileSync(path.join(bin,n),a,{encoding:'utf8',input,timeout:10000,maxBuffer:4*1024*1024}).trim();
+ const sql=s=>run('psql',args,`SET statement_timeout='5s';${s}`);
+ const start=()=>{run('pg_ctl',['-D',pg,'-l',path.join(tmp,'pg.log'),'-o',`-h '' -k ${tmp} -p ${port}`,'-w','start']);active=true;};
+ const id=randomUUID();const base='https://example.invalid/public-research';
+ const add=(key=id,url=base,extra={})=>sql(`SET ROLE service_role;INSERT INTO source_raw_documents(id,document_url,collected_at,metadata) VALUES(${q(key)},${q(url)},clock_timestamp()-interval '1 second',${q(JSON.stringify({canonical_url:url,rights_boundary:'public_citation',...extra}))}::jsonb);`);
+ try {
+  run('initdb',['-D',pg,'-A','trust','--no-instructions']);start();
+  sql(`CREATE ROLE anon;CREATE ROLE authenticated;CREATE ROLE service_role BYPASSRLS;CREATE TABLE source_raw_documents(id uuid PRIMARY KEY,document_url text NOT NULL,published_at timestamptz,collected_at timestamptz NOT NULL,metadata jsonb NOT NULL);GRANT ALL ON source_raw_documents TO service_role;`);
+  sql(fs.readFileSync('migrations/20261009_research_publication_source_fence_v2.sql','utf8'));
+  const job=randomUUID(),reservation=randomUUID(),company=randomUUID(),priority=randomUUID(),snapshot='a'.repeat(64),owner='synthetic-preparer';
+  sql(`CREATE TABLE research_observed_companies_v1(research_company_id uuid PRIMARY KEY,symbol text);
+   CREATE TABLE research_observed_roster_snapshots_v1(snapshot_hash text PRIMARY KEY,mapping_digest text,received_at timestamptz,latest_observed_at timestamptz);
+   CREATE TABLE research_observed_roster_members_v1(snapshot_hash text,research_company_id uuid,symbol text);
+   CREATE TABLE research_priority_runs_v1(run_id uuid PRIMARY KEY,research_scope text,observed_snapshot_hash text,as_of timestamptz,input_hash text);
+   CREATE TABLE research_observed_priority_store_receipts_v1(run_id uuid,stored_run_hash text);
+   CREATE TABLE research_deep_jobs_v1(job_id uuid PRIMARY KEY,priority_run_id uuid,symbol text,stock_id uuid,research_scope text,research_company_id uuid,observed_snapshot_hash text,status text,attempts integer,lease_owner text,lease_expires_at timestamptz);
+   CREATE TABLE research_deep_job_attempts_v1(job_id uuid,attempt integer,owner text,claimed_at timestamptz,lease_expires_at timestamptz);
+   CREATE TABLE research_model_reservations_v1(reservation_id uuid PRIMARY KEY,role text,owner text,work_key text,started_at timestamptz,lease_expires_at timestamptz);
+   CREATE TABLE research_model_completions_v1(reservation_id uuid);
+   CREATE TABLE stocks(id uuid PRIMARY KEY,symbol text);
+   INSERT INTO research_observed_companies_v1 VALUES(${q(company)},'5347');
+   INSERT INTO research_observed_roster_snapshots_v1 VALUES(${q(snapshot)},${q('b'.repeat(64))},now()-interval '3 minute',now()-interval '4 minute');
+   INSERT INTO research_observed_roster_members_v1 VALUES(${q(snapshot)},${q(company)},'5347');
+   INSERT INTO research_priority_runs_v1 VALUES(${q(priority)},'research_observed_v1',${q(snapshot)},now()-interval '2 minute',${q('c'.repeat(64))});
+   INSERT INTO research_observed_priority_store_receipts_v1 SELECT run_id,encode(sha256(convert_to(to_jsonb(r)::text,'UTF8')),'hex') FROM research_priority_runs_v1 r;
+   INSERT INTO research_deep_jobs_v1 VALUES(${q(job)},${q(priority)},'5347',NULL,'research_observed_v1',${q(company)},${q(snapshot)},'running',1,${q(owner)},now()+interval '28 minute');
+   INSERT INTO research_deep_job_attempts_v1 SELECT job_id,1,lease_owner,now()-interval '1 minute',lease_expires_at FROM research_deep_jobs_v1;
+   INSERT INTO research_model_reservations_v1 VALUES(${q(reservation)},'company_research',${q(owner)},${q('deep:'+job+':1')},now()-interval '1 minute',now()+interval '28 minute');`);
+  const roster=fs.readFileSync('migrations/20261008_research_observed_roster_v1.sql','utf8');sql(roster.slice(roster.indexOf('CREATE FUNCTION public.research_observed_canonical_json_v1'),roster.indexOf('-- Fail closed beyond PostgreSQL')));
+  sql(fs.readFileSync('migrations/20261009_research_input_preparations_v2.sql','utf8'));
+  sql('ALTER TABLE source_raw_documents ENABLE ROW LEVEL SECURITY;ALTER TABLE research_deep_jobs_v1 ENABLE ROW LEVEL SECURITY;ALTER TABLE research_model_reservations_v1 ENABLE ROW LEVEL SECURITY;');
+  const req={owner,jobId:job,attempt:1,reservationId:reservation,bundleId:null,sourceDocumentIds:[id],scope:'research_observed_v1',snapshotHash:snapshot};
+  const prepare=r=>JSON.parse(sql(`SET ROLE service_role;SELECT prepare_research_input_v2(${q(JSON.stringify(r))});`));
+  add();let saved;
+  await t.test('company absent from stocks prepares an immutable incomplete input without claiming or dispatching',()=>{
+   saved=prepare(req);assert.equal(saved.payload.researchCompanyId,company);assert.equal(saved.payload.stockId,null);assert.equal(saved.payload.status,'draft_incomplete');assert.equal(saved.payload.modelDispatched,false);assert.equal(saved.dispatchReady,false);assert.equal(saved.payload.sourceManifest[0].publishedAt,null);assert.equal(saved.payload.calculator,null);assert.equal(saved.payload.originalModelCutoff,null);assert.equal(sql('SELECT count(*) FROM stocks;'),'0');assert.equal(sql('SELECT count(*) FROM research_model_reservations_v1;'),'1');
+  });
+  await t.test('exact replay preserves hash/clocks and restart remains identical',()=>{
+   const same=prepare(req);assert.equal(same.replay,true);assert.deepEqual({...same,replay:false},saved);
+   run('pg_ctl',['-D',pg,'-m','fast','-w','stop']);active=false;start();assert.deepEqual({...prepare(req),replay:false},saved);
+  });
+  await t.test('unknown identity/authority/calculator/clock fields and wrong binding fail closed',()=>{
+   for(const field of ['authorId','reviewerId','execution','verified','calculator','researchCutoff','inputHash'])assert.throws(()=>prepare({...req,[field]:'synthetic'}),/input_preparation_shape/);
+   for(const patch of [{owner:'different-owner'},{attempt:2},{snapshotHash:'d'.repeat(64)},{reservationId:randomUUID()},{jobId:randomUUID()},{scope:'formal_v1'},{bundleId:randomUUID()},{sourceDocumentIds:[id,id]},{sourceDocumentIds:[randomUUID()]}])assert.throws(()=>prepare({...req,...patch}));
+  });
+  await t.test('BYPASSRLS direct insert/update/delete/truncate and anonymous RPC forbidden',()=>{
+   for(const command of ['INSERT INTO research_input_preparations_v2 SELECT * FROM research_input_preparations_v2','UPDATE research_input_preparations_v2 SET payload=payload','DELETE FROM research_input_preparations_v2','TRUNCATE research_input_preparations_v2'])assert.throws(()=>sql('SET ROLE service_role;'+command),/permission denied/);
+   assert.throws(()=>sql(`SET ROLE anon;SELECT prepare_research_input_v2(${q(JSON.stringify(req))});`),/permission denied/);
+   assert.throws(()=>sql(`SET ROLE research_input_preparation_owner_v2;UPDATE research_deep_jobs_v1 SET job_id=${q(randomUUID())};`),/row-level security/);
+   assert.throws(()=>sql('SET ROLE research_input_preparation_owner_v2;DELETE FROM research_input_preparations_v2;'),/immutable/);
+  });
+  await t.test('priority immutable-store proof cannot be bypassed by service RPC',()=>{
+   sql('DELETE FROM research_observed_priority_store_receipts_v1;');assert.throws(()=>prepare(req),/input_preparation_lineage/);
+   sql(`INSERT INTO research_observed_priority_store_receipts_v1 SELECT run_id,encode(sha256(convert_to(to_jsonb(r)::text,'UTF8')),'hex') FROM research_priority_runs_v1 r;`);
+  });
+  await t.test('completed or expired reservation never becomes fresh and receipts remain immutable',()=>{
+   sql(`INSERT INTO research_model_completions_v1 VALUES(${q(reservation)});`);assert.throws(()=>prepare(req),/original_lease_lost/);sql('DELETE FROM research_model_completions_v1;');
+   sql(`UPDATE research_model_reservations_v1 SET lease_expires_at=now()-interval '1 microsecond';`);assert.throws(()=>prepare(req),/original_lease_lost/);
+   sql(`UPDATE research_model_reservations_v1 SET lease_expires_at=now()+interval '27 minute';`);
+   assert.equal(sql(`SELECT input_hash FROM research_input_preparations_v2;`),saved.input_hash);
+  });
+  await t.test('source withdrawal rejects replay without replacing old bytes or returning publishable',()=>{
+   sql(`SET ROLE service_role;UPDATE source_raw_documents SET metadata=metadata||'{"rights_boundary":"none"}' WHERE id=${q(id)};`);
+   assert.throws(()=>prepare(req),/source_seal_invalidated_or_missing/);
+   assert.equal(sql('SELECT count(*) FROM research_input_preparations_v2;'),'1');assert.equal(sql('SELECT input_hash FROM research_input_preparations_v2;'),saved.input_hash);
+  });
+  await t.test('repeatable read cannot seal stale input; null/oversized/invalid-ID requests reject',()=>{
+   assert.throws(()=>sql(`BEGIN ISOLATION LEVEL REPEATABLE READ;SET ROLE service_role;SELECT prepare_research_input_v2(${q(JSON.stringify(req))});`),/read_committed_required/);
+   for(const v of [null,{}, {...req,sourceDocumentIds:['bad-id']},{...req,owner:'x'.repeat(9000)}])assert.throws(()=>prepare(v));
+  });
+ }finally{if(active)run('pg_ctl',['-D',pg,'-m','immediate','-w','stop']);fs.rmSync(tmp,{recursive:true,force:true});}
+});

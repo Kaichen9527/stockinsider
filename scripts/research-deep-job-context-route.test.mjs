@@ -124,6 +124,7 @@ function database(rows, options = {}) {
       calls.rpc.push({ name, args: structuredClone(args) });
       if (options.rpcThrows) throw new Error('fixture-private-database-diagnostic');
       if (options.rpcError) return { data: null, error: { message: options.rpcError } };
+      if (name === 'prepare_research_input_v2') return {data: {preparation_id: RECEIPT, dispatchReady: false}, error: null};
       if (name === 'research_evidence_heads_v1') return { data: options.heads || args.p_ids.map(id => ({ id, headId: id, retracted: false, superseded: false })), error: null };
       if (name === 'claim_research_deep_job_v1') {
         return { data: options.claimData === undefined ? [claimRow()] : options.claimData, error: null };
@@ -678,4 +679,18 @@ test('DAI-13 precise clocks survive packet serialization and reject invalid micr
   result = await run(f);
   assert.deepEqual(result.response.body.packet.sources, []);
   assert.equal(result.response.body.packet.gaps[0].reason, 'source_conflicting_head');
+});
+
+// Input preparation is incomplete, never a model or publication receipt.
+test('RIP-HTTP authentication precedes body/client for preparation',async()=>{
+ const r=await run({body:{action:'prepareResearchInput'},headers:{authorization:'Bearer wrong'}});
+ assert.equal(r.response.status,401);assert.equal(r.calls.body,0);assert.equal(r.calls.client,0);
+});
+test('RIP-HTTP closed observed preparation delegates to one atomic RPC without claim/reserve',async()=>{
+ const body={action:'prepareResearchInput',owner:OWNER,jobId:JOB,attempt:1,reservationId:RESERVATION,bundleId:null,sourceDocumentIds:[],scope:'research_observed_v1',snapshotHash:HASH};
+ const r=await run({body});assert.equal(r.response.status,200);assert.equal(r.response.body.dispatchReady,false);assert.deepEqual(r.calls.rpc.map(x=>x.name),['prepare_research_input_v2']);assert.deepEqual(r.calls.selects,[]);
+ for(const patch of [{authorId:'self'},{reviewerId:'other'},{verified:true},{scope:'formal_v1'},{bundleId:REVISION},{researchCutoff:NOW},{calculator:'arbitrary'}]){
+  const bad=await run({body:{...body,...patch}});assert.equal(bad.response.status,400);assert.equal(bad.calls.client,0);
+ }
+ const failed=await run({body,rpcError:'private-synthetic-db-error'});assert.equal(failed.response.status,409);assert.equal(failed.response.body.error,'research_input_preparation_unavailable');
 });

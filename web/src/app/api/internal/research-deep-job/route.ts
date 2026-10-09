@@ -22,6 +22,23 @@ export async function POST(request: Request) {
   if (['claim', 'status', 'input'].includes(action) && typeof body.owner !== 'string') {
     return NextResponse.json({ ok: false, error: 'research_deep_owner_invalid' }, { status: 400 });
   }
+  if (action === 'prepareResearchInput') {
+    let input;
+    try {
+      const { action: _action, ...fields } = body; void _action;
+      input = parseAuthorInputRequest(fields);
+      if (input.scope !== 'research_observed_v1' || input.bundleId !== null) throw new Error('unsupported');
+    } catch {
+      return NextResponse.json({ ok: false, error: 'research_input_preparation_invalid' }, { status: 400 });
+    }
+    try {
+      const result = await getSupabaseServerClient().rpc('prepare_research_input_v2', { p_request: input });
+      if (result.error || !result.data) throw new Error('preparation_unconfirmed');
+      return NextResponse.json({ ok: true, preparation: result.data, dispatchReady: false });
+    } catch {
+      return NextResponse.json({ ok: false, error: 'research_input_preparation_unavailable' }, { status: 409 });
+    }
+  }
   if (action === 'input') {
     let input;
     try {
