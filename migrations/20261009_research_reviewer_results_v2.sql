@@ -98,13 +98,17 @@ GRANT EXECUTE ON FUNCTION public.read_research_reviewer_result_context_v2(jsonb,
 CREATE FUNCTION public.assert_research_editorial_review_v2(packet jsonb,review jsonb) RETURNS void
  LANGUAGE plpgsql SET search_path=pg_catalog,public AS $$
 DECLARE c jsonb; f jsonb; id jsonb;allowed_paragraphs jsonb;allowed_sources jsonb; seen text[]:=ARRAY[]::text[]; concerns integer:=0;
+ -- ECMAScript WhiteSpace + LineTerminator set, identical to String.trim().
+ trim_chars text:=chr(9)||chr(10)||chr(11)||chr(12)||chr(13)||chr(32)||chr(160)||chr(5760)||
+  chr(8192)||chr(8193)||chr(8194)||chr(8195)||chr(8196)||chr(8197)||chr(8198)||chr(8199)||chr(8200)||chr(8201)||chr(8202)||
+  chr(8232)||chr(8233)||chr(8239)||chr(8287)||chr(12288)||chr(65279);
 BEGIN
  IF review IS NULL OR jsonb_typeof(review)<>'object' OR (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(review) key)
   IS DISTINCT FROM ARRAY['articleHash','checks','decision','findings','reviewPackHash','reviewedAt','schemaVersion','strongestCounterEvidence']
   OR jsonb_typeof(review->'decision') IS DISTINCT FROM 'string' OR review->>'decision' NOT IN ('accepted','revision_required','rejected')
   OR jsonb_typeof(review->'checks') IS DISTINCT FROM 'array' OR jsonb_array_length(review->'checks')<>8
   OR jsonb_typeof(review->'findings') IS DISTINCT FROM 'array' OR jsonb_array_length(review->'findings')>30
-  OR jsonb_typeof(review->'strongestCounterEvidence') IS DISTINCT FROM 'string' OR length(btrim(review->>'strongestCounterEvidence')) NOT BETWEEN 20 AND 4000
+  OR jsonb_typeof(review->'strongestCounterEvidence') IS DISTINCT FROM 'string' OR length(btrim(review->>'strongestCounterEvidence',trim_chars))<20 OR length(review->>'strongestCounterEvidence')>4000
  THEN RAISE EXCEPTION 'research_editorial_review_shape'; END IF;
  allowed_paragraphs:=jsonb_build_array(packet->'article'->'summary'->>'id')||
   (SELECT coalesce(jsonb_agg(p->>'id'),'[]') FROM jsonb_array_elements(packet->'article'->'sections') s CROSS JOIN LATERAL jsonb_array_elements(s->'paragraphs') p);
@@ -114,7 +118,7 @@ BEGIN
    IS DISTINCT FROM ARRAY['category','paragraphIds','rationale','status']
    OR jsonb_typeof(c->'category') IS DISTINCT FROM 'string' OR c->>'category' NOT IN ('source_support','rumor_staging','financial_recalculation','periods_and_dilution','competitive_alternatives','valuation_assumptions','counterevidence','entry_separation')
    OR c->>'category'=ANY(seen) OR jsonb_typeof(c->'status') IS DISTINCT FROM 'string' OR c->>'status' NOT IN ('pass','concern','fail')
-   OR jsonb_typeof(c->'rationale') IS DISTINCT FROM 'string' OR length(btrim(c->>'rationale')) NOT BETWEEN 20 AND 2000
+   OR jsonb_typeof(c->'rationale') IS DISTINCT FROM 'string' OR length(btrim(c->>'rationale',trim_chars))<20 OR length(c->>'rationale')>2000
    OR jsonb_typeof(c->'paragraphIds') IS DISTINCT FROM 'array' OR jsonb_array_length(c->'paragraphIds')>30
    OR (SELECT count(DISTINCT value) FROM jsonb_array_elements(c->'paragraphIds'))<>jsonb_array_length(c->'paragraphIds')
   THEN RAISE EXCEPTION 'research_editorial_review_check'; END IF;
@@ -128,7 +132,7 @@ BEGIN
    IS DISTINCT FROM ARRAY['issue','paragraphId','severity','sourceIds']
    OR jsonb_typeof(f->'severity') IS DISTINCT FROM 'string' OR f->>'severity' NOT IN ('blocking','major','minor')
    OR (f->'paragraphId'<>'null'::jsonb AND (jsonb_typeof(f->'paragraphId')<>'string' OR NOT allowed_paragraphs @> jsonb_build_array(f->'paragraphId')))
-   OR jsonb_typeof(f->'issue') IS DISTINCT FROM 'string' OR length(btrim(f->>'issue')) NOT BETWEEN 20 AND 2000
+   OR jsonb_typeof(f->'issue') IS DISTINCT FROM 'string' OR length(btrim(f->>'issue',trim_chars))<20 OR length(f->>'issue')>2000
    OR jsonb_typeof(f->'sourceIds') IS DISTINCT FROM 'array' OR jsonb_array_length(f->'sourceIds')>30
    OR (SELECT count(DISTINCT value) FROM jsonb_array_elements(f->'sourceIds'))<>jsonb_array_length(f->'sourceIds')
   THEN RAISE EXCEPTION 'research_editorial_review_finding'; END IF;

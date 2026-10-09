@@ -64,3 +64,8 @@ test('shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON 
 test('Unicode scalar text limits agree with PostgreSQL characters, astral min/max explicit',async()=>{
  const f=await reviewerResultFixture(),r=structuredClone(f.request.review);r.strongestCounterEvidence='😀'.repeat(20);assert.doesNotThrow(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));r.strongestCounterEvidence='😀'.repeat(19);assert.throws(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));r.strongestCounterEvidence='😀'.repeat(4000);assert.doesNotThrow(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));r.strongestCounterEvidence+='😀';assert.throws(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));
 });
+
+ test('review text rejects ECMAScript whitespace-only and untrimmed over-limit prose',async()=>{
+ const f=await reviewerResultFixture();for(const n of [9,10,11,12,13,32,160,5760,8192,8193,8194,8195,8196,8197,8198,8199,8200,8201,8202,8232,8233,8239,8287,12288,65279]){const r=structuredClone(f.request.review);r.strongestCounterEvidence=String.fromCodePoint(n).repeat(20);assert.throws(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));}
+ const r=structuredClone(f.request.review);r.checks[0].rationale='a'.repeat(2000)+' ';assert.throws(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));
+});

@@ -155,6 +155,12 @@ test('reviewer result: real original reservation budget/claim/fences, synthetic 
     await check('direct RPC closed nested fields refuse array/object coercion before result/registry/completion',()=>{
       for(const mutate of [r=>r.findings[0].paragraphId=['summary'],r=>r.checks[0].status=['concern'],r=>r.findings[0].severity=['major'],r=>r.decision={},r=>r.checks[0].status=null]){const bad=structuredClone(result.envelope);mutate(bad.rawReview);bad.validatedReview.review=bad.rawReview;bad.validatedReview.reviewHash=completeHash(bad.rawReview);bad.observation.outputHash=completeHash(bad.rawReview);const before=audit();assert.throws(()=>direct(bad),/research_editorial_review_/);assert.equal(audit(),before);}
     });
+    await check('direct RPC text trim and raw scalar maximum match TS with zero durable changes',()=>{
+      const whitespace=[9,10,11,12,13,32,160,5760,8192,8193,8194,8195,8196,8197,8198,8199,8200,8201,8202,8232,8233,8239,8287,12288,65279].map(n=>String.fromCodePoint(n));
+      for(const mutate of [...whitespace.map(w=>r=>r.strongestCounterEvidence=w.repeat(20)),r=>r.checks[0].rationale='\u00a0'.repeat(20),r=>r.checks[0].rationale='a'.repeat(2000)+' ',r=>r.findings[0].issue='a'.repeat(2000)+' ']){
+        const bad=structuredClone(result.envelope);mutate(bad.rawReview);assert.throws(()=>validateResearchEditorialReview(packet,bad.rawReview,new Date().toISOString()));bad.validatedReview.review=bad.rawReview;bad.validatedReview.reviewHash=completeHash(bad.rawReview);bad.observation.outputHash=completeHash(bad.rawReview);const before=audit();assert.throws(()=>direct(bad),/research_editorial_review_/);assert.equal(audit(),before);
+      }
+    });
     await check('injected completion failure rolls back result and invocation together',()=>{
       sql(`CREATE FUNCTION fixture_review_completion_abort() RETURNS trigger LANGUAGE plpgsql AS $$BEGIN IF NEW.reservation_id=${q(assignment.reservation_id)}::uuid THEN RAISE EXCEPTION 'synthetic_completion_insert_abort';END IF;RETURN NEW;END$$;
         CREATE TRIGGER fixture_review_completion_abort BEFORE INSERT ON research_model_completions_v1 FOR EACH ROW EXECUTE FUNCTION fixture_review_completion_abort();`);
