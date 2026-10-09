@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "author-packet-http-root-checkpoint-v1",
+  "sourceSubject": "cbd1a9e93ae77930684f0ca45726790b6871721c",
+  "vmTestSubject": "6fcd30649dc24955b5f620762f33f5c2e52f0e0b",
+  "vmReceiptSubject": "103a50f4981ef32d7e7dacbaefeba04e556bf42c",
+  "rootTestSuccessor": "31bd2e87884205fec48483fb207ed401ae85597d",
+  "webTreeUnchanged": "488da1f2daad0c862bbe7efb0915179822389614",
+  "verifiedVmRawEvidenceEntries": 62,
+  "verifiedVmRawEvidenceMismatches": 0,
+  "rootDiagnosticCases": 3,
+  "rootReadinessUnitTests": 14,
+  "rootReadinessFailures": 0,
+  "rootReadinessSkips": 0,
+  "historicalR1CauseEstablished": false,
+  "runtimeChanged": false,
+  "syntheticReservationCreated": true,
+  "actualModelDispatched": false,
+  "publicationApproved": false,
+  "nativeSuccessorAcceptance": "pending",
+  "independentSuccessorReview": {
+    "status": "unsigned scoped TEST-ONLY PASS",
+    "reviewer": "author_input_review_oct08",
+    "subject": "31bd2e87884205fec48483fb207ed401ae85597d",
+    "tree": "9af8c48b832cdf926af45959e87fc8561eafc01d",
+    "unitPass": 14,
+    "unitSkip": 0,
+    "additionalCounterexamples": 8,
+    "newP1P2": 0,
+    "nativeHttpRerun": false,
+    "buildRerun": false,
+    "notProtectedApproval": true
+  },
+  "evidence": [
+    {
+      "path": ".agent/reports/2026-10-09T13-20-financial-parent-diagnostic/probe.mjs",
+      "bytes": 4433,
+      "sha256": "1360300b5d2f65fcac7292eac1908fbb590b261dcc5042cc76a8b9d5f630d3d4"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-20-financial-parent-diagnostic/readiness-unit.log",
+      "bytes": 2479,
+      "sha256": "0171e6af139fd2093f5a0bf177fa5505166b145a4bbb469158ed1a83e4077046"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-20-financial-parent-diagnostic/result.json",
+      "bytes": 6076,
+      "sha256": "709be65ab773f0eec396b6e59e172b51eb02607eab776a9754a59d353078f86a"
+    }
+  ],
+  "limitations": [
+    "R1 30/2 failure retained; R2 38/38 is not a runtime fix or root-cause proof",
+    "Old6fcd test generic business retries found P2 by independent reviewer; successor awaits native and independent review",
+    "Directory diagnostic proves same-inode ancestor metadata changes can produce financial_parent_replaced; it does not identify original R1 writer",
+    "No fresh build: web runtime, migrations, package and original harness unchanged from cbd normal-build inputs",
+    "Inherited VM modelReserved:false is a stale shared-harness flag; actual nested audit contains synthetic reservation count1, no model execution"
+  ],
+  "pullRequest": "https://github.com/Kaichen9527/stockinsider/pull/344"
+}

@@ -23,9 +23,21 @@ main169aad1 remains unchanged. No production migration/deployment/publication.
   warnings) and normalbuild pass exactcbd. Independent scoped design/code pass;
   reviewer57tests plus7extra probes pass. Two original designP2 remain recorded.
   These are synthetic source/job/role fixtures, not actual author execution.
-- Existing authorized VM is running one new compiled HTTP AUO/EMC acceptance
-  turn01a12099 from exactcbd, owning a separate test/helper/receipt only. It must
-  build that changed runtime; no duplicate work or old6f build reuse is allowed.
+- VM turn01a12099 completed: normal exactcbd build, types/lint and HTTP R2
+  38/38 passed. Original R1 30pass/2fail financial_parent_replaced remains
+  unexplained; R2 is not a root-cause fix. Receipt103a50f4 has62 raw files whose
+  bytes/SHA root verified. Synthetic source/job/credentials, no actual model.
+- Independent review found test6fcd could discard arbitrary failed business
+  responses while retrying. Draft PR344 test-only successor31bd2e87 uses
+  explicit bounded readiness probes then single business requests; root and
+  independent14/14 plus8 reviewer counterexamples pass. Unsigned scoped test
+  review passes, native successor still pending. Runtime/SQL/web tree unchanged.
+- Root unchanged-reader real-filesystem probes show existing sibling nested
+  writes pass; new sibling directory entries change shared ancestor metadata
+  and reject; real parent replacement also rejects. Both failures clean up.
+  This proves a mechanism, not the original R1 writer. The existing authorized
+  VM owns a single observed diagnostic and, within budget, successor native run.
+  No overlapping runtime edits, namespace weakening or blind gate retries.
 - PR342 natural lock-expiry test remains open: Mac/Cloud10/10 and independent
   code review passed; ordinary diagnostic37921360805 now passed. Protected
   run37921360771 still lacks exactb38d review evidence. No repeat/bypass/merge.
@@ -33,7 +45,8 @@ main169aad1 remains unchanged. No production migration/deployment/publication.
   reviewer/result/publication, actual61-session price adapter, full protected
   release and future five trading days are unfinished. Strategy profit unproven.
 
-Evidence: `.agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance.json`.
+Evidence: `.agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance.json`
+and `.agent/reports/2026-10-09T13-20-financial-parent-diagnostic/checkpoint.json`.
 Engineering heartbeat continues; it does not enable the paused research schedule.
 
 ## Earlier exact state (historical, retained for provenance)
