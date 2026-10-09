@@ -221,3 +221,9 @@ Continue on existing CodexVM; VPSheavycapacity is not a development stop conditi
 - [x] Re-measured expandedVPS read-only:87.95GBavailable; app roots plus sharedPG3.389GB; currentservicesactive/home+preview200. Capacity is no longer the prior blocker. No deletion.
 - [x] Saved durable-vs-rebuildable placement matrix and truthful CI/VM/red-review progress in docs/operations/2026-10-09/progress-convergence-1205.md.
 - [ ] Repair actual insiderSQL and harnessverdict/deadline findings; independently accept observed43d repair; complete real roles/publication/strategies/protected release/schedules.
+
+## 2026-10-09 12:22 Taipei actual continuation
+
+- [x] Recorded independentobservedapproval and snapshotoriginalPG16/16+Linuxjournal1/1 aftertwoactualSQLred→green repairs.
+- [x] Created/reread hourly engineeringheartbeat stockinsider; activeworkdedupe, preservedauthorization/rights/history, no falseproductenablement.
+- [ ] Repair/reviewpublicationancestorrights/RRisolation/exact-replayfindings; finishactualsnapshotHTTPstack; diagnoseCI-onlynmhang withoutfakeclockfallback; finishrealroles/strategies/protectedrelease/schedules. See progress-convergence-1222.md.
