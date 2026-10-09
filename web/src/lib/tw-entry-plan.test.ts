@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import test from 'node:test';
-import { buildTwEntryPlans, nextTwEntryPrice, roundTwEntryPrice, twEntryTick } from './tw-entry-plan.ts';
+import { calculateTwEntryRawSignals, buildTwEntryPlans, nextTwEntryPrice, roundTwEntryPrice, twEntryTick } from './tw-entry-plan.ts';
 import type { TwEntryPlanInput } from './tw-entry-plan-contract.ts';
 
 function fixture(count = 240): TwEntryPlanInput {
@@ -187,4 +188,43 @@ test('zero-volume history cannot provide a breakout denominator and input size i
   assert.ok(buildTwEntryPlans(input).missingData.includes('prior20_volume_unavailable'));
   const overflow = fixture(); overflow.bars = Array(2001).fill(overflow.bars[0]);
   assert.throws(() => buildTwEntryPlans(overflow), /tw_entry_plan_input_bound/u);
+});
+
+
+test('shared raw extraction preserves six full base2878038 plan JSON hashes',()=>{
+const cases:Record<string,TwEntryPlanInput>={basic:fixture(),short:fixture(239),long:fixture(300),blocked:fixture(),pullback:fixture(),extended:fixture()};
+cases.blocked.formalEligibility={state:'blocked',reasonCodes:['existing_policy'],policyVersion:'fixture-policy'};
+Object.assign(cases.pullback.bars.at(-2)!,{open:72.7,high:72.9,low:72.4,close:72.6});Object.assign(cases.pullback.bars.at(-1)!,{open:72.8,high:73.5,low:72.7,close:73.3,volume:1000});
+Object.assign(cases.extended.bars.at(-1)!,{open:77.9,high:78.2,low:77.8,close:78});
+const expected={
+  "basic": "7a43b54256aa3166a4d062f7f86fd4ddbd3d8eca8b537fadd1b95d102c1f81ca",
+  "short": "6896411fa90d709e18048f7766183273c98dd0390bb5687628c2b374450e1867",
+  "long": "0f8027a1f212546464f677755c8b7409a7c02b34f124d64725b34d4f5a548d4c",
+  "blocked": "bd3ff35658d0c577486b628cc2e79d121e0efecb99cc86da6baed6f7553cba37",
+  "pullback": "235f95620b71196e106ae76aa06bfea958d378400eb8c5187264b4d5519574ae",
+  "extended": "40da4af79b805e41b0a306c6382438c094d4a9b8f8aac2f98fa45ef29ac8cb60"
+}
+;
+  for(const [key,input] of Object.entries(cases)) {
+    assert.equal(createHash('sha256').update(JSON.stringify(buildTwEntryPlans(input))).digest('hex'),expected[key as keyof typeof expected],key);
+  }
+});
+
+test('raw fixed-window formulas equal entry signals and do not confer entry authority',()=>{
+  for(const mutate of [false,true]) {
+    const input=fixture(); if(mutate) Object.assign(input.bars.at(-1)!,{open:77.9,high:78.2,low:77.8,close:78});
+    input.formalEligibility={state:'blocked',reasonCodes:['policy'],policyVersion:'fixture-policy'};
+    const raw=calculateTwEntryRawSignals(input.bars); assert.equal(raw.available,true); if(!raw.available) throw Error('raw missing');
+    const bundle=buildTwEntryPlans(input);
+    assert.deepEqual(raw.signals.map(x=>x.rawSignalState),bundle.plans.map(x=>x.rawSignalState));
+    assert.equal(raw.resistance,74);assert.equal(raw.volume20,1000);assert.equal(raw.threshold,74.1);
+    assert.equal('entryEligible' in raw,false);assert.equal('entryLower' in raw,false);
+    const older={...input.bars[0],session:'2024-12-31',close:999,high:1000,open:999,low:998};
+    assert.deepEqual(calculateTwEntryRawSignals([older,...input.bars]),raw);
+  }
+  assert.deepEqual(calculateTwEntryRawSignals(fixture(239).bars).missingData,['price_history_below_240']);
+  for(const bad of [NaN,Infinity,-1]) {
+    const bars=fixture().bars;bars.at(-1)!.close=bad;assert.equal(calculateTwEntryRawSignals(bars).available,false);
+  }
+  assert.throws(()=>calculateTwEntryRawSignals(Array(2001)),/bound/u);
 });
