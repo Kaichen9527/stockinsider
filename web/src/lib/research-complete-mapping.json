@@ -1,7 +1,7 @@
 {
   "schemaVersion": "research-complete-static-mapping-v2",
   "sourceClosureEncoding": "sorted_compact_utf8_json_metadata_v1",
-  "sourceClosureHash": "ef95096ff64e63dd4def51fa1aa5ec608837100fbdad780274becda5463b40ff",
+  "sourceClosureHash": "79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f",
   "sourceClosure": [
     {
       "file": "web/package-lock.json",
@@ -151,7 +151,7 @@
       "inventoryHash": "1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314",
       "historicalHash": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
       "modelCutoff": "2026-10-08T10:20:00Z",
-      "sourceClosureHash": "ef95096ff64e63dd4def51fa1aa5ec608837100fbdad780274becda5463b40ff"
+      "sourceClosureHash": "79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"
     },
     "2383": {
       "inventory": [
@@ -189,7 +189,7 @@
       "inventoryHash": "182992205534182b1e349da5c6806085574a3ca760273d0464f66eba6ce8c496",
       "historicalHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
       "modelCutoff": "2026-10-08T12:12:00Z",
-      "sourceClosureHash": "ef95096ff64e63dd4def51fa1aa5ec608837100fbdad780274becda5463b40ff"
+      "sourceClosureHash": "79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"
     }
   }
 }

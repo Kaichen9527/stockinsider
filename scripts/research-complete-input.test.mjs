@@ -20,3 +20,21 @@ test('static schema bundles exactly preserve both original numeric and Unicode s
  for(const[symbol,schema]of[['2409',schema2409],['2383',schema2383]])assert.deepEqual(schema,JSON.parse(fs.readFileSync('web/src/lib/research-complete-'+symbol+'.schema.json','utf8')));
  assert.equal(schema2409.properties.financialMaterial.properties.projection.properties.projected.properties.scenarios.prefixItems[1].properties.quarters.prefixItems[1].properties.segments.prefixItems[0].properties.revenue.const,31090.078766235238);
 });
+
+// This existing encoding sorts metadata object keys, not just the file array.
+// Recompute the complete transitive source closure from actual Git file bytes.
+test('closure metadata v1 preserves sorted keys independent of insertion order and binds SQL',async()=>{
+ const {createHash}=await import('node:crypto');
+ const mapping=JSON.parse(fs.readFileSync('web/src/lib/research-complete-mapping.json','utf8'));
+ assert.equal(mapping.sourceClosureEncoding,'sorted_compact_utf8_json_metadata_v1');
+ assert.deepEqual(mapping.sourceClosure.map(x=>x.file),mapping.sourceClosure.map(x=>x.file).sort());
+ const sorted=rows=>JSON.stringify(rows.map(row=>Object.fromEntries(Object.keys(row).sort().map(k=>[k,row[k]]))));
+ const digest=rows=>createHash('sha256').update(sorted(rows),'utf8').digest('hex');
+ assert.equal(mapping.sourceClosureHash,digest(mapping.sourceClosure));
+ assert.equal(digest(mapping.sourceClosure.map(({file,bytes,sha256})=>({sha256,file,bytes}))),mapping.sourceClosureHash);
+ for(const pin of mapping.sourceClosure){const bytes=fs.readFileSync(pin.file);assert.equal(bytes.length,pin.bytes,pin.file);assert.equal(createHash('sha256').update(bytes).digest('hex'),pin.sha256,pin.file);}
+ for(const company of Object.values(mapping.companies))assert.equal(company.sourceClosureHash,mapping.sourceClosureHash);
+ const sql=fs.readFileSync('migrations/20261009_research_complete_input_v2.sql','utf8');
+ assert.ok(sql.includes('"sourceClosureHash":"'+mapping.sourceClosureHash+'"'));
+ assert.ok(!sql.includes('ef95096ff64e63dd4def51fa1aa5ec608837100fbdad780274becda5463b40ff'));
+});
