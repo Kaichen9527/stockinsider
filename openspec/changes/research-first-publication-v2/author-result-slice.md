@@ -13,6 +13,25 @@ observation. Read uses the original four-key identity body. Model content never
 selects a principal, expected owner, role, clock, financial value or source.
 Reject mismatched credentials and unmarked/v1 downgrade before DB access.
 
+To preserve the existing 8192-byte path unchanged, this result-only branch also
+requires x-research-author-result-action equal to receiveAuthorResult or
+readAuthorResult, alongside the existing x-research-execution-version:2. The
+closed body action must match that header. Missing/unknown result discriminators
+cannot enter a result RPC. Existing assignment/packet actions retain their old
+parser and8192-byte bound. Result read is8192 wire bytes; receive is1048576 wire
+bytes, counted while streaming before UTF-8 decoding. Use the existing strict
+duplicate-decoded-key and depth12 parser, reject invalid UTF-8, and cancel on
+failure. Raw article262144 serialized UTF-8 bytes and canonical durable envelope
+1048576 bytes are separate checks, not substitutes for the wire limit.
+
+One original FinancialDeadline covers authentication-following body read, every
+RPC, actual recalculation, validation, canonicalization and response serialization.
+Check it after CPU work and after Response creation; do not renew it or either
+original job/reservation deadline. A stalled read/RPC uses abort/cancellation;
+do not launch work before deadline admission. Exact/+1 wire/article/envelope,
+duplicate/deep/invalid UTF-8, stalled I/O, expiry during calculation/serialization
+and uncertain-write exact-read reconciliation are executable acceptance cases.
+
 For receive, load the live original complete input and public author packet,
 actually recalculate and validate the business article with the server-resolved
 source descriptors. Compute outputHash from raw article and articleHash from
