@@ -1,0 +1,21 @@
+{
+  "admissionAt": "2026-10-09T17:05:43.111507+00:00",
+  "manualOriginalStartedAt": "2026-10-09T16:57:16Z",
+  "manualOriginalDeadline": "2026-10-09T17:27:16Z",
+  "upstreamRuntime": "27f13e51fca5d64498b5ef54d4f9e5394e0f7f21",
+  "upstreamTest": "df514965072816d319ec1a1aa47b752c538d1d92",
+  "localHead": "65bcd5f5327126b9078cbf7aa2de63547b0306b5",
+  "localTree": "67a6eb40339d209034ceb0b2b05f0a6e90433604",
+  "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+  "diskBeforeBytes": 11132379136,
+  "diskAfterBytes": 11339907072,
+  "cacheRetirement": {
+    "exactPath": "/workspace/cloud-reviewer-result-http-vm-oct09/web/.next",
+    "onlyRebuildableFailedBuild": true,
+    "filesInventoried": 71,
+    "fileBytes": 207338532
+  },
+  "active": [],
+  "ciNotStartedReason": "Upstream retains known SQL NULL empty psql stdout versus literal null assertion; await owner correction rather than repeat known failure",
+  "dependencyInstallPerformed": false
+}

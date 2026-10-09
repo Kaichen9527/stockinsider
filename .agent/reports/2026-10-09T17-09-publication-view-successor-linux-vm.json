@@ -1,0 +1,339 @@
+{
+  "schemaVersion": "bounded-linux-successor-acceptance-v1",
+  "sealedAt": "2026-10-09T17:09:36.475839+00:00",
+  "sealedAtAsiaTaipei": "2026-10-10T01:09:36.475839+08:00",
+  "originalManualStartedAt": "2026-10-09T16:57:16Z",
+  "originalManualDeadline": "2026-10-09T17:27:16Z",
+  "manualElapsedSeconds": 740.475839,
+  "upstreamRuntimeSubject": "27f13e51fca5d64498b5ef54d4f9e5394e0f7f21",
+  "upstreamTestSubject": "df514965072816d319ec1a1aa47b752c538d1d92",
+  "sourceHead": "65bcd5f5327126b9078cbf7aa2de63547b0306b5",
+  "sourceTree": "67a6eb40339d209034ceb0b2b05f0a6e90433604",
+  "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+  "branch": "codex/publication-view-linux-acceptance-oct10",
+  "allRuntimeAndTestsEqualUpstream": true,
+  "sourceCleanAtChecksAndSealing": true,
+  "sourceFiles": [
+    {
+      "file": "scripts/research-atomic-publication-postgres.test.mjs",
+      "bytes": 39194,
+      "sha256": "ef6d1ad24fdbb8921bcba7ab900a974535a25d031ccf8cc3559c9c65324df864"
+    },
+    {
+      "file": "scripts/research-publication-view-fixture.mjs",
+      "bytes": 1473,
+      "sha256": "7dae2dd716c30ad05ee829071cb3e1f275b24aedc1841bb7c540dcfdf430cf93"
+    },
+    {
+      "file": "scripts/research-publication-view.test.mjs",
+      "bytes": 9217,
+      "sha256": "b8f604bc3860700d6efa3ecb8de618e11e6318f1de8fc5a6654a4e41f54376af"
+    },
+    {
+      "file": "web/src/app/stock/[symbol]/PublishedResearchView.tsx",
+      "bytes": 9225,
+      "sha256": "4c10fbe2704e6876a22c53ceeb8bff58f60b489c98b597ef3b7a3e8a66b0a0f5"
+    },
+    {
+      "file": "web/src/lib/research-publication-view.ts",
+      "bytes": 14099,
+      "sha256": "9ff1bc9cfe104f1847dfd0899d45a45e6cab3db3720d71e92103a1cae4b0c6c3"
+    }
+  ],
+  "originalAcceptance": {
+    "source": "847d5f18d1af3d2bb7da399bb6e188d179466b7f",
+    "evidenceHead": "b1c56ed06d8649de22a4f4c04c80ef0f9ec6397c",
+    "receipt": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm.json",
+    "bytes": 17370,
+    "sha256": "ee932b2e56bc0e19a220f46d8a9e93083aa05ea3fda0471d63992a2fc4331fdc",
+    "unchanged": true,
+    "counts": {
+      "total": 759,
+      "pass": 755,
+      "fail": 2,
+      "skip": 2
+    }
+  },
+  "admission": {
+    "admissionAt": "2026-10-09T17:05:43.111507+00:00",
+    "manualOriginalStartedAt": "2026-10-09T16:57:16Z",
+    "manualOriginalDeadline": "2026-10-09T17:27:16Z",
+    "upstreamRuntime": "27f13e51fca5d64498b5ef54d4f9e5394e0f7f21",
+    "upstreamTest": "df514965072816d319ec1a1aa47b752c538d1d92",
+    "localHead": "65bcd5f5327126b9078cbf7aa2de63547b0306b5",
+    "localTree": "67a6eb40339d209034ceb0b2b05f0a6e90433604",
+    "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+    "diskBeforeBytes": 11132379136,
+    "diskAfterBytes": 11339907072,
+    "cacheRetirement": {
+      "exactPath": "/workspace/cloud-reviewer-result-http-vm-oct09/web/.next",
+      "onlyRebuildableFailedBuild": true,
+      "filesInventoried": 71,
+      "fileBytes": 207338532
+    },
+    "active": [],
+    "ciNotStartedReason": "Upstream retains known SQL NULL empty psql stdout versus literal null assertion; await owner correction rather than repeat known failure",
+    "dependencyInstallPerformed": false
+  },
+  "ci": {
+    "command": "npm run test:research-agents",
+    "counts": {
+      "tests": 760,
+      "pass": 756,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 2
+    },
+    "exitCode": 1,
+    "selectedFileCount": 74,
+    "selectedManifest": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/selected-tests.json",
+    "viewUnitSsrResults": [
+      {
+        "name": "display derives only original published public content without altering hashed input",
+        "passed": true
+      },
+      {
+        "name": "tampering, private fields, identity conflicts and failed read never become a working draft",
+        "passed": true
+      },
+      {
+        "name": "public URL conversion occurs after original hash check; private targets are rejected",
+        "passed": true
+      },
+      {
+        "name": "negative EPS cannot acquire applicable P/E; annual periods cannot borrow future-four labels",
+        "passed": true
+      },
+      {
+        "name": "closed query and exclusive view preserve original legacy/draft choices without fallback",
+        "passed": true
+      },
+      {
+        "name": "writer-to-reader compatibility preserves maximum catalysts, long locators and printed month/half-year units",
+        "passed": true
+      },
+      {
+        "name": "actual shared published component SSR escapes prose and shows periods, withdrawal and accessible folded tables",
+        "passed": true
+      }
+    ],
+    "skips": [
+      "ok 337 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled",
+      "ok 338 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled"
+    ],
+    "positivePgReaderCompleted": false,
+    "failure": {
+      "case": "private company reader is NULL before publication, RC-only and inaccessible to public roles",
+      "location": "scripts/research-atomic-publication-postgres.test.mjs:231:35",
+      "actualPsqlStdout": "",
+      "expected": "null",
+      "code": "ERR_ASSERTION",
+      "dependentParentFailure": "dependent_publication_case_stopped",
+      "countsAreOneChildAndItsParent": true,
+      "remainingPositiveReaderAndCorruptionCasesNotReached": true
+    },
+    "oneRunOnThisFrozenSuccessor": true,
+    "executionInstruction": "Root explicitly requested successor original CI after known NULL representation issue was reported; no assertion was altered and no same-head retry occurred"
+  },
+  "checks": {
+    "types": {
+      "exitCode": 0
+    },
+    "lint": {
+      "exitCode": 0,
+      "errors": 0,
+      "existingWarnings": 33
+    }
+  },
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "startedAt": "2026-10-09T17:05:43.149Z",
+      "completedAt": "2026-10-09T17:06:01.710Z",
+      "elapsedSeconds": 18.560517917008838,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1380028416,
+      "observedTaskDiskPeakBytes": 1004986368,
+      "availableBeforeBytes": 11339902976,
+      "availableAfterBytes": 11339853824,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T17:06:10.681Z",
+      "completedAt": "2026-10-09T17:06:38.508Z",
+      "elapsedSeconds": 27.82679450500291,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1899757568,
+      "observedTaskDiskPeakBytes": 1005051904,
+      "availableBeforeBytes": 11339849728,
+      "availableAfterBytes": 11339837440,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "ci-research",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-09T17:07:00.671Z",
+      "completedAt": "2026-10-09T17:08:05.151Z",
+      "elapsedSeconds": 64.47990381301497,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 1024024576,
+      "observedTaskDiskPeakBytes": 1047805952,
+      "availableBeforeBytes": 11339849728,
+      "availableAfterBytes": 11339583488,
+      "guardTermination": null
+    }
+  ],
+  "build": {
+    "executedOnSuccessor": false,
+    "id": null,
+    "completeManifest": null,
+    "linuxBuildPass": false,
+    "reason": "Root explicitly instructed not to retry VM Turbopack bind EPERM; Mac normal build is separate root-owned evidence, not Linux pass. No original or old compiled artifact reused.",
+    "previousExact847dBuildError": "globals.css worker binding to a port -> EPERM; exact syscall/address/port not recorded",
+    "previousStandaloneLoopbackBind": "127.0.0.1:56957 bound then closed; does not prove build-worker failure cause"
+  },
+  "resources": {
+    "sampledAggregateRssPeakBytes": 1899757568,
+    "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+    "rssTargetBytes": 8589934592,
+    "diskReserveBytes": 8589934592,
+    "minimumRecordedAvailableBytes": 11339583488,
+    "guardTerminations": [
+      null,
+      null,
+      null
+    ],
+    "singleHeavyStageAtATime": true
+  },
+  "cleanup": {
+    "at": "2026-10-09T17:09:36.475839+00:00",
+    "ownedProcessesRemaining": [],
+    "failedClusters": [
+      {
+        "cluster": "/tmp/si-rresult-6hB3Kx",
+        "stopped": true,
+        "retained": true,
+        "log": "si-rresult-6hB3Kx-failure-pg.log",
+        "bytes": 7461,
+        "sha256": "c8acf1c266b63fedef68f570b7c02f65c685e2f43d065d124840b722f04b32fd"
+      }
+    ],
+    "previousRedEvidenceRetained": true,
+    "availableBytes": 11339550720,
+    "onlyManualCleanup": "stopped original847d generated failed web/.next retired after71file inventory and original evidence Git push; no source/raw/model/uniquePG evidence deleted"
+  },
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/admission.json",
+      "bytes": 949,
+      "sha256": "bda357b51b07a52e2506d973ea996cad57ef143799baa57434aeefb64d70512b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/ci-research.json",
+      "bytes": 548,
+      "sha256": "f5b8340069206b8931569c6d63210bd4156b0ac7440e58956316012b2b2f9235"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/ci-research.log",
+      "bytes": 245791,
+      "sha256": "b4427c0991fb98153d0f0cf2e35c2b046e9dbea2bb738fd55449bf1b177988f1"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/ci-research.time",
+      "bytes": 799,
+      "sha256": "c4cffbdae3f61f4807652e8c5a21eb5286f336e6f375b7c6d42cdbdae5558b17"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/cleanup.json",
+      "bytes": 616,
+      "sha256": "5e46aaa13dc7d5845532d26068927f5883aec6d47a8fa2181b5d4bf2aee7ad7b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/lint.json",
+      "bytes": 525,
+      "sha256": "0b1463b61ef9d8b44481c551ca9e190c930d352b76e7d71f219c30e33bc6560b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/lint.log",
+      "bytes": 4753,
+      "sha256": "ad8c63f78b6e2415f7dedda610898a7df0a19c332b97e3a55d24f890724dac94"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/lint.time",
+      "bytes": 741,
+      "sha256": "f57cfd9b0b46510fd945d721c5819e45c0fa5cab699f8dada926aa54d05d4bea"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/red-cluster-inventory.json",
+      "bytes": 243,
+      "sha256": "4185fde71065eb57d8fcb1a5e26811bfca2cb5f773e28ec8d21b807591cd9789"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/retired-failed-build-inventory.json",
+      "bytes": 13478,
+      "sha256": "7cf1ed4c00f04a779155016e776f84d7a4fc671fa6baad6f3918e6a35b038644"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/run-check.py",
+      "bytes": 5032,
+      "sha256": "50d3048f1bd61736731bda3e20c43292ef387d45e5b128fe17f2768dd93407af"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/selected-tests.json",
+      "bytes": 16882,
+      "sha256": "994a0a88247bdfc447d85ebff211b2cfd69fb1a4635c1db8b50c8d9ee4b68ecc"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/si-rresult-6hB3Kx-failure-pg.log",
+      "bytes": 7461,
+      "sha256": "c8acf1c266b63fedef68f570b7c02f65c685e2f43d065d124840b722f04b32fd"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/source-file-hashes.json",
+      "bytes": 862,
+      "sha256": "0341e19a8f4ef86a1219163cb6cd4431bcba446b89238b2481b9b343fdfe3031"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/types.json",
+      "bytes": 589,
+      "sha256": "e0bad181f3b4a10ad6485a6049dcf8543b83300fd32baad809c3524e2fbf7dda"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/types.time",
+      "bytes": 789,
+      "sha256": "d5f2f3524acf541f5ca53376861713551500dd650e654843dc16837206e3f5f5"
+    }
+  ],
+  "limitations": [
+    "Successor overall Linux acceptance remains RED. Seven view/SSR units and types/lint pass, while original PG reader-before-publication assertion fails. Corruption fixture delta is preserved but its dependent case is not reached.",
+    "No new Linux BUILD_ID/compiled manifest; root Mac build cannot be relabeled Linux pass. Original847d build errors and unknown Mac sealing timeout remain historical evidence.",
+    "All fixture source/job/controller/model observations are synthetic engineering inputs, not actual model/research/publication/strategy qualification.",
+    "Only root supplied reviewed runtime/test successor commits were cherry-picked; VM did not author changes to runtime/SQL/tests/formulas/clock/guard/timeout/assertions.",
+    "No business HTTP, installation, production DB, main merge, deployment, model dispatch or protected approval. Manual time is not automated role budget evidence."
+  ]
+}

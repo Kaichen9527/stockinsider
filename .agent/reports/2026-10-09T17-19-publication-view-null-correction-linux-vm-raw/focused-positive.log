@@ -1,0 +1,177 @@
+TAP version 13
+# (node:231898) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:231898) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-reviewer-assignment.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# NOTICE:  constraint "candidate_detail_snapshots_revision_hash_check" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  identifier "candidate_detail_snapshots_stock_id_session_date_model_version_key" will be truncated to "candidate_detail_snapshots_stock_id_session_date_model_version_"
+# NOTICE:  constraint "candidate_detail_snapshots_stock_id_session_date_model_version_" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_input_hash_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_claims_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_source_refs_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_paid_content_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_bundle_binding_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_bundles_append_only_v4" for relation "public.candidate_dossier_bundles" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_research_dossiers_append_only_v4" for relation "public.candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_receipts_append_only_v4" for relation "public.candidate_dossier_submission_receipts" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_detail_published_append_only_v4" for relation "public.candidate_detail_snapshots" does not exist, skipping
+# ERROR:  research_publication_content_hash
+# CONTEXT:  PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 38 at RAISE
+# ERROR:  research_publication_binding
+# CONTEXT:  PL/pgSQL function read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text) line 34 at RAISE
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 8 at assignment
+# ERROR:  research_publication_request
+# CONTEXT:  PL/pgSQL function read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text) line 16 at RAISE
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 8 at assignment
+# ERROR:  research_publication_read_committed_required
+# CONTEXT:  PL/pgSQL function read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text) line 8 at RAISE
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 8 at assignment
+# ERROR:  permission denied for function read_research_company_publication_v2
+# ERROR:  permission denied for function read_research_company_publication_v2
+# ERROR:  research_publication_view_request
+# CONTEXT:  PL/pgSQL function read_research_company_publication_v2(uuid) line 8 at RAISE
+# ERROR:  synthetic_publication_abort
+# CONTEXT:  PL/pgSQL function fixture_publication_abort() line 1 at RAISE
+# SQL statement "INSERT INTO public.candidate_dossier_bundles(bundle_id,revision_kind,research_input_revision_id,research_company_id,research_snapshot_hash,input_hash,symbol,payload)
+#  VALUES(gen_random_uuid(),'research_input_v2',i.revision_id,i.research_company_id,i.snapshot_hash,i.input_hash,i.canonical_payload->'researchIdentity'->>'symbol',v)
+#  ON CONFLICT(research_input_revision_id,input_hash) WHERE revision_kind='research_input_v2' DO NOTHING"
+# PL/pgSQL function ensure_research_publication_bundle_v2(uuid,text) line 10 at SQL statement
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 41 at assignment
+# ERROR:  synthetic_publication_abort
+# CONTEXT:  PL/pgSQL function fixture_publication_abort() line 1 at RAISE
+# SQL statement "INSERT INTO public.candidate_dossier_outbox_v5(bundle_id,revision_kind,research_input_revision_id,research_company_id,research_snapshot_hash,input_hash,publication_kind,deep_job_id,deep_attempt)
+#  VALUES(b,'research_input_v2',i.revision_id,i.research_company_id,i.snapshot_hash,i.input_hash,'deep',j.job_id,i.attempt)
+#  ON CONFLICT(research_input_revision_id,input_hash,publication_kind) WHERE revision_kind='research_input_v2' DO NOTHING"
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 42 at SQL statement
+# ERROR:  synthetic_publication_abort
+# CONTEXT:  PL/pgSQL function fixture_publication_abort() line 1 at RAISE
+# SQL statement "UPDATE public.candidate_dossier_outbox_v5 SET status='running',attempts=1,lease_owner=a.work_owner,lease_expires_at=expiry,updated_at=clock_timestamp() WHERE job_id=o.job_id"
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 50 at SQL statement
+# ERROR:  synthetic_publication_abort
+# CONTEXT:  PL/pgSQL function fixture_publication_abort() line 1 at RAISE
+# SQL statement "INSERT INTO public.candidate_research_dossiers(narrative_kind,content,validation_status,bundle_hash,detail_payload_hash,bundle_id,input_hash,
+#   claims,source_references,claim_fact_map,published_at,revision_kind,research_input_revision_id,research_company_id,research_snapshot_hash,
+#   research_author_result_id,research_reviewer_result_id,source_seal_id)
+#  VALUES('codex_enriched',content,'valid',i.input_hash,i.input_hash,b,i.input_hash,'[]',ar.payload->'validatedArticle'->'sources','{}',clock_timestamp(),
+#   'research_input_v2',i.revision_id,i.research_company_id,i.snapshot_hash,ar.result_id,rr.result_id,i.source_seal_id) RETURNING id"
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 56 at SQL statement
+# ERROR:  synthetic_publication_abort
+# CONTEXT:  PL/pgSQL function fixture_publication_abort() line 1 at RAISE
+# SQL statement "INSERT INTO public.candidate_dossier_submission_receipts(bundle_id,input_hash,dossier_id,submission_hash,status,revision_kind,
+#   research_input_revision_id,research_company_id,research_snapshot_hash,research_author_result_id,research_reviewer_result_id,source_seal_id,research_request_hash)
+#  VALUES(b,i.input_hash,d,sh,'accepted','research_input_v2',i.revision_id,i.research_company_id,i.snapshot_hash,ar.result_id,rr.result_id,i.source_seal_id,rh) RETURNING submission_id"
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 61 at SQL statement
+# ERROR:  synthetic_publication_abort
+# CONTEXT:  PL/pgSQL function fixture_publication_abort() line 1 at RAISE
+# SQL statement "UPDATE public.research_deep_jobs_v1 SET status='completed',lease_owner=NULL,lease_expires_at=NULL,receipt_id=c,completion_owner=a.work_owner,
+#   completion_outbox_owner=a.work_owner,completion_outbox_job_id=o.job_id,completion_reviewer_result_id=rr.result_id,
+#   completion_article_hash=ar.payload->'validatedArticle'->>'articleHash',completion_submission_hash=sh,terminal_reason=NULL,finished_at=clock_timestamp()
+#  WHERE job_id=j.job_id"
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 66 at SQL statement
+# ERROR:  synthetic_publication_abort
+# CONTEXT:  PL/pgSQL function fixture_publication_abort() line 1 at RAISE
+# SQL statement "UPDATE public.candidate_dossier_outbox_v5 SET status='accepted',lease_owner=NULL,lease_expires_at=NULL,receipt_id=c,last_submission_hash=sh,updated_at=clock_timestamp() WHERE job_id=o.job_id"
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 65 at SQL statement
+# Subtest: atomic publication: original private pipeline, synthetic reports — positive
+    # Subtest: unpublished read, altered hash/result/role and isolation reject without effects
+    ok 1 - unpublished read, altered hash/result/role and isolation reject without effects
+      ---
+      duration_ms: 418.476709
+      ...
+    # Subtest: private company reader is NULL before publication, RC-only and inaccessible to public roles
+    ok 2 - private company reader is NULL before publication, RC-only and inaccessible to public roles
+      ---
+      duration_ms: 115.438845
+      ...
+    # Subtest: failure after each durable publication effect rolls back all rows and original lease
+    ok 3 - failure after each durable publication effect rolls back all rows and original lease
+      ---
+      duration_ms: 1632.886644
+      ...
+# ERROR:  research_publication_view_lineage
+# CONTEXT:  PL/pgSQL function read_research_company_publication_v2(uuid) line 28 at RAISE
+    # Subtest: real recalculation and concurrent publish yield one immutable existing receipt with no new charges
+    ok 4 - real recalculation and concurrent publish yield one immutable existing receipt with no new charges
+      ---
+      duration_ms: 1164.031362
+      ...
+    # Subtest: company reader displays the exact immutable publication, with no durable effects or private authority
+    ok 5 - company reader displays the exact immutable publication, with no durable effects or private authority
+      ---
+      duration_ms: 107.171477
+      ...
+    # Subtest: newest inconsistent dossier fails closed instead of selecting an older positive publication
+    ok 6 - newest inconsistent dossier fails closed instead of selecting an older positive publication
+      ---
+      duration_ms: 69.681314
+      ...
+# ERROR:  research_publication_branch_mismatch
+# CONTEXT:  PL/pgSQL function fence_research_dossier_insert_v2() line 9 at RAISE
+# ERROR:  research_publication_branch_mismatch
+# CONTEXT:  PL/pgSQL function fence_research_dossier_insert_v2() line 9 at RAISE
+# ERROR:  new row for relation "candidate_research_dossiers" violates check constraint "research_dossier_revision_union_v2"
+# DETAIL:  Failing row contains (4d583648-33d2-44ed-af3f-87f600386639, null, codex_enriched, {}, {}, valid, [], 2026-10-09 17:15:18.188127+00, null, null, null, null, [], [], null, null, legacy_detail_v1, null, null, null, null, null, null).
+# ERROR:  research_publication_writer_required
+# CONTEXT:  PL/pgSQL function fence_research_dossier_insert_v2() line 22 at RAISE
+    # Subtest: company reader acquires original source fence and serializes a simultaneous withdrawal
+    ok 7 - company reader acquires original source fence and serializes a simultaneous withdrawal
+      ---
+      duration_ms: 1169.052011
+      ...
+    # Subtest: legacy detail cannot disguise a v2 bundle or v2 dossier through direct service insert
+    ok 8 - legacy detail cannot disguise a v2 bundle or v2 dossier through direct service insert
+      ---
+      duration_ms: 174.255918
+      ...
+    # Subtest: original valid legacy writer still publishes its own bundle after v2 migration
+    ok 9 - original valid legacy writer still publishes its own bundle after v2 migration
+      ---
+      duration_ms: 47.059226
+      ...
+    # Subtest: restart and exact replay return original receipt without live claim
+    ok 10 - restart and exact replay return original receipt without live claim
+      ---
+      duration_ms: 432.816216
+      ...
+# ERROR:  candidate_dossier_revisions_are_append_only
+# CONTEXT:  PL/pgSQL function reject_candidate_dossier_revision_mutation_v4() line 3 at RAISE
+# ERROR:  candidate_dossier_revisions_are_append_only
+# CONTEXT:  PL/pgSQL function reject_candidate_dossier_revision_mutation_v4() line 3 at RAISE
+# NOTICE:  truncate cascades to table "candidate_dossier_submission_receipts"
+# NOTICE:  truncate cascades to table "research_deep_jobs_v1"
+# NOTICE:  truncate cascades to table "candidate_dossier_outbox_v5"
+# NOTICE:  truncate cascades to table "research_input_preparations_v2"
+# ERROR:  permission denied for table research_input_preparations_v2
+# NOTICE:  truncate cascades to table "research_deep_jobs_v1"
+# NOTICE:  truncate cascades to table "candidate_dossier_outbox_v5"
+# NOTICE:  truncate cascades to table "research_input_preparations_v2"
+# ERROR:  permission denied for table research_input_preparations_v2
+# ERROR:  research_publication_transition_writer
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 14 at RAISE
+# ERROR:  research_publication_replay_content
+# CONTEXT:  PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 11 at RAISE
+    # Subtest: completed replay holds source fence before withdrawal; original bytes remain immutable
+    ok 11 - completed replay holds source fence before withdrawal; original bytes remain immutable
+      ---
+      duration_ms: 1296.338234
+      ...
+    # Subtest: direct service mutation, truncate and changed completed replay denied
+    ok 12 - direct service mutation, truncate and changed completed replay denied
+      ---
+      duration_ms: 316.237951
+      ...
+    1..12
+ok 1 - atomic publication: original private pipeline, synthetic reports — positive
+  ---
+  duration_ms: 10523.957091
+  ...
+1..1
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10863.712174
