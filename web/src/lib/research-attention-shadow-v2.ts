@@ -80,7 +80,8 @@ function selectedRoots(roots: ResearchSourceRoot[]): ResearchSourceRoot[] {
       const a = group.rows[i - 1], b = group.rows[i];
       const aKey = a.revisionId || a.url, bKey = b.revisionId || b.url;
       if (severity[a.status] === severity[b.status] && aKey.localeCompare(bKey) === 0)
-        ensure(aKey === bKey && a.kind === b.kind && instant(a.publishedAt) === instant(b.publishedAt));
+        ensure(aKey === bKey && a.revisionId === b.revisionId
+          && a.kind === b.kind && instant(a.publishedAt) === instant(b.publishedAt));
     }
   }
   for (const root of roots) {

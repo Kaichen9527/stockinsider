@@ -153,6 +153,13 @@ test('newer winning revision cannot hide an older ambiguous pair in any permutat
       assert.throws(() => analyzeRoots(rows, [binding(winner)]), /shadow_invalid/);
   }
 });
+test('URL fallback and explicit revision with the same selection key cannot collide', () => {
+  const a = root('a', { url: 'https://example.org/source', revisionId: undefined });
+  const b = { ...a, revisionId: a.url }, winner = root('a', { revisionId: 'newest', revisionObservedAt: asOf });
+  for (const rows of [[a, b], [b, a], [a, b, winner], [b, a, winner],
+    [a, winner, b], [b, winner, a], [winner, a, b], [winner, b, a]])
+    assert.throws(() => analyzeRoots(rows, [binding(b)]), /shadow_invalid/);
+});
 test('missing revision leaves independence unknown; no supplied binding is inferred', () => {
   const r = root('a', { revisionId: undefined });
   const result = analyzeRoots([r], [binding(root('a'))]);
