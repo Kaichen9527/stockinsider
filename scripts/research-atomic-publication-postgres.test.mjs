@@ -116,7 +116,7 @@ async function publicationFixture(t,scenario='positive') {
     const prepare=async(invocation)=>{const f=await make();const p=await runResearchAuthorPacket(db,f,principal,new FinancialDeadline());return {...f,...authorResultFixture(f,f.revision,p.packet,invocation)};};
     const receive=f=>runResearchAuthorResult(db,f.request,principal,httpRequest,new FinancialDeadline());
     const read=f=>runResearchAuthorResult(db,{...f.request,action:'readAuthorResult'},principal,httpRequest,new FinancialDeadline());
-    if(scenario==='expires-waiting') sql("UPDATE research_deep_jobs_v1 SET lease_expires_at=clock_timestamp()+interval '7 seconds';UPDATE research_model_reservations_v1 SET lease_expires_at=(SELECT lease_expires_at FROM research_deep_jobs_v1 LIMIT 1);UPDATE research_deep_job_attempts_v1 SET lease_expires_at=(SELECT lease_expires_at FROM research_deep_jobs_v1 LIMIT 1);");
+    if(scenario==='expires-waiting') sql("UPDATE research_deep_jobs_v1 SET lease_expires_at=clock_timestamp()+interval '30 seconds';UPDATE research_model_reservations_v1 SET lease_expires_at=(SELECT lease_expires_at FROM research_deep_jobs_v1 LIMIT 1);UPDATE research_deep_job_attempts_v1 SET lease_expires_at=(SELECT lease_expires_at FROM research_deep_jobs_v1 LIMIT 1);");
     const f=await prepare();
     if(scenario==='paid-content') {
       f.request.article.summary.text+=' 定錨會員';
@@ -182,6 +182,7 @@ async function publicationFixture(t,scenario='positive') {
       await check('original live lease expires while awaiting source fence; no extension or writes',async()=>{
         const before=audit(),remainingSQL=`SELECT extract(epoch FROM lease_expires_at-clock_timestamp()) FROM research_deep_jobs_v1 WHERE job_id=${q(f.input.jobId)};`;
         let remaining=Number(sql(remainingSQL));
+        assert.ok(remaining>0&&remaining<=30,'original short synthetic fixture lease, sealed before execution');
         if(remaining>4) await new Promise(resolve=>setTimeout(resolve,(remaining-4)*1000));
         remaining=Number(sql(remainingSQL));assert.ok(remaining>0&&remaining<4.5,'bounded original fixture window remaining');
         const b=asyncSQL(`SET application_name='publication-expiry-B';BEGIN;SELECT pg_advisory_xact_lock(610091002::bigint);SELECT pg_sleep(${remaining+0.1});COMMIT;`);
