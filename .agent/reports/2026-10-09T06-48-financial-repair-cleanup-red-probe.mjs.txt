@@ -1,0 +1,16 @@
+import fs from 'node:fs/promises';
+import vm from 'node:vm';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import {createRequire} from 'node:module';
+import {performance} from 'node:perf_hooks';
+import ts from '/workspace/cloud-research-converged-oct08/web/node_modules/typescript/lib/typescript.js';
+const root='/workspace/cloud-research-converged-oct08',artifacts='/workspace/cloud-financial-adapter-artifacts-oct09';
+const fixture=path.join(artifacts,'cleanup-red-fixture');await fs.mkdir(path.join(fixture,'docs/research'),{recursive:true,mode:0o700});await fs.writeFile(path.join(fixture,'docs/research/probe.json'),'1',{mode:0o600});
+const source=await fs.readFile(path.join(root,'web/src/lib/research-financial-file-reader.ts'),'utf8');
+const originalRequire=createRequire(import.meta.url);let release,readPending;const gate=new Promise(r=>{release=r;});let opened=0,closeCalled=0,closed=0;
+const exports={};vm.runInNewContext(ts.transpileModule(source,{compilerOptions:{esModuleInterop:true,module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require:n=>n==='node:fs/promises'?{...fs,open:async(...args)=>{const handle=await fs.open(...args);opened++;return{stat:handle.stat.bind(handle),read:(...args)=>{readPending=gate.then(()=>handle.read(...args));return readPending;},close:async()=>{closeCalled++;await readPending;await handle.close();closed++;}};}}:originalRequire(n),Buffer,TextDecoder,AbortController,setTimeout,clearTimeout,performance});
+const deadline=new exports.FinancialDeadline();Object.defineProperty(deadline,'end',{value:performance.now()+20});const start=performance.now();let settled=false,primaryError=null;
+const work=exports.readPinnedFinancialFiles(fixture,[{path:'docs/research/probe.json',bytes:1,sha256:createHash('sha256').update('1').digest('hex')}],deadline).then(()=>{settled=true;},e=>{settled=true;primaryError=e.message;});
+await new Promise(r=>setTimeout(r,150));const red={subject:'abd58da2289222f2fef6777c0da50652aefe5f34',sourceSha256:createHash('sha256').update(source).digest('hex'),syntheticDelay:'real file descriptor and stats; controlled read/close Promise gate, not actual kernel I/O cancellation proof',deadlineMs:20,observedAtMs:performance.now()-start,abortTriggered:deadline.controller.signal.aborted,operationSettled:settled,opened,closeCalled,closed,expected:'bounded failure with explicitly unconfirmed cleanup',reproduced:deadline.controller.signal.aborted&&!settled&&opened===1&&closeCalled===1&&closed===0};
+release();await work;red.afterControlledRelease={settled,primaryError,closed};await fs.rm(fixture,{recursive:true,force:true});await fs.writeFile(path.join(artifacts,'cleanup-red-probe.json'),JSON.stringify(red,null,2)+'\n');console.log(JSON.stringify(red));process.exitCode=red.reproduced?1:2;

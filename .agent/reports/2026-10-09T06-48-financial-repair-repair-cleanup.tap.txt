@@ -1,0 +1,67 @@
+TAP version 13
+# Subtest: readStall bounded failure tracks delayed descriptor then permits confirmed recovery
+ok 1 - readStall bounded failure tracks delayed descriptor then permits confirmed recovery
+  ---
+  duration_ms: 150.371001
+  ...
+# Subtest: lateOpen bounded failure tracks delayed descriptor then permits confirmed recovery
+ok 2 - lateOpen bounded failure tracks delayed descriptor then permits confirmed recovery
+  ---
+  duration_ms: 127.872047
+  ...
+# Subtest: normal read cannot return successful cleanup while close is stalled
+ok 3 - normal read cannot return successful cleanup while close is stalled
+  ---
+  duration_ms: 124.122633
+  ...
+# Subtest: close rejection preserves original read failure and permanently requires controlled recovery
+not ok 4 - close rejection preserves original read failure and permanently requires controlled recovery
+  ---
+  duration_ms: 36.188666
+  location: '/workspace/cloud-research-converged-oct08/scripts/research-financial-cleanup.test.mjs:49:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: financial_cleanup_failed
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: [Function (anonymous)]
+  actual:
+    financialCleanup:
+      cleanupComplete: false
+      recoveryRequired: true
+      pendingOperations: 0
+      unconfirmedHandles: 1
+      cleanupFailed: true
+      kernelIoCancellationConfirmed: false
+  error: 'financial_cleanup_failed'
+  stack: |-
+    settled (evalmachine.<anonymous>:92:23)
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-financial-cleanup.test.mjs:51:3)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: success confirms all handles closed before return, duplicate close stays confirmed
+ok 5 - success confirms all handles closed before return, duplicate close stays confirmed
+  ---
+  duration_ms: 37.60279
+  ...
+# Subtest: already exhausted deadline never acquires a descriptor
+ok 6 - already exhausted deadline never acquires a descriptor
+  ---
+  duration_ms: 34.448121
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 5
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 515.844826
