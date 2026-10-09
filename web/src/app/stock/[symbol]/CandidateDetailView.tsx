@@ -5,6 +5,9 @@ import { sanitizePublicSourceUrl } from "@/lib/public-source-url.ts";
 import CandidateHistoryChart from "@/lib/candidate-history-chart";
 import LocalResearchWorkspace from "./LocalResearchWorkspace";
 import CandidateTradePlanView from "./CandidateTradePlanView";
+import { PublishedResearchView } from "./PublishedResearchView";
+import type { ResearchPublicationView } from "@/lib/research-publication-view";
+import { researchDisplayKind } from "@/lib/research-publication-view";
 
 type AnyRecord = Record<string, unknown>;
 
@@ -327,13 +330,16 @@ function WorkingResearchView({draft}: {draft: ReadOnlyResearchDraft}) {
   </article>;
 }
 
-export function DeepResearchView({ article, sourceLinks, layoutPreview = false, draft }: {
+export function DeepResearchView({ article, sourceLinks, layoutPreview = false, draft, publication }: {
   article: Pick<NonNullable<CandidateDetailPayload['deepResearch']>,
     'summary' | 'authoredAt' | 'evidenceCutoffAt' | 'sections' | 'scenarios' | 'companyBackground'> | null;
   sourceLinks: NonNullable<CandidateDetailPayload['deepResearchSources']>;
   layoutPreview?: boolean;
   draft?: ReadOnlyResearchDraft;
+  publication?: ResearchPublicationView;
 }) {
+  researchDisplayKind(article, draft, publication);
+  if (publication) return <PublishedResearchView publication={publication}/>;
   if (draft) {
     if (article) throw new Error("exclusive research display state");
     return <WorkingResearchView draft={draft}/>;

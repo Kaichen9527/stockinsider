@@ -21,6 +21,7 @@ import {syntheticReviewerEnvelope,canonicalSizedEditorialReview} from './researc
 import {validateResearchEditorialReview} from '../web/src/lib/research-editorial-review.ts';
 import {validateBusinessResearchArticle} from '../web/src/lib/research-business-article.ts';
 import {runResearchPublication,researchPublicationContent} from '../web/src/lib/research-atomic-publication.ts';
+import {parseResearchPublicationView} from '../web/src/lib/research-publication-view.ts';
 import mapping from '../web/src/lib/research-complete-mapping.json' with { type: 'json' };
 
 const bin = process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN || (() => {
@@ -52,6 +53,9 @@ async function publicationFixture(t,scenario='positive') {
     const ids = { job: randomUUID(), reservation: randomUUID(), company: randomUUID(), priority: randomUUID(), snapshot: 'a'.repeat(64), owner: 'synthetic-private-packet-owner' };
     createAuthorAssignmentFixture(sql, { q, ...ids });
     sql(`CREATE ROLE research_observed_rpc_owner NOLOGIN NOINHERIT NOBYPASSRLS;
+      -- Minimal company fixture restores the SELECT privilege granted by the
+      -- original full roster migration (no new production privilege).
+      GRANT SELECT ON research_observed_companies_v1 TO research_observed_rpc_owner;
       ALTER TABLE stocks ADD COLUMN market text DEFAULT 'TW';
       ALTER TABLE research_model_completions_v1 ADD PRIMARY KEY(reservation_id);
       ALTER TABLE research_model_completions_v1 ADD COLUMN owner text,ADD COLUMN outcome text,ADD COLUMN result_hash text,ADD COLUMN finished_at timestamptz DEFAULT clock_timestamp();
@@ -152,7 +156,7 @@ async function publicationFixture(t,scenario='positive') {
       ADD COLUMN completion_review_id uuid,ADD COLUMN completion_article_hash text,ADD COLUMN completion_submission_hash text,
       ADD COLUMN terminal_reason text,ADD COLUMN finished_at timestamptz;
       ALTER TABLE candidate_dossier_outbox_v5 ADD COLUMN deep_job_id uuid REFERENCES research_deep_jobs_v1(job_id),ADD COLUMN deep_attempt integer;`);
-    for(const name of ['20261009_research_publication_lineage_v2.sql','20261010_research_atomic_publication_v2.sql']) sql(fs.readFileSync('migrations/'+name,'utf8'));
+    for(const name of ['20261009_research_publication_lineage_v2.sql','20261010_research_atomic_publication_v2.sql','20261010_research_publication_view_v2.sql']) sql(fs.readFileSync('migrations/'+name,'utf8'));
     sql('GRANT ALL ON candidate_research_dossiers,research_deep_jobs_v1 TO service_role;ALTER TABLE candidate_research_dossiers ENABLE ROW LEVEL SECURITY;');
     const request={action:'publishResearchArticle',input:f.input,inputRevisionId:f.inputRevisionId,inputHash:f.inputHash,
       authorResultId:saved.result_id,authorResultHash:saved.result_hash,reviewerResultId:accepted.result_id,reviewerResultHash:accepted.result_hash};
@@ -223,6 +227,14 @@ async function publicationFixture(t,scenario='positive') {
       for(const patch of [{p_content_hash:'f'.repeat(64)},{p_reviewer_result_hash:'e'.repeat(64)},{p_author_principal:pair.reviewerPrincipalId}]) rejectSQL(rpc('publish_research_article_v2',Object.values({...pubArgs,...patch})),/research_publication_/);
       rejectSQL('BEGIN ISOLATION LEVEL REPEATABLE READ;'+rpc('publish_research_article_v2',Object.values(pubArgs)),/research_publication_read_committed_required/);assert.equal(audit(),before);
     });
+    await check('private company reader is NULL before publication, RC-only and inaccessible to public roles',()=>{
+      const before=audit();assert.equal(sql(`SET ROLE service_role;SELECT read_research_company_publication_v2(${q(ids.company)}::uuid) IS NULL;`),'t');
+      assert.equal(sql(`SET ROLE service_role;SELECT read_research_company_publication_v2(${q(randomUUID())}::uuid) IS NULL;`),'t');
+      for(const role of ['anon','authenticated'])assert.throws(()=>sql(`SET ROLE ${role};SELECT read_research_company_publication_v2(${q(ids.company)});`),/permission denied/);
+      assert.equal(sql("SELECT coalesce(bool_or(a.grantee=0 AND a.privilege_type='EXECUTE'),false) FROM pg_proc p CROSS JOIN LATERAL aclexplode(p.proacl) a WHERE p.oid='read_research_company_publication_v2(uuid)'::regprocedure;"),'f');
+      rejectSQL('BEGIN ISOLATION LEVEL REPEATABLE READ;'+rpc('read_research_company_publication_v2',[ids.company]),/research_publication_view_request/);
+      assert.equal(audit(),before);
+    });
     await check('failure after each durable publication effect rolls back all rows and original lease',()=>{
       const stages=[['candidate_dossier_bundles','INSERT'],['candidate_dossier_outbox_v5','INSERT'],['candidate_dossier_outbox_v5','UPDATE'],['candidate_research_dossiers','INSERT'],['candidate_dossier_submission_receipts','INSERT'],['research_deep_jobs_v1','UPDATE'],['candidate_dossier_outbox_v5','UPDATE','accepted']];
       for(const [table,op,state] of stages){sql(`CREATE FUNCTION fixture_publication_abort() RETURNS trigger LANGUAGE plpgsql AS $$BEGIN RAISE EXCEPTION 'synthetic_publication_abort';END$$;CREATE TRIGGER fixture_publication_abort AFTER ${op} ON ${table} FOR EACH ROW ${state ? "WHEN (NEW.status='accepted') " : ''}EXECUTE FUNCTION fixture_publication_abort();`);
@@ -239,6 +251,28 @@ async function publicationFixture(t,scenario='positive') {
       assert.equal(sql('SELECT count(*) FROM stocks;'),'0');assert.equal(sql('SELECT count(*) FROM candidate_detail_snapshots;'),'0');assert.equal(sql('SELECT count(*) FROM candidate_daily_stage_snapshots;'),'0');
       assert.equal(publication.researchQualified,false);assert.equal(publication.strategyApproved,false);assert.equal(publication.entryEligible,false);
       const publicBytes=JSON.stringify({content:publication.content,sources:publication.sourceReferences});for(const secret of [principal,pair.reviewerPrincipalId,ids.owner,'UNIQUE_PRIVATE_FULLTEXT_SENTINEL','controllerObservedStartAt','invocationId'])assert.ok(!publicBytes.includes(secret));
+    });
+    await check('company reader displays the exact immutable publication, with no durable effects or private authority',()=>{
+      const before=audit(),raw=JSON.parse(sql(rpc('read_research_company_publication_v2',[ids.company])));
+      assert.deepEqual(raw.publication.receipt,publication.receipt);assert.deepEqual(raw.publication.content,publication.content);
+      const view=parseResearchPublicationView(raw,ids.company,'2409');assert.equal(view.researchState,'published');assert.equal(view.entryEligible,false);
+      for(const secret of [principal,pair.reviewerPrincipalId,ids.owner,'UNIQUE_PRIVATE_FULLTEXT_SENTINEL','controllerObservedStartAt','invocationId','canonical_request'])assert.ok(!JSON.stringify(raw).includes(secret));
+      assert.equal(audit(),before);
+    });
+    await check('newest inconsistent dossier fails closed instead of selecting an older positive publication',()=>{
+      // Explicit database-corruption fixture under PostgreSQL superuser, rolled
+      // back. Runtime roles cannot disable the original append-only guards.
+      const before=audit();assert.throws(()=>sql(`BEGIN;ALTER TABLE candidate_research_dossiers DISABLE TRIGGER USER;
+        INSERT INTO candidate_research_dossiers SELECT (jsonb_populate_record(NULL::candidate_research_dossiers,to_jsonb(d)||jsonb_build_object('id',gen_random_uuid(),'input_hash',repeat('0',64),'bundle_hash',repeat('0',64),'detail_payload_hash',repeat('0',64),'published_at',clock_timestamp()+interval '1 second'))).* FROM candidate_research_dossiers d;
+        ALTER TABLE candidate_research_dossiers ENABLE TRIGGER USER;${rpc('read_research_company_publication_v2',[ids.company])}ROLLBACK;`),/research_publication_view_lineage/);
+      assert.equal(audit(),before);
+    });
+    await check('company reader acquires original source fence and serializes a simultaneous withdrawal',async()=>{
+      const before=audit();
+      const a=asyncSQL(`SET application_name='publication-view-A';BEGIN;${rpc('read_research_company_publication_v2',[ids.company])}SELECT pg_sleep(1);COMMIT;`);
+      await wait('publication-view-A','PgSleep');
+      const b=asyncSQL(`SET application_name='publication-view-B';BEGIN;SET ROLE service_role;UPDATE source_raw_documents SET metadata=metadata||'{"visibility":"private"}' WHERE id=${q(f.source)};ROLLBACK;`);
+      await wait('publication-view-B','advisory');assert.equal(JSON.parse((await a).stdout.trim()).publication.researchState,'published');await b;assert.equal(audit(),before);
     });
     await check('legacy detail cannot disguise a v2 bundle or v2 dossier through direct service insert',()=>{
       const stock=randomUUID(),detail=randomUUID(),legacyDossier=randomUUID(),bundle=publication.receipt.bundleId,dossier=publication.receipt.dossierId;
@@ -269,6 +303,8 @@ async function publicationFixture(t,scenario='positive') {
       const withdrawn=await publish();assert.equal(withdrawn.researchState,'withdrawn');assert.deepEqual(withdrawn.receipt,publication.receipt);assert.deepEqual(withdrawn.content,publication.content);
       const after=JSON.parse(audit());for(const key of ['bundles','outbox','dossiers','receipts','models','completions','jobs','inputs'])assert.deepEqual(after[key],before[key]);
       assert.equal(sql('SELECT count(*) FROM research_source_seal_invalidations_v2;'),'1');
+      const raw=JSON.parse(sql(rpc('read_research_company_publication_v2',[ids.company]))),view=parseResearchPublicationView(raw,ids.company,'2409');
+      assert.equal(view.researchState,'withdrawn');assert.deepEqual(raw.publication.content,publication.content);assert.deepEqual(raw.publication.receipt,publication.receipt);
     });
     await check('direct service mutation, truncate and changed completed replay denied',()=>{
       for(const s of ["UPDATE candidate_research_dossiers SET content='{}';","DELETE FROM candidate_dossier_submission_receipts;","TRUNCATE candidate_research_dossiers CASCADE;","TRUNCATE candidate_dossier_submission_receipts CASCADE;","UPDATE candidate_dossier_outbox_v5 SET status='failed',receipt_id=NULL;"])
