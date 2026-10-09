@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-09T17:43:51.572079+00:00",
+  "originalDeadline": "2026-10-09T17:57:55Z",
+  "availableBytes": 10421567488,
+  "ownedProcesses": [],
+  "previous94TAPPass": true,
+  "same521CompiledManifestVerified": true,
+  "freshProfileParent": "/workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native",
+  "noPreviousResultBytesReused": true
+}

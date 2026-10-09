@@ -1,0 +1,25 @@
+{
+  "startedAt": "2026-10-09T17:43:52.357Z",
+  "postgrest": {
+    "version": "PostgREST 16.3",
+    "archiveBytes": 4519976,
+    "archiveSha256": "4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d",
+    "binaryBytes": 20502640,
+    "binarySha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+  },
+  "partialDevelopmentProfile": true,
+  "databaseAdapterInjected": false,
+  "officialAuthorityRowsSeeded": 0,
+  "observedRosterPromoted": false,
+  "modelReserved": false,
+  "productionImported": false,
+  "top20": null,
+  "checks": [],
+  "limitations": [
+    "Node test-runner controlled loopback configuration, not production runtime activation",
+    "Partial schema profile does not attest the complete installed migration policy",
+    "No official roster/sector authority has been ingested; Top20 remains blocked"
+  ],
+  "failure": "Command failed: /workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl -D /workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native/http-2409/cluster -l /workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native/http-2409/postgres.log -o -h '' -k /workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native/http-2409/socket -p 35679 -w start\npg_ctl: could not start server\nExamine the log output.\n",
+  "completedAt": "2026-10-09T17:43:53.123Z"
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "file": "scripts/research-reviewer-result-http.test.mjs",
+    "bytes": 53490,
+    "sha256": "f21b54d2fcd625121c0948adcc506b216d43e9952ca0338ddb5f59ad4fd931e6"
+  },
+  {
+    "file": "scripts/research-publication-http.test.mjs",
+    "bytes": 61366,
+    "sha256": "5c843a39810fc31b6173c3a70a2c76699033c2825fa75cf744c3bacfa43d3906"
+  },
+  {
+    "file": "scripts/research-local-inbox-dataplane.mjs",
+    "bytes": 33643,
+    "sha256": "a45102c1c953cf359af6a2b7c2653203b4fadde9441a7a4183737a2b872c8c9d"
+  },
+  {
+    "file": "scripts/research-reviewer-result-http-readiness.mjs",
+    "bytes": 1462,
+    "sha256": "3952a65fd5c9e918f3873a03974c6f85e95f9321f7f9ec72affaf86178a28014"
+  }
+]

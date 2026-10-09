@@ -1,0 +1,14 @@
+{
+  "admissionAt": "2026-10-09T17:37:20.183567+00:00",
+  "originalManualStartedAt": "2026-10-09T17:27:55Z",
+  "originalManualDeadline": "2026-10-09T17:57:55+00:00",
+  "sourceHead": "1490472ec21630142222db86652d28772ddb45c9",
+  "sourceTree": "f02226c023457253e5823b6d368198536f1f6859",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "availableBytes": 10992791552,
+  "active": [],
+  "previousPartialPreservedAt": "/workspace/cloud-author-packet-artifacts-oct09/webpack178/partial-next-178",
+  "prebuildUnchanged": true,
+  "normalTurbopackRetry": false,
+  "dependenciesReused": true
+}
