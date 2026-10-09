@@ -70,5 +70,5 @@ export async function runCompleteInput(db:Pick<SupabaseClient,'rpc'>,request:Com
  phase='financial_calculation';const material=await completeMaterial(db,request,before.preparation as Row,deadline,root);
  phase='seal_rpc';const saved=await rpc('seal_research_article_input_revision_v2',{p_request:request,p_calculation:material});
  phase='seal_validate';validateCompleteResponse(request,saved);ensure(saved.status==='sealed');deadline.check();return saved;
- }catch(error){console.error('research_complete_input_failure_phase',phase);throw error;}
+ }catch(error){const codes=['research_complete_input_invalid','research_financial_supplement_invalid','research_business_calculator_invalid','financial_deadline','financial_recovery_required','financial_file_bound','financial_file_replaced','financial_parent_replaced'];console.error('research_complete_input_failure_phase',phase,error instanceof Error&&codes.includes(error.message)?error.message:'unclassified');throw error;}
 }

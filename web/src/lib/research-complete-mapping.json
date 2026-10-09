@@ -1,7 +1,7 @@
 {
   "schemaVersion": "research-complete-static-mapping-v2",
   "sourceClosureEncoding": "sorted_compact_utf8_json_metadata_v1",
-  "sourceClosureHash": "b38a7d717254c5b49f7795a91111c39c681754d008e30ee68b8c234e671579e2",
+  "sourceClosureHash": "751ede90a695535fa9a8bb941de9ce257fddcf1683453e4ec5bcd6f6fd38485b",
   "sourceClosure": [
     {
       "file": "web/package-lock.json",
@@ -45,8 +45,8 @@
     },
     {
       "file": "web/src/lib/research-complete-input.ts",
-      "bytes": 9794,
-      "sha256": "1b06d5ffcd4e45af0570c017b3dbaaa3af8461e912a377b01e10c447300ec588"
+      "bytes": 10132,
+      "sha256": "9a23f8c699d0f499cf90afd8a01f16455f8a59d39ea511210702286bb3a8c5e9"
     },
     {
       "file": "web/src/lib/research-deep-author-input.ts",
@@ -146,7 +146,7 @@
       "inventoryHash": "1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314",
       "historicalHash": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
       "modelCutoff": "2026-10-08T10:20:00Z",
-      "sourceClosureHash": "b38a7d717254c5b49f7795a91111c39c681754d008e30ee68b8c234e671579e2"
+      "sourceClosureHash": "751ede90a695535fa9a8bb941de9ce257fddcf1683453e4ec5bcd6f6fd38485b"
     },
     "2383": {
       "inventory": [
@@ -184,7 +184,7 @@
       "inventoryHash": "182992205534182b1e349da5c6806085574a3ca760273d0464f66eba6ce8c496",
       "historicalHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
       "modelCutoff": "2026-10-08T12:12:00Z",
-      "sourceClosureHash": "b38a7d717254c5b49f7795a91111c39c681754d008e30ee68b8c234e671579e2"
+      "sourceClosureHash": "751ede90a695535fa9a8bb941de9ce257fddcf1683453e4ec5bcd6f6fd38485b"
     }
   }
 }
