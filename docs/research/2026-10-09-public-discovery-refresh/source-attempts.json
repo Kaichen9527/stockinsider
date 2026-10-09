@@ -1,0 +1,316 @@
+{
+  "schemaVersion": "public-discovery-refresh-relay-v1",
+  "assembledAt": "2026-10-09T06:43:29.636561+00:00",
+  "sourceAttempts": [
+    {
+      "source": "investanchors",
+      "url": "https://investanchors.com/",
+      "attemptedAt": "2026-10-09T06:39:23.027343+00:00",
+      "authenticated": false,
+      "scope": "this exact public URL only; no pagination, replies, media or membership",
+      "httpStatus": 200,
+      "finalUrl": "https://investanchors.com/",
+      "contentType": "text/html; charset=utf-8",
+      "status": "read_success",
+      "bytes": 48281,
+      "sha256": "3c0302f06c4bc11011fbd55244e9e7768a931b1e297e788d6247ac592bb8a130",
+      "completedAt": "2026-10-09T06:39:23.770937+00:00"
+    },
+    {
+      "source": "telegram",
+      "url": "https://t.me/s/investanchors",
+      "attemptedAt": "2026-10-09T06:39:23.027825+00:00",
+      "authenticated": false,
+      "scope": "this exact public URL only; no pagination, replies, media or membership",
+      "httpStatus": 200,
+      "finalUrl": "https://t.me/s/investanchors",
+      "contentType": "text/html; charset=utf-8",
+      "status": "read_success",
+      "bytes": 116686,
+      "sha256": "d07c794d80ff95aa8612f2e9e1fb66e402ee7976b89141bd107db2499f3b1bd3",
+      "postIds": [
+        "investanchors/863",
+        "investanchors/864",
+        "investanchors/865",
+        "investanchors/866",
+        "investanchors/867",
+        "investanchors/868",
+        "investanchors/869",
+        "investanchors/870",
+        "investanchors/871",
+        "investanchors/872",
+        "investanchors/873",
+        "investanchors/874",
+        "investanchors/875",
+        "investanchors/876",
+        "investanchors/877",
+        "investanchors/878",
+        "investanchors/879",
+        "investanchors/880",
+        "investanchors/881",
+        "investanchors/882"
+      ],
+      "publicationTimeElements": [
+        "2026-06-16T03:01:22+00:00",
+        "2026-06-22T12:20:55+00:00",
+        "2026-06-29T03:21:06+00:00",
+        "2026-07-01T04:35:15+00:00",
+        "2026-07-05T15:25:07+00:00",
+        "2026-07-06T14:06:44+00:00",
+        "2026-07-07T03:33:38+00:00",
+        "2026-07-21T11:02:57+00:00",
+        "2026-07-27T07:56:07+00:00",
+        "2026-07-30T15:11:47+00:00",
+        "2026-08-10T07:03:51+00:00",
+        "2026-08-17T04:59:00+00:00",
+        "2026-08-19T04:21:53+00:00",
+        "2026-08-28T14:03:29+00:00",
+        "2026-09-04T16:16:42+00:00",
+        "2026-09-10T07:14:36+00:00",
+        "2026-09-12T02:03:19+00:00",
+        "2026-09-14T06:54:47+00:00",
+        "2026-09-14T12:10:13+00:00",
+        "2026-09-18T05:52:16+00:00"
+      ],
+      "completedAt": "2026-10-09T06:39:24.972317+00:00"
+    },
+    {
+      "source": "ptt",
+      "url": "https://www.ptt.cc/bbs/Stock/index.html",
+      "attemptedAt": "2026-10-09T06:39:23.028009+00:00",
+      "authenticated": false,
+      "scope": "this exact public URL only; no pagination, replies, media or membership",
+      "httpStatus": 200,
+      "finalUrl": "https://www.ptt.cc/bbs/Stock/index.html",
+      "contentType": "text/html; charset=utf-8",
+      "status": "read_success",
+      "bytes": 22706,
+      "sha256": "840191dbf753fe7dfd1838f6edb2e50d7f86991e6d188361d4f0e1812c9fdb45",
+      "completedAt": "2026-10-09T06:39:23.762760+00:00"
+    },
+    {
+      "source": "twse-calendar",
+      "url": "https://www.twse.com.tw/holidaySchedule/holidaySchedule?response=json&queryYear=115",
+      "attemptedAt": "2026-10-09T06:39:23.028159+00:00",
+      "authenticated": false,
+      "scope": "this exact public URL only; no pagination, replies, media or membership",
+      "httpStatus": 200,
+      "finalUrl": "https://www.twse.com.tw/holidaySchedule/holidaySchedule?response=json&queryYear=115",
+      "contentType": "application/json;charset=UTF-8",
+      "status": "read_success",
+      "bytes": 2783,
+      "sha256": "7fefe785ea7155a5004a2eb74486ad865ea5c4b5f02ee0cffbbdacb1ca2ea390",
+      "calendarColumns": [
+        "日期",
+        "名稱",
+        "說明"
+      ],
+      "oct09Rows": [
+        [
+          "2026-10-09",
+          "國慶日",
+          "國慶日為10月10日適逢星期六，於10月9日（星期五）補假。"
+        ]
+      ],
+      "completedAt": "2026-10-09T06:39:23.165279+00:00"
+    }
+  ],
+  "pttPosts": [
+    {
+      "url": "https://www.ptt.cc/bbs/Stock/M.1791514884.A.A00.html",
+      "attemptedAt": "2026-10-09T06:40:42.239313+00:00",
+      "scope": "one public post body plus currently delivered public pushes; no thread search/pagination/private content",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 8630,
+      "sha256": "ff85fcde7850dcde343365a450e84c0b21ad6282d189b2043f011133e01232dc",
+      "printedMetadata": [
+        "e246809416 (ddr9)",
+        "Stock",
+        "[情報] 2731 雄獅 115年9月",
+        "Fri Oct  9 11:01:22 2026"
+      ],
+      "sourceLinks": [
+        "https://mopsov.twse.com.tw/mops/web/t05st10_ifrs"
+      ],
+      "publicPushesDelivered": 8,
+      "completedAt": "2026-10-09T06:40:42.963631+00:00"
+    },
+    {
+      "url": "https://www.ptt.cc/bbs/Stock/M.1791521661.A.A4B.html",
+      "attemptedAt": "2026-10-09T06:40:42.963649+00:00",
+      "scope": "one public post body plus currently delivered public pushes; no thread search/pagination/private content",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 8050,
+      "sha256": "a5ed9386a9254e06ed7f6a01b04cd934789750fe99c6767961164f4409749194",
+      "printedMetadata": [
+        "BlueBird5566 (賴粉-青鳥56)",
+        "Stock",
+        "[情報] 8069 元太 115年9月營收",
+        "Fri Oct  9 12:54:18 2026"
+      ],
+      "sourceLinks": [
+        "https://mops.twse.com.tw/mops/web/t51sb10?Stp=R1&TK="
+      ],
+      "publicPushesDelivered": 6,
+      "completedAt": "2026-10-09T06:40:43.652218+00:00"
+    },
+    {
+      "url": "https://www.ptt.cc/bbs/Stock/M.1791526881.A.0E2.html",
+      "attemptedAt": "2026-10-09T06:40:43.652240+00:00",
+      "scope": "one public post body plus currently delivered public pushes; no thread search/pagination/private content",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 6592,
+      "sha256": "8a314260b347cfa3a5522864325fa7401a8da1e3326a308d4e8b35d489b6f063",
+      "printedMetadata": [
+        "greatliona (The Blessed)",
+        "Stock",
+        "[情報] 智通 9月",
+        "Fri Oct  9 14:21:19 2026"
+      ],
+      "sourceLinks": [
+        "https://mops.twse.com.tw/mops/#/web/t05st10_ifrs"
+      ],
+      "publicPushesDelivered": 0,
+      "completedAt": "2026-10-09T06:40:44.351279+00:00"
+    }
+  ],
+  "officialMonthlyAttempts": [
+    {
+      "source": "twse-monthly",
+      "url": "https://openapi.twse.com.tw/v1/opendata/t187ap05_L",
+      "attemptedAt": "2026-10-09T06:41:21.535079+00:00",
+      "authenticated": false,
+      "scope": "current publicly delivered whole official monthly revenue dataset; requested company rows only projected",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 606355,
+      "sha256": "83480ff80b337e936821b45e2cef1c2a48ba92f112fb3e31027501810e8bccf5",
+      "totalRows": 1086,
+      "selectedRows": [
+        {
+          "jsonPointer": "/462",
+          "value": {
+            "出表日期": "1150917",
+            "資料年月": "11508",
+            "公司代號": "2731",
+            "公司名稱": "雄獅",
+            "產業別": "觀光餐旅",
+            "營業收入-當月營收": "2549556",
+            "營業收入-上月營收": "2964348",
+            "營業收入-去年當月營收": "2383019",
+            "營業收入-上月比較增減(%)": "-13.992689117472038",
+            "營業收入-去年同月增減(%)": "6.988488132071125",
+            "累計營業收入-當月累計營收": "21974959",
+            "累計營業收入-去年累計營收": "19990398",
+            "累計營業收入-前期比較增減(%)": "9.927571226946057",
+            "備註": "-"
+          }
+        }
+      ],
+      "completedAt": "2026-10-09T06:41:22.390505+00:00"
+    },
+    {
+      "source": "tpex-monthly",
+      "url": "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O",
+      "attemptedAt": "2026-10-09T06:41:21.536424+00:00",
+      "authenticated": false,
+      "scope": "current publicly delivered whole official monthly revenue dataset; requested company rows only projected",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 496547,
+      "sha256": "f00e3fdd7060db0db943b79dc53d732df940d038ef208a1b075363e06660bd92",
+      "totalRows": 892,
+      "selectedRows": [
+        {
+          "jsonPointer": "/795",
+          "value": {
+            "出表日期": "1150917",
+            "資料年月": "11508",
+            "公司代號": "8069",
+            "公司名稱": "元太",
+            "產業別": "光電業",
+            "營業收入-當月營收": "3446142",
+            "營業收入-上月營收": "2876431",
+            "營業收入-去年當月營收": "3336337",
+            "營業收入-上月比較增減(%)": "19.80617647355351",
+            "營業收入-去年同月增減(%)": "3.2911843138148216",
+            "累計營業收入-當月累計營收": "25172156",
+            "累計營業收入-去年累計營收": "25917590",
+            "累計營業收入-前期比較增減(%)": "-2.8761701994668485",
+            "備註": "-"
+          }
+        },
+        {
+          "jsonPointer": "/879",
+          "value": {
+            "出表日期": "1150917",
+            "資料年月": "11508",
+            "公司代號": "8932",
+            "公司名稱": "智通*",
+            "產業別": "數位雲端",
+            "營業收入-當月營收": "206275",
+            "營業收入-上月營收": "192123",
+            "營業收入-去年當月營收": "182933",
+            "營業收入-上月比較增減(%)": "7.3661144162854",
+            "營業收入-去年同月增減(%)": "12.75986290062482",
+            "累計營業收入-當月累計營收": "1689473",
+            "累計營業收入-去年累計營收": "1508838",
+            "累計營業收入-前期比較增減(%)": "11.97179551416388",
+            "備註": "-"
+          }
+        }
+      ],
+      "completedAt": "2026-10-09T06:41:22.025945+00:00"
+    }
+  ],
+  "septemberCsvAttempts": [
+    {
+      "url": "https://mopsov.twse.com.tw/nas/t21/sii/t21sc03_115_9_0.csv",
+      "attemptedAt": "2026-10-09T06:41:41.261013+00:00",
+      "scope": "requested official September2026 monthly revenue CSV; full bytes, selected3company rows only",
+      "status": "failed",
+      "errorType": "HTTPError",
+      "error": "HTTP Error 404: Not Found",
+      "completedAt": "2026-10-09T06:41:41.394914+00:00"
+    },
+    {
+      "url": "https://mopsov.twse.com.tw/nas/t21/otc/t21sc03_115_9_0.csv",
+      "attemptedAt": "2026-10-09T06:41:41.261688+00:00",
+      "scope": "requested official September2026 monthly revenue CSV; full bytes, selected3company rows only",
+      "status": "failed",
+      "errorType": "HTTPError",
+      "error": "HTTP Error 404: Not Found",
+      "completedAt": "2026-10-09T06:41:41.407452+00:00"
+    }
+  ],
+  "einkOfficialRelease": {
+    "url": "https://www.eink.com/news/detail/e-ink-announces-strategic-investment-in-NewCopper-to-advance-conductive-copper-ink-technology",
+    "attemptedAt": "2026-10-09T06:42:01.776346+00:00",
+    "scope": "exact public company press release body, no linked private content/media",
+    "httpStatus": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "finalUrl": "https://www.eink.com/news/detail/e-ink-announces-strategic-investment-in-NewCopper-to-advance-conductive-copper-ink-technology",
+    "status": "read_success",
+    "bytes": 58576,
+    "sha256": "06cc454da38ee36e93da569381278c1a7a1551911d1d5c4aa5c87a2d7a534e3a",
+    "title": [
+      "E Ink Announces Strategic Investment in NewCopper to Advance Conductive Copper Ink Technology"
+    ],
+    "publishedMarkers": [],
+    "completedAt": "2026-10-09T06:42:03.262112+00:00"
+  },
+  "boundaries": {
+    "databaseSubmitted": false,
+    "platformEnabled": false,
+    "scoredOrRanked": false,
+    "financialVerified": false,
+    "researchQualified": false,
+    "pricePhaseKnown": false,
+    "historicalPITEligible": false,
+    "privateRawCommitted": false
+  },
+  "clockMeaning": "Current acquisition times are this research run only, never backdated to publisher dates; HTTP success does not establish completeness or actual content understanding."
+}
