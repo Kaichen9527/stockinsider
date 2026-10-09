@@ -1,0 +1,273 @@
+{
+  "schemaVersion": "stockinsider-reviewed-component-integration-v1",
+  "recordedAt": "2026-10-09T06:03:31.230Z",
+  "subject": "e215eaf9e38b30fd6af023a7c7412ef606e98353",
+  "tree": "340a2a031a641045ee6c8f96269420d5b953a294",
+  "sourceHeads": {
+    "base": "85f8fc3b7e21372187a8cebc010eaee37cfd1fae",
+    "benchmark": "77c3f5de71f7d220e9c7cccdd74d8d8487ae2503",
+    "shadow": "b12dc359c2bc2d7b7bc337c960394318b30b2192",
+    "archive": "5f46aa48c7637d106377c8ffd78875b89466e182"
+  },
+  "files": [
+    {
+      "path": "web/src/app/api/internal/candidate-financial-queue-drain/route.ts",
+      "sourceRef": "85f8fc3b7e21372187a8cebc010eaee37cfd1fae",
+      "bytes": 7370,
+      "sha256": "f01b355eec7f6ab85c8776e8f5874523fe84230f85f96c4d83821d8775d0f69e"
+    },
+    {
+      "path": "scripts/research-input-preparation-postgres.test.mjs",
+      "sourceRef": "85f8fc3b7e21372187a8cebc010eaee37cfd1fae",
+      "bytes": 15978,
+      "sha256": "17847c6d2036a77b5bfe03a5784b869e38d07fec033ab2f49e3e6b6dabba90dd"
+    },
+    {
+      "path": "scripts/research-publication-source-fence-postgres.test.mjs",
+      "sourceRef": "85f8fc3b7e21372187a8cebc010eaee37cfd1fae",
+      "bytes": 12444,
+      "sha256": "365c3c3214dc2b715af052b6dbe98ac3c542403ce4e6102b90aba65a1f33ed26"
+    },
+    {
+      "path": "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+      "sourceRef": "85f8fc3b7e21372187a8cebc010eaee37cfd1fae",
+      "bytes": 29788,
+      "sha256": "05be3041dabace723a9de9fde65647a5ec4275117eb98a51d146c8e153a83d04"
+    },
+    {
+      "path": "web/src/app/api/internal/research-technical-snapshot/route.ts",
+      "sourceRef": "77c3f5de71f7d220e9c7cccdd74d8d8487ae2503",
+      "bytes": 12582,
+      "sha256": "f0e1238d3cf464e0c0c94a6fcb56939100d3a35f2271a6a68cca28ea1cf1ec4c"
+    },
+    {
+      "path": "web/src/lib/research-monitor-benchmark-context.ts",
+      "sourceRef": "77c3f5de71f7d220e9c7cccdd74d8d8487ae2503",
+      "bytes": 14748,
+      "sha256": "2e3ae49d207a3fc9062075adf004233578ebd54d33cbaebf7d4140e17b82b875"
+    },
+    {
+      "path": "web/src/lib/research-monitor-benchmark-context.test.ts",
+      "sourceRef": "77c3f5de71f7d220e9c7cccdd74d8d8487ae2503",
+      "bytes": 14499,
+      "sha256": "c54076115482797aae2f0d4d900bd63cd03e15acd55779b03cdef09f68592bad"
+    },
+    {
+      "path": "scripts/research-agent-routes.test.mjs",
+      "sourceRef": "77c3f5de71f7d220e9c7cccdd74d8d8487ae2503",
+      "bytes": 17001,
+      "sha256": "e58c08473226f1f1ad1e998992d5ff73f55be81b9f32511c86671e676dfcccb2"
+    },
+    {
+      "path": "scripts/research-observed-roster-native.test.mjs",
+      "sourceRef": "77c3f5de71f7d220e9c7cccdd74d8d8487ae2503",
+      "bytes": 7862,
+      "sha256": "8a135bfb39c8618b9ddc4ec8af8d154217bf55057971df06c02a5b87c3ea7bfa"
+    },
+    {
+      "path": "web/src/lib/research-strategy-release.generated.ts",
+      "sourceRef": "77c3f5de71f7d220e9c7cccdd74d8d8487ae2503",
+      "bytes": 10050,
+      "sha256": "5ca0f774fcbf6fa2850f7851c18a4bd500a3603cf459f68c6c662d383b9c164f"
+    },
+    {
+      "path": "web/src/lib/research-attention-shadow-v2.ts",
+      "sourceRef": "b12dc359c2bc2d7b7bc337c960394318b30b2192",
+      "bytes": 12736,
+      "sha256": "799f07564669bec921835f9a8d3c7f0b5a67009c62f4d9867e7b9eedc02c341d"
+    },
+    {
+      "path": "web/src/lib/research-attention-shadow-v2.test.ts",
+      "sourceRef": "b12dc359c2bc2d7b7bc337c960394318b30b2192",
+      "bytes": 13935,
+      "sha256": "4feb688edfaccc8c1dea43525ce8a2dcedf9e074b24dc3ead9c05b44578c6b44"
+    },
+    {
+      "path": "migrations/20261008_insider_snapshots_v1.sql",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 27221,
+      "sha256": "b79886f1da20c646fb0fd96d9e01e1c90c904f41e1acc977bd0d6ea7548c323d"
+    },
+    {
+      "path": "scripts/research-insider-acceptance-lifecycle.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 4935,
+      "sha256": "6a8b9e280f35be6d1a818c4ea759d28c212db7f54d7537c1077f6cd430bb4983"
+    },
+    {
+      "path": "scripts/research-insider-acceptance-lifecycle.test.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 6278,
+      "sha256": "e4a33ea811eaaaa8454f406901e011f11dce582c90a32aabed78ff077633732c"
+    },
+    {
+      "path": "scripts/research-insider-capacity-witness.test.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 1294,
+      "sha256": "12c8aa0f530a9f5fb45d70014ed1b0a98b9e1577e4ad861ad57ded0124029b8e"
+    },
+    {
+      "path": "scripts/research-insider-command-input.test.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 3165,
+      "sha256": "c1d5e24804c7f142a4707b078aecc7f6a2750383fca6cec28fb079495ba9c67c"
+    },
+    {
+      "path": "scripts/research-insider-continuation-command.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 5488,
+      "sha256": "79c84bda64525ec38b0b02caa8ff6d3c86d2b477364765ef2989584f19e99899"
+    },
+    {
+      "path": "scripts/research-insider-continuation.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 5808,
+      "sha256": "f5dd1126b9fb91ba0d4165a519372cb191bad9469e0e1d26d16e6f99ef7f7242"
+    },
+    {
+      "path": "scripts/research-insider-continuation.test.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 3853,
+      "sha256": "dda13c88327ada33008e445ea6848eeb43f9e14eba1e2b796de167b3614c641c"
+    },
+    {
+      "path": "scripts/research-insider-dataplane.test.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 17679,
+      "sha256": "176c6f205e44a0797b4825a024bb30c49792f85add6cc983f859f5946c8bc30b"
+    },
+    {
+      "path": "scripts/research-insider-guarded-http.test.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 2147,
+      "sha256": "3780f42f699b105e972e7e3be65932a6c2f967a1e7fb9fc99b57f0bcae856f1b"
+    },
+    {
+      "path": "scripts/research-insider-health-route.test.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 5731,
+      "sha256": "a9ff7d4a7137645755ea3f4515538109dd4bdb10bdd1ccb1c0bfeb0e9e7b85d8"
+    },
+    {
+      "path": "scripts/research-insider-journal-linux.test.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 3357,
+      "sha256": "d58b6c7532c3687383db1bd3a1eec249494a2eee9f15fc5d7504e22bdea25142"
+    },
+    {
+      "path": "scripts/research-insider-snapshot-postgres.test.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 14763,
+      "sha256": "f19e17d0c25d48b0b09d6d6f9671555a9a4610380c5e55207131f8e5f5bd75e0"
+    },
+    {
+      "path": "scripts/research-insider-snapshot.test.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 6109,
+      "sha256": "c0f7ecfdcea26ed851196a4aef42a7697ab6ff0990dbfb79020678bdfac8852b"
+    },
+    {
+      "path": "scripts/research-source-controller.mjs",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 9268,
+      "sha256": "56b2fab436bc230a9fb2e97955ee12ed316d33f409eeb10c75c1214332842511"
+    },
+    {
+      "path": "web/src/app/api/internal/source-sync/route.ts",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 15119,
+      "sha256": "4f196ded180f83e07bf885308004caa04e85fce004af4d5bb01bfa96869d8373"
+    },
+    {
+      "path": "web/src/lib/insider-completed-archive-codec-v2.test.ts",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 5515,
+      "sha256": "936013fc59162fc3e7f41e03c8416bda3287857dd4ef2a948d30305c71180beb"
+    },
+    {
+      "path": "web/src/lib/insider-completed-archive-codec-v2.ts",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 5601,
+      "sha256": "7dd4f9720366dc0364c49b6ca2350ef9e0bb227d221960cf1f087b6cd075d469"
+    },
+    {
+      "path": "web/src/lib/insider-completed-archive-io-v2.test.ts",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 7256,
+      "sha256": "cbe4e31019af9ecb6e2c5e031a541f215736af05e843c09c1c33861b4c3589b9"
+    },
+    {
+      "path": "web/src/lib/insider-completed-archive-io-v2.ts",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 7438,
+      "sha256": "8a6fa1f75beba810d198c4e2cf49ed74cefd52372cac9270509a5c82e6d4362c"
+    },
+    {
+      "path": "web/src/lib/research-insider-official.ts",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 8114,
+      "sha256": "2d34a66468b60a9d7d46d3c233ee5886d5d8149d80a1fdbc90de8369e99db2b8"
+    },
+    {
+      "path": "web/src/lib/research-insider-snapshot.ts",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 12464,
+      "sha256": "be72153ca09caec692affe653ebb226ad31c12f48ffa96a212e9c1fdc978dfc9"
+    },
+    {
+      "path": "web/src/lib/research-v2.ts",
+      "sourceRef": "5f46aa48c7637d106377c8ffd78875b89466e182",
+      "bytes": 285140,
+      "sha256": "abd07715be302a0a0601b4d5b812af6b7e80a63b358e6ba186abd81867fe6e7c"
+    }
+  ],
+  "packageMerge": {
+    "onlyChangesToBase": {
+      "test:research-agents": [
+        "web/src/lib/research-monitor-benchmark-context.test.ts",
+        "web/src/lib/research-attention-shadow-v2.test.ts"
+      ]
+    },
+    "allExistingEntriesRetained": true
+  },
+  "localChecks": [
+    {
+      "path": "/tmp/stockinsider-integration-focused-final-oct09.tap",
+      "bytes": 21961,
+      "sha256": "312131c3ba76d5c2dad3a58726d5009296c8610de1864c52831671e54be454f4",
+      "summary": [
+        "# tests 84",
+        "# pass 84",
+        "# fail 0",
+        "# skipped 0"
+      ]
+    },
+    {
+      "path": "/tmp/stockinsider-integration-insider-oct09.tap",
+      "bytes": 8091,
+      "sha256": "f875fcee760dfcc55c238249ceb8deadf91c368b36e9e2ab244a4bdfc1e8c53a",
+      "summary": [
+        "# tests 37",
+        "# pass 37",
+        "# fail 0",
+        "# skipped 0"
+      ]
+    }
+  ],
+  "strategyCodeHash": "40da8d95e86bd096e387b1618833957db6af969cd2e1cb0f4c5ab75d1a3dcabe",
+  "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
+  "strategyReleaseCheckedAfterSupportedBridgeGeneration": true,
+  "acceptance": {
+    "fullCombinedTypesLintBuild": false,
+    "nativeCombinedPgPostgrest": false,
+    "independentIntegrationReview": false,
+    "protectedRelease": false,
+    "productionDeployment": false
+  },
+  "retainedLimitations": [
+    "Archive merge intentionally includes its previously reviewed d274 durable snapshot lineage; no archive eviction activation.",
+    "Prior focused command misspelled two archive test filenames and only ran71; corrected exact selected files run84.",
+    "Wrong release-check filename and missing generated bridge were diagnosed; supported canonical bridge generation then exact release check passed.",
+    "Manual deterministic checks are not model-role execution or formal publication."
+  ]
+}
