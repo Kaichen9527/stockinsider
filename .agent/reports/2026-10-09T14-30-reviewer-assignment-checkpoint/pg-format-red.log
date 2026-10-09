@@ -1,0 +1,315 @@
+TAP version 13
+# (node:82937) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82937) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-handoff.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: handoffAuthorResult original8192 wire limit exact/+1 and strict decoding
+ok 1 - handoffAuthorResult original8192 wire limit exact/+1 and strict decoding
+  ---
+  duration_ms: 33.1465
+  ...
+# Subtest: readAuthorHandoff original8192 wire limit exact/+1 and strict decoding
+ok 2 - readAuthorHandoff original8192 wire limit exact/+1 and strict decoding
+  ---
+  duration_ms: 4.237375
+  ...
+# Subtest: stalled body cancels and expired body launches no reads
+ok 3 - stalled body cancels and expired body launches no reads
+  ---
+  duration_ms: 32.116208
+  ...
+# Subtest: review/cron/unknown credentials reject; exact author malformed request rejects
+ok 4 - review/cron/unknown credentials reject; exact author malformed request rejects
+  ---
+  duration_ms: 3.243583
+  ...
+# Subtest: 2409 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+ok 5 - 2409 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+  ---
+  duration_ms: 1238.23125
+  ...
+# Subtest: 2383 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+ok 6 - 2383 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+  ---
+  duration_ms: 745.899459
+  ...
+# (node:82958) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82958) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-execution-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: REB01 actual matched credentials resolve private role-separated controller principals
+ok 7 - REB01 actual matched credentials resolve private role-separated controller principals
+  ---
+  duration_ms: 19.559625
+  ...
+# Subtest: REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication
+ok 8 - REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication
+  ---
+  duration_ms: 1.7385
+  ...
+# Subtest: REB03 role swap, alias header, raw/malformed token and cron do not authenticate
+ok 9 - REB03 role swap, alias header, raw/malformed token and cron do not authenticate
+  ---
+  duration_ms: 1.310292
+  ...
+# Subtest: REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null
+ok 10 - REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null
+  ---
+  duration_ms: 2.819958
+  ...
+# Subtest: REB05 key rotation cannot adopt an existing assignment and does not log credential values
+ok 11 - REB05 key rotation cannot adopt an existing assignment and does not log credential values
+  ---
+  duration_ms: 0.287834
+  ...
+# Subtest: REB06 original work owner and reservation role are separate from principal and cannot be swapped
+ok 12 - REB06 original work owner and reservation role are separate from principal and cannot be swapped
+  ---
+  duration_ms: 1.032833
+  ...
+# Subtest: REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation
+ok 13 - REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation
+  ---
+  duration_ms: 4.250333
+  ...
+# Subtest: REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions
+ok 14 - REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions
+  ---
+  duration_ms: 1.949417
+  ...
+# Subtest: REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks
+ok 15 - REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks
+  ---
+  duration_ms: 1.630875
+  ...
+# Subtest: REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution
+ok 16 - REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution
+  ---
+  duration_ms: 1.297875
+  ...
+# Subtest: REB11 used invocation is rejected rather than silently creating a new execution or budget charge
+ok 17 - REB11 used invocation is rejected rather than silently creating a new execution or budget charge
+  ---
+  duration_ms: 0.589958
+  ...
+# Subtest: REB12 PG microseconds and explicit offsets preserve exact original boundary ordering
+ok 18 - REB12 PG microseconds and explicit offsets preserve exact original boundary ordering
+  ---
+  duration_ms: 0.825667
+  ...
+# (node:82959) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82959) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: reviewer assignment: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+    # Subtest: no reviewer reservation before exact author handoff
+    ok 1 - no reviewer reservation before exact author handoff
+      ---
+      duration_ms: 392.001334
+      ...
+    # Subtest: server configuration author rotation, A-R swap and old-author-as-reviewer reject before reservation
+    ok 2 - server configuration author rotation, A-R swap and old-author-as-reviewer reject before reservation
+      ---
+      duration_ms: 329.591542
+      ...
+    # Subtest: global active fixture slot blocks with null and zero reservation/assignment writes
+    ok 3 - global active fixture slot blocks with null and zero reservation/assignment writes
+      ---
+      duration_ms: 576.662792
+      ...
+    # Subtest: original7200 daily budget blocks with no active slot or writes; synthetic temporary quota rows rollback
+    not ok 4 - original7200 daily budget blocks with no active slot or writes; synthetic temporary quota rows rollback
+      ---
+      duration_ms: 115.631958
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:30:28'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly deep-equal:
+        + actual - expected
+        
+          [
+            't',
+            't',
+            '7200',
+            '0',
+        +   '',
+        -   'null',
+            '0',
+            '4'
+          ]
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+        0: 't'
+        1: 't'
+        2: '7200'
+        3: '0'
+        4: 'null'
+        5: '0'
+        6: '4'
+      actual:
+        0: 't'
+        1: 't'
+        2: '7200'
+        3: '0'
+        4: ''
+        5: '0'
+        6: '4'
+      operator: 'deepStrictEqual'
+      stack: |-
+        file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:138:14
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:30:60)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+        check (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:30:28)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:133:11)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+      ...
+    # Subtest: injected assignment insertion failure rolls back original reservation and charge atomically
+    ok 5 - injected assignment insertion failure rolls back original reservation and charge atomically
+      ---
+      duration_ms: 315.484417
+      ...
+    # Subtest: concurrent exact admission creates one assignment and only one original1800 charge
+    ok 6 - concurrent exact admission creates one assignment and only one original1800 charge
+      ---
+      duration_ms: 251.45
+      ...
+    # Subtest: actual calculator and selected public source packet, no principals/owner/fulltext/model dispatch
+    ok 7 - actual calculator and selected public source packet, no principals/owner/fulltext/model dispatch
+      ---
+      duration_ms: 368.022084
+      ...
+    # Subtest: exact admission/read/packet and actual PG restart preserve original bytes, clocks and budget
+    ok 8 - exact admission/read/packet and actual PG restart preserve original bytes, clocks and budget
+      ---
+      duration_ms: 2899.721
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(v.source_seal_id)"
+# PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 35 at PERFORM
+# PL/pgSQL function read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) line 8 at assignment
+# ERROR:  research_author_handoff_claim
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 49 at RAISE
+# PL/pgSQL function read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) line 8 at assignment
+# ERROR:  research_author_handoff_claim
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 49 at RAISE
+# PL/pgSQL function read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) line 8 at assignment
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+    # Subtest: reviewer rotation cannot adopt existing assignment; old author reader stays rejected
+    ok 9 - reviewer rotation cannot adopt existing assignment; old author reader stays rejected
+      ---
+      duration_ms: 298.568542
+      ...
+    # Subtest: withdrawal/expiry/takeover fail inside transaction and rollback without altering original history
+    ok 10 - withdrawal/expiry/takeover fail inside transaction and rollback without altering original history
+      ---
+      duration_ms: 868.650833
+      ...
+    # Subtest: reviewer assignment immutable and service direct read/mutation denied
+    ok 11 - reviewer assignment immutable and service direct read/mutation denied
+      ---
+      duration_ms: 254.473417
+      ...
+    # Subtest: closed counter-review reservation rejects read/replay/packet without renewing or refunding
+    ok 12 - closed counter-review reservation rejects read/replay/packet without renewing or refunding
+      ---
+      duration_ms: 450.197875
+      ...
+    1..12
+not ok 19 - reviewer assignment: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+  ---
+  duration_ms: 11706.622292
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:25:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Failure evidence retained at /tmp/si-review-TMxlrU
+# (node:83413) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83413) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-reviewer-assignment.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: assignReviewer strict8192 byte body, header discrimination and UTF8
+ok 20 - assignReviewer strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 49.172584
+  ...
+# Subtest: readReviewerAssignment strict8192 byte body, header discrimination and UTF8
+ok 21 - readReviewerAssignment strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 9.330041
+  ...
+# Subtest: readReviewerPacket strict8192 byte body, header discrimination and UTF8
+ok 22 - readReviewerPacket strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 6.414292
+  ...
+# Subtest: body stall cancelled; expired read launches no I/O
+ok 23 - body stall cancelled; expired read launches no I/O
+  ---
+  duration_ms: 31.695416
+  ...
+# Subtest: author, cron, tester and unknown credentials cannot enter reviewer body/DB
+ok 24 - author, cron, tester and unknown credentials cannot enter reviewer body/DB
+  ---
+  duration_ms: 8.612584
+  ...
+# Subtest: 2409 actual fixed calculation, synthetic completed author and atomic reviewer transport
+ok 25 - 2409 actual fixed calculation, synthetic completed author and atomic reviewer transport
+  ---
+  duration_ms: 2675.344417
+  ...
+# Subtest: 2383 actual fixed calculation, synthetic completed author and atomic reviewer transport
+ok 26 - 2383 actual fixed calculation, synthetic completed author and atomic reviewer transport
+  ---
+  duration_ms: 685.462625
+  ...
+# (node:83424) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83424) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-execution-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: server configuration and exact credential principal agree without constructing author impersonation
+ok 27 - server configuration and exact credential principal agree without constructing author impersonation
+  ---
+  duration_ms: 26.906292
+  ...
+# Subtest: author/reviewer rotations, credential interchange and old-author-as-reviewer change frozen authority
+ok 28 - author/reviewer rotations, credential interchange and old-author-as-reviewer change frozen authority
+  ---
+  duration_ms: 1.051583
+  ...
+# Subtest: same credential or cron/test/approval alias disables both configuration and request identity
+ok 29 - same credential or cron/test/approval alias disables both configuration and request identity
+  ---
+  duration_ms: 3.79175
+  ...
+1..29
+# tests 41
+# suites 0
+# pass 39
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19066.663292

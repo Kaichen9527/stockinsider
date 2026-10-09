@@ -8,6 +8,34 @@ list is valid; research priority is not entry authority.
 
 ## Latest verified state — supersedes older checkpoints below
 
+### October 9 reviewer assignment and native result continuation
+
+- PR347 subject7f6259e8 implements separately authenticated reviewer assignment
+  and bounded sealed-source packets after exact author completion. Current server
+  author principal must still match the immutable author assignment, preventing
+  old-author-as-reviewer credential rotation adoption. Original reservation
+  function/global1/1800charge/7200daily budget, source and claim fences remain.
+- Root149related and13actual PostgreSQL tests pass, zero skip; typecheck and
+  lint0errors/33existingwarnings pass. Normal web buildy3EbpYvAmuUWWE0HiqSjc
+  passes. Design0144ff46 has unsigned scoped independent PASS; exact code review
+  is in progress. Initial fixture/command RED and diagnoses are saved, without
+  changing original fences or making synthetic prose into actual research.
+- VM author-result test/receiptb2ce6cf3 on frozenb8 runtime has52/52PASS,
+  zero skip. Root and independent reviewer verified all49raw-file bytes/SHA,
+  exact unchanged runtime blobs and negative source fingerprint409/unchanged
+  audit followed by correctly compiled-bound positive. Existing guarded
+  financialSupplement provides the actual compiled fingerprint; no runtime hash
+  weakening. Original42/50RED and later44/52RED remain preserved.
+- Existing reviewer returned unsigned scoped CODE/receiptPASSb2; this is
+  synthetic controller/prose transport acceptance, not genuine author/reviewer
+  execution or publication. Inherited modelReserved:false is stale; nested
+  actual audit remains eachjob1reservation,0completion. Native handoff492 is
+  currently active on the existing VM; no overlapping dispatch is authorized.
+- Main169aad1 and production remain unchanged. Genuine role adapter/invocations,
+  review result/completion, same-outbox publication, actual price adapter,
+  full protected release/merge/deploy and five future trading days remain.
+
+
 ### October 9 author handoff continuation
 
 - PR346 subject492729b349b4ffa6e6a28f9603de30e7ec9fba3e follows private
