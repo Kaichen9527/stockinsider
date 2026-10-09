@@ -20,8 +20,9 @@ research revision/input hash (plus original publication_kind on outbox).
 
 Outbox v2 requires publication_kind deep, original deep_job_id and deep_attempt,
 and binds exact bundle/input/company/snapshot/hash and original input job/attempt.
-A BEFORE INSERT/UPDATE trigger validates both branch tuples and makes those
-identity fields immutable after insert; legacy delivery state changes still work.
+A BEFORE INSERT/UPDATE trigger validates branch tuples. v2 identity is immutable;
+v1 preserves original deep NULL-to-job/attempt claim and later-attempt retry
+transitions. A revision discriminator cannot switch branches after insertion.
 Bundle's existing append-only trigger remains. Current source liveness is NOT
 proven by a storage FK; publication must separately recheck the live fences.
 Never infer model execution, source rights or article quality from this lineage.
@@ -32,7 +33,13 @@ No v2 production insert endpoint/RPC in this slice. BEFORE INSERT trigger requir
 research_input_preparation_owner_v2 as current_user for a v2 bundle and
 research_observed_rpc_owner for a v2 outbox. Those existing NOLOGIN owners receive
 only required table INSERT/SELECT privileges; service_role direct v2 insertion,
-anon/authenticated insertion and ordinary v2 claim fail closed. v1 owner/writer
+anon/authenticated insertion and ordinary v2 claim fail closed. This inert slice
+rejects ALL v2 outbox UPDATE/DELETE, including delivery-state changes, until the
+reviewed atomic writer slice explicitly replaces that guard. BEFORE TRUNCATE
+statement triggers reject truncation of either table whenever any v2 row exists;
+v1-only truncate behavior stays unchanged. RLS cannot hide v2 rows from these
+checks: the trigger performs a security-definer existence check owned by the
+existing trusted input owner with explicit SELECT/RLS visibility on both tables. v1 owner/writer
 permissions and row bytes remain unchanged. Future guarded RPCs must run as the
 expected owner and repeat actual claim/source/author/review checks atomically.
 Table identity constraints and trigger validation remain defense in depth.
@@ -52,8 +59,10 @@ Accept lawful v1 rows/defaults and lawful v2 owner inserts; reject mixed/null
 branches, nonexistent/mismatched input/company/snapshot/hash/symbol/job/attempt,
 wrong bundle lineage and service direct v2 writes. Duplicate v2 bundle/outbox
 identities reject; legacy duplicate rules unchanged. Verify ordinary claim never
-selects v2, immutable identities cannot be rebound, original delivery state
-transitions still work, all changes roll back on failure and rows survive restart.
+selects v2, branch switching and ALL v2 outbox UPDATE/DELETE/TRUNCATE reject,
+legacy first deep claim and retry attempt transitions still work, v1-only
+TRUNCATE stays available, mixed v1/v2 TRUNCATE rejects, failed changes roll back
+and rows survive restart.
 Run existing real-PG outbox/deep-publication regression tests, type/lint/build and
 independent design/code review. Native HTTP publication remains later acceptance;
 this slice does not claim publication or genuine author/reviewer execution.
