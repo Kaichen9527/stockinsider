@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "stockinsider-attributed-public-event-read-v1",
+  "recordedAt": "2026-10-09T05:57:04.376675+00:00",
+  "observer": "root-Mac-public-HTTPS",
+  "rightsBoundary": "Necessary original summaries and public metadata only; private raw files are not committed or transferred.",
+  "attempts": [
+    {
+      "id": "cna-largan",
+      "url": "https://www.cna.com.tw/news/afe/202610080326.aspx",
+      "attemptedAt": "2026-10-09T05:55:34.656579+00:00",
+      "acquisitionHost": "authorized-root-Mac-public-HTTPS",
+      "authenticated": false,
+      "httpStatus": 200,
+      "finalUrl": "https://www.cna.com.tw/news/afe/202610080326.aspx",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 128143,
+      "sha256": "0a8d1ae1540437500b2a906c700d1eea230fe24f0f87525e51315eec5d42089f",
+      "status": "read_success",
+      "structuredDateFields": [
+        "2026-10-08T19:41:00+08:00",
+        "2026-10-08T19:14:00+08:00"
+      ],
+      "htmlMetaDateFields": [
+        "<meta property=\"article:modified_time\" content=\"2026-10-08T19:41:00+08:00\" />",
+        "<meta property=\"article:published_time\" content=\"2026-10-08T19:14:00+08:00\" />"
+      ],
+      "observedAt": "2026-10-09T05:55:35.130556+00:00"
+    },
+    {
+      "id": "auo-cpo-gcs",
+      "url": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+      "attemptedAt": "2026-10-09T05:55:35.130583+00:00",
+      "acquisitionHost": "authorized-root-Mac-public-HTTPS",
+      "authenticated": false,
+      "httpStatus": 200,
+      "finalUrl": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+      "contentType": "text/html; charset=UTF-8",
+      "bytes": 56315,
+      "sha256": "b615a0de647b8c7cbfc7f078001058b3f7822ddf3548f6cdd2170628b4ea2d63",
+      "status": "read_success",
+      "structuredDateFields": [],
+      "htmlMetaDateFields": [],
+      "observedAt": "2026-10-09T05:55:35.526070+00:00"
+    },
+    {
+      "id": "largan-official-ir",
+      "url": "https://www.largan.com.tw/tw/investor/shareholder",
+      "attemptedAt": "2026-10-09T05:55:35.526109+00:00",
+      "acquisitionHost": "authorized-root-Mac-public-HTTPS",
+      "authenticated": false,
+      "httpStatus": 200,
+      "finalUrl": "https://www.largan.com.tw/tw/investor/shareholder",
+      "contentType": "text/html; charset=UTF-8",
+      "bytes": 41938,
+      "sha256": "2d7d0264818d3a5d7eeb2023a7eb038d83611c97104553531112e6835ddeafb1",
+      "status": "read_success",
+      "structuredDateFields": [],
+      "htmlMetaDateFields": [],
+      "observedAt": "2026-10-09T05:55:35.681070+00:00"
+    },
+    {
+      "id": "edn-rumor-root",
+      "url": "https://money.udn.com/money/story/5612/9766808",
+      "attemptedAt": "2026-10-09T05:55:35.681096+00:00",
+      "acquisitionHost": "authorized-root-Mac-public-HTTPS",
+      "authenticated": false,
+      "httpStatus": 200,
+      "finalUrl": "https://money.udn.com/money/story/5612/9766808",
+      "contentType": "text/html; charset=UTF-8",
+      "bytes": 283122,
+      "sha256": "9945a22bb89d077657d94effb8b41000638926014df63b3e6a4f684c63117406",
+      "status": "read_success",
+      "structuredDateFields": [
+        "2026-09-21T02:30:56+08:00",
+        "2026-09-22T01:01:12+08:00"
+      ],
+      "htmlMetaDateFields": [
+        "<meta name=\"date\" content=\"2026-09-21 02:30\">"
+      ],
+      "observedAt": "2026-10-09T05:55:35.959003+00:00"
+    },
+    {
+      "url": "https://www.largan.com.tw/tw/investor/shareholder/ajax/data1?class_id=1&year=2026",
+      "attemptedAt": "2026-10-09T05:56:20.379286+00:00",
+      "acquisition": "public GET exactly as official page get_data1 function",
+      "authenticated": false,
+      "status": "read_failed",
+      "errorType": "HTTPError",
+      "observedAt": "2026-10-09T05:56:20.549197+00:00"
+    }
+  ],
+  "rawResponsesRehashedByRoot": true,
+  "vmRawResponsesRehashed": false,
+  "publicationClockCorrection": {
+    "sourceUrl": "https://www.cna.com.tw/news/afe/202610080326.aspx",
+    "publishedAt": "2026-10-08T19:14:00+08:00",
+    "modifiedAt": "2026-10-08T19:41:00+08:00",
+    "basis": "Raw JSON-LD NewsArticle + article:published_time/modified_time explicit offset",
+    "precision": "minute represented as source-declared second00; no finer time inferred",
+    "supersedes": "Earlier web extraction timezone-unverified note only; original observation remains unchanged"
+  },
+  "lineage": {
+    "ednRootAlreadyReadByPriorResearch": true,
+    "priorAttributionGroupClock": "2026-10-08 06:49:54 UTC",
+    "currentReacquisitionIsNewIndependentConfirmation": false,
+    "pcGamerCitesEdnRoot": true,
+    "earliestSystemObservationProven": false
+  },
+  "formalPublication": false,
+  "researchQualified": false,
+  "modelDispatched": false,
+  "platformsEnabled": false,
+  "dbSubmitted": false
+}
