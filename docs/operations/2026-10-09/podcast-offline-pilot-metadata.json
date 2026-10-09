@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "podcast-asr-public-metadata-relay-v1",
+  "assembledAt": "2026-10-09T06:35:06.469157+00:00",
+  "acquisitions": [
+    {
+      "url": "https://pypi.org/pypi/faster-whisper/json",
+      "attemptedAt": "2026-10-09T06:34:10.780772+00:00",
+      "completedAt": "2026-10-09T06:34:11.013426+00:00",
+      "status": 200,
+      "bytes": 50466,
+      "sha256": "a12f14dd61adc6688e2baf70f9349a564ff244f9bf6a7c4346a9214ffb48317b",
+      "version": "1.2.1",
+      "requires": [
+        "ctranslate2<5,>=4.0",
+        "huggingface-hub>=0.21",
+        "tokenizers<1,>=0.13",
+        "onnxruntime<2,>=1.14",
+        "av>=11",
+        "tqdm",
+        "transformers[torch]>=4.23; extra == \"conversion\"",
+        "black==23.*; extra == \"dev\"",
+        "flake8==6.*; extra == \"dev\"",
+        "isort==5.*; extra == \"dev\"",
+        "pytest==7.*; extra == \"dev\""
+      ],
+      "artifacts": [
+        {
+          "name": "faster_whisper-1.2.1-py3-none-any.whl",
+          "bytes": 1118909,
+          "sha256": "79a66ad50688c0b794dd501dc340a736992a6342f7f95e5811be60b5224a26a7",
+          "url": "https://files.pythonhosted.org/packages/05/99/49ee85903dee060d9f08297b4a342e5e0bcfca2f027a07b4ee0a38ab13f9/faster_whisper-1.2.1-py3-none-any.whl"
+        }
+      ]
+    },
+    {
+      "url": "https://huggingface.co/api/models/Systran/faster-whisper-small?blobs=true",
+      "attemptedAt": "2026-10-09T06:34:11.013828+00:00",
+      "completedAt": "2026-10-09T06:34:11.320459+00:00",
+      "status": 200,
+      "bytes": 3396,
+      "sha256": "44a6406d9f31ea45567ea82b0f57717e22478832ad388109288d1f25c72649bd",
+      "revision": "536b0662742c02347bc0e980a01041f333bce120",
+      "files": [
+        {
+          "rfilename": ".gitattributes",
+          "blobId": "c7d9f3332a950355d5a77d85000f05e6f45435ea",
+          "size": 1477
+        },
+        {
+          "rfilename": "README.md",
+          "blobId": "16511f6106ead2fbc3a1480957a217c2661a5a98",
+          "size": 1998
+        },
+        {
+          "rfilename": "config.json",
+          "blobId": "e5047537059bd8f182d9ca64c470201585015187",
+          "size": 2370
+        },
+        {
+          "rfilename": "model.bin",
+          "blobId": "504a7fe023f19460564a623887a9f77ea53ac708",
+          "size": 483546902,
+          "lfs": {
+            "sha256": "3e305921506d8872816023e4c273e75d2419fb89b24da97b4fe7bce14170d671",
+            "size": 483546902,
+            "pointerSize": 134
+          }
+        },
+        {
+          "rfilename": "tokenizer.json",
+          "blobId": "7818adb6de9fa3064d3ff81226fdd675be1f6344",
+          "size": 2203239
+        },
+        {
+          "rfilename": "vocabulary.txt",
+          "blobId": "c9074644d9d1205686f16d411564729461324b75",
+          "size": 459861
+        }
+      ]
+    }
+  ],
+  "limits": {
+    "audioAcquired": false,
+    "packagesInstalled": false,
+    "asrExecuted": false,
+    "privateCredentialRead": false
+  }
+}
