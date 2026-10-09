@@ -1,6 +1,6 @@
 # Completed insider snapshot private archive V2
 
-Status: PROPOSED. Requirements and design review pending. Documentation only, based on `d274726ee2824f09539cc9197b5acd8535553b75`; no SQL, runtime, retention, schedule or deployment authority is changed. The existing snapshot acceptance remains valid: parent reports fresh PG16/16 plus Linux journal1/1 and actual guarded Next→PostgREST16.3→PG17 6/6. Those results do not test this proposal.
+Status: PROPOSED integration; first isolated component candidate. Root relayed unsigned independent requirements/design PASS for `ccb004a7ed92f8df2b60d1c91f716dcb8bbabd53` (tree `88149bbabf86f4b46c43d9fd804349d08f4361bc`), closing the e8 lease-fence P2. This is not protected approval or exact-code approval. Based on snapshot `d274726ee2824f09539cc9197b5acd8535553b75`; no SQL, retention, route, schedule or deployment authority is changed. The four new codec/private-I/O files are an unintegrated candidate only. The existing snapshot acceptance remains valid: parent reports fresh PG16/16 plus Linux journal1/1 and actual guarded Next→PostgREST16.3→PG17 6/6. Those results do not test this proposal.
 
 ## 1. Problem and scope
 
@@ -77,3 +77,11 @@ Failed pending-acquisition cancellation/abandonment remains a separate amendment
 - ARC-11: permanently failed pending sources retain their original tokens/liabilities; no cancel/expiry/reuse path is created. Archive failure retains its original reservation until verified reconciliation.
 - ARC-12: actual persistent private-store + PG + guarded HTTP restore/receipt integration, including authorized backend lease, missing-store refusal and sampled disk/RSS/temp/WAL metrics; no mock-only closure, production writes or inherited credentials. Backup evidence must name the exact tested format; incompatible existing export/import is explicitly not accepted.
 - ARC-13: actual PG/guarded HTTP owner A reserves/verifies, A lease expires and B obtains a distinct lease, explicit CAS takeover increments attempt and keeps reservation; stale A finalize and A-verification replay under B both reject. B can finalize only after its own fresh artifact verification. Disabled/NULL backend fence rejects reserve/verify/finalize even with another live lease. Race lease takeover/expiry against commit and prove old attempt cannot evict hot raw or release budget.
+
+## Component progress — first isolated slice
+
+The codec candidate implements the closed binding, exact raw/encoded bounds, single-member streaming gzip decode, CRC/trailer/SHA256 verification and byte-identical restore. The private-I/O candidate reuses the unchanged privateArtifactStore in a fresh private staging directory, publishes a create-only hard link in the existing hash layout, then checks actual file/directory descriptors, fsync and readback. Its return explicitly contains evictionAuthorized:false. It has no DB receipt, backend/lease identity, reservation, hot-raw deletion, parser/rights reader or public entrypoint. Synthetic bytes only were used.
+
+Decode has a finite 30-second timer, abort and per-chunk checks; its promise settles after the zlib stream closes. Filesystem operations have monotonic deadline/abort checkpoints around bounded regular-file reads and publication. They do not provide forced cancellation of an already pending kernel open/fsync or the reused private-store call. A filesystem/kernel stall is therefore not yet a proven end-to-end operation deadline. Failure staging is retained for later explicit reconciliation, never silently deleted to recover quota; its future allocation must be included by the shared reservation protocol.
+
+A caller-selected temporary test root is not proof of the deployed persistent root, backup compatibility, host guard, full-writer quota participation or crash recovery. Those remain required before integration/activation. No acceptance criterion above is marked satisfied by component tests alone.

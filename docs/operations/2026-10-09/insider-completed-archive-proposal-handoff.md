@@ -1,6 +1,6 @@
 # Insider completed archive V2 proposal handoff
 
-Documentation-only successor of d274726ee2824f09539cc9197b5acd8535553b75 on `codex/insider-archive-contract-oct09`. Requirements/design review pending; no SQL or runtime implementation, no PR326 head change and no production operation. Source V1 actual acceptance reported by root remains PG16/16 + journal1/1 and guarded stack6/6; this proposal has no execution PASS.
+Contract ancestor ccb004a7ed92f8df2b60d1c91f716dcb8bbabd53 received root-relayed unsigned requirements/design PASS. First isolated component candidate is on `codex/insider-archive-codec-oct09`, based on that exact contract. No SQL/route integration, PR326 head change or production operation. Independent exact-code review remains pending. Source V1 actual acceptance reported by root remains PG16/16 + journal1/1 and guarded stack6/6; those results do not validate this archive candidate.
 
 The concrete problem is lifetime capacity: completed raw still consumes128MiB/32 slots, completed runs consume128/640 metadata limits, and equal response hashes do not deduplicate. From an empty database, five new snapshots daily stop by the seventh complete cycle; at60MiB per cycle only two fit because each new five-source run reserves60MiB up front. Completion releases only per-dataset active exclusivity.
 
@@ -12,4 +12,25 @@ After approval, the minimal executable milestone is one real completed snapshot:
 
 Capacity failure queues the new operation; it never authorizes deletion. Failed pending source liabilities and archive failures retain their existing bindings/reservations until explicit verified resume. Cancellation/abandonment and any off-host sole-copy archive are separate future decisions. Daily scheduling remains unactivated; this proposal is neither protected authority nor a promise of indefinite ingestion.
 
-Independent e8 review repair: the existing assert_stockinsider_backend_request_v1(true) helper is not proof that this operation owns the live lease and may return NULL under disabled identity enforcement. Proposed reserve/verify/finalize now require the authenticated route's exact active backend and lease owner/ID plus operation attempt generation, locked and rechecked at commit. Explicit expired/revoked A→B takeover CAS preserves reservation and old attempt history; B must freshly reopen/decode/hash the artifact. A's old verification/finalize cannot borrow B's lease. NULL/disabled identity refuses. ARC-13 covers these cases; no helper or runtime was changed and successor independent re-review remains required.
+Independent e8 review repair: the existing assert_stockinsider_backend_request_v1(true) helper is not proof that this operation owns the live lease and may return NULL under disabled identity enforcement. Proposed reserve/verify/finalize now require the authenticated route's exact active backend and lease owner/ID plus operation attempt generation, locked and rechecked at commit. Explicit expired/revoked A→B takeover CAS preserves reservation and old attempt history; B must freshly reopen/decode/hash the artifact. A's old verification/finalize cannot borrow B's lease. NULL/disabled identity refuses. ARC-13 covers these cases; no helper or runtime was changed and root subsequently relayed unsigned ccb requirements/design PASS; exact implementation review remains required.
+
+## First component handoff
+
+Files: web/src/lib/insider-completed-archive-codec-v2.ts and insider-completed-archive-io-v2.ts with their adjacent .test.ts files. Four contract/handoff documents record progress. No package hook or existing shared helper was modified.
+
+Implemented: closed hash/length/encoding binding; raw2..12MiB and encoded12MiB+128KiB bounds; captured immutable input bytes; single-member streaming gzip with bounded declared output, CRC/ISIZE, full consumption, abort/deadline and close-before-settlement; no-overwrite private staging/publication through the existing store; regular O_NONBLOCK|O_NOFOLLOW descriptors; maximum+1 bounded reads; inode/size/time/hash checks; file and directory fsync; reopen/decode/readback. Return value always includes evictionAuthorized:false. Existing corrupt objects refuse rather than overwrite. Failed staging is retained, awaiting explicit future reservation/reconciliation.
+
+Commands from the component worktree (Node22):
+
+```sh
+/usr/local/bin/node --experimental-strip-types --test web/src/lib/insider-completed-archive-codec-v2.test.ts web/src/lib/insider-completed-archive-io-v2.test.ts web/src/lib/private-artifact-store.test.ts
+/usr/local/bin/node web/node_modules/typescript/bin/tsc --noEmit --pretty false --target ES2022 --module nodenext --moduleResolution nodenext --allowImportingTsExtensions --esModuleInterop --strict --skipLibCheck --types node --typeRoots web/node_modules/@types web/src/lib/insider-completed-archive-codec-v2.ts web/src/lib/insider-completed-archive-codec-v2.test.ts web/src/lib/insider-completed-archive-io-v2.ts web/src/lib/insider-completed-archive-io-v2.test.ts
+cd web
+/usr/local/bin/node node_modules/eslint/bin/eslint.js src/lib/insider-completed-archive-codec-v2.ts src/lib/insider-completed-archive-codec-v2.test.ts src/lib/insider-completed-archive-io-v2.ts src/lib/insider-completed-archive-io-v2.test.ts
+```
+
+Local evidence paths: /tmp/insider-archive-codec-red.log and /tmp/insider-archive-io-red.log are initial missing-module REDs, not production runtime reproductions. /tmp/insider-archive-components-green.log is the superseded bounded synchronous decoder run; final source replaces that decoder with streaming decode to conform to the contract. /tmp/insider-archive-components-streaming.log and /tmp/insider-archive-components-final.log retain subsequent results. Initial focused type checking found six missing test-mock this annotations; streaming conversion also exposed CommonJS top-level await in the test fixture, replaced with a before hook. Both were corrected; the latter RED remains in /tmp/insider-archive-components-streaming-types-red.log. No expectation was removed.
+
+Limits: no DB archival receipt/eviction, new schema, lease inventory, shared reservation accounting, restore tooling compatibility proof, persistent production-root proof, power-loss test, real guarded archive HTTP/PG test, source/provider execution or deployment occurred. File I/O deadlines are cooperative checkpoints; pending kernel fsync/shared-store calls are not force-cancelled. Synthetic local fsync/readback is not crash/power-loss durability proof. Full build/integration belongs to the VM queue. Daily archival operation remains unenabled.
+
+Final local component evidence: 17 named tests PASS, zero failures/cancellations/skips (13 new component cases and four unchanged private-store cases). Targeted four-file strict TypeScript and ESLint checks passed. These are lightweight host-local checks, not the deferred full VM build or archive PG/HTTP acceptance.

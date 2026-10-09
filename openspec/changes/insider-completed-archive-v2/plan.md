@@ -1,6 +1,6 @@
-# Implementation plan — PROPOSED, not approved
+# Implementation plan — reviewed design, integration PROPOSED
 
-Parent source: d274726ee2824f09539cc9197b5acd8535553b75. This branch changes documents only. No implementation starts before independent requirements/design review resolves the budget, storage and receipt transitions below.
+Parent snapshot source: d274726ee2824f09539cc9197b5acd8535553b75. Root relayed unsigned requirements/design PASS on exact ccb004a7ed92f8df2b60d1c91f716dcb8bbabd53 and authorized only the isolated codec/private-descriptor component slice. Exact-code review is pending. Budget/storage/lease integration prerequisites below remain open; this pass does not supply deployment authority or a working shared-writer quota protocol.
 
 ## Reuse and exact gaps
 
@@ -23,7 +23,7 @@ The existing configured private root is authoritative deployment input; `/var/li
 4. Portable red→green tests for codec/private descriptors/races/receipt selection. VM queue: actual PG transition/rollback/concurrency, real guarded HTTP/private filesystem, more-than32/128-history regression, actual12MiB transport/read and resource guards. Keep d274 regression tests unchanged.
 5. Independent exact-code review and measured persistence/restore evidence. Root separately integrates reviewed migration/release identity and deployment/rollout, if authorized. Contract approval alone does not grant these operations.
 
-## Review decisions required before coding
+## Integration decisions and evidence still required
 
 - Accept the precise distinction between permanent history and bounded operational32 snapshots/128 runs, with4GB shared byte accounting instead of a lifetime row cutoff.
 - Approve the explicit hot-raw nullable transition and narrow storage-verification receipt trust boundary; filesystem verification belongs to the established backend, not arbitrary service clients. The generic assert_stockinsider_backend_request_v1(true) any-live-lease/nullable behavior is insufficient: require exact locked backend/lease ownership and operation-generation checks, NULL refusal, explicit CAS takeover and fresh verification after restart/takeover.
@@ -34,4 +34,10 @@ Historical evidence grows. This proposal removes premature hot/lifetime-count st
 
 ## Independent review repair (documentation only)
 
-Root relayed an independent P2 against e8b9223: the existing backend-request helper does not bind the live lease to this owner and can return NULL when identity enforcement is disabled. This successor specifies an additional exact backend/lease/operation-attempt fence and ARC-13; it does not claim the helper is fixed, that this protocol already exists, or that review passed. The implementation must inspect actual lease-takeover locking and establish one compatible global order before coding finalize; no new owner/key/credential may be seeded to manufacture proof.
+Root relayed an independent P2 against e8b9223: the existing backend-request helper does not bind the live lease to this owner and can return NULL when identity enforcement is disabled. This successor specifies an additional exact backend/lease/operation-attempt fence and ARC-13; it does not claim the helper is fixed or this protocol already exists. Root subsequently relayed the unsigned ccb requirements/design pass; implementation still requires independent exact-code review. The implementation must inspect actual lease-takeover locking and establish one compatible global order before coding finalize; no new owner/key/credential may be seeded to manufacture proof.
+
+## First component candidate and next boundary
+
+Owned runtime files are only insider-completed-archive-codec-v2.ts and insider-completed-archive-io-v2.ts plus their two adjacent tests. Existing private-artifact-store.ts, snapshot SQL/routes, package scripts and deployment files are unchanged. Component checks cover actual raw12MiB/+1, actual valid encoded maximum/+1, gzip single member/trailing/truncation/bomb, hashes, real FIFO/no-follow/growth/rename and fsync/readback faults. Stream cancellation and captured input identity are tested.
+
+Before any finalize/takeover SQL, inventory actual backend/lease fields, revocation and transfer routines, and establish their complete compatible lock order. Before capacity admission/eviction integration, exercise a fixed conservative allocation reservation profile with every shared writer. Neither prerequisite was performed by this component slice. Persistent-root/backup restore, failed-stage accounting, hard filesystem-stall lifecycle, real guarded HTTP/PG and shared quota evidence remain open. Heavy builds and integration go to root's single VM queue, not the Mac.
