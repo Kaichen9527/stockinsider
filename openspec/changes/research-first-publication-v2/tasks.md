@@ -67,3 +67,15 @@ The Oct08 findings above are historical. Observed43d19d6/source05a repair and pr
 Independent review of d428ff9c requested changes for one P2: legacy INSERT could reference a v2 bundle/dossier. Successor rejects those mixed branches while preserving null-bundle legacy rows; the original v1 publication RPC is exercised after the new migration. Maker successor26/26 unit/actualPG cases pass zero skip, including a FIRST uncommitted publication holding the fence before committed withdrawal. Earlier completed-replay/withdrawal and restart/exact-replay tests are explicitly distinguished from first publication or dropped HTTP responses. Native dropped-response acceptance remains pending. Original REDs and review attribution are retained.
 
 Independent18d6 static CODE PASS closes P2; its original unit/PG run is24PASS/1FAIL/0skip, not all-green: expiry fixture seal psql15-second timeout has unknown cause. Independent positive+two mixed-branch/null-bundle probes11/11 pass. Original RED/TAP/PGlog are retained by hash. A test-only successor sets its synthetic original lease to30 seconds BEFORE sealing, then waits using the actual clock until4 seconds remain before testing lock expiry; production limits/guards and the already sealed lease never change. Maker expiry-only2/2 passes, not a full successor suite or an explanation of the earlier timeout. Normal build web bytes remain14528d8e and build Xv80B29nkNHk3jNxpO1wH; native/full schema/protected release remain pending.
+
+
+## 2026-10-10 shared read-only publication slice
+
+- [x] Approved30e85789 design: existing preview only, no formal catalog or strategy/entry promotion.
+- [x] Implement latest company publication RPC under original source/global fences; original completed-reader lineage and immutable receipt reused; private role assignments stay in SQL.
+- [x] Closed/hash-checked display projection and shared published component, paragraph citations, original calculated sensitivities/periods, folded background/tables, explicit withdrawal and missing quote/eligibility states.
+- [x] Existing demo/flag/symbol guard and optional closed UUID query; absent/error/mismatch never falls back to draft. No query preserves legacy draft path.
+- [ ] Exact independent code review, actual PG reader acceptance, types/lint/normal build and compiled preview desktop/mobile acceptance.
+- [ ] Genuine model/source/article acceptance and protected full release remain unfinished. Synthetic adapter/PG fixtures do not fulfill them.
+
+Maker adapter/actual SSR6/6 pass; types pass, final lint0 errors/33 existing warnings. First actual PG reader run found minimal fixture omitted original roster owner SELECT; fixture restores original production grant only. Second Mac run timed out in original input sealing psql15s, before new reader cases; root cause unknown, original RED/logs retained. No production timeout/clock/claim/rights rule was relaxed. Use independently bounded Linux verification rather than repeat identical Mac failure.
