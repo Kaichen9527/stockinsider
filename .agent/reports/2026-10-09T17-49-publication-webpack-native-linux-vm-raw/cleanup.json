@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-09T17:47:05.249003+00:00",
+  "ownedProcessesRemaining": [],
+  "profiles": [
+    {
+      "suite": "reviewer94",
+      "symbol": "2409",
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/webpack149/reviewer94/native/http-2409",
+      "pidFileExists": false,
+      "socketPathBytes": 107,
+      "failureLog": "/workspace/cloud-author-packet-artifacts-oct09/webpack149/reviewer94/native/http-2409/postgres.log"
+    },
+    {
+      "suite": "reviewer94",
+      "symbol": "2383",
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/webpack149/reviewer94/native/http-2383",
+      "pidFileExists": false,
+      "socketPathBytes": 107,
+      "failureLog": "/workspace/cloud-author-packet-artifacts-oct09/webpack149/reviewer94/native/http-2383/postgres.log"
+    },
+    {
+      "suite": "publication",
+      "symbol": "2409",
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native/http-2409",
+      "pidFileExists": false,
+      "socketPathBytes": 108,
+      "failureLog": "/workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native/http-2409/postgres.log"
+    },
+    {
+      "suite": "publication",
+      "symbol": "2383",
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native/http-2383",
+      "pidFileExists": false,
+      "socketPathBytes": 108,
+      "failureLog": "/workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native/http-2383/postgres.log"
+    }
+  ],
+  "manualDeletionPerformed": false,
+  "availableBytes": 10340618240,
+  "oldPartialArchivePreserved": "/workspace/cloud-author-packet-artifacts-oct09/webpack178/partial-next-178",
+  "newCompleteWebpackBuildRetained": "/workspace/cloud-reviewer-result-http-vm-oct09/web/.next"
+}
