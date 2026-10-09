@@ -4,7 +4,7 @@ import { researchCanonicalHash } from './research-agent-qualification.ts';
 import { buildResearchInboxRow, researchInboxContentHash, validateResearchInboxItemAt, RESEARCH_INBOX_ITEM_KEYS, type ResearchInboxItem } from './research-inbox.ts';
 import { researchRootFromDocument } from './research-source-roots.ts';
 import { RESEARCH_SOURCE_PLATFORMS, type ResearchSourcePlatform } from './research-source-registry.ts';
-import { CREATOR_PUBLISHED_PODCAST_RSS_INDEX_ALLOWLIST, SOURCE_CONNECTOR_KEYS, sourceExecutionPolicy } from './source-policy.ts';
+import { RESEARCH_CONTROLLER_PODCAST_INDEX_ALLOWLIST, SOURCE_CONNECTOR_KEYS, sourceExecutionPolicy } from './source-policy.ts';
 import type { ResearchSourceAttempt } from './research-agent-priority.ts';
 import { researchDeepInstant } from './research-deep-claim-context.ts';
 
@@ -128,7 +128,7 @@ export function publicSourceGrant(scope: SourceScope) {
   if (scope.method !== 'public_read') return false;
   if (url.search) return false;
   if (scope.rights.basis === 'creator_published_index') return scope.platform === 'podcast'
-    && (CREATOR_PUBLISHED_PODCAST_RSS_INDEX_ALLOWLIST as readonly string[]).includes(url.toString())
+    && (RESEARCH_CONTROLLER_PODCAST_INDEX_ALLOWLIST as readonly string[]).includes(url.toString())
     && scope.contentScope === 'metadata_index';
   if (scope.rights.basis !== 'official_public_document' || scope.platform !== 'official') return false;
   if (url.hostname === 'www.auo.com') return /^\/(?:zh-TW|en-global)\/(?:News_Archive|Press_Release)(?:\/|$)/u.test(url.pathname)

@@ -4,6 +4,7 @@ import { assembleSourceControllerRun, inspectSourceBody, publicSourceGrant, sour
   validateSourceControllerInput, SOURCE_CONTROLLER_LIMITS, type SourceScope, type SourceReadObservation,
   type SourceControllerInput } from './research-source-attempt-controller.ts';
 import { validateResearchInboxItem, researchInboxContentHash, type ResearchInboxItem } from './research-inbox.ts';
+import { authorizedPodcastRssAllowlist, podcastContentAnalyzable } from './source-policy.ts';
 import { selectResearchPriority } from './research-agent-priority.ts';
 
 const at='2026-10-05T00:00:00.000Z';
@@ -315,4 +316,20 @@ test('Apple numeric episode query granted only on exact public podcast-show path
  assert.equal(sourceControllerUrl('https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=1000755002590').searchParams.get('i'),'1000755002590');
  for(const url of ['https://example.org/us/podcast/ep8/id1872298769?i=1','https://podcasts.apple.com/evil?i=1','https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=1&i=2','https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=x','https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=1&track=2','https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=1&authorization=synthetic'])assert.throws(()=>sourceControllerUrl(url));
  assert.equal(publicSourceGrant({id:'publisher-description-reference',scope:'description only, not transcript',platform:'podcast',method:'public_read',url:'https://podcasts.apple.com/us/podcast/ep8/id1872298769?i=1000755002590',contentScope:'metadata_index',rights:{basis:'creator_published_index',checkedAt:'2026-10-08T13:00:00Z',checkedBy:'bounded'}}),false);
+});
+
+// SC-POD01: controller-only exact index grant never authorizes legacy content.
+test('SC-POD01 creator RSS with same-origin transcript and chapters stays metadata only',()=>{
+  const url='https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml';
+  const s=pub({platform:'podcast',url,contentScope:'metadata_index',rights:{basis:'creator_published_index',checkedAt:earlier,checkedBy:'actual-public-directory-review'}});
+  assert.equal(publicSourceGrant(s),true);
+  assert.equal(authorizedPodcastRssAllowlist('').includes(url),false);
+  assert.equal(podcastContentAnalyzable(url,''),false);
+  for(const contentScope of ['article_body','transcript','official_document'] as const) assert.equal(publicSourceGrant({...s,contentScope}),false);
+  const body='<rss xmlns:podcast="https://podcastindex.org/namespace/1.0"><channel><item><title>index</title><podcast:transcript url="https://feeds.soundon.fm/transcript.json" type="application/json"/><podcast:chapters url="https://feeds.soundon.fm/chapters.json" type="application/json"/></item></channel></rss>';
+  const inspected=inspectSourceBody(s,body,'application/rss+xml');
+  assert.equal(inspected.outcome,'metadata_only');assert.equal(inspected.bodyPresent,false);
+  const run=assembleSourceControllerRun(input([s]),[obs({...inspected,httpStatus:200,bytes:Buffer.byteLength(body)})],at);
+  assert.equal(run.receipts[0].outcome,'metadata_only');assert.equal(run.receipts[0].bodyPresent,false);
+  assert.equal(run.inboxRequest.items.length,0);
 });

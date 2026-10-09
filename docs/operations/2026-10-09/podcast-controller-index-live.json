@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "stockinsider-explicit-index-canary-v1",
+  "observer": "root-Mac-pinned-HTTPS",
+  "packet": {
+    "runId": "24ca52a5-f88f-49da-8704-22964d4795f9",
+    "scopes": [
+      {
+        "id": "investanchors-index",
+        "platform": "podcast",
+        "url": "https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+        "scope": "One actual public publisher RSS index; no transcript chapters or audio fetch",
+        "method": "public_read",
+        "contentScope": "metadata_index",
+        "rights": {
+          "basis": "creator_published_index",
+          "checkedAt": "2026-10-09T06:21:57.542Z",
+          "checkedBy": "root-public-directory-and-independent-data-review"
+        }
+      }
+    ]
+  },
+  "run": {
+    "policyVersion": "research-source-attempt-controller-v1",
+    "runId": "24ca52a5-f88f-49da-8704-22964d4795f9",
+    "asOf": "2026-10-09T06:21:57.921Z",
+    "limits": {
+      "scopes": 20,
+      "pagesPerScope": 1,
+      "bodyBytes": 4000000,
+      "timeoutMs": 12000,
+      "runMs": 60000,
+      "inputBytes": 2000000,
+      "priorItems": 1000
+    },
+    "receipts": [
+      {
+        "policyVersion": "research-source-attempt-controller-v1",
+        "runId": "24ca52a5-f88f-49da-8704-22964d4795f9",
+        "scopeId": "investanchors-index",
+        "platform": "podcast",
+        "sourceUrl": "https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+        "scope": "One actual public publisher RSS index; no transcript chapters or audio fetch",
+        "method": "public_read",
+        "contentScope": "metadata_index",
+        "rights": {
+          "basis": "creator_published_index",
+          "checkedAt": "2026-10-09T06:21:57.542Z",
+          "checkedBy": "root-public-directory-and-independent-data-review"
+        },
+        "attemptedAt": "2026-10-09T06:21:57.550Z",
+        "completedAt": "2026-10-09T06:21:57.921Z",
+        "readOutcome": "metadata_only",
+        "outcome": "metadata_only",
+        "httpStatus": 200,
+        "bytes": 77983,
+        "readAttempted": true,
+        "bodyPresent": false,
+        "responseHash": "1ec44c8d592f0556a4452b1fe6d6ef31eda7b9eba36be442eb2598702fc8d66e",
+        "publishedAt": null,
+        "sourcePublishedAt": null,
+        "summaryPublishedAt": null,
+        "firstObservedAt": null,
+        "revisionObservedAt": null,
+        "rootUrl": null,
+        "contentHash": null,
+        "retracted": false,
+        "errorCode": "source_metadata_only",
+        "legacyConnectorDisposition": "active",
+        "platformEnabled": false,
+        "receiptHash": "19d9df3e10c0b9b60c5181ee750ee4236be8be2ffb5913c0e20a1b8e0e874f28",
+        "attempt": {
+          "platform": "podcast",
+          "status": "failed",
+          "attemptedAt": "2026-10-09T06:21:57.550Z",
+          "scope": "investanchors-index: One actual public publisher RSS index; no transcript chapters or audio fetch | https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+          "resultCount": null,
+          "errorCode": "source_metadata_only",
+          "receiptHash": "19d9df3e10c0b9b60c5181ee750ee4236be8be2ffb5913c0e20a1b8e0e874f28"
+        }
+      }
+    ],
+    "unattemptedPlatforms": [
+      "official",
+      "news",
+      "broker",
+      "ptt",
+      "investanchors",
+      "threads",
+      "instagram",
+      "facebook",
+      "youtube",
+      "telegram",
+      "bulltalk",
+      "twse_insider"
+    ],
+    "priorityRequest": {
+      "asOf": "2026-10-09T06:21:57.921Z",
+      "sourceAttempts": [
+        {
+          "platform": "podcast",
+          "status": "failed",
+          "attemptedAt": "2026-10-09T06:21:57.550Z",
+          "scope": "investanchors-index: One actual public publisher RSS index; no transcript chapters or audio fetch | https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+          "resultCount": null,
+          "errorCode": "source_metadata_only",
+          "receiptHash": "19d9df3e10c0b9b60c5181ee750ee4236be8be2ffb5913c0e20a1b8e0e874f28"
+        }
+      ]
+    },
+    "inboxRequest": {
+      "items": []
+    },
+    "roots": [],
+    "priorItemsUnchanged": true,
+    "limitations": [
+      "Exact supplied scopes only; no exhaustive search or platform activation.",
+      "No summary/model adapter, authenticated browser dispatcher, submission, publication or strategy approval.",
+      "Prior items are controller-retained context; authoritative heads remain in VPS."
+    ],
+    "authoritativePublication": false,
+    "strategyApproved": false,
+    "startedAt": "2026-10-09T06:21:57.546Z",
+    "explicitRunOnly": true,
+    "inputHash": "b6afe9118d25462cf005409749cb9c1df3db0a60ef3a1cc0cf6f7ece8748dca0",
+    "runHash": "97521771801a4a343c99138596efb317b2da5b7b843fea32bba8ac71911316e4"
+  },
+  "dbSubmitted": false,
+  "vmHttpRead": false,
+  "platformEnabled": false,
+  "audioDownloaded": false,
+  "transcribed": false
+}
