@@ -189,6 +189,8 @@
     "test:research-publication-fence": "node scripts/run-node22.js --test scripts/research-publication-source-fence-postgres.test.mjs",
     "test:research-input-preparation": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-input-preparation-postgres.test.mjs scripts/research-deep-job-context-route.test.mjs",
     "test:research-complete-input:byte-boundary": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-complete-input-boundary-postgres.test.mjs",
+    "test:research-author-result": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-author-result.test.mjs",
+    "test:research-author-result:postgres": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-author-result-postgres.test.mjs",
     "test:research-author-packet": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-author-packet.test.mjs scripts/research-author-packet-route.test.mjs",
     "test:research-author-packet:postgres": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-author-packet-postgres.test.mjs",
     "test:research-business-article": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-business-article.test.mjs",
