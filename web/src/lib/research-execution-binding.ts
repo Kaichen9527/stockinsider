@@ -15,28 +15,38 @@ function configuredCredentials(): Credentials {
     RESEARCH_TEST_KEY: process.env.RESEARCH_TEST_KEY, STRATEGY_APPROVAL_KEY: process.env.STRATEGY_APPROVAL_KEY };
 }
 
+/** Configuration authority only. Never serialize these principals into model data.
+ * This does not impersonate an authenticated HTTP request or export credentials. */
+export function resolveConfiguredResearchControllerPrincipals(
+  credentials: Credentials = configuredCredentials(),
+): { ok: true; authorPrincipalId: string; reviewerPrincipalId: string } | Failure {
+  const writer = credentials.INTERNAL_API_KEY, reviewer = credentials.RESEARCH_REVIEW_KEY;
+  const otherRoles = [credentials.CRON_SECRET, credentials.RESEARCH_TEST_KEY, credentials.STRATEGY_APPROVAL_KEY];
+  if (!writer || !reviewer || writer === reviewer
+    || otherRoles.some(key => Boolean(key) && (key === writer || key === reviewer))) {
+    return { ok: false, error: 'research_controller_authority_unavailable' };
+  }
+  const principal = (role: ResearchControllerRole, key: string) => createHash('sha256')
+    .update(`stockinsider:research-controller:v2:${role}\0`).update(key).digest('hex');
+  return { ok: true, authorPrincipalId: principal('author', writer), reviewerPrincipalId: principal('reviewer', reviewer) };
+}
+
 export function resolveResearchControllerIdentity(
   request: Request, role: ResearchControllerRole, credentials: Credentials = configuredCredentials(),
 ): Identity | Failure {
-  const writer = credentials.INTERNAL_API_KEY;
-  const reviewer = credentials.RESEARCH_REVIEW_KEY;
-  const otherRoles = [credentials.CRON_SECRET, credentials.RESEARCH_TEST_KEY, credentials.STRATEGY_APPROVAL_KEY];
-  if ((role !== 'author' && role !== 'reviewer') || !writer || !reviewer
-    || writer === reviewer || otherRoles.some(key => Boolean(key) && (key === writer || key === reviewer))) {
-    return { ok: false, error: 'research_controller_authority_unavailable' };
-  }
+  const principals = resolveConfiguredResearchControllerPrincipals(credentials);
+  if (!principals.ok) return principals;
+  if (role !== 'author' && role !== 'reviewer') return { ok: false, error: 'research_controller_authority_unavailable' };
   const header = request.headers.get('authorization');
   if (!header?.startsWith('Bearer ') || request.headers.has('x-internal-key')) {
     return { ok: false, error: 'research_controller_unauthorized' };
   }
   const actual = Buffer.from(header.slice(7), 'utf8');
-  const expected = Buffer.from(role === 'author' ? writer : reviewer, 'utf8');
+  const expected = Buffer.from((role === 'author' ? credentials.INTERNAL_API_KEY : credentials.RESEARCH_REVIEW_KEY)!, 'utf8');
   if (actual.length !== expected.length || !timingSafeEqual(actual, expected)) {
     return { ok: false, error: 'research_controller_unauthorized' };
   }
-  const principalId = createHash('sha256').update(`stockinsider:research-controller:v2:${role}\0`)
-    .update(expected).digest('hex');
-  return { ok: true, role, principalId };
+  return { ok: true, role, principalId: role === 'author' ? principals.authorPrincipalId : principals.reviewerPrincipalId };
 }
 
 export type ResearchExecutionObservation = {
