@@ -1687,8 +1687,36 @@
     }
   ],
   "cleanup": {
-    "postfailureReadonlyPGStartedThenStopped": true,
-    "verificationPending": true
+    "completedAt": "2026-10-09T14:48:33.957276+00:00",
+    "ownedLiveProcesses": 0,
+    "remoteRawEvidenceVerified": "15c65179bd5ae9b6626d3d47fc8256b12afcf880 via git ls-remote",
+    "rawFileHashesVerified": 52,
+    "removedExactStoppedClusterPaths": [
+      {
+        "path": "/workspace/cloud-author-packet-artifacts-oct09/r7f/http-2409/cluster",
+        "removedBytes": 64008192,
+        "postmasterPidAbsent": true
+      },
+      {
+        "path": "/workspace/cloud-author-packet-artifacts-oct09/r7f/http-2383/cluster",
+        "removedBytes": 64172032,
+        "postmasterPidAbsent": true
+      }
+    ],
+    "freeBeforeBytes": 12293820416,
+    "freeAfterBytes": 12422000640,
+    "retainedReusableBuild": {
+      "buildId": "NwnkKwZce3fT-Egw964eK",
+      "compiledManifestSha256": "42371d0c5ff815db6eb2c1e7f05c40d5acb62f90bf8b28a30620bfdf47df7230",
+      "path": "/workspace/cloud-reviewer-assignment-http-vm-oct09/web/.next",
+      "runtimeExact7f": true,
+      "reason": "Capacity above8GiB reserve; retain exact build/dependency copy for a separately authorized fixed-test follow-up, avoiding repeat normal build."
+    },
+    "preserved": [
+      "All original RED raw outputs and readonly full-row audits",
+      "All source and receipts in Git",
+      "Shared tool/dependency targets and unique financial evidence"
+    ]
   },
   "independentReview": "Root prior runtime7f unsigned scoped CODE PASS only; new owned HTTP test/fix/receipt pending independent review.",
   "remaining": [

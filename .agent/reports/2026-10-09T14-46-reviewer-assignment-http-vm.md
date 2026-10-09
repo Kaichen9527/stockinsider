@@ -11,3 +11,5 @@ Runtime7f6259e88f52622cc909653f217d41c820e7e7eb, native test3725c0ea12978adfc667
 -52 raw files retained with original bytes/SHA, requests/responses, readiness attempts, readonly postfailure full-row audit and manifest. Original AUO seal request reconstructed from immutable preparation+mapping; not claimed wirecapture.
 
 Next needed: independent test-only fix review; identify AUO namespace instability, then explicit bounded fresh native acceptance. Original guards/SQL/ACL unchanged. Root runtime7f prior CODE PASS is separate from this RED.
+
+Cleanup:0 live owned heavy processes, remote15c65179 and all52 raw hashes verified. Removed only two stopped disposable PG clusters; free bytes 12293820416→12422000640. Exact7f build/dependency copy retained for reviewed follow-up because capacity remains above8GiB reserve. No original evidence removed.
