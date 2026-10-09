@@ -62,6 +62,10 @@ export async function handleResearchAuthorAssignment(request: Request): Promise<
   if (!requireExactInternalBearer(request)) return Response.json({ ok: false, error: 'research_author_auth_required' }, { status: 401 });
   const identity = resolveResearchControllerIdentity(request, 'author');
   if (!identity.ok) return Response.json({ ok: false, error: identity.error }, { status: 401 });
+  if (request.headers.has('x-research-author-handoff-action')) {
+    const { handleResearchAuthorHandoff } = await import('./research-author-handoff.ts');
+    return handleResearchAuthorHandoff(request);
+  }
   if (request.headers.has('x-research-author-result-action')) {
     const { handleResearchAuthorResult } = await import('./research-author-result.ts');
     return handleResearchAuthorResult(request);
