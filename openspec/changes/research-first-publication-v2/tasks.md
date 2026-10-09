@@ -52,3 +52,14 @@ The Oct08 findings above are historical. Observed43d19d6/source05a repair and pr
 - [x] Freeze financial adapter boundary for independent design before new immutable-input bindings.
 - [ ] Implement reviewed adapter and actual guarded preparation/calculation integration; reported observations, research assumptions and gaps remain distinct.
 - [ ] Complete reported YTD bridge, immutable financial revision and same-pipeline publication under64f7.
+
+## 2026-10-10 atomic publication implementation slice
+
+- [x] Add the approved closed marker2 action to the existing guarded deep-job route; current author bearer and independently configured saved role observations remain required.
+- [x] Reexecute article/calculation/reviewer packet and original saved envelope/completion bindings; only explicit accepted editorial decisions proceed.
+- [x] One existing bundle/outbox/dossier/receipt transaction, original source dependency, original lease and separate reviewer-result completion FK; completed replay precedes live readers.
+- [x] Maker isolated contract/actual PostgreSQL acceptance: 22/22 zero skip, including concurrent duplicate, seven injected effect failures, restart, withdrawal, committed new revision/rights-ABA source-first races, unchanged paid-content fence, unaccepted saved review and original expiry while waiting.
+- [ ] Exact independent code review, related legacy regression and final normal build acceptance.
+- [ ] Shared desktop/mobile renderer and native HTTP acceptance of this successor (the earlier94 native cases cover reviewer results only).
+- [ ] Actual configured model dispatch/tool evidence and genuinely authored/independently reviewed AUO and EMC publication. Synthetic fixtures never fulfill this item.
+- [ ] Protected full main-to-final review, merge/deploy and research schedule/five real trading days. No production migration or research/entry qualification has occurred in this slice.

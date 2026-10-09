@@ -14,6 +14,10 @@ export async function POST(request: Request) {
   }
   if (request.headers.has('x-research-input-version')) {
     if(request.headers.get('x-research-input-version')!=='2') return NextResponse.json({ok:false,error:'research_complete_marker_invalid'},{status:400});
+    if (request.headers.has('x-research-publication-action')) {
+      const { handleResearchPublication } = await import('@/lib/research-atomic-publication');
+      return handleResearchPublication(request);
+    }
     const {FinancialDeadline}=await import('@/lib/research-financial-file-reader');
     const {readCompleteBody,parseCompleteRequest,runCompleteInput}=await import('@/lib/research-complete-input');
     const deadline=new FinancialDeadline();let input;let action;
