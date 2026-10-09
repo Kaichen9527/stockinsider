@@ -8,35 +8,33 @@ list is valid; research priority is not entry authority.
 
 ## Latest verified state — supersedes older checkpoints below
 
-Integration0fc4ee239c7bbebb2f221c6fa3f092c3f063cb02 remains pushed/clean.
-Its tree equals reviewed7221958b; PR341 is merged into the feature branch.
-Main remains169aad1; no production migration or deployment occurred.
+Integration0fc4ee239c7bbebb2f221c6fa3f092c3f063cb02 remains clean and pushed;
+main169aad1 remains unchanged. No production migration/deployment/publication.
 
-- New business article contract: root109related tests, types/lint/normalbuild
-  pass; independent40/40 plus adversarial checks pass exact722. Original three
-  P2 and37/3 RED are retained. Real author/reviewer/publication remains pending.
-- Complete-input byte boundary: original-SQL Linux PG6/6, exact524288/+1,
-  rollback/replay/joint count verified. Fixed clock is serialization-only.
-- Existing VM turn01a12043 completed; no running work or duplicate dispatch.
-  Natural-clock actual shared-source/global-deep lock waits now pass10/10 in
-  Cloud PG17.11 and separate Mac PG17.10. Live before expiry succeeds; job or
-  reservation expiry rejects seal/read/replay without changing11table hashes,
-  logical charges or seeded reserved budgets. Missing PG explicitly fails.
-- Exactb38d2826 test-only increment has unsigned independent CODE PASS,
-  zeroP1/P2; twelve original VM evidence and four migration hashes match.
-  PR342 targets integration only; protected run37921360771 failed because
-  its exact-review-b38d2826 evidence ref is absent. No merge, bypass or retry.
-  Scoped test review cannot substitute for whole-release evidence. Ordinary
-  diagnostic was still running. Runtime/migrations/ACL unchanged; exact722 web
-  build reused.
-- Synthetic short initial leases prove original recheck, not production role
-  budget admission.120s freshness, source race/rights ABA and response-loss
-  remain pending. Genuine role execution, atomic v2 publication/reader, actual
-  61-session discovery price adapter and protected release are incomplete.
+- Draft PR343 subjectcbd1a9e93ae77930684f0ca45726790b6871721c adds guarded
+  readAuthorPacket to the existing marker2 path. Original assignment/source/deep
+  fences and exclusive deadlines remain; fixed financial models are rerun.
+  Only selected public summaries enter a bounded packet; private principal,
+  canonical request, worker owner and job/reservation IDs stay out of model data.
+- Legacy publication precision stays unknown, including midnight timestamps.
+  Source admittedAt explicitly means the immutable seal received_at, preserving
+  source observations separately. All capabilities/gaps remain unchanged/false.
+- Root85related tests and14actual PG tests pass, zero skip; type/lint (33existing
+  warnings) and normalbuild pass exactcbd. Independent scoped design/code pass;
+  reviewer57tests plus7extra probes pass. Two original designP2 remain recorded.
+  These are synthetic source/job/role fixtures, not actual author execution.
+- Existing authorized VM is running one new compiled HTTP AUO/EMC acceptance
+  turn01a12099 from exactcbd, owning a separate test/helper/receipt only. It must
+  build that changed runtime; no duplicate work or old6f build reuse is allowed.
+- PR342 natural lock-expiry test remains open: Mac/Cloud10/10 and independent
+  code review passed; ordinary diagnostic37921360805 now passed. Protected
+  run37921360771 still lacks exactb38d review evidence. No repeat/bypass/merge.
+- Reviewed article contract/byte boundary remain in integration. Real author/
+  reviewer/result/publication, actual61-session price adapter, full protected
+  release and future five trading days are unfinished. Strategy profit unproven.
 
-Exact root/VM evidence and limitations are saved in
-`.agent/reports/2026-10-09T11-05-00Z-natural-lock-expiry-root.json`.
-Engineering evidence does not establish investment effectiveness.
+Evidence: `.agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance.json`.
+Engineering heartbeat continues; it does not enable the paused research schedule.
 
 ## Earlier exact state (historical, retained for provenance)
 

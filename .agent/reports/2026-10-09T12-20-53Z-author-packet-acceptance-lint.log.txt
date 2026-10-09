@@ -1,0 +1,58 @@
+
+> web@0.1.0 prelint
+> node scripts/sync-official-authority.mjs
+
+Official authority build bridge verified (5 canonical modules).
+
+> web@0.1.0 lint
+> eslint
+
+[BABEL] Note: The code generator has deoptimised the styling of /Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/src/lib/domain.ts as it exceeds the max of 500KB.
+
+/Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/src/app/api/opportunity-v3/route.ts
+  26:22  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/src/lib/domain.ts
+   8021:10  warning  'buildRevenueSignalSeedFallback' is defined but never used  @typescript-eslint/no-unused-vars
+   8057:10  warning  'buildFundamentalSeedFallback' is defined but never used    @typescript-eslint/no-unused-vars
+   8116:3   warning  '_symbol' is defined but never used                         @typescript-eslint/no-unused-vars
+   8117:3   warning  '_fallbackAsOf' is defined but never used                   @typescript-eslint/no-unused-vars
+   8147:3   warning  '_symbol' is defined but never used                         @typescript-eslint/no-unused-vars
+   8148:3   warning  '_fallbackAsOf' is defined but never used                   @typescript-eslint/no-unused-vars
+  12187:38  warning  '_seed' is defined but never used                           @typescript-eslint/no-unused-vars
+
+/Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/src/lib/opportunity-v3/compact-radar-read.ts
+  2:76  warning  'validateCompactRadarProjectionRow' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/src/lib/radar-producer-payload.js
+  144:31  warning  '_connectorDetails' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/src/lib/radar-response-policy.ts
+  5:38  warning  '_state' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/src/lib/research-v2.ts
+    58:7   warning  'BROKER_DISCOVERY_SEARCH_TERMS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   398:10  warning  'resolveTimeoutMs' is defined but never used                        @typescript-eslint/no-unused-vars
+   486:10  warning  'extractTwSymbolsWithContext' is defined but never used             @typescript-eslint/no-unused-vars
+  1252:16  warning  'ensureDir' is defined but never used                               @typescript-eslint/no-unused-vars
+  1256:10  warning  'extractJsonText' is defined but never used                         @typescript-eslint/no-unused-vars
+  1266:10  warning  'firstNonEmpty' is defined but never used                           @typescript-eslint/no-unused-vars
+  1281:10  warning  'parseFollowerCount' is defined but never used                      @typescript-eslint/no-unused-vars
+  1388:10  warning  'sha256Hex' is defined but never used                               @typescript-eslint/no-unused-vars
+  1574:10  warning  'extractMatchedTerms' is defined but never used                     @typescript-eslint/no-unused-vars
+  1579:10  warning  'resolveContextSymbols' is defined but never used                   @typescript-eslint/no-unused-vars
+  1614:10  warning  'computeDirectHitStrength' is defined but never used                @typescript-eslint/no-unused-vars
+  1774:16  warning  'markLatestRunningConnectorFailed' is defined but never used        @typescript-eslint/no-unused-vars
+  1967:16  warning  'ensureDefaultWatchlists' is defined but never used                 @typescript-eslint/no-unused-vars
+  2575:10  warning  'parseCnyesForeignRatingRows' is defined but never used             @typescript-eslint/no-unused-vars
+  2653:10  warning  'parseFactsetConsensusFromText' is defined but never used           @typescript-eslint/no-unused-vars
+  2667:10  warning  'detectCrossThemeKeys' is defined but never used                    @typescript-eslint/no-unused-vars
+  3156:84  warning  'stockError' is assigned a value but never used                     @typescript-eslint/no-unused-vars
+  5471:16  warning  'fetchYoutubePlaylist' is defined but never used                    @typescript-eslint/no-unused-vars
+  5499:16  warning  'fetchApplePodcastRssItems' is defined but never used               @typescript-eslint/no-unused-vars
+  5586:16  warning  'fetchYoutubeTranscript' is defined but never used                  @typescript-eslint/no-unused-vars
+  5602:16  warning  'fetchYoutubeAudioUrl' is defined but never used                    @typescript-eslint/no-unused-vars
+  5621:16  warning  'transcribeWithWhisper' is defined but never used                   @typescript-eslint/no-unused-vars
+
+✖ 33 problems (0 errors, 33 warnings)
+
