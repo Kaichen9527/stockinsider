@@ -48,3 +48,17 @@ Still pending: trusted receive with real author execution, independent review,
 existing bundle/outbox/submission atomic v2 publication and shared reader. The
 length/completeness and semantic research standards are reviewed there; passing
 this contract alone is never article publication or investment qualification.
+
+Independent cf838c35 review reproduced three P2 gaps after its37 tests passed:
+exact expiry was accepted, source/execution gaps could not be cited, and calculated
+*SharesMillionAssumed denominators were absent from numeric references. Root
+added executable probes first:37 PASS/3 FAIL. The repair uses exclusive original
+deadlines with microsecond boundary tests, exact namespaced DB-assembled gaps,
+and an explicit share-field catalog across quarters/full years/future four.
+Original reviewer findings and RED remain saved; successor review is required.
+
+The independently reviewed complete-input byte-boundary test is separately added
+from exactd24bfc7f. Its explicit command requires real PostgreSQL and the already
+reviewed pinned Linux PG-only clock library. Missing prerequisites fail, never
+skip. That test is not natural-clock lease/freshness acceptance; no default CI
+profile, production clock or SQL body is modified to make it pass.

@@ -15,7 +15,7 @@ export type ArticleSourceV2 = {
 };
 type Reference = { kind: 'source'; documentId: string; rowHash: string; locator: string }
   | { kind: 'reported_observation' | 'calculation' | 'assumption'; pointer: string }
-  | { kind: 'gap'; reason: string };
+  | { kind: 'gap'; namespace: 'source' | 'financial' | 'execution'; reason: string };
 export type ArticleParagraphV2 = { id: string; text: string;
   kind: 'reported' | 'rumor' | 'inference' | 'scenario' | 'gap'; references: Reference[] };
 export type BusinessArticleV2 = {
@@ -54,12 +54,15 @@ type NumericNode = { value: number; unit: string; periods: string[]; scenarioId:
 const AMOUNTS = new Set(['revenue', 'grossProfit', 'operatingExpenses', 'operatingProfit', 'nonOperating', 'pretaxProfit',
   'taxExpense', 'netProfit', 'nonControllingNetProfit', 'ownersNetProfit', 'taxFloor', 'nci', 'interestIncome',
   'financeCosts', 'otherIncome', 'equityMethodProfit', 'fxAndOtherRecurring', 'bankInterest', 'financeCost', 'fx', 'otherGainsExFx']);
+const SHARE_FIELDS = new Set(['openingOrdinaryMillion', 'issuedOrdinaryMillion', 'potentialAwardsMillion',
+  'potentialIncludedMillion', 'antiDilutiveExcludedMillion', 'ordinaryWeightedSharesMillionAssumed',
+  'potentialWeightedSharesMillionAssumed', 'dilutedSharesMillionAssumed']);
 function numericNodes(value: unknown, prefix = '', out = new Map<string, NumericNode>(), depth = 0,
   periods: string[] = [], scenarioId: string | null = null): Map<string, NumericNode> {
   ensure(depth <= 12 && out.size <= 4096);
   if (typeof value === 'number') {
     ensure(Number.isFinite(value)); const key = prefix.split('/').at(-1)!;
-    const unit = key.endsWith('EpsConditional') ? 'TWD_per_share' : key.endsWith('Million') ? 'million_shares'
+    const unit = key.endsWith('EpsConditional') ? 'TWD_per_share' : SHARE_FIELDS.has(key) ? 'million_shares'
       : ['grossMargin', 'operatingMargin', 'opexRatio', 'taxRate', 'fractionOutstanding'].includes(key) ? 'fraction'
         : AMOUNTS.has(key) ? 'TWD_million' : null;
     if (unit) out.set(prefix, { value, unit, periods, scenarioId });
@@ -115,8 +118,8 @@ export function validateBusinessResearchArticle(context: {
   const cutoff = financialInstant(a.evidenceCutoffAt), authored = financialInstant(a.authoredAt);
   ensure(cutoff === financialInstant(clocks.researchCutoff) && cutoff <= authored && authored <= financialInstant(context.now));
   const job = object(payload.originalJob), reservation = object(payload.originalReservation);
-  ensure(financialInstant(reservation.startedAt) <= authored && authored <= financialInstant(job.leaseExpiresAt)
-    && authored <= financialInstant(reservation.leaseExpiresAt));
+  ensure(financialInstant(reservation.startedAt) <= authored && authored < financialInstant(job.leaseExpiresAt)
+    && authored < financialInstant(reservation.leaseExpiresAt));
   if (a.companyBackground !== null) text(a.companyBackground, 0, 6000);
   const manifest = list(object(payload.sources).manifest, 0, 30).map(object), sources = new Map<string, ArticleSourceV2>();
   for (const source of list(context.sources, 0, 30) as ArticleSourceV2[]) {
@@ -140,14 +143,25 @@ export function validateBusinessResearchArticle(context: {
     facts.set(`/${key}/${index}/value`, { value: f.value, unit: f.unit, periods: [f.period], scenarioId: null });
   });
   const nodes = { reported_observation: facts, calculation: numericNodes(material), assumption: numericNodes(projection.projected) };
-  const gaps = new Set(list(projection.gaps, 0, 64));
+  const expectedGaps = [{ namespace: 'source', reason: 'source_coverage_incomplete' },
+    { namespace: 'financial', reason: 'financial_source_live_rights_unverified' },
+    { namespace: 'execution', reason: 'trusted_role_execution_unavailable' },
+    ...list(projection.gaps, 0, 64).map(reason => { text(reason, 1, 200); return { namespace: 'financial', reason }; }),
+    ...(manifest.length ? [] : [{ namespace: 'source', reason: 'sources_not_selected' }])];
+  // Preserve the actual DB assembly's namespaces/order and reject additions,
+  // omissions or reclassification rather than inventing a separate gap ledger.
+  ensure(completeHash(payload.gaps) === completeHash(expectedGaps));
+  const gaps = new Set(expectedGaps.map(g => `${g.namespace}:${g.reason}`));
   const reference = (value: unknown) => {
     const r = object(value);
     if (r.kind === 'source') {
       exact(r, ['kind', 'documentId', 'rowHash', 'locator']); text(r.documentId); text(r.locator, 1, 500);
       ensure(sources.has(r.documentId) && sources.get(r.documentId)!.rowHash === r.rowHash); return r;
     }
-    if (r.kind === 'gap') { exact(r, ['kind', 'reason']); ensure(gaps.has(r.reason)); return r; }
+    if (r.kind === 'gap') {
+      exact(r, ['kind', 'namespace', 'reason']); text(r.namespace, 1, 20); text(r.reason, 1, 200);
+      ensure(gaps.has(`${r.namespace}:${r.reason}`)); return r;
+    }
     exact(r, ['kind', 'pointer']); ensure(r.kind === 'reported_observation' || r.kind === 'calculation' || r.kind === 'assumption');
     text(r.pointer, 1, 500); ensure(nodes[r.kind].has(r.pointer)); return r;
   };

@@ -51,6 +51,10 @@ async function fixture(symbol = '2409') {
       sourceManifestHash: completeHash(projection.sourceManifest), projectionHash: completeHash(projection),
       scenarioInputHash: completeHash(projection.projected.scenarios), resultHash: completeHash(calculation) },
     clocks: { originalModelCutoff: projection.clocks.originalModelCutoff, artifactReadKnownAt: projection.clocks.currentLocalReadKnownAt, researchCutoff: admittedAt },
+    gaps: [{ namespace: 'source', reason: 'source_coverage_incomplete' },
+      { namespace: 'financial', reason: 'financial_source_live_rights_unverified' },
+      { namespace: 'execution', reason: 'trusted_role_execution_unavailable' },
+      ...projection.gaps.map(reason => ({ namespace: 'financial', reason }))],
     capabilities: Object.fromEntries(['financialVerified', 'dispatchReady', 'modelDispatched', 'publishableResearch', 'researchQualified', 'strategyApproved', 'entryEligible', 'historicalPITEligible'].map(k => [k, false])) };
   const revision = { status: 'sealed', dispatchReady: false, revision_id: randomUUID(), canonical_request: request, request_hash: completeHash(request),
     canonical_payload: payload, input_hash: completeHash(payload), research_company_id: payload.researchIdentity.researchCompanyId,
@@ -117,7 +121,7 @@ const mutations = {
   'future source date': f => { f.context.sources[0].publication.raw = '2099-01-01'; },
   'invalid civil date': f => { f.context.sources[0].publication.raw = '2026-02-30'; },
   'missing source receipt': f => { f.context.sources = []; },
-  'invented gap reason': f => { f.article.summary.kind = 'gap'; f.article.summary.references = [{ kind: 'gap', reason: 'invented_no_orders' }]; },
+  'invented gap reason': f => { f.article.summary.kind = 'gap'; f.article.summary.references = [{ kind: 'gap', namespace: 'financial', reason: 'invented_no_orders' }]; },
 };
 for (const [name, mutate] of Object.entries(mutations)) test('reject ' + name, async () => {
   const f = await fixture(); mutate(f); assert.throws(() => validate(f));
@@ -152,7 +156,7 @@ test('printed facts, explicit assumptions and sealed gaps keep their classificat
   const f = await fixture();
   f.article.summary.kind = 'reported'; f.article.summary.references = [{ kind: 'reported_observation', pointer: '/reportedFacts/0/value' }];
   f.article.sections[0].paragraphs[0].kind = 'gap';
-  f.article.sections[0].paragraphs[0].references = [{ kind: 'gap', reason: 'capacity_yield_asp_orders_not_quantifiable' }];
+  f.article.sections[0].paragraphs[0].references = [{ kind: 'gap', namespace: 'financial', reason: 'capacity_yield_asp_orders_not_quantifiable' }];
   const ref = { kind: 'assumption', pointer: '/scenarios/1/quarters/0/segments/0/grossMargin' };
   f.article.sections[1].paragraphs[0].kind = 'scenario'; f.article.sections[1].paragraphs[0].references = [ref];
   f.article.tables[0].rows.push({ label: '假設毛利率', reference: ref });
@@ -171,4 +175,40 @@ test('validated snapshots retain no mutable aliases to author or trusted context
   f.article.summary.text += ' changed'; f.context.sources[0].url = 'https://example.com/changed';
   f.context.revision.canonical_payload.financial.material.calculation.scenarios[1].nextFourUnreported.revenue = 0;
   assert.equal(JSON.stringify(result), before);
+});
+test('author original deadlines are exclusive, retaining microsecond boundary precision', async () => {
+  for (const field of ['originalJob', 'originalReservation']) {
+    const f = await fixture(), deadline = f.context.revision.canonical_payload[field].leaseExpiresAt;
+    // Independently exercise each fence in a wholly synthetic context. No DB
+    // lease is changed; recompute the synthetic row hash after moving the OTHER
+    // deadline later so it cannot hide the fence under test.
+    f.context.revision.canonical_payload[field === 'originalJob' ? 'originalReservation' : 'originalJob'].leaseExpiresAt = new Date(Date.parse(deadline) + 60_000).toISOString();
+    f.context.revision.input_hash = completeHash(f.context.revision.canonical_payload);
+    f.article.inputHash = f.context.revision.input_hash;
+    const micros = BigInt(Date.parse(deadline)) * 1000n;
+    const instant = us => new Date(Number(us / 1000n)).toISOString().replace(/(\.\d{3})Z$/u, '$1' + String(us % 1000n).padStart(3, '0') + 'Z');
+    f.article.authoredAt = instant(micros - 1n); f.context.now = f.article.authoredAt; assert.doesNotThrow(() => validate(f));
+    for (const delta of [0n, 1n]) {
+      f.article.authoredAt = instant(micros + delta); f.context.now = f.article.authoredAt; assert.throws(() => validate(f));
+    }
+  }
+});
+test('actual sealed source/execution/financial gaps are referenceable with exact namespaces', async () => {
+  const f = await fixture(); f.article.summary.kind = 'gap';
+  for (const gap of f.context.revision.canonical_payload.gaps) {
+    f.article.summary.references = [{ kind: 'gap', ...gap }]; assert.doesNotThrow(() => validate(f));
+  }
+  f.article.summary.references = [{ kind: 'gap', namespace: 'financial', reason: 'source_coverage_incomplete' }];
+  assert.throws(() => validate(f));
+});
+test('actual calculated ordinary/potential/diluted share denominators are available in all periods', async () => {
+  for (const period of ['quarters/0', 'nextFourUnreported', 'fullForecastYears/0']) {
+    for (const key of ['ordinaryWeightedSharesMillionAssumed', 'potentialWeightedSharesMillionAssumed', 'dilutedSharesMillionAssumed']) {
+      const f = await fixture();
+      f.article.tables[0].rows = [{ label: '計算股數分母', reference: { kind: 'calculation', pointer: `/scenarios/1/${period}/${key}` } }];
+      const r = validate(f), row = r.tables[0].rows[0]; assert.equal(row.unit, 'million_shares');
+      assert.deepEqual(row.periods, period === 'quarters/0' ? ['2026Q3'] : period === 'nextFourUnreported'
+        ? ['2026Q3', '2026Q4', '2027Q1', '2027Q2'] : ['2027Q1', '2027Q2', '2027Q3', '2027Q4']);
+    }
+  }
 });
