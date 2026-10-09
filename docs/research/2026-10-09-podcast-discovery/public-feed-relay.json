@@ -86,7 +86,9 @@
     "episode8IsCurrentOctoberCatalyst": false,
     "rssDeclaredEnclosureLengthIsUsableDownloadBound": false,
     "enclosureAccessVerified": false,
-    "membershipRightsInferredFromFilename": false
+    "membershipRightsInferredFromFilename": false,
+    "publicEnclosureHeadersVerified": true,
+    "enclosureBodyAccessVerified": false
   },
   "integration": {
     "platformEnabled": false,
@@ -96,5 +98,39 @@
     "historicalPITEligible": false
   },
   "rawResponsesTransferredToVm": false,
-  "rawBodiesCommitted": false
+  "rawBodiesCommitted": false,
+  "publicEnclosureHeaders": {
+    "schemaVersion": "stockinsider-public-enclosure-header-observation-v1",
+    "recordedAt": "2026-10-09T06:08:44.559424+00:00",
+    "attempts": [
+      {
+        "url": "https://rss.soundon.fm/rssf/06e16cf5-5b45-4863-bcdf-9343aa584f73/feedurl/12f44f89-723a-4b7a-9b81-da916fdf07da/rssFileVip.mp3?timestamp=1773771540475",
+        "attemptedAt": "2026-10-09T06:08:44.103580+00:00",
+        "method": "HEAD",
+        "authenticated": false,
+        "actualBytesDownloaded": 0,
+        "status": "redirect_observed",
+        "errorType": "HTTPError",
+        "httpStatus": 302,
+        "nextUrl": "https://filesb.soundon.fm/file/filesb/6f14051a-1c2e-4782-a78d-9633d918c2bd.mp3",
+        "observedAt": "2026-10-09T06:08:44.293803+00:00"
+      },
+      {
+        "url": "https://filesb.soundon.fm/file/filesb/6f14051a-1c2e-4782-a78d-9633d918c2bd.mp3",
+        "attemptedAt": "2026-10-09T06:08:44.293906+00:00",
+        "method": "HEAD",
+        "authenticated": false,
+        "actualBytesDownloaded": 0,
+        "httpStatus": 200,
+        "status": "headers_read_success",
+        "contentType": "audio/mpeg",
+        "declaredContentLength": "79341218",
+        "acceptRanges": "bytes",
+        "observedAt": "2026-10-09T06:08:44.559384+00:00"
+      }
+    ],
+    "mediaBytesAcquired": 0,
+    "audioContentAnalyzed": false,
+    "rightsEscalationOrLogin": false
+  }
 }
