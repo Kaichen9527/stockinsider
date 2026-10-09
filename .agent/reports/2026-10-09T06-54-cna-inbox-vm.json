@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "real-public-summary-isolated-inbox-vm-v1",
+  "recordedAt": "2026-10-09T06:55:18.819981+00:00",
+  "sourceBranch": "codex/cna-guarded-inbox-acceptance-oct09",
+  "sourceSubject": "cb530817f964a78d9b6c7f35b2ffafe3a70821a9",
+  "reviewedPacketSubject": "c7381b0a169f1f10a15174ff1f77dd6f4c6ba261",
+  "webTree": "d512b0b362477d3f29f2a009613c857485744936",
+  "buildId": "PLFEHeZwyYXBKYYCNMmw4",
+  "buildProvenance": "reuses exact unchanged web tree compiled for abd58/9c; no financialSupplement action invoked; new financial repair not in this CNA stack",
+  "acceptance": {
+    "actualStack": "PG17.11, pinned PostgREST16.3, actual Next built runtime, existing requireInternalAuth endpoint",
+    "tests": 14,
+    "pass": 14,
+    "fail": 0,
+    "skip": 0,
+    "selection": "one parent + 9 original baseline + 4 real CNA/observed-consumer checks",
+    "anonymous401": true,
+    "acceptedRealSummary": 1,
+    "restartReplayAccepted": 0,
+    "sourceHeads": 4,
+    "CnaDirectSymbols": [
+      "3008"
+    ],
+    "observedRosterCount": 1978,
+    "CnaPrice": "unknown / quote null",
+    "CnaDisposition": "needs_evidence",
+    "assessmentsSupplied": false,
+    "queueLength": 0,
+    "jobsCreated": 0,
+    "formalPriority": "409 research_priority_official_roster_missing",
+    "formalStockAuthorityRowsWritten": 0,
+    "modelDispatch": false,
+    "investmentSignal": false,
+    "productionWrites": false
+  },
+  "resources": {
+    "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+    "stage": "native-cna-final",
+    "command": [
+      "node",
+      "scripts/run-node22.js",
+      "--experimental-strip-types",
+      "--test",
+      "--test-reporter=tap",
+      "/workspace/cloud-cna-inbox-artifacts-oct09/cna-probe.test.mjs"
+    ],
+    "startedAt": "2026-10-09T06:53:28.403Z",
+    "completedAt": "2026-10-09T06:53:48.943Z",
+    "elapsedSeconds": 20.539875466987723,
+    "exitCode": 0,
+    "sampledAggregateRssPeakBytes": 635568128,
+    "observedTaskDiskPeakBytes": 1435336704,
+    "availableBeforeBytes": 14751748096,
+    "availableAfterBytes": 14705020928,
+    "guardTermination": null
+  },
+  "originalRed": {
+    "tests": 14,
+    "pass": 12,
+    "fail": 2,
+    "skip": 0,
+    "meaning": "one leaf fixture incorrectly required research_priority_runs_v1=0 after deliberately creating one observed priority result; corrected to exactly1 while all formal/protected tables still0",
+    "originalInnerHarnessPassedField": true,
+    "innerHarnessFieldDoesNotOverrideActualFailedTAPExit": true,
+    "originalActualExitCode": 1
+  },
+  "clocks": {
+    "publishedAtOriginal": "2026-10-08T19:14:00+08:00",
+    "observedAtOriginal": "2026-10-09T05:55:35.130556+00:00",
+    "databasePublishedAt": "2026-10-08T11:14:00+00:00",
+    "databaseCollectedAt": "2026-10-09T05:55:35.13+00:00",
+    "precisionLimitation": "Existing inbox Date serialization retains milliseconds only; original supplied fractional clock remains immutable in packet, not falsely claimed in DB"
+  },
+  "attribution": {
+    "manualRootPublicRead": true,
+    "vmRawHttpReadOrRehash": false,
+    "fullResearchOrAudioTranscript": false,
+    "officialQandARead": false,
+    "AUOMentionOrIntelOrderDenial": false,
+    "qualificationOrEntryApproval": false,
+    "developerIsolatedDatabaseAndEphemeralCredentials": "synthetic local configuration; actual public summary bytes and DB minted document IDs",
+    "partialProfileNotProductionInstalledPolicy": true
+  },
+  "packet": {
+    "sourceSubject": "c7381b0a169f1f10a15174ff1f77dd6f4c6ba261",
+    "bytes": 1387,
+    "sha256": "cb45e74e6e68f4a3c8be78c4524ca01a8f8085db8f68bd2fe987939db89a3da7",
+    "vmFetchedOriginalRaw": false,
+    "metadataIngestionIsFullCompanyResearch": false,
+    "audioOrTranscriptRead": false,
+    "modelDispatched": false,
+    "qualification": false
+  },
+  "candidate": {
+    "candidate": {
+      "symbol": "3008",
+      "lane": "general",
+      "score": 7.35,
+      "scoreStatus": "partial_source_failure",
+      "independentRootCount": 1,
+      "rootIds": [
+        "https://www.cna.com.tw/news/afe/202610080326.aspx"
+      ],
+      "missingPlatforms": [
+        "broker",
+        "bulltalk",
+        "facebook",
+        "instagram",
+        "investanchors",
+        "news",
+        "official",
+        "podcast",
+        "ptt",
+        "threads",
+        "twse_insider",
+        "youtube"
+      ],
+      "inProgress": false,
+      "disposition": "needs_evidence",
+      "policyVersion": "research-priority-v1"
+    },
+    "priceContext": {
+      "symbol": "3008",
+      "priceContext": {
+        "policyVersion": "discovery-price-shadow-v1",
+        "cutoff": "2026-10-09T05:55:35.13+00:00",
+        "quote": null,
+        "quoteStatus": "missing_at_discovery",
+        "latestCompletedSession": null,
+        "relative5d": null,
+        "relative20d": null,
+        "relative60d": null,
+        "pricePhase": "unknown",
+        "phaseIsResearchSignalOnly": true,
+        "researchEvidenceRequired": true,
+        "rankingInfluence": false,
+        "missing": [
+          "aligned_61_session_window_missing",
+          "benchmark_pit_validation_missing",
+          "corporate_action_basis_missing",
+          "latest_completed_session_missing",
+          "official_dataset_validation_missing",
+          "official_instrument_identity_missing",
+          "price_phase_metadata_missing",
+          "quote_missing_at_discovery"
+        ],
+        "sourceDatasetHash": null,
+        "origin": "cutoff_read",
+        "firstRunId": null,
+        "capturedAt": null,
+        "immutableSnapshotHash": null,
+        "contextHash": "39386c593b43719b2d185a984bffd34ddb515d418383619f3f8284a321aa1c76"
+      },
+      "supplementaryObservation": {
+        "policyVersion": "discovery-price-supplement-v1",
+        "cutoff": "2026-10-09T06:53:34.625Z",
+        "quote": null,
+        "quoteStatus": "missing_at_current_cutoff",
+        "latestCompletedSession": null,
+        "relative5d": null,
+        "relative20d": null,
+        "relative60d": null,
+        "pricePhase": "unknown",
+        "phaseIsResearchSignalOnly": true,
+        "researchEvidenceRequired": true,
+        "rankingInfluence": false,
+        "missing": [
+          "aligned_61_session_window_missing",
+          "benchmark_pit_validation_missing",
+          "corporate_action_basis_missing",
+          "latest_completed_session_missing",
+          "official_dataset_validation_missing",
+          "official_instrument_identity_missing",
+          "price_phase_metadata_missing",
+          "quote_missing_at_current_cutoff"
+        ],
+        "sourceDatasetHash": null,
+        "origin": "current_run_observation",
+        "serverClock": "2026-10-09T06:53:34.859Z",
+        "attempted": true,
+        "knowledgeScope": "current_cutoff_only",
+        "observedClockBasis": "persisted_available_at",
+        "publishedAt": null,
+        "observedAt": null,
+        "availableAt": null,
+        "provenance": null,
+        "observationHash": "4e1c39a556dc815225394148b9dcaf24caf75c56aae30cc85840e802be1fbdaa"
+      }
+    },
+    "assessmentSupplied": false,
+    "jobCount": 0,
+    "investmentSignal": false
+  },
+  "artifacts": [
+    {
+      "path": ".agent/reports/2026-10-09T06-54-cna-inbox-vm-native-cna-first.log.txt",
+      "bytes": 5240,
+      "sha256": "30ca1ae60999e3a48114b39c14f8dc6c0369b393493c0917e2297b1dab231f8b"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-54-cna-inbox-vm-native-cna-first.json",
+      "bytes": 688,
+      "sha256": "d87b3892c1206c9c110baa0fa5ea15c3cfa6b3d253b1c80a6d59a66691480b84"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-54-cna-inbox-vm-native-cna-final.log.txt",
+      "bytes": 3963,
+      "sha256": "b3855d7b9e660e9aff4da0f07956ccc88cfa05f3ba4944252ec7621b832e43fa"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-54-cna-inbox-vm-native-cna-final.json",
+      "bytes": 688,
+      "sha256": "eb0b56fb7484ffa7419ff08321d74e3330bb22b2c23d12efae93991b6a59b493"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-54-cna-inbox-vm-cna-probe-first-red.mjs.txt",
+      "bytes": 6874,
+      "sha256": "897bd3d34e1f5b156cea5d83474bad7be82e2f491e0bf218f538805ef1f7052f"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-54-cna-inbox-vm-cna-probe.test.mjs.txt",
+      "bytes": 7075,
+      "sha256": "34379d6793d556be07b21e3378c70b3c5ebd9c4175e83c10bc9762b6b816cd40"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-54-cna-inbox-vm-native-cna-first-run-acceptance-receipt.json",
+      "bytes": 26961,
+      "sha256": "94310a8a467ea7ed73e1f634540a397bdca365b3f7eebb76322fb88e3f3d1679"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-54-cna-inbox-vm-native-cna-final-run-acceptance-receipt.json",
+      "bytes": 26961,
+      "sha256": "8671ee663b7ace8e0ef22b00c4fd3afe5e67a6acc3f733391d361cb43d2b6cd3"
+    }
+  ],
+  "limitations": [
+    "Actual public-summary metadata ingestion and restart/dedup only, not full company research or automatic collection",
+    "Existing inbox clock serialization retains milliseconds; original six-digit observed clock kept in immutable supplied packet",
+    "Top20 not fabricated; no market prices or assessment supplied",
+    "Normal build not repeated because this is docs/artifact-only and web tree unchanged; financial successor combined build separately pending"
+  ],
+  "ownedProcessesStopped": true
+}

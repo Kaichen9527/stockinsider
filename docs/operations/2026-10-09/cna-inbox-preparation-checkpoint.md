@@ -22,3 +22,27 @@ financial code is not independently approved. Complete probes/minimal repair
 contract are pending from the reviewer. Financial repair takes priority over
 this source acceptance; the original financial and capability branches remain
 frozen and pushed.
+
+
+## Actual guarded acceptance 2026-10-09T06:55:18.819981+00:00
+
+CNA3008 public summary was consumed via actual isolated PG17.11/PostgREST16.3/
+Next guarded inbox, anonymous401 and authenticated1 accepted. PostgreSQL restart
+and exact replay accepted0 with unchanged original document bytes. Original
+published offset and six-digit observed clock remain in supplied packet; existing
+inbox DB normalization retains milliseconds, explicitly not full microsecond
+storage. Source-head cutoff excludes CNA before acquisition; direct symbols only
+3008, no fabricated AUO/Intel order claim or independent confirmation.
+
+The actual1978 observed roster returned3008 quote null/needs_evidence with no
+assessment, job or investment signal. Formal scope still409 and formal tables
+remain empty.14/14TAP zero skip, including parent,9baseline and4new scoped tests.
+The first run12pass/2fail is retained: fixture incorrectly asserted zero observed
+priority rows after deliberately writing one; correction requires exactly one
+observed row and keeps formal-table zero assertions. Original inner harness's
+passed=true did not override failing TAP/exit1. Receipt `.agent/reports/2026-10-09T06-54-cna-inbox-vm.json`.
+
+No new App/API code, source HTTP grant, model role, production write, or
+qualification. Exact unchanged web tree uses existing PLFEHeZwyYXBKYYCNMmw4 build;
+no unrelated build rerun. All owned stack children stopped. Financial repair and
+complete-input/publication work remain separate and incomplete.

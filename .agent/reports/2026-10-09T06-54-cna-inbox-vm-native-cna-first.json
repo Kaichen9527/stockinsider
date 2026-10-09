@@ -1,0 +1,21 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "native-cna-first",
+  "command": [
+    "node",
+    "scripts/run-node22.js",
+    "--experimental-strip-types",
+    "--test",
+    "--test-reporter=tap",
+    "/workspace/cloud-cna-inbox-artifacts-oct09/cna-probe.test.mjs"
+  ],
+  "startedAt": "2026-10-09T06:52:08.316Z",
+  "completedAt": "2026-10-09T06:52:29.240Z",
+  "elapsedSeconds": 20.923415824014228,
+  "exitCode": 1,
+  "sampledAggregateRssPeakBytes": 665866240,
+  "observedTaskDiskPeakBytes": 1390477312,
+  "availableBeforeBytes": 14798508032,
+  "availableAfterBytes": 14751760384,
+  "guardTermination": null
+}

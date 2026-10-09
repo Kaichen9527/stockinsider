@@ -1,0 +1,86 @@
+TAP version 13
+# (node:134383) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:134383) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-observed-roster.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: reviewed real CNA3008 citation persists through guarded Next/PostgREST/PG and stays needs_evidence
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 106.008087
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 62.435953
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 11.033567
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 382.839859
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 32.071027
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 12.506384
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 3.574339
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 462.374458
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 81.852131
+      ...
+    # Subtest: CNA anonymous401, authenticated one real summary accepted
+    ok 10 - CNA anonymous401, authenticated one real summary accepted
+      ---
+      duration_ms: 46.438414
+      ...
+    # Subtest: CNA original revision persists after PG restart and exact repeat creates zero documents
+    ok 11 - CNA original revision persists after PG restart and exact repeat creates zero documents
+      ---
+      duration_ms: 684.960873
+      ...
+    # Subtest: real source head names Largan only and cutoff before acquisition excludes CNA
+    ok 12 - real source head names Largan only and cutoff before acquisition excludes CNA
+      ---
+      duration_ms: 12.392889
+      ...
+    # Subtest: observed1978 real admission gives 3008 priceunknown needs_evidence, no manufactured score or job
+    ok 13 - observed1978 real admission gives 3008 priceunknown needs_evidence, no manufactured score or job
+      ---
+      duration_ms: 13182.250733
+      ...
+    1..13
+ok 1 - reviewed real CNA3008 citation persists through guarded Next/PostgREST/PG and stays needs_evidence
+  ---
+  duration_ms: 17275.220758
+  ...
+1..1
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 20313.540043

@@ -1,0 +1,40 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {createHash}from 'node:crypto';
+import {verifyLocalInboxDataPlane}from '/workspace/cloud-research-converged-oct08/scripts/research-local-inbox-dataplane.mjs';
+import {prepareObservedRosterAdmission}from '/workspace/cloud-research-converged-oct08/web/src/lib/research-observed-roster.ts';
+import {buildResearchInboxRow,validateResearchInboxItemAt}from '/workspace/cloud-research-converged-oct08/web/src/lib/research-inbox.ts';
+const root='/workspace/cloud-research-converged-oct08',art='/workspace/cloud-cna-inbox-artifacts-oct09';
+const read=p=>JSON.parse(fs.readFileSync(root+'/'+p,'utf8'));
+const request=read('docs/research/2026-10-09-auo-event-check/prepared-inbox-request.json'),item=request.items[0];
+const body={legacyClassification:read('docs/research/2026-10-08-discovery-live/observed-security-classification.json'),securityScope:read('docs/research/2026-10-08-discovery-live/official-security-scope-reconciliation.json')};
+const sourceBytes=fs.readFileSync(root+'/docs/research/2026-10-09-auo-event-check/prepared-inbox-request.json');
+test('reviewed real CNA3008 citation persists through guarded Next/PostgREST/PG and stays needs_evidence',{timeout:120000},async t=>{
+ assert.equal(validateResearchInboxItemAt(item,new Date().toISOString()),true);assert.deepEqual(item.symbols,['3008']);
+ const expected=buildResearchInboxRow(item);let before;
+ const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,check:(name,fn)=>t.test(name,fn),afterBaseline:async({sql,post,rpc,report,restart,priorityRequest})=>{
+  await t.test('CNA anonymous401, authenticated one real summary accepted',async()=>{
+   const anon=await post('api/internal/research-inbox',request,false);assert.equal(anon.status,401);assert.equal(sql('SELECT count(*)FROM source_raw_documents'),'3');
+   const response=await post('api/internal/research-inbox',request);assert.equal(response.status,200);const accepted=await response.json();assert.equal(accepted.accepted,1);assert.equal(accepted.revisions.length,1);report.cnaRevision=accepted.revisions[0];
+   before=sql("SELECT row_to_json(d) FROM source_raw_documents d WHERE metadata->>'canonical_url'='https://www.cna.com.tw/news/afe/202610080326.aspx'");const saved=JSON.parse(before);assert.deepEqual(saved.symbols,['3008']);assert.equal(saved.publisher_name,item.author);assert.equal(saved.summary,item.shortSummary);assert.equal(saved.canonical_content_hash,expected.canonical_content_hash);assert.equal(saved.metadata.first_observed_at,expected.metadata.first_observed_at);assert.equal(saved.metadata.content_form,'research_summary');assert.equal(saved.metadata.acquisition_method,'public_document');
+   assert.equal(new Date(saved.published_at).toISOString(),'2026-10-08T11:14:00.000Z');assert.equal(new Date(saved.collected_at).toISOString(),'2026-10-09T05:55:35.130Z');
+   report.cnaPersistedClock={publishedAtOriginal:item.publishedAt,observedAtOriginal:item.observedAt,databasePublishedAt:saved.published_at,databaseCollectedAt:saved.collected_at,precisionLimitation:'Existing inbox Date serialization retains milliseconds only; original supplied fractional clock remains immutable in packet, not falsely claimed in DB'};
+  });
+  await t.test('CNA original revision persists after PG restart and exact repeat creates zero documents',async()=>{
+   restart();let response;for(let i=0;i<15;i++){response=await post('api/internal/research-inbox',request);if(response.status===200)break;await new Promise(r=>setTimeout(r,100));}assert.equal(response.status,200);assert.equal((await response.json()).accepted,0);
+   assert.equal(sql("SELECT row_to_json(d) FROM source_raw_documents d WHERE metadata->>'canonical_url'='https://www.cna.com.tw/news/afe/202610080326.aspx'"),before);assert.equal(sql('SELECT count(*)FROM source_raw_documents'),'4');report.cnaReplayAccepted=0;
+  });
+  await t.test('real source head names Largan only and cutoff before acquisition excludes CNA',async()=>{
+   let response=await rpc('research_source_heads_page_v1',{p_cutoff:new Date().toISOString(),p_offset:0,p_limit:500});assert.equal(response.status,200);const heads=await response.json();assert.equal(heads.length,4);const cna=heads.find(x=>x.id===report.cnaRevision.id);assert.ok(cna);assert.deepEqual(cna.symbols,['3008']);report.cnaSourceHead=cna;
+   response=await rpc('research_source_heads_page_v1',{p_cutoff:'2026-10-09T05:55:35Z',p_offset:0,p_limit:500});assert.equal(response.status,200);assert.ok(!(await response.json()).some(x=>x.id===report.cnaRevision.id));
+  });
+  await t.test('observed1978 real admission gives 3008 priceunknown needs_evidence, no manufactured score or job',async()=>{
+   const prepared=prepareObservedRosterAdmission(body),admitted=await post('api/internal/research-observed-roster',body);assert.equal(admitted.status,200);assert.equal((await admitted.json()).receipt.snapshotHash,prepared.snapshotHash);
+   const response=await post('api/internal/research-priority-run',{...priorityRequest,asOf:new Date().toISOString(),assessments:[],scope:'research_observed_v1',snapshotHash:prepared.snapshotHash});const data=await response.json();assert.equal(response.status,200,JSON.stringify(data));assert.equal(data.expectedCount,1978);assert.equal(data.accountedCount,1978);assert.equal(data.rows.length,1978);const candidate=data.rows.find(r=>r.symbol==='3008');assert.ok(candidate);assert.equal(candidate.disposition,'needs_evidence');const price=data.priceContexts.find(r=>r.symbol==='3008');assert.ok(price);assert.equal(price.priceContext.quote,null);assert.equal(data.queue.length,0);assert.equal(data.newDeepResearchJobs,0);assert.equal(data.researchQualified,false);report.cnaCandidate={candidate,priceContext:price,assessmentSupplied:false,jobCount:0,investmentSignal:false};
+   for(const table of ['stocks','stock_instruments_v3','stock_sector_assignments_v3','research_deep_jobs_v1',...report.readOnlyDependencyTables])assert.equal(sql(`SELECT count(*)FROM ${table}`),'0',table);
+   const formal=await post('api/internal/research-priority-run',{...priorityRequest,asOf:new Date().toISOString(),assessments:[]});assert.equal(formal.status,409);assert.equal((await formal.json()).error,'research_priority_official_roster_missing');
+  });
+  report.cnaPacket={sourceSubject:'c7381b0a169f1f10a15174ff1f77dd6f4c6ba261',bytes:sourceBytes.length,sha256:createHash('sha256').update(sourceBytes).digest('hex'),vmFetchedOriginalRaw:false,metadataIngestionIsFullCompanyResearch:false,audioOrTranscriptRead:false,modelDispatched:false,qualification:false};
+ }});assert.equal(report.passed,true);assert.equal(report.cnaCandidate.jobCount,0);
+});
