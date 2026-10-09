@@ -32,6 +32,7 @@ main169aad1 remains unchanged. No production migration/deployment/publication.
   explicit bounded readiness probes then single business requests; root and
   independent14/14 plus8 reviewer counterexamples pass. Unsigned scoped test
   review passes, native successor still pending. Runtime/SQL/web tree unchanged.
+  Fresh normalbuild of that identical web tree passes; raw log/BUILD_ID saved.
 - Root unchanged-reader real-filesystem probes show existing sibling nested
   writes pass; new sibling directory entries change shared ancestor metadata
   and reject; real parent replacement also rejects. Both failures clean up.

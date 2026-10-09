@@ -51,8 +51,18 @@
     "R1 30/2 failure retained; R2 38/38 is not a runtime fix or root-cause proof",
     "Old6fcd test generic business retries found P2 by independent reviewer; successor awaits native and independent review",
     "Directory diagnostic proves same-inode ancestor metadata changes can produce financial_parent_replaced; it does not identify original R1 writer",
-    "No fresh build: web runtime, migrations, package and original harness unchanged from cbd normal-build inputs",
-    "Inherited VM modelReserved:false is a stale shared-harness flag; actual nested audit contains synthetic reservation count1, no model execution"
+    "Inherited VM modelReserved:false is a stale shared-harness flag; actual nested audit contains synthetic reservation count1, no model execution",
+    "Fresh build reruns unchanged exactcbd web tree matching31bd; native successor remains pending"
   ],
-  "pullRequest": "https://github.com/Kaichen9527/stockinsider/pull/344"
+  "pullRequest": "https://github.com/Kaichen9527/stockinsider/pull/344",
+  "freshBuild": {
+    "exitCode": 0,
+    "sourceSubject": "cbd1a9e93ae77930684f0ca45726790b6871721c",
+    "webTree": "488da1f2daad0c862bbe7efb0915179822389614",
+    "buildId": "j34-PPOPvJBuRZ0dB2yTY",
+    "webTreeMatchesTestSuccessor": true,
+    "log": ".agent/reports/2026-10-09T13-20-financial-parent-diagnostic/build.log",
+    "sha256": "a617df4256c9e18a6f8b4c4a4d95b254641dd41e4c23600d146f94062bbd1af2",
+    "bytes": 6500
+  }
 }
