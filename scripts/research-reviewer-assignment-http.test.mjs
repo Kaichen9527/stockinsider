@@ -142,7 +142,8 @@ for(const symbol of ['2409','2383'])test(`compiled independent reviewer assignme
   await t.test('separate reviewer bearer, closed body, mixed header, oversized body reject without writes',async()=>{
    const before=audit();for(const role of [true,false,'cron','tester'])assert.equal((await reviewCall(reviewIdentity(),role,'auth')).response.status,401);
    reviewHeaders={authorization:'Bearer synthetic-unknown-reviewer'};try{assert.equal((await reviewCall(reviewIdentity(),'reviewer','unknown-auth')).response.status,401);}finally{reviewHeaders={};}
-   for(const patch of [{extra:true},{owner:'caller'},{principal:'a'.repeat(64)},{action:'assignAuthor'}])assert.equal((await reviewCall({...reviewIdentity(),...patch},'reviewer','closed-body')).response.status,400);
+   for(const patch of [{extra:true},{owner:'caller'},{principal:'a'.repeat(64)}])assert.equal((await reviewCall({...reviewIdentity(),...patch},'reviewer','closed-body')).response.status,400);
+   reviewHeaders={'x-research-review-assignment-action':'assignReviewer'};try{assert.equal((await reviewCall(reviewIdentity(),'reviewer','action-header-mismatch')).response.status,400);}finally{reviewHeaders={};}
    reviewHeaders={'x-research-author-handoff-action':'readAuthorHandoff'};try{assert.equal((await reviewCall(reviewIdentity(),'reviewer','mixed-header')).response.status,400);}finally{reviewHeaders={};}
    const large=reviewIdentity();large.input.owner='x'.repeat(9000);assert.equal((await reviewCall(large,'reviewer','oversized')).response.status,400);assert.equal(audit(),before);
   });
