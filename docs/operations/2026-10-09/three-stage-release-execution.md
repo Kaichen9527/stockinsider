@@ -48,8 +48,8 @@ main169aad1 remains unchanged. No production migration/deployment/publication.
 - Draft PR345 subjectb8c3df4d implements private create-only author result receive/
   read using original sources, assignments, deadlines and actual fixed calculator.
   Reviewed design8cb30b99; root101related and13real PG pass, zero skip; type/lint
-  and normalbuild q2qBDNHioSmYl4TWvbdZS pass. Exact code review and VM native
-  result HTTP remain pending. All observations/prose/jobs are explicit synthetic
+  and normalbuild q2qBDNHioSmYl4TWvbdZS pass. Independent unsigned scoped code
+  review passes31tests plus8counterexamples; VM native result HTTP remains pending. All observations/prose/jobs are explicit synthetic
   fixtures; no actual model, reservation handoff/completion, review or publication.
 - PR342 natural lock-expiry test remains open: Mac/Cloud10/10 and independent
   code review passed; ordinary diagnostic37921360805 now passed. Protected

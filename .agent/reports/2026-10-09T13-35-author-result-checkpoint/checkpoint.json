@@ -29,7 +29,16 @@
     "buildId": "q2qBDNHioSmYl4TWvbdZS"
   },
   "originalFailureRetained": "initial ALTER FUNCTION list SQL syntax error; split into two statements, no acceptance changed",
-  "independentCodeReview": "pending",
+  "independentCodeReview": {
+    "status": "unsigned scoped CODE PASS",
+    "subject": "b8c3df4d1c21b4aeee28341b6935302b42463f94",
+    "reviewer": "author_input_review_oct08",
+    "independentTests": 31,
+    "additionalAdversarialProbes": 8,
+    "newP1P2": 0,
+    "pgOrBuildRerun": false,
+    "notProtectedOrPublicationApproval": true
+  },
   "vmCompiledResultHttp": "pending turn dispatched; no duplicate author result runtime ownership",
   "actualModelExecuted": false,
   "reservationCompleted": false,
@@ -74,5 +83,17 @@
       "bytes": 6500,
       "sha256": "27bb3606803c615a443ab1b46bc1d8c921daab956d18ee0a2a150bdb6fa7d1b6"
     }
-  ]
+  ],
+  "packetNativeVerified": {
+    "receiptSubject": "97eab4b9057b49038c9fd2124223909c3d43b903",
+    "testSubject": "16155a8514eea967d620e15c47d3fc0a2c2b6383",
+    "rawEntriesChecked": 30,
+    "rawMismatches": 0,
+    "nativePass": 38,
+    "nativeFail": 0,
+    "nativeSkip": 0,
+    "unitPass": 16,
+    "businessRequestsRetried": false,
+    "historicalR1CauseEstablished": false
+  }
 }
