@@ -1,0 +1,1 @@
+{"ownedTemporaryCluster":"/workspace/cloud-complete-byte-boundary-artifacts-oct09/si-complete-byte-9jOrGF","stopped":true,"syntheticFrozenPgWallClock":"2026-10-09 10:31:46","originalSqlUnchanged":true}

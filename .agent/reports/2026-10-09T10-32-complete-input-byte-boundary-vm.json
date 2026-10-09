@@ -1,0 +1,512 @@
+{
+  "schemaVersion": "research-complete-input-byte-boundary-vm-receipt-v1",
+  "recordedAt": "2026-10-09T10:32:46.563520+00:00",
+  "baseSubject": "2db7bdac696cfc416b7946a912229bf9e4dee102",
+  "testSubject": "d24bfc7fd3a727df43d561141ec0c3fac6a6acbd",
+  "branch": "codex/complete-input-byte-boundary-vm-oct09",
+  "newTest": {
+    "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/scripts/research-complete-input-boundary-postgres.test.mjs",
+    "bytes": 21055,
+    "sha256": "9f87e38d2ed19e5d98f7a126a94a1eb6d609b21132f00f1fd96f9d8087f03925"
+  },
+  "runtimeUnchanged": {
+    "web": true,
+    "migrations": true,
+    "package.json": true,
+    "scripts/research-local-inbox-dataplane.mjs": true
+  },
+  "webTree": "655345527e929c2329b23eb19dd58355009c54d3",
+  "runtimeBuildReuse": {
+    "subject": "6f20d4fee2b0b7f960e36e6e104605acf6ded55c",
+    "buildId": "I-fUAZYDmfCD4nDT76Cu4",
+    "webTree": "655345527e929c2329b23eb19dd58355009c54d3",
+    "buildRerun": false,
+    "typeLintRerun": false,
+    "reason": "User authorized exact reviewed runtime/build reuse for test-only delta; no runtime, web, package, harness or migration blob changed."
+  },
+  "environment": {
+    "node": "22.14.0",
+    "postgres": "17.11",
+    "postgrestUsed": false,
+    "nextUsed": false,
+    "clockLibrary": {
+      "path": "/workspace/cloud-clock-builder-770-artifacts-oct09/build-770/libfaketime.so.1",
+      "bytes": 65856,
+      "sha256": "483dfc28d0b87718ce50b48d382f03b8615fe861c5f859c958ddfc934fa0b3c6"
+    },
+    "clockMode": "PG children only absolute frozen wall time; original RPC clock_timestamp still called. Serialization boundary fixture ONLY, not natural-clock lease/timeout acceptance; psql/Node not preloaded; external exec deadlines unchanged."
+  },
+  "fixtureBoundary": {
+    "sourceDocuments": "Synthetic example.invalid original public-citation rows and legal <=4096 UTF8-byte roots, including multibyte/escaped strings; no HTTP acquisition or trusted source claim",
+    "jobReservationAuthority": "Synthetic table/lineage/job/reservation seeds from the existing disposable complete-input PG fixture, no real claim/model role/production writer",
+    "financialMaterial": "Actual pinned AUO Git relay/model files, original completeMaterial and fixed calculator recomputation; manual assumptions and attributed source limits preserved; all eight capability flags false",
+    "capAndSql": "Original four source/prepare/assert/complete migrations installed unchanged. No lower cap, helper/body patch, stored logical_bytes mutation, added private grants or caller clock to RPC. Setup admin only measures original private canonical helper and count/hash oracle; original admission calls execute service_role.",
+    "plusOneOracle": "Actual original-RPC exact probe rolled back. Independently project source-root length delta +2 on shared root and -3 on last-only root, weight5 and3 => +1. In failed transaction PG reuses actual returned preparations and projects binding/source fields onto the actual probe complete payload, original canonical helper calculates candidate charge. Original service RPC rejects; all stored histories unchanged. Not a mock/admitted complete row."
+  },
+  "results": {
+    "tapTotal": 6,
+    "parentCases": 1,
+    "childCases": 5,
+    "pass": 6,
+    "fail": 0,
+    "skip": 0,
+    "exact": {
+      "cap": 524288,
+      "total": 524288,
+      "preparationCharges": [
+        140477,
+        145258
+      ],
+      "completeCharge": 238553,
+      "sharedCount": 3
+    },
+    "overLimit": {
+      "expectedCumulativeBytes": 524289,
+      "actualPgByteDiagnostic": {
+        "sharedCountBeforeSeal": 2,
+        "prospectiveCumulativeBytes": 524289,
+        "actualPreparationChargeBytes": 285737,
+        "prospectiveCompleteChargeBytes": 238552
+      },
+      "before": {
+        "charge": 2435,
+        "stocks": {
+          "count": 0,
+          "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "source_raw_documents": {
+          "count": 1,
+          "rowHash": "62f0b947c62ea40d3432e31c120b5dd4c74d3e74be7be451ae019c268ae1d4f2"
+        },
+        "research_deep_jobs_v1": {
+          "count": 2,
+          "rowHash": "05a58cee342e36c64e925bbe3ff3f5e9357f5e16586aaec6146dc6c6132d7648"
+        },
+        "research_source_seals_v2": {
+          "count": 1,
+          "rowHash": "cd76bebca676a9c911c37c8d1f32fa6de834f4edd29d5d574e480875fca40430"
+        },
+        "research_deep_job_attempts_v1": {
+          "count": 2,
+          "rowHash": "13a5e02c82e796bffdef33d1fdf3ed0090041634960267fc85de785f7984bf58"
+        },
+        "research_model_completions_v1": {
+          "count": 0,
+          "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "research_input_preparations_v2": {
+          "count": 1,
+          "rowHash": "4fbab69cc0e039fd9d6b4ae6eccfd825937284d5e0dab3850c67ffd53c89f6c6"
+        },
+        "research_model_reservations_v1": {
+          "count": 2,
+          "rowHash": "ea02016e923963037213420e3052e1b7cd99f7e477ec7b7ddde1c9d330ea2140"
+        },
+        "research_source_fence_events_v2": {
+          "count": 1,
+          "rowHash": "ab8bb37eeb25515f54ede0b15c94df8a84008d9d68c12cee532768791105c520"
+        },
+        "research_article_input_revisions_v2": {
+          "count": 0,
+          "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "research_source_seal_invalidations_v2": {
+          "count": 0,
+          "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      },
+      "after": {
+        "charge": 2435,
+        "stocks": {
+          "count": 0,
+          "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "source_raw_documents": {
+          "count": 1,
+          "rowHash": "62f0b947c62ea40d3432e31c120b5dd4c74d3e74be7be451ae019c268ae1d4f2"
+        },
+        "research_deep_jobs_v1": {
+          "count": 2,
+          "rowHash": "05a58cee342e36c64e925bbe3ff3f5e9357f5e16586aaec6146dc6c6132d7648"
+        },
+        "research_source_seals_v2": {
+          "count": 1,
+          "rowHash": "cd76bebca676a9c911c37c8d1f32fa6de834f4edd29d5d574e480875fca40430"
+        },
+        "research_deep_job_attempts_v1": {
+          "count": 2,
+          "rowHash": "13a5e02c82e796bffdef33d1fdf3ed0090041634960267fc85de785f7984bf58"
+        },
+        "research_model_completions_v1": {
+          "count": 0,
+          "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "research_input_preparations_v2": {
+          "count": 1,
+          "rowHash": "4fbab69cc0e039fd9d6b4ae6eccfd825937284d5e0dab3850c67ffd53c89f6c6"
+        },
+        "research_model_reservations_v1": {
+          "count": 2,
+          "rowHash": "ea02016e923963037213420e3052e1b7cd99f7e477ec7b7ddde1c9d330ea2140"
+        },
+        "research_source_fence_events_v2": {
+          "count": 1,
+          "rowHash": "ab8bb37eeb25515f54ede0b15c94df8a84008d9d68c12cee532768791105c520"
+        },
+        "research_article_input_revisions_v2": {
+          "count": 0,
+          "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "research_source_seal_invalidations_v2": {
+          "count": 0,
+          "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      }
+    },
+    "replay": "Both old preparations and complete sealed revision replay at full byte quota, all count/hash/charge oracle bytes identical. New fourth entry rejected by byte bound.",
+    "countGate": "Independent unit has three original preparations plus one actual complete revision under byte cap; fifth rejects by count and exact replay stays free.",
+    "rollbackOracleTables": [
+      "charge",
+      "stocks",
+      "source_raw_documents",
+      "research_deep_jobs_v1",
+      "research_source_seals_v2",
+      "research_deep_job_attempts_v1",
+      "research_model_completions_v1",
+      "research_input_preparations_v2",
+      "research_model_reservations_v1",
+      "research_source_fence_events_v2",
+      "research_article_input_revisions_v2",
+      "research_source_seal_invalidations_v2"
+    ],
+    "rollbackAllEqual": true
+  },
+  "runs": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "boundary-pg-r1",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-boundary-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T10:26:52.416Z",
+      "completedAt": "2026-10-09T10:26:53.863Z",
+      "elapsedSeconds": 1.447155710979132,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 171786240,
+      "observedTaskDiskPeakBytes": 208060416,
+      "availableBeforeBytes": 16485969920,
+      "availableAfterBytes": 16485949440,
+      "guardTermination": null,
+      "rawLog": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r1.log",
+        "bytes": 2688,
+        "sha256": "12e99b893b79ba4a8f940d2685436c037f7c6323cc08421db81fd906372e4cb5"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "boundary-pg-r2",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-boundary-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T10:27:21.992Z",
+      "completedAt": "2026-10-09T10:27:24.753Z",
+      "elapsedSeconds": 2.7613406959862914,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 175116288,
+      "observedTaskDiskPeakBytes": 209956864,
+      "availableBeforeBytes": 16485945344,
+      "availableAfterBytes": 16485801984,
+      "guardTermination": null,
+      "rawLog": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r2.log",
+        "bytes": 5760,
+        "sha256": "9dddfaa5242df444a9913959a98c34e1de7953c172b9bc6e0868ea0e42966d79"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "boundary-pg-r3",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-boundary-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T10:29:22.498Z",
+      "completedAt": "2026-10-09T10:29:25.362Z",
+      "elapsedSeconds": 2.8636798480001744,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 181137408,
+      "observedTaskDiskPeakBytes": 81072128,
+      "availableBeforeBytes": 16485793792,
+      "availableAfterBytes": 16485322752,
+      "guardTermination": null,
+      "rawLog": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r3.log",
+        "bytes": 134118,
+        "sha256": "8678fb852d9ce1e37fb93da1075ef3f538e38a44d5e07f6f0437f890716c3643"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "boundary-pg-final",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-boundary-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T10:30:45.920Z",
+      "completedAt": "2026-10-09T10:30:48.751Z",
+      "elapsedSeconds": 2.8309911060205195,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 163213312,
+      "observedTaskDiskPeakBytes": 81580032,
+      "availableBeforeBytes": 16485318656,
+      "availableAfterBytes": 16485179392,
+      "guardTermination": null,
+      "rawLog": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-final.log",
+        "bytes": 134112,
+        "sha256": "2d5837ebe2ad8254c6c50f221ab309a1dd1fc1b10234396f81a505f9ed89f85a"
+      }
+    }
+  ],
+  "history": {
+    "r1": "Original new-fixture duplicate source INSERT caused 0pass/1fail. Preserved raw stderr/TAP; corrected duplicate setup/newline, no runtime defect or assert weakening.",
+    "r2": "6/6 GREEN initial actual boundary regression; retained",
+    "r3": "6/6 GREEN added actual PG over-limit byte diagnostic; retained",
+    "final": "6/6 GREEN added pinned existing library SHA and per-charge JS/PG comparison; final source d24b tested before Git commit, blob unchanged."
+  },
+  "cleanup": {
+    "clusterReport": {
+      "ownedTemporaryCluster": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/si-complete-byte-9jOrGF",
+      "stopped": true,
+      "syntheticFrozenPgWallClock": "2026-10-09 10:31:46",
+      "originalSqlUnchanged": true
+    },
+    "ownedProcessReferencesAfterRun": [],
+    "scratchClusterRemoved": true,
+    "rawLogsRetained": true,
+    "newTaskAvailableAfterBytes": 16484339712,
+    "uniqueEvidenceDeleted": false,
+    "pgProofLogScope": "Final run log; each run original authoritative raw TAP/resource/time files separately retained. No claim of separate original PG server log for intermediate fixtures."
+  },
+  "manualWindow": {
+    "taskStartExactTimestampCaptured": false,
+    "worktreeCreatedAtFilesystemBirth": "2026-10-09 10:20:05.984667744 +0000",
+    "firstRecordedClockObservation": "2026-10-09T10:22:15Z",
+    "lastHeavyCommandCompletedAt": "2026-10-09T10:30:48.751Z",
+    "scope": "Single sequential manual test-only increment; exact task arrival clock unavailable, no automatic model-role budget/lease claim."
+  },
+  "limitations": [
+    "No independent review yet",
+    "Not full CI-01..09 acceptance",
+    "Freshness120s/lock-wait expiry/source concurrent two orders/rights ABA/actual response-loss reconciliation remain pending",
+    "No automatic package/CI hook edited; root can register explicit new script after review",
+    "No real model dispatch, publication, protected approval, main merge, production DB, deployment or source acquisition"
+  ],
+  "rawEvidence": [
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r1.log",
+        "bytes": 2688,
+        "sha256": "12e99b893b79ba4a8f940d2685436c037f7c6323cc08421db81fd906372e4cb5"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r1.log.txt",
+        "bytes": 2688,
+        "sha256": "12e99b893b79ba4a8f940d2685436c037f7c6323cc08421db81fd906372e4cb5"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r1.json",
+        "bytes": 653,
+        "sha256": "7fbfb9ab42385b87f84c84c77d5c36004117fd9541677df253e5d8182a0267ac"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r1.json.txt",
+        "bytes": 653,
+        "sha256": "7fbfb9ab42385b87f84c84c77d5c36004117fd9541677df253e5d8182a0267ac"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r1.time",
+        "bytes": 881,
+        "sha256": "80b2ad96487ce39597c724535c4ad5474d093a96eeffb395d403177957305259"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r1.time.txt",
+        "bytes": 881,
+        "sha256": "80b2ad96487ce39597c724535c4ad5474d093a96eeffb395d403177957305259"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r2.log",
+        "bytes": 5760,
+        "sha256": "9dddfaa5242df444a9913959a98c34e1de7953c172b9bc6e0868ea0e42966d79"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r2.log.txt",
+        "bytes": 5760,
+        "sha256": "9dddfaa5242df444a9913959a98c34e1de7953c172b9bc6e0868ea0e42966d79"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r2.json",
+        "bytes": 654,
+        "sha256": "60093deed442e426433a83a9d0ef017fe22a5407f2460bfefd7803b9f6fb6fab"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r2.json.txt",
+        "bytes": 654,
+        "sha256": "60093deed442e426433a83a9d0ef017fe22a5407f2460bfefd7803b9f6fb6fab"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r2.time",
+        "bytes": 845,
+        "sha256": "031543c3695fa094e200eeb40fd96e4b192d3224d37e5c011aa7a63e1ff43d7e"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r2.time.txt",
+        "bytes": 845,
+        "sha256": "031543c3695fa094e200eeb40fd96e4b192d3224d37e5c011aa7a63e1ff43d7e"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r3.log",
+        "bytes": 134118,
+        "sha256": "8678fb852d9ce1e37fb93da1075ef3f538e38a44d5e07f6f0437f890716c3643"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r3.log.txt",
+        "bytes": 134118,
+        "sha256": "8678fb852d9ce1e37fb93da1075ef3f538e38a44d5e07f6f0437f890716c3643"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r3.json",
+        "bytes": 653,
+        "sha256": "d2b3f07212e5f76defac9092f34aff8b1ab0793c0448605ea39a1380c8f1fb26"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r3.json.txt",
+        "bytes": 653,
+        "sha256": "d2b3f07212e5f76defac9092f34aff8b1ab0793c0448605ea39a1380c8f1fb26"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-r3.time",
+        "bytes": 845,
+        "sha256": "232cfb7ed0d0942a4bac807190b9f978294f56ec4dca6ab619b4d94378e50e28"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r3.time.txt",
+        "bytes": 845,
+        "sha256": "232cfb7ed0d0942a4bac807190b9f978294f56ec4dca6ab619b4d94378e50e28"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-final.log",
+        "bytes": 134112,
+        "sha256": "2d5837ebe2ad8254c6c50f221ab309a1dd1fc1b10234396f81a505f9ed89f85a"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-final.log.txt",
+        "bytes": 134112,
+        "sha256": "2d5837ebe2ad8254c6c50f221ab309a1dd1fc1b10234396f81a505f9ed89f85a"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-final.json",
+        "bytes": 656,
+        "sha256": "dfb4e77e0934a465688d531b4db4d5dccf422b61e3515edd879ce2e3478b0972"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-final.json.txt",
+        "bytes": 656,
+        "sha256": "dfb4e77e0934a465688d531b4db4d5dccf422b61e3515edd879ce2e3478b0972"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/boundary-pg-final.time",
+        "bytes": 845,
+        "sha256": "86af8f8b52ac32f7b3134dbf269c3dfde61c65cd811933fd4825c145811e3253"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-final.time.txt",
+        "bytes": 845,
+        "sha256": "86af8f8b52ac32f7b3134dbf269c3dfde61c65cd811933fd4825c145811e3253"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/pg-proof/pg.log",
+        "bytes": 466020,
+        "sha256": "035907767cd65cb7e8ac790e3cc9936f52cd449b1bca15840eb74d4925610efc"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-pg.log.txt",
+        "bytes": 466020,
+        "sha256": "035907767cd65cb7e8ac790e3cc9936f52cd449b1bca15840eb74d4925610efc"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-byte-boundary-artifacts-oct09/pg-proof/cleanup.json",
+        "bytes": 202,
+        "sha256": "955fbdd85cc0f1a674ee6beb9c11235642f59abdb3f6073c356a82dabb011f0c"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/.agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-cleanup.json.txt",
+        "bytes": 202,
+        "sha256": "955fbdd85cc0f1a674ee6beb9c11235642f59abdb3f6073c356a82dabb011f0c"
+      }
+    }
+  ],
+  "migrationSourceHashes": [
+    {
+      "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/migrations/20261009_research_publication_source_fence_v2.sql",
+      "bytes": 12454,
+      "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621"
+    },
+    {
+      "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/migrations/20261009_research_input_preparations_v2.sql",
+      "bytes": 14713,
+      "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e"
+    },
+    {
+      "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/migrations/20261009_research_input_preparation_assert_v2.sql",
+      "bytes": 2086,
+      "sha256": "c63a923be36e5f7ba06001a6d8be57287d80f5e6524dc866bad93b80666a9cbc"
+    },
+    {
+      "path": "/workspace/cloud-complete-byte-boundary-vm-oct09/migrations/20261009_research_complete_input_v2.sql",
+      "bytes": 446691,
+      "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c"
+    }
+  ]
+}

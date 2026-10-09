@@ -1,0 +1,55 @@
+TAP version 13
+# (node:166465) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:166465) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-complete-byte-boundary-vm-oct09/web/src/lib/research-financial-file-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-complete-byte-boundary-vm-oct09/web/package.json.
+# Subtest: CI-03 original SQL real PG exact cumulative bytes, +1 rollback and shared count (synthetic clock/source/job; real fixed financial material)
+    # Subtest: PG-only deterministic serialization clock; original RPC bodies/cap unchanged
+    ok 1 - PG-only deterministic serialization clock; original RPC bodies/cap unchanged
+      ---
+      duration_ms: 65.936474
+      ...
+# ERROR:  complete_byte_bound
+# CONTEXT:  PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 32 at RAISE
+# PL/pgSQL function inline_code_block line 1 at assignment
+# byte_boundary_overlimit {"expectedCumulativeBytes":524289,"before":{"charge":2435,"stocks":{"count":0,"rowHash":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},"source_raw_documents":{"count":1,"rowHash":"48d05f807b048211279b75990439bee2157c5e36e7b1b579a47ca39a65f8918e"},"research_deep_jobs_v1":{"count":2,"rowHash":"b083724f47db7dfbd44987c8ca28a582031e29133c94580780830ed764cf7469"},"research_source_seals_v2":{"count":1,"rowHash":"b9eab898976b17c980a1a00dfb6d41179c7ff772c7390c74bcd36665dbc8b5e9"},"research_deep_job_attempts_v1":{"count":2,"rowHash":"7b826dd8edd27f35b6b0896ac1c905958d6b5db5c082741eeea6f7985b9dc7fa"},"research_model_completions_v1":{"count":0,"rowHash":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},"research_input_preparations_v2":{"count":1,"rowHash":"246a74c6c878b45bd49ed45a40fc48d81d4109603b679c87258f8a0d98f6d6a7"},"research_model_reservations_v1":{"count":2,"rowHash":"46a4b82984b61e143f73dc07f542548ca807acc09a29706ea8597c52f0f6d1b5"},"research_source_fence_events_v2":{"count":1,"rowHash":"908ce4fe4e2a15010a57883245669f7c0341b7d26d22d80e0cfc670f2852b698"},"research_article_input_revisions_v2":{"count":0,"rowHash":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},"research_source_seal_invalidations_v2":{"count":0,"rowHash":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"}},"after":{"charge":2435,"stocks":{"count":0,"rowHash":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},"source_raw_documents":{"count":1,"rowHash":"48d05f807b048211279b75990439bee2157c5e36e7b1b579a47ca39a65f8918e"},"research_deep_jobs_v1":{"count":2,"rowHash":"b083724f47db7dfbd44987c8ca28a582031e29133c94580780830ed764cf7469"},"research_source_seals_v2":{"count":1,"rowHash":"b9eab898976b17c980a1a00dfb6d41179c7ff772c7390c74bcd36665dbc8b5e9"},"research_deep_job_attempts_v1":{"count":2,"rowHash":"7b826dd8edd27f35b6b0896ac1c905958d6b5db5c082741eeea6f7985b9dc7fa"},"research_model_completions_v1":{"count":0,"rowHash":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},"research_input_preparations_v2":{"count":1,"rowHash":"246a74c6c878b45bd49ed45a40fc48d81d4109603b679c87258f8a0d98f6d6a7"},"research_model_reservations_v1":{"count":2,"rowHash":"46a4b82984b61e143f73dc07f542548ca807acc09a29706ea8597c52f0f6d1b5"},"research_source_fence_events_v2":{"count":1,"rowHash":"908ce4fe4e2a15010a57883245669f7c0341b7d26d22d80e0cfc670f2852b698"},"research_article_input_revisions_v2":{"count":0,"rowHash":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},"research_source_seal_invalidations_v2":{"count":0,"rowHash":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"}}}
+# byte_boundary_exact {"cap":524288,"total":524288,"preparationCharges":[145258,140477],"completeCharge":238553,"sharedCount":3}
+# ERROR:  input_preparation_byte_bound
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 83 at RAISE
+# ERROR:  input_preparation_count_bound
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 58 at RAISE
+    # Subtest: actual original RPC rejects cumulative524289 at third shared slot; all counts/row hashes/charges roll back
+    ok 2 - actual original RPC rejects cumulative524289 at third shared slot; all counts/row hashes/charges roll back
+      ---
+      duration_ms: 173.809068
+      ...
+    # Subtest: actual original RPC admits exactly524288 with real AUO recomputation and three shared entries
+    ok 3 - actual original RPC admits exactly524288 with real AUO recomputation and three shared entries
+      ---
+      duration_ms: 183.487675
+      ...
+    # Subtest: full exact replay at byte cap is free; fourth new preparation rejects by bytes and leaves complete/source/budget history identical
+    ok 4 - full exact replay at byte cap is free; fourth new preparation rejects by bytes and leaves complete/source/budget history identical
+      ---
+      duration_ms: 140.55494
+      ...
+    # Subtest: independent four-count gate remains active below byte cap across old prepares and complete revision
+    ok 5 - independent four-count gate remains active below byte cap across old prepares and complete revision
+      ---
+      duration_ms: 283.262718
+      ...
+    1..5
+ok 1 - CI-03 original SQL real PG exact cumulative bytes, +1 rollback and shared count (synthetic clock/source/job; real fixed financial material)
+  ---
+  duration_ms: 2374.497858
+  ...
+1..1
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2597.225597

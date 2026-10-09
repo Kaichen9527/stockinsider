@@ -1,0 +1,20 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "boundary-pg-r1",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-complete-input-boundary-postgres.test.mjs"
+  ],
+  "startedAt": "2026-10-09T10:26:52.416Z",
+  "completedAt": "2026-10-09T10:26:53.863Z",
+  "elapsedSeconds": 1.447155710979132,
+  "exitCode": 1,
+  "sampledAggregateRssPeakBytes": 171786240,
+  "observedTaskDiskPeakBytes": 208060416,
+  "availableBeforeBytes": 16485969920,
+  "availableAfterBytes": 16485949440,
+  "guardTermination": null
+}
