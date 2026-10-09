@@ -1,4 +1,4 @@
-import { completeHash } from './research-complete-canonical.ts';
+import { completeHash, completeCanonical } from './research-complete-canonical.ts';
 import { financialInstant } from './research-financial-clock.ts';
 type Row = Record<string, unknown>;
 export const EDITORIAL_CHECKS = ['source_support', 'rumor_staging', 'financial_recalculation', 'periods_and_dilution',
@@ -9,7 +9,7 @@ function exact(value: unknown, keys: string[]): Row {
   ensure(Object.keys(row).sort().join(',') === keys.sort().join(',')); return row;
 }
 function text(value: unknown, min: number, max: number) {
-  ensure(typeof value === 'string' && value.trim().length >= min && value.length <= max
+  ensure(typeof value === 'string' && Array.from(value.trim()).length >= min && Array.from(value).length <= max
     && !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/u.test(value)
     && !/\bBearer\s+\S+|-----BEGIN .*PRIVATE KEY-----|\b(?:password|api[_-]?key|access[_-]?token|cookie)\s*[:=]/iu.test(value));
 }
@@ -19,10 +19,10 @@ function ids(value: unknown, allowed: Set<string>) {
 }
 /** Pure contract only; semantic source support and actual tool execution are independent gates. */
 export function validateResearchEditorialReview(packet: Row, candidate: unknown, now: string) {
-  ensure(Buffer.byteLength(JSON.stringify(candidate), 'utf8') <= 65536);
+  ensure(Buffer.byteLength(completeCanonical(candidate), 'utf8') <= 65536);
   const review = exact(candidate, ['schemaVersion', 'articleHash', 'reviewPackHash', 'reviewedAt', 'decision', 'checks', 'findings', 'strongestCounterEvidence']);
   ensure(review.schemaVersion === 'research-editorial-review-v2' && review.articleHash === packet.articleHash
-    && review.reviewPackHash === completeHash(packet) && ['accepted', 'revision_required', 'rejected'].includes(String(review.decision))
+    && review.reviewPackHash === completeHash(packet) && typeof review.decision === 'string' && ['accepted', 'revision_required', 'rejected'].includes(review.decision)
     && financialInstant(review.reviewedAt) <= financialInstant(now));
   const article = packet.article as Row, summary = article.summary as Row;
   const paragraphIds = new Set([String(summary.id), ...(article.sections as Row[]).flatMap(s => (s.paragraphs as Row[]).map(p => String(p.id)))]);
@@ -32,13 +32,14 @@ export function validateResearchEditorialReview(packet: Row, candidate: unknown,
   for (const candidate of review.checks) {
     const c = exact(candidate, ['category', 'status', 'rationale', 'paragraphIds']);
     ensure(EDITORIAL_CHECKS.includes(c.category as typeof EDITORIAL_CHECKS[number]) && !seen.has(c.category)
-      && ['pass', 'concern', 'fail'].includes(String(c.status))); seen.add(c.category);
+      && typeof c.status === 'string' && ['pass', 'concern', 'fail'].includes(c.status)); seen.add(c.category);
     text(c.rationale, 20, 2000); ids(c.paragraphIds, paragraphIds); if (c.status !== 'pass') concerns++;
   }
   ensure(Array.isArray(review.findings) && review.findings.length <= 30);
   for (const candidate of review.findings) {
     const f = exact(candidate, ['severity', 'paragraphId', 'issue', 'sourceIds']);
-    ensure(['blocking', 'major', 'minor'].includes(String(f.severity)) && (f.paragraphId === null || paragraphIds.has(String(f.paragraphId))));
+    ensure(typeof f.severity === 'string' && ['blocking', 'major', 'minor'].includes(f.severity)
+      && (f.paragraphId === null || (typeof f.paragraphId === 'string' && paragraphIds.has(f.paragraphId))));
     text(f.issue, 20, 2000); ids(f.sourceIds, sourceIds); if (f.severity !== 'minor') concerns++;
   }
   text(review.strongestCounterEvidence, 20, 4000);

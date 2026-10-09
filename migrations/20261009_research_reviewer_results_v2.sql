@@ -95,6 +95,54 @@ ALTER FUNCTION public.read_research_reviewer_result_context_v2(jsonb,uuid,text,t
 REVOKE ALL ON FUNCTION public.read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) TO service_role,research_observed_rpc_owner;
 
+CREATE FUNCTION public.assert_research_editorial_review_v2(packet jsonb,review jsonb) RETURNS void
+ LANGUAGE plpgsql SET search_path=pg_catalog,public AS $$
+DECLARE c jsonb; f jsonb; id jsonb;allowed_paragraphs jsonb;allowed_sources jsonb; seen text[]:=ARRAY[]::text[]; concerns integer:=0;
+BEGIN
+ IF review IS NULL OR jsonb_typeof(review)<>'object' OR (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(review) key)
+  IS DISTINCT FROM ARRAY['articleHash','checks','decision','findings','reviewPackHash','reviewedAt','schemaVersion','strongestCounterEvidence']
+  OR jsonb_typeof(review->'decision') IS DISTINCT FROM 'string' OR review->>'decision' NOT IN ('accepted','revision_required','rejected')
+  OR jsonb_typeof(review->'checks') IS DISTINCT FROM 'array' OR jsonb_array_length(review->'checks')<>8
+  OR jsonb_typeof(review->'findings') IS DISTINCT FROM 'array' OR jsonb_array_length(review->'findings')>30
+  OR jsonb_typeof(review->'strongestCounterEvidence') IS DISTINCT FROM 'string' OR length(btrim(review->>'strongestCounterEvidence')) NOT BETWEEN 20 AND 4000
+ THEN RAISE EXCEPTION 'research_editorial_review_shape'; END IF;
+ allowed_paragraphs:=jsonb_build_array(packet->'article'->'summary'->>'id')||
+  (SELECT coalesce(jsonb_agg(p->>'id'),'[]') FROM jsonb_array_elements(packet->'article'->'sections') s CROSS JOIN LATERAL jsonb_array_elements(s->'paragraphs') p);
+ allowed_sources:=(SELECT coalesce(jsonb_agg(s->'descriptor'->>'id'),'[]') FROM jsonb_array_elements(packet->'research'->'sources') s);
+ FOR c IN SELECT value FROM jsonb_array_elements(review->'checks') LOOP
+  IF jsonb_typeof(c) IS DISTINCT FROM 'object' OR (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(c) key)
+   IS DISTINCT FROM ARRAY['category','paragraphIds','rationale','status']
+   OR jsonb_typeof(c->'category') IS DISTINCT FROM 'string' OR c->>'category' NOT IN ('source_support','rumor_staging','financial_recalculation','periods_and_dilution','competitive_alternatives','valuation_assumptions','counterevidence','entry_separation')
+   OR c->>'category'=ANY(seen) OR jsonb_typeof(c->'status') IS DISTINCT FROM 'string' OR c->>'status' NOT IN ('pass','concern','fail')
+   OR jsonb_typeof(c->'rationale') IS DISTINCT FROM 'string' OR length(btrim(c->>'rationale')) NOT BETWEEN 20 AND 2000
+   OR jsonb_typeof(c->'paragraphIds') IS DISTINCT FROM 'array' OR jsonb_array_length(c->'paragraphIds')>30
+   OR (SELECT count(DISTINCT value) FROM jsonb_array_elements(c->'paragraphIds'))<>jsonb_array_length(c->'paragraphIds')
+  THEN RAISE EXCEPTION 'research_editorial_review_check'; END IF;
+  seen:=array_append(seen,c->>'category');IF c->>'status'<>'pass' THEN concerns:=concerns+1; END IF;
+  FOR id IN SELECT value FROM jsonb_array_elements(c->'paragraphIds') LOOP
+   IF jsonb_typeof(id)<>'string' OR NOT allowed_paragraphs @> jsonb_build_array(id) THEN RAISE EXCEPTION 'research_editorial_review_paragraph'; END IF;
+  END LOOP;
+ END LOOP;
+ FOR f IN SELECT value FROM jsonb_array_elements(review->'findings') LOOP
+  IF jsonb_typeof(f) IS DISTINCT FROM 'object' OR (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(f) key)
+   IS DISTINCT FROM ARRAY['issue','paragraphId','severity','sourceIds']
+   OR jsonb_typeof(f->'severity') IS DISTINCT FROM 'string' OR f->>'severity' NOT IN ('blocking','major','minor')
+   OR (f->'paragraphId'<>'null'::jsonb AND (jsonb_typeof(f->'paragraphId')<>'string' OR NOT allowed_paragraphs @> jsonb_build_array(f->'paragraphId')))
+   OR jsonb_typeof(f->'issue') IS DISTINCT FROM 'string' OR length(btrim(f->>'issue')) NOT BETWEEN 20 AND 2000
+   OR jsonb_typeof(f->'sourceIds') IS DISTINCT FROM 'array' OR jsonb_array_length(f->'sourceIds')>30
+   OR (SELECT count(DISTINCT value) FROM jsonb_array_elements(f->'sourceIds'))<>jsonb_array_length(f->'sourceIds')
+  THEN RAISE EXCEPTION 'research_editorial_review_finding'; END IF;
+  IF f->>'severity'<>'minor' THEN concerns:=concerns+1; END IF;
+  FOR id IN SELECT value FROM jsonb_array_elements(f->'sourceIds') LOOP
+   IF jsonb_typeof(id)<>'string' OR NOT allowed_sources @> jsonb_build_array(id) THEN RAISE EXCEPTION 'research_editorial_review_source'; END IF;
+  END LOOP;
+ END LOOP;
+ IF (review->>'decision'='accepted' AND concerns<>0) OR (review->>'decision'<>'accepted' AND concerns=0) THEN RAISE EXCEPTION 'research_editorial_review_decision'; END IF;
+END $$;
+ALTER FUNCTION public.assert_research_editorial_review_v2(jsonb,jsonb) OWNER TO research_input_preparation_owner_v2;
+REVOKE ALL ON FUNCTION public.assert_research_editorial_review_v2(jsonb,jsonb) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.assert_research_editorial_review_v2(jsonb,jsonb) TO research_observed_rpc_owner;
+
 CREATE FUNCTION public.receive_research_reviewer_result_v2(p_request jsonb,p_revision_id uuid,p_input_hash text,p_author_principal text,p_reviewer_principal text,p_result_id uuid,p_result_hash text,p_result jsonb)
  RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
 DECLARE context jsonb;ra jsonb;o jsonb;v jsonb;review jsonb;packet jsonb;h jsonb;old jsonb;
@@ -111,6 +159,7 @@ BEGIN
  bytes:=octet_length(convert_to(public.research_complete_canonical_v2(p_result),'UTF8'));
  IF bytes>1048576 THEN RAISE EXCEPTION 'research_reviewer_result_bound'; END IF;
  packet:=p_result->'packet';o:=p_result->'observation';v:=p_result->'validatedReview';review:=p_result->'rawReview';
+ PERFORM public.assert_research_editorial_review_v2(packet,review);
  IF jsonb_typeof(packet) IS DISTINCT FROM 'object' OR jsonb_typeof(o) IS DISTINCT FROM 'object' OR jsonb_typeof(v) IS DISTINCT FROM 'object' OR jsonb_typeof(review) IS DISTINCT FROM 'object'
   OR p_result->>'packetHash' IS DISTINCT FROM public.research_complete_hash_v2(packet)
   OR packet->>'reviewerAssignmentId' IS DISTINCT FROM ra->>'assignment_id'
@@ -123,7 +172,7 @@ BEGIN
   OR packet->>'calculatorExecutionHash' IS DISTINCT FROM h->'result'->'payload'->'validatedArticle'->>'calculatorExecutionHash'
   OR review->>'schemaVersion' IS DISTINCT FROM 'research-editorial-review-v2' OR review->>'articleHash' IS DISTINCT FROM packet->>'articleHash'
   OR review->>'reviewPackHash' IS DISTINCT FROM p_result->>'packetHash' OR review->>'decision' IS NULL OR review->>'decision' NOT IN ('accepted','revision_required','rejected')
-  OR octet_length(review::text)>65536 OR v->>'schemaVersion' IS DISTINCT FROM 'validated-editorial-review-v2'
+  OR octet_length(convert_to(public.research_complete_canonical_v2(review),'UTF8'))>65536 OR v->>'schemaVersion' IS DISTINCT FROM 'validated-editorial-review-v2'
   OR v->'review' IS DISTINCT FROM review OR v->>'reviewHash' IS DISTINCT FROM public.research_complete_hash_v2(review)
   OR v->>'articleHash' IS DISTINCT FROM packet->>'articleHash' OR v->>'reviewPackHash' IS DISTINCT FROM p_result->>'packetHash'
   OR v->>'validationStatus' IS DISTINCT FROM 'contract_valid_only' OR v->'controllerReportOnly' IS DISTINCT FROM 'true'::jsonb

@@ -25,6 +25,8 @@ valuation_assumptions,counterevidence,entry_separation. Each check contains cate
 status(pass/concern/fail),rationale(20–2000 chars),paragraphIds(max30, unique, existing
 summary/section IDs). Findings max30, each severity(blocking/major/minor),paragraphId
 (existing or null),issue(20–2000 chars),sourceIds(max30 unique selected source IDs).
+Text character limits count Unicode scalar values (matching PostgreSQL length),
+not UTF16 code units; canonical parsing rejects unpaired surrogates.
 Strongest counterevidence20–4000 chars. accepted requires all checks pass and no
 blocking/major findings; revision_required/rejected require at least one non-pass
 check or blocking/major finding. Neither structural pass nor controller acceptance

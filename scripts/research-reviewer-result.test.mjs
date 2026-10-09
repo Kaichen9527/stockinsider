@@ -5,7 +5,7 @@ import {runResearchReviewerResult,readResearchReviewerResultBody,handleResearchR
 import {validateResearchEditorialReview} from '../web/src/lib/research-editorial-review.ts';
 import {FinancialDeadline} from '../web/src/lib/research-financial-file-reader.ts';
 import {completeCanonical,completeHash} from '../web/src/lib/research-complete-canonical.ts';
-import {reviewerResultFixture,syntheticReviewCredentials} from './research-reviewer-result-fixture.mjs';
+import {reviewerResultFixture,syntheticReviewCredentials,canonicalSizedEditorialReview} from './research-reviewer-result-fixture.mjs';
 const keys=['INTERNAL_API_KEY','RESEARCH_REVIEW_KEY','CRON_SECRET','RESEARCH_TEST_KEY','STRATEGY_APPROVAL_KEY'];
 function env(t){const prior=Object.fromEntries(keys.map(k=>[k,process.env[k]]));for(const k of keys)delete process.env[k];Object.assign(process.env,syntheticReviewCredentials);t.after(()=>{for(const[k,v]of Object.entries(prior))if(v===undefined)delete process.env[k];else process.env[k]=v;});}
 const http=()=>new Request('http://localhost/synthetic',{headers:{authorization:'Bearer '+syntheticReviewCredentials.RESEARCH_REVIEW_KEY}});
@@ -42,4 +42,25 @@ test('author/cron/test/unknown cannot enter reviewer body, expired result starts
  env(t);process.env.CRON_SECRET='synthetic-C';process.env.RESEARCH_TEST_KEY='synthetic-T';for(const credential of [syntheticReviewCredentials.INTERNAL_API_KEY,'synthetic-C','synthetic-T','synthetic-unknown',''])assert.equal((await handleResearchReviewerResult(wire('{}','receiveReviewerResult',{authorization:'Bearer '+credential}))).status,401);
  assert.equal((await handleResearchReviewerResult(wire('{}','receiveReviewerResult',{authorization:'Bearer '+syntheticReviewCredentials.RESEARCH_REVIEW_KEY}))).status,400);
  const f=await reviewerResultFixture(),d=new FinancialDeadline();Object.defineProperty(d,'end',{value:performance.now()-1});let io=0;await assert.rejects(runResearchReviewerResult({rpc(){io++;throw Error();}},f.request,f.pair.authorPrincipalId,f.pair.reviewerPrincipalId,http(),d),/financial_deadline/);assert.equal(io,0);
+});
+
+test('closed editorial enums and paragraphId reject array/object/null coercions before receive',async t=>{
+ env(t);const f=await reviewerResultFixture();
+ for(const field of ['decision','status','severity','paragraphId'])for(const value of [[],[field==='paragraphId'?'summary':field==='status'?'concern':field==='severity'?'major':'accepted'],{},null]){
+   const r=structuredClone(f.request.review);r.findings=[{severity:'minor',paragraphId:'summary',issue:'這是足夠長度的合成測試檢查文字，不代表實際引用查證。',sourceIds:[]}];
+   if(field==='decision')r.decision=value;else if(field==='status')r.checks[0].status=value;else r.findings[0][field]=value;
+   if(field==='paragraphId'&&value===null){assert.doesNotThrow(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));continue;}
+   assert.throws(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));let receive=0;
+   const db={rpc(name){if(name==='receive_research_reviewer_result_v2')receive++;const p=Promise.resolve({data:name==='read_research_reviewer_result_context_v2'?f.context:f.sources,error:null});return Object.assign(p,{abortSignal:()=>p});}};
+   await assert.rejects(runResearchReviewerResult(db,{...f.request,review:r},f.pair.authorPrincipalId,f.pair.reviewerPrincipalId,http(),new FinancialDeadline()));assert.equal(receive,0);
+ }
+});
+
+test('shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate',async()=>{
+ const f=await reviewerResultFixture();const exact=canonicalSizedEditorialReview(f.request.review);assert.equal(Buffer.byteLength(completeCanonical(exact)),65536);assert.notEqual(Buffer.byteLength(JSON.stringify(exact)),65536);assert.equal(validateResearchEditorialReview(f.packet,exact,new Date().toISOString()).review.decision,'accepted');
+ const over=structuredClone(exact);over.strongestCounterEvidence+='a';assert.equal(Buffer.byteLength(completeCanonical(over)),65537);assert.throws(()=>validateResearchEditorialReview(f.packet,over,new Date().toISOString()));
+});
+
+test('Unicode scalar text limits agree with PostgreSQL characters, astral min/max explicit',async()=>{
+ const f=await reviewerResultFixture(),r=structuredClone(f.request.review);r.strongestCounterEvidence='😀'.repeat(20);assert.doesNotThrow(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));r.strongestCounterEvidence='😀'.repeat(19);assert.throws(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));r.strongestCounterEvidence='😀'.repeat(4000);assert.doesNotThrow(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));r.strongestCounterEvidence+='😀';assert.throws(()=>validateResearchEditorialReview(f.packet,r,new Date().toISOString()));
 });

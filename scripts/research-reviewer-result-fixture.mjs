@@ -35,3 +35,12 @@ export async function reviewerResultFixture(symbol='2409'){
  const packet=projectResearchReviewerPacket({...request,action:'readReviewerPacket'},{author,reviewer,result,revision:f.revision},f.response,new FinancialDeadline());
  return {...syntheticReviewerEnvelope(request,context,packet),context,packet,pair,sources:{sourceSealReceivedAt:f.response.sourceSealReceivedAt,sources:f.response.sources}};
 }
+// Fill only legal review prose to an exact SHARED canonical UTF8 byte boundary.
+// Quotes/backslash/newline and Chinese stay in the text, never stripped for size.
+export function canonicalSizedEditorialReview(base,target=65536){
+ const review=structuredClone(base);review.findings=Array.from({length:30},()=>({severity:'minor',paragraphId:null,issue:'中文跳脫測試含 "quote" 與 \\ slash。\n這是隔離的測試段落。',sourceIds:[]}));
+ let remaining=target-Buffer.byteLength(completeCanonical(review));if(remaining<0)throw Error('synthetic_boundary_base_too_large');
+ for(const finding of review.findings){const n=Math.min(Math.floor(remaining/3),2000-finding.issue.length);finding.issue+='中'.repeat(n);remaining-=n*3;
+  if(remaining<=2&&finding.issue.length+remaining<=2000){finding.issue+='a'.repeat(remaining);remaining=0;}if(!remaining)break;}
+ if(remaining||Buffer.byteLength(completeCanonical(review))!==target)throw Error('synthetic_boundary_not_exact');return review;
+}

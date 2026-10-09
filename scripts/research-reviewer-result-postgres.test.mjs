@@ -17,7 +17,8 @@ import { authorResultFixture } from './research-author-result-fixture.mjs';
 import { completeCanonical, completeHash } from '../web/src/lib/research-complete-canonical.ts';
 import { FinancialDeadline } from '../web/src/lib/research-financial-file-reader.ts';
 import {runResearchReviewerResult} from '../web/src/lib/research-reviewer-result.ts';
-import {syntheticReviewerEnvelope} from './research-reviewer-result-fixture.mjs';
+import {syntheticReviewerEnvelope,canonicalSizedEditorialReview} from './research-reviewer-result-fixture.mjs';
+import {validateResearchEditorialReview} from '../web/src/lib/research-editorial-review.ts';
 import mapping from '../web/src/lib/research-complete-mapping.json' with { type: 'json' };
 
 const bin = process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN || (() => {
@@ -125,6 +126,7 @@ test('reviewer result: real original reservation budget/claim/fences, synthetic 
     // migration acceptance checks the locked backfill instead of an empty table.
     sql(fs.readFileSync('migrations/20261009_research_reviewer_results_v2.sql','utf8'));
     const result=syntheticReviewerEnvelope(reviewRequest,{reviewerAssignment:assignment},packet);
+    result.request.review=canonicalSizedEditorialReview(result.request.review);result.envelope.rawReview=result.request.review;result.envelope.validatedReview=validateResearchEditorialReview(packet,result.request.review,new Date().toISOString());result.request.observation.outputHash=completeHash(result.request.review);
     const reviewerHTTP=new Request('http://localhost/synthetic',{headers:{authorization:'Bearer synthetic-result-reviewer'}});
     const role=(request=result.request)=>runResearchReviewerResult(db,request,principal,pair.reviewerPrincipalId,reviewerHTTP,new FinancialDeadline());
     const direct=envelope=>sql(rpc('receive_research_reviewer_result_v2',[...args,envelope]));
@@ -145,6 +147,13 @@ test('reviewer result: real original reservation budget/claim/fences, synthetic 
       // explicit synthetic existing-history fixture; it is not a new model run.
       const other='synthetic-history-'+randomUUID();sql(`SET ROLE research_input_preparation_owner_v2;INSERT INTO research_execution_invocations_v2 VALUES(${q(other)},'author',gen_random_uuid(),${q('f'.repeat(64))});`);
       const bad=structuredClone(result.envelope);bad.observation.invocationId=other;const before=audit();assert.throws(()=>direct(bad),/duplicate key/);assert.equal(audit(),before);
+    });
+    await check('shared canonical65536 bytes exact in TS and PG, +1 actual RPC refuses with zero rows',()=>{
+      assert.equal(Buffer.byteLength(completeCanonical(result.envelope.rawReview)),65536);assert.equal(sql(`SELECT octet_length(convert_to(research_complete_canonical_v2(${q(JSON.stringify(result.envelope.rawReview))}::jsonb),'UTF8'));`),'65536');
+      const bad=structuredClone(result.envelope);bad.rawReview.strongestCounterEvidence+='a';bad.validatedReview.review=bad.rawReview;bad.validatedReview.reviewHash=completeHash(bad.rawReview);bad.observation.outputHash=completeHash(bad.rawReview);assert.equal(Buffer.byteLength(completeCanonical(bad.rawReview)),65537);const before=audit();assert.throws(()=>direct(bad),/research_reviewer_result_review_binding/);assert.equal(audit(),before);
+    });
+    await check('direct RPC closed nested fields refuse array/object coercion before result/registry/completion',()=>{
+      for(const mutate of [r=>r.findings[0].paragraphId=['summary'],r=>r.checks[0].status=['concern'],r=>r.findings[0].severity=['major'],r=>r.decision={},r=>r.checks[0].status=null]){const bad=structuredClone(result.envelope);mutate(bad.rawReview);bad.validatedReview.review=bad.rawReview;bad.validatedReview.reviewHash=completeHash(bad.rawReview);bad.observation.outputHash=completeHash(bad.rawReview);const before=audit();assert.throws(()=>direct(bad),/research_editorial_review_/);assert.equal(audit(),before);}
     });
     await check('injected completion failure rolls back result and invocation together',()=>{
       sql(`CREATE FUNCTION fixture_review_completion_abort() RETURNS trigger LANGUAGE plpgsql AS $$BEGIN IF NEW.reservation_id=${q(assignment.reservation_id)}::uuid THEN RAISE EXCEPTION 'synthetic_completion_insert_abort';END IF;RETURN NEW;END$$;
