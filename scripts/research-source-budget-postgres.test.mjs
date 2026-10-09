@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
-import { execFileSync, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { createIsolatedPgClock, verifyIsolatedPgClock, boundedPgCommand, cleanIsolatedPgCluster } from './test-support/isolated-pg-clock.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pgConfig = spawnSync('pg_config', ['--bindir'], { encoding: 'utf8' });
@@ -14,15 +15,18 @@ const available = Boolean(binaries && ['initdb', 'pg_ctl', 'psql']
 const digest = 'a'.repeat(64);
 
 test('cross-role budget, revision heads and first-discovery gaps survive real PostgreSQL',
-  { skip: !available && 'local PostgreSQL tools unavailable' }, () => {
+  { skip: !available && 'local PostgreSQL tools unavailable' }, (t) => {
+    const clock = createIsolatedPgClock();
     const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'stockinsider-source-budget-'));
     const cluster = path.join(temporary, 'cluster'); const port = 54000 + process.pid % 10000;
-    const run = (binary, args) => execFileSync(path.join(binaries, binary), args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-    const sql = (query) => run('psql', ['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',temporary,'-p',String(port),'-d','postgres','-c',query]);
-    let started = false;
+    const run = (binary, args, limits = {}) => boundedPgCommand(path.join(binaries, binary), args, {
+      env: binary === 'pg_ctl' ? clock.childEnv : process.env, timeout: binary === 'psql' ? (limits.timeout ?? 5000) : 30_000,
+    });
+    const sql = (query, limits) => run('psql', ['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',temporary,'-p',String(port),'-d','postgres','-c',query], limits);
     try {
       run('initdb',['-D',cluster,'-A','trust','--no-instructions']);
-      run('pg_ctl',['-D',cluster,'-l',path.join(temporary,'postgres.log'),'-o',`-h '' -k ${temporary} -p ${port}`,'-w','start']); started=true;
+      run('pg_ctl',['-D',cluster,'-l',path.join(temporary,'postgres.log'),'-o',`-h '' -k ${temporary} -p ${port}`,'-w','start']);
+      t.diagnostic(JSON.stringify({ ...verifyIsolatedPgClock(sql, clock), postgres: run('postgres', ['--version']) }));
       sql(`CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN;
         CREATE SCHEMA extensions;
         CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions;
@@ -187,7 +191,7 @@ test('cross-role budget, revision heads and first-discovery gaps survive real Po
       assert.equal(sql("SELECT count(*) FROM research_paper_book_revisions_v1"),'3');
       assert.throws(()=>sql("UPDATE research_paper_book_revisions_v1 SET state='{}'"),/immutable_revision/u);
     } finally {
-      if(started) { try { run('pg_ctl',['-D',cluster,'-m','immediate','-w','stop']); } catch { /* Keep the primary failure. */ } }
-      fs.rmSync(temporary,{recursive:true,force:true});
+      cleanIsolatedPgCluster({ cluster, temporary,
+        stop: () => run('pg_ctl', ['-D', cluster, '-m', 'immediate', '-w', 'stop']) });
     }
   });

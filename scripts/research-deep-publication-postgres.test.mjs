@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
-import { execFileSync, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { createIsolatedPgClock, verifyIsolatedPgClock, boundedPgCommand, cleanIsolatedPgCluster } from './test-support/isolated-pg-clock.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pgConfig = spawnSync('pg_config', ['--bindir'], { encoding: 'utf8' });
@@ -22,21 +23,21 @@ const articleHash = 'c'.repeat(64);
 const submissionHash = 'd'.repeat(64);
 
 for (const recovery of ['rejected', 'explicit_failure']) test(`deep publication preserves ordinary history and recovers ${recovery} plus expired leases`,
-  { skip: !available && 'local PostgreSQL tools unavailable' }, () => {
+  { skip: !available && 'local PostgreSQL tools unavailable' }, (t) => {
+    const clock = createIsolatedPgClock();
     const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'stockinsider-deep-publication-'));
     const cluster = path.join(temporary, 'cluster');
     const port = 54000 + process.pid % 10000;
-    const run = (binary, args) => execFileSync(path.join(bin, binary), args, {
-      encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
-    }).trim();
-    const sql = (query) => run('psql', ['-X', '-A', '-t', '-v', 'ON_ERROR_STOP=1',
-      '-h', temporary, '-p', String(port), '-d', 'postgres', '-c', query]);
-    let started = false;
+    const run = (binary, args, limits = {}) => boundedPgCommand(path.join(bin, binary), args, {
+      env: binary === 'pg_ctl' ? clock.childEnv : process.env, timeout: binary === 'psql' ? (limits.timeout ?? 5000) : 30_000,
+    });
+    const sql = (query, limits) => run('psql', ['-X', '-A', '-t', '-v', 'ON_ERROR_STOP=1',
+      '-h', temporary, '-p', String(port), '-d', 'postgres', '-c', query], limits);
     try {
       run('initdb', ['-D', cluster, '-A', 'trust', '--no-instructions']);
       run('pg_ctl', ['-D', cluster, '-l', path.join(temporary, 'postgres.log'),
         '-o', `-h '' -k ${temporary} -p ${port}`, '-w', 'start']);
-      started = true;
+      t.diagnostic(JSON.stringify({ ...verifyIsolatedPgClock(sql, clock), postgres: run('postgres', ['--version']) }));
       sql(`CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN;
         CREATE TABLE public.stocks(id uuid PRIMARY KEY, symbol text, market text);
         CREATE TABLE public.candidate_detail_snapshots(id uuid PRIMARY KEY, stock_id uuid);
@@ -160,7 +161,7 @@ for (const recovery of ['rejected', 'explicit_failure']) test(`deep publication 
       assert.match(modelReservation,/^[a-f0-9-]{36}$/u);
       const reviewed = {revision_id:ids.revision,input_hash:inputHash,article_hash:articleHash,
         author_id:'author',reviewer_id:'independent-2',decision:'accepted',findings:{checked:true},
-        source_document_ids:[],reviewed_at:new Date().toISOString()};
+        source_document_ids:[],reviewed_at:sql("SELECT to_char(clock_timestamp() AT TIME ZONE 'UTC','YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"')")};
       reviewId=sql(`SELECT record_budgeted_deep_review_v1('${jobId}',3,'${modelReservation}','${JSON.stringify(reviewed)}')`);
       assert.equal(sql(`SELECT record_budgeted_deep_review_v1('${jobId}',3,'${modelReservation}','${JSON.stringify(reviewed)}')`),reviewId);
       assert.equal(sql(`SELECT count(*) FROM research_model_completions_v1 WHERE reservation_id='${modelReservation}'`),'1');
@@ -187,10 +188,7 @@ for (const recovery of ['rejected', 'explicit_failure']) test(`deep publication 
         WHERE job_id='${jobId}'`), 'completed|t');
       assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), recovery === 'rejected' ? '3' : '2');
     } finally {
-      if (started) {
-        try { run('pg_ctl', ['-D', cluster, '-m', 'immediate', '-w', 'stop']); }
-        catch { /* Preserve the original test result. */ }
-      }
-      fs.rmSync(temporary, { recursive: true, force: true });
+      cleanIsolatedPgCluster({ cluster, temporary,
+        stop: () => run('pg_ctl', ['-D', cluster, '-m', 'immediate', '-w', 'stop']) });
     }
   });

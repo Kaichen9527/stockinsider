@@ -12,6 +12,8 @@ on:
       - 'migrations/20260911*.sql'
       - 'migrations/20260929*.sql'
       - 'scripts/research-*.test.mjs'
+      - 'scripts/test-support/isolated-pg-clock*'
+      - 'scripts/test-support/*isolated_pg_clock_build.py'
       - 'scripts/candidate-dossier-outbox-v6-postgres.test.mjs'
       - 'deployment/vps/**'
       - 'scripts/model-runner-v3/**'
@@ -78,11 +80,41 @@ jobs:
       - name: Install PostgreSQL
         run: |
           sudo apt-get update
-          sudo apt-get install --yes postgresql
+          sudo apt-get install --yes postgresql libfaketime build-essential binutils strace
           postgres_bin="$(pg_config --bindir)"
           test -x "$postgres_bin/initdb"
           test -x "$postgres_bin/pg_ctl"
           echo "$postgres_bin" >> "$GITHUB_PATH"
+          clock_library="$(dpkg-query -L libfaketime | awk '/\/libfaketime\.so\.1$/ {print}')"
+          test -n "$clock_library"
+          test -f "$clock_library"
+          dpkg-query --show --showformat='${Package} ${Version}\n' libfaketime
+          sha256sum "$clock_library"
+      - name: Build pinned test-only PostgreSQL clock library
+        id: pg-clock
+        run: |
+          /usr/bin/python3 -I -S scripts/test-support/test_isolated_pg_clock_build.py
+          /usr/bin/python3 -I -S scripts/test-support/isolated_pg_clock_build.py \
+            --output "$RUNNER_TEMP/stockinsider-pg-clock-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" \
+            > "$RUNNER_TEMP/stockinsider-pg-clock-build.json"
+          python3 - "$RUNNER_TEMP/stockinsider-pg-clock-build.json" "$GITHUB_OUTPUT" <<'PY'
+          import json, sys
+          with open(sys.argv[1]) as source:
+              receipt = json.load(source)
+          print(json.dumps(receipt))
+          with open(sys.argv[2], 'a') as output:
+              output.write('library=' + receipt['library'] + '\n')
+          PY
+      - name: Retain failed test-clock inspection metadata
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: isolated-pg-clock-failure
+          path: |
+            ${{ runner.temp }}/stockinsider-pg-clock-${{ github.run_id }}-${{ github.run_attempt }}/failure.json
+            ${{ runner.temp }}/stockinsider-pg-clock-${{ github.run_id }}-${{ github.run_attempt }}/symbol-failure.json
+          if-no-files-found: ignore
+          retention-days: 3
       - name: Install root dependencies
         run: npm ci
       - uses: actions/setup-python@v5
@@ -100,7 +132,13 @@ jobs:
       - name: Verify candidate revision and historical date contracts
         run: npm run test:candidate-revision-history
       - name: Verify research agent contracts and real PostgreSQL recovery
+        env:
+          STOCKINSIDER_TEST_PG_CLOCK_LIBRARY: ${{ steps.pg-clock.outputs.library }}
         run: npm run test:research-agents
+      - name: Verify isolated PostgreSQL clock and unchanged day-end policy
+        env:
+          STOCKINSIDER_TEST_PG_CLOCK_LIBRARY: ${{ steps.pg-clock.outputs.library }}
+        run: node --test scripts/test-support/isolated-pg-clock.test.mjs scripts/research-isolated-clock-postgres.test.mjs
       - name: Install project-local Playwright Chromium
         working-directory: web
         run: ./node_modules/.bin/playwright install --with-deps chromium
