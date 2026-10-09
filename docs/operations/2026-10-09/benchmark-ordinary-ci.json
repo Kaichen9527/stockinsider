@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "stockinsider-ordinary-ci-observation-v1",
+  "recordedAt": "2026-10-09T06:35:42.221500+00:00",
+  "subjectHead": "77c3f5de71f7d220e9c7cccdd74d8d8487ae2503",
+  "runtimeHead": "59c14f3cdd8d6c96668527b3e7cc68f3c5ec031f",
+  "runId": 37890145970,
+  "jobId": 113688994208,
+  "runUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/37890145970",
+  "conclusion": "success",
+  "researchContracts": {
+    "tests": 498,
+    "pass": 495,
+    "fail": 0,
+    "skip": 3,
+    "actualSkipLogLines": [
+      "ok 138 - real existing PostgreSQL cursor DDL retains CAS/replay progress after restart # SKIP PostgreSQL unavailable",
+      "ok 188 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled",
+      "ok 189 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled"
+    ]
+  },
+  "productDiagnostic": {
+    "normalProductionBuild": "pass",
+    "browserChecksPassed": 9
+  },
+  "log": {
+    "bytes": 1312691,
+    "sha256": "a51d58a996951ad1d33c8aaef2fb1f237051b3d724bd3eeca770d23dfed1541c",
+    "privateLocalPath": "/tmp/stockinsider-benchmark-77c-ordinary-ci.log"
+  },
+  "protectedCodeGateEvidence": false,
+  "productionDeployed": false,
+  "limitations": [
+    "Ordinary diagnostic CI is distinct from scoped VM native/compiled rejection checks and does not grant protected authority.",
+    "The missing-row negative reader probe is distinct from the earlier successful61-row read; the append-only attribution clarification retains the original receipt.",
+    "No genuinely qualified benchmark snapshot or formal production refresh was published."
+  ]
+}

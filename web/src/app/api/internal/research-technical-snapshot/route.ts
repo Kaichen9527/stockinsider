@@ -9,6 +9,7 @@ import { TW_ENTRY_PLAN_RULESET } from '@/lib/tw-entry-plan-contract';
 import { loadDeepArticleEvidence } from '@/lib/research-deep-evidence';
 import { aggregateOfficialWeeklyBars, WEEKLY_AGGREGATION_VERSION } from '@/lib/research-weekly-bars';
 import { loadResearchExecutionContext } from '@/lib/research-execution-context';
+import { loadMonitorBenchmarkContext, MONITOR_BENCHMARK_VERSION } from '@/lib/research-monitor-benchmark-context';
 
 type Row = Record<string, unknown>;
 const SYMBOL = /^\d{4}$/u;
@@ -96,6 +97,9 @@ export async function POST(request: Request) {
       stockId, symbol, exchange: exchange as 'TWSE' | 'TPEX', signalSession: sessionDate,
       cutoff: observedAt, forwardCalendar,
     });
+    const benchmarkContext = await loadMonitorBenchmarkContext(db, {
+      symbol, exchange: exchange as 'TWSE' | 'TPEX', signalSession: sessionDate, cutoff: observedAt, authority,
+    });
     const plannedAt = new Date().toISOString();
     const preliminaryFeatures = authority.bars.length ? calculateTechnicalFeatures(authority.bars) : null;
     // Existing entry upper bounds are <= close + 0.25 ATR. Use the larger
@@ -147,13 +151,14 @@ export async function POST(request: Request) {
     const weeklyFeatures = completeWeeklyBars.length
       ? calculateTechnicalFeatures(completeWeeklyBars) : null;
     const decisionInputHash = researchCanonicalHash({ marketDatasetHash, calendarHash, execution: execution.contextHash,
+      benchmarkVersion: MONITOR_BENCHMARK_VERSION, benchmarkContextHash: benchmarkContext.contextHash,
       qualificationId: qualificationRead.data.id, evidenceCurrent, blockers: decision.blockers,
       featureVersion: TECHNICAL_FEATURE_RULESET_VERSION, strategyVersion, signalState: decision.signalState });
     const stored = await db.from('candidate_technical_decisions_v1').insert({
       stock_id: stockId, thesis_qualification_id: qualificationRead.data.id,
       session_date: sessionDate, market_dataset_hash: marketDatasetHash, calendar_hash: calendarHash,
       feature_version: TECHNICAL_FEATURE_RULESET_VERSION, strategy_version: strategyVersion, decision_input_hash: decisionInputHash,
-      snapshot: { ...decision, features, weeklyAggregationVersion: WEEKLY_AGGREGATION_VERSION,
+      snapshot: { ...decision, features, benchmarkContext, weeklyAggregationVersion: WEEKLY_AGGREGATION_VERSION,
         weeklyFeatures, lastWeeklyBar: completeWeeklyBars.at(-1) || null,
         execution, plans: plans.plans.map((plan) => ({
         planId: plan.planId, strategyId: plan.strategyId, rawSignalState: plan.rawSignalState,
@@ -170,7 +175,7 @@ export async function POST(request: Request) {
       .eq('strategy_version', strategyVersion).eq('decision_input_hash', decisionInputHash).maybeSingle() : null;
     if (replay?.error || (replay && !replay.data)) throw new Error('research_technical_replay_failed');
     return NextResponse.json({ ok: true, snapshotId: stored.data?.id || replay?.data?.id,
-      decision, missingData: plans.missingData, idempotentReplay: Boolean(replay) });
+      decision, benchmarkContext, missingData: plans.missingData, idempotentReplay: Boolean(replay) });
   } catch (error) {
     return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : 'research_technical_snapshot_failed' }, { status: 409 });
   }

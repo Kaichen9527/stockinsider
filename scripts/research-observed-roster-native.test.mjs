@@ -12,7 +12,7 @@ const directory=path.join(root,'docs/research/2026-10-08-discovery-live');
 const body={legacyClassification:JSON.parse(fs.readFileSync(path.join(directory,'observed-security-classification.json'))),securityScope:JSON.parse(fs.readFileSync(path.join(directory,'official-security-scope-reconciliation.json')))};
 const enabled=process.env.RESEARCH_LOCAL_DATAPLANE_VERIFY==='enabled';
 test('real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart',{skip:!enabled&&'explicit isolated profile not enabled',timeout:120000},async t=>{
- const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedRoster:true,check:(name,fn)=>t.test(name,fn),
+ const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedRoster:true,observedPriority:true,check:(name,fn)=>t.test(name,fn),
   afterBaseline:async({sql,post,rpc,origin,apiOrigin,report,restart,priorityRequest})=>{
    const result=prepareObservedRosterAdmission(body);const old=JSON.stringify(body.legacyClassification);let receipt;
    const dbCanonical=sql(`SELECT public.research_observed_canonical_json_v1('${result.canonicalPacket.replaceAll("'","''")}'::jsonb)`);

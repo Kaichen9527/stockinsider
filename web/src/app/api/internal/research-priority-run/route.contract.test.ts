@@ -10,6 +10,7 @@ import * as roots from '../../../../lib/research-source-roots.ts';
 import * as registry from '../../../../lib/research-source-registry.ts';
 import * as qualification from '../../../../lib/research-agent-qualification.ts';
 import * as association from '../../../../lib/research-source-association.ts';
+import * as observedPriority from '../../../../lib/research-observed-priority.ts';
 import { buildResearchInboxRow } from '../../../../lib/research-inbox.ts';
 
 const source=readFileSync(new URL('./route.ts',import.meta.url),'utf8');
@@ -87,6 +88,7 @@ function harness(first:unknown[]=[], config:{roster?:TestRow[];tables?:Record<st
       }},
     '@/lib/research-discovery-price-enrichment':enrichment,'@/lib/research-agent-priority':priority,
     '@/lib/research-source-association':association,
+    '@/lib/research-observed-priority':observedPriority,
   };
   const exports:Record<string,unknown>={};
   vm.runInNewContext(compiled,{exports,require:(name:string)=>{
@@ -243,7 +245,11 @@ test('DR09 actual DB predicates exclude later available/published quotes from or
 test('DR10 active research outside Top20 has server priority; model inProgress cannot promote other candidates',async()=>{
   const symbols=Array.from({length:45},(_,i)=>String(2400+i));const active=symbols.slice(10);
   const roster=symbols.map((symbol)=>({symbol,stock_id:uuid(Number(symbol)),exchange:'TWSE'}));
-  const tables=quoteTables(symbols);tables.research_deep_jobs_v1=active.map((symbol,i)=>({symbol,status:'running',created_at:cutoff,job_id:uuid(i+1)}));
+  const tables=quoteTables(symbols);tables.research_deep_jobs_v1=active.map((symbol,i)=>({symbol,status:'running',
+    research_scope:'formal_v1',created_at:cutoff,job_id:uuid(i+1)}));
+  // Work in the observed-only scope must not gain formal job priority.
+  tables.research_deep_jobs_v1.push({symbol:symbols[0],status:'running',research_scope:'research_observed_v1',
+    created_at:cutoff,job_id:uuid(100)});
   const h=harness(symbols.map(missingFirst),{roster,tables});
   const rated={level:4,reason:'reviewed synthetic ordinal'};
   const body={...payload(),assessments:symbols.map((symbol)=>({symbol,profitImpact:rated,novelty:rated,researchability:rated,

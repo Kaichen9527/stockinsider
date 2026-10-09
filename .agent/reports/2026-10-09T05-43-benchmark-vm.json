@@ -1,0 +1,899 @@
+{
+  "schemaVersion": "bounded-benchmark-vm-acceptance-v1",
+  "recordedAt": "2026-10-09T05:43:58.727822+00:00",
+  "manualEngineering": true,
+  "manualWindow": {
+    "start": "2026-10-09T05:25:01Z",
+    "deadline": "2026-10-09T05:55:01Z",
+    "notAutomatedModelLease": true
+  },
+  "runtimeSubject": "59c14f3cdd8d6c96668527b3e7cc68f3c5ec031f",
+  "runtimeTree": "d4aea5ad656c1156cf1fda2562657ea28737c44e",
+  "testProfileSubject": "ae6fe0b736ddf94f1c5c502e2867706ba09d63cf",
+  "webTree": "42ad35f0cb9b6f59a6d155f84f6dd29b6cc224fe",
+  "buildId": "_-F-PeEEiU7UzCecgH9Q2",
+  "sourceCleanAtBuild": true,
+  "sourceHash": "40da8d95e86bd096e387b1618833957db6af969cd2e1cb0f4c5ab75d1a3dcabe",
+  "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
+  "node": "22.14.0",
+  "postgres": "17.11",
+  "postgrest": "16.3",
+  "files": [
+    {
+      "path": "web/src/lib/research-monitor-benchmark-context.ts",
+      "bytes": 14748,
+      "sha256": "2e3ae49d207a3fc9062075adf004233578ebd54d33cbaebf7d4140e17b82b875"
+    },
+    {
+      "path": "web/src/app/api/internal/research-technical-snapshot/route.ts",
+      "bytes": 12582,
+      "sha256": "f0e1238d3cf464e0c0c94a6fcb56939100d3a35f2271a6a68cca28ea1cf1ec4c"
+    },
+    {
+      "path": "web/src/lib/research-strategy-release.generated.ts",
+      "bytes": 10050,
+      "sha256": "5ca0f774fcbf6fa2850f7851c18a4bd500a3603cf459f68c6c662d383b9c164f"
+    },
+    {
+      "path": "scripts/research-observed-roster-native.test.mjs",
+      "bytes": 7862,
+      "sha256": "8a135bfb39c8618b9ddc4ec8af8d154217bf55057971df06c02a5b87c3ea7bfa"
+    },
+    {
+      "path": "scripts/research-observed-priority-native.test.mjs",
+      "bytes": 24650,
+      "sha256": "5f3138ee39dfa71c2fea914e7276c30cb187b7146c9cc7ce7ad18daa244739b8"
+    },
+    {
+      "path": "scripts/research-local-inbox-dataplane.mjs",
+      "bytes": 31618,
+      "sha256": "fe30428c597dad44c92fa137dee01973781f02ddbffed48e8244df465fe626d7"
+    },
+    {
+      "path": "package.json",
+      "bytes": 28625,
+      "sha256": "f84da2baf43df492ff877f450bc97bc0793128fc2ac84da51c088f88047e8fb7"
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274090,
+      "sha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516"
+    }
+  ],
+  "checks": {
+    "focused42AfterGeneration": {
+      "pass": 39,
+      "fail": 0,
+      "skip": 0
+    },
+    "complete59Package": {
+      "tests": 498,
+      "pass": 496,
+      "fail": 0,
+      "skip": 2
+    },
+    "separateRealNativePriority59": {
+      "tests": 25,
+      "pass": 25,
+      "fail": 0,
+      "skip": 0
+    },
+    "separateRealNativeRoster59Red": {
+      "tests": 10,
+      "pass": 7,
+      "fail": 3,
+      "skip": 0
+    },
+    "nativeRosterTestDependencyRepair": {
+      "tests": 23,
+      "pass": 23,
+      "fail": 0,
+      "skip": 0
+    },
+    "pgBenchmarkReader59": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "skip": 0
+    },
+    "compiledTechnicalRoute59": {
+      "tests": 12,
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "positiveTechnicalSnapshotAccepted": false,
+      "unauthorizedStatus": 401,
+      "guardedInvalidFutureStatus": 400,
+      "validPositiveGap": "formal stock/instrument/thesis/article/adjusted-price authority absent; none fabricated; no repeated denied external calendar fetch"
+    },
+    "types59": "pass",
+    "lint59": {
+      "errors": 0,
+      "warnings": 33
+    },
+    "normalBuild59": "pass",
+    "normalBuildTestProfileSuccessor": "pass"
+  },
+  "originalFailures": [
+    "focused42 38pass1fail missing generated official bridge; pretypecheck supported generation then39pass",
+    "42 typecheck TS2352; copied-deps normalbuild also fails same compiler error; neither bypassed",
+    "initial normalbuild symlink out of Turbopack root; matching lock dependency copy only, no product config change",
+    "temporaryPG harness initial package subpath missing; public package export corrected",
+    "temporaryPG harness REST prefix setup read unavailable; realSupabase/PostgREST compatibility prefix corrected",
+    "temporary restart comparison before PostgREST pool readiness; bounded actual HTTP readiness added; then3pass",
+    "59 native roster partial profile lacks research_scope dependency; raw7pass3fail retained; test-only existing migration option then23pass"
+  ],
+  "profileRepair": {
+    "changedFile": "scripts/research-observed-roster-native.test.mjs",
+    "change": "observedPriority:true installs existing genuine SQL dependency; no assertion/production migration/helper changes",
+    "independentReview": "pending",
+    "runtimeWebTreeUnchangedFrom59": true
+  },
+  "pgReader": {
+    "syntheticFixture": true,
+    "officialActivation": false,
+    "routePositiveNotTested": true,
+    "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+    "librarySha256": "2e3ae49d207a3fc9062075adf004233578ebd54d33cbaebf7d4140e17b82b875",
+    "pg": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "postgrest": "PostgREST 16.3",
+    "results": [
+      {
+        "exchange": "TWSE",
+        "contextHash": "55ce7990cdce05df2b1903d9288adb0dfc49ca2a2b7b75ad895cc95f070134b5",
+        "coverage": 61,
+        "relative60": {
+          "stockPriceReturn": 0.21505376344086025,
+          "indexPriceReturn": 0.1200000000000001,
+          "relativeWealthRatioMinusOne": 0.08486943164362515
+        },
+        "missing": [
+          "benchmark_market_incomplete"
+        ]
+      },
+      {
+        "exchange": "TPEX",
+        "contextHash": "bf6e2e957512cdb8221452a300db80a8358324e4631f64915ad79f32d337eb5d",
+        "coverage": 61,
+        "relative60": {
+          "stockPriceReturn": 0.21505376344086025,
+          "indexPriceReturn": 0.1200000000000001,
+          "relativeWealthRatioMinusOne": 0.08486943164362515
+        },
+        "missing": [
+          "benchmark_market_incomplete"
+        ]
+      }
+    ]
+  },
+  "temporaryHarnesses": [
+    {
+      "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark.test.mjs",
+      "bytes": 8113,
+      "sha256": "ef92fb7af82f895a0a36a4cf7a65480a11af3d5d8b43f50cf0c01fd78bedd1f5"
+    },
+    {
+      "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/route-boundary.test.mjs.partial-profile-failure.txt",
+      "bytes": 1913,
+      "sha256": "8aabe3dc43506c6c067fc92a4bb42ebcb3b5e14ca4690035c5881c96a33b0e49"
+    },
+    {
+      "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark.test.mjs.first-reader-failure.txt",
+      "bytes": 7738,
+      "sha256": "ac91c512e72d0a783c5630d3b0551250f9f1e8cf9a41b5ab4a8b5eee94a8d360"
+    },
+    {
+      "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/route-boundary.test.mjs",
+      "bytes": 1935,
+      "sha256": "ba0241ec67e0063efbca8c27c532becd5d6953002abc66bde8d8a1e481152387"
+    },
+    {
+      "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark.test.mjs.restart-readiness-failure.txt",
+      "bytes": 7804,
+      "sha256": "b0cadd90f6e7eec31d8f04b7e247b3fe245d78182f2ed7f4bac6b7420afced0a"
+    }
+  ],
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "agents",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-09T05:29:05.640Z",
+      "completedAt": "2026-10-09T05:29:28.813Z",
+      "elapsedSeconds": 23.173309141013306,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1235378176,
+      "observedTaskDiskPeakBytes": 98381824,
+      "availableBeforeBytes": 17868406784,
+      "availableAfterBytes": 17868230656,
+      "guardTermination": null,
+      "tap": {
+        "tests": 498,
+        "pass": 496,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 2
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/agents.log",
+        "bytes": 135770,
+        "sha256": "5d806e4754386c51062969856378a6f6a6f0fcab899bcad794acd2cd320afd15"
+      },
+      "timeSha256": "d10b81da1ffb100476d2af3311a3b93a2efe0716f42bbfd71e9683d009787529"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build-local-deps",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T05:33:07.185Z",
+      "completedAt": "2026-10-09T05:33:39.975Z",
+      "elapsedSeconds": 32.79052311598207,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 1998716928,
+      "observedTaskDiskPeakBytes": 1329950720,
+      "availableBeforeBytes": 16810024960,
+      "availableAfterBytes": 16575025152,
+      "guardTermination": null,
+      "tap": {},
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/build-local-deps.log",
+        "bytes": 1069,
+        "sha256": "c3af97db63c2ac9928db540bdc55f40068b32d03c685063856063e0154cdebce"
+      },
+      "timeSha256": "c3af2b32e467d5995f4e5afd7e82a87e46ec60aa4b88be38a17e9575165265b3"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T05:32:07.354Z",
+      "completedAt": "2026-10-09T05:32:08.597Z",
+      "elapsedSeconds": 1.2424900870246347,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 184291328,
+      "observedTaskDiskPeakBytes": 135221248,
+      "availableBeforeBytes": 17769877504,
+      "availableAfterBytes": 17769558016,
+      "guardTermination": null,
+      "tap": {},
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/build.log",
+        "bytes": 3299,
+        "sha256": "b20511aeadf633dfc4e71ac084fbd90c78c250b0081fdd271efd4319ad1e2068"
+      },
+      "timeSha256": "84434975f816c449480b67a369d113e123f5eb1b62b3f12aac71ab1533a026ba"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused-generated",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-monitor-benchmark-context.test.ts",
+        "scripts/research-agent-routes.test.mjs",
+        "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+        "scripts/research-strategy-release.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:28:39.266Z",
+      "completedAt": "2026-10-09T05:28:41.667Z",
+      "elapsedSeconds": 2.4016689940181095,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 486289408,
+      "observedTaskDiskPeakBytes": 46538752,
+      "availableBeforeBytes": 17868427264,
+      "availableAfterBytes": 17868410880,
+      "guardTermination": null,
+      "tap": {
+        "tests": 39,
+        "pass": 39,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/focused-generated.log",
+        "bytes": 10740,
+        "sha256": "c9959b341551023e63a5b83d30b6a5bc4aeb7e15336086512dcb4b6313a16a2c"
+      },
+      "timeSha256": "6c6e82b3f6d87bf34b24479c698d7dd3f9f855c17b4f8603e1ef3335d4b8c94f"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-monitor-benchmark-context.test.ts",
+        "scripts/research-agent-routes.test.mjs",
+        "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+        "scripts/research-strategy-release.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:27:34.331Z",
+      "completedAt": "2026-10-09T05:27:35.803Z",
+      "elapsedSeconds": 1.4724023700109683,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 444944384,
+      "observedTaskDiskPeakBytes": 34222080,
+      "availableBeforeBytes": 17870786560,
+      "availableAfterBytes": 17870766080,
+      "guardTermination": null,
+      "tap": {
+        "tests": 39,
+        "pass": 38,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/focused.log",
+        "bytes": 16183,
+        "sha256": "fbbdb91c9cc565bbb6e3db4bd41dd43017a8b7990e931b48363807bd545221ca"
+      },
+      "timeSha256": "592dcbdcca2c47e2066c004d320b51e3e56580c80745b878254465ccdb9d9759"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T05:31:04.167Z",
+      "completedAt": "2026-10-09T05:31:27.183Z",
+      "elapsedSeconds": 23.015818446991034,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1041850368,
+      "observedTaskDiskPeakBytes": 85413888,
+      "availableBeforeBytes": 17827135488,
+      "availableAfterBytes": 17810952192,
+      "guardTermination": null,
+      "tap": {},
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/lint.log",
+        "bytes": 4781,
+        "sha256": "050dd927de950154beafc3e36cfef89bf7770cfe4e68aac369654d7ab6dc91ff"
+      },
+      "timeSha256": "26bfd7af7e8af6d7a75a2aa0295a1de702e2d1b01e49f649c0b4f910f0288a20"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-priority",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:38:05.333Z",
+      "completedAt": "2026-10-09T05:38:36.505Z",
+      "elapsedSeconds": 31.172070094995433,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 945360896,
+      "observedTaskDiskPeakBytes": 1650102272,
+      "availableBeforeBytes": 16354947072,
+      "availableAfterBytes": 16289054720,
+      "guardTermination": null,
+      "tap": {
+        "tests": 25,
+        "pass": 25,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/native-priority.log",
+        "bytes": 6960,
+        "sha256": "a344505d2a8c3d25fae160693c17e1b6f36f97c8e133fb44836a78facdeb2022"
+      },
+      "timeSha256": "27b322342ede1bb1bcc686b917a63595cd4343217d543caf01df88ac60de6e07"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-roster-profile",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:40:35.092Z",
+      "completedAt": "2026-10-09T05:40:49.614Z",
+      "elapsedSeconds": 14.521870407013921,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 558792704,
+      "observedTaskDiskPeakBytes": 1722318848,
+      "availableBeforeBytes": 16231747584,
+      "availableAfterBytes": 16187367424,
+      "guardTermination": null,
+      "tap": {
+        "tests": 23,
+        "pass": 23,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/native-roster-profile.log",
+        "bytes": 6168,
+        "sha256": "3117089ffa9e54ea11ca2e70a2e9858ca7a372139dbc8fb4cbce98b2d79d545d"
+      },
+      "timeSha256": "bf8a00d7954ce70a044fc1fe7f5d6267a425d7852da15be99c4af9a70dbd0221"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-roster",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:37:44.436Z",
+      "completedAt": "2026-10-09T05:37:50.948Z",
+      "elapsedSeconds": 6.512261630996363,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 328146944,
+      "observedTaskDiskPeakBytes": 1549967360,
+      "availableBeforeBytes": 16397340672,
+      "availableAfterBytes": 16354951168,
+      "guardTermination": null,
+      "tap": {
+        "tests": 10,
+        "pass": 7,
+        "fail": 3,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/native-roster.log",
+        "bytes": 6535,
+        "sha256": "25037b1e3bca2f5c4dbd3461bb921c7fa1fb2ba1c34d16733c14a1390e8b112d"
+      },
+      "timeSha256": "aba547d3096e52be6e4361d84bff725a648571a44b79170674a750bb29854255"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-technical-profile",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/workspace/cloud-benchmark-42e161-artifacts-oct09/route-boundary.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:37:14.812Z",
+      "completedAt": "2026-10-09T05:37:21.425Z",
+      "elapsedSeconds": 6.61249828900327,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 362536960,
+      "observedTaskDiskPeakBytes": 1507569664,
+      "availableBeforeBytes": 16439971840,
+      "availableAfterBytes": 16397344768,
+      "guardTermination": null,
+      "tap": {
+        "tests": 12,
+        "pass": 12,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/native-technical-profile.log",
+        "bytes": 3426,
+        "sha256": "32a4e342881949891285b58094832b2340825e20a077a5b04c0531e1d1d87f38"
+      },
+      "timeSha256": "bc31c1043e8cbf91d4a7b2788ed0383d3548ba4f5a1d8451ab8d6868a4e17d90"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-technical-route",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/workspace/cloud-benchmark-42e161-artifacts-oct09/route-boundary.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:36:01.944Z",
+      "completedAt": "2026-10-09T05:36:08.893Z",
+      "elapsedSeconds": 6.948228483001003,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 310919168,
+      "observedTaskDiskPeakBytes": 1464934400,
+      "availableBeforeBytes": 16482189312,
+      "availableAfterBytes": 16439980032,
+      "guardTermination": null,
+      "tap": {
+        "tests": 10,
+        "pass": 7,
+        "fail": 3,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/native-technical-route.log",
+        "bytes": 6401,
+        "sha256": "7f08d36714ee3a0ae4d48bb577c028142e61798544526cc67f4198ba63af705b"
+      },
+      "timeSha256": "6eae0140f533c0d49fc188e806ceeb01d24a6c7c24613a550b3eda7cbbf36a8a"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-benchmark-compatible",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:31:48.017Z",
+      "completedAt": "2026-10-09T05:31:51.837Z",
+      "elapsedSeconds": 3.820328794012312,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 209715200,
+      "observedTaskDiskPeakBytes": 135090176,
+      "availableBeforeBytes": 17810948096,
+      "availableAfterBytes": 17769881600,
+      "guardTermination": null,
+      "tap": {
+        "tests": 3,
+        "pass": 1,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark-compatible.log",
+        "bytes": 2731,
+        "sha256": "71ab66ea7ab4b5c1b9aca545aac4db5dc847e7db1fb0ce6327e01954eb4b7aa4"
+      },
+      "timeSha256": "eabd7bb6c16aa212af1a33be3cf32f19fadf2f5a12ab2822f2f704cd02ff7b1c"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-benchmark-import-corrected",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:30:46.949Z",
+      "completedAt": "2026-10-09T05:30:50.626Z",
+      "elapsedSeconds": 3.677304726006696,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 209145856,
+      "observedTaskDiskPeakBytes": 77832192,
+      "availableBeforeBytes": 17868206080,
+      "availableAfterBytes": 17827139584,
+      "guardTermination": null,
+      "tap": {
+        "tests": 3,
+        "pass": 0,
+        "fail": 3,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark-import-corrected.log",
+        "bytes": 3367,
+        "sha256": "3d85fbbaaea604d491347f54882f3aeaedfeaa3dada60d20ed43bc9ddf1a5b89"
+      },
+      "timeSha256": "30e77b6742b6ceeae400e0e288a27ee46fa71305cd741908909009164fddf572"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-benchmark-ready",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:32:48.532Z",
+      "completedAt": "2026-10-09T05:32:52.601Z",
+      "elapsedSeconds": 4.069286607991671,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 230580224,
+      "observedTaskDiskPeakBytes": 176492544,
+      "availableBeforeBytes": 17769545728,
+      "availableAfterBytes": 17728479232,
+      "guardTermination": null,
+      "tap": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark-ready.log",
+        "bytes": 1348,
+        "sha256": "bb7c78290d543a7d6bd4c2afeeecbaf00331430de5c06f91d5cf7436dc368433"
+      },
+      "timeSha256": "4c61a47940b2076830cfda338508b854c4aa8ab546060ab8e2fe9d78b170af43"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-benchmark",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:30:30.471Z",
+      "completedAt": "2026-10-09T05:30:30.603Z",
+      "elapsedSeconds": 0.13205863497569226,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 21700608,
+      "observedTaskDiskPeakBytes": 36757504,
+      "availableBeforeBytes": 17868218368,
+      "availableAfterBytes": 17868210176,
+      "guardTermination": null,
+      "tap": {
+        "tests": 1,
+        "pass": 0,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark.log",
+        "bytes": 1636,
+        "sha256": "52295e1bb62c460fc79b77f3b3c6e25432acd99fc1afab7aecb1b1829bb076e4"
+      },
+      "timeSha256": "0093aadc8149591e3f4e6142b740f3f62e34b7cd1063fb867b74785e92a394b4"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "profile-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T05:41:47.835Z",
+      "completedAt": "2026-10-09T05:41:53.848Z",
+      "elapsedSeconds": 6.012134534015786,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 912871424,
+      "observedTaskDiskPeakBytes": 1717493760,
+      "availableBeforeBytes": 16187363328,
+      "availableAfterBytes": 16186593280,
+      "guardTermination": null,
+      "tap": {},
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/profile-build.log",
+        "bytes": 6499,
+        "sha256": "14b32563a532caa67896590c102378c8259063101b8d81dc4f9a3acf976d0c78"
+      },
+      "timeSha256": "ba3589e30e630e97501a31fbb0cd5a3ccf6b4b94419060c2b723e83bd2d6e8c5"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "successor-agents",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-09T05:34:40.781Z",
+      "completedAt": "2026-10-09T05:35:02.428Z",
+      "elapsedSeconds": 21.64721645001555,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 925147136,
+      "observedTaskDiskPeakBytes": 1394008064,
+      "availableBeforeBytes": 16574955520,
+      "availableAfterBytes": 16574803968,
+      "guardTermination": null,
+      "tap": {
+        "tests": 498,
+        "pass": 496,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 2
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/successor-agents.log",
+        "bytes": 135780,
+        "sha256": "7a61200598b6301877de9e9d7be7c5bfad356b67c5307807b9666bd7ebec1714"
+      },
+      "timeSha256": "62a882ab43cceb07c5a743aa8c65c0bcb80cabc8e2a88dc00b020a7847994e36"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "successor-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T05:35:20.105Z",
+      "completedAt": "2026-10-09T05:35:28.981Z",
+      "elapsedSeconds": 8.87610437499825,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1106391040,
+      "observedTaskDiskPeakBytes": 1350242304,
+      "availableBeforeBytes": 16574799872,
+      "availableAfterBytes": 16482205696,
+      "guardTermination": null,
+      "tap": {},
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/successor-build.log",
+        "bytes": 6499,
+        "sha256": "78242c5f80b56944f8240bfe7768e0679ff666eb2227dccf815c8af92f9130d3"
+      },
+      "timeSha256": "d3876da4ea6815c81555e7589022201e58df5098ec2ae3b14a5238b07197fcfc"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "successor-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T05:39:52.032Z",
+      "completedAt": "2026-10-09T05:40:15.223Z",
+      "elapsedSeconds": 23.191081390017644,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1928683520,
+      "observedTaskDiskPeakBytes": 1656946688,
+      "availableBeforeBytes": 16247955456,
+      "availableAfterBytes": 16231788544,
+      "guardTermination": null,
+      "tap": {},
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/successor-lint.log",
+        "bytes": 4781,
+        "sha256": "050dd927de950154beafc3e36cfef89bf7770cfe4e68aac369654d7ab6dc91ff"
+      },
+      "timeSha256": "b82766eb71049dd8c718cfb4fdc0ef9854347d3d744f5a5c01c7679b1791ca6f"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "successor-pg",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/workspace/cloud-benchmark-42e161-artifacts-oct09/pg-benchmark.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:38:42.277Z",
+      "completedAt": "2026-10-09T05:38:46.254Z",
+      "elapsedSeconds": 3.9774583800171968,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 226426880,
+      "observedTaskDiskPeakBytes": 1656930304,
+      "availableBeforeBytes": 16289050624,
+      "availableAfterBytes": 16247984128,
+      "guardTermination": null,
+      "tap": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/successor-pg.log",
+        "bytes": 1347,
+        "sha256": "c9a4c441835aac8c36ff439a993bd3b3b7018e50a57180c4b3bdc0307c31269d"
+      },
+      "timeSha256": "94b9d560f6ed54084f344d6c6c5646688a6f49c9e287d01bcc6f00e6da97403b"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "successor-types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T05:34:13.734Z",
+      "completedAt": "2026-10-09T05:34:29.391Z",
+      "elapsedSeconds": 15.657040027988842,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1350680576,
+      "observedTaskDiskPeakBytes": 1329963008,
+      "availableBeforeBytes": 16574963712,
+      "availableAfterBytes": 16574959616,
+      "guardTermination": null,
+      "tap": {},
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/successor-types.log",
+        "bytes": 188,
+        "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+      },
+      "timeSha256": "8faa15e3f49265010fc678a79a735389a83477432fba45ef6ef7ce04c0d4c5b3"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T05:28:04.456Z",
+      "completedAt": "2026-10-09T05:28:19.264Z",
+      "elapsedSeconds": 14.808001527009765,
+      "exitCode": 2,
+      "sampledAggregateRssPeakBytes": 1328947200,
+      "observedTaskDiskPeakBytes": 34365440,
+      "availableBeforeBytes": 17870761984,
+      "availableAfterBytes": 17868431360,
+      "guardTermination": null,
+      "tap": {},
+      "log": {
+        "path": "/workspace/cloud-benchmark-42e161-artifacts-oct09/types.log",
+        "bytes": 606,
+        "sha256": "ab216ea04ec45b8751978a9ede35ef79de6b27357f483ebf8963b768b7e2685c"
+      },
+      "timeSha256": "9ef48073b9c7ef4e203b0ea54a74a3ff958bf897ed2a719d6632049aa3e2b983"
+    }
+  ],
+  "resource": {
+    "memoryCgroupBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "aggregateRssPeakBytes": 1998716928,
+    "taskDiskPeakBytes": 1722318848,
+    "diskFreeBytes": 16186548224,
+    "rssMethod": "100ms process group plus live recursive descendants; short/reparented processes may be missed; no task-attributable cgroup peak",
+    "diskMethod": "du -sx of checkout plus acceptance artifacts sampled each second; root dependency symlink target33517568 bytes is additional reused resident dependency; local web dependencies included after copy",
+    "guards": "420s per command,8GiB sampled aggregate RSS,4GB measured task disk;8GB filesystem reserve",
+    "singleHeavyActualStagesNoOverlap": true
+  },
+  "runtimeEnvironment": {
+    "configuredCapabilities": [],
+    "configuredSecrets": [],
+    "outboundIdentities": [],
+    "networkPolicyState": "unknown; inherited proxy/CA preserved; no acquisition bypass"
+  },
+  "dotenvInventory": [
+    ".env.example",
+    "scraper/.env.example"
+  ],
+  "dependencies": {
+    "installed": false,
+    "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "rootDependenciesReused": true
+  },
+  "limitations": [
+    "synthetic stock/index authority fixture only; real PG/PostgREST/Supabase reader proves behavior, not public acquisition or production activation",
+    "new Next route positive full authority/snapshot still not accepted",
+    "full-package2native skips are not passes; separate enabled outcomes recorded, repaired roster test awaits independent review",
+    "EP8 originalMarch publication/Oct first observation is old research description, no audio/transcript/new catalyst",
+    "claim/reservation developer acceptance is not real author/reviewer model execution",
+    "no protected attestation/strategy qualification/main merge/deploy/schedule/VPS change"
+  ]
+}
