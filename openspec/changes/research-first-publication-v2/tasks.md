@@ -26,3 +26,14 @@ Historical pending entries above remain as original planning state. Root relayed
 - [x] Reject unsupported parent lineage and non-READ-COMMITTED transactions; preserve original source/input clock meanings and existing v1 gates.
 - [x] Preserve INSERT-conflict/no-op source replay without false invalidation; normal successor build passed.
 - [ ] Complete independently reviewed ancestor closure if repost lineage is to become eligible; current successor rejects it.
+
+## 2026-10-09 bounded input-preparation slice (not full input revision)
+
+- [x] Add private immutable preparation RPC behind the existing guarded deep-job action; rebuild DB lineage and source seals, retain original leases, replay and incomplete gaps.
+- [x] Preserve exact05a source-fence review attribution; complete ancestor closure still rejects.
+- [ ] Exact independent review of this preparation slice (maker tests are separate).
+- [ ] Bind complete financial observations/static reviewed calculator into research_article_input_revisions_v2; preparation receipts cannot replace it.
+- [ ] Configure genuine trusted execution identity/adapter, new author and independent reviewer execution; no manual engineering receipt or caller identity string may substitute.
+- [ ] Complete the original bundle/outbox/submission transaction and shared reader under the approved64f7 contract.
+
+Final maker counts/provenance are in research-input-preparation-vm-handoff.md and its timestamped receipt; partial/root-reported history above remains unchanged.

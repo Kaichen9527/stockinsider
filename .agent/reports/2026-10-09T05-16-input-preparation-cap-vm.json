@@ -1,0 +1,401 @@
+{
+  "schemaVersion": "bounded-preparation-repair-vm-v1",
+  "subjectSha": "3ac619dd3f70fbed2aef7a4def444e634630633d",
+  "originalSubjectSha": "a4f08b3afc82304ac65b926df84c393b20b88555",
+  "originalIndependentRed": {
+    "reportedBy": "root independent reviewer, actual isolated PG",
+    "sources": 8,
+    "subsets": 129,
+    "rowsBefore": 1,
+    "rowsAfter": 130,
+    "elapsedSeconds": 3.4,
+    "probeSha256": "03ba58d0424be2becaf7fc61891e1576d3d7df09d3bbe8bc8b54431dee3b6a6b",
+    "notVmRerunClaim": true
+  },
+  "manualIncrement": {
+    "startedAt": "2026-10-09T05:07:25Z",
+    "deadline": "2026-10-09T05:37:25Z",
+    "completedAt": "2026-10-09T05:16:28.382044+00:00",
+    "automatedRoleLease": false
+  },
+  "policy": {
+    "originalUnit": [
+      "job",
+      "attempt",
+      "reservation"
+    ],
+    "maximumPreparations": 4,
+    "maximumCumulativeLogicalBytes": 524288,
+    "serialization": "complete request + complete payload + newly inserted full seal receipt, canonical-json-v1 UTF8",
+    "nonrefundable": true,
+    "exactReplayBeforeAdmission": true,
+    "transactionLocks": [
+      "source-fence610091002",
+      "deep-global2409/6002"
+    ],
+    "outOfScope": [
+      "direct source seal traffic",
+      "physical WAL/storage",
+      "shared4GB runtime admission"
+    ]
+  },
+  "checks": {
+    "beforeRepairPG": {
+      "pass": 8,
+      "fail": 2,
+      "skip": 0,
+      "cause": "5th preparation accepted; parent TAP reports failed subtest as well"
+    },
+    "firstRepairPG": {
+      "pass": 4,
+      "fail": 9,
+      "skip": 0,
+      "cause": "private owner root-projection execute grant missing"
+    },
+    "correctedPG": {
+      "pass": 13,
+      "fail": 0,
+      "skip": 0
+    },
+    "finalFocusedRoutesAndPG": {
+      "pass": 50,
+      "fail": 0,
+      "skip": 0
+    },
+    "exactCleanHTTP": {
+      "pass": 32,
+      "fail": 0,
+      "skip": 0
+    },
+    "typecheck": "pass",
+    "lint": {
+      "errors": 0,
+      "warnings": 33
+    },
+    "normalBuild": "pass",
+    "byteBoundaryScope": "Exact524288/+1 canonical UTF8 serialization tested via the same private charge function; actual RPC separately verifies cumulative-byte rejection and transactional counts unchanged. Not a claim of end-to-end exact-sized524288 positive packet."
+  },
+  "actualHTTP": {
+    "inputPreparation": {
+      "preparationId": "6d088847-dff9-4b2b-8928-045860b9039b",
+      "inputHash": "ef37484fa386d4c90e3cba3761ea0230984ee4f95407f6b234ccbe6d24d5064a",
+      "admittedAt": "2026-10-09T05:15:32.573433+00:00",
+      "sourceSealId": "f8aa3a65-2756-48fa-9423-742fe0b340dd",
+      "dispatchReady": false,
+      "actualModelExecution": false,
+      "formalProducts": 0
+    },
+    "observedClaim": {
+      "jobId": "ff151ec8-18e7-4667-b832-9417e448eac9",
+      "reservationId": "d1517c23-ef4e-4b8b-a77b-a5556a469bd5",
+      "attempt": 1,
+      "deadline": "2026-10-09T05:45:30.876776+00:00",
+      "inputHash": "11778d365c1d4f0e188498efaddcdf8334e04050cc4b4fc6a6ad7df483698747",
+      "schemaVersion": "research-deep-author-input-v2",
+      "modelBudgetSeconds": 1800,
+      "modelActuallyExecuted": false,
+      "publicationEligible": false
+    },
+    "ep8": {
+      "documentId": "187837f7-8892-479b-a149-0dd9c8675499",
+      "sourceUrl": "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999",
+      "publishedAt": "2026-03-16T22:30:00Z",
+      "firstObservedAt": "2026-10-08T12:31:55.622917+00:00",
+      "acquisition": "attributed Mac relay, not VM HTTP",
+      "scope": "public publisher description only; not episode audio/transcript",
+      "controllerRunHash": "15d551d85a184aacb45cdceca13d4509950a042acdacf7d07c47ec1edeac29fc"
+    },
+    "observedEmpty": {
+      "runId": "09152aa6-7901-4fbc-94b9-cf79b950a537",
+      "inputHash": "0591301f5d8e80f85d53dfa52bba9592a9dc8224da43415ac0e699dcda0c3348",
+      "accountedCount": 1978,
+      "queueLength": 0
+    },
+    "scopeBoundary": {
+      "formalIdentityRows": 0,
+      "formalProducts": 0,
+      "modelReserved": true,
+      "liveRolesExecuted": false,
+      "legacyAuthorityActivated": false
+    }
+  },
+  "fileHashes": {
+    "migrations/20261009_research_input_preparations_v2.sql": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e",
+    "scripts/research-input-preparation-postgres.test.mjs": "4d583eea28cb655d17f1c0e3cb62f378212e26ea51be499b358f8a7618db078f",
+    "openspec/changes/research-first-publication-v2/spec.md": "ebdd79ccf1e9dd8e2edb95b3937f337b06ca15406a1eb811e53e9c3751d4f5e9",
+    "docs/operations/2026-10-08/research-input-preparation-vm-handoff.md": "f9dd3a48cd81457c2432691994f48c36aff3394fd65a704f4e6c52461c341026"
+  },
+  "webTree": "2482e96b535269746143b2085854defec5706c1d",
+  "build": {
+    "id": "_KPF6rIxn-MIb9Uu0bJhq",
+    "idSha256": "59e993b79729a950a6942612dc4a4f5bfaec4149816fb41397fc28aea162edca",
+    "exactCleanSubjectAtExecution": true,
+    "dotenvFilenameInventory": []
+  },
+  "stages": {
+    "input-cap-red": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-cap-red",
+      "command": [
+        "node",
+        "--test",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:09:08.811Z",
+      "completedAt": "2026-10-09T05:09:10.953Z",
+      "elapsedSeconds": 2.1418751569872256,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 109056000,
+      "observedTaskDiskPeakBytes": 2294460416,
+      "availableBeforeBytes": 17973321728,
+      "availableAfterBytes": 17973309440,
+      "guardTermination": null
+    },
+    "input-cap-green": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-cap-green",
+      "command": [
+        "node",
+        "--test",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:10:26.584Z",
+      "completedAt": "2026-10-09T05:10:28.971Z",
+      "elapsedSeconds": 2.3875163000193425,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 109780992,
+      "observedTaskDiskPeakBytes": 2294353920,
+      "availableBeforeBytes": 17973297152,
+      "availableAfterBytes": 17973264384,
+      "guardTermination": null
+    },
+    "input-cap-owner-green": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-cap-owner-green",
+      "command": [
+        "node",
+        "--test",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:10:57.234Z",
+      "completedAt": "2026-10-09T05:11:00.476Z",
+      "elapsedSeconds": 3.2418741320143454,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 114421760,
+      "observedTaskDiskPeakBytes": 2294468608,
+      "availableBeforeBytes": 17973260288,
+      "availableAfterBytes": 17973248000,
+      "guardTermination": null
+    },
+    "input-cap-focused-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-cap-focused-final",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-deep-job-context-route.test.mjs",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:12:36.770Z",
+      "completedAt": "2026-10-09T05:12:48.260Z",
+      "elapsedSeconds": 11.489705004001735,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 603623424,
+      "observedTaskDiskPeakBytes": 2294706176,
+      "availableBeforeBytes": 17973243904,
+      "availableAfterBytes": 17973223424,
+      "guardTermination": null
+    },
+    "input-cap-types": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-cap-types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T05:13:13.961Z",
+      "completedAt": "2026-10-09T05:13:17.367Z",
+      "elapsedSeconds": 3.406376082013594,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 564248576,
+      "observedTaskDiskPeakBytes": 2253209600,
+      "availableBeforeBytes": 17973133312,
+      "availableAfterBytes": 17973125120,
+      "guardTermination": null
+    },
+    "input-cap-lint": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-cap-lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T05:13:40.943Z",
+      "completedAt": "2026-10-09T05:14:03.138Z",
+      "elapsedSeconds": 22.19456787899253,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1858314240,
+      "observedTaskDiskPeakBytes": 2253217792,
+      "availableBeforeBytes": 17973121024,
+      "availableAfterBytes": 17973108736,
+      "guardTermination": null
+    },
+    "input-cap-build": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-cap-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T05:14:20.012Z",
+      "completedAt": "2026-10-09T05:14:26.199Z",
+      "elapsedSeconds": 6.18746490299236,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 859873280,
+      "observedTaskDiskPeakBytes": 2253234176,
+      "availableBeforeBytes": 17973100544,
+      "availableAfterBytes": 17972293632,
+      "guardTermination": null
+    },
+    "input-cap-http-clean": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-cap-http-clean",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:14:59.265Z",
+      "completedAt": "2026-10-09T05:15:36.394Z",
+      "elapsedSeconds": 37.12858339300146,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 959655936,
+      "observedTaskDiskPeakBytes": 2337509376,
+      "availableBeforeBytes": 17972289536,
+      "availableAfterBytes": 17905917952,
+      "guardTermination": null
+    }
+  },
+  "artifactHashes": {
+    "input-cap-red.json": {
+      "bytes": 586,
+      "sha256": "c651225f54f6d0a422bfdb53862acc57d4515f9bded09627459c942961e0e63d"
+    },
+    "input-cap-red.log": {
+      "bytes": 7371,
+      "sha256": "5925de11b2ed70d5d07b61afb8e69648f1a581942e7f327f0ccfe633dbcf8895"
+    },
+    "input-cap-red.time": {
+      "bytes": 828,
+      "sha256": "ec52d5d573d1a7ba68c4e47019ce6555a1d0363c21c5bbabc009356d1590e7ad"
+    },
+    "input-cap-green.json": {
+      "bytes": 588,
+      "sha256": "ddbb653f59e79e7b864447f3315d7fbc7c2f0181a25f26fcc7c97d394487fb20"
+    },
+    "input-cap-green.log": {
+      "bytes": 27532,
+      "sha256": "e9d68b2b24e39e46a83dacf66febcac4f6fecfedb8f2c774ff89642aac6710d6"
+    },
+    "input-cap-green.time": {
+      "bytes": 828,
+      "sha256": "c23b3a75561f166d80db3cc8bec77bc4b6e730aa7cbb5aea836bc64786ff7e4c"
+    },
+    "input-cap-owner-green.json": {
+      "bytes": 594,
+      "sha256": "996c812fe08e446b44c11f08a03455af9efb722c550c3c9fd19e9b044dd2e8e7"
+    },
+    "input-cap-owner-green.log": {
+      "bytes": 7142,
+      "sha256": "fbcd5684753eb6c092bdc2c5c2aed4135e8fdbb2dc3433fac6311d4735f53a77"
+    },
+    "input-cap-owner-green.time": {
+      "bytes": 790,
+      "sha256": "9ed193ccc0567121a77e608be3799314c721c3460a63561c0ee6cbc55f53a59e"
+    },
+    "input-cap-focused-final.json": {
+      "bytes": 715,
+      "sha256": "ba360c29adc763f92f3db89d6585587a956667898d1b0fdcc39066768526adda"
+    },
+    "input-cap-focused-final.log": {
+      "bytes": 16372,
+      "sha256": "05c32e8143477bff2d8219278db45452b75de467e0ccf95dc3f11647f0bf6a5d"
+    },
+    "input-cap-focused-final.time": {
+      "bytes": 892,
+      "sha256": "751aca97c8b6f3a73aad1e490dbb5f8cbbe79f3fd8e6f383b9eca0cda572ba61"
+    },
+    "input-cap-types.json": {
+      "bytes": 540,
+      "sha256": "7a642ee7b00bae15860a1e2042b6c5cf688ff4dd828689c5ae21ac0b19f53c09"
+    },
+    "input-cap-types.log": {
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "input-cap-types.time": {
+      "bytes": 743,
+      "sha256": "689edeeee8896e397ebc404e425c356dd1948ceb1db428fc6e4ebb58f78d3b57"
+    },
+    "input-cap-lint.json": {
+      "bytes": 535,
+      "sha256": "13f97462b3ac32fd0f71cef2a44a4b1b1cc804378ebdd3ce6878f3318173afe3"
+    },
+    "input-cap-lint.log": {
+      "bytes": 4718,
+      "sha256": "08dc636eb541cc8b68c21f4149b523ab347ff6e4a474fa6a378f006e124571ff"
+    },
+    "input-cap-lint.time": {
+      "bytes": 741,
+      "sha256": "cb613466ca9b3181db0f22c65c33a3ed52986fb41f55a1caefa5bd27a8969390"
+    },
+    "input-cap-build.json": {
+      "bytes": 535,
+      "sha256": "da5e5e1e3c1ad7c9205597f76ff18548de15ac982005acff6d599d655354e0a4"
+    },
+    "input-cap-build.log": {
+      "bytes": 6499,
+      "sha256": "53743f997952eed1658ed440ea27d2e544e245f4b68da3ecb8363cc8bc670739"
+    },
+    "input-cap-build.time": {
+      "bytes": 745,
+      "sha256": "4a538add1865311e2fb1b35fabf8d7e6f2577c0248cf5c8c712579ff2e30e4e0"
+    },
+    "input-cap-http-clean.json": {
+      "bytes": 653,
+      "sha256": "f19df176eea62c1ac87fad9b0d0648dd455c58432c290c81131c015a87d1befd"
+    },
+    "input-cap-http-clean.log": {
+      "bytes": 8582,
+      "sha256": "ea78039f7cad8b23a6547195cc43966482d0d6f6f94ee89e25876db7a897ebb6"
+    },
+    "input-cap-http-clean.time": {
+      "bytes": 840,
+      "sha256": "da5d9c387fe5f24443ca99b108dfb9e7031578fd3b981df7fca7309ce4812055"
+    }
+  },
+  "nativeReceiptHash": "50e6d92d610bb98cee2742e603d82a8216e2ec6eb3427d793c104db4b8da492b",
+  "resources": {
+    "maxSampledAggregateRSSBytes": 1858314240,
+    "maxObservedTaskDiskBytes": 2337509376,
+    "rssMethod": "100ms process-group plus live recursive descendants; may miss short/reparented processes",
+    "memoryCgroupMax": 34359738368,
+    "singleHeavy": true,
+    "reserveBytes": 8000000000
+  },
+  "limits": [
+    "Preparation only, incomplete; no trusted real author/reviewer execution or full financial/static calculator binding",
+    "Independent code review of this successor pending",
+    "Fresh disposable schema only; no production or historical receipt upgrade performed",
+    "Prior converged full research suite failure22 remains documented separately; this focused repair does not claim that whole suite passes",
+    "Old EP8 public description relay is not VM acquisition, episode audio/transcript, current catalyst or full company research",
+    "Original lease/reservation/budget retained; no publication/qualification/strategy/entry approval"
+  ]
+}

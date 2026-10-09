@@ -151,6 +151,31 @@ test('real observed priority accounts1978 and admits an old public company resea
     assert.equal(packet.schemaVersion,'research-deep-author-input-v2');assert.deepEqual(packet.researchIdentity,context.researchIdentity);assert.equal(packet.financial,null);assert.ok(packet.gaps.some(g=>g.reason==='dossier_not_selected'));assert.equal(packet.sources.length,1);assert.equal(packet.sources[0].documentId,report.ep8.documentId);assert.equal(sourceControllerInstant(packet.sources[0].publishedAt),sourceControllerInstant(report.ep8.publishedAt));assert.equal(packet.financialForecastComplete,false);assert.equal(packet.authoritativePublication,false);
     report.observedClaim={jobId:context.job.jobId,reservationId:context.modelReservation.reservationId,attempt:context.job.attempt,deadline:context.job.leaseExpiresAt,inputHash:packet.inputHash,schemaVersion:packet.schemaVersion,modelBudgetSeconds:1800,modelActuallyExecuted:false,publicationEligible:false};
    });
+   if(process.env.RESEARCH_INPUT_PREPARATION_VERIFY==='enabled') {
+    sql(fs.readFileSync(path.join(root,'migrations/20261009_research_publication_source_fence_v2.sql'),'utf8'));
+    sql(fs.readFileSync(path.join(root,'migrations/20261009_research_input_preparations_v2.sql'),'utf8'));
+    sql("NOTIFY pgrst,'reload schema';");
+    const request={action:'prepareResearchInput',owner,...scope,jobId:context.job.jobId,attempt:context.job.attempt,reservationId:context.modelReservation.reservationId,bundleId:null,sourceDocumentIds:[report.ep8.documentId]};let saved;
+    await t.test('actual guarded Next/PostgREST prepares old EP8 input with original lease and no trusted role fiction',async()=>{
+     let response;for(let i=0;i<20;i++){response=await post('api/internal/research-deep-job',request);if(response.status===200)break;await new Promise(r=>setTimeout(r,100));}
+     const data=await response.json();assert.equal(response.status,200,JSON.stringify(data));saved=data.preparation;
+     assert.equal(saved.payload.status,'draft_incomplete');assert.equal(saved.payload.researchCompanyId,context.researchIdentity.researchCompanyId);assert.equal(saved.payload.sourceManifest[0].id,report.ep8.documentId);
+     assert.equal(saved.payload.originalJob.leaseExpiresAt,sql("SELECT to_json(lease_expires_at)::text FROM research_deep_jobs_v1").replaceAll('"',''));
+     assert.equal(data.dispatchReady,false);assert.equal(saved.payload.modelDispatched,false);assert.equal(saved.payload.financial,null);
+     assert.equal(sql('SELECT sum(reserved_seconds)FROM research_model_reservations_v1'),'1800');assert.equal(sql('SELECT count(*)FROM stocks'),'0');
+    });
+    await t.test('actual preparation replay and restart return original admitted clock/hash',async()=>{
+     restart();let response;for(let i=0;i<20;i++){response=await post('api/internal/research-deep-job',request);if(response.status===200)break;await new Promise(r=>setTimeout(r,100));}
+     const data=await response.json();assert.equal(response.status,200,JSON.stringify(data));assert.deepEqual({...data.preparation,replay:false},saved);assert.equal(sql('SELECT count(*)FROM research_input_preparations_v2'),'1');
+    });
+    await t.test('anonymous/caller-identity input cannot cause preparation or budget writes',async()=>{
+     assert.equal((await post('api/internal/research-deep-job',request,false)).status,401);
+     assert.equal((await post('api/internal/research-deep-job',{...request,reviewerId:'fake-role'})).status,400);
+     const r=await rpc('prepare_research_input_v2',{p_request:{...request,authorId:'fake-role'}});assert.notEqual(r.status,200);
+     assert.equal(sql('SELECT count(*)FROM research_input_preparations_v2'),'1');assert.equal(sql('SELECT count(*)FROM research_model_reservations_v1'),'1');
+    });
+    report.inputPreparation={preparationId:saved.preparation_id,inputHash:saved.input_hash,admittedAt:saved.admitted_at,sourceSealId:saved.source_seal_id,dispatchReady:false,actualModelExecution:false,formalProducts:0};
+   }
    await t.test('direct v1 completion/review/publication RPCs reject observed job without completing budget or writing outbox',async()=>{
     const job=context.job.jobId,attempt=context.job.attempt,res=context.modelReservation.reservationId;
     for(const [name,args]of [
