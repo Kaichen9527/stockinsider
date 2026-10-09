@@ -168,3 +168,29 @@ candidate jobs. This preserves evidence without inventing publisher timezone,
 September official confirmation or EPS. The separate financial59 independent
 observation records both7pass/1timingfail and unchanged8pass rerun, explicitly
 without original TAP persistence; it is a reviewer observation relay only.
+
+## Private author assignment checkpoint — PR339 remains draft
+
+Exact subject fa3edca89fc3dde1cd06cb5ccb55b6b4714f4ed5, tree
+94e47129acb5a02e473d3430a1a631080993b56f, is pushed as draft PR339 against
+integration b8f. It adds private immutable one-per-original-job/attempt author
+assignment persistence and read/replay, retaining the already charged original
+reservation, original clocks, source/preparation fences and complete-input hash.
+It creates no reservation, lease extension, model execution, review or article.
+
+Root isolated actual PostgreSQL17 tests9/9PASS0skip and normalbuild PASS. Existing
+independent reviewer author_input_review_oct08 independently ran9/9PG0skip and
+returned unsigned scoped CODE PASS with no remaining P1/P2 in this increment.
+Root raw logs and a clearly labelled reviewer-observation relay are preserved in
+the timestamped author-assignment checkpoint. Complete rows are synthetic private
+assignment fixtures, not full financial/native HTTP acceptance. Pinned precursor
+75a SQL hash is retained; protected CI cannot silently depend on a Git-only fixture.
+
+Do not integrate/deploy this ahead of the accepted complete-input predecessor and
+guarded model-reservation route. Server credential identity/current compiled
+mapping checks, actual author/result handoff, independent review and publication
+remain open. VM is still active on complete-input HTTP acceptance; its latest
+observation reports both companies create/read/replay succeed, but final expiry
+fixture attempted to mutate an append-only dossier. That RED is retained pending
+a legal expiry fixture and exact successor review. No main merge or deployment
+has occurred at this checkpoint.
