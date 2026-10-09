@@ -343,7 +343,14 @@ for(const symbol of ['2409','2383'])test(`compiled atomic publication ${symbol},
    assert.equal(audit(),before);report.publicationHttp.compiledPreview=true;
   });
   await publicationCheck('inbox HTTP withdrawal changes display state but retains original publication bytes, receipt and budget',async()=>{
-   const revisedAt=new Date().toISOString();const response=await post('api/internal/research-inbox',{items:[{...item,observedAt:revisedAt,revisionObservedAt:revisedAt,retracted:true}]});assert.equal(response.status,200,await response.text());
+   const beforeWithdrawal=JSON.parse(audit()),sourceRow=()=>sql(`SELECT to_jsonb(s)::text FROM source_raw_documents s WHERE id=${q(documentId)};`),originalSource=sourceRow();
+   const revisedAt=new Date().toISOString();const response=await post('api/internal/research-inbox',{items:[{...item,observedAt:revisedAt,revisionObservedAt:revisedAt,retracted:true}]});const result=await response.json();assert.equal(response.status,200,JSON.stringify(result));
+   assert.equal(result.accepted,1);assert.equal(result.revisions.length,1);assert.notEqual(result.revisions[0].id,documentId);assert.equal(sourceRow(),originalSource);
+   const afterWithdrawal=JSON.parse(audit());
+   assert.equal(afterWithdrawal.source_raw_documents.count,beforeWithdrawal.source_raw_documents.count+1);
+   assert.ok(afterWithdrawal.research_source_seal_invalidations_v2.count>beforeWithdrawal.research_source_seal_invalidations_v2.count);
+   for(const key of ['source_raw_documents','research_source_seal_invalidations_v2']){delete beforeWithdrawal[key];delete afterWithdrawal[key];}
+   assert.deepEqual(afterWithdrawal,beforeWithdrawal);
    const before=audit(),{response:readResponse,body}=await publicationCall(publicationRead);assert.equal(readResponse.status,200,JSON.stringify(body));
    assert.equal(body.publication.researchState,'withdrawn');assert.deepEqual(body.publication.content,original.content);assert.deepEqual(body.publication.receipt,original.receipt);
    const page=await get(preview),html=await page.text();assert.equal(page.status,200);assert.ok(html.includes('published-research-title'));
