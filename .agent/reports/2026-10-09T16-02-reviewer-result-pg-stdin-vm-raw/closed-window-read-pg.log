@@ -1,0 +1,12 @@
+2026-10-09 15:55:18.793 UTC [205447] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-09 15:55:18.793 UTC [205447] LOG:  listening on Unix socket "/tmp/si-rresult-H4RTT0/.s.PGSQL.59883"
+2026-10-09 15:55:18.795 UTC [205450] LOG:  database system was interrupted; last known up at 2026-10-09 15:53:09 UTC
+2026-10-09 15:55:18.797 UTC [205450] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-10-09 15:55:18.797 UTC [205450] LOG:  redo starts at 0/150ABC0
+2026-10-09 15:55:18.803 UTC [205450] LOG:  invalid record length at 0/1697570: expected at least 24, got 0
+2026-10-09 15:55:18.803 UTC [205450] LOG:  redo done at 0/1697530 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-10-09 15:55:18.804 UTC [205448] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-10-09 15:55:18.807 UTC [205448] LOG:  checkpoint complete: wrote 308 buffers (1.9%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.001 s, total=0.003 s; sync files=155, longest=0.001 s, average=0.000 s; distance=1586 kB, estimate=1586 kB; lsn=0/1697570, redo lsn=0/1697570
+2026-10-09 15:55:18.809 UTC [205447] LOG:  database system is ready to accept connections
+2026-10-09 15:55:18.891 UTC [205447] LOG:  received immediate shutdown request
+2026-10-09 15:55:18.893 UTC [205447] LOG:  database system is shut down

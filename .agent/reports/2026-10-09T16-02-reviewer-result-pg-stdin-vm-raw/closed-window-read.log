@@ -1,0 +1,10 @@
+{"dbClock": "2026-10-09T15:55:18.888192+00:00", "assignments": 0, "completions": 2, "taipeiClock": "2026-10-09T23:55:18.888192", "reservations": 2, "reservedSeconds": 3600, "fits30MinuteLease": false, "completionRowsHash": "f67bc2813b7985a7e2bf61cc46b6c9dc", "reservationRowsHash": "fb17f5dfab10a336db9e05ff5607113d"}
+CREATE OR REPLACE FUNCTION public.research_model_lease_fits_day_v1(p_started timestamp with time zone)
+ RETURNS boolean
+ LANGUAGE sql
+ IMMUTABLE
+AS $function$
+  SELECT (p_started AT TIME ZONE 'Asia/Taipei')::date=
+    ((p_started+interval '30 minutes') AT TIME ZONE 'Asia/Taipei')::date
+$function$
+
