@@ -26,9 +26,13 @@ function originUrl(origin) {
     throw new Error('monitor_controller_origin_invalid');
   return url;
 }
-export async function jsonPost(url, body, key, timeoutMs) {
+export async function jsonPost(url, body, key, timeoutMs, { maxResponseBytes = MAX_BYTES } = {}) {
   if (!Number.isInteger(timeoutMs) || timeoutMs <= 0 || timeoutMs > 15_000)
     throw new Error('monitor_controller_transport_deadline');
+  // Only trusted bounded callers select a larger cohort response budget.
+  // Existing monitor requests retain their original four-million-byte limit.
+  if (!Number.isInteger(maxResponseBytes) || maxResponseBytes <= 0 || maxResponseBytes > 32_000_000)
+    throw new Error('monitor_controller_response_budget_invalid');
   // Keep cancellation strongly reachable until the complete body is read.
   // An inline timeout signal may be collected once fetch returns its headers.
   const controller = new AbortController();
@@ -50,7 +54,7 @@ export async function jsonPost(url, body, key, timeoutMs) {
         const item = await bounded(reader.read());
         if (item.done) break;
         bytes += item.value.byteLength;
-        if (bytes > MAX_BYTES) { await bounded(reader.cancel()); throw new Error('monitor_controller_response_bound'); }
+        if (bytes > maxResponseBytes) { await bounded(reader.cancel()); throw new Error('monitor_controller_response_bound'); }
         parts.push(item.value);
       }
     } catch (error) {

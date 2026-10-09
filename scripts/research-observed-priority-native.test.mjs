@@ -16,7 +16,7 @@ const body={legacyClassification:read('observed-security-classification.json'),s
 const enabled=process.env.RESEARCH_LOCAL_DATAPLANE_VERIFY==='enabled';
 test('real observed priority accounts1978 and admits an old public company research lead without formal identity',{skip:!enabled&&'explicit isolated profile not enabled',timeout:120000},async t=>{
  const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,testPgClockLibrary:process.env.STOCKINSIDER_OBSERVED_TEST_CLOCK_LIBRARY||null,observedClaim:process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled',check:(name,fn)=>t.test(name,fn),
- afterBaseline:async({sql,sqlAsync,post,rpc,report,restart,priorityRequest,pgClock})=>{
+ afterBaseline:async({sql,sqlAsync,post,rpc,report,restart,priorityRequest,pgClock,origin,artifacts,consumePriority})=>{
   const prepared=prepareObservedRosterAdmission(body);let receipt;
   await t.test('guarded1978 admission retains formal stocks count zero',async()=>{
    const response=await post('api/internal/research-observed-roster',body);assert.equal(response.status,200);receipt=(await response.json()).receipt;
@@ -42,13 +42,38 @@ test('real observed priority accounts1978 and admits an old public company resea
    const item=controller.inboxRequest.items[0];assert.equal(item.publishedAt,'2026-03-16T22:30:00Z');assert.equal(item.firstObservedAt,relay.summary.firstObservedAt);assert.deepEqual(item.symbols,['5347','6531']);
    report.ep8={documentId:data.revisions[0].id,sourceUrl:item.sourceUrl,publishedAt:item.publishedAt,firstObservedAt:item.firstObservedAt,acquisition:'attributed Mac relay, not VM HTTP',scope:'public publisher description only; not episode audio/transcript',controllerRunHash:controller.runHash};
   });
+  let firstDiscoveryAfterConsumer;
+  await t.test('real source-priority consumer explicitly selects observed roster and replays without new DB run',async()=>{
+   const controllerPath=path.join(artifacts,'observed-consumer-controller.json');
+   const assessmentsPath=path.join(artifacts,'observed-consumer-assessments.json');
+   fs.writeFileSync(controllerPath,JSON.stringify(controller),{flag:'wx',mode:0o600});
+   fs.writeFileSync(assessmentsPath,'[]\n',{flag:'wx',mode:0o600});
+   const args=['--controller',controllerPath,'--assessments',assessmentsPath,'--origin',origin,
+    '--journal',path.join(artifacts,'observed-consumer-journal'),'--scope',scope.scope,'--snapshot-hash',scope.snapshotHash];
+   const consumed=await consumePriority(args);
+   assert.equal(consumed.completed,true);assert.equal(consumed.priority.scope,'research_observed_v1');
+   assert.equal(consumed.priority.snapshotHash,prepared.snapshotHash);assert.equal(consumed.priority.accountedCount,1978);
+   assert.equal(consumed.priority.rows.length,1978);assert.equal(consumed.priority.priceContexts.length,1978);assert.equal(consumed.priority.queue.length,0);
+   assert.equal(consumed.priority.newDeepResearchJobs,0);assert.equal(consumed.priority.researchQualified,false);
+   assert.equal(consumed.priority.firstDiscoveryCaptures,2);
+   assert.equal(sql("SELECT string_agg(symbol,','ORDER BY symbol)FROM research_observed_first_discoveries_v1"),'5347,6531');
+   firstDiscoveryAfterConsumer=sql('SELECT json_agg(x ORDER BY symbol)::text FROM research_observed_first_discoveries_v1 x');
+   const count=sql('SELECT count(*)FROM research_priority_runs_v1');
+   const replay=await consumePriority(args);assert.equal(replay.localJournalReplay,true);
+   assert.equal(replay.receiptHash,consumed.receiptHash);assert.equal(sql('SELECT count(*)FROM research_priority_runs_v1'),count);
+   assert.equal(sql('SELECT json_agg(x ORDER BY symbol)::text FROM research_observed_first_discoveries_v1 x'),firstDiscoveryAfterConsumer);
+   assert.equal(sql('SELECT count(*)FROM stocks'),'0');
+   report.observedConsumer={receiptHash:consumed.receiptHash,snapshotHash:prepared.snapshotHash,accountedCount:1978,
+    actualAuthenticatedHttp:true,replayWithoutNewRun:true,newDeepResearchJobs:0,researchQualified:false};
+  });
   let positive;
   await t.test('reasoned low-impact zero-novelty old lead creates one real observed-only job and accounts all other companies',async()=>{
    const request={...priorityRequest,asOf:new Date().toISOString(),sourceAttempts:[...priorityRequest.sourceAttempts,...controller.priorityRequest.sourceAttempts],...scope,assessments:[{
     symbol:'5347',profitImpact:{level:0,reason:'舊節目說明沒有可量化當前訂單或獲利影響'},novelty:{level:0,reason:'三月發表的舊內容，十月才取得，非新市場催化'},researchability:{level:1,reason:'出版方直接列出公司，僅可排查舊線索與尋找法說反證'},lane:'general',disposition:'queued',inProgress:false,
    }]};
    const response=await post('api/internal/research-priority-run',request);const data=await response.json();assert.equal(response.status,200,JSON.stringify(data));positive=data;
-   assert.equal(data.accountedCount,1978);assert.equal(data.queue.length,1);assert.equal(data.queue[0].symbol,'5347');assert.equal(data.newDeepResearchJobs,1);assert.equal(data.firstDiscoveryCaptures,2);assert.match(data.sourceTemporalInterpretation,/not publication novelty/);assert.ok(data.sourcePublicationClocks.some(r=>r.symbol==='5347'&&sourceControllerInstant(r.publishedAt)===sourceControllerInstant('2026-03-16T22:30:00Z')));
+   assert.equal(data.accountedCount,1978);assert.equal(data.queue.length,1);assert.equal(data.queue[0].symbol,'5347');assert.equal(data.newDeepResearchJobs,1);assert.equal(data.firstDiscoveryCaptures,0);assert.match(data.sourceTemporalInterpretation,/not publication novelty/);assert.ok(data.sourcePublicationClocks.some(r=>r.symbol==='5347'&&sourceControllerInstant(r.publishedAt)===sourceControllerInstant('2026-03-16T22:30:00Z')));
+   assert.equal(sql('SELECT json_agg(x ORDER BY symbol)::text FROM research_observed_first_discoveries_v1 x'),firstDiscoveryAfterConsumer);
    assert.equal(data.rows.find(r=>r.symbol==='6531').disposition,'needs_evidence');assert.equal(sql('SELECT count(*)FROM research_deep_jobs_v1'),'1');
    const job=JSON.parse(sql("SELECT row_to_json(j)FROM research_deep_jobs_v1 j"));assert.equal(job.research_scope,'research_observed_v1');assert.equal(job.stock_id,null);assert.match(job.research_company_id,/^[a-f0-9-]{36}$/u);assert.equal(job.observed_snapshot_hash,prepared.snapshotHash);
    assert.equal(sql("SELECT count(*)FROM research_deep_admission_charges_v1 WHERE admission_week=date_trunc('week',clock_timestamp()AT TIME ZONE'Asia/Taipei')::date"),'1');
