@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "bounded-supplementary-webpack-diagnostic-v1",
+  "sealedAt": "2026-10-09T17:31:41.862670+00:00",
+  "sealedAtAsiaTaipei": "2026-10-10T01:31:41.862670+08:00",
+  "manualStartedAt": "2026-10-09T17:27:55Z",
+  "manualDeadline": "2026-10-09T17:57:55Z",
+  "manualElapsedSeconds": 226.86267,
+  "sourceHead": "17820a6cc3d69cc62cc92680d954b94ab951a289",
+  "sourceTree": "1253e1dc245438a790ebfc23b59ed6b8ede6817b",
+  "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+  "branch": "codex/publication-webpack-linux-diagnostic-oct10",
+  "sourceCleanAtCheckAndSeal": true,
+  "admission": {
+    "admissionAt": "2026-10-09T17:28:56.128900+00:00",
+    "manualStartedAt": "2026-10-09T17:27:55Z",
+    "manualDeadline": "2026-10-09T17:57:55Z",
+    "sourceHead": "17820a6cc3d69cc62cc92680d954b94ab951a289",
+    "sourceTree": "1253e1dc245438a790ebfc23b59ed6b8ede6817b",
+    "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+    "nodeVersion": "v22.14.0",
+    "nextVersion": "16.3.8",
+    "buildScript": "next build",
+    "prebuildScript": "node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs && node ../scripts/sync-research-strategy-release.mjs --check",
+    "prebuildPreserved": true,
+    "availableBytes": 11338444800,
+    "diskTotalBytes": 33770192896,
+    "memoryCgroupLimitBytes": 34359738368,
+    "workspaceActiveHeavyAtAdmission": [],
+    "dotenvFilenameInventory": [],
+    "newDependenciesInstalled": false,
+    "networkPolicy": "restricted, state unknown; configured proxy/CA retained; no credentials inspected",
+    "normalBuildRetryAuthorizedOrPerformed": false,
+    "nativeHttpRunAuthorizedOrPerformed": false
+  },
+  "stage": {
+    "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+    "stage": "diagnostic-webpack",
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "build",
+      "--",
+      "--webpack"
+    ],
+    "startedAt": "2026-10-09T17:28:56.173Z",
+    "completedAt": "2026-10-09T17:29:39.258Z",
+    "elapsedSeconds": 43.084916145016905,
+    "exitCode": 1,
+    "sampledAggregateRssPeakBytes": 1571942400,
+    "observedTaskDiskPeakBytes": 1358794752,
+    "availableBeforeBytes": 11338432512,
+    "availableAfterBytes": 10993135616,
+    "guardTermination": null
+  },
+  "classification": "supplementary labelled Webpack diagnostic; not normal Turbopack PASS",
+  "compile": {
+    "command": "npm --prefix web run build -- --webpack",
+    "prebuildScriptPreserved": true,
+    "prebuildCompleted": true,
+    "prebuildReleaseCheck": {
+      "codeHash": "a5367b9c2ae935897612b096f7f533fd7f12e22790e5bf539bfb3bce35d96fa0",
+      "parameterHash": "8bbad7c16c55b4ef1483e1f0c348f35d2404397717e10d1daed49fba30843a39",
+      "files": 31
+    },
+    "optimizedCompileReportedSuccess": true,
+    "optimizedCompileReportedSeconds": 20.1,
+    "wholeBuildExitCode": 1,
+    "wholeBuildCompleted": false,
+    "failedStage": "Next generated App Router TypeScript validator",
+    "errors": [
+      {
+        "code": "TS2344",
+        "generatedLocation": ".next/types/app/layout.ts:14:13",
+        "source": "web/src/app/layout.tsx",
+        "invalidExtraExport": "CANONICAL_APP_URL"
+      },
+      {
+        "code": "TS2344",
+        "generatedLocation": ".next/types/app/opportunity-v3/page.ts:14:13",
+        "source": "web/src/app/opportunity-v3/page.tsx",
+        "invalidExtraExport": "OpportunityV3Page"
+      }
+    ],
+    "retryPerformed": false,
+    "assertionTypeGuardOrBuildScriptChanged": false,
+    "newDependenciesInstalled": false
+  },
+  "buildArtifact": {
+    "buildId": null,
+    "completeManifestAvailable": false,
+    "incompleteServerManifest": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/incomplete-webpack-server-file-manifest.json",
+    "actualCurrentServerEntries": 485,
+    "allEntriesBytesShaRecorded": true,
+    "artifactIsNotAcceptedCompleteBuild": true,
+    "guardedDiagnosticCompiledCoreHash": null,
+    "reasonNoObservedCoreHash": "No app/native HTTP started: complete build prerequisite failed"
+  },
+  "nativeQueue": {
+    "newReviewedNativeTestSubject": "05ea2dde87ab3c6eea533dae0b13792fbca1009a",
+    "sourceAdopted": false,
+    "originalReviewerResultHttp": "not_attempted",
+    "newPublicationHttp": "not_attempted",
+    "reason": "Explicit authorization conditioned native on successful supplementary whole build; condition not met. No old94/result/core observation was reused."
+  },
+  "resources": {
+    "rssTargetBytes": 8589934592,
+    "sampledAggregateRssPeakBytes": 1571942400,
+    "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+    "diskReserveBytes": 8589934592,
+    "lowestRecordedAvailableBytes": 10993135616,
+    "guardTermination": null,
+    "singleHeavyAtATime": true
+  },
+  "cleanup": {
+    "at": "2026-10-09T17:31:41.862670+00:00",
+    "ownedProcessesRemaining": [],
+    "manualDeletionPerformed": false,
+    "incompleteGeneratedArtifactRetained": "/workspace/cloud-reviewer-result-http-vm-oct09/web/.next",
+    "availableBytes": 10993012736,
+    "allPriorRawEvidenceRetained": true
+  },
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/admission.json",
+      "bytes": 1038,
+      "sha256": "9d00cb8209947cc2cb6a31b4be9a7e74ffd6192ce449330c8f1c4f9cb677735a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/cleanup.json",
+      "bytes": 289,
+      "sha256": "103a2fa5c228bed0135405f8e63d4ef70c2cf99dfb6c6d610e6739944ceff6c0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/diagnostic-webpack.json",
+      "bytes": 595,
+      "sha256": "3ec383f02ff42ae381d66a83d7e6d4b31815b03eb1eda074bc0a32bf0e2cefaf"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/diagnostic-webpack.log",
+      "bytes": 1752,
+      "sha256": "406e6ca75852bfc6f92c37e85fc2ec1e7f3d1058b8ed42894374a1caf611cc2f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/diagnostic-webpack.time",
+      "bytes": 811,
+      "sha256": "5170b8f2882825eeae8c7c7117f1f6e81f07f666620254a25047d61cdbfe8a14"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/error-source-type-file-hashes.json",
+      "bytes": 630,
+      "sha256": "94cc9defca6894b103b4d442fd7c73c0ec22e6bfb4442581ba94462faff03ea0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/incomplete-webpack-server-file-manifest.json",
+      "bytes": 95488,
+      "sha256": "c9124fa7cb08364f8e4594cc1dc4e0cee80b3522390d36d48ea18b2410fb81b7"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/pre-existing-build-inventory.json",
+      "bytes": 127,
+      "sha256": "409fff0aa519c0921d3a85455c18a7f8059e8484d37fd5697c03323f7628a07f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/run-check.py",
+      "bytes": 5035,
+      "sha256": "8965e5dd64fc7dcc86b368a6b192dbb20ec9ccb68efaa7a2a212f244b62f1c63"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-32-publication-webpack-supplementary-linux-vm-raw/source-build-files.json",
+      "bytes": 922,
+      "sha256": "69f1b4edaf2b28fb19a0c27313f5ac70b034829d9f251ff873a115790fd8b545"
+    }
+  ],
+  "limitations": [
+    "Webpack emitted compiled server files but failed generated TypeScript validation before BUILD_ID/static completion; it is a RED supplementary build, not normal build PASS.",
+    "Prior normal Turbopack two EPERM REDs remain unmodified; no identical normal build retry was performed.",
+    "No nativeHTTP, database, author/reviewer/model invocation, paidAPI, publication, production write, main merge or deployment. No credentials copied/read.",
+    "Later native must use a successfully accepted exact build and observe its actual guarded core fingerprint, not source/Mac/old compiler bytes.",
+    "Manualengineering window is independent of application jobs/reservations/model budget; sampled RSS may miss short/reparented processes."
+  ]
+}
