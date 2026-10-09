@@ -43,6 +43,13 @@ test('stalled child retains bounded timeout and killed exit', async () => {
   });
   assert.ok(performance.now() - start < 2000);
 });
+test('blocked maximum stdin write is bounded and preserves timeout error', async () => {
+  const start = performance.now();
+  await assert.rejects(run('stall', 'x'.repeat(MAX_SQL_INPUT_BYTES), { timeout: 50 }), error => {
+    assert.equal(error.killed, true); assert.equal(error.signal, 'SIGTERM'); return true;
+  });
+  assert.ok(performance.now() - start < 2000);
+});
 test('transport callers cannot widen original timeout or output cap', async () => {
   for (const options of [{ timeout: 6001 }, { maxBuffer: 1048577 }, { timeout: 0 }]) {
     await assert.rejects(run(consume, '', options), /transport_limits/);
