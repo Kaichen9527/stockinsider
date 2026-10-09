@@ -165,6 +165,17 @@ class ClockBuildTest(unittest.TestCase):
                 clock.download_archive()
             timer.assert_not_called()
 
+    def test_symbol_diagnostic_is_bounded_and_never_substitutes_success(self):
+        with patch.object(clock.Path, 'is_file', return_value=True), \
+                patch.object(clock, 'bounded_command', side_effect=clock.BuildFailure('build_deadline')) as command:
+            result = clock.inspect_failed_symbol_command(['/usr/bin/nm', '-D', '/tmp/library'], '/tmp')
+            self.assertFalse(result['traceCompleted'])
+            self.assertEqual(command.call_args.kwargs['timeout'], 3)
+            self.assertEqual(command.call_args.args[0][:3], ['/usr/bin/strace', '-f', '-tt'])
+        with patch.object(clock.Path, 'is_file', return_value=False), patch.object(clock, 'bounded_command') as command:
+            self.assertEqual(clock.inspect_failed_symbol_command([], '/tmp'), {'trace': 'strace_unavailable'})
+            command.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()

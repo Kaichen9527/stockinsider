@@ -29,6 +29,19 @@ class BuildFailure(RuntimeError):
     pass
 
 
+def inspect_failed_symbol_command(arguments, directory):
+    """Failure-only diagnostics; never used as a successful check or fallback."""
+    if not Path('/usr/bin/strace').is_file():
+        return {'trace': 'strace_unavailable'}
+    command = ['/usr/bin/strace', '-f', '-tt', '-e',
+               'trace=execve,openat,read,futex,poll,ppoll', *arguments]
+    try:
+        output = bounded_command(command, directory, timeout=3)
+        return {'traceCompleted': True, 'tail': output[-4096:]}
+    except Exception as error:
+        return {'traceCompleted': False, 'tail': str(error)[-4096:]}
+
+
 def new_output(directory):
     p = Path(directory)
     if not p.is_absolute() or any(part in ('.', '..') for part in p.parts):
@@ -226,7 +239,19 @@ def build(output_directory):
         if library.is_symlink() or not library.is_file() or not 0 < library.stat().st_size <= 16 * 1024 * 1024:
             raise BuildFailure('built_library_invalid')
         # Dynamic defined symbols independently check the chosen build option.
-        symbols = bounded_command(['/usr/bin/nm', '-D', '--defined-only', str(library)], output, timeout=3)
+        symbol_command = ['/usr/bin/nm', '-D', '--defined-only', str(library)]
+        try:
+            symbols = bounded_command(symbol_command, output, timeout=3)
+        except BuildFailure as error:
+            # Preserve the exact candidate for diagnosis, never mark it usable.
+            evidence = {'passed': False, 'librarySha256': hashlib.sha256(library.read_bytes()).hexdigest(),
+                        'libraryBytes': library.stat().st_size, 'command': symbol_command,
+                        'environment': BUILD_ENV, 'originalFailure': str(error)[:4096]}
+            if 'cleanup_unconfirmed' not in str(error):
+                evidence.update(inspect_failed_symbol_command(symbol_command, output))
+            (output / 'symbol-failure.json').write_text(json.dumps(evidence, indent=2) + '\n')
+            print(json.dumps(evidence), file=sys.stderr)
+            raise
         forbidden = {'sleep', 'nanosleep', 'clock_nanosleep', '__nanosleep', 'usleep', 'alarm',
                      'poll', 'ppoll', 'epoll_wait', 'epoll_pwait', 'epoll_pwait2', 'select', 'pselect'}
         if any(line.split()[-1].split('@')[0] in forbidden for line in symbols.splitlines() if line.split()):

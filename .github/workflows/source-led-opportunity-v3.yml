@@ -80,7 +80,7 @@ jobs:
       - name: Install PostgreSQL
         run: |
           sudo apt-get update
-          sudo apt-get install --yes postgresql libfaketime build-essential binutils
+          sudo apt-get install --yes postgresql libfaketime build-essential binutils strace
           postgres_bin="$(pg_config --bindir)"
           test -x "$postgres_bin/initdb"
           test -x "$postgres_bin/pg_ctl"
@@ -105,6 +105,16 @@ jobs:
           with open(sys.argv[2], 'a') as output:
               output.write('library=' + receipt['library'] + '\n')
           PY
+      - name: Retain failed test-clock inspection metadata
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: isolated-pg-clock-failure
+          path: |
+            ${{ runner.temp }}/stockinsider-pg-clock-${{ github.run_id }}-${{ github.run_attempt }}/failure.json
+            ${{ runner.temp }}/stockinsider-pg-clock-${{ github.run_id }}-${{ github.run_attempt }}/symbol-failure.json
+          if-no-files-found: ignore
+          retention-days: 3
       - name: Install root dependencies
         run: npm ci
       - uses: actions/setup-python@v5
