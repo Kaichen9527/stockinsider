@@ -41,12 +41,31 @@ GRANT EXECUTE ON FUNCTION public.research_source_root_v2(jsonb) TO research_sour
 
 CREATE FUNCTION public.research_source_fence_write_v2() RETURNS trigger
  LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
-DECLARE old_doc jsonb; new_doc jsonb; eid bigint; roots text[];
 BEGIN
+ IF current_setting('transaction_isolation')<>'read committed' THEN RAISE EXCEPTION 'source_fence_read_committed_required'; END IF;
  PERFORM pg_advisory_xact_lock(610091002::bigint);
  IF TG_OP='TRUNCATE' THEN RAISE EXCEPTION 'research_source_truncate_fenced'; END IF;
+ IF TG_OP='DELETE' THEN RETURN OLD; END IF;
+ RETURN NEW;
+END $$;
+ALTER FUNCTION public.research_source_fence_write_v2() OWNER TO research_source_fence_owner_v2;
+REVOKE ALL ON FUNCTION public.research_source_fence_write_v2() FROM PUBLIC,anon,authenticated,service_role;
+CREATE TRIGGER research_source_fence_write_v2 BEFORE INSERT OR UPDATE OR DELETE ON public.source_raw_documents
+ FOR EACH ROW EXECUTE FUNCTION public.research_source_fence_write_v2();
+CREATE TRIGGER research_source_fence_truncate_v2 BEFORE TRUNCATE ON public.source_raw_documents
+ FOR EACH STATEMENT EXECUTE FUNCTION public.research_source_fence_write_v2();
+
+-- Record only writes that actually happened. BEFORE INSERT also runs for
+-- ON CONFLICT DO NOTHING; recording there would invalidate exact inbox replays.
+CREATE FUNCTION public.research_source_fence_record_v2() RETURNS trigger
+ LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+DECLARE old_doc jsonb; new_doc jsonb; eid bigint; roots text[];
+BEGIN
+ IF current_setting('transaction_isolation')<>'read committed' THEN RAISE EXCEPTION 'source_fence_read_committed_required'; END IF;
+ PERFORM pg_advisory_xact_lock(610091002::bigint);
  IF TG_OP<>'INSERT' THEN old_doc:=to_jsonb(OLD); END IF;
  IF TG_OP<>'DELETE' THEN new_doc:=to_jsonb(NEW); END IF;
+ IF old_doc IS NOT DISTINCT FROM new_doc THEN RETURN NEW; END IF;
  roots:=ARRAY[public.research_source_root_v2(old_doc),public.research_source_root_v2(new_doc)];
  INSERT INTO public.research_source_fence_events_v2(document_id,operation,before_hash,after_hash)
  VALUES(COALESCE(NEW.id,OLD.id),TG_OP,
@@ -58,12 +77,10 @@ BEGIN
  IF TG_OP='DELETE' THEN RETURN OLD; END IF;
  RETURN NEW;
 END $$;
-ALTER FUNCTION public.research_source_fence_write_v2() OWNER TO research_source_fence_owner_v2;
-REVOKE ALL ON FUNCTION public.research_source_fence_write_v2() FROM PUBLIC,anon,authenticated,service_role;
-CREATE TRIGGER research_source_fence_write_v2 BEFORE INSERT OR UPDATE OR DELETE ON public.source_raw_documents
- FOR EACH ROW EXECUTE FUNCTION public.research_source_fence_write_v2();
-CREATE TRIGGER research_source_fence_truncate_v2 BEFORE TRUNCATE ON public.source_raw_documents
- FOR EACH STATEMENT EXECUTE FUNCTION public.research_source_fence_write_v2();
+ALTER FUNCTION public.research_source_fence_record_v2() OWNER TO research_source_fence_owner_v2;
+REVOKE ALL ON FUNCTION public.research_source_fence_record_v2() FROM PUBLIC,anon,authenticated,service_role;
+CREATE TRIGGER research_source_fence_record_v2 AFTER INSERT OR UPDATE OR DELETE ON public.source_raw_documents
+ FOR EACH ROW EXECUTE FUNCTION public.research_source_fence_record_v2();
 
 -- An untrusted caller supplies IDs and exact row hashes, never trusted flags.
 -- The database rebuilds the receipt after the shared lock. A seal is a source
@@ -72,6 +89,7 @@ CREATE FUNCTION public.seal_research_sources_v2(p_documents jsonb,p_cutoff times
  RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
 DECLARE item jsonb; doc jsonb; root text; docs jsonb:='[]'; row_hash text; req text; result public.research_source_seals_v2;
 BEGIN
+ IF current_setting('transaction_isolation')<>'read committed' THEN RAISE EXCEPTION 'source_fence_read_committed_required'; END IF;
  PERFORM pg_advisory_xact_lock(610091002::bigint);
  IF p_cutoff IS NULL OR NOT isfinite(p_cutoff) OR p_cutoff>clock_timestamp()
   OR p_documents IS NULL OR jsonb_typeof(p_documents)<>'array' THEN RAISE EXCEPTION 'source_seal_shape'; END IF;
@@ -83,6 +101,11 @@ BEGIN
    OR NOT(item ? 'id' AND item ? 'rowHash') OR COALESCE(item->>'rowHash','')!~'^[0-9a-f]{64}$' THEN RAISE EXCEPTION 'source_seal_shape'; END IF;
   SELECT to_jsonb(s) INTO doc FROM public.source_raw_documents s WHERE s.id=(item->>'id')::uuid;
   IF doc IS NULL THEN RAISE EXCEPTION 'source_seal_missing'; END IF;
+  -- Reposts cannot launder an older ancestor's revoked rights. Until the full
+  -- immutable ancestor closure is implemented, admit originals only; never
+  -- infer ancestor permission from the child's public-citation flag.
+  IF NULLIF(doc->'metadata'->>'parent_source_url','') IS NOT NULL
+   AND doc->'metadata'->>'parent_source_url' IS DISTINCT FROM COALESCE(NULLIF(doc->'metadata'->>'canonical_url',''),split_part(doc->>'document_url','#si-revision-',1)) THEN RAISE EXCEPTION 'source_seal_unsupported_parent_lineage'; END IF;
   IF octet_length(doc::text)>4194304 THEN RAISE EXCEPTION 'source_seal_document_bound'; END IF;
   row_hash:=encode(sha256(convert_to(doc::text,'UTF8')),'hex'); root:=public.research_source_root_v2(doc);
   IF row_hash<>item->>'rowHash' THEN RAISE EXCEPTION 'source_seal_hash_changed'; END IF;
@@ -116,6 +139,7 @@ CREATE FUNCTION public.assert_research_source_seal_v2(p_seal uuid) RETURNS jsonb
  LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
 DECLARE result public.research_source_seals_v2; item jsonb; actual_hash text;
 BEGIN
+ IF current_setting('transaction_isolation')<>'read committed' THEN RAISE EXCEPTION 'source_fence_read_committed_required'; END IF;
  PERFORM pg_advisory_xact_lock(610091002::bigint);
  SELECT * INTO result FROM public.research_source_seals_v2 WHERE seal_id=p_seal;
  IF NOT FOUND OR EXISTS(SELECT FROM public.research_source_seal_invalidations_v2 WHERE seal_id=p_seal) THEN RAISE EXCEPTION 'source_seal_invalidated_or_missing'; END IF;

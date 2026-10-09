@@ -21,3 +21,8 @@ Historical pending entries above remain as original planning state. Root relayed
 - [ ] Independent exact code review and full installed production dependency/ACL audit.
 - [ ] Bind these seals to immutable input/article and the existing publication transaction; this slice is not an article publication.
 - [ ] Genuine configured trusted author/reviewer dispatch and same-pipeline end-to-end acceptance; environment currently lacks the identity/adapter authority.
+
+- [x] Preserve exact6b49 independent REQUEST_CHANGES and actual maker PG red→green for ancestor-rights/stale-RR defects; final15/15 zero skip.
+- [x] Reject unsupported parent lineage and non-READ-COMMITTED transactions; preserve original source/input clock meanings and existing v1 gates.
+- [x] Preserve INSERT-conflict/no-op source replay without false invalidation; normal successor build passed.
+- [ ] Complete independently reviewed ancestor closure if repost lineage is to become eligible; current successor rejects it.
