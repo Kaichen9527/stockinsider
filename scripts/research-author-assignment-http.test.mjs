@@ -59,7 +59,13 @@ for(const symbol of ['2409','2383'])test(`compiled private author assignment ${s
    restart();for(let n=0;n<20;n++){r=await post('api/internal/research-model-reservation',{...assignmentRequest,action:'readAuthorAssignment'});if(r.status===200)break;await new Promise(resolve=>setTimeout(resolve,100));}const d=await r.json();assert.equal(r.status,200,JSON.stringify(d));assert.deepEqual(d.assignment,assignment);assert.equal(counts(),before);
   });
   await t.test('source withdrawal or original expiry blocks read/replay without deleting assignment',async()=>{
-   const before=counts();if(symbol==='2409')sql(`SET ROLE service_role;UPDATE source_raw_documents SET metadata=metadata||jsonb_build_object('retracted_at',clock_timestamp()) WHERE id='${documentId}';RESET ROLE;`);
+   const before=counts();if(symbol==='2409'){
+    const original=sql(`SELECT to_jsonb(s)::text FROM source_raw_documents s WHERE id='${documentId}';`);
+    const revisedAt=new Date().toISOString();
+    const withdrawn=await post('api/internal/research-inbox',{items:[{...item,observedAt:revisedAt,revisionObservedAt:revisedAt,retracted:true}]});
+    const body=await withdrawn.json();assert.equal(withdrawn.status,200,JSON.stringify(body));assert.equal(body.accepted,1);assert.notEqual(body.revisions[0].id,documentId);
+    assert.equal(sql(`SELECT to_jsonb(s)::text FROM source_raw_documents s WHERE id='${documentId}';`),original,'withdrawal appends a new revision and preserves the original source');
+   }
    else{assert.ok(pgClock,'explicit reviewed isolated PG clock required');await pgClock.set('+1900');}
    for(const action of ['assignAuthor','readAuthorAssignment'])assert.equal((await post('api/internal/research-model-reservation',{...assignmentRequest,action})).status,409);assert.equal(counts(),before);
   });
