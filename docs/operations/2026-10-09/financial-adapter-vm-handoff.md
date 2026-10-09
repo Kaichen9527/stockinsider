@@ -85,3 +85,21 @@ its actual nested schema/canonical numeric-Unicode vectors/transitive calculator
 identity/local-vs-DB clocks frozen before implementation. CNA packet remains
 prepared but no guarded transaction has run; podcast inventory only, no installs
 or audio/model download. The active Goal remains incomplete.
+
+
+## Late-write matrix final successor 2026-10-09T07:03:34.784917+00:00
+
+Use exact `59aea2a1837c3e76f6af4e9a3b062d2f26de41fe` for independent re-review, not earlier fa35. Latest
+root minimum matrix reproduced fa35's late buffer write after timeout,8cases
+7pass/1fail; RED remains unchanged. Pending read settlement now owns the final
+zeroing responsibility, and open ownership precedes fs.open. New matrix35/35
+(27adapter+8cleanup) zero skip; final types pass/lint0errors33existingwarnings.
+Original core is byte-identical31-case subject; no redundant rerun claim.
+Normal build/fresh PG remain pending reviewed combined integration. Receipt
+`.agent/reports/2026-10-09T07-03-financial-final-successor.json`. All source/model inventory bytes and original cutoffs
+remain unchanged. No actual author/reviewer execution or publication occurred.
+
+Separate actualCNA inbox acceptance is pushed on
+`codex/cna-guarded-inbox-acceptance-oct09` atbf4c0afec304965ae6fdb7bf0dd6c2a21a4bbb4f:
+14/14zero skip,3008needs_evidence/unknownprice/0jobs, formal409. It does not
+change this financial tree or turn public-source ingestion into research approval.
