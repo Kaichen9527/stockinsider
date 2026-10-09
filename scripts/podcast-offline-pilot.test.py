@@ -220,4 +220,42 @@ class PilotTests(unittest.TestCase):
             supervisor.run('launch',['synthetic'],{},launch=mock.Mock(side_effect=OSError('synthetic')))
         self.assertFalse(supervisor.cleanup_confirmed)
 
+    def test_post_pidfd_snapshot_adopted_child_cannot_be_discarded(self):
+        tree=pilot.LinuxTree.__new__(pilot.LinuxTree);tree.pid=10;tree.owned={}
+        leader={'pid':11,'ppid':10,'pgid':11,'start':100,'rss':1,'state':'S'}
+        child={'pid':12,'ppid':10,'pgid':11,'start':101,'rss':2,'state':'S'}
+        calls=0
+        def snapshot():
+            nonlocal calls
+            calls+=1
+            if calls==1:return {11:leader}
+            if calls==2:return {11:leader,12:child}
+            return {12:child}
+        def signal_fd(fd,kind):
+            if fd==111:raise ProcessLookupError()
+        process=Process(0);process.pid=11
+        with mock.patch.object(tree,'snapshot',side_effect=snapshot), mock.patch.object(os,'pidfd_open',side_effect=lambda pid,flags:pid+100,create=True), mock.patch.object(signal,'pidfd_send_signal',side_effect=signal_fd,create=True), mock.patch.object(os,'close'):
+            identities=tree.scan(process)
+        self.assertEqual({row['pid'] for row in identities},{12})
+        self.assertEqual(set(tree.owned),{12})
+
+    def test_initial_resource_scan_crossing_deadline_never_launches(self):
+        clock=Clock()
+        def resources():clock.pause(2);return self.resources()
+        supervisor,_=self.supervisor(Tree(),clock=clock,resources=resources,seconds=1)
+        launch=mock.Mock(return_value=Process())
+        with self.assertRaisesRegex(pilot.Refusal,'deadline'):supervisor.run('late-launch',['synthetic'],{},launch=launch)
+        launch.assert_not_called()
+
+    def test_continuously_growing_tree_refuses_bounded_reconciliation(self):
+        tree=pilot.LinuxTree.__new__(pilot.LinuxTree);tree.pid=10;tree.owned={};calls=0
+        def snapshot():
+            nonlocal calls
+            calls+=1
+            return {pid:{'pid':pid,'ppid':10,'pgid':11,'start':pid,'rss':1,'state':'S'} for pid in range(11,11+calls)}
+        with mock.patch.object(tree,'snapshot',side_effect=snapshot), mock.patch.object(os,'pidfd_open',side_effect=lambda pid,flags:pid+100,create=True), mock.patch.object(signal,'pidfd_send_signal',create=True), mock.patch.object(os,'close'):
+            with self.assertRaisesRegex(pilot.Refusal,'process_tree_unstable'):tree.scan(Process())
+        self.assertLess(calls,512)
+        self.assertTrue(tree.owned)  # Known ownership is retained, never erased by uncertainty.
+
 if __name__ == '__main__': unittest.main(verbosity=2)

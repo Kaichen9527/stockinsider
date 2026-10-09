@@ -224,8 +224,9 @@ class LinuxTree:
                 continue
         return result
 
-    def scan(self, leader):
-        rows = self.snapshot()
+    def scan(self, leader, *, _rows=None, _round=0):
+        require(_round < 8, 'process_tree_unstable')
+        rows = self.snapshot() if _rows is None else _rows
         descendants = {self.pid}
         changed = True
         while changed:
@@ -269,6 +270,25 @@ class LinuxTree:
             except ProcessLookupError:
                 os.close(row['fd'])
                 del self.owned[pid]
+        # pidfd acquisition and Popen.poll may span reparenting. Reconcile the
+        # ENTIRE post-acquisition/post-reap snapshot, not only each leader row.
+        # A bounded unstable tree is uncertainty, never proof of no descendants.
+        final_rows = self.snapshot()
+        final_descendants = {self.pid} | set(self.owned)
+        changed = True
+        while changed:
+            changed = False
+            for pid, row in final_rows.items():
+                if row['ppid'] in final_descendants and pid not in final_descendants:
+                    final_descendants.add(pid)
+                    changed = True
+        for pid, identity in self.owned.items():
+            if pid in final_rows:
+                require(final_rows[pid]['start'] == identity['start'], 'owned_pid_identity_changed')
+                identity['rss'] = final_rows[pid]['rss']
+        untracked = (final_descendants - {self.pid}) - set(self.owned)
+        if untracked:
+            return self.scan(leader, _rows=final_rows, _round=_round+1)
         return list(self.owned.values())
 
     def signal_all(self, kind):
@@ -344,6 +364,8 @@ class Supervisor:
         first = self.resources()
         require(first['logicalBytes'] <= self.byte_limit and first['allocatedBytes'] <= self.byte_limit, 'task_storage_limit')
         require(first['freeBytes'] >= self.free_reserve, 'host_free_reserve')
+        require(first.get('supervisorRssBytes', 0) <= self.rss_limit, 'rss_limit')
+        require(self.clock() < self.deadline, 'work_deadline')
         result = {'stage': name, 'success': False, 'cleanupConfirmed': False}
         self.stages.append(result)
         process = None
@@ -352,6 +374,7 @@ class Supervisor:
         try:
             # Logs are private regular files and included in every storage sample.
             with os.fdopen(os.open(self.root/(name+'.stdout'), os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW, 0o600), 'wb') as out, os.fdopen(os.open(self.root/(name+'.stderr'), os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW, 0o600), 'wb') as err:
+                require(self.clock() < self.deadline, 'work_deadline')
                 launch_attempted = True
                 process = launch(command, env=env, cwd=self.root, stdin=subprocess.DEVNULL,
                                  stdout=out, stderr=err, start_new_session=True, close_fds=True)
