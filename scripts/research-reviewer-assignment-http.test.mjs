@@ -6,6 +6,7 @@ import {completeHash} from '../web/src/lib/research-complete-canonical.ts';
 import {verifyLocalInboxDataPlane} from '../scripts/research-local-inbox-dataplane.mjs';
 import {prepareObservedRosterAdmission} from '../web/src/lib/research-observed-roster.ts';
 import {readAfterResearchReadiness} from './research-reviewer-assignment-http-readiness.mjs';
+import {oversizedReviewerFixture} from './research-reviewer-assignment-http-fixture.mjs';
 import {authorResultFixture} from './research-author-result-fixture.mjs';
 const root=process.cwd();
 const read=f=>JSON.parse(fs.readFileSync(root+'/docs/research/2026-10-08-discovery-live/'+f,'utf8'));
@@ -145,7 +146,7 @@ for(const symbol of ['2409','2383'])test(`compiled independent reviewer assignme
    for(const patch of [{extra:true},{owner:'caller'},{principal:'a'.repeat(64)}])assert.equal((await reviewCall({...reviewIdentity(),...patch},'reviewer','closed-body')).response.status,400);
    reviewHeaders={'x-research-review-assignment-action':'assignReviewer'};try{assert.equal((await reviewCall(reviewIdentity(),'reviewer','action-header-mismatch')).response.status,400);}finally{reviewHeaders={};}
    reviewHeaders={'x-research-author-handoff-action':'readAuthorHandoff'};try{assert.equal((await reviewCall(reviewIdentity(),'reviewer','mixed-header')).response.status,400);}finally{reviewHeaders={};}
-   const large=reviewIdentity();large.input.owner='x'.repeat(9000);assert.equal((await reviewCall(large,'reviewer','oversized')).response.status,400);assert.equal(audit(),before);
+   const originalInputHash=completeHash(input),large=oversizedReviewerFixture(reviewIdentity());assert.equal((await reviewCall(large,'reviewer','oversized')).response.status,400);assert.equal(completeHash(input),originalInputHash);assert.equal(audit(),before);
   });
   await t.test('reviewer read packet and assign before author handoff reject with zero writes',async()=>{
    const before=audit();for(const action of ['readReviewerAssignment','readReviewerPacket','assignReviewer']){const{response,body}=await reviewCall(reviewIdentity(action),'reviewer','pre-handoff');assert.equal(response.status,409,JSON.stringify(body));assert.equal(body.error,'research_reviewer_assignment_unavailable');assert.equal(body.retryClaim,false);}assert.equal(audit(),before);
@@ -168,6 +169,7 @@ for(const symbol of ['2409','2383'])test(`compiled independent reviewer assignme
    const after=JSON.parse(audit());assert.equal(after.research_model_completions_v1.count,before.research_model_completions_v1.count+1);const fullBefore=structuredClone(before),fullAfter=structuredClone(after);delete before.research_model_completions_v1;delete after.research_model_completions_v1;assert.deepEqual(after,before);
    report.authorHandoffHttp={symbol,completion:body.receipt,completionHash:completeHash(body.receipt),completionBytes:Buffer.byteLength(JSON.stringify(body.receipt)),stateAuditBefore:fullBefore,stateAuditAfter:fullAfter,syntheticControllerOnly:true,actualModelExecution:false,publication:false};
   });
+  assert.ok(handoffResponse,'first author handoff failed; stop dependent cases without retry');
   await t.test('old author result active read rejects completed reservation and preserves private result',async()=>{
    const before=audit(),response=await post('api/internal/research-model-reservation',resultIdentity),body=await response.json();assert.equal(response.status,409,JSON.stringify(body));assert.equal(body.error,'research_author_result_unavailable');assert.equal(audit(),before);
   });
