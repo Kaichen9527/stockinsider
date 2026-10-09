@@ -236,3 +236,14 @@ Continue on existing CodexVM; VPSheavycapacity is not a development stop conditi
 - [ ] Complete genuine v2 role execution, independent article review and fenced submission; full source/strategy/production/schedule acceptance remains open. See progress-convergence-1235.md; no claim that the entire original plan is finished.
 
 - [x] Later final CI observation: exact0cf run37883620967 ordinary product/runtime succeeds, researchPG354/354 plus clock11/11 and types/lint/normal build pass, nine Playwright cases pass. Evaluation/native jobs skipped; protected approval and earlier intermittent failure causes are not inferred. Bounded metadata saved in clock-0cf-ordinary-ci.json.
+
+
+## 2026-10-09 12:55 Taipei — continued bounded implementation
+
+- [x] Shadow attention exactafa3 independent28/28 plus precision/permutation probes; prior request-changes retained, v1 unchanged, PR329 draft.
+- [ ] Shadow VM type/lint/normalbuild and later production adoption remain separate.
+- [x] VM immutable incomplete-preparation codea4f delivered; maker46focused/32native+types/lint/build reported, PR330 draft.
+- [ ] Exact HTTP receipt and independent a4 review, real financial/calculator/trusted roles/publication remain open.
+- [x] Identified insider lifetime32/128MiB/128run limits despite expanded VPS; archive contracte8 independently reviewed with lease-ownership P2.
+- [ ] Repair/review archive contract before implementation and actual crash/restore/shared-budget acceptance; never delete research evidence to continue.
+- [ ] Protected merge/deployment, source breadth, true monitoring/strategy/forward evidence and five actual trading days remain incomplete. See progress-convergence-1255.md.
