@@ -1,0 +1,734 @@
+TAP version 13
+# (node:82345) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82345) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-financial-supplement.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: 2409 actual fixed calculator; tables/valuation share result, no publication authority
+ok 1 - 2409 actual fixed calculator; tables/valuation share result, no publication authority
+  ---
+  duration_ms: 100.887625
+  ...
+# Subtest: 2383 actual fixed calculator; tables/valuation share result, no publication authority
+ok 2 - 2383 actual fixed calculator; tables/valuation share result, no publication authority
+  ---
+  duration_ms: 38.043959
+  ...
+# Subtest: reject wrong input hash
+ok 3 - reject wrong input hash
+  ---
+  duration_ms: 19.454875
+  ...
+# Subtest: reject wrong company
+ok 4 - reject wrong company
+  ---
+  duration_ms: 17.170125
+  ...
+# Subtest: reject v1 downgrade
+ok 5 - reject v1 downgrade
+  ---
+  duration_ms: 17.392209
+  ...
+# Subtest: reject arbitrary calculator command
+ok 6 - reject arbitrary calculator command
+  ---
+  duration_ms: 16.561083
+  ...
+# Subtest: reject caller table result
+ok 7 - reject caller table result
+  ---
+  duration_ms: 19.951
+  ...
+# Subtest: reject nonexistent order/capacity
+ok 8 - reject nonexistent order/capacity
+  ---
+  duration_ms: 18.489666
+  ...
+# Subtest: reject page number as reported earnings
+ok 9 - reject page number as reported earnings
+  ---
+  duration_ms: 18.478542
+  ...
+# Subtest: reject assumption promoted to reported
+ok 10 - reject assumption promoted to reported
+  ---
+  duration_ms: 19.097166
+  ...
+# Subtest: reject unsupported normalization
+ok 11 - reject unsupported normalization
+  ---
+  duration_ms: 19.967958
+  ...
+# Subtest: reject partial year called full year
+ok 12 - reject partial year called full year
+  ---
+  duration_ms: 20.5985
+  ...
+# Subtest: reject duplicate paragraph IDs
+ok 13 - reject duplicate paragraph IDs
+  ---
+  duration_ms: 19.497542
+  ...
+# Subtest: reject wrong chapter order
+ok 14 - reject wrong chapter order
+  ---
+  duration_ms: 18.676333
+  ...
+# Subtest: reject future author
+ok 15 - reject future author
+  ---
+  duration_ms: 15.757458
+  ...
+# Subtest: reject backdated author
+ok 16 - reject backdated author
+  ---
+  duration_ms: 17.01025
+  ...
+# Subtest: reject original deadline expired
+ok 17 - reject original deadline expired
+  ---
+  duration_ms: 5.011042
+  ...
+# Subtest: reject nonfinite multiple
+ok 18 - reject nonfinite multiple
+  ---
+  duration_ms: 0.957041
+  ...
+# Subtest: reject raw credential in prose
+ok 19 - reject raw credential in prose
+  ---
+  duration_ms: 18.023458
+  ...
+# Subtest: reject unselected source
+ok 20 - reject unselected source
+  ---
+  duration_ms: 17.459375
+  ...
+# Subtest: reject withdrawn source
+ok 21 - reject withdrawn source
+  ---
+  duration_ms: 16.444
+  ...
+# Subtest: reject superseded source
+ok 22 - reject superseded source
+  ---
+  duration_ms: 16.167375
+  ...
+# Subtest: reject rights revoked
+ok 23 - reject rights revoked
+  ---
+  duration_ms: 16.9255
+  ...
+# Subtest: reject wrong source revision
+ok 24 - reject wrong source revision
+  ---
+  duration_ms: 17.105
+  ...
+# Subtest: reject wrong source company
+ok 25 - reject wrong source company
+  ---
+  duration_ms: 18.9675
+  ...
+# Subtest: reject future source admission
+ok 26 - reject future source admission
+  ---
+  duration_ms: 18.368584
+  ...
+# Subtest: reject date-only invented midnight
+ok 27 - reject date-only invented midnight
+  ---
+  duration_ms: 17.272042
+  ...
+# Subtest: reject future source date
+ok 28 - reject future source date
+  ---
+  duration_ms: 19.1845
+  ...
+# Subtest: reject invalid civil date
+ok 29 - reject invalid civil date
+  ---
+  duration_ms: 16.666458
+  ...
+# Subtest: reject missing source receipt
+ok 30 - reject missing source receipt
+  ---
+  duration_ms: 17.367792
+  ...
+# Subtest: reject invented gap reason
+ok 31 - reject invented gap reason
+  ---
+  duration_ms: 19.770709
+  ...
+# Subtest: sealed financial result tampering rejects even after all caller hashes are recomputed
+ok 32 - sealed financial result tampering rejects even after all caller hashes are recomputed
+  ---
+  duration_ms: 20.691333
+  ...
+# Subtest: industry-only source cannot establish company rumor or production, and rumor cannot become order
+ok 33 - industry-only source cannot establish company rumor or production, and rumor cannot become order
+  ---
+  duration_ms: 73.640167
+  ...
+# Subtest: annual2027 is separate from next four; changed prose/model/valuation needs a new hash
+ok 34 - annual2027 is separate from next four; changed prose/model/valuation needs a new hash
+  ---
+  duration_ms: 75.4105
+  ...
+# Subtest: printed facts, explicit assumptions and sealed gaps keep their classifications
+ok 35 - printed facts, explicit assumptions and sealed gaps keep their classifications
+  ---
+  duration_ms: 24.464292
+  ...
+# Subtest: actual AUO loss scenario gives null P/E price, never a negative target
+ok 36 - actual AUO loss scenario gives null P/E price, never a negative target
+  ---
+  duration_ms: 28.14475
+  ...
+# Subtest: validated snapshots retain no mutable aliases to author or trusted context
+ok 37 - validated snapshots retain no mutable aliases to author or trusted context
+  ---
+  duration_ms: 26.523125
+  ...
+# Subtest: author original deadlines are exclusive, retaining microsecond boundary precision
+ok 38 - author original deadlines are exclusive, retaining microsecond boundary precision
+  ---
+  duration_ms: 126.581292
+  ...
+# Subtest: actual sealed source/execution/financial gaps are referenceable with exact namespaces
+ok 39 - actual sealed source/execution/financial gaps are referenceable with exact namespaces
+  ---
+  duration_ms: 186.389958
+  ...
+# Subtest: actual calculated ordinary/potential/diluted share denominators are available in all periods
+ok 40 - actual calculated ordinary/potential/diluted share denominators are available in all periods
+  ---
+  duration_ms: 188.137625
+  ...
+# NOTICE:  constraint "candidate_detail_snapshots_revision_hash_check" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  identifier "candidate_detail_snapshots_stock_id_session_date_model_version_key" will be truncated to "candidate_detail_snapshots_stock_id_session_date_model_version_"
+# NOTICE:  constraint "candidate_detail_snapshots_stock_id_session_date_model_version_" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_input_hash_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_claims_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_source_refs_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_paid_content_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_bundle_binding_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_bundles_append_only_v4" for relation "public.candidate_dossier_bundles" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_research_dossiers_append_only_v4" for relation "public.candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_receipts_append_only_v4" for relation "public.candidate_dossier_submission_receipts" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_detail_published_append_only_v4" for relation "public.candidate_detail_snapshots" does not exist, skipping
+# ERROR:  candidate_dossier_revision_not_published
+# CONTEXT:  PL/pgSQL function record_candidate_dossier_submission_v4(uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb) line 19 at RAISE
+# NOTICE:  truncate cascades to table "candidate_research_dossiers"
+# NOTICE:  truncate cascades to table "candidate_dossier_submission_receipts"
+# NOTICE:  truncate cascades to table "candidate_dossier_outbox_v5"
+# ERROR:  new row for relation "candidate_dossier_bundles" violates check constraint "research_bundle_revision_union_v2"
+# DETAIL:  Failing row contains (aea54d37-dfe3-4ce2-9b39-1a76d3516e69, null, d29d55ea-cf44-42cc-91e3-eb754ede4cfa, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 2409, {}, 2026-10-10 00:29:00.882335+08, legacy_detail_v1, null, null, null).
+# ERROR:  new row for relation "candidate_dossier_bundles" violates check constraint "research_bundle_revision_union_v2"
+# DETAIL:  Failing row contains (aea54d37-dfe3-4ce2-9b39-1a76d3516e69, d29d55ea-cf44-42cc-91e3-eb754ede4cfa, null, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 2409, {}, 2026-10-10 00:29:00.964342+08, legacy_detail_v1, null, null, null).
+# ERROR:  new row for relation "candidate_dossier_bundles" violates check constraint "research_bundle_revision_union_v2"
+# DETAIL:  Failing row contains (aea54d37-dfe3-4ce2-9b39-1a76d3516e69, null, null, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 2409, {}, 2026-10-10 00:29:01.040211+08, legacy_detail_v1, null, null, null).
+# ERROR:  new row for relation "candidate_dossier_bundles" violates check constraint "research_bundle_revision_union_v2"
+# DETAIL:  Failing row contains (aea54d37-dfe3-4ce2-9b39-1a76d3516e69, d29d55ea-cf44-42cc-91e3-eb754ede4cfa, d29d55ea-cf44-42cc-91e3-eb754ede4cfa, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 2409, {}, 2026-10-10 00:29:01.123406+08, legacy_detail_v1, ff560dbf-c21b-47a5-b342-bea4345011e1, null, null).
+# ERROR:  new row for relation "candidate_dossier_outbox_v5" violates check constraint "research_outbox_revision_union_v2"
+# DETAIL:  Failing row contains (4ccce9a7-dbcf-48e5-9adc-7961d6482ea4, 2acd8ef0-bd49-4fd6-a3a7-53b7ff912214, null, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, queued, 0, null, null, null, null, 2026-10-10 00:29:01.197989+08, 2026-10-10 00:29:01.197989+08, null, null, ordinary, null, null, legacy_detail_v1, null, null, null).
+# ERROR:  research_publication_writer_required
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 26 at RAISE
+# ERROR:  permission denied for table candidate_dossier_bundles
+# ERROR:  permission denied for table candidate_dossier_bundles
+# ERROR:  permission denied for table candidate_dossier_bundles
+# ERROR:  research_publication_branch_invalid
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 23 at RAISE
+# ERROR:  research_publication_branch_invalid
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 23 at RAISE
+# ERROR:  new row violates row-level security policy for table "candidate_dossier_bundles"
+# ERROR:  new row for relation "candidate_dossier_bundles" violates check constraint "research_bundle_revision_union_v2"
+# ERROR:  new row for relation "candidate_dossier_bundles" violates check constraint "research_bundle_revision_union_v2"
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_bundle_payload
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 36 at RAISE
+# ERROR:  research_publication_bundle_payload
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 36 at RAISE
+# ERROR:  duplicate key value violates unique constraint "research_bundle_input_unique_v2"
+# Subtest: existing publication tables: exclusive v1/v2 lineage, inert writes, real PG restart and truncate races
+    # Subtest: legacy bytes and functions preserved; absent lawful published stage still rejects
+    ok 1 - legacy bytes and functions preserved; absent lawful published stage still rejects
+      ---
+      duration_ms: 175.475375
+      ...
+    # Subtest: v1 deep first binding, rejection and expired later-attempt retries remain lawful
+    ok 2 - v1 deep first binding, rejection and expired later-attempt retries remain lawful
+      ---
+      duration_ms: 250.027375
+      ...
+    # Subtest: v1-only READ COMMITTED bundle truncate rolls back; explicit v1 NULL branch CHECK remains required
+    ok 3 - v1-only READ COMMITTED bundle truncate rolls back; explicit v1 NULL branch CHECK remains required
+      ---
+      duration_ms: 480.499625
+      ...
+    # Subtest: only expected owner admits exact closed inert research bundle; mixed branches cannot bypass NULL CHECK
+    ok 4 - only expected owner admits exact closed inert research bundle; mixed branches cannot bypass NULL CHECK
+      ---
+      duration_ms: 1299.204542
+      ...
+# ERROR:  research_publication_writer_required
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 26 at RAISE
+# ERROR:  permission denied for table candidate_dossier_outbox_v5
+# ERROR:  permission denied for table candidate_dossier_outbox_v5
+# ERROR:  permission denied for table candidate_dossier_outbox_v5
+# ERROR:  research_publication_branch_mismatch
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 20 at RAISE
+# ERROR:  new row for relation "candidate_dossier_outbox_v5" violates check constraint "research_outbox_revision_union_v2"
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  duplicate key value violates unique constraint "research_outbox_input_unique_v2"
+# ERROR:  research_publication_v2_inert
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 10 at RAISE
+# ERROR:  research_publication_v2_inert
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 5 at RAISE
+# ERROR:  research_publication_v2_inert
+# CONTEXT:  PL/pgSQL function fence_research_publication_truncate_v2() line 6 at RAISE
+# NOTICE:  truncate cascades to table "candidate_research_dossiers"
+# NOTICE:  truncate cascades to table "candidate_dossier_submission_receipts"
+# NOTICE:  truncate cascades to table "candidate_dossier_outbox_v5"
+# ERROR:  research_publication_v2_inert
+# CONTEXT:  PL/pgSQL function fence_research_publication_truncate_v2() line 6 at RAISE
+# ERROR:  research_publication_branch_immutable
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 9 at RAISE
+    # Subtest: old-snapshot REPEATABLE READ cannot truncate a subsequently committed v2 outbox
+    ok 5 - old-snapshot REPEATABLE READ cannot truncate a subsequently committed v2 outbox
+      ---
+      duration_ms: 1253.060625
+      ...
+    # Subtest: mismatched lineage, nonqueued state and direct v2 mutation reject with unchanged all-state audit
+    ok 6 - mismatched lineage, nonqueued state and direct v2 mutation reject with unchanged all-state audit
+      ---
+      duration_ms: 1624.758542
+      ...
+# ERROR:  research_publication_branch_mismatch
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 20 at RAISE
+# ERROR:  research_publication_branch_mismatch
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 13 at RAISE
+# ERROR:  research_publication_truncate_isolation
+# CONTEXT:  PL/pgSQL function fence_research_publication_truncate_v2() line 3 at RAISE
+# ERROR:  permission denied for table candidate_dossier_bundles
+    # Subtest: READ COMMITTED truncate waits for a new v2 insertion and sees its committed row
+    ok 7 - READ COMMITTED truncate waits for a new v2 insertion and sees its committed row
+      ---
+      duration_ms: 1360.219459
+      ...
+    # Subtest: ordinary claimer excludes v2; legacy downgrade/rebind fails; immutable rows survive actual restart
+    ok 8 - ordinary claimer excludes v2; legacy downgrade/rebind fails; immutable rows survive actual restart
+      ---
+      duration_ms: 613.77575
+      ...
+    1..8
+ok 41 - existing publication tables: exclusive v1/v2 lineage, inert writes, real PG restart and truncate races
+  ---
+  duration_ms: 9473.545167
+  ...
+# (node:83011) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83011) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-packet.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: reviewer result: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+    # Subtest: existing exact author invocation backfilled, null review read without writes
+    ok 1 - existing exact author invocation backfilled, null review read without writes
+      ---
+      duration_ms: 602.53625
+      ...
+# ERROR:  duplicate key value violates unique constraint "research_execution_invocations_v2_pkey"
+# DETAIL:  Key (invocation_id)=(synthetic-history-5643f11e-08a1-4518-8b40-23414fba85a1) already exists.
+# CONTEXT:  SQL statement "INSERT INTO public.research_execution_invocations_v2 VALUES(NEW.invocation_id,
+#   CASE WHEN TG_TABLE_NAME='research_author_results_v2' THEN 'author' ELSE 'reviewer' END,NEW.result_id,NEW.result_hash)"
+# PL/pgSQL function fence_research_execution_invocation_v2() line 7 at SQL statement
+# SQL statement "INSERT INTO public.research_reviewer_results_v2(assignment_id,invocation_id,result_hash,logical_bytes,received_at,payload)
+#  VALUES((ra->>'assignment_id')::uuid,o->>'invocationId',public.research_complete_hash_v2(p_result),bytes,n,p_result) RETURNING *"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 67 at SQL statement
+# ERROR:  research_reviewer_result_review_binding
+# CONTEXT:  PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 35 at RAISE
+# ERROR:  research_editorial_review_finding
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 40 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_check
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 26 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_finding
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 40 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_check
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 26 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 14 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_check
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 26 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_check
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 26 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_finding
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 40 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  synthetic_completion_insert_abort
+# CONTEXT:  PL/pgSQL function fixture_review_completion_abort() line 1 at RAISE
+# SQL statement "INSERT INTO public.research_model_completions_v1(reservation_id,owner,outcome,result_hash)
+#  VALUES((ra->>'reservation_id')::uuid,ra->>'work_owner','completed',saved.result_hash)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 69 at SQL statement
+    # Subtest: same thread/invocation, before-author and changed packet denied without writes
+    ok 2 - same thread/invocation, before-author and changed packet denied without writes
+      ---
+      duration_ms: 1827.413875
+      ...
+    # Subtest: registry blocks different existing author invocation before first review commit
+    ok 3 - registry blocks different existing author invocation before first review commit
+      ---
+      duration_ms: 252.016084
+      ...
+    # Subtest: shared canonical65536 bytes exact in TS and PG, +1 actual RPC refuses with zero rows
+    ok 4 - shared canonical65536 bytes exact in TS and PG, +1 actual RPC refuses with zero rows
+      ---
+      duration_ms: 207.053625
+      ...
+    # Subtest: direct RPC closed nested fields refuse array/object coercion before result/registry/completion
+    ok 5 - direct RPC closed nested fields refuse array/object coercion before result/registry/completion
+      ---
+      duration_ms: 663.063
+      ...
+    # Subtest: direct RPC text trim and raw scalar maximum match TS with zero durable changes
+    ok 6 - direct RPC text trim and raw scalar maximum match TS with zero durable changes
+      ---
+      duration_ms: 4180.619792
+      ...
+    # Subtest: injected completion failure rolls back result and invocation together
+    ok 7 - injected completion failure rolls back result and invocation together
+      ---
+      duration_ms: 322.37575
+      ...
+    # Subtest: concurrent exact receive commits one result, one invocation and one original completion
+    ok 8 - concurrent exact receive commits one result, one invocation and one original completion
+      ---
+      duration_ms: 536.3715
+      ...
+    # Subtest: real calculation packet revalidation, exact read/replay/restart and active reader rejection
+    ok 9 - real calculation packet revalidation, exact read/replay/restart and active reader rejection
+      ---
+      duration_ms: 2595.257083
+      ...
+# ERROR:  research_reviewer_result_review_binding
+# CONTEXT:  PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 35 at RAISE
+    # Subtest: changed review/packet/replay reject with original accepted bytes
+    ok 10 - changed review/packet/replay reject with original accepted bytes
+      ---
+      duration_ms: 1275.663042
+      ...
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(v.source_seal_id)"
+# PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 35 at PERFORM
+# PL/pgSQL function read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) line 6 at assignment
+# ERROR:  research_author_handoff_claim
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 49 at RAISE
+# PL/pgSQL function read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) line 6 at assignment
+# ERROR:  research_reviewer_result_original_fence
+# CONTEXT:  PL/pgSQL function read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) line 22 at RAISE
+# ERROR:  research_reviewer_result_completion_conflict
+# CONTEXT:  PL/pgSQL function read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) line 39 at RAISE
+    # Subtest: reviewer invocation cannot become later author invocation (opposite insertion order)
+    ok 11 - reviewer invocation cannot become later author invocation (opposite insertion order)
+      ---
+      duration_ms: 1718.261167
+      ...
+    # Subtest: source withdrawal, takeover, expired reservation and conflicting completion reject; histories retained
+    ok 12 - source withdrawal, takeover, expired reservation and conflicting completion reject; histories retained
+      ---
+      duration_ms: 692.718292
+      ...
+# ERROR:  permission denied for table research_execution_invocations_v2
+# ERROR:  permission denied for table research_execution_invocations_v2
+# ERROR:  permission denied for table research_execution_invocations_v2
+# ERROR:  permission denied for table research_execution_invocations_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  permission denied for table research_reviewer_results_v2
+# ERROR:  permission denied for table research_reviewer_results_v2
+# ERROR:  permission denied for table research_reviewer_results_v2
+# ERROR:  permission denied for table research_reviewer_results_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+    # Subtest: author/reviewer credential rotation after completion cannot read or replay stored report
+    ok 13 - author/reviewer credential rotation after completion cannot read or replay stored report
+      ---
+      duration_ms: 540.362084
+      ...
+    # Subtest: private registry/results deny service direct access and owner mutation
+    ok 14 - private registry/results deny service direct access and owner mutation
+      ---
+      duration_ms: 475.399375
+      ...
+    1..14
+ok 42 - reviewer result: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+  ---
+  duration_ms: 20282.424834
+  ...
+# (node:83782) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83782) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: 2409 exact review result/read/replay with actual calculation and synthetic transport
+ok 43 - 2409 exact review result/read/replay with actual calculation and synthetic transport
+  ---
+  duration_ms: 1614.158667
+  ...
+# Subtest: 2383 exact review result/read/replay with actual calculation and synthetic transport
+ok 44 - 2383 exact review result/read/replay with actual calculation and synthetic transport
+  ---
+  duration_ms: 897.235208
+  ...
+# Subtest: closed review checks, exact article/packet, selected IDs and decision semantics
+ok 45 - closed review checks, exact article/packet, selected IDs and decision semantics
+  ---
+  duration_ms: 138.824792
+  ...
+# Subtest: receiveReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+ok 46 - receiveReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+  ---
+  duration_ms: 143.983917
+  ...
+# Subtest: readReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+ok 47 - readReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+  ---
+  duration_ms: 114.120542
+  ...
+# Subtest: author/cron/test/unknown cannot enter reviewer body, expired result starts no I/O
+ok 48 - author/cron/test/unknown cannot enter reviewer body, expired result starts no I/O
+  ---
+  duration_ms: 90.095667
+  ...
+# Subtest: closed editorial enums and paragraphId reject array/object/null coercions before receive
+ok 49 - closed editorial enums and paragraphId reject array/object/null coercions before receive
+  ---
+  duration_ms: 1120.62525
+  ...
+# Subtest: shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate
+ok 50 - shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate
+  ---
+  duration_ms: 105.948041
+  ...
+# Subtest: Unicode scalar text limits agree with PostgreSQL characters, astral min/max explicit
+ok 51 - Unicode scalar text limits agree with PostgreSQL characters, astral min/max explicit
+  ---
+  duration_ms: 121.177667
+  ...
+# Subtest: review text rejects ECMAScript whitespace-only and untrimmed over-limit prose
+ok 52 - review text rejects ECMAScript whitespace-only and untrimmed over-limit prose
+  ---
+  duration_ms: 203.756958
+  ...
+# (node:83803) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83803) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-execution-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: RSO01 saved author and reviewer original reports equal authenticated structural results without a Request
+ok 53 - RSO01 saved author and reviewer original reports equal authenticated structural results without a Request
+  ---
+  duration_ms: 19.265334
+  ...
+# Subtest: RSO02 saved validation cannot substitute for actual receive authentication
+ok 54 - RSO02 saved validation cannot substitute for actual receive authentication
+  ---
+  duration_ms: 1.926375
+  ...
+# Subtest: RSO03 absent or aliased current role configuration and unknown role fail closed
+ok 55 - RSO03 absent or aliased current role configuration and unknown role fail closed
+  ---
+  duration_ms: 0.747041
+  ...
+# Subtest: RSO04 key rotation cannot adopt an immutable role assignment
+ok 56 - RSO04 key rotation cannot adopt an immutable role assignment
+  ---
+  duration_ms: 0.200875
+  ...
+# Subtest: RSO05 shared validation preserves all hash, owner, clock, shape and invocation rejections
+ok 57 - RSO05 shared validation preserves all hash, owner, clock, shape and invocation rejections
+  ---
+  duration_ms: 5.327833
+  ...
+# Subtest: RSO06 reviewer independence remains mandatory for saved observations
+ok 58 - RSO06 reviewer independence remains mandatory for saved observations
+  ---
+  duration_ms: 0.92
+  ...
+# Subtest: RSO07 original microsecond receive boundary is preserved and current time cannot renew it
+ok 59 - RSO07 original microsecond receive boundary is preserved and current time cannot renew it
+  ---
+  duration_ms: 0.238209
+  ...
+# Subtest: RSO08 validation results contain no raw credential or authority flag
+ok 60 - RSO08 validation results contain no raw credential or authority flag
+  ---
+  duration_ms: 0.160917
+  ...
+1..60
+# tests 82
+# suites 0
+# pass 82
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 36736.849333

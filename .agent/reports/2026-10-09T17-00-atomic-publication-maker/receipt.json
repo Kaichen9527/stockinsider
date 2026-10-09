@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "engineering-maker-acceptance-v1",
+  "recordedAt": "2026-10-09T16:36:44.323441+00:00",
+  "sourceHead": "18d6c86ffabfa0fc88c6f0ed807a860024d0f144",
+  "webTree": "14528d8e1d435f881f6e3da91ccfeb4e7808c408",
+  "buildId": "Xv80B29nkNHk3jNxpO1wH",
+  "compiledServerFiles": 2092,
+  "tests": {
+    "newUnitAndActualMinimalUpstreamPg": {
+      "pass": 26,
+      "fail": 0,
+      "skip": 0
+    },
+    "relatedLegacyBeforeSqlP2Successor": {
+      "pass": 82,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "typesExit": 0,
+  "lintExit": 0,
+  "existingLintWarnings": 33,
+  "normalBuildExit": 0,
+  "review": "existing astra_publication_review unsigned static CODE PASS18d6; independentPG running, not yet counted",
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T17-00-atomic-publication-maker/stockinsider-atomic-review-fix.log",
+      "bytes": 28639,
+      "sha256": "5b3e44f40daa98fd412208f2477722b1add834dbc012e98b9a1d554db6074ca2"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-00-atomic-publication-maker/stockinsider-atomic-mixed-lineage.log",
+      "bytes": 27858,
+      "sha256": "82966a29dc6122611b863e3e99c617f713f1f06d571c94e93183930ca55e7680"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-00-atomic-publication-maker/stockinsider-atomic-related.log",
+      "bytes": 43773,
+      "sha256": "d8c017e871c5827478cb33600cb124487d95439b3e3bc7eb5e6710f97a085a4f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-00-atomic-publication-maker/stockinsider-atomic-types-final.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-00-atomic-publication-maker/stockinsider-atomic-lint.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-00-atomic-publication-maker/stockinsider-atomic-build.log",
+      "bytes": 6498,
+      "sha256": "db8e9db7a22fe644c35b9e9850e638e55cdaab28697e8a40429d31e92d0c394e"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-00-atomic-publication-maker/compiled-server-manifest.json",
+      "bytes": 373071,
+      "sha256": "3cf01fbfa4e75983704cfcd8b57179d23936db03aa9f0c86ee8ac8d922b37a5f"
+    }
+  ],
+  "limitations": [
+    "Explicit synthetic controller/model reports, minimal upstream schema with original actual added migrations/functions.",
+    "No genuine author or semantic review authority; no native HTTP successor acceptance or dropped response claim.",
+    "No main merge/production migration/deploy/research/strategy/entry qualification.",
+    "Original P2 d428 REQUEST_CHANGES and earlier REDs retained in progress checkpoint.",
+    "Expiry test uses actual original short synthetic upstream lease and wall-clock wait, never fake clock/guard/renewal."
+  ]
+}
