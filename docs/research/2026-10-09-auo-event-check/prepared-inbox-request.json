@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "sourcePlatform": "news",
+      "sourceUrl": "https://www.cna.com.tw/news/afe/202610080326.aspx",
+      "author": "中央社／趙敏雅",
+      "publishedAt": "2026-10-08T19:14:00+08:00",
+      "observedAt": "2026-10-09T05:55:35.130556+00:00",
+      "symbols": [
+        "3008"
+      ],
+      "subjectScope": "company_mentions",
+      "industryTerms": [
+        "CPO",
+        "Micro LED",
+        "光纖陣列",
+        "FAU",
+        "客戶驗證"
+      ],
+      "shortSummary": "中央社報導大立光法說：林恩平對Micro LED光通訊方案的耗電、尺寸與客戶接受度提出疑問；FA已通過客戶認證，FAU以2027年量產為目標。這是媒體引述管理層觀點與規劃，尚未核對官方問答及實際訂單。",
+      "catalyst": "追查光纖陣列路線的客戶認證、量產時程及系統性能，並與Micro LED替代方案比較。報導直接提及大立光；對友達的影響屬研究者供應鏈關聯假說。",
+      "risk": "競爭者觀點不是友達失敗或Intel否認合作。認證與量產計畫不等於確定營收或EPS；不能將本來源重複計為友達直接提及。",
+      "claimStatus": "reported",
+      "visibility": "public",
+      "contentForm": "research_summary",
+      "acquisitionMethod": "public_document",
+      "parentSourceUrl": null,
+      "retracted": false
+    }
+  ]
+}
