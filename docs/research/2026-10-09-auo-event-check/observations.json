@@ -1,0 +1,88 @@
+{
+  "schema": "manual-public-research-observation-v1",
+  "recordedAt": "2026-10-09T05:49:15Z",
+  "observer": "root_codex_desktop_web_tool",
+  "firstHistoricalObservationClaimed": false,
+  "httpRawBytesVerified": false,
+  "httpResponseSha256": null,
+  "summaryOnly": true,
+  "dbSubmitted": false,
+  "published": false,
+  "platformsEnabled": false,
+  "sources": [
+    {
+      "url": "https://www.cna.com.tw/news/afe/202610080326.aspx",
+      "outcome": "public_body_read",
+      "publication": { "value": "2026-10-08 19:14", "precision": "minute_displayed_timezone_unverified" },
+      "revision": { "value": "2026-10-08 19:41", "precision": "minute_displayed_timezone_unverified" },
+      "primarySourceVerified": false,
+      "claimStatus": "media_report_of_competitor_statements",
+      "summary": "大立光對Micro LED方案的耗電、尺寸與客戶接受度提出質疑；另述FA認證及FAU量產規劃。",
+      "verificationGap": "尚未核對官方問答及相同系統邊界的實測。"
+    },
+    {
+      "url": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+      "outcome": "public_body_read",
+      "publication": { "value": null, "precision": "unknown_from_read_body" },
+      "urlDateIsPublicationProof": false,
+      "claimStatus": "company_technical_position_description",
+      "summary": "官方描述Micro LED CPO、GCS、RDL及生態圈分工；本頁沒有提供Intel訂單與可重算新增EPS的產能價格資料。"
+    },
+    {
+      "url": "https://www.pcgamer.com/hardware/gaming-monitors/intel-reportedly-collaborating-with-auo-on-microled-panels-which-could-help-make-the-ultimate-display-tech-more-mainstream/",
+      "outcome": "public_body_read",
+      "publication": { "value": "2026-09-22", "precision": "date" },
+      "rootUrl": "https://money.udn.com/money/story/5612/9766808",
+      "rootRelation": "explicit_article_hyperlink_and_attribution",
+      "independentCooperationConfirmation": false,
+      "summary": "海外解釋文章引用經濟日報同一報導，不能重複算獨立消息根源或直接當成CPO客戶訂單。"
+    },
+    {
+      "url": "https://money.udn.com/money/story/5612/9766808",
+      "outcome": "public_body_read",
+      "publication": { "value": "2026-09-21 02:30:56", "precision": "second_displayed_timezone_unverified" },
+      "claimStatus": "reported_rumor_with_noncomment",
+      "summary": "報導Intel合作傳聞並記錄不予評論，相關專利原文仍待核對；不代表確定訂單。"
+    },
+    {
+      "url": "https://auo.com/zh-TW/Investor_Conference_Call_Information/index/16",
+      "outcome": "public_body_read",
+      "publication": { "value": null, "precision": "unknown" },
+      "eventAt": "2026-10-29T14:00:00+08:00",
+      "eventClockBasis": "page_explicit_GMT_plus_8",
+      "claimStatus": "announced_future_event_only"
+    },
+    {
+      "url": "https://www.ptt.cc/bbs/Stock/M.1790911210.A.9C2.html",
+      "outcome": "read_failed",
+      "httpStatusReportedByTool": 403,
+      "searchExcerptPresent": true,
+      "bodyAndRepliesRead": false,
+      "publication": { "value": null, "precision": "not_verified_from_original_body" }
+    },
+    {
+      "url": "https://www.largan.com.tw/tw/investor/shareholder",
+      "outcome": "partial_metadata_read",
+      "officialQuestionAnswerRead": false,
+      "verificationGap": "直接擷取未包含可核對的法說問答，搜尋摘要不代替官方逐字稿。"
+    }
+  ],
+  "searchCoverage": {
+    "queries": [
+      "友達 Intel CPO 2026 10月 8日 9日",
+      "台光電 2026 10月 月營收 券商",
+      "site.ptt.cc/bbs/Stock 2026 友達 CPO",
+      "site.auo.com 2026 10 29 法人",
+      "site.intel.com AUO MicroLED 2026",
+      "site.auo.com 2026 玻璃 核心 基板 MicroLED CPO",
+      "site.elite-material.com.tw 2026 9 營收",
+      "site.largan.com.tw 2026 10 8 法說",
+      "大立光 2026 10 8 MicroLED 多模 光纖 林恩平"
+    ],
+    "intelOfficialMatchingResultInReturnedSubset": false,
+    "claimThatNoOfficialAnnouncementExists": false,
+    "completePlatformOrInternetCoverage": false,
+    "socialLoginUsed": false,
+    "privateOrMemberContentExported": false
+  }
+}
