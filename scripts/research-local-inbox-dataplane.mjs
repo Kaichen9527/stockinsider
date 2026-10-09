@@ -309,7 +309,9 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
       await assert.rejects(sourcePriorityCommand(args,{env:{INTERNAL_API_KEY:key}}),/uncertain_submission/);assert.equal(sql('SELECT count(*) FROM source_raw_documents'),'3');report.checks.push('priority_blocked_restart_fenced');
     });
     assert.equal(report.checks.length,9,'local_profile_incomplete_checks');
-    if (afterBaseline) await afterBaseline({sql,sqlAsync,post,rpc,origin,priorityRequest:run.priorityRequest,apiOrigin:`http://127.0.0.1:${apiPort}/rest/v1/`,report,pgClock:clockFile?{file:clockFile,librarySha256:clockHash,set:offset=>writeFile(clockFile,`${offset}\n`)}:null,restart:()=>{pgStop();pgStart();}});
+    if (afterBaseline) await afterBaseline({sql,sqlAsync,post,rpc,origin,artifacts,
+      consumePriority:args=>sourcePriorityCommand(args,{env:{INTERNAL_API_KEY:key}}),
+      priorityRequest:run.priorityRequest,apiOrigin:`http://127.0.0.1:${apiPort}/rest/v1/`,report,pgClock:clockFile?{file:clockFile,librarySha256:clockHash,set:offset=>writeFile(clockFile,`${offset}\n`)}:null,restart:()=>{pgStop();pgStart();}});
     report.passed=true;
   } catch(error) {report.failure=safe(error.message);throw error;}
   finally {

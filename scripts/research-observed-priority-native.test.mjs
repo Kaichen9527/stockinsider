@@ -16,7 +16,7 @@ const body={legacyClassification:read('observed-security-classification.json'),s
 const enabled=process.env.RESEARCH_LOCAL_DATAPLANE_VERIFY==='enabled';
 test('real observed priority accounts1978 and admits an old public company research lead without formal identity',{skip:!enabled&&'explicit isolated profile not enabled',timeout:120000},async t=>{
  const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,testPgClockLibrary:process.env.STOCKINSIDER_OBSERVED_TEST_CLOCK_LIBRARY||null,observedClaim:process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled',check:(name,fn)=>t.test(name,fn),
- afterBaseline:async({sql,sqlAsync,post,rpc,report,restart,priorityRequest,pgClock})=>{
+ afterBaseline:async({sql,sqlAsync,post,rpc,report,restart,priorityRequest,pgClock,origin,artifacts,consumePriority})=>{
   const prepared=prepareObservedRosterAdmission(body);let receipt;
   await t.test('guarded1978 admission retains formal stocks count zero',async()=>{
    const response=await post('api/internal/research-observed-roster',body);assert.equal(response.status,200);receipt=(await response.json()).receipt;
@@ -41,6 +41,25 @@ test('real observed priority accounts1978 and admits an old public company resea
    assert.equal(controller.inboxRequest.items.length,1);const accepted=await post('api/internal/research-inbox',controller.inboxRequest);assert.equal(accepted.status,200);const data=await accepted.json();assert.equal(data.accepted,1);assert.match(data.revisions[0].id,/^[a-f0-9-]{36}$/u);
    const item=controller.inboxRequest.items[0];assert.equal(item.publishedAt,'2026-03-16T22:30:00Z');assert.equal(item.firstObservedAt,relay.summary.firstObservedAt);assert.deepEqual(item.symbols,['5347','6531']);
    report.ep8={documentId:data.revisions[0].id,sourceUrl:item.sourceUrl,publishedAt:item.publishedAt,firstObservedAt:item.firstObservedAt,acquisition:'attributed Mac relay, not VM HTTP',scope:'public publisher description only; not episode audio/transcript',controllerRunHash:controller.runHash};
+  });
+  await t.test('real source-priority consumer explicitly selects observed roster and replays without new DB run',async()=>{
+   const controllerPath=path.join(artifacts,'observed-consumer-controller.json');
+   const assessmentsPath=path.join(artifacts,'observed-consumer-assessments.json');
+   fs.writeFileSync(controllerPath,JSON.stringify(controller),{flag:'wx',mode:0o600});
+   fs.writeFileSync(assessmentsPath,'[]\n',{flag:'wx',mode:0o600});
+   const args=['--controller',controllerPath,'--assessments',assessmentsPath,'--origin',origin,
+    '--journal',path.join(artifacts,'observed-consumer-journal'),'--scope',scope.scope,'--snapshot-hash',scope.snapshotHash];
+   const consumed=await consumePriority(args);
+   assert.equal(consumed.completed,true);assert.equal(consumed.priority.scope,'research_observed_v1');
+   assert.equal(consumed.priority.snapshotHash,prepared.snapshotHash);assert.equal(consumed.priority.accountedCount,1978);
+   assert.equal(consumed.priority.rows.length,1978);assert.equal(consumed.priority.queue.length,0);
+   assert.equal(consumed.priority.newDeepResearchJobs,0);assert.equal(consumed.priority.researchQualified,false);
+   const count=sql('SELECT count(*)FROM research_priority_runs_v1');
+   const replay=await consumePriority(args);assert.equal(replay.localJournalReplay,true);
+   assert.equal(replay.receiptHash,consumed.receiptHash);assert.equal(sql('SELECT count(*)FROM research_priority_runs_v1'),count);
+   assert.equal(sql('SELECT count(*)FROM stocks'),'0');
+   report.observedConsumer={receiptHash:consumed.receiptHash,snapshotHash:prepared.snapshotHash,accountedCount:1978,
+    actualAuthenticatedHttp:true,replayWithoutNewRun:true,newDeepResearchJobs:0,researchQualified:false};
   });
   let positive;
   await t.test('reasoned low-impact zero-novelty old lead creates one real observed-only job and accounts all other companies',async()=>{

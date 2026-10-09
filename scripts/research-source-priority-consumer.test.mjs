@@ -5,12 +5,13 @@ import os from 'node:os';
 import path from 'node:path';
 import http from 'node:http';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
-import { sourcePriorityCommand } from './research-source-priority-consumer.mjs';
+import { sourcePriorityCommand, sourcePriorityScope } from './research-source-priority-consumer.mjs';
 const key = 'synthetic-local-only-internal-key';
 async function fixture() {
   const dir=await mkdtemp(path.join(os.tmpdir(),'source-priority-consumer-'));
-  const controller={asOf:new Date().toISOString(),authoritativePublication:false,strategyApproved:false,
-    priorityRequest:{asOf:new Date().toISOString(),sourceAttempts:[]},inboxRequest:{items:[]}};
+  const asOf=new Date().toISOString();
+  const controller={asOf,authoritativePublication:false,strategyApproved:false,
+    priorityRequest:{asOf,sourceAttempts:[]},inboxRequest:{items:[]}};
   controller.runHash=researchCanonicalHash(controller);
   await writeFile(path.join(dir,'controller.json'),JSON.stringify(controller));
   await writeFile(path.join(dir,'assessments.json'),'[]');
@@ -50,4 +51,79 @@ test('PC04 tampered controller or shared principal rejected',async()=>{
 test('PC05 incomplete journal never becomes successful empty receipt',async()=>{
   const f=await fixture();await mkdir(path.join(f.dir,'journal'));await writeFile(path.join(f.dir,'journal','attempt.json'),'{}');
   await assert.rejects(sourcePriorityCommand(f.args('http://127.0.0.1:5555/'),{env:{INTERNAL_API_KEY:key}}),/binding_mismatch/);
+});
+
+const snapshotHash='a'.repeat(64);
+const observedFlags=['--scope','research_observed_v1','--snapshot-hash',snapshotHash];
+const validPriority=()=>({ok:true,rows:[{symbol:'2409',disposition:'needs_evidence'}],expectedCount:1,accountedCount:1,queue:[],
+  scope:'research_observed_v1',snapshotHash,scopeReceipt:{snapshotHash},researchQualified:false,strategyApproved:false,entryEligible:false});
+
+test('PC06 explicit observed roster reaches actual HTTP endpoint and replays once',async()=>{
+  const f=await fixture();let calls=0;
+  const server=http.createServer(async(req,res)=>{
+    calls++;let text='';for await(const chunk of req)text+=chunk;
+    const body=JSON.parse(text);
+    assert.equal(body.scope,'research_observed_v1');assert.equal(body.snapshotHash,snapshotHash);
+    assert.deepEqual(body.assessments,[]);assert.equal(req.url,'/api/internal/research-priority-run');
+    assert.equal(req.headers.authorization,`Bearer ${key}`);
+    res.setHeader('content-type','application/json');res.end(JSON.stringify(validPriority()));
+  });
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  try{
+    const args=[...f.args(`http://127.0.0.1:${server.address().port}/`),...observedFlags];
+    const first=await sourcePriorityCommand(args,{env:{INTERNAL_API_KEY:key}});
+    assert.equal(first.scope,'research_observed_v1');assert.equal(first.snapshotHash,snapshotHash);
+    assert.equal(first.publication,false);assert.equal(first.strategyApproved,false);
+    const replay=await sourcePriorityCommand(args,{env:{INTERNAL_API_KEY:key}});
+    assert.equal(replay.localJournalReplay,true);assert.equal(calls,1);
+    await assert.rejects(sourcePriorityCommand(f.args(`http://127.0.0.1:${server.address().port}/`),{env:{INTERNAL_API_KEY:key}}),/replay_binding_mismatch/);
+    await assert.rejects(sourcePriorityCommand([...args.slice(0,-1),'b'.repeat(64)],{env:{INTERNAL_API_KEY:key}}),/replay_binding_mismatch/);
+    assert.equal(calls,1);
+  }finally{await new Promise(resolve=>server.close(resolve));}
+});
+
+for(const [name,amend] of [
+  ['silent formal fallback',body=>{delete body.scope;}],
+  ['wrong roster',body=>{body.snapshotHash='b'.repeat(64);}],
+  ['wrong roster receipt',body=>{body.scopeReceipt.snapshotHash='b'.repeat(64);}],
+  ['manufactured entry eligibility',body=>{body.entryEligible=true;}],
+])test(`PC07 rejects ${name} and fences uncertain submission`,async()=>{
+  const f=await fixture();let calls=0;
+  const body=validPriority();amend(body);
+  const args=[...f.args('http://127.0.0.1:5555/'),...observedFlags];
+  const options={env:{INTERNAL_API_KEY:key},post:async()=>{calls++;return{body};}};
+  await assert.rejects(sourcePriorityCommand(args,options),/response_scope_mismatch/);
+  await assert.rejects(sourcePriorityCommand(args,options),/uncertain_submission/);
+  assert.equal(calls,1);
+});
+
+test('PC08 formal response cannot silently switch to an observed roster',async()=>{
+  const f=await fixture();
+  await assert.rejects(sourcePriorityCommand(f.args('http://127.0.0.1:5555/'),{
+    env:{INTERNAL_API_KEY:key},post:async()=>({body:validPriority()}),
+  }),/response_scope_mismatch/);
+});
+
+test('PC09 controller cannot smuggle a different roster or cutoff',async()=>{
+  for(const amend of [body=>{body.priorityRequest.scope='research_observed_v1';},body=>{body.priorityRequest.asOf='2020-01-01T00:00:00Z';}]){
+    const f=await fixture();const filename=path.join(f.dir,'controller.json');const body=JSON.parse(await readFile(filename));
+    delete body.runHash;amend(body);body.runHash=researchCanonicalHash(body);await writeFile(filename,JSON.stringify(body));
+    let calls=0;
+    await assert.rejects(sourcePriorityCommand(f.args('http://127.0.0.1:5555/'),{
+      env:{INTERNAL_API_KEY:key},post:async()=>{calls++;},
+    }),/controller_binding_invalid/);assert.equal(calls,0);
+  }
+});
+
+test('PCscope default is formal; observed scope requires a valid explicit snapshot',()=>{
+  const base=['--controller','/tmp/controller','--assessments','/tmp/assessments','--origin','http://127.0.0.1:5555/','--journal','/tmp/journal'];
+  assert.deepEqual(sourcePriorityScope(base).scope,{kind:'formal_v1'});
+  assert.deepEqual(sourcePriorityScope([...base,...observedFlags]).scope,{kind:'research_observed_v1',snapshotHash});
+  for(const extra of [
+    ['--snapshot-hash',snapshotHash],['--scope','research_observed_v1'],
+    ['--scope','formal_v1','--snapshot-hash',snapshotHash],['--scope','automatic'],
+    ['--scope','research_observed_v1','--snapshot-hash','bad'],['--scope','formal_v1','--scope','formal_v1'],
+  ])assert.throws(()=>sourcePriorityScope([...base,...extra]),/source_priority_(?:scope|arguments)_invalid/);
+  assert.throws(()=>sourcePriorityScope([...base,'--unknown','x']),/arguments_invalid/);
+  assert.throws(()=>sourcePriorityScope(base.slice(0,-2)),/arguments_invalid/);
 });

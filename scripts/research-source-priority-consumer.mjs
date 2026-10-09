@@ -5,9 +5,40 @@ import { fileURLToPath } from 'node:url';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
 import { assertSourcePacketBoundary } from '../web/src/lib/research-source-attempt-controller.ts';
 import { validateResearchInboxItemAt } from '../web/src/lib/research-inbox.ts';
+import { parseResearchPriorityScope } from '../web/src/lib/research-observed-priority.ts';
 import { jsonPost } from './research-monitor-controller.mjs';
 
 const MAX_BYTES = 2_000_000;
+export function sourcePriorityScope(args) {
+  const flags = new Map();
+  if (![8, 10, 12].includes(args.length)) throw new Error('source_priority_arguments_invalid');
+  for (let i = 0; i < args.length; i += 2) {
+    if (!['--controller','--assessments','--origin','--journal','--scope','--snapshot-hash'].includes(args[i])
+      || flags.has(args[i]) || typeof args[i + 1] !== 'string' || !args[i + 1])
+      throw new Error('source_priority_arguments_invalid');
+    flags.set(args[i], args[i + 1]);
+  }
+  if (!['--controller','--assessments','--origin','--journal'].every(flag => flags.has(flag)))
+    throw new Error('source_priority_arguments_invalid');
+  let scope;
+  try {
+    scope = parseResearchPriorityScope({
+      ...(flags.has('--scope') ? { scope: flags.get('--scope') } : {}),
+      ...(flags.has('--snapshot-hash') ? { snapshotHash: flags.get('--snapshot-hash') } : {}),
+    });
+  } catch { throw new Error('source_priority_scope_invalid'); }
+  return { flags, scope };
+}
+function assertPriorityScope(body, scope) {
+  if (scope.kind === 'research_observed_v1') {
+    if (body?.scope !== scope.kind || body.snapshotHash !== scope.snapshotHash
+      || body.scopeReceipt?.snapshotHash !== scope.snapshotHash
+      || body.researchQualified !== false || body.strategyApproved !== false || body.entryEligible !== false)
+      throw new Error('source_priority_response_scope_mismatch');
+  } else if (body?.scope !== undefined && body.scope !== 'formal_v1' || body?.snapshotHash !== undefined) {
+    throw new Error('source_priority_response_scope_mismatch');
+  }
+}
 async function readJson(filename) {
   if (!path.isAbsolute(filename || '')) throw new Error('source_priority_absolute_path_required');
   const handle = await open(filename, constants.O_RDONLY | constants.O_NOFOLLOW);
@@ -38,13 +69,7 @@ function localOrigin(raw) {
 /** Development-only loopback submission. Uncertain writes require reconciliation;
  * replaying a completed journal never calls either endpoint again. */
 export async function sourcePriorityCommand(args, { env = process.env, post = jsonPost } = {}) {
-  const flags = new Map();
-  if (args.length !== 8) throw new Error('source_priority_arguments_invalid');
-  for (let i = 0; i < args.length; i += 2) {
-    if (!['--controller','--assessments','--origin','--journal'].includes(args[i]) || flags.has(args[i]))
-      throw new Error('source_priority_arguments_invalid');
-    flags.set(args[i], args[i + 1]);
-  }
+  const { flags, scope } = sourcePriorityScope(args);
   const origin = localOrigin(flags.get('--origin'));
   const journal = flags.get('--journal');
   if (!path.isAbsolute(journal || '')) throw new Error('source_priority_absolute_path_required');
@@ -59,9 +84,14 @@ export async function sourcePriorityCommand(args, { env = process.env, post = js
   if (runHash !== researchCanonicalHash(unsigned) || run.authoritativePublication !== false
     || run.strategyApproved !== false || !Array.isArray(run.inboxRequest?.items)
     || run.inboxRequest.items.length > 100 || !run.inboxRequest.items.every(item => validateResearchInboxItemAt(item, run.asOf))
-    || !Array.isArray(run.priorityRequest?.sourceAttempts) || !Array.isArray(assessments) || assessments.length > 5000)
+    || !Array.isArray(run.priorityRequest?.sourceAttempts)
+    || Object.keys(run.priorityRequest).some(key => !['asOf','sourceAttempts'].includes(key))
+    || run.priorityRequest.asOf !== run.asOf || !Array.isArray(assessments) || assessments.length > 5000)
     throw new Error('source_priority_controller_binding_invalid');
-  const inputHash = researchCanonicalHash({ runHash, assessments, origin: origin.toString() });
+  // Preserve existing formal journals; an observed run is separately bound to
+  // its explicit immutable roster and cannot replay across scopes or snapshots.
+  const observed = scope.kind === 'research_observed_v1' ? { scope: scope.kind, snapshotHash: scope.snapshotHash } : {};
+  const inputHash = researchCanonicalHash({ runHash, assessments, origin: origin.toString(), ...observed });
   try { await mkdir(journal, { mode: 0o700 }); }
   catch (error) {
     if (error.code !== 'EEXIST') throw error;
@@ -77,6 +107,7 @@ export async function sourcePriorityCommand(args, { env = process.env, post = js
     const { receiptHash, ...content } = result;
     if (result.inputHash !== inputHash || result.completed !== true || receiptHash !== researchCanonicalHash(content))
       throw new Error('source_priority_replay_receipt_invalid');
+    assertPriorityScope(result.priority, scope);
     const visible = await lstat(journal);
     if (visible.isSymbolicLink() || visible.ino !== identity.ino || visible.dev !== identity.dev)
       throw new Error('source_priority_directory_changed');
@@ -94,7 +125,7 @@ export async function sourcePriorityCommand(args, { env = process.env, post = js
   };
   await assertDirectory();
   await writeJson(path.join(anchored, 'attempt.json'), {
-    inputHash, controllerRunHash: runHash, startedAt: new Date().toISOString(), developmentOnly: true,
+    inputHash, controllerRunHash: runHash, ...observed, startedAt: new Date().toISOString(), developmentOnly: true,
   });
   await directory.sync();
   await assertDirectory();
@@ -106,14 +137,15 @@ export async function sourcePriorityCommand(args, { env = process.env, post = js
     inbox = result.body;
   }
   const priority = await post(new URL('/api/internal/research-priority-run', origin), {
-    ...run.priorityRequest, assessments,
+    ...run.priorityRequest, assessments, ...observed,
   }, key, 15000);
   if (priority.rejected || priority.body?.ok !== true || !Array.isArray(priority.body.rows)
     || priority.body.rows.length !== priority.body.accountedCount || priority.body.expectedCount !== priority.body.accountedCount
     || !Array.isArray(priority.body.queue) || priority.body.queue.length > 20)
     throw new Error('source_priority_priority_rejected_or_uncertain');
+  assertPriorityScope(priority.body, scope);
   const result = { inputHash, controllerRunHash: runHash, completed: true, completedAt: new Date().toISOString(),
-    developmentOnly: true, inbox, priority: priority.body, publication: false, strategyApproved: false,
+    developmentOnly: true, ...observed, inbox, priority: priority.body, publication: false, strategyApproved: false,
     limitation: 'Explicit local run only; no automatic acquisition/dispatch or production acceptance.' };
   const receipt = { ...result, receiptHash: researchCanonicalHash(result) };
   await assertDirectory();
