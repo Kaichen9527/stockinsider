@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { chmod, mkdir, mkdtemp, readFile, realpath, rm, symlink, writeFile } from 'node:fs/promises';
+import { chmod, cp, mkdir, mkdtemp, readFile, realpath, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { packageStandaloneRelease } from './package-standalone-release.mjs';
 import { verifyStandaloneRelease } from './verify-standalone-release.mjs';
 
-async function fixture(t, bundledAssets = null) {
+async function fixture(t, bundledAssets = null, researchFiles = false) {
   const root = await mkdtemp(path.join(await realpath(tmpdir()), 'stockinsider-package-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   const sourceRepository = path.join(root, 'source'), packagerRepository = path.join(root, 'packager');
@@ -44,6 +44,16 @@ async function fixture(t, bundledAssets = null) {
     await writeFile(path.join(packagerRepository, 'scripts', name), name);
   }
   await writeFile(path.join(packagerRepository, 'deployment', 'vps', 'policy.json'), '{}');
+  if(researchFiles){
+    const repository=fileURLToPath(new URL('../',import.meta.url));
+    const relative='deployment/vps/research-runtime-files-v1.json';
+    const pins=JSON.parse(await readFile(path.join(repository,relative),'utf8'));
+    await mkdir(path.join(sourceRepository,'deployment/vps'),{recursive:true});
+    await mkdir(path.join(sourceRepository,'web/src/lib'),{recursive:true});
+    await cp(path.join(repository,relative),path.join(sourceRepository,relative));
+    await writeFile(path.join(sourceRepository,'web/src/lib/research-complete-input.ts'),'// feature marker\n');
+    for(const pin of pins.files){const target=path.join(sourceRepository,pin.path);await mkdir(path.dirname(target),{recursive:true});await cp(path.join(repository,pin.path),target);}
+  }
   for (const repository of [sourceRepository, packagerRepository]) {
     execFileSync('/usr/bin/git', ['init'], { cwd: repository });
     execFileSync('/usr/bin/git', ['add', '.'], { cwd: repository });
@@ -78,6 +88,16 @@ test('packages only the standalone runtime and binds a full git identity', async
   }
   assert.equal((await verifyStandaloneRelease(result.releaseDirectory)).releaseVerified, true);
   await assert.rejects(packageStandaloneRelease(config));
+});
+
+test('release manifest covers every research dependency and verification rejects altered evidence',async t=>{
+  const config=await fixture(t,null,true),result=await packageStandaloneRelease(config);
+  const receipt=JSON.parse(await readFile(path.join(result.releaseDirectory,'release-manifest.json'),'utf8'));
+  const pins=JSON.parse(await readFile(path.join(config.sourceRepository,'deployment/vps/research-runtime-files-v1.json'),'utf8'));
+  assert.deepEqual(receipt.manifest.files.filter(p=>p.path.startsWith('docs/research/')).map(({path,bytes,sha256})=>({path,bytes,sha256})),pins.files);
+  assert.equal((await verifyStandaloneRelease(result.releaseDirectory)).releaseVerified,true);
+  await writeFile(path.join(result.releaseDirectory,pins.files[0].path),'altered');
+  await assert.rejects(verifyStandaloneRelease(result.releaseDirectory),/metadata_invalid|hash_mismatch/);
 });
 
 test('release verification rejects a modified runtime file', async (t) => {
