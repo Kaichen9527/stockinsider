@@ -28,7 +28,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "web/src/app/api/internal/research-technical-snapshot/route.ts",
-      "sha256": "f510296a03705e007b635fc773030eb81fd6ea4093066e2ead2daa8fe6ebee66"
+      "sha256": "f0e1238d3cf464e0c0c94a6fcb56939100d3a35f2271a6a68cca28ea1cf1ec4c"
     },
     {
       "path": "web/src/lib/candidate-dossier-contract.ts",
@@ -71,6 +71,10 @@ export const RESEARCH_STRATEGY_RELEASE = {
       "sha256": "3ef5cb7ccaa3b8dde09fefe1abfa9b894496ee85f3058a6b405d3aac122c11e2"
     },
     {
+      "path": "web/src/lib/research-deep-claim-context.ts",
+      "sha256": "c6016ca331d77cff78b05c26642ebbb8ce040a285293eebdca9fecf20f3b680c"
+    },
+    {
       "path": "web/src/lib/research-deep-evidence.ts",
       "sha256": "867e32a328813adeb01b6cbccb084c638318e31bcda35fa34af4b6d455d05531"
     },
@@ -81,6 +85,10 @@ export const RESEARCH_STRATEGY_RELEASE = {
     {
       "path": "web/src/lib/research-execution-context.ts",
       "sha256": "1023a0d57e2096180444809f09fe62a2b21f928f2f97d19bd144f7c6b19d2e06"
+    },
+    {
+      "path": "web/src/lib/research-monitor-benchmark-context.ts",
+      "sha256": "3b643da30414d0c2676540adb46cc79d0e6c0201fa3340ae411b61042c728d07"
     },
     {
       "path": "web/src/lib/research-paper-books.ts",
@@ -243,7 +251,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     }
   ],
   "dependencyLockHash": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
-  "codeHash": "4ff97130999ee66808e05d1a253cece453141bc704c8050a581b955f4205e664",
+  "codeHash": "2f56cb2dc71e7e1a118d72f7438008cccc491571a97ab9d2be507588c3e6fc7c",
   "parameterMode": "fixed_baseline_source_bound",
   "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
   "parameterFiles": [
