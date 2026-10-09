@@ -1,0 +1,165 @@
+TAP version 13
+# (node:81748) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:81748) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/src/lib/research-execution-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/package.json.
+# Subtest: REB01 actual matched credentials resolve private role-separated controller principals
+ok 1 - REB01 actual matched credentials resolve private role-separated controller principals
+  ---
+  duration_ms: 20.170375
+  ...
+# Subtest: REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication
+ok 2 - REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication
+  ---
+  duration_ms: 0.674542
+  ...
+# Subtest: REB03 role swap, alias header, raw/malformed token and cron do not authenticate
+ok 3 - REB03 role swap, alias header, raw/malformed token and cron do not authenticate
+  ---
+  duration_ms: 0.216583
+  ...
+# Subtest: REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null
+ok 4 - REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null
+  ---
+  duration_ms: 9.11925
+  ...
+# Subtest: REB05 key rotation cannot adopt an existing assignment and does not log credential values
+ok 5 - REB05 key rotation cannot adopt an existing assignment and does not log credential values
+  ---
+  duration_ms: 0.179333
+  ...
+# Subtest: REB06 original work owner and reservation role are separate from principal and cannot be swapped
+ok 6 - REB06 original work owner and reservation role are separate from principal and cannot be swapped
+  ---
+  duration_ms: 0.42825
+  ...
+# Subtest: REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation
+ok 7 - REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation
+  ---
+  duration_ms: 2.994458
+  ...
+# Subtest: REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions
+ok 8 - REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions
+  ---
+  duration_ms: 3.045916
+  ...
+# Subtest: REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks
+ok 9 - REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks
+  ---
+  duration_ms: 0.918708
+  ...
+# Subtest: REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution
+ok 10 - REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution
+  ---
+  duration_ms: 0.83375
+  ...
+# Subtest: REB11 used invocation is rejected rather than silently creating a new execution or budget charge
+ok 11 - REB11 used invocation is rejected rather than silently creating a new execution or budget charge
+  ---
+  duration_ms: 0.320667
+  ...
+# Subtest: REB12 PG microseconds and explicit offsets preserve exact original boundary ordering
+ok 12 - REB12 PG microseconds and explicit offsets preserve exact original boundary ordering
+  ---
+  duration_ms: 0.380958
+  ...
+# (node:81750) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:81750) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/package.json.
+# Subtest: bounded cohort transport is explicit; ordinary monitor keeps its original response limit
+ok 13 - bounded cohort transport is explicit; ordinary monitor keeps its original response limit
+  ---
+  duration_ms: 72.543792
+  ...
+# Subtest: consumes server membership held-first, accounts expiry, and never renews or adopts a strategy
+ok 14 - consumes server membership held-first, accounts expiry, and never renews or adopts a strategy
+  ---
+  duration_ms: 79.220833
+  ...
+# Subtest: server rechecks latest invalidation and does not receive a stale cutoff or caller eligibility
+ok 15 - server rechecks latest invalidation and does not receive a stale cutoff or caller eligibility
+  ---
+  duration_ms: 55.559459
+  ...
+# Subtest: 32 tasks bound accounts every leftover, including held stocks outside the batch
+ok 16 - 32 tasks bound accounts every leftover, including held stocks outside the batch
+  ---
+  duration_ms: 385.96675
+  ...
+# Subtest: total deadline defers work instead of pretending the monitoring run completed
+ok 17 - total deadline defers work instead of pretending the monitoring run completed
+  ---
+  duration_ms: 143.731167
+  ...
+# Subtest: deadline exhausted while journaling does not dispatch a snapshot with a negative timeout
+ok 18 - deadline exhausted while journaling does not dispatch a snapshot with a negative timeout
+  ---
+  duration_ms: 44.743125
+  ...
+# Subtest: explicit server gaps remain visible and do not stop another held stock from being checked
+ok 19 - explicit server gaps remain visible and do not stop another held stock from being checked
+  ---
+  duration_ms: 54.554041
+  ...
+# Subtest: network ambiguity stops further mutations and preserves original worklist and completed responses
+ok 20 - network ambiguity stops further mutations and preserves original worklist and completed responses
+  ---
+  duration_ms: 34.153167
+  ...
+# Subtest: missing held membership, duplicates, future or stale server clock, invalid renewal fail closed
+ok 21 - missing held membership, duplicates, future or stale server clock, invalid renewal fail closed
+  ---
+  duration_ms: 1.328
+  ...
+# Subtest: mismatched response, future snapshot and manufactured eligibility become uncertain without retry
+ok 22 - mismatched response, future snapshot and manufactured eligibility become uncertain without retry
+  ---
+  duration_ms: 79.642334
+  ...
+# Subtest: unsafe origin, shared writer key, dirty source, caller stock selection reject before any request
+ok 23 - unsafe origin, shared writer key, dirty source, caller stock selection reject before any request
+  ---
+  duration_ms: 1.572375
+  ...
+# Subtest: existing output blocks all requests, preserving previous receipt
+ok 24 - existing output blocks all requests, preserving previous receipt
+  ---
+  duration_ms: 9.179084
+  ...
+# Subtest: real transport uses finite authenticated routes and rejects redirects without forwarding the bearer
+ok 25 - real transport uses finite authenticated routes and rejects redirects without forwarding the bearer
+  ---
+  duration_ms: 61.771791
+  ...
+# Subtest: GC cannot cancel the strongly held body deadline after response headers
+ok 26 - GC cannot cancel the strongly held body deadline after response headers
+  ---
+  duration_ms: 1166.934458
+  ...
+# (node:81751) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:81751) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/src/lib/research-review-auth.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/package.json.
+# Subtest: research qualification requires a separate bearer identity
+ok 27 - research qualification requires a separate bearer identity
+  ---
+  duration_ms: 13.672667
+  ...
+# Subtest: independent testing and human approval cannot share writer or each other identity
+ok 28 - independent testing and human approval cannot share writer or each other identity
+  ---
+  duration_ms: 0.575959
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2294.7185

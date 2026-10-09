@@ -127,6 +127,32 @@ PG cases. Cumulative-byte rollback, lock-expiry/freshness, both source mutation
 commit orders/rights ABA and real lost-response reconciliation remain explicit
 acceptance gaps, alongside the compiled unavailable failure.
 
+## Integrated code checkpoint b8f — not production
+
+Integration b8f6c786c4173e9f253fe389c416c29888490c37 (tree
+d662ad8628329141a76ca1d7d5a5352becbafc31) now includes both reviewed feature
+branches via merge commits. PR338 and337 are merged into the integration branch,
+not main. The independent mechanical review checked all10incoming non-package
+blobs exactly; package conflict resolution preserves both test entries once and
+all other settings. Root combined28smoke cases, typecheck, lint0errors/33existing
+warnings and normal production build pass. Original stdout/hash records are in
+the2026-10-09T09-15-13Z feature-integration checkpoint; retained raw log whitespace
+is not normalized. The old631 combined run is not claimed for this new tree.
+
+An isolated setup attempt created an unused nested dependency clone through an
+old worktree symlink after Python Path.readlink was unavailable. Exact-path lsof
+found no references; only that newly created clone was removed. The original
+shared dependencies and all unique data remain. The integration worktree now
+uses a private APFS dependency clone; no VPS cleanup or physical capacity claim
+is inferred from this local repair.
+
+The VM remains the sole owner of complete-input fixes and the queued d75 native
+whole-file rerun. Its exact9745 acceptance stdout/receipt is durable on branch
+codex/observed-consumer-9745-vm-oct09 at37ac88c8223a774d9ee1d3f4bf115f168be60cd8.
+No duplicate worker or overlapping edit was started. The Goal remains active;
+actual assignments, author/reviewer dispatch, fenced v2 publication, price-context
+adapters, protected final-R review/gates and deployment are still required.
+
 The readonly release inventory covers1,011 changed files main169aad1→75d.
 Seventy distinct integration-manifest entries still match; five historical
 entries need successor/blob-to-review closure. The31PCR catalog/boundaries and

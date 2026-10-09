@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "bounded-feature-integration-checkpoint-v1",
+  "recordedAt": "2026-10-09T09:15:13.804624+00:00",
+  "subject": "b8f6c786c4173e9f253fe389c416c29888490c37",
+  "tree": "d662ad8628329141a76ca1d7d5a5352becbafc31",
+  "branch": "codex/research-integration-oct09",
+  "mainUnchanged": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "mechanicalReview": {
+    "by": "astra_publication_review",
+    "kind": "unsigned scoped mechanical PASS",
+    "incomingNonPackageBlobs": 10,
+    "allMatchReviewedSubjects": true,
+    "packageResolution": "All prior settings unchanged; both test entries retained exactly once."
+  },
+  "rootValidation": {
+    "smokePassed": 28,
+    "failed": 0,
+    "skipped": 0,
+    "typecheckExit": 0,
+    "lintExit": 0,
+    "lintWarnings": 33,
+    "normalBuildExit": 0
+  },
+  "setupIncident": {
+    "issue": "Python3 Path.readlink absent; setup cp created an unused nested dependency clone through the old symlink",
+    "resolution": "lsof found no open reference to exact accidental nested path; removed only that clone, preserved original shared cache; replaced owned worktree symlink with private APFS dependency clone",
+    "vpsDeleted": false,
+    "uniqueDataDeleted": false,
+    "actualPhysicalBytesReclaimed": null
+  },
+  "nativeAcceptance": {
+    "runtime": "9745e4d24da914b27fe533344e497049e047594f",
+    "testSuccessor": "d75ee25683adf287497dd793eb12e808ca5e659a",
+    "receiptBranch": "codex/observed-consumer-9745-vm-oct09",
+    "receiptCommit": "37ac88c8223a774d9ee1d3f4bf115f168be60cd8",
+    "linuxConsumerMonitorPassed": 29,
+    "nativeConsumerSubcase": "passed 1978rows and1978priceContexts,compactreceipt4372812B,replay0newrun",
+    "wholeFileOriginal": "22pass2fail; initial capture moved earlier by added consumer case",
+    "wholeFileSuccessor": "pending"
+  },
+  "completeInput": "Not integrated; current mapping replay P2 and compiled unavailable unresolved in VM owned worktree",
+  "protectedApproval": false,
+  "productionDeployment": false,
+  "researchScheduleEnabled": false,
+  "logs": [
+    {
+      "file": "2026-10-09T09-15-13Z-integration-smoke.tap",
+      "bytes": 8694,
+      "sha256": "5ded7f29b95e0810ecd8ef26b6f059ba428bd648c42b1c14be8ab85b1e792a64"
+    },
+    {
+      "file": "2026-10-09T09-15-13Z-integration-typecheck.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": "2026-10-09T09-15-13Z-integration-lint.log",
+      "bytes": 4942,
+      "sha256": "255aa22dc28395495190896cd16074982e5dd50533601a7b8b7dd42f0b6b2eac"
+    },
+    {
+      "file": "2026-10-09T09-15-13Z-integration-build.log",
+      "bytes": 6500,
+      "sha256": "e3a93c73ea910fd34eb0cb2e6415089cbf64d4f8874d80ad5f098110d391f3de"
+    }
+  ]
+}
