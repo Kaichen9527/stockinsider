@@ -6,6 +6,7 @@ import {pathToFileURL} from 'node:url';
 import {publicationViewFixture} from './research-publication-view-fixture.mjs';
 import {parseResearchPublicationView,publicationPreviewSelection,researchDisplayKind} from '../web/src/lib/research-publication-view.ts';
 import {completeHash} from '../web/src/lib/research-complete-canonical.ts';
+import {validateBusinessResearchArticle} from '../web/src/lib/research-business-article.ts';
 const parse=w=>parseResearchPublicationView(w,w.researchCompanyId,w.symbol);
 const rehash=w=>{w.publication.receipt.contentHash=completeHash(w.publication.content);return w;};
 test('display derives only original published public content without altering hashed input',async()=>{
@@ -56,6 +57,22 @@ test('closed query and exclusive view preserve original legacy/draft choices wit
  assert.equal(researchDisplayKind({},undefined,undefined),'legacy');assert.equal(researchDisplayKind(null,{},undefined),'draft');
  assert.equal(researchDisplayKind(null,undefined,{}),'published');assert.equal(researchDisplayKind(null,undefined,undefined),'empty');
  for(const values of [[{},{}],[{},null,{}],[null,{},{}]])assert.throws(()=>researchDisplayKind(...values));
+});
+test('writer-to-reader compatibility preserves maximum catalysts, long locators and printed month/half-year units',async()=>{
+ const w=await publicationViewFixture(async(f,payload)=>{
+   const a=payload.rawArticle,source=payload.validatedArticle.sources[0];
+   a.summary.references.push({kind:'source',documentId:source.id,rowHash:source.rowHash,locator:'a'.repeat(500)});
+   a.catalysts=Array.from({length:15},(_,i)=>({...structuredClone(a.catalysts[0]),name:'合成催化劑'+i}));
+   const projection=f.context.authorContext.revision.canonical_payload.financial.material.projection;
+   const half=projection.reportedFacts.findIndex(x=>x.period.includes('H'));assert.ok(half>=0);
+   a.tables[0].rows.push({label:'月營收',reference:{kind:'reported_observation',pointer:'/monthlyFacts/0/value'}},
+    {label:'半年財報',reference:{kind:'reported_observation',pointer:`/reportedFacts/${half}/value`}});
+   payload.validatedArticle=validateBusinessResearchArticle({request:f.context.authorContext.assignment.canonical_request,
+     revision:f.context.authorContext.revision,sources:payload.validatedArticle.sources,now:new Date().toISOString()},a);
+ });
+ const v=parse(w);assert.equal(v.article.catalysts.length,15);assert.equal(v.article.summary.references.at(-1).locator.length,500);
+ assert.match(v.tables[0].rows[1].periods[0],/^\d{4}-\d{2}$/);assert.equal(v.tables[0].rows[2].periods[0],'2026H1');
+ assert.equal(v.tables[0].rows[2].unit,'TWD_thousands');
 });
 test('actual shared published component SSR escapes prose and shows periods, withdrawal and accessible folded tables',async()=>{
  const require=createRequire(new URL('../web/package.json',import.meta.url)),ts=require('typescript');

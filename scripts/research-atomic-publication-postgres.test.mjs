@@ -263,7 +263,7 @@ async function publicationFixture(t,scenario='positive') {
       // Explicit database-corruption fixture under PostgreSQL superuser, rolled
       // back. Runtime roles cannot disable the original append-only guards.
       const before=audit();assert.throws(()=>sql(`BEGIN;ALTER TABLE candidate_research_dossiers DISABLE TRIGGER USER;
-        INSERT INTO candidate_research_dossiers SELECT (jsonb_populate_record(NULL::candidate_research_dossiers,to_jsonb(d)||jsonb_build_object('id',gen_random_uuid(),'published_at',clock_timestamp()+interval '1 second'))).* FROM candidate_research_dossiers d;
+        INSERT INTO candidate_research_dossiers SELECT (jsonb_populate_record(NULL::candidate_research_dossiers,to_jsonb(d)||jsonb_build_object('id',gen_random_uuid(),'input_hash',repeat('0',64),'published_at',clock_timestamp()+interval '1 second'))).* FROM candidate_research_dossiers d;
         ALTER TABLE candidate_research_dossiers ENABLE TRIGGER USER;${rpc('read_research_company_publication_v2',[ids.company])}ROLLBACK;`),/research_publication_view_lineage/);
       assert.equal(audit(),before);
     });
