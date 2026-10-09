@@ -88,7 +88,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "web/src/lib/research-monitor-benchmark-context.ts",
-      "sha256": "3b643da30414d0c2676540adb46cc79d0e6c0201fa3340ae411b61042c728d07"
+      "sha256": "dfad0f149b43e37aa604e5a619ef50740cff75966d5a1383b9a5dad59b5fb763"
     },
     {
       "path": "web/src/lib/research-paper-books.ts",
@@ -251,7 +251,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     }
   ],
   "dependencyLockHash": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
-  "codeHash": "2f56cb2dc71e7e1a118d72f7438008cccc491571a97ab9d2be507588c3e6fc7c",
+  "codeHash": "ec137e1b79310a0fe1e97c93ced78a8af4a662fe143fd4b83d80a3a9b59f1ba3",
   "parameterMode": "fixed_baseline_source_bound",
   "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
   "parameterFiles": [

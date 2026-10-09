@@ -16,3 +16,5 @@ Maker raw TAPs (outside Git, synthetic fixtures only):
 - `/tmp/stockinsider-monitor-benchmark-route-second.tap` —6/6 (five actual-route tests plus one source-release identity test).
 
 The actual-route tests execute the imported benchmark adapter, existing execution-approval reader and decision function together, with synthetic DB transport. They verify old source-code approval is rejected, held monitoring persists, identical input replays, corrections change decision identity, missing benchmarks remain explicit, and auth is checked before DB access. They do not claim official feed activation, production ACL acceptance or investment performance.
+
+Independent exact1c1fc2 review found one P2: BigInt literal syntax was incompatible with the repository's ES2017 TypeScript target, despite Node strip-types tests passing. The successor uses BigInt constructors without changing tsconfig and regenerates the normal source release. The original failure and subject remain in Git; affected tests and independent targeted compiler check must be repeated. No semantic or parameter change accompanies this repair.

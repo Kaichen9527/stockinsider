@@ -128,7 +128,7 @@ export function calculateMonitorBenchmarkContext(input: MonitorBenchmarkInput, c
       clocks(row, ['source_timestamp', 'collected_at', 'recorded_at'], cutoff);
       const open = instant(row.open_at), close = instant(row.close_at);
       const civil = (time: bigint) => {
-        const millis = time >= 0 ? time / 1000n : -((-time + 999n) / 1000n);
+        const millis = time >= 0 ? time / BigInt(1000) : -((-time + BigInt(999)) / BigInt(1000));
         return new Date(Number(millis) + 8 * 3600_000).toISOString().slice(0, 10);
       };
       ensure(open < close && civil(open) === row.session_id && civil(close) === row.session_id, 'calendar_invalid');
