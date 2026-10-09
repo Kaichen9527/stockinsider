@@ -1,0 +1,171 @@
+{
+  "schemaVersion": "author-assignment-test-only-successor-vm-receipt-v1",
+  "recordedAt": "2026-10-09T10:14:47.249296+00:00",
+  "runtimeSubject": "6f20d4fee2b0b7f960e36e6e104605acf6ded55c",
+  "sourceSubject": "6f20d4fee2b0b7f960e36e6e104605acf6ded55c",
+  "testSubject": "34f658e6a3882883df7a67e2ee12a84ffe32ca12",
+  "buildSubject": "6f20d4fee2b0b7f960e36e6e104605acf6ded55c",
+  "localTestCommit": "0ef3f1c9676b38cb463b80afefb60446c6812312",
+  "buildId": "I-fUAZYDmfCD4nDT76Cu4",
+  "webTree": "655345527e929c2329b23eb19dd58355009c54d3",
+  "testSubjectTree": "2003ce08af0c98fa860f1249f3e578a1d7bc0769",
+  "branch": "codex/author-assignment-route-vm-oct09",
+  "runtimeMatch": "6f→34f only one test changes7insert/1delete. Web/harness/package/migrations byte-identical; exact6f compiled artifact reused, no build/type/lint rerun. Fresh disposable PG profile.",
+  "testBlob": {
+    "path": "scripts/research-author-assignment-http.test.mjs",
+    "bytes": 11768,
+    "sha256": "773caee3e258de693695a07f65dacb6616610824045109a6a42b4cfa1f9b5783"
+  },
+  "checks": {
+    "nativeWholeFile": {
+      "total": 34,
+      "parentCases": 2,
+      "childCases": 32,
+      "pass": 34,
+      "fail": 0,
+      "skip": 0,
+      "exitCode": 0
+    },
+    "sameBuildPriorTypesLintNormalBuild": "6f recorded PASS in immutable original receipt; inherited by exact runtime byte match, not newly executed"
+  },
+  "accepted": {
+    "guardedCompleteFixedInputsBothCompanies": true,
+    "closedBodyRoleAuthDenials": true,
+    "twoHttpFirstAdmissionsOneAssignment": true,
+    "readReplayRestartSameAssignmentCounts": true,
+    "auoWithdrawalViaAuthenticatedInboxPost": true,
+    "auoWithdrawalAcceptedOneNewRevisionId": true,
+    "auoOriginalSourceWholeJsonBytesUnchanged": true,
+    "auoOriginalAssignmentReadReplay409": true,
+    "emcOriginalLeaseExpiryReadReplay409": true,
+    "assignmentReservationChargeAndFormalCountsUnchanged": true
+  },
+  "redHistory": {
+    "originalReceipt": ".agent/reports/2026-10-09T10-02-author-assignment-6f-vm.json",
+    "bytes": 17211,
+    "sha256": "95224c8eb3765431fc98ddb430e39c16ef9fd72d2c7f56f9c391a9ab81bb50b6",
+    "originalNativeCounts": {
+      "total": 34,
+      "pass": 32,
+      "fail": 2,
+      "skip": 0
+    },
+    "firstError": "permission denied for table source_raw_documents",
+    "originalNeverModified": true,
+    "repair": "Root-owned test replaces refused directUPDATE with existing authenticated inbox append. No grant or runtime change."
+  },
+  "profiles": [
+    {
+      "symbol": "2409",
+      "path": "/workspace/aah-r2-2409/acceptance-receipt.json",
+      "bytes": 22162,
+      "sha256": "07c229725bf69284de00fd1ab7d9d5e5eb1d89f56874747a0f026cb9b19df333",
+      "completeInput": {
+        "symbol": "2409",
+        "revisionId": "82a3f6fa-5263-491a-8908-bdf9d97bb44c",
+        "inputHash": "2d73f793c8c97bcc04805c8f82426704a81483cc6ae476da301c486c3b41ce2f",
+        "charge": 166397,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "assignment": {
+        "symbol": "2409",
+        "assignmentId": "4be8385e-0db9-42a6-a35d-87913fba6b40",
+        "inputRevisionId": "82a3f6fa-5263-491a-8908-bdf9d97bb44c",
+        "inputHash": "2d73f793c8c97bcc04805c8f82426704a81483cc6ae476da301c486c3b41ce2f",
+        "syntheticControllerCredentials": true,
+        "actualTrustedRoleExecution": false,
+        "publishableResearch": false
+      },
+      "harnessPassed": true,
+      "tapAuthoritative": true
+    },
+    {
+      "symbol": "2383",
+      "path": "/workspace/aah-r2-2383/acceptance-receipt.json",
+      "bytes": 22161,
+      "sha256": "ac777687e535bdb79d3cecfe3d219bfb55e2ff951fd9ccb68bc36b6889278eb2",
+      "completeInput": {
+        "symbol": "2383",
+        "revisionId": "b78034e7-940b-4935-b391-92018790ab26",
+        "inputHash": "8298776cbadbf10c40b0dfa22bbcdad0681fe45928e4766f805e74361dcf43dc",
+        "charge": 99113,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "assignment": {
+        "symbol": "2383",
+        "assignmentId": "3b9c0230-5598-4961-b02f-bdcdc69ddd4a",
+        "inputRevisionId": "b78034e7-940b-4935-b391-92018790ab26",
+        "inputHash": "8298776cbadbf10c40b0dfa22bbcdad0681fe45928e4766f805e74361dcf43dc",
+        "syntheticControllerCredentials": true,
+        "actualTrustedRoleExecution": false,
+        "publishableResearch": false
+      },
+      "harnessPassed": true,
+      "tapAuthoritative": true
+    }
+  ],
+  "logs": [
+    {
+      "path": ".agent/reports/2026-10-09T10-14-author-assignment-34f-vm.log.txt",
+      "bytes": 8560,
+      "sha256": "5fbd2cc95a6c1d994d1120c884479b19d56015f07914940514fc1f369c5e8d93",
+      "originalPath": "/workspace/cloud-author-assignment-artifacts-oct09/native-author-assignment-r2.log"
+    }
+  ],
+  "resourceMeasurement": {
+    "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+    "stage": "native-author-assignment-r2",
+    "command": [
+      "node",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/research-author-assignment-http.test.mjs"
+    ],
+    "startedAt": "2026-10-09T10:12:28.921Z",
+    "completedAt": "2026-10-09T10:13:13.753Z",
+    "elapsedSeconds": 44.8310475719918,
+    "exitCode": 0,
+    "sampledAggregateRssPeakBytes": 632737792,
+    "observedTaskDiskPeakBytes": 1432702976,
+    "availableBeforeBytes": 16654233600,
+    "availableAfterBytes": 16524750848,
+    "guardTermination": null
+  },
+  "cleanup": {
+    "ownedProcessesObserved": [],
+    "availableBytes": 16524718080,
+    "allScratchAndEvidenceRetained": true,
+    "noDeletion": true
+  },
+  "manualIncrement": {
+    "startedAt": "2026-10-09T10:11:40Z",
+    "maxSeconds": 1800,
+    "singleHeavySequential": true,
+    "notAutomatedModelBudgetAcceptance": true
+  },
+  "reviewAttribution": "Root reports34f test-only independent review ongoing at task receipt; this is maker VM acceptance, not independent/protected approval.",
+  "remaining": [
+    "Actual trusted author/reviewer model execution",
+    "Article completion and original publication chain",
+    "Complete-input byte rollback/lock-wait/120-second/concurrency/response-loss gaps unchanged"
+  ],
+  "capabilities": {
+    "actualTrustedRoleExecution": false,
+    "modelDispatched": false,
+    "publishableResearch": false,
+    "financialVerified": false,
+    "researchQualified": false,
+    "strategyApproved": false,
+    "entryEligible": false,
+    "protectedApproved": false,
+    "productionWrites": false,
+    "deployed": false
+  }
+}

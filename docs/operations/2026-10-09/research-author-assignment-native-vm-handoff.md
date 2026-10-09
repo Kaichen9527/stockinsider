@@ -11,3 +11,11 @@ Fresh actual compiled Next→Supabase/PostgREST→PG native **34total/32pass/2fa
 Exact original stdout hashes/source/build/profile/resource/cleanup are in `.agent/reports/2026-10-09T10-02-author-assignment-6f-vm.json`. Native45.7sec, sampledRSS0.638GB; build sampledRSS1.859GB; task disk1.432GB, final free~16.654GB >8GiB reserve. Owned processes stopped, all scratch/unique RED evidence retained, no deletion. Roughly10-minute manual incremental work is not role/model-budget acceptance.
 
 Next: root-owned lawful withdrawal fixture successor, then exact test-only rerun against matching existing build if runtime unchanged. Complete-input byte rollback/lock-wait expiry/120-second/source concurrency/response-loss gaps stay recorded. Genuine trusted author/reviewer invocation and original publication pipeline remain unfinished. No main merge, shared integration, live DB write, deployment or protected bypass.
+
+## Test-only successor34f — 2026-10-09 18:14 Asia/Taipei
+
+Entire native34/34 zero skip (32 children+2 parents), exit0, test subject `34f658e6a3882883df7a67e2ee12a84ffe32ca12`. Runtime/build/source remains `6f20d4fee2b0b7f960e36e6e104605acf6ded55c`; web/harness/package/migrations exactly identical, original build reused with no rebuild. Fresh disposable PG17/PostgREST/compiled Next, independent ephemeral synthetic controller keys.
+
+AUO withdrawal uses existing authenticated inbox POST, accepted1/newrevisionUUID, original source whole JSON bytes unchanged. Original assignment read/replay409, all assignment/reservation/charge/formal counts unchanged. Both company create/concurrent-first-admission/replay/restart/auth pass, EMC real isolated-clock expiry pass. Original sourceACL34/32/2 RED stays immutable; no grants/directUPDATE/runtime/assertion relaxation. TAP is authoritative, not shared harness `passed:true`.
+
+Receipt `.agent/reports/2026-10-09T10-14-author-assignment-34f-vm.json` saves exact stdout/hash/profile/build/resource/cleanup. Runtime44.8sec, sampledRSS0.633GB, taskdisk1.433GB, free~16.524GB >8GiB reserve; owned processes stopped, scratch/evidence retained without deletion. Manual incremental work, not model-budget acceptance. Root test-only independent review was ongoing at handoff; no actual model execution/publication/qualification/main/integration/deployment claim. Earlier complete-input boundary gaps remain recorded.
