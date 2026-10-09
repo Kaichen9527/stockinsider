@@ -62,6 +62,10 @@ export async function handleResearchAuthorAssignment(request: Request): Promise<
   if (!requireExactInternalBearer(request)) return Response.json({ ok: false, error: 'research_author_auth_required' }, { status: 401 });
   const identity = resolveResearchControllerIdentity(request, 'author');
   if (!identity.ok) return Response.json({ ok: false, error: identity.error }, { status: 401 });
+  if (request.headers.has('x-research-author-result-action')) {
+    const { handleResearchAuthorResult } = await import('./research-author-result.ts');
+    return handleResearchAuthorResult(request);
+  }
   const deadline = new FinancialDeadline(); let input: AuthorRequest;
   try { input = parseRequest(await readCompleteBody(request, deadline)); }
   catch { deadline.controller.abort(); return Response.json({ ok: false, error: 'research_author_assignment_request_invalid' }, { status: 400 }); }
