@@ -202,7 +202,8 @@
     "test:research-reviewer-assignment": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-reviewer-assignment.test.mjs scripts/research-reviewer-identity.test.mjs",
     "test:research-reviewer-assignment:postgres": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-reviewer-assignment-postgres.test.mjs",
     "test:research-reviewer-result": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-reviewer-result.test.mjs",
-    "test:research-reviewer-result:postgres": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-reviewer-result-postgres.test.mjs"
+    "test:research-reviewer-result:postgres": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-reviewer-result-postgres.test.mjs",
+    "test:research-publication-lineage:postgres": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-publication-lineage-postgres.test.mjs"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
