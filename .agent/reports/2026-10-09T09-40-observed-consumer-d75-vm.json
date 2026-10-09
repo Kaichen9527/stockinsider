@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "observed-consumer-d75-native-vm-receipt-v1",
+  "recordedAt": "2026-10-09T09:41:11.442908+00:00",
+  "runtimeSubject": "9745e4d24da914b27fe533344e497049e047594f",
+  "testSubject": "d75ee25683adf287497dd793eb12e808ca5e659a",
+  "localTestCommit": "28028845aaedfc7f6a456d337db527cfa8b280c6",
+  "buildSubject": "9745e4d24da914b27fe533344e497049e047594f",
+  "runtimeAndBuildWebTree": "714d370bda0067bbff81ceec6206a11bd659022c",
+  "buildId": "ClbGVSBZerb6jaq-nl1LN",
+  "provenance": "9745→d75 changes only scripts/research-observed-priority-native.test.mjs. Runtime/web/package/build inputs identical; original exact9745 compiled build reused without rebuild. Fresh disposable PG profile.",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-observed-priority-native.test.mjs"
+  ],
+  "checks": {
+    "nativeFullFile": {
+      "total": 24,
+      "parentCases": 1,
+      "childCases": 23,
+      "pass": 24,
+      "fail": 0,
+      "skip": 0
+    },
+    "priorLinuxConsumerAndMonitor29": "preserved prior9745 pass; not rerun for test-only delta"
+  },
+  "consumer": {
+    "receiptBytes": 4372812,
+    "receiptSha256": "c038cc5be5296e5a19af6f5f9113f1aa31695a4f2ce38f28a9909722413d9c51",
+    "priorityReserializedBytes": 4372119,
+    "bodyAttribution": "Parsed native HTTP response reserialized compactly; original network chunks not independently retained. Do not call this rawHTTP byte length.",
+    "rows": 1978,
+    "uniqueSymbols": 1978,
+    "priceContexts": 1978,
+    "accountedCount": 1978,
+    "dispositions": {
+      "needs_evidence": 1978
+    },
+    "queueCount": 0,
+    "newJobs": 0,
+    "firstDiscoveryCaptures": 2,
+    "snapshotHash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42",
+    "receiptHash": "958ac08fdfe6860c7d541cb6a34c25f5191eef024c8a29b6a4f71176f784520e",
+    "scope": "research_observed_v1",
+    "replayNoNewRunAndOriginalFirstDiscoveryBytesUnchanged": true
+  },
+  "ep8": {
+    "documentId": "cffd0243-39fa-4360-8bcd-0b5fc102b5d9",
+    "sourceUrl": "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999",
+    "publishedAt": "2026-03-16T22:30:00Z",
+    "firstObservedAt": "2026-10-08T12:31:55.622917+00:00",
+    "acquisition": "attributed Mac relay, not VM HTTP",
+    "scope": "public publisher description only; not episode audio/transcript",
+    "controllerRunHash": "1e5b282c7a864d12ff8141a7bf0038d9a3972efac2536588570c4cbbab35b875"
+  },
+  "reasonedResearchQueue": {
+    "runId": "9509b819-c6c3-4d5e-bc45-1494c220661c",
+    "inputHash": "25af32abde10d5822c345b6ba2976ff8213f14794884803a807d3a3e1614f4af",
+    "queue": [
+      {
+        "symbol": "5347",
+        "lane": "general",
+        "score": 11.76,
+        "scoreStatus": "partial_source_failure",
+        "independentRootCount": 1,
+        "rootIds": [
+          "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999"
+        ],
+        "missingPlatforms": [
+          "broker",
+          "bulltalk",
+          "facebook",
+          "instagram",
+          "investanchors",
+          "news",
+          "official",
+          "ptt",
+          "threads",
+          "twse_insider",
+          "youtube"
+        ],
+        "inProgress": false,
+        "disposition": "queued",
+        "policyVersion": "research-priority-v1"
+      }
+    ],
+    "jobId": "38d7efca-afb9-427b-a629-0f59d432d9d6",
+    "researchCompanyId": "3f27f0fe-f280-46e8-8535-b1d637db8a68",
+    "novelty": 0,
+    "profitImpact": 0,
+    "notCurrentCatalyst": true,
+    "claimInputCompleted": false
+  },
+  "meaning": "Authenticated existing endpoints consume attributed real publisher description. OriginalMarch16 publication/October8 first acquisition; novelty0/profitImpact0. One manually assessed research-only5347 job for old lead, not new order/catalyst, trusted role execution, full company research, Top20, qualification, publication or production use. Optional observed claim/input profile disabled; explicitly not claimed.",
+  "resourceMeasurement": {
+    "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+    "stage": "native-consumer-r2",
+    "command": [
+      "node",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "scripts/research-observed-priority-native.test.mjs"
+    ],
+    "startedAt": "2026-10-09T09:39:06.863Z",
+    "completedAt": "2026-10-09T09:39:53.028Z",
+    "elapsedSeconds": 46.16517592102173,
+    "exitCode": 0,
+    "sampledAggregateRssPeakBytes": 913510400,
+    "observedTaskDiskPeakBytes": 1290072064,
+    "availableBeforeBytes": 18460516352,
+    "availableAfterBytes": 18388205568,
+    "guardTermination": null
+  },
+  "diskCorrection": {
+    "wrapperOmittedNonSuffixedNativeProfile": true,
+    "retainedProfileBytes": 72298496,
+    "conservativeMeasuredPlusRetainedProfileBytes": 1362370560
+  },
+  "cleanup": {
+    "ownedProcessPidsObserved": [],
+    "scratchLogsRetained": true,
+    "availableBytes": 18388176896,
+    "noDeletion": true
+  },
+  "logs": [
+    {
+      "path": ".agent/reports/2026-10-09T09-40-observed-consumer-d75-vm.log.txt",
+      "bytes": 6565,
+      "sha256": "9c80366cb2b8bbef00d9a57b839a26a8113b0781721ffafe33d6cfb73c6b9b68",
+      "originalPath": "/workspace/cloud-consumer-9745-artifacts-oct09/native-consumer-r2.log"
+    },
+    {
+      "path": "/workspace/cph-r2/acceptance-receipt.json",
+      "bytes": 24428,
+      "sha256": "c8ea9073e15d7dad45e0e557e335d730cbfe1b74c3adc8b4583f4b3aa9c4e74b"
+    }
+  ],
+  "redHistory": "Original9745 native22pass2fail preserved. Earlierconsumer already captured2; laterpositive expected2 incorrectly. Rootd75 asserts2/symbols in earlier case, then0 plus all first-discoverybytes immutable later. No runtime/test assertions weakened by VM owner.",
+  "reviewAttribution": "Root reports independent d75 test-only PASS. This receipt is maker VM runtime acceptance, not protected authority.",
+  "capabilities": {
+    "formalAuthoritySeeded": false,
+    "strategyApproved": false,
+    "entryEligible": false,
+    "productionWrites": false,
+    "modelDispatched": false,
+    "deploymentApproved": false
+  }
+}
