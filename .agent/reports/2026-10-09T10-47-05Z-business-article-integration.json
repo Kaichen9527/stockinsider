@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-09T10:47:05.180871+00:00",
+  "subject": "7221958b5b3de77134f3df816376e52fba9ec6c5",
+  "tree": "a0c659aa194a8e7250522dd1e3f92200214ed7c8",
+  "integration": "0fc4ee239c7bbebb2f221c6fa3f092c3f063cb02",
+  "pr341": "merged development integration only",
+  "implementation": "pure closed v2 business article validation and static recomputation; no new route/DB/role/publication",
+  "checks": {
+    "rootRelated": {
+      "pass": 109,
+      "fail": 0,
+      "skip": 0
+    },
+    "articleCases": 40,
+    "typecheck": "PASS; web bytes identical to final successor",
+    "lint": "PASS0errors33existingwarnings",
+    "normalBuild": "PASS final722",
+    "resourcePeakMeasured": false
+  },
+  "review": {
+    "initialSubject": "cf838c35c108548a8daff5bb1821ce65a8e6d179",
+    "initialVerdict": "3P2: exclusive expiry, namespaced sealed gaps, share denominator numeric references",
+    "rootRegressionBeforeRepair": {
+      "pass": 37,
+      "fail": 3,
+      "skip": 0
+    },
+    "finalReviewer": "author_input_review_oct08",
+    "finalVerdict": "unsigned scoped CODE PASS exact722; independent40/40 plus empty-manifest and gap-hash tamper probes; no PG/build rerun"
+  },
+  "byteBoundary": {
+    "subject": "d24bfc7fd3a727df43d561141ec0c3fac6a6acbd",
+    "receipt": "9e28b8366bab787e24c3721189acdeded3f6dae3",
+    "rawGitEvidenceVerified": [
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r1.log.txt",
+        "bytes": 2688,
+        "sha256": "12e99b893b79ba4a8f940d2685436c037f7c6323cc08421db81fd906372e4cb5"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r1.json.txt",
+        "bytes": 653,
+        "sha256": "7fbfb9ab42385b87f84c84c77d5c36004117fd9541677df253e5d8182a0267ac"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r1.time.txt",
+        "bytes": 881,
+        "sha256": "80b2ad96487ce39597c724535c4ad5474d093a96eeffb395d403177957305259"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r2.log.txt",
+        "bytes": 5760,
+        "sha256": "9dddfaa5242df444a9913959a98c34e1de7953c172b9bc6e0868ea0e42966d79"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r2.json.txt",
+        "bytes": 654,
+        "sha256": "60093deed442e426433a83a9d0ef017fe22a5407f2460bfefd7803b9f6fb6fab"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r2.time.txt",
+        "bytes": 845,
+        "sha256": "031543c3695fa094e200eeb40fd96e4b192d3224d37e5c011aa7a63e1ff43d7e"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r3.log.txt",
+        "bytes": 134118,
+        "sha256": "8678fb852d9ce1e37fb93da1075ef3f538e38a44d5e07f6f0437f890716c3643"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r3.json.txt",
+        "bytes": 653,
+        "sha256": "d2b3f07212e5f76defac9092f34aff8b1ab0793c0448605ea39a1380c8f1fb26"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-r3.time.txt",
+        "bytes": 845,
+        "sha256": "232cfb7ed0d0942a4bac807190b9f978294f56ec4dca6ab619b4d94378e50e28"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-final.log.txt",
+        "bytes": 134112,
+        "sha256": "2d5837ebe2ad8254c6c50f221ab309a1dd1fc1b10234396f81a505f9ed89f85a"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-final.json.txt",
+        "bytes": 656,
+        "sha256": "dfb4e77e0934a465688d531b4db4d5dccf422b61e3515edd879ce2e3478b0972"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-boundary-pg-final.time.txt",
+        "bytes": 845,
+        "sha256": "86af8f8b52ac32f7b3134dbf269c3dfde61c65cd811933fd4825c145811e3253"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-pg.log.txt",
+        "bytes": 466020,
+        "sha256": "035907767cd65cb7e8ac790e3cc9936f52cd449b1bca15840eb74d4925610efc"
+      },
+      {
+        "path": ".agent/reports/2026-10-09T10-32-complete-input-byte-boundary-vm-cleanup.json.txt",
+        "bytes": 202,
+        "sha256": "955fbdd85cc0f1a674ee6beb9c11235642f59abdb3f6073c356a82dabb011f0c"
+      }
+    ],
+    "actualPgTap": {
+      "pass": 6,
+      "fail": 0,
+      "skip": 0
+    },
+    "exactBytes": 524288,
+    "rejectedBytes": 524289,
+    "fullRollback": true,
+    "review": "astra_publication_review unsigned scoped CODE PASS; did not run Linux clock fixture onMac",
+    "unchangedRuntime": true,
+    "notProven": [
+      "natural freshness120s",
+      "real lockwait expiry",
+      "source commit orders/rightsABA",
+      "actual response-loss recovery"
+    ]
+  },
+  "vmOwnership": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "turnId": "01a12043-8e4d-7233-ad26-f80fb64d5bc8",
+    "status": "active",
+    "base": "2db7bdac696cfc416b7946a912229bf9e4dee102",
+    "newTask": "natural-clock complete-input original deadline after actual shared-lock wait only",
+    "ownedFiles": [
+      "scripts/research-complete-input-lock-expiry-postgres.test.mjs",
+      "necessary separate test fixture helper"
+    ],
+    "duplicateDispatch": false
+  },
+  "logs": {
+    "initial-type-red": {
+      "path": ".agent/reports/2026-10-09T10-47-05Z-business-article-initial-type-red.log.txt",
+      "bytes": 315,
+      "sha256": "091467e75b59bef44f4327fa67fa51ba783513283bd8ae3d06ebbd373ce87077"
+    },
+    "initial-related-106": {
+      "path": ".agent/reports/2026-10-09T10-47-05Z-business-article-initial-related-106.log.txt",
+      "bytes": 18943,
+      "sha256": "a9996e347078ecbf3359c4ad410d121965e4f12e0ad4c6cf3eccc6827dc6d796"
+    },
+    "review-red-37-3": {
+      "path": ".agent/reports/2026-10-09T10-47-05Z-business-article-review-red-37-3.log.txt",
+      "bytes": 10491,
+      "sha256": "f64b9c5568b1a8d49694527b892343ec3a85c2f83f5298af6146d6c626200390"
+    },
+    "final-related-109": {
+      "path": ".agent/reports/2026-10-09T10-47-05Z-business-article-final-related-109.log.txt",
+      "bytes": 19657,
+      "sha256": "6dc3ccb46aa72f0a6726196dd549da961f09864d0e8b04add43bf0b91d4953b8"
+    },
+    "typecheck": {
+      "path": ".agent/reports/2026-10-09T10-47-05Z-business-article-typecheck.log.txt",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "lint": {
+      "path": ".agent/reports/2026-10-09T10-47-05Z-business-article-lint.log.txt",
+      "bytes": 4998,
+      "sha256": "0ed564bcd7dedded8f331201d5b62651ceefc249aef01556408aaed8e0c0a4bb"
+    },
+    "build": {
+      "path": ".agent/reports/2026-10-09T10-47-05Z-business-article-build.log.txt",
+      "bytes": 6499,
+      "sha256": "da619b2cabbfddf0959764fdd586faf9472aafe1e2ca358b5d69834cf8886303"
+    }
+  },
+  "remaining": [
+    "genuine assigned author/result and independent reviewer execution",
+    "original v2 bundle/outbox/submission and shared reader",
+    "real aligned discovery price adapter",
+    "full final main-to-R protected review",
+    "main merge/production migration/deploy",
+    "accepted research schedules/five actual trading days"
+  ],
+  "actualRoleExecution": false,
+  "publication": false,
+  "productionWrites": false,
+  "deployed": false
+}

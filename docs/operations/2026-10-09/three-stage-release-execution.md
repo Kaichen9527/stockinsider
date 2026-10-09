@@ -6,7 +6,31 @@ accounting, AUO plus a different-industry article with recalculable inputs and
 independent review, then qualified technical observation. An empty eligible
 list is valid; research priority is not entry authority.
 
-## Current exact state
+## Latest verified state — supersedes older checkpoints below
+
+Integration **0fc4ee239c7bbebb2f221c6fa3f092c3f063cb02** is pushed and clean;
+its tree exactly equals reviewed7221958b. PR341 is merged into that feature
+branch. Main remains169aad1; no production migration/deployment occurred.
+
+- New source-linked business-article contract revalidates complete input and
+  reruns fixed AUO/EMC calculators. Tables carry computed values/units/periods;
+  gaps/assumptions stay explicit, P/E on losses is N/A and multiples are
+  uncalibrated sensitivity. The validator cannot publish or confer eligibility.
+- Root109related tests0fail/skip, typecheck, lint0errors/33existing warnings and
+  normalbuild pass. Independent reviewer40/40 plus adversarial probes passes
+  exact722. Three initialP2 and root37/3RED remain in immutable evidence; fixes
+  cover exclusive expiry, exact namespaced gaps and EPS share denominators.
+- Independently reviewed original-SQL PG byte test6/6 proves524288 exact/+1
+  rejection, full rollback/replay and joint four-count gate. Root verified14
+  original Git evidence hashes. Linux fixed clock is explicitly serialization
+  only; Mac did not rerun it and it proves no natural expiry/freshness.
+- Existing VM is active on one new natural-clock lock-wait expiry fixture from
+  2db, turn01a12043. It owns a separate new test file; no duplicate work assigned.
+- Genuine product author/reviewer execution, v2 original publication/reader,
+  actual61-session discovery price adapter and full protected release remain
+  incomplete. Engineering progress does not establish investment effectiveness.
+
+## Earlier exact state (historical, retained for provenance)
 
 - Main remains169aad1b6cfa747f78ae3464b614f43c0749d806; production was not deployed
   by this checkpoint. Clean integration75d91024ce365606989bfe42b2d7e6227b65044d
@@ -290,3 +314,12 @@ exact/+1 and rollback fixture from2db. Root must not duplicate that task or edit
 its owned boundary test. Root may continue the nonoverlapping article contract.
 The Goal tool currently reports blocked despite this live engineering progress;
 this record observes that state and does not manufacture a resumed/completed goal.
+
+## Article contract and cumulative byte acceptance integrated
+
+The timestamped business-article checkpoint saves exact109/TSC/lint/build logs,
+initial compile-target RED and independent reviewer regression37/3RED. Original
+v1,financial core,migrations,protected gates and production state are unchanged.
+No claim of new source acquisition or completed company article follows from the
+synthetic pure contract fixtures. Actual provider/role identities and citations
+must still pass the same guarded receive/review/publication transaction.
