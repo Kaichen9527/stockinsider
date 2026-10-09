@@ -138,7 +138,7 @@ for(const symbol of ['2409','2383'])test(`compiled private author handoff ${symb
 
   const handoffIdentity=()=>({action:'readAuthorHandoff',input,inputRevisionId:sealed.revision_id,inputHash:sealed.input_hash,resultId:savedResult.result_id,resultHash:savedResult.result_hash});
   let handoffResponse;
-  const handoffCall=async(req,role=true,label='handoff')=>{const response=await post('api/internal/research-model-reservation',req,role),body=await response.json();report.authorHandoffAttempts??=[];report.authorHandoffAttempts.push({label,action:req.action,requestHash:completeHash(req),status:response.status,body});return{response,body};};
+  const handoffCall=async(req,role=true,label='handoff')=>{const response=await post('api/internal/research-model-reservation',req,role),body=await response.json();report.authorHandoffAttempts??=[];report.authorHandoffAttempts.push({label,action:req.action,requestHash:completeHash(req),request:structuredClone(req),status:response.status,body});return{response,body};};
   await t.test('handoff exact header auth, closed six keys and result mismatch leave all state unchanged',async()=>{
    const before=audit();for(const role of [false,'reviewer','tester','cron'])assert.equal((await handoffCall(handoffIdentity(),role,'auth')).response.status,401);
    for(const patch of [{extra:true},{principal:'a'.repeat(64)},{owner:'caller'},{completion:{}}])assert.equal((await handoffCall({...handoffIdentity(),...patch},true,'closed-shape')).response.status,400);
