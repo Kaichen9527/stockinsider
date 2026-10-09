@@ -1,0 +1,306 @@
+{
+  "schemaVersion": "observed-consumer-successor-vm-receipt-v1",
+  "recordedAt": "2026-10-09T09:06:27.955709+00:00",
+  "subject": "9745e4d24da914b27fe533344e497049e047594f",
+  "tree": "5d3d01cd9cd79c7973831229c24e1b21b0d61043",
+  "webTree": "714d370bda0067bbff81ceec6206a11bd659022c",
+  "buildId": "ClbGVSBZerb6jaq-nl1LN",
+  "branch": "codex/observed-consumer-9745-vm-oct09",
+  "sourceEdited": false,
+  "singleHeavySequential": true,
+  "window": {
+    "startedAt": "2026-10-09T08:59:18Z",
+    "maxManualSeconds": 1800,
+    "automatedModelRoleBudgetAcceptance": false
+  },
+  "checks": {
+    "linuxConsumerPlusMonitor": {
+      "pass": 29,
+      "fail": 0,
+      "skip": 0,
+      "includesPC10": true
+    },
+    "normalBuild": "pass",
+    "nativeFullFile": {
+      "pass": 22,
+      "fail": 2,
+      "skip": 0,
+      "passed": false
+    },
+    "nativeRequestedConsumerCase": "pass",
+    "pc10InstrumentedMeasurement": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "bodyBytes": 4162178,
+      "receiptBytes": 4162839,
+      "rows": 1978,
+      "priceContexts": 1978,
+      "httpRequests": 1,
+      "localJournalReplay": true,
+      "synthetic": true,
+      "measurementCopyOnly": "Original test imports/assertions retained; add console diagnostic, select PC10 only; source files untouched"
+    }
+  },
+  "nativeConsumer": {
+    "receiptBytes": 4372812,
+    "receiptSha256": "089c9f3d4f02f225dc6d38b8c1cf286052d78c2c6695cca8d86b0ab6996827ac",
+    "priorityReserializedBytes": 4372119,
+    "bodyMeasurementAttribution": "Native body parsed by consumer then saved compactly; original network chunks not separately retained",
+    "cohort": {
+      "accountedCount": 1978,
+      "rows": 1978,
+      "uniqueSymbols": 1978,
+      "priceContexts": 1978,
+      "dispositions": {
+        "needs_evidence": 1978
+      },
+      "queueCount": 0,
+      "newDeepResearchJobs": 0,
+      "firstDiscoveryCaptures": 2
+    },
+    "receiptHash": "6e93d64b4956bea3f1ceffbbb799f8ebf5a90a802abdc24da1fed92b1fd1f171",
+    "scope": "research_observed_v1",
+    "snapshotHash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42",
+    "publishedClocks": [
+      {
+        "symbol": "5347",
+        "rootId": "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999",
+        "publishedAt": "2026-03-16T22:30:00+00:00",
+        "firstObservedAt": "2026-10-08T12:31:55.622+00:00",
+        "revisionObservedAt": "2026-10-08T12:31:55.622+00:00"
+      },
+      {
+        "symbol": "6531",
+        "rootId": "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999",
+        "publishedAt": "2026-03-16T22:30:00+00:00",
+        "firstObservedAt": "2026-10-08T12:31:55.622+00:00",
+        "revisionObservedAt": "2026-10-08T12:31:55.622+00:00"
+      }
+    ],
+    "sourceTemporalInterpretation": "firstObservedAt is acquisition freshness, not publication novelty or increased market attention; no historical PIT"
+  },
+  "nativeFailures": {
+    "primary": "scripts/research-observed-priority-native.test.mjs:70 expects firstDiscoveryCaptures2 after new consumer case already captured both; actual0. Requested consumer case succeeded, preserved first-discovery lineage explains changed fixture ordering. Root owns repair; not modified here.",
+    "secondary": "line243 report.observedPositive undefined after failed assertion, parent throws novelty TypeError.",
+    "harnessPassedFlagCaveat": "Shared receipt says passed:true because t.test records failed children without throwing. Actual TAP22/2 is authoritative; not claiming overall acceptance."
+  },
+  "resources": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "consumer-monitor-focused",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-source-priority-consumer.test.mjs",
+        "scripts/research-monitor-controller.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:00:41.243Z",
+      "completedAt": "2026-10-09T09:00:43.899Z",
+      "elapsedSeconds": 2.6563909749966115,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 258121728,
+      "observedTaskDiskPeakBytes": 954048512,
+      "availableBeforeBytes": 19554414592,
+      "availableAfterBytes": 19549974528,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-consumer-r1",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:02:40.080Z",
+      "completedAt": "2026-10-09T09:03:25.330Z",
+      "elapsedSeconds": 45.24990598100703,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 853659648,
+      "observedTaskDiskPeakBytes": 1285795840,
+      "availableBeforeBytes": 19222417408,
+      "availableAfterBytes": 19150118912,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-9745",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T09:01:26.569Z",
+      "completedAt": "2026-10-09T09:02:08.200Z",
+      "elapsedSeconds": 41.63105688698124,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 2115371008,
+      "observedTaskDiskPeakBytes": 1194438656,
+      "availableBeforeBytes": 19549970432,
+      "availableAfterBytes": 19222421504,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pc10-byte-measurement",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-name-pattern",
+        "PC10",
+        "/workspace/cloud-consumer-9745-artifacts-oct09/pc10-measurement.mjs"
+      ],
+      "startedAt": "2026-10-09T09:04:21.071Z",
+      "completedAt": "2026-10-09T09:04:21.946Z",
+      "elapsedSeconds": 0.8753410869976506,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 215113728,
+      "observedTaskDiskPeakBytes": 1285812224,
+      "availableBeforeBytes": 19150106624,
+      "availableAfterBytes": 19145912320,
+      "guardTermination": null
+    }
+  ],
+  "diskMeasurementCaveat": "resource wrapper samples work+artifact paths but cph-r1 native profile was outside its suffix-based scan. Retained profile disk72282112B; add that to sampled task peak1285795840 for conservative1358077952B attribution, below4GB. Actual system free remains>19GB.",
+  "cleanup": {
+    "profileOwnedNextPostgrestPgStopped": true,
+    "ownedProcessScanRemaining": 0,
+    "evidenceRemoved": false,
+    "rebuildableBuildRetained": true,
+    "noGlobalPrune": true
+  },
+  "environment": {
+    "node": "22.14.0",
+    "postgres": "17.11",
+    "postgrest": "16.3 repo pinned",
+    "dependencySource": "existing installed cache copied, no install/download",
+    "dotenvFileInventory": [
+      ".env.example",
+      "scraper/.env.example"
+    ],
+    "envValuesRead": false,
+    "internalKeyAndJWT": "ephemeral harness only, not committed"
+  },
+  "scope": {
+    "realAttributedEP8PublisherDescription": true,
+    "audioOrTranscript": false,
+    "historicalPIT": false,
+    "newCatalyst": false,
+    "formalStocksAdded": 0,
+    "researchQualified": false,
+    "strategyApproved": false,
+    "entryEligible": false,
+    "liveModelRolesExecuted": false,
+    "productionImported": false,
+    "protectedApproved": false
+  },
+  "oldFailure": "4c3874 independently found4M HTTP/2M receipt capacity failure retained; never rerun here",
+  "files": [
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/consumer-monitor-focused.json",
+      "bytes": 708,
+      "sha256": "836453e0088f5246dd0da05509707aabf2540681adcede894c433abf1f386d51"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/consumer-monitor-focused.log",
+      "bytes": 7566,
+      "sha256": "fdf25458d6bf9990e69f73f1fd1135ecec2d1477dbd1b5a1894888c9c910211a"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/consumer-monitor-focused.time",
+      "bytes": 882,
+      "sha256": "436e9a21d5ed4193f18774c8a36845c3a5c695a430f84256676527c3855cafe2"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/native-cohort-measurement.json",
+      "bytes": 1891,
+      "sha256": "a11bcf024c79d3c164435c8c32fd2a7e8955d361e856999d154208efbfbe5105"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/native-consumer-r1.json",
+      "bytes": 650,
+      "sha256": "d82a1281fc4eb93036509c6ce83add80887bf9426fbe7eb60bf937afe3b96b4f"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/native-consumer-r1.log",
+      "bytes": 8401,
+      "sha256": "ce8c8dda7bd91c2cb466ad9bba0c6648f48cf3f0ea5b2b27f3e3ed7d57bd1d16"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/native-consumer-r1.time",
+      "bytes": 877,
+      "sha256": "85edd45b8982e6a390f2dd13acee201fcae7011f73442fd0e8cf5bf8e1f1d453"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/normal-build-9745.json",
+      "bytes": 539,
+      "sha256": "ab153292164eb7ea4f651e987e14a3eba55caabdfb4a02da8f3da1078fec5af2"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/normal-build-9745.log",
+      "bytes": 6500,
+      "sha256": "ef416510525a9e159f8704bffc1d44e7f3861febd0a8efa39ce42281905103c2"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/normal-build-9745.time",
+      "bytes": 749,
+      "sha256": "f0419334317919461be18fbf1330d033dd099db22a6a3910b0b89ced8ae091fb"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/pc10-byte-measurement.json",
+      "bytes": 682,
+      "sha256": "4c109c224cb22f2c93b59c165b87b499d64a18bb7a10da488f802d6306334289"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/pc10-byte-measurement.log",
+      "bytes": 1275,
+      "sha256": "205bbe86e7bfbb6941808f830caefdbfd0fb71645f9dc1ce5a953a1056aecd72"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/pc10-byte-measurement.time",
+      "bytes": 856,
+      "sha256": "56ab1391c6add5a047f278c844e75ccff2279441716e2c8b77e0b208914a4f75"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/pc10-measurement.mjs",
+      "bytes": 12296,
+      "sha256": "34ed042c5902a916af93a32ba89fb0b0782aa03931fb6491dbcc5071042b3ab2"
+    },
+    {
+      "path": "/workspace/cloud-consumer-9745-artifacts-oct09/run-check.py",
+      "bytes": 4800,
+      "sha256": "9efbe7e5bb1c6a07244c904e03a8c5ceb45b683368e33743c206dff31015aeaf"
+    },
+    {
+      "path": "/workspace/cph-r1/acceptance-receipt.json",
+      "bytes": 23151,
+      "sha256": "5522fde17688e0bfe2728325cba65d015bbe2b14fcd9927953231e0de7e7a10e"
+    },
+    {
+      "path": "/workspace/cph-r1/observed-consumer-journal/receipt.json",
+      "bytes": 4372812,
+      "sha256": "089c9f3d4f02f225dc6d38b8c1cf286052d78c2c6695cca8d86b0ab6996827ac"
+    },
+    {
+      "path": "/workspace/cph-r1/next.log",
+      "bytes": 274,
+      "sha256": "484912a06ed3e23cc734a495f9282d3aa8aea11868428b65a3ce8c391c568bdd"
+    },
+    {
+      "path": "/workspace/cph-r1/postgrest.log",
+      "bytes": 8522,
+      "sha256": "1074ef4a49e58a4e9ad93bde25ee9a2bb7c36925ef89133e7ca8372ec5813116"
+    },
+    {
+      "path": "/workspace/cph-r1/postgres.log",
+      "bytes": 18399,
+      "sha256": "903a643ded57c33cc425a7afeee7dbe93d2045420d730e889a9323c39c74f9b4"
+    }
+  ]
+}

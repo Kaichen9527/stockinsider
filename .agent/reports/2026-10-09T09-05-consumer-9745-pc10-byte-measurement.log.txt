@@ -1,0 +1,22 @@
+TAP version 13
+# (node:152742) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:152742) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-observed-consumer-9745-oct09/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-observed-consumer-9745-oct09/web/package.json.
+# {"probe":"PC10 exact synthetic scoring/enrichment full cohort","bodyBytes":4162178,"receiptBytes":4162839,"rows":1978,"priceContexts":1978,"receiptHash":"b8f3030c7e212593cd7cd1db7eee8a8f5831640f0ecfb0712a073f1c2958f2f6","synthetic":true}
+# {"probe":"PC10 replay","httpRequests":1,"localJournalReplay":true}
+# Subtest: PC10 full1978 HTTP response persists compactly and replays all candidate and price rows
+ok 1 - PC10 full1978 HTTP response persists compactly and replays all candidate and price rows
+  ---
+  duration_ms: 500.547601
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 684.182306

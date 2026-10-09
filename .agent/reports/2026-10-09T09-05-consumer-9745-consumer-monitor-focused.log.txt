@@ -1,0 +1,165 @@
+TAP version 13
+# (node:151945) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:151945) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-observed-consumer-9745-oct09/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-observed-consumer-9745-oct09/web/package.json.
+# Subtest: bounded cohort transport is explicit; ordinary monitor keeps its original response limit
+ok 1 - bounded cohort transport is explicit; ordinary monitor keeps its original response limit
+  ---
+  duration_ms: 157.507196
+  ...
+# Subtest: consumes server membership held-first, accounts expiry, and never renews or adopts a strategy
+ok 2 - consumes server membership held-first, accounts expiry, and never renews or adopts a strategy
+  ---
+  duration_ms: 21.943095
+  ...
+# Subtest: server rechecks latest invalidation and does not receive a stale cutoff or caller eligibility
+ok 3 - server rechecks latest invalidation and does not receive a stale cutoff or caller eligibility
+  ---
+  duration_ms: 7.214428
+  ...
+# Subtest: 32 tasks bound accounts every leftover, including held stocks outside the batch
+ok 4 - 32 tasks bound accounts every leftover, including held stocks outside the batch
+  ---
+  duration_ms: 41.155481
+  ...
+# Subtest: total deadline defers work instead of pretending the monitoring run completed
+ok 5 - total deadline defers work instead of pretending the monitoring run completed
+  ---
+  duration_ms: 15.118787
+  ...
+# Subtest: deadline exhausted while journaling does not dispatch a snapshot with a negative timeout
+ok 6 - deadline exhausted while journaling does not dispatch a snapshot with a negative timeout
+  ---
+  duration_ms: 5.285947
+  ...
+# Subtest: explicit server gaps remain visible and do not stop another held stock from being checked
+ok 7 - explicit server gaps remain visible and do not stop another held stock from being checked
+  ---
+  duration_ms: 5.034137
+  ...
+# Subtest: network ambiguity stops further mutations and preserves original worklist and completed responses
+ok 8 - network ambiguity stops further mutations and preserves original worklist and completed responses
+  ---
+  duration_ms: 5.505879
+  ...
+# Subtest: missing held membership, duplicates, future or stale server clock, invalid renewal fail closed
+ok 9 - missing held membership, duplicates, future or stale server clock, invalid renewal fail closed
+  ---
+  duration_ms: 0.589139
+  ...
+# Subtest: mismatched response, future snapshot and manufactured eligibility become uncertain without retry
+ok 10 - mismatched response, future snapshot and manufactured eligibility become uncertain without retry
+  ---
+  duration_ms: 12.202946
+  ...
+# Subtest: unsafe origin, shared writer key, dirty source, caller stock selection reject before any request
+ok 11 - unsafe origin, shared writer key, dirty source, caller stock selection reject before any request
+  ---
+  duration_ms: 1.158939
+  ...
+# Subtest: existing output blocks all requests, preserving previous receipt
+ok 12 - existing output blocks all requests, preserving previous receipt
+  ---
+  duration_ms: 2.281854
+  ...
+# Subtest: real transport uses finite authenticated routes and rejects redirects without forwarding the bearer
+ok 13 - real transport uses finite authenticated routes and rejects redirects without forwarding the bearer
+  ---
+  duration_ms: 21.113585
+  ...
+# Subtest: GC cannot cancel the strongly held body deadline after response headers
+ok 14 - GC cannot cancel the strongly held body deadline after response headers
+  ---
+  duration_ms: 1187.20085
+  ...
+# (node:151969) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:151969) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-observed-consumer-9745-oct09/web/src/lib/research-discovery-price-enrichment.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-observed-consumer-9745-oct09/web/package.json.
+# Subtest: PC01 actual loopback HTTP POST and completed journal replay issue no second request
+ok 15 - PC01 actual loopback HTTP POST and completed journal replay issue no second request
+  ---
+  duration_ms: 46.520142
+  ...
+# Subtest: PC02 uncertain POST is fenced on restart rather than repeated
+ok 16 - PC02 uncertain POST is fenced on restart rather than repeated
+  ---
+  duration_ms: 9.189268
+  ...
+# Subtest: PC03 remote origin rejected before transport or journal creation
+ok 17 - PC03 remote origin rejected before transport or journal creation
+  ---
+  duration_ms: 3.98245
+  ...
+# Subtest: PC04 tampered controller or shared principal rejected
+ok 18 - PC04 tampered controller or shared principal rejected
+  ---
+  duration_ms: 4.220014
+  ...
+# Subtest: PC05 incomplete journal never becomes successful empty receipt
+ok 19 - PC05 incomplete journal never becomes successful empty receipt
+  ---
+  duration_ms: 4.470742
+  ...
+# Subtest: PC06 explicit observed roster reaches actual HTTP endpoint and replays once
+ok 20 - PC06 explicit observed roster reaches actual HTTP endpoint and replays once
+  ---
+  duration_ms: 25.492062
+  ...
+# Subtest: PC07 rejects silent formal fallback and fences uncertain submission
+ok 21 - PC07 rejects silent formal fallback and fences uncertain submission
+  ---
+  duration_ms: 8.62061
+  ...
+# Subtest: PC07 rejects wrong roster and fences uncertain submission
+ok 22 - PC07 rejects wrong roster and fences uncertain submission
+  ---
+  duration_ms: 6.289092
+  ...
+# Subtest: PC07 rejects wrong roster receipt and fences uncertain submission
+ok 23 - PC07 rejects wrong roster receipt and fences uncertain submission
+  ---
+  duration_ms: 13.760617
+  ...
+# Subtest: PC07 rejects manufactured entry eligibility and fences uncertain submission
+ok 24 - PC07 rejects manufactured entry eligibility and fences uncertain submission
+  ---
+  duration_ms: 7.450364
+  ...
+# Subtest: PC08 formal response cannot silently switch to an observed roster
+ok 25 - PC08 formal response cannot silently switch to an observed roster
+  ---
+  duration_ms: 6.661864
+  ...
+# Subtest: PC09 controller cannot smuggle a different roster or cutoff
+ok 26 - PC09 controller cannot smuggle a different roster or cutoff
+  ---
+  duration_ms: 5.984752
+  ...
+# Subtest: PCscope default is formal; observed scope requires a valid explicit snapshot
+ok 27 - PCscope default is formal; observed scope requires a valid explicit snapshot
+  ---
+  duration_ms: 0.816842
+  ...
+# Subtest: PCsize actual scoring/enrichment modules produce a cohort larger than the old four-MB transport budget
+ok 28 - PCsize actual scoring/enrichment modules produce a cohort larger than the old four-MB transport budget
+  ---
+  duration_ms: 100.322855
+  ...
+# Subtest: PC10 full1978 HTTP response persists compactly and replays all candidate and price rows
+ok 29 - PC10 full1978 HTTP response persists compactly and replays all candidate and price rows
+  ---
+  duration_ms: 449.561044
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2483.4388
