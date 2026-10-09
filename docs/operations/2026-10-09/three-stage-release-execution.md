@@ -17,8 +17,8 @@ list is valid; research priority is not entry authority.
   function/global1/1800charge/7200daily budget, source and claim fences remain.
 - Root149related and13actual PostgreSQL tests pass, zero skip; typecheck and
   lint0errors/33existingwarnings pass. Normal web buildy3EbpYvAmuUWWE0HiqSjc
-  passes. Design0144ff46 has unsigned scoped independent PASS; exact code review
-  is in progress. Initial fixture/command RED and diagnoses are saved, without
+  passes. Design0144ff46 and exact7f6259e8 have unsigned scoped independent
+  PASS; reviewer independently passed29lighttests plus7adversarialprobes. Initial fixture/command RED and diagnoses are saved, without
   changing original fences or making synthetic prose into actual research.
 - VM author-result test/receiptb2ce6cf3 on frozenb8 runtime has52/52PASS,
   zero skip. Root and independent reviewer verified all49raw-file bytes/SHA,

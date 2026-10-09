@@ -1,10 +1,22 @@
 {
   "recordedAt": "2026-10-09T14:26:07.800184+00:00",
-  "subject": "7f6259e8",
+  "subject": "7f6259e88f52622cc909653f217d41c820e7e7eb",
   "pr": 347,
   "designSubject": "0144ff46",
   "designStatus": "unsigned scoped PASS by author_input_review_oct08",
-  "codeReview": "in progress",
+  "codeReview": {
+    "status": "unsigned scoped CODE PASS",
+    "reviewer": "author_input_review_oct08",
+    "independentLightTests": 29,
+    "independentAdversarialProbes": 7,
+    "P1": 0,
+    "P2": 0,
+    "notRerun": [
+      "PostgreSQL",
+      "native HTTP",
+      "build"
+    ]
+  },
   "rootTests": {
     "related": 149,
     "postgres": 13,
@@ -83,5 +95,6 @@
       "bytes": 6498,
       "sha256": "85d826c53f9e69081013491da18d90f1fbbf227869619c2c8ff9c0e6296f2129"
     }
-  }
+  },
+  "tree": "84dc70bb8bd9c2c3c79e347a689aac5798863881"
 }
