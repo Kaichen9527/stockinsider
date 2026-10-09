@@ -1,0 +1,39 @@
+{
+  "savedEvidenceHead": "e8fa496703c8a955ed8ac5208f1d47e0f60d741a",
+  "gitLsRemoteExactSha": "e8fa496703c8a955ed8ac5208f1d47e0f60d741a",
+  "remoteShaMatches": true,
+  "gitRawByteHashChecks": 45,
+  "rawBytes": 4335604,
+  "liveOwnedServiceProcesses": [],
+  "removedOnly": [
+    {
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/rdiag/native2/http-2409/cluster",
+      "allocatedBytesBefore": 64327680,
+      "existsAfter": false,
+      "postmasterPidAbsent": true,
+      "shutdownLogConfirmed": true
+    },
+    {
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/rdiag/native2/http-2383/cluster",
+      "allocatedBytesBefore": 64311296,
+      "existsAfter": false,
+      "postmasterPidAbsent": true,
+      "shutdownLogConfirmed": true
+    }
+  ],
+  "freeBeforeBytes": 12283637760,
+  "freeAfterBytes": 12412276736,
+  "retained": [
+    "original RED evidence",
+    "all raw logs/relay/calculator inputs",
+    "retained exact7f build/dependencies",
+    "stopped journals and noncluster artifacts"
+  ],
+  "completedAt": "2026-10-09T15:14:27.785606+00:00",
+  "manualTaskStartedAt": "2026-10-09T14:54:57Z",
+  "manualTaskElapsedSeconds": 1170.785606,
+  "memoryCgroupLimitBytes": 34359738368,
+  "memoryCgroupLifetimePeakBytes": 23304355840,
+  "memoryCgroupPeakNotAttributedToTask": true,
+  "narrowFetchNote": "Remote-tracking ref absent; ls-remote actual exact head succeeded. No cleanup occurred on earlier ref lookup failure."
+}
