@@ -247,3 +247,23 @@ Continue on existing CodexVM; VPSheavycapacity is not a development stop conditi
 - [x] Identified insider lifetime32/128MiB/128run limits despite expanded VPS; archive contracte8 independently reviewed with lease-ownership P2.
 - [ ] Repair/review archive contract before implementation and actual crash/restore/shared-budget acceptance; never delete research evidence to continue.
 - [ ] Protected merge/deployment, source breadth, true monitoring/strategy/forward evidence and five actual trading days remain incomplete. See progress-convergence-1255.md.
+
+## 2026-10-09 13:50 Taipei — current milestone reconciliation
+
+Earlier dated checkboxes above preserve historical observations; this section supersedes their pending component states, without closing the end-to-end milestones.
+
+- [x] Expanded VPS measured about87.95GB free; the old capacity blocker is resolved. No verified unused large StockInsider deployment was found, so no stock/research evidence was deleted. Keep canonical history/evidence/ledgers on VPS; rebuildable isolated dependencies/build/databases stay in VM.
+- [x] PR329 shadow ranking runtimeafa3: independent28/28 and ordinary CI/build/9browser cases passed. This compares alternative attention measures only; live scoring remains unchanged. VM receipt branch6b9c50aa is available for ingestion.
+- [x] PR330 original preparation growth defect repaired at3ac619: same original unit capped at4preparations/524288 serialized bytes; maker50/50+native32/32 and independent originalPG13/13 plus129-subset counterexample pass, zero skip. Receipt0feb2b0 retained. No genuine author/reviewer was dispatched.
+- [x] PR331 benchmark runtime59c14f3: scoped independent review, ordinary CI/build/9browser cases pass. Actual VM reader3/3 and boundary12/12 do not prove a positive qualified-stock snapshot. Native roster profile7pass/3fail repaired by installing its real priority dependency; final23/23 VM, unsigned static review passed. Test-only root successor77c3f5d retains the identical web tree and all assertions.
+- [x] PR332 archive codec/private-FD/byte-identical restore component5f46: maker17/17 and independent17/17+4probes, zero skip; no SQL eviction or activation. Cooperative file timeout limitation retained.
+- [x] PR333 financial queue missing-lease repair runtime1b8aa0d: production read-only evidence11fetched/0written identified the actual omitted entry. Original3pass/5fail becomes16/16; independent16/16+3probes passes. No schema/helper change or production drain.
+- [ ] PR333 VM isolated artifact/PG route acceptance, full types/lint/normal build and genuine protected release remain pending.
+- [x] Fixed AUO/EMC bounded financial adapter designa2046447 independently accepted: complete inventory14files and original model manifests verified in Git, per-file/aggregate/input/output/deadline/finite calculation bounds explicit. This is design approval, not raw-PDF verification or implementation approval.
+- [ ] Implement/review the AUO/EMC financial supplement, then a separately reviewed durable complete-input signature. Manual assumptions remain assumptions; no financialVerified/dispatchReady promotion from recomputation alone.
+- [ ] Complete actual platform content breadth and search expansion, fair cohort/price-phase enrichment, real leased author and independent budgeted reviewer, fenced company-specific publication, genuine qualification and held-position/company-action monitoring.
+- [ ] Complete all-candidate point-in-time strategy and forward comparisons, independent result verification and exact user-approved adoption. Two persistent paper-book APIs and tests do not establish a profitable strategy.
+- [ ] Complete measured archive authority/fencing/shared-writer reservation before hot eviction; preserve raw bytes until that acceptance passes.
+- [ ] Restore genuine protected authority/graph, then reviewed merge commits, production migration/deployment, verified product schedules and five actual trading days. Ordinary CI and unsigned reviews cannot substitute for this authority; future trading days cannot be compressed into fixtures.
+
+Development and heavy acceptance continue on the existing Codex VM. Progress, failures and evidence are committed to PR327; original AUO product heartbeat remains paused, separate from the active deduplicating engineering continuation.
