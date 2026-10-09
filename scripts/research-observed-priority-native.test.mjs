@@ -3,6 +3,7 @@ import {randomUUID}from 'node:crypto';
 import {sourceControllerInstant}from '../web/src/lib/research-source-attempt-controller.ts';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {execFileSync}from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {verifyLocalInboxDataPlane} from './research-local-inbox-dataplane.mjs';
@@ -14,8 +15,8 @@ const read=name=>JSON.parse(fs.readFileSync(path.join(directory,name),'utf8'));
 const body={legacyClassification:read('observed-security-classification.json'),securityScope:read('official-security-scope-reconciliation.json')};
 const enabled=process.env.RESEARCH_LOCAL_DATAPLANE_VERIFY==='enabled';
 test('real observed priority accounts1978 and admits an old public company research lead without formal identity',{skip:!enabled&&'explicit isolated profile not enabled',timeout:120000},async t=>{
- const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,observedClaim:process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled',check:(name,fn)=>t.test(name,fn),
- afterBaseline:async({sql,sqlAsync,post,rpc,report,restart,priorityRequest})=>{
+ const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,testPgClockLibrary:process.env.STOCKINSIDER_OBSERVED_TEST_CLOCK_LIBRARY||null,observedClaim:process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled',check:(name,fn)=>t.test(name,fn),
+ afterBaseline:async({sql,sqlAsync,post,rpc,report,restart,priorityRequest,pgClock})=>{
   const prepared=prepareObservedRosterAdmission(body);let receipt;
   await t.test('guarded1978 admission retains formal stocks count zero',async()=>{
    const response=await post('api/internal/research-observed-roster',body);assert.equal(response.status,200);receipt=(await response.json()).receipt;
@@ -105,6 +106,31 @@ test('real observed priority accounts1978 and admits an old public company resea
    const boundaries=sql("SELECT (date_trunc('week','2026-10-11T15:59:59.999999Z'::timestamptz AT TIME ZONE'Asia/Taipei')::date)::text||','||(date_trunc('week','2026-10-11T16:00:00Z'::timestamptz AT TIME ZONE'Asia/Taipei')::date)::text");assert.equal(boundaries,'2026-10-05,2026-10-12');
    report.lockClock={afterActualLockWait:true,releaseClock:release,admissionClock:admitted,realMondayWallClockNotCrossed:true,mondayBoundaryExpressionChecked:true};
   });
+  for(const variant of ['empty-accounting','invented-root','forged-receipt'])await t.test(`BYPASSRLS service direct observed priority INSERT rejects ${variant}`,async()=>{
+   const forged='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+   const probe=sql(`BEGIN;ALTER ROLE service_role BYPASSRLS;GRANT ALL ON research_priority_runs_v1 TO service_role;SET LOCAL ROLE service_role;DO $probe$ BEGIN BEGIN
+    INSERT INTO research_priority_runs_v1(run_id,as_of,policy_version,input_hash,expected_count,accounted_count,source_attempts,rows,research_queue,research_scope,observed_snapshot_hash,scope_receipt)
+    SELECT '${forged}',as_of,policy_version,'${'d'.repeat(64)}',1978,1978,source_attempts,${variant==='empty-accounting'?"'[]'::jsonb":"rows"},'[ {"symbol":"6531","disposition":"queued","independentRootCount":999,"rootIds":["https://example.com/fake"]} ]'::jsonb,research_scope,observed_snapshot_hash,${variant==='forged-receipt'?"'{\"forged\":true}'::jsonb":"scope_receipt"} FROM research_priority_runs_v1 WHERE run_id='${positive.runId}';
+    PERFORM enqueue_research_deep_jobs_v1('${forged}');PERFORM set_config('test.probe_result','accepted',true);
+    EXCEPTION WHEN OTHERS THEN PERFORM set_config('test.probe_result','rejected:'||SQLERRM,true);END;END $probe$;
+    SELECT current_setting('test.probe_result');RESET ROLE;ROLLBACK;`);
+   assert.match(probe,/rejected:observed_priority_requires_scoped_store/u);assert.equal(sql(`SELECT count(*)FROM research_priority_runs_v1 WHERE run_id='${forged}'`),'0');
+   report.directBypassRoleProbe={bypassRls:true,legacyGrantAll:true,rollbackOnly:true,variants:3};
+  });
+  if(process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled')await t.test('v1 claim alone seals expired observed attempt and can claim a queued formal fixture',async()=>{
+   const fixture=sql(`BEGIN;
+    INSERT INTO research_model_reservations_v1(role,owner,work_key,taipei_day,started_at,lease_expires_at)SELECT 'company_research','expired-fixture','deep:${report.observedPositive.jobId}:1',(n AT TIME ZONE'Asia/Taipei')::date,n-interval'1 hour',n-interval'30 minutes'FROM(SELECT clock_timestamp()AS n)clock;
+    SET LOCAL ROLE research_observed_rpc_owner;UPDATE research_deep_jobs_v1 SET status='running',attempts=1,lease_owner='expired-fixture',lease_expires_at=(SELECT lease_expires_at FROM research_model_reservations_v1 WHERE owner='expired-fixture')WHERE job_id='${report.observedPositive.jobId}';
+    INSERT INTO research_deep_job_attempts_v1(job_id,attempt,owner,claimed_at,lease_expires_at)SELECT job_id,1,'expired-fixture',lease_expires_at-interval'30 minutes',lease_expires_at FROM research_deep_jobs_v1 WHERE job_id='${report.observedPositive.jobId}';RESET ROLE;
+    INSERT INTO stocks(id,symbol,name,market)VALUES('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb','2409','rollback-only formal expiry fixture','TW');
+    INSERT INTO research_priority_runs_v1(run_id,as_of,policy_version,input_hash,expected_count,accounted_count,source_attempts,rows,research_queue)VALUES('cccccccc-cccc-4ccc-8ccc-cccccccccccc',clock_timestamp(),'research-priority-v1','${'c'.repeat(64)}',0,0,'[]','[]','[]');
+    INSERT INTO research_deep_jobs_v1(priority_run_id,stock_id,symbol,week_start,queue_rank)VALUES('cccccccc-cccc-4ccc-8ccc-cccccccccccc','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb','2409',current_date,1);
+    SET LOCAL ROLE service_role;SELECT count(*)FROM claim_research_deep_job_v1('formal-expiry-probe');RESET ROLE;
+    SELECT json_build_object('observedStatus',(SELECT status FROM research_deep_jobs_v1 WHERE job_id='${report.observedPositive.jobId}'),'failedCompletion',(SELECT count(*)FROM research_model_completions_v1 WHERE owner='expired-fixture'AND outcome='failed'),'immutableAttempt',(SELECT count(*)FROM research_deep_job_attempts_v1 WHERE owner='expired-fixture'),'reservedSeconds',(SELECT sum(reserved_seconds)FROM research_model_reservations_v1),'formalStatus',(SELECT status FROM research_deep_jobs_v1 WHERE symbol='2409'));
+    ROLLBACK;`);
+   const outcome=JSON.parse(fixture.split('\n').find(x=>x.startsWith('{')));assert.equal(outcome.observedStatus,'queued');assert.equal(outcome.failedCompletion,1);assert.equal(outcome.immutableAttempt,1);assert.equal(outcome.formalStatus,'running');assert.equal(outcome.reservedSeconds,3600);
+   assert.equal(sql('SELECT count(*)FROM stocks'),'0');assert.equal(sql('SELECT count(*)FROM research_model_reservations_v1'),'0');report.crossScopeExpiry={rollbackOnly:true,syntheticExpiredLease:true,v1AloneRecovered:true,failedBudgetRetained:true};
+  });
   if(process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled') {
    const owner='isolated-observed-author';let context,packet;
    const fits=sql("SELECT research_model_lease_fits_day_v1(clock_timestamp())")==='t';
@@ -144,6 +170,30 @@ test('real observed priority accounts1978 and admits an old public company resea
     const forged=await rpc('read_research_observed_claim_v2',{p_owner:'foreign-owner',p_snapshot_hash:scope.snapshotHash,p_job_id:context.job.jobId,p_attempt:1});assert.equal(await forged.json(),null);assert.equal(sql('SELECT count(*)FROM stocks'),'0');assert.equal(sql('SELECT count(*)FROM candidate_dossier_submission_receipts'),'0');
    });
   }
+
+  if(pgClock)await t.test('actual enqueue crosses Taipei Monday with one captured clock; old exact trigger splits weeks',async()=>{
+   const old=execFileSync('git',['show','4868472ee479aa14aed24587311d1a5f1118d07b:migrations/20261008_research_observed_priority_v1.sql'],{cwd:root,encoding:'utf8'});
+   const start=old.indexOf('CREATE FUNCTION public.validate_research_deep_scope_v1()');const end=old.indexOf('END $$;',start)+7;assert.ok(start>=0&&end>start);const oldTrigger=old.slice(start,end).replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION');
+   const monday='2026-10-11T16:00:10Z',sunday='2026-10-11T15:59:50Z';
+   for(const legacy of [true,false]){
+    await pgClock.set('+'+String(Math.floor((Date.parse(sunday)-Date.now())/1000)));
+    try{
+     const next='+'+String(Math.floor((Date.parse(monday)-Date.now())/1000));
+     const outcome=sql(`BEGIN;${legacy?oldTrigger:''}
+      CREATE FUNCTION public.test_cross_week_v1()RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $test$ BEGIN IF NEW.symbol='9991'THEN EXECUTE format('COPY(SELECT %L)TO %L','${next}','${pgClock.file}');END IF;RETURN NEW;END $test$;
+      CREATE TRIGGER test_cross_week AFTER INSERT ON research_deep_jobs_v1 FOR EACH ROW EXECUTE FUNCTION test_cross_week_v1();
+      INSERT INTO stocks(id,symbol,name,market)VALUES('99919991-9991-4991-8991-999199919991','9991','rollback clock fixture1','TW'),('99929992-9992-4992-8992-999299929992','9992','rollback clock fixture2','TW');
+      INSERT INTO research_priority_runs_v1(run_id,as_of,policy_version,input_hash,expected_count,accounted_count,source_attempts,rows,research_queue)VALUES('99939993-9993-4993-8993-999399939993',clock_timestamp(),'research-priority-v1','${'e'.repeat(64)}',0,0,'[]','[]','[{"symbol":"9991","disposition":"queued","independentRootCount":1},{"symbol":"9992","disposition":"queued","independentRootCount":1}]');
+      SET LOCAL ROLE service_role;SELECT enqueue_research_deep_jobs_v1('99939993-9993-4993-8993-999399939993');RESET ROLE;
+      SELECT json_build_object('weeks',(SELECT count(DISTINCT week_start)FROM research_deep_jobs_v1 WHERE symbol IN('9991','9992')),'clocks',(SELECT count(DISTINCT created_at)FROM research_deep_jobs_v1 WHERE symbol IN('9991','9992')),'chargeWeeks',(SELECT count(DISTINCT admission_week)FROM research_deep_admission_charges_v1 WHERE issuer_key IN('TW:9991','TW:9992')),'sameReceipt',(SELECT bool_and(j.created_at=r.admission_at AND j.week_start=r.admission_week)FROM research_deep_jobs_v1 j JOIN research_deep_run_admissions_v1 r ON r.run_id=j.priority_run_id WHERE j.symbol IN('9991','9992')),'afterDay',(clock_timestamp()AT TIME ZONE'Asia/Taipei')::date);ROLLBACK;`);
+     const o=JSON.parse(outcome.split('\n').find(x=>x.startsWith('{')));assert.equal(o.afterDay,'2026-10-12');
+     if(legacy){assert.equal(o.weeks,2);assert.equal(o.chargeWeeks,2);assert.equal(o.sameReceipt,false);}else{assert.equal(o.weeks,1);assert.equal(o.clocks,1);assert.equal(o.chargeWeeks,1);assert.equal(o.sameReceipt,true);}
+     report.actualMondayEnqueue??={librarySha256:pgClock.librarySha256,onlyPostgresPreloaded:true,rollbackOnly:true,oldExactTriggerSource:'4868472ee479aa14aed24587311d1a5f1118d07b'};report.actualMondayEnqueue[legacy?'oldRed':'newGreen']=o;
+    }finally{await pgClock.set('+0');}
+   }
+   assert.equal(sql('SELECT count(*)FROM stocks'),'0');
+  });
+
 
  }});
  assert.equal(report.passed,true);assert.equal(report.observedPositive.novelty,0);assert.equal(report.observedPositive.notCurrentCatalyst,true);

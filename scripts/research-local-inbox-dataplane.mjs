@@ -140,7 +140,7 @@ export async function localInboxProfile(root) {
 
 /** Runs only in the existing Node test-runner loopback projection boundary.
  * Uses real Next, Supabase client, PostgREST and PostgreSQL; no DB/client injection. */
-export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgrestBin, check = async (_name, fn) => fn(), observedRoster = false, observedPriority = false, observedClaim = false, afterBaseline = null }) {
+export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgrestBin, check = async (_name, fn) => fn(), observedRoster = false, observedPriority = false, observedClaim = false, testPgClockLibrary = null, afterBaseline = null }) {
   assert.equal(process.env.NODE_TEST_CONTEXT, 'child-v8', 'local_profile_requires_node_test_runner');
   for (const value of [root, artifacts, pgBin, postgrestBin]) assert.ok(path.isAbsolute(value));
   const environment = localProcessEnvironment();
@@ -150,9 +150,16 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
   assert.ok(/^[a-zA-Z0-9_./-]+$/u.test(socket) && Buffer.byteLength(socket) < 95, 'local_socket_path_bound');
   const cluster = path.join(artifacts, 'cluster'); const pgPort = await reservePort();
   const pgrstPort = await reservePort(); const apiPort = await reservePort(); const appPort = await reservePort();
+  let pgEnvironment=environment, clockFile=null, clockHash=null;
+  if(testPgClockLibrary!==null){
+    assert.ok(path.isAbsolute(testPgClockLibrary));const library=await open(testPgClockLibrary,constants.O_RDONLY|constants.O_NOFOLLOW|constants.O_NONBLOCK);
+    try{const stat=await library.stat();assert.ok(stat.isFile()&&stat.size>0&&stat.size<1_000_000);clockHash=hash(await library.readFile());}finally{await library.close();}
+    clockFile=path.join(artifacts,'pg-test-clock.rc');await writeFile(clockFile,'+0\n',{flag:'wx',mode:0o600});
+    pgEnvironment={...environment,LD_PRELOAD:testPgClockLibrary,FAKETIME_TIMESTAMP_FILE:clockFile,FAKETIME_NO_CACHE:'1',FAKETIME_DONT_FAKE_MONOTONIC:'1'};
+  }
   const exec = (name, args) => execFileSync(path.join(pgBin, name), args, { env:environment, encoding: 'utf8', stdio: ['ignore','pipe','pipe'], timeout: 20000 }).trim();
   const sql = query => execFileSync(path.join(pgBin,'psql'), ['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(pgPort),'-d','postgres','-f','-'], {env:environment,encoding:'utf8',input:query,stdio:['pipe','pipe','pipe'],timeout:20000,maxBuffer:observedPriority?16*1024*1024:4*1024*1024}).trim();
-  const pgStart = () => exec('pg_ctl', ['-D',cluster,'-l',path.join(artifacts,'postgres.log'),'-o',`-h '' -k ${socket} -p ${pgPort}`,'-w','start']);
+  const pgStart = () => execFileSync(path.join(pgBin,'pg_ctl'),['-D',cluster,'-l',path.join(artifacts,'postgres.log'),'-o',`-h '' -k ${socket} -p ${pgPort}`,'-w','start'],{env:pgEnvironment,encoding:'utf8',timeout:20000}).trim();
   const pgStop = () => exec('pg_ctl', ['-D',cluster,'-m','fast','-w','stop']);
   const sqlAsync=query=>new Promise((resolve,reject)=>{const child=spawn(path.join(pgBin,'psql'),['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(pgPort),'-d','postgres','-f','-'],{env:environment,stdio:['pipe','pipe','pipe']});const output=[];let bytes=0;const timeout=setTimeout(()=>child.kill('SIGKILL'),20000);for(const stream of [child.stdout,child.stderr])stream.on('data',chunk=>{bytes+=chunk.length;if(bytes>1_000_000)child.kill('SIGKILL');else output.push(chunk);});child.on('error',reject);child.on('close',code=>{clearTimeout(timeout);const text=Buffer.concat(output).toString('utf8').trim();if(code===0)resolve(text);else reject(Error('local_pg_async_failed'));});child.stdin.end(query);});
   const key = randomBytes(32).toString('hex'); const secret = randomBytes(48).toString('hex');
@@ -302,7 +309,7 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
       await assert.rejects(sourcePriorityCommand(args,{env:{INTERNAL_API_KEY:key}}),/uncertain_submission/);assert.equal(sql('SELECT count(*) FROM source_raw_documents'),'3');report.checks.push('priority_blocked_restart_fenced');
     });
     assert.equal(report.checks.length,9,'local_profile_incomplete_checks');
-    if (afterBaseline) await afterBaseline({sql,sqlAsync,post,rpc,origin,priorityRequest:run.priorityRequest,apiOrigin:`http://127.0.0.1:${apiPort}/rest/v1/`,report,restart:()=>{pgStop();pgStart();}});
+    if (afterBaseline) await afterBaseline({sql,sqlAsync,post,rpc,origin,priorityRequest:run.priorityRequest,apiOrigin:`http://127.0.0.1:${apiPort}/rest/v1/`,report,pgClock:clockFile?{file:clockFile,librarySha256:clockHash,set:offset=>writeFile(clockFile,`${offset}\n`)}:null,restart:()=>{pgStop();pgStart();}});
     report.passed=true;
   } catch(error) {report.failure=safe(error.message);throw error;}
   finally {
