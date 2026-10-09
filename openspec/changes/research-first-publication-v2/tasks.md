@@ -52,3 +52,18 @@ The Oct08 findings above are historical. Observed43d19d6/source05a repair and pr
 - [x] Freeze financial adapter boundary for independent design before new immutable-input bindings.
 - [ ] Implement reviewed adapter and actual guarded preparation/calculation integration; reported observations, research assumptions and gaps remain distinct.
 - [ ] Complete reported YTD bridge, immutable financial revision and same-pipeline publication under64f7.
+
+## 2026-10-10 atomic publication implementation slice
+
+- [x] Add the approved closed marker2 action to the existing guarded deep-job route; current author bearer and independently configured saved role observations remain required.
+- [x] Reexecute article/calculation/reviewer packet and original saved envelope/completion bindings; only explicit accepted editorial decisions proceed.
+- [x] One existing bundle/outbox/dossier/receipt transaction, original source dependency, original lease and separate reviewer-result completion FK; completed replay precedes live readers.
+- [x] Maker isolated contract/actual PostgreSQL acceptance: 22/22 zero skip, including concurrent duplicate, seven injected effect failures, restart, withdrawal, committed new revision/rights-ABA source-first races, unchanged paid-content fence, unaccepted saved review and original expiry while waiting.
+- [ ] Exact independent code review, related legacy regression and final normal build acceptance.
+- [ ] Shared desktop/mobile renderer and native HTTP acceptance of this successor (the earlier94 native cases cover reviewer results only).
+- [ ] Actual configured model dispatch/tool evidence and genuinely authored/independently reviewed AUO and EMC publication. Synthetic fixtures never fulfill this item.
+- [ ] Protected full main-to-final review, merge/deploy and research schedule/five real trading days. No production migration or research/entry qualification has occurred in this slice.
+
+Independent review of d428ff9c requested changes for one P2: legacy INSERT could reference a v2 bundle/dossier. Successor rejects those mixed branches while preserving null-bundle legacy rows; the original v1 publication RPC is exercised after the new migration. Maker successor26/26 unit/actualPG cases pass zero skip, including a FIRST uncommitted publication holding the fence before committed withdrawal. Earlier completed-replay/withdrawal and restart/exact-replay tests are explicitly distinguished from first publication or dropped HTTP responses. Native dropped-response acceptance remains pending. Original REDs and review attribution are retained.
+
+Independent18d6 static CODE PASS closes P2; its original unit/PG run is24PASS/1FAIL/0skip, not all-green: expiry fixture seal psql15-second timeout has unknown cause. Independent positive+two mixed-branch/null-bundle probes11/11 pass. Original RED/TAP/PGlog are retained by hash. A test-only successor sets its synthetic original lease to30 seconds BEFORE sealing, then waits using the actual clock until4 seconds remain before testing lock expiry; production limits/guards and the already sealed lease never change. Maker expiry-only2/2 passes, not a full successor suite or an explanation of the earlier timeout. Normal build web bytes remain14528d8e and build Xv80B29nkNHk3jNxpO1wH; native/full schema/protected release remain pending.
