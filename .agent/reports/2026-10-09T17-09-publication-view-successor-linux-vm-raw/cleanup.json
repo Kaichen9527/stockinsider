@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-09T17:09:36.475839+00:00",
+  "ownedProcessesRemaining": [],
+  "failedClusters": [
+    {
+      "cluster": "/tmp/si-rresult-6hB3Kx",
+      "stopped": true,
+      "retained": true,
+      "log": "si-rresult-6hB3Kx-failure-pg.log",
+      "bytes": 7461,
+      "sha256": "c8acf1c266b63fedef68f570b7c02f65c685e2f43d065d124840b722f04b32fd"
+    }
+  ],
+  "previousRedEvidenceRetained": true,
+  "availableBytes": 11339550720,
+  "onlyManualCleanup": "stopped original847d generated failed web/.next retired after71file inventory and original evidence Git push; no source/raw/model/uniquePG evidence deleted"
+}
