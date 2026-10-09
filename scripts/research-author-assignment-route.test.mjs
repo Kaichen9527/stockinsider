@@ -85,7 +85,9 @@ test('v2 assignment is writer-only, exact bearer, distinct from reviewer/test/cr
     assert.equal(r.status, 401); assert.equal(f.dbReads(), 0); assert.equal(f.calls.length, 0);
   }
   for (const credentials of [{ ...env, RESEARCH_REVIEW_KEY: env.INTERNAL_API_KEY }, { ...env, CRON_SECRET: env.INTERNAL_API_KEY },
-    { ...env, CRON_SECRET: env.RESEARCH_REVIEW_KEY }, { INTERNAL_API_KEY: env.INTERNAL_API_KEY }]) {
+    { ...env, CRON_SECRET: env.RESEARCH_REVIEW_KEY }, { ...env, RESEARCH_TEST_KEY: env.INTERNAL_API_KEY },
+    { ...env, STRATEGY_APPROVAL_KEY: env.INTERNAL_API_KEY }, { ...env, RESEARCH_TEST_KEY: env.RESEARCH_REVIEW_KEY },
+    { ...env, STRATEGY_APPROVAL_KEY: env.RESEARCH_REVIEW_KEY }, { INTERNAL_API_KEY: env.INTERNAL_API_KEY }]) {
     const f = fixture({ credentials }); assert.equal((await f.send()).status, 401); assert.equal(f.dbReads(), 0);
   }
 });
