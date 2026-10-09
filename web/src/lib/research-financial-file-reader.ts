@@ -40,6 +40,10 @@ class FinancialReadOwner {
     work.then(() => { this.pending.delete(work); this.release(); }, () => { this.pending.delete(work); this.release(); });
     return work;
   }
+  start<T>(work: () => Promise<T>): Promise<T> {
+    // Register the ownership promise before issuing the filesystem open.
+    return this.track(Promise.resolve().then(work));
+  }
   closeHandle(handle: FileHandle) {
     const state = this.handles.get(handle)!;
     if (!state.closing) {
@@ -64,6 +68,7 @@ class FinancialReadOwner {
       cleanupFailed: this.cleanupFailed, kernelIoCancellationConfirmed: false };
   }
   async cleanup(deadline: FinancialDeadline, primary?: unknown) {
+    const hasPrimary = arguments.length > 1;
     this.cleaning = true;
     for (const handle of this.handles.keys()) this.closeHandle(handle);
     // Pending open may deliver a new handle; opened() closes it on settlement.
@@ -76,12 +81,12 @@ class FinancialReadOwner {
     work.catch(() => {}); // observed even if wait() rejects before subscribing
     try { await deadline.wait(work); }
     catch (cleanupError) {
-      const error = primary !== undefined ? (primary !== null && (typeof primary === 'object' || typeof primary === 'function') ? primary : new Error('financial_primary_failure', { cause: primary })) : cleanupError;
+      const error = hasPrimary ? (primary !== null && (typeof primary === 'object' || typeof primary === 'function') ? primary : new Error('financial_primary_failure', { cause: primary })) : cleanupError;
       if (!error || (typeof error !== 'object' && typeof error !== 'function')) throw error;
       Object.assign(error, { financialCleanup: this.status() });
       throw error;
     }
-    if (primary !== undefined) throw primary;
+    if (hasPrimary) throw primary;
   }
 }
 function same(a: BigIntStats, b: BigIntStats) {
@@ -123,14 +128,18 @@ export async function readPinnedFinancialFiles(root: string, pins: readonly Fina
       await deadline.wait(Promise.resolve(checkpoint('before_open:'+pin.path)));
       // O_NONBLOCK prevents FIFO replacement between lstat and descriptor open
       // from monopolizing a filesystem worker before fstat can reject it.
-      const pending = owner.track(open(filename,constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK).then(h => owner.opened(h)));
+      const pending = owner.start(() => open(filename,constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK).then(h => owner.opened(h)));
       const handle = await deadline.wait(pending);
       const entry = {handle,filename,before:leaf,pin}; handles.push(entry);
       const before = await deadline.wait(owner.track(handle.stat({bigint:true}))); entry.before = before; regular(before,pin.bytes); if (!same(before,leaf)) throw new Error('financial_file_replaced');
       const raw = Buffer.alloc(pin.bytes+1); let offset = 0;
       try {
         while (offset < raw.length) {
-          const read = await deadline.wait(owner.track(handle.read(raw,offset,raw.length-offset,offset)));
+          const read = await deadline.wait(owner.track(handle.read(raw,offset,raw.length-offset,offset).finally(() => {
+            // A timed-out read may still write into this buffer later. Retain
+            // wipe responsibility until its actual settlement, not just finally.
+            if (deadline.controller.signal.aborted) raw.fill(0);
+          })));
           if (!read.bytesRead) break; offset += read.bytesRead;
         }
         if (offset !== pin.bytes || createHash('sha256').update(raw.subarray(0,offset)).digest('hex') !== pin.sha256) throw new Error('financial_file_hash_or_length');

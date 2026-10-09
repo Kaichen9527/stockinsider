@@ -89,3 +89,14 @@ explicit omission; Q2 basic/diluted EPS, share basis, group/owners/NCI and all f
 segments remain. Original 14-file inventory and model results are unchanged.
 Normal build and broader PG acceptance are pending the separately reviewed
 financial successor plus latest combined integration, as requested by root.
+
+
+### Reviewer late-write follow-up
+
+The root's additional minimum probe matrix exposed a late read overwriting the
+buffer after the timeout-path initial wipe. The fa35 first successor RED is
+preserved (8 cleanup cases, 7 pass/1 fail); a second wipe is owned by each pending
+read's settlement before cleanup ownership may release. Pending open ownership
+is registered before the filesystem open is issued. Late-open close rejection
+and hash-failure/cleanup-failure cases are added, still within the original shared
+deadline. No kernel-I/O cancellation or confirmed close is inferred from abort.
