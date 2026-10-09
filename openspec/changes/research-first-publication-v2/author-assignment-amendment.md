@@ -11,3 +11,39 @@ One assignment per job/attempt is intentional. Same principal, input revision/ha
 Tests use isolated real PostgreSQL and the actual source/preparation/complete-input predecessor functions. Synthetic private seeded complete rows are explicitly assignment fixtures, not financial acceptance or actual model execution. Verify immutable ACLs, replay/restart, competing admission, input/principal mismatch, unchanged reservation counts, source withdrawal and expiration. The complete-input predecessor used in tests is pinned separately and remains under its own review/fix; this migration must not be deployed ahead of an accepted predecessor or the guarded route.
 
 The first publication plan's actual author/reviewer and final release requirements remain unchanged. A saved assignment alone does not make an article publishable.
+
+## Guarded existing route adapter
+
+The existing research-model-reservation endpoint gains an explicit
+`x-research-execution-version:2` branch with exactly action,input,inputRevisionId,
+inputHash. Actions are assignAuthor/readAuthorAssignment. The original unmarked
+v1 reserve/finish branches and role rules remain unchanged. The v2 path first
+requires exact internal bearer and resolves the configured distinct author
+credential; reviewer/test/cron, credential aliases and caller principal/authorId
+are rejected before body/DB I/O. It reads at most8192 UTF-8 bytes under the existing
+10-second shared deadline, rejecting duplicate/unknown keys.
+
+Every admission and read runs the actual complete-input read path with seal=false
+so the current compiled mapping, canonical payload/hash/subhash/schema and false
+capabilities are revalidated without calculation/artifact I/O or a new revision.
+Only then is the assignment RPC invoked with the server-derived private principal
+and exact revision/hash/original request. SQL rechecks original live source/job/
+reservation fences atomically. Returned bindings/clocks must match; principal and
+canonical request stay private. Success still says dispatchReady=false and
+modelDispatched=false. Uncertain write response requires readAuthorAssignment
+reconciliation with the same original input, never a new claim/reservation.
+
+The real PG test now loads the tracked predecessor migration by default. The
+manual pinned-Git fallback remains explicit and cannot silently become CI input.
+Transport/auth tests use actual route and helpers with clearly labelled mocked
+DB/current-input boundaries; they do not replace native HTTP acceptance. A new
+native fixture uses existing isolated PG/PostgREST/compiled Next harness and
+actual fixed company calculations, plus ephemeral test-only separate credentials.
+All inherited credentials remain excluded and every temporary key is redacted.
+Native verification is a separate command and must actually run before this
+route is accepted; no model execution or publication proof follows from it.
+
+Complete-input0d has an independently reported closure-encoding P2 pending VM
+repair. This development branch stages that predecessor to compile/test the
+adapter; staging is not integration approval. No main/deployment authority is
+inferred and the accepted repaired successor must replace it before integration.
