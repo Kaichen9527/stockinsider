@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "post-metadata-cleanup-health-v1",
+  "web": "active",
+  "nginx": "active",
+  "postgresql": "active",
+  "postgresqlAcceptingConnections": true,
+  "productionRelease": "9fd86fe620ccc63c89c4acd208327bf2c4e15332",
+  "homepageGetStatus": 200,
+  "stock2409GetStatus": 200,
+  "previewHeadStatus": 200,
+  "previewHost": "5.104.83.211",
+  "previewPath": "/preview/auo-2409",
+  "previewTrailingSlashStatus": 308,
+  "historyDataDeleted": false,
+  "browserContentAcceptance": false
+}

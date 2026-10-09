@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "unsigned-independent-code-review-record-v1",
+  "reviewedCommit": "62d9d9aaa7c45a802dee3270a6e60ccfe84e67f9",
+  "guardBaseCommit": "39436ce56e78521203ee10b7ca61811a3cff5cd2",
+  "sourceContractCommit": "7956772691defb366fd1bd3ff610c762d69f5f0d",
+  "reviewer": "/root/astra_publication_review",
+  "decision": "approve_limited_code_scope",
+  "scope": ["industry-only inbox/controller contract", "immutable revision identity and legacy compatibility", "direct-company root/factor projection guard"],
+  "focusedTests": {"passed": 58, "failed": 0, "skipped": 0},
+  "additionalBoundaryChecks": 16,
+  "additionalProbes": [
+    "Disposable actual source schema/head RPC accepts industry-only empty symbols",
+    "Repeated ingestion remains idempotent; changed terms retain immutable revisions",
+    "Industry repost/retraction preserves its acquisition parent root",
+    "Historical unioned tags do not create company attention for a current industry-only head",
+    "Industry/unknown/malformed factor references reject before insertion; company binding remains valid"
+  ],
+  "historicalPublishedAssessmentsRepaired": false,
+  "companyAssociationImplemented": false,
+  "industryArticleCitationImplemented": false,
+  "protectedGatePassed": false,
+  "productionApproved": false,
+  "signedAttestation": false
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": "tw-strategy-lab-preregistration-v1",
+  "signal_version": "tw-strategy-lab-signals-v1",
+  "registered_on": "2026-09-25",
+  "research_only": true,
+  "production_model_changes": false,
+  "hypothesis_ids": ["S1", "S2", "S3", "S4", "S5", "S6", "S7"],
+  "executable_ids": ["S1", "S2", "S3", "S4", "S6"],
+  "parameter_variants": [],
+  "population": {
+    "symbols": ["2330", "2317", "1216", "2882", "2603", "6488", "5347", "8069"],
+    "selection": "supplied_eight_stock_survivor_panel",
+    "historical_membership_verified": false,
+    "historical_app_universe_verified": false,
+    "industry_rotation_enabled": false,
+    "exclusions": "Record unsupported share actions, calendar/price gaps and unresolved authority before performance; retain original eight-symbol denominator."
+  },
+  "dates": {
+    "warmup_start": "2018-01-01", "warmup_end": "2018-12-31",
+    "development_start": "2019-01-01", "development_end": "2023-12-31",
+    "holdout_start": "2024-01-01", "holdout_status": "locked_do_not_download_open_or_compute"
+  },
+  "windows": {
+    "kind": "chronological_six_month_development_windows",
+    "starts": ["2019-01-01", "2019-07-01", "2020-01-01", "2020-07-01", "2021-01-01", "2021-07-01", "2022-01-01", "2022-07-01", "2023-01-01", "2023-07-01"],
+    "ends": ["2019-06-30", "2019-12-31", "2020-06-30", "2020-12-31", "2021-06-30", "2021-12-31", "2022-06-30", "2022-12-31", "2023-06-30", "2023-12-31"],
+    "parameter_fitting": "none",
+    "performance_selection": "none",
+    "claim": "descriptive_development_only_not_untouched_out_of_sample",
+    "boundary_policy": "One continuous 2019-2023 portfolio path; half-year windows describe that same path and retain holdings/cash/receivables across boundaries. No reset, parameter selection or OOS claim. Terminal positions remain marked and reported unrealized, never fabricated as liquidated."
+  },
+  "signals": {
+    "minimum_history": 240,
+    "atr": "Wilder; first TR=high-low; arithmetic seed; fixed final 240 bars for ATR14",
+    "knowledge_cutoff": "20:00 Asia/Taipei on signal session",
+    "corporate_actions": "Adjust each historical window to its own signal session: prior OHLC multiply price_factor; prior volume multiply share_factor (new shares / old shares). Never anchor to future actions.",
+    "missing_event_known_at": "Default blocks. Explicit allow_reconstructed_history with official_effective_date_reconstruction permits retrospective effective-date research only; does not establish historical knowledge/PIT verification.",
+    "execution_eligibility": "Research proxy only; formal production eligibility and liquidity gates are not evaluated.",
+    "S1": {"name": "breakout", "status": "executable", "source_ruleset": "tw-entry-plan-v0.1", "trend": "C>MA20>MA60 and MA60>=MA60[t-5]", "trigger": "C>=nextTick(prior20High) and volume>=1.5*prior20MeanVolume", "entry_lower": "nextTick(prior20High)", "buy_limit": "floorTick(min(C+0.25*ATR14,prior20High+0.75*ATR14))", "stop": "floorTick(prior20High-ATR14)", "exit_ma": 20, "exit_ma_direction": "below", "max_hold": 20, "rank": "volume/prior20MeanVolume"},
+    "S2": {"name": "pullback", "status": "executable", "source_ruleset": "tw-entry-plan-v0.1", "trend": "C>MA20>MA60 and MA60>=MA60[t-5]", "trigger": "Range touches MA20 +/- 0.5*ATR14 and C>=MA20 and C>priorHigh", "entry_lower": "C", "buy_limit": "floorTick(min(C+0.25*ATR14,MA20+ATR14))", "stop": "floorTick(min(low,MA20)-0.5*ATR14)", "exit_ma": 20, "exit_ma_direction": "below", "max_hold": 20, "rank": "volume/prior20MeanVolume"},
+    "S3": {"name": "panel_relative_momentum", "status": "executable", "schedule": "Friday close only; skip holiday Fridays rather than infer week end from future observations", "trigger": "At least 5 panel members with 240 bars on the date; top ceil(N*0.20) by C[t-21]/C[t-126]-1; positive score and C>MA60", "buy_limit": "floorTick(C+0.25*ATR14)", "stop": "floorTick(C-2*ATR14)", "exit_ma": 60, "exit_ma_direction": "below", "max_hold": 60, "rank": "C[t-21]/C[t-126]-1", "rank_exit": false, "sector_variant": "blocked_without_PIT_sector_membership"},
+    "S4": {"name": "contraction", "status": "executable", "trigger": "Prior-session WilderATR5/WilderATR20<=0.60 on the preceding 239 bars; C>=nextTick(prior10High), volume>=prior20MeanVolume and C>MA60", "buy_limit": "floorTick(C+0.25*ATR14)", "stop": "floorTick(prior10Low)", "exit_ma": 20, "exit_ma_direction": "below", "max_hold": 20, "rank": "1/(priorATR5/priorATR20)"},
+    "S5": {"name": "revenue_acceleration", "status": "blocked", "reason": "Missing PIT monthly releases/corrections/availability lineage", "hypothesis": "New release: positive trailing-three-month YoY growth, accelerating at least 10 percentage points over preceding nonoverlapping three-month YoY growth, with C>MA60", "activation": "Not enabled by current prices, article text or synthetic events; requires a separately reviewed future registry."},
+    "S6": {"name": "short_term_reversal", "status": "executable", "trigger": "C>MA120 and C/C[t-3]-1<=-2*ATR14/C", "buy_limit": "floorTick(C)", "stop": "floorTick(C-2*ATR14)", "exit_ma": 5, "exit_ma_direction": "above", "max_hold": 5, "rank": "-(C/C[t-3]-1)"},
+    "S7": {"name": "broker_revision", "status": "blocked", "reason": "Missing PIT broker/analyst forecast revisions, access rights and original-publication lineage", "hypothesis": "Upward same-analyst, same-period, same-currency EPS revision may predict continuation; no numeric threshold is searched in this blocked round", "agent_event_interface": "research_event_contract('S7'); source records only, never automatic strategy activation"}
+  },
+  "execution": {
+    "model": "daily_auction_limit_proxy_not_verified_fills",
+    "first_eligible_time": "next official market session opening; never signal close",
+    "entry_order": "Precommitted opening limit ROD, cancel residual after opening assumed; no inferred intraday fills",
+    "entry_lower": "Descriptive plan boundary only: opening limit may fill below it. Do not inspect open then pretend to place at that same open.",
+    "avoid_chase": "Invalid stop/lower/upper geometry or signal close above upper emits no executable buy_limit",
+    "exit": "Closing MA/stop/time conditions queue next-tradable-session opening sale; S6 uses close>=MA5, others close<MA. No daily-bar intraday stop fill.",
+    "same_bar": "No same-day stop fill after opening entry; closing exit signals execute no earlier than the next session",
+    "untradable": "Missing opening/status authority, zero volume, locked limit-up buys and locked limit-down sells do not receive invented fills",
+    "position_policy": "Long only; no leverage, no averaging, one position per symbol; higher rank first, then symbol ascending",
+    "sector_cap": "not_applied_without_PIT_sector_classification",
+    "corporate_action_execution": "First real run permits verified cash-only events share_factor==1; other actions excluded before performance. Dividends lacking payment date are receivables, not spendable cash."
+  },
+  "assumptions": {"initial_cash": 10000000, "lot": 1000, "commission": 0.001425, "minimum_commission": 20, "sell_tax": 0.003, "slippage_bps": 10, "slippage_floor": "one_legal_tick", "max_weight": 0.1, "max_turnover_participation": 0.01, "turnover_basis": "prior20_session_median_turnover", "sizing": "Before observing opening prices: use previous-close NAV, prior20 turnover and each precommitted buy limit to fix lot quantities, including commission. Reserve cash for all ordered quantities before the opening. Do not reuse same-opening sale proceeds or refund gap-price savings into other opening orders."},
+  "scenarios": [
+    {"id": "baseline", "overrides": {}},
+    {"id": "cost_stress", "overrides": {"commission": 0.00285, "minimum_commission": 40, "slippage_bps": 20}, "sell_tax_unchanged": true},
+    {"id": "small_capacity", "overrides": {"initial_cash": 1000000}}
+  ],
+  "trial_accounting": {"price_hypotheses": 5, "scenarios_per_hypothesis": 3, "whole_development_runs": 15, "retain_each_window_and_attempt": true, "blocked_hypotheses": ["S5", "S7"], "same_input_repeats": "not_independent_corroboration", "optimization": "none"},
+  "benchmark": {"primary": "official_TAIEX_total_return_index_same_dates_without_fees", "primary_limitation": "Fully invested broad index versus partial-investment survivor-panel strategy; not an exposure/risk-matched alpha comparison.", "additional": "Same eligible panel, initial buy-and-hold allocation up to 10% per stock, same friction/lot/liquidity/corporate-action assumptions, remaining cash; no rebalancing.", "cash": "zero_interest", "unavailable": "If official total-return data are unavailable, report missing; never silently replace with a price index."},
+  "reporting": ["net_return", "same_filled_share_path_cost_addback_diagnostic_not_true_counterfactual_gross", "cost_breakdown", "maximum_drawdown", "underwater_duration", "turnover", "exposure", "completed_trades", "unrealized_positions", "unfilled_and_blocked_counts", "per_window_results", "benchmark_same_dates", "weekly_5pct_and_monthly_10pct_empirical_frequency_not_promises"],
+  "acceptance": {"profit_required_for_valid_research": false, "promotion": "none", "required": ["determinism", "no_future_signal_or_event_use", "holdout_locked", "explicit_exclusions", "all_seven_hypotheses_reported", "S1_S2_formula_parity_tests", "cash_cost_reconciliation", "independent_review"], "inference": "No alpha, generalization, genuine OOS or causal claim from selected survivors and descriptive development windows."},
+  "sources": [
+    "https://www.twse.com.tw/en/products/system/trading.html",
+    "https://www.tpex.org.tw/en-us/mainboard/trading/rules/system.html",
+    "https://www.etax.nat.gov.tw/etwmain/tax-info/understanding/tax-q-and-a/national/securities-transaction-tax/filing/mM8n39b",
+    "https://twse-regulation.twse.com.tw/m/en/LawContent.aspx?FID=FL007250",
+    "https://www.davidhbailey.com/dhbpapers/deflated-sharpe.pdf"
+  ],
+  "cost_source_note": "0.1425% is the reference standard rate, not a universal legal ceiling; minimum TWD20 is an explicit model assumption.",
+  "preregistration_review_correction": "Before any actual development performance was computed, independent implementation review aligned this registry to one continuous descriptive portfolio path, explicit primary/additional benchmarks, cost-addback terminology and pre-opening cash-reserved limit-based sizing. This is a pre-results contract correction, not a performance-driven parameter change."
+}

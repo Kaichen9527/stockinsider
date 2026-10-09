@@ -1,0 +1,55 @@
+{
+  "canonicalModelHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
+  "files": [
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/README.md",
+      "bytes": 4274,
+      "sha256": "bbd0a3d136e13c0985d01223e0cca0d71f73797be77ec7cf49e3151b117eff60"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/article-template.md",
+      "bytes": 18274,
+      "sha256": "5e607a501832aefa644c2b757668504fc93a637ccaaac675fd53184e811a64f3"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/article.md",
+      "bytes": 20855,
+      "sha256": "762f27593c28114644e9b7fb90b8a6d8a392b855a2bd5d44e2025fc114159822"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/draft-metadata.json",
+      "bytes": 1192,
+      "sha256": "e26f29ebe7b97a5410bc70c89b1461b686d311d5545dd75537b1ba2b4a1ec857"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/model-results.json",
+      "bytes": 54602,
+      "sha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+      "bytes": 17073,
+      "sha256": "e34d5d25f0214b1a0581faa723d684e33bcbc0ee8c76690b1507ecd9d33ddaab"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/source-ledger.json",
+      "bytes": 1720,
+      "sha256": "634706a92e05e3c05ff6e88853dd77d2c63436a40aab0551ccc83910104713b7"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-company-model/verify-output.py",
+      "bytes": 4599,
+      "sha256": "f7a3865ce0d6aa9998dcb4c7d010985cf53e845590681cf50435aaae8a06a040"
+    },
+    {
+      "file": "scripts/lib/research-model-article.mjs",
+      "bytes": 728,
+      "sha256": "2dbcc7e7c46dfe5aece331cc281fc39b1d63687925dea6597ead95bbb3b29112"
+    },
+    {
+      "file": "scripts/research-emc-company-model.test.mjs",
+      "bytes": 7410,
+      "sha256": "de9ceda82c9bc10c8186a119a92fd6c97226875ef4ab5ed050b4f0963003af36"
+    }
+  ]
+}

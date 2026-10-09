@@ -1,0 +1,488 @@
+TAP version 13
+# (node:239137) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:239137) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-financial-clock.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: compiled reviewer result 2409, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 59.551756
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 75.945161
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 15.708771
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 423.717112
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 29.871528
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 10.740426
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 3.844452
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 495.422258
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 84.902882
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 327.015239
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 373.682774
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 815.635576
+      ...
+    # Subtest: packet marker2 authentication and closed-body rejection leave all rows unchanged
+    ok 13 - packet marker2 authentication and closed-body rejection leave all rows unchanged
+      ---
+      duration_ms: 225.962355
+      ...
+    # Subtest: complete input without original author assignment cannot produce a packet
+    ok 14 - complete input without original author assignment cannot produce a packet
+      ---
+      duration_ms: 309.820161
+      ...
+    # Subtest: existing guarded author admission binds this original input without a new reservation
+    ok 15 - existing guarded author admission binds this original input without a new reservation
+      ---
+      duration_ms: 407.571063
+      ...
+    # Subtest: compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+    ok 16 - compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+      ---
+      duration_ms: 881.497411
+      ...
+    # Subtest: two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+    ok 17 - two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+      ---
+      duration_ms: 2987.820248
+      ...
+    # Subtest: result marker2 auth and closed body reject with unchanged original budget
+    ok 18 - result marker2 auth and closed body reject with unchanged original budget
+      ---
+      duration_ms: 60.785694
+      ...
+    # Subtest: actual result read before reception is null, no assignment or charge added
+    ok 19 - actual result read before reception is null, no assignment or charge added
+      ---
+      duration_ms: 1409.634031
+      ...
+    # Subtest: counterfactual original source fingerprint observation is rejected once with identical all-state audit
+    ok 20 - counterfactual original source fingerprint observation is rejected once with identical all-state audit
+      ---
+      duration_ms: 931.986989
+      ...
+    # Subtest: synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result
+    ok 21 - synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result
+      ---
+      duration_ms: 1626.614852
+      ...
+    # Subtest: changed article or observation single-shot rejected without modifying private draft
+    ok 22 - changed article or observation single-shot rejected without modifying private draft
+      ---
+      duration_ms: 2727.546413
+      ...
+    # Subtest: result exact read/reception replay and actual PG restart preserve full hash/clock/bytes and budget
+    ok 23 - result exact read/reception replay and actual PG restart preserve full hash/clock/bytes and budget
+      ---
+      duration_ms: 5375.033604
+      ...
+    # Subtest: separate reviewer bearer, closed body, mixed header, oversized body reject without writes
+    ok 24 - separate reviewer bearer, closed body, mixed header, oversized body reject without writes
+      ---
+      duration_ms: 96.41907
+      ...
+    # Subtest: reviewer read packet and assign before author handoff reject with zero writes
+    ok 25 - reviewer read packet and assign before author handoff reject with zero writes
+      ---
+      duration_ms: 1287.510178
+      ...
+    # Subtest: handoff exact header auth, closed six keys and result mismatch leave all state unchanged
+    ok 26 - handoff exact header auth, closed six keys and result mismatch leave all state unchanged
+      ---
+      duration_ms: 92.16161
+      ...
+    # Subtest: read before original reservation completion returns null without writing
+    ok 27 - read before original reservation completion returns null without writing
+      ---
+      duration_ms: 481.198353
+      ...
+    # Subtest: single original author handoff adds only completion bound to recalculated article hash
+    ok 28 - single original author handoff adds only completion bound to recalculated article hash
+      ---
+      duration_ms: 681.160102
+      ...
+    # Subtest: old author result active read rejects completed reservation and preserves private result
+    ok 29 - old author result active read rejects completed reservation and preserves private result
+      ---
+      duration_ms: 57.101035
+      ...
+    # Subtest: handoff exact read replay and actual PG restart preserve complete receipt bytes clock and charge
+    ok 30 - handoff exact read replay and actual PG restart preserve complete receipt bytes clock and charge
+      ---
+      duration_ms: 1383.67993
+      ...
+    # Subtest: completed author permits independent read with null reviewer and packet remains unavailable
+    ok 31 - completed author permits independent read with null reviewer and packet remains unavailable
+      ---
+      duration_ms: 590.662093
+      ...
+    # Subtest: concurrent exact reviewer admission adds one counter-review reservation and1800 charge only
+    ok 32 - concurrent exact reviewer admission adds one counter-review reservation and1800 charge only
+      ---
+      duration_ms: 1724.644171
+      ...
+    # Subtest: original global-one model slot blocks another guarded reserve without refund or writes
+    ok 33 - original global-one model slot blocks another guarded reserve without refund or writes
+      ---
+      duration_ms: 58.201366
+      ...
+    # Subtest: reviewer packet carries actual fixed financial result public summaries article and no private execution bindings
+    ok 34 - reviewer packet carries actual fixed financial result public summaries article and no private execution bindings
+      ---
+      duration_ms: 811.197344
+      ...
+    # Subtest: reviewer exact read assign replay packet and PostgreSQL restart retain row hash clocks and budgets
+    ok 35 - reviewer exact read assign replay packet and PostgreSQL restart retain row hash clocks and budgets
+      ---
+      duration_ms: 2120.724136
+      ...
+    # Subtest: review-result independent bearer closed body null-before with zero all-state audit
+    ok 36 - review-result independent bearer closed body null-before with zero all-state audit
+      ---
+      duration_ms: 1431.548783
+      ...
+    # Subtest: review enums and paragraph scalar types reject coercion with zero result completion budget changes
+    ok 37 - review enums and paragraph scalar types reject coercion with zero result completion budget changes
+      ---
+      duration_ms: 15743.957361
+      ...
+    # Subtest: review canonical65537 and Unicode trim raw scalar bounds reject without any state change
+    ok 38 - review canonical65537 and Unicode trim raw scalar bounds reject without any state change
+      ---
+      duration_ms: 5387.567054
+      ...
+    # Subtest: cross-role thread invocation reuse clock hash stale input rejected single-shot without writes
+    ok 39 - cross-role thread invocation reuse clock hash stale input rejected single-shot without writes
+      ---
+      duration_ms: 4712.155191
+      ...
+    # Subtest: one immutable synthetic review result finishes only original counter-review reservation
+    ok 40 - one immutable synthetic review result finishes only original counter-review reservation
+      ---
+      duration_ms: 1544.019013
+      ...
+    # Subtest: completed exact context read replay and PG restart preserve whole result clocks bytes charge
+    ok 41 - completed exact context read replay and PG restart preserve whole result clocks bytes charge
+      ---
+      duration_ms: 4602.209334
+      ...
+    # Subtest: guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+    ok 42 - guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+      ---
+      duration_ms: 158.432811
+      ...
+    # Subtest: withdrawal rejects result read and receive replay, preserves complete private draft and all charges
+    ok 43 - withdrawal rejects result read and receive replay, preserves complete private draft and all charges
+      ---
+      duration_ms: 104.557298
+      ...
+    # Subtest: withdrawal rejects new handoff and read while immutable draft completion and all charges remain
+    ok 44 - withdrawal rejects new handoff and read while immutable draft completion and all charges remain
+      ---
+      duration_ms: 183.00242
+      ...
+    # Subtest: source withdrawal rejects reviewer read packet assign preserving complete historical rows and budgets
+    ok 45 - source withdrawal rejects reviewer read packet assign preserving complete historical rows and budgets
+      ---
+      duration_ms: 231.222871
+      ...
+    # Subtest: withdrawn source rejects completed review result read receive and preserves historical result bytes
+    ok 46 - withdrawn source rejects completed review result read receive and preserves historical result bytes
+      ---
+      duration_ms: 177.239186
+      ...
+    1..46
+ok 1 - compiled reviewer result 2409, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 79960.894256
+  ...
+# {"field":"base Q4 display revenue, manual research assumption projection","actual":31090.078766235238,"expectedFrozen":31090.078766235238}
+# Subtest: compiled reviewer result 2383, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 96.562691
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 69.263087
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 11.445125
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 348.940212
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 25.635704
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 11.318804
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 3.998685
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 468.095768
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 74.556862
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 349.690979
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 403.911643
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 827.067745
+      ...
+    # Subtest: packet marker2 authentication and closed-body rejection leave all rows unchanged
+    ok 13 - packet marker2 authentication and closed-body rejection leave all rows unchanged
+      ---
+      duration_ms: 222.579636
+      ...
+    # Subtest: complete input without original author assignment cannot produce a packet
+    ok 14 - complete input without original author assignment cannot produce a packet
+      ---
+      duration_ms: 303.942889
+      ...
+    # Subtest: existing guarded author admission binds this original input without a new reservation
+    ok 15 - existing guarded author admission binds this original input without a new reservation
+      ---
+      duration_ms: 395.967587
+      ...
+    # Subtest: compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+    ok 16 - compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+      ---
+      duration_ms: 834.728303
+      ...
+    # Subtest: two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+    ok 17 - two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+      ---
+      duration_ms: 2871.575344
+      ...
+    # Subtest: result marker2 auth and closed body reject with unchanged original budget
+    ok 18 - result marker2 auth and closed body reject with unchanged original budget
+      ---
+      duration_ms: 70.184565
+      ...
+    # Subtest: actual result read before reception is null, no assignment or charge added
+    ok 19 - actual result read before reception is null, no assignment or charge added
+      ---
+      duration_ms: 1352.82855
+      ...
+    # Subtest: counterfactual original source fingerprint observation is rejected once with identical all-state audit
+    ok 20 - counterfactual original source fingerprint observation is rejected once with identical all-state audit
+      ---
+      duration_ms: 904.714062
+      ...
+    # Subtest: synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result
+    ok 21 - synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result
+      ---
+      duration_ms: 1487.791577
+      ...
+    # Subtest: changed article or observation single-shot rejected without modifying private draft
+    ok 22 - changed article or observation single-shot rejected without modifying private draft
+      ---
+      duration_ms: 2510.257363
+      ...
+    # Subtest: result exact read/reception replay and actual PG restart preserve full hash/clock/bytes and budget
+    ok 23 - result exact read/reception replay and actual PG restart preserve full hash/clock/bytes and budget
+      ---
+      duration_ms: 5203.382244
+      ...
+    # Subtest: separate reviewer bearer, closed body, mixed header, oversized body reject without writes
+    ok 24 - separate reviewer bearer, closed body, mixed header, oversized body reject without writes
+      ---
+      duration_ms: 75.451085
+      ...
+    # Subtest: reviewer read packet and assign before author handoff reject with zero writes
+    ok 25 - reviewer read packet and assign before author handoff reject with zero writes
+      ---
+      duration_ms: 1219.055902
+      ...
+    # Subtest: handoff exact header auth, closed six keys and result mismatch leave all state unchanged
+    ok 26 - handoff exact header auth, closed six keys and result mismatch leave all state unchanged
+      ---
+      duration_ms: 94.666533
+      ...
+    # Subtest: read before original reservation completion returns null without writing
+    ok 27 - read before original reservation completion returns null without writing
+      ---
+      duration_ms: 471.952511
+      ...
+    # Subtest: single original author handoff adds only completion bound to recalculated article hash
+    ok 28 - single original author handoff adds only completion bound to recalculated article hash
+      ---
+      duration_ms: 599.07065
+      ...
+    # Subtest: old author result active read rejects completed reservation and preserves private result
+    ok 29 - old author result active read rejects completed reservation and preserves private result
+      ---
+      duration_ms: 50.789163
+      ...
+    # Subtest: handoff exact read replay and actual PG restart preserve complete receipt bytes clock and charge
+    ok 30 - handoff exact read replay and actual PG restart preserve complete receipt bytes clock and charge
+      ---
+      duration_ms: 1258.702253
+      ...
+    # Subtest: completed author permits independent read with null reviewer and packet remains unavailable
+    ok 31 - completed author permits independent read with null reviewer and packet remains unavailable
+      ---
+      duration_ms: 535.141661
+      ...
+    # Subtest: concurrent exact reviewer admission adds one counter-review reservation and1800 charge only
+    ok 32 - concurrent exact reviewer admission adds one counter-review reservation and1800 charge only
+      ---
+      duration_ms: 1671.908529
+      ...
+    # Subtest: original global-one model slot blocks another guarded reserve without refund or writes
+    ok 33 - original global-one model slot blocks another guarded reserve without refund or writes
+      ---
+      duration_ms: 49.202583
+      ...
+    # Subtest: reviewer packet carries actual fixed financial result public summaries article and no private execution bindings
+    ok 34 - reviewer packet carries actual fixed financial result public summaries article and no private execution bindings
+      ---
+      duration_ms: 735.052772
+      ...
+    # Subtest: reviewer exact read assign replay packet and PostgreSQL restart retain row hash clocks and budgets
+    ok 35 - reviewer exact read assign replay packet and PostgreSQL restart retain row hash clocks and budgets
+      ---
+      duration_ms: 1990.357477
+      ...
+    # Subtest: review-result independent bearer closed body null-before with zero all-state audit
+    ok 36 - review-result independent bearer closed body null-before with zero all-state audit
+      ---
+      duration_ms: 1448.253722
+      ...
+    # Subtest: review enums and paragraph scalar types reject coercion with zero result completion budget changes
+    ok 37 - review enums and paragraph scalar types reject coercion with zero result completion budget changes
+      ---
+      duration_ms: 13246.704159
+      ...
+    # Subtest: review canonical65537 and Unicode trim raw scalar bounds reject without any state change
+    ok 38 - review canonical65537 and Unicode trim raw scalar bounds reject without any state change
+      ---
+      duration_ms: 4674.211602
+      ...
+    # Subtest: cross-role thread invocation reuse clock hash stale input rejected single-shot without writes
+    ok 39 - cross-role thread invocation reuse clock hash stale input rejected single-shot without writes
+      ---
+      duration_ms: 4017.665678
+      ...
+    # Subtest: one immutable synthetic review result finishes only original counter-review reservation
+    ok 40 - one immutable synthetic review result finishes only original counter-review reservation
+      ---
+      duration_ms: 1248.501128
+      ...
+    # Subtest: completed exact context read replay and PG restart preserve whole result clocks bytes charge
+    ok 41 - completed exact context read replay and PG restart preserve whole result clocks bytes charge
+      ---
+      duration_ms: 3936.044663
+      ...
+    # Subtest: guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+    ok 42 - guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+      ---
+      duration_ms: 152.599998
+      ...
+    # Subtest: withdrawal rejects result read and receive replay, preserves complete private draft and all charges
+    ok 43 - withdrawal rejects result read and receive replay, preserves complete private draft and all charges
+      ---
+      duration_ms: 110.437766
+      ...
+    # Subtest: withdrawal rejects new handoff and read while immutable draft completion and all charges remain
+    ok 44 - withdrawal rejects new handoff and read while immutable draft completion and all charges remain
+      ---
+      duration_ms: 133.056242
+      ...
+    # Subtest: source withdrawal rejects reviewer read packet assign preserving complete historical rows and budgets
+    ok 45 - source withdrawal rejects reviewer read packet assign preserving complete historical rows and budgets
+      ---
+      duration_ms: 138.836426
+      ...
+    # Subtest: withdrawn source rejects completed review result read receive and preserves historical result bytes
+    ok 46 - withdrawn source rejects completed review result read receive and preserves historical result bytes
+      ---
+      duration_ms: 116.088045
+      ...
+    1..46
+ok 2 - compiled reviewer result 2383, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 72845.511055
+  ...
+1..2
+# tests 94
+# suites 0
+# pass 94
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 156033.48431

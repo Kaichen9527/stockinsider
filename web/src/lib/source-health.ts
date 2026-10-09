@@ -47,13 +47,13 @@ export function classifySourceSyncTerminal(
   if (/auth|oauth|credential|login|vault|token/iu.test(reason)) return 'auth_failed';
   if (/parser|parse_zero|zero_messages/iu.test(reason)) return 'parser_failed';
   if (result.timedOut) return 'failed';
-  if (written > 0 && reason.trim()) return 'partial';
+  // Incomplete coverage or dataset failures cannot become successful empty/duplicate replays.
+  if (reason.trim()) return written > 0 || fetched > 0 ? 'partial' : 'failed';
   if (written > 0) return 'success';
   if (candidates > 0 && duplicates >= candidates) return 'duplicate_only';
   if (fetched > 0 && duplicates >= fetched) return 'duplicate_only';
   if (candidates > 0 || matched > 0) return 'parser_failed';
   if (fetched > 0) return 'successful_empty';
-  if (reason.trim()) return 'failed';
   return 'successful_empty';
 }
 

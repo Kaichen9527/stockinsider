@@ -1,0 +1,14 @@
+{
+  "observedAt": "2026-10-04T01:15:19.849744+00:00",
+  "applied": true,
+  "beforeFreeBytes": 15092928512,
+  "afterFreeBytes": 15131607040,
+  "removedAllocatedBytes": 38682624,
+  "items": [
+    {"path":"/var/tmp/stockinsider-30fe8d89b3dba7acb875edc89a87dd18a58d7741.clean.tar.gz","status":"removed","allocatedBytes":18931712,"identityHash":"4ea4d1003b74559c540ac0a686e1dec46308914e364893dba8034fd94758a819"},
+    {"path":"/var/tmp/stockinsider-30fe8d89b3dba7acb875edc89a87dd18a58d7741.tar.gz","status":"removed","allocatedBytes":19578880,"identityHash":"6127c931dba1f26fd82c578f20b7ebdb7ba3a673a037456f2c9e6f7c9448da7f"},
+    {"path":"/tmp/stockinsider-research-capacity-20260930","status":"removed","allocatedBytes":24576,"identityHash":"f276ffc00bf052b318563fa52fc72ed8c61d707750b86f917fd88dc11c58ac6c"},
+    {"path":"/tmp/stockinsider-worker-unit-check-20260914","status":"removed","allocatedBytes":122880,"identityHash":"f5c4116f73377d7e1edb065f1b5803321b778fd763490fd290edece3adf270bd"},
+    {"path":"/tmp/stockinsider-parser-repair.VXQMr8","status":"removed","allocatedBytes":24576,"identityHash":"d1faa2be043711196e65ce465320899dd650b0728ee5c31f5e5524bf72b42065"}
+  ]
+}

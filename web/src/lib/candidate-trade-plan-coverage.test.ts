@@ -143,6 +143,31 @@ test('publication accepts only current saved summaries and respects existing fil
   assert.equal(reconcilePublishedCandidateTradePlanCoverage({ coverage, cards: [] }).complete, true);
 });
 
+test('every current screened symbol must have a same-run public card when explicitly required', () => {
+  const one = fixture('2330'); const two = fixture('2409', 'insufficient');
+  const coverage = reconcileCandidateTradePlanCoverage({ expectedSymbols: ['2330', '2409'], outcomes: [one.outcome, two.outcome] });
+  const missing = reconcilePublishedCandidateTradePlanCoverage({ coverage, cards: [one.card], requiredSymbols: ['2330', '2409'] });
+  assert.equal(missing.complete, false); assert.equal(missing.requiredSymbolCount, 2);
+  assert.equal(missing.matchedRequiredSymbolCount, 1); assert.equal(missing.missingRequiredSymbolCount, 1);
+  assert.deepEqual(missing.mismatches, [{ symbol: '2409', reason: 'required_screened_card_missing' }]);
+  const complete = reconcilePublishedCandidateTradePlanCoverage({ coverage, cards: [one.card, two.card], requiredSymbols: ['2330', '2409'] });
+  assert.equal(complete.complete, true); assert.equal(complete.matchedRequiredSymbolCount, 2);
+  assert.equal(complete.missingRequiredSymbolCount, 0);
+});
+
+test('required screened roster is validated instead of silently normalized', () => {
+  const one = fixture('2330');
+  const coverage = reconcileCandidateTradePlanCoverage({ expectedSymbols: ['2330'], outcomes: [one.outcome] });
+  const result = reconcilePublishedCandidateTradePlanCoverage({ coverage, cards: [one.card],
+    requiredSymbols: ['2330', '2330', '2409', 'TSM'] });
+  assert.equal(result.complete, false); assert.equal(result.requiredSymbolCount, 2);
+  assert.deepEqual(result.mismatches, [
+    { symbol: '2330', reason: 'required_screened_symbol_duplicate' },
+    { symbol: null, reason: 'required_screened_symbol_invalid' },
+    { symbol: '2409', reason: 'required_screened_symbol_not_in_research_roster' },
+  ]);
+});
+
 test('publication rejects old latest revisions, missing summaries and valid-shaped but changed summaries', () => {
   const { outcome, card } = fixture();
   const coverage = reconcileCandidateTradePlanCoverage({ expectedSymbols: ['2330'], outcomes: [outcome] });

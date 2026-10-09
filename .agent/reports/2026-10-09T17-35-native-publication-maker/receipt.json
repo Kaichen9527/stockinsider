@@ -1,0 +1,61 @@
+{
+  "recordedAt": "2026-10-09T17:32:44.581810+00:00",
+  "sourceHead": "05ea2dde87ab3c6eea533dae0b13792fbca1009a",
+  "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+  "pureOrSSRChecks": {
+    "total": 12,
+    "pass": 11,
+    "fail": 0,
+    "explicitInactiveNativeSkip": 1
+  },
+  "raw": {
+    "path": ".agent/reports/2026-10-09T17-35-native-publication-maker/related-unit.tap",
+    "bytes": 4291,
+    "sha256": "e848776054504d269f09a048230acf250156261a9081976877ff4d899c475e2e"
+  },
+  "sourceFiles": [
+    {
+      "path": "scripts/research-reviewer-result-http.test.mjs",
+      "bytes": 53490,
+      "sha256": "f21b54d2fcd625121c0948adcc506b216d43e9952ca0338ddb5f59ad4fd931e6"
+    },
+    {
+      "path": "scripts/research-publication-http.test.mjs",
+      "bytes": 61366,
+      "sha256": "5c843a39810fc31b6173c3a70a2c76699033c2825fa75cf744c3bacfa43d3906"
+    },
+    {
+      "path": "scripts/research-publication-http-drop.mjs",
+      "bytes": 2950,
+      "sha256": "dd0a9c92fb787966924cfedfe5a6d5246bfda7cdc852a12b86b9f9f419f6eed9"
+    },
+    {
+      "path": "scripts/research-local-inbox-dataplane.mjs",
+      "bytes": 33643,
+      "sha256": "a45102c1c953cf359af6a2b7c2653203b4fadde9441a7a4183737a2b872c8c9d"
+    },
+    {
+      "path": "package.json",
+      "bytes": 32933,
+      "sha256": "b60ab7edafc164e5d7227238e910a42ff3d662c45eece73e226752a112133b26"
+    }
+  ],
+  "originalReviewerFileUnchanged": true,
+  "scope": "isolated synthetic test infrastructure; native scenario not yet executed",
+  "reviewAttribution": {
+    "reviewer": "/root/strategy_deploy_audit_plan",
+    "source": "collaboration final response in parent chat",
+    "subject": "05ea2dde87ab3c6eea533dae0b13792fbca1009a",
+    "result": "unsigned scoped CODE PASS after pre-withdrawal baseline P2 repair"
+  },
+  "normalBuild": {
+    "environment": "Mac",
+    "priorSameWebSource": "df514965072816d319ec1a1aa47b752c538d1d92",
+    "receiptCommit": "cffe3e38",
+    "reusedIdenticalWeb": true,
+    "notNewLinuxBuild": true
+  },
+  "nativeHttpAccepted": false,
+  "genuineAuthorExecuted": false,
+  "productionDeployed": false
+}

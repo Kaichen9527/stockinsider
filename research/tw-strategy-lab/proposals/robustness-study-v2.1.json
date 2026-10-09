@@ -1,0 +1,181 @@
+{
+  "schema": "tw-strategy-robustness-proposal/v2",
+  "proposal_id": "tw-strategy-robustness-v2.1",
+  "created_at": "2026-09-25T06:48:36Z",
+  "status": "review_candidate_not_executed",
+  "amends": {
+    "proposal_id": "tw-strategy-robustness-v2",
+    "sha256": "94fd91733a0474a2ed65e5c96fc1c2bad4559a68354dfba4b2f57e980ddfbac5",
+    "review_sha256": "c1debc7ae03eef35190de76b2c664ae2dd14eb44251b62ed1d8f947c1586f2de",
+    "policy": "The v2 files remain immutable; this is a separately identified replacement candidate."
+  },
+  "informed_by_development_results": true,
+  "source_evidence": {
+    "source_run": 36081668572,
+    "source_commit": "e1fb505a894105e05fb08aa28fd0fb8ad8e520fa",
+    "run_id": "a9123545831d8ee1a39b231c",
+    "registry_hash": "abd03f9bbe3230575f3e14016c8c1fd92fef6ad00155c0d743612754e8bcc98d",
+    "dataset_hash": "a89bf8e5cbcfc464463a53c29f1f5f68f6419d72f2a06befcaeb008e3cff5cca"
+  },
+  "scope": {
+    "warmup": ["2018-01-01", "2018-12-31"],
+    "development": ["2019-01-01", "2023-12-31"],
+    "holdout_start": "2024-01-01",
+    "holdout_policy": "do_not_download_read_or_compute",
+    "universe": ["1216", "2330", "5347", "6488", "8069"],
+    "universe_warning": "fixed surviving cash-only subset; not historical market or App candidates",
+    "price_strategies": ["S1", "S2", "S3", "S4", "S6"],
+    "execution_scenarios": ["baseline", "cost_stress", "small_capacity"]
+  },
+  "preconditions": [
+    "A reviewer other than the proposal author accepts this contract and records the exact proposal hash.",
+    "The exact normalized inputs identified by the frozen dataset hash are available to the isolated runner without reading 2024+.",
+    "Each implementation change has a new source commit; run 36081668572 and every failed result remain unchanged.",
+    "Every registered path is retained, including zero-trade and failed paths; no result-driven omission or replacement is allowed."
+  ],
+  "metric_contract": {
+    "completed_trade": "a record present in the retained trades array with one entry and one exit",
+    "median_net_trade_return": {
+      "formula": "ordinary median of completed-trade net_return; for an even count, arithmetic mean of the two center values",
+      "empty_case": null,
+      "gate_rule_for_null": "fail"
+    },
+    "profit_factor": {
+      "numerator": "sum(net_pnl for completed trades where net_pnl > 0)",
+      "denominator": "abs(sum(net_pnl for completed trades where net_pnl < 0))",
+      "zero_positive_profit": 0,
+      "zero_negative_loss": null,
+      "gate_rule_for_null": "fail; do not encode infinity"
+    },
+    "largest_winner_share_of_positive_profit": {
+      "numerator": "maximum positive completed-trade net_pnl",
+      "denominator": "sum(net_pnl for completed trades where net_pnl > 0)",
+      "no_positive_profit": 1,
+      "gate_rule_for_no_positive_profit": "fail"
+    },
+    "largest_symbol_share_of_positive_profit": {
+      "numerator": "maximum across symbols of sum(net_pnl for that symbol's completed trades where net_pnl > 0); losing trades are not netted",
+      "denominator": "sum(net_pnl for all completed trades where net_pnl > 0)",
+      "no_positive_profit": 1,
+      "gate_rule_for_no_positive_profit": "fail"
+    },
+    "terminal_return_ex_unavailable_receivables": {
+      "formula": "(ending_equity - ending_receivables) / assumptions.initial_cash - 1",
+      "nonpositive_initial_cash": null,
+      "interpretation": "terminal accounting decomposition only; not a counterfactual portfolio path"
+    },
+    "numeric_comparison": "IEEE-754 parsed values; gates use the written operators without rounding; displays may round only after decisions"
+  },
+  "work_items": [
+    {
+      "id": "R1",
+      "kind": "reporting_repair",
+      "strategy_parameters_changed": false,
+      "strategies": ["S1", "S2", "S3", "S4", "S6"],
+      "scenarios": ["baseline", "cost_stress", "small_capacity"],
+      "registered_trials": 15,
+      "new_fields": {
+        "raw_confirmation_count": "count of signal rows where raw_signal_state == confirmed",
+        "eligible_order_count": "count of signal rows where plan_state == eligible_proxy",
+        "avoid_chase_count": "count of signal rows where plan_state == avoid_chase"
+      },
+      "canonical_equality": {
+        "trial_result_files": "For every strategy/scenario pair, canonical JSON of the complete existing result object must be exactly equal; recursive object keys are sorted, array order is retained, and numeric values are not rounded.",
+        "signal_rows": "For every strategy, canonical JSON of every existing signal row and its original array order must be exactly equal. New counts are emitted only in a separate reporting object, never injected into existing rows.",
+        "trial_ledger_projection": ["strategy_id", "scenario", "parameter_variant", "status", "metrics", "result_file"],
+        "allowed_differences": ["new reporting object", "new run_id", "new trial_id prefix", "new source commit", "creation timestamps"],
+        "forbidden_differences": "Any difference in trial result files, existing signal rows, projected ledger fields, eligible signals, fills, completed trades, costs or portfolio metrics invalidates R1."
+      },
+      "decision_rule": "All 15 paths and all equality checks must pass. Any mismatch is retained as a failed repair run and cannot replace v1."
+    },
+    {
+      "id": "R2",
+      "kind": "s3_concentration_diagnostic",
+      "strategy_parameters_changed": false,
+      "source_paths": ["S3-baseline", "S3-cost_stress"],
+      "registered_diagnostic_datasets": 2,
+      "finite_checks": [
+        { "metric": "completed_trades_baseline", "operator": ">=", "threshold": 30 },
+        { "metric": "median_net_trade_return_baseline", "operator": ">", "threshold": 0 },
+        { "metric": "profit_factor_baseline", "operator": ">", "threshold": 1 },
+        { "metric": "profit_factor_cost_stress", "operator": ">", "threshold": 1 },
+        { "metric": "largest_winner_share_of_positive_profit_baseline", "operator": "<=", "threshold": 0.25 },
+        { "metric": "largest_symbol_share_of_positive_profit_baseline", "operator": "<=", "threshold": 0.5 },
+        { "metric": "terminal_return_ex_unavailable_receivables_baseline", "operator": ">", "threshold": 0 },
+        { "metric": "terminal_return_ex_unavailable_receivables_cost_stress", "operator": ">", "threshold": 0 }
+      ],
+      "decision_rule": "Failure of any gate keeps S3 exploratory. Passing all gates would still be a result-informed development diagnostic, not OOS alpha, validation or trading authorization."
+    },
+    {
+      "id": "R3",
+      "kind": "s4_result_informed_hypothesis_generation",
+      "strategy_parameters_changed": true,
+      "fixed_parent_strategy": "S4",
+      "variants": [
+        { "strategy_id": "S4v2-070", "atr5_over_atr20_max": 0.7 },
+        { "strategy_id": "S4v2-075", "atr5_over_atr20_max": 0.75 }
+      ],
+      "scenarios": ["baseline", "cost_stress", "small_capacity"],
+      "registered_trials": 6,
+      "frozen_fields": "Every S4 v1 parameter, universe, date, cost and execution rule except atr5_over_atr20_max.",
+      "multiplicity_rule": "Report both variants and all scenarios. Do not select, promote or rename a development winner.",
+      "decision_rule": "Development output may reject or retain a hypothesis for a later independently defined panel; it cannot produce a deployable strategy."
+    },
+    {
+      "id": "R4",
+      "kind": "dividend_availability_sensitivity",
+      "strategy_parameters_changed": false,
+      "strategies": ["S1", "S2", "S3", "S4", "S6"],
+      "scenarios": ["baseline"],
+      "paths": [
+        {
+          "id": "payment_date_unknown",
+          "rule": "Recognize the entitlement as a receivable on ex-date and never release it to spendable cash during the study."
+        },
+        {
+          "id": "optimistic_next_session_preopen",
+          "rule": "On the next recorded market session after ex-date, release the entitlement into spendable cash before pre-open sizing and reservation, so it may fund that session's opening orders. This is an optimistic bound, not a factual payment schedule."
+        }
+      ],
+      "session_event_order_optimistic_path": [
+        "release eligible next-session receivables to cash",
+        "size opening orders and reserve cash",
+        "process opening fills",
+        "mark end-of-session equity"
+      ],
+      "registered_paths": 10,
+      "excluded_scenarios": ["cost_stress", "small_capacity"],
+      "exclusion_reason": "R4 isolates payment availability under baseline; cost/capacity interactions require a separately registered study.",
+      "decision_rule": "Show all ten paths. The optimistic path is a sensitivity ceiling and may not be the headline return or promotion evidence."
+    }
+  ],
+  "cardinality": {
+    "r1_trials": 15,
+    "r2_diagnostic_datasets_no_new_simulation": 2,
+    "r3_trials": 6,
+    "r4_paths": 10,
+    "total_new_simulation_paths_if_fully_executed": 31
+  },
+  "blocked_robustness": [
+    {
+      "test": "S3 leave-one-symbol-out full-path replay",
+      "reason": "The frozen strategy needs at least five complete momentum members and the eligible subset has exactly five.",
+      "unblock": "Acquire a point-in-time-defined panel with at least ten eligible symbols without using 2024+ holdout data."
+    },
+    {
+      "test": "S5 revenue and S7 broker-revision factors",
+      "reason": "No licensed point-in-time event history with publication, revision, correction and entitlement provenance."
+    }
+  ],
+  "global_decision_rules": [
+    "Weekly 5%, monthly 10% and annualized 50% are not selection criteria.",
+    "No development-only result may be called out-of-sample, alpha, validated profitability or deployable.",
+    "Do not replace the v1 registry, ledger, zero-trade S4 result or failed trials.",
+    "Any implementation defect requires a new commit and run with an explicit invalidation reason; no silent overwrite.",
+    "Article publication, merge and deployment remain outside this proposal."
+  ],
+  "authorization": {
+    "execute": false,
+    "reason": "Independent contract review and exact normalized replay inputs are still required."
+  }
+}

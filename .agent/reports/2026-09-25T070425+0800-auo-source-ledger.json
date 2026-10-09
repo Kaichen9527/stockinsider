@@ -1,0 +1,151 @@
+{
+  "schema": "auo-source-run-v1",
+  "symbol": "2409",
+  "run": "2026-09-25-0700-asia-taipei",
+  "observedAt": "2026-09-25T07:04:25+08:00",
+  "latestCompletedTradingSession": "2026-09-24",
+  "researchRevision": "auo-2409-2026-09-25.v5",
+  "scopeNote": "Direct-source hashes are SHA-256 of fetched response bytes. Search-only checks have no source-body hash and do not prove complete coverage of a platform or the web. No credentials, private posts, or member article bodies are stored.",
+  "sources": [
+    {
+      "name": "TWSE 2409 September daily prices",
+      "attemptedScope": "STOCK_DAY, 2409, 2026-09, completed rows through 2026-09-24",
+      "status": "read_success_relevant",
+      "publishedAt": "2026-09-24",
+      "firstObservedAt": "2026-09-25T07:04:25+08:00",
+      "rootUrl": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20260901&stockNo=2409",
+      "relation": "Official price and volume root; no repost counted",
+      "trust": "official_market_data",
+      "contentSha256": "3788d104dd873852edbe00df4c0e9aebd8500d3f520bee8c938ec5dfa50974f9",
+      "finding": "9/24 OHLC 34.75/35.95/33.75/34.20 TWD; 542503236 shares."
+    },
+    {
+      "name": "TWSE T86 three institutional groups",
+      "attemptedScope": "All listed securities, 2026-09-24, filtered to 2409",
+      "status": "read_success_relevant",
+      "publishedAt": "2026-09-24",
+      "firstObservedAt": "2026-09-25T07:04:25+08:00",
+      "rootUrl": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260924&selectType=ALL&response=json",
+      "relation": "Official flow root; does not independently confirm any Intel cooperation",
+      "trust": "official_market_data",
+      "contentSha256": "8330297a3982cc2710af03251bc822db763d7994f37f65afd9d961cde0f0d87a",
+      "finding": "Foreign net -79998614 shares, investment trust -6000, dealer +2103828."
+    },
+    {
+      "name": "TWSE TAIEX September index",
+      "attemptedScope": "September 2026 daily index through 2026-09-24",
+      "status": "read_success_relevant",
+      "publishedAt": "2026-09-24",
+      "firstObservedAt": "2026-09-25T07:04:25+08:00",
+      "rootUrl": "https://www.twse.com.tw/rwd/zh/TAIEX/MI_5MINS_HIST?response=json&date=20260924",
+      "relation": "Official index comparator",
+      "trust": "official_market_data",
+      "contentSha256": "2196a5afd7378ee56254f910413ea901b9e5194913099a1b40afe694c2599baa",
+      "finding": "9/24 TAIEX close 48024.60."
+    },
+    {
+      "name": "TWSE 2026 market calendar",
+      "attemptedScope": "Published 2026 exchange holiday schedule",
+      "status": "read_success_relevant",
+      "publishedAt": "2026",
+      "firstObservedAt": "2026-09-25T07:04:25+08:00",
+      "rootUrl": "https://www.twse.com.tw/holidaySchedule/holidaySchedule?response=json&queryYear=2026",
+      "relation": "Official trading-day calendar",
+      "trust": "official_market_data",
+      "contentSha256": "7fefe785ea7155a5004a2eb74486ad865ea5c4b5f02ee0cffbbdacb1ca2ea390",
+      "finding": "9/25 and 9/28 closed; 9/24 remains latest completed session at this run."
+    },
+    {
+      "name": "TWSE MOPS listed-company material disclosures OpenAPI",
+      "attemptedScope": "96 returned 2026-09-24 listed-company disclosures, filtered to company 2409",
+      "status": "read_success_no_relevant_result",
+      "publishedAt": "2026-09-24",
+      "firstObservedAt": "2026-09-25T07:04:25+08:00",
+      "rootUrl": "https://openapi.twse.com.tw/v1/opendata/t187ap04_L",
+      "relation": "Official daily material-disclosure feed; not a complete historical MOPS search",
+      "trust": "official_disclosure_limited_scope",
+      "contentSha256": "6139fd97aaa18bafb86455d37b2d0a1c120731465476e3f9d9395b123631223e",
+      "finding": "No 2409 row in returned 9/24 slice; absence is limited to this feed."
+    },
+    {
+      "name": "AUO corporate news index",
+      "attemptedScope": "Visible current first page and must-see entries through 2026-09-25 morning",
+      "status": "read_success_no_relevant_result",
+      "publishedAt": "2026-09-09",
+      "firstObservedAt": "2026-09-25T07:04:25+08:00",
+      "rootUrl": "https://www.auo.com/zh-TW/News_Archive/index",
+      "relation": "Company newsroom; 8/31 CPO/GCS item already in prior revision",
+      "trust": "official_company_limited_scope",
+      "contentSha256": "b6bded8faca3aafd529b89fc81c8954963a72bb20cd6c78d84db23a3419d2243",
+      "finding": "No newer CPO, GCS, or Intel confirmation on inspected first page."
+    },
+    {
+      "name": "Intel newsroom index",
+      "attemptedScope": "Visible current latest-news listing and targeted Intel/AUO/GCS web search",
+      "status": "read_success_no_relevant_result",
+      "publishedAt": "2026-09-21",
+      "firstObservedAt": "2026-09-25T07:04:25+08:00",
+      "rootUrl": "https://www.intel.com/content/www/us/en/newsroom/home.html",
+      "relation": "Possible cooperation counterparty; prior Intel/Lens announcement remains a competing route",
+      "trust": "official_company_limited_scope",
+      "contentSha256": "8c1c836f215c49b34c1d7e1773b4d7e25b335ef2e930a9330ad1e40f5b2bca6d",
+      "finding": "No AUO order or partnership confirmation in inspected listing/search scope."
+    },
+    {
+      "name": "PTT Stock 9/24 trading thread",
+      "attemptedScope": "Public 9/24 intraday body and replies containing 友達, 戀人, Intel",
+      "status": "read_success_relevant",
+      "publishedAt": "2026-09-24",
+      "firstObservedAt": "2026-09-25T07:04:25+08:00",
+      "rootUrl": "https://www.ptt.cc/bbs/Stock/M.1790209831.A.834.html",
+      "relation": "Individual trading comments; no independent order confirmation; 9/23 news repost remains a repost",
+      "trust": "unverified_public_social",
+      "contentSha256": "ee4f13c78f527820c32b01d7ebe3aab9ac0978d03e9c8d5472519ded21beb739",
+      "finding": "Price and trader opinions only; no new verifiable customer/order detail."
+    },
+    {
+      "name": "BOE 2026-07-02 investor relations record",
+      "attemptedScope": "Original 2026-030 PDF; glass substrate, Corning, Micro LED optical interconnect and CPO passages",
+      "status": "read_success_relevant",
+      "publishedAt": "2026-07-03",
+      "firstObservedAt": "2026-09-25T07:09:04+08:00",
+      "rootUrl": "https://static.cninfo.com.cn/finalpage/2026-07-03/1225407620.PDF",
+      "relation": "BOE primary investor communication; TrendForce 7/9 article restates this root and is not independent confirmation",
+      "trust": "official_peer_primary_document",
+      "contentSha256": "6adc4811c5629cb1d4a1113cc3f705e326aa6378a52646103ff184d020e36ea0",
+      "finding": "BOE and Corning are cooperating on glass substrate and optical-interconnect applications; BOE formed a Micro LED optical interconnect and glass-carrier CPO project team. BOE explicitly says these new lines are not yet in mass production or mass-production revenue. This limits AUO exclusivity and future share assumptions."
+    }
+  ],
+  "searches": [
+    {
+      "scope": "News and public broker articles: 友達/2409/AUO + Intel, 台積電, 康寧, CPO, GCS, 訂單, 9/24–25",
+      "status": "read_success_no_new_independent_claim",
+      "finding": "Search surfaced 9/21 rumor copies and 9/23 selloff commentary; no new confirmed customer, design win, or order. Search indexes are incomplete.",
+      "contentSha256": null
+    },
+    {
+      "scope": "InvestAnchors public indexed pages and Telegram: 友達 + Intel/玻璃/CPO, September 2026",
+      "status": "read_success_no_relevant_result",
+      "finding": "No new indexed AUO post found in this search scope; member articles were not copied or exported.",
+      "contentSha256": null
+    },
+    {
+      "scope": "Publicly indexed Threads, Instagram, Facebook: 友達 + Intel/CPO, 9/24–25",
+      "status": "read_success_no_relevant_result",
+      "finding": "Search did not surface a new verifiable claim. No signed-in social platform tab was available in the enabled in-app browser; authenticated feeds and replies were not read.",
+      "contentSha256": null
+    },
+    {
+      "scope": "TrendForce, Omdia, Corning, LG Display, BOE, TCL CSOT, Visteon: new AUO-related industry/customer evidence",
+      "status": "read_success_no_relevant_result",
+      "finding": "Targeted search found BOE's 7/3 primary investor document on a competing Micro LED/CPO and Corning route. It narrows AUO exclusivity/share assumptions, but does not establish an AUO order or change baseline EPS. This was not a full paid-research scan.",
+      "contentSha256": null
+    }
+  ],
+  "materialChange": "Official price, index, and institutional flow advance one complete session. Two-day foreign selling weakens near-term momentum. BOE primary disclosure narrows any AUO exclusivity/share argument for CPO/GCS. No new AUO business proof changes baseline 2027 EPS or CPO/GCS commercial inputs.",
+  "unfinishedCoverage": [
+    "Authenticated Threads, Instagram, and Facebook feeds/replies were not available in the enabled browser session.",
+    "Historical MOPS query beyond the returned 9/24 OpenAPI slice was not completed.",
+    "Public search cannot establish full coverage of broker or paywalled industry research."
+  ]
+}

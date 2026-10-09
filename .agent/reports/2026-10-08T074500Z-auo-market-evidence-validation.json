@@ -1,0 +1,366 @@
+{
+  "schemaVersion": "bounded-vm-auo-market-evidence-validation-v1",
+  "recordedAt": "2026-10-08T07:46:23.060649+00:00",
+  "batchStartedAt": "2026-10-08T07:22:35Z",
+  "dataCalculationSubjectCommit": "e9af6710f36cd007819d52c91c065ef96a56bdaa",
+  "baseCommit": "95b5a5cc97b1bfad0b0e406d8271f7207c63b288",
+  "branch": "codex/auo-market-evidence-oct08",
+  "scope": "offline public market relay verification, research calculation, normal web build; no application changes",
+  "financialUnsignedReviewDeliveryCommit": "95b5a5cc97b1bfad0b0e406d8271f7207c63b288",
+  "financialPr": "https://github.com/Kaichen9527/stockinsider/pull/305",
+  "financialDatasetUnchanged": true,
+  "financialDatasetSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+  "marketDatasetSha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582",
+  "marketDatasetCanonicalHash": "82410d4700b39287ce8ead9893e279decf25e8b92b4aa2a536cf24023ddbc71a",
+  "manifestSha256": "bb1c2be02e961862a64c1969642fa117ceec53c04dc45874a1c31714ad6d07bf",
+  "checks": {
+    "calculationAndDataValidationGroups": 49,
+    "failed": 0,
+    "skipped": 0,
+    "stockBars": 268,
+    "taiexBars": 268,
+    "canonicalHashesVerified": 30,
+    "localFileHashesVerified": 7,
+    "crossProcessExactDatasetReproduction": true,
+    "normalWebBuildExitCode": 0,
+    "normalWebBuildSubjectCommit": "e9af6710f36cd007819d52c91c065ef96a56bdaa",
+    "appWebTree": "743559fb2d5e850c08a355cf091461c16ce8a30d",
+    "baseAppWebTree": "743559fb2d5e850c08a355cf091461c16ce8a30d",
+    "sharedBuildScope": "PR305 financial and current market branches have identical complete web Git trees; this one normal build covers their unchanged app tree",
+    "prior346IntegrationTypesLintRerun": false,
+    "prior346Status": "historical code1243ee1 validation passed; retained, not current-market rerun"
+  },
+  "acquisition": {
+    "vmCanary": {
+      "schemaVersion": "auo-twse-vm-canary-v1",
+      "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=2409",
+      "attemptedAt": "2026-10-08T07:23:06.986068+00:00",
+      "completedAt": "2026-10-08T07:23:07.002126+00:00",
+      "elapsedSeconds": 0.016057393993833102,
+      "curlExitCode": 56,
+      "httpStatus": 0,
+      "bytes": 0,
+      "bodySha256": null,
+      "completeBody": false,
+      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "redirectsFollowed": 0,
+      "tlsVerificationBypassed": false,
+      "bounds": {
+        "requests": 1,
+        "seconds": 15,
+        "bodyBytes": 2000000
+      },
+      "acquisition": "VM public HTTPS GET; not pinned source controller",
+      "stopDirectFetch": true,
+      "originDnsStatus": "not observed if proxy tunnel refused",
+      "productionImported": false
+    },
+    "macRelayResponses": 28,
+    "macRawBytesReported": 67188,
+    "rawSourceHashesReverifiedByVm": false,
+    "rawFilesTransferredToVm": false,
+    "compressedDuplicateUsed": false,
+    "compressedDuplicateReason": "previous full selected-field relay already saved; avoid retranscription",
+    "retainedNonstandardChangeMarker": "2026-07-30 X0.00",
+    "pricesAdjusted": false,
+    "totalReturnsComputed": false
+  },
+  "buildFailureHistory": [
+    {
+      "stage": "build",
+      "reason": "Turbopack rejects outside-root dependency symlink"
+    },
+    {
+      "stage": "normal-build",
+      "reason": "sandbox PostCSS worker local port binding Operation not permitted"
+    },
+    {
+      "stage": "normal-build-final",
+      "reason": "same error returned from existing failed .next cache even with approved execution mode"
+    }
+  ],
+  "buildRecovery": "copied existing dependencies without install; retained and moved only this-turn generated failed .next cache; same npm run build succeeds in approved execution mode with clean cache",
+  "resources": {
+    "node": "v22.14.0",
+    "nprocVisible": 5,
+    "cgroupV2MemoryMaxBytes": 34359738368,
+    "cgroupV2CpuMax": "400000 100000",
+    "filesystemVisibleTotalBytes": 33770192896,
+    "availableBeforeFirstRecomputeBytes": 28666478592,
+    "availableAfterValidationBytes": 27387207680,
+    "projectDiskQuotaConfirmed": false,
+    "filesystemTotalsAreNotProjectQuotaGuarantees": true,
+    "workspaceResidentDuBytes": 5800169472,
+    "isolatedWorktreeDuBytes": 1270829056,
+    "privateArtifactsDuBytes": 38178816,
+    "observedTaskDiskPeakBytes": 1309007872,
+    "sampledAggregateRssPeakBytes": 1545478144,
+    "gnuTimeProcessMaximumRssBytes": 1414660096,
+    "measurementMethods": [
+      "GNU time -v process maximum RSS",
+      "100ms /proc PGID aggregate RSS samples; sampling does not guarantee observation of all short peaks",
+      "1s du of this worktree plus private task artifacts; final du included",
+      "statvfs visible filesystem free bytes; not a project hard quota"
+    ],
+    "budgets": {
+      "residentBytes": 20000000000,
+      "temporaryBytes": 4000000000,
+      "reserveBytes": 8000000000,
+      "oneHeavyWorkRssLimitBytes": 8589934592
+    },
+    "guardTermination": null
+  },
+  "stages": [
+    {
+      "stage": "recompute",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-market/recompute-market.mjs"
+      ],
+      "startedAt": "2026-10-08T07:36:57.002Z",
+      "completedAt": "2026-10-08T07:36:57.214Z",
+      "elapsedSeconds": 0.21218116801173892,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 50020352,
+      "observedTaskDiskPeakBytes": 29908992,
+      "availableBeforeBytes": 28666478592,
+      "availableAfterBytes": 28666077184,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 81063936,
+      "logSha256": "a42216f4b850f335fefb2689a538a347ad453f472bdaea9d03619ae72230c097"
+    },
+    {
+      "stage": "recompute-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-market/recompute-market.mjs"
+      ],
+      "startedAt": "2026-10-08T07:37:44.526Z",
+      "completedAt": "2026-10-08T07:37:44.737Z",
+      "elapsedSeconds": 0.21058900200296193,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 70070272,
+      "observedTaskDiskPeakBytes": 29921280,
+      "availableBeforeBytes": 28666466304,
+      "availableAfterBytes": 28666060800,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 82235392,
+      "logSha256": "b84f1f0776f0cc9b807dd8ca6059b2cff41ca176392da33d7caa920f0d29a1eb"
+    },
+    {
+      "stage": "repeatability",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-market/recompute-market.mjs",
+        "--check"
+      ],
+      "startedAt": "2026-10-08T07:37:44.769Z",
+      "completedAt": "2026-10-08T07:37:44.980Z",
+      "elapsedSeconds": 0.21157674299320206,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 75247616,
+      "observedTaskDiskPeakBytes": 30330880,
+      "availableBeforeBytes": 28666056704,
+      "availableAfterBytes": 28666048512,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 81776640,
+      "logSha256": "7ddc89ec144accffa6bc5a35be68efc6a49161910425285fe33ee6cdacbae5a0"
+    },
+    {
+      "stage": "final-repeatability",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-market/recompute-market.mjs",
+        "--check"
+      ],
+      "startedAt": "2026-10-08T07:39:44.003Z",
+      "completedAt": "2026-10-08T07:39:44.319Z",
+      "elapsedSeconds": 0.31598952000786085,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 67682304,
+      "observedTaskDiskPeakBytes": 30359552,
+      "availableBeforeBytes": 28666028032,
+      "availableAfterBytes": 28666019840,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 80130048,
+      "logSha256": "a6be78509711c99f439f53035adf29fbb5ef543881f39afceeb27cea381c53b1"
+    },
+    {
+      "stage": "file-hashes",
+      "command": [
+        "python3",
+        "docs/research/2026-10-08-auo-market/verify-hashes.py"
+      ],
+      "startedAt": "2026-10-08T07:39:44.348Z",
+      "completedAt": "2026-10-08T07:39:44.457Z",
+      "elapsedSeconds": 0.10920911100402009,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 30371840,
+      "availableBeforeBytes": 28666015744,
+      "availableAfterBytes": 28666007552,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 11665408,
+      "logSha256": "4e88458769977a7c06194910d10caac30c87291a21a18fb469ff6d2838a0feb0"
+    },
+    {
+      "stage": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T07:40:49.634Z",
+      "completedAt": "2026-10-08T07:40:51.079Z",
+      "elapsedSeconds": 1.4451211499981582,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 191672320,
+      "observedTaskDiskPeakBytes": 30515200,
+      "availableBeforeBytes": 28665827328,
+      "availableAfterBytes": 28664856576,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 170164224,
+      "logSha256": "fa9973d35b80429ab0604ad12caee81383f59d6977e0d8465d710ffe097f44dc"
+    },
+    {
+      "stage": "dependency-copy",
+      "command": [
+        "cp",
+        "-a",
+        "--reflink=auto",
+        "/workspace/stockinsider/web/node_modules",
+        "web/node_modules"
+      ],
+      "startedAt": "2026-10-08T07:41:36.481Z",
+      "completedAt": "2026-10-08T07:41:40.694Z",
+      "elapsedSeconds": 4.2129038230050355,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1986560,
+      "observedTaskDiskPeakBytes": 731586560,
+      "availableBeforeBytes": 28664852480,
+      "availableAfterBytes": 27746394112,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 1179648,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T07:41:46.885Z",
+      "completedAt": "2026-10-08T07:42:34.613Z",
+      "elapsedSeconds": 47.72777379800391,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 932044800,
+      "observedTaskDiskPeakBytes": 950747136,
+      "availableBeforeBytes": 27746390016,
+      "availableAfterBytes": 27710742528,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 891105280,
+      "logSha256": "1ad7c3a7d6de7907e8586fee7e30e45d62e20a68b825c3de4ccc8cd165b3ffa2"
+    },
+    {
+      "stage": "normal-build-final",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T07:43:00.048Z",
+      "completedAt": "2026-10-08T07:43:01.323Z",
+      "elapsedSeconds": 1.274860446996172,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 176885760,
+      "observedTaskDiskPeakBytes": 985477120,
+      "availableBeforeBytes": 27710754816,
+      "availableAfterBytes": 27710570496,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 254140416,
+      "logSha256": "304d3cf0ef14917ba6cc4ad6277efd055ede51cf862da5d144df79cf74e0d07f"
+    },
+    {
+      "stage": "normal-build-clean",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T07:44:11.201Z",
+      "completedAt": "2026-10-08T07:44:46.935Z",
+      "elapsedSeconds": 35.734083746006945,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1545478144,
+      "observedTaskDiskPeakBytes": 1218555904,
+      "availableBeforeBytes": 27710566400,
+      "availableAfterBytes": 27387252736,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 1414660096,
+      "logSha256": "51b86c3603e4333458f9f4ef4a6d1f8667bc7fd7c4bab99758a98cb4ccdede6a"
+    },
+    {
+      "stage": "delivery-repeatability",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-market/recompute-market.mjs",
+        "--check"
+      ],
+      "startedAt": "2026-10-08T07:45:10.351Z",
+      "completedAt": "2026-10-08T07:45:10.632Z",
+      "elapsedSeconds": 0.2813326479954412,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 73035776,
+      "observedTaskDiskPeakBytes": 1308983296,
+      "availableBeforeBytes": 27387232256,
+      "availableAfterBytes": 27387224064,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 83128320,
+      "logSha256": "03375d1abb55f200d864435f446b7edd675261126a77c61e23f04e73af525c92"
+    },
+    {
+      "stage": "delivery-file-hashes",
+      "command": [
+        "python3",
+        "docs/research/2026-10-08-auo-market/verify-hashes.py"
+      ],
+      "startedAt": "2026-10-08T07:45:10.659Z",
+      "completedAt": "2026-10-08T07:45:10.842Z",
+      "elapsedSeconds": 0.18311388599977363,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 655360,
+      "observedTaskDiskPeakBytes": 1308995584,
+      "availableBeforeBytes": 27387219968,
+      "availableAfterBytes": 27387211776,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 11665408,
+      "logSha256": "4e88458769977a7c06194910d10caac30c87291a21a18fb469ff6d2838a0feb0"
+    }
+  ],
+  "remaining": [
+    "corporate actions and adjusted price basis",
+    "official session calendar completeness and latest-completed session proof",
+    "institutional flow",
+    "historical publication/availableAt",
+    "independent thesis qualification and approved strategy",
+    "period-end common shares net of treasury for P/B"
+  ],
+  "authority": {
+    "productionImported": false,
+    "productionWrites": false,
+    "deployed": false,
+    "scheduled": false,
+    "strategyApproved": false,
+    "researchQualified": false,
+    "pricePhase": "unknown",
+    "qualifiedRelativeReturns": null,
+    "protectedAttestation": false,
+    "vpsCloudBusinessRoundtripVerified": false
+  }
+}

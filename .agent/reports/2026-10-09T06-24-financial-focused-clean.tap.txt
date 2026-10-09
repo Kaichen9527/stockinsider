@@ -1,0 +1,140 @@
+(node:131591) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:131591) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-financial-file-reader.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+TAP version 13
+# Subtest: bundled fixed inventory exactly equals approved design bytes/paths/hashes
+ok 1 - bundled fixed inventory exactly equals approved design bytes/paths/hashes
+  ---
+  duration_ms: 3.899155
+  ...
+# Subtest: 2409 actual immutable relay projection and independently recalculated bridges
+ok 2 - 2409 actual immutable relay projection and independently recalculated bridges
+  ---
+  duration_ms: 41.2608
+  ...
+# Subtest: 2383 actual immutable relay projection and independently recalculated bridges
+ok 3 - 2383 actual immutable relay projection and independently recalculated bridges
+  ---
+  duration_ms: 14.337588
+  ...
+# Subtest: actual EP8 company remains unsupported and does not read AUO files
+ok 4 - actual EP8 company remains unsupported and does not read AUO files
+  ---
+  duration_ms: 0.54307
+  ...
+# Subtest: closed request rejects caller command
+ok 5 - closed request rejects caller command
+  ---
+  duration_ms: 0.564281
+  ...
+# Subtest: closed request rejects caller calculatorId
+ok 6 - closed request rejects caller calculatorId
+  ---
+  duration_ms: 0.229817
+  ...
+# Subtest: closed request rejects caller path
+ok 7 - closed request rejects caller path
+  ---
+  duration_ms: 0.176576
+  ...
+# Subtest: closed request rejects caller symbol
+ok 8 - closed request rejects caller symbol
+  ---
+  duration_ms: 0.116767
+  ...
+# Subtest: closed request rejects caller financialVerified
+ok 9 - closed request rejects caller financialVerified
+  ---
+  duration_ms: 0.247534
+  ...
+# Subtest: live original preparation recheck rejects wrongHash
+ok 10 - live original preparation recheck rejects wrongHash
+  ---
+  duration_ms: 0.610531
+  ...
+# Subtest: live original preparation recheck rejects withdrawn
+ok 11 - live original preparation recheck rejects withdrawn
+  ---
+  duration_ms: 0.264829
+  ...
+# Subtest: live original preparation recheck rejects completedAfterRead
+ok 12 - live original preparation recheck rejects completedAfterRead
+  ---
+  duration_ms: 20.353708
+  ...
+# Subtest: live original preparation recheck rejects crossScope
+ok 13 - live original preparation recheck rejects crossScope
+  ---
+  duration_ms: 0.179882
+  ...
+# Subtest: stalled lease dependency cannot produce a late success under shared10s deadline
+ok 14 - stalled lease dependency cannot produce a late success under shared10s deadline
+  ---
+  duration_ms: 10000.915032
+  ...
+# Subtest: nanosecond ordering and invalid finite calendar retained
+ok 15 - nanosecond ordering and invalid finite calendar retained
+  ---
+  duration_ms: 0.253102
+  ...
+# Subtest: actual read exact per-file/aggregate caps; +1 fails without truncate success
+ok 16 - actual read exact per-file/aggregate caps; +1 fails without truncate success
+  ---
+  duration_ms: 15.111156
+  ...
+# Subtest: bounded regular FD rejects fifo
+ok 17 - bounded regular FD rejects fifo
+  ---
+  duration_ms: 7.545398
+  ...
+# Subtest: bounded regular FD rejects directory
+ok 18 - bounded regular FD rejects directory
+  ---
+  duration_ms: 1.974029
+  ...
+# Subtest: bounded regular FD rejects symlink
+ok 19 - bounded regular FD rejects symlink
+  ---
+  duration_ms: 3.971253
+  ...
+# Subtest: bounded regular FD rejects replaceBeforeOpen
+ok 20 - bounded regular FD rejects replaceBeforeOpen
+  ---
+  duration_ms: 6.64824
+  ...
+# Subtest: bounded regular FD rejects replaceParent
+ok 21 - bounded regular FD rejects replaceParent
+  ---
+  duration_ms: 4.647052
+  ...
+# Subtest: bounded regular FD rejects shortRead
+ok 22 - bounded regular FD rejects shortRead
+  ---
+  duration_ms: 2.135883
+  ...
+# Subtest: bounded regular FD rejects mutateAfterRead
+ok 23 - bounded regular FD rejects mutateAfterRead
+  ---
+  duration_ms: 2.811413
+  ...
+# Subtest: projection/result UTF8 exact and +1, not character count
+ok 24 - projection/result UTF8 exact and +1, not character count
+  ---
+  duration_ms: 5.701204
+  ...
+# Subtest: late async success discarded by monotonic deadline
+ok 25 - late async success discarded by monotonic deadline
+  ---
+  duration_ms: 14.224187
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10180.45066

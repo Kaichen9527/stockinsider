@@ -1,0 +1,155 @@
+TAP version 13
+# (node:155691) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:155691) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-observed-roster.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: compiled complete-input 2409, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 114.094315
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 69.04237
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 10.242899
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 364.887534
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 28.471801
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 11.312443
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 3.370667
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 473.944416
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 87.077729
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 313.931093
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    not ok 11 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 609.098699
+      location: '/workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:33:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        {"ok":false,"error":"research_complete_input_unavailable","outcome":"uncertain","retryClaim":false}
+        
+        409 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 409
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:34:119)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:33:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-research-converged-oct08/scripts/research-local-inbox-dataplane.mjs:312:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:15:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: guarded read and exact duplicate preserve original payload/hash/charge
+    not ok 12 - guarded read and exact duplicate preserve original payload/hash/charge
+      ---
+      duration_ms: 201.045814
+      location: '/workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:37:11'
+      failureType: 'testCodeFailure'
+      error: "Cannot read properties of undefined (reading 'input_hash')"
+      code: 'ERR_TEST_FAILURE'
+      name: 'TypeError'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:38:411)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:37:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-research-converged-oct08/scripts/research-local-inbox-dataplane.mjs:312:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:15:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: anonymous, extra executable/body/clock and wrong original binding reject
+    ok 13 - anonymous, extra executable/body/clock and wrong original binding reject
+      ---
+      duration_ms: 22.61413
+      ...
+    # Subtest: actual restart reread persists and expired reservation refuses historical replay
+    not ok 14 - actual restart reread persists and expired reservation refuses historical replay
+      ---
+      duration_ms: 549.015428
+      location: '/workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:45:11'
+      failureType: 'testCodeFailure'
+      error: "Cannot read properties of undefined (reading 'input_hash')"
+      code: 'ERR_TEST_FAILURE'
+      name: 'TypeError'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:46:290)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:45:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-research-converged-oct08/scripts/research-local-inbox-dataplane.mjs:312:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:15:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    1..14
+not ok 1 - compiled complete-input 2409, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 18683.072702
+  location: '/workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:13:37'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(report.completeInputHttp)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:49:13)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 15
+# suites 0
+# pass 11
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 21774.083737

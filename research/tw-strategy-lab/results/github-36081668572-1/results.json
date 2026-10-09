@@ -1,0 +1,1848 @@
+{
+  "schema_version": "tw-strategy-lab-results-v1",
+  "run_id": "a9123545831d8ee1a39b231c",
+  "dataset_hash": "a89bf8e5cbcfc464463a53c29f1f5f68f6419d72f2a06befcaeb008e3cff5cca",
+  "registry_hash": "abd03f9bbe3230575f3e14016c8c1fd92fef6ad00155c0d743612754e8bcc98d",
+  "code_hashes": {
+    "engine.py": "89ff9e4b9169ab0b8fdf6b539b4acbe822e66e60d361eb68ce32efa3cbd65c21",
+    "strategies.py": "5b921beca51aacf3b504b625b7bdf6639f185b6e61b2e9bab23b5a906a435501",
+    "run_research.py": "341ba781e02d2e5fead50bd3fb43de57793a51a020eb9e95b8a1a054b67ff23d",
+    "official_data.py": "5b8c14bba902ab95b6483dadc3fbd37cd8af601271a320fe1874db17ba50d4e6"
+  },
+  "period": [
+    "2019-01-01",
+    "2023-12-31"
+  ],
+  "hypotheses": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7"
+  ],
+  "created_at": "2026-09-25T01:34:55.928196+00:00",
+  "source": {
+    "commit": "e1fb505a894105e05fb08aa28fd0fb8ad8e520fa",
+    "research_sources_dirty": false,
+    "exact_review_attestation": false
+  },
+  "validation_status": "exploratory_fixed_survivor_panel",
+  "holdout_accessed": false,
+  "promotion_eligible": false,
+  "live_articles_updated": 0,
+  "live_candidate_snapshot_available": false,
+  "coverage": {
+    "requested_panel": [
+      "2330",
+      "2317",
+      "1216",
+      "2882",
+      "2603",
+      "6488",
+      "5347",
+      "8069"
+    ],
+    "included_panel": [
+      "1216",
+      "2330",
+      "5347",
+      "6488",
+      "8069"
+    ],
+    "exclusions": {
+      "2317": [
+        "missing_explicit_cash_or_share_factor",
+        "price_gap_needs_suspension_or_listing_evidence",
+        "stock_and_benchmark_sessions_differ",
+        "unresolved_corporate_action"
+      ],
+      "2882": [
+        "rights_subscription_cashflow_unmodeled",
+        "unresolved_corporate_action"
+      ],
+      "2603": [
+        "missing_explicit_cash_or_share_factor",
+        "price_gap_needs_suspension_or_listing_evidence",
+        "rights_subscription_cashflow_unmodeled",
+        "share_distribution_delivery_date_missing",
+        "stock_and_benchmark_sessions_differ",
+        "unresolved_corporate_action"
+      ]
+    },
+    "available_source_requests": 684,
+    "expected_source_requests": 684
+  },
+  "by_symbol": {
+    "2330": {
+      "strategy_coverage": [
+        {
+          "strategy_id": "S1",
+          "status": "evaluated",
+          "signal_count": 35,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S2",
+          "status": "evaluated",
+          "signal_count": 37,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S3",
+          "status": "evaluated",
+          "signal_count": 36,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S4",
+          "status": "no_signals",
+          "signal_count": 0,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S5",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "historical_point_in_time_events_missing"
+          ]
+        },
+        {
+          "strategy_id": "S6",
+          "status": "evaluated",
+          "signal_count": 22,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S7",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "historical_point_in_time_events_missing"
+          ]
+        }
+      ]
+    },
+    "2317": {
+      "strategy_coverage": [
+        {
+          "strategy_id": "S1",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S2",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S3",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S4",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S5",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action",
+            "historical_point_in_time_events_missing"
+          ]
+        },
+        {
+          "strategy_id": "S6",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S7",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action",
+            "historical_point_in_time_events_missing"
+          ]
+        }
+      ]
+    },
+    "1216": {
+      "strategy_coverage": [
+        {
+          "strategy_id": "S1",
+          "status": "evaluated",
+          "signal_count": 9,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S2",
+          "status": "evaluated",
+          "signal_count": 68,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S3",
+          "status": "evaluated",
+          "signal_count": 9,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S4",
+          "status": "no_signals",
+          "signal_count": 0,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S5",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "historical_point_in_time_events_missing"
+          ]
+        },
+        {
+          "strategy_id": "S6",
+          "status": "evaluated",
+          "signal_count": 5,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S7",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "historical_point_in_time_events_missing"
+          ]
+        }
+      ]
+    },
+    "2882": {
+      "strategy_coverage": [
+        {
+          "strategy_id": "S1",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "rights_subscription_cashflow_unmodeled",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S2",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "rights_subscription_cashflow_unmodeled",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S3",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "rights_subscription_cashflow_unmodeled",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S4",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "rights_subscription_cashflow_unmodeled",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S5",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "rights_subscription_cashflow_unmodeled",
+            "unresolved_corporate_action",
+            "historical_point_in_time_events_missing"
+          ]
+        },
+        {
+          "strategy_id": "S6",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "rights_subscription_cashflow_unmodeled",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S7",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "rights_subscription_cashflow_unmodeled",
+            "unresolved_corporate_action",
+            "historical_point_in_time_events_missing"
+          ]
+        }
+      ]
+    },
+    "2603": {
+      "strategy_coverage": [
+        {
+          "strategy_id": "S1",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "rights_subscription_cashflow_unmodeled",
+            "share_distribution_delivery_date_missing",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S2",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "rights_subscription_cashflow_unmodeled",
+            "share_distribution_delivery_date_missing",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S3",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "rights_subscription_cashflow_unmodeled",
+            "share_distribution_delivery_date_missing",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S4",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "rights_subscription_cashflow_unmodeled",
+            "share_distribution_delivery_date_missing",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S5",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "rights_subscription_cashflow_unmodeled",
+            "share_distribution_delivery_date_missing",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action",
+            "historical_point_in_time_events_missing"
+          ]
+        },
+        {
+          "strategy_id": "S6",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "rights_subscription_cashflow_unmodeled",
+            "share_distribution_delivery_date_missing",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action"
+          ]
+        },
+        {
+          "strategy_id": "S7",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "missing_explicit_cash_or_share_factor",
+            "price_gap_needs_suspension_or_listing_evidence",
+            "rights_subscription_cashflow_unmodeled",
+            "share_distribution_delivery_date_missing",
+            "stock_and_benchmark_sessions_differ",
+            "unresolved_corporate_action",
+            "historical_point_in_time_events_missing"
+          ]
+        }
+      ]
+    },
+    "6488": {
+      "strategy_coverage": [
+        {
+          "strategy_id": "S1",
+          "status": "evaluated",
+          "signal_count": 32,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S2",
+          "status": "evaluated",
+          "signal_count": 27,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S3",
+          "status": "evaluated",
+          "signal_count": 30,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S4",
+          "status": "no_signals",
+          "signal_count": 0,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S5",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "historical_point_in_time_events_missing"
+          ]
+        },
+        {
+          "strategy_id": "S6",
+          "status": "evaluated",
+          "signal_count": 20,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S7",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "historical_point_in_time_events_missing"
+          ]
+        }
+      ]
+    },
+    "5347": {
+      "strategy_coverage": [
+        {
+          "strategy_id": "S1",
+          "status": "evaluated",
+          "signal_count": 30,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S2",
+          "status": "evaluated",
+          "signal_count": 43,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S3",
+          "status": "evaluated",
+          "signal_count": 21,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S4",
+          "status": "no_signals",
+          "signal_count": 0,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S5",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "historical_point_in_time_events_missing"
+          ]
+        },
+        {
+          "strategy_id": "S6",
+          "status": "evaluated",
+          "signal_count": 13,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S7",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "historical_point_in_time_events_missing"
+          ]
+        }
+      ]
+    },
+    "8069": {
+      "strategy_coverage": [
+        {
+          "strategy_id": "S1",
+          "status": "evaluated",
+          "signal_count": 40,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S2",
+          "status": "evaluated",
+          "signal_count": 50,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S3",
+          "status": "evaluated",
+          "signal_count": 74,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S4",
+          "status": "no_signals",
+          "signal_count": 0,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S5",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "historical_point_in_time_events_missing"
+          ]
+        },
+        {
+          "strategy_id": "S6",
+          "status": "evaluated",
+          "signal_count": 14,
+          "reasons": []
+        },
+        {
+          "strategy_id": "S7",
+          "status": "blocked",
+          "signal_count": null,
+          "reasons": [
+            "historical_point_in_time_events_missing"
+          ]
+        }
+      ]
+    }
+  },
+  "strategies": [
+    {
+      "strategy_id": "S1",
+      "name": "breakout",
+      "status": "exploratory",
+      "reason": null,
+      "signalversion": "tw-strategy-lab-signals-v1",
+      "minimum_bars": 240,
+      "production_eligibility": "not_evaluated",
+      "variants_enabled": false,
+      "sector_rotation_status": null,
+      "scenarios": {
+        "baseline": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": 0.001064137077000371,
+            "net_cagr": 0.00021264517549957063,
+            "maximum_drawdown": -0.030903910791692413,
+            "longest_underwater_sessions": 595,
+            "sharpe_zero_cash_rate": 0.02098564615673845,
+            "completed_trades": 33,
+            "winning_trade_fraction": 0.2727272727272727,
+            "average_exposure": 0.031510278943026784,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.008062223421681058,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 84498.225,
+              "sell_tax": 87103.04999999999,
+              "slippage": 101600.0000000005,
+              "traded_notional": 59297000.0
+            },
+            "turnover_over_initial_capital": 5.9297,
+            "cost_addback_return_same_filled_shares": 0.02838426457700042,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 10010641.370770004,
+            "ending_cash": 8600098.725000003,
+            "ending_receivables": 29542.64577
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S1-baseline.json"
+        },
+        "cost_stress": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": -0.02363221017299999,
+            "net_cagr": -0.004769712843937346,
+            "maximum_drawdown": -0.038430329244589,
+            "longest_underwater_sessions": 595,
+            "sharpe_zero_cash_rate": -0.2180616853890597,
+            "completed_trades": 32,
+            "winning_trade_fraction": 0.25,
+            "average_exposure": 0.030169528134036283,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.011089279292744614,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 162297.09749999997,
+              "sell_tax": 83317.65000000001,
+              "slippage": 156799.99999999988,
+              "traded_notional": 56946350.0
+            },
+            "turnover_over_initial_capital": 5.694635,
+            "cost_addback_return_same_filled_shares": 0.016609264576999995,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 9763677.89827,
+            "ending_cash": 8353135.2524999995,
+            "ending_receivables": 29542.64577
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S1-cost_stress.json"
+        },
+        "small_capacity": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": 0.004761828820000202,
+            "net_cagr": 0.0009501470110666599,
+            "maximum_drawdown": -0.01977099887293654,
+            "longest_underwater_sessions": 595,
+            "sharpe_zero_cash_rate": 0.08702446410658794,
+            "completed_trades": 15,
+            "winning_trade_fraction": 0.26666666666666666,
+            "average_exposure": 0.013642620868297468,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.0067128330860419805,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 3342.2662499999997,
+              "sell_tax": 3531.6000000000004,
+              "slippage": 3100.000000000042,
+              "traded_notional": 2345450.0
+            },
+            "turnover_over_initial_capital": 2.34545,
+            "cost_addback_return_same_filled_shares": 0.014735695070000245,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 1004761.8288200003,
+            "ending_cash": 1002076.1337500003,
+            "ending_receivables": 2685.6950699999998
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S1-small_capacity.json"
+        }
+      },
+      "signal_count": 146
+    },
+    {
+      "strategy_id": "S2",
+      "name": "pullback",
+      "status": "exploratory",
+      "reason": null,
+      "signalversion": "tw-strategy-lab-signals-v1",
+      "minimum_bars": 240,
+      "production_eligibility": "not_evaluated",
+      "variants_enabled": false,
+      "sector_rotation_status": null,
+      "scenarios": {
+        "baseline": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": -0.05036689662499949,
+            "net_cagr": -0.01027827384369906,
+            "maximum_drawdown": -0.062184030007847224,
+            "longest_underwater_sessions": 1145,
+            "sharpe_zero_cash_rate": -0.6275460923934192,
+            "completed_trades": 79,
+            "winning_trade_fraction": 0.17721518987341772,
+            "average_exposure": 0.03299159703550822,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.01037857712034973,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 199889.66625,
+              "sell_tax": 206529.30000000005,
+              "slippage": 235799.9999999992,
+              "traded_notional": 140273450.0
+            },
+            "turnover_over_initial_capital": 14.027345,
+            "cost_addback_return_same_filled_shares": 0.013855000000000436,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 9496331.033750005,
+            "ending_cash": 7006331.033750004,
+            "ending_receivables": 18000.0
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S2-baseline.json"
+        },
+        "cost_stress": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": -0.06482675900000068,
+            "net_cagr": -0.013309552657718493,
+            "maximum_drawdown": -0.07607303119307574,
+            "longest_underwater_sessions": 1157,
+            "sharpe_zero_cash_rate": -0.8644488993207208,
+            "completed_trades": 67,
+            "winning_trade_fraction": 0.11940298507462686,
+            "average_exposure": 0.025298503189585687,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.010834916980945408,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 334400.19,
+              "sell_tax": 172067.4,
+              "slippage": 337900.0000000005,
+              "traded_notional": 117333400.0
+            },
+            "turnover_over_initial_capital": 11.73334,
+            "cost_addback_return_same_filled_shares": 0.019609999999999378,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 9351732.409999993,
+            "ending_cash": 6871732.409999994,
+            "ending_receivables": 8000.0
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S2-cost_stress.json"
+        },
+        "small_capacity": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": -0.043301487499999736,
+            "net_cagr": -0.008810535844154699,
+            "maximum_drawdown": -0.044196749999999674,
+            "longest_underwater_sessions": 1206,
+            "sharpe_zero_cash_rate": -1.1448769398202425,
+            "completed_trades": 48,
+            "winning_trade_fraction": 0.125,
+            "average_exposure": 0.015221256722468624,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.005538981919732788,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 10253.5875,
+              "sell_tax": 10647.899999999996,
+              "slippage": 9849.99999999994,
+              "traded_notional": 7195500.0
+            },
+            "turnover_over_initial_capital": 7.1955,
+            "cost_addback_return_same_filled_shares": -0.012549999999999797,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 956698.5125000003,
+            "ending_cash": 882198.5125000003,
+            "ending_receivables": 0.0
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S2-small_capacity.json"
+        }
+      },
+      "signal_count": 225
+    },
+    {
+      "strategy_id": "S3",
+      "name": "panel_relative_momentum",
+      "status": "exploratory",
+      "reason": null,
+      "signalversion": "tw-strategy-lab-signals-v1",
+      "minimum_bars": 240,
+      "production_eligibility": "not_evaluated",
+      "variants_enabled": false,
+      "sector_rotation_status": "blocked_pit_sector_membership_missing",
+      "scenarios": {
+        "baseline": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": 0.06285975835500057,
+            "net_cagr": 0.012261945375513283,
+            "maximum_drawdown": -0.04599536100320889,
+            "longest_underwater_sessions": 316,
+            "sharpe_zero_cash_rate": 0.391322902257086,
+            "completed_trades": 36,
+            "winning_trade_fraction": 0.3333333333333333,
+            "average_exposure": 0.05738409781740353,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.022231215803447335,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 91562.09250000003,
+              "sell_tax": 96525.75,
+              "slippage": 118499.99999999991,
+              "traded_notional": 64254100.0
+            },
+            "turnover_over_initial_capital": 6.42541,
+            "cost_addback_return_same_filled_shares": 0.09351854260500056,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 10628597.583550006,
+            "ending_cash": 9908312.157500006,
+            "ending_receivables": 127285.42605000001
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S3-baseline.json"
+        },
+        "cost_stress": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": 0.03755100509099951,
+            "net_cagr": 0.007396670048651188,
+            "maximum_drawdown": -0.04412102362491799,
+            "longest_underwater_sessions": 316,
+            "sharpe_zero_cash_rate": 0.244657351310572,
+            "completed_trades": 36,
+            "winning_trade_fraction": 0.3055555555555556,
+            "average_exposure": 0.05624998060637384,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.02299754741786042,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 180827.085,
+              "sell_tax": 95076.90000000002,
+              "slippage": 182599.9999999999,
+              "traded_notional": 63448100.0
+            },
+            "turnover_over_initial_capital": 6.34481,
+            "cost_addback_return_same_filled_shares": 0.0834014035909995,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 10375510.050909996,
+            "ending_cash": 9660596.014999997,
+            "ending_receivables": 121914.03591
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S3-cost_stress.json"
+        },
+        "small_capacity": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": 0.06254534756999952,
+            "net_cagr": 0.012202075474430085,
+            "maximum_drawdown": -0.030919283591514635,
+            "longest_underwater_sessions": 313,
+            "sharpe_zero_cash_rate": 0.617159123571917,
+            "completed_trades": 15,
+            "winning_trade_fraction": 0.26666666666666666,
+            "average_exposure": 0.022149313351906688,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.011767070829827198,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 3383.9474999999998,
+              "sell_tax": 3656.3999999999996,
+              "slippage": 3799.99999999999,
+              "traded_notional": 2374700.0
+            },
+            "turnover_over_initial_capital": 2.3747,
+            "cost_addback_return_same_filled_shares": 0.07338569506999951,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 1062545.3475699995,
+            "ending_cash": 1055859.6524999996,
+            "ending_receivables": 6685.69507
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S3-small_capacity.json"
+        }
+      },
+      "signal_count": 170
+    },
+    {
+      "strategy_id": "S4",
+      "name": "contraction",
+      "status": "exploratory",
+      "reason": null,
+      "signalversion": "tw-strategy-lab-signals-v1",
+      "minimum_bars": 240,
+      "production_eligibility": "not_evaluated",
+      "variants_enabled": false,
+      "sector_rotation_status": null,
+      "scenarios": {
+        "baseline": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": 0.0,
+            "net_cagr": 0.0,
+            "maximum_drawdown": 0.0,
+            "longest_underwater_sessions": 0,
+            "sharpe_zero_cash_rate": null,
+            "completed_trades": 0,
+            "winning_trade_fraction": null,
+            "average_exposure": 0.0,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": 0.0,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 0.0,
+              "sell_tax": 0.0,
+              "slippage": 0.0,
+              "traded_notional": 0.0
+            },
+            "turnover_over_initial_capital": 0.0,
+            "cost_addback_return_same_filled_shares": 0.0,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 10000000.0,
+            "ending_cash": 10000000.0,
+            "ending_receivables": 0.0
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S4-baseline.json"
+        },
+        "cost_stress": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": 0.0,
+            "net_cagr": 0.0,
+            "maximum_drawdown": 0.0,
+            "longest_underwater_sessions": 0,
+            "sharpe_zero_cash_rate": null,
+            "completed_trades": 0,
+            "winning_trade_fraction": null,
+            "average_exposure": 0.0,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": 0.0,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 0.0,
+              "sell_tax": 0.0,
+              "slippage": 0.0,
+              "traded_notional": 0.0
+            },
+            "turnover_over_initial_capital": 0.0,
+            "cost_addback_return_same_filled_shares": 0.0,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 10000000.0,
+            "ending_cash": 10000000.0,
+            "ending_receivables": 0.0
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S4-cost_stress.json"
+        },
+        "small_capacity": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": 0.0,
+            "net_cagr": 0.0,
+            "maximum_drawdown": 0.0,
+            "longest_underwater_sessions": 0,
+            "sharpe_zero_cash_rate": null,
+            "completed_trades": 0,
+            "winning_trade_fraction": null,
+            "average_exposure": 0.0,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": 0.0,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 0.0,
+              "sell_tax": 0.0,
+              "slippage": 0.0,
+              "traded_notional": 0.0
+            },
+            "turnover_over_initial_capital": 0.0,
+            "cost_addback_return_same_filled_shares": 0.0,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 1000000.0,
+            "ending_cash": 1000000.0,
+            "ending_receivables": 0.0
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S4-small_capacity.json"
+        }
+      },
+      "signal_count": 0
+    },
+    {
+      "strategy_id": "S5",
+      "name": "revenue_acceleration",
+      "status": "blocked",
+      "reason": "historical_point_in_time_events_missing",
+      "signalversion": "tw-strategy-lab-signals-v1",
+      "minimum_bars": 240,
+      "production_eligibility": "not_evaluated",
+      "variants_enabled": false,
+      "sector_rotation_status": null,
+      "scenarios": {},
+      "signal_count": 0
+    },
+    {
+      "strategy_id": "S6",
+      "name": "short_term_reversal",
+      "status": "exploratory",
+      "reason": null,
+      "signalversion": "tw-strategy-lab-signals-v1",
+      "minimum_bars": 240,
+      "production_eligibility": "not_evaluated",
+      "variants_enabled": false,
+      "sector_rotation_status": null,
+      "scenarios": {
+        "baseline": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": -0.004792850999999598,
+            "net_cagr": -0.0009599994437401449,
+            "maximum_drawdown": -0.016627614541631863,
+            "longest_underwater_sessions": 584,
+            "sharpe_zero_cash_rate": -0.11224757325255563,
+            "completed_trades": 25,
+            "winning_trade_fraction": 0.6,
+            "average_exposure": 0.006422375133803963,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.00808643286609012,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 60125.31,
+              "sell_tax": 63403.2,
+              "slippage": 68799.99999999978,
+              "traded_notional": 42193200.0
+            },
+            "turnover_over_initial_capital": 4.21932,
+            "cost_addback_return_same_filled_shares": 0.01444000000000038,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 9952071.490000004,
+            "ending_cash": 9952071.490000004,
+            "ending_receivables": 0.0
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S6-baseline.json"
+        },
+        "cost_stress": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": -0.016851164750000036,
+            "net_cagr": -0.0033917222234544075,
+            "maximum_drawdown": -0.021550448540211375,
+            "longest_underwater_sessions": 1074,
+            "sharpe_zero_cash_rate": -0.4075569076870643,
+            "completed_trades": 23,
+            "winning_trade_fraction": 0.4782608695652174,
+            "average_exposure": 0.005996884698869093,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.009064585765796718,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 108212.64749999999,
+              "sell_tax": 56948.99999999999,
+              "slippage": 108600.00000000026,
+              "traded_notional": 37969350.0
+            },
+            "turnover_over_initial_capital": 3.796935,
+            "cost_addback_return_same_filled_shares": 0.01052499999999999,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 9831488.3525,
+            "ending_cash": 9831488.3525,
+            "ending_receivables": 0.0
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S6-cost_stress.json"
+        },
+        "small_capacity": {
+          "status": "exploratory",
+          "metrics": {
+            "net_total_return": 0.0028855162500005527,
+            "net_cagr": 0.0005761897682183825,
+            "maximum_drawdown": -0.007056174707486873,
+            "longest_underwater_sessions": 582,
+            "sharpe_zero_cash_rate": 0.12852651943434834,
+            "completed_trades": 10,
+            "winning_trade_fraction": 0.6,
+            "average_exposure": 0.002476104624600056,
+            "weekly_above_5pct_fraction": 0.0,
+            "monthly_above_10pct_fraction": 0.0,
+            "worst_month_return": -0.0011426575295123698,
+            "calendar_period_last_may_be_partial": true,
+            "costs_twd": {
+              "commission": 2169.6337500000004,
+              "sell_tax": 2294.85,
+              "slippage": 2099.9999999999836,
+              "traded_notional": 1522550.0
+            },
+            "turnover_over_initial_capital": 1.52255,
+            "cost_addback_return_same_filled_shares": 0.009450000000000538,
+            "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+            "ending_equity": 1002885.5162500005,
+            "ending_cash": 1002885.5162500005,
+            "ending_receivables": 0.0
+          },
+          "benchmark": {
+            "name": "TAIEX total return index, no fees",
+            "total_return": 1.2265745870679448,
+            "exposure_matching": false,
+            "note": "Fully invested index vs strategy cash allocation; not a risk-matched alpha test."
+          },
+          "result_file": "S6-small_capacity.json"
+        }
+      },
+      "signal_count": 74
+    },
+    {
+      "strategy_id": "S7",
+      "name": "broker_revision",
+      "status": "blocked",
+      "reason": "historical_point_in_time_events_missing",
+      "signalversion": "tw-strategy-lab-signals-v1",
+      "minimum_bars": 240,
+      "production_eligibility": "not_evaluated",
+      "variants_enabled": false,
+      "sector_rotation_status": null,
+      "scenarios": {},
+      "signal_count": 0
+    }
+  ],
+  "trials": [
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S1:baseline",
+      "strategy_id": "S1",
+      "scenario": "baseline",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.001064137077000371,
+        "net_cagr": 0.00021264517549957063,
+        "maximum_drawdown": -0.030903910791692413,
+        "longest_underwater_sessions": 595,
+        "sharpe_zero_cash_rate": 0.02098564615673845,
+        "completed_trades": 33,
+        "winning_trade_fraction": 0.2727272727272727,
+        "average_exposure": 0.031510278943026784,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.008062223421681058,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 84498.225,
+          "sell_tax": 87103.04999999999,
+          "slippage": 101600.0000000005,
+          "traded_notional": 59297000.0
+        },
+        "turnover_over_initial_capital": 5.9297,
+        "cost_addback_return_same_filled_shares": 0.02838426457700042,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 10010641.370770004,
+        "ending_cash": 8600098.725000003,
+        "ending_receivables": 29542.64577
+      },
+      "result_file": "S1-baseline.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S1:cost_stress",
+      "strategy_id": "S1",
+      "scenario": "cost_stress",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": -0.02363221017299999,
+        "net_cagr": -0.004769712843937346,
+        "maximum_drawdown": -0.038430329244589,
+        "longest_underwater_sessions": 595,
+        "sharpe_zero_cash_rate": -0.2180616853890597,
+        "completed_trades": 32,
+        "winning_trade_fraction": 0.25,
+        "average_exposure": 0.030169528134036283,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.011089279292744614,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 162297.09749999997,
+          "sell_tax": 83317.65000000001,
+          "slippage": 156799.99999999988,
+          "traded_notional": 56946350.0
+        },
+        "turnover_over_initial_capital": 5.694635,
+        "cost_addback_return_same_filled_shares": 0.016609264576999995,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 9763677.89827,
+        "ending_cash": 8353135.2524999995,
+        "ending_receivables": 29542.64577
+      },
+      "result_file": "S1-cost_stress.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S1:small_capacity",
+      "strategy_id": "S1",
+      "scenario": "small_capacity",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.004761828820000202,
+        "net_cagr": 0.0009501470110666599,
+        "maximum_drawdown": -0.01977099887293654,
+        "longest_underwater_sessions": 595,
+        "sharpe_zero_cash_rate": 0.08702446410658794,
+        "completed_trades": 15,
+        "winning_trade_fraction": 0.26666666666666666,
+        "average_exposure": 0.013642620868297468,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.0067128330860419805,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 3342.2662499999997,
+          "sell_tax": 3531.6000000000004,
+          "slippage": 3100.000000000042,
+          "traded_notional": 2345450.0
+        },
+        "turnover_over_initial_capital": 2.34545,
+        "cost_addback_return_same_filled_shares": 0.014735695070000245,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 1004761.8288200003,
+        "ending_cash": 1002076.1337500003,
+        "ending_receivables": 2685.6950699999998
+      },
+      "result_file": "S1-small_capacity.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S2:baseline",
+      "strategy_id": "S2",
+      "scenario": "baseline",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": -0.05036689662499949,
+        "net_cagr": -0.01027827384369906,
+        "maximum_drawdown": -0.062184030007847224,
+        "longest_underwater_sessions": 1145,
+        "sharpe_zero_cash_rate": -0.6275460923934192,
+        "completed_trades": 79,
+        "winning_trade_fraction": 0.17721518987341772,
+        "average_exposure": 0.03299159703550822,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.01037857712034973,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 199889.66625,
+          "sell_tax": 206529.30000000005,
+          "slippage": 235799.9999999992,
+          "traded_notional": 140273450.0
+        },
+        "turnover_over_initial_capital": 14.027345,
+        "cost_addback_return_same_filled_shares": 0.013855000000000436,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 9496331.033750005,
+        "ending_cash": 7006331.033750004,
+        "ending_receivables": 18000.0
+      },
+      "result_file": "S2-baseline.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S2:cost_stress",
+      "strategy_id": "S2",
+      "scenario": "cost_stress",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": -0.06482675900000068,
+        "net_cagr": -0.013309552657718493,
+        "maximum_drawdown": -0.07607303119307574,
+        "longest_underwater_sessions": 1157,
+        "sharpe_zero_cash_rate": -0.8644488993207208,
+        "completed_trades": 67,
+        "winning_trade_fraction": 0.11940298507462686,
+        "average_exposure": 0.025298503189585687,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.010834916980945408,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 334400.19,
+          "sell_tax": 172067.4,
+          "slippage": 337900.0000000005,
+          "traded_notional": 117333400.0
+        },
+        "turnover_over_initial_capital": 11.73334,
+        "cost_addback_return_same_filled_shares": 0.019609999999999378,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 9351732.409999993,
+        "ending_cash": 6871732.409999994,
+        "ending_receivables": 8000.0
+      },
+      "result_file": "S2-cost_stress.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S2:small_capacity",
+      "strategy_id": "S2",
+      "scenario": "small_capacity",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": -0.043301487499999736,
+        "net_cagr": -0.008810535844154699,
+        "maximum_drawdown": -0.044196749999999674,
+        "longest_underwater_sessions": 1206,
+        "sharpe_zero_cash_rate": -1.1448769398202425,
+        "completed_trades": 48,
+        "winning_trade_fraction": 0.125,
+        "average_exposure": 0.015221256722468624,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.005538981919732788,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 10253.5875,
+          "sell_tax": 10647.899999999996,
+          "slippage": 9849.99999999994,
+          "traded_notional": 7195500.0
+        },
+        "turnover_over_initial_capital": 7.1955,
+        "cost_addback_return_same_filled_shares": -0.012549999999999797,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 956698.5125000003,
+        "ending_cash": 882198.5125000003,
+        "ending_receivables": 0.0
+      },
+      "result_file": "S2-small_capacity.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S3:baseline",
+      "strategy_id": "S3",
+      "scenario": "baseline",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.06285975835500057,
+        "net_cagr": 0.012261945375513283,
+        "maximum_drawdown": -0.04599536100320889,
+        "longest_underwater_sessions": 316,
+        "sharpe_zero_cash_rate": 0.391322902257086,
+        "completed_trades": 36,
+        "winning_trade_fraction": 0.3333333333333333,
+        "average_exposure": 0.05738409781740353,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.022231215803447335,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 91562.09250000003,
+          "sell_tax": 96525.75,
+          "slippage": 118499.99999999991,
+          "traded_notional": 64254100.0
+        },
+        "turnover_over_initial_capital": 6.42541,
+        "cost_addback_return_same_filled_shares": 0.09351854260500056,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 10628597.583550006,
+        "ending_cash": 9908312.157500006,
+        "ending_receivables": 127285.42605000001
+      },
+      "result_file": "S3-baseline.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S3:cost_stress",
+      "strategy_id": "S3",
+      "scenario": "cost_stress",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.03755100509099951,
+        "net_cagr": 0.007396670048651188,
+        "maximum_drawdown": -0.04412102362491799,
+        "longest_underwater_sessions": 316,
+        "sharpe_zero_cash_rate": 0.244657351310572,
+        "completed_trades": 36,
+        "winning_trade_fraction": 0.3055555555555556,
+        "average_exposure": 0.05624998060637384,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.02299754741786042,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 180827.085,
+          "sell_tax": 95076.90000000002,
+          "slippage": 182599.9999999999,
+          "traded_notional": 63448100.0
+        },
+        "turnover_over_initial_capital": 6.34481,
+        "cost_addback_return_same_filled_shares": 0.0834014035909995,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 10375510.050909996,
+        "ending_cash": 9660596.014999997,
+        "ending_receivables": 121914.03591
+      },
+      "result_file": "S3-cost_stress.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S3:small_capacity",
+      "strategy_id": "S3",
+      "scenario": "small_capacity",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.06254534756999952,
+        "net_cagr": 0.012202075474430085,
+        "maximum_drawdown": -0.030919283591514635,
+        "longest_underwater_sessions": 313,
+        "sharpe_zero_cash_rate": 0.617159123571917,
+        "completed_trades": 15,
+        "winning_trade_fraction": 0.26666666666666666,
+        "average_exposure": 0.022149313351906688,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.011767070829827198,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 3383.9474999999998,
+          "sell_tax": 3656.3999999999996,
+          "slippage": 3799.99999999999,
+          "traded_notional": 2374700.0
+        },
+        "turnover_over_initial_capital": 2.3747,
+        "cost_addback_return_same_filled_shares": 0.07338569506999951,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 1062545.3475699995,
+        "ending_cash": 1055859.6524999996,
+        "ending_receivables": 6685.69507
+      },
+      "result_file": "S3-small_capacity.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S4:baseline",
+      "strategy_id": "S4",
+      "scenario": "baseline",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.0,
+        "net_cagr": 0.0,
+        "maximum_drawdown": 0.0,
+        "longest_underwater_sessions": 0,
+        "sharpe_zero_cash_rate": null,
+        "completed_trades": 0,
+        "winning_trade_fraction": null,
+        "average_exposure": 0.0,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": 0.0,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 0.0,
+          "sell_tax": 0.0,
+          "slippage": 0.0,
+          "traded_notional": 0.0
+        },
+        "turnover_over_initial_capital": 0.0,
+        "cost_addback_return_same_filled_shares": 0.0,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 10000000.0,
+        "ending_cash": 10000000.0,
+        "ending_receivables": 0.0
+      },
+      "result_file": "S4-baseline.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S4:cost_stress",
+      "strategy_id": "S4",
+      "scenario": "cost_stress",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.0,
+        "net_cagr": 0.0,
+        "maximum_drawdown": 0.0,
+        "longest_underwater_sessions": 0,
+        "sharpe_zero_cash_rate": null,
+        "completed_trades": 0,
+        "winning_trade_fraction": null,
+        "average_exposure": 0.0,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": 0.0,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 0.0,
+          "sell_tax": 0.0,
+          "slippage": 0.0,
+          "traded_notional": 0.0
+        },
+        "turnover_over_initial_capital": 0.0,
+        "cost_addback_return_same_filled_shares": 0.0,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 10000000.0,
+        "ending_cash": 10000000.0,
+        "ending_receivables": 0.0
+      },
+      "result_file": "S4-cost_stress.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S4:small_capacity",
+      "strategy_id": "S4",
+      "scenario": "small_capacity",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.0,
+        "net_cagr": 0.0,
+        "maximum_drawdown": 0.0,
+        "longest_underwater_sessions": 0,
+        "sharpe_zero_cash_rate": null,
+        "completed_trades": 0,
+        "winning_trade_fraction": null,
+        "average_exposure": 0.0,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": 0.0,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 0.0,
+          "sell_tax": 0.0,
+          "slippage": 0.0,
+          "traded_notional": 0.0
+        },
+        "turnover_over_initial_capital": 0.0,
+        "cost_addback_return_same_filled_shares": 0.0,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 1000000.0,
+        "ending_cash": 1000000.0,
+        "ending_receivables": 0.0
+      },
+      "result_file": "S4-small_capacity.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S5:blocked",
+      "strategy_id": "S5",
+      "scenario": null,
+      "status": "blocked",
+      "reason": "historical_point_in_time_events_missing",
+      "parameter_variant": false
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S6:baseline",
+      "strategy_id": "S6",
+      "scenario": "baseline",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": -0.004792850999999598,
+        "net_cagr": -0.0009599994437401449,
+        "maximum_drawdown": -0.016627614541631863,
+        "longest_underwater_sessions": 584,
+        "sharpe_zero_cash_rate": -0.11224757325255563,
+        "completed_trades": 25,
+        "winning_trade_fraction": 0.6,
+        "average_exposure": 0.006422375133803963,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.00808643286609012,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 60125.31,
+          "sell_tax": 63403.2,
+          "slippage": 68799.99999999978,
+          "traded_notional": 42193200.0
+        },
+        "turnover_over_initial_capital": 4.21932,
+        "cost_addback_return_same_filled_shares": 0.01444000000000038,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 9952071.490000004,
+        "ending_cash": 9952071.490000004,
+        "ending_receivables": 0.0
+      },
+      "result_file": "S6-baseline.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S6:cost_stress",
+      "strategy_id": "S6",
+      "scenario": "cost_stress",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": -0.016851164750000036,
+        "net_cagr": -0.0033917222234544075,
+        "maximum_drawdown": -0.021550448540211375,
+        "longest_underwater_sessions": 1074,
+        "sharpe_zero_cash_rate": -0.4075569076870643,
+        "completed_trades": 23,
+        "winning_trade_fraction": 0.4782608695652174,
+        "average_exposure": 0.005996884698869093,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.009064585765796718,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 108212.64749999999,
+          "sell_tax": 56948.99999999999,
+          "slippage": 108600.00000000026,
+          "traded_notional": 37969350.0
+        },
+        "turnover_over_initial_capital": 3.796935,
+        "cost_addback_return_same_filled_shares": 0.01052499999999999,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 9831488.3525,
+        "ending_cash": 9831488.3525,
+        "ending_receivables": 0.0
+      },
+      "result_file": "S6-cost_stress.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S6:small_capacity",
+      "strategy_id": "S6",
+      "scenario": "small_capacity",
+      "parameter_variant": false,
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.0028855162500005527,
+        "net_cagr": 0.0005761897682183825,
+        "maximum_drawdown": -0.007056174707486873,
+        "longest_underwater_sessions": 582,
+        "sharpe_zero_cash_rate": 0.12852651943434834,
+        "completed_trades": 10,
+        "winning_trade_fraction": 0.6,
+        "average_exposure": 0.002476104624600056,
+        "weekly_above_5pct_fraction": 0.0,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.0011426575295123698,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 2169.6337500000004,
+          "sell_tax": 2294.85,
+          "slippage": 2099.9999999999836,
+          "traded_notional": 1522550.0
+        },
+        "turnover_over_initial_capital": 1.52255,
+        "cost_addback_return_same_filled_shares": 0.009450000000000538,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 1002885.5162500005,
+        "ending_cash": 1002885.5162500005,
+        "ending_receivables": 0.0
+      },
+      "result_file": "S6-small_capacity.json"
+    },
+    {
+      "trial_id": "a9123545831d8ee1a39b231c:S7:blocked",
+      "strategy_id": "S7",
+      "scenario": null,
+      "status": "blocked",
+      "reason": "historical_point_in_time_events_missing",
+      "parameter_variant": false
+    }
+  ],
+  "limitations": [
+    "Fixed surviving panel selected today; no historical App-screen membership.",
+    "Complete cash-only subset excludes unresolved share changes before inspecting performance.",
+    "Development results are not out-of-sample validation. 2024 onward remains locked.",
+    "No original broker PIT feed, monthly revenue release ledger, historical sector membership or live candidate export.",
+    "Daily auction fills/limits are a conservative proxy; exact queue and exceptional limit rules unavailable.",
+    "Unknown dividend payment dates reduce reusable cash; entitlements remain in equity.",
+    "No statistical alpha claim or production promotion from this exploratory run."
+  ],
+  "panel_benchmarks": {
+    "baseline": {
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.9119450147900001,
+        "net_cagr": 0.1383369013225475,
+        "maximum_drawdown": -0.17239274238426527,
+        "longest_underwater_sessions": 340,
+        "sharpe_zero_cash_rate": 0.9371985310158601,
+        "completed_trades": 0,
+        "winning_trade_fraction": null,
+        "average_exposure": 0.5718074219491105,
+        "weekly_above_5pct_fraction": 0.01953125,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.09103648429621392,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 6388.56,
+          "sell_tax": 0.0,
+          "slippage": 7800.000000000155,
+          "traded_notional": 4483200.0
+        },
+        "turnover_over_initial_capital": 0.44832,
+        "cost_addback_return_same_filled_shares": 0.9133638707900001,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 19119450.1479,
+        "ending_cash": 5510411.44,
+        "ending_receivables": 1375038.7079
+      },
+      "definition": "Initial buy-and-hold, same complete panel, 10% budget per stock; remaining cash, same costs; no rebalance.",
+      "result_file": "panel-benchmark-baseline.json"
+    },
+    "cost_stress": {
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.91072450579,
+        "net_cagr": 0.13819159313137663,
+        "maximum_drawdown": -0.1725011322408615,
+        "longest_underwater_sessions": 340,
+        "sharpe_zero_cash_rate": 0.9357006346072791,
+        "completed_trades": 0,
+        "winning_trade_fraction": null,
+        "average_exposure": 0.5722839975119747,
+        "weekly_above_5pct_fraction": 0.01953125,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.09109495031525017,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 12793.65,
+          "sell_tax": 0.0,
+          "slippage": 13600.000000000124,
+          "traded_notional": 4489000.0
+        },
+        "turnover_over_initial_capital": 0.4489,
+        "cost_addback_return_same_filled_shares": 0.91336387079,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 19107245.0579,
+        "ending_cash": 5498206.350000001,
+        "ending_receivables": 1375038.7079
+      },
+      "definition": "Initial buy-and-hold, same complete panel, 10% budget per stock; remaining cash, same costs; no rebalance.",
+      "result_file": "panel-benchmark-cost_stress.json"
+    },
+    "small_capacity": {
+      "status": "exploratory",
+      "metrics": {
+        "net_total_return": 0.59886973104,
+        "net_cagr": 0.09836085393768501,
+        "maximum_drawdown": -0.15197341387193686,
+        "longest_underwater_sessions": 178,
+        "sharpe_zero_cash_rate": 0.8146977928504693,
+        "completed_trades": 0,
+        "winning_trade_fraction": null,
+        "average_exposure": 0.34978400672574633,
+        "weekly_above_5pct_fraction": 0.015625,
+        "monthly_above_10pct_fraction": 0.0,
+        "worst_month_return": -0.08401461329858251,
+        "calendar_period_last_may_be_partial": true,
+        "costs_twd": {
+          "commission": 314.28375000000005,
+          "sell_tax": 0.0,
+          "slippage": 350.00000000001205,
+          "traded_notional": 220550.0
+        },
+        "turnover_over_initial_capital": 0.22055,
+        "cost_addback_return_same_filled_shares": 0.59953401479,
+        "cost_addback_note": "Diagnostic on the same filled share path; not a no-cost counterfactual portfolio.",
+        "ending_equity": 1598869.73104,
+        "ending_cash": 779135.71625,
+        "ending_receivables": 72734.01479
+      },
+      "definition": "Initial buy-and-hold, same complete panel, 10% budget per stock; remaining cash, same costs; no rebalance.",
+      "result_file": "panel-benchmark-small_capacity.json"
+    }
+  }
+}

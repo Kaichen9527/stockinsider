@@ -6,6 +6,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { assertInstalledResearchSuccessorPlan } from './migration-successor-guard.mjs';
+import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
 
 const require = createRequire(import.meta.url);
 const { Client } = require('pg');
@@ -67,6 +69,17 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260911_05_financial_fact_isolation_v10.sql',
   'migrations/20260924_entry_plan_official_action_symbols.sql',
 ]);
+const RESEARCH_AGENT_MIGRATIONS = Object.freeze([
+  'migrations/20260929_candidate_dossier_outbox_v6.sql',
+  'migrations/20260929_research_agent_state_v1.sql',
+  'migrations/20260929_research_deep_jobs_v1.sql',
+  'migrations/20261004_research_technical_identity_v2.sql',
+  'migrations/20261004_research_cloud_receipts_v1.sql',
+  'migrations/20261005_financial_history_admission_v1.sql',
+]);
+const RESEARCH_AGENT_PRELUDE_MIGRATIONS = Object.freeze([
+  'migrations/20261005_release_function_ownership_bridge_v1.sql',
+]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
 
@@ -77,20 +90,32 @@ async function reviewedMigrationIsSuperseded(client, relativePath) {
       'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)') IS NULL
       THEN false
     ELSE position('jsonb_typeof(v_item#>''{bundle,json,researchDossier}'')' IN pg_get_functiondef(
-      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+      to_regprocedure('public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)')))>0
       AND position('''dossierId''' IN pg_get_functiondef(
-      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+      to_regprocedure('public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)')))>0
       AND position('decision_revision_identity_conflict' IN pg_get_functiondef(
-      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+      to_regprocedure('public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)')))>0
     END AS superseded`);
   return result.rows[0]?.superseded === true;
 }
 
+async function assertExistingRuntimeRoleContract(client) {
+  const role=(await client.query(`SELECT rolcanlogin AND NOT rolinherit
+    AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication
+    AND NOT rolbypassrls AND rolconnlimit=6 AS valid
+    FROM pg_roles WHERE rolname='stockinsider_runtime_v319'`)).rows[0];
+  // Existing reviewed migrations require this exact environment-specific
+  // contract. Report missing bootstrap before any migration mutation; do not
+  // activate a login, invent credentials or broaden a role automatically.
+  if(role && role.valid!==true) throw new Error('runtime_role_bootstrap_required');
+}
+
 function parseArguments(argv) {
-  const result = { apply:false,sourceCommit:null,attestationCommit:null };
+  const result = { apply:false,researchAgentExtension:false,sourceCommit:null,attestationCommit:null };
   for (let index=0; index<argv.length; index+=1) {
     const value=argv[index];
     if(value==='--apply')result.apply=true;
+    else if(value==='--research-agent-extension')result.researchAgentExtension=true;
     else if(value==='--source-commit'&&SHA40.test(argv[index+1]??''))result.sourceCommit=argv[++index];
     else if(value==='--attestation-commit'&&SHA40.test(argv[index+1]??''))result.attestationCommit=argv[++index];
     else throw new Error('invalid_arguments');
@@ -110,7 +135,12 @@ function reviewedMigrationPlan(options) {
     '.loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json'),'utf8'));
   if(status?.authority?.v314?.productionDatabaseMigrationAuthorized!==true)
     throw new Error('production_migration_authority_missing');
-  const migrations=MIGRATIONS.map((relativePath)=>{
+  if(options.researchAgentExtension
+    && status?.authority?.researchAgent?.productionDatabaseMigrationAuthorized!==true)
+    throw new Error('research_agent_production_migration_authority_missing');
+  const migrationPaths=options.researchAgentExtension
+    ? [...RESEARCH_AGENT_PRELUDE_MIGRATIONS,...MIGRATIONS,...RESEARCH_AGENT_MIGRATIONS] : MIGRATIONS;
+  const migrations=migrationPaths.map((relativePath)=>{
     const bytes=fs.readFileSync(path.join(root,relativePath));
     if(/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')))
       throw new Error('non_additive_migration_rejected');
@@ -127,10 +157,28 @@ async function applyReviewedMigrations(options) {
     application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
   await client.connect();
   let locked=false;
+  let transactionOpen=false;
   const supersededMigrations=[];
   try {
     await client.query("SELECT pg_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");
     locked=true;
+    await client.query('BEGIN');
+    transactionOpen=true;
+    // Older chain replay overwrites the append/prepare bodies. Detect installed
+    // successors before the first mutation; a base-only replay must fail closed.
+    await assertInstalledResearchSuccessorPlan(client, { researchAgentExtension: options.researchAgentExtension,
+      migrations: plan.migrations });
+    await assertExistingRuntimeRoleContract(client);
+    if(options.researchAgentExtension) {
+      const researchPrerequisite=(await client.query(`SELECT
+      to_regclass('public.candidate_dossier_outbox_v5') IS NOT NULL AS outbox,
+      to_regclass('public.candidate_dossier_submission_receipts') IS NOT NULL AS receipts,
+      to_regclass('public.candidate_detail_snapshots') IS NOT NULL AS detail,
+      to_regclass('public.candidate_research_dossiers') IS NOT NULL AS dossier,
+      to_regprocedure('public.record_candidate_dossier_submission_v4(uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)') IS NOT NULL AS submission`)).rows[0];
+    if(!researchPrerequisite||Object.values(researchPrerequisite).some((value)=>value!==true))
+      throw new Error('research_agent_migration_prerequisite_missing');
+    }
     // Freeze successor detection before replaying any older migration. Earlier
     // migrations can temporarily replace the authoritative function body and
     // must not erase evidence that the stronger successor was already installed.
@@ -141,7 +189,7 @@ async function applyReviewedMigrations(options) {
         supersededMigrations.push(migration.relativePath);
         continue;
       }
-      await client.query(migration.bytes.toString('utf8'));
+      await client.query(migrationBodyInAtomicTransaction(migration.bytes.toString('utf8')));
     }
     const verified=(await client.query(`SELECT jsonb_build_object(
       'v314Diagnostics',to_regclass('public.legacy_runtime_failure_diagnostics_v3_14') IS NOT NULL,
@@ -438,11 +486,49 @@ async function applyReviewedMigrations(options) {
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
+    const researchVerified=options.researchAgentExtension ? (await client.query(`SELECT
+      to_regclass('public.research_priority_runs_v1') IS NOT NULL AS priority,
+      to_regclass('public.candidate_deep_article_reviews_v1') IS NOT NULL AS reviews,
+      to_regclass('public.candidate_thesis_qualifications_v1') IS NOT NULL AS thesis,
+      to_regclass('public.candidate_technical_decisions_v1') IS NOT NULL AS technical,
+      to_regclass('public.research_deep_jobs_v1') IS NOT NULL AS jobs,
+      to_regclass('public.research_cloud_acceptances_v1') IS NOT NULL AS cloud_receipts,
+      to_regprocedure('public.accept_research_cloud_result_v1(uuid,text,text,text,text,text,text)') IS NOT NULL AS cloud_acceptance,
+      (SELECT relrowsecurity FROM pg_class WHERE oid='public.research_cloud_acceptances_v1'::regclass) AS cloud_rls,
+      NOT has_table_privilege('service_role','public.research_cloud_acceptances_v1','INSERT') AS cloud_no_direct_write,
+      NOT has_function_privilege('anon','public.accept_research_cloud_result_v1(uuid,text,text,text,text,text,text)','EXECUTE') AS cloud_no_public_rpc,
+      EXISTS(SELECT 1 FROM pg_trigger WHERE tgrelid='public.research_cloud_acceptances_v1'::regclass
+        AND tgname='trg_research_cloud_acceptances_immutable_v1' AND tgenabled='O' AND NOT tgisinternal
+        AND tgfoid='public.reject_candidate_dossier_revision_mutation_v4()'::regprocedure) AS cloud_immutable,
+      to_regclass('public.opportunity_financial_observations_v1') IS NOT NULL AS financial_observations,
+      to_regprocedure('public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid)') IS NOT NULL AS financial_history_reader,
+      position('financial_period_revision_bound' IN pg_get_functiondef('public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0 AS financial_period_admission,
+      NOT has_table_privilege('service_role','public.opportunity_financial_observations_v1','INSERT') AS financial_no_direct_write,
+      (SELECT relrowsecurity FROM pg_class WHERE oid='public.opportunity_financial_observations_v1'::regclass) AS financial_observation_rls,
+      NOT has_function_privilege('anon','public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid)','EXECUTE') AS financial_no_public_reader,
+      to_regprocedure('public.record_candidate_deep_submission_v1(uuid,text,integer,uuid,text,uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)') IS NOT NULL AS deep_publication`)).rows[0] : null;
+    if(options.researchAgentExtension
+      && (!researchVerified||Object.values(researchVerified).some((value)=>value!==true)))
+      throw new Error('research_agent_migration_postcondition_failed');
+    if(options.researchAgentExtension) {
+      const generated = fs.readFileSync(path.join(root,'web/src/lib/research-strategy-release.generated.ts'),'utf8');
+      const manifest = JSON.parse(generated.match(/export const RESEARCH_STRATEGY_RELEASE = ([\s\S]+) as const;/u)?.[1] || 'null');
+      const installed = await client.query('SELECT public.research_execution_policy_matches_v1($1::jsonb) AS valid',
+        [JSON.stringify(manifest?.databasePolicy)]);
+      if(installed.rows[0]?.valid!==true) throw new Error('research_agent_installed_policy_mismatch');
+      researchVerified.installedPolicyMatches = true;
+    }
+    // Postconditions participate in the SAME transaction as every migration.
+    // A failed extension or disconnected client cannot leave an old predecessor
+    // body installed without its financial/Cloud successor.
+    await client.query('COMMIT');
+    transactionOpen=false;
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
       orderedChainSha256:plan.chainSha256,migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
-      supersededMigrations:Object.freeze(supersededMigrations),verified});
+      supersededMigrations:Object.freeze(supersededMigrations),verified,researchVerified});
   } finally {
+    if(transactionOpen)try{await client.query('ROLLBACK');}catch{/* disconnect rolls back server-side */}
     if(locked)try{await client.query("SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");}
       catch{/* session close releases the lock */}
     await client.end();
@@ -455,5 +541,5 @@ if(import.meta.url===`file://${process.argv[1]}`) {
     .catch(()=>{process.stderr.write('reviewed V3 migration apply failed\n');process.exitCode=1;});
 }
 
-export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationIsSuperseded,
+export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationIsSuperseded, assertExistingRuntimeRoleContract,
   reviewedMigrationPlan };

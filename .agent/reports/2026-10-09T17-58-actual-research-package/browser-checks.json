@@ -1,0 +1,34 @@
+{
+  "recordedAt": "2026-10-09T17:59:25.114972+00:00",
+  "browser": "Codex In-app Browser",
+  "scope": "actual Mac standalone package, incomplete working drafts only; not Linux deploy artifact or native published-v2 acceptance",
+  "auoDesktop": {
+    "viewportWidth": 1280,
+    "documentWidth": 1265,
+    "tables": 3,
+    "detailsInitiallyClosed": [
+      true,
+      true
+    ]
+  },
+  "auoMobile": {
+    "viewportWidth": 375,
+    "documentWidth": 360,
+    "tablesConfinedScroll": true,
+    "backgroundKeyboardEnterOpened": true,
+    "backgroundKeyboardEnterClosed": true
+  },
+  "emcMobile": {
+    "viewportWidth": 375,
+    "documentWidth": 360,
+    "detailsInitiallyClosed": [
+      true,
+      true
+    ]
+  },
+  "tabClosed": true,
+  "viewportReset": true,
+  "ownedServerStopped": true,
+  "publishedResearch": false,
+  "deployed": false
+}

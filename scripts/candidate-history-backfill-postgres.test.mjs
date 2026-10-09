@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import {spawn,spawnSync} from 'node:child_process';
+import { waitForProcessClose } from './test-support/process-close.mjs';
 
 // Private, temporary local cluster only. No production URL or credentials.
 test('history completion is atomic, private, idempotent and preserves conflicting official evidence',async()=>{
@@ -119,8 +120,10 @@ test('history completion is atomic, private, idempotent and preserves conflictin
       writer.stderr.on('data',(chunk)=>{writerError+=chunk;});
       reader.stdout.on('data',(chunk)=>{readerOutput+=chunk;});
       reader.stderr.on('data',(chunk)=>{readerError+=chunk;});
-      const writerDone=new Promise((resolve)=>writer.on('exit',(code)=>resolve(code)));
-      const readerDone=new Promise((resolve)=>reader.on('exit',(code)=>resolve(code)));
+      // A process exit does not imply its stdout pipe has drained. Keep every
+      // DB/lock/financial assertion unchanged; consume results only on close.
+      const writerDone=waitForProcessClose(writer);
+      const readerDone=waitForProcessClose(reader);
       const until=async(predicate)=>{
         const deadline=Date.now()+5000;
         while(!predicate()){

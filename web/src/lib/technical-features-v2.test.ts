@@ -50,3 +50,18 @@ test('institutional 5/20 day flow is normalized by official traded volume and de
   assert.equal(result.normalized5d, 0.12);
   assert.equal(result.normalized20d, 0.105);
 });
+
+test('MACD is neutral on a flat full series; partial flows stay explicitly missing', () => {
+  const bars = Array.from({ length: 240 }, (_, i) => ({
+    session: new Date(Date.UTC(2025, 0, i + 1)).toISOString().slice(0, 10),
+    high: 31, low: 29, close: 30, volume: 1000,
+  }));
+  const features = calculateTechnicalFeatures(bars);
+  assert.equal(features.macd12_26, 0);
+  assert.equal(features.macdSignal9, 0);
+  assert.equal(features.macdHistogram, 0);
+  const flows = bars.slice(-5).map((row) => ({ session: row.session, net: 100, volume: row.volume }));
+  assert.deepEqual(normalizeInstitutionalFlows(flows), { normalized5d: 0.1, normalized20d: null });
+  assert.deepEqual(normalizeInstitutionalFlows([{ ...flows[0], volume: 0 }]),
+    { normalized5d: null, normalized20d: null });
+});

@@ -1,0 +1,14 @@
+{
+  "admissionAt": "2026-10-09T17:15:09.446582+00:00",
+  "originalManualStartedAt": "2026-10-09T16:57:16Z",
+  "originalManualDeadline": "2026-10-09T17:27:16Z",
+  "upstreamTestSubject": "6b5fb0560088ab50e702f6664f57874072044065",
+  "runtimeSubject": "27f13e51fca5d64498b5ef54d4f9e5394e0f7f21",
+  "localHead": "bdf87ee72fd86e53b43934c3881dfc7c7b5c3436",
+  "localTree": "00203c88403688ec62cdc6ea80b1438e334d9642",
+  "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+  "availableBytes": 11338846208,
+  "active": [],
+  "rootMacBuildReference": "cffe3e38; not a Linux build or independently rerun here",
+  "noLinuxBuildRetry": true
+}

@@ -1,0 +1,19 @@
+{
+  "subject": "abd58da2289222f2fef6777c0da50652aefe5f34",
+  "sourceSha256": "542ce51ef15dfd309e532d313b6b363aefade07eb77a628ad2afbbec53dac20f",
+  "syntheticDelay": "real file descriptor and stats; controlled read/close Promise gate, not actual kernel I/O cancellation proof",
+  "deadlineMs": 20,
+  "observedAtMs": 152.67279899999994,
+  "abortTriggered": true,
+  "operationSettled": false,
+  "opened": 1,
+  "closeCalled": 1,
+  "closed": 0,
+  "expected": "bounded failure with explicitly unconfirmed cleanup",
+  "reproduced": true,
+  "afterControlledRelease": {
+    "settled": true,
+    "primaryError": "financial_deadline",
+    "closed": 1
+  }
+}

@@ -1,0 +1,232 @@
+import { researchCanonicalHash } from './research-agent-qualification.ts';
+
+export const STRATEGY_EXPERIMENT_POLICY = 'strategy-experiment-v1' as const;
+export const PAPER_BOOKS = Object.freeze({
+  conservative: Object.freeze({
+    initialCapital: 1_000_000, initialRiskFraction: 0.005, stockExposureFraction: 0.15,
+    sectorExposureFraction: 0.30, totalExposureFraction: 0.80, totalInitialRiskFraction: 0.03,
+    drawdownActionFraction: 0.15,
+  }),
+  growth: Object.freeze({
+    initialCapital: 1_000_000, initialRiskFraction: 0.01, stockExposureFraction: 0.20,
+    sectorExposureFraction: 0.40, totalExposureFraction: 1.00, totalInitialRiskFraction: 0.05,
+    drawdownActionFraction: 0.25,
+  }),
+});
+export type StrategyArm = 'technical_baseline' | 'technical_research' | 'technical_research_kol';
+export type StrategyExperimentProposal = {
+  policyVersion: typeof STRATEGY_EXPERIMENT_POLICY;
+  authorId: string;
+  registeredAt: string;
+  codeHash: string;
+  inputDatasetHash: string;
+  hypothesis: string;
+  primaryFailureCategory: 'stock_selection' | 'entry' | 'exit' | 'cost' | 'liquidity' | 'regime';
+  variants: Array<{ id: string; parameterHash: string; explanation: string }>;
+  arms: StrategyArm[];
+  sampleStart: string;
+  sampleEnd: string;
+  holdoutStartsAt: '2024-01-01';
+  sourceAvailabilityPolicy: 'point_in_time';
+};
+export type StrategyExperimentObservation = {
+  arm: StrategyArm;
+  variantId: string;
+  symbol: string;
+  signalAt: string;
+  sourceAvailableAt: string;
+  researchArticlePublishedAt: string | null;
+  kolClaimObservedAt: string | null;
+  grossReturnFraction: number;
+  roundTripCostFraction: number;
+  maximumDrawdownFraction: number;
+  regime: string;
+};
+export type StrategyExperimentAssessment = {
+  proposalHash: string;
+  evaluatedAt: string;
+  reviewerId: string;
+  status: 'researching' | 'candidate_for_independent_review';
+  reasons: string[];
+  byArm: Array<{
+    arm: StrategyArm; trades: number; meanNetReturnFraction: number | null;
+    worstDrawdownFraction: number | null; topFiveProfitShare: number | null;
+    regimes: string[];
+  }>;
+  byVariantArm: Array<{
+    variantId: string; arm: StrategyArm; trades: number;
+    meanNetReturnFraction: number | null; worstDrawdownFraction: number | null;
+    topFiveProfitShare: number | null; regimes: string[];
+  }>;
+};
+export type StrategyApprovalReceipt = {
+  schemaVersion: 'strategy-user-approval-v1';
+  proposalHash: string;
+  assessmentHash: string;
+  independentValidationHash: string;
+  codeHash: string;
+  parameterHashes: string[];
+  riskPolicyHash: string;
+  approvedBy: string;
+  approvedAt: string;
+  effectiveFrom: string;
+  receiptHash: string;
+};
+const HASH = /^[0-9a-f]{64}$/u;
+const stamp = (value: string) => Number.isFinite(Date.parse(value)) && /T.*(?:Z|[+-]\d{2}:\d{2})$/u.test(value);
+const date = (value: string) => /^\d{4}-\d{2}-\d{2}$/u.test(value)
+  && Number.isFinite(Date.parse(`${value}T00:00:00Z`));
+// The first strategy family consumes complete Taiwan daily bars. One symbol
+// has at most one independent signal per variant and arm on a market session.
+const taipeiSession = (value: string) => new Date(Date.parse(value) + 8 * 3600_000)
+  .toISOString().slice(0, 10);
+const arms: StrategyArm[] = ['technical_baseline', 'technical_research', 'technical_research_kol'];
+
+export function validateStrategyExperimentProposal(proposal: StrategyExperimentProposal) {
+  if (proposal.policyVersion !== STRATEGY_EXPERIMENT_POLICY || !proposal.authorId
+    || !stamp(proposal.registeredAt) || !HASH.test(proposal.codeHash)
+    || !HASH.test(proposal.inputDatasetHash) || proposal.hypothesis.trim().length < 20
+    || proposal.variants.length < 1 || proposal.variants.length > 3
+    || new Set(proposal.variants.map((variant) => variant.id)).size !== proposal.variants.length
+    || proposal.variants.some((variant) => !/^[a-z0-9_-]{2,40}$/u.test(variant.id)
+      || !HASH.test(variant.parameterHash) || variant.explanation.trim().length < 10)
+    || proposal.arms.length !== 3 || proposal.arms.some((arm, index) => arm !== arms[index])
+    || !date(proposal.sampleStart) || !date(proposal.sampleEnd) || proposal.sampleEnd < proposal.sampleStart
+    || proposal.sampleEnd >= proposal.holdoutStartsAt || proposal.holdoutStartsAt !== '2024-01-01'
+    || proposal.sourceAvailabilityPolicy !== 'point_in_time') {
+    throw new Error('strategy_experiment_preregistration_invalid');
+  }
+  return researchCanonicalHash(proposal);
+}
+
+/** Evaluation can suggest review; it never promotes a production strategy. */
+export function assessStrategyExperiment(input: {
+  proposal: StrategyExperimentProposal;
+  observations: StrategyExperimentObservation[];
+  independentReviewerId: string;
+  evaluatedAt: string;
+}): StrategyExperimentAssessment {
+  const proposalHash = validateStrategyExperimentProposal(input.proposal);
+  if (!input.independentReviewerId || input.independentReviewerId === input.proposal.authorId
+    || !stamp(input.evaluatedAt) || Date.parse(input.evaluatedAt) < Date.parse(input.proposal.registeredAt)
+    || input.observations.length > 100_000) throw new Error('strategy_experiment_reviewer_or_size_invalid');
+  const variants = new Set(input.proposal.variants.map((variant) => variant.id));
+  const seenSignals = new Set<string>();
+  for (const row of input.observations) {
+    if (!variants.has(row.variantId) || !arms.includes(row.arm) || !/^\d{4}$/u.test(row.symbol)
+      || !stamp(row.signalAt) || !stamp(row.sourceAvailableAt)
+      || taipeiSession(row.signalAt) < input.proposal.sampleStart
+      || taipeiSession(row.signalAt) > input.proposal.sampleEnd
+      || Date.parse(row.sourceAvailableAt) > Date.parse(row.signalAt)
+      || ![row.grossReturnFraction, row.roundTripCostFraction, row.maximumDrawdownFraction].every(Number.isFinite)
+      || row.roundTripCostFraction < 0 || row.maximumDrawdownFraction < 0 || !row.regime.trim()) {
+      throw new Error('strategy_experiment_point_in_time_or_cost_invalid');
+    }
+    if (row.arm !== 'technical_baseline' && (!row.researchArticlePublishedAt
+      || !stamp(row.researchArticlePublishedAt)
+      || Date.parse(row.researchArticlePublishedAt) > Date.parse(row.signalAt))) {
+      throw new Error('strategy_experiment_research_lookahead');
+    }
+    if (row.arm === 'technical_research_kol' && (!row.kolClaimObservedAt
+      || !stamp(row.kolClaimObservedAt) || Date.parse(row.kolClaimObservedAt) > Date.parse(row.signalAt))) {
+      throw new Error('strategy_experiment_kol_lookahead');
+    }
+    // A daily signal cannot become independent evidence by repeating its result.
+    const signalKey = `${row.variantId}:${row.arm}:${row.symbol}:${taipeiSession(row.signalAt)}`;
+    if (seenSignals.has(signalKey)) throw new Error('strategy_experiment_duplicate_signal');
+    seenSignals.add(signalKey);
+  }
+  const byVariantArm = input.proposal.variants.flatMap((variant) => arms.map((arm) => {
+    const trades = input.observations.filter((row) => row.arm === arm && row.variantId === variant.id);
+    const net = trades.map((row) => row.grossReturnFraction - row.roundTripCostFraction);
+    const profit = net.filter((value) => value > 0).sort((left, right) => right - left);
+    const totalProfit = profit.reduce((sum, value) => sum + value, 0);
+    return {
+      variantId: variant.id, arm, trades: trades.length,
+      meanNetReturnFraction: trades.length ? net.reduce((sum, value) => sum + value, 0) / trades.length : null,
+      worstDrawdownFraction: trades.length ? Math.max(...trades.map((row) => row.maximumDrawdownFraction)) : null,
+      topFiveProfitShare: totalProfit > 0 ? profit.slice(0, 5).reduce((sum, value) => sum + value, 0) / totalProfit : null,
+      regimes: [...new Set(trades.map((row) => row.regime))].sort(),
+    };
+  }));
+  // The first preregistered variant is the fixed comparison; other variants
+  // remain visible and must pass independently rather than diluting failures.
+  const byArm = byVariantArm.filter((row) => row.variantId === input.proposal.variants[0].id);
+  const reasons: string[] = [];
+  if (byVariantArm.some((row) => row.trades === 0)) reasons.push('variant_arm_run_result_missing_or_zero');
+  if (byVariantArm.some((row) => row.trades < 30)) reasons.push('sample_below_30_per_arm');
+  if (byVariantArm.some((row) => row.regimes.length < 2)) reasons.push('market_regime_coverage_incomplete');
+  if (byVariantArm.some((row) => row.topFiveProfitShare != null && row.topFiveProfitShare > 0.5)) reasons.push('profit_concentration_above_half');
+  if (byVariantArm.some((row) => row.meanNetReturnFraction == null || row.meanNetReturnFraction <= 0)) reasons.push('cost_adjusted_expectancy_not_positive');
+  return { proposalHash, evaluatedAt: new Date(input.evaluatedAt).toISOString(), reviewerId: input.independentReviewerId, status: reasons.length ? 'researching' : 'candidate_for_independent_review',
+    reasons, byArm, byVariantArm };
+}
+
+/** Exact user approval is a separate act; an experiment assessment never enables trading. */
+export function issueStrategyApproval(input: {
+  proposal: StrategyExperimentProposal;
+  assessment: StrategyExperimentAssessment;
+  independentReviewerId: string;
+  independentValidation: {
+    receiptHash: string; status: 'passed' | 'failed'; reviewerId: string;
+    validatedAt: string; holdoutAndForwardChecked: boolean;
+    proposalHash: string; assessmentHash: string; codeHash: string;
+    parameterHashes: string[]; riskPolicyHash: string;
+  };
+  approvedBy: string;
+  approvedAt: string;
+  effectiveFrom: string;
+  riskPolicyHash: string;
+}): StrategyApprovalReceipt {
+  const proposalHash = validateStrategyExperimentProposal(input.proposal);
+  const assessmentHash = researchCanonicalHash(input.assessment);
+  const { receiptHash, ...validationPayload } = input.independentValidation;
+  const expectedKeys = input.proposal.variants.flatMap((variant) => arms.map((arm) => `${variant.id}:${arm}`));
+  const actualKeys = input.assessment.byVariantArm.map((row) => `${row.variantId}:${row.arm}`);
+  const primary = input.assessment.byVariantArm.filter((row) => row.variantId === input.proposal.variants[0].id);
+  if (actualKeys.length !== expectedKeys.length || new Set(actualKeys).size !== actualKeys.length
+    || expectedKeys.some((key) => !actualKeys.includes(key))
+    || researchCanonicalHash(primary) !== researchCanonicalHash(input.assessment.byArm)
+    || input.assessment.byVariantArm.some((row) => !Number.isInteger(row.trades) || row.trades < 30
+      || !Number.isFinite(row.meanNetReturnFraction) || (row.meanNetReturnFraction ?? 0) <= 0
+      || !Number.isFinite(row.worstDrawdownFraction) || (row.worstDrawdownFraction ?? -1) < 0
+      || !Number.isFinite(row.topFiveProfitShare) || (row.topFiveProfitShare ?? 1) > 0.5
+      || new Set(row.regimes).size < 2)
+    || !stamp(input.assessment.evaluatedAt)
+    || Date.parse(input.assessment.evaluatedAt) < Date.parse(input.proposal.registeredAt)
+    || input.assessment.reviewerId !== input.independentReviewerId
+    || receiptHash !== researchCanonicalHash(validationPayload)
+    || validationPayload.proposalHash !== proposalHash || validationPayload.assessmentHash !== assessmentHash
+    || validationPayload.codeHash !== input.proposal.codeHash
+    || researchCanonicalHash(validationPayload.parameterHashes) !== researchCanonicalHash(input.proposal.variants.map((v) => v.parameterHash))
+    || validationPayload.riskPolicyHash !== input.riskPolicyHash
+    || Date.parse(validationPayload.validatedAt) < Date.parse(input.assessment.evaluatedAt)
+    || input.approvedBy === validationPayload.reviewerId
+    || input.assessment.proposalHash !== proposalHash
+    || input.assessment.status !== 'candidate_for_independent_review'
+    || input.assessment.reasons.length !== 0
+    || !input.independentReviewerId || input.independentReviewerId === input.proposal.authorId
+    || !HASH.test(input.independentValidation.receiptHash)
+    || input.independentValidation.status !== 'passed'
+    || input.independentValidation.holdoutAndForwardChecked !== true
+    || !input.independentValidation.reviewerId
+    || [input.proposal.authorId, input.independentReviewerId].includes(input.independentValidation.reviewerId)
+    || !stamp(input.independentValidation.validatedAt)
+    || Date.parse(input.independentValidation.validatedAt) > Date.parse(input.approvedAt)
+    || !input.approvedBy || [input.proposal.authorId, input.independentReviewerId].includes(input.approvedBy)
+    || !stamp(input.approvedAt) || !stamp(input.effectiveFrom)
+    || Date.parse(input.effectiveFrom) < Date.parse(input.approvedAt)
+    || !HASH.test(input.riskPolicyHash)) {
+    throw new Error('strategy_user_approval_not_independent_or_exact');
+  }
+  const receipt = {
+    schemaVersion: 'strategy-user-approval-v1' as const,
+    proposalHash, assessmentHash,
+    independentValidationHash: input.independentValidation.receiptHash,
+    codeHash: input.proposal.codeHash,
+    parameterHashes: input.proposal.variants.map((variant) => variant.parameterHash),
+    riskPolicyHash: input.riskPolicyHash, approvedBy: input.approvedBy,
+    approvedAt: input.approvedAt, effectiveFrom: input.effectiveFrom,
+  };
+  return { ...receipt, receiptHash: researchCanonicalHash(receipt) };
+}

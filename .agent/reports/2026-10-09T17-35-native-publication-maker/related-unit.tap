@@ -1,0 +1,80 @@
+TAP version 13
+# (node:34129) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:34129) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: local profile selects existing SQL and never seeds observed authority or invents RPCs
+ok 1 - local profile selects existing SQL and never seeds observed authority or invents RPCs
+  ---
+  duration_ms: 23.626791
+  ...
+# Subtest: local child environment excludes inherited credentials and production writer identity
+ok 2 - local child environment excludes inherited credentials and production writer identity
+  ---
+  duration_ms: 0.745125
+  ...
+# Subtest: actual attributed relay through real local Next/Supabase/PostgREST/PostgreSQL
+ok 3 - actual attributed relay through real local Next/Supabase/PostgREST/PostgreSQL # SKIP explicit local development verification not enabled
+  ---
+  duration_ms: 0.160459
+  ...
+# Subtest: joined log removes ephemeral values across every pipe-chunk split
+ok 4 - joined log removes ephemeral values across every pipe-chunk split
+  ---
+  duration_ms: 0.633334
+  ...
+# Subtest: loopback first-response drop performs one request and sends no response to caller
+ok 5 - loopback first-response drop performs one request and sends no response to caller
+  ---
+  duration_ms: 25.612
+  ...
+# (node:34131) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:34131) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-business-article.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: display derives only original published public content without altering hashed input
+ok 6 - display derives only original published public content without altering hashed input
+  ---
+  duration_ms: 98.091125
+  ...
+# Subtest: tampering, private fields, identity conflicts and failed read never become a working draft
+ok 7 - tampering, private fields, identity conflicts and failed read never become a working draft
+  ---
+  duration_ms: 53.838584
+  ...
+# Subtest: public URL conversion occurs after original hash check; private targets are rejected
+ok 8 - public URL conversion occurs after original hash check; private targets are rejected
+  ---
+  duration_ms: 51.46525
+  ...
+# Subtest: negative EPS cannot acquire applicable P/E; annual periods cannot borrow future-four labels
+ok 9 - negative EPS cannot acquire applicable P/E; annual periods cannot borrow future-four labels
+  ---
+  duration_ms: 49.678
+  ...
+# Subtest: closed query and exclusive view preserve original legacy/draft choices without fallback
+ok 10 - closed query and exclusive view preserve original legacy/draft choices without fallback
+  ---
+  duration_ms: 0.201083
+  ...
+# Subtest: writer-to-reader compatibility preserves maximum catalysts, long locators and printed month/half-year units
+ok 11 - writer-to-reader compatibility preserves maximum catalysts, long locators and printed month/half-year units
+  ---
+  duration_ms: 57.97775
+  ...
+# Subtest: actual shared published component SSR escapes prose and shows periods, withdrawal and accessible folded tables
+ok 12 - actual shared published component SSR escapes prose and shows periods, withdrawal and accessible folded tables
+  ---
+  duration_ms: 234.51275
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 804.734625

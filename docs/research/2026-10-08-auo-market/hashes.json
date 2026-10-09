@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "local-market-evidence-hash-manifest-v1",
+  "rawHttpHashesReverified": false,
+  "files": {
+    "root-market-relay.json": {
+      "bytes": 98974,
+      "sha256": "6b59d3daa60e17b79a0f2fab80a1c5b2a8083ecdbbf6cdf0a985551be1467d98"
+    },
+    "october-stock-day-relay.json": {
+      "bytes": 1877,
+      "sha256": "bfc44df7a1108fe6eef94492f37e2a890973330522094819b75fe8b758ac9217"
+    },
+    "vm-canary.json": {
+      "bytes": 793,
+      "sha256": "05d6d0898d210740cb09eb72e744e5152f561994837f7d05a9ed0ec48c1eefb7"
+    },
+    "dataset.json": {
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
+    },
+    "recompute-market.mjs": {
+      "bytes": 15735,
+      "sha256": "ad51426ae845347309bae7e16c8270c3c1ff48ba21983fff04a2926f9e27e2dd"
+    },
+    "verify-hashes.py": {
+      "bytes": 696,
+      "sha256": "4fac0215350c354ba1ddf7035a100baeb61d46db967f3067b140a5344bfc670a"
+    },
+    "README.md": {
+      "bytes": 9171,
+      "sha256": "abfb175cc5d8530647d58216f3f1cc485c424fa84a0ad1b28ef864393e256081"
+    },
+    "source-notes-relay.json": {
+      "bytes": 1878,
+      "sha256": "4cac1a3804039f4a5f649abfa83ffc777ab6a9e89d0527dfa68b28d3c60fadee"
+    },
+    "unsigned-exact-market-review-relay.json": {
+      "bytes": 1664,
+      "sha256": "409922cd11382a7c5cdc9b434ac0aad7a117f6d68d54ad04a71d5f6ffe303d4e"
+    },
+    "auo-article-preparation.md": {
+      "bytes": 6141,
+      "sha256": "70f92ee4174c4dfd69b0f96164857915ce104f8e8b89f5a6689980bf3acdf209"
+    }
+  },
+  "datasetCanonicalHash": "82410d4700b39287ce8ead9893e279decf25e8b92b4aa2a536cf24023ddbc71a",
+  "relayCanonicalHash": "e437e01c65394cb51879931ddb8ddb2e3d09b5c88f079d80a719848e5d934e69",
+  "selectedRowsCanonicalHashes": {
+    "stock/202509": "b613a1306ab148a93421b2b0e3575e9976e6856c460e3a4a1c0eadc2a5d59c38",
+    "index/202509": "b22b7269244e50b3692e9ce7ce5dc065858844373558fa475f92f2e58c51c283",
+    "stock/202510": "b85ea9d8d296f730079c7a57a0ab159d6fc78a1c2dfc59c116e5e33ae7b03e09",
+    "index/202510": "014e62e807b60e3e5bcd9e554ff3b32c0c92938bf6147996bbf2f5a2a2a9bdf1",
+    "stock/202511": "f665a79fbfba5db654055a02a4987e7ba088de908526015d9e9d6a33879844fe",
+    "index/202511": "03ec054d3ba1f44ef844e52d304bb7c544b26d6a0e8d7c17a1f01c8fa3e3c6ef",
+    "stock/202512": "dd8c79081281e9a3121a2170eadc6799210b82c318ed11d8a4a3b4f631761a3b",
+    "index/202512": "1999a45b6b3e63c5c8e322a65fda73e2949fec92c559455f6be42b228774bb63",
+    "stock/202601": "30dc5344642632a207f6ade916582ae26aca55f4353892a06cb609f7846e6376",
+    "index/202601": "464d5b48f4a137a98ce27b212f61a7a7fae2230f636c733dd5bcbca70fee8de7",
+    "stock/202602": "7433b492434d1780c2231606396f20a29cedbc498622995aa24a82d917bdf97a",
+    "index/202602": "481b4887a75a204227c127a022c8edbc7603b9a1c1547ed1b305e2881ce0232e",
+    "stock/202603": "cc3430d1fe1b9a8b71dc3b37b9030bfeee846f8e494798b2fca9fe5f99ad9b7e",
+    "index/202603": "e854732e1b6aa0686ca8703625cee3c36d41ce2852b119c1fb9c461c212128d2",
+    "stock/202604": "f8cf1e86f44bb2cef91bb1222d4ab1e88f8d0fcd8e77dfb3857a471c688f1ddd",
+    "index/202604": "ee77319c6e34de0a4a6855d53bdc170eecc1b87768f295de2223f0e3b1f57f92",
+    "stock/202605": "1a250ce1d86c2e5210a95cc9a0f32a39765e2b5d330229ec3eb0846a033f758d",
+    "index/202605": "d353727e8ce60142da79e720a432c57df6cb8083c731245dda72895100396848",
+    "stock/202606": "3a8fa56f3e19d9a3da6414df1cbd11cac5d7d34a772b8c097ffa10a7dfcf87f0",
+    "index/202606": "c442e59a21bd635dd9fcfc3c7f797a844d0271cceb45586d99e1fe07607a3e3a",
+    "stock/202607": "121693194eb543494f857a204ac30307168b535327dddd0931e2bd0e5ecf05a2",
+    "index/202607": "a05c067bc7313d0f5f56ac0b5ee078237b959cdfcfe5ffcff78b1fc6828f7673",
+    "stock/202608": "cf9ed0b374f167325ad7effeb3de453a73a6a5f392d6c9794e9d3b4b7814b915",
+    "index/202608": "fcaf5cf4627bae74284e83e1e187fc391f346ebffc555990eb5cd7aef18cda1c",
+    "stock/202609": "8757e5c1cb2aeb064272ae7b740c7b9727411e218e6306701b5d4148179d70f6",
+    "index/202609": "7e96614744ff95df02e77d00c3e3917dc70af3e3b1bf474d5540bc81217238ea",
+    "stock/202610": "c838919ded1cb4a5ee687d2aff8e3ae49ad7b352f976aff90b3a502b349ad300",
+    "index/202610": "790d269b0aa0d5d7b61c2749afd09cff6f0a68fdac1b79562deb1f25694508ed"
+  },
+  "documentationRevisionBase": "c16bc52271eaf733b7ca69d0cc747d123a5d2ad6",
+  "documentationRevisionScope": "response-level notes, attributed unsigned review and article preparation; dataset/calculator unchanged"
+}

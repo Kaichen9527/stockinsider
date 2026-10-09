@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "unsigned-development-validation-v1",
+  "sourceCommit": "3953e7c00c1e58055c5b9bdd9cf02c27b13464d6",
+  "parent": "0ae412f536a02745eb45a59383808f8e09bb7c52",
+  "financialTests": {
+    "passed": 104,
+    "failed": 0,
+    "skipped": 0
+  },
+  "researchTests": {
+    "passed": 329,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typecheck": "passed",
+  "lint": {
+    "errors": 0,
+    "preexistingWarnings": 33
+  },
+  "build": "passed",
+  "independentReview": {
+    "agent": "/root/author_input_review_oct08",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "decision": "approved_unsigned_scoped",
+    "independentTestsPassed": 19
+  },
+  "protectedApproval": false,
+  "merged": false,
+  "deployed": false,
+  "productionIngestRetried": false,
+  "logHashes": {
+    "stockinsider-financial-lease-integrated-oct08.log": "ac37e7b1d912d170664ef68fd2d3bdc46ef468e0e5e15cd2da670f3f0523ed70",
+    "stockinsider-financial-lease-research-oct08.log": "95253717d70459c4a3cfe08331eab6e0a6623dc2a05fa223947f44aee79dbe64",
+    "stockinsider-financial-lease-types-oct08.log": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+    "stockinsider-financial-lease-lint-oct08.log": "4a13415a64c750e27b2e34d389d96e7b1b952909139acb919eaefd7838587879",
+    "stockinsider-financial-lease-build-oct08.log": "b521351124fb082dd9530542e804133c5aca3559760258046324816779f8bea8"
+  }
+}

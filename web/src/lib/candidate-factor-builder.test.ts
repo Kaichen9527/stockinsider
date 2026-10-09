@@ -61,13 +61,25 @@ test('builder evidence reaches the classifier without a hand-authored score fixt
   assert.equal(result.scores.research, 90, 'one relationship per fundamental factor is explicitly 50% evidence coverage');
 });
 
-test('licensed broker imports connect to the factor while unknown licenses stay out', () => {
+test('explicitly licensed broker imports connect to the factor while unknown licenses stay out', () => {
   const rows = brokerEvidenceRowsFromSnapshots([
-    { sourceCount: 2, freshnessStatus: 'fresh', asOfDate: '2026-09-05', permittedSourceModes: ['manual_pdf'] },
+    { sourceCount: 2, freshnessStatus: 'fresh', asOfDate: '2026-09-05', permittedSourceModes: ['manual_pdf'], licenseStatus: 'permitted' },
     { sourceCount: 3, freshnessStatus: 'fresh', asOfDate: '2026-09-06', licenseStatus: 'unknown' },
   ]);
   assert.equal(brokerResearchFactor(rows).score, 75);
   assert.equal(rows[1].lawful, false);
+});
+
+test('manual ingestion never substitutes for factor-use rights and explicit blocked status wins', () => {
+  const modesWithoutGrant = brokerEvidenceRowsFromSnapshots([
+    { sourceCount: 3, freshnessStatus: 'fresh', asOfDate: '2026-09-05', permittedSourceModes: ['manual_pdf'] },
+    { sourceCount: 3, freshnessStatus: 'fresh', asOfDate: '2026-09-06', permittedSourceModes: ['manual_csv'], licenseStatus: 'unknown' },
+    { sourceCount: 3, freshnessStatus: 'fresh', asOfDate: '2026-09-07', permittedSourceModes: ['imported_pdf'], licenseStatus: 'blocked' },
+  ]);
+  assert(modesWithoutGrant.every((row) => row.lawful === false));
+  assert.equal(brokerResearchFactor(modesWithoutGrant).score, 0);
+  assert.equal(brokerResearchFactor([{ sourceCount: 3, freshness: 'fresh', asOf: '2026-09-07', lawful: true, licenseStatus: 'blocked' }]).score, 0);
+  assert.equal(brokerResearchFactor([{ sourceCount: 3, freshness: 'fresh', asOf: '2026-09-07', lawful: true, licenseStatus: 'unknown' }]).score, 0);
 });
 
 test('peer builder respects product type and relationship direction, while unknown price rights cannot score or block', () => {

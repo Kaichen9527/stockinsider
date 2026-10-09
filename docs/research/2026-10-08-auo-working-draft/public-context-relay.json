@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "public-research-context-relay-v1",
+  "observer": "root-hosted-web-reader",
+  "observedAt": "2026-10-08 07:54:22 UTC",
+  "observedAtNormalized": "2026-10-08T07:54:22Z",
+  "additionalObservedAt": "2026-10-08 07:56:56 UTC",
+  "additionalObservedAtNormalized": "2026-10-08T07:56:56Z",
+  "recordedByVmAt": "2026-10-08T08:03:49.885253+00:00",
+  "vmFetchSucceeded": false,
+  "productionImported": false,
+  "rawHttpRetained": false,
+  "rights": "Public short paraphrases and citations only; no member or private content.",
+  "entries": [
+    {
+      "url": "https://www.auo.com/en-global/New_Archive/detail/news_IR_20260730",
+      "publicationDateOnlyReported": "2026-07-30",
+      "exactPublicationInstantVerified": false,
+      "publishedAt": null,
+      "kind": "issuer_guidance",
+      "summary": "Q226營收708.9億元、營業利益2.2億元、歸母13.4億元、基本EPS0.18。顯示營收季減0.3%，移動季增3%，垂直季增11%；存貨58日。7/30指引Q3消費電子弱、車用穩、垂直穩健成長。凌華2025-06-30起納入合併。",
+      "implication": "三事業變化不能直接套成整體高速成長；毛利/費用與業外分開，凌華口徑需比對。公司指引是7/30當時，不假稱10/8新指引。"
+    },
+    {
+      "url": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+      "publicationDateOnlyReported": "2026-08-31",
+      "exactPublicationInstantVerified": false,
+      "publishedAt": null,
+      "kind": "issuer_technology",
+      "summary": "官方描述MicroLED光通訊瞄準約10公尺，友達負責巨量轉移/RDL/光耦合/架構，整合富采、鼎元、達興、康寧；GCS結合康寧材料及AUO RDL，TGV/金屬化/可靠度分階段推進。未於此文披露Intel客戶、訂單、量產產能、良率或售價。",
+      "implication": "CPO與GCS分開催化劑；技術展示不是量產，不能把集團各公司全部營收或毛利加至AUO歸母。"
+    },
+    {
+      "url": "https://www.intel.com/content/www/us/en/newsroom/news/intel-unveils-first-integrated-optical-io-chiplet.html",
+      "publicationDateOnlyReported": "2024-06-26",
+      "exactPublicationInstantVerified": false,
+      "publishedAt": null,
+      "kind": "partner_alternative_primary",
+      "summary": "Intel官方2024 OCI展示為矽光子PIC整合片上雷射與放大器，再接電晶片；宣稱每方向64通道32Gbps、最多100公尺，曾與Intel CPU共同封裝展示。不是AUO MicroLED產品或2026訂單證據。",
+      "implication": "AI光互連需求不等於MicroLED獨占份額；距離、系統相容性、成本及功耗比較須同測試口徑。商業化情境保留替代架構與採用延後，不把Intel OCI性能嫁接AUO。"
+    },
+    {
+      "url": "https://investors.visteon.com/investors/investor-news/news-details/2026/Visteon-Announces-Second-Quarter-2026-Financial-Results-and-200-Million-Accelerated-Share-Repurchase-Program/default.aspx",
+      "publicationDateOnlyReported": "2026-07-23",
+      "exactPublicationInstantVerified": false,
+      "publishedAt": null,
+      "kind": "overseas_comparable_primary",
+      "summary": "Visteon Q226銷售960百萬美元，去年969；歸母49百萬，去年71；調整EBITDA116百萬/12.1%。新business wins20億美元，24產品/11客戶量產。公司明示business wins不是firm orders/commitments，非GAAP EBITDA不能跨公司直接對照。",
+      "implication": "智慧座艙設計獲選並不保證當期銷售或利潤同步成長；AUO移動收入應看量產爬坡/客戶車產/價格/費用。不能套Visteon EBITDA margin作AUO營業淨利率或直接套PE。"
+    },
+    {
+      "url": "https://www.auo.com/en-global/Investor_Conference/index",
+      "publicationDateOnlyReported": null,
+      "exactPublicationInstantVerified": false,
+      "publishedAt": null,
+      "kind": "issuer_schedule",
+      "summary": "本次讀取頁面Q326法說預定2026-10-29台北14:00，presentation/financial尚無連結；不把尚未舉行法說視為已知Q3獲利。",
+      "implication": "月營收已知不等於Q3 EPS已公告；在下一次法說追問試產/客戶驗證/資本投入與口徑。"
+    },
+    {
+      "url": "https://omdia.tech.informa.com/pr/2026/sep/china-based-panel-makers-to-capture-65percent-of-automotive-display-shipments-in-2h26",
+      "publicationDateOnlyReported": "2026-09-03",
+      "exactPublicationInstantVerified": false,
+      "publishedAt": null,
+      "kind": "industry_research_public_release",
+      "summary": "Omdia公開稿預測中國廠車載顯示出貨占比H226為65.2%，H126為59.0%；選定2028情境下中國以外可商用a-Si/Oxide車載相關產線7降至3。G8.x OLED先吸收手機/IT需求，之後G6可能釋出車用；非全數產能專用車載。",
+      "implication": "是研究預測/選定情境，不是已實現AUO失單或必定關廠。壓低車載單片ASP/市占樂觀假設，另評非中國合格供應的選擇價值；車用成長不能假設自動提升毛利。"
+    },
+    {
+      "url": "https://www.lgdisplay.com/kor/company/media-center/latest-news?contentId=5558",
+      "publicationDateOnlyReported": "2026-07-22",
+      "exactPublicationInstantVerified": false,
+      "publishedAt": null,
+      "kind": "overseas_comparable_primary",
+      "summary": "韓文官方稿：H126銷售11兆1461億韓元、營業利益390億；Q226銷售5兆6121億、營業損失1077億。解釋季節淡季及人員效率一次費用，管理層稱剔一次項後本業仍正；續推OLED高附加價值與成本改善。",
+      "implication": "競爭者轉型也會有報表/正常化差距；AUO不能把合併歸母獲利當作顯示本業已高利潤。LG OLED投入限制AUO高階顯示份額/ASP假設，無法據韓元金額或未核附註直接建立PE可比."
+    }
+  ],
+  "failedReads": [
+    {
+      "url": "https://nvidianews.nvidia.com/news/nvidia-and-corning-partner-to-build-us-manufacturing-infrastructure-for-ai",
+      "status": "hosted_reader_internal_error",
+      "contentAnalyzed": false
+    }
+  ],
+  "coverage": "Finite source selection, not all web. No exact publishedAt midnight inferred, no actual ingestion IDs or trusted issuer facts minted.",
+  "amendments": [
+    {
+      "recordedByVmAt": "2026-10-08T08:10:33.101303+00:00",
+      "reportedBy": "source thread relaying independent Astra source-page reading",
+      "sourceUrl": "https://investors.visteon.com/investors/investor-news/news-details/2026/Visteon-Announces-Second-Quarter-2026-Financial-Results-and-200-Million-Accelerated-Share-Repurchase-Program/default.aspx",
+      "originalPhrase": "24產品/11客戶量產",
+      "correctedPhrase": "跨11客戶推出/導入24項產品，未披露具體量產規模",
+      "reportedOriginalWording": "launched24newproductsacross11customers",
+      "reason": "launch must not manufacture production quantities or firm orders",
+      "originalEntryRetained": true
+    }
+  ],
+  "independentSourceCheckRelay": {
+    "reportedBy": "source thread delegation",
+    "reviewer": "existing independent Astra",
+    "publicPagesRead": 11,
+    "scope": "source limits/readings only; no article/publication approval",
+    "notes": [
+      "Intel prototype not AUO product",
+      "Omdia forecasts and selected scenarios retained",
+      "one AUO cash dividend0.4 only",
+      "EDN related same-author reports and derivative LEDinside",
+      "date precision retained"
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "manual-auo-working-draft-metadata-v1",
+  "status": "draft/incomplete",
+  "articleContractReference": "candidate-deep-research-v1; section order reused; not a validated payload",
+  "evidenceCutoffAt": "2026-10-08T08:16:44.396260+00:00",
+  "latestRelayObservedAt": "2026-10-08T08:03:37Z",
+  "historicalPITEligible": false,
+  "published": false,
+  "productionImported": false,
+  "automaticModelDispatch": false,
+  "modelReservation": null,
+  "job": null,
+  "trustedPreparedInput": null,
+  "researchQualified": false,
+  "strategyApproved": false,
+  "targetPrice": null,
+  "formalCitationIdsMinted": false,
+  "preparationCutoffHistory": [
+    {
+      "evidenceCutoffAt": "2026-10-08T08:03:49.885253+00:00",
+      "scope": "initial source preparation before additional cash-action relay was received by VM"
+    },
+    {
+      "evidenceCutoffAt": "2026-10-08T08:05:49.538458+00:00",
+      "scope": "after cash-action relay, before later Visteon source-wording correction"
+    }
+  ],
+  "cutoffUpdateReason": "manual incomplete draft source preparation finalized after Visteon amendment; original prepared artifacts and historical runs unchanged",
+  "latestVmRelayRecordedAt": "2026-10-08T08:10:33.101303+00:00",
+  "independentSourceReadingApprovalOfArticle": false,
+  "sourceLedger": "source-ledger.json",
+  "authoredAt": "2026-10-08T08:20:17.057931+00:00",
+  "checkpointValidationStatus": "original a38 lightweight validation complete; editorial successor delta checks complete; independent difference review pending",
+  "checkpointValidationHistory": [
+    {
+      "subjectCommit": "a38ccf9a831fce46d7bd4385acba397d735816ca",
+      "status": "article and generated tables saved; final lightweight citation/clock/immutable-byte verification pending"
+    },
+    {
+      "validationReceipt": ".agent/reports/2026-10-08T082600Z-auo-working-draft-validation.json",
+      "status": "completed61 lightweight checks/4 sensitivity/9 private-file hashes; original article subjecta38ccf9"
+    }
+  ],
+  "editorialRevisionAt": "2026-10-08T08:30:37.429029+00:00",
+  "editorialRevisionReason": "ordinary reader language, fair QoQ/YoY/TTM comparison, conditional EPS/PE alongside asset/cycle approach; no dataset/table/arithmetic changes",
+  "editorialValidation": "editorial-validation.json"
+}

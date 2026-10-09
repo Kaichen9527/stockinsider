@@ -1,0 +1,16 @@
+{
+  "schema_version": "editorial-source-audit-v1",
+  "observed_date": "2026-09-25",
+  "production_imported": false,
+  "published": false,
+  "raw_source_bytes_retained": false,
+  "sources": [
+    {"id":"B01","publisher":"BOE via CNInfo","url":"https://static.cninfo.com.cn/finalpage/2026-07-03/1225407620.PDF","document_id":"2026-030","event_date":"2026-07-02","archive_path_date":"2026-07-03","retrieval":"parsed_document_and_page_1_visual_checked","scope":"Historical R&D/validation status on July 2, not September 25 mass-production status.","raw_sha256":null,"independence_group":"BOE-2026-030"},
+    {"id":"C01","publisher":"Corning","url":"https://www.corning.com/cn/zh/about-us/news-events/news-releases/2026/05/BOE_and_Corning_Extend_Strategic_Collaboration.html","published_date":"2026-05-20","retrieval":"issuer_body_opened","scope":"MOU and exploration; not order/revenue/EPS evidence.","raw_sha256":null,"independence_group":"BOE-Corning-MOU"},
+    {"id":"A01","publisher":"AUO","url":"https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831","published_date":"2026-08-31","retrieval":"indexed_only_direct_body_unavailable","scope":"SEMICON technology demonstration lead; mass production and financial contribution not verified.","raw_sha256":null,"independence_group":"AUO-SEMICON-20260831"},
+    {"id":"T01","publisher":"TSMC","url":"https://pr.tsmc.com/japanese/news/3340","published_date":"2026-09-10","period":"2026-08","retrieval":"indexed_issuer_release_direct_open_cache_miss","indexed_claim":{"revenue_ntd_billion":514.81,"mom_percent":10.1,"yoy_percent":53.3,"ytd_ntd_billion":3386.87,"ytd_yoy_percent":39.3},"raw_sha256":null,"accepted_financial_fact":false,"independence_group":"TSMC-August-2026-release"},
+    {"id":"T02","publisher":"TSMC","url":"https://investor.tsmc.com/english/monthly-revenue/2026","published_date":null,"retrieval":"opened_cached_table_through_July_August_blank","table_unit":"NTD_millions","raw_sha256":null,"accepted_august_fact":false,"independence_group":"TSMC-August-2026-release"},
+    {"id":"U01","publisher":"UMC via Business Wire","url":"https://www.businesswire.com/news/home/20260903516473/en/","distribution_url":"https://www.nasdaq.com/press-release/umc-reports-sales-august-2026-2026-09-04","published_date":"2026-09-04","period":"2026-08","retrieval":"indexed_issuer_distribution_direct_bodies_unavailable","indexed_claim":{"revenue_ntd_thousand":25044641,"yoy_percent":30.71,"ytd_ntd_thousand":178659250,"ytd_yoy_percent":14.66},"raw_sha256":null,"accepted_financial_fact":false,"independence_group":"UMC-August-2026-release"},
+    {"id":"U02","publisher":"UMC","url":"https://www.umc.com/en/IR_Financial/monthly_sales_revenue","published_date":null,"retrieval":"opened_cached_table_through_July_August_blank","table_unit":"NTD_thousands","raw_sha256":null,"accepted_august_fact":false,"independence_group":"UMC-August-2026-release"}
+  ]
+}

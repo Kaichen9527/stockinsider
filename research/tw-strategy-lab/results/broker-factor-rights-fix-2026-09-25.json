@@ -1,0 +1,51 @@
+{
+  "schema": "broker-factor-rights-fix/v1",
+  "reviewed_at": "2026-09-25T07:50:36Z",
+  "status": "code_fixed_not_deployed",
+  "scope": "production broker-consensus factor mapping and snapshot metadata only",
+  "holdout_accessed": false,
+  "network_requests": 0,
+  "database_reads": 0,
+  "database_writes": 0,
+  "finding": {
+    "severity": "high",
+    "old_behavior": [
+      "manual_pdf, manual_csv or imported_pdf ingestion mode could set lawful=true without an explicit factor-use grant",
+      "brokerIsLawful evaluated lawful=true before licenseStatus=blocked or unknown, so a convenience flag could override an explicit negative status",
+      "rebuilt broker snapshots labeled user-supplied/imported documents as an authorization basis without a separate license status"
+    ],
+    "risk": "Unlicensed or explicitly blocked broker summaries could contribute up to 100 broker-evidence points and raise a candidate's research score."
+  },
+  "repair": {
+    "mapping": "Only licenseStatus licensed or permitted sets lawful=true. Ingestion modes remain provenance and do not grant factor use.",
+    "precedence": "Explicit blocked or unknown status returns false before any compatibility flag is considered.",
+    "snapshot_metadata": {
+      "license_status": "unknown",
+      "authorization_basis": "source_mode_is_not_factor_use_grant"
+    },
+    "legacy_boundary": "Rows with no explicit licenseStatus may still use the historical freshness=licensed representation or a previously validated lawful flag; any explicit blocked/unknown value wins."
+  },
+  "validation": {
+    "targeted_node_tests": { "passed": 8, "failed": 0 },
+    "new_regression_assertions": [
+      "three manual/import modes without explicit permission all map to lawful=false",
+      "explicit blocked cannot be overridden by lawful=true",
+      "explicit unknown cannot be overridden by lawful=true",
+      "explicit permitted with two sources still produces the expected 75 evidence grade"
+    ],
+    "typescript": "passed",
+    "next_production_build": { "passed": true, "static_pages": 91 }
+  },
+  "research_effect": {
+    "s7_status": "blocked",
+    "ubs_2454_event_status": "metadata_only",
+    "usable_feature_count": 0,
+    "historical_run_36081668572_invalidated": false,
+    "reason": "S7 was already blocked and no broker feature entered the preserved price-strategy run."
+  },
+  "operational_effect": {
+    "production_changed": false,
+    "existing_database_rows_modified": false,
+    "required_after_reviewed_deployment": "Rebuild broker consensus snapshots through the guarded pipeline; rows remain non-scoring until an explicit licensed/permitted status backed by a factor-use grant is supplied."
+  }
+}

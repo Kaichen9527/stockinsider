@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "source-and-capacity-followup-v1",
+  "sourceCommit": "2e11a58b8a7859f439d88e6d069c134c0b728ea9",
+  "browser": {
+    "method": "actual CUA existing authenticated session; necessary public summaries only",
+    "sourcePost": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+    "publishedAtFromDOM": "2026-09-18T05:52:39.000Z",
+    "bodyRead": true,
+    "visibleReply": "https://www.threads.com/@gooptions/post/DdngHBpkoGb",
+    "replyPublishedAtFromDOM": "2026-09-23T04:56:05.000Z",
+    "replyCoverage": "one visible reply; page reports other replies unavailable",
+    "summary": "CPO optical-engine quality and packaging yield depend on inspection; standards and supply chain are not yet settled. Visible reply adds warpage, coplanarity and FAU alignment as yield challenges. Neither confirms an AUO order.",
+    "companyMapping": "No AUO symbol in original industry post; no company-specific item emitted",
+    "memberArticleFollowed": false,
+    "publicSearch": {
+      "query": "友達 Intel",
+      "sortsInspected": [
+        "Top",
+        "Recent"
+      ],
+      "recentVisiblePosts": [
+        {
+          "url": "https://www.threads.com/@chipmunk.4552273/post/DeCNTCKE_YS",
+          "publishedAt": "2026-10-03T13:51:12.000Z"
+        },
+        {
+          "url": "https://www.threads.com/@yiche_n1123/post/DeCP1V-E_ds",
+          "publishedAt": "2026-10-03T14:13:21.000Z"
+        }
+      ],
+      "visibleBodiesSame": true,
+      "originalRootUnknown": true,
+      "secondIndependentItemEmitted": false,
+      "scope": "Only returned visible results; no full-platform or earliest-origin assertion; text truncated and media not read"
+    },
+    "sessionCredentialsExported": false,
+    "privateMessagesRead": false,
+    "controller": {
+      "items": 1,
+      "scopes": 2,
+      "runId": "aedc0bc6-e78f-40e0-9bd4-5b35fc83816e",
+      "runHash": "3b4736a39b67555c6d7a38b19d0866a64cdf0cb827178cc823ddee592f031195",
+      "receiptBytes": 8213,
+      "receiptSha256": "ec4ccf8d271306b9b922594a4d573fe8bd7eb0198daa997816d0d5c1e2f6aeea",
+      "sourceWireBodyHash": null,
+      "submitted": false,
+      "platformAutomaticallyEnabled": false
+    }
+  },
+  "cloud": {
+    "thread": "Set up stockinsider",
+    "sourceCommit": "9cce0516f73ad81a1497d4a9278a9b9d77c118d3",
+    "requestedUrl": "https://www.auo.com/zh-TW/News_Archive/index",
+    "attemptedAt": "2026-10-05T05:32:11.489Z",
+    "completedAt": "2026-10-05T05:32:11.497Z",
+    "status": "failed",
+    "error": "public_connection_failed",
+    "curlExitCode": 7,
+    "httpStatus": null,
+    "bytes": 0,
+    "bodyHash": null,
+    "otherHostsAttempted": false,
+    "explicitPolicyDenialConfirmed": false,
+    "rawReportBytesReportedByCloud": 4235,
+    "rawReportSha256ReportedByCloud": "1bb7a578a4184914e29ec6e56ec97a133bf220e63c17eedb2b7fc0ed2f4675d6",
+    "rawReportCopiedToRoot": false
+  },
+  "vps": {
+    "readOnly": true,
+    "physicalDeviceBytes": 80530636800,
+    "rootPartitionBytes": 79455829504,
+    "filesystemBytes": 76887154688,
+    "availableBytes": 13011673088,
+    "filesystem": "ext4",
+    "additionalBlockDeviceObserved": false,
+    "expansionObserved": false,
+    "activeRelease": "9fd86fe620ccc63c89c4acd208327bf2c4e15332",
+    "newSafeDeletionProven": false,
+    "deletedItems": []
+  },
+  "acceptance": {
+    "liveResearchPublication": false,
+    "protectedRelease": false,
+    "strategyAdoption": false,
+    "sixRoleCompletion": false
+  }
+}

@@ -1,0 +1,965 @@
+{
+  "schemaVersion": "stockinsider-attributed-official-financial-relay-v1",
+  "symbol": "2383",
+  "recordedAt": "2026-10-08T09:28:37.654569+00:00",
+  "amountUnit": "TWD_thousands",
+  "epsUnit": "TWD_per_share",
+  "reports": [
+    {
+      "label": "2026q2",
+      "pdfPage": 5,
+      "source": {
+        "label": "2026q2",
+        "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/115/273512_115Q2_%E5%90%88%E4%BD%B5_%E5%AE%8C%E7%A8%BF%E8%B2%A1%E5%A0%B1_IMSv1-%E9%9B%BB%E5%AD%90%E6%9B%B8_IMSv1.pdf",
+        "attemptedAt": "2026-10-08T09:21:30.333371+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 1113066,
+        "sha256": "245b41f9f54c9542ffac64141d546fde0f28d0537d9f36307028b081318e0f20",
+        "observedAt": "2026-10-08T09:21:30.635619+00:00",
+        "rawFile": "2026q2.pdf",
+        "textSha256": "1e784f0272aec1e423499f9e962778caf86f702a9556bdbf42d594a045e0abc6"
+      },
+      "columns": {
+        "revenue": [
+          47275194,
+          22507694,
+          80342455,
+          44187758
+        ],
+        "cost": [
+          -31272203,
+          -15678479,
+          -54610311,
+          -30768217
+        ],
+        "grossProfit": [
+          16002991,
+          6829215,
+          25732144,
+          13419541
+        ],
+        "operatingExpenses": [
+          -3269308,
+          -2185630,
+          -5869991,
+          -4236221
+        ],
+        "operatingProfit": [
+          12733683,
+          4643585,
+          19862153,
+          9183320
+        ],
+        "nonOperating": [
+          51568,
+          -176574,
+          117256,
+          -48822
+        ],
+        "pretaxProfit": [
+          12785251,
+          4467011,
+          19979409,
+          9134498
+        ],
+        "tax": [
+          -2913605,
+          -989405,
+          -4768986,
+          -2189738
+        ],
+        "netProfit": [
+          9871646,
+          3477606,
+          15210423,
+          6944760
+        ],
+        "ownersNetProfit": [
+          9873398,
+          3477879,
+          15213191,
+          6946779
+        ],
+        "nonControllingNetProfit": [
+          -1752,
+          -273,
+          -2768,
+          -2019
+        ],
+        "reportedBasicEps": [
+          27.55,
+          10.02,
+          42.46,
+          20.03
+        ],
+        "reportedDilutedEps": [
+          27.55,
+          9.62,
+          42.44,
+          19.33
+        ]
+      },
+      "sourceNumericLines": {
+        "revenue": "4000   營業收入(附註六(十七)及七)           $ 47,275,194 100             22,507,694 100          80,342,455 100          44,187,758 100",
+        "cost": "5000   營業成本(附註六(五))                  (31,272,203)     (66) (15,678,479)       (70) (54,610,311)       (68) (30,768,217)       (70)",
+        "grossProfit": "營業毛利                          16,002,991       34      6,829,215       30      25,732,144      32      13,419,541      30",
+        "operatingExpenses": "營業費用合計                       (3,269,308)      (7)    (2,185,630)      (9)    (5,869,991)      (7)    (4,236,221)      (9)",
+        "operatingProfit": "營業淨利                          12,733,683       27      4,643,585       21      19,862,153      25       9,183,320      21",
+        "nonOperating": "營業外收入及支出合計                      51,568       -        (176,574)       (2)      117,256       -          (48,822)     -",
+        "pretaxProfit": "7900   繼續營業部門稅前淨利                    12,785,251       27      4,467,011       19      19,979,409      25       9,134,498      21",
+        "tax": "7950   所得稅費用(附註六(十四))                 (2,913,605)      (6)     (989,405)       (4)    (4,768,986)      (6)    (2,189,738)      (5)",
+        "netProfit": "8200   本期淨利                           9,871,646       21      3,477,606       15      15,210,423      19       6,944,760      16",
+        "ownersNetProfit": "8610    母公司業主                    $    9,873,398       21      3,477,879       15      15,213,191      19       6,946,779      16",
+        "nonControllingNetProfit": "8620    非控制權益                             (1,752)     -            (273)      -           (2,768)     -           (2,019)     -",
+        "reportedBasicEps": "9750   基本每股盈餘(單位：新台幣元)           $                  27.55                   10.02                   42.46                   20.03",
+        "reportedDilutedEps": "9850   稀釋每股盈餘(單位：新台幣元)           $                  27.55                    9.62                   42.44                   19.33"
+      },
+      "columnPeriods": [
+        "2026Q2",
+        "2025Q2",
+        "2026H1",
+        "2025H1"
+      ]
+    },
+    {
+      "label": "2025q3",
+      "pdfPage": 5,
+      "source": {
+        "label": "2025q3",
+        "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/114/2025Q3.pdf",
+        "attemptedAt": "2026-10-08T09:22:44.677399+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 1155065,
+        "sha256": "e68c5a0365e083a062e961d8f788e93965c8e04dacc8dfe2de5ac5aee9bd57b8",
+        "observedAt": "2026-10-08T09:22:45.326095+00:00",
+        "rawFile": "2025q3.pdf",
+        "textSha256": "8b9b645735d2e23cc4d034954b96a248b263f3ce3525aff1b6733ee41f295c8a"
+      },
+      "columns": {
+        "revenue": [
+          25145642,
+          17463096,
+          69333400,
+          45814623
+        ],
+        "cost": [
+          -17569793,
+          -12747903,
+          -48338010,
+          -33126257
+        ],
+        "grossProfit": [
+          7575849,
+          4715193,
+          20995390,
+          12688366
+        ],
+        "operatingExpenses": [
+          -2585816,
+          -1548109,
+          -6822037,
+          -4061909
+        ],
+        "operatingProfit": [
+          4990033,
+          3167084,
+          14173353,
+          8626457
+        ],
+        "nonOperating": [
+          131136,
+          6871,
+          82314,
+          136311
+        ],
+        "pretaxProfit": [
+          5121169,
+          3173955,
+          14255667,
+          8762768
+        ],
+        "tax": [
+          -1157100,
+          -659300,
+          -3346838,
+          -1837531
+        ],
+        "netProfit": [
+          3964069,
+          2514655,
+          10908829,
+          6925237
+        ],
+        "ownersNetProfit": [
+          3965068,
+          2516219,
+          10911847,
+          6930367
+        ],
+        "nonControllingNetProfit": [
+          -999,
+          -1564,
+          -3018,
+          -5130
+        ],
+        "reportedBasicEps": [
+          11.19,
+          7.3,
+          31.23,
+          20.14
+        ],
+        "reportedDilutedEps": [
+          11.06,
+          7.25,
+          30.38,
+          19.94
+        ]
+      },
+      "sourceNumericLines": {
+        "revenue": "4000   營業收入(附註六(十八)及七)           $ 25,145,642 100               17,463,096 100           69,333,400 100          45,814,623 100",
+        "cost": "5000   營業成本(附註六(五))                  (17,569,793)       (70) (12,747,903)       (73) (48,338,010)        (70) (33,126,257)       (72)",
+        "grossProfit": "營業毛利                           7,575,849         30      4,715,193        27      20,995,390      30      12,688,366      28",
+        "operatingExpenses": "營業費用合計                       (2,585,816)       (10)    (1,548,109)       (9)    (6,822,037)     (10)    (4,061,909)      (9)",
+        "operatingProfit": "營業淨利                           4,990,033         20      3,167,084        18      14,173,353      20       8,626,457      19",
+        "nonOperating": "營業外收入及支出合計                     131,136             1       6,871        -          82,314       -         136,311       -",
+        "pretaxProfit": "7900   繼續營業部門稅前淨利                     5,121,169         21      3,173,955        18      14,255,667      20       8,762,768      19",
+        "tax": "7950   所得稅費用(附註六(十五))                 (1,157,100)        (5)     (659,300)        (4)    (3,346,838)      (5)    (1,837,531)      (4)",
+        "netProfit": "8200   本期淨利                           3,964,069         16      2,514,655        14      10,908,829      15       6,925,237      15",
+        "ownersNetProfit": "8610    母公司業主                    $    3,965,068         16      2,516,219        14      10,911,847      15       6,930,367      15",
+        "nonControllingNetProfit": "8620    非控制權益                                 (999)     -           (1,564)      -           (3,018)     -           (5,130)     -",
+        "reportedBasicEps": "9750   基本每股盈餘(單位：新台幣元)           $                    11.19                     7.30                   31.23                   20.14",
+        "reportedDilutedEps": "9850   稀釋每股盈餘(單位：新台幣元)           $                    11.06                     7.25                   30.38                   19.94"
+      },
+      "columnPeriods": [
+        "2025Q3",
+        "2024Q3",
+        "2025YTD9",
+        "2024YTD9"
+      ]
+    },
+    {
+      "label": "2024q3",
+      "pdfPage": 6,
+      "source": {
+        "label": "2024q3",
+        "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/113/2024Q3.pdf",
+        "attemptedAt": "2026-10-08T09:22:45.623534+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 1192302,
+        "sha256": "45cee1f529d17b9c3f8eed5d45e67a37d082622f98b1dd9af92fc9f03d28ca35",
+        "observedAt": "2026-10-08T09:22:45.888928+00:00",
+        "rawFile": "2024q3.pdf",
+        "textSha256": "a20f6457f04f7e4094eb6414456f449848715da27ef88fd4e7f8973f7923f8dd"
+      },
+      "columns": {
+        "revenue": [
+          17463096,
+          11874501,
+          45814623,
+          28414074
+        ],
+        "cost": [
+          -12747903,
+          -8290373,
+          -33126257,
+          -20732775
+        ],
+        "grossProfit": [
+          4715193,
+          3584128,
+          12688366,
+          7681299
+        ],
+        "operatingExpenses": [
+          -1548109,
+          -1077787,
+          -4061909,
+          -2786531
+        ],
+        "operatingProfit": [
+          3167084,
+          2506341,
+          8626457,
+          4894768
+        ],
+        "nonOperating": [
+          6871,
+          67844,
+          136311,
+          -3389
+        ],
+        "pretaxProfit": [
+          3173955,
+          2574185,
+          8762768,
+          4891379
+        ],
+        "tax": [
+          -659300,
+          -551754,
+          -1837531,
+          -1388951
+        ],
+        "netProfit": [
+          2514655,
+          2022431,
+          6925237,
+          3502428
+        ],
+        "ownersNetProfit": [
+          2516219,
+          2022431,
+          6930367,
+          3502428
+        ],
+        "nonControllingNetProfit": [
+          -1564,
+          0,
+          -5130,
+          0
+        ],
+        "reportedBasicEps": [
+          7.3,
+          6.04,
+          20.14,
+          10.5
+        ],
+        "reportedDilutedEps": [
+          7.25,
+          5.79,
+          19.94,
+          10.03
+        ]
+      },
+      "sourceNumericLines": {
+        "revenue": "4000   營業收入(附註六(十七)及七)          $ 17,463,096 100              11,874,501 100         45,814,623 100          28,414,074 100",
+        "cost": "5000   營業成本(附註六(四)及七)               (12,747,903)     (73)     (8,290,373)   (70) (33,126,257)        (72) (20,732,775)       (73)",
+        "grossProfit": "營業毛利                          4,715,193        27      3,584,128      30      12,688,366      28      7,681,299       27",
+        "operatingExpenses": "營業費用合計                      (1,548,109)       (9)    (1,077,787)     (9)    (4,061,909)      (9)    (2,786,531)     (10)",
+        "operatingProfit": "營業淨利                          3,167,084        18      2,506,341      21       8,626,457      19      4,894,768       17",
+        "nonOperating": "營業外收入及支出合計                          6,871    -          67,844      -         136,311       -           (3,389)     -",
+        "pretaxProfit": "7900   繼續營業部門稅前淨利                    3,173,955        18      2,574,185      21       8,762,768      19      4,891,379       17",
+        "tax": "7950   所得稅費用(附註六(十四))                 (659,300)        (4)     (551,754)      (4)    (1,837,531)      (4)    (1,388,951)      (5)",
+        "netProfit": "8200   本期淨利                          2,514,655        14      2,022,431      17       6,925,237      15      3,502,428       12",
+        "ownersNetProfit": "8610    母公司業主                   $    2,516,219        14      2,022,431      17       6,930,367      15      3,502,428       12",
+        "nonControllingNetProfit": "8620    非控制權益                            (1,564)      -           -          -           (5,130)     -           -           -",
+        "reportedBasicEps": "9750   基本每股盈餘(單位：新台幣元)          $                    7.30                   6.04                   20.14                   10.50",
+        "reportedDilutedEps": "9850   稀釋每股盈餘(單位：新台幣元)          $                    7.25                   5.79                   19.94                   10.03"
+      },
+      "columnPeriods": [
+        "2024Q3",
+        "2023Q3",
+        "2024YTD9",
+        "2023YTD9"
+      ]
+    },
+    {
+      "label": "2025q4",
+      "pdfPage": 8,
+      "source": {
+        "label": "2025q4",
+        "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/114/2025Q4.pdf",
+        "attemptedAt": "2026-10-08T09:21:31.044045+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 1647830,
+        "sha256": "631ba5e313a24a7787989ccda089f8638364b2d2e1e85afb0385644a5ef795f8",
+        "observedAt": "2026-10-08T09:21:31.369870+00:00",
+        "rawFile": "2025q4.pdf",
+        "textSha256": "fa87cc2986a7d2dc9142aa6c2a3506b8f08d55709da8b869aea7d24c84f5c43c"
+      },
+      "columns": {
+        "revenue": [
+          94260578,
+          64376727
+        ],
+        "cost": [
+          -66140668,
+          -46407101
+        ],
+        "grossProfit": [
+          28119910,
+          17969626
+        ],
+        "operatingExpenses": [
+          -9011641,
+          -5818017
+        ],
+        "operatingProfit": [
+          19108269,
+          12151609
+        ],
+        "nonOperating": [
+          -232133,
+          -18678
+        ],
+        "pretaxProfit": [
+          18876136,
+          12132931
+        ],
+        "tax": [
+          -4231248,
+          -2563946
+        ],
+        "netProfit": [
+          14644888,
+          9568985
+        ],
+        "ownersNetProfit": [
+          14648907,
+          9578449
+        ],
+        "nonControllingNetProfit": [
+          -4019,
+          -9464
+        ],
+        "reportedBasicEps": [
+          41.67,
+          27.81
+        ],
+        "reportedDilutedEps": [
+          40.81,
+          27.3
+        ]
+      },
+      "sourceNumericLines": {
+        "revenue": "4000   營業收入(附註六(十九)及七)                       $ 94,260,578 100 64,376,727 100",
+        "cost": "5000   營業成本(附註六(五))                           (66,140,668) (70) (46,407,101) (72)",
+        "grossProfit": "營業毛利                                    28,119,910   30 17,969,626     28",
+        "operatingExpenses": "營業費用合計                        (9,011,641) (10)          (5,818,017)     (9)",
+        "operatingProfit": "營業淨利                            19,108,269     20         12,151,609      19",
+        "nonOperating": "營業外收入及支出合計                      (232,133)    -             (18,678)     -",
+        "pretaxProfit": "7900   繼續營業部門稅前淨利                      18,876,136     20         12,132,931      19",
+        "tax": "7950   所得稅費用(附註六(十六))                  (4,231,248)    (4)        (2,563,946)     (4)",
+        "netProfit": "8200   本期淨利                            14,644,888     16          9,568,985      15",
+        "ownersNetProfit": "8610    母公司業主                        $ 14,648,907     16          9,578,449      15",
+        "nonControllingNetProfit": "8620    非控制權益                              (4,019)    -              (9,464)     -",
+        "reportedBasicEps": "9750   基本每股盈餘(單位：新台幣元)               $             41.67                       27.81",
+        "reportedDilutedEps": "9850   稀釋每股盈餘(單位：新台幣元)               $             40.81                       27.30"
+      },
+      "columnPeriods": [
+        "2025FY",
+        "2024FY"
+      ]
+    },
+    {
+      "label": "2024q4",
+      "pdfPage": 8,
+      "source": {
+        "label": "2024q4",
+        "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/113/2024Q4.pdf",
+        "attemptedAt": "2026-10-08T09:21:31.602424+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 1721750,
+        "sha256": "27fbfc3e587a473ddd6dd8a11bc2bbd871f73eeeff3eba825b90dcc49af25cea",
+        "observedAt": "2026-10-08T09:21:31.934488+00:00",
+        "rawFile": "2024q4.pdf",
+        "textSha256": "830731a0da2a8a08df77c61f9274928dead7c6b4b2ad08eb698cf48360c68faa"
+      },
+      "columns": {
+        "revenue": [
+          64376727,
+          41296217
+        ],
+        "cost": [
+          -46407101,
+          -29963502
+        ],
+        "grossProfit": [
+          17969626,
+          11332715
+        ],
+        "operatingExpenses": [
+          -5818017,
+          -3986724
+        ],
+        "operatingProfit": [
+          12151609,
+          7345991
+        ],
+        "nonOperating": [
+          -18678,
+          73557
+        ],
+        "pretaxProfit": [
+          12132931,
+          7419548
+        ],
+        "tax": [
+          -2563946,
+          -1931239
+        ],
+        "netProfit": [
+          9568985,
+          5488309
+        ],
+        "ownersNetProfit": [
+          9578449,
+          5488309
+        ],
+        "nonControllingNetProfit": [
+          -9464,
+          0
+        ],
+        "reportedBasicEps": [
+          27.81,
+          16.35
+        ],
+        "reportedDilutedEps": [
+          27.3,
+          15.75
+        ]
+      },
+      "sourceNumericLines": {
+        "revenue": "4000   營業收入(附註六(十八)及七)                       $ 64,376,727 100 41,296,217 100",
+        "cost": "5000   營業成本(附註六(四)及七)                         (46,407,101) (72) (29,963,502) (73)",
+        "grossProfit": "營業毛利                                    17,969,626   28 11,332,715     27",
+        "operatingExpenses": "營業費用合計                        (5,818,017)    (9)        (3,986,724)     (9)",
+        "operatingProfit": "營業淨利                            12,151,609     19          7,345,991      18",
+        "nonOperating": "營業外收入及支出合計                       (18,678)    -              73,557      -",
+        "pretaxProfit": "7900   繼續營業部門稅前淨利                      12,132,931     19          7,419,548      18",
+        "tax": "7950   所得稅費用(附註六(十五))                  (2,563,946)    (4)        (1,931,239)     (5)",
+        "netProfit": "8200   本期淨利                             9,568,985     15          5,488,309      13",
+        "ownersNetProfit": "8610    母公司業主                        $ 9,578,449      15          5,488,309      13",
+        "nonControllingNetProfit": "8620    非控制權益                              (9,464)    -              -           -",
+        "reportedBasicEps": "9750   基本每股盈餘(單位：新台幣元)               $             27.81                       16.35",
+        "reportedDilutedEps": "9850   稀釋每股盈餘(單位：新台幣元)               $             27.30                       15.75"
+      },
+      "columnPeriods": [
+        "2024FY",
+        "2023FY"
+      ]
+    }
+  ],
+  "quarters": [
+    {
+      "period": "2024Q3",
+      "values": {
+        "revenue": 17463096,
+        "cost": -12747903,
+        "grossProfit": 4715193,
+        "operatingExpenses": -1548109,
+        "operatingProfit": 3167084,
+        "nonOperating": 6871,
+        "pretaxProfit": 3173955,
+        "tax": -659300,
+        "netProfit": 2514655,
+        "ownersNetProfit": 2516219,
+        "nonControllingNetProfit": -1564,
+        "reportedBasicEps": 7.3,
+        "reportedDilutedEps": 7.25
+      },
+      "method": "reported_quarter",
+      "sourceColumns": [
+        "2025q3:1"
+      ]
+    },
+    {
+      "period": "2024Q4",
+      "values": {
+        "revenue": 18562104,
+        "cost": -13280844,
+        "grossProfit": 5281260,
+        "operatingExpenses": -1756108,
+        "operatingProfit": 3525152,
+        "nonOperating": -154989,
+        "pretaxProfit": 3370163,
+        "tax": -726415,
+        "netProfit": 2643748,
+        "ownersNetProfit": 2648082,
+        "nonControllingNetProfit": -4334
+      },
+      "method": "annual_minus_nine_month_flows_only",
+      "sourceColumns": [
+        "2025q4:1",
+        "2025q3:3"
+      ]
+    },
+    {
+      "period": "2025Q1",
+      "values": {
+        "revenue": 21680064,
+        "cost": -15089738,
+        "grossProfit": 6590326,
+        "operatingExpenses": -2050591,
+        "operatingProfit": 4539735,
+        "nonOperating": 127752,
+        "pretaxProfit": 4667487,
+        "tax": -1200333,
+        "netProfit": 3467154,
+        "ownersNetProfit": 3468900,
+        "nonControllingNetProfit": -1746
+      },
+      "method": "half_year_minus_second_quarter_flows_only",
+      "sourceColumns": [
+        "2026q2:3",
+        "2026q2:1"
+      ]
+    },
+    {
+      "period": "2025Q2",
+      "values": {
+        "revenue": 22507694,
+        "cost": -15678479,
+        "grossProfit": 6829215,
+        "operatingExpenses": -2185630,
+        "operatingProfit": 4643585,
+        "nonOperating": -176574,
+        "pretaxProfit": 4467011,
+        "tax": -989405,
+        "netProfit": 3477606,
+        "ownersNetProfit": 3477879,
+        "nonControllingNetProfit": -273,
+        "reportedBasicEps": 10.02,
+        "reportedDilutedEps": 9.62
+      },
+      "method": "reported_quarter",
+      "sourceColumns": [
+        "2026q2:1"
+      ]
+    },
+    {
+      "period": "2025Q3",
+      "values": {
+        "revenue": 25145642,
+        "cost": -17569793,
+        "grossProfit": 7575849,
+        "operatingExpenses": -2585816,
+        "operatingProfit": 4990033,
+        "nonOperating": 131136,
+        "pretaxProfit": 5121169,
+        "tax": -1157100,
+        "netProfit": 3964069,
+        "ownersNetProfit": 3965068,
+        "nonControllingNetProfit": -999,
+        "reportedBasicEps": 11.19,
+        "reportedDilutedEps": 11.06
+      },
+      "method": "reported_quarter",
+      "sourceColumns": [
+        "2025q3:0"
+      ]
+    },
+    {
+      "period": "2025Q4",
+      "values": {
+        "revenue": 24927178,
+        "cost": -17802658,
+        "grossProfit": 7124520,
+        "operatingExpenses": -2189604,
+        "operatingProfit": 4934916,
+        "nonOperating": -314447,
+        "pretaxProfit": 4620469,
+        "tax": -884410,
+        "netProfit": 3736059,
+        "ownersNetProfit": 3737060,
+        "nonControllingNetProfit": -1001
+      },
+      "method": "annual_minus_nine_month_flows_only",
+      "sourceColumns": [
+        "2025q4:0",
+        "2025q3:2"
+      ]
+    },
+    {
+      "period": "2026Q1",
+      "values": {
+        "revenue": 33067261,
+        "cost": -23338108,
+        "grossProfit": 9729153,
+        "operatingExpenses": -2600683,
+        "operatingProfit": 7128470,
+        "nonOperating": 65688,
+        "pretaxProfit": 7194158,
+        "tax": -1855381,
+        "netProfit": 5338777,
+        "ownersNetProfit": 5339793,
+        "nonControllingNetProfit": -1016
+      },
+      "method": "half_year_minus_second_quarter_flows_only",
+      "sourceColumns": [
+        "2026q2:2",
+        "2026q2:0"
+      ]
+    },
+    {
+      "period": "2026Q2",
+      "values": {
+        "revenue": 47275194,
+        "cost": -31272203,
+        "grossProfit": 16002991,
+        "operatingExpenses": -3269308,
+        "operatingProfit": 12733683,
+        "nonOperating": 51568,
+        "pretaxProfit": 12785251,
+        "tax": -2913605,
+        "netProfit": 9871646,
+        "ownersNetProfit": 9873398,
+        "nonControllingNetProfit": -1752,
+        "reportedBasicEps": 27.55,
+        "reportedDilutedEps": 27.55
+      },
+      "method": "reported_quarter",
+      "sourceColumns": [
+        "2026q2:0"
+      ]
+    }
+  ],
+  "presentation": {
+    "source": {
+      "label": "2026q2-presentation",
+      "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Presentation_Materials/CH/115/Investor%20Conference%20Presentation_20260729%20final%20CH.pdf",
+      "attemptedAt": "2026-10-08T09:21:32.190304+00:00",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 1378178,
+      "sha256": "532af5aebb1a0ce9a90b8a001efc83e43535a91614ab33bd61b8d54b51d07df3",
+      "observedAt": "2026-10-08T09:21:32.442710+00:00",
+      "rawFile": "2026q2-presentation.pdf",
+      "textSha256": "5d1e842adde6a0f7f57cc4d70db136adb890f70a9620a170ffb3b6a63518be1c"
+    },
+    "datedDocument": "2026-07",
+    "publishedAt": null,
+    "publicationPrecision": "unverified",
+    "facts": [
+      {
+        "pdfPage": 4,
+        "kind": "reported",
+        "basicEps2026Q1": 14.9,
+        "basicEps2026Q2": 27.55,
+        "scope": "rounded presentation values; verify EPS note for denominator"
+      },
+      {
+        "pdfPage": 6,
+        "kind": "company_reported",
+        "infrastructureQoqPercent": 46,
+        "infrastructureYoyPercent": 141,
+        "scope": "category growth, not category revenue level"
+      },
+      {
+        "pdfPage": 12,
+        "kind": "company_plan",
+        "unit": "million_CCL_sheets_per_month",
+        "capacityByYear": {
+          "2024": 4.35,
+          "2025": 5.85,
+          "2026": 6.15,
+          "2027": 9.3,
+          "2028": 11.1
+        },
+        "scope": "dated expansion plan, not realized capacity or output; no utilization/yield/ASP verified"
+      }
+    ]
+  },
+  "notes": [
+    "Raw PDF bytes retained privately on acquisition host, not exported to Git; necessary numeric financial lines only.",
+    "Reported annual and cumulative weighted EPS must never be subtracted to claim quarterly EPS; derived quarterly flow rows deliberately omit EPS.",
+    "2024 comparative annual and third-quarter values cross-check across independently retrieved source files.",
+    "No normalized EPS, forward EPS, target price, orders or historical availability inferred. First observations are 2026-10-08.",
+    "Latest official dated capacity plan differs from undated website 5.25M page; neither proves current utilization, yields or output.",
+    "No authenticated database source IDs, authority activation, thesis qualification or publication approval asserted.",
+    "Independent scoped data review approved f7bc9b1 original numeric scope; explicit report columnPeriods added to prevent quarter/cumulative period confusion."
+  ],
+  "monthlyRevenue": {
+    "source": {
+      "label": "twse-2383-profile",
+      "url": "https://www.twse.com.tw/pdf/ch/2383_ch.pdf",
+      "attemptedAt": "2026-10-08T09:27:58.586996+00:00",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 369557,
+      "sha256": "658a44ad58bd691e6ec28a68c22fb0043b5e18734162b5b682f717c20c3ccabe",
+      "observedAt": "2026-10-08T09:27:58.821107+00:00",
+      "rawFile": "twse-2383-profile.pdf",
+      "textSha256": "b7c5d4b91bdd3dab491944d27d739554f28b4192bb984cd7f5d29828d5e2fbcf"
+    },
+    "documentProducedDate": "2026-10-08",
+    "publicationPrecision": "date_without_verified_zone",
+    "publishedAt": null,
+    "unit": "TWD",
+    "rows": [
+      {
+        "month": "2024-10",
+        "revenueTwd": 5817800000
+      },
+      {
+        "month": "2024-11",
+        "revenueTwd": 6336270000
+      },
+      {
+        "month": "2024-12",
+        "revenueTwd": 6410246000
+      },
+      {
+        "month": "2025-01",
+        "revenueTwd": 6986221000
+      },
+      {
+        "month": "2025-02",
+        "revenueTwd": 7029925000
+      },
+      {
+        "month": "2025-03",
+        "revenueTwd": 7668109000
+      },
+      {
+        "month": "2025-04",
+        "revenueTwd": 7191345000
+      },
+      {
+        "month": "2025-05",
+        "revenueTwd": 7277046000
+      },
+      {
+        "month": "2025-06",
+        "revenueTwd": 8035115000
+      },
+      {
+        "month": "2025-07",
+        "revenueTwd": 8372495000
+      },
+      {
+        "month": "2025-08",
+        "revenueTwd": 8764793000
+      },
+      {
+        "month": "2025-09",
+        "revenueTwd": 8008332000
+      },
+      {
+        "month": "2025-10",
+        "revenueTwd": 8074815000
+      },
+      {
+        "month": "2025-11",
+        "revenueTwd": 8129128000
+      },
+      {
+        "month": "2025-12",
+        "revenueTwd": 8704662000
+      },
+      {
+        "month": "2026-01",
+        "revenueTwd": 10862602000
+      },
+      {
+        "month": "2026-02",
+        "revenueTwd": 10193772000
+      },
+      {
+        "month": "2026-03",
+        "revenueTwd": 12010861000
+      },
+      {
+        "month": "2026-04",
+        "revenueTwd": 13923687000
+      },
+      {
+        "month": "2026-05",
+        "revenueTwd": 15618565000
+      },
+      {
+        "month": "2026-06",
+        "revenueTwd": 17732956000
+      },
+      {
+        "month": "2026-07",
+        "revenueTwd": 19206698000
+      },
+      {
+        "month": "2026-08",
+        "revenueTwd": 20145589000
+      },
+      {
+        "month": "2026-09",
+        "revenueTwd": 21532230000
+      }
+    ],
+    "supportingCompanyYearFiles": [
+      {
+        "label": "monthly2025",
+        "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Monthly_Revenue/EN/2025_Monthly_revenue_EN12.pdf",
+        "attemptedAt": "2026-10-08T09:27:58.861341+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 760623,
+        "sha256": "2baf50608ff7ac576a8bf5f981de98adc3cda2a9e87d1249b36e9273e0924f93",
+        "observedAt": "2026-10-08T09:27:59.019211+00:00",
+        "rawFile": "monthly2025.pdf",
+        "textSha256": "e2ab34a9a8b5a8e0e233e01300cc9122b77848c01c6472994524ab3e71e9d94b"
+      },
+      {
+        "label": "monthly2024",
+        "url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Monthly_Revenue/EN/2024_Monthly_revenue_EN.pdf",
+        "attemptedAt": "2026-10-08T09:27:59.044023+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 224533,
+        "sha256": "23e25e6b5bf178143d89cc8e89bf319516d3e511fe2a5240611d3e581c5c37bd",
+        "observedAt": "2026-10-08T09:27:59.125475+00:00",
+        "rawFile": "monthly2024.pdf",
+        "textSha256": "837d45bbd3cfd63bf05a830e99e346157fbaf03fee831028ce67b56b370168cb"
+      }
+    ],
+    "reconciliation": [
+      {
+        "quarter": "2024Q4",
+        "sumMonthlyTwd": 18564316000,
+        "reportedFinancialTwd": 18562104000,
+        "differenceMonthlyMinusFinancialTwd": 2212000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2025Q1",
+        "sumMonthlyTwd": 21684255000,
+        "reportedFinancialTwd": 21680064000,
+        "differenceMonthlyMinusFinancialTwd": 4191000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2025Q2",
+        "sumMonthlyTwd": 22503506000,
+        "reportedFinancialTwd": 22507694000,
+        "differenceMonthlyMinusFinancialTwd": -4188000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2025Q3",
+        "sumMonthlyTwd": 25145620000,
+        "reportedFinancialTwd": 25145642000,
+        "differenceMonthlyMinusFinancialTwd": -22000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2025Q4",
+        "sumMonthlyTwd": 24908605000,
+        "reportedFinancialTwd": 24927178000,
+        "differenceMonthlyMinusFinancialTwd": -18573000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2026Q1",
+        "sumMonthlyTwd": 33067235000,
+        "reportedFinancialTwd": 33067261000,
+        "differenceMonthlyMinusFinancialTwd": -26000,
+        "status": "difference_retained_not_explained"
+      },
+      {
+        "quarter": "2026Q2",
+        "sumMonthlyTwd": 47275208000,
+        "reportedFinancialTwd": 47275194000,
+        "differenceMonthlyMinusFinancialTwd": 14000,
+        "status": "difference_retained_not_explained"
+      }
+    ],
+    "notes": [
+      "Monthly preliminary sales and quarterly financial revenue are separate observations; differences retained, not forced to match.",
+      "Supporting year PDFs have different units: 2025 TWD thousands, 2024 TWD. Numeric reconciliation remains required; no forecast EPS from monthly data.",
+      "No current quote/technical qualification inferred from this dated profile; price cutoff October7 is older than acquired-at October8."
+    ]
+  }
+}

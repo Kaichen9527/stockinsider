@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "public-research-preparation-relay-v1",
+  "observedAt": "2026-10-08T06:26:50Z",
+  "observedBy": "root-hosted-web-reader",
+  "acquisition": "hosted_web_search_and_page_read_not_vm_http_controller",
+  "productionImported": false,
+  "completeResearch": false,
+  "sources": [
+    {
+      "url": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+      "publicationDate": "2026-08-31",
+      "publicationPrecision": "date",
+      "summary": "官方展示分成 Micro LED 短距光互連與玻璃核心基板兩條路。前者涉及富采、鼎元、達興材料、康寧及友達整合；後者結合康寧材料和友達 RDL。文件沒有提供 Intel 訂單、產量、良率、售價或合約。",
+      "status": "body_read",
+      "independenceRoot": "AUO-20260831"
+    },
+    {
+      "url": "https://www.cna.com.tw/news/afe/202609210034.aspx",
+      "publicationDate": "2026-09-21T10:11:00+08:00",
+      "updatedAt": "2026-09-21T10:48:00+08:00",
+      "summary": "報導保留 Intel／先進封裝合作傳聞，同時指出當時尚無具體合作公告。這是媒體轉述線索，不能當成訂單確認，也不能當成截至10/08的合作否認。",
+      "status": "body_read",
+      "independenceRoot": "CNA-202609210034"
+    },
+    {
+      "url": "https://www.intel.com/content/www/us/en/newsroom/news/intel-unveils-industry-leading-glass-substrates.html",
+      "publicationDate": "2023-09-18",
+      "publicationPrecision": "date",
+      "summary": "Intel 曾公布玻璃基板研發與本十年後半商用方向，提供客戶自有方案、供應鏈競爭與量產時間假說；不是2026年與友達合作的證據。",
+      "status": "body_read",
+      "independenceRoot": "Intel-20230918"
+    },
+    {
+      "url": "https://www.auo.com/zh-TW/News_Archive/detail/news_IR_20260730",
+      "publicationDate": "2026-07-30",
+      "publicationPrecision": "date",
+      "summary": "2026Q2營收708.9億元、營業利益2.2億元、歸母淨利13.4億元、基本EPS0.18元，當季平均股數7547百萬股。凌華自2025/6/30納入合併，歷史比較需處理口徑。淨利與營業利益差額須取得業外、稅及權益歸屬明細，不能直接當一次性收益。",
+      "status": "body_read",
+      "independenceRoot": "AUO-20260730"
+    },
+    {
+      "url": "https://www.auo.com/en-global/New_Archive/detail/News_Archive_FinanceReport_20260909",
+      "publicationDate": "2026-09-09",
+      "publicationPrecision": "date",
+      "summary": "8月未經查核營收23102百萬元，年減5.9%，前8月183394百萬元。已讀資料不能推出9月營收或全年EPS。",
+      "status": "body_read",
+      "independenceRoot": "AUO-20260909"
+    },
+    {
+      "url": "https://www.auo.com/en-global/Investor_Conference/index",
+      "summary": "索引顯示2026Q3法說預定10/29，10/08不能視為已公告Q3實績。Q2有簡報與財報連結，須分別取得與核對。",
+      "status": "index_read"
+    },
+    {
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Handout_English.pdf",
+      "summary": "取得15頁PDF識別，但文字層近乎空白；此工具截圖未回傳可檢視像素，未讀取表格數字。後續須實際render/OCR核對。",
+      "status": "pdf_text_unusable_no_table_verification"
+    },
+    {
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Finance_Statement_English.pdf",
+      "summary": "hosted reader HTTP500/Unknown error；不得標成沒有財報。",
+      "status": "fetch_failed"
+    }
+  ],
+  "remaining": [
+    "8季完整財務",
+    "24月營收",
+    "一次性及業外橋接",
+    "客戶/競爭者更新",
+    "現行訂單/否認搜尋",
+    "官方價量及技術資料",
+    "第二產業公司完整研究"
+  ],
+  "note": "研究準備，不建立虛構正式 source document/job/reservation ID，不假裝 VM HTTP讀取成功。"
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "stockinsider-scoped-packaging-receipt-v1",
+  "recordedAt": "2026-10-09T17:49:46.096582+00:00",
+  "reviewedCommit": "84d06a61817d18dd49fa5f069f50eff4fbc28029",
+  "baseCommit": "ec1d5413a69cf96d704372f2dc3614271aeaa116",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "tests": {
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0,
+    "rawBytes": 3267,
+    "rawSha256": "5c37ef02c102a140ed9b2bb5a9c9e22e1eccaaf4ee8f80a8ab2f045b1ac8ae47"
+  },
+  "independentReview": {
+    "agent": "/root/strategy_deploy_audit_plan",
+    "result": "unsigned scoped CODE/TEST-REVIEW PASS",
+    "testsIndependentlyRerun": false,
+    "findingsP1P2": 0,
+    "scope": "packaging only; exact20 inputs and14 financial +8draft minus2 overlap independently verified"
+  },
+  "nativePublicationPassed": false,
+  "protectedFullReviewPassed": false,
+  "deployed": false,
+  "sameWebBuildEvidenceCommit": "ec1d5413a69cf96d704372f2dc3614271aeaa116",
+  "normalBuildReuse": "identical web tree to1490472; no new web source in packaging slice"
+}

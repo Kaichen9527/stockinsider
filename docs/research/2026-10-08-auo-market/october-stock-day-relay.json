@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "public-twse-stock-day-relay-v1",
+  "observer": "root-Mac-public-reader",
+  "observedAt": "2026-10-08T07:19:32.313418+00:00",
+  "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=2409",
+  "bytesReportedByOrigin": 1446,
+  "rawSha256ReportedByOrigin": "df7f23952b76a9b7045f97c79efe4f179422563c558db15e5783259adecd63f3",
+  "stat": "OK",
+  "symbol": "2409",
+  "acquisition": "root Mac normal public HTTPS; hosted web same URL previously failed; not VM transport success",
+  "fields": [
+    "日期",
+    "成交股數",
+    "成交金額",
+    "開盤",
+    "最高",
+    "最低",
+    "收盤",
+    "漲跌",
+    "筆數",
+    "註記"
+  ],
+  "rows": [
+    [
+      "115/10/01",
+      932903295,
+      36277769915,
+      39.8,
+      40.0,
+      37.8,
+      38.3,
+      -0.25,
+      298222
+    ],
+    [
+      "115/10/02",
+      701554317,
+      28027963732,
+      38.75,
+      40.85,
+      38.65,
+      40.45,
+      2.15,
+      230564
+    ],
+    [
+      "115/10/05",
+      965082115,
+      39398949082,
+      41.55,
+      43.55,
+      39.0,
+      39.05,
+      -1.4,
+      356424
+    ],
+    [
+      "115/10/06",
+      496834937,
+      18850504113,
+      39.25,
+      39.5,
+      37.15,
+      37.45,
+      -1.6,
+      202912
+    ],
+    [
+      "115/10/07",
+      349688890,
+      13156007181,
+      37.5,
+      38.15,
+      37.0,
+      37.95,
+      0.5,
+      129730
+    ],
+    [
+      "115/10/08",
+      275388154,
+      10175871322,
+      37.4,
+      37.75,
+      36.5,
+      36.6,
+      -1.35,
+      121888
+    ]
+  ],
+  "missingRelayColumn": "註記 omitted from provided rows; not inferred",
+  "rawBytesTransferredToVm": false,
+  "rawSha256VerifiedByVm": false,
+  "priceBasis": "official raw unadjusted reported prices; corporate actions not verified",
+  "productionImported": false,
+  "publicationTimestamp": null
+}

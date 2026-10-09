@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { copyResearchRuntimeFiles } from './research-release-artifacts.mjs';
 
 const FORBIDDEN_COMPONENT = /^(?:backup|\.env(?:\..*)?)$/i;
 const RELEASE_ID = /^[0-9a-f]{40}$/;
@@ -123,6 +124,7 @@ export async function packageStandaloneRelease({ sourceRepository, packagerRepos
     for (const name of ['call_internal_api.mjs', 'call_internal_api_sequence.mjs',
       'internal-api-sequence-policy.mjs',
       'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
+    'research-capacity-admission.mjs', 'research-host-resource-check.mjs',
       'contabo-deployment-inventory.mjs', 'contabo-cleanup-preflight.mjs',
       'sync-official-trading-calendar.mjs',
       'verify-standalone-release.mjs',
@@ -133,6 +135,7 @@ export async function packageStandaloneRelease({ sourceRepository, packagerRepos
     }
     await cp(path.join(packager, 'deployment', 'vps'), path.join(releaseDirectory, 'deployment', 'vps'),
       { recursive: true, dereference: true, errorOnExist: true, force: false });
+    await copyResearchRuntimeFiles({sourceRoot:source,releaseRoot:releaseDirectory,entrypointDirectory});
     const files = await inspectTree(releaseDirectory);
     const manifest = {
       schema: 'stockinsider-standalone-release-v2', releaseId: sourceCommit,

@@ -1,0 +1,123 @@
+{
+  "schema_version": "broker-report-evaluation-v1",
+  "validation_status": "research_only",
+  "cutoff": "2026-09-25T01:09:25.581341Z",
+  "age_policy": {
+    "version": "publication-age-v1",
+    "max_age_days": 60,
+    "boundary": "inclusive",
+    "basis_priority": [
+      "report_published_at",
+      "article_published_at",
+      "report_date"
+    ],
+    "date_only_basis": "start_of_day_Asia_Taipei",
+    "unknown_age_factor_use": "blocked"
+  },
+  "summary": {
+    "input_count": 1,
+    "visible_event_count": 1,
+    "invalid_count": 0,
+    "duplicate_count": 0,
+    "counts": {
+      "evaluated": 0,
+      "metadata_only": 1,
+      "future": 0,
+      "superseded": 0,
+      "retracted": 0,
+      "retraction": 0,
+      "duplicate": 0,
+      "invalid": 0
+    },
+    "usable_feature_count": 0
+  },
+  "records": [
+    {
+      "event_id": "report:e80bc49d81cec62f9dd9f1b91309cf0b2997b39163264db8896e9f3c979eeb3b",
+      "symbol": "2454",
+      "status": "metadata_only",
+      "reasons": [
+        "factor_use_grant_missing"
+      ],
+      "freshness": {
+        "status": "fresh",
+        "publication_at": "2026-09-24T11:16:37.000000Z",
+        "publication_basis": "article_published_at",
+        "precision": "timestamp",
+        "age_days": 0.5783400618171296
+      }
+    }
+  ],
+  "metadata_events": [
+    {
+      "schema_version": "broker-report-event-v1",
+      "symbol": "2454",
+      "exchange": "TWSE",
+      "source_type": "media_reported",
+      "source_url": "https://money.udn.com/money/story/5607/9776183",
+      "original_report_url": null,
+      "broker_id": "ubs",
+      "broker_group_id": "ubs",
+      "analyst": "林莉鈞",
+      "rights_grant_id": null,
+      "supersedes_event_id": null,
+      "retracts_event_id": null,
+      "publisher": "經濟日報",
+      "report_key": "media-linked:ubs:2454:udn-9776183",
+      "extraction_version": "manual-attributed-facts-v1",
+      "report_date": null,
+      "report_published_at": null,
+      "article_published_at": "2026-09-24T11:16:37.000000Z",
+      "source_available_at": "2026-09-24T11:16:37.000000Z",
+      "first_seen_at": "2026-09-25T00:50:18.000000Z",
+      "recorded_at": "2026-09-25T00:50:18.000000Z",
+      "rights_status": "unknown",
+      "availability_evidence": {
+        "kind": "publisher_timestamp",
+        "evidence_id": "udn-9776183-observed-20260925T005018Z",
+        "evidence_url": "https://money.udn.com/money/story/5607/9776183",
+        "known_at": "2026-09-25T00:50:18.000000Z"
+      },
+      "rating": {
+        "raw": "買進",
+        "scale_id": null,
+        "previous": "買進",
+        "current": "買進",
+        "action": "reiterate"
+      },
+      "target": {
+        "previous": 6500.0,
+        "current": 7300.0,
+        "currency": "TWD",
+        "horizon_months": null,
+        "share_basis": "unknown"
+      },
+      "estimates": [
+        {
+          "metric": "eps",
+          "fiscal_period_end": "2028-12-31",
+          "accounting_basis": "unknown",
+          "currency": "TWD",
+          "unit": "unknown",
+          "previous": null,
+          "current": 362.63,
+          "reported_change_pct": 21.0
+        },
+        {
+          "metric": "eps",
+          "fiscal_period_end": "2029-12-31",
+          "accounting_basis": "unknown",
+          "currency": "TWD",
+          "unit": "unknown",
+          "previous": null,
+          "current": 432.81,
+          "reported_change_pct": 28.0
+        }
+      ],
+      "event_id": "report:e80bc49d81cec62f9dd9f1b91309cf0b2997b39163264db8896e9f3c979eeb3b",
+      "content_hash": "e80bc49d81cec62f9dd9f1b91309cf0b2997b39163264db8896e9f3c979eeb3b"
+    }
+  ],
+  "revision_features": [],
+  "eps_revision_breadth": []
+}

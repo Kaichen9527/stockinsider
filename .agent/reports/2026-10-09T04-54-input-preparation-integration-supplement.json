@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "research-input-preparation-integration-supplement-v1",
+  "recordedAt": "2026-10-09T04:55:18.245297+00:00",
+  "codeSubject": "a4f08b3afc82304ac65b926df84c393b20b88555",
+  "executionDocsHead": "443c251b800044679340af087d001ddb6e3f8e8c",
+  "result": {
+    "pass": 478,
+    "fail": 22,
+    "skip": 0,
+    "fullSuitePassed": false
+  },
+  "failureGroups": [
+    {
+      "count": 1,
+      "file": "scripts/release-owner-bridge-postgres.test.mjs",
+      "reason": "Cannot find module 'pg' required by apply-reviewed-migrations.mjs; no package installation attempted"
+    },
+    {
+      "count": 2,
+      "files": [
+        "scripts/research-observed-priority-native.test.mjs",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "reason": "Concurrent native suites received the same RESEARCH_LOCAL_DATAPLANE_ARTIFACTS path; create-only EEXIST guard retained"
+    },
+    {
+      "count": 19,
+      "file": "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+      "reason": "Existing fixture module loader does not accept @/lib/research-observed-priority imported by the integrated route"
+    }
+  ],
+  "measurement": {
+    "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+    "stage": "input-v2-agents",
+    "command": [
+      "npm",
+      "run",
+      "test:research-agents"
+    ],
+    "startedAt": "2026-10-09T04:53:20.296Z",
+    "completedAt": "2026-10-09T04:53:44.789Z",
+    "elapsedSeconds": 24.49358064198168,
+    "exitCode": 1,
+    "sampledAggregateRssPeakBytes": 1003409408,
+    "observedTaskDiskPeakBytes": 2345697280,
+    "availableBeforeBytes": 19301212160,
+    "availableAfterBytes": 19301031936,
+    "guardTermination": null
+  },
+  "artifacts": [
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-agents.log",
+      "bytes": 165218,
+      "sha256": "e5c85f37f9c6d368bb1004c36bc7ad8e607a48c7dcc5f754aec60e42cb4da914"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-agents.json",
+      "bytes": 552,
+      "sha256": "c8fd402322a3123346c1593b3a14af8e313c016a686a5f6c40c95622676ffc11"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-agents.time",
+      "bytes": 801,
+      "sha256": "84a77f386f07e226362c2048f1392afd9ea011962f291411d0ae10aa41890c0e"
+    }
+  ],
+  "earlierReceiptsImmutable": true,
+  "focused46AndCleanNative32RemainSeparate": true,
+  "independentInputReview": "pending",
+  "noModelOrProtectedApproval": true
+}

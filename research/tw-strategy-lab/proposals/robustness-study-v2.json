@@ -1,0 +1,101 @@
+{
+  "schema": "tw-strategy-robustness-proposal/v1",
+  "proposal_id": "tw-strategy-robustness-v2",
+  "created_at": "2026-09-25T03:51:04Z",
+  "status": "review_required_not_executed",
+  "informed_by_development_results": true,
+  "source_evidence": {
+    "source_run": 36081668572,
+    "source_commit": "e1fb505a894105e05fb08aa28fd0fb8ad8e520fa",
+    "diagnostic_commit": "305d61b2b816ac760c0e828ac2931947480aeafb"
+  },
+  "scope": {
+    "warmup": ["2018-01-01", "2018-12-31"],
+    "development": ["2019-01-01", "2023-12-31"],
+    "holdout_start": "2024-01-01",
+    "holdout_policy": "do_not_download_read_or_compute",
+    "universe": ["1216", "2330", "5347", "6488", "8069"],
+    "universe_warning": "fixed surviving cash-only subset; not historical market or App candidates"
+  },
+  "preconditions": [
+    "Independent review accepts the exact source, registry, dataset and corporate-action identities.",
+    "A rights-safe mechanism makes the exact normalized inputs available to the isolated runner; the current derived artifact alone is insufficient for full replay.",
+    "The signal-count reporting repair uses a new source commit and preserves run 36081668572 unchanged.",
+    "Every registered trial and failure is retained; no variant may be omitted after results are known."
+  ],
+  "work_items": [
+    {
+      "id": "R1",
+      "kind": "reporting_repair",
+      "strategy_parameters_changed": false,
+      "description": "Emit separate raw_confirmation_count, eligible_order_count and avoid_chase_count for S1/S2, while asserting identical eligible signals and fills against the frozen first run.",
+      "required_trials": 15,
+      "acceptance": [
+        "all five strategies and three fixed cost/capital scenarios retained",
+        "eligible signals, fills, completed trades and portfolio metrics match the frozen run bit-for-bit except schema additions",
+        "any mismatch invalidates the repaired run and is recorded"
+      ]
+    },
+    {
+      "id": "R2",
+      "kind": "s3_concentration_diagnostic",
+      "strategy_parameters_changed": false,
+      "description": "Apply predeclared robustness gates to S3 without selecting a new signal rule.",
+      "finite_checks": [
+        { "metric": "completed_trades_baseline", "operator": ">=", "threshold": 30 },
+        { "metric": "median_net_trade_return_baseline", "operator": ">", "threshold": 0 },
+        { "metric": "profit_factor_baseline", "operator": ">", "threshold": 1 },
+        { "metric": "profit_factor_cost_stress", "operator": ">", "threshold": 1 },
+        { "metric": "largest_winner_share_of_realized_gross_profit", "operator": "<=", "threshold": 0.25 },
+        { "metric": "largest_symbol_share_of_realized_gross_profit", "operator": "<=", "threshold": 0.5 },
+        { "metric": "terminal_return_ex_unavailable_receivables_baseline", "operator": ">", "threshold": 0 },
+        { "metric": "terminal_return_ex_unavailable_receivables_cost_stress", "operator": ">", "threshold": 0 }
+      ],
+      "decision_rule": "Failure of any gate keeps S3 exploratory. Passing all gates still does not establish OOS alpha or authorize trading."
+    },
+    {
+      "id": "R3",
+      "kind": "s4_result_informed_hypothesis_generation",
+      "strategy_parameters_changed": true,
+      "description": "Evaluate exactly two new contraction thresholds while holding every other S4 rule fixed.",
+      "variants": [
+        { "strategy_id": "S4v2-070", "atr5_over_atr20_max": 0.7 },
+        { "strategy_id": "S4v2-075", "atr5_over_atr20_max": 0.75 }
+      ],
+      "execution_scenarios": ["baseline", "cost_stress", "small_capacity"],
+      "registered_trials": 6,
+      "multiplicity_rule": "Report both variants and all scenarios. Do not select or promote the best development return; these thresholds were proposed after inspecting S4 v1 diagnostics.",
+      "decision_rule": "Development output may only reject or retain a hypothesis for later independent evaluation. It cannot produce a deployable winner."
+    },
+    {
+      "id": "R4",
+      "kind": "dividend_availability_sensitivity",
+      "strategy_parameters_changed": false,
+      "description": "Bound the effect of absent cash payment dates under two exact accounting paths for all five price strategies.",
+      "paths": [
+        { "id": "payment_date_unknown", "rule": "recognize receivable on ex-date; never release to spendable cash during the study" },
+        { "id": "optimistic_next_session", "rule": "release the ex-date entitlement to cash on the next market session; label as an optimistic bound, not a factual payment schedule" }
+      ],
+      "registered_paths": 10,
+      "decision_rule": "Show both paths. Do not use the optimistic bound as the headline return or as promotion evidence."
+    }
+  ],
+  "blocked_robustness": [
+    {
+      "test": "S3 leave-one-symbol-out full-path replay",
+      "reason": "The current strategy requires at least five complete momentum members and the eligible subset has exactly five; deleting one changes the strategy into an invalid four-member panel.",
+      "unblock": "Acquire a point-in-time-defined panel with at least ten eligible symbols without using 2024+ holdout data."
+    },
+    {
+      "test": "S5 revenue and S7 broker-revision factors",
+      "reason": "No licensed point-in-time event history with publication, revision, correction and entitlement provenance."
+    }
+  ],
+  "global_decision_rules": [
+    "Weekly 5%, monthly 10% and annualized 50% are not selection criteria.",
+    "No development-only result may be called out-of-sample, alpha, validated profitability or deployable.",
+    "Do not replace the v1 registry, ledger, zero-trade S4 result or failed trials.",
+    "Any implementation defect requires a new commit and run with an explicit invalidation reason; no silent overwrite.",
+    "Article publication, merge and deployment remain outside this proposal."
+  ]
+}

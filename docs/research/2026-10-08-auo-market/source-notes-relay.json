@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "twse-top-level-notes-relay-v1",
+  "recordedAt": "2026-10-08T15:54:43.557756+08:00",
+  "reportedBy": "source thread delegation",
+  "acquisition": "semantics of original TWSE response notes reported from root Mac raw acquisition; not VM raw HTTP fetch",
+  "sourceFamily": "TWSE STOCK_DAY",
+  "relatedRelay": "root-market-relay.json",
+  "relatedImmutableMarketHead": "c16bc52271eaf733b7ca69d0cc747d123a5d2ad6",
+  "notesSemantics": [
+    {
+      "field": "漲跌價差",
+      "markers": {
+        "+": "漲",
+        "-": "跌",
+        "X": "不比價"
+      }
+    },
+    {
+      "field": "註記",
+      "marker": "**",
+      "meaning": "恢復買賣日因變更面額或ETF分割/反分割而與最近成交價有比例轉換"
+    },
+    {
+      "field": "當日統計",
+      "includes": [
+        "一般交易",
+        "零股交易",
+        "盤後定價交易",
+        "鉅額交易"
+      ],
+      "excludes": [
+        "拍賣",
+        "標購"
+      ]
+    }
+  ],
+  "selectedRowsAreCompleteRawResponses": false,
+  "rowEmptyNoteDoesNotExcludeCorporateActions": true,
+  "xMarkerImpliesKnownCorporateActionAmount": false,
+  "rawPricesAdjusted": false,
+  "totalReturnsVerified": false,
+  "datasetRewritten": false,
+  "rawSourceFilesTransferredToVm": false,
+  "rawSourceHashesReverifiedByVm": false,
+  "reviewStatus": {
+    "original28RawResponses": "source thread reports existing Astra independent raw-file check completed",
+    "exactMarketImplementationAndDatasetReview": "source thread subsequently supplied unsigned scoped approval for exactc16bc52271eaf733b7ca69d0cc747d123a5d2ad6; see unsigned-exact-market-review-relay.json",
+    "protectedAttestation": false
+  },
+  "productionImported": false,
+  "note": "Response-level semantics are preserved separately; neither row note nor X establishes the missing company-action adjustment basis."
+}

@@ -1,0 +1,38 @@
+TAP version 13
+# (node:94524) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:94524) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# NOTICE:  constraint "candidate_detail_snapshots_revision_hash_check" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  identifier "candidate_detail_snapshots_stock_id_session_date_model_version_key" will be truncated to "candidate_detail_snapshots_stock_id_session_date_model_version_"
+# NOTICE:  constraint "candidate_detail_snapshots_stock_id_session_date_model_version_" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_input_hash_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_claims_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_source_refs_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_paid_content_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_bundle_binding_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_bundles_append_only_v4" for relation "public.candidate_dossier_bundles" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_research_dossiers_append_only_v4" for relation "public.candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_receipts_append_only_v4" for relation "public.candidate_dossier_submission_receipts" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_detail_published_append_only_v4" for relation "public.candidate_detail_snapshots" does not exist, skipping
+# Subtest: atomic publication: original private pipeline, synthetic reports — expires-waiting
+    # Subtest: original live lease expires while awaiting source fence; no extension or writes
+    ok 1 - original live lease expires while awaiting source fence; no extension or writes
+      ---
+      duration_ms: 28663.264084
+      ...
+    1..1
+ok 1 - atomic publication: original private pipeline, synthetic reports — expires-waiting
+  ---
+  duration_ms: 31277.805625
+  ...
+1..1
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 31498.473125

@@ -1,0 +1,25 @@
+{
+  "schema": "stockinsider-independent-code-review-record-v1",
+  "reviewedCommit": "56b244a3759904d73e699a469ef0f44ec783c8ce",
+  "reviewedTree": "da6ddf179bfa59f5e3ca741853ef3374364d11a1",
+  "baseCommit": "75d0752ffb31a9b51cc072e4b6b35232779fdbee",
+  "reviewer": "astra_recovery_oct04",
+  "result": "approve",
+  "scope": "finite ownership prelude, runtime preflight, missing-function detection, pgcrypto schema, release identity and frozen schema-only rehearsal",
+  "independentNamedTestsPassed": 12,
+  "skipped": 0,
+  "additionalIsolatedChecks": [
+    "both exact fifth-function body variants change owner without changing body",
+    "unlisted whitespace variant rejected",
+    "non-owner login, unknown profile, ACL and role failures rejected",
+    "transaction rollback preserved",
+    "all 55 frozen ordered migration hashes independently matched exact source"
+  ],
+  "signed": false,
+  "protectedGateEvidence": false,
+  "productionAcceptance": false,
+  "leastPrivilegeOperatorAcceptance": false,
+  "runtimeRoleBootstrapComplete": false,
+  "sourceIdentity": "60c4c72ced1c3f75276025d008de5eca1d3ec86f3afcc952448debe6676b71c0",
+  "parameterIdentity": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4"
+}

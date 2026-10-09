@@ -1,0 +1,624 @@
+{
+  "schemaVersion": "emc-real-input-model-acceptance-v1",
+  "recordedAt": "2026-10-08T12:17:45.962145+00:00",
+  "manualIncrementStartedAt": "2026-10-08T11:55:42Z",
+  "manualIncrementDeadline": "2026-10-08T12:25:42Z",
+  "scope": "EMCrealinputconditionalmodel+article, interrupted by prioritizedAUOreviewfix; notmodeljoblease/autodispatchbudget",
+  "subjectPrior": "13a038450d538c1e4463e05bdec8a16ab14b0522",
+  "dataSubjects": [
+    "ab2fda19ecea49796a802fddbe1795edbdb74f17",
+    "4b3f4201af02b419c10c22c8b35e7d3de1477856"
+  ],
+  "unsignedDataApproval": "root-relayed Astra scopedDATAonly; rawrootcustody notVMrawverification",
+  "AUOApproval": "root-relayed Astra unsigned scopedresearch/data/calculation approval13a0384; notforecastendorsement/protected/trade/publication",
+  "nativeApproval": "root-relayed Astra unsignedscoped8e0437; ancestor",
+  "finalTests": {
+    "EMC": {
+      "pass": 16,
+      "fail": 0,
+      "skip": 0
+    },
+    "independentDecimalChecks": 383,
+    "quarterBridges": 18,
+    "inputHashes": 5,
+    "citationDefinitions": 10
+  },
+  "articleMainHan": 4468,
+  "modelCanonicalHash": "74b1b5e797578c0752f869b4438b6be2d305e0e2347f24685cd4a8761cc855b8",
+  "types": "pass",
+  "webLint": "0errors33existingwarnings; rootMJS/Python verified focused/Decimal notwebeslintcoverage",
+  "normalWebBuild": "pass; existingwebtree unchanged",
+  "failureHistory": [
+    "initial50/51 related tests failed mainarticle3534Han; expanded analyticalcontent; preserved",
+    "newnotesreader incorrectly iterated pdfPagesmetadata as product; compute/tests/Decimal failed; filtered actualperiodrows, finalpassed",
+    "intermediate types label reused AUO local types paths accidentally; intermediate preserved as emc-intermediate-types, original typesJSON restored from immutable committedreceipt; oldtypeslog empty unchanged; oldtypes.time overwritten and NOT recoverable. AUOcommittedreceipt remains immutable, its oldtypes.time path cannot be claimed hashmatching. Harness now create-only labels; all subsequentEMClabels unique"
+  ],
+  "stages": [
+    {
+      "stage": "emc-compute",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+        "2026-10-08T12:05:00Z"
+      ],
+      "startedAt": "2026-10-08T12:06:57.241Z",
+      "completedAt": "2026-10-08T12:06:57.647Z",
+      "elapsedSeconds": 0.4054879050090676,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 104861696,
+      "observedTaskDiskPeakBytes": 1344126976,
+      "availableBeforeBytes": 25680343040,
+      "availableAfterBytes": 25680265216,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-sealed-compute",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+        "2026-10-08T12:05:00Z"
+      ],
+      "startedAt": "2026-10-08T12:08:35.137Z",
+      "completedAt": "2026-10-08T12:08:35.552Z",
+      "elapsedSeconds": 0.4155129450082313,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 97034240,
+      "observedTaskDiskPeakBytes": 1344221184,
+      "availableBeforeBytes": 25680248832,
+      "availableAfterBytes": 25680240640,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-tests",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-emc-company-model.test.mjs",
+        "scripts/research-auo-four-segment-model.test.mjs",
+        "web/src/lib/auo-deep-dive-model.test.ts"
+      ],
+      "startedAt": "2026-10-08T12:08:35.582Z",
+      "completedAt": "2026-10-08T12:08:36.336Z",
+      "elapsedSeconds": 0.7540816800028551,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 291737600,
+      "observedTaskDiskPeakBytes": 1344233472,
+      "availableBeforeBytes": 25680236544,
+      "availableAfterBytes": 25680216064,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-decimal",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "docs/research/2026-10-08-emc-company-model/verify-output.py"
+      ],
+      "startedAt": "2026-10-08T12:08:36.381Z",
+      "completedAt": "2026-10-08T12:08:36.590Z",
+      "elapsedSeconds": 0.2097879350039875,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 1344258048,
+      "availableBeforeBytes": 25680211968,
+      "availableAfterBytes": 25680203776,
+      "guardTermination": null
+    },
+    {
+      "stage": "types",
+      "command": [
+        "npm",
+        "exec",
+        "tsc",
+        "--",
+        "--noEmit"
+      ],
+      "startedAt": "2026-10-08T12:09:24.090Z",
+      "completedAt": "2026-10-08T12:09:27.413Z",
+      "elapsedSeconds": 3.3234365270036506,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 559763456,
+      "observedTaskDiskPeakBytes": 1344274432,
+      "availableBeforeBytes": 25680146432,
+      "availableAfterBytes": 25680146432,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-final-compute",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+        "2026-10-08T12:12:00Z"
+      ],
+      "startedAt": "2026-10-08T12:12:27.972Z",
+      "completedAt": "2026-10-08T12:12:28.262Z",
+      "elapsedSeconds": 0.29037394901388325,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 75333632,
+      "observedTaskDiskPeakBytes": 1344286720,
+      "availableBeforeBytes": 25680093184,
+      "availableAfterBytes": 25680084992,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-final-tests",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-emc-company-model.test.mjs"
+      ],
+      "startedAt": "2026-10-08T12:12:28.293Z",
+      "completedAt": "2026-10-08T12:12:28.688Z",
+      "elapsedSeconds": 0.39551632599614095,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 136224768,
+      "observedTaskDiskPeakBytes": 1344299008,
+      "availableBeforeBytes": 25680080896,
+      "availableAfterBytes": 25680072704,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-final-decimal",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "docs/research/2026-10-08-emc-company-model/verify-output.py"
+      ],
+      "startedAt": "2026-10-08T12:12:28.717Z",
+      "completedAt": "2026-10-08T12:12:28.904Z",
+      "elapsedSeconds": 0.18673541200405452,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 1344311296,
+      "availableBeforeBytes": 25680068608,
+      "availableAfterBytes": 25680060416,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-note-fixed-compute",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+        "2026-10-08T12:12:00Z"
+      ],
+      "startedAt": "2026-10-08T12:12:47.804Z",
+      "completedAt": "2026-10-08T12:12:48.106Z",
+      "elapsedSeconds": 0.30220801099494565,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 84082688,
+      "observedTaskDiskPeakBytes": 1344323584,
+      "availableBeforeBytes": 25680056320,
+      "availableAfterBytes": 25680035840,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-note-fixed-tests",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-emc-company-model.test.mjs"
+      ],
+      "startedAt": "2026-10-08T12:12:48.134Z",
+      "completedAt": "2026-10-08T12:12:48.542Z",
+      "elapsedSeconds": 0.4072287949966267,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 127578112,
+      "observedTaskDiskPeakBytes": 1344348160,
+      "availableBeforeBytes": 25680031744,
+      "availableAfterBytes": 25680023552,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-note-fixed-decimal",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "docs/research/2026-10-08-emc-company-model/verify-output.py"
+      ],
+      "startedAt": "2026-10-08T12:12:48.573Z",
+      "completedAt": "2026-10-08T12:12:48.764Z",
+      "elapsedSeconds": 0.19134509599825833,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 1344360448,
+      "availableBeforeBytes": 25680019456,
+      "availableAfterBytes": 25680011264,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-delivery-compute",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-emc-company-model/recompute.mjs",
+        "2026-10-08T12:12:00Z"
+      ],
+      "startedAt": "2026-10-08T12:13:55.766Z",
+      "completedAt": "2026-10-08T12:13:56.068Z",
+      "elapsedSeconds": 0.30186800500086974,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 70361088,
+      "observedTaskDiskPeakBytes": 1344376832,
+      "availableBeforeBytes": 25680003072,
+      "availableAfterBytes": 25679994880,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-delivery-tests",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-emc-company-model.test.mjs"
+      ],
+      "startedAt": "2026-10-08T12:13:56.098Z",
+      "completedAt": "2026-10-08T12:13:56.503Z",
+      "elapsedSeconds": 0.40519725800550077,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 122572800,
+      "observedTaskDiskPeakBytes": 1344389120,
+      "availableBeforeBytes": 25679990784,
+      "availableAfterBytes": 25679982592,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-delivery-decimal",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "docs/research/2026-10-08-emc-company-model/verify-output.py"
+      ],
+      "startedAt": "2026-10-08T12:13:56.532Z",
+      "completedAt": "2026-10-08T12:13:56.721Z",
+      "elapsedSeconds": 0.189173581005889,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 655360,
+      "observedTaskDiskPeakBytes": 1344401408,
+      "availableBeforeBytes": 25679978496,
+      "availableAfterBytes": 25679970304,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "exec",
+        "--",
+        "tsc",
+        "--project",
+        "web/tsconfig.json",
+        "--noEmit"
+      ],
+      "startedAt": "2026-10-08T12:14:03.878Z",
+      "completedAt": "2026-10-08T12:14:06.894Z",
+      "elapsedSeconds": 3.015834083998925,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 570576896,
+      "observedTaskDiskPeakBytes": 1344413696,
+      "availableBeforeBytes": 25679966208,
+      "availableAfterBytes": 25679962112,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T12:14:06.926Z",
+      "completedAt": "2026-10-08T12:14:30.655Z",
+      "elapsedSeconds": 23.729323278996162,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1173819392,
+      "observedTaskDiskPeakBytes": 1344425984,
+      "availableBeforeBytes": 25679958016,
+      "availableAfterBytes": 25679945728,
+      "guardTermination": null
+    },
+    {
+      "stage": "emc-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T12:14:30.688Z",
+      "completedAt": "2026-10-08T12:14:37.251Z",
+      "elapsedSeconds": 6.56246435099456,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 902881280,
+      "observedTaskDiskPeakBytes": 1344438272,
+      "availableBeforeBytes": 25679941632,
+      "availableAfterBytes": 25679163392,
+      "guardTermination": null
+    }
+  ],
+  "privateFiles": [
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-compute.json",
+      "bytes": 524,
+      "sha256": "4bea257864087e6c478853cac5ae4ab12216a9bb01a1c61ba100e5d772757681"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-compute.log",
+      "bytes": 1804,
+      "sha256": "6d3cc7e8c60d701730235186e75a43f2018405540055105ba1002f2596912045"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-compute.time",
+      "bytes": 832,
+      "sha256": "55be4bfe32686f052bd285ec8dff9faba2a15ee5d09ef787efc3683a3c0ba560"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-sealed-compute.json",
+      "bytes": 530,
+      "sha256": "9790928eac78437bfe9bc7a071f7ec331636ab826ed37664604008a3d749f225"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-sealed-compute.log",
+      "bytes": 1889,
+      "sha256": "f4925f26064b62e4d03aaa0692ced5c93653f205ed146ab1647e421e4bac1353"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-sealed-compute.time",
+      "bytes": 832,
+      "sha256": "dd27836891a7dd5ab6360ee965a00913d68b88a9239a8686c9288926d0f12f0e"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-tests.json",
+      "bytes": 598,
+      "sha256": "2e6dfb4e2d71f393e79cfb421126afcd6206990bcdc74e2387a6b1944026ac07"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-tests.log",
+      "bytes": 12902,
+      "sha256": "53296962af7b3ecd06b69be3e893e5281542e6b992b9ea3bfa9a08c939b04d25"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-tests.time",
+      "bytes": 932,
+      "sha256": "8727e27a4c85a165d6b801543571a009ad4f501404296ada98c03806a9675ee7"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-decimal.json",
+      "bytes": 530,
+      "sha256": "dd8ef5fb9f32c7d447422666741529bb074e3f53cb822892a87f4ed6bf2e776e"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-decimal.log",
+      "bytes": 481,
+      "sha256": "acc249d075f07d9305eea5a55f607bff5af57f911efd10b1ecae0004e48e24c7"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-decimal.time",
+      "bytes": 885,
+      "sha256": "1fe636f89a4cfbf397675a8027abaad4d588f73b2a0b867e40051584d9e6397c"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-intermediate-types.json",
+      "bytes": 440,
+      "sha256": "812abb1496861c57c9d86aeac5dd047494b8483a26899b85acf8ba44097e556b"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-intermediate-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-intermediate-types.time",
+      "bytes": 750,
+      "sha256": "8fa7efc2bc3a70d18c8e06364f9987b19e3860d3a93dece8e734935f83e2de63"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-final-compute.json",
+      "bytes": 530,
+      "sha256": "e59819fade223295855a7891bfa95bc967b42b8588d3ceb07ba2c2f1ba683eb1"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-final-compute.log",
+      "bytes": 1176,
+      "sha256": "e15f254b9b527060e209974f7766599239b6a8aea70ef5e65bf01847801b7c9a"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-final-compute.time",
+      "bytes": 867,
+      "sha256": "55dff18d7b845d2a7b04b73ec4761b9964b6a513ea93685492d14663630b4681"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-final-tests.json",
+      "bytes": 502,
+      "sha256": "fcb2e8620ce1263fddd55cd308ae2eeacc6a49a598e527f2e7c3c1070c3845b4"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-final-tests.log",
+      "bytes": 1666,
+      "sha256": "3d08f96a36995f6327a7e31ed7dfab1bac1617bdc7e2d8c550f2490ef5cf3dd0"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-final-tests.time",
+      "bytes": 841,
+      "sha256": "a1b51da9d794b8cfd15d88f98977c4800af9814d3540f30cfef59770b4916220"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-final-decimal.json",
+      "bytes": 537,
+      "sha256": "cfbe9dd247d1d2235960429ca91125a12384eab3ef7bef44547367de764671ec"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-final-decimal.log",
+      "bytes": 539,
+      "sha256": "fbc7eebfcff13a7b33c4fdd1a0d303ffa682135205fd5423d00121e7b1a6e29e"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-final-decimal.time",
+      "bytes": 885,
+      "sha256": "ac8d1a4bbc31aeb92c6a125f342228af41a9e8f30252fce649e416f91a1fa8c6"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-note-fixed-compute.json",
+      "bytes": 535,
+      "sha256": "72ef99890302d81c479ed72b69f5fda773867488ddc507f5787494bf8c651b9f"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-note-fixed-compute.log",
+      "bytes": 2321,
+      "sha256": "e81dedf303a8b375b7336ed644c8708eb0fe65d0d12e2e97e5abb6757d00e3cb"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-note-fixed-compute.time",
+      "bytes": 831,
+      "sha256": "8e177b815183ac90f8ef8b20a764aa7fa8df2ba5f2e4c459fa0718ba0952bdc7"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-note-fixed-tests.json",
+      "bytes": 506,
+      "sha256": "483ce6d4a9bb68494e4c5e3a2ea5e1a26d674ee077249e94f5e4b7d9edfc1f28"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-note-fixed-tests.log",
+      "bytes": 3800,
+      "sha256": "fa6432cd4a7b0dbae9e21249844cdf6b27bf86e338d1359c2548c099d9ecdc7d"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-note-fixed-tests.time",
+      "bytes": 802,
+      "sha256": "c90ec7d2c1ca5490e3b527c0583228f7a3ee69df6f84d6f3bf89790fa581644c"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-note-fixed-decimal.json",
+      "bytes": 542,
+      "sha256": "6da2573a065921fcce054bae1d628bf1322b5c03828df01e45382c766983ec7d"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-note-fixed-decimal.log",
+      "bytes": 141,
+      "sha256": "ad7930789b8ced5d11f656e0c27cbe1decb0cce281fe522d912f7b2e63858912"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-note-fixed-decimal.time",
+      "bytes": 848,
+      "sha256": "3db442d479e91bdc85f5cdf49949ad7a40620c9932fbfdbe7e6c16e566f03fde"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-delivery-compute.json",
+      "bytes": 533,
+      "sha256": "0af53e91603739db848f6d37899a27b3002490b59e0b8bffe47d238f5b484bb9"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-delivery-compute.log",
+      "bytes": 2374,
+      "sha256": "81dd224a34e658d670ea6ba249298e9943efe6acb3a38480172c420116b61262"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-delivery-compute.time",
+      "bytes": 832,
+      "sha256": "f49094143873323753e1abcc3e1afb73ea3cf5cc955db9d7e826d06337193dae"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-delivery-tests.json",
+      "bytes": 505,
+      "sha256": "3b1e0432d72ee32121b1cce4603d76e414d229c80a5fabbda9e67f51baa321b6"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-delivery-tests.log",
+      "bytes": 4031,
+      "sha256": "cd97ceb4f79f19c36cf7f5bcc5f6b7f5c483bf56a6ed53b07b95b22c09cb8274"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-delivery-tests.time",
+      "bytes": 804,
+      "sha256": "6c5dbc6c2ce58be80138e1e2190d128aaadab8738391f725da4bbc68c357fb4d"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-delivery-decimal.json",
+      "bytes": 538,
+      "sha256": "397b5c82766f226f8cd4c4e6d466ca3e092cf1b4078a8f0a9a836ed37791d54c"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-delivery-decimal.log",
+      "bytes": 141,
+      "sha256": "e7ccea0976780c3282c7d0d1c8ba924903ac1ff32a785e7c091ea7853794d2dd"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-delivery-decimal.time",
+      "bytes": 848,
+      "sha256": "061cfce4a9ef66dbead33fa35a5756885f4c056465f678db5a24d8cf5ab2ce4c"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-types.json",
+      "bytes": 512,
+      "sha256": "5c0691ecf1d1466ee1449a25ff24b639414d9c71843f0e472e1a14c70d7bdf1b"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-types.time",
+      "bytes": 790,
+      "sha256": "af33a15091645f6280d575e6c437b131dcb0d7e3a1f150e9a722d37d6986841c"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-lint.json",
+      "bytes": 445,
+      "sha256": "2728370178e90f004789fd128fe10225028bd91b9c893f867d9ffd5097885df9"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-lint.log",
+      "bytes": 4760,
+      "sha256": "33a71dbfe5b1ff029d709b11d89e069122c96d9632df4458dba81e58362697fe"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-lint.time",
+      "bytes": 756,
+      "sha256": "64db5c16ee1ccf446c377b16ce9b0a89f9c50045e1394548cf22dbf179e09329"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-build.json",
+      "bytes": 444,
+      "sha256": "ffb1ad2c115824d755da9f8ccc36fbd2ed9b41f9279167998638b12c85d6caf8"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-build.log",
+      "bytes": 6411,
+      "sha256": "257fa5d9a9d80521bb3effeac7776b1210ee465a93aeeb808916ea4224327416"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/emc-build.time",
+      "bytes": 758,
+      "sha256": "58c6d960eae9dfd58b781235d59be15f9370ea2b06d6906d03dc444196afb829"
+    }
+  ],
+  "resources": {
+    "node": "22.14.0",
+    "cgroupMemoryMax": 34359738368,
+    "cpuMax": "400000 100000",
+    "nproc": 5,
+    "rssMeasurement": "100ms processgroup/procRSS aggregate plusGNUtime-v, can miss transientpeak",
+    "sampledRssPeakBytes": 1173819392,
+    "taskDiskPeakBytes": 1344438272,
+    "workspaceResidentAfterBytes": 7508262912,
+    "filesystemAvailableAfterBytes": 25679126528,
+    "projectDiskQuota": null,
+    "quotaNote": "df hostfilesystemavailability notprojectguarantee",
+    "budget": "20GBresident+4GBtemp+8GBreserve; oneheavy<=8GiB; noVPSadmission"
+  },
+  "limits": [
+    "incomplete grade economics/normalization/futureordinarypotentialshares; no calibratedPE/target/entry",
+    "currentmedia expectations not currentcompleteconsensus ororders",
+    "rawAug28X0.00 not totalreturn",
+    "sharedexistingarticle-contractVMpreview andformalconsumer/strategychain pending",
+    "next queuednativeportable verification kept separate exacttree"
+  ]
+}

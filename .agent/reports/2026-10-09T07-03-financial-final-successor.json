@@ -1,0 +1,187 @@
+{
+  "schemaVersion": "financial-cleanup-late-write-successor-vm-v1",
+  "recordedAt": "2026-10-09T07:03:34.784917+00:00",
+  "subjectSha": "59aea2a1837c3e76f6af4e9a3b062d2f26de41fe",
+  "branch": "codex/financial-supplement-repair-oct09",
+  "tree": "6e48a55347fb170844af6324b270765123df7276",
+  "webTree": "9a6326c25f6e5361738da2e04f884b54f22efa7d",
+  "previousReceipt": ".agent/reports/2026-10-09T06-48-financial-repair-vm.json",
+  "previousCodeSubject": "fa35f43b7c16e38b8eba641ee413636005a17862",
+  "independentCodeReview": "pending; neither maker green nor root repair instruction is independent approval",
+  "manualEngineeringWindow": {
+    "firstNewCounterexampleStageAt": "2026-10-09T06:56:06.130Z",
+    "sealedAt": "2026-10-09T07:03:34.784917+00:00",
+    "maximumSeconds": 1800,
+    "notAutomatedRoleOrLeaseAcceptance": true
+  },
+  "counterexample": {
+    "subject": "fa35f43b7c16e38b8eba641ee413636005a17862",
+    "actualTAP": {
+      "tests": 8,
+      "pass": 7,
+      "fail": 1,
+      "skip": 0
+    },
+    "failure": "late read wrote buffer after timeout-path initial fill(0); actual descriptor + controlled Promise gate",
+    "originalRedKept": true
+  },
+  "repair": {
+    "lateBufferWrite": "pending read settlement owns a second wipe after abort; no claim of kernel cancellation",
+    "pendingOpen": "owner promise registered before filesystem open is issued",
+    "close": "tracked exactly once; unresolved/rejected close retains process admission fence",
+    "primaryError": "original hash/read failure preserved separately from cleanup attribution",
+    "probeMatrix": "read→close stall; normal read→close stall; late open→close success/failure; hash→cleanup failure; admission blocked until all operations settle; success all closed; exhausted deadline no descriptor"
+  },
+  "checks": {
+    "focused": {
+      "tests": 35,
+      "pass": 35,
+      "fail": 0,
+      "skip": 0,
+      "membership": "27 financial adapter +8 cleanup boundaries"
+    },
+    "types": "pass",
+    "lint": {
+      "errors": 0,
+      "existingWarnings": 33
+    },
+    "calculationCore": "prior31/31 remains applicable to byte-identical core; not a newly rerun suite",
+    "normalBuild": "pending exact reviewed financial merge into latest integration, per root request",
+    "freshPostgres": "pending combined; original15 not claimed on successor"
+  },
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "repair-final-matrix",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "scripts/research-financial-cleanup.test.mjs",
+        "scripts/research-financial-supplement.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:57:32.567Z",
+      "completedAt": "2026-10-09T06:57:43.251Z",
+      "elapsedSeconds": 10.684983025013935,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 253321216,
+      "observedTaskDiskPeakBytes": 1345052672,
+      "availableBeforeBytes": 14704812032,
+      "availableAfterBytes": 14704799744,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-financial-final-successor",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T07:00:40.455Z",
+      "completedAt": "2026-10-09T07:00:43.889Z",
+      "elapsedSeconds": 3.4340063919953536,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 565243904,
+      "observedTaskDiskPeakBytes": 1345052672,
+      "availableBeforeBytes": 14704730112,
+      "availableAfterBytes": 14704721920,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-financial-final-successor",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T07:01:22.778Z",
+      "completedAt": "2026-10-09T07:01:47.106Z",
+      "elapsedSeconds": 24.328057340026135,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1083338752,
+      "observedTaskDiskPeakBytes": 1345064960,
+      "availableBeforeBytes": 14704717824,
+      "availableAfterBytes": 14704332800,
+      "guardTermination": null
+    }
+  ],
+  "sampledRssPeakBytes": 1083338752,
+  "taskDiskPeakBytes": 1345064960,
+  "minimumObservedFreeBytes": 14704332800,
+  "resourceLimitations": "100ms process-group samples; not cgroup high watermark; tasks sequential",
+  "sourceFiles": [
+    {
+      "path": "docs/operations/2026-10-09/financial-adapter-vm-handoff.md",
+      "sha256": "00c5dbd9b4cb54c1e62e953f2b2bdc93812ec88d2c20ba3102b2ff706986b77e",
+      "bytes": 5844
+    },
+    {
+      "path": "openspec/changes/research-first-publication-v2/financial-supplement-repair-proposal.md",
+      "sha256": "b1bb1e0110bb8a273c546527e1db085180c3636fde6df231ebeb2b70634a342a",
+      "bytes": 6506
+    },
+    {
+      "path": "scripts/research-financial-cleanup.test.mjs",
+      "sha256": "cef5025605e1c88aa1b569bb9805b0bb96a8b5278b2a5cabeb480ab33ac80848",
+      "bytes": 6109
+    },
+    {
+      "path": "web/src/lib/research-financial-file-reader.ts",
+      "sha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+      "bytes": 10211
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".agent/reports/2026-10-09T07-03-financial-final-successor-repair-late-buffer-red.log.txt",
+      "bytes": 2365,
+      "sha256": "30e924c669806b7743558623622e13d2fac986fceb456aebf98998e367fe5b81"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-03-financial-final-successor-repair-late-buffer-red.json",
+      "bytes": 676,
+      "sha256": "d990c56573fb552ae1598a53238208abec3919d0e55728845062734ffe41cad5"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-03-financial-final-successor-repair-final-matrix.log.txt",
+      "bytes": 6843,
+      "sha256": "5871f7c3b7c44eff9cb981e689a2aebcf462740521aecbe4da39b348d59b3af1"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-03-financial-final-successor-repair-final-matrix.json",
+      "bytes": 727,
+      "sha256": "515dadb42366d895606c788e67dc119b4ee88c24dd5798aed925b191223ea028"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-03-financial-final-successor-types-financial-final-successor.log.txt",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-03-financial-final-successor-types-financial-final-successor.json",
+      "bytes": 557,
+      "sha256": "73429423f4ac33979e00fd62fc173b58b754964539b188ca28977b2e576c6572"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-03-financial-final-successor-lint-financial-final-successor.log.txt",
+      "bytes": 4718,
+      "sha256": "08dc636eb541cc8b68c21f4149b523ab347ff6e4a474fa6a378f006e124571ff"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-03-financial-final-successor-lint-financial-final-successor.json",
+      "bytes": 552,
+      "sha256": "6e71a67bb6f15dd0b409c863c1c3087b232da654393e78fc028088c69a0c2e86"
+    }
+  ],
+  "buildOrDispatchClaim": false,
+  "financialVerified": false,
+  "dispatchReady": false,
+  "productionWrites": false,
+  "protectedApproval": false,
+  "ownedTestChildrenStopped": true,
+  "receiptLogs": "exact original TAP/time log bytes retained; whitespace-only git diff warnings in raw evidence are not normalized"
+}

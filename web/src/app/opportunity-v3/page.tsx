@@ -56,7 +56,7 @@ function wholeSecondNow(): string {
   return new Date(Math.floor(Date.now() / 1000) * 1000).toISOString().replace('.000Z', 'Z');
 }
 
-export async function OpportunityV3Page({
+async function OpportunityV3Page({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

@@ -1,0 +1,18 @@
+{
+  "schema": "tw-robustness-v2.1-clarification-v1",
+  "base_proposal_sha256": "4379960b4d1406bee97fcf54fa0f99e832abdefa1ed9a5111d04f2d25748270a",
+  "review_id": 5319012346,
+  "finding_comment_id": 4105628954,
+  "scope": "R2 profit factor all-zero denominator precedence only; every R1/R3/R4 path, input, parameter and gate stays unchanged.",
+  "profit_factor": {
+    "evaluation_order": [
+      "If the sum of negative completed-trade losses is zero, return null, including no trades and all-zero PnL.",
+      "Otherwise return the sum of positive completed-trade PnL divided by the absolute sum of losses; zero positive PnL therefore returns 0."
+    ],
+    "all_zero_or_no_trades": null,
+    "gate_rule_for_null": "fail"
+  },
+  "prior_proposal_modified": false,
+  "accepted_by_independent_reviewer": false,
+  "new_historical_simulations": 0
+}

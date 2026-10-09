@@ -45,6 +45,7 @@ export type CandidateTradePlanPublicationCard = {
 export type CandidateTradePlanPublicationCoverage = {
   schemaVersion: typeof CANDIDATE_TRADE_PLAN_PUBLICATION_COVERAGE_VERSION; validationStatus: 'research_only';
   complete: boolean; coverageComplete: boolean; cardCount: number; taiwanCardCount: number; ignoredCardCount: number;
+  requiredSymbolCount: number; matchedRequiredSymbolCount: number; missingRequiredSymbolCount: number;
   /** Number of individually matched display cards, including copies across stage buckets. */
   matchedCount: number;
   /** Number of distinct symbols for which every displayed copy matches. */
@@ -165,12 +166,26 @@ export function reconcileCandidateTradePlanCoverage(input: {
  * carry this run's saved revision and its exact compact research summary.
  * Found and waiting/actionable buckets can legitimately display the same stock. */
 export function reconcilePublishedCandidateTradePlanCoverage(input: {
-  coverage: CandidateTradePlanCoverage; cards: readonly CandidateTradePlanPublicationCard[];
+  coverage: CandidateTradePlanCoverage; cards: readonly CandidateTradePlanPublicationCard[]; requiredSymbols?: readonly string[];
 }): CandidateTradePlanPublicationCoverage {
-  if (input.cards.length > MAXIMUM_ROSTER * 3) throw new RangeError('candidate_trade_plan_publication_bound');
+  if (input.cards.length > MAXIMUM_ROSTER * 3 || (input.requiredSymbols?.length ?? 0) > MAXIMUM_ROSTER) {
+    throw new RangeError('candidate_trade_plan_publication_bound');
+  }
   const mismatches: CandidateTradePlanPublicationCoverage['mismatches'] = [];
   if (!input.coverage.complete) mismatches.push({ symbol: null, reason: 'research_coverage_incomplete' });
   const expected = new Set(input.coverage.records.map((row) => row.symbol));
+  const required = new Set<string>();
+  for (const requiredSymbol of input.requiredSymbols ?? []) {
+    if (!symbol(requiredSymbol)) {
+      mismatches.push({ symbol: null, reason: 'required_screened_symbol_invalid' });
+      continue;
+    }
+    if (required.has(requiredSymbol)) {
+      mismatches.push({ symbol: requiredSymbol, reason: 'required_screened_symbol_duplicate' });
+      continue;
+    }
+    required.add(requiredSymbol);
+  }
   const bindings = new Map<string, CandidateTradePlanPublicationBinding[]>();
   for (const binding of input.coverage.publicationBindings) {
     const rows = bindings.get(binding.symbol) ?? []; rows.push(binding); bindings.set(binding.symbol, rows);
@@ -195,8 +210,28 @@ export function reconcilePublishedCandidateTradePlanCoverage(input: {
     }
     if (matchedCount - matchesBefore === rows.length) matchedSymbolCount += 1;
   }
+  let matchedRequiredSymbolCount = 0; let missingRequiredSymbolCount = 0;
+  for (const key of [...required].sort()) {
+    if (!expected.has(key)) {
+      mismatches.push({ symbol: key, reason: 'required_screened_symbol_not_in_research_roster' });
+      continue;
+    }
+    const rows = cards.get(key) ?? [];
+    if (rows.length === 0) {
+      missingRequiredSymbolCount += 1;
+      mismatches.push({ symbol: key, reason: 'required_screened_card_missing' });
+      continue;
+    }
+    if (rows.every((card) => {
+      const saved = bindings.get(key) ?? [];
+      if (saved.length !== 1 || card.detailRevisionId !== saved[0].revisionId) return false;
+      const summary = readCandidateTradePlanSummary(card.tradePlanSummary, { revisionId: saved[0].revisionId });
+      return Boolean(summary && isDeepStrictEqual(summary, saved[0].summary));
+    })) matchedRequiredSymbolCount += 1;
+  }
   return { schemaVersion: CANDIDATE_TRADE_PLAN_PUBLICATION_COVERAGE_VERSION, validationStatus: 'research_only',
     complete: mismatches.length === 0, coverageComplete: input.coverage.complete,
     cardCount: input.cards.length, taiwanCardCount: input.cards.length - ignoredCardCount, ignoredCardCount,
+    requiredSymbolCount: required.size, matchedRequiredSymbolCount, missingRequiredSymbolCount,
     matchedCount, matchedSymbolCount, mismatches };
 }

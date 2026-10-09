@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "research-tagged-canonical-v2-vectors",
+  "status": "Frozen target vectors; actual JS/PG implementation parity tests not run in docs-only freeze",
+  "numericRule": "finite JSON numbers; plain exact decimal of shortest JS JSON.stringify token, trailing fractional zeros stripped, exponent expanded, negative zero normalized; closed fixed numeric domains prevent arbitrary higher-precision service-role numbers masquerading as JS values",
+  "unicodeRule": "Unicode scalars, no NUL/lone surrogates, no NFC/NFKC normalization; object key order UTF8 bytewise C, arrays order preserved",
+  "vectors": [
+    {
+      "rawJson": "null",
+      "canonicalUtf8": "[\"n\"]",
+      "bytes": 5,
+      "sha256": "e00e71c16c36d75ab3d0f00c3647ac15d0f62b1fd6bec81dce7c7b5b3cc22d91"
+    },
+    {
+      "rawJson": "false",
+      "canonicalUtf8": "[\"b\",false]",
+      "bytes": 11,
+      "sha256": "0e18bc49d2784c233215706d4ba8f6d2f39ed2df682db7ae0aa0c6d828652fdf"
+    },
+    {
+      "rawJson": "0",
+      "canonicalUtf8": "[\"d\",\"0\"]",
+      "bytes": 9,
+      "sha256": "697a10f4d293d5b9ad5c1d9edc5db1ace59ea4eb9031ef73ae62aa0bd7772ae3"
+    },
+    {
+      "rawJson": "-0",
+      "canonicalUtf8": "[\"d\",\"0\"]",
+      "bytes": 9,
+      "sha256": "697a10f4d293d5b9ad5c1d9edc5db1ace59ea4eb9031ef73ae62aa0bd7772ae3"
+    },
+    {
+      "rawJson": "0.1",
+      "canonicalUtf8": "[\"d\",\"0.1\"]",
+      "bytes": 11,
+      "sha256": "5fcb766a5f41c3657f9f1babddaa9a51e5e4fca5dcb047484dade4a47ec0fdae"
+    },
+    {
+      "rawJson": "1e-7",
+      "canonicalUtf8": "[\"d\",\"0.0000001\"]",
+      "bytes": 17,
+      "sha256": "13f65ccafc491ef97bbd7bf5202e58b9cb7157f4666819d84a87efb0f7bc0007"
+    },
+    {
+      "rawJson": "1000000.0",
+      "canonicalUtf8": "[\"d\",\"1000000\"]",
+      "bytes": 15,
+      "sha256": "7ad86ff714078777709c286082c2a687516ba06014077db27f7a3820fdfdd128"
+    },
+    {
+      "rawJson": "1000000000000000",
+      "canonicalUtf8": "[\"d\",\"1000000000000000\"]",
+      "bytes": 24,
+      "sha256": "4fb5ab77c8660e57b7429e38a9775e6c17da63726751140a4b205b71c8252f16"
+    },
+    {
+      "rawJson": "0.30000000000000004",
+      "canonicalUtf8": "[\"d\",\"0.30000000000000004\"]",
+      "bytes": 27,
+      "sha256": "37f7777feb059931418f8780134d8af1ed41f85bcb32ec895fbb7bdad212d86b"
+    },
+    {
+      "rawJson": "\"友達\"",
+      "canonicalUtf8": "[\"s\",\"友達\"]",
+      "bytes": 14,
+      "sha256": "df368c1ca6da9da58a34a8f016d4049f2ecb5f802b122fca94a522e35f093b33"
+    },
+    {
+      "rawJson": "\"é\"",
+      "canonicalUtf8": "[\"s\",\"é\"]",
+      "bytes": 10,
+      "sha256": "f14a626265344c668652334efbeab2bbb14e68b2db16e0de6c0fa3e5aea6ad4d"
+    },
+    {
+      "rawJson": "\"é\"",
+      "canonicalUtf8": "[\"s\",\"é\"]",
+      "bytes": 11,
+      "sha256": "e96a17a93913e617a9413635dee147802f36a1e7303d605d147d834a77197b81"
+    },
+    {
+      "rawJson": "\"a\\nb\\\\\\\"\"",
+      "canonicalUtf8": "[\"s\",\"a\\nb\\\\\\\"\"]",
+      "bytes": 16,
+      "sha256": "08bdb16bfbe46e1bf84f9e9c2762d26670209aa218c0ba7f8534a18fb98414fd"
+    },
+    {
+      "rawJson": "{\"😀\":1,\"\":2}",
+      "canonicalUtf8": "[\"o\",[[\"\",[\"d\",\"2\"]],[\"😀\",[\"d\",\"1\"]]]]",
+      "bytes": 44,
+      "sha256": "a69a846f51a4ec6b75309479ae6de00b58c6b5943d623a1b52dea6b9d99cf61e"
+    },
+    {
+      "rawJson": "{\"b\":[1,null,false],\"a\":\"欄位\"}",
+      "canonicalUtf8": "[\"o\",[[\"a\",[\"s\",\"欄位\"]],[\"b\",[\"a\",[[\"d\",\"1\"],[\"n\"],[\"b\",false]]]]]]",
+      "bytes": 70,
+      "sha256": "3c8807b8715dbd55cac91ed84ffaf67cf15552ff05be09e73dc9ccedf365f14e"
+    }
+  ],
+  "rejectedBeforeHash": [
+    "NaN",
+    "Infinity",
+    "-Infinity",
+    "duplicate object keys",
+    "invalid UTF8",
+    "lone surrogate",
+    "NUL in string",
+    "unknown nested property",
+    "depth >12 in semantic input",
+    "unsafe/unsupported numeric fixed-field value"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "observedAt": "2026-10-09T16:18:33.707596+00:00",
+  "ownedActiveProcesses": [],
+  "manualDeletions": [],
+  "shortTmp": "/tmp/si-ci27a-nujnllgk",
+  "longSocketProbeStopped": true,
+  "originalTestCleanup": "Original suites retain their own existing stop/removal behavior; no cleanup assertions or fixtures altered.",
+  "preserved": "All previous evidence/REDs; this task raw logs, long-socket expected-red PG startup log, stopped probe scratch, model inputs and existing dependencies retained.",
+  "availableBytes": 11016159232
+}

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "auo-public-vm-acquisition-ledger-v1",
+  "recordedAt": "2026-10-08T06:56:51.936+00:00",
+  "requestBounds": {
+    "maxRequests": 7,
+    "attemptedRequests": 1,
+    "perRequestSeconds": 15,
+    "perBodyMaxBytes": 20000000,
+    "redirectFollow": false
+  },
+  "productionImported": false,
+  "items": [
+    {
+      "sourceKey": "q226",
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Finance_Statement_English.pdf",
+      "attemptedAt": "2026-10-08T06:56:51.919+00:00",
+      "completedAt": "2026-10-08T06:56:51.936+00:00",
+      "elapsedSeconds": 0.017249885000637732,
+      "curlExitCode": 56,
+      "httpStatus": 0,
+      "status": "failed",
+      "bodyBytes": 0,
+      "sha256": null,
+      "bodyType": "none",
+      "completeBody": false,
+      "contentType": null,
+      "remoteIp": "",
+      "error": "curl: (56) CONNECT tunnel failed, response 403",
+      "redirectLocation": null,
+      "redirectsFollowed": 0,
+      "tlsVerificationBypassed": false,
+      "acquisition": "VM curl TLS public GET; not pinned research-source controller",
+      "publicationTime": null
+    },
+    {
+      "sourceKey": "q126",
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/1Q26_Finance_Statement_English.pdf",
+      "status": "not_attempted",
+      "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+    },
+    {
+      "sourceKey": "q425",
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/4Q25_Handout_English_20260210.pdf",
+      "status": "not_attempted",
+      "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+    },
+    {
+      "sourceKey": "monthly26",
+      "url": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+      "status": "not_attempted",
+      "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+    },
+    {
+      "sourceKey": "oct25",
+      "url": "https://www.auo.com/en-global/New_Archive/detail/news_MonthlySales_20251110",
+      "status": "not_attempted",
+      "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+    },
+    {
+      "sourceKey": "nov25",
+      "url": "https://www.auo.com/ja-JP/News_Archive/detail/news_MonthlySales_20251209",
+      "status": "not_attempted",
+      "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+    },
+    {
+      "sourceKey": "dec25",
+      "url": "https://www.auo.com/en-global/New_Archive/detail/news_MonthlySales_20260109",
+      "status": "not_attempted",
+      "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+    }
+  ],
+  "stopReason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+}

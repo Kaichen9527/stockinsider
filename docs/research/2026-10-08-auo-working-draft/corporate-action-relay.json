@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "auo-corporate-action-public-relay-v1",
+  "observer": "root-hosted-web-reader",
+  "observedAt": "2026-10-08T08:03:37Z",
+  "recordedByVmAt": "2026-10-08T08:05:49.538458+00:00",
+  "url": "https://www.auo.com/en-global/shareholder_information/index/distribution_information",
+  "status": "public_body_read",
+  "publishedAt": null,
+  "rawHttpRetained": false,
+  "vmFetchSucceeded": false,
+  "productionImported": false,
+  "claims": {
+    "cashDividendTwdPerCommonShare": 0.4,
+    "exTradingDate": "2026-07-30",
+    "commonRecordDate": "2026-08-06",
+    "commonPaymentDate": "2026-08-28"
+  },
+  "limits": "Issuer page verifies this cash action; does not establish all corporate actions, official adjustment factors, official calendar completeness, or historical availability. Do not replace 1.45 raw price difference with dividend; no raw dataset mutation."
+}

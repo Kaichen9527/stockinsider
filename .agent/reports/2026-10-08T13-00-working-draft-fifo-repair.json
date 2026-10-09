@@ -1,0 +1,357 @@
+{
+  "schemaVersion": "working-draft-fifo-repair-v1",
+  "recordedAt": "2026-10-08T13:00:43.791048+00:00",
+  "subjectBefore": "12e29b7df7740306caf5eb75e400cdc3b168166e",
+  "reviewAttribution": "root-relayed independent Astra P2: blocking FIFO before fstat; other14reviewtests/SSR524cells/route-switch checks passed independently; not protected",
+  "reproduction": {
+    "fourConcurrentLoads": 4,
+    "deadlineMilliseconds": 1500,
+    "pass": 0,
+    "fail": 1,
+    "skip": 0,
+    "timedOutBeforeRefusals": true
+  },
+  "after": {
+    "focusedPass": 13,
+    "fail": 0,
+    "skip": 0,
+    "types": "pass",
+    "lintErrors": 0,
+    "existingWarnings": 33,
+    "normalBuild": "pass",
+    "HTTP": "2success200; unknown and disabled404; original524cells27links preserved",
+    "browser": "both2409/2383 desktop/mobile actualanchors/details/overflow/error checks pass"
+  },
+  "mechanism": "leaf lstat early rejection, O_NONBLOCK|O_NOFOLLOW open, authoritative descriptor regular-file/size/inode-bound bytes/nanosecond ctime checks retained",
+  "scope": "loader+new FIFO/device regression tests+sanitized records only; no source work mixed",
+  "originalReceiptPreserved": ".agent/reports/2026-10-08T12-45-working-draft-preview.json",
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "preview-fifo-after",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-working-draft.test.ts",
+        "web/src/lib/research-working-draft-fifo.test.ts"
+      ],
+      "startedAt": "2026-10-08T12:58:14.417Z",
+      "completedAt": "2026-10-08T12:58:15.181Z",
+      "elapsedSeconds": 0.7636982459953288,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 248049664,
+      "observedTaskDiskPeakBytes": 1344274432,
+      "availableBeforeBytes": 25255522304,
+      "availableAfterBytes": 25255510016,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "preview-fifo-before",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-working-draft-fifo.test.ts"
+      ],
+      "startedAt": "2026-10-08T12:57:33.439Z",
+      "completedAt": "2026-10-08T12:57:35.198Z",
+      "elapsedSeconds": 1.7584052739985054,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 168972288,
+      "observedTaskDiskPeakBytes": 1344409600,
+      "availableBeforeBytes": 25255534592,
+      "availableAfterBytes": 25255526400,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "preview-fifo-browser",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/cloud-working-preview-artifacts-oct08/browser-server-fifo.py"
+      ],
+      "startedAt": "2026-10-08T12:59:37.278Z",
+      "completedAt": "2026-10-08T12:59:44.360Z",
+      "elapsedSeconds": 7.081535758989048,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1244348416,
+      "observedTaskDiskPeakBytes": 1350795264,
+      "availableBeforeBytes": 25251004416,
+      "availableAfterBytes": 25248796672,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "preview-fifo-build",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T12:58:46.421Z",
+      "completedAt": "2026-10-08T12:58:55.620Z",
+      "elapsedSeconds": 9.19891695700062,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1060040704,
+      "observedTaskDiskPeakBytes": 1344327680,
+      "availableBeforeBytes": 25255469056,
+      "availableAfterBytes": 25251364864,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "preview-fifo-http",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/cloud-working-preview-artifacts-oct08/http-check-fifo.py"
+      ],
+      "startedAt": "2026-10-08T12:59:35.328Z",
+      "completedAt": "2026-10-08T12:59:37.247Z",
+      "elapsedSeconds": 1.9190948119940003,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 170172416,
+      "observedTaskDiskPeakBytes": 1348771840,
+      "availableBeforeBytes": 25251344384,
+      "availableAfterBytes": 25251008512,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "preview-fifo-lint",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T12:58:21.845Z",
+      "completedAt": "2026-10-08T12:58:46.389Z",
+      "elapsedSeconds": 24.54398663500615,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1418952704,
+      "observedTaskDiskPeakBytes": 1344315392,
+      "availableBeforeBytes": 25255485440,
+      "availableAfterBytes": 25255473152,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "preview-fifo-types",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T12:58:15.214Z",
+      "completedAt": "2026-10-08T12:58:21.810Z",
+      "elapsedSeconds": 6.595425435007201,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 732774400,
+      "observedTaskDiskPeakBytes": 1344299008,
+      "availableBeforeBytes": 25255505920,
+      "availableAfterBytes": 25255497728,
+      "guardTermination": null
+    }
+  ],
+  "codeManifest": [
+    {
+      "file": "web/src/lib/research-working-draft-loader.ts",
+      "bytes": 3801,
+      "sha256": "55144886948973e098216b5a3d09029134be2f60360949de7e97831ae4570c1c"
+    },
+    {
+      "file": "web/src/lib/research-working-draft-fifo.test.ts",
+      "bytes": 2037,
+      "sha256": "ad3b79bc9a7949096812de4b3ea52f39390b2dc57221f4da794c6b004a58dafe"
+    }
+  ],
+  "privateArtifacts": [
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/2383-desktop-fifo.png",
+      "bytes": 907665,
+      "sha256": "d52ba17d46ee2572b5772a0802b97c8ec6daf2514c6b7a2911dc61323551adc1"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/2383-mobile-fifo.png",
+      "bytes": 191879,
+      "sha256": "b899718d6f14ae7338c661f63daa6d555cbee725e9f0b1640af35a32f45839e6"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/2383-page-fifo.html",
+      "bytes": 161375,
+      "sha256": "0821e6f769d575f7c89abe785324d1af138f3c2f1096a3225acfa0ba7b06a524"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/2409-desktop-fifo.png",
+      "bytes": 846619,
+      "sha256": "1191f9bec430a63c263530d83cc8afec526bbc9fe5d1c212b0fa059d129b055b"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/2409-mobile-fifo.png",
+      "bytes": 191590,
+      "sha256": "d94efff4a8b69a15879fc34305df55aa1fc3e69b38742af7ce0a65743ba25994"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/2409-page-fifo.html",
+      "bytes": 150961,
+      "sha256": "9e4337e9ab8fb6b5884758e194523efebf21c5686afa274a3a9c0863cbeee5b0"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/browser-check-fifo.cjs",
+      "bytes": 2905,
+      "sha256": "9f43d233f217587175b91447ab9b161fd725025ba829c1747eb2724740bf42ae"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/browser-receipt-fifo.json",
+      "bytes": 1656,
+      "sha256": "ae8383ebba5693da8fd43c42793f5ee6d125c04003c74d5d6e46c0db2afff410"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/browser-server-fifo.log",
+      "bytes": 272,
+      "sha256": "db76f6c171b91d401bc303020d650850e797347fd2f1ac43f8427a4b47ed9cb2"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/browser-server-fifo.py",
+      "bytes": 1304,
+      "sha256": "76d2365dc0d360ba79d709d969b816ce06a950b2d95af2ea40e55cbf92d04208"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/http-check-fifo.py",
+      "bytes": 4242,
+      "sha256": "e2c7d2f92e259fe49af96ab8a6ea9eccc345e1e448975f581d9cee89917c92fb"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/http-receipt-fifo.json",
+      "bytes": 1838,
+      "sha256": "68bb76ce51bca2dd4dd21a33d48b2839fcca12c852e5366d11deed2b9cdec3c1"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/local-disabled-fifo.log",
+      "bytes": 272,
+      "sha256": "70f0f9e1db21e47c5aad5975322ebd3c37b5f22e0b1e89b7c71297835d555749"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/local-enabled-fifo.log",
+      "bytes": 272,
+      "sha256": "d83f71c0688b2402934bf955e64caeacb5a12eb9513f29c20ac423aaa9db7b5b"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-after.json",
+      "bytes": 713,
+      "sha256": "feba9ef460081d3700953c4ebce171826a973551c36ca31e8a7c5d5e3db77d82"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-after.log",
+      "bytes": 4213,
+      "sha256": "4f2e389d0c5017209291496d10a988b96f262a5e5c18956fcb45633da8a06776"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-after.time",
+      "bytes": 897,
+      "sha256": "a9791941b14cb9590a8c63cf85dfd437ad7a3d7c6cfdd90e1582298c65e0aa67"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-before.json",
+      "bytes": 664,
+      "sha256": "e8bb8774b9f5588812cf7499360456832fdae5d4dedba6ac7a0d996dde49333a"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-before.log",
+      "bytes": 2812,
+      "sha256": "8609d8e46609fed1d68e4f287dc2c35800cfb3ab777d265cf9fcac5a77a3c2ed"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-before.time",
+      "bytes": 889,
+      "sha256": "0de5d2ea3ac9d9a6550aeddadb23bb5fd8bcf352d5a7359e321271c99e992c3f"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-browser.json",
+      "bytes": 666,
+      "sha256": "d361aafbaee10c453dc124a11d18c34c7b168ae9ee7b9a11f31de84d6aeb6067"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-browser.log",
+      "bytes": 1018,
+      "sha256": "47d852101a22d4b65b617de75e5dc9a7c95ce033b448db0ac18084ecbcaae6ee"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-browser.time",
+      "bytes": 872,
+      "sha256": "2e3bff07b20e985652a9841e84dbf6c8f70b6581cb4d81ec098c10ced8a6492f"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-build.json",
+      "bytes": 630,
+      "sha256": "467339d6406f098f3084ebe12c05047396a41422328211fa4d0dce027d3e3542"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-build.log",
+      "bytes": 6453,
+      "sha256": "987ea73903c7ba642464a75d8a3064d931d0612fc9c98117169abcbc3752f9d2"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-build.time",
+      "bytes": 822,
+      "sha256": "957c37aed74567f797fefd97baab1494edb25cc2037675bee3997ca6e37b16f2"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-http.json",
+      "bytes": 659,
+      "sha256": "a8a3fc3071e33fb08c3a0cc54d504337d08d256a61b9855be6a6cf13259319f5"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-http.log",
+      "bytes": 1210,
+      "sha256": "bd9e240a8f2a8c2151b72fb02e59c82a84273904570f9c24949247a4dcf70d32"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-http.time",
+      "bytes": 863,
+      "sha256": "4845cc73a25d7629dc8a0d539b45739809c4b6a0206c4c1fecf1713fea0d03e8"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-lint.json",
+      "bytes": 629,
+      "sha256": "52cc13fe3cf32e17d9255d1d3b69b7b09aaf6b182169269cbaf679c82cf57d3e"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-lint.log",
+      "bytes": 4760,
+      "sha256": "33a71dbfe5b1ff029d709b11d89e069122c96d9632df4458dba81e58362697fe"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-lint.time",
+      "bytes": 818,
+      "sha256": "79e3bd9b31f8fb6bb8c630c2520e27657ac233cd6143d157cf393b09efdd5467"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-types.json",
+      "bytes": 634,
+      "sha256": "c3a41e012a4bdce82aab0f9a65edfe5d328b13fa3d80994d3c0969b3ceef6259"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": "/workspace/cloud-working-preview-artifacts-oct08/preview-fifo-types.time",
+      "bytes": 821,
+      "sha256": "273ab999a2d08456f0f30efbe7ea6a5f748efa9aed3c78311cec11ec0b779e7a"
+    }
+  ],
+  "published": false,
+  "qualified": false,
+  "sourceWorkPreserved": "owned source1978 changes in named Git stash; committed relay data on source-cohort-consumer branch",
+  "sampledPeakRssBytes": 1418952704,
+  "taskDiskPeakBytes": 1350795264
+}

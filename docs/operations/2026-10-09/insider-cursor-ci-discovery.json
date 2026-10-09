@@ -1,0 +1,18 @@
+{
+  "base": "ceafb7b919b545fa37c3d6f1372920c83bd08a95",
+  "change": "test PostgreSQL discovery only; all content from const available onward byte identical",
+  "boundedDesign": "unsigned independent author_input_review_oct08 PASS before implementation",
+  "checks": {
+    "nodeCheck": "pass",
+    "preludeProbes": 10,
+    "actualPostgres": "not run on Mac; queued for VM combined acceptance",
+    "skipSemanticsUnchanged": true
+  },
+  "probeLog": {
+    "bytes": 440,
+    "sha256": "87a89ee4cdb4f05f61dc9b40e48808206e0760d6ad3e65ccf448dccda1dd924e"
+  },
+  "productionRuntimeChanged": false,
+  "workflowChanged": false,
+  "protectedApproval": false
+}

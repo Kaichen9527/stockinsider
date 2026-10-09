@@ -1,0 +1,170 @@
+(node:131248) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:131248) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-business-calculator.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+TAP version 13
+# Subtest: AUO bear: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 1 - AUO bear: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 4.612851
+  ...
+# Subtest: AUO base: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 2 - AUO base: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 3.251117
+  ...
+# Subtest: AUO bull: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 3 - AUO bull: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 1.94834
+  ...
+# Subtest: AUO: original immutable input files match byte/hash manifest
+ok 4 - AUO: original immutable input files match byte/hash manifest
+  ---
+  duration_ms: 0.113511
+  ...
+# Subtest: EMC bear: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 5 - EMC bear: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 2.27958
+  ...
+# Subtest: EMC base: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 6 - EMC base: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 2.088211
+  ...
+# Subtest: EMC bull: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 7 - EMC bull: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 1.131849
+  ...
+# Subtest: EMC: original immutable input files match byte/hash manifest
+ok 8 - EMC: original immutable input files match byte/hash manifest
+  ---
+  duration_ms: 0.069846
+  ...
+# Subtest: AUO Other and jurisdiction tax floor survive; EMC signed NCI and FX separate
+ok 9 - AUO Other and jurisdiction tax floor survive; EMC signed NCI and FX separate
+  ---
+  duration_ms: 4.487368
+  ...
+# Subtest: loss/zero excludes potential while actual hypothetical ordinary issuance retains period weight
+ok 10 - loss/zero excludes potential while actual hypothetical ordinary issuance retains period weight
+  ---
+  duration_ms: 3.735326
+  ...
+# Subtest: reject arbitrary calculator path
+ok 11 - reject arbitrary calculator path
+  ---
+  duration_ms: 0.695459
+  ...
+# Subtest: reject request command
+ok 12 - reject request command
+  ---
+  duration_ms: 0.790654
+  ...
+# Subtest: reject supplied EPS
+ok 13 - reject supplied EPS
+  ---
+  duration_ms: 0.422898
+  ...
+# Subtest: reject qualification
+ok 14 - reject qualification
+  ---
+  duration_ms: 0.329898
+  ...
+# Subtest: reject wrong company
+ok 15 - reject wrong company
+  ---
+  duration_ms: 0.43722
+  ...
+# Subtest: reject unit
+ok 16 - reject unit
+  ---
+  duration_ms: 0.45676
+  ...
+# Subtest: reject missing Other
+ok 17 - reject missing Other
+  ---
+  duration_ms: 0.380354
+  ...
+# Subtest: reject duplicate period
+ok 18 - reject duplicate period
+  ---
+  duration_ms: 0.492293
+  ...
+# Subtest: reject nonfinite margin
+ok 19 - reject nonfinite margin
+  ---
+  duration_ms: 0.33763
+  ...
+# Subtest: reject bad finance sign
+ok 20 - reject bad finance sign
+  ---
+  duration_ms: 0.567306
+  ...
+# Subtest: reject issuance weight
+ok 21 - reject issuance weight
+  ---
+  duration_ms: 0.48394
+  ...
+# Subtest: reject unknown publication instant
+ok 22 - reject unknown publication instant
+  ---
+  duration_ms: 0.66965
+  ...
+# Subtest: reject fake February date
+ok 23 - reject fake February date
+  ---
+  duration_ms: 0.647487
+  ...
+# Subtest: reject duplicate receipt
+ok 24 - reject duplicate receipt
+  ---
+  duration_ms: 0.475357
+  ...
+# Subtest: reject future nanos
+ok 25 - reject future nanos
+  ---
+  duration_ms: 0.741218
+  ...
+# Subtest: reject observed after admitted
+ok 26 - reject observed after admitted
+  ---
+  duration_ms: 0.472293
+  ...
+# Subtest: reject future reported quarter
+ok 27 - reject future reported quarter
+  ---
+  duration_ms: 0.45712
+  ...
+# Subtest: nanosecond observation/admission inversion rejects without millisecond truncation
+ok 28 - nanosecond observation/admission inversion rejects without millisecond truncation
+  ---
+  duration_ms: 0.479533
+  ...
+# Subtest: date-only remains a date with no synthetic publication instant
+ok 29 - date-only remains a date with no synthetic publication instant
+  ---
+  duration_ms: 1.587826
+  ...
+# Subtest: core hash, input hash and result hash bind deterministic recalculation
+ok 30 - core hash, input hash and result hash bind deterministic recalculation
+  ---
+  duration_ms: 4.879924
+  ...
+# Subtest: accessor/prototype objects and large packets cannot supply executable behavior
+ok 31 - accessor/prototype objects and large packets cannot supply executable behavior
+  ---
+  duration_ms: 1.878586
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 54.140431

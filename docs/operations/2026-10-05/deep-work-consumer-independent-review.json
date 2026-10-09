@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "unsigned-independent-code-review-record-v1",
+  "reviewedCommit": "139f6efe5e564db609115aba2e3a81dec51dbbc7",
+  "baseCommit": "7c05e7c6bdc491dad4671b0341c384d35fed0c07",
+  "reviewer": "/root/astra_publication_review",
+  "decision": "approve_limited_code_scope",
+  "scope": ["deep-job claim/status route", "real reservation context and microsecond clocks", "private claim/recovery controller journal", "per-claim unique owner binding", "bounded shared HTTP transport export"],
+  "focusedTests": {"passed": 37, "failed": 0, "skipped": 0},
+  "additionalProbes": [
+    "Two actual controller claims with the same worker label generate different owners",
+    "Old lost-reply recovery reads only its original owner and cannot recover a later claim",
+    "Server-substituted owner context is rejected",
+    "A recomputed request hash with inconsistent claimId/owner is rejected",
+    "Complete HTTP 409 and destination failure recover without another claim"
+  ],
+  "resolvedFindings": ["P2 lost-first-response owner-only recovery attribution", "Node 22.14 documentation requires explicit type stripping"],
+  "protectedGatePassed": false,
+  "productionApproved": false,
+  "actualCloudModelDispatchVerified": false,
+  "articlePublished": false,
+  "signedAttestation": false
+}

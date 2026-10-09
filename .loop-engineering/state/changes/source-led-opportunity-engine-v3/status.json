@@ -452,6 +452,18 @@
       "lineDispatchAuthorized": false,
       "rankingPromotionAuthorized": false,
       "mergeAuthorizedWithoutStepwiseConfirmation": true
+    },
+    "researchAgent": {
+      "productionDatabaseMigrationAuthorized": true,
+      "productionWebDeploymentAuthorized": true,
+      "scheduleActivationAfterAcceptanceAuthorized": true,
+      "authorizedBy": "user-in-current-conversation",
+      "authorizationText": "繼續完成剩下的，包含部署等等之類全部都完成",
+      "recordedDate": "2026-09-30",
+      "scope": "reviewed research-agent extension with passing exact-source gates, resource admission and coordinated writer cutover",
+      "protectedGateBypassAuthorized": false,
+      "liveTradingAuthorized": false,
+      "exactStrategyAdoptionAuthorized": false
     }
   }
 }

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "cloud-compatibility-relay-v1",
+  "reportedBy": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "title": "Set up stockinsider",
+    "hostId": "durable",
+    "turnId": "01a119ab-04d9-76b8-9404-a826856e0486"
+  },
+  "sourceCommit": "9610514ce52bcbac29e77b9c0ae80828e2da69d4",
+  "reportedTests": {
+    "passed": 87,
+    "failed": 0,
+    "skipped": 0,
+    "route": 34,
+    "controller": 16,
+    "claimContext": 4,
+    "sourceAssociation": 33
+  },
+  "reportedRuntime": {
+    "node": "v22.14.0",
+    "cgroupMemoryGiB": 32,
+    "singleProcessPeakMiB": 456.5,
+    "processGroupSamplePeakMiB": 513.1,
+    "samplingIntervalMs": 100,
+    "availableDiskGB": 30.04,
+    "worktreeBytes": 29290496,
+    "projectDiskHardQuotaConfirmed": false
+  },
+  "reportedOriginalReceipt": {
+    "bytes": 4684,
+    "mode": "0600",
+    "sha256": "aed3601692df7243c08b217019a9803bc0d4fd3377b56bc0150d9bfdbf0bc6fd",
+    "copiedToLocal": false
+  },
+  "actualProductionRoundtripAccepted": false,
+  "protectedApproval": false,
+  "source": "trusted_cross_chat_completion_summary_not_original_artifact"
+}

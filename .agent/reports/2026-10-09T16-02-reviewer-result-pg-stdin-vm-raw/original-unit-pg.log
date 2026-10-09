@@ -1,0 +1,85 @@
+TAP version 13
+(node:204828) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:204828) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: reviewer result: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+not ok 1 - reviewer result: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+  ---
+  duration_ms: 381.311285
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-postgres.test.mjs:28:1'
+  failureType: 'testCodeFailure'
+  error: 'spawnSync /workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb EPERM'
+  code: 'EPERM'
+  stack: |-
+    Object.spawnSync (node:internal/child_process:1120:20)
+    spawnSync (node:child_process:868:24)
+    execFileSync (node:child_process:911:15)
+    run (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-postgres.test.mjs:34:38)
+    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-postgres.test.mjs:44:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Failure evidence retained at /tmp/si-rresult-eqzJN4
+# Subtest: 2409 exact review result/read/replay with actual calculation and synthetic transport
+ok 2 - 2409 exact review result/read/replay with actual calculation and synthetic transport
+  ---
+  duration_ms: 1671.227283
+  ...
+# Subtest: 2383 exact review result/read/replay with actual calculation and synthetic transport
+ok 3 - 2383 exact review result/read/replay with actual calculation and synthetic transport
+  ---
+  duration_ms: 971.082001
+  ...
+# Subtest: closed review checks, exact article/packet, selected IDs and decision semantics
+ok 4 - closed review checks, exact article/packet, selected IDs and decision semantics
+  ---
+  duration_ms: 160.000875
+  ...
+# Subtest: receiveReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+ok 5 - receiveReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+  ---
+  duration_ms: 163.236537
+  ...
+# Subtest: readReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+ok 6 - readReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+  ---
+  duration_ms: 118.798653
+  ...
+# Subtest: author/cron/test/unknown cannot enter reviewer body, expired result starts no I/O
+ok 7 - author/cron/test/unknown cannot enter reviewer body, expired result starts no I/O
+  ---
+  duration_ms: 118.440067
+  ...
+# Subtest: closed editorial enums and paragraphId reject array/object/null coercions before receive
+ok 8 - closed editorial enums and paragraphId reject array/object/null coercions before receive
+  ---
+  duration_ms: 1284.781381
+  ...
+# Subtest: shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate
+ok 9 - shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate
+  ---
+  duration_ms: 127.134569
+  ...
+# Subtest: Unicode scalar text limits agree with PostgreSQL characters, astral min/max explicit
+ok 10 - Unicode scalar text limits agree with PostgreSQL characters, astral min/max explicit
+  ---
+  duration_ms: 115.848076
+  ...
+# Subtest: review text rejects ECMAScript whitespace-only and untrimmed over-limit prose
+ok 11 - review text rejects ECMAScript whitespace-only and untrimmed over-limit prose
+  ---
+  duration_ms: 215.566146
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 10
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5595.976633

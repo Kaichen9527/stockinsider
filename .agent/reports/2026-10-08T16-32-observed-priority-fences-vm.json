@@ -1,0 +1,336 @@
+{
+  "schemaVersion": "observed-priority-fences-vm-repair-v1",
+  "recordedAt": "2026-10-08T16:33:07.803612+00:00",
+  "baseCommit": "4868472ee479aa14aed24587311d1a5f1118d07b",
+  "branch": "codex/observed-priority-fences-repair-oct08",
+  "manualWindow": {
+    "startedAt": "2026-10-08T16:03:57.536955+00:00",
+    "deadline": "2026-10-08T16:33:57.536955+00:00",
+    "previousDeadline": "2026-10-08T16:02:26Z",
+    "previousPositiveVerificationCompletedAt": "2026-10-08T16:01:56.732Z",
+    "previousCheckpointCommitAt": "2026-10-08T16:02:35Z",
+    "previousCommitOverrunSeconds": 9,
+    "scope": "64f7 static trusted business calculator incremental implementation; no publication or role dispatch"
+  },
+  "reviewHistory": {
+    "subject": "4868472ee479aa14aed24587311d1a5f1118d07b",
+    "result": "unsigned request changes; three P2; successor review pending"
+  },
+  "sourceFiles": {
+    "migrations/20261008_research_observed_priority_v1.sql": {
+      "bytes": 28579,
+      "sha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3"
+    },
+    "migrations/20261008_research_observed_claim_v2.sql": {
+      "bytes": 26148,
+      "sha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2"
+    },
+    "scripts/research-local-inbox-dataplane.mjs": {
+      "bytes": 32537,
+      "sha256": "c20d2cfde6ba66e3adb65e11ae174b4beb415f82d167aea436c5462ab9042538"
+    },
+    "scripts/research-observed-priority-native.test.mjs": {
+      "bytes": 32641,
+      "sha256": "1d10ca0da2e06483658123df3cca2895281c632fb6c28aac0af08aecb8807e4d"
+    }
+  },
+  "measurements": {
+    "fences-red-complete": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "fences-red-complete",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T16:18:22.702Z",
+      "completedAt": "2026-10-08T16:18:59.930Z",
+      "elapsedSeconds": 37.22784453199711,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 1034797056,
+      "observedTaskDiskPeakBytes": 1784320000,
+      "availableBeforeBytes": 21492699136,
+      "availableAfterBytes": 21422538752,
+      "guardTermination": null
+    },
+    "fences-green": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "fences-green",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T16:20:49.030Z",
+      "completedAt": "2026-10-08T16:21:24.440Z",
+      "elapsedSeconds": 35.41098590800539,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 944316416,
+      "observedTaskDiskPeakBytes": 1860063232,
+      "availableBeforeBytes": 21422534656,
+      "availableAfterBytes": 21356527616,
+      "guardTermination": null
+    },
+    "fences-monday": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "fences-monday",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T16:24:30.259Z",
+      "completedAt": "2026-10-08T16:25:09.171Z",
+      "elapsedSeconds": 38.91186724998988,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 977461248,
+      "observedTaskDiskPeakBytes": 1909510144,
+      "availableBeforeBytes": 21356294144,
+      "availableAfterBytes": 21290401792,
+      "guardTermination": null
+    },
+    "fences-monday-signed": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "fences-monday-signed",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T16:30:17.900Z",
+      "completedAt": "2026-10-08T16:30:55.699Z",
+      "elapsedSeconds": 37.798849280006834,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 921726976,
+      "observedTaskDiskPeakBytes": 1983496192,
+      "availableBeforeBytes": 21290397696,
+      "availableAfterBytes": 21224333312,
+      "guardTermination": null
+    },
+    "fences-types": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "fences-types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T16:30:44.687Z",
+      "completedAt": "2026-10-08T16:30:48.172Z",
+      "elapsedSeconds": 3.48508158599725,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 551669760,
+      "observedTaskDiskPeakBytes": 1983496192,
+      "availableBeforeBytes": 21223940096,
+      "availableAfterBytes": 21224599552,
+      "guardTermination": null
+    },
+    "fences-lint": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "fences-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T16:31:12.644Z",
+      "completedAt": "2026-10-08T16:31:38.195Z",
+      "elapsedSeconds": 25.550430653005606,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1426165760,
+      "observedTaskDiskPeakBytes": 1975029760,
+      "availableBeforeBytes": 21224329216,
+      "availableAfterBytes": 21224316928,
+      "guardTermination": null
+    },
+    "fences-build": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "fences-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T16:31:58.514Z",
+      "completedAt": "2026-10-08T16:32:05.583Z",
+      "elapsedSeconds": 7.068711713000084,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1006706688,
+      "observedTaskDiskPeakBytes": 1975046144,
+      "availableBeforeBytes": 21224312832,
+      "availableAfterBytes": 21223108608,
+      "guardTermination": null
+    }
+  },
+  "evidenceFiles": {
+    "fences-red-complete.json": {
+      "bytes": 653,
+      "sha256": "e8f16952427d96a6795e9a3f1ed67d4341bfbeb64e4596694bad289b3a6d3594"
+    },
+    "fences-red-complete.log": {
+      "bytes": 14157,
+      "sha256": "a78228c0db71a2773184145299eeec2bb150332910f570605b5022caa48df5ba"
+    },
+    "fences-red-complete.time": {
+      "bytes": 878,
+      "sha256": "50631b9859f23b0060ad05cb3b251d9b08da2d66dcada7e15cd2e165571902e1"
+    },
+    "fences-green.json": {
+      "bytes": 645,
+      "sha256": "d07103850df708a46bef37ea89b6ff7d2032eb8f537c423747e53fa1b98cc37c"
+    },
+    "fences-green.log": {
+      "bytes": 7853,
+      "sha256": "496311f6055aea94103b6f4ac50215eaba26ab722c8cc010347efa9ad88dac16"
+    },
+    "fences-green.time": {
+      "bytes": 840,
+      "sha256": "10feb7f56d80017e90fdb4c29dd201e92d592d502f240eb6f79d10eb52b99830"
+    },
+    "fences-monday.json": {
+      "bytes": 646,
+      "sha256": "cf134ee396e569c111640ae1433c74cbe75a3b0bfc68186e54eb1d725863fbe0"
+    },
+    "fences-monday.log": {
+      "bytes": 11211,
+      "sha256": "b5b97095a5c4ce533404d4faf499c6e5ea051811433a26ef52cf0ffa98045e38"
+    },
+    "fences-monday.time": {
+      "bytes": 878,
+      "sha256": "fd71eb324aeb783b81dbe0bf6ea897ffba07b9c1451a4d5b11730f2f65abf066"
+    },
+    "fences-monday-signed.json": {
+      "bytes": 625,
+      "sha256": "063640c4d342e771ebed92af6f0254d7012751139dd411ff66e6a867374fdbee"
+    },
+    "fences-monday-signed.log": {
+      "bytes": 8117,
+      "sha256": "672360e640e93df30c52cc786d638bf2a8df146cf36802dc0cad80d30ce28b5d"
+    },
+    "fences-monday-signed.time": {
+      "bytes": 818,
+      "sha256": "d7b7dc1315c39b8a9d2cdabcbabbffd48c5975f511be5bd7171c058bb5f4653a"
+    },
+    "fences-types.json": {
+      "bytes": 563,
+      "sha256": "3f757cf85b732655dcbff8e3ae8e265f3912331783255702b6dac7304416583f"
+    },
+    "fences-types.log": {
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "fences-types.time": {
+      "bytes": 757,
+      "sha256": "de782bc42eceb878f5710aa19ff2e9579416445aa073d1baf758f560a02215c4"
+    },
+    "fences-lint.json": {
+      "bytes": 560,
+      "sha256": "91dbc62eae3d34229fd8481d05882c4f40d3c9ceeab0019135f0e41aadc965d4"
+    },
+    "fences-lint.log": {
+      "bytes": 4718,
+      "sha256": "08dc636eb541cc8b68c21f4149b523ab347ff6e4a474fa6a378f006e124571ff"
+    },
+    "fences-lint.time": {
+      "bytes": 754,
+      "sha256": "4e00151c11637d96bb97a1ae2dc3602092287233f47b4a7fd82977de42b7c983"
+    },
+    "fences-build.json": {
+      "bytes": 561,
+      "sha256": "8656cc3f3f9a439f93775cd71111ade48367a996834d7a5925a49e0721607c34"
+    },
+    "fences-build.log": {
+      "bytes": 6499,
+      "sha256": "af651acf7673c7a101726704a8fd2c81ef05150b61f53bf8caf5285d4f7cebef"
+    },
+    "fences-build.time": {
+      "bytes": 758,
+      "sha256": "e16c4e33a80561cd355c7965a84fad14d8235038c755871002dd73072d4d2639"
+    }
+  },
+  "nativeCases": {
+    "redComplete": {
+      "tests": 29,
+      "pass": 24,
+      "fail": 5,
+      "skip": 0,
+      "meaning": "three forged inserts accepted, expired observed blocks v1 plus parent failure"
+    },
+    "green": {
+      "tests": 29,
+      "pass": 29,
+      "fail": 0,
+      "skip": 0
+    },
+    "clockProbeInitial": {
+      "tests": 30,
+      "pass": 28,
+      "fail": 2,
+      "skip": 0,
+      "reason": "positive offset lacked plus sign; libfaketime parse error/postmaster exit; retained"
+    },
+    "final": {
+      "tests": 30,
+      "pass": 30,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "actualMondayEnqueue": {
+    "librarySha256": "45c4822a7516e9c41ec1b5498b0f08665ba4877330e9e9573c1213d16d6629a0",
+    "onlyPostgresPreloaded": true,
+    "rollbackOnly": true,
+    "oldExactTriggerSource": "4868472ee479aa14aed24587311d1a5f1118d07b",
+    "oldRed": {
+      "weeks": 2,
+      "clocks": 2,
+      "chargeWeeks": 2,
+      "sameReceipt": false,
+      "afterDay": "2026-10-12"
+    },
+    "newGreen": {
+      "weeks": 1,
+      "clocks": 1,
+      "chargeWeeks": 1,
+      "sameReceipt": true,
+      "afterDay": "2026-10-12"
+    }
+  },
+  "validation": {
+    "types": "pass",
+    "lint": {
+      "errors": 0,
+      "existingWarnings": 33
+    },
+    "normalWebBuild": "pass",
+    "independentSuccessorReview": "pending"
+  },
+  "resources": {
+    "node": "22.14.0",
+    "postgres": "17.11",
+    "cgroupMemoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "projectDiskQuota": "unknown; df is availability not guarantee",
+    "maxSampledAggregateRssBytes": 1426165760
+  },
+  "limits": [
+    "Only controlled rollback-only synthetic formal fixtures; real observed flow has no formal authority or product writes",
+    "PG fake clock is test-only; statement_timeout/preload compatibility diagnostic remains pending; no canary repair claimed",
+    "No author/reviewer model executed; no publication/strategy/protected/deployment approval",
+    "Calculator separate branch preserved; no claim that this manual increment verifies automated role budget",
+    "Current complete production policy immutable triggers/ACL are not a full schema attestation"
+  ]
+}

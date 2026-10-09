@@ -1,0 +1,170 @@
+{
+  "schema": "auo-source-run-v1",
+  "symbol": "2409",
+  "run": "2026-09-25-1800-asia-taipei",
+  "observedAt": "2026-09-25T18:05:41+08:00",
+  "latestCompletedTradingSession": "2026-09-24",
+  "researchRevision": "auo-2409-2026-09-25.v6",
+  "scopeNote": "SHA-256 is over directly fetched response bytes only; UI-only and search-index checks have null hash. Browser profile content was read in place; no credentials, private posts, or member full text were exported. A source returning no relevant result only describes the scope attempted, never all online information.",
+  "sources": [
+    {
+      "name": "TWSE 2409 September daily prices",
+      "attemptedScope": "Official STOCK_DAY 2409 September rows through 9/25 18:00 Taiwan",
+      "status": "read_success_no_new_result",
+      "publishedAt": "2026-09-24",
+      "firstObservedAt": "2026-09-25T18:05:41+08:00",
+      "rootUrl": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20260901&stockNo=2409",
+      "relation": "Official price root; repeats 07:00 latest completed day",
+      "trust": "official_market_data",
+      "contentSha256": "3788d104dd873852edbe00df4c0e9aebd8500d3f520bee8c938ec5dfa50974f9",
+      "finding": "Latest completed close remains 9/24 TWD 34.20; 9/25 and 9/28 are exchange holidays."
+    },
+    {
+      "name": "TWSE market holiday calendar",
+      "attemptedScope": "Published 2026 schedule, 9/25 and 9/28",
+      "status": "read_success_relevant",
+      "publishedAt": "2026",
+      "firstObservedAt": "2026-09-25T18:05:41+08:00",
+      "rootUrl": "https://www.twse.com.tw/holidaySchedule/holidaySchedule?response=json&queryYear=2026",
+      "relation": "Official market calendar",
+      "trust": "official_market_data",
+      "contentSha256": "7fefe785ea7155a5004a2eb74486ad865ea5c4b5f02ee0cffbbdacb1ca2ea390",
+      "finding": "No new completed trading session today."
+    },
+    {
+      "name": "TWSE MOPS material disclosures OpenAPI",
+      "attemptedScope": "Latest returned 96 listed-company disclosures dated 9/24, filtered for 2409",
+      "status": "read_success_no_relevant_result",
+      "publishedAt": "2026-09-24",
+      "firstObservedAt": "2026-09-25T18:05:41+08:00",
+      "rootUrl": "https://openapi.twse.com.tw/v1/opendata/t187ap04_L",
+      "relation": "Latest snapshot only; not historical MOPS query",
+      "trust": "official_disclosure_limited_scope",
+      "contentSha256": "6139fd97aaa18bafb86455d37b2d0a1c120731465476e3f9d9395b123631223e",
+      "finding": "No 2409 item in returned 9/24 snapshot; historical July disposal notices could not be retrieved from this endpoint."
+    },
+    {
+      "name": "AUO news index",
+      "attemptedScope": "Current visible newsroom first page plus targeted AUO/Intel/CPO search",
+      "status": "read_success_no_new_relevant_result",
+      "publishedAt": "2026-09-09",
+      "firstObservedAt": "2026-09-25T18:05:41+08:00",
+      "rootUrl": "https://www.auo.com/zh-TW/News_Archive/index",
+      "relation": "Company primary index; 8/31 technical release already recorded",
+      "trust": "official_company_limited_scope",
+      "contentSha256": "4c6daed32704e13e0f37b7f469eb2b80c8a65973211b59148ed252205505617b",
+      "finding": "No newer official Intel contract or CPO mass-production item on inspected index/search."
+    },
+    {
+      "name": "Intel newsroom index",
+      "attemptedScope": "Current visible news listing plus targeted Intel/AUO/玻璃/CPO search",
+      "status": "read_success_no_new_relevant_result",
+      "publishedAt": null,
+      "firstObservedAt": "2026-09-25T18:05:41+08:00",
+      "rootUrl": "https://www.intel.com/content/www/us/en/newsroom/home.html",
+      "relation": "Potential counterparty primary newsroom; prior Intel/Lens item is a different partnership",
+      "trust": "official_company_limited_scope",
+      "contentSha256": "ef78e8d233bac89534973c7e3bbbe3190503072b6bc35a032bc7ebf6dc9c3f8f",
+      "finding": "No inspected Intel/AUO announcement; does not prove no private talks."
+    },
+    {
+      "name": "AUO Huaya plant disposal notice",
+      "attemptedScope": "Verbatim public MOPS notice reprint dated 7/28; gain and transfer terms",
+      "status": "read_success_relevant",
+      "publishedAt": "2026-07-28T20:25:00+08:00",
+      "firstObservedAt": "2026-09-25T18:05:41+08:00",
+      "rootUrl": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=d79d267f-ece8-4552-9ced-2b8068255de5",
+      "relation": "Reprint of the first of two independent corporate transactions; original historical MOPS page unresolved",
+      "trust": "mops_notice_reprint_pending_original",
+      "contentSha256": "074967199a5c954d05aae6b7391787ab4874dd92904cbaa16dd5882a1bdcdd54",
+      "finding": "Expected gain NT$13.39bn after estimated costs and taxes; closing and recognition year not given."
+    },
+    {
+      "name": "AUO C5E plant disposal notice",
+      "attemptedScope": "Verbatim public MOPS notice reprint dated 7/30; gain and buyer",
+      "status": "read_success_relevant",
+      "publishedAt": "2026-07-30T14:00:13+08:00",
+      "firstObservedAt": "2026-09-25T18:05:41+08:00",
+      "rootUrl": "https://pchome.megatime.com.tw/news/cat7/20260730/9700002409202607304.html",
+      "relation": "Second corporate transaction, not a retransmission of first; original historical MOPS page unresolved",
+      "trust": "mops_notice_reprint_pending_original",
+      "contentSha256": null,
+      "finding": "Expected gain NT$4.28bn after estimated costs and taxes; direct HTTP client redirected to access page, while public browser text was readable."
+    },
+    {
+      "name": "Threads DingYuan/Intel/AUO thread",
+      "attemptedScope": "Signed-in Safari recent public search 友達光電, one author's main post and own continuation; no private replies exported",
+      "status": "read_success_relevant_unverified",
+      "publishedAt": "2026-09-25, relative timestamp approximately 3–4 hours before observation",
+      "firstObservedAt": "2026-09-25T18:09:38+08:00",
+      "rootUrl": "https://www.threads.com/@caiboren658/post/DdsyK13ksEL",
+      "relation": "Continuation https://www.threads.com/@caiboren658/post/DdsyK2dElWW by same author; one root, not two independent confirmations",
+      "trust": "single_author_public_social_rumor",
+      "contentSha256": null,
+      "finding": "Claims unnamed US CSP orders, 2028 visibility and Intel/AUO CPO chain; no named customer document or AUO attributable order. UI-only read, so no raw-body hash."
+    },
+    {
+      "name": "DingYuan corporate history",
+      "attemptedScope": "Public company technology milestones for PD 2025–2026",
+      "status": "read_success_relevant",
+      "publishedAt": null,
+      "firstObservedAt": "2026-09-25T18:10:00+08:00",
+      "rootUrl": "https://www.tyntek.com.tw/about_01.php",
+      "relation": "Supplier primary company page; supports product development, not social order claim",
+      "trust": "official_supplier_limited_scope",
+      "contentSha256": null,
+      "finding": "2025 100G/lane PD and 2026 development of 200G/lane PD and Micro-PD; direct Python TLS validation failed, search-engine copy was readable."
+    },
+    {
+      "name": "MoneyDJ DingYuan reporting",
+      "attemptedScope": "9/09 public article paragraphs on PD orders, capex and Micro LED CPO progress",
+      "status": "read_success_relevant",
+      "publishedAt": "2026-09-09",
+      "firstObservedAt": "2026-09-25T18:08:00+08:00",
+      "rootUrl": "https://www.moneydj.com/KMDJ/news/newsviewer.aspx?a=72ab35d5-00c3-4978-891a-118a52253901",
+      "relation": "Earlier reporting possibly remixed by social post; not independent confirmation of its new Intel/CSP claims",
+      "trust": "public_media_secondary",
+      "contentSha256": "f954949eb0d39a63705f10d9f45684a5d81589d068cda357cc1efc0ea0a71b11",
+      "finding": "Distinguishes existing high-speed PD order visibility from Micro LED CPO still in development/verification."
+    }
+  ],
+  "searches": [
+    {
+      "scope": "News, broker summaries, PTT, AUO/2409 + Intel, CPO, DingYuan, Corning, Quanta, ASE; September 2026",
+      "status": "read_success_no_new_independent_order_confirmation",
+      "finding": "Search surfaced prior Intel rumor and DingYuan PD reports; no independently verified AUO CPO purchase order. Not exhaustive.",
+      "contentSha256": null
+    },
+    {
+      "scope": "InvestAnchors public indexed site and Telegram, 友達/2409 plus CPO, Intel, 鼎元",
+      "status": "read_success_no_new_relevant_result",
+      "finding": "No new indexed 9/25 AUO analysis found; member-only material not copied. Public 2023 BHTC assessment remains historical context.",
+      "contentSha256": null
+    },
+    {
+      "scope": "Facebook signed-in Safari public post search 友達 Intel CPO",
+      "status": "read_success_no_new_independent_result",
+      "finding": "Visible results repeated older Economic Daily cooperation rumor; no independently documented order. Limited to visible search results.",
+      "contentSha256": null
+    },
+    {
+      "scope": "Instagram signed-in Safari search 友達光電 and 友達 CPO",
+      "status": "read_success_limited_no_relevant_result",
+      "finding": "Search UI exposed account matches, not a complete post/reply search; no relevant result in that limited scope, so platform coverage remains incomplete.",
+      "contentSha256": null
+    },
+    {
+      "scope": "Industry and overseas alternatives: BOE, Corning, Intel/Lens, TrendForce/Omdia, existing primary documents",
+      "status": "read_success_no_new_independent_result",
+      "finding": "No new official AUO order/competitor commercialization item since v5; BOE competing route remains in sensitivity constraints.",
+      "contentSha256": null
+    }
+  ],
+  "materialChange": "Two earlier but omitted AUO corporate disposal notices imply conditional NT$17.67bn one-time expected gain (NT$2.34/share only if fully attributable), not recurring EPS. New single-author Threads claim enters pending hypothesis; supplier primary page and prior reporting support PD development/orders but not Intel/AUO CPO mass-production. No change to base 2027 EPS, CPO/GCS commercial inputs, or completed-session trading state.",
+  "unfinishedCoverage": [
+    "Original July historical MOPS notice URLs and final disposal closing/recognition documents were not retrieved; public verbatim reprints are cited with that limit.",
+    "Instagram search did not expose a comprehensive public post/reply listing; absence of a relevant account match is not evidence of no IG discussion.",
+    "Direct Threads source-body hash was not obtainable from the UI, so only the source URL, visible summary and observation timestamp were retained.",
+    "No full scan of paid broker or paid industry publications; no private/member article text exported."
+  ]
+}

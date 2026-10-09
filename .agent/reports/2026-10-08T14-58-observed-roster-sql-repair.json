@@ -1,0 +1,390 @@
+{
+  "schemaVersion": "observed-roster-sql-repair-vm-v1",
+  "recordedAt": "2026-10-08T14:59:37.016976+00:00",
+  "baseCommit": "31a7ddd4acad72ba0a84e1c923a87197e517f580",
+  "branch": "codex/observed-roster-sql-repair-oct08",
+  "manualWindow": {
+    "startedAt": "2026-10-08T14:31:36.269Z",
+    "deadline": "2026-10-08T15:01:36.269Z",
+    "scope": "manual engineering, not model role/lease/budget acceptance"
+  },
+  "review": {
+    "subject": "31a7ddd4acad72ba0a84e1c923a87197e517f580",
+    "result": "request_changes",
+    "attribution": "root relay of independent Astra static SQL review; reviewer did not run PG",
+    "successorIndependentReview": "pending"
+  },
+  "red": {
+    "directRpcProbes": 7,
+    "incorrectlyAccepted": 6,
+    "alreadyRejected": [
+      "infiniteRecordedAt"
+    ],
+    "tapPass": 14,
+    "tapFail": 9,
+    "tapSkip": 0,
+    "failureAccounting": "six direct probes, two downstream contaminated snapshot failures, parent"
+  },
+  "green": {
+    "stage": "rpc-seal",
+    "tapPass": 23,
+    "tapFail": 0,
+    "tapSkip": 0,
+    "actualChecksExcludingParent": 22,
+    "adversarialProbes": 7,
+    "observedReceipt": {
+      "receivedAt": "2026-10-08T14:58:25.457575+00:00",
+      "snapshotHash": "6910b7d8fe8bf4262168034daccc49f9ee6c6d64e0274186b5a26db5ba2ebc42",
+      "entryEligible": false,
+      "excludedCount": 10,
+      "includedCount": 1978,
+      "mappingDigest": "6c8eee2500e9f18afc6f87715d1f6a546499e95ef5c398c71c20007c7048f5bb",
+      "idempotentReplay": false,
+      "latestObservedAt": "2026-10-08T12:21:15.657943+00:00",
+      "strategyApproved": false,
+      "researchQualified": false
+    },
+    "actualPath": "guarded Next HTTP -> bounded Supabase-compatible adapter -> pinned PostgREST16.3 -> isolated PostgreSQL17; direct service-role RPC adversarial probes also executed"
+  },
+  "changes": [
+    "DB reconstructs and compares complete sorted members/excluded including sector/listingDate/TPEXsection/excluded identity/reason",
+    "required finite source clocks attempted<=observed<=recorded<=DB clock after lock",
+    "greater-than-six fraction digits rejected, never rounded; legacy observed/recorded clocks separate",
+    "complete derived source projection and bounded original receipt field checks",
+    "no JS classifier, app or source dataset change"
+  ],
+  "checks": {
+    "typesFinal": "pass via npm typecheck lifecycle after first missing-generated-modules failure",
+    "lint": "0 errors/33 preexisting warnings",
+    "normalWebBuild": "pass using existing cache; unchanged web tree; final SQL sealing subsequently verified by rpc-seal",
+    "webTree": "1f15a1c7bbed1e9e26a5e25093b1d97482e9564a"
+  },
+  "sourceFiles": [
+    {
+      "path": "migrations/20261008_research_observed_roster_v1.sql",
+      "bytes": 29314,
+      "sha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b"
+    },
+    {
+      "path": "scripts/research-observed-roster-native.test.mjs",
+      "bytes": 7840,
+      "sha256": "bcfee2026ec9f1f60a49b751a3f615374ce974770c66ec7817905474964ac15d"
+    }
+  ],
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "direct-rpc-red",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:42:30.492Z",
+      "completedAt": "2026-10-08T14:42:52.386Z",
+      "elapsedSeconds": 21.89363127099932,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 487215104,
+      "observedTaskDiskPeakBytes": 1366122496,
+      "availableBeforeBytes": 23801438208,
+      "availableAfterBytes": 23733768192,
+      "guardTermination": null,
+      "measurementReceipt": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/direct-rpc-red.json",
+        "bytes": 616,
+        "sha256": "1dc13173b07dfd573afde69e40632372d6214517683b2bc889521fdf2e629c74"
+      },
+      "log": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/direct-rpc-red.log",
+        "sha256": "8b1ede6754538da2732ec96a186024485968fd6ff784fd238b4959442e0a55f5"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "direct-rpc-green",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:45:23.690Z",
+      "completedAt": "2026-10-08T14:45:44.390Z",
+      "elapsedSeconds": 20.700676392007153,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 606646272,
+      "observedTaskDiskPeakBytes": 1402683392,
+      "availableBeforeBytes": 23733760000,
+      "availableAfterBytes": 23691292672,
+      "guardTermination": null,
+      "measurementReceipt": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/direct-rpc-green.json",
+        "bytes": 619,
+        "sha256": "8e8ac83f0fac0d1d9fda60aa89b9bffd2b02f18e8f8a1b48d6b91e5c1c97e0df"
+      },
+      "log": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/direct-rpc-green.log",
+        "sha256": "dd03d5c2795ffa722bc6e982ef9df10d7fe55cb844c0fd38ac89c268bb76e754"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "direct-rpc-green-qualified",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:46:29.529Z",
+      "completedAt": "2026-10-08T14:46:31.038Z",
+      "elapsedSeconds": 1.5097580140136415,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 213884928,
+      "observedTaskDiskPeakBytes": 1436106752,
+      "availableBeforeBytes": 23691288576,
+      "availableAfterBytes": 23650828288,
+      "guardTermination": null,
+      "measurementReceipt": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/direct-rpc-green-qualified.json",
+        "bytes": 629,
+        "sha256": "8da3df8fd7df5f53a7292cca0e7e2e8024ff37557608656a4f40d4e8ae0027b6"
+      },
+      "log": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/direct-rpc-green-qualified.log",
+        "sha256": "72abad7e2699d0ea13163be5b2f0de1df56da40da878e15fa921194154c66424"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "rpc-final",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:48:12.584Z",
+      "completedAt": "2026-10-08T14:48:37.524Z",
+      "elapsedSeconds": 24.940243657998508,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 614916096,
+      "observedTaskDiskPeakBytes": 1485619200,
+      "availableBeforeBytes": 23650820096,
+      "availableAfterBytes": 23608373248,
+      "guardTermination": null,
+      "measurementReceipt": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/rpc-final.json",
+        "bytes": 612,
+        "sha256": "0e0ce36e90690b523614f743fdb7b65cb538147e9bc6503c6bd1e3adc62cb4a4"
+      },
+      "log": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/rpc-final.log",
+        "sha256": "9fddeb7b2bd373b4a39152124ade2fb4e44484ffdd15ef155e2e562729764f3b"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "rpc-ok",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:54:26.121Z",
+      "completedAt": "2026-10-08T14:54:42.367Z",
+      "elapsedSeconds": 16.24519851100922,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 556511232,
+      "observedTaskDiskPeakBytes": 1528053760,
+      "availableBeforeBytes": 23608369152,
+      "availableAfterBytes": 23564238848,
+      "guardTermination": null,
+      "measurementReceipt": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/rpc-ok.json",
+        "bytes": 608,
+        "sha256": "c863ddf0b482140474bdb7c6f491b32e1a778a6b2f4091b23123cbaaa85b4fe5"
+      },
+      "log": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/rpc-ok.log",
+        "sha256": "401bd1b3cf42a27a0b5b76bcabf1ec7060d6b18792a278f5621316431bdb082e"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "npm",
+        "exec",
+        "--",
+        "tsc",
+        "--noEmit"
+      ],
+      "startedAt": "2026-10-08T14:55:07.466Z",
+      "completedAt": "2026-10-08T14:55:23.554Z",
+      "elapsedSeconds": 16.088718938990496,
+      "exitCode": 2,
+      "sampledAggregateRssPeakBytes": 1335689216,
+      "observedTaskDiskPeakBytes": 1522720768,
+      "availableBeforeBytes": 23564234752,
+      "availableAfterBytes": 23559790592,
+      "guardTermination": null,
+      "measurementReceipt": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/types.json",
+        "bytes": 553,
+        "sha256": "f40fc4524cc06145e808ecb4b4f4ba0fc0fbcafe16f79846386f685d994c9e8c"
+      },
+      "log": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/types.log",
+        "sha256": "b0a71cb6a0cd75db128feba4f3e52f4cc7c4ca501b56722bfe6249d7e419e6e0"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T14:55:30.002Z",
+      "completedAt": "2026-10-08T14:55:54.633Z",
+      "elapsedSeconds": 24.63152697098849,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1202970624,
+      "observedTaskDiskPeakBytes": 1538543616,
+      "availableBeforeBytes": 23559786496,
+      "availableAfterBytes": 23543508992,
+      "guardTermination": null,
+      "measurementReceipt": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/lint.json",
+        "bytes": 525,
+        "sha256": "8994862b2e96551aae18414966f74faa3f0799357a3f647a10a86afeae78a65d"
+      },
+      "log": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/lint.log",
+        "sha256": "38e0255b87f18382fc1700d9982e3f39ecad5f1cd8b14fe577ccc713a6247812"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T14:56:29.736Z",
+      "completedAt": "2026-10-08T14:56:36.768Z",
+      "elapsedSeconds": 7.0322157540067565,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1544343552,
+      "observedTaskDiskPeakBytes": 1543442432,
+      "availableBeforeBytes": 23543504896,
+      "availableAfterBytes": 23540359168,
+      "guardTermination": null,
+      "measurementReceipt": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/build.json",
+        "bytes": 528,
+        "sha256": "4dd2437ed47207f15af61769b6827a6b43b2739cb825b7a374c7f32a86222489"
+      },
+      "log": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/build.log",
+        "sha256": "e2f22c44cc13ee19dc08d8e25fe45dee4943385896aad2e59503263b2786ccf5"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T14:57:04.915Z",
+      "completedAt": "2026-10-08T14:57:16.134Z",
+      "elapsedSeconds": 11.219186243004515,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1024499712,
+      "observedTaskDiskPeakBytes": 1546596352,
+      "availableBeforeBytes": 23540355072,
+      "availableAfterBytes": 23540346880,
+      "guardTermination": null,
+      "measurementReceipt": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/types-final.json",
+        "bytes": 565,
+        "sha256": "8949c75c3a0a8e81ecd8e8bd02d1800bf8fd291af9e78a5e1f53975a9d4905a4"
+      },
+      "log": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/types-final.log",
+        "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "rpc-seal",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:58:17.173Z",
+      "completedAt": "2026-10-08T14:58:32.761Z",
+      "elapsedSeconds": 15.588001535012154,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 546238464,
+      "observedTaskDiskPeakBytes": 1597808640,
+      "availableBeforeBytes": 23540338688,
+      "availableAfterBytes": 23496200192,
+      "guardTermination": null,
+      "measurementReceipt": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/rpc-seal.json",
+        "bytes": 611,
+        "sha256": "06ab99061bbbf278607ec8c25ae4edffba5c47318fee12b5a493791458646821"
+      },
+      "log": {
+        "path": "/workspace/cloud-observed-roster-repair-artifacts-oct08/rpc-seal.log",
+        "sha256": "9806998fbb2f0b3ec3214631f2e58be9f3440041bf8e3d801431ab8de2ea640f"
+      }
+    }
+  ],
+  "resources": {
+    "node": "v22.14.0",
+    "memoryMax": "34359738368",
+    "cpuMax": "400000 100000",
+    "sampledAggregateRssPeakBytes": 1544343552,
+    "observedTaskDiskPeakBytes": 1597808640,
+    "availableBeforeBytes": 23801438208,
+    "availableAfterBytes": 23496200192,
+    "diskQuota": "unknown; filesystem available space is not project quota",
+    "method": "100ms process group/live recursive descendants, short or reparented process RSS may be missed; task du plus stage artifacts, one heavy task, 8GiB/4GB temporary guards"
+  },
+  "preservedFailures": [
+    "SQL projection alias ambiguity",
+    "normal admission rejected by inverted condition before correction",
+    "PG Unix socket path length >107 bytes; shorter new artifact path used without product harness change",
+    "first typecheck missing generated authority modules, lifecycle regenerated them"
+  ],
+  "remaining": [
+    "Slice2 scoped priority/atomic first-discovery/enqueue and global current admission week",
+    "Slice3 real scoped claim/context/author input",
+    "approved64f7 publication contract implementation",
+    "native0825/monitor5dff VM verification queue"
+  ],
+  "flags": {
+    "formalStocksWritten": false,
+    "formalAuthoritySeeded": false,
+    "modelReserved": false,
+    "productionImported": false,
+    "top20Completed": false,
+    "jobClaimInputCompleted": false,
+    "protectedAttestation": false,
+    "deploymentApproved": false
+  },
+  "slice2Notes": "EP8 published March16/acquiredOct8, novelty0, not new current catalyst/market attention; priority weights unchanged; Slice2 uncommitted files preserved in other worktree"
+}
