@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "author-result-build-identity-diagnostic-v1",
+  "compiledChunk": "web/.next/server/chunks/src_lib_research-financial-supplement_ts_0vy83j9._.js",
+  "compiledChunkBytes": 24245,
+  "compiledChunkSha256": "83daa3f08f8232d880476fe6531a6f853028a40216e2b3d9b91a8699a3358408",
+  "functions": 20,
+  "sourceRuntimeHash": "284921a74e8b58d75352f13608c02ff84bfce60d0c0a6c64ad14e8a97512431c",
+  "compiledStaticHash": "a9d36cfbab603802756fc49fe1d8c419353aa94eb650315b7a2502b7cf508dac",
+  "match": false,
+  "method": "static AST extraction of exact named functions and constant arrays used by compiled Function.toString digest; no compiled execution",
+  "native409CauseStatus": "fingerprint mismatch demonstrated; precise server rejection phase not exposed by handler"
+}

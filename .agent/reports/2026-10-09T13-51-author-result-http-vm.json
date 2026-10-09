@@ -1,0 +1,2568 @@
+{
+  "schemaVersion": "author-result-compiled-http-vm-receipt-v1",
+  "recordedAt": "2026-10-09T13:51:39.889633+00:00",
+  "branch": "codex/author-result-http-vm-oct09",
+  "runtimeSubject": "b8c3df4d1c21b4aeee28341b6935302b42463f94",
+  "runtimeTree": "b360aeb3db772189c55eb69aeb6921233e1504e5",
+  "nativeTestSubject": "13072b3bbce5e89dd56e47774cd1e4837c2437e7",
+  "buildSourceSubject": "13072b3bbce5e89dd56e47774cd1e4837c2437e7",
+  "buildSourceTree": "2c6358d23b026a515d8bfaf14ce4fe6213263941",
+  "diagnosticSubject": "bb09df0db0f5ed335b8144251be35d6a01b21703",
+  "unchangedRuntimeBlobs": {
+    "web": "7bdb7dc6f5e7d9aa3445aabca9528a26dd073d26",
+    "migrations": "7ba5051613ed86ebe8437f12cbc84bc79ae9f102",
+    "package.json": "9c209b94f4523664d86073a91aa9843b5177a2f8",
+    "scripts/research-local-inbox-dataplane.mjs": "2b8fea66a47e309b572403a3331ab136af51bd54",
+    "scripts/research-author-result-fixture.mjs": "c45d7bfc6dee943057e920daf9cb6e6563abfecc"
+  },
+  "testAndDiagnosticFileHashes": {
+    "scripts/research-author-result-http.test.mjs": {
+      "bytes": 22987,
+      "sha256": "6160b7245f738be49f8055e2467ae895555b23bd8d31929798a2156910395225"
+    },
+    "scripts/research-author-result-http-readiness.mjs": {
+      "bytes": 1462,
+      "sha256": "3952a65fd5c9e918f3873a03974c6f85e95f9321f7f9ec72affaf86178a28014"
+    },
+    "scripts/research-author-result-build-identity-diagnostic.mjs": {
+      "bytes": 3253,
+      "sha256": "713919f5882959a005adffb32a3a043c073fa148f630d195eb33f713e3e751eb"
+    }
+  },
+  "build": {
+    "buildId": "AwvYbZjxpDludvMr16gWE",
+    "normalBuildPassed": true,
+    "actualServerFileCount": 2070,
+    "allManifestBytesAndHashesVerifiedBeforeAndAfterNative": true,
+    "previousCbdBuildNotReused": true,
+    "manifestSha256": "c7728ee502017fef0925795250b1d21f66ff7e0d732ab42ac11a79f93da468d2"
+  },
+  "tests": {
+    "authorResultUnitActual": {
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "runner": "--experimental-test-isolation=none, original untouched eight cases"
+    },
+    "earlierUnitIsolatedAttempts": "four file-level PASS outputs, not evidence of eight cases; all outputs preserved; cause not established",
+    "authorResultOriginalPostgres": {
+      "total": 13,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0
+    },
+    "compiledHttpSingleRun": {
+      "total": 50,
+      "pass": 42,
+      "fail": 8,
+      "skip": 0,
+      "parents": 2,
+      "childrenPerParent": 24,
+      "firstFunctionalFailureBothCompanies": "receiveAuthorResult HTTP409 research_author_result_unavailable",
+      "cascadeFailures": "each result replay comparison / withdrawal report assignment / parent final assertion depend on absent saved result",
+      "resultRestartAcceptance": "not reached due preceding exact-read/replay failure; prior packet restart passed",
+      "singleShotBusinessRequests": true,
+      "readinessOnlyApprovedStartupTypes": true,
+      "harnessPassedTrueMustNotOverrideRawTapExit1": true
+    }
+  },
+  "rootIndependentAttribution": {
+    "subject": "b8c3df4d1c21b4aeee28341b6935302b42463f94",
+    "observer": "author_input_review_oct08 via root relay",
+    "scope": "unsigned scoped CODE PASS, 31 independent tests + 8 adversarial probes",
+    "notNativeProtectedOrModelApproval": true
+  },
+  "failureDiagnostic": {
+    "schemaVersion": "author-result-build-identity-diagnostic-v1",
+    "compiledChunk": "web/.next/server/chunks/src_lib_research-financial-supplement_ts_0vy83j9._.js",
+    "compiledChunkBytes": 24245,
+    "compiledChunkSha256": "83daa3f08f8232d880476fe6531a6f853028a40216e2b3d9b91a8699a3358408",
+    "functions": 20,
+    "sourceRuntimeHash": "284921a74e8b58d75352f13608c02ff84bfce60d0c0a6c64ad14e8a97512431c",
+    "compiledStaticHash": "a9d36cfbab603802756fc49fe1d8c419353aa94eb650315b7a2502b7cf508dac",
+    "match": false,
+    "method": "static AST extraction of exact named functions and constant arrays used by compiled Function.toString digest; no compiled execution",
+    "native409CauseStatus": "fingerprint mismatch demonstrated; precise server rejection phase not exposed by handler"
+  },
+  "minimalRepairProposalForRootReview": "Use a reviewed stable transitive calculator identity across source controller and compiled receiver, or a explicitly bound common validator artifact; do not overwrite caller observation hash or bypass its equality. Static digest mismatch is demonstrated; exact handler rejection phase remains hidden. No runtime/SQL repair performed.",
+  "profiles": {
+    "2409": {
+      "startedAt": "2026-10-09T13:41:39.787Z",
+      "postgrest": {
+        "version": "PostgREST 16.3",
+        "archiveBytes": 4519976,
+        "archiveSha256": "4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d",
+        "binaryBytes": 20502640,
+        "binarySha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+      },
+      "partialDevelopmentProfile": true,
+      "databaseAdapterInjected": false,
+      "officialAuthorityRowsSeeded": 0,
+      "observedRosterPromoted": false,
+      "modelReserved": false,
+      "productionImported": false,
+      "top20": null,
+      "checks": [
+        "unauthorized_401_zero_write",
+        "inbox_three_industry_only",
+        "anonymous_table_rpc_denied",
+        "ancillary_read_only_empty_authority",
+        "production_writer_not_fabricated",
+        "real_source_heads_cutoff",
+        "real_authority_empty",
+        "restart_dedup",
+        "priority_blocked_restart_fenced"
+      ],
+      "limitations": [
+        "Node test-runner controlled loopback configuration, not production runtime activation",
+        "Partial schema profile does not attest the complete installed migration policy",
+        "No official roster/sector authority has been ingested; Top20 remains blocked"
+      ],
+      "observedRosterMigrationSha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b",
+      "observedPriorityMigrationSha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3",
+      "observedClaimDependencySourceHashes": {
+        "state": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+        "jobs": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+        "dossier": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+        "immutableDefinition": "d2edbeae7c77f25924a3a9c21acb9ad65109cb0f1a6206aad83dff8d88b60985"
+      },
+      "observedClaimMigrationSha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2",
+      "installedDefinitions": [
+        {
+          "file": "supabase_schema.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stocks (",
+          "sourceSha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3",
+          "definitionSha256": "b3d9d87b4dd2cd2570c657f6d9edeca9474409198f1ce2f2d4b143b313d1b1d2"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_entities (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "03c78b435837ecd782b14e36f8f51a7bdbeeefc130cb19d36bf3ff7120292f74"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_raw_documents (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "1ddf2e178a9dcbb5608535eaf32f9f508908ace0a804283f614e02c64338e7da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "6f9cf89764e00a16dd2630f9aaa92be8c26e375c05bb738f9ac4638e8d914c52"
+        },
+        {
+          "file": "migrations/20260906_source_identity_v4.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+          "definitionSha256": "c1d15e7436fef37b0d959e009f50ac67c9588f43d2000f3b82424794bb5a7969"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE authority_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "de0456eee24d4a21f288f00843e1c7ea2bf26c4475e4035cfa976d98f38df541"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE stock_exchange_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "bb7c4a9dcf3cb5356c8dbd6b1e363d7532c19bed93e17528d1c8a0d129c7d73a"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE instrument_type_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "81cb876a7635be9f157396262a638bf6de5831b1e764a9c86a469c070f6b7afb"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE listing_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "03070b2edae9d1f1b2f15514852a6ae61d4b8e980fd7406bb05bedcb1d6d2a78"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE official_roster_provider_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "c85a62f8be9eca5f006ed60d7ee9e366246dc44678e32be2466f1129df37a61d"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE tw_market_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "be7acd6c47b936c20739f01bceec5a206b9cdfaed0cf9250bdb1c5a8883e8792"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE canonical_sector_key_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "e92dfaa281fddd0da3154e2429ebae9553fc96393289986ec30267722c8475b9"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_instruments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "411f053cf5273c207fb1567a391c02986ce5b849128f2d3b47ac1cc85a2c4a3c"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "9c2b0c74ea924ef94f143b37d7de13b57e2c5530eebbbc0911cdaa5b676a5194"
+        },
+        {
+          "file": "migrations/20260831_candidate_shadow_performance.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_runs (",
+          "sourceSha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+          "definitionSha256": "c37f899abd5d57f924a8cd2c1bace068bb2dc5e539ae0809381c7ff6115973da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.market_evidence_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "9f7b07f170febec813a9c67bba8e33338cf3ff5fa35de6e2df2cd9fc14578957"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_detail_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2c2fc7a718d8f0335ca4f718bf7f71ff0d447639910811276c9a965d76981139"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_bundles (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "49bfec32f5a5e712cc1158c391168699cf81876bcfb9dcbec3bcd30f33cb14c4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_dossiers (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2151ab0e8433a794f4bed71fa4fcfea65ab3df045ad5c88b9c2a63912c7d0db0"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_submission_receipts (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "5337c2d9217883181acbc053e205d78cb5d0b54605aca893790a07cc28f452c1"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "3418aa78ecbfaf879f426561e30cb35cd223fdfe5ba8f7d849e6dc36281579d7"
+        },
+        {
+          "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_issuer_document_domains_v6 (",
+          "sourceSha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+          "definitionSha256": "5d66b75c1bff55126ada62aaedcf489128769ef3ec3f1e390c6cf93267812845"
+        },
+        {
+          "file": "migrations/20260929_research_deep_jobs_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_deep_jobs_v1 (",
+          "sourceSha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+          "definitionSha256": "f6b905d282b566dd2d80cd2cf19ec418e35a8951aa04004deecf801ddf9d3eb4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority(",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "a6749bacb864ab7c6c61dd9b6cd2d1bdfcb4b09c40e99489ed8d072d84719e95"
+        },
+        {
+          "file": "migrations/20260906_authority_pagination_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority_page(",
+          "sourceSha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+          "definitionSha256": "e76a34cde20546b651b64713313ea63e784ee93be606c6804f0e2a32b5578598"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "088283446f2f3ded3deca7cc2e8328325abe4490470954219c2954850851d8cf"
+        }
+      ],
+      "developmentProfileSqlSha256": "666264467963b75fec638b685e4f2eae9081635f389c00b5472f2154647b9b39",
+      "readOnlyDependencyTables": [
+        "candidate_research_runs",
+        "market_evidence_snapshots",
+        "candidate_detail_snapshots",
+        "candidate_dossier_bundles",
+        "candidate_research_dossiers",
+        "candidate_dossier_submission_receipts",
+        "research_priority_runs_v1",
+        "candidate_issuer_document_domains_v6",
+        "research_deep_jobs_v1"
+      ],
+      "installedRoutines": [
+        {
+          "name": "candidate_research_stock_authority",
+          "bodySha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "bodySha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "research_source_heads_page_v1",
+          "bodySha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        }
+      ],
+      "classificationEvidence": {
+        "schemaVersion": "stockinsider-observed-official-security-scope-reconciliation-v1",
+        "recordedAt": "2026-10-08T12:23:18.366811+00:00",
+        "counts": {
+          "twseMasterMatched": 1095,
+          "twseOrdinaryResearchCandidates": 1085,
+          "twseInnovationBoard": 31,
+          "twseOrdinaryAdditionalTransferRestrictionCfi": 1,
+          "twseTdrExcludedFromOrdinaryScope": 10,
+          "unchangedObservedTpexOrdinary": 893,
+          "reconciledObservedOrdinaryResearchCohort": 1978,
+          "legacyStrictObservedCohort": 1946
+        },
+        "sourceReferences": [
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=2",
+            "observedAt": "2026-10-08T12:21:15.657943+00:00",
+            "responseBytes": 9063029,
+            "responseSha256": "920828356712b85375e504b4633446ad8af39f6f59eddbb7efc0f47e7ca54311"
+          },
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=4",
+            "observedAt": "2026-10-08T09:04:35.607658+00:00",
+            "responseBytes": 3030198,
+            "responseSha256": "0a719dcffca37de025a3d5be17e83c39019d9d78ffb6e6992ca140b18707e65e"
+          }
+        ],
+        "rawSourceHashesVerifiedByVm": false,
+        "selectedPacketHash": "50fd3e96233b4a0386c09729371283c703f9e9ae147cc4bfd667914a8a753518",
+        "trustedAuthorityActivated": false,
+        "currentTradingEligibilityVerified": false,
+        "historicalPITEligible": false
+      },
+      "excludedNonCommon": [
+        {
+          "symbol": "9103",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910322",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9105",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910861",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9110",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911608",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911622",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911868",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "912000",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9136",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        }
+      ],
+      "observedClassificationAccounting": {
+        "total": 1978,
+        "legacySnapshotTotal": 1946,
+        "excludedTdr": 10,
+        "needsEvidence": 2,
+        "notAssessed": 1976,
+        "qualified": 0,
+        "ranked": 0
+      },
+      "sourceAttempts": [
+        {
+          "id": "investanchors-public",
+          "outcome": "metadata_only"
+        },
+        {
+          "id": "nittobo-electronic",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-products",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-production",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "auo-tech",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "threads-partial-surface",
+          "outcome": "read_failed"
+        },
+        {
+          "id": "telegram-investanchors-869",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-881",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-882",
+          "outcome": "item_ready"
+        }
+      ],
+      "controllerRunHash": "97a3adf8c92a07b11d36e42d509b9bea9e5859653b0936c76bbea8ea54c5a71c",
+      "inputCanonicalSymbols": [
+        {
+          "url": "https://t.me/investanchors/869",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/881",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/882",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        }
+      ],
+      "distinctPublishers": 1,
+      "persistedDocuments": 3,
+      "dependencyPrivileges": [
+        {
+          "table": "candidate_research_runs",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        }
+      ],
+      "dependencyPolicies": [
+        {
+          "table": "candidate_research_runs",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        }
+      ],
+      "initialPriorityFailure": "research_priority_official_roster_missing",
+      "unchangedEmptyTables": {
+        "candidate_research_runs": 0,
+        "market_evidence_snapshots": 0,
+        "candidate_detail_snapshots": 0,
+        "candidate_dossier_bundles": 0,
+        "candidate_research_dossiers": 0,
+        "candidate_dossier_submission_receipts": 0,
+        "research_priority_runs_v1": 0,
+        "candidate_issuer_document_domains_v6": 0,
+        "research_deep_jobs_v1": 0,
+        "stocks": 0,
+        "stock_instruments_v3": 0,
+        "stock_sector_assignments_v3": 0
+      },
+      "rosterIngestionFailure": "writer_release_identity_missing",
+      "sourceHeads": 3,
+      "postgresRestartUnchanged": true,
+      "inboxReplayAccepted": 0,
+      "priorityStatus": 409,
+      "priorityFailure": {
+        "ok": false,
+        "error": "research_priority_official_roster_missing"
+      },
+      "authorPacketReadiness": [
+        {
+          "name": "prepare_research_input_v2",
+          "attempt": 1,
+          "status": 404,
+          "body": {
+            "code": "PGRST202",
+            "details": "Searched for the function public.prepare_research_input_v2 with parameter p_request or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.",
+            "hint": null,
+            "message": "Could not find the function public.prepare_research_input_v2(p_request) in the schema cache"
+          },
+          "elapsedMs": 4.4231460000009974
+        },
+        {
+          "name": "prepare_research_input_v2",
+          "attempt": 2,
+          "status": 400,
+          "body": {
+            "code": "P0001",
+            "details": null,
+            "hint": null,
+            "message": "input_preparation_shape"
+          },
+          "elapsedMs": 113.9822380000005
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "attempt": 1,
+          "status": 503,
+          "body": {
+            "code": "57P01",
+            "details": null,
+            "hint": null,
+            "message": "terminating connection due to administrator command"
+          },
+          "elapsedMs": 5.245317000000796
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "attempt": 2,
+          "status": 200,
+          "body": [],
+          "elapsedMs": 118.69730300000083
+        }
+      ],
+      "completeInputHttp": {
+        "symbol": "2409",
+        "revisionId": "b6f31547-d290-4074-b3fa-32d9395e530c",
+        "inputHash": "8d9d586dfac3a63df71185a7e1c930f846a5bab90e5bc05205264843d960be0e",
+        "charge": 166397,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "authorPacketHttp": {
+        "symbol": "2409",
+        "packetHash": "c237cc9df40c63402e89ab8e09d5f29ff15aa30d7040dcd099eb84645a90f753",
+        "packetBytes": 130658,
+        "sourceCount": 1,
+        "sourceSealReceivedAt": "2026-10-09T13:41:57.230319+00:00",
+        "dbSealReceivedAt": "2026-10-09T13:41:57.230319+00:00",
+        "nodeReadAt": "2026-10-09T13:42:00.288Z",
+        "pgReadAt": "2026-10-09 13:42:00.297173+00",
+        "writingWindow": {
+          "assignedAt": "2026-10-09T13:41:59.402659+00:00",
+          "originalJobDeadline": "2026-10-09T14:11:56.382954+00:00",
+          "originalReservationDeadline": "2026-10-09T14:11:56.382954+00:00"
+        },
+        "syntheticSourceJobCredentials": true,
+        "actualFinancialRelayProjection": true,
+        "modelDispatched": false,
+        "researchQualified": false,
+        "stateAuditBefore": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 168984,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "9b82adaefbf50c8128fd0bb872c9b96ed97b3e61ea3d9654578b162af5723a68"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "2d2bcfc3ddb5f54ce32f2b3a774120d7f4b02e8ec4412279c45ccaa7fe455c91"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "c2d0c79ddb4cf99bb016232103218020eafa12be0f2a7c0cd21814c17df6233c"
+          },
+          "research_author_results_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "96ed4d2bded59bec71d5f871f4c13d4cd710d477cee3c3b45cd21a26053c6d3c"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "1a86f9fde3bdb367b5673f709aec942dd6d1fd972959a7c4fc3219a78d7d531f"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "f7e359933d9515e97fd53aeba88e545eb08c77ac77318d243cc40b185b7079cd"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "9ab8377915c9f92d2b4a5ced5b3b626bf80c40cd71e4a3c5c3c9281a2071d362"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "09b44e6735b5afadd75bd198ef8c2b2a38e7f1b5509d80154e5a4b762a0f7e73"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "stateAuditAfter": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 168984,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "9b82adaefbf50c8128fd0bb872c9b96ed97b3e61ea3d9654578b162af5723a68"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "2d2bcfc3ddb5f54ce32f2b3a774120d7f4b02e8ec4412279c45ccaa7fe455c91"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "c2d0c79ddb4cf99bb016232103218020eafa12be0f2a7c0cd21814c17df6233c"
+          },
+          "research_author_results_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "96ed4d2bded59bec71d5f871f4c13d4cd710d477cee3c3b45cd21a26053c6d3c"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "1a86f9fde3bdb367b5673f709aec942dd6d1fd972959a7c4fc3219a78d7d531f"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "f7e359933d9515e97fd53aeba88e545eb08c77ac77318d243cc40b185b7079cd"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "9ab8377915c9f92d2b4a5ced5b3b626bf80c40cd71e4a3c5c3c9281a2071d362"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "09b44e6735b5afadd75bd198ef8c2b2a38e7f1b5509d80154e5a4b762a0f7e73"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      "authorPacketWithdrawal": {
+        "before": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 168984,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "9b82adaefbf50c8128fd0bb872c9b96ed97b3e61ea3d9654578b162af5723a68"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "2d2bcfc3ddb5f54ce32f2b3a774120d7f4b02e8ec4412279c45ccaa7fe455c91"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "c2d0c79ddb4cf99bb016232103218020eafa12be0f2a7c0cd21814c17df6233c"
+          },
+          "research_author_results_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "96ed4d2bded59bec71d5f871f4c13d4cd710d477cee3c3b45cd21a26053c6d3c"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "1a86f9fde3bdb367b5673f709aec942dd6d1fd972959a7c4fc3219a78d7d531f"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "f7e359933d9515e97fd53aeba88e545eb08c77ac77318d243cc40b185b7079cd"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "9ab8377915c9f92d2b4a5ced5b3b626bf80c40cd71e4a3c5c3c9281a2071d362"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "09b44e6735b5afadd75bd198ef8c2b2a38e7f1b5509d80154e5a4b762a0f7e73"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "afterWithdrawal": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 168984,
+          "source_raw_documents": {
+            "count": 5,
+            "rowHash": "ad7bbf1d905e39aee876ee514e74e72ec94166316d5b4426bcf6d89312266e3f"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "2d2bcfc3ddb5f54ce32f2b3a774120d7f4b02e8ec4412279c45ccaa7fe455c91"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "c2d0c79ddb4cf99bb016232103218020eafa12be0f2a7c0cd21814c17df6233c"
+          },
+          "research_author_results_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "96ed4d2bded59bec71d5f871f4c13d4cd710d477cee3c3b45cd21a26053c6d3c"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "1a86f9fde3bdb367b5673f709aec942dd6d1fd972959a7c4fc3219a78d7d531f"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "f7e359933d9515e97fd53aeba88e545eb08c77ac77318d243cc40b185b7079cd"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "9ab8377915c9f92d2b4a5ced5b3b626bf80c40cd71e4a3c5c3c9281a2071d362"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "09b44e6735b5afadd75bd198ef8c2b2a38e7f1b5509d80154e5a4b762a0f7e73"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 1,
+            "rowHash": "18afb86c7214b57262186110b36fa32f05583b0854e1b6bbe4f9b538f85bdd73"
+          }
+        },
+        "afterRead": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 168984,
+          "source_raw_documents": {
+            "count": 5,
+            "rowHash": "ad7bbf1d905e39aee876ee514e74e72ec94166316d5b4426bcf6d89312266e3f"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "2d2bcfc3ddb5f54ce32f2b3a774120d7f4b02e8ec4412279c45ccaa7fe455c91"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "c2d0c79ddb4cf99bb016232103218020eafa12be0f2a7c0cd21814c17df6233c"
+          },
+          "research_author_results_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "96ed4d2bded59bec71d5f871f4c13d4cd710d477cee3c3b45cd21a26053c6d3c"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "1a86f9fde3bdb367b5673f709aec942dd6d1fd972959a7c4fc3219a78d7d531f"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "f7e359933d9515e97fd53aeba88e545eb08c77ac77318d243cc40b185b7079cd"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "9ab8377915c9f92d2b4a5ced5b3b626bf80c40cd71e4a3c5c3c9281a2071d362"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "09b44e6735b5afadd75bd198ef8c2b2a38e7f1b5509d80154e5a4b762a0f7e73"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 1,
+            "rowHash": "18afb86c7214b57262186110b36fa32f05583b0854e1b6bbe4f9b538f85bdd73"
+          }
+        },
+        "originalSourceUnchanged": true,
+        "acceptedNewRevision": 1,
+        "packetHttpStatus": 409
+      },
+      "passed": true,
+      "completedAt": "2026-10-09T13:42:09.654Z"
+    },
+    "2383": {
+      "startedAt": "2026-10-09T13:42:09.961Z",
+      "postgrest": {
+        "version": "PostgREST 16.3",
+        "archiveBytes": 4519976,
+        "archiveSha256": "4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d",
+        "binaryBytes": 20502640,
+        "binarySha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+      },
+      "partialDevelopmentProfile": true,
+      "databaseAdapterInjected": false,
+      "officialAuthorityRowsSeeded": 0,
+      "observedRosterPromoted": false,
+      "modelReserved": false,
+      "productionImported": false,
+      "top20": null,
+      "checks": [
+        "unauthorized_401_zero_write",
+        "inbox_three_industry_only",
+        "anonymous_table_rpc_denied",
+        "ancillary_read_only_empty_authority",
+        "production_writer_not_fabricated",
+        "real_source_heads_cutoff",
+        "real_authority_empty",
+        "restart_dedup",
+        "priority_blocked_restart_fenced"
+      ],
+      "limitations": [
+        "Node test-runner controlled loopback configuration, not production runtime activation",
+        "Partial schema profile does not attest the complete installed migration policy",
+        "No official roster/sector authority has been ingested; Top20 remains blocked"
+      ],
+      "observedRosterMigrationSha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b",
+      "observedPriorityMigrationSha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3",
+      "observedClaimDependencySourceHashes": {
+        "state": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+        "jobs": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+        "dossier": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+        "immutableDefinition": "d2edbeae7c77f25924a3a9c21acb9ad65109cb0f1a6206aad83dff8d88b60985"
+      },
+      "observedClaimMigrationSha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2",
+      "installedDefinitions": [
+        {
+          "file": "supabase_schema.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stocks (",
+          "sourceSha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3",
+          "definitionSha256": "b3d9d87b4dd2cd2570c657f6d9edeca9474409198f1ce2f2d4b143b313d1b1d2"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_entities (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "03c78b435837ecd782b14e36f8f51a7bdbeeefc130cb19d36bf3ff7120292f74"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_raw_documents (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "1ddf2e178a9dcbb5608535eaf32f9f508908ace0a804283f614e02c64338e7da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "6f9cf89764e00a16dd2630f9aaa92be8c26e375c05bb738f9ac4638e8d914c52"
+        },
+        {
+          "file": "migrations/20260906_source_identity_v4.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+          "definitionSha256": "c1d15e7436fef37b0d959e009f50ac67c9588f43d2000f3b82424794bb5a7969"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE authority_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "de0456eee24d4a21f288f00843e1c7ea2bf26c4475e4035cfa976d98f38df541"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE stock_exchange_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "bb7c4a9dcf3cb5356c8dbd6b1e363d7532c19bed93e17528d1c8a0d129c7d73a"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE instrument_type_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "81cb876a7635be9f157396262a638bf6de5831b1e764a9c86a469c070f6b7afb"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE listing_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "03070b2edae9d1f1b2f15514852a6ae61d4b8e980fd7406bb05bedcb1d6d2a78"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE official_roster_provider_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "c85a62f8be9eca5f006ed60d7ee9e366246dc44678e32be2466f1129df37a61d"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE tw_market_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "be7acd6c47b936c20739f01bceec5a206b9cdfaed0cf9250bdb1c5a8883e8792"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE canonical_sector_key_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "e92dfaa281fddd0da3154e2429ebae9553fc96393289986ec30267722c8475b9"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_instruments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "411f053cf5273c207fb1567a391c02986ce5b849128f2d3b47ac1cc85a2c4a3c"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "9c2b0c74ea924ef94f143b37d7de13b57e2c5530eebbbc0911cdaa5b676a5194"
+        },
+        {
+          "file": "migrations/20260831_candidate_shadow_performance.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_runs (",
+          "sourceSha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+          "definitionSha256": "c37f899abd5d57f924a8cd2c1bace068bb2dc5e539ae0809381c7ff6115973da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.market_evidence_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "9f7b07f170febec813a9c67bba8e33338cf3ff5fa35de6e2df2cd9fc14578957"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_detail_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2c2fc7a718d8f0335ca4f718bf7f71ff0d447639910811276c9a965d76981139"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_bundles (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "49bfec32f5a5e712cc1158c391168699cf81876bcfb9dcbec3bcd30f33cb14c4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_dossiers (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2151ab0e8433a794f4bed71fa4fcfea65ab3df045ad5c88b9c2a63912c7d0db0"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_submission_receipts (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "5337c2d9217883181acbc053e205d78cb5d0b54605aca893790a07cc28f452c1"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "3418aa78ecbfaf879f426561e30cb35cd223fdfe5ba8f7d849e6dc36281579d7"
+        },
+        {
+          "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_issuer_document_domains_v6 (",
+          "sourceSha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+          "definitionSha256": "5d66b75c1bff55126ada62aaedcf489128769ef3ec3f1e390c6cf93267812845"
+        },
+        {
+          "file": "migrations/20260929_research_deep_jobs_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_deep_jobs_v1 (",
+          "sourceSha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+          "definitionSha256": "f6b905d282b566dd2d80cd2cf19ec418e35a8951aa04004deecf801ddf9d3eb4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority(",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "a6749bacb864ab7c6c61dd9b6cd2d1bdfcb4b09c40e99489ed8d072d84719e95"
+        },
+        {
+          "file": "migrations/20260906_authority_pagination_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority_page(",
+          "sourceSha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+          "definitionSha256": "e76a34cde20546b651b64713313ea63e784ee93be606c6804f0e2a32b5578598"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "088283446f2f3ded3deca7cc2e8328325abe4490470954219c2954850851d8cf"
+        }
+      ],
+      "developmentProfileSqlSha256": "666264467963b75fec638b685e4f2eae9081635f389c00b5472f2154647b9b39",
+      "readOnlyDependencyTables": [
+        "candidate_research_runs",
+        "market_evidence_snapshots",
+        "candidate_detail_snapshots",
+        "candidate_dossier_bundles",
+        "candidate_research_dossiers",
+        "candidate_dossier_submission_receipts",
+        "research_priority_runs_v1",
+        "candidate_issuer_document_domains_v6",
+        "research_deep_jobs_v1"
+      ],
+      "installedRoutines": [
+        {
+          "name": "candidate_research_stock_authority",
+          "bodySha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "bodySha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "research_source_heads_page_v1",
+          "bodySha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        }
+      ],
+      "classificationEvidence": {
+        "schemaVersion": "stockinsider-observed-official-security-scope-reconciliation-v1",
+        "recordedAt": "2026-10-08T12:23:18.366811+00:00",
+        "counts": {
+          "twseMasterMatched": 1095,
+          "twseOrdinaryResearchCandidates": 1085,
+          "twseInnovationBoard": 31,
+          "twseOrdinaryAdditionalTransferRestrictionCfi": 1,
+          "twseTdrExcludedFromOrdinaryScope": 10,
+          "unchangedObservedTpexOrdinary": 893,
+          "reconciledObservedOrdinaryResearchCohort": 1978,
+          "legacyStrictObservedCohort": 1946
+        },
+        "sourceReferences": [
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=2",
+            "observedAt": "2026-10-08T12:21:15.657943+00:00",
+            "responseBytes": 9063029,
+            "responseSha256": "920828356712b85375e504b4633446ad8af39f6f59eddbb7efc0f47e7ca54311"
+          },
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=4",
+            "observedAt": "2026-10-08T09:04:35.607658+00:00",
+            "responseBytes": 3030198,
+            "responseSha256": "0a719dcffca37de025a3d5be17e83c39019d9d78ffb6e6992ca140b18707e65e"
+          }
+        ],
+        "rawSourceHashesVerifiedByVm": false,
+        "selectedPacketHash": "50fd3e96233b4a0386c09729371283c703f9e9ae147cc4bfd667914a8a753518",
+        "trustedAuthorityActivated": false,
+        "currentTradingEligibilityVerified": false,
+        "historicalPITEligible": false
+      },
+      "excludedNonCommon": [
+        {
+          "symbol": "9103",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910322",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9105",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910861",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9110",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911608",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911622",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911868",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "912000",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9136",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        }
+      ],
+      "observedClassificationAccounting": {
+        "total": 1978,
+        "legacySnapshotTotal": 1946,
+        "excludedTdr": 10,
+        "needsEvidence": 2,
+        "notAssessed": 1976,
+        "qualified": 0,
+        "ranked": 0
+      },
+      "sourceAttempts": [
+        {
+          "id": "investanchors-public",
+          "outcome": "metadata_only"
+        },
+        {
+          "id": "nittobo-electronic",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-products",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-production",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "auo-tech",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "threads-partial-surface",
+          "outcome": "read_failed"
+        },
+        {
+          "id": "telegram-investanchors-869",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-881",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-882",
+          "outcome": "item_ready"
+        }
+      ],
+      "controllerRunHash": "bcb18b949521dd39b8bc85339ceb3a379f0637994a7d519c87cad4dd6395a994",
+      "inputCanonicalSymbols": [
+        {
+          "url": "https://t.me/investanchors/869",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/881",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/882",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        }
+      ],
+      "distinctPublishers": 1,
+      "persistedDocuments": 3,
+      "dependencyPrivileges": [
+        {
+          "table": "candidate_research_runs",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        }
+      ],
+      "dependencyPolicies": [
+        {
+          "table": "candidate_research_runs",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        }
+      ],
+      "initialPriorityFailure": "research_priority_official_roster_missing",
+      "unchangedEmptyTables": {
+        "candidate_research_runs": 0,
+        "market_evidence_snapshots": 0,
+        "candidate_detail_snapshots": 0,
+        "candidate_dossier_bundles": 0,
+        "candidate_research_dossiers": 0,
+        "candidate_dossier_submission_receipts": 0,
+        "research_priority_runs_v1": 0,
+        "candidate_issuer_document_domains_v6": 0,
+        "research_deep_jobs_v1": 0,
+        "stocks": 0,
+        "stock_instruments_v3": 0,
+        "stock_sector_assignments_v3": 0
+      },
+      "rosterIngestionFailure": "writer_release_identity_missing",
+      "sourceHeads": 3,
+      "postgresRestartUnchanged": true,
+      "inboxReplayAccepted": 0,
+      "priorityStatus": 409,
+      "priorityFailure": {
+        "ok": false,
+        "error": "research_priority_official_roster_missing"
+      },
+      "authorPacketReadiness": [
+        {
+          "name": "prepare_research_input_v2",
+          "attempt": 1,
+          "status": 404,
+          "body": {
+            "code": "PGRST202",
+            "details": "Searched for the function public.prepare_research_input_v2 with parameter p_request or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.",
+            "hint": null,
+            "message": "Could not find the function public.prepare_research_input_v2(p_request) in the schema cache"
+          },
+          "elapsedMs": 4.645962000002328
+        },
+        {
+          "name": "prepare_research_input_v2",
+          "attempt": 2,
+          "status": 400,
+          "body": {
+            "code": "P0001",
+            "details": null,
+            "hint": null,
+            "message": "input_preparation_shape"
+          },
+          "elapsedMs": 116.0859500000006
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "attempt": 1,
+          "status": 503,
+          "body": {
+            "code": "57P01",
+            "details": null,
+            "hint": null,
+            "message": "terminating connection due to administrator command"
+          },
+          "elapsedMs": 5.237875999999233
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "attempt": 2,
+          "status": 200,
+          "body": [],
+          "elapsedMs": 114.30492000000231
+        }
+      ],
+      "completeInputHttp": {
+        "symbol": "2383",
+        "revisionId": "967f0744-a0c3-4189-87d3-2338ace8ef26",
+        "inputHash": "e87926fd3f6fa9a4bc1b70ab85b3e44fe0781a3293c765f53e2e9a72497770d6",
+        "charge": 99111,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "authorPacketHttp": {
+        "symbol": "2383",
+        "packetHash": "2310931f76fd7ed3bdd168eed25076c1e66cd13ab9a9374c6839b2d0e249e5bc",
+        "packetBytes": 78682,
+        "sourceCount": 1,
+        "sourceSealReceivedAt": "2026-10-09T13:42:28.137338+00:00",
+        "dbSealReceivedAt": "2026-10-09T13:42:28.137338+00:00",
+        "nodeReadAt": "2026-10-09T13:42:30.939Z",
+        "pgReadAt": "2026-10-09 13:42:30.947416+00",
+        "writingWindow": {
+          "assignedAt": "2026-10-09T13:42:30.169558+00:00",
+          "originalJobDeadline": "2026-10-09T14:12:27.28418+00:00",
+          "originalReservationDeadline": "2026-10-09T14:12:27.28418+00:00"
+        },
+        "syntheticSourceJobCredentials": true,
+        "actualFinancialRelayProjection": true,
+        "modelDispatched": false,
+        "researchQualified": false,
+        "stateAuditBefore": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 101699,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "faef5efc07bf89de23d284660ac4b063d750eb9f946c37334cc9866bf17e966e"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "4e465c2af93261d68dca56a06a09f8a974bb2c745545020b9737184ef423d1b8"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "dec91ed8c9e4d83ac305c1348ed64fa765348b6d39b85f71065953ffddc58a38"
+          },
+          "research_author_results_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "4d0e37e80441ae9402060fdf5954653497736e68c326918baeed65b9a3d193d7"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "5f4165c99c3243a508c42349e0e1f735a56af9502159872adc4f84938efae21b"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "11acec0fcfed4aa3faddc21f6feec97e6e85ac1d6f74c33a812612d662e2c72f"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "66ef55fa2e041fb6ff72b89e189231e8261615699322de3fbac5303067ae2784"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "9755cbd3e9c48c5ed470d8ccd73f6250b5d3eabd002fb96ebcca7db026596a31"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "stateAuditAfter": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 101699,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "faef5efc07bf89de23d284660ac4b063d750eb9f946c37334cc9866bf17e966e"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "4e465c2af93261d68dca56a06a09f8a974bb2c745545020b9737184ef423d1b8"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "dec91ed8c9e4d83ac305c1348ed64fa765348b6d39b85f71065953ffddc58a38"
+          },
+          "research_author_results_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "4d0e37e80441ae9402060fdf5954653497736e68c326918baeed65b9a3d193d7"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "5f4165c99c3243a508c42349e0e1f735a56af9502159872adc4f84938efae21b"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "11acec0fcfed4aa3faddc21f6feec97e6e85ac1d6f74c33a812612d662e2c72f"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "66ef55fa2e041fb6ff72b89e189231e8261615699322de3fbac5303067ae2784"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "9755cbd3e9c48c5ed470d8ccd73f6250b5d3eabd002fb96ebcca7db026596a31"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      "authorPacketWithdrawal": {
+        "before": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 101699,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "faef5efc07bf89de23d284660ac4b063d750eb9f946c37334cc9866bf17e966e"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "4e465c2af93261d68dca56a06a09f8a974bb2c745545020b9737184ef423d1b8"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "dec91ed8c9e4d83ac305c1348ed64fa765348b6d39b85f71065953ffddc58a38"
+          },
+          "research_author_results_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "4d0e37e80441ae9402060fdf5954653497736e68c326918baeed65b9a3d193d7"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "5f4165c99c3243a508c42349e0e1f735a56af9502159872adc4f84938efae21b"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "11acec0fcfed4aa3faddc21f6feec97e6e85ac1d6f74c33a812612d662e2c72f"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "66ef55fa2e041fb6ff72b89e189231e8261615699322de3fbac5303067ae2784"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "9755cbd3e9c48c5ed470d8ccd73f6250b5d3eabd002fb96ebcca7db026596a31"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "afterWithdrawal": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 101699,
+          "source_raw_documents": {
+            "count": 5,
+            "rowHash": "04e0272d6d6bbe74ef7637709375f2eeb3fd2570b387ff021af59877f4d2626f"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "4e465c2af93261d68dca56a06a09f8a974bb2c745545020b9737184ef423d1b8"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "dec91ed8c9e4d83ac305c1348ed64fa765348b6d39b85f71065953ffddc58a38"
+          },
+          "research_author_results_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "4d0e37e80441ae9402060fdf5954653497736e68c326918baeed65b9a3d193d7"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "5f4165c99c3243a508c42349e0e1f735a56af9502159872adc4f84938efae21b"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "11acec0fcfed4aa3faddc21f6feec97e6e85ac1d6f74c33a812612d662e2c72f"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "66ef55fa2e041fb6ff72b89e189231e8261615699322de3fbac5303067ae2784"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "9755cbd3e9c48c5ed470d8ccd73f6250b5d3eabd002fb96ebcca7db026596a31"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 1,
+            "rowHash": "0aed322395b25c584de35367e96e5b2c0988f1e6f88b513c668962f79abf81f8"
+          }
+        },
+        "afterRead": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 101699,
+          "source_raw_documents": {
+            "count": 5,
+            "rowHash": "04e0272d6d6bbe74ef7637709375f2eeb3fd2570b387ff021af59877f4d2626f"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "4e465c2af93261d68dca56a06a09f8a974bb2c745545020b9737184ef423d1b8"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "dec91ed8c9e4d83ac305c1348ed64fa765348b6d39b85f71065953ffddc58a38"
+          },
+          "research_author_results_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "4d0e37e80441ae9402060fdf5954653497736e68c326918baeed65b9a3d193d7"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "5f4165c99c3243a508c42349e0e1f735a56af9502159872adc4f84938efae21b"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "11acec0fcfed4aa3faddc21f6feec97e6e85ac1d6f74c33a812612d662e2c72f"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "66ef55fa2e041fb6ff72b89e189231e8261615699322de3fbac5303067ae2784"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "9755cbd3e9c48c5ed470d8ccd73f6250b5d3eabd002fb96ebcca7db026596a31"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 1,
+            "rowHash": "0aed322395b25c584de35367e96e5b2c0988f1e6f88b513c668962f79abf81f8"
+          }
+        },
+        "originalSourceUnchanged": true,
+        "acceptedNewRevision": 1,
+        "packetHttpStatus": 409
+      },
+      "passed": true,
+      "completedAt": "2026-10-09T13:42:40.161Z"
+    }
+  },
+  "inheritedFlagClarification": {
+    "modelReservedFalse": "stale generic harness flag; both nested audits have one real synthetic model reservation and zero completions",
+    "harnessPassedTrue": "baseline completion flag despite child TAP failures; raw TAP is authoritative"
+  },
+  "precheck": {
+    "at": "2026-10-09T13:38:46.027584+00:00",
+    "freeBytes": 14157930496,
+    "memoryMax": "34359738368",
+    "source": "b8c3df4d1c21b4aeee28341b6935302b42463f94",
+    "reviewPending": true,
+    "toolsAlreadyInstalled": true,
+    "proxyPreservedNoSecretsPrinted": true
+  },
+  "stageResources": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "result-unit-explicit-tap",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-author-result.test.mjs"
+      ],
+      "startedAt": "2026-10-09T13:39:58.707Z",
+      "completedAt": "2026-10-09T13:40:01.185Z",
+      "elapsedSeconds": 2.477494171995204,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 168906752,
+      "observedTaskDiskPeakBytes": 957128704,
+      "availableBeforeBytes": 14157860864,
+      "availableAfterBytes": 14157852672,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "result-unit-package",
+      "command": [
+        "npm",
+        "run",
+        "test:research-author-result"
+      ],
+      "startedAt": "2026-10-09T13:46:11.423Z",
+      "completedAt": "2026-10-09T13:46:13.937Z",
+      "elapsedSeconds": 2.5137365290138405,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 230510592,
+      "observedTaskDiskPeakBytes": 1547911168,
+      "availableBeforeBytes": 13697032192,
+      "availableAfterBytes": 13697024000,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "result-unit-no-isolation",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--experimental-test-isolation=none",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-author-result.test.mjs"
+      ],
+      "startedAt": "2026-10-09T13:48:06.892Z",
+      "completedAt": "2026-10-09T13:48:09.233Z",
+      "elapsedSeconds": 2.340774424985284,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 145960960,
+      "observedTaskDiskPeakBytes": 1564426240,
+      "availableBeforeBytes": 13680517120,
+      "availableAfterBytes": 13680508928,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-result",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T13:47:09.548Z",
+      "completedAt": "2026-10-09T13:47:36.231Z",
+      "elapsedSeconds": 26.68279148999136,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1424375808,
+      "observedTaskDiskPeakBytes": 1548247040,
+      "availableBeforeBytes": 13696696320,
+      "availableAfterBytes": 13680521216,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-result-http",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-author-result-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T13:41:39.084Z",
+      "completedAt": "2026-10-09T13:42:43.191Z",
+      "elapsedSeconds": 64.10703335600556,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 668745728,
+      "observedTaskDiskPeakBytes": 1547898880,
+      "availableBeforeBytes": 13827035136,
+      "availableAfterBytes": 13697052672,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "result-pg",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-author-result-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T13:39:37.998Z",
+      "completedAt": "2026-10-09T13:39:49.473Z",
+      "elapsedSeconds": 11.474993993004318,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 202113024,
+      "observedTaskDiskPeakBytes": 957116416,
+      "availableBeforeBytes": 14157893632,
+      "availableAfterBytes": 14157881344,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "result-unit",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-author-result.test.mjs"
+      ],
+      "startedAt": "2026-10-09T13:39:03.622Z",
+      "completedAt": "2026-10-09T13:39:06.358Z",
+      "elapsedSeconds": 2.7355805859842803,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 162607104,
+      "observedTaskDiskPeakBytes": 957100032,
+      "availableBeforeBytes": 14157889536,
+      "availableAfterBytes": 14157881344,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "result-unit-ref-driver",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-author-result-unit-driver.mjs"
+      ],
+      "startedAt": "2026-10-09T13:41:17.043Z",
+      "completedAt": "2026-10-09T13:41:19.538Z",
+      "elapsedSeconds": 2.4944661980262026,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 164913152,
+      "observedTaskDiskPeakBytes": 1287958528,
+      "availableBeforeBytes": 13827031040,
+      "availableAfterBytes": 13827022848,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-result",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T13:46:21.600Z",
+      "completedAt": "2026-10-09T13:46:38.861Z",
+      "elapsedSeconds": 17.260776782000903,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1375531008,
+      "observedTaskDiskPeakBytes": 1547923456,
+      "availableBeforeBytes": 13697019904,
+      "availableAfterBytes": 13696712704,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-result",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T13:40:17.657Z",
+      "completedAt": "2026-10-09T13:40:58.911Z",
+      "elapsedSeconds": 41.25484519699239,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 2001281024,
+      "observedTaskDiskPeakBytes": 1195819008,
+      "availableBeforeBytes": 14157864960,
+      "availableAfterBytes": 13827485696,
+      "guardTermination": null
+    }
+  ],
+  "cleanup": [
+    {
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2409/cluster",
+      "bytesBefore": 64012288,
+      "postmasterPidAbsent": true,
+      "removedOnlyAfterRawLogsCopiedAndHashed": true,
+      "bytesAfter": 0
+    },
+    {
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2383/cluster",
+      "bytesBefore": 64020480,
+      "postmasterPidAbsent": true,
+      "removedOnlyAfterRawLogsCopiedAndHashed": true,
+      "bytesAfter": 0
+    }
+  ],
+  "availableAfterBytes": 13807333376,
+  "currentMemoryMax": "34359738368",
+  "dotenvFilenameInventory": [
+    ".env.example",
+    "scraper/.env.example"
+  ],
+  "rawEvidence": [
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/build-identity-diagnostic.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/build-identity-diagnostic.json",
+      "bytes": 777,
+      "sha256": "2b42d551de2c0ab5d0f1859c6763b2ea73f92f5bb49d20b5506233cba7f7b456"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/build-identity-diagnostic.stderr",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/build-identity-diagnostic.stderr",
+      "bytes": 603,
+      "sha256": "ff9a2599f92c09c52e17761cc66f9ef4ecbc31bf2fb98910ded1a2858f56a8d0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/compiled-server-file-manifest.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/compiled-server-file-manifest.json",
+      "bytes": 425767,
+      "sha256": "c7728ee502017fef0925795250b1d21f66ff7e0d732ab42ac11a79f93da468d2"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2383/acceptance-receipt.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2383/acceptance-receipt.json",
+      "bytes": 34235,
+      "sha256": "52e741b683cdf8cbc00f46eb89f33c019e07a6386aab911b01a43c202e133eda"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2383/author-packet-response.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2383/author-packet-response.json",
+      "bytes": 78829,
+      "sha256": "ed41e5a9f3d7b2153934ae6c09213ca8a18300b3dd7a292e6d70e311804e9c1a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2383/financial-supplement-diagnostic.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2383/financial-supplement-diagnostic.json",
+      "bytes": 76944,
+      "sha256": "35120060aab59e86ac44e9ef067010c77931fef7c821c5ee0cb7ca052d5a78ec"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2383/next.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2383/next.log",
+      "bytes": 511,
+      "sha256": "1f12a4d8bd8db62ca0dc1cfe4471c7e307f4480048a328dc323f27371383df11"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2383/postgres.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2383/postgres.log",
+      "bytes": 14952,
+      "sha256": "8660c12a5ac31a77abe737636a36f5132b5cf77702290e4c5a934e9f92259aa4"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2383/postgrest.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2383/postgrest.log",
+      "bytes": 8682,
+      "sha256": "aa209a9e5778fd5361434c21906d85e0542a1aa22e4f6d57272650ba6d385c3e"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2409/acceptance-receipt.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2409/acceptance-receipt.json",
+      "bytes": 34240,
+      "sha256": "819e7c8aad01def54447c1261fdd279646e812469c08db8ffea10ad9d2bbcaf7"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2409/author-packet-response.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2409/author-packet-response.json",
+      "bytes": 130805,
+      "sha256": "58171d7115ab401058d380c8ebbcf8405aa90c5db8ef3f2fa955546bab251afb"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2409/financial-supplement-diagnostic.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2409/financial-supplement-diagnostic.json",
+      "bytes": 128920,
+      "sha256": "1efb8a308b4437980f3e1b18f763a0340481cdc85fac72098d10d1ed28a22608"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2409/next.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2409/next.log",
+      "bytes": 511,
+      "sha256": "458741f8915dd0dbdb2b26c51d369be2c29a6c53ea6e0cd4bdc9a08ed41a6726"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2409/postgres.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2409/postgres.log",
+      "bytes": 14952,
+      "sha256": "5c122f5ef7cbdaf729538571812976ebec9374798d1dcf3e2790bc0bfec19660"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/http-2409/postgrest.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/http-2409/postgrest.log",
+      "bytes": 8682,
+      "sha256": "5557b9d913ee8f2e67a036af252999519b80c946b6db96ff70a6b99707bd1ed0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/lint-result.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/lint-result.json",
+      "bytes": 532,
+      "sha256": "8c6a75baefecfc227d32807feac4829b907a4e2fdaae84478830acf8a4e09ea3"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/lint-result.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/lint-result.log",
+      "bytes": 4739,
+      "sha256": "35d3b204d872d17cc53ef0caa263892ca6f19bc0d58b696f885b1b6b63d48403"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/lint-result.time",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/lint-result.time",
+      "bytes": 744,
+      "sha256": "018ae0f320d8368fc8621312e8e2b376a8c8600e81f5b8d675766530b8e84977"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/native-result-http.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/native-result-http.json",
+      "bytes": 671,
+      "sha256": "56f79525be9e78bb90abdf17c5c898b0ee949f5494ac4c08c63e1ede751bc426"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/native-result-http.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/native-result-http.log",
+      "bytes": 22446,
+      "sha256": "2d1b0d44d8cf9f627fa88c7fd85d680e91951806f85caad8e4016ec09b1f8bf0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/native-result-http.time",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/native-result-http.time",
+      "bytes": 893,
+      "sha256": "f8c44d413ef243b53b4ff7c777aa893e270826bc47ccb03560ec7ee0a714d10e"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/normal-build-result.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/normal-build-result.json",
+      "bytes": 541,
+      "sha256": "2cfc470f75f26fbd3bc66e2885de622ae0f0ee24a6ca1a3879a0a0b5c52672a6"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/normal-build-result.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/normal-build-result.log",
+      "bytes": 6500,
+      "sha256": "5f964eb58a4b7498479d2d21e70dd69efd453126c812d5a29d16fb86fe2a22df"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/normal-build-result.time",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/normal-build-result.time",
+      "bytes": 748,
+      "sha256": "1cca2d747c386cc80934339f83f57f503af85b2c0e3f42f03db9de15b9a6c783"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/precheck.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/precheck.json",
+      "bytes": 260,
+      "sha256": "948ca5d2ada9f49d00a1aeb9b45f2cc78b99a566316c65918b0247e689b1df84"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-pg.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-pg.json",
+      "bytes": 666,
+      "sha256": "6579910525aedf15dd5589df05c8415c3f8ceaa3c85ac49ab0d16778dbaf4615"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-pg.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-pg.log",
+      "bytes": 5706,
+      "sha256": "fa077166d09296821aee9e5d337c4ecfd7152adb8e4ea577522d2539c171450d"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-pg.time",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-pg.time",
+      "bytes": 852,
+      "sha256": "bd10f0aba965122ae65292c7c1a6f74a6163eeaeb812b53f0b4ea5e6f8279d53"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-explicit-tap.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-explicit-tap.json",
+      "bytes": 671,
+      "sha256": "3af71a94aa10e49e0dba71ad49c288b7e4bed1bd3d0ca23497070eeac57e265d"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-explicit-tap.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-explicit-tap.log",
+      "bytes": 257,
+      "sha256": "03696b47c69f2e30d41d6efe73614763ba4c5edeae220d7eb22dafff579ab145"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-explicit-tap.time",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-explicit-tap.time",
+      "bytes": 841,
+      "sha256": "a86893ab17076829ee4acad3d35c92d6dd2e45bd89ea9dc33cd131f969859467"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-no-isolation.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-no-isolation.json",
+      "bytes": 714,
+      "sha256": "9cac0ebdb295a2bbdb3b4722f24a1fa4b018fe36a6badb87d3237e588aad3835"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-no-isolation.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-no-isolation.log",
+      "bytes": 2457,
+      "sha256": "7a9e99442dfd7c9a0653a2a2ca201a38cf3849ec0a2833aeb45fecc044480e23"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-no-isolation.time",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-no-isolation.time",
+      "bytes": 876,
+      "sha256": "e6255e42e0c20192fe93eb188382d30fa451b730b9a48170f0ebf624682cbc96"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-package.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-package.json",
+      "bytes": 563,
+      "sha256": "1c07f0af3c891ffa64370c34fd8df977e84428205c1bab7816cce64b4ed540a8"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-package.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-package.log",
+      "bytes": 413,
+      "sha256": "f3a044164d776417f14eae4565c2adf94eda9fc3bc648815469d8c079ebc3b89"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-package.time",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-package.time",
+      "bytes": 758,
+      "sha256": "85a596c73cf7d7cc10240dba736222984494fd335f474285ca7813f3a4266470"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-ref-driver.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-ref-driver.json",
+      "bytes": 678,
+      "sha256": "4c9f9ec8240fba20b8a55cb5dd944323667fb506150acc2e34116743d41083eb"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-ref-driver.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-ref-driver.log",
+      "bytes": 271,
+      "sha256": "1b352bc009396f9632120101fcd76c2603664000fb8f26ad97ee7a8f137fa93e"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit-ref-driver.time",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit-ref-driver.time",
+      "bytes": 848,
+      "sha256": "bb45e4ed46d73fdad0dc14ec268a0a10542f0e0afb1c08deb7b1c85e19f0808c"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit.json",
+      "bytes": 632,
+      "sha256": "fa30f6db96da2776abfc6a184954b088385b764c6ae33e6528b89f4fab2637d7"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit.log",
+      "bytes": 257,
+      "sha256": "93261b6d222fa53936ef25facd6a6b404382e1f6b2862746321520f70ed7ff6b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/result-unit.time",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/result-unit.time",
+      "bytes": 822,
+      "sha256": "fbdeba1804788152557428b0815b95f37caa21af5bec4b24361b7f35deac95b8"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/run-check.py",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/run-check.py",
+      "bytes": 4792,
+      "sha256": "6964146d9c52f973d7dcfe36c10322e2c3af1e11979916571e126185cc0ebf49"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/types-result.json",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/types-result.json",
+      "bytes": 539,
+      "sha256": "c52170a71ef599379b6cc4a5abd8e26717e166a20194fa54ce568f203177c83d"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/types-result.log",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/types-result.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/types-result.time",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/types-result.time",
+      "bytes": 746,
+      "sha256": "04062bfcd10fcebe431441e8c0039250ded7edaff4048dcc3c89426ee86a2a40"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T13-51-author-result-http-vm/unit-ref-driver-diagnostic-source.mjs",
+      "originalPath": "/workspace/cloud-author-packet-artifacts-oct09/author-result-b8c3/unit-ref-driver-diagnostic-source.mjs",
+      "bytes": 320,
+      "sha256": "f6a87c1e7461ae646fb655d640b2a9ec8498307f03f5126dd1b6ca40c002bcaa"
+    }
+  ],
+  "limits": {
+    "singleHeavySequential": true,
+    "rssGuardBytes": 8589934592,
+    "diskReserveBytes": 8589934592,
+    "manualTaskNotProductRoleBudget": true,
+    "allObservedCommandsUnder420Seconds": true,
+    "manualFirstRecordedInventoryAt": "2026-10-09T13:38:46.027584+00:00",
+    "manualStartBeforeInventoryNotIndependentlyTimestamped": true
+  },
+  "flags": {
+    "syntheticCredentialsCompanySourcesJobsObservationsAndProse": true,
+    "baselineIndustryRelayActualAttributedPublicSummaries": true,
+    "actualFixedFinancialGitRelayCalculation": true,
+    "vmRawPdfReverified": false,
+    "actualModelDispatched": false,
+    "actualAuthorOrReviewerExecuted": false,
+    "formalPublication": false,
+    "researchQualified": false,
+    "strategyApproved": false,
+    "entryEligible": false,
+    "productionImported": false,
+    "protectedApproved": false
+  },
+  "remaining": [
+    "root review of native failure and stable cross-runtime hash binding",
+    "result receive/read/replay/restart success not established",
+    "true author/reviewer dispatch and publication not executed",
+    "previous R1 financial_parent_replaced historical cause remains unknown"
+  ],
+  "cleanupOwnedProcessesRemaining": [],
+  "unitDiagnosticClarification": "The temporary ref-driver hypothesized unref timers; reviewed FinancialDeadline wait uses a normal ref timer. Driver did not expose per-case TAP and was discarded from tracked code, preserved only as historical diagnostic evidence. No-isolation execution produced actual 8 cases; exact underlying isolated file-report behavior not proved."
+}

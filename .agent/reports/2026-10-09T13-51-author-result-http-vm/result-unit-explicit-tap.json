@@ -1,0 +1,21 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "result-unit-explicit-tap",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-reporter=tap",
+    "--test-concurrency=1",
+    "scripts/research-author-result.test.mjs"
+  ],
+  "startedAt": "2026-10-09T13:39:58.707Z",
+  "completedAt": "2026-10-09T13:40:01.185Z",
+  "elapsedSeconds": 2.477494171995204,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 168906752,
+  "observedTaskDiskPeakBytes": 957128704,
+  "availableBeforeBytes": 14157860864,
+  "availableAfterBytes": 14157852672,
+  "guardTermination": null
+}

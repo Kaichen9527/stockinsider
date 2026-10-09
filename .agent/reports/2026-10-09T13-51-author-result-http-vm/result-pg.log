@@ -1,0 +1,111 @@
+TAP version 13
+# (node:185777) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:185777) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-author-result-http-vm-oct09/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-author-result-http-vm-oct09/web/package.json.
+# Subtest: private author results against real original PG fences; synthetic execution, actual fixed AUO calculation
+    # Subtest: no result before receive, all original rows and budget unchanged
+    ok 1 - no result before receive, all original rows and budget unchanged
+      ---
+      duration_ms: 358.195149
+      ...
+    # Subtest: actual calculator and authenticated binding persist one private draft only
+    ok 2 - actual calculator and authenticated binding persist one private draft only
+      ---
+      duration_ms: 525.551991
+      ...
+    # Subtest: exact receive replay/read and PostgreSQL restart preserve original bytes and charge
+    ok 3 - exact receive replay/read and PostgreSQL restart preserve original bytes and charge
+      ---
+      duration_ms: 1382.740018
+      ...
+# ERROR:  research_author_result_replay_conflict
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 71 at RAISE
+    # Subtest: changed article or execution bindings fail with no new row
+    ok 4 - changed article or execution bindings fail with no new row
+      ---
+      duration_ms: 1555.899352
+      ...
+    # Subtest: same assignment conflicting immutable envelope is rejected by SQL
+    ok 5 - same assignment conflicting immutable envelope is rejected by SQL
+      ---
+      duration_ms: 175.48018
+      ...
+    # Subtest: concurrent exact first receive creates one result and no completion
+    ok 6 - concurrent exact first receive creates one result and no completion
+      ---
+      duration_ms: 867.36714
+      ...
+    # Subtest: invocation cannot be reused across different original assignments
+    ok 7 - invocation cannot be reused across different original assignments
+      ---
+      duration_ms: 1163.662363
+      ...
+# ERROR:  research_author_result_bound
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 17 at RAISE
+    # Subtest: SQL canonical envelope exact1MiB/+1 quota, synthetic validation-limit text only
+    ok 8 - SQL canonical envelope exact1MiB/+1 quota, synthetic validation-limit text only
+      ---
+      duration_ms: 1054.784478
+      ...
+# ERROR:  research_author_result_binding
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 61 at RAISE
+# ERROR:  research_author_result_binding
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 61 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_shape
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 15 at RAISE
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+    # Subtest: SQL null identities, changed calculation and promoted capabilities reject
+    ok 9 - SQL null identities, changed calculation and promoted capabilities reject
+      ---
+      duration_ms: 1606.477856
+      ...
+    # Subtest: service table mutations denied; owner UPDATE DELETE TRUNCATE rejected
+    ok 10 - service table mutations denied; owner UPDATE DELETE TRUNCATE rejected
+      ---
+      duration_ms: 78.544334
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# research_complete_input_failure_phase read_rpc unclassified
+    # Subtest: withdrawal rejects read/replay without changing stored draft
+    ok 11 - withdrawal rejects read/replay without changing stored draft
+      ---
+      duration_ms: 151.271788
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# research_complete_input_failure_phase read_rpc unclassified
+    # Subtest: expired original job cannot read or receive a private result
+    ok 12 - expired original job cannot read or receive a private result
+      ---
+      duration_ms: 604.229006
+      ...
+    1..12
+ok 1 - private author results against real original PG fences; synthetic execution, actual fixed AUO calculation
+  ---
+  duration_ms: 10975.795524
+  ...
+1..1
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11254.278438

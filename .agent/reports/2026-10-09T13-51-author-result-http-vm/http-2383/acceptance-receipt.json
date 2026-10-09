@@ -1,0 +1,961 @@
+{
+  "startedAt": "2026-10-09T13:42:09.961Z",
+  "postgrest": {
+    "version": "PostgREST 16.3",
+    "archiveBytes": 4519976,
+    "archiveSha256": "4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d",
+    "binaryBytes": 20502640,
+    "binarySha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+  },
+  "partialDevelopmentProfile": true,
+  "databaseAdapterInjected": false,
+  "officialAuthorityRowsSeeded": 0,
+  "observedRosterPromoted": false,
+  "modelReserved": false,
+  "productionImported": false,
+  "top20": null,
+  "checks": [
+    "unauthorized_401_zero_write",
+    "inbox_three_industry_only",
+    "anonymous_table_rpc_denied",
+    "ancillary_read_only_empty_authority",
+    "production_writer_not_fabricated",
+    "real_source_heads_cutoff",
+    "real_authority_empty",
+    "restart_dedup",
+    "priority_blocked_restart_fenced"
+  ],
+  "limitations": [
+    "Node test-runner controlled loopback configuration, not production runtime activation",
+    "Partial schema profile does not attest the complete installed migration policy",
+    "No official roster/sector authority has been ingested; Top20 remains blocked"
+  ],
+  "observedRosterMigrationSha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b",
+  "observedPriorityMigrationSha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3",
+  "observedClaimDependencySourceHashes": {
+    "state": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+    "jobs": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+    "dossier": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+    "immutableDefinition": "d2edbeae7c77f25924a3a9c21acb9ad65109cb0f1a6206aad83dff8d88b60985"
+  },
+  "observedClaimMigrationSha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2",
+  "installedDefinitions": [
+    {
+      "file": "supabase_schema.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS stocks (",
+      "sourceSha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3",
+      "definitionSha256": "b3d9d87b4dd2cd2570c657f6d9edeca9474409198f1ce2f2d4b143b313d1b1d2"
+    },
+    {
+      "file": "migrations/20260315_research_system_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS source_entities (",
+      "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+      "definitionSha256": "03c78b435837ecd782b14e36f8f51a7bdbeeefc130cb19d36bf3ff7120292f74"
+    },
+    {
+      "file": "migrations/20260315_research_system_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS source_raw_documents (",
+      "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+      "definitionSha256": "1ddf2e178a9dcbb5608535eaf32f9f508908ace0a804283f614e02c64338e7da"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "ALTER TABLE public.source_raw_documents",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "6f9cf89764e00a16dd2630f9aaa92be8c26e375c05bb738f9ac4638e8d914c52"
+    },
+    {
+      "file": "migrations/20260906_source_identity_v4.sql",
+      "marker": "ALTER TABLE public.source_raw_documents",
+      "sourceSha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+      "definitionSha256": "c1d15e7436fef37b0d959e009f50ac67c9588f43d2000f3b82424794bb5a7969"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE authority_status_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "de0456eee24d4a21f288f00843e1c7ea2bf26c4475e4035cfa976d98f38df541"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE stock_exchange_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "bb7c4a9dcf3cb5356c8dbd6b1e363d7532c19bed93e17528d1c8a0d129c7d73a"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE instrument_type_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "81cb876a7635be9f157396262a638bf6de5831b1e764a9c86a469c070f6b7afb"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE listing_status_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "03070b2edae9d1f1b2f15514852a6ae61d4b8e980fd7406bb05bedcb1d6d2a78"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE official_roster_provider_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "c85a62f8be9eca5f006ed60d7ee9e366246dc44678e32be2466f1129df37a61d"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE tw_market_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "be7acd6c47b936c20739f01bceec5a206b9cdfaed0cf9250bdb1c5a8883e8792"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE canonical_sector_key_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "e92dfaa281fddd0da3154e2429ebae9553fc96393289986ec30267722c8475b9"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS stock_instruments_v3 (",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "411f053cf5273c207fb1567a391c02986ce5b849128f2d3b47ac1cc85a2c4a3c"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "9c2b0c74ea924ef94f143b37d7de13b57e2c5530eebbbc0911cdaa5b676a5194"
+    },
+    {
+      "file": "migrations/20260831_candidate_shadow_performance.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_runs (",
+      "sourceSha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+      "definitionSha256": "c37f899abd5d57f924a8cd2c1bace068bb2dc5e539ae0809381c7ff6115973da"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.market_evidence_snapshots (",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "9f7b07f170febec813a9c67bba8e33338cf3ff5fa35de6e2df2cd9fc14578957"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_detail_snapshots (",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "2c2fc7a718d8f0335ca4f718bf7f71ff0d447639910811276c9a965d76981139"
+    },
+    {
+      "file": "migrations/20260906_candidate_dossier_v4.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_bundles (",
+      "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+      "definitionSha256": "49bfec32f5a5e712cc1158c391168699cf81876bcfb9dcbec3bcd30f33cb14c4"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_dossiers (",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "2151ab0e8433a794f4bed71fa4fcfea65ab3df045ad5c88b9c2a63912c7d0db0"
+    },
+    {
+      "file": "migrations/20260906_candidate_dossier_v4.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_submission_receipts (",
+      "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+      "definitionSha256": "5337c2d9217883181acbc053e205d78cb5d0b54605aca893790a07cc28f452c1"
+    },
+    {
+      "file": "migrations/20260929_research_agent_state_v1.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (",
+      "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+      "definitionSha256": "3418aa78ecbfaf879f426561e30cb35cd223fdfe5ba8f7d849e6dc36281579d7"
+    },
+    {
+      "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_issuer_document_domains_v6 (",
+      "sourceSha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+      "definitionSha256": "5d66b75c1bff55126ada62aaedcf489128769ef3ec3f1e390c6cf93267812845"
+    },
+    {
+      "file": "migrations/20260929_research_deep_jobs_v1.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.research_deep_jobs_v1 (",
+      "sourceSha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+      "definitionSha256": "f6b905d282b566dd2d80cd2cf19ec418e35a8951aa04004deecf801ddf9d3eb4"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority(",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "a6749bacb864ab7c6c61dd9b6cd2d1bdfcb4b09c40e99489ed8d072d84719e95"
+    },
+    {
+      "file": "migrations/20260906_authority_pagination_v2.sql",
+      "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority_page(",
+      "sourceSha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+      "definitionSha256": "e76a34cde20546b651b64713313ea63e784ee93be606c6804f0e2a32b5578598"
+    },
+    {
+      "file": "migrations/20260929_research_agent_state_v1.sql",
+      "marker": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(",
+      "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+      "definitionSha256": "088283446f2f3ded3deca7cc2e8328325abe4490470954219c2954850851d8cf"
+    }
+  ],
+  "developmentProfileSqlSha256": "666264467963b75fec638b685e4f2eae9081635f389c00b5472f2154647b9b39",
+  "readOnlyDependencyTables": [
+    "candidate_research_runs",
+    "market_evidence_snapshots",
+    "candidate_detail_snapshots",
+    "candidate_dossier_bundles",
+    "candidate_research_dossiers",
+    "candidate_dossier_submission_receipts",
+    "research_priority_runs_v1",
+    "candidate_issuer_document_domains_v6",
+    "research_deep_jobs_v1"
+  ],
+  "installedRoutines": [
+    {
+      "name": "candidate_research_stock_authority",
+      "bodySha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf",
+      "securityDefiner": true,
+      "searchPath": [
+        "search_path=public, pg_temp"
+      ],
+      "serviceExecute": true,
+      "anonExecute": false
+    },
+    {
+      "name": "candidate_research_stock_authority_page",
+      "bodySha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d",
+      "securityDefiner": true,
+      "searchPath": [
+        "search_path=public, pg_temp"
+      ],
+      "serviceExecute": true,
+      "anonExecute": false
+    },
+    {
+      "name": "research_source_heads_page_v1",
+      "bodySha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+      "securityDefiner": true,
+      "searchPath": [
+        "search_path=public, pg_temp"
+      ],
+      "serviceExecute": true,
+      "anonExecute": false
+    }
+  ],
+  "classificationEvidence": {
+    "schemaVersion": "stockinsider-observed-official-security-scope-reconciliation-v1",
+    "recordedAt": "2026-10-08T12:23:18.366811+00:00",
+    "counts": {
+      "twseMasterMatched": 1095,
+      "twseOrdinaryResearchCandidates": 1085,
+      "twseInnovationBoard": 31,
+      "twseOrdinaryAdditionalTransferRestrictionCfi": 1,
+      "twseTdrExcludedFromOrdinaryScope": 10,
+      "unchangedObservedTpexOrdinary": 893,
+      "reconciledObservedOrdinaryResearchCohort": 1978,
+      "legacyStrictObservedCohort": 1946
+    },
+    "sourceReferences": [
+      {
+        "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=2",
+        "observedAt": "2026-10-08T12:21:15.657943+00:00",
+        "responseBytes": 9063029,
+        "responseSha256": "920828356712b85375e504b4633446ad8af39f6f59eddbb7efc0f47e7ca54311"
+      },
+      {
+        "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=4",
+        "observedAt": "2026-10-08T09:04:35.607658+00:00",
+        "responseBytes": 3030198,
+        "responseSha256": "0a719dcffca37de025a3d5be17e83c39019d9d78ffb6e6992ca140b18707e65e"
+      }
+    ],
+    "rawSourceHashesVerifiedByVm": false,
+    "selectedPacketHash": "50fd3e96233b4a0386c09729371283c703f9e9ae147cc4bfd667914a8a753518",
+    "trustedAuthorityActivated": false,
+    "currentTradingEligibilityVerified": false,
+    "historicalPITEligible": false
+  },
+  "excludedNonCommon": [
+    {
+      "symbol": "9103",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "910322",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "9105",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "910861",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "9110",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "911608",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "911622",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "911868",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "912000",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    },
+    {
+      "symbol": "9136",
+      "cfi": "EDSDDR",
+      "sourceSection": "臺灣存託憑證(TDR)",
+      "reason": "non_ordinary_tdr"
+    }
+  ],
+  "observedClassificationAccounting": {
+    "total": 1978,
+    "legacySnapshotTotal": 1946,
+    "excludedTdr": 10,
+    "needsEvidence": 2,
+    "notAssessed": 1976,
+    "qualified": 0,
+    "ranked": 0
+  },
+  "sourceAttempts": [
+    {
+      "id": "investanchors-public",
+      "outcome": "metadata_only"
+    },
+    {
+      "id": "nittobo-electronic",
+      "outcome": "pending_publication_precision"
+    },
+    {
+      "id": "emc-products",
+      "outcome": "pending_publication_precision"
+    },
+    {
+      "id": "emc-production",
+      "outcome": "pending_publication_precision"
+    },
+    {
+      "id": "auo-tech",
+      "outcome": "pending_publication_precision"
+    },
+    {
+      "id": "threads-partial-surface",
+      "outcome": "read_failed"
+    },
+    {
+      "id": "telegram-investanchors-869",
+      "outcome": "item_ready"
+    },
+    {
+      "id": "telegram-investanchors-881",
+      "outcome": "item_ready"
+    },
+    {
+      "id": "telegram-investanchors-882",
+      "outcome": "item_ready"
+    }
+  ],
+  "controllerRunHash": "bcb18b949521dd39b8bc85339ceb3a379f0637994a7d519c87cad4dd6395a994",
+  "inputCanonicalSymbols": [
+    {
+      "url": "https://t.me/investanchors/869",
+      "symbols": [],
+      "subjectScope": "industry_context"
+    },
+    {
+      "url": "https://t.me/investanchors/881",
+      "symbols": [],
+      "subjectScope": "industry_context"
+    },
+    {
+      "url": "https://t.me/investanchors/882",
+      "symbols": [],
+      "subjectScope": "industry_context"
+    }
+  ],
+  "distinctPublishers": 1,
+  "persistedDocuments": 3,
+  "dependencyPrivileges": [
+    {
+      "table": "candidate_research_runs",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "market_evidence_snapshots",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_detail_snapshots",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_dossier_bundles",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_research_dossiers",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_dossier_submission_receipts",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "research_priority_runs_v1",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_issuer_document_domains_v6",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "research_deep_jobs_v1",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    }
+  ],
+  "dependencyPolicies": [
+    {
+      "table": "candidate_research_runs",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "market_evidence_snapshots",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_detail_snapshots",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_dossier_bundles",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_research_dossiers",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_dossier_submission_receipts",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "research_priority_runs_v1",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_issuer_document_domains_v6",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "research_deep_jobs_v1",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    }
+  ],
+  "initialPriorityFailure": "research_priority_official_roster_missing",
+  "unchangedEmptyTables": {
+    "candidate_research_runs": 0,
+    "market_evidence_snapshots": 0,
+    "candidate_detail_snapshots": 0,
+    "candidate_dossier_bundles": 0,
+    "candidate_research_dossiers": 0,
+    "candidate_dossier_submission_receipts": 0,
+    "research_priority_runs_v1": 0,
+    "candidate_issuer_document_domains_v6": 0,
+    "research_deep_jobs_v1": 0,
+    "stocks": 0,
+    "stock_instruments_v3": 0,
+    "stock_sector_assignments_v3": 0
+  },
+  "rosterIngestionFailure": "writer_release_identity_missing",
+  "sourceHeads": 3,
+  "postgresRestartUnchanged": true,
+  "inboxReplayAccepted": 0,
+  "priorityStatus": 409,
+  "priorityFailure": {
+    "ok": false,
+    "error": "research_priority_official_roster_missing"
+  },
+  "authorPacketReadiness": [
+    {
+      "name": "prepare_research_input_v2",
+      "attempt": 1,
+      "status": 404,
+      "body": {
+        "code": "PGRST202",
+        "details": "Searched for the function public.prepare_research_input_v2 with parameter p_request or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.",
+        "hint": null,
+        "message": "Could not find the function public.prepare_research_input_v2(p_request) in the schema cache"
+      },
+      "elapsedMs": 4.645962000002328
+    },
+    {
+      "name": "prepare_research_input_v2",
+      "attempt": 2,
+      "status": 400,
+      "body": {
+        "code": "P0001",
+        "details": null,
+        "hint": null,
+        "message": "input_preparation_shape"
+      },
+      "elapsedMs": 116.0859500000006
+    },
+    {
+      "name": "candidate_research_stock_authority_page",
+      "attempt": 1,
+      "status": 503,
+      "body": {
+        "code": "57P01",
+        "details": null,
+        "hint": null,
+        "message": "terminating connection due to administrator command"
+      },
+      "elapsedMs": 5.237875999999233
+    },
+    {
+      "name": "candidate_research_stock_authority_page",
+      "attempt": 2,
+      "status": 200,
+      "body": [],
+      "elapsedMs": 114.30492000000231
+    }
+  ],
+  "completeInputHttp": {
+    "symbol": "2383",
+    "revisionId": "967f0744-a0c3-4189-87d3-2338ace8ef26",
+    "inputHash": "e87926fd3f6fa9a4bc1b70ab85b3e44fe0781a3293c765f53e2e9a72497770d6",
+    "charge": 99111,
+    "syntheticJobAndOwner": true,
+    "actualTrustedRoleExecution": false,
+    "financialVerified": false,
+    "dispatchReady": false
+  },
+  "authorPacketHttp": {
+    "symbol": "2383",
+    "packetHash": "2310931f76fd7ed3bdd168eed25076c1e66cd13ab9a9374c6839b2d0e249e5bc",
+    "packetBytes": 78682,
+    "sourceCount": 1,
+    "sourceSealReceivedAt": "2026-10-09T13:42:28.137338+00:00",
+    "dbSealReceivedAt": "2026-10-09T13:42:28.137338+00:00",
+    "nodeReadAt": "2026-10-09T13:42:30.939Z",
+    "pgReadAt": "2026-10-09 13:42:30.947416+00",
+    "writingWindow": {
+      "assignedAt": "2026-10-09T13:42:30.169558+00:00",
+      "originalJobDeadline": "2026-10-09T14:12:27.28418+00:00",
+      "originalReservationDeadline": "2026-10-09T14:12:27.28418+00:00"
+    },
+    "syntheticSourceJobCredentials": true,
+    "actualFinancialRelayProjection": true,
+    "modelDispatched": false,
+    "researchQualified": false,
+    "stateAuditBefore": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101699,
+      "source_raw_documents": {
+        "count": 4,
+        "rowHash": "faef5efc07bf89de23d284660ac4b063d750eb9f946c37334cc9866bf17e966e"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "4e465c2af93261d68dca56a06a09f8a974bb2c745545020b9737184ef423d1b8"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "dec91ed8c9e4d83ac305c1348ed64fa765348b6d39b85f71065953ffddc58a38"
+      },
+      "research_author_results_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "4d0e37e80441ae9402060fdf5954653497736e68c326918baeed65b9a3d193d7"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "5f4165c99c3243a508c42349e0e1f735a56af9502159872adc4f84938efae21b"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "11acec0fcfed4aa3faddc21f6feec97e6e85ac1d6f74c33a812612d662e2c72f"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "66ef55fa2e041fb6ff72b89e189231e8261615699322de3fbac5303067ae2784"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "9755cbd3e9c48c5ed470d8ccd73f6250b5d3eabd002fb96ebcca7db026596a31"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "stateAuditAfter": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101699,
+      "source_raw_documents": {
+        "count": 4,
+        "rowHash": "faef5efc07bf89de23d284660ac4b063d750eb9f946c37334cc9866bf17e966e"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "4e465c2af93261d68dca56a06a09f8a974bb2c745545020b9737184ef423d1b8"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "dec91ed8c9e4d83ac305c1348ed64fa765348b6d39b85f71065953ffddc58a38"
+      },
+      "research_author_results_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "4d0e37e80441ae9402060fdf5954653497736e68c326918baeed65b9a3d193d7"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "5f4165c99c3243a508c42349e0e1f735a56af9502159872adc4f84938efae21b"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "11acec0fcfed4aa3faddc21f6feec97e6e85ac1d6f74c33a812612d662e2c72f"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "66ef55fa2e041fb6ff72b89e189231e8261615699322de3fbac5303067ae2784"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "9755cbd3e9c48c5ed470d8ccd73f6250b5d3eabd002fb96ebcca7db026596a31"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    }
+  },
+  "authorPacketWithdrawal": {
+    "before": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101699,
+      "source_raw_documents": {
+        "count": 4,
+        "rowHash": "faef5efc07bf89de23d284660ac4b063d750eb9f946c37334cc9866bf17e966e"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "4e465c2af93261d68dca56a06a09f8a974bb2c745545020b9737184ef423d1b8"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "dec91ed8c9e4d83ac305c1348ed64fa765348b6d39b85f71065953ffddc58a38"
+      },
+      "research_author_results_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "4d0e37e80441ae9402060fdf5954653497736e68c326918baeed65b9a3d193d7"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "5f4165c99c3243a508c42349e0e1f735a56af9502159872adc4f84938efae21b"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "11acec0fcfed4aa3faddc21f6feec97e6e85ac1d6f74c33a812612d662e2c72f"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "66ef55fa2e041fb6ff72b89e189231e8261615699322de3fbac5303067ae2784"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "9755cbd3e9c48c5ed470d8ccd73f6250b5d3eabd002fb96ebcca7db026596a31"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "afterWithdrawal": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101699,
+      "source_raw_documents": {
+        "count": 5,
+        "rowHash": "04e0272d6d6bbe74ef7637709375f2eeb3fd2570b387ff021af59877f4d2626f"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "4e465c2af93261d68dca56a06a09f8a974bb2c745545020b9737184ef423d1b8"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "dec91ed8c9e4d83ac305c1348ed64fa765348b6d39b85f71065953ffddc58a38"
+      },
+      "research_author_results_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "4d0e37e80441ae9402060fdf5954653497736e68c326918baeed65b9a3d193d7"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "5f4165c99c3243a508c42349e0e1f735a56af9502159872adc4f84938efae21b"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "11acec0fcfed4aa3faddc21f6feec97e6e85ac1d6f74c33a812612d662e2c72f"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "66ef55fa2e041fb6ff72b89e189231e8261615699322de3fbac5303067ae2784"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "9755cbd3e9c48c5ed470d8ccd73f6250b5d3eabd002fb96ebcca7db026596a31"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 1,
+        "rowHash": "0aed322395b25c584de35367e96e5b2c0988f1e6f88b513c668962f79abf81f8"
+      }
+    },
+    "afterRead": {
+      "stocks": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "logicalCharge": 101699,
+      "source_raw_documents": {
+        "count": 5,
+        "rowHash": "04e0272d6d6bbe74ef7637709375f2eeb3fd2570b387ff021af59877f4d2626f"
+      },
+      "stock_instruments_v3": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_jobs_v1": {
+        "count": 1,
+        "rowHash": "4e465c2af93261d68dca56a06a09f8a974bb2c745545020b9737184ef423d1b8"
+      },
+      "research_source_seals_v2": {
+        "count": 1,
+        "rowHash": "dec91ed8c9e4d83ac305c1348ed64fa765348b6d39b85f71065953ffddc58a38"
+      },
+      "research_author_results_v2": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_deep_job_attempts_v1": {
+        "count": 1,
+        "rowHash": "4d0e37e80441ae9402060fdf5954653497736e68c326918baeed65b9a3d193d7"
+      },
+      "research_model_completions_v1": {
+        "count": 0,
+        "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "research_author_assignments_v2": {
+        "count": 1,
+        "rowHash": "5f4165c99c3243a508c42349e0e1f735a56af9502159872adc4f84938efae21b"
+      },
+      "research_input_preparations_v2": {
+        "count": 1,
+        "rowHash": "11acec0fcfed4aa3faddc21f6feec97e6e85ac1d6f74c33a812612d662e2c72f"
+      },
+      "research_model_reservations_v1": {
+        "count": 1,
+        "rowHash": "66ef55fa2e041fb6ff72b89e189231e8261615699322de3fbac5303067ae2784"
+      },
+      "research_article_input_revisions_v2": {
+        "count": 1,
+        "rowHash": "9755cbd3e9c48c5ed470d8ccd73f6250b5d3eabd002fb96ebcca7db026596a31"
+      },
+      "research_source_seal_invalidations_v2": {
+        "count": 1,
+        "rowHash": "0aed322395b25c584de35367e96e5b2c0988f1e6f88b513c668962f79abf81f8"
+      }
+    },
+    "originalSourceUnchanged": true,
+    "acceptedNewRevision": 1,
+    "packetHttpStatus": 409
+  },
+  "passed": true,
+  "completedAt": "2026-10-09T13:42:40.161Z"
+}

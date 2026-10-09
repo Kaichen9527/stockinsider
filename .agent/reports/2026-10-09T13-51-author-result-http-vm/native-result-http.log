@@ -1,0 +1,438 @@
+TAP version 13
+# (node:186615) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:186615) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-author-result-http-vm-oct09/web/src/lib/research-financial-clock.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-author-result-http-vm-oct09/web/package.json.
+# Subtest: compiled private author result 2409, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 142.546511
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 68.97705
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 15.991366
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 439.204478
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 28.937621
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 12.123615
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 4.786233
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 484.091994
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 98.831865
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 308.361417
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 436.151179
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 856.938527
+      ...
+    # Subtest: packet marker2 authentication and closed-body rejection leave all rows unchanged
+    ok 13 - packet marker2 authentication and closed-body rejection leave all rows unchanged
+      ---
+      duration_ms: 210.326286
+      ...
+    # Subtest: complete input without original author assignment cannot produce a packet
+    ok 14 - complete input without original author assignment cannot produce a packet
+      ---
+      duration_ms: 286.872349
+      ...
+    # Subtest: existing guarded author admission binds this original input without a new reservation
+    ok 15 - existing guarded author admission binds this original input without a new reservation
+      ---
+      duration_ms: 405.070515
+      ...
+    # Subtest: compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+    ok 16 - compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+      ---
+      duration_ms: 898.721373
+      ...
+    # Subtest: two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+    ok 17 - two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+      ---
+      duration_ms: 2977.300654
+      ...
+    # Subtest: result marker2 auth and closed body reject with unchanged original budget
+    ok 18 - result marker2 auth and closed body reject with unchanged original budget
+      ---
+      duration_ms: 73.983227
+      ...
+    # Subtest: actual result read before reception is null, no assignment or charge added
+    ok 19 - actual result read before reception is null, no assignment or charge added
+      ---
+      duration_ms: 1362.133406
+      ...
+    # Subtest: synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result
+    not ok 20 - synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result
+      ---
+      duration_ms: 911.263858
+      location: '/workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:95:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        {"ok":false,"error":"research_author_result_unavailable","outcome":"uncertain","recoveryAction":"readAuthorResult","retryClaim":false}
+        
+        409 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 409
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:97:123)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:95:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: changed article or observation single-shot rejected without modifying private draft
+    ok 21 - changed article or observation single-shot rejected without modifying private draft
+      ---
+      duration_ms: 2446.10871
+      ...
+    # Subtest: result exact read/reception replay and actual PG restart preserve full hash/clock/bytes and budget
+    not ok 22 - result exact read/reception replay and actual PG restart preserve full hash/clock/bytes and budget
+      ---
+      duration_ms: 960.882607
+      location: '/workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:108:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly deep-equal:
+        + actual - expected
+        
+        + {
+        +   controllerReportOnly: true,
+        +   dispatchReady: false,
+        +   modelDispatched: false,
+        +   ok: true,
+        +   publishableResearch: false,
+        +   result: null
+        + }
+        - undefined
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      actual:
+        ok: true
+        result: ~
+        dispatchReady: false
+        modelDispatched: false
+        publishableResearch: false
+        controllerReportOnly: true
+      operator: 'deepStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:109:253)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:108:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+    ok 23 - guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+      ---
+      duration_ms: 215.95161
+      ...
+    # Subtest: withdrawal rejects result read and receive replay, preserves complete private draft and all charges
+    not ok 24 - withdrawal rejects result read and receive replay, preserves complete private draft and all charges
+      ---
+      duration_ms: 244.379386
+      location: '/workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:118:11'
+      failureType: 'testCodeFailure'
+      error: "Cannot set properties of undefined (setting 'withdrawalRejectedWithDraftPreserved')"
+      code: 'ERR_TEST_FAILURE'
+      name: 'TypeError'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:119:419)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:118:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    1..24
+not ok 1 - compiled private author result 2409, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 30201.430277
+  location: '/workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:16:37'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(report.authorResultHttp)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:121:13)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# {"field":"base Q4 display revenue, manual research assumption projection","actual":31090.078766235238,"expectedFrozen":31090.078766235238}
+# Subtest: compiled private author result 2383, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 132.255556
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 65.971822
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 7.578368
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 318.50449
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 28.125411
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 12.938808
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 3.51146
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 472.887502
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 81.200548
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 343.836509
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 394.858105
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 813.169672
+      ...
+    # Subtest: packet marker2 authentication and closed-body rejection leave all rows unchanged
+    ok 13 - packet marker2 authentication and closed-body rejection leave all rows unchanged
+      ---
+      duration_ms: 218.365183
+      ...
+    # Subtest: complete input without original author assignment cannot produce a packet
+    ok 14 - complete input without original author assignment cannot produce a packet
+      ---
+      duration_ms: 259.852981
+      ...
+    # Subtest: existing guarded author admission binds this original input without a new reservation
+    ok 15 - existing guarded author admission binds this original input without a new reservation
+      ---
+      duration_ms: 361.520594
+      ...
+    # Subtest: compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+    ok 16 - compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+      ---
+      duration_ms: 785.411609
+      ...
+    # Subtest: two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+    ok 17 - two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+      ---
+      duration_ms: 2778.109322
+      ...
+    # Subtest: result marker2 auth and closed body reject with unchanged original budget
+    ok 18 - result marker2 auth and closed body reject with unchanged original budget
+      ---
+      duration_ms: 69.281068
+      ...
+    # Subtest: actual result read before reception is null, no assignment or charge added
+    ok 19 - actual result read before reception is null, no assignment or charge added
+      ---
+      duration_ms: 1349.669341
+      ...
+    # Subtest: synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result
+    not ok 20 - synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result
+      ---
+      duration_ms: 880.241366
+      location: '/workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:95:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        {"ok":false,"error":"research_author_result_unavailable","outcome":"uncertain","recoveryAction":"readAuthorResult","retryClaim":false}
+        
+        409 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 409
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:97:123)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:95:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+      ...
+    # Subtest: changed article or observation single-shot rejected without modifying private draft
+    ok 21 - changed article or observation single-shot rejected without modifying private draft
+      ---
+      duration_ms: 2577.399132
+      ...
+    # Subtest: result exact read/reception replay and actual PG restart preserve full hash/clock/bytes and budget
+    not ok 22 - result exact read/reception replay and actual PG restart preserve full hash/clock/bytes and budget
+      ---
+      duration_ms: 911.833623
+      location: '/workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:108:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly deep-equal:
+        + actual - expected
+        
+        + {
+        +   controllerReportOnly: true,
+        +   dispatchReady: false,
+        +   modelDispatched: false,
+        +   ok: true,
+        +   publishableResearch: false,
+        +   result: null
+        + }
+        - undefined
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      actual:
+        ok: true
+        result: ~
+        dispatchReady: false
+        modelDispatched: false
+        publishableResearch: false
+        controllerReportOnly: true
+      operator: 'deepStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:109:253)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:108:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+      ...
+    # Subtest: guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+    ok 23 - guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+      ---
+      duration_ms: 216.490521
+      ...
+    # Subtest: withdrawal rejects result read and receive replay, preserves complete private draft and all charges
+    not ok 24 - withdrawal rejects result read and receive replay, preserves complete private draft and all charges
+      ---
+      duration_ms: 254.90465
+      location: '/workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:118:11'
+      failureType: 'testCodeFailure'
+      error: "Cannot set properties of undefined (setting 'withdrawalRejectedWithDraftPreserved')"
+      code: 'ERR_TEST_FAILURE'
+      name: 'TypeError'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:119:419)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:118:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:18:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+      ...
+    1..24
+not ok 2 - compiled private author result 2383, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 30500.279903
+  location: '/workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:16:37'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(report.authorResultHttp)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-author-result-http-vm-oct09/scripts/research-author-result-http.test.mjs:121:13)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..2
+# tests 50
+# suites 0
+# pass 42
+# fail 8
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 63870.747428

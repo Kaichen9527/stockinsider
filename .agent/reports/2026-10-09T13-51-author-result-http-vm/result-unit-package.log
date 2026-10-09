@@ -1,0 +1,19 @@
+
+> test:research-author-result
+> node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-author-result.test.mjs
+
+TAP version 13
+# Subtest: scripts/research-author-result.test.mjs
+ok 1 - scripts/research-author-result.test.mjs
+  ---
+  duration_ms: 2177.182661
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2184.551152

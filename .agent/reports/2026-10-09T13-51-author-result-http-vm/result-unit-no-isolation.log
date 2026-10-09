@@ -1,0 +1,55 @@
+TAP version 13
+(node:188156) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:188156) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-author-result-http-vm-oct09/web/src/lib/research-author-result.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-author-result-http-vm-oct09/web/package.json.
+# Subtest: readAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+ok 1 - readAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+  ---
+  duration_ms: 21.252038
+  ...
+# Subtest: receiveAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+ok 2 - receiveAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+  ---
+  duration_ms: 28.685078
+  ...
+# Subtest: duplicate decoded keys, excessive nesting, invalid UTF8 and header/body disagreement reject
+ok 3 - duplicate decoded keys, excessive nesting, invalid UTF8 and header/body disagreement reject
+  ---
+  duration_ms: 2.125468
+  ...
+# Subtest: stalled streaming body expires and is cancelled under same deadline
+ok 4 - stalled streaming body expires and is cancelled under same deadline
+  ---
+  duration_ms: 31.113053
+  ...
+# Subtest: exhausted deadline launches no body read
+ok 5 - exhausted deadline launches no body read
+  ---
+  duration_ms: 0.442167
+  ...
+# Subtest: auth separation and malformed result discriminator fail before result handling
+ok 6 - auth separation and malformed result discriminator fail before result handling
+  ---
+  duration_ms: 3.511289
+  ...
+# Subtest: 2409 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+ok 7 - 2409 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+  ---
+  duration_ms: 1008.61789
+  ...
+# Subtest: 2383 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+ok 8 - 2383 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+  ---
+  duration_ms: 857.30313
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2192.926256
