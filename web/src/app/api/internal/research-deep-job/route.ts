@@ -22,6 +22,18 @@ export async function POST(request: Request) {
   if (['claim', 'status', 'input'].includes(action) && typeof body.owner !== 'string') {
     return NextResponse.json({ ok: false, error: 'research_deep_owner_invalid' }, { status: 400 });
   }
+  if (action === 'financialSupplement') {
+    try {
+      // Literal server-owned module only, never caller-selected import/command.
+      const { parseFinancialSupplementRequest, loadResearchFinancialSupplement } = await import('@/lib/research-financial-supplement');
+      const { action: _action, ...fields } = body; void _action;
+      const input = parseFinancialSupplementRequest(fields);
+      const supplement = await loadResearchFinancialSupplement(getSupabaseServerClient(), input);
+      return NextResponse.json({ ok: true, supplement, dispatchReady: false });
+    } catch {
+      return NextResponse.json({ ok: false, error: 'research_financial_supplement_unavailable' }, { status: 409 });
+    }
+  }
   if (action === 'prepareResearchInput') {
     let input;
     try {

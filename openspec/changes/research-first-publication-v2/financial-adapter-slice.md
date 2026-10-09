@@ -43,3 +43,17 @@ Use the reviewed nonblocking/O_NOFOLLOW regular-file private-reader pattern: fix
 One10000ms shared monotonic deadline begins before initial original lease/source-seal validation and includes all reads, projection, computation, serialization and final live lease/seal validation. Every asynchronous dependency receives remaining-time abort/timeout; discard late successful completion. Check before/after each finite synchronous phase. Deadline does not change source/PIT clocks, renew leases, retry or write DB state. Unknown/unimplemented2026 reported YTD+forecast annual bridge remains explicitly incomplete; do not fill values to agree with an old table.
 
 Acceptance: per-file/aggregate/projection/result exact/+1 and UTF-8; actual FIFO/nonregular/symlink, deterministic parent/leaf replacement and short-read races; stalled pre/post lease/seal dependency or read; late completion and computation/serialization deadline crossing yield no successful supplement. Retain the old request-changes history. No implementation is approved by this repaired spec alone.
+
+## Independent design approval and implementation increment
+
+Root-delegated independent reviewer gave unsigned bounded design PASS on exact a2046447a74d98f78c51fef5162c8bf571371370: workload P2 closed, no remaining P1/P2. Spec SHA579e176f84984b6534a5ac3024616c4e7ebc2250f382e774d5855ebf3dad8dd4 and inventory SHAfc299201a7e49dee91416e3105bb3996a13514bc459476443967a7beeec5bd4d; independently checked14 Git inputs, AUO8/641874B and EMC6/216856B. This is design approval, not runtime, financial verification or protected authority.
+
+New manual implementation increment starts2026-10-09T05:59:38Z, deadline06:29:38Z. A read-only `assert_research_input_preparation_v2` wrapper checks immutable preparation existence/hash/request under original locks, then enters only the existing exact-replay branch to revalidate original leases and source seal. It rejects missing receipts before calling admission and adds no table, charge, seal, preparation or reservation. Service still cannot read/write the private preparation table. `financialSupplement` is an additive action on the existing guarded deep-job endpoint; request supplies only original identity plus preparation ID/hash, never a calculator/path/command. Exact code and real PG acceptance remain pending until implemented.
+
+The implementation bundles only the fixed inventory configuration inside the web
+module because Next's web-root compiler cannot import the external OpenSpec JSON.
+An equality regression compares every path/length/SHA to the approved inventory;
+evidence still uses regular-descriptor bounded reads. The projection deliberately
+keeps AUO's group operating-expense total and leaves its three disclosed expense
+components in the pinned relay, keeping the explicit selected fact view within
+64 rows. This is a finite selected view, not complete financial-note coverage.

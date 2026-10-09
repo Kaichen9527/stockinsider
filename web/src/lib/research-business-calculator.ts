@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { sourceControllerInstant } from './research-source-attempt-controller.ts';
+import { financialInstant as sourceControllerInstant } from './research-financial-clock.ts';
 
 /** Pure, fixed dispatch. Input observations remain unsealed until the publication
  * transaction resolves their immutable DB revisions. This is no identity,
@@ -127,7 +127,7 @@ function aggregate(rows: QuarterResult[]) {
 export function businessCalculatorExecutionHash(): string {
   // Bind the executed financial core, including dependencies, without reading
   // request paths, dynamically importing a module or executing report scripts.
-  return digest({ version: 'business-calculator-core-v2.1', profitFields: PROFIT_FIELDS, functions: [sum, eps, auo, emc, calculate, aggregate].map(fn => fn.toString()) });
+  return digest({ version: 'business-calculator-core-v2.2', profitFields: PROFIT_FIELDS, auoKeys: AUO_KEYS, commonKeys: COMMON_KEYS, auoFields: AUO_FIELDS, emcFields: EMC_FIELDS, functions: [sourceControllerInstant, ensure, exact, finite, text, hash, json, canonical, digest, sum, periodIndex, shareInput, common, quarterInput, eps, auo, emc, calculate, aggregate, recalculateResearchBusinessScenarios].map(fn => fn.toString()) });
 }
 export function recalculateResearchBusinessScenarios(value: unknown, now = new Date().toISOString()) {
   json(value); ensure(Buffer.byteLength(JSON.stringify(value), 'utf8') <= 160_000);
