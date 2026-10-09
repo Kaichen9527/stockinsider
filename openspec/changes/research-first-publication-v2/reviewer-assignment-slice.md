@@ -19,13 +19,22 @@ identity; keep it unchanged as the execution-binding contract requires. Never
 copy any credential into model data, create production principals or infer an
 actual model execution merely from an assignment.
 
-Before admission/read, a private scoped context finds the stored author assignment
-and uses its private principal internally to call the original new handoff context.
-Caller cannot supply/adopt the author principal. Require its exact completed
-receipt and full original source/claim/lineage/clock fences. The original author
-result and completed reservation remain immutable. Reviewer principal differs
-from stored author principal. Application revalidates the complete revision,
-actual calculator and entire stored validated article before reserve and replay.
+Before every admission/read/packet, the server derives the expected current author
+principal from its configured author credential, alongside the authenticated
+reviewer principal. A small configuration-only identity helper validates the same
+credential pair/role aliases and hashes the author domain; it never constructs or
+sends a fake author Bearer request, exports a credential or accepts a caller hash.
+The private SQL context requires this server-derived expected author principal
+to equal the immutable author assignment principal, then calls the original
+handoff context with that matched value. Merely reusing the stored principal is
+forbidden: role-domain separation alone would let old author key A become the
+reviewer after changing author to B and reviewer to A. Original author rotation
+must reject instead of adopting the old assignment. Reviewer principal must also
+match an existing reviewer assignment on every replay; current author/reviewer
+configuration aliases remain invalid. Require exact completed receipt and all
+original source/claim/lineage/clock fences. Author result/completed reservation
+remain immutable. Application revalidates the complete revision, actual calculator
+and entire stored validated article before reserve and replay.
 
 Under original source→global locks, call existing reserve_research_model_v1 with
 role counter_review, original work owner and deterministic work key binding job,
@@ -73,8 +82,17 @@ AUO/EMC recalculation with explicitly synthetic upstream/execution fixtures;
 real PG original budget reserve and observed claim/completion fences; missing
 handoff rejects; null budget admission has zero writes; exact concurrent reserve
 one assignment/one1800charge; replay/read/restart unchanged; source withdrawal,
-expiry/takeover/principal rotation/completed review reservation reject; no private
+expiry/takeover/author rotation/reviewer rotation/A-R swap/old-author-as-reviewer/
+completed review reservation reject before any reservation or assignment writes; no private
 model context or fulltext; no completion/job/publication/qualification writes.
 Independent design/code review, related tests/type/lint/normal build and native
 HTTP required. Actual author/reviewer tool dispatch remains separate incomplete
 acceptance, not substituted by this reservation/packet or engineering turns.
+
+## Preserved design finding
+
+Exact3c030556 unsigned review found P2 credential-rotation adoption: original
+H(author,A), then configured authorB/reviewerA gives H(reviewer,A) distinct from
+the stored principal. The design now requires the current server-derived author
+principal as well. Original rejected design and reviewer probe remain historical;
+this correction is not acceptance or authorization of any actual role execution.
