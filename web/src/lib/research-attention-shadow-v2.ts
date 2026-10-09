@@ -62,6 +62,27 @@ function selectedRoots(roots: ResearchSourceRoot[]): ResearchSourceRoot[] {
   const selected = new Map<string, ResearchSourceRoot>();
   const firstTimes = new Map<string, string>();
   const severity = { current: 0, contradicted: 1, retracted: 2 };
+  // Validate every tied revision, including losers. Comparing only against the
+  // current winner lets a newer row hide an older ambiguous pair by permutation.
+  const groups = new Map<string, Map<string, { precise: bigint; rows: ResearchSourceRoot[] }>>();
+  for (const root of roots) {
+    const time = root.revisionObservedAt || root.firstObservedAt;
+    const key = `${root.isOriginalSource !== false}:${Date.parse(time)}`;
+    const byClock = groups.get(root.rootId) || new Map<string, { precise: bigint; rows: ResearchSourceRoot[] }>();
+    const group = byClock.get(key) || { precise: instant(time), rows: [] };
+    ensure(group.precise === instant(time)); group.rows.push(root);
+    byClock.set(key, group); groups.set(root.rootId, byClock);
+  }
+  for (const byClock of groups.values()) for (const group of byClock.values()) {
+    group.rows.sort((a, b) => severity[a.status] - severity[b.status]
+      || (a.revisionId || a.url).localeCompare(b.revisionId || b.url));
+    for (let i = 1; i < group.rows.length; i++) {
+      const a = group.rows[i - 1], b = group.rows[i];
+      const aKey = a.revisionId || a.url, bKey = b.revisionId || b.url;
+      if (severity[a.status] === severity[b.status] && aKey.localeCompare(bKey) === 0)
+        ensure(aKey === bKey && a.kind === b.kind && instant(a.publishedAt) === instant(b.publishedAt));
+    }
+  }
   for (const root of roots) {
     const first = firstTimes.get(root.rootId);
     if (!first || instant(root.firstObservedAt) < instant(first)
@@ -72,15 +93,6 @@ function selectedRoots(roots: ResearchSourceRoot[]): ResearchSourceRoot[] {
     const previous = prior ? Date.parse(prior.revisionObservedAt || prior.firstObservedAt) : -Infinity;
     const original = root.isOriginalSource !== false, priorOriginal = prior?.isOriginalSource !== false;
     const tie = (root.revisionId || root.url).localeCompare(prior?.revisionId || prior?.url || '');
-    if (prior && original === priorOriginal && revision === previous) {
-      ensure(instant(root.revisionObservedAt || root.firstObservedAt)
-        === instant(prior.revisionObservedAt || prior.firstObservedAt));
-      if (severity[root.status] === severity[prior.status] && tie === 0)
-        ensure((root.revisionId || root.url) === (prior.revisionId || prior.url));
-    }
-    if (prior && original === priorOriginal && revision === previous && severity[root.status] === severity[prior.status] && tie === 0) {
-      ensure(root.kind === prior.kind && instant(root.publishedAt) === instant(prior.publishedAt));
-    }
     if (!prior || original && !priorOriginal || original === priorOriginal && (revision > previous
       || revision === previous && (severity[root.status] > severity[prior.status]
         || severity[root.status] === severity[prior.status] && tie > 0))) selected.set(root.rootId, root);

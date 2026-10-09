@@ -142,6 +142,17 @@ test('v1-ambiguous fractional revision or Unicode collation ties reject in eithe
   for (const pair of [[a, b], [b, a], [earlier, later], [later, earlier]])
     assert.throws(() => analyzeRoots(pair, [binding(pair[0])]), /shadow_invalid/);
 });
+test('newer winning revision cannot hide an older ambiguous pair in any permutation', () => {
+  const winner = root('a', { revisionId: 'newest', revisionObservedAt: asOf });
+  const a = root('a', { revisionId: 'é' }), b = { ...a, revisionId: 'e\u0301' };
+  const early = root('a', { revisionObservedAt: '2026-10-08T06:00:00.000080Z' });
+  const late = { ...early, revisionObservedAt: '2026-10-08T06:00:00.000090Z' };
+  for (const [x, y] of [[a, b], [early, late], [a, { ...a, kind: 'metadata_only' as const }]]) {
+    for (const rows of [[x, y, winner], [y, x, winner], [x, winner, y],
+      [y, winner, x], [winner, x, y], [winner, y, x]])
+      assert.throws(() => analyzeRoots(rows, [binding(winner)]), /shadow_invalid/);
+  }
+});
 test('missing revision leaves independence unknown; no supplied binding is inferred', () => {
   const r = root('a', { revisionId: undefined });
   const result = analyzeRoots([r], [binding(root('a'))]);
