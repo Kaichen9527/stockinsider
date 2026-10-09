@@ -55,6 +55,7 @@ test('REB01 actual matched credentials resolve private role-separated controller
 test('REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication', () => {
   for (const keys of [{}, { INTERNAL_API_KEY: 'fixture' }, { RESEARCH_REVIEW_KEY: 'fixture' },
     { ...credentials, RESEARCH_REVIEW_KEY: credentials.INTERNAL_API_KEY },
+    { ...credentials, CRON_SECRET: credentials.INTERNAL_API_KEY },
     { ...credentials, RESEARCH_REVIEW_KEY: credentials.CRON_SECRET }]) {
     for (const role of ['author', 'reviewer']) assert.equal(
       resolveResearchControllerIdentity(authorRequest(), role, keys).error, 'research_controller_authority_unavailable');
@@ -134,7 +135,7 @@ test('REB09 dispatch/completion must fit original assignment, reservation, job a
     ['expected', 'receivedAt', at(24)], ['expected', 'originalJobDeadline', at(10)],
     ['observation', 'controllerObservedStartAt', at(9)], ['observation', 'controllerObservedEndAt', at(19)],
     ['observation', 'controllerObservedEndAt', at(31)], ['observation', 'controllerObservedEndAt', '2026-02-30T00:00:00.000Z'],
-    ['observation', 'controllerObservedStartAt', '2026-10-09T00:00:20+00:00'],
+    ['observation', 'controllerObservedStartAt', '2026-10-09T00:00:20.0000001Z'],
     ['expected', 'reservationStartedAt', 'invalid'],
   ];
   for (const [target, key, value] of cases) {
@@ -162,5 +163,25 @@ test('REB11 used invocation is rejected rather than silently creating a new exec
   for (const role of ['author', 'reviewer']) {
     const f = fixture(role); f.expected.usedInvocationIds = [f.observation.invocationId];
     rejects(f, 'research_execution_invocation_reused');
+  }
+});
+
+test('REB12 PG microseconds and explicit offsets preserve exact original boundary ordering', () => {
+  const f = fixture();
+  f.expected.assignedAt = '2026-10-09T08:00:10.000001+08:00';
+  f.observation.controllerObservedStartAt = '2026-10-09T00:00:10.000001Z';
+  assert.equal(validate(f).ok, true);
+  f.observation.controllerObservedStartAt = '2026-10-09T00:00:10.000000Z';
+  rejects(f, 'research_execution_clock_invalid');
+  f.observation.controllerObservedStartAt = at(20);
+  f.expected.originalJobDeadline = '2026-10-09T00:00:30.000001+00:00';
+  f.expected.receivedAt = '2026-10-09T00:00:30.000000Z';
+  assert.equal(validate(f).ok, true);
+  f.expected.receivedAt = '2026-10-09T00:00:30.000001Z';
+  rejects(f, 'research_execution_clock_invalid');
+  for (const invalid of ['2026-10-09T00:00:20+14:01', '2026-10-09T00:00:20+08:60',
+    '2026-10-09T24:00:00Z', '2026-10-09T00:00:20', '2026-02-30T00:00:00+00:00']) {
+    const bad = fixture(); bad.observation.controllerObservedStartAt = invalid;
+    rejects(bad, 'research_execution_clock_invalid');
   }
 });

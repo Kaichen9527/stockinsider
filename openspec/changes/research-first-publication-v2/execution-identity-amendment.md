@@ -14,8 +14,12 @@ The future route loads an immutable assignment and its original job/reservation 
 
 Review requires a separately authenticated principal and a different actual thread and invocation from the stored author observation. Merely renaming a reviewer or starting another turn in the author's thread does not establish this pilot's independence. Global invocation uniqueness/replay and atomic reservation completion must be enforced by the future transaction; the helper's provided prior-invocation set is defense in depth, not a concurrency lock. Exact accepted result replay belongs to the immutable receipt transaction, not a new assignment or budget charge.
 
+Original clocks accept explicit ISO8601 Z/offset timestamps with zero to six fractional digits and offsets up to14:00; comparisons retain microseconds as integers. Adapters must preserve original database clocks, not truncate them to JavaScript milliseconds. Unsupported precision/offsets fail closed. No leap-second interpretation is claimed.
+
 ## Acceptance and remaining work
 
 Unit/adversarial tests exercise credential separation, header aliases, rotation, mixed identifiers/hashes, unknown keys, role/owner mismatch, deadline/time bounds, self-review and invocation reuse. Synthetic test keys and observations are explicitly isolated fixtures, never real execution evidence. A normal build confirms the foundation compiles. Independent code review is required before integration.
 
 Still required: private create-only assignments and uniqueness constraints; original owner/lease/source fences; original fixed budgets; actual cross-chat dispatch/result adapter; guarded v2 handoff/review integration; transaction/replay/concurrency tests; and fresh real author/reviewer execution for two company-specific articles. This increment cannot make those items green.
+
+The initial eb9276a6 review found the cron=writer configuration omitted from the rejection. That synthetic P2 is retained; the successor explicitly rejects it for both roles and adds regression coverage. The initial11 passing tests did not detect that omission and are not treated as independent acceptance.

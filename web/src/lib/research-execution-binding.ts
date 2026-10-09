@@ -19,7 +19,7 @@ export function resolveResearchControllerIdentity(
   const writer = credentials.INTERNAL_API_KEY;
   const reviewer = credentials.RESEARCH_REVIEW_KEY;
   if ((role !== 'author' && role !== 'reviewer') || !writer || !reviewer
-    || writer === reviewer || reviewer === credentials.CRON_SECRET) {
+    || writer === reviewer || writer === credentials.CRON_SECRET || reviewer === credentials.CRON_SECRET) {
     return { ok: false, error: 'research_controller_authority_unavailable' };
   }
   const header = request.headers.get('authorization');
@@ -102,10 +102,21 @@ function text(value: unknown, max = 200): value is string {
     && value.trim() === value && !/[\u0000-\u001f\u007f]/u.test(value);
 }
 
-function instant(value: unknown): number | null {
-  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/u.test(value)) return null;
-  const ms = Date.parse(value);
-  return Number.isFinite(ms) && new Date(ms).toISOString() === value ? ms : null;
+// Preserve PostgreSQL microseconds; never round/truncate original deadline clocks.
+function instant(value: unknown): bigint | null {
+  if (typeof value !== 'string') return null;
+  const match = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,6}))?(Z|[+-]\d{2}:\d{2})$/u.exec(value);
+  if (!match) return null;
+  const seconds = Date.parse(`${match[1]}.000Z`);
+  if (!Number.isFinite(seconds) || new Date(seconds).toISOString() !== `${match[1]}.000Z`) return null;
+  let offsetMinutes = 0;
+  if (match[3] !== 'Z') {
+    const hours = Number(match[3].slice(1, 3)); const minutes = Number(match[3].slice(4, 6));
+    if (hours > 14 || minutes > 59 || (hours === 14 && minutes !== 0)) return null;
+    offsetMinutes = (hours * 60 + minutes) * (match[3][0] === '+' ? 1 : -1);
+  }
+  return BigInt(seconds) * 1000n + BigInt((match[2] || '').padEnd(6, '0'))
+    - BigInt(offsetMinutes) * 60_000_000n;
 }
 
 /** Structural/clock binding of an authenticated controller report, NOT platform execution proof.
@@ -149,7 +160,7 @@ export function validateResearchExecutionObservation(
   const clocks = [expected.assignedAt, expected.reservationStartedAt, expected.reservationExpiresAt,
     expected.originalJobDeadline, expected.receivedAt, row.controllerObservedStartAt, row.controllerObservedEndAt].map(instant);
   if (clocks.some(value => value === null)) return { ok: false, error: 'research_execution_clock_invalid' };
-  const [assigned, reserved, expires, deadline, received, started, ended] = clocks as number[];
+  const [assigned, reserved, expires, deadline, received, started, ended] = clocks as bigint[];
   if (assigned < reserved || assigned >= expires || assigned >= deadline
     || started < assigned || ended < started || ended > received || received >= expires || received >= deadline) {
     return { ok: false, error: 'research_execution_clock_invalid' };
