@@ -65,14 +65,19 @@ export async function allocationInventory(directory,{maxEntries=16384,maxBytes=5
 }
 export async function measureOpenUnlinkedLiability(privateRoot,raw,life){
  life.remaining();const staged=path.join(privateRoot,'.synthetic-retained-stage');await fs.writeFile(staged,raw,{mode:0o600,flag:'wx'});await fs.link(staged,staged+'.link');
- const fd=await fs.open(staged,constants.O_RDONLY|constants.O_NONBLOCK|constants.O_NOFOLLOW);let closing;
- const close=()=>closing??=(async()=>{await fd.close();assert.equal(fd.fd,-1,'orphan_descriptor_close_unconfirmed');})();
+ // Register ownership of the pending acquisition BEFORE starting fs.open. An
+ // abort while open is in flight must wait for its descriptor and observe any
+ // close failure, rather than relying on settled work being successful.
+ life.remaining();let opened,closing;
+ const close=()=>closing??=(async()=>{let fd;try{fd=await opened;}catch{return;}if(!fd)return;await fd.close();assert.equal(fd.fd,-1,'orphan_descriptor_close_unconfirmed');})();
+ life.addCleanup(close);
+ opened=Promise.resolve().then(()=>fs.open(staged,constants.O_RDONLY|constants.O_NONBLOCK|constants.O_NOFOLLOW));
  try{
-  // Register immediately; cancellation and the normal/error path share one close.
-  life.addCleanup(close);life.remaining();await fs.unlink(staged);life.remaining();await fs.unlink(staged+'.link');life.remaining();
+  const fd=await opened;life.remaining();await fs.unlink(staged);life.remaining();await fs.unlink(staged+'.link');life.remaining();
   const orphan=await fd.stat();assert.equal(orphan.nlink,0);const bytes=orphan.blocks*512;assert.ok(Number.isSafeInteger(bytes)&&bytes>0);return bytes;
  }finally{await close();}
 }
+
 export async function buildArchiveFixtureProfile(){
  const definitions=[],pieces=['CREATE ROLE anon NOLOGIN;CREATE ROLE authenticated NOLOGIN;CREATE ROLE service_role NOLOGIN;CREATE SCHEMA extensions;CREATE EXTENSION pgcrypto WITH SCHEMA extensions;'];
  const extract=async(file,marker,end='\n);')=>{const source=await fs.readFile(path.join(root,file),'utf8');const start=source.indexOf(marker),finish=source.indexOf(end,start);assert.ok(start>=0&&finish>start,`profile_marker:${marker}`);const sql=source.slice(start,finish+end.length);definitions.push({file,marker,sha256:sha(sql)});pieces.push(sql);};

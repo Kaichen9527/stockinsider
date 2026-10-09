@@ -101,3 +101,15 @@ test('unconfirmed descriptor close produces cleanupComplete false',async t=>fixt
  try{await assert.rejects(life.check('orphan',()=>measureOpenUnlinkedLiability(root,Buffer.alloc(8192,1),life)),/close_failure/);const receipt=await life.finish();assert.equal(receipt.passed,false);assert.equal(receipt.cleanupComplete,false);assert.equal((await handle.stat()).nlink,0);}
  finally{open.mock.restore();await close?.();}
 }));
+test('cancel during pending open and subsequent close failure cannot confirm cleanup',async t=>fixture(async root=>{
+ const controller=new AbortController(),life=insiderAcceptanceLifecycle({signal:controller.signal,timeoutMs:1500,requiredChecks:['orphan']});const original=fs.open;let handle,close;
+ const open=t.mock.method(fs,'open',async function(...args){handle=await original.apply(this,args);close=handle.close.bind(handle);handle.close=async()=>{throw Error('delayed_open_close_failed');};controller.abort(Error('cancel_before_open_returns'));await new Promise(resolve=>setTimeout(resolve,10));return handle;});
+ try{await assert.rejects(life.check('orphan',()=>measureOpenUnlinkedLiability(root,Buffer.alloc(8192,1),life)),/cancel_before_open/);const receipt=await life.finish();assert.equal(receipt.passed,false);assert.equal(receipt.cleanupComplete,false);assert.equal((await handle.stat()).nlink,2);}
+ finally{open.mock.restore();await close?.();}
+}));
+test('cancel during pending open waits for confirmed descriptor close',async t=>fixture(async root=>{
+ const controller=new AbortController(),life=insiderAcceptanceLifecycle({signal:controller.signal,timeoutMs:1500,requiredChecks:['orphan']});const original=fs.open;let handle;
+ const open=t.mock.method(fs,'open',async function(...args){handle=await original.apply(this,args);controller.abort(Error('cancel_before_open_returns'));await new Promise(resolve=>setTimeout(resolve,10));return handle;});
+ try{await assert.rejects(life.check('orphan',()=>measureOpenUnlinkedLiability(root,Buffer.alloc(8192,1),life)),/cancel_before_open/);const receipt=await life.finish();assert.equal(receipt.passed,false);assert.equal(receipt.cleanupComplete,true);await assert.rejects(handle.stat(),{code:'EBADF'});}
+ finally{open.mock.restore();await handle?.close();}
+}));
