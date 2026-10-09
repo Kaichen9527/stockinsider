@@ -1,0 +1,114 @@
+TAP version 13
+# Subtest: SQL larger than Linux single-argv limit travels entirely through stdin
+not ok 1 - SQL larger than Linux single-argv limit travels entirely through stdin
+  ---
+  duration_ms: 29.069082
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-psql-transport.test.mjs:8:1'
+  failureType: 'testCodeFailure'
+  error: 'write EPIPE'
+  code: 'EPIPE'
+  stack: |-
+    WriteWrap.onWriteComplete [as oncomplete] (node:internal/stream_base_commons:87:19)
+  ...
+# Subtest: exact four-MiB input accepted; +1 UTF-8 byte rejected before spawn
+not ok 2 - exact four-MiB input accepted; +1 UTF-8 byte rejected before spawn
+  ---
+  duration_ms: 26.793027
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-psql-transport.test.mjs:14:1'
+  failureType: 'testCodeFailure'
+  error: 'write EPIPE'
+  code: 'EPIPE'
+  stack: |-
+    WriteWrap.onWriteComplete [as oncomplete] (node:internal/stream_base_commons:87:19)
+  ...
+# Subtest: nonzero child exit preserves native code, stdout and stderr
+not ok 3 - nonzero child exit preserves native code, stdout and stderr
+  ---
+  duration_ms: 27.807207
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-psql-transport.test.mjs:19:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    '' !== 'out'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'out'
+  actual: ''
+  operator: 'strictEqual'
+  stack: |-
+    Object.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-psql-transport.test.mjs:21:41)
+    expectedException (node:assert:808:17)
+    expectsError (node:assert:931:3)
+    Function.rejects (node:assert:996:3)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-psql-transport.test.mjs:20:3)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: failed spawn propagates ENOENT without unhandled stdin errors
+ok 4 - failed spawn propagates ENOENT without unhandled stdin errors
+  ---
+  duration_ms: 1.943524
+  ...
+# Subtest: closed stdin propagates pipe failure even when child exits successfully
+ok 5 - closed stdin propagates pipe failure even when child exits successfully
+  ---
+  duration_ms: 128.50814
+  ...
+# Subtest: stdout buffer cap rejects rather than truncating success
+not ok 6 - stdout buffer cap rejects rather than truncating success
+  ---
+  duration_ms: 27.090146
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-psql-transport.test.mjs:32:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    code: 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER'
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-psql-transport.test.mjs:33:3)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: stderr buffer cap rejects rather than truncating success
+not ok 7 - stderr buffer cap rejects rather than truncating success
+  ---
+  duration_ms: 25.623342
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-psql-transport.test.mjs:35:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    code: 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER'
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-psql-transport.test.mjs:36:3)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: stalled child retains bounded timeout and killed exit
+ok 8 - stalled child retains bounded timeout and killed exit
+  ---
+  duration_ms: 54.617978
+  ...
+# Subtest: transport callers cannot widen original timeout or output cap
+ok 9 - transport callers cannot widen original timeout or output cap
+  ---
+  duration_ms: 0.701248
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 4
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 344.499679
