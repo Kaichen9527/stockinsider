@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "benchmark-vm-reader-attribution-supplement-v1",
+  "recordedAt": "2026-10-09T05:45:44.429048+00:00",
+  "originalReceipt": {
+    "path": ".agent/reports/2026-10-09T05-43-benchmark-vm.json",
+    "bytes": 32999,
+    "sha256": "e3e512532e2b5aa36c54d8f2d0afe1c46ea7839c434f1ea9013d429a3aa84680",
+    "unchanged": true
+  },
+  "runtimeSubject": "59c14f3cdd8d6c96668527b3e7cc68f3c5ec031f",
+  "readerResults": [
+    {
+      "exchange": "TWSE",
+      "positiveFull61Read": {
+        "available": true,
+        "contextHash": "55ce7990cdce05df2b1903d9288adb0dfc49ca2a2b7b75ad895cc95f070134b5",
+        "coverageSessions": 61,
+        "relative60": {
+          "stockPriceReturn": 0.21505376344086025,
+          "indexPriceReturn": 0.1200000000000001,
+          "relativeWealthRatioMinusOne": 0.08486943164362515
+        }
+      },
+      "laterAfterDeliberateMissingRow": {
+        "available": false,
+        "returns60": null,
+        "missingData": [
+          "benchmark_market_incomplete"
+        ]
+      },
+      "attribution": "positive fields captured before deliberate row deletion; missing array captured afterward; synthetic fixture; separate sequential probes"
+    },
+    {
+      "exchange": "TPEX",
+      "positiveFull61Read": {
+        "available": true,
+        "contextHash": "bf6e2e957512cdb8221452a300db80a8358324e4631f64915ad79f32d337eb5d",
+        "coverageSessions": 61,
+        "relative60": {
+          "stockPriceReturn": 0.21505376344086025,
+          "indexPriceReturn": 0.1200000000000001,
+          "relativeWealthRatioMinusOne": 0.08486943164362515
+        }
+      },
+      "laterAfterDeliberateMissingRow": {
+        "available": false,
+        "returns60": null,
+        "missingData": [
+          "benchmark_market_incomplete"
+        ]
+      },
+      "attribution": "positive fields captured before deliberate row deletion; missing array captured afterward; synthetic fixture; separate sequential probes"
+    }
+  ]
+}
