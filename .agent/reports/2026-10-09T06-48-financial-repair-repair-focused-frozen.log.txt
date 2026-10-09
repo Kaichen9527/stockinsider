@@ -1,0 +1,180 @@
+TAP version 13
+# Subtest: readStall bounded failure tracks delayed descriptor then permits confirmed recovery
+ok 1 - readStall bounded failure tracks delayed descriptor then permits confirmed recovery
+  ---
+  duration_ms: 142.680861
+  ...
+# Subtest: lateOpen bounded failure tracks delayed descriptor then permits confirmed recovery
+ok 2 - lateOpen bounded failure tracks delayed descriptor then permits confirmed recovery
+  ---
+  duration_ms: 126.923601
+  ...
+# Subtest: normal read cannot return successful cleanup while close is stalled
+ok 3 - normal read cannot return successful cleanup while close is stalled
+  ---
+  duration_ms: 125.108767
+  ...
+# Subtest: close rejection preserves original read failure and permanently requires controlled recovery
+ok 4 - close rejection preserves original read failure and permanently requires controlled recovery
+  ---
+  duration_ms: 36.385723
+  ...
+# Subtest: success confirms all handles closed before return, duplicate close stays confirmed
+ok 5 - success confirms all handles closed before return, duplicate close stays confirmed
+  ---
+  duration_ms: 36.068064
+  ...
+# Subtest: already exhausted deadline never acquires a descriptor
+ok 6 - already exhausted deadline never acquires a descriptor
+  ---
+  duration_ms: 34.11053
+  ...
+# (node:133622) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:133622) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-financial-file-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: bundled fixed inventory exactly equals approved design bytes/paths/hashes
+ok 7 - bundled fixed inventory exactly equals approved design bytes/paths/hashes
+  ---
+  duration_ms: 7.547691
+  ...
+# Subtest: 2409 actual immutable relay projection and independently recalculated bridges
+ok 8 - 2409 actual immutable relay projection and independently recalculated bridges
+  ---
+  duration_ms: 72.156019
+  ...
+# Subtest: 2383 actual immutable relay projection and independently recalculated bridges
+ok 9 - 2383 actual immutable relay projection and independently recalculated bridges
+  ---
+  duration_ms: 24.715451
+  ...
+# Subtest: actual EP8 company remains unsupported and does not read AUO files
+ok 10 - actual EP8 company remains unsupported and does not read AUO files
+  ---
+  duration_ms: 0.696241
+  ...
+# Subtest: closed request rejects caller command
+ok 11 - closed request rejects caller command
+  ---
+  duration_ms: 0.66896
+  ...
+# Subtest: closed request rejects caller calculatorId
+ok 12 - closed request rejects caller calculatorId
+  ---
+  duration_ms: 0.247654
+  ...
+# Subtest: closed request rejects caller path
+ok 13 - closed request rejects caller path
+  ---
+  duration_ms: 0.213823
+  ...
+# Subtest: closed request rejects caller symbol
+ok 14 - closed request rejects caller symbol
+  ---
+  duration_ms: 0.169926
+  ...
+# Subtest: closed request rejects caller financialVerified
+ok 15 - closed request rejects caller financialVerified
+  ---
+  duration_ms: 0.290098
+  ...
+# Subtest: live original preparation recheck rejects wrongHash
+ok 16 - live original preparation recheck rejects wrongHash
+  ---
+  duration_ms: 0.704924
+  ...
+# Subtest: live original preparation recheck rejects withdrawn
+ok 17 - live original preparation recheck rejects withdrawn
+  ---
+  duration_ms: 0.343208
+  ...
+# Subtest: live original preparation recheck rejects completedAfterRead
+ok 18 - live original preparation recheck rejects completedAfterRead
+  ---
+  duration_ms: 27.572513
+  ...
+# Subtest: live original preparation recheck rejects crossScope
+ok 19 - live original preparation recheck rejects crossScope
+  ---
+  duration_ms: 0.375967
+  ...
+# Subtest: stalled lease dependency cannot produce a late success under shared10s deadline
+ok 20 - stalled lease dependency cannot produce a late success under shared10s deadline
+  ---
+  duration_ms: 10000.195199
+  ...
+# Subtest: nanosecond ordering and invalid finite calendar retained
+ok 21 - nanosecond ordering and invalid finite calendar retained
+  ---
+  duration_ms: 0.292061
+  ...
+# Subtest: actual read exact per-file/aggregate caps; +1 fails without truncate success
+ok 22 - actual read exact per-file/aggregate caps; +1 fails without truncate success
+  ---
+  duration_ms: 19.981304
+  ...
+# Subtest: bounded regular FD rejects fifo
+ok 23 - bounded regular FD rejects fifo
+  ---
+  duration_ms: 7.205875
+  ...
+# Subtest: bounded regular FD rejects directory
+ok 24 - bounded regular FD rejects directory
+  ---
+  duration_ms: 2.373011
+  ...
+# Subtest: bounded regular FD rejects symlink
+ok 25 - bounded regular FD rejects symlink
+  ---
+  duration_ms: 2.269495
+  ...
+# Subtest: bounded regular FD rejects replaceBeforeOpen
+ok 26 - bounded regular FD rejects replaceBeforeOpen
+  ---
+  duration_ms: 5.940305
+  ...
+# Subtest: bounded regular FD rejects replaceParent
+ok 27 - bounded regular FD rejects replaceParent
+  ---
+  duration_ms: 3.539522
+  ...
+# Subtest: bounded regular FD rejects shortRead
+ok 28 - bounded regular FD rejects shortRead
+  ---
+  duration_ms: 2.397588
+  ...
+# Subtest: bounded regular FD rejects mutateAfterRead
+ok 29 - bounded regular FD rejects mutateAfterRead
+  ---
+  duration_ms: 3.176954
+  ...
+# Subtest: projection/result UTF8 exact and +1, not character count
+ok 30 - projection/result UTF8 exact and +1, not character count
+  ---
+  duration_ms: 4.953716
+  ...
+# Subtest: late async success discarded by monotonic deadline
+ok 31 - late async success discarded by monotonic deadline
+  ---
+  duration_ms: 14.838254
+  ...
+# Subtest: 2409 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+ok 32 - 2409 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+  ---
+  duration_ms: 22.040279
+  ...
+# Subtest: 2383 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+ok 33 - 2383 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+  ---
+  duration_ms: 14.028763
+  ...
+1..33
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10428.070944

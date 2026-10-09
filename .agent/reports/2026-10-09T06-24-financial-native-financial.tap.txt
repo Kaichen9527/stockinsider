@@ -1,0 +1,179 @@
+(node:130816) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:130816) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-financial-supplement.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+ERROR:  input_preparation_assert_mismatch
+CONTEXT:  PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 10 at RAISE
+ERROR:  input_preparation_assert_mismatch
+CONTEXT:  PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 10 at RAISE
+ERROR:  input_preparation_assert_mismatch
+CONTEXT:  PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 10 at RAISE
+ERROR:  permission denied for function assert_research_input_preparation_v2
+ERROR:  input_preparation_original_lease_lost
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+ERROR:  input_preparation_original_lease_lost
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+TAP version 13
+# Subtest: real PostgreSQL immutable input preparations, original leases and source fences (synthetic)
+    # Subtest: company absent from stocks prepares an immutable incomplete input without claiming or dispatching
+    ok 1 - company absent from stocks prepares an immutable incomplete input without claiming or dispatching
+      ---
+      duration_ms: 31.211269
+      ...
+    # Subtest: read-only assertion rechecks existing preparation without any new charge or seal
+    ok 2 - read-only assertion rechecks existing preparation without any new charge or seal
+      ---
+      duration_ms: 150.455755
+      ...
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_original_lease_lost
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+ERROR:  input_preparation_original_lease_lost
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+ERROR:  input_preparation_original_lease_lost
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+ERROR:  input_preparation_original_lease_lost
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+ERROR:  input_preparation_original_lease_lost
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 21 at RAISE
+ERROR:  input_preparation_source_missing
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 60 at RAISE
+ERROR:  permission denied for table research_input_preparations_v2
+ERROR:  permission denied for table research_input_preparations_v2
+ERROR:  permission denied for table research_input_preparations_v2
+ERROR:  permission denied for table research_input_preparations_v2
+ERROR:  permission denied for function prepare_research_input_v2
+ERROR:  new row violates row-level security policy for table "research_deep_jobs_v1"
+ERROR:  immutable_source_receipt
+CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+ERROR:  input_preparation_lineage
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 46 at RAISE
+ERROR:  input_preparation_original_lease_lost
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+ERROR:  input_preparation_original_lease_lost
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+ERROR:  input_preparation_count_bound
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 58 at RAISE
+ERROR:  input_preparation_original_lease_lost
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+ERROR:  source_seal_invalidated_or_missing
+CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+ERROR:  input_preparation_byte_bound
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 83 at RAISE
+    # Subtest: real PG read-only assertions feed both fixed calculators without formal rows or durable financial state
+    ok 3 - real PG read-only assertions feed both fixed calculators without formal rows or durable financial state
+      ---
+      duration_ms: 236.335787
+      ...
+    # Subtest: exact replay preserves hash/clocks and restart remains identical
+    ok 4 - exact replay preserves hash/clocks and restart remains identical
+      ---
+      duration_ms: 248.163742
+      ...
+    # Subtest: unknown identity/authority/calculator/clock fields and wrong binding fail closed
+    ok 5 - unknown identity/authority/calculator/clock fields and wrong binding fail closed
+      ---
+      duration_ms: 183.215281
+      ...
+    # Subtest: BYPASSRLS direct insert/update/delete/truncate and anonymous RPC forbidden
+    ok 6 - BYPASSRLS direct insert/update/delete/truncate and anonymous RPC forbidden
+      ---
+      duration_ms: 51.325204
+      ...
+    # Subtest: priority immutable-store proof cannot be bypassed by service RPC
+    ok 7 - priority immutable-store proof cannot be bypassed by service RPC
+      ---
+      duration_ms: 26.498005
+      ...
+    # Subtest: completed or expired reservation never becomes fresh and receipts remain immutable
+    ok 8 - completed or expired reservation never becomes fresh and receipts remain immutable
+      ---
+      duration_ms: 60.066322
+      ...
+    # Subtest: four preparations fill one original unit; fifth rejects instead of durable growth
+    ok 9 - four preparations fill one original unit; fifth rejects instead of durable growth
+      ---
+      duration_ms: 260.009629
+      ...
+    # Subtest: full UTF-8 serialized request/payload/new seal charges include exact524288 and +1 bytes
+    ok 10 - full UTF-8 serialized request/payload/new seal charges include exact524288 and +1 bytes
+      ---
+      duration_ms: 92.81437
+      ...
+    # Subtest: cumulative bytes reject below count cap and rollback seal/preparation/budget counts
+    ok 11 - cumulative bytes reject below count cap and rollback seal/preparation/budget counts
+      ---
+      duration_ms: 448.05789
+      ...
+ERROR:  source_seal_invalidated_or_missing
+CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+ERROR:  source_seal_invalidated_or_missing
+CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+ERROR:  input_preparation_read_committed_required
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 8 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 21 at RAISE
+ERROR:  input_preparation_shape
+CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+    # Subtest: two actual concurrent clients compete for the last original-unit slot
+    ok 12 - two actual concurrent clients compete for the last original-unit slot
+      ---
+      duration_ms: 129.811254
+      ...
+    # Subtest: source withdrawal rejects replay without replacing old bytes or returning publishable
+    ok 13 - source withdrawal rejects replay without replacing old bytes or returning publishable
+      ---
+      duration_ms: 51.120985
+      ...
+    # Subtest: repeatable read cannot seal stale input; null/oversized/invalid-ID requests reject
+    ok 14 - repeatable read cannot seal stale input; null/oversized/invalid-ID requests reject
+      ---
+      duration_ms: 67.17685
+      ...
+    1..14
+ok 1 - real PostgreSQL immutable input preparations, original leases and source fences (synthetic)
+  ---
+  duration_ms: 3129.233376
+  ...
+1..1
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3133.162708

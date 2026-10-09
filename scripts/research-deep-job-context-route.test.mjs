@@ -694,3 +694,5 @@ test('RIP-HTTP closed observed preparation delegates to one atomic RPC without c
  }
  const failed=await run({body,rpcError:'private-synthetic-db-error'});assert.equal(failed.response.status,409);assert.equal(failed.response.body.error,'research_input_preparation_unavailable');
 });
+
+test('financial supplement auth rejects before body or database construction', async()=>{const {response,calls}=await run({body:{action:'financialSupplement',owner:OWNER},headers:{}});assert.equal(response.status,401);assert.equal(calls.body,0);assert.equal(calls.client,0);});

@@ -1,0 +1,151 @@
+(node:133069) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:133069) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-financial-file-reader.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+TAP version 13
+# Subtest: bundled fixed inventory exactly equals approved design bytes/paths/hashes
+ok 1 - bundled fixed inventory exactly equals approved design bytes/paths/hashes
+  ---
+  duration_ms: 5.044353
+  ...
+# Subtest: 2409 actual immutable relay projection and independently recalculated bridges
+ok 2 - 2409 actual immutable relay projection and independently recalculated bridges
+  ---
+  duration_ms: 44.636241
+  ...
+# Subtest: 2383 actual immutable relay projection and independently recalculated bridges
+ok 3 - 2383 actual immutable relay projection and independently recalculated bridges
+  ---
+  duration_ms: 20.094838
+  ...
+# Subtest: actual EP8 company remains unsupported and does not read AUO files
+ok 4 - actual EP8 company remains unsupported and does not read AUO files
+  ---
+  duration_ms: 0.493065
+  ...
+# Subtest: closed request rejects caller command
+ok 5 - closed request rejects caller command
+  ---
+  duration_ms: 0.587387
+  ...
+# Subtest: closed request rejects caller calculatorId
+ok 6 - closed request rejects caller calculatorId
+  ---
+  duration_ms: 0.238721
+  ...
+# Subtest: closed request rejects caller path
+ok 7 - closed request rejects caller path
+  ---
+  duration_ms: 0.21186
+  ...
+# Subtest: closed request rejects caller symbol
+ok 8 - closed request rejects caller symbol
+  ---
+  duration_ms: 0.119861
+  ...
+# Subtest: closed request rejects caller financialVerified
+ok 9 - closed request rejects caller financialVerified
+  ---
+  duration_ms: 0.226122
+  ...
+# Subtest: live original preparation recheck rejects wrongHash
+ok 10 - live original preparation recheck rejects wrongHash
+  ---
+  duration_ms: 0.827269
+  ...
+# Subtest: live original preparation recheck rejects withdrawn
+ok 11 - live original preparation recheck rejects withdrawn
+  ---
+  duration_ms: 0.302817
+  ...
+# Subtest: live original preparation recheck rejects completedAfterRead
+ok 12 - live original preparation recheck rejects completedAfterRead
+  ---
+  duration_ms: 22.288508
+  ...
+# Subtest: live original preparation recheck rejects crossScope
+ok 13 - live original preparation recheck rejects crossScope
+  ---
+  duration_ms: 0.231088
+  ...
+# Subtest: stalled lease dependency cannot produce a late success under shared10s deadline
+ok 14 - stalled lease dependency cannot produce a late success under shared10s deadline
+  ---
+  duration_ms: 10000.008717
+  ...
+# Subtest: nanosecond ordering and invalid finite calendar retained
+ok 15 - nanosecond ordering and invalid finite calendar retained
+  ---
+  duration_ms: 0.249426
+  ...
+# Subtest: actual read exact per-file/aggregate caps; +1 fails without truncate success
+ok 16 - actual read exact per-file/aggregate caps; +1 fails without truncate success
+  ---
+  duration_ms: 12.924746
+  ...
+# Subtest: bounded regular FD rejects fifo
+not ok 17 - bounded regular FD rejects fifo
+  ---
+  duration_ms: 7.885982
+  location: '/workspace/cloud-research-converged-oct08/scripts/research-financial-supplement.test.mjs:27:116'
+  failureType: 'testCodeFailure'
+  error: 'spawnSync mkfifo EPERM'
+  code: 'EPERM'
+  stack: |-
+    Object.spawnSync (node:internal/child_process:1120:20)
+    spawnSync (node:child_process:868:24)
+    execFileSync (node:child_process:911:15)
+    TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-financial-supplement.test.mjs:27:288)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: bounded regular FD rejects directory
+ok 18 - bounded regular FD rejects directory
+  ---
+  duration_ms: 3.350497
+  ...
+# Subtest: bounded regular FD rejects symlink
+ok 19 - bounded regular FD rejects symlink
+  ---
+  duration_ms: 2.860818
+  ...
+# Subtest: bounded regular FD rejects replaceBeforeOpen
+ok 20 - bounded regular FD rejects replaceBeforeOpen
+  ---
+  duration_ms: 7.037871
+  ...
+# Subtest: bounded regular FD rejects replaceParent
+ok 21 - bounded regular FD rejects replaceParent
+  ---
+  duration_ms: 3.006127
+  ...
+# Subtest: bounded regular FD rejects shortRead
+ok 22 - bounded regular FD rejects shortRead
+  ---
+  duration_ms: 2.727607
+  ...
+# Subtest: bounded regular FD rejects mutateAfterRead
+ok 23 - bounded regular FD rejects mutateAfterRead
+  ---
+  duration_ms: 3.066939
+  ...
+# Subtest: projection/result UTF8 exact and +1, not character count
+ok 24 - projection/result UTF8 exact and +1, not character count
+  ---
+  duration_ms: 5.050954
+  ...
+# Subtest: late async success discarded by monotonic deadline
+ok 25 - late async success discarded by monotonic deadline
+  ---
+  duration_ms: 13.963665
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 24
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10190.087274

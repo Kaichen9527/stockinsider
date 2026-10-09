@@ -1,0 +1,799 @@
+{
+  "schemaVersion": "bounded-financial-adapter-vm-receipt-v1",
+  "recordedAt": "2026-10-09T06:23:55.631+00:00",
+  "subjectSha": "abd58da2289222f2fef6777c0da50652aefe5f34",
+  "subjectTree": "cdf440ec1306a5ea9204075c0b5c575066ff6e17",
+  "webTree": "d512b0b362477d3f29f2a009613c857485744936",
+  "buildId": "PLFEHeZwyYXBKYYCNMmw4",
+  "branch": "codex/research-financial-input-integration-oct09",
+  "cleanBeforeReceipt": true,
+  "increment": {
+    "startedAt": "2026-10-09T05:59:38Z",
+    "deadline": "2026-10-09T06:29:38Z",
+    "completionRecordedAt": "2026-10-09T06:23:55.631+00:00",
+    "manualEngineeringOnly": true,
+    "automatedRoleBudgetAcceptance": false
+  },
+  "designApproval": {
+    "subjectSha": "a2046447a74d98f78c51fef5162c8bf571371370",
+    "attribution": "root relay of independent author_input reviewer unsigned bounded design pass",
+    "codeReviewCovered": false,
+    "protected": false
+  },
+  "sourceFiles": [
+    {
+      "file": "docs/operations/2026-10-09/financial-adapter-vm-handoff.md",
+      "bytes": 3466,
+      "sha256": "cbca8c1ef98ad44080f77c7f7b7b64e01cf1ba506c2b86d1d2fda1aa11e647dc"
+    },
+    {
+      "file": "migrations/20261009_research_input_preparation_assert_v2.sql",
+      "bytes": 2086,
+      "sha256": "c63a923be36e5f7ba06001a6d8be57287d80f5e6524dc866bad93b80666a9cbc"
+    },
+    {
+      "file": "openspec/changes/research-first-publication-v2/financial-adapter-slice.md",
+      "bytes": 12421,
+      "sha256": "c5a7a3e53eee0f2c41223fef6ee76cd6364904431c05d5e586085887598eaf6c"
+    },
+    {
+      "file": "package.json",
+      "bytes": 29117,
+      "sha256": "8080f8e79aef90dab9f75dbce476f8713bdf86574c323b85bfaf9df03da3c7d3"
+    },
+    {
+      "file": "scripts/research-deep-job-context-route.test.mjs",
+      "bytes": 39600,
+      "sha256": "b2c162e1bc916bacb9d5b8b2baa8fa41e29e91d3c9fd04cfbad7dd417d8d2d5a"
+    },
+    {
+      "file": "scripts/research-financial-supplement.test.mjs",
+      "bytes": 9207,
+      "sha256": "96e22d652a2c5257a4965d624d0da8a53fc5842f02fa5ae974e0009ef938452e"
+    },
+    {
+      "file": "scripts/research-input-preparation-postgres.test.mjs",
+      "bytes": 19517,
+      "sha256": "1900d193cdd5e54d5c1f27d35cf2175baf5aba1631d87a6bfab48f4162215101"
+    },
+    {
+      "file": "web/src/app/api/internal/research-deep-job/route.ts",
+      "bytes": 11125,
+      "sha256": "29aff686612aa80abdfd10121e55ad6219c1ebedb2223957b4dc18dc7df7f7e9"
+    },
+    {
+      "file": "web/src/lib/research-business-calculator.ts",
+      "bytes": 14206,
+      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb"
+    },
+    {
+      "file": "web/src/lib/research-financial-clock.ts",
+      "bytes": 807,
+      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f"
+    },
+    {
+      "file": "web/src/lib/research-financial-file-reader.ts",
+      "bytes": 6611,
+      "sha256": "542ce51ef15dfd309e532d313b6b363aefade07eb77a628ad2afbbec53dac20f"
+    },
+    {
+      "file": "web/src/lib/research-financial-inventory.ts",
+      "bytes": 3294,
+      "sha256": "f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5"
+    },
+    {
+      "file": "web/src/lib/research-financial-supplement.ts",
+      "bytes": 14955,
+      "sha256": "76e40bc8a5834e80951d350774df95bda6a23d83449634326b52dc50252c54df"
+    }
+  ],
+  "staticApprovedInventory": {
+    "schemaVersion": "financial-adapter-static-file-inventory-v1",
+    "runtimeAuthority": false,
+    "companies": {
+      "2409": [
+        {
+          "path": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+          "bytes": 88790,
+          "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965"
+        },
+        {
+          "path": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+          "bytes": 19837,
+          "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf"
+        },
+        {
+          "path": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+          "bytes": 40271,
+          "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb"
+        },
+        {
+          "path": "docs/research/2026-10-08-auo/dataset.json",
+          "bytes": 86638,
+          "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
+        },
+        {
+          "path": "docs/research/2026-10-08-auo-market/dataset.json",
+          "bytes": 393280,
+          "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
+        },
+        {
+          "path": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+          "bytes": 2910,
+          "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189"
+        },
+        {
+          "path": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+          "bytes": 3549,
+          "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6"
+        },
+        {
+          "path": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+          "bytes": 6599,
+          "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
+        }
+      ],
+      "2383": [
+        {
+          "path": "docs/research/2026-10-08-emc-company-model/model-results.json",
+          "bytes": 54602,
+          "sha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c"
+        },
+        {
+          "path": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+          "bytes": 33734,
+          "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
+        },
+        {
+          "path": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+          "bytes": 110526,
+          "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
+        },
+        {
+          "path": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+          "bytes": 10693,
+          "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
+        },
+        {
+          "path": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+          "bytes": 3630,
+          "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
+        },
+        {
+          "path": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+          "bytes": 3671,
+          "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
+        }
+      ]
+    }
+  },
+  "checks": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "core-final",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-business-calculator.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:19:24.151Z",
+      "completedAt": "2026-10-09T06:19:24.590Z",
+      "elapsedSeconds": 0.4385139169753529,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 91537408,
+      "observedTaskDiskPeakBytes": 1343442944,
+      "availableBeforeBytes": 14800670720,
+      "availableAfterBytes": 14800658432,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/core-final.log",
+        "bytes": 5324,
+        "sha256": "4189d56a6fef2d27cd3aedb09bb244cada88ddce5194b85f04ed2b1f85c9d630"
+      },
+      "tapFinalSummary": {
+        "tests": 31,
+        "pass": 31,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused-clean",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-financial-supplement.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:22:03.291Z",
+      "completedAt": "2026-10-09T06:22:13.778Z",
+      "elapsedSeconds": 10.486881957011065,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 89468928,
+      "observedTaskDiskPeakBytes": 1344589824,
+      "availableBeforeBytes": 14799372288,
+      "availableAfterBytes": 14799360000,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/focused-clean.log",
+        "bytes": 4709,
+        "sha256": "69977d3a03c2a8523fc884bde14eeeec310927b0c258a21e79741aa3df28d8dc"
+      },
+      "tapFinalSummary": {
+        "tests": 25,
+        "pass": 25,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused-direct",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-business-calculator.test.mjs",
+        "scripts/research-financial-supplement.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:08:58.238Z",
+      "completedAt": "2026-10-09T06:09:08.888Z",
+      "elapsedSeconds": 10.650646304013208,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 225247232,
+      "observedTaskDiskPeakBytes": 1295417344,
+      "availableBeforeBytes": 14848700416,
+      "availableAfterBytes": 14848692224,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/focused-direct.log",
+        "bytes": 641,
+        "sha256": "1ed4a7998d2c6d91b7a30fceecf88de4c26c46327496bfc5b2bd83c7c445751b"
+      },
+      "tapFinalSummary": {
+        "tests": 2,
+        "pass": 1,
+        "fail": 1,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused-escalated",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-financial-supplement.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:13:38.798Z",
+      "completedAt": "2026-10-09T06:13:49.223Z",
+      "elapsedSeconds": 10.424727459001588,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 87101440,
+      "observedTaskDiskPeakBytes": 1295454208,
+      "availableBeforeBytes": 14848688128,
+      "availableAfterBytes": 14848675840,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/focused-escalated.log",
+        "bytes": 5376,
+        "sha256": "18c5d4851c1c1489b92d9ff47dc8b28150bd3481f333a499a2c700cb4e73ec83"
+      },
+      "tapFinalSummary": {
+        "tests": 24,
+        "pass": 23,
+        "fail": 1,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused-final",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-financial-supplement.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:14:23.402Z",
+      "completedAt": "2026-10-09T06:14:33.902Z",
+      "elapsedSeconds": 10.499605424003676,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 87310336,
+      "observedTaskDiskPeakBytes": 1295470592,
+      "availableBeforeBytes": 14848671744,
+      "availableAfterBytes": 14848659456,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/focused-final.log",
+        "bytes": 4508,
+        "sha256": "c94240484102d9b8a889eb6e9a3a67c863329b80cce14849035914d9be71c59a"
+      },
+      "tapFinalSummary": {
+        "tests": 24,
+        "pass": 24,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused-provenance",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-financial-supplement.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:18:58.683Z",
+      "completedAt": "2026-10-09T06:19:09.194Z",
+      "elapsedSeconds": 10.510737708013039,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 90243072,
+      "observedTaskDiskPeakBytes": 1343434752,
+      "availableBeforeBytes": 14800703488,
+      "availableAfterBytes": 14800691200,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/focused-provenance.log",
+        "bytes": 4710,
+        "sha256": "e58e54faeea6406219897f9801b7805c9631400bfa16d0524e61d28e66aae5db"
+      },
+      "tapFinalSummary": {
+        "tests": 25,
+        "pass": 25,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused-single",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-financial-supplement.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:12:59.610Z",
+      "completedAt": "2026-10-09T06:13:10.118Z",
+      "elapsedSeconds": 10.507842343999073,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 91795456,
+      "observedTaskDiskPeakBytes": 1295437824,
+      "availableBeforeBytes": 14848688128,
+      "availableAfterBytes": 14848675840,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/focused-single.log",
+        "bytes": 6877,
+        "sha256": "6f05af7a4bcf434688acb59632a6be42862dd8715f6427a9fd72dc680f2c9132"
+      },
+      "tapFinalSummary": {
+        "tests": 24,
+        "pass": 21,
+        "fail": 3,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-business-calculator.test.mjs",
+        "scripts/research-financial-supplement.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:08:35.735Z",
+      "completedAt": "2026-10-09T06:08:46.311Z",
+      "elapsedSeconds": 10.575923387979856,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 232894464,
+      "observedTaskDiskPeakBytes": 1295405056,
+      "availableBeforeBytes": 14848712704,
+      "availableAfterBytes": 14848704512,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/focused.log",
+        "bytes": 639,
+        "sha256": "cc5b02b367b74ab78933236ceecd2091ddd16c0297a3e14d0f53401438961f39"
+      },
+      "tapFinalSummary": {
+        "tests": 2,
+        "pass": 1,
+        "fail": 1,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-clean",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T06:22:21.812Z",
+      "completedAt": "2026-10-09T06:22:44.842Z",
+      "elapsedSeconds": 23.029977184982272,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1109803008,
+      "observedTaskDiskPeakBytes": 1344602112,
+      "availableBeforeBytes": 14799339520,
+      "availableAfterBytes": 14799327232,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/lint-clean.log",
+        "bytes": 4718,
+        "sha256": "08dc636eb541cc8b68c21f4149b523ab347ff6e4a474fa6a378f006e124571ff"
+      },
+      "tapFinalSummary": {}
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T06:16:07.672Z",
+      "completedAt": "2026-10-09T06:16:30.850Z",
+      "elapsedSeconds": 23.17744525099988,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1362866176,
+      "observedTaskDiskPeakBytes": 1297420288,
+      "availableBeforeBytes": 14846701568,
+      "availableAfterBytes": 14830530560,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/lint.log",
+        "bytes": 4718,
+        "sha256": "08dc636eb541cc8b68c21f4149b523ab347ff6e4a474fa6a378f006e124571ff"
+      },
+      "tapFinalSummary": {}
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-assert",
+      "command": [
+        "node",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:15:05.027Z",
+      "completedAt": "2026-10-09T06:15:08.097Z",
+      "elapsedSeconds": 3.0690989850263577,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 89333760,
+      "observedTaskDiskPeakBytes": 1338695680,
+      "availableBeforeBytes": 14846771200,
+      "availableAfterBytes": 14846754816,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/native-assert.log",
+        "bytes": 8584,
+        "sha256": "7d1e33d78e6c36e00e66201411b274c8a6fc751d0a97037813371d6d6479af6a"
+      },
+      "tapFinalSummary": {
+        "tests": 14,
+        "pass": 14,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-financial",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:18:34.939Z",
+      "completedAt": "2026-10-09T06:18:38.296Z",
+      "elapsedSeconds": 3.3572158780007157,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 131137536,
+      "observedTaskDiskPeakBytes": 1384960000,
+      "availableBeforeBytes": 14800723968,
+      "availableAfterBytes": 14800707584,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/native-financial.log",
+        "bytes": 9835,
+        "sha256": "232527f4171a31bb65845a90f2f083e6c0eff3537ce8e662e72935e3df2c4598"
+      },
+      "tapFinalSummary": {
+        "tests": 15,
+        "pass": 15,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-clean",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T06:21:19.369Z",
+      "completedAt": "2026-10-09T06:21:26.609Z",
+      "elapsedSeconds": 7.2396802800067235,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1059155968,
+      "observedTaskDiskPeakBytes": 1343488000,
+      "availableBeforeBytes": 14800465920,
+      "availableAfterBytes": 14799376384,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/normal-build-clean.log",
+        "bytes": 6499,
+        "sha256": "2d59cc6a98d786cc7c9a091e81e87895411470196a52c55baad1864750a745d0"
+      },
+      "tapFinalSummary": {}
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-fixed",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T06:17:37.159Z",
+      "completedAt": "2026-10-09T06:17:46.049Z",
+      "elapsedSeconds": 8.889768852997804,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1391534080,
+      "observedTaskDiskPeakBytes": 1270403072,
+      "availableBeforeBytes": 14896377856,
+      "availableAfterBytes": 14800728064,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/normal-build-fixed.log",
+        "bytes": 6500,
+        "sha256": "1347b7f7acbdf37dae2a3856723312aa071e071ada722d6e67a0711fd6d981e5"
+      },
+      "tapFinalSummary": {}
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T06:16:50.465Z",
+      "completedAt": "2026-10-09T06:16:56.238Z",
+      "elapsedSeconds": 5.7731669770146254,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 1207857152,
+      "observedTaskDiskPeakBytes": 1313603584,
+      "availableBeforeBytes": 14830526464,
+      "availableAfterBytes": 14896386048,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/normal-build.log",
+        "bytes": 1864,
+        "sha256": "a35e9102f1417e2d4fc0790f5bdbfd3a0203f185ba21a0e0a3be7abff5d312c1"
+      },
+      "tapFinalSummary": {}
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "related",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-deep-job-context-route.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:16:24.624Z",
+      "completedAt": "2026-10-09T06:16:36.302Z",
+      "elapsedSeconds": 11.678282531996956,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 420065280,
+      "observedTaskDiskPeakBytes": 1313591296,
+      "availableBeforeBytes": 14846697472,
+      "availableAfterBytes": 14830514176,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/related.log",
+        "bytes": 8934,
+        "sha256": "8295dd3beaf1f8d367b5293ed684dda685f10e3b86f7cf3a886bb949f821aa2d"
+      },
+      "tapFinalSummary": {
+        "tests": 37,
+        "pass": 37,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "route-clean",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-deep-job-context-route.test.mjs"
+      ],
+      "startedAt": "2026-10-09T06:20:45.556Z",
+      "completedAt": "2026-10-09T06:20:56.848Z",
+      "elapsedSeconds": 11.292342086002463,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 551702528,
+      "observedTaskDiskPeakBytes": 1343475712,
+      "availableBeforeBytes": 14800470016,
+      "availableAfterBytes": 14800453632,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/route-clean.log",
+        "bytes": 9133,
+        "sha256": "8d88a815c7c35ec257c96fcf08b1ef7f5089324644414b02e3bee4ab5bd8cc8d"
+      },
+      "tapFinalSummary": {
+        "tests": 38,
+        "pass": 38,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-clean",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T06:23:05.714Z",
+      "completedAt": "2026-10-09T06:23:10.321Z",
+      "elapsedSeconds": 4.6066939549928065,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 723345408,
+      "observedTaskDiskPeakBytes": 1344618496,
+      "availableBeforeBytes": 14799323136,
+      "availableAfterBytes": 14799314944,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/types-clean.log",
+        "bytes": 188,
+        "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+      },
+      "tapFinalSummary": {}
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-final",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T06:15:46.735Z",
+      "completedAt": "2026-10-09T06:15:51.408Z",
+      "elapsedSeconds": 4.673025271011284,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 719409152,
+      "observedTaskDiskPeakBytes": 1297403904,
+      "availableBeforeBytes": 14846713856,
+      "availableAfterBytes": 14846705664,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/types-final.log",
+        "bytes": 188,
+        "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+      },
+      "tapFinalSummary": {}
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-green",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T06:15:35.095Z",
+      "completedAt": "2026-10-09T06:15:35.289Z",
+      "elapsedSeconds": 0.19366509700194,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 18194432,
+      "observedTaskDiskPeakBytes": 1297379328,
+      "availableBeforeBytes": 14846734336,
+      "availableAfterBytes": 14846717952,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/types-green.log",
+        "bytes": 306,
+        "sha256": "b1115d9c9140626c39e05a3c1c2fb9fd68c98d0068b8858bc352b3544d89606a"
+      },
+      "tapFinalSummary": {}
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T06:14:43.853Z",
+      "completedAt": "2026-10-09T06:14:49.421Z",
+      "elapsedSeconds": 5.568703072000062,
+      "exitCode": 2,
+      "sampledAggregateRssPeakBytes": 727228416,
+      "observedTaskDiskPeakBytes": 1297354752,
+      "availableBeforeBytes": 14848634880,
+      "availableAfterBytes": 14846758912,
+      "guardTermination": null,
+      "log": {
+        "privateVmPath": "/workspace/cloud-financial-adapter-artifacts-oct09/types.log",
+        "bytes": 860,
+        "sha256": "df36970ccd93de0eb267b1cbe805d13fd3bf4e53f3d79f8ce6fbbb05a78e1109"
+      },
+      "tapFinalSummary": {}
+    }
+  ],
+  "actualPositiveScope": [
+    "actual pinned Git evidence byte/length/hash reads and both fixed calculators",
+    "actual disposable PostgreSQL original preparation/assertion RPCs with synthetic job/source/role fixtures",
+    "original preparation/seal/charge/lease unchanged after both company supplements",
+    "clean normal Next build and actual auth-first route harness regression"
+  ],
+  "limits": {
+    "fileCountPerCompany": 8,
+    "perFileBytes": 524288,
+    "aggregateBytes": 1048576,
+    "projectionBytes": 160000,
+    "resultBytes": 262144,
+    "sharedMonotonicDeadlineMs": 10000,
+    "quartersPerScenario": 6,
+    "scenarios": 3,
+    "selectedFactsMax": 64
+  },
+  "remaining": [
+    "independent exact code review",
+    "full positive compiled Next/PostgREST HTTP supplement acceptance",
+    "root reviewed combined branch full integration suite",
+    "trusted execution provider/principal/assignment receipts unavailable",
+    "reported 2026 YTD plus forecasts bridge remains incomplete",
+    "no sealed financial input/author/reviewer/outbox/publication execution"
+  ],
+  "flags": {
+    "financialVerified": false,
+    "dispatchReady": false,
+    "modelDispatched": false,
+    "researchQualified": false,
+    "strategyApproved": false,
+    "entryEligible": false,
+    "protectedApproval": false,
+    "productionWrites": false
+  },
+  "resources": {
+    "sampledProcessGroupRssPeakBytes": 1391534080,
+    "observedTaskDiskPeakBytes": 1384960000,
+    "minimumAvailableBytes": 14799314944,
+    "samplingLimitation": "100ms process group and descendants; not a cgroup high-water mark. Earlier light route harness overlapped first lint; final focused/lint/build/type stages serialized.",
+    "ownedStageProcessesStopped": true,
+    "disposablePgStoppedAndCleanedByTestFinally": true
+  },
+  "secrets": {
+    "envFilenameInventoryOnly": [
+      ".env.example",
+      "scraper/.env.example"
+    ],
+    "dotenvRead": false,
+    "credentialExported": false
+  },
+  "preservedFailureAttribution": [
+    "opaque outer-file two-tests failure is not a detailed assertion count",
+    "direct 21/24 identifies actual model unit mismatch and sandbox mkfifo EPERM",
+    "corrected 23/24 identifies explicit AUO 68-fact selection over approved cap; selected group-total view now62",
+    "typecheck 3 recursive inference errors fixed explicit return type",
+    "types-green missing root npm script caused wrapper cwd label mismatch, not application type error",
+    "initial Next build external JSON import fails; approved inventory equality test and static build configuration close packaging gap"
+  ]
+}
