@@ -5,6 +5,7 @@ import {financialInstant} from '../web/src/lib/research-financial-clock.ts';
 import {completeHash} from '../web/src/lib/research-complete-canonical.ts';
 import {verifyLocalInboxDataPlane} from '../scripts/research-local-inbox-dataplane.mjs';
 import {prepareObservedRosterAdmission} from '../web/src/lib/research-observed-roster.ts';
+import {readAfterResearchReadiness} from './research-http-readiness.mjs';
 const root=process.cwd();
 const read=f=>JSON.parse(fs.readFileSync(root+'/docs/research/2026-10-08-discovery-live/'+f,'utf8'));
 const roster={legacyClassification:read('observed-security-classification.json'),securityScope:read('official-security-scope-reconciliation.json')};
@@ -13,7 +14,7 @@ const roster={legacyClassification:read('observed-security-classification.json')
 const mapping=JSON.parse(fs.readFileSync(root+'/web/src/lib/research-complete-mapping.json'));
 for(const symbol of ['2409','2383'])test(`compiled read-only author packet ${symbol}, synthetic job, actual fixed financial inputs`,{timeout:120000},async t=>{
  const realFetch=globalThis.fetch;globalThis.fetch=(url,options)=>{const action=typeof options?.body==='string'&&options.body.length?JSON.parse(options.body).action:undefined;return realFetch(url,action==='sealResearchInput'||action==='readResearchInputRevision'?{...options,headers:{...options.headers,'x-research-input-version':'2'}}:action==='assignAuthor'||action==='readAuthorAssignment'||action==='readAuthorPacket'?{...options,headers:{...options.headers,'x-research-execution-version':'2'}}:options);};
- try {const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,observedClaim:true,researchControllers:true,testPgClockLibrary:process.env.STOCKINSIDER_TEST_PG_CLOCK_LIBRARY,check:(name,fn)=>t.test(name,fn),afterBaseline:async({post,sql,priorityRequest,report,restart})=>{
+ try {const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,observedClaim:true,researchControllers:true,testPgClockLibrary:process.env.STOCKINSIDER_TEST_PG_CLOCK_LIBRARY,check:(name,fn)=>t.test(name,fn),afterBaseline:async({post,rpc,sql,priorityRequest,report,restart})=>{
   const prepared=prepareObservedRosterAdmission(roster),scope={scope:'research_observed_v1',snapshotHash:prepared.snapshotHash};
   let r=await post('api/internal/research-observed-roster',roster);assert.equal(r.status,200);
   const now=new Date(Date.now()-1000).toISOString();
@@ -24,9 +25,13 @@ for(const symbol of ['2409','2383'])test(`compiled read-only author packet ${sym
   const request={owner,...scope,jobId:context.job.jobId,attempt:context.job.attempt,reservationId:context.modelReservation.reservationId,bundleId:null,sourceDocumentIds:[documentId]};
   for(const name of ['20261009_research_publication_source_fence_v2.sql','20261009_research_input_preparations_v2.sql','20261009_research_input_preparation_assert_v2.sql','20261009_research_complete_input_v2.sql','20261009_research_author_assignments_v2.sql','20261009_research_author_packet_v2.sql'])sql(fs.readFileSync(root+'/migrations/'+name,'utf8'));
   sql("NOTIFY pgrst,'reload schema';");
+  // Admission probes are read/no-write readiness checks, separate from the
+  // single business calls below. Preserve every startup response in the receipt.
+  report.authorPacketReadiness=[];
+  const attempts=report.authorPacketReadiness;
   let saved;
   await t.test('compiled guarded preparation binds actual job, lease and source seal',async()=>{
-   for(let n=0;n<20;n++){r=await post('api/internal/research-deep-job',{action:'prepareResearchInput',...request});if(r.status===200)break;await new Promise(resolve=>setTimeout(resolve,100));}const d=await r.json();assert.equal(r.status,200,JSON.stringify(d));saved=d.preparation;assert.equal(saved.payload.stockId,null);assert.equal(d.dispatchReady,false);
+   r=await readAfterResearchReadiness(()=>rpc('prepare_research_input_v2',{p_request:{}}),()=>post('api/internal/research-deep-job',{action:'prepareResearchInput',...request}),{name:'prepare_research_input_v2',attempts,ready:x=>x.status===400&&x.body?.code==='P0001'&&x.body?.message==='input_preparation_shape'});const d=await r.json();assert.equal(r.status,200,JSON.stringify(d));saved=d.preparation;assert.equal(saved.payload.stockId,null);assert.equal(d.dispatchReady,false);
   });
 
   const input={owner,jobId:request.jobId,attempt:request.attempt,reservationId:request.reservationId,...scope,preparationId:saved.preparation_id,preparationHash:saved.input_hash,expectedArtifactManifestHash:mapping.companies[symbol].inventoryHash,expectedCalculatorExecutionHash:mapping.sourceClosureHash};
@@ -73,7 +78,8 @@ for(const symbol of ['2409','2383'])test(`compiled read-only author packet ${sym
    report.authorPacketHttp={symbol,packetHash:body.packetHash,packetBytes:Buffer.byteLength(encoded),sourceCount:packet.sources.length,sourceSealReceivedAt:packet.sourceSealReceivedAt,dbSealReceivedAt:dbSeal,nodeReadAt:realNow,pgReadAt:dbNow,writingWindow:packet.writingWindow,syntheticSourceJobCredentials:true,actualFinancialRelayProjection:true,modelDispatched:false,researchQualified:false,stateAuditBefore:JSON.parse(before),stateAuditAfter:JSON.parse(audit())};assert.equal(audit(),before);
   });
   await t.test('two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges',async()=>{
-   const before=audit();for(let n=0;n<2;n++){const response=await post('api/internal/research-model-reservation',packetRequest);const body=await response.json();assert.equal(response.status,200,JSON.stringify(body));assert.deepEqual(body,packetResponse);}restart();let response;for(let n=0;n<20;n++){response=await post('api/internal/research-model-reservation',packetRequest);if(response.status===200)break;await new Promise(resolve=>setTimeout(resolve,100));}const body=await response.json();assert.equal(response.status,200,JSON.stringify(body));assert.deepEqual(body,packetResponse);assert.equal(audit(),before);
+   const before=audit();for(let n=0;n<2;n++){const response=await post('api/internal/research-model-reservation',packetRequest);const body=await response.json();assert.equal(response.status,200,JSON.stringify(body));assert.deepEqual(body,packetResponse);}restart();
+   const response=await readAfterResearchReadiness(()=>rpc('candidate_research_stock_authority_page',{p_cutoff:priorityRequest.asOf,p_page_offset:0,p_page_limit:500}),()=>post('api/internal/research-model-reservation',packetRequest),{name:'candidate_research_stock_authority_page',attempts,ready:x=>x.status===200&&Array.isArray(x.body)&&x.body.length===0});const body=await response.json();assert.equal(response.status,200,JSON.stringify(body));assert.deepEqual(body,packetResponse);assert.equal(audit(),before);
   });
   await t.test('guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes',async()=>{
    const original=sql(`SELECT to_jsonb(s)::text FROM source_raw_documents s WHERE id=${q(documentId)};`);
