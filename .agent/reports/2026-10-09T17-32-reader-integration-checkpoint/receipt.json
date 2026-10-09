@@ -1,0 +1,27 @@
+{
+  "recordedAt": "2026-10-09T17:29:03.903692+00:00",
+  "integration": "58b90e48a6b1ccc93a2de7c5ce0c9f22bee6edef",
+  "mainUnchanged": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "readerEvidence": "c676cf95958689b4ac8eccbd1fafd8b9131e1e3e",
+  "focusedPG": {
+    "pass": 13,
+    "fail": 0,
+    "skip": 0
+  },
+  "ordinaryCI": {
+    "pass": 768,
+    "fail": 0,
+    "skip": 2,
+    "overlapsFocused": true
+  },
+  "protectedRun": 37966203521,
+  "protectedFailure": "missing exact-head review ref",
+  "raw": {
+    "path": ".agent/reports/2026-10-09T17-32-reader-integration-checkpoint/protected-run-37966203521-failed.log",
+    "bytes": 35205,
+    "sha256": "3ae57bc5e9193071803fc3c4eb4e1faa1b9778715f56b4a8752957fa58bd56b2"
+  },
+  "genuineModelExecuted": false,
+  "productionDeployed": false,
+  "mainMerged": false
+}
