@@ -400,7 +400,7 @@ export async function loadTwEntryHistoricalAuthority(client: TwEntryAuthorityCli
 }
 
 export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<TwEntryAuthorityResult> {
-  const base: TwEntryAuthorityResult = { bars: [], calendar: null, priceBasis: null, sourceDatasetRevision: 'unavailable', availableAt: request.cutoff, missingData: [], anchorAction: null };
+  const base: TwEntryAuthorityResult = { bars: [], calendar: null, priceBasis: null, sourceDatasetRevision: `${VERSION}:unavailable`, availableAt: request.cutoff, missingData: [], anchorAction: null };
   const scope = createReadScope();
   try {
     validateRequest(request);

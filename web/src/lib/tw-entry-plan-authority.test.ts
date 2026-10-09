@@ -382,3 +382,14 @@ test('deadline bounds a noncooperative shared query and does not poison its late
   await new Promise(resolve=>setTimeout(resolve,50));assert.equal(observed?.aborted,true);
   assert.deepEqual((await loadTwEntryPlanAuthority(client,request)).missingData,[]);
 });
+
+
+test('legacy missing-forward and read-error complete outputs retain base2878038 identities',async()=>{
+  for(const [kind,expected]of [
+    ['missing-forward','155a07f2d6d864a0d5aa80f935ad896f27a09e9c4652d285ea9d2a09279c8e52'],
+    ['read-error','4a66cc616d001d43c388c3cdb1e879cf98fd353365e832a2073f9d9fdb8c0d25']]) {
+    const {data,request}=fixture();if(kind==='missing-forward')delete request.forwardCalendar;
+    const result=await loadTwEntryPlanAuthority(mockClient(data,kind==='read-error'?tables.calendar:undefined).client,request);
+    assert.equal(hash(result),expected,kind);assert.equal(result.sourceDatasetRevision,'tw-entry-authority-v0.1:unavailable');
+  }
+});
