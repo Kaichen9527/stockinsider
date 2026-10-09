@@ -82,3 +82,9 @@ node --experimental-strip-types --test scripts/research-insider-dataplane.test.m
 ```
 
 No missing-tool skip: Linux, built Next artifact and tool paths are mandatory. The artifact directory must be new. Test keys/JWT exist only for the disposable loopback fixture and are omitted/redacted from persisted reports. No inherited production keys, official roster, stock rows, model/approval authority or platform credentials are imported. This is a narrow source/lease/ledger dependency profile, not a full reviewed production schema or installed-policy attestation. Maker syntax-checked the harness only; successful transport/Next/PG execution is **not yet claimed**.
+
+## Actual VM PostgreSQL RED and scoped name-resolution repair
+
+Root reported actual c96 PostgreSQL execution: 7 passed / 9 failed, first admission token UPDATE rejected with `missing FROM-clause entry`. Linux private journal: 1 passed. The source used `admit_insider_snapshot_v1.snapshot_id` for a variable declared in an unlabeled inner block. That qualifier is not a relation or the variable's block label. The successor names the local value `v_snapshot_id` throughout admission, including both token/member UPDATE right-hand sides. Columns, immutable token semantics, locks and acceptance expectations are unchanged.
+
+Local unchanged snapshot/capacity lightweight regression: 8 passed / 0 skipped. This does not execute PL/pgSQL. Actual VM PostgreSQL rerun is required to establish green; no maker claim that the nine failures are closed. The separate actual-stack harness has two independent-review findings (unconditional passed receipt and cancellation/cleanup bounds) and remains unapproved pending its own repair.

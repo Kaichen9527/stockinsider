@@ -172,7 +172,7 @@ BEGIN
 END $$;
 CREATE OR REPLACE FUNCTION public.admit_insider_snapshot_v1(p_run uuid,p_dataset integer,p_token uuid,p_raw_base64 text,p_hash text,p_rows integer,p_attempted timestamptz,p_observed timestamptz,p_parser text,p_rights text) RETURNS jsonb
  LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public,extensions AS $$
-DECLARE raw_bytes bytea; rows jsonb; row_value jsonb; binding public.insider_run_members_v1; acquisition public.insider_acquisitions_v1; snapshot_id uuid;
+DECLARE raw_bytes bytea; rows jsonb; row_value jsonb; binding public.insider_run_members_v1; acquisition public.insider_acquisitions_v1; v_snapshot_id uuid;
 BEGIN
  IF p_run IS NULL OR public.insider_dataset_v1(p_dataset) IS NULL THEN RAISE EXCEPTION 'insider_admission_identity'; END IF;
  PERFORM pg_advisory_xact_lock(2410,8001); PERFORM pg_advisory_xact_lock(2411,p_dataset);
@@ -196,14 +196,14 @@ BEGIN
  IF p_rows IS NULL OR jsonb_array_length(rows)<>p_rows OR p_rows NOT BETWEEN 0 AND 50000 THEN RAISE EXCEPTION 'insider_row_bound'; END IF;
  FOR row_value IN SELECT value FROM jsonb_array_elements(rows) LOOP PERFORM public.insider_row_v1(row_value,p_dataset); END LOOP;
  INSERT INTO public.insider_snapshots_v1(dataset,raw,raw_sha256,row_count,attempted_at,observed_at,parser_identity,rights_identity)
-  VALUES(p_dataset,raw_bytes,p_hash,p_rows,p_attempted,p_observed,p_parser,p_rights) RETURNING id INTO snapshot_id;
+  VALUES(p_dataset,raw_bytes,p_hash,p_rows,p_attempted,p_observed,p_parser,p_rights) RETURNING id INTO v_snapshot_id;
  -- Provisional row is transaction-private. Reject oversized derived pages before
  -- creating active progress or binding any member; exception rolls back the raw.
- PERFORM public.insider_snapshot_projection_bound_v1(snapshot_id);
+ PERFORM public.insider_snapshot_projection_bound_v1(v_snapshot_id);
  -- Empty snapshots still require the frozen-run commit, ensuring a replay receipt.
- INSERT INTO public.insider_snapshot_progress_v1(snapshot_id,dataset) VALUES(snapshot_id,p_dataset);
- UPDATE public.insider_acquisitions_v1 SET snapshot_id=admit_insider_snapshot_v1.snapshot_id,resolved_at=clock_timestamp() WHERE id=p_token;
- UPDATE public.insider_run_members_v1 SET snapshot_id=admit_insider_snapshot_v1.snapshot_id WHERE acquisition_token=p_token AND insider_run_members_v1.snapshot_id IS NULL;
+ INSERT INTO public.insider_snapshot_progress_v1(snapshot_id,dataset) VALUES(v_snapshot_id,p_dataset);
+ UPDATE public.insider_acquisitions_v1 SET snapshot_id=v_snapshot_id,resolved_at=clock_timestamp() WHERE id=p_token;
+ UPDATE public.insider_run_members_v1 SET snapshot_id=v_snapshot_id WHERE acquisition_token=p_token AND insider_run_members_v1.snapshot_id IS NULL;
  UPDATE public.insider_acquisition_runs_v1 r SET frozen_at=clock_timestamp() WHERE r.frozen_at IS NULL
   AND EXISTS(SELECT 1 FROM public.insider_run_members_v1 m WHERE m.run_id=r.id AND m.acquisition_token=p_token)
   AND (SELECT count(*) FROM public.insider_run_members_v1 m WHERE m.run_id=r.id AND m.snapshot_id IS NOT NULL)=5;
