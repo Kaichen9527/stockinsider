@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-09T10:15:05.224643+00:00",
+  "subjectCommit": "34f658e6a3882883df7a67e2ee12a84ffe32ca12",
+  "subjectTree": "2003ce08af0c98fa860f1249f3e578a1d7bc0769",
+  "pr": "https://github.com/Kaichen9527/stockinsider/pull/340",
+  "reviewObservations": {
+    "mechanical6f": "astra_publication_review unsigned mechanicalPASS: exactly3incoming962blobs and no others",
+    "testOnly34f": "author_input_review_oct08 unsigned scopedTEST-ONLYPASS: guarded append-only retraction, original source bytes preserved, original409/count assertions retained; node--check; native not rerun"
+  },
+  "vmReceipts": {
+    "completeInput962": {
+      "commit": "8841471427a8490aee790fc0e59ff34932a1acb6",
+      "reportedFocusedTapIncludingParents": 47,
+      "reportedCompiledHttp": {
+        "pass": 32,
+        "fail": 0,
+        "skip": 0
+      },
+      "GitRawLogsVerified": 10,
+      "profilesReadOnMac": false
+    },
+    "author6f": {
+      "commit": "6c2d81f04e685413130e6eb129a416d8e413430b",
+      "compiledTap": {
+        "total": 34,
+        "pass": 32,
+        "fail": 2,
+        "skip": 0
+      },
+      "firstFailure": "AUO withdrawal fixture direct service-role UPDATE refused by source_raw_documents ACL;1failedchild+parent",
+      "GitRawLogsVerified": 9,
+      "profilesReadOnMac": false,
+      "normalBuild": "pass6f"
+    }
+  },
+  "repair": "test only uses existing guarded research-inbox retracted revision; no SQL/runtime/grant changes; originalRED retained",
+  "native34f": "queued existing VM; no duplicate worker",
+  "github": {
+    "main": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "diagnosticProductRuntime": "pass on6f",
+    "protectedRun": "37914276990",
+    "protectedFailure": "missing refs/heads/evidence/source-led-opportunity-v3-exact-review-6f20d4fee2b0b7f960e36e6e104605acf6ded55c; downstream code tracks skipped",
+    "rerunSameFailure": false
+  },
+  "notCompleted": [
+    "complete-input boundary inventory",
+    "genuine author/reviewer/result/handoff",
+    "v2 original publication transaction and reader",
+    "real discovery price enrichment",
+    "full final-R protected evidence/merge/deploy",
+    "research schedule and five trading days"
+  ]
+}

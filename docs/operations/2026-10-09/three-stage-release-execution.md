@@ -239,3 +239,31 @@ All1978unique candidates/price contexts are accounted, with immutable first
 discoveries5347/6531. OldMarch publicEP8 description may create an observed-only
 research job under a manual low-impact assessment; it is not audio/transcript,
 current-order evidence, investment qualification or an early-discovery success.
+
+## Live GitHub/VM reconciliation and lawful withdrawal repair
+
+After latest user continuation, GitHub main remains169aad1. PR340 diagnostic
+product-runtime passes; protectedrun37914276990 fails because exact6f review
+evidence ref is absent, so downstream protected code tracks skip. Scoped helper
+reviews cannot substitute the full final-R evidence; no unchanged blind rerun.
+VM complete-input962 has its own47focused/32compiled HTTP, types/lint/build
+receipt88414714; root verified10Git log bytes/SHA, not remote profile files.
+
+VM author6f native whole file is34total/32pass/2fail0skip, receipt6c2d81f. Both
+company seals/assignment/auth/concurrency/replay/restart and EMC expiry pass.
+Only AUOwithdrawal child fails: directservice-roleUPDATE is correctly denied by
+source ACL, plus parent failure. Root verified9Gitrawlog hashes; harnesspassed:true
+is not accepted as whole-file success. No privilege expansion is warranted.
+
+Test-only34f658e6 replaces this with actual guardedresearch-inbox retracted:true
+new revision of the same source root. It asserts accepted1,newID,original full
+source bytes unchanged, then retains read/replay409 and assignmentcountsunchanged.
+No runtime,SQL,ACL,grants or existing assertions weakened. Existing reviewer
+returned unsigned scopedTEST-ONLYPASS; actual native rerun is queued on the same
+VM. Web/harness/package/migrations remain exact6f, allowing honest existing build
+reuse with explicit source/test provenance. Original32/2RED stays durable.
+
+Independent mechanical6f review also passes: exactly the3reviewed962blobs merge
+into4eb without extra changes. None of these observations is final-release or
+real-model/publication approval. Goal remains active and planned product research
+schedules remain unaccepted. No production DB write,main merge or deployment.
