@@ -101,5 +101,21 @@
     "removed": true,
     "logicalBytes": 43959202
   },
-  "updatedAt": "2026-10-09T14:04:08.731429+00:00"
+  "updatedAt": "2026-10-09T14:04:08.731429+00:00",
+  "nativeSuccessor": {
+    "subject": "833c9a476672e5f316aab02c99e53527769d2c0c",
+    "runtimeSubject": "492729b349b4ffa6e6a28f9603de30e7ec9fba3e",
+    "http": {
+      "pass": 64,
+      "fail": 0,
+      "skip": 0
+    },
+    "unit": 6,
+    "realPostgres": 20,
+    "buildId": "G3pokh7OaeFYCV_iUSnhb",
+    "compiledFiles": 2074,
+    "rawFilesBytesShaRootVerified": 49,
+    "independentReview": "unsigned scoped TEST/receipt PASS astra_publication_review; syntax/canonical/readiness/receipt reviewed, no native rerun",
+    "limitation": "packet/result withdrawal negatives run after completion, cannot isolate withdrawal; handoff has success-before/withdraw-reject-after control; synthetic controller only"
+  }
 }

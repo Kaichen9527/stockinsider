@@ -8,6 +8,26 @@ list is valid; research priority is not entry authority.
 
 ## Latest verified state — supersedes older checkpoints below
 
+### October 9 native handoff complete; review result implementation awaiting correction
+
+- Exact492 native handoff successor833c9a4 passed64HTTP/20realPG/6unit,
+  zero skip, normal buildG3pokh7OaeFYCV_iUSnhb with2074compiled files, types
+  and lint. Root verified49raw bytes/SHA; independent reviewer returned unsigned
+  scoped TEST/receiptPASS. Handoff-only completion/audit/restart/withdrawal control
+  is accepted. Synthetic controller reports remain distinct from actual execution.
+- Frozen7f reviewer assignment now has exact independent CODE PASS, root149/13
+  related/PG/type/lint/build success and is undergoing native acceptance in the
+  existing VM without overlapping edits.
+- PR348 reviewer-result implementation128fec85 initially passed155related/12PG/
+  type/lint/buildKYoxX3VJkI0QL8CB_BHeV, but independent review found a P2:
+  compactJSON rawreview65536bytes becomes65853inPGjsonb::text. This is not a
+  final pass. Design amendment5c5c5c80 specifies shared existing completeCanonical
+  UTF8 size65536, no raised bound; actualRPC exact/+1 and multibyte/escaping tests
+  plus exact re-review are pending. Original tests/results/rejected code retained.
+- Main/production unchanged. Publication and actual role execution still incomplete;
+  new private review persistence is not publication authority.
+
+
 ### October 9 reviewer assignment and native result continuation
 
 - PR347 subject7f6259e8 implements separately authenticated reviewer assignment
