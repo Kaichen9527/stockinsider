@@ -1,0 +1,11 @@
+import {after} from 'node:test';
+import fs from 'node:fs';
+import path from 'node:path';
+import {ancestorPaths,observeNamespace} from './research-financial-parent-namespace-diagnostic.mjs';
+import {financialInventory} from '../web/src/lib/research-financial-inventory.ts';
+const root=process.cwd(),out=process.env.FINANCIAL_NAMESPACE_ARTIFACTS;
+if(!path.isAbsolute(out)||!fs.statSync(out).isDirectory())throw new Error('namespace_artifacts_precreation_required');
+const paths=ancestorPaths(root,financialInventory.companies['2409']),monitor=await observeNamespace(paths,path.join(out,'compiled-http-namespace-observation.json')),realFetch=globalThis.fetch;
+globalThis.fetch=(url,options)=>{let action;try{action=typeof options?.body==='string'?JSON.parse(options.body).action:undefined;}catch{}return ['financialSupplement','sealResearchInput','readResearchInputRevision','receiveAuthorResult','handoffAuthorResult','assignReviewer','readReviewerPacket'].includes(action)?monitor.around(action,()=>realFetch(url,options)):realFetch(url,options);};
+after(async()=>{globalThis.fetch=realFetch;await monitor.stop();});
+await import('./research-reviewer-assignment-http.test.mjs');
