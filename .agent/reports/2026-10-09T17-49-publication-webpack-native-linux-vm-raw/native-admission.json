@@ -1,0 +1,16 @@
+{
+  "nativeAdmissionAt": "2026-10-09T17:39:55.807521+00:00",
+  "originalManualDeadline": "2026-10-09T17:57:55Z",
+  "sourceHead": "1490472ec21630142222db86652d28772ddb45c9",
+  "buildId": "N21vIx77tWp2gOHVhDJPW",
+  "compiler": "webpack supplementary",
+  "compiledManifestEntries": 521,
+  "availableBytes": 10558676992,
+  "freshDistinctProfileParents": [
+    "/workspace/cloud-author-packet-artifacts-oct09/webpack149/reviewer94/native",
+    "/workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native"
+  ],
+  "exclusiveHttpLeavesNotPrecreated": true,
+  "exactObservedCoreRequired": true,
+  "oldModelResultBytesReused": false
+}

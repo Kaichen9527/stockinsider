@@ -8,6 +8,7 @@ import { randomBytes, createHash, createHmac } from 'node:crypto';
 import { sourcePriorityCommand } from './research-source-priority-consumer.mjs';
 import { prepareDiscoveryRelay } from './research-discovery-relay-prepare.mjs';
 import { executeSourceController } from './research-source-controller.mjs';
+import { dropFirstPublicationResponse } from './research-publication-http-drop.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export function localProcessEnvironment(env = process.env) {
@@ -140,7 +141,7 @@ export async function localInboxProfile(root) {
 
 /** Runs only in the existing Node test-runner loopback projection boundary.
  * Uses real Next, Supabase client, PostgREST and PostgreSQL; no DB/client injection. */
-export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgrestBin, check = async (_name, fn) => fn(), observedRoster = false, observedPriority = false, observedClaim = false, testPgClockLibrary = null, researchControllers = false, afterBaseline = null }) {
+export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgrestBin, check = async (_name, fn) => fn(), observedRoster = false, observedPriority = false, observedClaim = false, testPgClockLibrary = null, researchControllers = false, publicationPreview = false, afterBaseline = null }) {
   assert.equal(process.env.NODE_TEST_CONTEXT, 'child-v8', 'local_profile_requires_node_test_runner');
   for (const value of [root, artifacts, pgBin, postgrestBin]) assert.ok(path.isAbsolute(value));
   const environment = localProcessEnvironment();
@@ -227,7 +228,7 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
       } catch {res.writeHead(502);res.end('{"error":"local_compatibility_failed"}');}
     });
     await new Promise(resolve=>compatibility.listen(apiPort,'127.0.0.1',resolve));
-    next=spawn(process.execPath,[path.join(root,'web/node_modules/next/dist/bin/next'),'start','--hostname','127.0.0.1','--port',String(appPort)],{cwd:path.join(root,'web'),env:{...environment,NODE_ENV:'production',INTERNAL_API_KEY:key,...(researchControllers?{RESEARCH_REVIEW_KEY:reviewKey,RESEARCH_TEST_KEY:testKey,CRON_SECRET:cronKey}:{}),LEGACY_RADAR_CORRECTNESS_PROJECTION:'enabled',SUPABASE_URL:`http://127.0.0.1:${apiPort}/`,SUPABASE_SERVICE_ROLE_KEY:bearer,RADAR_PUBLIC_SNAPSHOTS_ENABLED:'disabled',SOURCE_LED_OPPORTUNITY_V3:'disabled'},stdio:['ignore','pipe','pipe']});
+    next=spawn(process.execPath,[path.join(root,'web/node_modules/next/dist/bin/next'),'start','--hostname','127.0.0.1','--port',String(appPort)],{cwd:path.join(root,'web'),env:{...environment,NODE_ENV:'production',INTERNAL_API_KEY:key,...(researchControllers?{RESEARCH_REVIEW_KEY:reviewKey,RESEARCH_TEST_KEY:testKey,CRON_SECRET:cronKey}:{}),...(publicationPreview?{DATA_MODE:'demo',RESEARCH_WORKING_DRAFT_PREVIEW:'enabled'}:{}),LEGACY_RADAR_CORRECTNESS_PROJECTION:'enabled',SUPABASE_URL:`http://127.0.0.1:${apiPort}/`,SUPABASE_SERVICE_ROLE_KEY:bearer,RADAR_PUBLIC_SNAPSHOTS_ENABLED:'disabled',SOURCE_LED_OPPORTUNITY_V3:'disabled'},stdio:['ignore','pipe','pipe']});
     for(const stream of [next.stdout,next.stderr])stream.on('data',b=>logs.next.push(safe(b)));
     const origin=`http://127.0.0.1:${appPort}/`;await ready(origin+'api/internal/research-inbox',next);
     const directory=path.join(root,'docs/research/2026-10-08-discovery-live');
@@ -317,6 +318,7 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
     });
     assert.equal(report.checks.length,9,'local_profile_incomplete_checks');
     if (afterBaseline) await afterBaseline({sql,sqlAsync,post,rpc,origin,artifacts,
+      dropPublicationResponse:payload=>{assert.equal(publicationPreview,true);return dropFirstPublicationResponse({origin,payload,authorization:`Bearer ${key}`});},
       consumePriority:args=>sourcePriorityCommand(args,{env:{INTERNAL_API_KEY:key}}),
       priorityRequest:run.priorityRequest,apiOrigin:`http://127.0.0.1:${apiPort}/rest/v1/`,report,pgClock:clockFile?{file:clockFile,librarySha256:clockHash,set:offset=>writeFile(clockFile,`${offset}\n`)}:null,restart:()=>{pgStop();pgStart();}});
     report.passed=true;

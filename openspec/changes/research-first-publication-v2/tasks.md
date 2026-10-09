@@ -81,3 +81,13 @@ Independent18d6 static CODE PASS closes P2; its original unit/PG run is24PASS/1F
 Maker adapter/actual SSR6/6 pass; types pass, final lint0 errors/33 existing warnings. First actual PG reader run found minimal fixture omitted original roster owner SELECT; fixture restores original production grant only. Second Mac run timed out in original input sealing psql15s, before new reader cases; root cause unknown, original RED/logs retained. No production timeout/clock/claim/rights rule was relaxed. Use independently bounded Linux verification rather than repeat identical Mac failure.
 
 Independent847d CODE REQUEST_CHANGES identifies three P2s: valid monthly/half-year periods were rejected; writer accepts15 catalysts/500-character locators but reader narrowed to12/300; latest-corruption fixture collided with unique input/hash index before exercising lineage. Successor aligns writer bounds, preserves reported period/unit labels (including TWD_thousands/TWD), retains separate strict four-quarter valuation periods, and uses a deliberately corrupt different hash under the explicit rolled-back superuser fixture. Actual writer-to-reader maximum-bound/month/half-year regression added. Maker successor7/7 unit/SSR passes, types passes and lint0errors/33existing warnings. Independent successor review and original/successor Linux evidence remain separate and pending.
+
+## October10 native publication checkpoint (original history retained)
+
+- [x] Exact05ea native test code review and149 two-line Next entry export repair review passed, scoped and unsigned.
+- [x] Actual guarded HTTP/PG publication, committed-first-response loss/read recovery, exact replay, restart, shared compiled preview and append-only withdrawal: new publication94/94 zero skip on149. Separate original reviewer94/94 regression passed; shared cases are not counted twice as distinct acceptance criteria.
+- [x] Root and independent review verify75cc evidence28 raw/6644494bytes and priorf50 evidence54raw/6815926bytes, source/build identities and preserved startupRED. Partial development schema and synthetic controller/prose are explicit.
+- [x] Mac normal build/type/lint passes identical149 webtree; labelled Linux supplementary Webpack passes. Original normal Linux EPERM and initial supplementaryTS2344 remainRED.
+- [ ] Genuine trusted model/controller role execution and actual authored/independently reviewed AUO+EMC publication remain incomplete.
+- [ ] Positive published-v2 desktop/mobile browser visual acceptance remains separate from compiled HTTP and working-draft browser acceptance.
+- [ ] Full protected main-to-final review/recovery, merge/deploy, formal schedule activation and five future trading days remain incomplete. No strategy effectiveness or production-ready claim.

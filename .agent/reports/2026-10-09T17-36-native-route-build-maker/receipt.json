@@ -1,0 +1,59 @@
+{
+  "recordedAt": "2026-10-09T17:36:58.324801+00:00",
+  "subject": "1490472ec21630142222db86652d28772ddb45c9",
+  "tree": "f02226c023457253e5823b6d368198536f1f6859",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "environment": "Mac",
+  "normalBuild": {
+    "command": "npm --prefix web run build",
+    "exitCode": 0,
+    "buildId": "rv2HimjZfXfOWkh7gyrLM",
+    "serverFiles": 2092
+  },
+  "typecheckExitCode": 0,
+  "lintExitCode": 0,
+  "lintExistingWarnings": 33,
+  "nonCompilerCommandErrorPreserved": "npm run types is absent; corrected to existing typecheck script",
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-09T17-36-native-route-build-maker/stockinsider-native-route-normal-build.log",
+      "bytes": 6500,
+      "sha256": "48b75fd065fdeb45d3e71d71c447cba4244255d11c4c050595b7434f1f5d2fb1"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T17-36-native-route-build-maker/stockinsider-native-route-types.log",
+      "bytes": 223,
+      "sha256": "7920604cc58b6ccd8dec8ad9195fe3b3c79f8e492c99f400b881bdb8b61d1227"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T17-36-native-route-build-maker/stockinsider-native-route-typecheck.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T17-36-native-route-build-maker/stockinsider-native-route-lint.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T17-36-native-route-build-maker/stockinsider-native-route-cache-retirement.json",
+      "bytes": 996212,
+      "sha256": "a54a1b1ecb9b1d5fe7d87ea00f82c40b314417d0f76fff81153c0b3a48cdafa4"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T17-36-native-route-build-maker/compiled-server-manifest.json",
+      "bytes": 408677,
+      "sha256": "f5bc733c36076a410ec284ee307307f80c2956c7023d5e0ad1491f37d23634f8"
+    }
+  ],
+  "reviewAttribution": {
+    "reviewer": "/root/strategy_deploy_audit_plan",
+    "result": "unsigned scoped CODE PASS1490472e",
+    "scope": "exact two named export removals only"
+  },
+  "linuxNormalBuild": "original EPERM RED retained; not rerun here",
+  "supplementaryLinuxBuild": "separate VM still pending",
+  "nativeAccepted": false,
+  "genuineModelExecuted": false,
+  "deployed": false
+}

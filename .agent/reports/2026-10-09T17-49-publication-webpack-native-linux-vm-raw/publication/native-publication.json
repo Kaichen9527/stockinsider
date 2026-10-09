@@ -1,0 +1,21 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "native-publication",
+  "command": [
+    "node",
+    "scripts/run-node22.js",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-publication-http.test.mjs"
+  ],
+  "startedAt": "2026-10-09T17:43:51.601Z",
+  "completedAt": "2026-10-09T17:43:54.280Z",
+  "elapsedSeconds": 2.6789011340006255,
+  "exitCode": 1,
+  "sampledAggregateRssPeakBytes": 259215360,
+  "observedTaskDiskPeakBytes": 1528541184,
+  "availableBeforeBytes": 10421563392,
+  "availableAfterBytes": 10340638720,
+  "guardTermination": null
+}
