@@ -188,6 +188,7 @@
     "research:monitor-controller": "node scripts/run-node22.js --experimental-strip-types scripts/research-monitor-controller.mjs",
     "test:research-publication-fence": "node scripts/run-node22.js --test scripts/research-publication-source-fence-postgres.test.mjs",
     "test:research-input-preparation": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-input-preparation-postgres.test.mjs scripts/research-deep-job-context-route.test.mjs",
+    "test:research-complete-input:lock-expiry": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-complete-input-lock-expiry-postgres.test.mjs",
     "test:research-complete-input:byte-boundary": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-complete-input-boundary-postgres.test.mjs",
     "test:research-author-result": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-author-result.test.mjs",
     "test:research-author-result:postgres": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-author-result-postgres.test.mjs",
