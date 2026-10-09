@@ -1,0 +1,395 @@
+{
+  "task": "exact27a ordinary Linux integration acceptance; evidence-only",
+  "branch": "codex/integration-linux-acceptance-oct10",
+  "sourceHead": "27a7a9bc23fa42e25e02ef285ea22f175d13adc1",
+  "sourceTree": "18d860bee37eff27b2d90e33a580aea8130f71cb",
+  "webTree": "2759d97914a5d3af4227dd51c472d93d2c0135dd",
+  "startedAt": "2026-10-09T16:08:14+00:00",
+  "sealedAt": "2026-10-09T16:20:42.291241+00:00",
+  "clientTimezone": "Asia/Taipei",
+  "clientStartedAt": "2026-10-10T00:08:14+08:00",
+  "manualElapsedSeconds": 748.291241,
+  "manualDeadline": "2026-10-09T16:38:14Z",
+  "manualEngineeringTimeIsProductModelBudget": false,
+  "runtimeSqlGuardClockFixturesAssertionsPackageChanges": [],
+  "dependencies": {
+    "subject": "27a7a9bc23fa42e25e02ef285ea22f175d13adc1",
+    "tree": "18d860bee37eff27b2d90e33a580aea8130f71cb",
+    "webTree": "2759d97914a5d3af4227dd51c472d93d2c0135dd",
+    "gitStatusBeforeReceipt": [],
+    "dependencyVersions": {
+      "pg": "8.18.0",
+      "next": "16.3.8"
+    },
+    "dependencyLockHashes": {
+      "package-lock.json": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "web/package-lock.json": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516"
+    }
+  },
+  "admission": {
+    "startedAt": "2026-10-09T16:08:14Z",
+    "deadline": "2026-10-09T16:38:14Z",
+    "subject": "27a7a9bc23fa42e25e02ef285ea22f175d13adc1",
+    "tree": "18d860bee37eff27b2d90e33a580aea8130f71cb",
+    "webTree": "2759d97914a5d3af4227dd51c472d93d2c0135dd",
+    "node": "22.14.0",
+    "pgPackageLockAndInstalled": "8.18.0",
+    "rootDependenciesReinstalled": false,
+    "webDependenciesReinstalled": false,
+    "availableBytes": 11072593920,
+    "activeVmHeavyWorkAtAdmission": [],
+    "existingPG": "17.11",
+    "ciCommand": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/research-agent-*.test.ts web/src/lib/research-deep-*.test.ts web/src/lib/research-paper-books.test.ts web/src/lib/research-review-auth.test.ts web/src/lib/research-strategy-governance.test.ts web/src/lib/research-weekly-bars.test.ts scripts/research-agent-migration-gate.test.mjs scripts/research-agent-routes.test.mjs scripts/research-paper-session-route.test.mjs scripts/research-approval-replay-route.test.mjs scripts/research-strategy-release.test.mjs scripts/research-source-budget-postgres.test.mjs web/src/lib/research-source-extensions.test.ts web/src/lib/research-broker-estimate.test.ts web/src/lib/research-execution-context.test.ts web/src/lib/technical-features-v2.test.ts scripts/research-deep-*-postgres.test.mjs scripts/candidate-dossier-outbox-v6-postgres.test.mjs scripts/research-capacity-admission.test.mjs scripts/research-host-resource-check.test.mjs web/src/lib/research-cloud-work.test.ts scripts/research-cloud-capacity.test.mjs scripts/research-cloud-work-cli.test.mjs scripts/research-cloud-result-route.test.mjs scripts/research-cloud-receipts-postgres.test.mjs web/src/lib/research-source-attempt-controller.test.ts scripts/research-source-controller.test.mjs web/src/lib/research-source-roots.test.ts web/src/lib/research-inbox.test.ts web/src/lib/research-agent-priority.test.ts scripts/release-owner-bridge-postgres.test.mjs scripts/research-cloud-controller.test.mjs web/src/lib/research-discovery-evidence.test.ts web/src/lib/research-discovery-price-enrichment.test.ts web/src/app/api/internal/research-priority-run/route.contract.test.ts scripts/research-monitor-controller.test.mjs scripts/research-monitor-progress.test.mjs scripts/research-deep-controller.test.mjs scripts/research-deep-draft-controller.test.mjs scripts/research-deep-job-context-route.test.mjs web/src/lib/research-source-association.test.ts scripts/candidate-financial-document-write-lease-route.test.mjs web/src/lib/research-insider-official.test.ts web/src/lib/source-health.test.ts scripts/research-insider-collector.test.mjs scripts/research-insider-health-route.test.mjs scripts/research-insider-cursor-postgres.test.mjs web/src/lib/research-observed-roster.test.ts web/src/lib/research-observed-priority.test.ts web/src/lib/research-observed-deep.test.ts scripts/research-observed-roster-native.test.mjs scripts/research-observed-priority-native.test.mjs scripts/research-publication-source-fence-postgres.test.mjs scripts/research-input-preparation-postgres.test.mjs scripts/candidate-financial-queue-write-lease-route.test.mjs web/src/lib/research-monitor-benchmark-context.test.ts web/src/lib/research-attention-shadow-v2.test.ts scripts/research-business-calculator.test.mjs scripts/research-financial-supplement.test.mjs scripts/research-financial-cleanup.test.mjs scripts/research-execution-binding.test.mjs scripts/research-saved-observation.test.mjs scripts/research-source-priority-consumer.test.mjs scripts/research-complete-input.test.mjs scripts/research-complete-input-postgres.test.mjs scripts/research-author-assignment-route.test.mjs scripts/research-author-assignment-postgres.test.mjs"
+  },
+  "red": {
+    "ciFirst": {
+      "tests": 733,
+      "pass": 726,
+      "fail": 5,
+      "skipped": 2
+    },
+    "cause": "Five pg_ctl startup failures before SQL with socket paths110–113 UTF8 bytes. Same-prefix realPG diagnostic reproduced max107-byte Unix socket rejection; original suites removed their own failure clusters/logs under unchanged finally cleanup. Original stdout/stack/paths retained; reproduction log independently retained.",
+    "changedFactorOnly": "Short private TMPDIR; no source/test/SQL/guard/clock/fixture/permission/deadline change; one corrected full original-command rerun",
+    "probe": {
+      "originalTmpdir": "/workspace/cloud-author-packet-artifacts-oct09/integration27a",
+      "shortTmpdir": "/tmp/si-ci27a-nujnllgk",
+      "startupExitCode": 1,
+      "postgresLog": "long-socket-probe.log",
+      "singleChangedSetupFactor": "TMPDIR only; CI literal command/runtime/tests/SQL/clock/fixtures unchanged",
+      "longSocketBytes": 111,
+      "shortSocketBytes": 37
+    },
+    "originalRedRemains": true
+  },
+  "green": {
+    "ordinaryCi": {
+      "tests": 733,
+      "pass": 731,
+      "fail": 0,
+      "skipped": 2
+    },
+    "ordinaryCiOriginalCommand": "npm run test:research-agents",
+    "ordinarySelectedFileCount": 71,
+    "ordinarySkipReasons": [
+      "real observed priority accounts1978 and admits an old public company research lead without formal identity: explicit isolated profile not enabled",
+      "real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart: explicit isolated profile not enabled"
+    ],
+    "cursorPg": "Executed with available realPG; not counted as a skip",
+    "extraReviewerTransport": {
+      "tests": 35,
+      "pass": 35,
+      "fail": 0,
+      "skipped": 0
+    },
+    "extraComposition": "transport10 + reviewer unit10 + realPG parent and14 child cases; 35 total does not mean35 PG cases",
+    "typesExitCode": 0,
+    "lintExitCode": 0,
+    "lintErrors": 0,
+    "existingLintWarnings": 33,
+    "normalBuildExitCode": 0
+  },
+  "stages": {
+    "lint": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T16:16:26.104Z",
+      "completedAt": "2026-10-09T16:16:52.988Z",
+      "elapsedSeconds": 26.88413409300847,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 2035073024,
+      "observedTaskDiskPeakBytes": 1375346688,
+      "availableBeforeBytes": 11026624512,
+      "availableAfterBytes": 11026612224,
+      "guardTermination": null
+    },
+    "types": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "startedAt": "2026-10-09T16:16:15.278Z",
+      "completedAt": "2026-10-09T16:16:26.071Z",
+      "elapsedSeconds": 10.792995310999686,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 991813632,
+      "observedTaskDiskPeakBytes": 1357905920,
+      "availableBeforeBytes": 11026632704,
+      "availableAfterBytes": 11026628608,
+      "guardTermination": null
+    },
+    "ci-research": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "ci-research",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-09T16:11:04.903Z",
+      "completedAt": "2026-10-09T16:11:40.009Z",
+      "elapsedSeconds": 35.105953583988594,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 1129230336,
+      "observedTaskDiskPeakBytes": 1388986368,
+      "availableBeforeBytes": 11072589824,
+      "availableAfterBytes": 11067375616,
+      "guardTermination": null
+    },
+    "normal-build": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T16:16:53.016Z",
+      "completedAt": "2026-10-09T16:17:16.207Z",
+      "elapsedSeconds": 23.190366916998755,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1259614208,
+      "observedTaskDiskPeakBytes": 1375350784,
+      "availableBeforeBytes": 11026608128,
+      "availableAfterBytes": 11016589312,
+      "guardTermination": null
+    },
+    "reviewer-transport": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "reviewer-transport",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-reviewer-result-psql-transport.test.mjs",
+        "scripts/research-reviewer-result.test.mjs",
+        "scripts/research-reviewer-result-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T16:15:14.874Z",
+      "completedAt": "2026-10-09T16:15:37.876Z",
+      "elapsedSeconds": 23.001839175005443,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 215908352,
+      "observedTaskDiskPeakBytes": 1357897728,
+      "availableBeforeBytes": 11026665472,
+      "availableAfterBytes": 11026636800,
+      "guardTermination": null
+    },
+    "ci-research-short-tmp": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "ci-research-short-tmp",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-09T16:13:54.316Z",
+      "completedAt": "2026-10-09T16:14:28.487Z",
+      "elapsedSeconds": 34.1702471759927,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 950325248,
+      "observedTaskDiskPeakBytes": 1435389952,
+      "availableBeforeBytes": 11026894848,
+      "availableAfterBytes": 11026669568,
+      "guardTermination": null
+    }
+  },
+  "build": {
+    "sourceHead": "27a7a9bc23fa42e25e02ef285ea22f175d13adc1",
+    "sourceTree": "18d860bee37eff27b2d90e33a580aea8130f71cb",
+    "webTree": "2759d97914a5d3af4227dd51c472d93d2c0135dd",
+    "id": "-35tqbgy5Y_9xUgSIrDZ7",
+    "serverFiles": 2076,
+    "manifestFile": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/compiled-server-file-manifest.json",
+    "manifestBytes": 397641,
+    "manifestSha256": "24f9b1a8f28b6f911f96ed7db44903357de7606cc6bfb1144dfa3efb5a56e58a",
+    "verifiedAfterAllChecks": true,
+    "normalBuildNotOldArtifactReused": true
+  },
+  "resource": {
+    "peakSampledAggregateRssBytes": 2035073024,
+    "peakObservedWorkArtifactShortTmpDiskBytes": 1435389952,
+    "availableInitialBytes": 11072593920,
+    "availableFinalBytes": 11015151616,
+    "diskReserveBytes": 8589934592,
+    "rssTargetBytes": 8589934592,
+    "singleHeavyQueue": true,
+    "sampling": "100ms process group and live recursive descendants; may miss short/reparented processes; not an exhaustive cgroup peak",
+    "guardTermination": null
+  },
+  "cleanup": {
+    "observedAt": "2026-10-09T16:18:33.707596+00:00",
+    "ownedActiveProcesses": [],
+    "manualDeletions": [],
+    "shortTmp": "/tmp/si-ci27a-nujnllgk",
+    "longSocketProbeStopped": true,
+    "originalTestCleanup": "Original suites retain their own existing stop/removal behavior; no cleanup assertions or fixtures altered.",
+    "preserved": "All previous evidence/REDs; this task raw logs, long-socket expected-red PG startup log, stopped probe scratch, model inputs and existing dependencies retained.",
+    "availableBytes": 11016159232
+  },
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/admission.json",
+      "bytes": 3693,
+      "sha256": "6031725156e8f3ec420888b1c8666b4904ab6989e0ae7f051760c3b8e03f6490"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/ci-research-short-tmp.json",
+      "bytes": 556,
+      "sha256": "54daaa9df856320b7139fd8ba49a32d4348823f6c24da3306254da1bc21aac2c"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/ci-research-short-tmp.log",
+      "bytes": 220846,
+      "sha256": "bf90e91d299e3820475b9de31063297927bf9704d1da395b92618d6b5d55bace"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/ci-research-short-tmp.time",
+      "bytes": 761,
+      "sha256": "e364a0fd83a9e90e6dc0221226175334f30407252e962e68664e55f60caaa9bd"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/ci-research.json",
+      "bytes": 549,
+      "sha256": "9d01730377fb6c7cd3356960cdee7ae369da5e32d84cb2bf458cb7325c38aaba"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/ci-research.log",
+      "bytes": 227836,
+      "sha256": "e063b1371232798d30fa6e24cb4ef0d14a527e7d5488e33c618e9522dfde27cf"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/ci-research.time",
+      "bytes": 802,
+      "sha256": "74cbdb3417b4ad6c988253ac1a7afa6e50d3c8ac4be4bdaae80987ef936a0790"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/cleanup.json",
+      "bytes": 532,
+      "sha256": "d6823c08a29302e83192faeb187f587e0a05956d725024af17426b08c5a216bc"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/compiled-server-file-manifest.json",
+      "bytes": 397641,
+      "sha256": "24f9b1a8f28b6f911f96ed7db44903357de7606cc6bfb1144dfa3efb5a56e58a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/final-check-sequence.json",
+      "bytes": 156,
+      "sha256": "256d9c1bfe0626d494e53bb5496c7bc5dc30b8b7be35d8fbbd666366315f7954"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/lint.json",
+      "bytes": 525,
+      "sha256": "fdf916871567258ef276032f433345c8b970f4db2c6f5a64c18a676fcf2215fc"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/lint.log",
+      "bytes": 4753,
+      "sha256": "ad8c63f78b6e2415f7dedda610898a7df0a19c332b97e3a55d24f890724dac94"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/lint.time",
+      "bytes": 741,
+      "sha256": "8d3c996b4abb9f255b8fec5fe004b2c17a9757f91ce5ace26e465b72f2b3f39e"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/long-socket-probe.log",
+      "bytes": 2630,
+      "sha256": "899bf9273ec1615b261de9ddfc598152fc88344d2fc9046cc25049dd1d71cb7f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/normal-build.json",
+      "bytes": 535,
+      "sha256": "e944cc9140172d2b4aec23a9e59e680529ef51e8aef8f3c48256e2aaf80c7fb3"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/normal-build.log",
+      "bytes": 6499,
+      "sha256": "1224ae03d86bc0ba611cda6442ef6c8af132092fcb1f20f96593ce20ad6657c2"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/normal-build.time",
+      "bytes": 745,
+      "sha256": "01763c9f4a0ceaeff3afddaf11b2ecaf9c8367f0dc3e06f5d194ef1a7f8b675f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/ordinary-ci-test-membership.json",
+      "bytes": 16139,
+      "sha256": "53d0fd380b70d2fb7fb0cc4e78fdd2ac9a6c5866f1fcb1281682ab7b5ab98f33"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/reviewer-transport.json",
+      "bytes": 791,
+      "sha256": "406784446b2c4669832fa27bbc03c9e0db763999e6f5f6519a0cda65b17fc284"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/reviewer-transport.log",
+      "bytes": 24387,
+      "sha256": "1e13e366dd7d680d39a441aed540b4f7b76ffeb6c83b8940576b95b6fe5691ae"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/reviewer-transport.time",
+      "bytes": 955,
+      "sha256": "5509db9fa9d0ae1a87fcc65b90f7fe7e5516b785e47cba870d997c7cb0bd799c"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/run-check-short-tmp.py",
+      "bytes": 5042,
+      "sha256": "c66afd2103921817d0d1c240fd99b720053298e6fccde7c28f1fc91b906c80b5"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/run-check.py",
+      "bytes": 4969,
+      "sha256": "23adf43cfafc3d311d06266886b9eb6b9e270476b8c54dbaf298bf4fe489af7f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/short-tmp-admission.json",
+      "bytes": 357,
+      "sha256": "697ab5b7bdb28f78e7d1ee588e7d03152224c51773976f131ef777432fd7e83b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/source-dependency-proof.json",
+      "bytes": 497,
+      "sha256": "befbbb8e2720246cfad35bec79aac6feacb663b1db99861745915a74c3a972d3"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/types.json",
+      "bytes": 588,
+      "sha256": "557a3eedf35498f7371912edb093972c2ee1ed664218d1a497b1dd9e5c867db6"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-19-integration-linux-acceptance-vm-raw/types.time",
+      "bytes": 787,
+      "sha256": "bf7c8688fc7d0d74a6868c8daa341c889f13cb8130ac66f014bde181dd72cc6d"
+    }
+  ],
+  "rawTotalBytes": 924312,
+  "limitations": {
+    "ordinaryCIIsProtectedApproval": false,
+    "observedNativeProfilesReexecuted": false,
+    "businessCompiledHttpReexecuted": false,
+    "actualAuthorReviewerModelDispatch": false,
+    "researchStrategyPublicationApproval": false,
+    "productionWrites": false,
+    "deploymentOrMainMerge": false,
+    "rootIndependentReceiptReview": "pending",
+    "rootMacRed": "User-provided Mac702pass21fail2skip retained by root; not reclassified as Linux product failure. This receipt records its own actual Linux counts."
+  }
+}
