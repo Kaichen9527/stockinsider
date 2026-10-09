@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "independent-review-test-observation-v1",
+  "recordedBy": "root relay of author_input_review_oct08 report",
+  "runtimeSubject": "59aea2a1837c3e76f6af4e9a3b062d2f26de41fe",
+  "testFile": "scripts/research-financial-cleanup.test.mjs",
+  "environment": "Mac Node22; existing TypeScript resolved through an in-memory import hook",
+  "rawLogsPersisted": false,
+  "rawLogSha256": null,
+  "firstRun": {
+    "execSessionId": 26341,
+    "resultChunkId": "451427",
+    "exitCode": 1,
+    "pass": 7,
+    "fail": 1,
+    "failedCase": "readStall bounded failure tracks delayed descriptor then permits confirmed recovery",
+    "location": "scripts/research-financial-cleanup.test.mjs:38:38",
+    "assertion": "closed count",
+    "actual": 0,
+    "expected": 1,
+    "caseDurationMs": 228.035958
+  },
+  "rerun": {
+    "execSessionId": 33791,
+    "finalChunkId": "c13aaf",
+    "exitCode": 0,
+    "pass": 8,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 1296.488208,
+    "codeOrTestChangesBeforeRerun": false
+  },
+  "independentExtraProbes": {
+    "count": 10,
+    "scope": "undefined/null/false/0/empty string primary values across cleanup success and failure",
+    "passed": 10
+  },
+  "interpretation": "First-run failure retained; rerun passed. Timing sensitivity observed, exact scheduling cause not established. This JSON is a reviewer observation relay, not original TAP.",
+  "scope": "unsigned independent lightweight observation; no PG/build/protected acceptance",
+  "integration": {
+    "subject": "75d91024ce365606989bfe42b2d7e6227b65044d",
+    "tree": "26e5622bd43938ee86b281b52322c68c48f3d422",
+    "mechanicalReview": "PASS; all13 incoming blobs preserved",
+    "readerBlob": "356aba3e06fd1e3961143c14b0886e813987a510",
+    "cleanupTestBlob": "578b205610157192a1d77cd3caa448089272fb0e"
+  }
+}

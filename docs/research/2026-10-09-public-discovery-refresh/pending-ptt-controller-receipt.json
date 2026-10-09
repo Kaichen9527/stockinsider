@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "source-controller-local-execution-receipt-v1",
+  "recordedAt": "2026-10-09T07:13:53.979565+00:00",
+  "runtimeSubject": "75d91024ce365606989bfe42b2d7e6227b65044d",
+  "executionHost": "Mac; explicit local Node22 command",
+  "input": "pending-ptt-controller-input.json",
+  "inputBytes": 4488,
+  "inputSha256": "c332245c9288114b78c3f539fb9036494078b49d369cb685f8d565dd9d273063",
+  "output": "pending-ptt-controller-result.json",
+  "outputBytes": 11248,
+  "outputSha256": "db7a8462f3d417bac046aecf2a0cbb4242e7c0d6ff2497912c050e0fd9699628",
+  "exitCode": 0,
+  "runHash": "434b54fe7ea86a93acd92034a0b06dd00f4912d5b6eca4a7777e29cfc23ba129",
+  "outcomes": [
+    {
+      "id": "ptt-2731-oct09",
+      "readOutcome": "read_success",
+      "outcome": "pending_publication_precision",
+      "errorCode": "source_publication_instant_missing"
+    },
+    {
+      "id": "ptt-8069-oct09",
+      "readOutcome": "read_success",
+      "outcome": "pending_publication_precision",
+      "errorCode": "source_publication_instant_missing"
+    },
+    {
+      "id": "ptt-8932-oct09",
+      "readOutcome": "read_success",
+      "outcome": "pending_publication_precision",
+      "errorCode": "source_publication_instant_missing"
+    }
+  ],
+  "inboxItems": 0,
+  "networkReadsInExecution": 0,
+  "rawHttpBytesReadByThisExecution": false,
+  "databaseSubmitted": false,
+  "candidateQueueSubmitted": false,
+  "platformEnabled": false,
+  "historicalPITEligible": false,
+  "limits": [
+    "Publisher header times lack verified offset. Retained pending summaries and actual observation clocks are not silently promoted into publishedAt.",
+    "First preparation used the wrong relative worktree path and failed before creating input/output; corrected to absolute data path, with no runtime change.",
+    "E Ink date-only release remains separate: its exact URL is not yet in the current controller citation policy; no policy bypass.",
+    "This validates retention as pending controller receipts, not durable company research queue admission or complete source coverage."
+  ]
+}
