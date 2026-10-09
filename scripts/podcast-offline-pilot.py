@@ -199,13 +199,24 @@ def parse_proc_stat(pid, data):
 class LinuxTree:
     """Single-job subreaper; pidfds signal exact identities, never reused PID/PGID."""
     def __init__(self):
-        require(sys.platform == 'linux' and hasattr(os, 'pidfd_open') and hasattr(signal, 'pidfd_send_signal'),
+        require(sys.platform == 'linux' and hasattr(os, 'pidfd_open') and hasattr(signal, 'pidfd_send_signal')
+                and all(hasattr(os,name) for name in ('waitid','P_ALL','WEXITED','WNOWAIT')),
                 'linux_pidfd_supervision_unavailable')
         self.pid = os.getpid()
         self.owned = {}
+        require(self.kernel_child() is False, 'preexisting_child_refused')
         self.libc = ctypes.CDLL(None, use_errno=True)
         require(self.libc.prctl(36, 1, 0, 0, 0) == 0, 'subreaper_unavailable')  # PR_SET_CHILD_SUBREAPER
         require(not any(row['ppid'] == self.pid for row in self.snapshot().values()), 'preexisting_child_refused')
+
+    @staticmethod
+    def kernel_child():
+        # None from WNOHANG means there are live children, NOT ECHILD. WNOWAIT
+        # observes an exited child without stealing Popen's leader exit status.
+        try:
+            return os.waitid(os.P_ALL, 0, os.WEXITED | os.WNOHANG | os.WNOWAIT)
+        except ChildProcessError:
+            return False  # Only the kernel's ECHILD establishes no children.
 
     @staticmethod
     def snapshot():
@@ -289,6 +300,17 @@ class LinuxTree:
         untracked = (final_descendants - {self.pid}) - set(self.owned)
         if untracked:
             return self.scan(leader, _rows=final_rows, _round=_round+1)
+        if not self.owned:
+            child = self.kernel_child()
+            if child is not False:
+                if child is not None and child.si_pid:
+                    if child.si_pid == leader.pid:
+                        leader.poll()
+                    else:
+                        # Kernel says this is our exited adopted child. This is
+                        # reaping, never signaling a numeric/reusable PID.
+                        os.waitpid(child.si_pid, os.WNOHANG)
+                return self.scan(leader, _round=_round+1)
         return list(self.owned.values())
 
     def signal_all(self, kind):

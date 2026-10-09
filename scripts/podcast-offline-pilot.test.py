@@ -258,4 +258,22 @@ class PilotTests(unittest.TestCase):
         self.assertLess(calls,512)
         self.assertTrue(tree.owned)  # Known ownership is retained, never erased by uncertainty.
 
+    def test_empty_proc_snapshot_with_kernel_live_child_is_never_empty_proof(self):
+        tree=pilot.LinuxTree.__new__(pilot.LinuxTree);tree.pid=10;tree.owned={}
+        with mock.patch.object(tree,'snapshot',return_value={}), mock.patch.object(os,'waitid',return_value=None,create=True), mock.patch.object(os,'P_ALL',0,create=True), mock.patch.object(os,'WEXITED',4,create=True), mock.patch.object(os,'WNOWAIT',0x1000000,create=True):
+            with self.assertRaisesRegex(pilot.Refusal,'process_tree_unstable'):tree.scan(Process(0))
+        self.assertEqual(tree.owned,{})
+
+    def test_only_echild_allows_empty_tree_and_adopted_zombie_is_reaped(self):
+        import types
+        tree=pilot.LinuxTree.__new__(pilot.LinuxTree);tree.pid=10;tree.owned={}
+        with mock.patch.object(tree,'snapshot',return_value={}), mock.patch.object(os,'waitid',side_effect=[types.SimpleNamespace(si_pid=12),ChildProcessError()],create=True), mock.patch.object(os,'waitpid',return_value=(12,0)) as reap, mock.patch.object(os,'P_ALL',0,create=True), mock.patch.object(os,'WEXITED',4,create=True), mock.patch.object(os,'WNOWAIT',0x1000000,create=True):
+            self.assertEqual(tree.scan(Process(0)),[])
+            reap.assert_called_once_with(12,os.WNOHANG)
+
+    def test_kernel_child_probe_error_is_cleanup_uncertainty(self):
+        tree=pilot.LinuxTree.__new__(pilot.LinuxTree);tree.pid=10;tree.owned={}
+        with mock.patch.object(tree,'snapshot',return_value={}), mock.patch.object(os,'waitid',side_effect=PermissionError('synthetic kernel refusal'),create=True), mock.patch.object(os,'P_ALL',0,create=True), mock.patch.object(os,'WEXITED',4,create=True), mock.patch.object(os,'WNOWAIT',0x1000000,create=True):
+            with self.assertRaises(PermissionError):tree.scan(Process(0))
+
 if __name__ == '__main__': unittest.main(verbosity=2)
