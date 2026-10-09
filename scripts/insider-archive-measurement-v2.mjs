@@ -21,35 +21,57 @@ export function measurementVerdict(lifecycle){
  const passed=lifecycle?.passed===true&&lifecycle.cleanupComplete===true&&REQUIRED_CHECKS.every(k=>lifecycle.checks?.[k]==='passed');
  return {testOutcome:passed?'passed':'failed',fullContractAcceptance:false,productionReady:false,evictionAuthorized:false,cleanupComplete:lifecycle?.cleanupComplete===true,checks:lifecycle?.checks??{}};
 }
+const statFields=['dev','ino','mode','uid','gid','nlink','size','blocks','mtimeNs','ctimeNs'];
+const stableStat=(before,after)=>statFields.every(key=>before[key]===after[key]);
 export async function allocationInventory(directory,{maxEntries=16384,maxBytes=512*1024**2,hashFiles=true,signal}={}){
  assert.ok(Number.isSafeInteger(maxEntries)&&maxEntries>0&&maxEntries<=16384,'entry_bound');assert.ok(Number.isSafeInteger(maxBytes)&&maxBytes>=0&&maxBytes<=4*1024**3,'byte_bound');
- const actual=await fs.realpath(directory);assert.equal(actual,path.resolve(directory),'unsafe_root');const entries=[],inodes=new Set();let apparent=0,unique=0,dirs=0,count=0;
+ const actual=await fs.realpath(directory);assert.equal(actual,path.resolve(directory),'unsafe_root');const entries=[],inodes=new Set(),observations=[];let apparent=0,unique=0,dirs=0,count=0;
  const check=()=>{if(signal?.aborted)throw Error('inventory_aborted');};
+ const boundedNumber=value=>{const n=Number(value);assert.ok(Number.isSafeInteger(n)&&n>=0,'allocation_overflow');return n;};
+ async function names(filename){const result=[];const dir=await fs.opendir(filename);for await(const entry of dir){check();if(result.length>=maxEntries)throw Error('inventory_entry_bound');result.push(entry.name);}return result.sort();}
  async function visit(filename){
-  check();if(++count>maxEntries)throw Error('inventory_entry_bound');const before=await fs.lstat(filename);
-  if(before.isSymbolicLink()||(!before.isFile()&&!before.isDirectory())||before.uid!==process.getuid()||!Number.isSafeInteger(before.blocks)||before.blocks<0)throw Error('inventory_unsafe');
-  const inode=`${before.dev}:${before.ino}`,bytes=before.blocks*512;assert.ok(Number.isSafeInteger(bytes),'allocation_overflow');
-  const row={path:path.relative(actual,filename)||'.',dev:before.dev,ino:before.ino,nlink:before.nlink,size:before.size,blocks:before.blocks,allocatedBytes:bytes,kind:before.isFile()?'file':'directory'};
+  check();if(++count>maxEntries)throw Error('inventory_entry_bound');const before=await fs.lstat(filename,{bigint:true});
+  if(before.isSymbolicLink()||(!before.isFile()&&!before.isDirectory())||before.uid!==BigInt(process.getuid())||before.blocks<0n)throw Error('inventory_unsafe');
+  const inode=`${before.dev}:${before.ino}`,bytes=boundedNumber(before.blocks*512n),size=boundedNumber(before.size);
+  const row={path:path.relative(actual,filename)||'.',dev:boundedNumber(before.dev),ino:boundedNumber(before.ino),nlink:boundedNumber(before.nlink),size,blocks:boundedNumber(before.blocks),allocatedBytes:bytes,kind:before.isFile()?'file':'directory'};
+  const observation={filename,before,names:null};observations.push(observation);
   if(before.isDirectory()){
    dirs+=bytes;entries.push(row);if(dirs+unique>maxBytes)throw Error('inventory_byte_bound');
-   // opendir bounds enumeration without materializing an unbounded readdir array.
-   const stream=await fs.opendir(filename);for await(const child of stream)await visit(path.join(filename,child.name));
+   observation.names=await names(filename);for(const child of observation.names)await visit(path.join(filename,child));
   }else{
-   apparent+=before.size;if(apparent>maxBytes||dirs+unique+(!inodes.has(inode)?bytes:0)>maxBytes)throw Error('inventory_byte_bound');
+   apparent+=size;if(apparent>maxBytes||dirs+unique+(!inodes.has(inode)?bytes:0)>maxBytes)throw Error('inventory_byte_bound');
    if(!inodes.has(inode)){inodes.add(inode);unique+=bytes;}
    if(hashFiles){
     const handle=await fs.open(filename,constants.O_RDONLY|constants.O_NONBLOCK|constants.O_NOFOLLOW);
-    try{const initial=await handle.stat();assert.ok(initial.isFile()&&initial.dev===before.dev&&initial.ino===before.ino,'inventory_changed');
+    try{const initial=await handle.stat({bigint:true});assert.ok(initial.isFile()&&stableStat(before,initial),'inventory_changed');
      const hash=createHash('sha256'),chunk=Buffer.alloc(65536);let n=0;
-     while(true){check();const r=await handle.read(chunk,0,Math.min(chunk.length,before.size+1-n),n);if(!r.bytesRead)break;n+=r.bytesRead;if(n>before.size)throw Error('inventory_growth');hash.update(chunk.subarray(0,r.bytesRead));}
-     const after=await handle.stat();assert.ok(n===before.size&&after.size===before.size&&after.ctimeMs===before.ctimeMs&&after.mtimeMs===before.mtimeMs,'inventory_changed');row.sha256=hash.digest('hex');
+     while(true){check();const r=await handle.read(chunk,0,Math.min(chunk.length,size+1-n),n);if(!r.bytesRead)break;n+=r.bytesRead;if(n>size)throw Error('inventory_growth');hash.update(chunk.subarray(0,r.bytesRead));}
+     const after=await handle.stat({bigint:true});assert.ok(n===size&&stableStat(before,after),'inventory_changed');row.sha256=hash.digest('hex');
     }finally{await handle.close();}
    }
    entries.push(row);
   }
-  const visible=await fs.lstat(filename);assert.ok(visible.dev===before.dev&&visible.ino===before.ino,'inventory_changed');check();
+  assert.ok(stableStat(before,await fs.lstat(filename,{bigint:true})),'inventory_changed');check();
  }
- await visit(actual);return {allocatedBytes:unique+dirs,uniqueFileAllocatedBytes:unique,directoryAllocatedBytes:dirs,apparentFileBytes:apparent,uniqueFiles:inodes.size,fileEntries:entries.filter(x=>x.kind==='file').length,entries};
+ await visit(actual);
+ // Recheck every prior observation: a later traversal may mutate an earlier file.
+ // This is a fail-closed quiescent fixture inventory, not an atomic live-FS snapshot.
+ for(const observation of observations){check();const {filename,before}=observation;
+  assert.ok(stableStat(before,await fs.lstat(filename,{bigint:true})),'inventory_changed');
+  if(observation.names!==null)assert.deepEqual(await names(filename),observation.names,'inventory_changed');
+  assert.ok(stableStat(before,await fs.lstat(filename,{bigint:true})),'inventory_changed');
+ }
+ return {allocatedBytes:unique+dirs,uniqueFileAllocatedBytes:unique,directoryAllocatedBytes:dirs,apparentFileBytes:apparent,uniqueFiles:inodes.size,fileEntries:entries.filter(x=>x.kind==='file').length,entries};
+}
+export async function measureOpenUnlinkedLiability(privateRoot,raw,life){
+ life.remaining();const staged=path.join(privateRoot,'.synthetic-retained-stage');await fs.writeFile(staged,raw,{mode:0o600,flag:'wx'});await fs.link(staged,staged+'.link');
+ const fd=await fs.open(staged,constants.O_RDONLY|constants.O_NONBLOCK|constants.O_NOFOLLOW);let closing;
+ const close=()=>closing??=(async()=>{await fd.close();assert.equal(fd.fd,-1,'orphan_descriptor_close_unconfirmed');})();
+ try{
+  // Register immediately; cancellation and the normal/error path share one close.
+  life.addCleanup(close);life.remaining();await fs.unlink(staged);life.remaining();await fs.unlink(staged+'.link');life.remaining();
+  const orphan=await fd.stat();assert.equal(orphan.nlink,0);const bytes=orphan.blocks*512;assert.ok(Number.isSafeInteger(bytes)&&bytes>0);return bytes;
+ }finally{await close();}
 }
 export async function buildArchiveFixtureProfile(){
  const definitions=[],pieces=['CREATE ROLE anon NOLOGIN;CREATE ROLE authenticated NOLOGIN;CREATE ROLE service_role NOLOGIN;CREATE SCHEMA extensions;CREATE EXTENSION pgcrypto WITH SCHEMA extensions;'];
@@ -194,7 +216,7 @@ export async function runArchiveMeasurement({pgBin,artifacts,signal}={}){
   await life.check('physical_files',async()=>{
    const {encodeInsiderArchiveV2,restoreInsiderArchiveV2}=await import(pathToFileURL(path.join(root,'web/src/lib/insider-completed-archive-codec-v2.ts')));const {publishInsiderArchiveV2,readInsiderArchiveV2}=await import(pathToFileURL(path.join(root,'web/src/lib/insider-completed-archive-io-v2.ts')));
    let firstBinding;for(const bytes of [raw,Buffer.alloc(12*1024**2,32),randomBytes(12*1024**2)]){const encoded=await encodeInsiderArchiveV2(bytes);firstBinding??=encoded.binding;const result=await publishInsiderArchiveV2(privateRoot,encoded.bytes,encoded.binding,{signal:life.signal});assert.equal(result.evictionAuthorized,false);assert.deepEqual(await readInsiderArchiveV2(privateRoot,encoded.binding),bytes);assert.deepEqual(await restoreInsiderArchiveV2(encoded.bytes,encoded.binding),bytes);report.metrics.push({phase:'verified-object',rawBytes:bytes.length,encodedBytes:encoded.bytes.length,allocation:await allocationInventory(privateRoot,{signal:life.signal})});}
-   const staged=path.join(privateRoot,'.synthetic-retained-stage');await fs.writeFile(staged,raw,{mode:0o600});await fs.link(staged,staged+'.link');const fd=await fs.open(staged,'r');await fs.unlink(staged);await fs.unlink(staged+'.link');const orphan=await fd.stat();report.openUnlinkedLiabilityBytes=orphan.blocks*512;assert.ok(report.openUnlinkedLiabilityBytes>0);await fd.close();
+   report.openUnlinkedLiabilityBytes=await measureOpenUnlinkedLiability(privateRoot,raw,life);
    // A separate owned process performs real reopen/hash, rather than reusing buffers.
    const restartCode="import{createHash}from'node:crypto';const{readInsiderArchiveV2}=await import(process.argv[1]);const raw=await readInsiderArchiveV2(process.argv[2],JSON.parse(process.argv[3]));console.log(createHash('sha256').update(raw).digest('hex'))";
    const result=await runOwned(process.execPath,['--experimental-strip-types','--input-type=module','-e',restartCode,pathToFileURL(path.join(root,'web/src/lib/insider-completed-archive-io-v2.ts')).href,privateRoot,JSON.stringify(firstBinding)],{life,env});assert.equal(result.trim(),rawHash);

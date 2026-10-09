@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
-import {allocationInventory,buildArchiveFixtureProfile,measurementVerdict,journalFingerprint,REQUIRED_CHECKS,runOwned} from './insider-archive-measurement-v2.mjs';
+import {allocationInventory,buildArchiveFixtureProfile,measurementVerdict,journalFingerprint,REQUIRED_CHECKS,runOwned,measureOpenUnlinkedLiability} from './insider-archive-measurement-v2.mjs';
 import {insiderAcceptanceLifecycle} from './research-insider-acceptance-lifecycle.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 async function fixture(fn){const root=await fs.mkdtemp(path.join(await fs.realpath(os.tmpdir()),'afm-light-'));try{await fn(root);}finally{await fs.rm(root,{recursive:true,force:true});}}
@@ -64,4 +64,40 @@ test('real isolated process restart reopens archive bytes and verifies expected 
   assert.equal(digest.trim(),hash(Buffer.from('synthetic restart bytes')));
  });
  const outcome=await life.finish();assert.equal(outcome.passed,true);assert.equal(outcome.cleanupComplete,true);
+}));
+
+test('unhashed same-inode growth beyond allocation bound refuses',async t=>fixture(async root=>{
+ const file=path.join(root,'a');await fs.writeFile(file,'x');const original=fs.lstat;let calls=0;
+ const mock=t.mock.method(fs,'lstat',async function(filename,...args){if(filename===file&&++calls===2)await fs.appendFile(file,Buffer.alloc(1024*1024,71));return original.call(this,filename,...args);});
+ try{await assert.rejects(allocationInventory(root,{hashFiles:false,maxBytes:32768}),/changed|bound/);}finally{mock.mock.restore();}
+}));
+test('directory insertion after enumeration refuses instead of reporting empty inventory',async t=>fixture(async root=>{
+ const original=fs.opendir;let changed=false;
+ const mock=t.mock.method(fs,'opendir',async function(filename,...args){const dir=await original.call(this,filename,...args);return {[Symbol.asyncIterator]:async function*(){for await(const entry of dir)yield entry;if(filename===root&&!changed){changed=true;await fs.writeFile(path.join(root,'late'),'late');}}};});
+ try{await assert.rejects(allocationInventory(root,{hashFiles:false}),/changed/);}finally{mock.mock.restore();}
+}));
+test('second unlink failure closes owned unlinked descriptor before cleanup success',async t=>fixture(async root=>{
+ const life=insiderAcceptanceLifecycle({timeoutMs:1500,requiredChecks:['orphan']});const originalOpen=fs.open,originalUnlink=fs.unlink;let handle;
+ const open=t.mock.method(fs,'open',async function(...args){handle=await originalOpen.apply(this,args);return handle;});
+ const unlink=t.mock.method(fs,'unlink',async function(filename){await originalUnlink.call(this,filename);if(filename.endsWith('.link'))throw Error('controlled_second_unlink_failure');});
+ try{await assert.rejects(life.check('orphan',()=>measureOpenUnlinkedLiability(root,Buffer.alloc(8192,1),life)),/controlled_second/);const receipt=await life.finish();assert.equal(receipt.passed,false);assert.equal(receipt.cleanupComplete,true);await assert.rejects(handle.stat(),{code:'EBADF'});}
+ finally{open.mock.restore();unlink.mock.restore();await handle?.close();}
+}));
+test('final sweep refuses growth of an earlier file during later traversal',async t=>fixture(async root=>{
+ const earlier=path.join(root,'a'),later=path.join(root,'b');await fs.writeFile(earlier,'a');await fs.writeFile(later,'b');const original=fs.lstat;let changed=false;
+ const mock=t.mock.method(fs,'lstat',async function(filename,...args){if(filename===later&&!changed){changed=true;await fs.appendFile(earlier,'late');}return original.call(this,filename,...args);});
+ try{await assert.rejects(allocationInventory(root,{hashFiles:false}),/changed/);}finally{mock.mock.restore();}
+}));
+test('cancellation after unlink still closes descriptor and cannot pass',async t=>fixture(async root=>{
+ const controller=new AbortController(),life=insiderAcceptanceLifecycle({signal:controller.signal,timeoutMs:1500,requiredChecks:['orphan']});const originalOpen=fs.open,originalUnlink=fs.unlink;let handle;
+ const open=t.mock.method(fs,'open',async function(...args){handle=await originalOpen.apply(this,args);return handle;});
+ const unlink=t.mock.method(fs,'unlink',async function(filename){await originalUnlink.call(this,filename);controller.abort(Error('controlled_orphan_cancel'));});
+ try{await assert.rejects(life.check('orphan',()=>measureOpenUnlinkedLiability(root,Buffer.alloc(8192,1),life)),/cancel/);const receipt=await life.finish();assert.equal(receipt.passed,false);assert.equal(receipt.cleanupComplete,true);await assert.rejects(handle.stat(),{code:'EBADF'});}
+ finally{open.mock.restore();unlink.mock.restore();await handle?.close();}
+}));
+test('unconfirmed descriptor close produces cleanupComplete false',async t=>fixture(async root=>{
+ const life=insiderAcceptanceLifecycle({timeoutMs:1500,requiredChecks:['orphan']});const originalOpen=fs.open;let handle,close;
+ const open=t.mock.method(fs,'open',async function(...args){handle=await originalOpen.apply(this,args);close=handle.close.bind(handle);handle.close=async()=>{throw Error('controlled_close_failure');};return handle;});
+ try{await assert.rejects(life.check('orphan',()=>measureOpenUnlinkedLiability(root,Buffer.alloc(8192,1),life)),/close_failure/);const receipt=await life.finish();assert.equal(receipt.passed,false);assert.equal(receipt.cleanupComplete,false);assert.equal((await handle.stat()).nlink,0);}
+ finally{open.mock.restore();await close?.();}
 }));
