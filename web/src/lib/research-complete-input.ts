@@ -24,15 +24,17 @@ export async function readCompleteBody(request:Request,deadline:FinancialDeadlin
  finally{void reader.cancel().catch(()=>{});reader.releaseLock();}
 }
 export async function completeMaterial(db:Pick<SupabaseClient,'rpc'>,request:CompleteRequest,preparation:Row,deadline:FinancialDeadline,root=path.resolve(process.cwd(),'..')) {
+ let materialStage='parent_binding';try {
  const old=preparation.request as Row;
  ensure(old&&old.owner===request.owner&&old.jobId===request.jobId&&old.attempt===request.attempt&&old.reservationId===request.reservationId&&old.scope===request.scope&&old.snapshotHash===request.snapshotHash&&preparation.preparation_id===request.preparationId&&preparation.input_hash===request.preparationHash);
  const symbol=(preparation.payload as Row).symbol;ensure(symbol==='2409'||symbol==='2383');const m=mapping.companies[symbol];
  ensure(request.expectedArtifactManifestHash===m.inventoryHash&&request.expectedCalculatorExecutionHash===mapping.sourceClosureHash);
- const s=await loadResearchFinancialSupplement(db,{request:old as never,preparationId:request.preparationId,preparationInputHash:request.preparationHash},root,deadline);
- ensure(s.status==='unsealed_calculation_only');const projection={...s.projection as Row},calculation={...s.calculation as Row};
+ materialStage='supplement';const s=await loadResearchFinancialSupplement(db,{request:old as never,preparationId:request.preparationId,preparationInputHash:request.preparationHash},root,deadline);
+ materialStage='supplement_shape';ensure(s.status==='unsealed_calculation_only');const projection={...s.projection as Row},calculation={...s.calculation as Row};
  delete projection.sourceManifestHash;for(const k of ['inputHash','resultHash','executionCodeHash'])delete calculation[k];
  const material={schemaVersion:'research-complete-financial-material-v2',symbol,artifactReadKnownAt:(projection.clocks as Row).currentLocalReadKnownAt,sourceClosureHash:mapping.sourceClosureHash,artifactInventoryHash:completeHash(financialInventory.companies[symbol].map(p=>({file:p.path,bytes:p.bytes,sha256:p.sha256}))),financialMaterial:{projection,calculation}};
- ensure(material.artifactInventoryHash===m.inventoryHash);validateCompleteSchema(material,(symbol==='2409'?schema2409:schema2383) as Row,String(material.artifactReadKnownAt));ensure(Buffer.byteLength(JSON.stringify(material))<=262144);deadline.check();return material;
+ materialStage='inventory_hash';ensure(material.artifactInventoryHash===m.inventoryHash);materialStage='fixed_schema';validateCompleteSchema(material,(symbol==='2409'?schema2409:schema2383) as Row,String(material.artifactReadKnownAt));ensure(Buffer.byteLength(JSON.stringify(material))<=262144);deadline.check();return material;
+ }catch(error){console.error('research_complete_material_failure_stage',materialStage);if(error instanceof Error){const trail=(error as Error & {schemaPath?:unknown}).schemaPath;if(typeof trail==='string'&&/^[/A-Za-z0-9_:-]{1,400}$/u.test(trail))console.error('research_complete_schema_failure_path',trail);}throw error;}
 }
 const capabilityKeys=['financialVerified','dispatchReady','modelDispatched','publishableResearch','researchQualified','strategyApproved','entryEligible','historicalPITEligible'];
 function object(value:unknown):Row {ensure(value&&typeof value==='object'&&!Array.isArray(value));return value as Row;}

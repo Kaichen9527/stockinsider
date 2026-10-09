@@ -21,18 +21,20 @@ export function completeCanonical(value: unknown, depth=0): string {
 }
 export const completeHash=(value:unknown)=>createHash('sha256').update(completeCanonical(value)).digest('hex');
 /** Static schemas only; no dynamic refs, resolution or request-selected validators. */
-export function validateCompleteSchema(value:unknown,schema:Row,clock:string,depth=0):void {
+export function validateCompleteSchema(value:unknown,schema:Row,clock:string,depth=0,trail=""):void {
+ try {
  completeEnsure(depth<=12);
  if(Object.hasOwn(schema,'const')){completeEnsure(completeCanonical(value)===completeCanonical(schema.const));return;}
  if(schema.type==='object'){
   completeEnsure(value&&typeof value==='object'&&!Array.isArray(value));const v=value as Row,p=schema.properties as Record<string,Row>;
   completeEnsure(Object.keys(v).sort().join(',')===Object.keys(p).sort().join(','));
-  for(const key of Object.keys(p))validateCompleteSchema(v[key],p[key],clock,depth+1);return;
+  for(const key of Object.keys(p))validateCompleteSchema(v[key],p[key],clock,depth+1,trail+"/"+key);return;
  }
- if(schema.type==='array'){const p=schema.prefixItems as Row[];completeEnsure(Array.isArray(value)&&value.length===p.length);value.forEach((v,i)=>validateCompleteSchema(v,p[i],clock,depth+1));return;}
+ if(schema.type==='array'){const p=schema.prefixItems as Row[];completeEnsure(Array.isArray(value)&&value.length===p.length);value.forEach((v,i)=>validateCompleteSchema(v,p[i],clock,depth+1,trail+"/"+i));return;}
  completeEnsure(schema.type==='string'&&typeof value==='string');scalar(value);
  if(schema.pattern)completeEnsure(new RegExp(String(schema.pattern),'u').test(value));
  if(schema.format==='date-time'){completeEnsure(value===clock&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$/u.test(value));financialInstant(value);}
+ }catch(error){if(error instanceof Error&&!Object.hasOwn(error,'schemaPath'))Object.defineProperty(error,'schemaPath',{value:trail});throw error;}
 }
 /** Reject duplicate decoded object keys before JSON.parse loses them. */
 export function parseCompleteJson(text:string):unknown {
