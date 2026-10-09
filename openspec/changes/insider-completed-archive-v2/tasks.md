@@ -3,8 +3,9 @@
 - [x] Read d274 capacity/immutability/reader behavior and existing private artifact/receipt/backup code.
 - [x] Record the finite six-cycle/maximum-payload two-cycle boundary and proposed storage separation.
 - [x] Draft spec, implementation plan and operation handoff. No runtime files changed.
-- [ ] Independent requirements review of spec ARC-01..ARC-12; record exact reviewed commit.
+- [ ] Independent requirements review of spec ARC-01..ARC-13; record exact reviewed commit.
 - [ ] Independent design review of hot transition, private receipt authority, lock/restart flow and shared budget formulas; record exact reviewed commit.
+- [x] Amend proposed exact backend/lease/attempt fencing after root-relayed independent e8 P2; add A→B takeover, disabled/NULL fence and old-verification replay cases. Successor re-review pending.
 - [ ] Resolve design decisions in plan before implementation; do not mark a placeholder quota or persistence claim approved.
 - [ ] Implement additive SQL only after both reviews; preserve original migration and all existing rows/ownership.
 - [ ] Implement bounded private-store archive and V2 archived reader/replay under existing guards/leases.
