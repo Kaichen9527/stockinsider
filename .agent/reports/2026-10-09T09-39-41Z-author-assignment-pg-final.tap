@@ -1,0 +1,128 @@
+TAP version 13
+# ERROR:  research_author_assignment_replay_conflict
+# CONTEXT:  PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 17 at RAISE
+# PL/pgSQL function assign_research_author_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  research_author_assignment_input_invalid
+# CONTEXT:  PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 20 at RAISE
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function assign_research_author_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  research_author_assignment_input_invalid
+# CONTEXT:  PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 20 at RAISE
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function assign_research_author_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  research_author_assignment_identity_invalid
+# CONTEXT:  PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 7 at RAISE
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function assign_research_author_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  complete_request_shape
+# CONTEXT:  PL/pgSQL function research_complete_parent_v2(jsonb) line 8 at RAISE
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function assign_research_author_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  complete_parent_binding
+# CONTEXT:  PL/pgSQL function research_complete_parent_v2(jsonb) line 14 at RAISE
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function assign_research_author_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  permission denied for table research_author_assignments_v2
+# ERROR:  permission denied for table research_author_assignments_v2
+# ERROR:  permission denied for table research_author_assignments_v2
+# ERROR:  permission denied for table research_author_assignments_v2
+# ERROR:  permission denied for table research_author_assignments_v2
+# ERROR:  permission denied for function assign_research_author_v2
+# ERROR:  permission denied for function research_author_assignment_context_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# Subtest: private author assignment persistence on actual PG; synthetic role/input fixtures, not model execution
+    # Subtest: read is null before assignment; creation derives original owner, company and both exact deadlines
+    ok 1 - read is null before assignment; creation derives original owner, company and both exact deadlines
+      ---
+      duration_ms: 41.9505
+      ...
+    # Subtest: exact replay and PG restart preserve immutable assignment and do not reserve or charge again
+    ok 2 - exact replay and PG restart preserve immutable assignment and do not reserve or charge again
+      ---
+      duration_ms: 308.799541
+      ...
+    # Subtest: rotation, changed input/revision, unknown caller identity and changed owner fail closed
+    ok 3 - rotation, changed input/revision, unknown caller identity and changed owner fail closed
+      ---
+      duration_ms: 169.978625
+      ...
+    # Subtest: BYPASSRLS service cannot directly write or read private rows; anon cannot invoke helper or RPC
+    ok 4 - BYPASSRLS service cannot directly write or read private rows; anon cannot invoke helper or RPC
+      ---
+      duration_ms: 80.430917
+      ...
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function assign_research_author_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function assign_research_author_v2(jsonb,uuid,text,text) line 6 at assignment
+    # Subtest: two actual PG sessions replay the same assignment without duplicate state
+    ok 5 - two actual PG sessions replay the same assignment without duplicate state
+      ---
+      duration_ms: 31.0465
+      ...
+    # Subtest: completion and expiration block even exact replay without changing saved assignment bytes
+    ok 6 - completion and expiration block even exact replay without changing saved assignment bytes
+      ---
+      duration_ms: 52.277334
+      ...
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+# PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function assign_research_author_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+# PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+    # Subtest: competing first admission in two real PG sessions yields exactly one new original assignment
+    ok 7 - competing first admission in two real PG sessions yields exactly one new original assignment
+      ---
+      duration_ms: 71.709125
+      ...
+    # Subtest: actual source withdrawal blocks original assignment read/replay while retaining immutable row
+    ok 8 - actual source withdrawal blocks original assignment read/replay while retaining immutable row
+      ---
+      duration_ms: 57.001333
+      ...
+    1..8
+ok 1 - private author assignment persistence on actual PG; synthetic role/input fixtures, not model execution
+  ---
+  duration_ms: 1675.035958
+  ...
+# Complete-input predecessor SQL SHA256 2c4a7a4f6ea986220fb71150a962f329a6a74d11a481e85eb561515ef48a7981; seeded assignment fixture is not financial or model acceptance.
+1..1
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1719.142584

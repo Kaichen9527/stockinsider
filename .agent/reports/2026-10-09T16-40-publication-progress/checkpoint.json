@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "engineering-checkpoint-v1",
+  "recordedAt": "2026-10-09T16:31:04.638644+00:00",
+  "exactIntegration": "e88236d9d3bd1957ab283d222e6532152cfb1f8f",
+  "integrationProductSource": "27a7a9bc23fa42e25e02ef285ea22f175d13adc1",
+  "integrationIndependentReview": "unsigned scoped receipt/TEST evidence PASS by existing author_input_review_oct08;28 raw/924312bytes independently verified;not protected approval",
+  "ordinaryLinuxSuite": {
+    "pass": 731,
+    "fail": 0,
+    "skip": 2,
+    "extraTestsPass": 35
+  },
+  "atomicFirstSource": "d428ff9cad3fc583f247b0b3987b135b82e69d2c",
+  "atomicIndependentReview": "in progress; reviewer found legacy-to-v2 mixed-lineage INSERT gap; root fixed successor uncommitted and actual PG retest running",
+  "atomicMakerInitial": {
+    "pass": 22,
+    "fail": 0,
+    "skip": 0
+  },
+  "legacyRelated": {
+    "pass": 82,
+    "fail": 0,
+    "skip": 0
+  },
+  "macTypes": "PASS",
+  "macLint": {
+    "errors": 0,
+    "existingWarnings": 33
+  },
+  "build": "successor pending",
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T16-40-publication-progress/stockinsider-atomic-pg-01.log",
+      "bytes": 1227,
+      "sha256": "8ba7a48f2c2a18a64d95229419933c41d30a9fb1bd68f4bcbf02936bb4eb1a2a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-40-publication-progress/stockinsider-atomic-pg-02.log",
+      "bytes": 10283,
+      "sha256": "827b65c69c390e114e7bc5a4e4a058533618995407a533d010ad030b6d2fb5f0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-40-publication-progress/stockinsider-atomic-pg-03.log",
+      "bytes": 19712,
+      "sha256": "20f7aa83f0bc99b9eeeb027c3794b3c98d74220707f27d2da60eaf3314e01f09"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-40-publication-progress/stockinsider-atomic-pg-04.log",
+      "bytes": 15653,
+      "sha256": "3c24cecbe7c01bb94ae9aea9cfce1a3e330df25d0a4c08dcca149d886c38e136"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-40-publication-progress/stockinsider-atomic-pg-05.log",
+      "bytes": 26450,
+      "sha256": "0240388be97b7ef044d0041837de1724a6902ced85d156e47c21e61f7e36c4a1"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-40-publication-progress/stockinsider-atomic-final.log",
+      "bytes": 25211,
+      "sha256": "3dbb1c2ded4a8456d4b764d208abfad954d9ba356baad5dcde9d88db7e51f124"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-40-publication-progress/stockinsider-atomic-unit-01.log",
+      "bytes": 1923,
+      "sha256": "5a3df35393fa1e04cdb186ae27487abf50af46eb3e5b1b33cc3d00968b805fa3"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-40-publication-progress/stockinsider-atomic-related.log",
+      "bytes": 43773,
+      "sha256": "d8c017e871c5827478cb33600cb124487d95439b3e3bc7eb5e6710f97a085a4f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-40-publication-progress/stockinsider-atomic-types-final.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-40-publication-progress/stockinsider-atomic-lint.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    }
+  ],
+  "limitations": [
+    "Synthetic controller/model reports are not actual model execution/semantic source review.",
+    "No main merge, production migration or deploy.",
+    "Original REDs retained: missing TS flag; test transport argv variable shadow; expiry rejection code mismatch.",
+    "The saved Goal is blocked and cannot be resumed through goal API; manual authorized engineering continues."
+  ]
+}

@@ -1,0 +1,153 @@
+TAP version 13
+# (node:96731) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:96731) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/src/lib/research-author-packet.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/package.json.
+# Subtest: actual original PG input/assignment and read-only author packet; synthetic source/role fixtures, real fixed AUO calculator
+    # Subtest: existing original assignment returns exact public summary and seal receipt; actual server recomputes without writes
+    ok 1 - existing original assignment returns exact public summary and seal receipt; actual server recomputes without writes
+      ---
+      duration_ms: 195.781291
+      ...
+    # Subtest: exact replay and actual restart return same sources/deadlines without any new charge or state
+    ok 2 - exact replay and actual restart return same sources/deadlines without any new charge or state
+      ---
+      duration_ms: 347.662375
+      ...
+# ERROR:  research_author_packet_assignment_missing
+# CONTEXT:  PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 7 at RAISE
+# ERROR:  research_author_assignment_replay_conflict
+# CONTEXT:  PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 17 at RAISE
+# PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  research_author_assignment_input_invalid
+# CONTEXT:  PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 20 at RAISE
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 6 at assignment
+    # Subtest: missing assignment, rotated principal and mismatched input reject without writes
+    ok 3 - missing assignment, rotated principal and mismatched input reject without writes
+      ---
+      duration_ms: 202.91075
+      ...
+# ERROR:  research_author_packet_source_rights_or_scope
+# CONTEXT:  PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 37 at RAISE
+    # Subtest: private summary rights cannot become a partial packet
+    ok 4 - private summary rights cannot become a partial packet
+      ---
+      duration_ms: 200.842167
+      ...
+# ERROR:  research_author_packet_source_rights_or_scope
+# CONTEXT:  PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 37 at RAISE
+    # Subtest: different company cannot become a partial packet
+    ok 5 - different company cannot become a partial packet
+      ---
+      duration_ms: 205.51275
+      ...
+# ERROR:  research_author_packet_source_rights_or_scope
+# CONTEXT:  PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 37 at RAISE
+    # Subtest: missing metadata scope cannot become a partial packet
+    ok 6 - missing metadata scope cannot become a partial packet
+      ---
+      duration_ms: 208.35175
+      ...
+# ERROR:  research_author_packet_source_clock
+# CONTEXT:  PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 51 at RAISE
+    # Subtest: first observation after collection cannot become a partial packet
+    ok 7 - first observation after collection cannot become a partial packet
+      ---
+      duration_ms: 222.039667
+      ...
+# ERROR:  research_author_packet_content_bound
+# CONTEXT:  PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 45 at RAISE
+    # Subtest: summary4097 bytes cannot become a partial packet
+    ok 8 - summary4097 bytes cannot become a partial packet
+      ---
+      duration_ms: 219.113209
+      ...
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+# PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 6 at assignment
+    # Subtest: exact4096-byte summary accepted; publication midnight is still unknown precision
+    ok 9 - exact4096-byte summary accepted; publication midnight is still unknown precision
+      ---
+      duration_ms: 228.495542
+      ...
+    # Subtest: real source change/retraction invalidates original packet while immutable financial input/assignment persists
+    ok 10 - real source change/retraction invalidates original packet while immutable financial input/assignment persists
+      ---
+      duration_ms: 89.386458
+      ...
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 6 at assignment
+    # Subtest: completed and expired original fences reject; fixture rollback does not renew saved clocks
+    ok 11 - completed and expired original fences reject; fixture rollback does not renew saved clocks
+      ---
+      duration_ms: 343.812458
+      ...
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+# PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# PL/pgSQL function research_author_assignment_context_v2(jsonb,uuid,text,text) line 9 at assignment
+# PL/pgSQL function read_research_author_assignment_v2(jsonb,uuid,text,text) line 4 at assignment
+# PL/pgSQL function read_research_author_packet_v2(jsonb,uuid,text,text) line 6 at assignment
+# ERROR:  permission denied for function read_research_author_packet_v2
+# ERROR:  permission denied for function read_research_author_packet_v2
+# ERROR:  permission denied for table research_author_assignments_v2
+# ERROR:  permission denied for function research_author_assignment_context_v2
+    # Subtest: source rights restored after revocation cannot resurrect the old sealed input (sequential ABA, not concurrent race proof)
+    ok 12 - source rights restored after revocation cannot resurrect the old sealed input (sequential ABA, not concurrent race proof)
+      ---
+      duration_ms: 227.670291
+      ...
+    # Subtest: anon/authenticated cannot read RPC; service cannot bypass original private assignment/context ACL
+    ok 13 - anon/authenticated cannot read RPC; service cannot bypass original private assignment/context ACL
+      ---
+      duration_ms: 85.023959
+      ...
+    1..13
+ok 1 - actual original PG input/assignment and read-only author packet; synthetic source/role fixtures, real fixed AUO calculator
+  ---
+  duration_ms: 3771.676917
+  ...
+1..1
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3951.389

@@ -1,0 +1,49 @@
+TAP version 13
+# NOTICE:  constraint "candidate_detail_snapshots_revision_hash_check" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  identifier "candidate_detail_snapshots_stock_id_session_date_model_version_key" will be truncated to "candidate_detail_snapshots_stock_id_session_date_model_version_"
+# NOTICE:  constraint "candidate_detail_snapshots_stock_id_session_date_model_version_" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_input_hash_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_claims_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_source_refs_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_paid_content_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_bundle_binding_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_bundles_append_only_v4" for relation "public.candidate_dossier_bundles" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_research_dossiers_append_only_v4" for relation "public.candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_receipts_append_only_v4" for relation "public.candidate_dossier_submission_receipts" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_detail_published_append_only_v4" for relation "public.candidate_detail_snapshots" does not exist, skipping
+# ERROR:  null value in column "revision_hash" of relation "candidate_detail_snapshots" violates not-null constraint
+# DETAIL:  Failing row contains (cfe799d2-2c9b-4d15-90de-e76d708c2000, 5e42edbd-c2b2-48ab-9861-01826b5e3c36, 2026-10-08, synthetic, null, null).
+# Preserved failing isolated lineage evidence: /tmp/si-lineage-qWrCt9
+# Subtest: existing publication tables: exclusive v1/v2 lineage, inert writes, real PG restart and truncate races
+not ok 1 - existing publication tables: exclusive v1/v2 lineage, inert writes, real PG restart and truncate races
+  ---
+  duration_ms: 2113.78075
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-publication-lineage-postgres.test.mjs:10:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-lineage-qWrCt9 -p 57371 -d postgres
+    ERROR:  null value in column "revision_hash" of relation "candidate_detail_snapshots" violates not-null constraint
+    DETAIL:  Failing row contains (cfe799d2-2c9b-4d15-90de-e76d708c2000, 5e42edbd-c2b2-48ab-9861-01826b5e3c36, 2026-10-08, synthetic, null, null).
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    genericNodeError (node:internal/errors:983:15)
+    wrappedFn (node:internal/errors:537:14)
+    checkExecSyncError (node:child_process:882:11)
+    execFileSync (node:child_process:918:15)
+    run (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-publication-lineage-postgres.test.mjs:13:30)
+    sql (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-publication-lineage-postgres.test.mjs:14:15)
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-publication-lineage-postgres.test.mjs:55:3)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2261.097625

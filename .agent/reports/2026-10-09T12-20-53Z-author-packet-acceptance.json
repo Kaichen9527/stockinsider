@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-09T12:20:53.014500+00:00",
+  "subject": "cbd1a9e93ae77930684f0ca45726790b6871721c",
+  "tree": "80326f52b01d206873ab3c15df6adfc182e1b749",
+  "base": "0fc4ee239c7bbebb2f221c6fa3f092c3f063cb02",
+  "pr": "https://github.com/Kaichen9527/stockinsider/pull/343",
+  "scope": "Read-only author input packet; no model dispatch/completion/publication/new table/strategy approval",
+  "design": {
+    "initial": "0d361af9b9e49493ffb3670a0bec0dfbc5163730",
+    "initialP2": [
+      "legacy timestamp cannot establish instant precision",
+      "collected_at cannot establish DB admission; exact deadline and byte boundaries needed"
+    ],
+    "approved": "b990ebce8a872b5f1eb9930b77138b3f97446f94",
+    "specSha256": "92f2d53a747c3fbb9dce26a8f6e4ce8009b411d28949eefaf739d718a30b6d7b",
+    "reviewKind": "unsigned scoped DESIGN PASS"
+  },
+  "maker": {
+    "node": "22.14.0",
+    "postgres": "17.10 Homebrew",
+    "related": {
+      "pass": 85,
+      "fail": 0,
+      "skip": 0
+    },
+    "actualPg": {
+      "pass": 14,
+      "fail": 0,
+      "skip": 0,
+      "tablesCountAndWholeRowHashOracle": 12,
+      "logicalChargeUnchanged": true,
+      "sourceRightsABA": "Sequential revoke/restore rejects old seal; not concurrent source race proof",
+      "expiry": "Fixture transaction rollback probes; natural lock-expiry evidence remains PR342, not claimed here",
+      "claims": "Synthetic original job/role/assignment/public sources; actual original SQL and fixed AUO calculator. No actual model or article execution."
+    },
+    "typecheck": "pass",
+    "lint": {
+      "errors": 0,
+      "existingWarnings": 33
+    },
+    "normalBuild": {
+      "status": "pass",
+      "subject": "cbd1a9e93ae77930684f0ca45726790b6871721c",
+      "buildId": "uDOGWyfmDrWUk-57w5MXM",
+      "reused": false,
+      "peakRss": "not measured"
+    },
+    "missingPostgres": "explicit assertion fail, zero skip"
+  },
+  "independent": {
+    "agent": "/root/author_input_review_oct08",
+    "subject": "cbd1a9e93ae77930684f0ca45726790b6871721c",
+    "kind": "unsigned scoped CODE PASS",
+    "p1": 0,
+    "p2": 0,
+    "reportedTests": 57,
+    "extraReportedProbes": 7,
+    "reranPg": false,
+    "reranBuild": false,
+    "protectedApproval": false
+  },
+  "cloudHttp": {
+    "status": "inProgress",
+    "thread": "01a106b8-a883-7185-9962-f7372109a093",
+    "host": "durable",
+    "turn": "01a12099-6737-76b3-a41b-bd6c3711d7f3",
+    "subject": "cbd1a9e93ae77930684f0ca45726790b6871721c",
+    "ownership": "separate new author-packet-http test/helper/receipt only; no root runtime edits",
+    "buildReuse": "new exact runtime build required, not old6f",
+    "actualTrustedRoleExecution": false
+  },
+  "rawEvidence": [
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-initial-unit.tap.txt",
+      "bytes": 5782,
+      "sha256": "d1ab78a66f805b71457779f7d7add495ef5a403d435a239181fe97157fcfbf12"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-initial-pg.tap.txt",
+      "bytes": 8586,
+      "sha256": "a850d1eb5bdc66fba6185c48bc011a61c133322962f7961c631e94bd78f6457e"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-initial-related.tap.txt",
+      "bytes": 16352,
+      "sha256": "7c7574630ec9b7c75f51eb023cd181d859c4b9ab83a71b624392c542b89815a0"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-final-related.tap.txt",
+      "bytes": 16584,
+      "sha256": "28b603f394fc555f4744fd3bda731e23a7af4d7b0bf964a25db58e932bbde250"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-final-pg.tap.txt",
+      "bytes": 9741,
+      "sha256": "b084df901bd2efc2aa0cced58c2a5317dde3fa6269470ef0a93903bee0195624"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-typecheck.log.txt",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-lint.log.txt",
+      "bytes": 4956,
+      "sha256": "b423a394afeccb8f22815189348c8034663710cff71fd3ad04e84e4efe3608b6"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-build.log.txt",
+      "bytes": 6500,
+      "sha256": "84e13af56d3ef1096a63bda731b3f192b61517d7d3e15a83ce9ef80acbf3adc9"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-missing-pg.tap.txt",
+      "bytes": 1831,
+      "sha256": "abdd5efc497a2368e13ce61fcafe291d5ad8382efc77c6460916825d2e145707"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-pg-server.log.txt",
+      "bytes": 23067,
+      "sha256": "d75697ccf5c4f1fd4211d5f70af0a17c3bb5b0c4e53b5b1bc4b949092bf86d72"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T12-20-53Z-author-packet-acceptance-pg-cleanup.json",
+      "bytes": 89,
+      "sha256": "4134a682312abcafcbfca4d0c7db873b3227c522e31a7cb851a14ac7991f5299"
+    }
+  ],
+  "remaining": [
+    "Cloud compiled HTTP exact acceptance",
+    "Genuine author/result and independently budgeted reviewer execution",
+    "Original v2 bundle/outbox/submission atomic publication and shared reader",
+    "Actual aligned61-session first-seen discovery-price adapter",
+    "Final main-to-R protected review evidence/merge/deployment and future five trading days",
+    "Real platform coverage and strategy effectiveness remain incomplete"
+  ],
+  "publication": {
+    "mainMerged": false,
+    "productionDeployed": false,
+    "researchPublished": false,
+    "strategyApproved": false,
+    "allCapabilities": false
+  },
+  "knownPreviousCI": {
+    "pr": 342,
+    "ordinaryDiagnostic": "success37921360805",
+    "protected": "37921360771 exact evidence ref missing, no rerun or bypass"
+  }
+}

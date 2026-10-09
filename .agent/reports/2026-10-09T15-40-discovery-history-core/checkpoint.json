@@ -1,0 +1,125 @@
+{
+  "subject": "eed77a07ea7f5a6473c71999b74c01f48f2764ab",
+  "tree": "a9c83d007c664e27f9f9fd19602a49eca7eeb91a",
+  "draftPR": 350,
+  "baselineTests": 29,
+  "correctedRelatedAndManifest": 86,
+  "zeroSkip": true,
+  "typecheck": "PASS",
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 33
+  },
+  "build": "arGq5GubeZW2uDWiBOKp_",
+  "independentReview": "unsigned scoped CODE PASS eed77a07; prior092f P2 legacy unavailable sentinel restored",
+  "fullOriginalPlanCases": 6,
+  "fullOriginalAuthorityCases": 5,
+  "namespaceDiagnosticFix": {
+    "subject": "91212edb07d66d8675e0f70002a97b709abf2aec",
+    "draftPR": 351,
+    "rootUnit": 2,
+    "independentUnit": 2,
+    "review": "unsigned scoped TEST CODE PASS",
+    "nativeNotRerun": true
+  },
+  "notCompleted": [
+    "current window adapter activation",
+    "genuine model execution",
+    "same-pipeline atomic publication",
+    "protected full-range review",
+    "merge",
+    "deployment"
+  ],
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-baseline.log",
+      "bytes": 7976,
+      "sha256": "af4d46a57948e09a281b2d65de99b8594122972ae4f11a3f9ab03a12bfd8ba8b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-first.log",
+      "bytes": 4833,
+      "sha256": "e94938e1c2a0a225aa50d5f2986b7678257686c3a77447d5bc6c958007bd73a6"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-second.log",
+      "bytes": 7981,
+      "sha256": "c5d677991e650500f1e0589ae6482fd88349d86aacba4628d33214f0733681b1"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-third.log",
+      "bytes": 9694,
+      "sha256": "0f7d1c0ff532c7ad7390a08996f2b99be1e29898e82247d4f87ba78be91e4a92"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-final.log",
+      "bytes": 10150,
+      "sha256": "f7f525cde45296128c1a31a9e70acf1298febbf9c5c849110fd760310b412218"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-corrected.log",
+      "bytes": 21979,
+      "sha256": "c6ac196775e80edceeaeaf2b65de8964cabbd8b228836e64dc9d8803128b005e"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-types2.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-lint.log",
+      "bytes": 5166,
+      "sha256": "6b3b87b71c3d17387b41d809801b3e843e943cdc7bb2e101f7120cdffd729e50"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-lint2.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-build.log",
+      "bytes": 1047,
+      "sha256": "a4f4df1fd73966ebd3f26540166267d92d79897c73d265a2fa300542f8922859"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-build2.log",
+      "bytes": 6500,
+      "sha256": "6a1c45ed3c5161099d59f1cb5948b747f600ae2e6833cd2fb58dda96de2fce0f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-history-core-build3.log",
+      "bytes": 6498,
+      "sha256": "526d2d918a685e62c72ac3a98b402450fd6ef470772e0040972558305944f9e4"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-authority-full-parity.log",
+      "bytes": 871,
+      "sha256": "7ff9ab790275b18e3e3db9e341dbd93ae297755a3a174b37b8a9b79e1c253b33"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-authority-full-parity2.log",
+      "bytes": 1028,
+      "sha256": "e2086e279677f1d3f1653a3e8151ece49689bd33db96ff311384f5c46c8aa6f6"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-entry-golden.json",
+      "bytes": 484,
+      "sha256": "a889033b5cb231561d3c822809e24476e028746ca8be8c1b2355989b576088b6"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-entry-golden-after.json",
+      "bytes": 484,
+      "sha256": "a889033b5cb231561d3c822809e24476e028746ca8be8c1b2355989b576088b6"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-40-discovery-history-core/stockinsider-namespace-bounds-test.log",
+      "bytes": 549,
+      "sha256": "2c3f2296ac707491f0433c2d9fb0235593b2a7b842ed7b3c10e61ae1e4caccc7"
+    }
+  ]
+}

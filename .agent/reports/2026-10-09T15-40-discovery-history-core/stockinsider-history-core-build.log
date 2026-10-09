@@ -1,0 +1,16 @@
+
+> web@0.1.0 prebuild
+> node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs && node ../scripts/sync-research-strategy-release.mjs --check
+
+Official authority build bridge verified (5 canonical modules).
+file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/sync-research-strategy-release.mjs:107
+    throw new Error('research_strategy_release_stale: run node scripts/sync-research-strategy-release.mjs --write and review the result');
+          ^
+
+Error: research_strategy_release_stale: run node scripts/sync-research-strategy-release.mjs --write and review the result
+    at file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/sync-research-strategy-release.mjs:107:11
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.14.0

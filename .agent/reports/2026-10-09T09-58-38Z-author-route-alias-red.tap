@@ -1,0 +1,66 @@
+TAP version 13
+# (node:10304) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:10304) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/package.json.
+# Subtest: v2 assignment is writer-only, exact bearer, distinct from reviewer/test/cron; no DB work on denial
+not ok 1 - v2 assignment is writer-only, exact bearer, distinct from reviewer/test/cron; no DB work on denial
+  ---
+  duration_ms: 339.591375
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/scripts/research-author-assignment-route.test.mjs:81:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    200 !== 401
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 401
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/scripts/research-author-assignment-route.test.mjs:91:48)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: closed marker, body keys, original input shape and bounded streaming parser reject before DB
+ok 2 - closed marker, body keys, original input shape and bounded streaming parser reject before DB
+  ---
+  duration_ms: 416.079875
+  ...
+# Subtest: current compiled validated read precedes assignment, principal is server derived, private fields omitted
+ok 3 - current compiled validated read precedes assignment, principal is server derived, private fields omitted
+  ---
+  duration_ms: 35.89875
+  ...
+# Subtest: exact read is null before admission; response-loss recovery reads same immutable assignment without reservation
+ok 4 - exact read is null before admission; response-loss recovery reads same immutable assignment without reservation
+  ---
+  duration_ms: 32.657459
+  ...
+# Subtest: current mapping/source/lease rejection or wrong sealed revision cannot call assignment RPC
+ok 5 - current mapping/source/lease rejection or wrong sealed revision cannot call assignment RPC
+  ---
+  duration_ms: 194.522667
+  ...
+# Subtest: unexpected DB bindings cannot return successful assignment or leak principal
+ok 6 - unexpected DB bindings cannot return successful assignment or leak principal
+  ---
+  duration_ms: 769.266083
+  ...
+# Subtest: unmarked v1 reserve keeps original role separation and does not invoke v2 assignment
+ok 7 - unmarked v1 reserve keeps original role separation and does not invoke v2 assignment
+  ---
+  duration_ms: 16.129584
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 6
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2271.677667

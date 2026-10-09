@@ -1,0 +1,82 @@
+TAP version 13
+# (node:82278) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82278) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: assignReviewer strict8192 byte body, header discrimination and UTF8
+ok 1 - assignReviewer strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 16.1365
+  ...
+# Subtest: readReviewerAssignment strict8192 byte body, header discrimination and UTF8
+ok 2 - readReviewerAssignment strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 2.226875
+  ...
+# Subtest: readReviewerPacket strict8192 byte body, header discrimination and UTF8
+ok 3 - readReviewerPacket strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 3.476458
+  ...
+# Subtest: body stall cancelled; expired read launches no I/O
+ok 4 - body stall cancelled; expired read launches no I/O
+  ---
+  duration_ms: 30.674167
+  ...
+# Subtest: author, cron, tester and unknown credentials cannot enter reviewer body/DB
+ok 5 - author, cron, tester and unknown credentials cannot enter reviewer body/DB
+  ---
+  duration_ms: 1.606583
+  ...
+# Subtest: 2409 actual fixed calculation, synthetic completed author and atomic reviewer transport
+not ok 6 - 2409 actual fixed calculation, synthetic completed author and atomic reviewer transport
+  ---
+  duration_ms: 287.243625
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment.test.mjs:31:37'
+  failureType: 'testCodeFailure'
+  error: |-
+    private execution binding excluded: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment.test.mjs:51:148)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 2383 actual fixed calculation, synthetic completed author and atomic reviewer transport
+not ok 7 - 2383 actual fixed calculation, synthetic completed author and atomic reviewer transport
+  ---
+  duration_ms: 143.157417
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment.test.mjs:31:37'
+  failureType: 'testCodeFailure'
+  error: |-
+    private execution binding excluded: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment.test.mjs:51:148)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 5
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 670.79725

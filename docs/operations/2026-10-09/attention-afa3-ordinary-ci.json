@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-09T05:03:12Z",
+  "subject": "afa3b89907823a7b96408165ab001dc79bc24cc4",
+  "runUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/37886024145",
+  "run": {
+    "conclusion": "success",
+    "createdAt": "2026-10-09T04:54:04Z",
+    "databaseId": 37886024145,
+    "headSha": "afa3b89907823a7b96408165ab001dc79bc24cc4",
+    "jobs": [
+      {
+        "completedAt": "2026-10-09T04:54:04Z",
+        "conclusion": "skipped",
+        "databaseId": 113676109791,
+        "name": "model-runner",
+        "startedAt": "2026-10-09T04:54:05Z",
+        "status": "completed",
+        "steps": [],
+        "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/37886024145/job/113676109791"
+      },
+      {
+        "completedAt": "2026-10-09T05:01:30Z",
+        "conclusion": "success",
+        "databaseId": 113676109866,
+        "name": "product-runtime",
+        "startedAt": "2026-10-09T04:54:06Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-09T04:54:07Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-09T04:54:07Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:54:09Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-09T04:54:07Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:54:14Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-node@v4",
+            "number": 3,
+            "startedAt": "2026-10-09T04:54:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:54:27Z",
+            "conclusion": "success",
+            "name": "Install PostgreSQL",
+            "number": 4,
+            "startedAt": "2026-10-09T04:54:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:54:28Z",
+            "conclusion": "success",
+            "name": "Install root dependencies",
+            "number": 5,
+            "startedAt": "2026-10-09T04:54:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:54:28Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 6,
+            "startedAt": "2026-10-09T04:54:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:54:44Z",
+            "conclusion": "success",
+            "name": "Install isolated offline parser test dependencies",
+            "number": 7,
+            "startedAt": "2026-10-09T04:54:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:54:57Z",
+            "conclusion": "success",
+            "name": "Install web dependencies",
+            "number": 8,
+            "startedAt": "2026-10-09T04:54:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:54:58Z",
+            "conclusion": "success",
+            "name": "Verify candidate revision and historical date contracts",
+            "number": 9,
+            "startedAt": "2026-10-09T04:54:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:55:22Z",
+            "conclusion": "success",
+            "name": "Verify research agent contracts and real PostgreSQL recovery",
+            "number": 10,
+            "startedAt": "2026-10-09T04:54:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:55:35Z",
+            "conclusion": "success",
+            "name": "Install project-local Playwright Chromium",
+            "number": 11,
+            "startedAt": "2026-10-09T04:55:22Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T05:01:27Z",
+            "conclusion": "success",
+            "name": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+            "number": 12,
+            "startedAt": "2026-10-09T04:55:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T05:01:27Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 22,
+            "startedAt": "2026-10-09T05:01:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T05:01:28Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-node@v4",
+            "number": 23,
+            "startedAt": "2026-10-09T05:01:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T05:01:28Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 24,
+            "startedAt": "2026-10-09T05:01:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T05:01:28Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 25,
+            "startedAt": "2026-10-09T05:01:28Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/37886024145/job/113676109866"
+      },
+      {
+        "completedAt": "2026-10-09T04:54:04Z",
+        "conclusion": "skipped",
+        "databaseId": 113676141959,
+        "name": "evaluation-governance",
+        "startedAt": "2026-10-09T04:54:13Z",
+        "status": "completed",
+        "steps": [],
+        "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/37886024145/job/113676141959"
+      },
+      {
+        "completedAt": "2026-10-09T05:01:34Z",
+        "conclusion": "success",
+        "databaseId": 113677896484,
+        "name": "stockinsider-v3-diagnostic-product-runtime",
+        "startedAt": "2026-10-09T05:01:32Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-09T05:01:33Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-09T05:01:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T05:01:33Z",
+            "conclusion": "success",
+            "name": "Require executable PR product/runtime evidence only",
+            "number": 2,
+            "startedAt": "2026-10-09T05:01:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T05:01:33Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 3,
+            "startedAt": "2026-10-09T05:01:33Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/37886024145/job/113677896484"
+      }
+    ],
+    "status": "completed",
+    "updatedAt": "2026-10-09T05:01:35Z"
+  },
+  "rawLog": {
+    "localPath": "/tmp/stockinsider-pr329-product-runtime-afa3.log",
+    "bytes": 1208685,
+    "sha256": "c452f0b0953eb322c71a470ec6bcd04e6ac6222bf59f216cbc60c92d0a41653b",
+    "privateMode": "0600",
+    "committed": false
+  },
+  "verified": {
+    "researchAndActualPostgres": {
+      "tests": 369,
+      "passed": 369,
+      "failed": 0,
+      "skipped": 0,
+      "includesNewShadowCases": true
+    },
+    "candidateHistory": {
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    },
+    "playwrightPassed": 9,
+    "typecheck": true,
+    "lint": true,
+    "normalBuild": true
+  },
+  "limits": [
+    "Ordinary diagnostic product/runtime evidence only; protected requirements/architecture/exact-review remain failed.",
+    "model-runner and evaluation-governance jobs skipped, not passed.",
+    "Suites overlap; counts are not summed as unique acceptance requirements.",
+    "No production ranking adoption, migration, merge, deployment, scheduling or profit claim."
+  ]
+}

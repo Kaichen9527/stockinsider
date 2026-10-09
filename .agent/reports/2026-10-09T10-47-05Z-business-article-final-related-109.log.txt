@@ -1,0 +1,577 @@
+TAP version 13
+# (node:45900) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:45900) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/package.json.
+# Subtest: 2409 actual fixed calculator; tables/valuation share result, no publication authority
+ok 1 - 2409 actual fixed calculator; tables/valuation share result, no publication authority
+  ---
+  duration_ms: 65.743125
+  ...
+# Subtest: 2383 actual fixed calculator; tables/valuation share result, no publication authority
+ok 2 - 2383 actual fixed calculator; tables/valuation share result, no publication authority
+  ---
+  duration_ms: 24.8965
+  ...
+# Subtest: reject wrong input hash
+ok 3 - reject wrong input hash
+  ---
+  duration_ms: 13.528416
+  ...
+# Subtest: reject wrong company
+ok 4 - reject wrong company
+  ---
+  duration_ms: 12.308334
+  ...
+# Subtest: reject v1 downgrade
+ok 5 - reject v1 downgrade
+  ---
+  duration_ms: 12.743834
+  ...
+# Subtest: reject arbitrary calculator command
+ok 6 - reject arbitrary calculator command
+  ---
+  duration_ms: 11.886042
+  ...
+# Subtest: reject caller table result
+ok 7 - reject caller table result
+  ---
+  duration_ms: 12.25475
+  ...
+# Subtest: reject nonexistent order/capacity
+ok 8 - reject nonexistent order/capacity
+  ---
+  duration_ms: 11.921833
+  ...
+# Subtest: reject page number as reported earnings
+ok 9 - reject page number as reported earnings
+  ---
+  duration_ms: 12.687208
+  ...
+# Subtest: reject assumption promoted to reported
+ok 10 - reject assumption promoted to reported
+  ---
+  duration_ms: 13.12775
+  ...
+# Subtest: reject unsupported normalization
+ok 11 - reject unsupported normalization
+  ---
+  duration_ms: 12.764417
+  ...
+# Subtest: reject partial year called full year
+ok 12 - reject partial year called full year
+  ---
+  duration_ms: 14.18425
+  ...
+# Subtest: reject duplicate paragraph IDs
+ok 13 - reject duplicate paragraph IDs
+  ---
+  duration_ms: 13.030833
+  ...
+# Subtest: reject wrong chapter order
+ok 14 - reject wrong chapter order
+  ---
+  duration_ms: 12.231292
+  ...
+# Subtest: reject future author
+ok 15 - reject future author
+  ---
+  duration_ms: 10.759958
+  ...
+# Subtest: reject backdated author
+ok 16 - reject backdated author
+  ---
+  duration_ms: 11.088583
+  ...
+# Subtest: reject original deadline expired
+ok 17 - reject original deadline expired
+  ---
+  duration_ms: 3.52325
+  ...
+# Subtest: reject nonfinite multiple
+ok 18 - reject nonfinite multiple
+  ---
+  duration_ms: 0.628334
+  ...
+# Subtest: reject raw credential in prose
+ok 19 - reject raw credential in prose
+  ---
+  duration_ms: 12.308667
+  ...
+# Subtest: reject unselected source
+ok 20 - reject unselected source
+  ---
+  duration_ms: 12.500583
+  ...
+# Subtest: reject withdrawn source
+ok 21 - reject withdrawn source
+  ---
+  duration_ms: 11.002792
+  ...
+# Subtest: reject superseded source
+ok 22 - reject superseded source
+  ---
+  duration_ms: 11.64475
+  ...
+# Subtest: reject rights revoked
+ok 23 - reject rights revoked
+  ---
+  duration_ms: 15.692875
+  ...
+# Subtest: reject wrong source revision
+ok 24 - reject wrong source revision
+  ---
+  duration_ms: 18.897833
+  ...
+# Subtest: reject wrong source company
+ok 25 - reject wrong source company
+  ---
+  duration_ms: 17.337708
+  ...
+# Subtest: reject future source admission
+ok 26 - reject future source admission
+  ---
+  duration_ms: 27.099709
+  ...
+# Subtest: reject date-only invented midnight
+ok 27 - reject date-only invented midnight
+  ---
+  duration_ms: 27.84175
+  ...
+# Subtest: reject future source date
+ok 28 - reject future source date
+  ---
+  duration_ms: 15.276042
+  ...
+# Subtest: reject invalid civil date
+ok 29 - reject invalid civil date
+  ---
+  duration_ms: 12.987375
+  ...
+# Subtest: reject missing source receipt
+ok 30 - reject missing source receipt
+  ---
+  duration_ms: 12.819
+  ...
+# Subtest: reject invented gap reason
+ok 31 - reject invented gap reason
+  ---
+  duration_ms: 13.07825
+  ...
+# Subtest: sealed financial result tampering rejects even after all caller hashes are recomputed
+ok 32 - sealed financial result tampering rejects even after all caller hashes are recomputed
+  ---
+  duration_ms: 12.147333
+  ...
+# Subtest: industry-only source cannot establish company rumor or production, and rumor cannot become order
+ok 33 - industry-only source cannot establish company rumor or production, and rumor cannot become order
+  ---
+  duration_ms: 41.347458
+  ...
+# Subtest: annual2027 is separate from next four; changed prose/model/valuation needs a new hash
+ok 34 - annual2027 is separate from next four; changed prose/model/valuation needs a new hash
+  ---
+  duration_ms: 42.63425
+  ...
+# Subtest: printed facts, explicit assumptions and sealed gaps keep their classifications
+ok 35 - printed facts, explicit assumptions and sealed gaps keep their classifications
+  ---
+  duration_ms: 14.884083
+  ...
+# Subtest: actual AUO loss scenario gives null P/E price, never a negative target
+ok 36 - actual AUO loss scenario gives null P/E price, never a negative target
+  ---
+  duration_ms: 15.240291
+  ...
+# Subtest: validated snapshots retain no mutable aliases to author or trusted context
+ok 37 - validated snapshots retain no mutable aliases to author or trusted context
+  ---
+  duration_ms: 14.819042
+  ...
+# Subtest: author original deadlines are exclusive, retaining microsecond boundary precision
+ok 38 - author original deadlines are exclusive, retaining microsecond boundary precision
+  ---
+  duration_ms: 80.619083
+  ...
+# Subtest: actual sealed source/execution/financial gaps are referenceable with exact namespaces
+ok 39 - actual sealed source/execution/financial gaps are referenceable with exact namespaces
+  ---
+  duration_ms: 119.668416
+  ...
+# Subtest: actual calculated ordinary/potential/diluted share denominators are available in all periods
+ok 40 - actual calculated ordinary/potential/diluted share denominators are available in all periods
+  ---
+  duration_ms: 167.500917
+  ...
+# (node:45919) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:45919) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/package.json.
+# research_complete_input_failure_phase read_validate research_complete_input_invalid
+# research_complete_input_failure_phase read_validate research_complete_input_invalid
+# Subtest: canonical frozen vector 0
+ok 41 - canonical frozen vector 0
+  ---
+  duration_ms: 1.575959
+  ...
+# Subtest: canonical frozen vector 1
+ok 42 - canonical frozen vector 1
+  ---
+  duration_ms: 0.123916
+  ...
+# Subtest: canonical frozen vector 2
+ok 43 - canonical frozen vector 2
+  ---
+  duration_ms: 0.125375
+  ...
+# Subtest: canonical frozen vector 3
+ok 44 - canonical frozen vector 3
+  ---
+  duration_ms: 0.151041
+  ...
+# Subtest: canonical frozen vector 4
+ok 45 - canonical frozen vector 4
+  ---
+  duration_ms: 0.074125
+  ...
+# Subtest: canonical frozen vector 5
+ok 46 - canonical frozen vector 5
+  ---
+  duration_ms: 0.110417
+  ...
+# Subtest: canonical frozen vector 6
+ok 47 - canonical frozen vector 6
+  ---
+  duration_ms: 0.409208
+  ...
+# Subtest: canonical frozen vector 7
+ok 48 - canonical frozen vector 7
+  ---
+  duration_ms: 0.180042
+  ...
+# Subtest: canonical frozen vector 8
+ok 49 - canonical frozen vector 8
+  ---
+  duration_ms: 0.614833
+  ...
+# Subtest: canonical frozen vector 9
+ok 50 - canonical frozen vector 9
+  ---
+  duration_ms: 0.684
+  ...
+# Subtest: canonical frozen vector 10
+ok 51 - canonical frozen vector 10
+  ---
+  duration_ms: 0.191792
+  ...
+# Subtest: canonical frozen vector 11
+ok 52 - canonical frozen vector 11
+  ---
+  duration_ms: 0.060042
+  ...
+# Subtest: canonical frozen vector 12
+ok 53 - canonical frozen vector 12
+  ---
+  duration_ms: 0.046208
+  ...
+# Subtest: canonical frozen vector 13
+ok 54 - canonical frozen vector 13
+  ---
+  duration_ms: 0.14775
+  ...
+# Subtest: canonical frozen vector 14
+ok 55 - canonical frozen vector 14
+  ---
+  duration_ms: 0.159
+  ...
+# Subtest: strict JSON rejects {"a":1,"a":2}
+ok 56 - strict JSON rejects {"a":1,"a":2}
+  ---
+  duration_ms: 0.710208
+  ...
+# Subtest: strict JSON rejects {"a":1,"\\u0061":2}
+ok 57 - strict JSON rejects {"a":1,"\\u0061":2}
+  ---
+  duration_ms: 0.127917
+  ...
+# Subtest: strict JSON rejects {"x":NaN}
+ok 58 - strict JSON rejects {"x":NaN}
+  ---
+  duration_ms: 0.047
+  ...
+# Subtest: strict JSON rejects {"x":1} trailing
+ok 59 - strict JSON rejects {"x":1} trailing
+  ---
+  duration_ms: 0.044708
+  ...
+# Subtest: strict JSON rejects "\\ud800"
+ok 60 - strict JSON rejects "\\ud800"
+  ---
+  duration_ms: 0.036333
+  ...
+# Subtest: strict JSON rejects "\\u0000"
+ok 61 - strict JSON rejects "\\u0000"
+  ---
+  duration_ms: 0.036291
+  ...
+# Subtest: non JSON value rejects Infinity
+ok 62 - non JSON value rejects Infinity
+  ---
+  duration_ms: 0.05625
+  ...
+# Subtest: non JSON value rejects NaN
+ok 63 - non JSON value rejects NaN
+  ---
+  duration_ms: 0.034542
+  ...
+# Subtest: non JSON value rejects ()=>{}
+ok 64 - non JSON value rejects ()=>{}
+  ---
+  duration_ms: 0.10475
+  ...
+# Subtest: non JSON value rejects undefined
+ok 65 - non JSON value rejects undefined
+  ---
+  duration_ms: 0.03825
+  ...
+# Subtest: 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+ok 66 - 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+  ---
+  duration_ms: 19.569084
+  ...
+# Subtest: closed ingress cannot select executable, financial body or clock
+ok 67 - closed ingress cannot select executable, financial body or clock
+  ---
+  duration_ms: 0.500916
+  ...
+# Subtest: schema constant and unknown nested fields reject
+ok 68 - schema constant and unknown nested fields reject
+  ---
+  duration_ms: 0.41925
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping false
+ok 69 - old DB sealed mapping cannot bypass current mapping false
+  ---
+  duration_ms: 1.124292
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping true
+ok 70 - old DB sealed mapping cannot bypass current mapping true
+  ---
+  duration_ms: 0.431625
+  ...
+# Subtest: static schema bundles exactly preserve both original numeric and Unicode schemas
+ok 71 - static schema bundles exactly preserve both original numeric and Unicode schemas
+  ---
+  duration_ms: 12.51325
+  ...
+# Subtest: closure metadata v1 preserves sorted keys independent of insertion order and binds SQL
+ok 72 - closure metadata v1 preserves sorted keys independent of insertion order and binds SQL
+  ---
+  duration_ms: 5.736208
+  ...
+# (node:45921) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:45921) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-financial-file-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/package.json.
+# Subtest: bundled fixed inventory exactly equals approved design bytes/paths/hashes
+ok 73 - bundled fixed inventory exactly equals approved design bytes/paths/hashes
+  ---
+  duration_ms: 4.994292
+  ...
+# Subtest: 2409 actual immutable relay projection and independently recalculated bridges
+ok 74 - 2409 actual immutable relay projection and independently recalculated bridges
+  ---
+  duration_ms: 35.599334
+  ...
+# Subtest: 2383 actual immutable relay projection and independently recalculated bridges
+ok 75 - 2383 actual immutable relay projection and independently recalculated bridges
+  ---
+  duration_ms: 12.570375
+  ...
+# Subtest: actual EP8 company remains unsupported and does not read AUO files
+ok 76 - actual EP8 company remains unsupported and does not read AUO files
+  ---
+  duration_ms: 0.441833
+  ...
+# Subtest: closed request rejects caller command
+ok 77 - closed request rejects caller command
+  ---
+  duration_ms: 0.407584
+  ...
+# Subtest: closed request rejects caller calculatorId
+ok 78 - closed request rejects caller calculatorId
+  ---
+  duration_ms: 0.186042
+  ...
+# Subtest: closed request rejects caller path
+ok 79 - closed request rejects caller path
+  ---
+  duration_ms: 0.153333
+  ...
+# Subtest: closed request rejects caller symbol
+ok 80 - closed request rejects caller symbol
+  ---
+  duration_ms: 0.067708
+  ...
+# Subtest: closed request rejects caller financialVerified
+ok 81 - closed request rejects caller financialVerified
+  ---
+  duration_ms: 0.27625
+  ...
+# Subtest: live original preparation recheck rejects wrongHash
+ok 82 - live original preparation recheck rejects wrongHash
+  ---
+  duration_ms: 0.553
+  ...
+# Subtest: live original preparation recheck rejects withdrawn
+ok 83 - live original preparation recheck rejects withdrawn
+  ---
+  duration_ms: 0.272958
+  ...
+# Subtest: live original preparation recheck rejects completedAfterRead
+ok 84 - live original preparation recheck rejects completedAfterRead
+  ---
+  duration_ms: 14.841458
+  ...
+# Subtest: live original preparation recheck rejects crossScope
+ok 85 - live original preparation recheck rejects crossScope
+  ---
+  duration_ms: 0.2385
+  ...
+# Subtest: stalled lease dependency cannot produce a late success under shared10s deadline
+ok 86 - stalled lease dependency cannot produce a late success under shared10s deadline
+  ---
+  duration_ms: 10001.574625
+  ...
+# Subtest: nanosecond ordering and invalid finite calendar retained
+ok 87 - nanosecond ordering and invalid finite calendar retained
+  ---
+  duration_ms: 0.300542
+  ...
+# Subtest: actual read exact per-file/aggregate caps; +1 fails without truncate success
+ok 88 - actual read exact per-file/aggregate caps; +1 fails without truncate success
+  ---
+  duration_ms: 8.784167
+  ...
+# Subtest: bounded regular FD rejects fifo
+ok 89 - bounded regular FD rejects fifo
+  ---
+  duration_ms: 4.530542
+  ...
+# Subtest: bounded regular FD rejects directory
+ok 90 - bounded regular FD rejects directory
+  ---
+  duration_ms: 1.277
+  ...
+# Subtest: bounded regular FD rejects symlink
+ok 91 - bounded regular FD rejects symlink
+  ---
+  duration_ms: 1.294833
+  ...
+# Subtest: bounded regular FD rejects replaceBeforeOpen
+ok 92 - bounded regular FD rejects replaceBeforeOpen
+  ---
+  duration_ms: 4.184375
+  ...
+# Subtest: bounded regular FD rejects replaceParent
+ok 93 - bounded regular FD rejects replaceParent
+  ---
+  duration_ms: 1.623791
+  ...
+# Subtest: bounded regular FD rejects shortRead
+ok 94 - bounded regular FD rejects shortRead
+  ---
+  duration_ms: 1.046083
+  ...
+# Subtest: bounded regular FD rejects mutateAfterRead
+ok 95 - bounded regular FD rejects mutateAfterRead
+  ---
+  duration_ms: 1.954625
+  ...
+# Subtest: projection/result UTF8 exact and +1, not character count
+ok 96 - projection/result UTF8 exact and +1, not character count
+  ---
+  duration_ms: 3.305417
+  ...
+# Subtest: late async success discarded by monotonic deadline
+ok 97 - late async success discarded by monotonic deadline
+  ---
+  duration_ms: 15.521958
+  ...
+# Subtest: 2409 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+ok 98 - 2409 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+  ---
+  duration_ms: 14.537125
+  ...
+# Subtest: 2383 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+ok 99 - 2383 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+  ---
+  duration_ms: 7.316708
+  ...
+# (node:46014) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:46014) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-deep-article.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/package.json.
+# Subtest: inbox revisions cannot travel backwards through article cutoff; chapter titles are not claim evidence
+ok 100 - inbox revisions cannot travel backwards through article cutoff; chapter titles are not claim evidence
+  ---
+  duration_ms: 4.114667
+  ...
+# Subtest: conditional scenario computes attribution, diluted EPS and dated present value
+ok 101 - conditional scenario computes attribution, diluted EPS and dated present value
+  ---
+  duration_ms: 6.677875
+  ...
+# Subtest: a different industry can use its actual issuer segments or a disclosed consolidated bridge
+ok 102 - a different industry can use its actual issuer segments or a disclosed consolidated bridge
+  ---
+  duration_ms: 0.78775
+  ...
+# Subtest: rumor citations, retraction, future sources and unsupported text fail closed
+ok 103 - rumor citations, retraction, future sources and unsupported text fail closed
+  ---
+  duration_ms: 0.19775
+  ...
+# Subtest: a non-commercialized baseline and negative EPS do not get a fictitious P/E value
+ok 104 - a non-commercialized baseline and negative EPS do not get a fictitious P/E value
+  ---
+  duration_ms: 1.423417
+  ...
+# Subtest: explicit industry paragraph cites empty-symbol context without promoting company evidence
+ok 105 - explicit industry paragraph cites empty-symbol context without promoting company evidence
+  ---
+  duration_ms: 1.831709
+  ...
+# Subtest: industry sources never satisfy a company paragraph, catalyst or EPS scenario, even with old tags
+ok 106 - industry sources never satisfy a company paragraph, catalyst or EPS scenario, even with old tags
+  ---
+  duration_ms: 0.202166
+  ...
+# Subtest: industry scope cannot be moved into orders or valuation, made verified, mixed or caller-malformed
+ok 107 - industry scope cannot be moved into orders or valuation, made verified, mixed or caller-malformed
+  ---
+  duration_ms: 0.346542
+  ...
+# Subtest: industry citation retains cutoff, content and withdrawal barriers
+ok 108 - industry citation retains cutoff, content and withdrawal barriers
+  ---
+  duration_ms: 1.138875
+  ...
+# Subtest: loader preserves industry scope and only explicit public acquisition can cite a public social permalink
+ok 109 - loader preserves industry scope and only explicit public acquisition can cite a public social permalink
+  ---
+  duration_ms: 1.362333
+  ...
+1..109
+# tests 109
+# suites 0
+# pass 109
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11914.303542

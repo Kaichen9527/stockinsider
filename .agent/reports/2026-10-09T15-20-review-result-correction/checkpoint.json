@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "stockinsider-engineering-checkpoint-v1",
+  "recordedAt": "2026-10-09T14:58:43.715623+00:00",
+  "subject": "a106d0001b64f30896db8ca6443333a1605fc228",
+  "tree": "5228e4eb3d584c7be19829991f6050a9572d8a51",
+  "rootChecks": {
+    "unitAndRealPg": {
+      "tests": 23,
+      "pass": 23,
+      "skip": 0
+    },
+    "related": {
+      "tests": 30,
+      "pass": 30,
+      "skip": 0
+    },
+    "types": "pass",
+    "lint": {
+      "errors": 0,
+      "existingWarnings": 33
+    },
+    "buildId": "IIBZVCuq4B-Xbj9cY1e7b"
+  },
+  "independentReview": {
+    "originalTwoP2": "closed",
+    "newP2": "SQL trim/min/raw maximum differs from TS; correction pending",
+    "tests": 31,
+    "scope": "unsigned CODE only; no final pass"
+  },
+  "reviewerAssignmentNative": {
+    "subject": "8be8179f2b24ceef13cb3e684c9d3b385c0c6b9b",
+    "runtime": "7f6259e88f52622cc909653f217d41c820e7e7eb",
+    "http": {
+      "tests": 44,
+      "pass": 35,
+      "fail": 9,
+      "skip": 0
+    },
+    "rootVerifiedRawFiles": 52,
+    "independentScope": "TEST CODE/RED receipt PASS; not native PASS"
+  },
+  "mainUnchanged": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "productionChanged": false,
+  "remaining": [
+    "Real trusted role tool dispatch",
+    "Same-pipeline v2 publication and withdrawal",
+    "Actual price-phase adapter",
+    "Protected review merge deploy",
+    "Five future trading days"
+  ],
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-09T15-20-review-result-correction/boundary2.log",
+      "bytes": 12737,
+      "sha256": "068fcf369db4e03018058a84adfe4cd4316aa867a5ace0b940e5cb861ac09931"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T15-20-review-result-correction/fixed-related.log",
+      "bytes": 9360,
+      "sha256": "aa3f1588a936578dac83720c20923ce23daecab3fca385c7f390ba75c291280a"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T15-20-review-result-correction/fixed-types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T15-20-review-result-correction/fixed-lint.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T15-20-review-result-correction/fixed-build.log",
+      "bytes": 6498,
+      "sha256": "8dfa5bf0a878d132ddb9d827d28a3b816f69f542ec17d659e18d2fe7c778afd9"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T15-20-review-result-correction/boundary.log",
+      "bytes": 13885,
+      "sha256": "18976afbccc6c92328e9ac874c1a1eb58a27c60bfff4c822fe1d682a16d2593a"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T15-20-review-result-correction/whitespace.log",
+      "bytes": 22667,
+      "sha256": "bf71e887bc758f71841f6d96951344630bc0ff2b4af78dc81a5f13618118c0fb"
+    }
+  ],
+  "successor": {
+    "subject": "9136a09a75492ced1af9ba27a922c04ad23e0c39",
+    "tree": "bc3780f0dfa300104042ccadcc5360b730397d20",
+    "rootUnitAndPg": {
+      "tests": 25,
+      "pass": 25,
+      "skip": 0
+    },
+    "independent": "unsigned scoped CODE PASS",
+    "independentPure": 10,
+    "independentIsolatedPgTsComparisons": 31,
+    "fullUnicodeTrimSetScan": "pass",
+    "nativeHttp": "pending",
+    "webSubtreeUnchangedFromA106": true
+  }
+}

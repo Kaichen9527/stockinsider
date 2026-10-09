@@ -1,0 +1,386 @@
+{
+  "schemaVersion": "ordinary-github-clock-ci-observation-v1",
+  "observedAt": "2026-10-09T04:33:59.164447+00:00",
+  "source": "0cf40067b0279c429970f4cb98841dd2d4bd83e7",
+  "runUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/37883620967",
+  "jobId": 113668619510,
+  "run": {
+    "conclusion": "success",
+    "createdAt": "2026-10-09T04:23:03Z",
+    "headSha": "0cf40067b0279c429970f4cb98841dd2d4bd83e7",
+    "jobs": [
+      {
+        "completedAt": "2026-10-09T04:31:52Z",
+        "conclusion": "success",
+        "databaseId": 113668619510,
+        "name": "product-runtime",
+        "startedAt": "2026-10-09T04:23:06Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-09T04:23:07Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-09T04:23:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:23:09Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-09T04:23:07Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:23:17Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-node@v4",
+            "number": 3,
+            "startedAt": "2026-10-09T04:23:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:23:27Z",
+            "conclusion": "success",
+            "name": "Install PostgreSQL",
+            "number": 4,
+            "startedAt": "2026-10-09T04:23:17Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:23:30Z",
+            "conclusion": "success",
+            "name": "Build pinned test-only PostgreSQL clock library",
+            "number": 5,
+            "startedAt": "2026-10-09T04:23:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:23:30Z",
+            "conclusion": "skipped",
+            "name": "Retain failed test-clock inspection metadata",
+            "number": 6,
+            "startedAt": "2026-10-09T04:23:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:23:31Z",
+            "conclusion": "success",
+            "name": "Install root dependencies",
+            "number": 7,
+            "startedAt": "2026-10-09T04:23:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:23:31Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 8,
+            "startedAt": "2026-10-09T04:23:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:23:46Z",
+            "conclusion": "success",
+            "name": "Install isolated offline parser test dependencies",
+            "number": 9,
+            "startedAt": "2026-10-09T04:23:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:23:57Z",
+            "conclusion": "success",
+            "name": "Install web dependencies",
+            "number": 10,
+            "startedAt": "2026-10-09T04:23:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:23:57Z",
+            "conclusion": "success",
+            "name": "Verify candidate revision and historical date contracts",
+            "number": 11,
+            "startedAt": "2026-10-09T04:23:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:24:24Z",
+            "conclusion": "success",
+            "name": "Verify research agent contracts and real PostgreSQL recovery",
+            "number": 12,
+            "startedAt": "2026-10-09T04:23:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:24:28Z",
+            "conclusion": "success",
+            "name": "Verify isolated PostgreSQL clock and unchanged day-end policy",
+            "number": 13,
+            "startedAt": "2026-10-09T04:24:24Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:24:42Z",
+            "conclusion": "success",
+            "name": "Install project-local Playwright Chromium",
+            "number": 14,
+            "startedAt": "2026-10-09T04:24:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:31:48Z",
+            "conclusion": "success",
+            "name": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+            "number": 15,
+            "startedAt": "2026-10-09T04:24:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:31:48Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 28,
+            "startedAt": "2026-10-09T04:31:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:31:49Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-node@v4",
+            "number": 29,
+            "startedAt": "2026-10-09T04:31:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:31:49Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 30,
+            "startedAt": "2026-10-09T04:31:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:31:49Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 31,
+            "startedAt": "2026-10-09T04:31:49Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/37883620967/job/113668619510"
+      },
+      {
+        "completedAt": "2026-10-09T04:23:04Z",
+        "conclusion": "skipped",
+        "databaseId": 113668621077,
+        "name": "evaluation-governance",
+        "startedAt": "2026-10-09T04:23:04Z",
+        "status": "completed",
+        "steps": [],
+        "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/37883620967/job/113668621077"
+      },
+      {
+        "completedAt": "2026-10-09T04:23:04Z",
+        "conclusion": "skipped",
+        "databaseId": 113668621157,
+        "name": "model-runner",
+        "startedAt": "2026-10-09T04:23:04Z",
+        "status": "completed",
+        "steps": [],
+        "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/37883620967/job/113668621157"
+      },
+      {
+        "completedAt": "2026-10-09T04:31:56Z",
+        "conclusion": "success",
+        "databaseId": 113670756299,
+        "name": "stockinsider-v3-diagnostic-product-runtime",
+        "startedAt": "2026-10-09T04:31:54Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-09T04:31:54Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-09T04:31:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:31:54Z",
+            "conclusion": "success",
+            "name": "Require executable PR product/runtime evidence only",
+            "number": 2,
+            "startedAt": "2026-10-09T04:31:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T04:31:54Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 3,
+            "startedAt": "2026-10-09T04:31:54Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/37883620967/job/113670756299"
+      }
+    ],
+    "status": "completed",
+    "updatedAt": "2026-10-09T04:31:57Z"
+  },
+  "log": {
+    "path": "/tmp/stockinsider-pr324-product-runtime-0cf4006.log",
+    "bytes": 1219198,
+    "sha256": "22cda1357a808d13eec496321e36b832e555b200dbe9a40f153bccb7e3cdee50",
+    "fileMode": "0o600",
+    "rawLogCommitted": false
+  },
+  "clockLibraryReceipt": {
+    "schema": "stockinsider-isolated-pg-clock-build-v1",
+    "sourceCommit": "d475b925943ad404c6c728ac868dc73949e7281c",
+    "sourceUrl": "https://codeload.github.com/wolfcw/libfaketime/tar.gz/d475b925943ad404c6c728ac868dc73949e7281c",
+    "archiveSha256": "141d76954a430ee4a43dfdec8984c7507cf803a9f66b62853e5642e7131b42c8",
+    "archiveBytes": 89000,
+    "compilerVersion": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "makeVersion": "GNU Make 4.3",
+    "command": [
+      "/usr/bin/make",
+      "-f",
+      "Makefile",
+      "CC=/usr/bin/cc",
+      "FAKETIME_COMPILE_CFLAGS=-UFAKE_SLEEP",
+      "libfaketime.so.1"
+    ],
+    "environment": {
+      "PATH": "/usr/bin:/bin",
+      "LC_ALL": "C",
+      "LANG": "C"
+    },
+    "library": "/home/runner/work/_temp/stockinsider-pg-clock-37883620967-1/libfaketime.so.1",
+    "librarySha256": "bb9e49d1dff9b56f62ba784f1443c8d430081eee84c8d86b68d11b6a20c752cd",
+    "waitWrappersAbsent": true
+  },
+  "tapSuites": [
+    {
+      "step": "Verify candidate revision and historical date contracts",
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Verify research agent contracts and real PostgreSQL recovery",
+      "tests": 354,
+      "pass": 354,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Verify isolated PostgreSQL clock and unchanged day-end policy",
+      "tests": 11,
+      "pass": 11,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+      "tests": 43,
+      "pass": 43,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+      "tests": 237,
+      "pass": 237,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+      "tests": 44,
+      "pass": 44,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+      "tests": 104,
+      "pass": 104,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+      "tests": 67,
+      "pass": 67,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+      "tests": 155,
+      "pass": 155,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+      "tests": 86,
+      "pass": 86,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "step": "Run diagnostic product/runtime suite (not authoritative Code Gate evidence)",
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    }
+  ],
+  "pythonUnitCases": 14,
+  "offlineParserCases": [
+    3,
+    9
+  ],
+  "playwrightCases": 9,
+  "typesLintNormalBuildPassed": true,
+  "postgresVersion": "16.15 Ubuntu 16.15-1.pgdg24.04+2",
+  "failureTraceExecuted": false,
+  "priorNmHangRootCauseProven": false,
+  "priorMacForkFailureErased": false,
+  "protectedApproval": false,
+  "strategyEvaluationOrNativeRunnerPassed": false,
+  "noProductionMutation": true
+}

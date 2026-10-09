@@ -1,0 +1,25 @@
+{
+  "subject": "7f82f1d8adde04507744e92a0b8f1fa31b99c2ea",
+  "verifiedRawFiles": 50,
+  "verifiedRawBytes": 18285543,
+  "rawMismatches": [],
+  "independentReview": {
+    "reviewer": "/root/author_input_review_oct08",
+    "level": "unsigned scoped TEST/receipt PASS",
+    "newP1P2": 0
+  },
+  "compiledHttp": {
+    "pass": 94,
+    "fail": 0,
+    "skip": 0
+  },
+  "standaloneUnitAndPg": {
+    "pass": 20,
+    "fail": 5,
+    "skip": 0
+  },
+  "notGenuineModelExecution": true,
+  "notPublication": true,
+  "notProtectedReleaseApproval": true,
+  "reviewerDirectVmDiskManifestRecheck": false
+}

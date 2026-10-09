@@ -1,0 +1,40 @@
+TAP version 13
+# (node:75759) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:75759) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-atomic-publication.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: closed publication request permits only original result identities; all mixed controls rejected
+ok 1 - closed publication request permits only original result identities; all mixed controls rejected
+  ---
+  duration_ms: 105.17925
+  ...
+# Subtest: stalled reader cancels under original deadline, expired execution starts zero I/O
+ok 2 - stalled reader cancels under original deadline, expired execution starts zero I/O
+  ---
+  duration_ms: 79.156125
+  ...
+# Subtest: only actual independent configured author bearer can reach publication body
+ok 3 - only actual independent configured author bearer can reach publication body
+  ---
+  duration_ms: 1.460125
+  ...
+# Subtest: saved reports and calculators revalidated; no synthetic reviewer Request or caller prose authority
+ok 4 - saved reports and calculators revalidated; no synthetic reviewer Request or caller prose authority
+  ---
+  duration_ms: 329.209083
+  ...
+# Subtest: completed read precedes live readers and never reserves or rewrites content
+ok 5 - completed read precedes live readers and never reserves or rewrites content
+  ---
+  duration_ms: 52.284375
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 761.48625

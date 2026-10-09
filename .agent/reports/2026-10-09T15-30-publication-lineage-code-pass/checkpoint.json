@@ -1,0 +1,86 @@
+{
+  "subject": "2878038e22362a1f09790ba5ded1b71cdbd114d5",
+  "tree": "d69c30e48c5c109e58284991c452ab3a29860f0c",
+  "independentCodeReview": "unsigned scoped CODE PASS, no P1/P2",
+  "rootRealPG": 9,
+  "legacyRegressionPG": 10,
+  "buildId": "3uvi2ZrmgQFhKD2rigOel",
+  "independentPG": 10,
+  "nativeAssignmentTestHead": "843117ca82942eb0835c662ec956bfad82674eaa",
+  "assignmentRuntime": "7f6259e88f52622cc909653f217d41c820e7e7eb",
+  "assignmentNative": {
+    "pass": 80,
+    "fail": 0,
+    "skip": 0,
+    "rawBlobsVerified": 45
+  },
+  "notCompleted": [
+    "genuine role execution",
+    "atomic publication",
+    "protected release",
+    "merge",
+    "deployment"
+  ],
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-publication-lineage-pg1.log",
+      "bytes": 3928,
+      "sha256": "1f73e2c52e7fe01330d7731a86bdd4b4961f1c6bb13c2dbee5a6634b53ccb41b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-publication-lineage-pg2.log",
+      "bytes": 17707,
+      "sha256": "1c07e7640209d9afc3faa24e632852022463b2b4f228ca296273080732f924cc"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-publication-lineage-pg3.log",
+      "bytes": 9633,
+      "sha256": "3060226a69c933850cde9e5f45004db7047e024d237099a36f20be00183b5bf9"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-publication-lineage-pg4.log",
+      "bytes": 12411,
+      "sha256": "f7245ef0f3fb2fc3854d493c1cce9a1b8f1e0b56f40d9205c1f0b1fa5d6180d7"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-publication-lineage-regression.log",
+      "bytes": 2207,
+      "sha256": "909098300f86db32f365f9cf85a07334956b7ecee8673d68cb2e004378240977"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-publication-lineage-types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-publication-lineage-lint.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-publication-lineage-build.log",
+      "bytes": 6500,
+      "sha256": "94c3bc7a7050f5f590afc0e2052d1070b4f6bb62bc49f6085b455eacf1310e84"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-lineage-independent-probe.log",
+      "bytes": 13457,
+      "sha256": "bd67e4864b273989c7f780c88cb21ac2870430b0ff7d366050addb00a308b599"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-rebuildable-cache-check.json",
+      "bytes": 226,
+      "sha256": "0123b46c155c09896a02d37852c7c97194837accf33e155acf2a7101fca99a9b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-rebuildable-cache-deleted.json",
+      "bytes": 1056,
+      "sha256": "6279d6f85f8b26b63051d723591265b7078e82b91d5166bbe795ab6ef490624a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-30-publication-lineage-code-pass/stockinsider-assignment-native-green.json",
+      "bytes": 400899,
+      "sha256": "a631eddc672283a4923b8c3ceba9651ffc797db8e6e6011247ce294916cef6c4"
+    }
+  ]
+}

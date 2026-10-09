@@ -1,0 +1,105 @@
+{
+  "schema": "stockinsider-ordinary-ci-evidence-v1",
+  "subject": "59c14f3cdd8d6c96668527b3e7cc68f3c5ec031f",
+  "tree": "d4aea5ad656c1156cf1fda2562657ea28737c44e",
+  "run": 37889092605,
+  "job": 113685707111,
+  "conclusion": "success",
+  "boundary": "ordinary_diagnostic_not_protected_code_gate",
+  "rawPrivateLog": {
+    "bytes": 1312183,
+    "sha256": "7b91f8959931d909944a6a558b9cc94286df9075daab7626afe3dfee90f428b4"
+  },
+  "tapSuitesInLogOrder": [
+    {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "tests": 498,
+      "pass": 495,
+      "fail": 0,
+      "skipped": 3
+    },
+    {
+      "tests": 43,
+      "pass": 43,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "tests": 237,
+      "pass": 237,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "tests": 44,
+      "pass": 44,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "tests": 104,
+      "pass": 104,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "tests": 67,
+      "pass": 67,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "tests": 155,
+      "pass": 155,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "tests": 86,
+      "pass": 86,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "skipped": 0
+    }
+  ],
+  "playwrightPassed": 9,
+  "researchNativeSkips": 3,
+  "vmNativeResultsReportedSeparately": {
+    "priorityClaimInput": {
+      "pass": 25,
+      "fail": 0,
+      "skip": 0
+    },
+    "roster": {
+      "pass": 7,
+      "fail": 3,
+      "skip": 0,
+      "reason": "partial_profile_missing_priority_scope_columns"
+    }
+  },
+  "vmNativeResultsReceiptSealed": false,
+  "protectedPassed": false,
+  "deployed": false
+}

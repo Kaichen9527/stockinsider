@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "new-research-lead-price-observation-v1",
+  "assembledAt": "2026-10-09T06:49:31.939289+00:00",
+  "acquisitions": [
+    {
+      "symbol": "2731",
+      "url": "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?response=json&date=20261001&stockNo=2731",
+      "attemptedAt": "2026-10-09T06:48:11.185716+00:00",
+      "scope": "explicit October2026 per-stock daily history, read only",
+      "httpStatus": 200,
+      "contentType": "application/json;charset=UTF-8",
+      "status": "read_success",
+      "bytes": 1403,
+      "sha256": "94b8ac045fbcdc5a384ff5eb4403ac44ca0c4dd2a6cbda2a0ef637e995a72139",
+      "payloadKeys": [
+        "stat",
+        "date",
+        "title",
+        "fields",
+        "data",
+        "notes",
+        "total"
+      ],
+      "completedAt": "2026-10-09T06:48:11.444152+00:00"
+    },
+    {
+      "symbol": "8069",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=8069&date=2026%2F10%2F01&response=json",
+      "attemptedAt": "2026-10-09T06:48:11.188838+00:00",
+      "scope": "explicit October2026 per-stock daily history, read only",
+      "httpStatus": 200,
+      "contentType": "application/json;charset=UTF-8",
+      "status": "read_success",
+      "bytes": 1094,
+      "sha256": "61754bc68d24394090227ac60cc97af31f563c910286f159b5e22f81d5df03e4",
+      "payloadKeys": [
+        "tables",
+        "date",
+        "code",
+        "name",
+        "showListPriceNote",
+        "showListPriceLink",
+        "flagField",
+        "stat"
+      ],
+      "completedAt": "2026-10-09T06:48:11.414269+00:00"
+    },
+    {
+      "symbol": "8932",
+      "url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=8932&date=2026%2F10%2F01&response=json",
+      "attemptedAt": "2026-10-09T06:48:11.414332+00:00",
+      "scope": "explicit October2026 per-stock daily history, read only",
+      "httpStatus": 200,
+      "contentType": "application/json;charset=UTF-8",
+      "status": "read_success",
+      "bytes": 1051,
+      "sha256": "2119fb0c056257e5613d20b519090f0c26fd70377c9c003e209e8e2761f116d9",
+      "payloadKeys": [
+        "tables",
+        "date",
+        "code",
+        "name",
+        "showListPriceNote",
+        "showListPriceLink",
+        "flagField",
+        "stat"
+      ],
+      "completedAt": "2026-10-09T06:48:11.566197+00:00"
+    }
+  ],
+  "quotes": [
+    {
+      "symbol": "2731",
+      "exchange": "TWSE",
+      "sessionDate": "2026-10-08",
+      "closeTwd": "145.00",
+      "volumePrinted": "243,410",
+      "volumeUnit": "shares",
+      "turnoverPrinted": "35,214,774",
+      "turnoverUnit": "TWD",
+      "fields": [
+        "日期",
+        "成交股數",
+        "成交金額",
+        "開盤價",
+        "最高價",
+        "最低價",
+        "收盤價",
+        "漲跌價差",
+        "成交筆數",
+        "註記"
+      ],
+      "row": [
+        "115/10/08",
+        "243,410",
+        "35,214,774",
+        "144.50",
+        "145.50",
+        "144.00",
+        "145.00",
+        "+1.00",
+        "293",
+        ""
+      ],
+      "rowJsonPointer": "/data/5",
+      "sourceSha256": "94b8ac045fbcdc5a384ff5eb4403ac44ca0c4dd2a6cbda2a0ef637e995a72139",
+      "quoteFirstObservedInThisBatch": "2026-10-09T06:48:11.444152+00:00",
+      "globalFirstDiscoveryClaimed": false,
+      "pricePhase": "unknown",
+      "limitations": [
+        "Only six October sessions read; no60/240-session trend or market-relative result.",
+        "No verified corporate-action adjustment or liquidity qualification.",
+        "Raw prices and printed unit differences must not silently become an actionable snapshot."
+      ]
+    },
+    {
+      "symbol": "8069",
+      "exchange": "TPEX",
+      "sessionDate": "2026-10-08",
+      "closeTwd": "144.00",
+      "volumePrinted": "3,445",
+      "volumeUnit": "lots",
+      "turnoverPrinted": "499,905",
+      "turnoverUnit": "TWD_thousands",
+      "fields": [
+        "日 期",
+        "成交張數",
+        "成交仟元",
+        "開盤",
+        "最高",
+        "最低",
+        "收盤",
+        "漲跌",
+        "筆數"
+      ],
+      "row": [
+        "115/10/08",
+        "3,445",
+        "499,905",
+        "145.00",
+        "147.00",
+        "144.00",
+        "144.00",
+        "-1.00",
+        "3,283"
+      ],
+      "rowJsonPointer": "/tables/0/data/5",
+      "sourceSha256": "61754bc68d24394090227ac60cc97af31f563c910286f159b5e22f81d5df03e4",
+      "quoteFirstObservedInThisBatch": "2026-10-09T06:48:11.414269+00:00",
+      "globalFirstDiscoveryClaimed": false,
+      "pricePhase": "unknown",
+      "limitations": [
+        "Only six October sessions read; no60/240-session trend or market-relative result.",
+        "No verified corporate-action adjustment or liquidity qualification.",
+        "Raw prices and printed unit differences must not silently become an actionable snapshot."
+      ]
+    },
+    {
+      "symbol": "8932",
+      "exchange": "TPEX",
+      "sessionDate": "2026-10-08",
+      "closeTwd": "92.70",
+      "volumePrinted": "1,884",
+      "volumeUnit": "lots",
+      "turnoverPrinted": "175,516",
+      "turnoverUnit": "TWD_thousands",
+      "fields": [
+        "日 期",
+        "成交張數",
+        "成交仟元",
+        "開盤",
+        "最高",
+        "最低",
+        "收盤",
+        "漲跌",
+        "筆數"
+      ],
+      "row": [
+        "115/10/08",
+        "1,884",
+        "175,516",
+        "90.70",
+        "95.10",
+        "90.20",
+        "92.70",
+        "2.60",
+        "1,315"
+      ],
+      "rowJsonPointer": "/tables/0/data/5",
+      "sourceSha256": "2119fb0c056257e5613d20b519090f0c26fd70377c9c003e209e8e2761f116d9",
+      "quoteFirstObservedInThisBatch": "2026-10-09T06:48:11.566197+00:00",
+      "globalFirstDiscoveryClaimed": false,
+      "pricePhase": "unknown",
+      "limitations": [
+        "Only six October sessions read; no60/240-session trend or market-relative result.",
+        "No verified corporate-action adjustment or liquidity qualification.",
+        "Raw prices and printed unit differences must not silently become an actionable snapshot."
+      ]
+    }
+  ],
+  "lastCompletedSessionBasis": "TWSE current official holiday row confirms2026-10-09closed; delivered per-stock rows end2026-10-08",
+  "databaseSubmitted": false,
+  "researchQualified": false,
+  "entryEligible": false,
+  "strategyApproved": false,
+  "privateRawCommitted": false
+}

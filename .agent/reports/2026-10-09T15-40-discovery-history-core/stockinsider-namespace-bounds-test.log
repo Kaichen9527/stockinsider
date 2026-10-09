@@ -1,0 +1,20 @@
+TAP version 13
+# Subtest: observer caps events, closes collectors and rejects teardown after saving failed receipt
+ok 1 - observer caps events, closes collectors and rejects teardown after saving failed receipt
+  ---
+  duration_ms: 45.150041
+  ...
+# Subtest: ordinary observations save unchanged raw stats and zero-failure receipt
+ok 2 - ordinary observations save unchanged raw stats and zero-failure receipt
+  ---
+  duration_ms: 3.119125
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 85.532833

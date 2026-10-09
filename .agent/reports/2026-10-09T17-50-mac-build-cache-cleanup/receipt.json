@@ -1,0 +1,79 @@
+{
+  "recordedAt": "2026-10-09T17:52:26.607490+00:00",
+  "scope": "five exact old git-ignored Next build caches; no source, history, evidence, database or dependency deleted",
+  "launchChecks": [
+    {
+      "domain": "gui/501",
+      "exitCode": 0,
+      "references": [],
+      "rawOutputRetained": false
+    },
+    {
+      "domain": "system",
+      "exitCode": 0,
+      "references": [],
+      "rawOutputRetained": false
+    }
+  ],
+  "records": [
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/industry-association-receipts-oct05/web/.next",
+      "sourceCommit": "970b05215c84166c2fb394f37e88dad46cd395f2",
+      "inode": 202616384,
+      "device": 16777232,
+      "buildId": "BPQyEQPH4sCcXe_jPpxv5",
+      "fileCount": 4734,
+      "logicalBytes": 285623368,
+      "trackedFiles": 0,
+      "openFiles": 0
+    },
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/astra-recovery-oct04/web/.next",
+      "sourceCommit": "b1d96eb96156d3e1394615bb32c7a2d7ef90b661",
+      "inode": 200091725,
+      "device": 16777232,
+      "buildId": "iUsj3BTfZropAlgMyVTtA",
+      "fileCount": 4367,
+      "logicalBytes": 279322842,
+      "trackedFiles": 0,
+      "openFiles": 0
+    },
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/deep-claim-context-oct05/web/.next",
+      "sourceCommit": "08e00b164b66e3d3eff504f9783c9f8a570b548a",
+      "inode": 202362660,
+      "device": 16777232,
+      "buildId": "q-LSKWk3ehJW_xMZUuqHr",
+      "fileCount": 4743,
+      "logicalBytes": 284964325,
+      "trackedFiles": 0,
+      "openFiles": 0
+    },
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/industry-source-contract-oct05/web/.next",
+      "sourceCommit": "7956772691defb366fd1bd3ff610c762d69f5f0d",
+      "inode": 202443086,
+      "device": 16777232,
+      "buildId": "POhams-cqd_uSKSRy2fjq",
+      "fileCount": 4741,
+      "logicalBytes": 285019056,
+      "trackedFiles": 0,
+      "openFiles": 0
+    },
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/strategy-artifact-audit-oct05/web/.next",
+      "sourceCommit": "9b6cb4d9d8716060eb12d3d8cb7374b845872857",
+      "inode": 202171237,
+      "device": 16777232,
+      "buildId": "_V20FmatSgsJo3zE3N-gU",
+      "fileCount": 4750,
+      "logicalBytes": 285957303,
+      "trackedFiles": 0,
+      "openFiles": 0
+    }
+  ],
+  "freeBytesBefore": 846667776,
+  "freeBytesAfter": 2425495552,
+  "freeDeltaBytes": 1578827776,
+  "logicalBytesRemoved": 1420886894
+}

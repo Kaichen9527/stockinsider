@@ -1,0 +1,802 @@
+TAP version 13
+# (node:84275) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:84275) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: v2 assignment is writer-only, exact bearer, distinct from reviewer/test/cron; no DB work on denial
+ok 1 - v2 assignment is writer-only, exact bearer, distinct from reviewer/test/cron; no DB work on denial
+  ---
+  duration_ms: 310.98425
+  ...
+# Subtest: closed marker, body keys, original input shape and bounded streaming parser reject before DB
+ok 2 - closed marker, body keys, original input shape and bounded streaming parser reject before DB
+  ---
+  duration_ms: 165.282917
+  ...
+# Subtest: current compiled validated read precedes assignment, principal is server derived, private fields omitted
+ok 3 - current compiled validated read precedes assignment, principal is server derived, private fields omitted
+  ---
+  duration_ms: 11.259875
+  ...
+# Subtest: exact read is null before admission; response-loss recovery reads same immutable assignment without reservation
+ok 4 - exact read is null before admission; response-loss recovery reads same immutable assignment without reservation
+  ---
+  duration_ms: 12.948666
+  ...
+# Subtest: current mapping/source/lease rejection or wrong sealed revision cannot call assignment RPC
+ok 5 - current mapping/source/lease rejection or wrong sealed revision cannot call assignment RPC
+  ---
+  duration_ms: 101.892334
+  ...
+# Subtest: unexpected DB bindings cannot return successful assignment or leak principal
+ok 6 - unexpected DB bindings cannot return successful assignment or leak principal
+  ---
+  duration_ms: 204.203333
+  ...
+# Subtest: unmarked v1 reserve keeps original role separation and does not invoke v2 assignment
+ok 7 - unmarked v1 reserve keeps original role separation and does not invoke v2 assignment
+  ---
+  duration_ms: 8.804833
+  ...
+# (node:84350) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:84350) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-financial-file-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: handoffAuthorResult original8192 wire limit exact/+1 and strict decoding
+ok 8 - handoffAuthorResult original8192 wire limit exact/+1 and strict decoding
+  ---
+  duration_ms: 16.430709
+  ...
+# Subtest: readAuthorHandoff original8192 wire limit exact/+1 and strict decoding
+ok 9 - readAuthorHandoff original8192 wire limit exact/+1 and strict decoding
+  ---
+  duration_ms: 2.497125
+  ...
+# Subtest: stalled body cancels and expired body launches no reads
+ok 10 - stalled body cancels and expired body launches no reads
+  ---
+  duration_ms: 31.813667
+  ...
+# Subtest: review/cron/unknown credentials reject; exact author malformed request rejects
+ok 11 - review/cron/unknown credentials reject; exact author malformed request rejects
+  ---
+  duration_ms: 1.522959
+  ...
+# Subtest: 2409 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+ok 12 - 2409 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+  ---
+  duration_ms: 775.256833
+  ...
+# Subtest: 2383 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+ok 13 - 2383 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+  ---
+  duration_ms: 700.441416
+  ...
+# (node:84453) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:84453) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-financial-file-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: 2409 public sources and actual fixed financial calculator share sealed input; model-safe projection
+ok 14 - 2409 public sources and actual fixed financial calculator share sealed input; model-safe projection
+  ---
+  duration_ms: 136.309375
+  ...
+# Subtest: 2383 public sources and actual fixed financial calculator share sealed input; model-safe projection
+ok 15 - 2383 public sources and actual fixed financial calculator share sealed input; model-safe projection
+  ---
+  duration_ms: 56.6385
+  ...
+# Subtest: reject different input revision
+ok 16 - reject different input revision
+  ---
+  duration_ms: 17.743667
+  ...
+# Subtest: reject different source row
+ok 17 - reject different source row
+  ---
+  duration_ms: 17.216833
+  ...
+# Subtest: reject missing selected source
+ok 18 - reject missing selected source
+  ---
+  duration_ms: 18.525417
+  ...
+# Subtest: reject extra source
+ok 19 - reject extra source
+  ---
+  duration_ms: 17.583834
+  ...
+# Subtest: reject extra private source field
+ok 20 - reject extra private source field
+  ---
+  duration_ms: 17.543375
+  ...
+# Subtest: reject private source descriptor
+ok 21 - reject private source descriptor
+  ---
+  duration_ms: 17.26175
+  ...
+# Subtest: reject withdrawn source
+ok 22 - reject withdrawn source
+  ---
+  duration_ms: 18.437166
+  ...
+# Subtest: reject wrong company
+ok 23 - reject wrong company
+  ---
+  duration_ms: 18.624375
+  ...
+# Subtest: reject industry source invents company symbol
+ok 24 - reject industry source invents company symbol
+  ---
+  duration_ms: 15.58
+  ...
+# Subtest: reject legacy midnight promoted to instant
+ok 25 - reject legacy midnight promoted to instant
+  ---
+  duration_ms: 16.426875
+  ...
+# Subtest: reject unknown publication with fabricated date
+ok 26 - reject unknown publication with fabricated date
+  ---
+  duration_ms: 16.150417
+  ...
+# Subtest: reject observation after collection
+ok 27 - reject observation after collection
+  ---
+  duration_ms: 18.962
+  ...
+# Subtest: reject collection after seal receipt
+ok 28 - reject collection after seal receipt
+  ---
+  duration_ms: 23.845709
+  ...
+# Subtest: reject different seal receipt
+ok 29 - reject different seal receipt
+  ---
+  duration_ms: 25.600167
+  ...
+# Subtest: reject future seal receipt
+ok 30 - reject future seal receipt
+  ---
+  duration_ms: 21.889541
+  ...
+# Subtest: reject credential URL
+ok 31 - reject credential URL
+  ---
+  duration_ms: 17.823833
+  ...
+# Subtest: reject private host
+ok 32 - reject private host
+  ---
+  duration_ms: 16.325208
+  ...
+# Subtest: reject source secret text
+ok 33 - reject source secret text
+  ---
+  duration_ms: 16.148
+  ...
+# Subtest: reject source untrusted flag removed
+ok 34 - reject source untrusted flag removed
+  ---
+  duration_ms: 15.620333
+  ...
+# Subtest: reject extra RPC field
+ok 35 - reject extra RPC field
+  ---
+  duration_ms: 15.018959
+  ...
+# Subtest: reject wrong original assignment
+ok 36 - reject wrong original assignment
+  ---
+  duration_ms: 15.969292
+  ...
+# Subtest: reject different original assignment
+ok 37 - reject different original assignment
+  ---
+  duration_ms: 16.974125
+  ...
+# Subtest: title exact UTF8 byte boundary accepted, +1 rejected without truncation
+ok 38 - title exact UTF8 byte boundary accepted, +1 rejected without truncation
+  ---
+  duration_ms: 91.524833
+  ...
+# Subtest: summary exact UTF8 byte boundary accepted, +1 rejected without truncation
+ok 39 - summary exact UTF8 byte boundary accepted, +1 rejected without truncation
+  ---
+  duration_ms: 92.32025
+  ...
+# Subtest: catalyst exact UTF8 byte boundary accepted, +1 rejected without truncation
+ok 40 - catalyst exact UTF8 byte boundary accepted, +1 rejected without truncation
+  ---
+  duration_ms: 92.995291
+  ...
+# Subtest: risk exact UTF8 byte boundary accepted, +1 rejected without truncation
+ok 41 - risk exact UTF8 byte boundary accepted, +1 rejected without truncation
+  ---
+  duration_ms: 90.786583
+  ...
+# Subtest: platform exact UTF8 byte boundary accepted, +1 rejected without truncation
+ok 42 - platform exact UTF8 byte boundary accepted, +1 rejected without truncation
+  ---
+  duration_ms: 83.869334
+  ...
+# Subtest: original expiry at exact microsecond and expiry crossed during calculation reject
+ok 43 - original expiry at exact microsecond and expiry crossed during calculation reject
+  ---
+  duration_ms: 70.986125
+  ...
+# Subtest: aggregate compact source JSON exact300KiB accepted; +1 rejected without dropping a source
+ok 44 - aggregate compact source JSON exact300KiB accepted; +1 rejected without dropping a source
+  ---
+  duration_ms: 68.482625
+  ...
+# Subtest: same original deadline covers recompute and serialization checks, no restarted budget
+ok 45 - same original deadline covers recompute and serialization checks, no restarted budget
+  ---
+  duration_ms: 20.955916
+  ...
+# Subtest: financial tamper rejects despite rebinding all caller hashes; no assumption promotion
+ok 46 - financial tamper rejects despite rebinding all caller hashes; no assumption promotion
+  ---
+  duration_ms: 20.323292
+  ...
+# Subtest: empty manifest retains sources-not-selected gap, no invented receipt or authority
+ok 47 - empty manifest retains sources-not-selected gap, no invented receipt or authority
+  ---
+  duration_ms: 43.058583
+  ...
+# (node:84517) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:84517) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-result.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: readAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+ok 48 - readAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+  ---
+  duration_ms: 21.957917
+  ...
+# Subtest: receiveAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+ok 49 - receiveAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+  ---
+  duration_ms: 30.47775
+  ...
+# Subtest: duplicate decoded keys, excessive nesting, invalid UTF8 and header/body disagreement reject
+ok 50 - duplicate decoded keys, excessive nesting, invalid UTF8 and header/body disagreement reject
+  ---
+  duration_ms: 2.153709
+  ...
+# Subtest: stalled streaming body expires and is cancelled under same deadline
+ok 51 - stalled streaming body expires and is cancelled under same deadline
+  ---
+  duration_ms: 31.455375
+  ...
+# Subtest: exhausted deadline launches no body read
+ok 52 - exhausted deadline launches no body read
+  ---
+  duration_ms: 0.517292
+  ...
+# Subtest: auth separation and malformed result discriminator fail before result handling
+ok 53 - auth separation and malformed result discriminator fail before result handling
+  ---
+  duration_ms: 3.092333
+  ...
+# Subtest: 2409 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+ok 54 - 2409 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+  ---
+  duration_ms: 986.827
+  ...
+# Subtest: 2383 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+ok 55 - 2383 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+  ---
+  duration_ms: 737.542834
+  ...
+# (node:84572) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:84572) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: 2409 actual fixed calculator; tables/valuation share result, no publication authority
+ok 56 - 2409 actual fixed calculator; tables/valuation share result, no publication authority
+  ---
+  duration_ms: 51.048958
+  ...
+# Subtest: 2383 actual fixed calculator; tables/valuation share result, no publication authority
+ok 57 - 2383 actual fixed calculator; tables/valuation share result, no publication authority
+  ---
+  duration_ms: 19.6885
+  ...
+# Subtest: reject wrong input hash
+ok 58 - reject wrong input hash
+  ---
+  duration_ms: 10.441625
+  ...
+# Subtest: reject wrong company
+ok 59 - reject wrong company
+  ---
+  duration_ms: 9.575916
+  ...
+# Subtest: reject v1 downgrade
+ok 60 - reject v1 downgrade
+  ---
+  duration_ms: 9.397709
+  ...
+# Subtest: reject arbitrary calculator command
+ok 61 - reject arbitrary calculator command
+  ---
+  duration_ms: 9.3725
+  ...
+# Subtest: reject caller table result
+ok 62 - reject caller table result
+  ---
+  duration_ms: 10.337917
+  ...
+# Subtest: reject nonexistent order/capacity
+ok 63 - reject nonexistent order/capacity
+  ---
+  duration_ms: 10.014166
+  ...
+# Subtest: reject page number as reported earnings
+ok 64 - reject page number as reported earnings
+  ---
+  duration_ms: 10.156375
+  ...
+# Subtest: reject assumption promoted to reported
+ok 65 - reject assumption promoted to reported
+  ---
+  duration_ms: 10.698125
+  ...
+# Subtest: reject unsupported normalization
+ok 66 - reject unsupported normalization
+  ---
+  duration_ms: 11.218125
+  ...
+# Subtest: reject partial year called full year
+ok 67 - reject partial year called full year
+  ---
+  duration_ms: 11.251375
+  ...
+# Subtest: reject duplicate paragraph IDs
+ok 68 - reject duplicate paragraph IDs
+  ---
+  duration_ms: 10.379084
+  ...
+# Subtest: reject wrong chapter order
+ok 69 - reject wrong chapter order
+  ---
+  duration_ms: 10.509375
+  ...
+# Subtest: reject future author
+ok 70 - reject future author
+  ---
+  duration_ms: 8.917458
+  ...
+# Subtest: reject backdated author
+ok 71 - reject backdated author
+  ---
+  duration_ms: 9.29175
+  ...
+# Subtest: reject original deadline expired
+ok 72 - reject original deadline expired
+  ---
+  duration_ms: 2.833958
+  ...
+# Subtest: reject nonfinite multiple
+ok 73 - reject nonfinite multiple
+  ---
+  duration_ms: 0.497542
+  ...
+# Subtest: reject raw credential in prose
+ok 74 - reject raw credential in prose
+  ---
+  duration_ms: 9.890583
+  ...
+# Subtest: reject unselected source
+ok 75 - reject unselected source
+  ---
+  duration_ms: 9.9215
+  ...
+# Subtest: reject withdrawn source
+ok 76 - reject withdrawn source
+  ---
+  duration_ms: 9.021125
+  ...
+# Subtest: reject superseded source
+ok 77 - reject superseded source
+  ---
+  duration_ms: 8.982792
+  ...
+# Subtest: reject rights revoked
+ok 78 - reject rights revoked
+  ---
+  duration_ms: 9.398083
+  ...
+# Subtest: reject wrong source revision
+ok 79 - reject wrong source revision
+  ---
+  duration_ms: 9.029792
+  ...
+# Subtest: reject wrong source company
+ok 80 - reject wrong source company
+  ---
+  duration_ms: 9.615417
+  ...
+# Subtest: reject future source admission
+ok 81 - reject future source admission
+  ---
+  duration_ms: 9.584166
+  ...
+# Subtest: reject date-only invented midnight
+ok 82 - reject date-only invented midnight
+  ---
+  duration_ms: 9.913875
+  ...
+# Subtest: reject future source date
+ok 83 - reject future source date
+  ---
+  duration_ms: 9.561625
+  ...
+# Subtest: reject invalid civil date
+ok 84 - reject invalid civil date
+  ---
+  duration_ms: 9.377667
+  ...
+# Subtest: reject missing source receipt
+ok 85 - reject missing source receipt
+  ---
+  duration_ms: 9.274875
+  ...
+# Subtest: reject invented gap reason
+ok 86 - reject invented gap reason
+  ---
+  duration_ms: 10.231875
+  ...
+# Subtest: sealed financial result tampering rejects even after all caller hashes are recomputed
+ok 87 - sealed financial result tampering rejects even after all caller hashes are recomputed
+  ---
+  duration_ms: 9.376
+  ...
+# Subtest: industry-only source cannot establish company rumor or production, and rumor cannot become order
+ok 88 - industry-only source cannot establish company rumor or production, and rumor cannot become order
+  ---
+  duration_ms: 31.80125
+  ...
+# Subtest: annual2027 is separate from next four; changed prose/model/valuation needs a new hash
+ok 89 - annual2027 is separate from next four; changed prose/model/valuation needs a new hash
+  ---
+  duration_ms: 32.839375
+  ...
+# Subtest: printed facts, explicit assumptions and sealed gaps keep their classifications
+ok 90 - printed facts, explicit assumptions and sealed gaps keep their classifications
+  ---
+  duration_ms: 11.659625
+  ...
+# Subtest: actual AUO loss scenario gives null P/E price, never a negative target
+ok 91 - actual AUO loss scenario gives null P/E price, never a negative target
+  ---
+  duration_ms: 11.678375
+  ...
+# Subtest: validated snapshots retain no mutable aliases to author or trusted context
+ok 92 - validated snapshots retain no mutable aliases to author or trusted context
+  ---
+  duration_ms: 12.256708
+  ...
+# Subtest: author original deadlines are exclusive, retaining microsecond boundary precision
+ok 93 - author original deadlines are exclusive, retaining microsecond boundary precision
+  ---
+  duration_ms: 72.912542
+  ...
+# Subtest: actual sealed source/execution/financial gaps are referenceable with exact namespaces
+ok 94 - actual sealed source/execution/financial gaps are referenceable with exact namespaces
+  ---
+  duration_ms: 114.802833
+  ...
+# Subtest: actual calculated ordinary/potential/diluted share denominators are available in all periods
+ok 95 - actual calculated ordinary/potential/diluted share denominators are available in all periods
+  ---
+  duration_ms: 126.807125
+  ...
+# (node:84576) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:84576) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# research_complete_input_failure_phase read_validate research_complete_input_invalid
+# research_complete_input_failure_phase read_validate research_complete_input_invalid
+# Subtest: canonical frozen vector 0
+ok 96 - canonical frozen vector 0
+  ---
+  duration_ms: 0.8295
+  ...
+# Subtest: canonical frozen vector 1
+ok 97 - canonical frozen vector 1
+  ---
+  duration_ms: 0.07
+  ...
+# Subtest: canonical frozen vector 2
+ok 98 - canonical frozen vector 2
+  ---
+  duration_ms: 0.089416
+  ...
+# Subtest: canonical frozen vector 3
+ok 99 - canonical frozen vector 3
+  ---
+  duration_ms: 0.116791
+  ...
+# Subtest: canonical frozen vector 4
+ok 100 - canonical frozen vector 4
+  ---
+  duration_ms: 0.114333
+  ...
+# Subtest: canonical frozen vector 5
+ok 101 - canonical frozen vector 5
+  ---
+  duration_ms: 0.087833
+  ...
+# Subtest: canonical frozen vector 6
+ok 102 - canonical frozen vector 6
+  ---
+  duration_ms: 0.142708
+  ...
+# Subtest: canonical frozen vector 7
+ok 103 - canonical frozen vector 7
+  ---
+  duration_ms: 0.047083
+  ...
+# Subtest: canonical frozen vector 8
+ok 104 - canonical frozen vector 8
+  ---
+  duration_ms: 0.435292
+  ...
+# Subtest: canonical frozen vector 9
+ok 105 - canonical frozen vector 9
+  ---
+  duration_ms: 0.456583
+  ...
+# Subtest: canonical frozen vector 10
+ok 106 - canonical frozen vector 10
+  ---
+  duration_ms: 0.184084
+  ...
+# Subtest: canonical frozen vector 11
+ok 107 - canonical frozen vector 11
+  ---
+  duration_ms: 0.061042
+  ...
+# Subtest: canonical frozen vector 12
+ok 108 - canonical frozen vector 12
+  ---
+  duration_ms: 0.043167
+  ...
+# Subtest: canonical frozen vector 13
+ok 109 - canonical frozen vector 13
+  ---
+  duration_ms: 0.151667
+  ...
+# Subtest: canonical frozen vector 14
+ok 110 - canonical frozen vector 14
+  ---
+  duration_ms: 0.231208
+  ...
+# Subtest: strict JSON rejects {"a":1,"a":2}
+ok 111 - strict JSON rejects {"a":1,"a":2}
+  ---
+  duration_ms: 0.30975
+  ...
+# Subtest: strict JSON rejects {"a":1,"\\u0061":2}
+ok 112 - strict JSON rejects {"a":1,"\\u0061":2}
+  ---
+  duration_ms: 0.092709
+  ...
+# Subtest: strict JSON rejects {"x":NaN}
+ok 113 - strict JSON rejects {"x":NaN}
+  ---
+  duration_ms: 0.03575
+  ...
+# Subtest: strict JSON rejects {"x":1} trailing
+ok 114 - strict JSON rejects {"x":1} trailing
+  ---
+  duration_ms: 0.037167
+  ...
+# Subtest: strict JSON rejects "\\ud800"
+ok 115 - strict JSON rejects "\\ud800"
+  ---
+  duration_ms: 0.029792
+  ...
+# Subtest: strict JSON rejects "\\u0000"
+ok 116 - strict JSON rejects "\\u0000"
+  ---
+  duration_ms: 0.028458
+  ...
+# Subtest: non JSON value rejects Infinity
+ok 117 - non JSON value rejects Infinity
+  ---
+  duration_ms: 0.041375
+  ...
+# Subtest: non JSON value rejects NaN
+ok 118 - non JSON value rejects NaN
+  ---
+  duration_ms: 0.026417
+  ...
+# Subtest: non JSON value rejects ()=>{}
+ok 119 - non JSON value rejects ()=>{}
+  ---
+  duration_ms: 0.083333
+  ...
+# Subtest: non JSON value rejects undefined
+ok 120 - non JSON value rejects undefined
+  ---
+  duration_ms: 0.030917
+  ...
+# Subtest: 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+ok 121 - 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+  ---
+  duration_ms: 12.342708
+  ...
+# Subtest: closed ingress cannot select executable, financial body or clock
+ok 122 - closed ingress cannot select executable, financial body or clock
+  ---
+  duration_ms: 0.124583
+  ...
+# Subtest: schema constant and unknown nested fields reject
+ok 123 - schema constant and unknown nested fields reject
+  ---
+  duration_ms: 0.133291
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping false
+ok 124 - old DB sealed mapping cannot bypass current mapping false
+  ---
+  duration_ms: 0.4945
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping true
+ok 125 - old DB sealed mapping cannot bypass current mapping true
+  ---
+  duration_ms: 0.185459
+  ...
+# Subtest: static schema bundles exactly preserve both original numeric and Unicode schemas
+ok 126 - static schema bundles exactly preserve both original numeric and Unicode schemas
+  ---
+  duration_ms: 9.833791
+  ...
+# Subtest: closure metadata v1 preserves sorted keys independent of insertion order and binds SQL
+ok 127 - closure metadata v1 preserves sorted keys independent of insertion order and binds SQL
+  ---
+  duration_ms: 2.530917
+  ...
+# (node:84577) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:84577) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-execution-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: REB01 actual matched credentials resolve private role-separated controller principals
+ok 128 - REB01 actual matched credentials resolve private role-separated controller principals
+  ---
+  duration_ms: 10.823958
+  ...
+# Subtest: REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication
+ok 129 - REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication
+  ---
+  duration_ms: 0.876042
+  ...
+# Subtest: REB03 role swap, alias header, raw/malformed token and cron do not authenticate
+ok 130 - REB03 role swap, alias header, raw/malformed token and cron do not authenticate
+  ---
+  duration_ms: 0.381917
+  ...
+# Subtest: REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null
+ok 131 - REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null
+  ---
+  duration_ms: 1.563125
+  ...
+# Subtest: REB05 key rotation cannot adopt an existing assignment and does not log credential values
+ok 132 - REB05 key rotation cannot adopt an existing assignment and does not log credential values
+  ---
+  duration_ms: 0.16475
+  ...
+# Subtest: REB06 original work owner and reservation role are separate from principal and cannot be swapped
+ok 133 - REB06 original work owner and reservation role are separate from principal and cannot be swapped
+  ---
+  duration_ms: 0.578417
+  ...
+# Subtest: REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation
+ok 134 - REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation
+  ---
+  duration_ms: 2.336708
+  ...
+# Subtest: REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions
+ok 135 - REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions
+  ---
+  duration_ms: 1.199041
+  ...
+# Subtest: REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks
+ok 136 - REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks
+  ---
+  duration_ms: 0.864875
+  ...
+# Subtest: REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution
+ok 137 - REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution
+  ---
+  duration_ms: 0.7285
+  ...
+# Subtest: REB11 used invocation is rejected rather than silently creating a new execution or budget charge
+ok 138 - REB11 used invocation is rejected rather than silently creating a new execution or budget charge
+  ---
+  duration_ms: 0.219
+  ...
+# Subtest: REB12 PG microseconds and explicit offsets preserve exact original boundary ordering
+ok 139 - REB12 PG microseconds and explicit offsets preserve exact original boundary ordering
+  ---
+  duration_ms: 0.393917
+  ...
+# (node:84578) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:84578) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-reviewer-assignment.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: assignReviewer strict8192 byte body, header discrimination and UTF8
+ok 140 - assignReviewer strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 16.410333
+  ...
+# Subtest: readReviewerAssignment strict8192 byte body, header discrimination and UTF8
+ok 141 - readReviewerAssignment strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 2.960042
+  ...
+# Subtest: readReviewerPacket strict8192 byte body, header discrimination and UTF8
+ok 142 - readReviewerPacket strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 1.195833
+  ...
+# Subtest: body stall cancelled; expired read launches no I/O
+ok 143 - body stall cancelled; expired read launches no I/O
+  ---
+  duration_ms: 31.327
+  ...
+# Subtest: author, cron, tester and unknown credentials cannot enter reviewer body/DB
+ok 144 - author, cron, tester and unknown credentials cannot enter reviewer body/DB
+  ---
+  duration_ms: 1.724666
+  ...
+# Subtest: 2409 actual fixed calculation, synthetic completed author and atomic reviewer transport
+ok 145 - 2409 actual fixed calculation, synthetic completed author and atomic reviewer transport
+  ---
+  duration_ms: 574.661542
+  ...
+# Subtest: 2383 actual fixed calculation, synthetic completed author and atomic reviewer transport
+ok 146 - 2383 actual fixed calculation, synthetic completed author and atomic reviewer transport
+  ---
+  duration_ms: 260.980167
+  ...
+# (node:84584) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:84584) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-execution-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: server configuration and exact credential principal agree without constructing author impersonation
+ok 147 - server configuration and exact credential principal agree without constructing author impersonation
+  ---
+  duration_ms: 11.958875
+  ...
+# Subtest: author/reviewer rotations, credential interchange and old-author-as-reviewer change frozen authority
+ok 148 - author/reviewer rotations, credential interchange and old-author-as-reviewer change frozen authority
+  ---
+  duration_ms: 0.355875
+  ...
+# Subtest: same credential or cron/test/approval alias disables both configuration and request identity
+ok 149 - same credential or cron/test/approval alias disables both configuration and request identity
+  ---
+  duration_ms: 1.181209
+  ...
+1..149
+# tests 149
+# suites 0
+# pass 149
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9068.668625

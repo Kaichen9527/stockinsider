@@ -1,0 +1,297 @@
+TAP version 13
+# (node:11615) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:11615) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/package.json.
+# Subtest: v2 assignment is writer-only, exact bearer, distinct from reviewer/test/cron; no DB work on denial
+ok 1 - v2 assignment is writer-only, exact bearer, distinct from reviewer/test/cron; no DB work on denial
+  ---
+  duration_ms: 620.157416
+  ...
+# Subtest: closed marker, body keys, original input shape and bounded streaming parser reject before DB
+ok 2 - closed marker, body keys, original input shape and bounded streaming parser reject before DB
+  ---
+  duration_ms: 245.324375
+  ...
+# Subtest: current compiled validated read precedes assignment, principal is server derived, private fields omitted
+ok 3 - current compiled validated read precedes assignment, principal is server derived, private fields omitted
+  ---
+  duration_ms: 17.901542
+  ...
+# Subtest: exact read is null before admission; response-loss recovery reads same immutable assignment without reservation
+ok 4 - exact read is null before admission; response-loss recovery reads same immutable assignment without reservation
+  ---
+  duration_ms: 15.5525
+  ...
+# Subtest: current mapping/source/lease rejection or wrong sealed revision cannot call assignment RPC
+ok 5 - current mapping/source/lease rejection or wrong sealed revision cannot call assignment RPC
+  ---
+  duration_ms: 203.678542
+  ...
+# Subtest: unexpected DB bindings cannot return successful assignment or leak principal
+ok 6 - unexpected DB bindings cannot return successful assignment or leak principal
+  ---
+  duration_ms: 346.245209
+  ...
+# Subtest: unmarked v1 reserve keeps original role separation and does not invoke v2 assignment
+ok 7 - unmarked v1 reserve keeps original role separation and does not invoke v2 assignment
+  ---
+  duration_ms: 7.626542
+  ...
+# (node:11616) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:11616) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/package.json.
+# research_complete_input_failure_phase read_validate research_complete_input_invalid
+# research_complete_input_failure_phase read_validate research_complete_input_invalid
+# Subtest: canonical frozen vector 0
+ok 8 - canonical frozen vector 0
+  ---
+  duration_ms: 2.0945
+  ...
+# Subtest: canonical frozen vector 1
+ok 9 - canonical frozen vector 1
+  ---
+  duration_ms: 0.232708
+  ...
+# Subtest: canonical frozen vector 2
+ok 10 - canonical frozen vector 2
+  ---
+  duration_ms: 0.214959
+  ...
+# Subtest: canonical frozen vector 3
+ok 11 - canonical frozen vector 3
+  ---
+  duration_ms: 0.289417
+  ...
+# Subtest: canonical frozen vector 4
+ok 12 - canonical frozen vector 4
+  ---
+  duration_ms: 0.118666
+  ...
+# Subtest: canonical frozen vector 5
+ok 13 - canonical frozen vector 5
+  ---
+  duration_ms: 0.092459
+  ...
+# Subtest: canonical frozen vector 6
+ok 14 - canonical frozen vector 6
+  ---
+  duration_ms: 0.208208
+  ...
+# Subtest: canonical frozen vector 7
+ok 15 - canonical frozen vector 7
+  ---
+  duration_ms: 0.067125
+  ...
+# Subtest: canonical frozen vector 8
+ok 16 - canonical frozen vector 8
+  ---
+  duration_ms: 0.48925
+  ...
+# Subtest: canonical frozen vector 9
+ok 17 - canonical frozen vector 9
+  ---
+  duration_ms: 0.826167
+  ...
+# Subtest: canonical frozen vector 10
+ok 18 - canonical frozen vector 10
+  ---
+  duration_ms: 0.222083
+  ...
+# Subtest: canonical frozen vector 11
+ok 19 - canonical frozen vector 11
+  ---
+  duration_ms: 0.068083
+  ...
+# Subtest: canonical frozen vector 12
+ok 20 - canonical frozen vector 12
+  ---
+  duration_ms: 0.051666
+  ...
+# Subtest: canonical frozen vector 13
+ok 21 - canonical frozen vector 13
+  ---
+  duration_ms: 0.178833
+  ...
+# Subtest: canonical frozen vector 14
+ok 22 - canonical frozen vector 14
+  ---
+  duration_ms: 0.342667
+  ...
+# Subtest: strict JSON rejects {"a":1,"a":2}
+ok 23 - strict JSON rejects {"a":1,"a":2}
+  ---
+  duration_ms: 0.819
+  ...
+# Subtest: strict JSON rejects {"a":1,"\\u0061":2}
+ok 24 - strict JSON rejects {"a":1,"\\u0061":2}
+  ---
+  duration_ms: 0.320292
+  ...
+# Subtest: strict JSON rejects {"x":NaN}
+ok 25 - strict JSON rejects {"x":NaN}
+  ---
+  duration_ms: 0.251083
+  ...
+# Subtest: strict JSON rejects {"x":1} trailing
+ok 26 - strict JSON rejects {"x":1} trailing
+  ---
+  duration_ms: 0.263292
+  ...
+# Subtest: strict JSON rejects "\\ud800"
+ok 27 - strict JSON rejects "\\ud800"
+  ---
+  duration_ms: 0.4175
+  ...
+# Subtest: strict JSON rejects "\\u0000"
+ok 28 - strict JSON rejects "\\u0000"
+  ---
+  duration_ms: 0.108083
+  ...
+# Subtest: non JSON value rejects Infinity
+ok 29 - non JSON value rejects Infinity
+  ---
+  duration_ms: 0.141375
+  ...
+# Subtest: non JSON value rejects NaN
+ok 30 - non JSON value rejects NaN
+  ---
+  duration_ms: 0.062958
+  ...
+# Subtest: non JSON value rejects ()=>{}
+ok 31 - non JSON value rejects ()=>{}
+  ---
+  duration_ms: 0.200875
+  ...
+# Subtest: non JSON value rejects undefined
+ok 32 - non JSON value rejects undefined
+  ---
+  duration_ms: 0.062416
+  ...
+# Subtest: 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+ok 33 - 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+  ---
+  duration_ms: 27.735125
+  ...
+# Subtest: closed ingress cannot select executable, financial body or clock
+ok 34 - closed ingress cannot select executable, financial body or clock
+  ---
+  duration_ms: 0.357916
+  ...
+# Subtest: schema constant and unknown nested fields reject
+ok 35 - schema constant and unknown nested fields reject
+  ---
+  duration_ms: 0.277708
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping false
+ok 36 - old DB sealed mapping cannot bypass current mapping false
+  ---
+  duration_ms: 0.825458
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping true
+ok 37 - old DB sealed mapping cannot bypass current mapping true
+  ---
+  duration_ms: 0.302791
+  ...
+# Subtest: static schema bundles exactly preserve both original numeric and Unicode schemas
+ok 38 - static schema bundles exactly preserve both original numeric and Unicode schemas
+  ---
+  duration_ms: 15.101959
+  ...
+# Subtest: closure metadata v1 preserves sorted keys independent of insertion order and binds SQL
+ok 39 - closure metadata v1 preserves sorted keys independent of insertion order and binds SQL
+  ---
+  duration_ms: 4.065792
+  ...
+# (node:11617) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:11617) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/src/lib/research-execution-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/package.json.
+# Subtest: REB01 actual matched credentials resolve private role-separated controller principals
+ok 40 - REB01 actual matched credentials resolve private role-separated controller principals
+  ---
+  duration_ms: 59.377167
+  ...
+# Subtest: REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication
+ok 41 - REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication
+  ---
+  duration_ms: 2.37775
+  ...
+# Subtest: REB03 role swap, alias header, raw/malformed token and cron do not authenticate
+ok 42 - REB03 role swap, alias header, raw/malformed token and cron do not authenticate
+  ---
+  duration_ms: 0.486875
+  ...
+# Subtest: REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null
+ok 43 - REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null
+  ---
+  duration_ms: 5.292167
+  ...
+# Subtest: REB05 key rotation cannot adopt an existing assignment and does not log credential values
+ok 44 - REB05 key rotation cannot adopt an existing assignment and does not log credential values
+  ---
+  duration_ms: 0.400834
+  ...
+# Subtest: REB06 original work owner and reservation role are separate from principal and cannot be swapped
+ok 45 - REB06 original work owner and reservation role are separate from principal and cannot be swapped
+  ---
+  duration_ms: 1.251125
+  ...
+# Subtest: REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation
+ok 46 - REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation
+  ---
+  duration_ms: 5.348166
+  ...
+# Subtest: REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions
+ok 47 - REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions
+  ---
+  duration_ms: 8.957375
+  ...
+# Subtest: REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks
+ok 48 - REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks
+  ---
+  duration_ms: 2.281792
+  ...
+# Subtest: REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution
+ok 49 - REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution
+  ---
+  duration_ms: 2.039208
+  ...
+# Subtest: REB11 used invocation is rejected rather than silently creating a new execution or budget charge
+ok 50 - REB11 used invocation is rejected rather than silently creating a new execution or budget charge
+  ---
+  duration_ms: 0.678084
+  ...
+# Subtest: REB12 PG microseconds and explicit offsets preserve exact original boundary ordering
+ok 51 - REB12 PG microseconds and explicit offsets preserve exact original boundary ordering
+  ---
+  duration_ms: 0.919542
+  ...
+# (node:11618) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:11618) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/src/lib/research-review-auth.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/package.json.
+# Subtest: research qualification requires a separate bearer identity
+ok 52 - research qualification requires a separate bearer identity
+  ---
+  duration_ms: 57.5855
+  ...
+# Subtest: independent testing and human approval cannot share writer or each other identity
+ok 53 - independent testing and human approval cannot share writer or each other identity
+  ---
+  duration_ms: 1.607792
+  ...
+1..53
+# tests 53
+# suites 0
+# pass 53
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2218.606875

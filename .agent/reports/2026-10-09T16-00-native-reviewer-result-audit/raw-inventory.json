@@ -1,0 +1,17 @@
+[
+  {
+    "file": "root-independent-verification.json",
+    "bytes": 585,
+    "sha256": "71c9c8051cbc8db650f1e6bc92f4a8c0d69d7244bc16bd325cad9a0bb98f786f"
+  },
+  {
+    "file": "vm-receipt.json",
+    "bytes": 59875,
+    "sha256": "1bdaa75dea50629c0bbb14d12327499a6444df0f4d3234b68f1bbfe7b728ae3e"
+  },
+  {
+    "file": "pr334-product-runtime-failed.log",
+    "bytes": 536546,
+    "sha256": "31b48df064b9668036dcc27eb0e548c6861e005770ef44f3429bce9eb2597035"
+  }
+]

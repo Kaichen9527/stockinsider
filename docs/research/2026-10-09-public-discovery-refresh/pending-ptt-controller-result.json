@@ -1,0 +1,261 @@
+{
+  "policyVersion": "research-source-attempt-controller-v1",
+  "runId": "0aaebc26-16ed-4eb4-a082-6a8d5cd3aae2",
+  "asOf": "2026-10-09T07:13:07.526Z",
+  "limits": {
+    "scopes": 20,
+    "pagesPerScope": 1,
+    "bodyBytes": 4000000,
+    "timeoutMs": 12000,
+    "runMs": 60000,
+    "inputBytes": 2000000,
+    "priorItems": 1000
+  },
+  "receipts": [
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "0aaebc26-16ed-4eb4-a082-6a8d5cd3aae2",
+      "scopeId": "ptt-2731-oct09",
+      "platform": "ptt",
+      "sourceUrl": "https://www.ptt.cc/bbs/Stock/M.1791514884.A.A00.html",
+      "scope": "One previously read public post body and delivered pushes; no pagination or platform completeness claim",
+      "method": "public_summary_relay",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T07:13:07.315558+00:00",
+        "checkedBy": "authorized-mac-public-summary-review"
+      },
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-09T06:40:42.963631+00:00",
+        "publication": {
+          "precision": "unverified_timezone",
+          "value": "Fri Oct  9 11:01:22 2026"
+        },
+        "acquisition": {
+          "responseSha256": "ff85fcde7850dcde343365a450e84c0b21ad6282d189b2043f011133e01232dc",
+          "responseBytes": 8630,
+          "readSurfaceUrl": "https://www.ptt.cc/bbs/Stock/M.1791514884.A.A00.html"
+        },
+        "pendingSummary": "2731雄獅：PTT轉載九月營收2,685,543仟元、年增11.40%；官方當次API只有八月，尚未確認九月原始公告。追查旅遊產品與季節性、毛利及預收款。營收增長不等於EPS或買點。"
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-09T06:40:42.239313+00:00",
+      "completedAt": "2026-10-09T06:40:42.963631+00:00",
+      "readOutcome": "read_success",
+      "outcome": "pending_publication_precision",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_publication_instant_missing",
+      "legacyConnectorDisposition": "blocked_license",
+      "platformEnabled": false,
+      "receiptHash": "71cce9565f0915dc7942a48abc26d110511c0782378e0e1f1f8678c521b9d073",
+      "attempt": {
+        "platform": "ptt",
+        "status": "failed",
+        "attemptedAt": "2026-10-09T06:40:42.239313+00:00",
+        "scope": "ptt-2731-oct09: One previously read public post body and delivered pushes; no pagination or platform completeness claim | https://www.ptt.cc/bbs/Stock/M.1791514884.A.A00.html",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "71cce9565f0915dc7942a48abc26d110511c0782378e0e1f1f8678c521b9d073"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "0aaebc26-16ed-4eb4-a082-6a8d5cd3aae2",
+      "scopeId": "ptt-8069-oct09",
+      "platform": "ptt",
+      "sourceUrl": "https://www.ptt.cc/bbs/Stock/M.1791521661.A.A4B.html",
+      "scope": "One previously read public post body and delivered pushes; no pagination or platform completeness claim",
+      "method": "public_summary_relay",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T07:13:07.315558+00:00",
+        "checkedBy": "authorized-mac-public-summary-review"
+      },
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-09T06:40:43.652218+00:00",
+        "publication": {
+          "precision": "unverified_timezone",
+          "value": "Fri Oct  9 12:54:18 2026"
+        },
+        "acquisition": {
+          "responseSha256": "a5ed9386a9254e06ed7f6a01b04cd934789750fe99c6767961164f4409749194",
+          "responseBytes": 8050,
+          "readSurfaceUrl": "https://www.ptt.cc/bbs/Stock/M.1791521661.A.A4B.html"
+        },
+        "pendingSummary": "8069元太：PTT轉載九月營收3,613,296仟元、年增13.54%，累計年減1.08%；官方當次API只有八月。需核對九月公告及電子紙組合、訂單持續性；單月回升不等於全年成長。"
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-09T06:40:42.963649+00:00",
+      "completedAt": "2026-10-09T06:40:43.652218+00:00",
+      "readOutcome": "read_success",
+      "outcome": "pending_publication_precision",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_publication_instant_missing",
+      "legacyConnectorDisposition": "blocked_license",
+      "platformEnabled": false,
+      "receiptHash": "7806af08d7adfb3da40c13909787f58f021e057f1903222e3118a13674148d39",
+      "attempt": {
+        "platform": "ptt",
+        "status": "failed",
+        "attemptedAt": "2026-10-09T06:40:42.963649+00:00",
+        "scope": "ptt-8069-oct09: One previously read public post body and delivered pushes; no pagination or platform completeness claim | https://www.ptt.cc/bbs/Stock/M.1791521661.A.A4B.html",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "7806af08d7adfb3da40c13909787f58f021e057f1903222e3118a13674148d39"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "0aaebc26-16ed-4eb4-a082-6a8d5cd3aae2",
+      "scopeId": "ptt-8932-oct09",
+      "platform": "ptt",
+      "sourceUrl": "https://www.ptt.cc/bbs/Stock/M.1791526881.A.0E2.html",
+      "scope": "One previously read public post body and delivered pushes; no pagination or platform completeness claim",
+      "method": "public_summary_relay",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T07:13:07.315558+00:00",
+        "checkedBy": "authorized-mac-public-summary-review"
+      },
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-09T06:40:44.351279+00:00",
+        "publication": {
+          "precision": "unverified_timezone",
+          "value": "Fri Oct  9 14:21:19 2026"
+        },
+        "acquisition": {
+          "responseSha256": "8a314260b347cfa3a5522864325fa7401a8da1e3326a308d4e8b35d489b6f063",
+          "responseBytes": 6592,
+          "readSurfaceUrl": "https://www.ptt.cc/bbs/Stock/M.1791526881.A.0E2.html"
+        },
+        "pendingSummary": "8932智通*：PTT轉載九月營收271,125仟元、年增29.50%；官方當次API只有八月。需核對九月公告、經常性與專案收入、毛利及現金流；不可只由營收推高EPS。"
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-09T06:40:43.652240+00:00",
+      "completedAt": "2026-10-09T06:40:44.351279+00:00",
+      "readOutcome": "read_success",
+      "outcome": "pending_publication_precision",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_publication_instant_missing",
+      "legacyConnectorDisposition": "blocked_license",
+      "platformEnabled": false,
+      "receiptHash": "0cb0366320633837642724b13cebd5c9746c4f557278f0e5d704459898c9568f",
+      "attempt": {
+        "platform": "ptt",
+        "status": "failed",
+        "attemptedAt": "2026-10-09T06:40:43.652240+00:00",
+        "scope": "ptt-8932-oct09: One previously read public post body and delivered pushes; no pagination or platform completeness claim | https://www.ptt.cc/bbs/Stock/M.1791526881.A.0E2.html",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "0cb0366320633837642724b13cebd5c9746c4f557278f0e5d704459898c9568f"
+      }
+    }
+  ],
+  "unattemptedPlatforms": [
+    "official",
+    "news",
+    "broker",
+    "investanchors",
+    "threads",
+    "instagram",
+    "facebook",
+    "podcast",
+    "youtube",
+    "telegram",
+    "bulltalk",
+    "twse_insider"
+  ],
+  "priorityRequest": {
+    "asOf": "2026-10-09T07:13:07.526Z",
+    "sourceAttempts": [
+      {
+        "platform": "ptt",
+        "status": "failed",
+        "attemptedAt": "2026-10-09T06:40:42.239313+00:00",
+        "scope": "ptt-2731-oct09: One previously read public post body and delivered pushes; no pagination or platform completeness claim | https://www.ptt.cc/bbs/Stock/M.1791514884.A.A00.html",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "71cce9565f0915dc7942a48abc26d110511c0782378e0e1f1f8678c521b9d073"
+      },
+      {
+        "platform": "ptt",
+        "status": "failed",
+        "attemptedAt": "2026-10-09T06:40:42.963649+00:00",
+        "scope": "ptt-8069-oct09: One previously read public post body and delivered pushes; no pagination or platform completeness claim | https://www.ptt.cc/bbs/Stock/M.1791521661.A.A4B.html",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "7806af08d7adfb3da40c13909787f58f021e057f1903222e3118a13674148d39"
+      },
+      {
+        "platform": "ptt",
+        "status": "failed",
+        "attemptedAt": "2026-10-09T06:40:43.652240+00:00",
+        "scope": "ptt-8932-oct09: One previously read public post body and delivered pushes; no pagination or platform completeness claim | https://www.ptt.cc/bbs/Stock/M.1791526881.A.0E2.html",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "0cb0366320633837642724b13cebd5c9746c4f557278f0e5d704459898c9568f"
+      }
+    ]
+  },
+  "inboxRequest": {
+    "items": []
+  },
+  "roots": [],
+  "priorItemsUnchanged": true,
+  "limitations": [
+    "Exact supplied scopes only; no exhaustive search or platform activation.",
+    "No summary/model adapter, authenticated browser dispatcher, submission, publication or strategy approval.",
+    "Prior items are controller-retained context; authoritative heads remain in VPS."
+  ],
+  "authoritativePublication": false,
+  "strategyApproved": false,
+  "startedAt": "2026-10-09T07:13:07.525Z",
+  "explicitRunOnly": true,
+  "inputHash": "99824f174ac90d112a4a4e28bb9bfa192759ef4e2a4b0714df5151b1af98931c",
+  "runHash": "434b54fe7ea86a93acd92034a0b06dd00f4912d5b6eca4a7777e29cfc23ba129"
+}

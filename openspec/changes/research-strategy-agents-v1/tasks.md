@@ -178,3 +178,114 @@ protected evidence ref was minted; PR307 remains unmerged and undeployed.
 ## 2026-10-08 current source-cohort checkpoint
 
 1978 current observations now consumed by the existing bounded relay/controller and native guarded inbox harness; 40 source +12 native maker tests zero skip, types/lint/normal build pass. Three industry records persisted and replay accepted zero; authority remains empty, priority409 research_priority_read_failed and Top20 null. See source-cohort-consumer-handoff.md and observed-source-cohort-consumer-v1/tasks.md for remaining profile/intake/insider work. Root reports preview4aa unsigned scoped repair approval; earlier P2 pending history above is preserved. This is not publication, strategy, protected attestation or automatic role-budget acceptance. VM work continues independently of VPS heavy capacity.
+
+## October8 15:15UTC convergence — scoped code vs live operation
+
+These entries add to the dated historical ledger; prior pending rows are not silently promoted to complete. All new PRs remain draft/unmerged. Main/production/schedules were not changed.
+
+- [x] AUO four-segment and EMC company-specific, recalculable manual research models/articles, plus one shared working-draft renderer (PR310/312/313), independently reviewed within stated scopes. Actual Cloud desktop/mobile draft rendering measured; these are not genuine leased author/reviewer publications or qualified entry recommendations.
+- [x] Three actual public industry summaries admitted via guarded isolated source inbox with restart/exact replay; observed1978-company/10TDR-exclusion scope retained. No fictional company hypotheses or formalstocks authority (PR315/316).
+- [x] Official TWSE/TPEx insider row schemas, identity/date/trust fields and partial-coverage health repaired at2cca2f8 (PR319): maker60tests inclPG; independent59tests+probes. Public raw capture attribution retained separately from VM parsing.
+- [ ] Insider market coverage still resets on changed whole-response hash. Bounded immutable snapshot/CAS/freshness contract53bdeed is under requirements review; not implemented. A partial successful batch is not complete platform coverage.
+- [x] Immutable observed-company roster Slice1 repaired at635cb97 (PR321): maker23TAP/22checks incldirectRPC+types/lint/build; independent10puretests+full1978/10projection+staticSQL review, noP1/P2. Static independent SQL review is not independently rerunPG.
+- [ ] Observed Slice2 scoped ranking/atomic first-discovery/enqueue/currentDB-week shared quota and Slice3 typed claim/input are still in progress on existingVM. Formalpriority still lacks the actual formal roster; do not invent authority to bypass it.
+- [x] Daily technical fair continuation code5dff990 independently approved44tests+probes; docheadac0b0565, PR320. No starvation from the first32symbols when trusted cycle continuation is used; explicitHTTPfailure is not a saved technical snapshot.
+- [ ] MonitorVM integration/build, actual daily schedule, monthly independent renewal and held-position runtime acceptance remain open.
+- [x] Inactive native JSONL parser1afdd69 (PR317) and process lifecycle0825db4 (PR318) independently validated50and81cases respectively, plus scoped probes. Original Linux platform/auth failures retained; neither activates native runner or protected authority. VM compatibility verification queued.
+- [x] Original GitHub run35888990201 audit saved: test9JSONL passed; actualfail12hostdev/inode mismatch and16doctor. Exact executable component/doctor check remain unproved; no speculation promoted to root cause.
+- [x] Existing outbox race harness pipe collection repaired atde57358 (PR322). Oldrealchild regression failed; maker and independentMacPG17.10+collector7/7passed0skip. AllSQLrace/status/regex/count expectations unchanged. VMregression/normalbuild queued; originalCIcausality not proved.
+- [ ] First-publication v2 requirements64f7 approved; actual leased author/durable draft/independent budgeted review/fenced submission still pending implementation and genuine role execution. ManualAUO/EMCarticles are not substituted for role evidence.
+- [ ] Actual platform content breadth (KOLvideo/audio/social/broker), fair newsource coverage, exactPIT price/benchmark/corporateactions, fullcandidate strategy/forward trials and user-approved strategy adoption are not complete.
+- [ ] Exact protected requirements/architecture/review authority graph, reviewed mergecommit, productionmigration/deploy, schedule enablement and fiveactualtradingdays remain open. OrdinaryGitHubproduct-runtime successes are not protectedapproval. PR315ordinaryCIharness failure has a separate proposed repairPR322; it was not blindly rerun.
+
+ExistingCodexVM remains the implementation/heavy-test environment; VPSdisk does not block these tasks. Latest Slice1repair receipt measured sampledRSS1.54GB/taskdisk1.60GB/free23.50GB,4CPU/32GiB cgroup; filesystemfree is not projectquota proof. NoVPS or Macunique research data deleted during these increments. No strategy profit claim.
+
+
+## October9 00:20 Taipei — actual claim and review repairs
+
+See docs/operations/2026-10-09/progress-convergence-0020.md for exact subjects, evidence attribution and defects. Prior dated pending entries are retained as history, not current completion assertions.
+
+- [x] Converged dev4868472 actual25TAP positive observed claim/input/restart; earlier21TAP closed window kept distinct.78focused/112integration/types/lint/build maker evidence; no model/article publication.
+- [ ] Repair observed service INSERT lineage bypass, expired cross-scope slot and recaptured admission clock; independent3P2 requestchanges prevents release.
+- [x] Final outbox2ebb independent8/8; monitor d309 explicitCI membership/44tests; paper09a independent20/20plus4probes and releaseidentity1/1.
+- [ ] PaperVMchecks, real heldcompanyaction entitlements, live monitoring/renewal/schedules remain open.
+- [ ] Insider4b3 candidate78lightcases is not approved: durablecapacityreservation, FIFO/growingfile input and escapedprojectionpage bounds require3P2repairs plus actualPG/HTTP/FD/build.
+- [x] Add PR324 clockimplementation6a94498,9unit0skip, unchangedproductionSQL/sourceidentity; close reviewer-reported errorpathdeadline/secondsformat in maker.
+- [ ] Finalclockreview and actualLinuxPGopen/closed/restart/threeoriginalsuites/type/lint/build; do not call originalCIrepaired before these pass.
+- [ ] Firstpublication64f7 actualroleexecution/independentreview/submission, sourcebreadth, fullcandidatePITstrategy/forwardtrials, protectedapproval, reviewedmerge/deploy and fiveactualtradingdays remain open.
+
+Continue on existing CodexVM; VPSheavycapacity is not a development stop condition. No new VPS or Mac unique-data deletion, mainmerge, productionmigration, publication, scheduleactivation or profitclaim.
+
+## 2026-10-09 12:05 Taipei continuation checkpoint
+
+- [x] Re-measured expandedVPS read-only:87.95GBavailable; app roots plus sharedPG3.389GB; currentservicesactive/home+preview200. Capacity is no longer the prior blocker. No deletion.
+- [x] Saved durable-vs-rebuildable placement matrix and truthful CI/VM/red-review progress in docs/operations/2026-10-09/progress-convergence-1205.md.
+- [ ] Repair actual insiderSQL and harnessverdict/deadline findings; independently accept observed43d repair; complete real roles/publication/strategies/protected release/schedules.
+
+## 2026-10-09 12:22 Taipei actual continuation
+
+- [x] Recorded independentobservedapproval and snapshotoriginalPG16/16+Linuxjournal1/1 aftertwoactualSQLred→green repairs.
+- [x] Created/reread hourly engineeringheartbeat stockinsider; activeworkdedupe, preservedauthorization/rights/history, no falseproductenablement.
+- [ ] Repair/reviewpublicationancestorrights/RRisolation/exact-replayfindings; finishactualsnapshotHTTPstack; diagnoseCI-onlynmhang withoutfakeclockfallback; finishrealroles/strategies/protectedrelease/schedules. See progress-convergence-1222.md.
+
+## 2026-10-09 12:35 Taipei — actual transport and independent source-fence acceptance
+
+- [x] Snapshot exact d274: VM original PG16/16, Linux journal1/1 and real guarded Next/PostgREST/PG transport6/6, zero skip; types/lint/normal build passed. Exact source/build/resource receipts are sealed separately at c6e5b753. Synthetic fixture privileges are not production ACL or full-market coverage.
+- [x] Source-fence exact05a: independent original PG15/15 and prior ancestry/RR/replay counterexamples pass; unsigned scoped code approval, unsupported ancestry remains fail closed.
+- [x] Clock exact770: VM original three PG suites plus dedicated canaries6/6 zero skip. CI0cf pinned build/original research PG/dedicated canary steps pass; full downstream runtime is still running and earlier CI nm/Mac probe failures remain unexplained.
+- [ ] Complete genuine v2 role execution, independent article review and fenced submission; full source/strategy/production/schedule acceptance remains open. See progress-convergence-1235.md; no claim that the entire original plan is finished.
+
+- [x] Later final CI observation: exact0cf run37883620967 ordinary product/runtime succeeds, researchPG354/354 plus clock11/11 and types/lint/normal build pass, nine Playwright cases pass. Evaluation/native jobs skipped; protected approval and earlier intermittent failure causes are not inferred. Bounded metadata saved in clock-0cf-ordinary-ci.json.
+
+
+## 2026-10-09 12:55 Taipei — continued bounded implementation
+
+- [x] Shadow attention exactafa3 independent28/28 plus precision/permutation probes; prior request-changes retained, v1 unchanged, PR329 draft.
+- [ ] Shadow VM type/lint/normalbuild and later production adoption remain separate.
+- [x] VM immutable incomplete-preparation codea4f delivered; maker46focused/32native+types/lint/build reported, PR330 draft.
+- [ ] Exact HTTP receipt and independent a4 review, real financial/calculator/trusted roles/publication remain open.
+- [x] Identified insider lifetime32/128MiB/128run limits despite expanded VPS; archive contracte8 independently reviewed with lease-ownership P2.
+- [ ] Repair/review archive contract before implementation and actual crash/restore/shared-budget acceptance; never delete research evidence to continue.
+- [ ] Protected merge/deployment, source breadth, true monitoring/strategy/forward evidence and five actual trading days remain incomplete. See progress-convergence-1255.md.
+
+## 2026-10-09 13:50 Taipei — current milestone reconciliation
+
+Earlier dated checkboxes above preserve historical observations; this section supersedes their pending component states, without closing the end-to-end milestones.
+
+- [x] Expanded VPS measured about87.95GB free; the old capacity blocker is resolved. No verified unused large StockInsider deployment was found, so no stock/research evidence was deleted. Keep canonical history/evidence/ledgers on VPS; rebuildable isolated dependencies/build/databases stay in VM.
+- [x] PR329 shadow ranking runtimeafa3: independent28/28 and ordinary CI/build/9browser cases passed. This compares alternative attention measures only; live scoring remains unchanged. VM receipt branch6b9c50aa is available for ingestion.
+- [x] PR330 original preparation growth defect repaired at3ac619: same original unit capped at4preparations/524288 serialized bytes; maker50/50+native32/32 and independent originalPG13/13 plus129-subset counterexample pass, zero skip. Receipt0feb2b0 retained. No genuine author/reviewer was dispatched.
+- [x] PR331 benchmark runtime59c14f3: scoped independent review, ordinary CI/build/9browser cases pass. Actual VM reader3/3 and boundary12/12 do not prove a positive qualified-stock snapshot. Native roster profile7pass/3fail repaired by installing its real priority dependency; final23/23 VM, unsigned static review passed. Test-only root successor77c3f5d retains the identical web tree and all assertions.
+- [x] PR332 archive codec/private-FD/byte-identical restore component5f46: maker17/17 and independent17/17+4probes, zero skip; no SQL eviction or activation. Cooperative file timeout limitation retained.
+- [x] PR333 financial queue missing-lease repair runtime1b8aa0d: production read-only evidence11fetched/0written identified the actual omitted entry. Original3pass/5fail becomes16/16; independent16/16+3probes passes. No schema/helper change or production drain.
+- [ ] PR333 VM isolated artifact/PG route acceptance, full types/lint/normal build and genuine protected release remain pending.
+- [x] Fixed AUO/EMC bounded financial adapter designa2046447 independently accepted: complete inventory14files and original model manifests verified in Git, per-file/aggregate/input/output/deadline/finite calculation bounds explicit. This is design approval, not raw-PDF verification or implementation approval.
+- [ ] Implement/review the AUO/EMC financial supplement, then a separately reviewed durable complete-input signature. Manual assumptions remain assumptions; no financialVerified/dispatchReady promotion from recomputation alone.
+- [ ] Complete actual platform content breadth and search expansion, fair cohort/price-phase enrichment, real leased author and independent budgeted reviewer, fenced company-specific publication, genuine qualification and held-position/company-action monitoring.
+- [ ] Complete all-candidate point-in-time strategy and forward comparisons, independent result verification and exact user-approved adoption. Two persistent paper-book APIs and tests do not establish a profitable strategy.
+- [ ] Complete measured archive authority/fencing/shared-writer reservation before hot eviction; preserve raw bytes until that acceptance passes.
+- [ ] Restore genuine protected authority/graph, then reviewed merge commits, production migration/deployment, verified product schedules and five actual trading days. Ordinary CI and unsigned reviews cannot substitute for this authority; future trading days cannot be compressed into fixtures.
+
+Development and heavy acceptance continue on the existing Codex VM. Progress, failures and evidence are committed to PR327; original AUO product heartbeat remains paused, separate from the active deduplicating engineering continuation.
+
+## 2026-10-09 14:24 Taipei — continued implementation
+
+- [x] PR333 VM queue artifact/PG and normal build receipts saved; exact85f8 ordinary CI519/516/0/3skip passes. Actual official positive refresh and protected release remain open.
+- [x] Independently reviewed cursor test discovery d4c0721 and controller-only Podcast index712140c merged into development integration24333aa;35/35 source tests and actual Mac metadata read retained. No audio/transcript/legacy-content grant or production platform enablement.
+- [x] Actual public broker PDF page5 checked and reviewed; unknown publication instant/closed host retained as pending, not fabricated historical intake.
+- [ ] Fetch/review exact financial supplement and complete one combined native/type/lint/build; durable complete input and genuine roles/publication still pending.
+- [ ] Repair archive delayed-open cancellation cleanup liability before VM measurement/eviction.
+- [ ] Complete remaining real source breadth, fair observed cohort, qualification/held positions/actions, all-candidate PIT/forward strategies, external protected authority, reviewed formal deployment and five real trading days.
+
+See progress-convergence-1424.md for actual subjects, failures, resource retention and continuation state. Earlier entries retain their original dates and limits.
+
+## October9 14:39 actual review and capability checkpoint
+
+- [x] Fetch exact financialadapterabd58 and preserve independent25/31/38 zero-skip results plus two real P2 failures; VM repair requested, not accepted.
+- [x] Complete-inputff677 design reviewed; final financial schema/dependency/clocks still await repaired code acceptance.
+- [x] Archive587 lightweight/FD review passes; real VM PG/resources and production authority remain separate.
+- [x] Preserve actual offline Podcast capability inventoryc96; root cache unreadable, no ASR available claim. Bound and independently reviewda17 private CPU pilot before installation.
+- [x] Preserve exact benchmark77 ordinary CI and positive/negative reader attribution in PR331; no protected promotion.
+- [ ] Repair/review financial P2s; complete combined VM native/types/lint/build; implement closed complete input and actual separate roles.
+- [ ] Execute reviewed offline content capability pilot, actual source breadth/cohort and company-specific publication; retain missing/failed source states.
+- [ ] Remaining core strategy/held-position/qualification/protected deployment/schedule/five-real-day milestones remain incomplete; see progress-convergence-1439.md.

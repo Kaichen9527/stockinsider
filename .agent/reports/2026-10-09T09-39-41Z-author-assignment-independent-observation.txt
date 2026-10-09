@@ -1,0 +1,6 @@
+Unsigned scoped CODE PASS from existing independent reviewer /root/author_input_review_oct08.
+Subject fa3edca89fc3dde1cd06cb5ccb55b6b4714f4ed5; tree94e47129acb5a02e473d3430a1a631080993b56f.
+Reviewer reported no remaining P1/P2 in this private assignment increment and independently ran actual PostgreSQL17:9/9PASS,0skip, without editing files.
+Verified original source/job/reservation fences, immutable unique(job,attempt), principal/input/owner/clock mismatch rejection, replay/restart, concurrent first admission, withdrawal, expiry and role ACLs.
+Actual pinned predecessor SQL SHA2562c4a7a4f6ea986220fb71150a962f329a6a74d11a481e85eb561515ef48a7981.
+This file is a root-preserved relay of the independent reviewer message; it is unsigned, not raw reviewer TAP or protected attestation. Complete input uses a synthetic private fixture. HTTP credential resolution, full financial integration, actual model/reviewer execution and publication are not accepted. Predecessor and guarded route acceptance remain required before product use.

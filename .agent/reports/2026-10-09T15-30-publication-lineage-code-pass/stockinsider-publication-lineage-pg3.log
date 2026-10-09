@@ -1,0 +1,145 @@
+TAP version 13
+# NOTICE:  constraint "candidate_detail_snapshots_revision_hash_check" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  identifier "candidate_detail_snapshots_stock_id_session_date_model_version_key" will be truncated to "candidate_detail_snapshots_stock_id_session_date_model_version_"
+# NOTICE:  constraint "candidate_detail_snapshots_stock_id_session_date_model_version_" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_input_hash_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_claims_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_source_refs_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_paid_content_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_bundle_binding_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_bundles_append_only_v4" for relation "public.candidate_dossier_bundles" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_research_dossiers_append_only_v4" for relation "public.candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_receipts_append_only_v4" for relation "public.candidate_dossier_submission_receipts" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_detail_published_append_only_v4" for relation "public.candidate_detail_snapshots" does not exist, skipping
+# ERROR:  candidate_dossier_revision_not_published
+# CONTEXT:  PL/pgSQL function record_candidate_dossier_submission_v4(uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb) line 19 at RAISE
+# ERROR:  research_publication_writer_required
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 26 at RAISE
+# ERROR:  permission denied for table candidate_dossier_bundles
+# ERROR:  permission denied for table candidate_dossier_bundles
+# ERROR:  permission denied for table candidate_dossier_bundles
+# ERROR:  research_publication_branch_invalid
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 23 at RAISE
+# ERROR:  research_publication_branch_invalid
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 23 at RAISE
+# ERROR:  new row violates row-level security policy for table "candidate_dossier_bundles"
+# ERROR:  new row for relation "candidate_dossier_bundles" violates check constraint "research_bundle_revision_union_v2"
+# ERROR:  new row for relation "candidate_dossier_bundles" violates check constraint "research_bundle_revision_union_v2"
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_bundle_payload
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 36 at RAISE
+# ERROR:  research_publication_bundle_payload
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 36 at RAISE
+# ERROR:  duplicate key value violates unique constraint "research_bundle_input_unique_v2"
+# Subtest: existing publication tables: exclusive v1/v2 lineage, inert writes, real PG restart and truncate races
+    # Subtest: legacy bytes and functions preserved; absent lawful published stage still rejects
+    ok 1 - legacy bytes and functions preserved; absent lawful published stage still rejects
+      ---
+      duration_ms: 233.366667
+      ...
+    # Subtest: v1 deep first binding, rejection and expired later-attempt retries remain lawful
+    ok 2 - v1 deep first binding, rejection and expired later-attempt retries remain lawful
+      ---
+      duration_ms: 639.331791
+      ...
+    # Subtest: only expected owner admits exact closed inert research bundle; mixed branches cannot bypass NULL CHECK
+    ok 3 - only expected owner admits exact closed inert research bundle; mixed branches cannot bypass NULL CHECK
+      ---
+      duration_ms: 2297.556
+      ...
+# ERROR:  research_publication_writer_required
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 26 at RAISE
+# ERROR:  permission denied for table candidate_dossier_outbox_v5
+# ERROR:  permission denied for table candidate_dossier_outbox_v5
+# ERROR:  permission denied for table candidate_dossier_outbox_v5
+# ERROR:  research_publication_branch_mismatch
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 20 at RAISE
+# ERROR:  new row for relation "candidate_dossier_outbox_v5" violates check constraint "research_outbox_revision_union_v2"
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_input_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 30 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  research_publication_outbox_binding
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 46 at RAISE
+# ERROR:  duplicate key value violates unique constraint "research_outbox_input_unique_v2"
+# ERROR:  research_publication_v2_inert
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 10 at RAISE
+# ERROR:  research_publication_v2_inert
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 5 at RAISE
+# ERROR:  research_publication_v2_inert
+# CONTEXT:  PL/pgSQL function fence_research_publication_truncate_v2() line 6 at RAISE
+# NOTICE:  truncate cascades to table "candidate_research_dossiers"
+# NOTICE:  truncate cascades to table "candidate_dossier_submission_receipts"
+# NOTICE:  truncate cascades to table "candidate_dossier_outbox_v5"
+# ERROR:  research_publication_v2_inert
+# CONTEXT:  PL/pgSQL function fence_research_publication_truncate_v2() line 6 at RAISE
+# ERROR:  research_publication_branch_immutable
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 9 at RAISE
+    # Subtest: old-snapshot REPEATABLE READ cannot truncate a subsequently committed v2 outbox
+    ok 4 - old-snapshot REPEATABLE READ cannot truncate a subsequently committed v2 outbox
+      ---
+      duration_ms: 1277.566375
+      ...
+    # Subtest: mismatched lineage, nonqueued state and direct v2 mutation reject with unchanged all-state audit
+    ok 5 - mismatched lineage, nonqueued state and direct v2 mutation reject with unchanged all-state audit
+      ---
+      duration_ms: 4079.380375
+      ...
+# ERROR:  research_publication_branch_mismatch
+# CONTEXT:  PL/pgSQL function fence_research_publication_lineage_v2() line 20 at RAISE
+# ERROR:  permission denied for table candidate_dossier_bundles
+    # Subtest: READ COMMITTED truncate waits for a new v2 insertion and sees its committed row
+    ok 6 - READ COMMITTED truncate waits for a new v2 insertion and sees its committed row
+      ---
+      duration_ms: 1575.27025
+      ...
+    # Subtest: ordinary claimer excludes v2; legacy downgrade/rebind fails; immutable rows survive actual restart
+    ok 7 - ordinary claimer excludes v2; legacy downgrade/rebind fails; immutable rows survive actual restart
+      ---
+      duration_ms: 910.824958
+      ...
+    1..7
+ok 1 - existing publication tables: exclusive v1/v2 lineage, inert writes, real PG restart and truncate races
+  ---
+  duration_ms: 13750.98425
+  ...
+1..1
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13869.632333

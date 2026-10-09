@@ -1,0 +1,130 @@
+TAP version 13
+# (node:10401) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:10401) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/package.json.
+# Subtest: v2 assignment is writer-only, exact bearer, distinct from reviewer/test/cron; no DB work on denial
+ok 1 - v2 assignment is writer-only, exact bearer, distinct from reviewer/test/cron; no DB work on denial
+  ---
+  duration_ms: 268.907125
+  ...
+# Subtest: closed marker, body keys, original input shape and bounded streaming parser reject before DB
+ok 2 - closed marker, body keys, original input shape and bounded streaming parser reject before DB
+  ---
+  duration_ms: 116.13975
+  ...
+# Subtest: current compiled validated read precedes assignment, principal is server derived, private fields omitted
+ok 3 - current compiled validated read precedes assignment, principal is server derived, private fields omitted
+  ---
+  duration_ms: 10.024042
+  ...
+# Subtest: exact read is null before admission; response-loss recovery reads same immutable assignment without reservation
+ok 4 - exact read is null before admission; response-loss recovery reads same immutable assignment without reservation
+  ---
+  duration_ms: 8.306375
+  ...
+# Subtest: current mapping/source/lease rejection or wrong sealed revision cannot call assignment RPC
+ok 5 - current mapping/source/lease rejection or wrong sealed revision cannot call assignment RPC
+  ---
+  duration_ms: 93.0865
+  ...
+# Subtest: unexpected DB bindings cannot return successful assignment or leak principal
+ok 6 - unexpected DB bindings cannot return successful assignment or leak principal
+  ---
+  duration_ms: 159.78125
+  ...
+# Subtest: unmarked v1 reserve keeps original role separation and does not invoke v2 assignment
+ok 7 - unmarked v1 reserve keeps original role separation and does not invoke v2 assignment
+  ---
+  duration_ms: 3.771792
+  ...
+# (node:10402) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:10402) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/src/lib/research-execution-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/package.json.
+# Subtest: REB01 actual matched credentials resolve private role-separated controller principals
+ok 8 - REB01 actual matched credentials resolve private role-separated controller principals
+  ---
+  duration_ms: 13.284833
+  ...
+# Subtest: REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication
+ok 9 - REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication
+  ---
+  duration_ms: 0.700792
+  ...
+# Subtest: REB03 role swap, alias header, raw/malformed token and cron do not authenticate
+ok 10 - REB03 role swap, alias header, raw/malformed token and cron do not authenticate
+  ---
+  duration_ms: 0.229709
+  ...
+# Subtest: REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null
+ok 11 - REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null
+  ---
+  duration_ms: 1.378917
+  ...
+# Subtest: REB05 key rotation cannot adopt an existing assignment and does not log credential values
+ok 12 - REB05 key rotation cannot adopt an existing assignment and does not log credential values
+  ---
+  duration_ms: 0.178458
+  ...
+# Subtest: REB06 original work owner and reservation role are separate from principal and cannot be swapped
+ok 13 - REB06 original work owner and reservation role are separate from principal and cannot be swapped
+  ---
+  duration_ms: 0.467417
+  ...
+# Subtest: REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation
+ok 14 - REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation
+  ---
+  duration_ms: 2.104667
+  ...
+# Subtest: REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions
+ok 15 - REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions
+  ---
+  duration_ms: 1.010917
+  ...
+# Subtest: REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks
+ok 16 - REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks
+  ---
+  duration_ms: 0.691458
+  ...
+# Subtest: REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution
+ok 17 - REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution
+  ---
+  duration_ms: 0.548709
+  ...
+# Subtest: REB11 used invocation is rejected rather than silently creating a new execution or budget charge
+ok 18 - REB11 used invocation is rejected rather than silently creating a new execution or budget charge
+  ---
+  duration_ms: 0.172083
+  ...
+# Subtest: REB12 PG microseconds and explicit offsets preserve exact original boundary ordering
+ok 19 - REB12 PG microseconds and explicit offsets preserve exact original boundary ordering
+  ---
+  duration_ms: 0.286667
+  ...
+# (node:10403) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:10403) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/src/lib/research-review-auth.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-assignment-route-oct09/web/package.json.
+# Subtest: research qualification requires a separate bearer identity
+ok 20 - research qualification requires a separate bearer identity
+  ---
+  duration_ms: 10.5915
+  ...
+# Subtest: independent testing and human approval cannot share writer or each other identity
+ok 21 - independent testing and human approval cannot share writer or each other identity
+  ---
+  duration_ms: 0.55625
+  ...
+1..21
+# tests 21
+# suites 0
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 967.990708

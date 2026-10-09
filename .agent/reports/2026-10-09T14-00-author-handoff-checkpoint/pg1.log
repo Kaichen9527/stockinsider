@@ -1,0 +1,332 @@
+TAP version 13
+# (node:60193) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:60193) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-handoff.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: author handoff: real original claim/completion fences, synthetic upstream/execution and actual AUO calculator
+    # Subtest: no result before receive, all original rows and budget unchanged
+    ok 1 - no result before receive, all original rows and budget unchanged
+      ---
+      duration_ms: 693.309916
+      ...
+    # Subtest: actual calculator and authenticated binding persist one private draft only
+    ok 2 - actual calculator and authenticated binding persist one private draft only
+      ---
+      duration_ms: 709.681791
+      ...
+    # Subtest: exact receive replay/read and PostgreSQL restart preserve original bytes and charge
+    ok 3 - exact receive replay/read and PostgreSQL restart preserve original bytes and charge
+      ---
+      duration_ms: 2016.502708
+      ...
+# ERROR:  research_author_result_replay_conflict
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 71 at RAISE
+    # Subtest: changed article or execution bindings fail with no new row
+    ok 4 - changed article or execution bindings fail with no new row
+      ---
+      duration_ms: 2139.581875
+      ...
+    # Subtest: same assignment conflicting immutable envelope is rejected by SQL
+    ok 5 - same assignment conflicting immutable envelope is rejected by SQL
+      ---
+      duration_ms: 190.387208
+      ...
+    # Subtest: concurrent exact first receive creates one result and no completion
+    ok 6 - concurrent exact first receive creates one result and no completion
+      ---
+      duration_ms: 1159.592208
+      ...
+    # Subtest: invocation cannot be reused across different original assignments
+    ok 7 - invocation cannot be reused across different original assignments
+      ---
+      duration_ms: 1400.6525
+      ...
+# ERROR:  research_author_result_bound
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 17 at RAISE
+    # Subtest: SQL canonical envelope exact1MiB/+1 quota, synthetic validation-limit text only
+    ok 8 - SQL canonical envelope exact1MiB/+1 quota, synthetic validation-limit text only
+      ---
+      duration_ms: 1338.07125
+      ...
+# ERROR:  research_author_result_binding
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 61 at RAISE
+# ERROR:  research_author_result_binding
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 61 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_shape
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 15 at RAISE
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+    # Subtest: SQL null identities, changed calculation and promoted capabilities reject
+    ok 9 - SQL null identities, changed calculation and promoted capabilities reject
+      ---
+      duration_ms: 1831.183875
+      ...
+    # Subtest: service table mutations denied; owner UPDATE DELETE TRUNCATE rejected
+    ok 10 - service table mutations denied; owner UPDATE DELETE TRUNCATE rejected
+      ---
+      duration_ms: 221.268625
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# research_complete_input_failure_phase read_rpc unclassified
+    # Subtest: withdrawal rejects read/replay without changing stored draft
+    ok 11 - withdrawal rejects read/replay without changing stored draft
+      ---
+      duration_ms: 227.059583
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# research_complete_input_failure_phase read_rpc unclassified
+    # Subtest: expired original job cannot read or receive a private result
+    ok 12 - expired original job cannot read or receive a private result
+      ---
+      duration_ms: 922.414041
+      ...
+# ERROR:  observed_completion_requires_scoped_controller
+# CONTEXT:  PL/pgSQL function fence_observed_model_completion_v2() line 3 at RAISE
+    # Subtest: handoff null before commit; result identity and principal mismatch leave state unchanged
+    not ok 13 - handoff null before commit; result identity and principal mismatch leave state unchanged
+      ---
+      duration_ms: 98.213125
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:125:13'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-handoff-7xEwJ2 -p 55193 -d postgres -c SET ROLE service_role;SELECT read_research_author_handoff_context_v2('{"owner":"synthetic-private-packet-owner","jobId":"34d87f0b-cf9d-426b-80c7-3bd4c4e06957","attempt":1,"reservationId":"48ee76d9-82e7-4b33-ae7f-487b5325bed4","scope":"research_observed_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","preparationId":"120b4cb5-c65d-4072-8ff4-98edf0c218b9","preparationHash":"fe77ac7794e16279779fb7a10f1c78290bacb382a38ceb477e3f755b531e4414","expectedArtifactManifestHash":"1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314","expectedCalculatorExecutionHash":"79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"}','e0bbc496-d3ee-4ae5-84f9-b91495ddf66c','4610cbd9ca15c5e996ef5c5bcf62aa2d705ce830472d727027bd73baaff9c40c','7bcdd129b3aa74b126a9c0fc86ab2b14a9bfe3ddf82c2cb05e0bb2b12e3cb632','1b4f1b58-7956-4c70-9714-cd1267447cea','9e4cc447731afd063dfde2f20ce459ee8f4414342433ed8e142481a8ab38f8d8');
+        ERROR:  operator is not unique: unknown - unknown
+        LINE 17: ...rch_complete_hash_v2(r.payload->'validatedArticle'-'articleH...
+                                                                      ^
+        HINT:  Could not choose a best candidate operator. You might need to add explicit type casts.
+        QUERY:  a.assignment_id IS NULL OR v.revision_id IS NULL OR r.result_id IS NULL OR p.preparation_id IS NULL
+          OR a.canonical_request IS DISTINCT FROM p_request OR v.canonical_request IS DISTINCT FROM p_request
+          OR a.controller_principal IS DISTINCT FROM p_principal OR a.input_hash IS DISTINCT FROM p_input_hash
+          OR v.input_hash IS DISTINCT FROM p_input_hash OR r.assignment_id IS DISTINCT FROM a.assignment_id
+          OR r.result_hash IS DISTINCT FROM p_result_hash OR r.result_hash IS DISTINCT FROM public.research_complete_hash_v2(r.payload)
+          OR r.logical_bytes IS DISTINCT FROM octet_length(convert_to(public.research_complete_canonical_v2(r.payload),'UTF8'))
+          OR v.input_hash IS DISTINCT FROM public.research_complete_hash_v2(v.canonical_payload)
+          OR v.job_id IS DISTINCT FROM a.job_id OR v.attempt IS DISTINCT FROM a.attempt
+          OR v.reservation_id IS DISTINCT FROM a.reservation_id OR v.research_company_id IS DISTINCT FROM a.research_company_id
+          OR v.snapshot_hash IS DISTINCT FROM a.snapshot_hash OR v.research_scope IS DISTINCT FROM 'research_observed_v1'
+          OR p.job_id IS DISTINCT FROM a.job_id OR p.attempt IS DISTINCT FROM a.attempt OR p.reservation_id IS DISTINCT FROM a.reservation_id
+          OR p.input_hash IS DISTINCT FROM p_request->>'preparationHash' OR p.preparation_id::text IS DISTINCT FROM p_request->>'preparationId'
+          OR p.source_seal_id IS DISTINCT FROM v.source_seal_id
+          OR r.payload->>'assignmentId' IS DISTINCT FROM a.assignment_id::text
+          OR r.payload->>'inputRevisionId' IS DISTINCT FROM p_revision_id::text OR r.payload->>'inputHash' IS DISTINCT FROM p_input_hash
+          OR r.payload->'observation'->>'invocationId' IS DISTINCT FROM r.invocation_id
+          OR r.payload->'validatedArticle'->>'articleHash' IS DISTINCT FROM public.research_complete_hash_v2(r.payload->'validatedArticle'-'articleHash')
+        CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 17 at IF
+        
+      code: 1
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        ChildProcess.exithandler (node:child_process:414:12)
+        ChildProcess.emit (node:events:518:28)
+        maybeClose (node:internal/child_process:1101:16)
+        Socket.<anonymous> (node:internal/child_process:456:11)
+        Socket.emit (node:events:518:28)
+        Pipe.<anonymous> (node:net:351:12)
+      ...
+    # Subtest: generic completion trigger rejects even superuser; scoped commit creates only original immutable completion
+    not ok 14 - generic completion trigger rejects even superuser; scoped commit creates only original immutable completion
+      ---
+      duration_ms: 136.971583
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:131:13'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-handoff-7xEwJ2 -p 55193 -d postgres -c SET ROLE service_role;SELECT read_research_author_handoff_context_v2('{"owner":"synthetic-private-packet-owner","jobId":"34d87f0b-cf9d-426b-80c7-3bd4c4e06957","attempt":1,"reservationId":"48ee76d9-82e7-4b33-ae7f-487b5325bed4","scope":"research_observed_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","preparationId":"120b4cb5-c65d-4072-8ff4-98edf0c218b9","preparationHash":"fe77ac7794e16279779fb7a10f1c78290bacb382a38ceb477e3f755b531e4414","expectedArtifactManifestHash":"1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314","expectedCalculatorExecutionHash":"79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"}','e0bbc496-d3ee-4ae5-84f9-b91495ddf66c','4610cbd9ca15c5e996ef5c5bcf62aa2d705ce830472d727027bd73baaff9c40c','7bcdd129b3aa74b126a9c0fc86ab2b14a9bfe3ddf82c2cb05e0bb2b12e3cb632','1b4f1b58-7956-4c70-9714-cd1267447cea','9e4cc447731afd063dfde2f20ce459ee8f4414342433ed8e142481a8ab38f8d8');
+        ERROR:  operator is not unique: unknown - unknown
+        LINE 17: ...rch_complete_hash_v2(r.payload->'validatedArticle'-'articleH...
+                                                                      ^
+        HINT:  Could not choose a best candidate operator. You might need to add explicit type casts.
+        QUERY:  a.assignment_id IS NULL OR v.revision_id IS NULL OR r.result_id IS NULL OR p.preparation_id IS NULL
+          OR a.canonical_request IS DISTINCT FROM p_request OR v.canonical_request IS DISTINCT FROM p_request
+          OR a.controller_principal IS DISTINCT FROM p_principal OR a.input_hash IS DISTINCT FROM p_input_hash
+          OR v.input_hash IS DISTINCT FROM p_input_hash OR r.assignment_id IS DISTINCT FROM a.assignment_id
+          OR r.result_hash IS DISTINCT FROM p_result_hash OR r.result_hash IS DISTINCT FROM public.research_complete_hash_v2(r.payload)
+          OR r.logical_bytes IS DISTINCT FROM octet_length(convert_to(public.research_complete_canonical_v2(r.payload),'UTF8'))
+          OR v.input_hash IS DISTINCT FROM public.research_complete_hash_v2(v.canonical_payload)
+          OR v.job_id IS DISTINCT FROM a.job_id OR v.attempt IS DISTINCT FROM a.attempt
+          OR v.reservation_id IS DISTINCT FROM a.reservation_id OR v.research_company_id IS DISTINCT FROM a.research_company_id
+          OR v.snapshot_hash IS DISTINCT FROM a.snapshot_hash OR v.research_scope IS DISTINCT FROM 'research_observed_v1'
+          OR p.job_id IS DISTINCT FROM a.job_id OR p.attempt IS DISTINCT FROM a.attempt OR p.reservation_id IS DISTINCT FROM a.reservation_id
+          OR p.input_hash IS DISTINCT FROM p_request->>'preparationHash' OR p.preparation_id::text IS DISTINCT FROM p_request->>'preparationId'
+          OR p.source_seal_id IS DISTINCT FROM v.source_seal_id
+          OR r.payload->>'assignmentId' IS DISTINCT FROM a.assignment_id::text
+          OR r.payload->>'inputRevisionId' IS DISTINCT FROM p_revision_id::text OR r.payload->>'inputHash' IS DISTINCT FROM p_input_hash
+          OR r.payload->'observation'->>'invocationId' IS DISTINCT FROM r.invocation_id
+          OR r.payload->'validatedArticle'->>'articleHash' IS DISTINCT FROM public.research_complete_hash_v2(r.payload->'validatedArticle'-'articleHash')
+        CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 17 at IF
+        
+      code: 1
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        ChildProcess.exithandler (node:child_process:414:12)
+        ChildProcess.emit (node:events:518:28)
+        maybeClose (node:internal/child_process:1101:16)
+        ChildProcess._handle.onexit (node:internal/child_process:304:5)
+      ...
+    # Subtest: handoff replay/read and restart preserve exact receipt; active-work result reader still rejects
+    not ok 15 - handoff replay/read and restart preserve exact receipt; active-work result reader still rejects
+      ---
+      duration_ms: 96.321375
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:138:13'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-handoff-7xEwJ2 -p 55193 -d postgres -c SET ROLE service_role;SELECT read_research_author_handoff_context_v2('{"owner":"synthetic-private-packet-owner","jobId":"34d87f0b-cf9d-426b-80c7-3bd4c4e06957","attempt":1,"reservationId":"48ee76d9-82e7-4b33-ae7f-487b5325bed4","scope":"research_observed_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","preparationId":"120b4cb5-c65d-4072-8ff4-98edf0c218b9","preparationHash":"fe77ac7794e16279779fb7a10f1c78290bacb382a38ceb477e3f755b531e4414","expectedArtifactManifestHash":"1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314","expectedCalculatorExecutionHash":"79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"}','e0bbc496-d3ee-4ae5-84f9-b91495ddf66c','4610cbd9ca15c5e996ef5c5bcf62aa2d705ce830472d727027bd73baaff9c40c','7bcdd129b3aa74b126a9c0fc86ab2b14a9bfe3ddf82c2cb05e0bb2b12e3cb632','1b4f1b58-7956-4c70-9714-cd1267447cea','9e4cc447731afd063dfde2f20ce459ee8f4414342433ed8e142481a8ab38f8d8');
+        ERROR:  operator is not unique: unknown - unknown
+        LINE 17: ...rch_complete_hash_v2(r.payload->'validatedArticle'-'articleH...
+                                                                      ^
+        HINT:  Could not choose a best candidate operator. You might need to add explicit type casts.
+        QUERY:  a.assignment_id IS NULL OR v.revision_id IS NULL OR r.result_id IS NULL OR p.preparation_id IS NULL
+          OR a.canonical_request IS DISTINCT FROM p_request OR v.canonical_request IS DISTINCT FROM p_request
+          OR a.controller_principal IS DISTINCT FROM p_principal OR a.input_hash IS DISTINCT FROM p_input_hash
+          OR v.input_hash IS DISTINCT FROM p_input_hash OR r.assignment_id IS DISTINCT FROM a.assignment_id
+          OR r.result_hash IS DISTINCT FROM p_result_hash OR r.result_hash IS DISTINCT FROM public.research_complete_hash_v2(r.payload)
+          OR r.logical_bytes IS DISTINCT FROM octet_length(convert_to(public.research_complete_canonical_v2(r.payload),'UTF8'))
+          OR v.input_hash IS DISTINCT FROM public.research_complete_hash_v2(v.canonical_payload)
+          OR v.job_id IS DISTINCT FROM a.job_id OR v.attempt IS DISTINCT FROM a.attempt
+          OR v.reservation_id IS DISTINCT FROM a.reservation_id OR v.research_company_id IS DISTINCT FROM a.research_company_id
+          OR v.snapshot_hash IS DISTINCT FROM a.snapshot_hash OR v.research_scope IS DISTINCT FROM 'research_observed_v1'
+          OR p.job_id IS DISTINCT FROM a.job_id OR p.attempt IS DISTINCT FROM a.attempt OR p.reservation_id IS DISTINCT FROM a.reservation_id
+          OR p.input_hash IS DISTINCT FROM p_request->>'preparationHash' OR p.preparation_id::text IS DISTINCT FROM p_request->>'preparationId'
+          OR p.source_seal_id IS DISTINCT FROM v.source_seal_id
+          OR r.payload->>'assignmentId' IS DISTINCT FROM a.assignment_id::text
+          OR r.payload->>'inputRevisionId' IS DISTINCT FROM p_revision_id::text OR r.payload->>'inputHash' IS DISTINCT FROM p_input_hash
+          OR r.payload->'observation'->>'invocationId' IS DISTINCT FROM r.invocation_id
+          OR r.payload->'validatedArticle'->>'articleHash' IS DISTINCT FROM public.research_complete_hash_v2(r.payload->'validatedArticle'-'articleHash')
+        CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 17 at IF
+        
+      code: 1
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        ChildProcess.exithandler (node:child_process:414:12)
+        ChildProcess.emit (node:events:518:28)
+        maybeClose (node:internal/child_process:1101:16)
+        Socket.<anonymous> (node:internal/child_process:456:11)
+        Socket.emit (node:events:518:28)
+        Pipe.<anonymous> (node:net:351:12)
+      ...
+    # Subtest: concurrent first handoff inserts one completion without changing original charge or deadlines
+    not ok 16 - concurrent first handoff inserts one completion without changing original charge or deadlines
+      ---
+      duration_ms: 1383.214125
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:142:13'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-handoff-7xEwJ2 -p 55193 -d postgres -c SET ROLE service_role;SELECT commit_research_author_handoff_v2('{"owner":"synthetic-private-packet-owner","jobId":"eeecedec-6ac2-450b-85b5-43180d7d4568","attempt":1,"reservationId":"e7c738ca-9de6-413b-804d-5d1137e8961b","scope":"research_observed_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","preparationId":"4f4fc9c1-577c-46c7-bf38-edbb8172d248","preparationHash":"ca851b276c3e642a72dc8a05b6fb38719c24302d46a910048270789e674e96bb","expectedArtifactManifestHash":"1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314","expectedCalculatorExecutionHash":"79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"}','b19f7b7e-8ddc-40af-8c0f-b230b1fb2613','37cc1feb41ee54b509eab758b07acd38122f045995349cc5d6bd2e7343d80098','7bcdd129b3aa74b126a9c0fc86ab2b14a9bfe3ddf82c2cb05e0bb2b12e3cb632','864f5525-254f-465c-8427-a1fb2ca1b570','83a3703e7e2617dd0c000dea56adb024fe4cc98f1b4cafc76173bc83cc81798a');
+        ERROR:  operator is not unique: unknown - unknown
+        LINE 17: ...rch_complete_hash_v2(r.payload->'validatedArticle'-'articleH...
+                                                                      ^
+        HINT:  Could not choose a best candidate operator. You might need to add explicit type casts.
+        QUERY:  a.assignment_id IS NULL OR v.revision_id IS NULL OR r.result_id IS NULL OR p.preparation_id IS NULL
+          OR a.canonical_request IS DISTINCT FROM p_request OR v.canonical_request IS DISTINCT FROM p_request
+          OR a.controller_principal IS DISTINCT FROM p_principal OR a.input_hash IS DISTINCT FROM p_input_hash
+          OR v.input_hash IS DISTINCT FROM p_input_hash OR r.assignment_id IS DISTINCT FROM a.assignment_id
+          OR r.result_hash IS DISTINCT FROM p_result_hash OR r.result_hash IS DISTINCT FROM public.research_complete_hash_v2(r.payload)
+          OR r.logical_bytes IS DISTINCT FROM octet_length(convert_to(public.research_complete_canonical_v2(r.payload),'UTF8'))
+          OR v.input_hash IS DISTINCT FROM public.research_complete_hash_v2(v.canonical_payload)
+          OR v.job_id IS DISTINCT FROM a.job_id OR v.attempt IS DISTINCT FROM a.attempt
+          OR v.reservation_id IS DISTINCT FROM a.reservation_id OR v.research_company_id IS DISTINCT FROM a.research_company_id
+          OR v.snapshot_hash IS DISTINCT FROM a.snapshot_hash OR v.research_scope IS DISTINCT FROM 'research_observed_v1'
+          OR p.job_id IS DISTINCT FROM a.job_id OR p.attempt IS DISTINCT FROM a.attempt OR p.reservation_id IS DISTINCT FROM a.reservation_id
+          OR p.input_hash IS DISTINCT FROM p_request->>'preparationHash' OR p.preparation_id::text IS DISTINCT FROM p_request->>'preparationId'
+          OR p.source_seal_id IS DISTINCT FROM v.source_seal_id
+          OR r.payload->>'assignmentId' IS DISTINCT FROM a.assignment_id::text
+          OR r.payload->>'inputRevisionId' IS DISTINCT FROM p_revision_id::text OR r.payload->>'inputHash' IS DISTINCT FROM p_input_hash
+          OR r.payload->'observation'->>'invocationId' IS DISTINCT FROM r.invocation_id
+          OR r.payload->'validatedArticle'->>'articleHash' IS DISTINCT FROM public.research_complete_hash_v2(r.payload->'validatedArticle'-'articleHash')
+        CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 17 at IF
+        PL/pgSQL function commit_research_author_handoff_v2(jsonb,uuid,text,text,uuid,text) line 4 at assignment
+        
+      code: 1
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        ChildProcess.exithandler (node:child_process:414:12)
+        ChildProcess.emit (node:events:518:28)
+        maybeClose (node:internal/child_process:1101:16)
+        ChildProcess._handle.onexit (node:internal/child_process:304:5)
+      ...
+# ERROR:  permission denied for table research_model_completions_v1
+# ERROR:  research_author_handoff_read_committed_required
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 6 at RAISE
+    # Subtest: completed result still denies withdrawn source, expired job and takeover without rewriting history
+    not ok 17 - completed result still denies withdrawn source, expired job and takeover without rewriting history
+      ---
+      duration_ms: 1476.224209
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:147:13'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-handoff-7xEwJ2 -p 55193 -d postgres -c SET ROLE service_role;SELECT read_research_author_handoff_context_v2('{"owner":"synthetic-private-packet-owner","jobId":"15e8bd76-ca7e-43a6-b9fc-c67afea9417b","attempt":1,"reservationId":"7855b277-ca4f-44cd-9103-bd7ebe39b6b9","scope":"research_observed_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","preparationId":"168c5622-034d-4446-a60c-be3829dbe789","preparationHash":"1798551ff337a5a7380940bf42cc3b03ceb74a72be7a25631cf1c9bab1d0cd09","expectedArtifactManifestHash":"1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314","expectedCalculatorExecutionHash":"79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"}','878d16a9-dca7-4d62-b3d0-4f78a77ae152','4e63a3318d4ec59e7be36788a8594870386d7365c23345c582890b3c0443b8d3','7bcdd129b3aa74b126a9c0fc86ab2b14a9bfe3ddf82c2cb05e0bb2b12e3cb632','18664574-0b75-4ad6-ba14-7efd3e1e3833','a9cc3bd1660a9632372ce21f73bd972de1c10cef3edc373fb92eb26b96811378');
+        ERROR:  operator is not unique: unknown - unknown
+        LINE 17: ...rch_complete_hash_v2(r.payload->'validatedArticle'-'articleH...
+                                                                      ^
+        HINT:  Could not choose a best candidate operator. You might need to add explicit type casts.
+        QUERY:  a.assignment_id IS NULL OR v.revision_id IS NULL OR r.result_id IS NULL OR p.preparation_id IS NULL
+          OR a.canonical_request IS DISTINCT FROM p_request OR v.canonical_request IS DISTINCT FROM p_request
+          OR a.controller_principal IS DISTINCT FROM p_principal OR a.input_hash IS DISTINCT FROM p_input_hash
+          OR v.input_hash IS DISTINCT FROM p_input_hash OR r.assignment_id IS DISTINCT FROM a.assignment_id
+          OR r.result_hash IS DISTINCT FROM p_result_hash OR r.result_hash IS DISTINCT FROM public.research_complete_hash_v2(r.payload)
+          OR r.logical_bytes IS DISTINCT FROM octet_length(convert_to(public.research_complete_canonical_v2(r.payload),'UTF8'))
+          OR v.input_hash IS DISTINCT FROM public.research_complete_hash_v2(v.canonical_payload)
+          OR v.job_id IS DISTINCT FROM a.job_id OR v.attempt IS DISTINCT FROM a.attempt
+          OR v.reservation_id IS DISTINCT FROM a.reservation_id OR v.research_company_id IS DISTINCT FROM a.research_company_id
+          OR v.snapshot_hash IS DISTINCT FROM a.snapshot_hash OR v.research_scope IS DISTINCT FROM 'research_observed_v1'
+          OR p.job_id IS DISTINCT FROM a.job_id OR p.attempt IS DISTINCT FROM a.attempt OR p.reservation_id IS DISTINCT FROM a.reservation_id
+          OR p.input_hash IS DISTINCT FROM p_request->>'preparationHash' OR p.preparation_id::text IS DISTINCT FROM p_request->>'preparationId'
+          OR p.source_seal_id IS DISTINCT FROM v.source_seal_id
+          OR r.payload->>'assignmentId' IS DISTINCT FROM a.assignment_id::text
+          OR r.payload->>'inputRevisionId' IS DISTINCT FROM p_revision_id::text OR r.payload->>'inputHash' IS DISTINCT FROM p_input_hash
+          OR r.payload->'observation'->>'invocationId' IS DISTINCT FROM r.invocation_id
+          OR r.payload->'validatedArticle'->>'articleHash' IS DISTINCT FROM public.research_complete_hash_v2(r.payload->'validatedArticle'-'articleHash')
+        CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 17 at IF
+        
+      code: 1
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        ChildProcess.exithandler (node:child_process:414:12)
+        ChildProcess.emit (node:events:518:28)
+        maybeClose (node:internal/child_process:1101:16)
+        Socket.<anonymous> (node:internal/child_process:456:11)
+        Socket.emit (node:events:518:28)
+        Pipe.<anonymous> (node:net:351:12)
+      ...
+    # Subtest: service direct completion write forbidden and serializable context forbidden
+    ok 18 - service direct completion write forbidden and serializable context forbidden
+      ---
+      duration_ms: 421.125083
+      ...
+    1..18
+not ok 1 - author handoff: real original claim/completion fences, synthetic upstream/execution and actual AUO calculator
+  ---
+  duration_ms: 22756.581375
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:23:1'
+  failureType: 'subtestsFailed'
+  error: '5 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 19
+# suites 0
+# pass 13
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 23154.19975

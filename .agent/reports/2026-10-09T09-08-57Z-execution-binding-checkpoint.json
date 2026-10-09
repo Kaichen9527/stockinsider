@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "scoped-implementation-checkpoint-v1",
+  "recordedAt": "2026-10-09T09:08:57.662812+00:00",
+  "subject": "eeba1231545b17ccceb9e46b226b2b1e0eec735f",
+  "tree": "36b67d736849012cb270b465afef04ac25e9229b",
+  "pr": 338,
+  "independentReview": {
+    "reviewer": "author_input_review_oct08",
+    "kind": "unsigned scoped CODE PASS",
+    "subject": "eeba1231545b17ccceb9e46b226b2b1e0eec735f",
+    "unitPassed": 12,
+    "unitSkipped": 0,
+    "extraClockProbesPassed": 21,
+    "rawReviewerLogsPersisted": false,
+    "limitations": "Pure helper only; no DB, actual model, global uniqueness or release approval."
+  },
+  "rootValidation": {
+    "authRegressionPassed": 14,
+    "authRegressionFailed": 0,
+    "skipped": 0,
+    "typecheck": "passed successor rerun",
+    "lint": "passed,0errors33existingwarnings",
+    "normalBuild": "passed successor",
+    "retainedFailures": [
+      "Initial credential authority P2 at eb9276a6",
+      "ProcessEnv credential-type TS2739/TS2559",
+      "BigInt-literal TS2737 at906c84fe; corrected constructors without target change"
+    ]
+  },
+  "logs": [
+    {
+      "name": "stockinsider-execution-binding-typecheck.log",
+      "bytes": 568,
+      "sha256": "570564ce2eb8bd8b5372a7d57cf09079e5399826541946b5ba77f260821c3925"
+    },
+    {
+      "name": "stockinsider-execution-binding-typecheck-rerun.log",
+      "bytes": 450,
+      "sha256": "4820cce0f8f1959386f0d7882ac3cc609a9511b14d4c4ee1c5879a5129425d8f"
+    },
+    {
+      "name": "stockinsider-execution-binding-typecheck-final.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "stockinsider-execution-binding-successor-typecheck.log",
+      "bytes": 446,
+      "sha256": "ce56de3d88a73b3c9a4e5fc4e422881386440a484e5e0055ee9fc457f80d9398"
+    },
+    {
+      "name": "stockinsider-execution-binding-successor-typecheck-final.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "stockinsider-execution-binding-successor-lint.log",
+      "bytes": 4984,
+      "sha256": "c319563a0b62eacd988014b7bf0e9d9f89676e4e0ff9b635431ce25b915bfd85"
+    },
+    {
+      "name": "stockinsider-execution-binding-successor-build.log",
+      "bytes": 6500,
+      "sha256": "dfa4224eac34fe1b31e5fd7f86bbb2381cfc806109900cad1925e1e9a4d4754d"
+    },
+    {
+      "name": "stockinsider-execution-binding-auth-regression.tap",
+      "bytes": 4791,
+      "sha256": "b26dbc8107b670617c9fbf5083ab1d396cf9962dc917af4602bcd652a99c9de5"
+    }
+  ],
+  "actualDispatch": false,
+  "dbAssignment": false,
+  "publishedArticle": false,
+  "protectedApproval": false,
+  "deployment": false
+}

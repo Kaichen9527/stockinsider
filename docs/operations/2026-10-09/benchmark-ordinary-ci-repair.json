@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "ordinary-ci-repair-observation-v1",
+  "observedAt": "2026-10-09T05:24:51Z",
+  "repository": "Kaichen9527/stockinsider",
+  "pullRequest": 331,
+  "failedSubject": "78882d14d1c55721c740b1a6625bc9710698e09e",
+  "runId": 37887903183,
+  "jobId": 113681929212,
+  "job": "product-runtime",
+  "failedStep": "Verify research agent contracts and real PostgreSQL recovery",
+  "researchTap": { "tests": 498, "pass": 476, "fail": 19, "skip": 3, "cancelled": 0 },
+  "candidateHistoryTap": { "tests": 9, "pass": 9, "fail": 0, "skip": 0 },
+  "cause": "Nineteen existing priority route contract tests did not register the new actual observed-priority dependency. After registering it, DR10 exposed its fixture's missing formal_v1 scope.",
+  "nativeSkips": [
+    "real existing PostgreSQL cursor DDL retains CAS/replay progress after restart: PostgreSQL unavailable",
+    "real observed priority accounts1978 and admits an old public company research lead without formal identity: explicit isolated profile not enabled",
+    "real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart: explicit isolated profile not enabled"
+  ],
+  "failedRawLog": {
+    "privateLocalPath": "/tmp/stockinsider-benchmark-78882-ordinary-ci.log",
+    "bytes": 563105,
+    "sha256": "da76454750f31c2dfcb11acad3b38fba0cfd18a7566e8b896012c970ae8cb9be"
+  },
+  "repairSubject": "42e16135708780c5fbc5b559d5beb59db9fe326c",
+  "repairTree": "c63ff17f674b2fa11a16728bd4a224ced367ad11",
+  "runtimeUnchangedFrom": "78882d14d1c55721c740b1a6625bc9710698e09e",
+  "codeHash": "ec137e1b79310a0fe1e97c93ced78a8af4a662fe143fd4b83d80a3a9b59f1ba3",
+  "repair": "Actual module import/map, formal_v1 job fixture, and observed-only negative-control job; all prior assertions retained. No production logic, runtime release identity, parameters or permissions changed.",
+  "makerAffectedTap": {
+    "tests": 39, "pass": 39, "fail": 0, "skip": 0,
+    "privateLocalPath": "/tmp/stockinsider-monitor-priority-integration-repair.tap",
+    "bytes": 10907,
+    "sha256": "6535855f8627254cb340e0ec133b7e993cc95f1939a340bff6decd537560c86c"
+  },
+  "independentReview": {
+    "role": "/root/author_input_review_oct08",
+    "scope": "unsigned bounded test-only repair",
+    "result": "pass",
+    "priorityTests": { "pass": 19, "fail": 0, "skip": 0 },
+    "weakeningFound": false
+  },
+  "replacementFullCiVerified": false,
+  "vmPgPostgrestGuardedRouteVerified": false,
+  "protectedApproval": false,
+  "deployed": false
+}

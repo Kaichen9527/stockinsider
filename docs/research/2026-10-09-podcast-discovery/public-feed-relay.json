@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "stockinsider-podcast-public-directory-relay-v1",
+  "recordedAt": "2026-10-09T06:13:30.814614+00:00",
+  "observer": "root-Mac-public-HTTPS-and-IAB",
+  "directory": {
+    "url": "https://itunes.apple.com/lookup?id=1872298769&entity=podcast",
+    "attemptedAt": "2026-10-09T06:06:00.759519+00:00",
+    "authenticated": false,
+    "scope": "Public Apple directory metadata for creator-linked show ID; no audio/transcript",
+    "httpStatus": 200,
+    "bytes": 1995,
+    "sha256": "df66045b68efbe98b3b3c208286450f9ac5185e64ac387fb648f3f5a386ecaba",
+    "finalUrl": "https://itunes.apple.com/lookup?id=1872298769&entity=podcast",
+    "status": "read_success",
+    "results": [
+      {
+        "collectionId": 1872298769,
+        "collectionName": "定錨產業筆記-科技產業趨勢領航者",
+        "artistName": "定錨財經資訊工作室",
+        "feedUrl": "https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+        "collectionViewUrl": "https://podcasts.apple.com/us/podcast/%E5%AE%9A%E9%8C%A8%E7%94%A2%E6%A5%AD%E7%AD%86%E8%A8%98-%E7%A7%91%E6%8A%80%E7%94%A2%E6%A5%AD%E8%B6%A8%E5%8B%A2%E9%A0%98%E8%88%AA%E8%80%85/id1872298769?uo=4"
+      }
+    ],
+    "observedAt": "2026-10-09T06:06:01.219760+00:00"
+  },
+  "publisherFeed": {
+    "url": "https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+    "attemptedAt": "2026-10-09T06:06:44.579105+00:00",
+    "authenticated": false,
+    "scope": "Publisher RSS discovered from public Apple directory; metadata and exact EP8 enclosure only, no audio/transcript",
+    "httpStatus": 200,
+    "bytes": 77983,
+    "sha256": "1ec44c8d592f0556a4452b1fe6d6ef31eda7b9eba36be442eb2598702fc8d66e",
+    "finalUrl": "https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+    "status": "read_success",
+    "itemCount": 14,
+    "selectedEP8": [
+      {
+        "title": "EP8-轉單、漲價、滿載：成熟製程供需拐點一次講清楚 ft.Eric",
+        "guid": "12f44f89-723a-4b7a-9b81-da916fdf07da",
+        "link": "https://player.soundon.fm/p/06e16cf5-5b45-4863-bcdf-9343aa584f73/episodes/12f44f89-723a-4b7a-9b81-da916fdf07da",
+        "publishedDate": "Mon, 16 Mar 2026 22:30:00 GMT",
+        "duration": "1984",
+        "enclosure": {
+          "url": "https://rss.soundon.fm/rssf/06e16cf5-5b45-4863-bcdf-9343aa584f73/feedurl/12f44f89-723a-4b7a-9b81-da916fdf07da/rssFileVip.mp3?timestamp=1773771540475",
+          "length": "1",
+          "type": "audio/mpeg"
+        }
+      }
+    ],
+    "latestVisibleItems": [
+      {
+        "title": "EP14-從GPU算力到Agent執行：Computex揭露的伺服器分工革命 ft.Eric",
+        "guid": "30d0973c-088d-4afa-989d-dd92b61b69d5",
+        "publishedDate": "Tue, 21 Jul 2026 09:55:55 GMT",
+        "link": "https://player.soundon.fm/p/06e16cf5-5b45-4863-bcdf-9343aa584f73/episodes/30d0973c-088d-4afa-989d-dd92b61b69d5"
+      },
+      {
+        "title": "EP13 AI伺服器運算主板規格持續升級，PCB供應鏈瓶頸卡在哪？ ft. Leo",
+        "guid": "6bfb700b-de92-4fc1-a284-bf978411733d",
+        "publishedDate": "Tue, 28 Apr 2026 08:21:11 GMT",
+        "link": "https://player.soundon.fm/p/06e16cf5-5b45-4863-bcdf-9343aa584f73/episodes/6bfb700b-de92-4fc1-a284-bf978411733d"
+      },
+      {
+        "title": "EP12-CAPEX 將達到上緣：台積電擴產循環下，廠務/設備機會與風險 ft.站長",
+        "guid": "96c8a01b-9c7d-41c1-8055-8499c6d7aef3",
+        "publishedDate": "Mon, 20 Apr 2026 22:30:17 GMT",
+        "link": "https://player.soundon.fm/p/06e16cf5-5b45-4863-bcdf-9343aa584f73/episodes/96c8a01b-9c7d-41c1-8055-8499c6d7aef3"
+      }
+    ],
+    "observedAt": "2026-10-09T06:06:45.297011+00:00"
+  },
+  "browserObservation": {
+    "readScope": "public EP8 notes/time DOM plus existing rendered media/link elements only",
+    "visibleMediaElements": 0,
+    "transcriptVisible": false,
+    "audioPlayed": false,
+    "publishedTimeDom": "2026-03-16T22:30:00.000Z"
+  },
+  "contentInterpretation": {
+    "sourceFamily": "one creator across directory/RSS/player; not independent corroboration",
+    "rssOnly": true,
+    "audioDownloaded": false,
+    "audioTranscribed": false,
+    "allEpisodesAnalyzed": false,
+    "episode8IsCurrentOctoberCatalyst": false,
+    "rssDeclaredEnclosureLengthIsUsableDownloadBound": false,
+    "enclosureAccessVerified": false,
+    "membershipRightsInferredFromFilename": false,
+    "publicEnclosureHeadersVerified": true,
+    "enclosureBodyAccessVerified": false
+  },
+  "integration": {
+    "platformEnabled": false,
+    "newHttpGrant": false,
+    "modelDispatched": false,
+    "dbSubmitted": false,
+    "historicalPITEligible": false
+  },
+  "rawResponsesTransferredToVm": false,
+  "rawBodiesCommitted": false,
+  "publicEnclosureHeaders": {
+    "schemaVersion": "stockinsider-public-enclosure-header-observation-v1",
+    "recordedAt": "2026-10-09T06:08:44.559424+00:00",
+    "attempts": [
+      {
+        "url": "https://rss.soundon.fm/rssf/06e16cf5-5b45-4863-bcdf-9343aa584f73/feedurl/12f44f89-723a-4b7a-9b81-da916fdf07da/rssFileVip.mp3?timestamp=1773771540475",
+        "attemptedAt": "2026-10-09T06:08:44.103580+00:00",
+        "method": "HEAD",
+        "authenticated": false,
+        "actualBytesDownloaded": 0,
+        "status": "redirect_observed",
+        "errorType": "HTTPError",
+        "httpStatus": 302,
+        "nextUrl": "https://filesb.soundon.fm/file/filesb/6f14051a-1c2e-4782-a78d-9633d918c2bd.mp3",
+        "observedAt": "2026-10-09T06:08:44.293803+00:00"
+      },
+      {
+        "url": "https://filesb.soundon.fm/file/filesb/6f14051a-1c2e-4782-a78d-9633d918c2bd.mp3",
+        "attemptedAt": "2026-10-09T06:08:44.293906+00:00",
+        "method": "HEAD",
+        "authenticated": false,
+        "actualBytesDownloaded": 0,
+        "httpStatus": 200,
+        "status": "headers_read_success",
+        "contentType": "audio/mpeg",
+        "declaredContentLength": "79341218",
+        "acceptRanges": "bytes",
+        "observedAt": "2026-10-09T06:08:44.559384+00:00"
+      }
+    ],
+    "mediaBytesAcquired": 0,
+    "audioContentAnalyzed": false,
+    "rightsEscalationOrLogin": false
+  },
+  "originalIndexRecordedAt": "2026-10-09T06:08:11.183770+00:00",
+  "recordedAtMeaning": "Assembly of index relay plus later public enclosure HEAD receipt; original individual acquisition clocks retained."
+}

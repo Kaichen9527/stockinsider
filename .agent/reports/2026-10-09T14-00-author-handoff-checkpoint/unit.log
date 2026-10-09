@@ -1,0 +1,45 @@
+TAP version 13
+# (node:59609) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:59609) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-handoff.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: handoffAuthorResult original8192 wire limit exact/+1 and strict decoding
+ok 1 - handoffAuthorResult original8192 wire limit exact/+1 and strict decoding
+  ---
+  duration_ms: 50.02675
+  ...
+# Subtest: readAuthorHandoff original8192 wire limit exact/+1 and strict decoding
+ok 2 - readAuthorHandoff original8192 wire limit exact/+1 and strict decoding
+  ---
+  duration_ms: 3.3215
+  ...
+# Subtest: stalled body cancels and expired body launches no reads
+ok 3 - stalled body cancels and expired body launches no reads
+  ---
+  duration_ms: 38.245333
+  ...
+# Subtest: review/cron/unknown credentials reject; exact author malformed request rejects
+ok 4 - review/cron/unknown credentials reject; exact author malformed request rejects
+  ---
+  duration_ms: 30.103917
+  ...
+# Subtest: 2409 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+ok 5 - 2409 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+  ---
+  duration_ms: 1172.733875
+  ...
+# Subtest: 2383 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+ok 6 - 2383 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+  ---
+  duration_ms: 851.945792
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2720.641959

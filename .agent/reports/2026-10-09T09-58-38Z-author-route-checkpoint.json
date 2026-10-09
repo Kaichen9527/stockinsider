@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-09T09:58:38.578716+00:00",
+  "subjectCommit": "6f20d4fee2b0b7f960e36e6e104605acf6ded55c",
+  "subjectTree": "91bae170b0ee88b9e540f42d5fe5c10bb2d013c2",
+  "pr": "https://github.com/Kaichen9527/stockinsider/pull/340",
+  "rootChecks": {
+    "combinedUnit": {
+      "pass": 53,
+      "fail": 0,
+      "skip": 0
+    },
+    "actualPgTapIncludingParents": {
+      "pass": 24,
+      "fail": 0,
+      "skip": 0
+    },
+    "types": "pass",
+    "lint": {
+      "errors": 0,
+      "existingWarnings": 33
+    },
+    "normalBuild": "pass"
+  },
+  "scope": "private original author assignment; no model execution/publication",
+  "nativeHttp": "queued existing VM; not accepted",
+  "review": {
+    "authorIncrement": "unsigned scopedCODEPASS4eb",
+    "completeInputIncrement": "unsigned scopedCODEPASS962",
+    "mechanical6f": "pending"
+  },
+  "rawLogs": [
+    {
+      "path": ".agent/reports/2026-10-09T09-58-38Z-author-route-combined-unit.tap",
+      "bytes": 12207,
+      "sha256": "24fe6e954d32233c83d2db3e8fe6b8a589c8c65e77c15a43a1ea55afd8a449bd"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-58-38Z-author-route-combined-pg.tap",
+      "bytes": 29237,
+      "sha256": "dce2b30f559be1d5fa88b8b2a73a76889275146d144f60e1e8fe94654f5a24ec"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-58-38Z-author-route-alias-red.tap",
+      "bytes": 3225,
+      "sha256": "24e981f76180d27a75baeb62da9755ea4156f8baca1e3b120a94cd47fcbb69f4"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-58-38Z-author-route-alias-green.tap",
+      "bytes": 7218,
+      "sha256": "8b38e5ed285d1e24cf747c9bd8c66498602a9a37a3bd0da701534bee9d575377"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-58-38Z-author-route-final-typecheck.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-58-38Z-author-route-final-lint.log",
+      "bytes": 5026,
+      "sha256": "c8e6b59e15eaa31e497ded01931d8473234f8095265a1e0106ec5f169cb5502c"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-58-38Z-author-route-final-build.log",
+      "bytes": 6499,
+      "sha256": "9b11ffc4e5622a2e75b26355cbb27ae44d24a8b20261ac3abd72b552e6329625"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-58-38Z-author-route-independent-observations.txt",
+      "bytes": 1459,
+      "sha256": "19a8761d062f035208986e3d4f53b2eb94a81e5304ac5dbbb06ec7fa8acc3ea4"
+    }
+  ],
+  "notCompleted": [
+    "complete-input boundary acceptance inventory",
+    "compiled author assignment HTTP",
+    "actual author/reviewer/result/handoff",
+    "v2 existing publication transaction/reader",
+    "real first-discovery price adapter",
+    "protected release/main merge/deploy",
+    "research schedule/five real trading days"
+  ]
+}

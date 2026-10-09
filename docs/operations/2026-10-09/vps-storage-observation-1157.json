@@ -1,0 +1,49 @@
+{
+  "schema": "stockinsider-vps-storage-observation-v1",
+  "observedAt": "2026-10-09T03:57:11.362482+00:00",
+  "host": "5.104.83.211",
+  "rootFilesystem": {
+    "totalBytes": 154894188544,
+    "availableBytes": 87946252288
+  },
+  "applicationRoots": [
+    {
+      "path": "/opt/stockinsider",
+      "allocatedBytes": 258142208
+    },
+    {
+      "path": "/opt/stockinsider-standalone",
+      "allocatedBytes": 69087232
+    },
+    {
+      "path": "/opt/stockinsider-previews",
+      "allocatedBytes": 69029888
+    },
+    {
+      "path": "/opt/stockinsider-control",
+      "allocatedBytes": 4096
+    },
+    {
+      "path": "/var/lib/stockinsider",
+      "allocatedBytes": 187969536
+    },
+    {
+      "path": "/var/lib/postgresql",
+      "allocatedBytes": 2804432896
+    },
+    {
+      "path": "/var/log/stockinsider",
+      "absent": true
+    }
+  ],
+  "services": {
+    "stockinsider-web-standalone": "active",
+    "stockinsider-internal-worker": "active",
+    "stockinsider-postgrest": "active",
+    "stockinsider-auo-preview": "active",
+    "nginx": "active",
+    "postgresql@17-stockinsider": "active"
+  },
+  "readOnly": true,
+  "deletions": []
+}

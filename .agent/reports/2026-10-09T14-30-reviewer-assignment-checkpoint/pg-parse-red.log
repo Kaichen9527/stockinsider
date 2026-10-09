@@ -1,0 +1,31 @@
+TAP version 13
+# file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:122
+#     const audit=()=>sql(`SELECT jsonb_build_object('assignments',(SELECT coalesce(jsonb_agg(to_jsonb(x) ORDER BY assignment_id),'[]') FROM research_reviewer_assignments_v2 x),'models',(SELECT jsonb_agg(to_jsonb(x) ORDER BY reservation_id) FROM research_model_reservations_v1 x),'completions',(SELECT jsonb_agg(to_jsonb(x) ORDER BY reservation_id) FROM research_model_completions_v1 x),'results',(SELECT jsonb_agg(to_jsonb(x) ORDER BY result_id) FROM research_author_results_v2 x),'jobs',(SELECT jsonb_agg(to_jsonb(x) ORDER BY job_id) FROM research_deep_jobs_v1 x),'charge',(SELECT sum(reserved_seconds) FROM research_model_reservations_v1));`);
+#           ^
+# SyntaxError: Identifier 'audit' has already been declared
+#     at compileSourceTextModule (node:internal/modules/esm/utils:338:16)
+#     at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:102:18)
+#     at \#translate (node:internal/modules/esm/loader:468:12)
+#     at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:515:27)
+#     at async ModuleJob._link (node:internal/modules/esm/module_job:115:19)
+# Node.js v22.14.0
+# Subtest: scripts/research-reviewer-assignment-postgres.test.mjs
+not ok 1 - scripts/research-reviewer-assignment-postgres.test.mjs
+  ---
+  duration_ms: 55.719083
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 64.585166

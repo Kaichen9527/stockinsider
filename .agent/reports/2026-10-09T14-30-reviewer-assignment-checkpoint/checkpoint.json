@@ -1,0 +1,100 @@
+{
+  "recordedAt": "2026-10-09T14:26:07.800184+00:00",
+  "subject": "7f6259e88f52622cc909653f217d41c820e7e7eb",
+  "pr": 347,
+  "designSubject": "0144ff46",
+  "designStatus": "unsigned scoped PASS by author_input_review_oct08",
+  "codeReview": {
+    "status": "unsigned scoped CODE PASS",
+    "reviewer": "author_input_review_oct08",
+    "independentLightTests": 29,
+    "independentAdversarialProbes": 7,
+    "P1": 0,
+    "P2": 0,
+    "notRerun": [
+      "PostgreSQL",
+      "native HTTP",
+      "build"
+    ]
+  },
+  "rootTests": {
+    "related": 149,
+    "postgres": 13,
+    "fail": 0,
+    "skip": 0,
+    "typecheck": "pass",
+    "lint": "0 errors,33 existing warnings",
+    "normalBuild": "pass",
+    "buildId": "y3EbpYvAmuUWWE0HiqSjc"
+  },
+  "redDiagnosis": [
+    "New PG fixture duplicate audit declaration parsed before PG startup; removed only unused copied helper",
+    "Synthetic transaction post-RPC fixture audit was service_role; RESET ROLE before test-only table count, ACL unchanged",
+    "psql SQL NULL emits empty string; test output expectation corrected, null response and zero-write assertions retained",
+    "Repeated b principal collided with existing synthetic source rowHash; private principals now independent random32bytes, all strict exclusion assertions retained",
+    "Initial build command invoked root with no build script; actual normal web build passed"
+  ],
+  "limitations": [
+    "No actual author/reviewer model invocation, independent product article review, publication or production change",
+    "VM currently executing isolated exact492 native handoff acceptance, do not duplicate",
+    "No native reviewer assignment HTTP acceptance yet"
+  ],
+  "upstreamNative": {
+    "subject": "b2ce6cf30439923a1edf8884ce83cc10d85c5676",
+    "runtime": "b8c3df4d",
+    "pass": 52,
+    "fail": 0,
+    "skip": 0,
+    "rawEvidenceVerified": 49,
+    "independentReview": "unsigned scoped CODE/receipt PASS by astra_publication_review; syntax/blob/canonical/raw evidence checked, no native rerun",
+    "build": "AwvYbZjxpDludvMr16gWE",
+    "controllerOnly": true
+  },
+  "rawFiles": {
+    "unit-red": {
+      "bytes": 10673,
+      "sha256": "3bd1a0e55bbde09fc9d973fef6e68f3159464080422e97f7ab84d3d3f700f753"
+    },
+    "unit-red2": {
+      "bytes": 3700,
+      "sha256": "df9bc3edbe228e849eded9263656ace600571d3c8be89c95c36a70ad8f70f1ab"
+    },
+    "pg-parse-red": {
+      "bytes": 1808,
+      "sha256": "ccc471c6f67da89421e2a51a49309312960f558092921277c978a07c2d33187d"
+    },
+    "pg-acl-red": {
+      "bytes": 7601,
+      "sha256": "30c2a8d9b11490a28c3c4b23542d6f4ffd6bbb8bd3aca5bade8b16eba190398c"
+    },
+    "pg-format-red": {
+      "bytes": 17100,
+      "sha256": "45f1c7a5a638159c8518435e8c522d293ea39d9de324cee571bc29360723b071"
+    },
+    "pg-final": {
+      "bytes": 5789,
+      "sha256": "002837bd5b583fd9b207cc9b25261e9f923968d65b6999d7f59bf174c22f13ac"
+    },
+    "related": {
+      "bytes": 31400,
+      "sha256": "7bf9954d6b8724dd398c1288b687dca46c8f16a32c9aefa2fb88a2aa53fa7778"
+    },
+    "types": {
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "lint": {
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    "build-invocation-red": {
+      "bytes": 223,
+      "sha256": "7e888dfd7e09020252c160f4c0df05e5fee9a1ecc484cd74e009f73a78377069"
+    },
+    "build": {
+      "bytes": 6498,
+      "sha256": "85d826c53f9e69081013491da18d90f1fbbf227869619c2c8ff9c0e6296f2129"
+    }
+  },
+  "tree": "84dc70bb8bd9c2c3c79e347a689aac5798863881"
+}

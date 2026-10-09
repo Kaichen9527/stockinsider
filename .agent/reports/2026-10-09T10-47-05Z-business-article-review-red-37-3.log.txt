@@ -1,0 +1,265 @@
+TAP version 13
+# (node:44971) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:44971) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-deep-article.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/package.json.
+# Subtest: 2409 actual fixed calculator; tables/valuation share result, no publication authority
+ok 1 - 2409 actual fixed calculator; tables/valuation share result, no publication authority
+  ---
+  duration_ms: 45.886958
+  ...
+# Subtest: 2383 actual fixed calculator; tables/valuation share result, no publication authority
+ok 2 - 2383 actual fixed calculator; tables/valuation share result, no publication authority
+  ---
+  duration_ms: 17.34575
+  ...
+# Subtest: reject wrong input hash
+ok 3 - reject wrong input hash
+  ---
+  duration_ms: 9.62375
+  ...
+# Subtest: reject wrong company
+ok 4 - reject wrong company
+  ---
+  duration_ms: 8.974208
+  ...
+# Subtest: reject v1 downgrade
+ok 5 - reject v1 downgrade
+  ---
+  duration_ms: 8.599417
+  ...
+# Subtest: reject arbitrary calculator command
+ok 6 - reject arbitrary calculator command
+  ---
+  duration_ms: 8.626459
+  ...
+# Subtest: reject caller table result
+ok 7 - reject caller table result
+  ---
+  duration_ms: 9.282625
+  ...
+# Subtest: reject nonexistent order/capacity
+ok 8 - reject nonexistent order/capacity
+  ---
+  duration_ms: 9.198375
+  ...
+# Subtest: reject page number as reported earnings
+ok 9 - reject page number as reported earnings
+  ---
+  duration_ms: 9.455291
+  ...
+# Subtest: reject assumption promoted to reported
+ok 10 - reject assumption promoted to reported
+  ---
+  duration_ms: 9.554833
+  ...
+# Subtest: reject unsupported normalization
+ok 11 - reject unsupported normalization
+  ---
+  duration_ms: 9.541416
+  ...
+# Subtest: reject partial year called full year
+ok 12 - reject partial year called full year
+  ---
+  duration_ms: 9.426959
+  ...
+# Subtest: reject duplicate paragraph IDs
+ok 13 - reject duplicate paragraph IDs
+  ---
+  duration_ms: 8.92125
+  ...
+# Subtest: reject wrong chapter order
+ok 14 - reject wrong chapter order
+  ---
+  duration_ms: 9.419166
+  ...
+# Subtest: reject future author
+ok 15 - reject future author
+  ---
+  duration_ms: 8.3485
+  ...
+# Subtest: reject backdated author
+ok 16 - reject backdated author
+  ---
+  duration_ms: 8.428542
+  ...
+# Subtest: reject original deadline expired
+ok 17 - reject original deadline expired
+  ---
+  duration_ms: 2.545041
+  ...
+# Subtest: reject nonfinite multiple
+ok 18 - reject nonfinite multiple
+  ---
+  duration_ms: 0.440792
+  ...
+# Subtest: reject raw credential in prose
+ok 19 - reject raw credential in prose
+  ---
+  duration_ms: 8.984709
+  ...
+# Subtest: reject unselected source
+ok 20 - reject unselected source
+  ---
+  duration_ms: 9.218333
+  ...
+# Subtest: reject withdrawn source
+ok 21 - reject withdrawn source
+  ---
+  duration_ms: 8.187667
+  ...
+# Subtest: reject superseded source
+ok 22 - reject superseded source
+  ---
+  duration_ms: 8.247459
+  ...
+# Subtest: reject rights revoked
+ok 23 - reject rights revoked
+  ---
+  duration_ms: 8.363334
+  ...
+# Subtest: reject wrong source revision
+ok 24 - reject wrong source revision
+  ---
+  duration_ms: 8.210708
+  ...
+# Subtest: reject wrong source company
+ok 25 - reject wrong source company
+  ---
+  duration_ms: 8.35025
+  ...
+# Subtest: reject future source admission
+ok 26 - reject future source admission
+  ---
+  duration_ms: 8.850917
+  ...
+# Subtest: reject date-only invented midnight
+ok 27 - reject date-only invented midnight
+  ---
+  duration_ms: 8.521667
+  ...
+# Subtest: reject future source date
+ok 28 - reject future source date
+  ---
+  duration_ms: 8.405666
+  ...
+# Subtest: reject invalid civil date
+ok 29 - reject invalid civil date
+  ---
+  duration_ms: 8.26025
+  ...
+# Subtest: reject missing source receipt
+ok 30 - reject missing source receipt
+  ---
+  duration_ms: 8.6765
+  ...
+# Subtest: reject invented gap reason
+ok 31 - reject invented gap reason
+  ---
+  duration_ms: 8.965208
+  ...
+# Subtest: sealed financial result tampering rejects even after all caller hashes are recomputed
+ok 32 - sealed financial result tampering rejects even after all caller hashes are recomputed
+  ---
+  duration_ms: 8.313334
+  ...
+# Subtest: industry-only source cannot establish company rumor or production, and rumor cannot become order
+ok 33 - industry-only source cannot establish company rumor or production, and rumor cannot become order
+  ---
+  duration_ms: 28.2215
+  ...
+# Subtest: annual2027 is separate from next four; changed prose/model/valuation needs a new hash
+ok 34 - annual2027 is separate from next four; changed prose/model/valuation needs a new hash
+  ---
+  duration_ms: 31.092958
+  ...
+# Subtest: printed facts, explicit assumptions and sealed gaps keep their classifications
+ok 35 - printed facts, explicit assumptions and sealed gaps keep their classifications
+  ---
+  duration_ms: 10.757208
+  ...
+# Subtest: actual AUO loss scenario gives null P/E price, never a negative target
+ok 36 - actual AUO loss scenario gives null P/E price, never a negative target
+  ---
+  duration_ms: 10.475375
+  ...
+# Subtest: validated snapshots retain no mutable aliases to author or trusted context
+ok 37 - validated snapshots retain no mutable aliases to author or trusted context
+  ---
+  duration_ms: 10.487334
+  ...
+# Subtest: author original deadlines are exclusive, retaining microsecond boundary precision
+not ok 38 - author original deadlines are exclusive, retaining microsecond boundary precision
+  ---
+  duration_ms: 21.016709
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/scripts/research-business-article.test.mjs:179:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected exception.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/scripts/research-business-article.test.mjs:186:100)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: actual sealed source/execution/financial gaps are referenceable with exact namespaces
+not ok 39 - actual sealed source/execution/financial gaps are referenceable with exact namespaces
+  ---
+  duration_ms: 8.76375
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/scripts/research-business-article.test.mjs:190:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Got unwanted exception.
+    Actual message: "research_business_article_invalid"
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  actual:
+  error: 'research_business_article_invalid'
+  stack: |-
+    ensure (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts:36:68)
+    exact (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts:42:30)
+    reference (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts:150:29)
+    Array.map (<anonymous>)
+    paragraph (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts:159:44)
+    validateBusinessResearchArticle (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts:168:3)
+    validate (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/scripts/research-business-article.test.mjs:77:31)
+    file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/scripts/research-business-article.test.mjs:193:89
+    getActual (node:assert:840:5)
+    Function.doesNotThrow (node:assert:1006:32)
+  operator: 'doesNotThrow'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/scripts/research-business-article.test.mjs:193:70)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: actual calculated ordinary/potential/diluted share denominators are available in all periods
+not ok 40 - actual calculated ordinary/potential/diluted share denominators are available in all periods
+  ---
+  duration_ms: 9.088
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/scripts/research-business-article.test.mjs:198:1'
+  failureType: 'testCodeFailure'
+  error: 'research_business_article_invalid'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    ensure (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts:36:68)
+    reference (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts:152:30)
+    file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts:206:90
+    Array.map (<anonymous>)
+    file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts:205:46
+    Array.map (<anonymous>)
+    validateBusinessResearchArticle (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/web/src/lib/research-business-article.ts:202:40)
+    validate (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/scripts/research-business-article.test.mjs:77:31)
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-article-contract-v2-oct09/scripts/research-business-article.test.mjs:203:17)
+    async Test.run (node:internal/test_runner/test:980:9)
+  ...
+1..40
+# tests 40
+# suites 0
+# pass 37
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 584.581791

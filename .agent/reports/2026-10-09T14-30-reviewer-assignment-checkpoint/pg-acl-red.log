@@ -1,0 +1,127 @@
+TAP version 13
+# (node:82195) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82195) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-execution-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: reviewer assignment: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+    # Subtest: no reviewer reservation before exact author handoff
+    ok 1 - no reviewer reservation before exact author handoff
+      ---
+      duration_ms: 68.759375
+      ...
+    # Subtest: server configuration author rotation, A-R swap and old-author-as-reviewer reject before reservation
+    ok 2 - server configuration author rotation, A-R swap and old-author-as-reviewer reject before reservation
+      ---
+      duration_ms: 104.329667
+      ...
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+    # Subtest: global active fixture slot blocks with null and zero reservation/assignment writes
+    ok 3 - global active fixture slot blocks with null and zero reservation/assignment writes
+      ---
+      duration_ms: 170.140709
+      ...
+    # Subtest: original7200 daily budget blocks with no active slot or writes; synthetic temporary quota rows rollback
+    not ok 4 - original7200 daily budget blocks with no active slot or writes; synthetic temporary quota rows rollback
+      ---
+      duration_ms: 51.962583
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:30:28'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-review-IyNsnS -p 57195 -d postgres
+        ERROR:  permission denied for table research_reviewer_assignments_v2
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        checkExecSyncError (node:child_process:882:11)
+        execFileSync (node:child_process:918:15)
+        run (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:31:38)
+        sql (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:32:20)
+        file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:136:39
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:30:60)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+      ...
+    # Subtest: injected assignment insertion failure rolls back original reservation and charge atomically
+    ok 5 - injected assignment insertion failure rolls back original reservation and charge atomically
+      ---
+      duration_ms: 135.755833
+      ...
+    # Subtest: concurrent exact admission creates one assignment and only one original1800 charge
+    ok 6 - concurrent exact admission creates one assignment and only one original1800 charge
+      ---
+      duration_ms: 101.961417
+      ...
+    # Subtest: actual calculator and selected public source packet, no principals/owner/fulltext/model dispatch
+    ok 7 - actual calculator and selected public source packet, no principals/owner/fulltext/model dispatch
+      ---
+      duration_ms: 128.727458
+      ...
+    # Subtest: exact admission/read/packet and actual PG restart preserve original bytes, clocks and budget
+    ok 8 - exact admission/read/packet and actual PG restart preserve original bytes, clocks and budget
+      ---
+      duration_ms: 731.895542
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(v.source_seal_id)"
+# PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 35 at PERFORM
+# PL/pgSQL function read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) line 8 at assignment
+# ERROR:  research_author_handoff_claim
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 49 at RAISE
+# PL/pgSQL function read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) line 8 at assignment
+# ERROR:  research_author_handoff_claim
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 49 at RAISE
+# PL/pgSQL function read_research_reviewer_context_v2(jsonb,uuid,text,text,text,uuid,text) line 8 at assignment
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  permission denied for table research_reviewer_assignments_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+    # Subtest: reviewer rotation cannot adopt existing assignment; old author reader stays rejected
+    ok 9 - reviewer rotation cannot adopt existing assignment; old author reader stays rejected
+      ---
+      duration_ms: 71.264583
+      ...
+    # Subtest: withdrawal/expiry/takeover fail inside transaction and rollback without altering original history
+    ok 10 - withdrawal/expiry/takeover fail inside transaction and rollback without altering original history
+      ---
+      duration_ms: 156.164167
+      ...
+    # Subtest: reviewer assignment immutable and service direct read/mutation denied
+    ok 11 - reviewer assignment immutable and service direct read/mutation denied
+      ---
+      duration_ms: 91.0785
+      ...
+    # Subtest: closed counter-review reservation rejects read/replay/packet without renewing or refunding
+    ok 12 - closed counter-review reservation rejects read/replay/packet without renewing or refunding
+      ---
+      duration_ms: 130.368625
+      ...
+    1..12
+not ok 1 - reviewer assignment: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+  ---
+  duration_ms: 3954.641541
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-assignment-postgres.test.mjs:25:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Failure evidence retained at /tmp/si-review-IyNsnS
+1..1
+# tests 13
+# suites 0
+# pass 11
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4172.463583

@@ -1,0 +1,213 @@
+{
+  "schemaVersion": "financial-parent-mechanism-diagnostic-v1",
+  "sourceRoot": "/Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09",
+  "readerSha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+  "filesystemCallsMocked": false,
+  "runtimeChanged": false,
+  "historicalR1CauseEstablished": false,
+  "cases": [
+    {
+      "kind": "nested-scratch-write",
+      "startedAt": "2026-10-09T13:07:13.160Z",
+      "completedAt": "2026-10-09T13:07:13.172Z",
+      "expectedRejection": false,
+      "observedError": null,
+      "before": {
+        "common": {
+          "dev": "16777232",
+          "ino": "209365236",
+          "size": "128",
+          "mtimeNs": "1791551233159756582",
+          "ctimeNs": "1791551233159756582"
+        },
+        "root": {
+          "dev": "16777232",
+          "ino": "209365237",
+          "size": "96",
+          "mtimeNs": "1791551233159528041",
+          "ctimeNs": "1791551233159528041"
+        },
+        "parent": {
+          "dev": "16777232",
+          "ino": "209365239",
+          "size": "96",
+          "mtimeNs": "1791551233160093790",
+          "ctimeNs": "1791551233160093790"
+        },
+        "file": {
+          "dev": "16777232",
+          "ino": "209365241",
+          "size": "14",
+          "mtimeNs": "1791551233160352373",
+          "ctimeNs": "1791551233160352373"
+        }
+      },
+      "after": {
+        "common": {
+          "dev": "16777232",
+          "ino": "209365236",
+          "size": "128",
+          "mtimeNs": "1791551233159756582",
+          "ctimeNs": "1791551233159756582"
+        },
+        "root": {
+          "dev": "16777232",
+          "ino": "209365237",
+          "size": "96",
+          "mtimeNs": "1791551233159528041",
+          "ctimeNs": "1791551233159528041"
+        },
+        "parent": {
+          "dev": "16777232",
+          "ino": "209365239",
+          "size": "96",
+          "mtimeNs": "1791551233160093790",
+          "ctimeNs": "1791551233160093790"
+        },
+        "file": {
+          "dev": "16777232",
+          "ino": "209365241",
+          "size": "14",
+          "mtimeNs": "1791551233160352373",
+          "ctimeNs": "1791551233160352373"
+        }
+      }
+    },
+    {
+      "kind": "new-sibling-entry",
+      "startedAt": "2026-10-09T13:07:13.175Z",
+      "completedAt": "2026-10-09T13:07:13.176Z",
+      "expectedRejection": true,
+      "observedError": "financial_parent_replaced",
+      "before": {
+        "common": {
+          "dev": "16777232",
+          "ino": "209365244",
+          "size": "128",
+          "mtimeNs": "1791551233175141714",
+          "ctimeNs": "1791551233175141714"
+        },
+        "root": {
+          "dev": "16777232",
+          "ino": "209365245",
+          "size": "96",
+          "mtimeNs": "1791551233174813798",
+          "ctimeNs": "1791551233174813798"
+        },
+        "parent": {
+          "dev": "16777232",
+          "ino": "209365247",
+          "size": "96",
+          "mtimeNs": "1791551233175289964",
+          "ctimeNs": "1791551233175289964"
+        },
+        "file": {
+          "dev": "16777232",
+          "ino": "209365249",
+          "size": "14",
+          "mtimeNs": "1791551233175391089",
+          "ctimeNs": "1791551233175391089"
+        }
+      },
+      "after": {
+        "common": {
+          "dev": "16777232",
+          "ino": "209365244",
+          "size": "160",
+          "mtimeNs": "1791551233176265295",
+          "ctimeNs": "1791551233176265295"
+        },
+        "root": {
+          "dev": "16777232",
+          "ino": "209365245",
+          "size": "96",
+          "mtimeNs": "1791551233174813798",
+          "ctimeNs": "1791551233174813798"
+        },
+        "parent": {
+          "dev": "16777232",
+          "ino": "209365247",
+          "size": "96",
+          "mtimeNs": "1791551233175289964",
+          "ctimeNs": "1791551233175289964"
+        },
+        "file": {
+          "dev": "16777232",
+          "ino": "209365249",
+          "size": "14",
+          "mtimeNs": "1791551233175391089",
+          "ctimeNs": "1791551233175391089"
+        }
+      }
+    },
+    {
+      "kind": "replace-research-parent",
+      "startedAt": "2026-10-09T13:07:13.177Z",
+      "completedAt": "2026-10-09T13:07:13.178Z",
+      "expectedRejection": true,
+      "observedError": "financial_parent_replaced",
+      "before": {
+        "common": {
+          "dev": "16777232",
+          "ino": "209365251",
+          "size": "128",
+          "mtimeNs": "1791551233176881294",
+          "ctimeNs": "1791551233176881294"
+        },
+        "root": {
+          "dev": "16777232",
+          "ino": "209365252",
+          "size": "96",
+          "mtimeNs": "1791551233176802711",
+          "ctimeNs": "1791551233176802711"
+        },
+        "parent": {
+          "dev": "16777232",
+          "ino": "209365254",
+          "size": "96",
+          "mtimeNs": "1791551233176934585",
+          "ctimeNs": "1791551233176934585"
+        },
+        "file": {
+          "dev": "16777232",
+          "ino": "209365256",
+          "size": "14",
+          "mtimeNs": "1791551233176985877",
+          "ctimeNs": "1791551233176985877"
+        }
+      },
+      "after": {
+        "common": {
+          "dev": "16777232",
+          "ino": "209365251",
+          "size": "128",
+          "mtimeNs": "1791551233176881294",
+          "ctimeNs": "1791551233176881294"
+        },
+        "root": {
+          "dev": "16777232",
+          "ino": "209365252",
+          "size": "96",
+          "mtimeNs": "1791551233176802711",
+          "ctimeNs": "1791551233176802711"
+        },
+        "parent": {
+          "dev": "16777232",
+          "ino": "209365257",
+          "size": "96",
+          "mtimeNs": "1791551233177606167",
+          "ctimeNs": "1791551233177606167"
+        },
+        "file": {
+          "dev": "16777232",
+          "ino": "209365258",
+          "size": "14",
+          "mtimeNs": "1791551233177725375",
+          "ctimeNs": "1791551233177725375"
+        }
+      }
+    }
+  ],
+  "postFailureReadAndCleanupPassed": true,
+  "ownedScratchRemovedOnExit": true
+}

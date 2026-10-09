@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "stockinsider-public-broker-document-relay-v1",
+  "recordedAt": "2026-10-09T06:20:13.808850+00:00",
+  "acquisition": {
+    "url": "https://www.yuantafutures.com.tw/UploadFile/Artical/202604/1776332269519_%E3%80%90%E5%85%83%E5%A4%A7%E6%9C%9F%E8%B2%A8%E3%80%91%E8%82%A1%E6%9C%9F%E7%84%A6%E9%BB%9E%E7%86%B1%E5%8D%80%2020260416_20260416_165658.pdf",
+    "attemptedAt": "2026-10-09T06:18:28.039874+00:00",
+    "authenticated": false,
+    "scope": "Public publisher PDF,7 pages; selected company discussion page5 only",
+    "bodyReadLimit": 8000000,
+    "httpStatus": 200,
+    "finalUrl": "https://www.yuantafutures.com.tw/UploadFile/Artical/202604/1776332269519_%E3%80%90%E5%85%83%E5%A4%A7%E6%9C%9F%E8%B2%A8%E3%80%91%E8%82%A1%E6%9C%9F%E7%84%A6%E9%BB%9E%E7%86%B1%E5%8D%80%2020260416_20260416_165658.pdf",
+    "contentType": "application/pdf",
+    "bytes": 2969823,
+    "sha256": "2168bd7938ed2d4f73ba8bb5bf40147099df5b2750cc200096bb18ee36660cca",
+    "status": "read_success",
+    "observedAt": "2026-10-09T06:18:28.964252+00:00"
+  },
+  "publisher": "元大期貨",
+  "documentTitle": "股期焦點熱區",
+  "sourceDocumentDate": {
+    "precision": "date",
+    "value": "2026-04-16",
+    "basis": "visible page5 header; not proven first public availability"
+  },
+  "publicPublishedInstant": null,
+  "firstObservedAtThisResearchRun": "2026-10-09T06:18:28.964252+00:00",
+  "selectedPageOneBased": 5,
+  "scope": "Entire page5 visually inspected; selected page5 text extracted. Other6pages not analyzed.",
+  "pdfMetadataCaveat": {
+    "creationDatePrintedByPdfinfo": "2007-08-11 12:48:06 CST",
+    "modificationDatePrintedByPdfinfo": "2026-04-16 16:43:52 CST",
+    "metadataIsPublicPublicationProof": false
+  },
+  "privateEvidence": {
+    "sourceBytesCommitted": false,
+    "renderTransferred": false,
+    "extractedPageSha256": "eecfd0ac7c1f346d47b3042ba484352217d657f7124d3974c0f03be994364f7b",
+    "renderSha256": "89f9bc7135bbdf4cadc4bdff15860ebf566369d9069662d5ef330b14ef2bcd4b"
+  },
+  "claims": [
+    {
+      "kind": "broker_commentary",
+      "company": "友達",
+      "symbol": "2409",
+      "summary": "報告將友達定位於Micro LED短距離光互連模組整合與封裝，提到與富采、鼎元的樣品及送樣進度。",
+      "verification": "publisher commentary; current customer qualification/order/volume not independently confirmed"
+    },
+    {
+      "kind": "conditional_outlook",
+      "summary": "作者認為實質營收貢獻仍需二至三年，量產若落地才可能改變市場估值框架。",
+      "verification": "historical analyst scenario, not company guidance or a current promise"
+    }
+  ],
+  "doesNotEstablish": [
+    "Intel cooperation or a purchase order",
+    "current shipment volume, ASP, yield or customer acceptance",
+    "a numerical forward EPS, justified P/E or equity target price",
+    "a current equity entry condition from old futures prices",
+    "that StockInsider discovered this report in April"
+  ],
+  "modelTreatment": {
+    "unconfirmedCommercializationInBaseEps": false,
+    "possibleTimingComparison": "historical 2026 two-to-three-year commentary vs explicit2028-2029 conditional commercialization; no arithmetic EPS addition",
+    "strongestCountercase": "sample/technical integration can fail to win system-level customers; later company/customer evidence supersedes historical commentary"
+  },
+  "intake": {
+    "dbSubmitted": false,
+    "reason": "Current existing controller broker host grant does not include yuantafutures.com.tw; exact publication instant also unknown. Preserve as pending source without inventing midnight/timezone or bypassing closed grant.",
+    "historicalPITEligible": false,
+    "platformEnabled": false,
+    "financialVerified": false,
+    "strategyApproved": false
+  }
+}

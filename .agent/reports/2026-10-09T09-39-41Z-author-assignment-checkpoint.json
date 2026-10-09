@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-09T09:39:41.090344+00:00",
+  "subjectCommit": "fa3edca89fc3dde1cd06cb5ccb55b6b4714f4ed5",
+  "subjectTree": "94e47129acb5a02e473d3430a1a631080993b56f",
+  "pr": "https://github.com/Kaichen9527/stockinsider/pull/339",
+  "baseCommit": "b8f6c786c4173e9f253fe389c416c29888490c37",
+  "rootPg": {
+    "tests": 9,
+    "pass": 9,
+    "fail": 0,
+    "skip": 0,
+    "fixtureMode": "explicit pinned Git predecessor75a; synthetic seeded complete rows"
+  },
+  "normalBuild": "pass",
+  "independentReview": "unsigned scoped CODE PASS; reviewer independently ran9/9PG; observation relay only",
+  "files": [
+    {
+      "path": ".agent/reports/2026-10-09T09-39-41Z-author-assignment-pg-final.tap",
+      "bytes": 8421,
+      "sha256": "54d26c96565b2172644631bf3e07d52f6a4f476ed4850309ed4761007173689e"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-39-41Z-author-assignment-build.log",
+      "bytes": 6500,
+      "sha256": "950cae85888b14664273bbd7441b65a30aa883e44f390b54c33b7b0f7dc988a1"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-39-41Z-author-assignment-independent-observation.txt",
+      "bytes": 1036,
+      "sha256": "f663a7fa7ec227073b04de0da166c992af06cd03e904011e7346277bdde3c0b0"
+    }
+  ],
+  "notProven": [
+    "HTTP identity resolution",
+    "accepted complete-input financial predecessor",
+    "real author/reviewer dispatch",
+    "publication",
+    "protected release",
+    "main merge",
+    "deployment"
+  ]
+}

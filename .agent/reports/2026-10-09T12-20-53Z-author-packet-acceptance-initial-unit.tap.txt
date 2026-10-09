@@ -1,0 +1,180 @@
+TAP version 13
+# (node:93235) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:93235) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/src/lib/research-financial-file-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-packet-oct09/web/package.json.
+# Subtest: 2409 public sources and actual fixed financial calculator share sealed input; model-safe projection
+ok 1 - 2409 public sources and actual fixed financial calculator share sealed input; model-safe projection
+  ---
+  duration_ms: 53.341959
+  ...
+# Subtest: 2383 public sources and actual fixed financial calculator share sealed input; model-safe projection
+ok 2 - 2383 public sources and actual fixed financial calculator share sealed input; model-safe projection
+  ---
+  duration_ms: 20.017542
+  ...
+# Subtest: reject different input revision
+ok 3 - reject different input revision
+  ---
+  duration_ms: 6.532333
+  ...
+# Subtest: reject different source row
+ok 4 - reject different source row
+  ---
+  duration_ms: 6.047375
+  ...
+# Subtest: reject missing selected source
+ok 5 - reject missing selected source
+  ---
+  duration_ms: 6.252083
+  ...
+# Subtest: reject extra source
+ok 6 - reject extra source
+  ---
+  duration_ms: 6.085
+  ...
+# Subtest: reject extra private source field
+ok 7 - reject extra private source field
+  ---
+  duration_ms: 6.005875
+  ...
+# Subtest: reject private source descriptor
+ok 8 - reject private source descriptor
+  ---
+  duration_ms: 6.490792
+  ...
+# Subtest: reject withdrawn source
+ok 9 - reject withdrawn source
+  ---
+  duration_ms: 6.244792
+  ...
+# Subtest: reject wrong company
+ok 10 - reject wrong company
+  ---
+  duration_ms: 6.233584
+  ...
+# Subtest: reject industry source invents company symbol
+ok 11 - reject industry source invents company symbol
+  ---
+  duration_ms: 5.800875
+  ...
+# Subtest: reject legacy midnight promoted to instant
+ok 12 - reject legacy midnight promoted to instant
+  ---
+  duration_ms: 5.973833
+  ...
+# Subtest: reject unknown publication with fabricated date
+ok 13 - reject unknown publication with fabricated date
+  ---
+  duration_ms: 5.896042
+  ...
+# Subtest: reject observation after collection
+ok 14 - reject observation after collection
+  ---
+  duration_ms: 5.93475
+  ...
+# Subtest: reject collection after seal receipt
+ok 15 - reject collection after seal receipt
+  ---
+  duration_ms: 6.405667
+  ...
+# Subtest: reject different seal receipt
+ok 16 - reject different seal receipt
+  ---
+  duration_ms: 6.243542
+  ...
+# Subtest: reject future seal receipt
+ok 17 - reject future seal receipt
+  ---
+  duration_ms: 6.159041
+  ...
+# Subtest: reject credential URL
+ok 18 - reject credential URL
+  ---
+  duration_ms: 6.034708
+  ...
+# Subtest: reject private host
+ok 19 - reject private host
+  ---
+  duration_ms: 5.754625
+  ...
+# Subtest: reject source secret text
+ok 20 - reject source secret text
+  ---
+  duration_ms: 5.961417
+  ...
+# Subtest: reject source untrusted flag removed
+ok 21 - reject source untrusted flag removed
+  ---
+  duration_ms: 6.483542
+  ...
+# Subtest: reject extra RPC field
+ok 22 - reject extra RPC field
+  ---
+  duration_ms: 6.390167
+  ...
+# Subtest: reject wrong original assignment
+ok 23 - reject wrong original assignment
+  ---
+  duration_ms: 6.192
+  ...
+# Subtest: reject different original assignment
+ok 24 - reject different original assignment
+  ---
+  duration_ms: 5.961958
+  ...
+# Subtest: title exact UTF8 byte boundary accepted, +1 rejected without truncation
+ok 25 - title exact UTF8 byte boundary accepted, +1 rejected without truncation
+  ---
+  duration_ms: 35.2995
+  ...
+# Subtest: summary exact UTF8 byte boundary accepted, +1 rejected without truncation
+ok 26 - summary exact UTF8 byte boundary accepted, +1 rejected without truncation
+  ---
+  duration_ms: 35.295208
+  ...
+# Subtest: catalyst exact UTF8 byte boundary accepted, +1 rejected without truncation
+ok 27 - catalyst exact UTF8 byte boundary accepted, +1 rejected without truncation
+  ---
+  duration_ms: 34.026459
+  ...
+# Subtest: risk exact UTF8 byte boundary accepted, +1 rejected without truncation
+ok 28 - risk exact UTF8 byte boundary accepted, +1 rejected without truncation
+  ---
+  duration_ms: 39.006416
+  ...
+# Subtest: platform exact UTF8 byte boundary accepted, +1 rejected without truncation
+ok 29 - platform exact UTF8 byte boundary accepted, +1 rejected without truncation
+  ---
+  duration_ms: 34.188
+  ...
+# Subtest: original expiry at exact microsecond and expiry crossed during calculation reject
+ok 30 - original expiry at exact microsecond and expiry crossed during calculation reject
+  ---
+  duration_ms: 28.747083
+  ...
+# Subtest: same original deadline covers recompute and serialization checks, no restarted budget
+ok 31 - same original deadline covers recompute and serialization checks, no restarted budget
+  ---
+  duration_ms: 8.575042
+  ...
+# Subtest: financial tamper rejects despite rebinding all caller hashes; no assumption promotion
+ok 32 - financial tamper rejects despite rebinding all caller hashes; no assumption promotion
+  ---
+  duration_ms: 8.746584
+  ...
+# Subtest: empty manifest retains sources-not-selected gap, no invented receipt or authority
+ok 33 - empty manifest retains sources-not-selected gap, no invented receipt or authority
+  ---
+  duration_ms: 20.022625
+  ...
+1..33
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 623.707666

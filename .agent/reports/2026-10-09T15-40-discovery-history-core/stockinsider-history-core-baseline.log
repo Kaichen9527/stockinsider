@@ -1,0 +1,165 @@
+TAP version 13
+# (node:29092) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:29092) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/tw-entry-plan-authority.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: loads 240 proved observations and an official next session after a holiday and weekend
+ok 1 - loads 240 proved observations and an official next session after a holiday and weekend
+  ---
+  duration_ms: 86.084625
+  ...
+# Subtest: verified event chain rescales prior prices to the unchanged signal-session price
+ok 2 - verified event chain rescales prior prices to the unchanged signal-session price
+  ---
+  duration_ms: 61.963333
+  ...
+# Subtest: market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+ok 3 - market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+  ---
+  duration_ms: 54.189542
+  ...
+# Subtest: absent price/session/action authority and read failure never abort the candidate run
+ok 4 - absent price/session/action authority and read failure never abort the candidate run
+  ---
+  duration_ms: 15.828334
+  ...
+# Subtest: corporate-action hash corruption and changed daily factor fail closed
+ok 5 - corporate-action hash corruption and changed daily factor fail closed
+  ---
+  duration_ms: 20.2555
+  ...
+# Subtest: post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+ok 6 - post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+  ---
+  duration_ms: 68.235
+  ...
+# Subtest: an absent weekday and conflicting calendar heads cannot be skipped
+ok 7 - an absent weekday and conflicting calendar heads cannot be skipped
+  ---
+  duration_ms: 58.66675
+  ...
+# Subtest: zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+ok 8 - zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+  ---
+  duration_ms: 7.307042
+  ...
+# Subtest: shared market authority is acquired once for the immutable run cutoff
+ok 9 - shared market authority is acquired once for the immutable run cutoff
+  ---
+  duration_ms: 108.655709
+  ...
+# Subtest: an older raw observation remains valid against its own immutable calendar revision
+ok 10 - an older raw observation remains valid against its own immutable calendar revision
+  ---
+  duration_ms: 55.000458
+  ...
+# Subtest: a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+ok 11 - a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+  ---
+  duration_ms: 50.741542
+  ...
+# Subtest: a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+ok 12 - a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+  ---
+  duration_ms: 50.873333
+  ...
+# Subtest: a recent share-changing action does not manufacture a comparable volume ratio
+ok 13 - a recent share-changing action does not manufacture a comparable volume ratio
+  ---
+  duration_ms: 9.315208
+  ...
+# Subtest: anchor action context uses corrected zero-event head and ignores old, future and other-exchange events
+ok 14 - anchor action context uses corrected zero-event head and ignores old, future and other-exchange events
+  ---
+  duration_ms: 51.878208
+  ...
+# Subtest: anchor action context retains a verified current event and fails closed on incomplete evidence
+ok 15 - anchor action context retains a verified current event and fails closed on incomplete evidence
+  ---
+  duration_ms: 73.822833
+  ...
+# (node:29093) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:29093) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/tw-entry-plan.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: P1-01: prior20 excludes the signal high and its exactly 1.5x volume
+ok 16 - P1-01: prior20 excludes the signal high and its exactly 1.5x volume
+  ---
+  duration_ms: 24.526458
+  ...
+# Subtest: P1-02: a confirmed signal retains unchanged formal market/overseas blockers
+ok 17 - P1-02: a confirmed signal retains unchanged formal market/overseas blockers
+  ---
+  duration_ms: 4.021875
+  ...
+# Subtest: P1-03: a touch without stabilization never confirms a pullback
+ok 18 - P1-03: a touch without stabilization never confirms a pullback
+  ---
+  duration_ms: 3.175708
+  ...
+# Subtest: P1-03: a stabilized uptrend pullback produces a bounded current-scale research zone
+ok 19 - P1-03: a stabilized uptrend pullback produces a bounded current-scale research zone
+  ---
+  duration_ms: 3.783833
+  ...
+# Subtest: P1-03: a valid breakout that is too far above resistance keeps the signal without a usable entry zone
+ok 20 - P1-03: a valid breakout that is too far above resistance keeps the signal without a usable entry zone
+  ---
+  duration_ms: 3.326042
+  ...
+# Subtest: P1-03: tick rounding that leaves U below L cannot publish an entry zone
+ok 21 - P1-03: tick rounding that leaves U below L cannot publish an entry zone
+  ---
+  duration_ms: 2.935083
+  ...
+# Subtest: P1-04: Taiwan ticks use the correct tier on both sides of every boundary
+ok 22 - P1-04: Taiwan ticks use the correct tier on both sides of every boundary
+  ---
+  duration_ms: 0.402416
+  ...
+# Subtest: P1-04: only the supplied official next session determines validity across closures
+ok 23 - P1-04: only the supplied official next session determines validity across closures
+  ---
+  duration_ms: 3.336917
+  ...
+# Subtest: P1-04: late knowledge cannot manufacture next-open eligibility; close-time publication is expired
+ok 24 - P1-04: late knowledge cannot manufacture next-open eligibility; close-time publication is expired
+  ---
+  duration_ms: 6.574292
+  ...
+# Subtest: P1-01/P1-05: insufficient, unfinished, missing-adjustment and conflicting inputs fail closed
+ok 25 - P1-01/P1-05: insufficient, unfinished, missing-adjustment and conflicting inputs fail closed
+  ---
+  duration_ms: 16.454792
+  ...
+# Subtest: P1-05: official session gaps, duplicate dates, impossible dates, bad OHLC and future observations fail closed
+ok 26 - P1-05: official session gaps, duplicate dates, impossible dates, bad OHLC and future observations fail closed
+  ---
+  duration_ms: 14.299416
+  ...
+# Subtest: P1-09: rebind/retry preserves semantic plan identity and frozen knowledge time
+ok 27 - P1-09: rebind/retry preserves semantic plan identity and frozen knowledge time
+  ---
+  duration_ms: 11.3125
+  ...
+# Subtest: missing liquidity/formal authority never changes a technical observation into actionable permission
+ok 28 - missing liquidity/formal authority never changes a technical observation into actionable permission
+  ---
+  duration_ms: 5.990208
+  ...
+# Subtest: zero-volume history cannot provide a breakout denominator and input size is bounded
+ok 29 - zero-volume history cannot provide a breakout denominator and input size is bounded
+  ---
+  duration_ms: 3.539917
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 908.669084

@@ -1,0 +1,240 @@
+TAP version 13
+# (node:61180) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:61180) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-handoff.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: author handoff: real original claim/completion fences, synthetic upstream/execution and actual AUO calculator
+    # Subtest: no result before receive, all original rows and budget unchanged
+    ok 1 - no result before receive, all original rows and budget unchanged
+      ---
+      duration_ms: 207.867167
+      ...
+    # Subtest: actual calculator and authenticated binding persist one private draft only
+    ok 2 - actual calculator and authenticated binding persist one private draft only
+      ---
+      duration_ms: 289.729958
+      ...
+    # Subtest: exact receive replay/read and PostgreSQL restart preserve original bytes and charge
+    ok 3 - exact receive replay/read and PostgreSQL restart preserve original bytes and charge
+      ---
+      duration_ms: 886.1115
+      ...
+# ERROR:  research_author_result_replay_conflict
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 71 at RAISE
+    # Subtest: changed article or execution bindings fail with no new row
+    ok 4 - changed article or execution bindings fail with no new row
+      ---
+      duration_ms: 954.1695
+      ...
+    # Subtest: same assignment conflicting immutable envelope is rejected by SQL
+    ok 5 - same assignment conflicting immutable envelope is rejected by SQL
+      ---
+      duration_ms: 100.332
+      ...
+    # Subtest: concurrent exact first receive creates one result and no completion
+    ok 6 - concurrent exact first receive creates one result and no completion
+      ---
+      duration_ms: 538.761958
+      ...
+    # Subtest: invocation cannot be reused across different original assignments
+    ok 7 - invocation cannot be reused across different original assignments
+      ---
+      duration_ms: 937.588875
+      ...
+# ERROR:  research_author_result_bound
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 17 at RAISE
+    # Subtest: SQL canonical envelope exact1MiB/+1 quota, synthetic validation-limit text only
+    ok 8 - SQL canonical envelope exact1MiB/+1 quota, synthetic validation-limit text only
+      ---
+      duration_ms: 861.179625
+      ...
+# ERROR:  research_author_result_binding
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 61 at RAISE
+# ERROR:  research_author_result_binding
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 61 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_shape
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 15 at RAISE
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+    # Subtest: SQL null identities, changed calculation and promoted capabilities reject
+    ok 9 - SQL null identities, changed calculation and promoted capabilities reject
+      ---
+      duration_ms: 1229.624417
+      ...
+    # Subtest: service table mutations denied; owner UPDATE DELETE TRUNCATE rejected
+    ok 10 - service table mutations denied; owner UPDATE DELETE TRUNCATE rejected
+      ---
+      duration_ms: 139.3635
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# research_complete_input_failure_phase read_rpc unclassified
+    # Subtest: withdrawal rejects read/replay without changing stored draft
+    ok 11 - withdrawal rejects read/replay without changing stored draft
+      ---
+      duration_ms: 160.462542
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# research_complete_input_failure_phase read_rpc unclassified
+    # Subtest: expired original job cannot read or receive a private result
+    ok 12 - expired original job cannot read or receive a private result
+      ---
+      duration_ms: 569.435375
+      ...
+# ERROR:  observed_completion_requires_scoped_controller
+# CONTEXT:  PL/pgSQL function fence_observed_model_completion_v2() line 3 at RAISE
+    # Subtest: handoff null before commit; result identity and principal mismatch leave state unchanged
+    not ok 13 - handoff null before commit; result identity and principal mismatch leave state unchanged
+      ---
+      duration_ms: 100.290708
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:28:28'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-handoff-DW1Kky -p 56180 -d postgres -c SET ROLE service_role;SELECT read_research_author_handoff_context_v2('{"owner":"synthetic-private-packet-owner","jobId":"062febb7-7c8c-4148-a9a1-8a677743ef48","attempt":1,"reservationId":"5467ad6d-5892-4f9b-8ed7-128034718748","scope":"research_observed_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","preparationId":"cf636a2a-df65-4711-88fd-de1c13fb2005","preparationHash":"d2a8bb28803074bd1160acb38ff2a38bc23774a85859f09b1188a618c1d16540","expectedArtifactManifestHash":"1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314","expectedCalculatorExecutionHash":"79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"}','9b9d18ee-f511-42fb-a187-4246228f087e','7913154ffbffa0c0d4607bb9a08cffaaad71a684774cac3ca6a8362122492a63','7bcdd129b3aa74b126a9c0fc86ab2b14a9bfe3ddf82c2cb05e0bb2b12e3cb632','15b6c20f-3670-4182-9303-add6b4515ecb','79d0f9684fde33afc620b121e0a850b81ae4cc4460c953e0fae80f01e8be2a30');
+        ERROR:  observed_claim_reservation_changed
+        CONTEXT:  PL/pgSQL function read_research_observed_claim_v2(text,text,uuid,integer) line 16 at RAISE
+        PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 36 at assignment
+        
+      code: 1
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        ChildProcess.exithandler (node:child_process:414:12)
+        ChildProcess.emit (node:events:518:28)
+        maybeClose (node:internal/child_process:1101:16)
+        Socket.<anonymous> (node:internal/child_process:456:11)
+        Socket.emit (node:events:518:28)
+        Pipe.<anonymous> (node:net:351:12)
+      ...
+    # Subtest: generic completion trigger rejects even superuser; scoped commit creates only original immutable completion
+    not ok 14 - generic completion trigger rejects even superuser; scoped commit creates only original immutable completion
+      ---
+      duration_ms: 136.142959
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:28:28'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-handoff-DW1Kky -p 56180 -d postgres -c SET ROLE service_role;SELECT read_research_author_handoff_context_v2('{"owner":"synthetic-private-packet-owner","jobId":"062febb7-7c8c-4148-a9a1-8a677743ef48","attempt":1,"reservationId":"5467ad6d-5892-4f9b-8ed7-128034718748","scope":"research_observed_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","preparationId":"cf636a2a-df65-4711-88fd-de1c13fb2005","preparationHash":"d2a8bb28803074bd1160acb38ff2a38bc23774a85859f09b1188a618c1d16540","expectedArtifactManifestHash":"1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314","expectedCalculatorExecutionHash":"79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"}','9b9d18ee-f511-42fb-a187-4246228f087e','7913154ffbffa0c0d4607bb9a08cffaaad71a684774cac3ca6a8362122492a63','7bcdd129b3aa74b126a9c0fc86ab2b14a9bfe3ddf82c2cb05e0bb2b12e3cb632','15b6c20f-3670-4182-9303-add6b4515ecb','79d0f9684fde33afc620b121e0a850b81ae4cc4460c953e0fae80f01e8be2a30');
+        ERROR:  observed_claim_reservation_changed
+        CONTEXT:  PL/pgSQL function read_research_observed_claim_v2(text,text,uuid,integer) line 16 at RAISE
+        PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 36 at assignment
+        
+      code: 1
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        ChildProcess.exithandler (node:child_process:414:12)
+        ChildProcess.emit (node:events:518:28)
+        maybeClose (node:internal/child_process:1101:16)
+        Socket.<anonymous> (node:internal/child_process:456:11)
+        Socket.emit (node:events:518:28)
+        Pipe.<anonymous> (node:net:351:12)
+      ...
+    # Subtest: handoff replay/read and restart preserve exact receipt; active-work result reader still rejects
+    not ok 15 - handoff replay/read and restart preserve exact receipt; active-work result reader still rejects
+      ---
+      duration_ms: 96.957833
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:28:28'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-handoff-DW1Kky -p 56180 -d postgres -c SET ROLE service_role;SELECT read_research_author_handoff_context_v2('{"owner":"synthetic-private-packet-owner","jobId":"062febb7-7c8c-4148-a9a1-8a677743ef48","attempt":1,"reservationId":"5467ad6d-5892-4f9b-8ed7-128034718748","scope":"research_observed_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","preparationId":"cf636a2a-df65-4711-88fd-de1c13fb2005","preparationHash":"d2a8bb28803074bd1160acb38ff2a38bc23774a85859f09b1188a618c1d16540","expectedArtifactManifestHash":"1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314","expectedCalculatorExecutionHash":"79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"}','9b9d18ee-f511-42fb-a187-4246228f087e','7913154ffbffa0c0d4607bb9a08cffaaad71a684774cac3ca6a8362122492a63','7bcdd129b3aa74b126a9c0fc86ab2b14a9bfe3ddf82c2cb05e0bb2b12e3cb632','15b6c20f-3670-4182-9303-add6b4515ecb','79d0f9684fde33afc620b121e0a850b81ae4cc4460c953e0fae80f01e8be2a30');
+        ERROR:  observed_claim_reservation_changed
+        CONTEXT:  PL/pgSQL function read_research_observed_claim_v2(text,text,uuid,integer) line 16 at RAISE
+        PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 36 at assignment
+        
+      code: 1
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        ChildProcess.exithandler (node:child_process:414:12)
+        ChildProcess.emit (node:events:518:28)
+        maybeClose (node:internal/child_process:1101:16)
+        Socket.<anonymous> (node:internal/child_process:456:11)
+        Socket.emit (node:events:518:28)
+        Pipe.<anonymous> (node:net:351:12)
+      ...
+    # Subtest: concurrent first handoff inserts one completion without changing original charge or deadlines
+    not ok 16 - concurrent first handoff inserts one completion without changing original charge or deadlines
+      ---
+      duration_ms: 1002.913584
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:28:28'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-handoff-DW1Kky -p 56180 -d postgres -c SET ROLE service_role;SELECT commit_research_author_handoff_v2('{"owner":"synthetic-private-packet-owner","jobId":"3dbfde28-2f82-43ff-9352-c764bd355cb1","attempt":1,"reservationId":"06e7382f-f188-47e5-820a-68859c63abf6","scope":"research_observed_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","preparationId":"9c30734a-3b3e-49c2-8fd7-4b3cffb3b36c","preparationHash":"849b637d8cdef5ed5d59b182a44b4ebc45bfd0f6ae2d8e193d822d46b7b9d5b0","expectedArtifactManifestHash":"1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314","expectedCalculatorExecutionHash":"79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"}','cb50e7ab-87d6-49aa-9003-7266ca9386aa','9006a4721fb9276961c52d59a8ffa61e0be07ad28a8590ee25eaf6baf0794096','7bcdd129b3aa74b126a9c0fc86ab2b14a9bfe3ddf82c2cb05e0bb2b12e3cb632','7c61954a-adc9-49ba-9196-25facf693ee7','036ef4107ee63277e194a3a03c98326e56bb68077fe1e357c4c5ef60f88f5472');
+        ERROR:  observed_claim_reservation_changed
+        CONTEXT:  PL/pgSQL function read_research_observed_claim_v2(text,text,uuid,integer) line 16 at RAISE
+        PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 36 at assignment
+        PL/pgSQL function commit_research_author_handoff_v2(jsonb,uuid,text,text,uuid,text) line 4 at assignment
+        
+      code: 1
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        ChildProcess.exithandler (node:child_process:414:12)
+        ChildProcess.emit (node:events:518:28)
+        maybeClose (node:internal/child_process:1101:16)
+        Socket.<anonymous> (node:internal/child_process:456:11)
+        Socket.emit (node:events:518:28)
+        Pipe.<anonymous> (node:net:351:12)
+      ...
+# ERROR:  permission denied for table research_model_completions_v1
+# ERROR:  research_author_handoff_read_committed_required
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 6 at RAISE
+    # Subtest: completed result still denies withdrawn source, expired job and takeover without rewriting history
+    not ok 17 - completed result still denies withdrawn source, expired job and takeover without rewriting history
+      ---
+      duration_ms: 924.244708
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:28:28'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/opt/postgresql@17/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-handoff-DW1Kky -p 56180 -d postgres -c SET ROLE service_role;SELECT read_research_author_handoff_context_v2('{"owner":"synthetic-private-packet-owner","jobId":"cf0d92f1-16d7-4fa0-8f71-a07780639771","attempt":1,"reservationId":"88185345-a15d-4310-baed-aa1935a82ccb","scope":"research_observed_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","preparationId":"321e51b3-f250-4814-8e16-3b876f6b537c","preparationHash":"e9cbb882d2e00586c7dff853573057dd78e605d7834d860bb849cad1534e208b","expectedArtifactManifestHash":"1b9f2182a4b388b6227bf9719a7de8dcea8b79d2cb893c01034cd28d1073a314","expectedCalculatorExecutionHash":"79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f"}','5d7cd2d7-ce49-4e34-92be-dd4622e30b65','b2ffbb5abcf87f3e0fc0201dafb39245932922e83a072b70c4243337969570d2','7bcdd129b3aa74b126a9c0fc86ab2b14a9bfe3ddf82c2cb05e0bb2b12e3cb632','8a78aa10-2ff0-419f-a3c9-2dfc97abcfbd','4e5f3aa1e4a3cf479e82bd5773b51388eeabb4103242d5b39266b570f63320cb');
+        ERROR:  observed_claim_reservation_changed
+        CONTEXT:  PL/pgSQL function read_research_observed_claim_v2(text,text,uuid,integer) line 16 at RAISE
+        PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 36 at assignment
+        
+      code: 1
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        ChildProcess.exithandler (node:child_process:414:12)
+        ChildProcess.emit (node:events:518:28)
+        maybeClose (node:internal/child_process:1101:16)
+        ChildProcess._handle.onexit (node:internal/child_process:304:5)
+      ...
+    # Subtest: service direct completion write forbidden and serializable context forbidden
+    ok 18 - service direct completion write forbidden and serializable context forbidden
+      ---
+      duration_ms: 142.27875
+      ...
+    1..18
+not ok 1 - author handoff: real original claim/completion fences, synthetic upstream/execution and actual AUO calculator
+  ---
+  duration_ms: 11484.768208
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-handoff-postgres.test.mjs:23:1'
+  failureType: 'subtestsFailed'
+  error: '5 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Failure evidence retained at /tmp/si-handoff-DW1Kky
+1..1
+# tests 19
+# suites 0
+# pass 13
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11678.911291

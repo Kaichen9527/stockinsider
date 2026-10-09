@@ -1,0 +1,9 @@
+- [x] Read actual priority/inbox/job/claim/input code and record withdrawn direct-stocks design; preserve current formal409 profile.
+- [x] Submit exact independent-company/snapshot/scope/first-discovery/quota/v2 boundary spec for architecture review.
+- [ ] Receive attributed independent architecture approval of exact spec (not source data/code approval).
+- [ ] Slice1 additive immutable independent company/roster admission and real1978 guarded HTTP acceptance.
+- [ ] Slice2 explicit priority/observed discovery/job transaction, crossscope quotas and real positive accounting.
+- [ ] Slice3 real v2 claim/input/private draft scope binding with incomplete financial/publication gaps.
+- [ ] Independent code review and required VM focused/integration/types/lint/build/resources per slice.
+- [ ] Separate TWSE insider coverage/schema/period/unknown quantities and TPEX finite-key/placeholder repair.
+- [ ] Lawful publication reconciliation/lifecycle, complete strategy/consumer chain and production roundtrip; no alternate pipe.
