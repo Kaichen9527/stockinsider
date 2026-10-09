@@ -4,7 +4,12 @@ import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-const binaries=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN;
+// Preserve explicit environment selection (including an invalid nonempty path).
+// Ordinary CI exposes pg_config on PATH; protected CI provides its pinned bin.
+const binaries=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN || process.env.OPPORTUNITY_V3_POSTGRES_BIN || (()=>{
+ try {return execFileSync('pg_config',['--bindir'],{encoding:'utf8',timeout:5000,maxBuffer:4096}).trim();}
+ catch {return '';}
+})();
 const available=binaries&&['initdb','pg_ctl','psql'].every(name=>fs.existsSync(path.join(binaries,name)));
 test('real existing PostgreSQL cursor DDL retains CAS/replay progress after restart',{skip:!available&&'PostgreSQL unavailable'},()=>{
  const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'si-insider-'));const cluster=path.join(tmp,'pg');const port=56000+process.pid%7000;
