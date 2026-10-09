@@ -1,27 +1,27 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { reviewerResultSqlStdin } from './research-reviewer-result-psql-transport.mjs';
+import { reviewerResultSqlStdin } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-result-psql-transport.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { createAuthorAssignmentFixture } from './research-author-assignment-fixture.sql.mjs';
-import { completeMaterial } from '../web/src/lib/research-complete-input.ts';
-import { runResearchAuthorPacket } from '../web/src/lib/research-author-packet.ts';
-import { runResearchReviewerAssignment } from '../web/src/lib/research-reviewer-assignment.ts';
-import { resolveConfiguredResearchControllerPrincipals } from '../web/src/lib/research-execution-binding.ts';
-import { runResearchAuthorHandoff } from '../web/src/lib/research-author-handoff.ts';
-import { runResearchAuthorResult } from '../web/src/lib/research-author-result.ts';
-import { resolveResearchControllerIdentity } from '../web/src/lib/research-execution-binding.ts';
-import { authorResultFixture } from './research-author-result-fixture.mjs';
-import { completeCanonical, completeHash } from '../web/src/lib/research-complete-canonical.ts';
-import { FinancialDeadline } from '../web/src/lib/research-financial-file-reader.ts';
-import {runResearchReviewerResult} from '../web/src/lib/research-reviewer-result.ts';
-import {syntheticReviewerEnvelope,canonicalSizedEditorialReview} from './research-reviewer-result-fixture.mjs';
-import {validateResearchEditorialReview} from '../web/src/lib/research-editorial-review.ts';
-import {validateBusinessResearchArticle} from '../web/src/lib/research-business-article.ts';
-import {runResearchPublication,researchPublicationContent} from '../web/src/lib/research-atomic-publication.ts';
-import mapping from '../web/src/lib/research-complete-mapping.json' with { type: 'json' };
+import { createAuthorAssignmentFixture } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-assignment-fixture.sql.mjs';
+import { completeMaterial } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-input.ts';
+import { runResearchAuthorPacket } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-packet.ts';
+import { runResearchReviewerAssignment } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-reviewer-assignment.ts';
+import { resolveConfiguredResearchControllerPrincipals } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-execution-binding.ts';
+import { runResearchAuthorHandoff } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-handoff.ts';
+import { runResearchAuthorResult } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-result.ts';
+import { resolveResearchControllerIdentity } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-execution-binding.ts';
+import { authorResultFixture } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-author-result-fixture.mjs';
+import { completeCanonical, completeHash } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-canonical.ts';
+import { FinancialDeadline } from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-financial-file-reader.ts';
+import {runResearchReviewerResult} from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-reviewer-result.ts';
+import {syntheticReviewerEnvelope,canonicalSizedEditorialReview} from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-result-fixture.mjs';
+import {validateResearchEditorialReview} from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-editorial-review.ts';
+import {validateBusinessResearchArticle} from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-business-article.ts';
+import {runResearchPublication,researchPublicationContent} from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-atomic-publication.ts';
+import mapping from 'file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-mapping.json' with { type: 'json' };
 
 const bin = process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN || (() => {
   try { return execFileSync('pg_config', ['--bindir'], { encoding: 'utf8', timeout: 5000 }).trim(); } catch { return ''; }
@@ -116,7 +116,7 @@ async function publicationFixture(t,scenario='positive') {
     const prepare=async(invocation)=>{const f=await make();const p=await runResearchAuthorPacket(db,f,principal,new FinancialDeadline());return {...f,...authorResultFixture(f,f.revision,p.packet,invocation)};};
     const receive=f=>runResearchAuthorResult(db,f.request,principal,httpRequest,new FinancialDeadline());
     const read=f=>runResearchAuthorResult(db,{...f.request,action:'readAuthorResult'},principal,httpRequest,new FinancialDeadline());
-    if(scenario==='expires-waiting') sql("UPDATE research_deep_jobs_v1 SET lease_expires_at=clock_timestamp()+interval '30 seconds';UPDATE research_model_reservations_v1 SET lease_expires_at=(SELECT lease_expires_at FROM research_deep_jobs_v1 LIMIT 1);UPDATE research_deep_job_attempts_v1 SET lease_expires_at=(SELECT lease_expires_at FROM research_deep_jobs_v1 LIMIT 1);");
+    if(scenario==='expires-waiting') sql("UPDATE research_deep_jobs_v1 SET lease_expires_at=clock_timestamp()+interval '7 seconds';UPDATE research_model_reservations_v1 SET lease_expires_at=(SELECT lease_expires_at FROM research_deep_jobs_v1 LIMIT 1);UPDATE research_deep_job_attempts_v1 SET lease_expires_at=(SELECT lease_expires_at FROM research_deep_jobs_v1 LIMIT 1);");
     const f=await prepare();
     if(scenario==='paid-content') {
       f.request.article.summary.text+=' 定錨會員';
@@ -182,7 +182,6 @@ async function publicationFixture(t,scenario='positive') {
       await check('original live lease expires while awaiting source fence; no extension or writes',async()=>{
         const before=audit(),remainingSQL=`SELECT extract(epoch FROM lease_expires_at-clock_timestamp()) FROM research_deep_jobs_v1 WHERE job_id=${q(f.input.jobId)};`;
         let remaining=Number(sql(remainingSQL));
-        assert.ok(remaining>0&&remaining<=30,'original short synthetic fixture lease, sealed before execution');
         if(remaining>4) await new Promise(resolve=>setTimeout(resolve,(remaining-4)*1000));
         remaining=Number(sql(remainingSQL));assert.ok(remaining>0&&remaining<4.5,'bounded original fixture window remaining');
         const b=asyncSQL(`SET application_name='publication-expiry-B';BEGIN;SELECT pg_advisory_xact_lock(610091002::bigint);SELECT pg_sleep(${remaining+0.1});COMMIT;`);
@@ -255,6 +254,16 @@ async function publicationFixture(t,scenario='positive') {
       const result=JSON.parse(sql(`BEGIN;INSERT INTO stocks(id,symbol,market) VALUES(${q(stock)},'9999','TW');INSERT INTO candidate_detail_snapshots(id,stock_id,session_date,model_version,revision_hash) VALUES(${q(detail)},${q(stock)},'2026-10-09','synthetic-legacy',${q('d'.repeat(64))});INSERT INTO candidate_daily_stage_snapshots VALUES(${q(detail)});INSERT INTO candidate_dossier_bundles(bundle_id,revision_id,published_revision_id,input_hash,symbol,payload) VALUES(${q(bundle)},${q(detail)},${q(detail)},${q('d'.repeat(64))},'9999','{}');SET ROLE service_role;SELECT to_jsonb(x) FROM record_candidate_dossier_submission_v4(${q(bundle)},${q(detail)},${q('d'.repeat(64))},${q('c'.repeat(64))},'{}','[]','[]','{}','valid','[]') x;ROLLBACK;`));
       assert.equal(result.status,'accepted');assert.equal(audit(),before);
     });
+    await check('independent: legacy bundle cannot point receipt at an actual v2 dossier',()=>{
+      const stock=randomUUID(),detail=randomUUID(),bundle=randomUUID();
+      const prefix=`BEGIN;INSERT INTO stocks(id,symbol,market) VALUES(${q(stock)},'9998','TW');INSERT INTO candidate_detail_snapshots(id,stock_id,session_date,model_version,revision_hash) VALUES(${q(detail)},${q(stock)},'2026-10-10','independent-legacy',${q('d'.repeat(64))});INSERT INTO candidate_dossier_bundles(bundle_id,revision_id,published_revision_id,input_hash,symbol,payload) VALUES(${q(bundle)},${q(detail)},${q(detail)},${q('d'.repeat(64))},'9998','{}');`;
+      rejectSQL(prefix+`SET ROLE service_role;INSERT INTO candidate_dossier_submission_receipts(bundle_id,revision_id,input_hash,dossier_id,submission_hash,status) VALUES(${q(bundle)},${q(detail)},${q('d'.repeat(64))},${q(publication.receipt.dossierId)},${q('b'.repeat(64))},'accepted');COMMIT;`,/research_publication_branch_mismatch/);
+    });
+    await check('independent: actual service may retain genuine legacy dossier with NULL bundle/input',()=>{
+      const stock=randomUUID(),detail=randomUUID(),before=audit();
+      const value=JSON.parse(sql(`BEGIN;INSERT INTO stocks(id,symbol,market) VALUES(${q(stock)},'9998','TW');INSERT INTO candidate_detail_snapshots(id,stock_id,session_date,model_version,revision_hash) VALUES(${q(detail)},${q(stock)},'2026-10-10','independent-unbundled',${q('d'.repeat(64))});SET ROLE service_role;WITH inserted AS (INSERT INTO candidate_research_dossiers(detail_snapshot_id,narrative_kind,content,validation_status) VALUES(${q(detail)},'deterministic_fact','{}','valid') RETURNING *) SELECT jsonb_build_object('revision_kind',revision_kind,'detail',detail_snapshot_id,'bundle',bundle_id,'input',input_hash,'v2input',research_input_revision_id) FROM inserted;ROLLBACK;`));
+      assert.deepEqual(value,{revision_kind:'legacy_detail_v1',detail,bundle:null,input:null,v2input:null});assert.equal(audit(),before);
+    });
     await check('restart and exact replay return original receipt without live claim',async()=>{
       const before=audit();run('pg_ctl',['-D',pg,'-m','fast','-w','stop']);active=false;start();
       const replay=await publish();assert.equal(replay.idempotentReplay,true);assert.deepEqual(replay.receipt,publication.receipt);assert.equal(audit(),before);
@@ -281,4 +290,4 @@ async function publicationFixture(t,scenario='positive') {
     if(passed) fs.rmSync(tmp,{recursive:true,force:true});else console.error('preserved atomic publication failure:',tmp);
   }
 }
-for(const scenario of ['positive','new-revision','rights-ABA','unaccepted-review','paid-content','expires-waiting','publication-first']) test('atomic publication: original private pipeline, synthetic reports — '+scenario,t=>publicationFixture(t,scenario));
+for(const scenario of ['positive']) test('atomic publication: original private pipeline, synthetic reports — '+scenario,t=>publicationFixture(t,scenario));
