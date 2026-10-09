@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "bounded-publication-view-maker-acceptance-v1",
+  "recordedAt": "2026-10-09T17:08:25.849117+00:00",
+  "subject": "df514965072816d319ec1a1aa47b752c538d1d92",
+  "runtimeSubject": "27f13e51fca5d64498b5ef54d4f9e5394e0f7f21",
+  "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+  "unitActualSSR": {
+    "pass": 7,
+    "fail": 0,
+    "skip": 0
+  },
+  "types": "pass",
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 33
+  },
+  "normalBuild": {
+    "platform": "Mac",
+    "command": "npm --prefix web run build",
+    "exitCode": 0,
+    "buildId": "-yKUNE4qCy1kUif8SXRbR",
+    "serverFiles": 2094
+  },
+  "compiledHttp": {
+    "statusBoundaryCases": 8,
+    "focusedBodyChecks": 2,
+    "actualInternalBrowser": "original draft desktop1265/mobile375, keyboard details, overflow confined, invalid query404; viewport reset and temporary tab closed",
+    "positivePublishedV2Http": false,
+    "productionDatabase": "not contacted; synthetic unavailable URL/credential for failure test",
+    "serverStopped": true
+  },
+  "independentReview": {
+    "attribution": "existing strategy_deploy_audit_plan agent unsigned scoped CODE PASS27f plus TEST-ONLY CODE PASSdf; independent7/7unit/actualSSR rerun",
+    "protectedApproval": false
+  },
+  "linux": "original847d RED retained, successor pending; root Mac build does not convert Linux build EPERM to pass",
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T17-08-publication-view-successor-maker/stockinsider-publication-view-successor-unit.log",
+      "bytes": 2492,
+      "sha256": "817971c8453efd807587f4fdf97729ef177dd8b518f666da96f12731985edab1"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-08-publication-view-successor-maker/stockinsider-publication-view-successor-types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-08-publication-view-successor-maker/stockinsider-publication-view-successor-lint.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-08-publication-view-successor-maker/stockinsider-publication-view-successor-build.log",
+      "bytes": 6498,
+      "sha256": "a7f323000004256424aa3f1995c58e664e7bfe19278ed607ae203f70f4fb1fff"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-08-publication-view-successor-maker/stockinsider-publication-view-compiled-preview-original.json",
+      "bytes": 1890,
+      "sha256": "b89210e81913296da5e178d3dea6becb709884821b24af7930873b5892265c02"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-08-publication-view-successor-maker/stockinsider-publication-view-compiled-preview-final.json",
+      "bytes": 3286,
+      "sha256": "71ed3477167c6958f8926211a0aa909103f45f51137b9ce70e03b7dd2398ba32"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-08-publication-view-successor-maker/compiled-server-manifest.json",
+      "bytes": 409171,
+      "sha256": "8b20533e38ed854d9655714056d85b6d42642d65098f75b5edd4eae3816e8b48"
+    }
+  ],
+  "limitations": [
+    "Synthetic fixture/controller data is not genuine author or investment research evidence",
+    "No publication positive native HTTP or new component external browser acceptance yet",
+    "No complete installed migration validation or strategy qualification",
+    "No main merge, production migration/deployment or formal schedule activation"
+  ]
+}

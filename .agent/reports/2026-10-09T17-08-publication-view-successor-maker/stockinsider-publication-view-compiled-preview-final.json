@@ -1,0 +1,112 @@
+{
+  "subject": "df514965072816d319ec1a1aa47b752c538d1d92",
+  "buildId": "-yKUNE4qCy1kUif8SXRbR",
+  "observedAt": "2026-10-09T17:06:24.468Z",
+  "loopbackOnly": true,
+  "database": "explicit unavailable synthetic URL/credential; no production DB read or write",
+  "scope": "actual compiled existing draft path and closed query failure boundaries; no accepted published-v2 positive HTTP or external browser proof",
+  "results": [
+    {
+      "path": "/preview/research-working/2409",
+      "status": 200,
+      "expected": 200,
+      "bytes": 150961,
+      "containsDraftMetadataTitle": true
+    },
+    {
+      "path": "/preview/research-working/2383",
+      "status": 200,
+      "expected": 200,
+      "bytes": 161375,
+      "containsDraftMetadataTitle": true
+    },
+    {
+      "path": "/preview/research-working/2330",
+      "status": 404,
+      "expected": 404,
+      "bytes": 7443,
+      "containsDraftMetadataTitle": true
+    },
+    {
+      "path": "/preview/research-working/2409?researchCompanyId=",
+      "status": 404,
+      "expected": 404,
+      "bytes": 7518,
+      "containsDraftMetadataTitle": true
+    },
+    {
+      "path": "/preview/research-working/2409?researchCompanyId=invalid",
+      "status": 404,
+      "expected": 404,
+      "bytes": 7539,
+      "containsDraftMetadataTitle": true
+    },
+    {
+      "path": "/preview/research-working/2409?researchCompanyId=00000000-0000-4000-8000-000000000000",
+      "status": 404,
+      "expected": 404,
+      "bytes": 7626,
+      "containsDraftMetadataTitle": true
+    },
+    {
+      "path": "/preview/research-working/2409?researchCompanyId=00000000-0000-4000-8000-000000000000&researchCompanyId=00000000-0000-4000-8000-000000000000",
+      "status": 404,
+      "expected": 404,
+      "bytes": 7793,
+      "containsDraftMetadataTitle": true
+    },
+    {
+      "path": "/preview/research-working/2409?owner=other",
+      "status": 404,
+      "expected": 404,
+      "bytes": 7497,
+      "containsDraftMetadataTitle": true
+    }
+  ],
+  "actualDraftBodyCheck": [
+    {
+      "path": "/preview/research-working/2409",
+      "status": 200,
+      "draftBody": true
+    },
+    {
+      "path": "/preview/research-working/2409?researchCompanyId=invalid",
+      "status": 404,
+      "draftBody": false
+    }
+  ],
+  "browser": {
+    "surface": "actual Codex in-app browser, localhost compiled Next page only",
+    "desktop": {
+      "width": 1265,
+      "documentScrollWidth": 1265,
+      "actualDraftHeading": "友達：合併Q2轉盈，但現價仍需要另一段證據",
+      "keyboardDetailsOpened": true,
+      "tables": 3
+    },
+    "mobile": {
+      "requestedWidth": 390,
+      "requestedHeight": 844,
+      "actualDocumentClientWidth": 375,
+      "documentScrollWidth": 375,
+      "tableOverflowAuto": true,
+      "tableWidths": [
+        414.890625,
+        421.328125,
+        806.7578125
+      ],
+      "wrapperWidths": [
+        335,
+        335,
+        293
+      ]
+    },
+    "invalidCompanyQuery": {
+      "visibleHeading": "404",
+      "noDraftBody": true
+    },
+    "viewportRestored": true,
+    "temporaryTabClosed": true,
+    "limitation": "Existing original draft desktop/mobile regression only. Accepted published-v2 positive HTTP/browser still pending; new component separately tested through actual SSR."
+  }
+}
