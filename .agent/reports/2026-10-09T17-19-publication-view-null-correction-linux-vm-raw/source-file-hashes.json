@@ -1,0 +1,27 @@
+[
+  {
+    "file": "scripts/research-atomic-publication-postgres.test.mjs",
+    "bytes": 39276,
+    "sha256": "3576a06546b2394dbbd0ade47a20c226724c3d24bc5bf5ae16afb6fd2972adb8"
+  },
+  {
+    "file": "scripts/research-publication-view-fixture.mjs",
+    "bytes": 1473,
+    "sha256": "7dae2dd716c30ad05ee829071cb3e1f275b24aedc1841bb7c540dcfdf430cf93"
+  },
+  {
+    "file": "scripts/research-publication-view.test.mjs",
+    "bytes": 9217,
+    "sha256": "b8f604bc3860700d6efa3ecb8de618e11e6318f1de8fc5a6654a4e41f54376af"
+  },
+  {
+    "file": "web/src/app/stock/[symbol]/PublishedResearchView.tsx",
+    "bytes": 9225,
+    "sha256": "4c10fbe2704e6876a22c53ceeb8bff58f60b489c98b597ef3b7a3e8a66b0a0f5"
+  },
+  {
+    "file": "web/src/lib/research-publication-view.ts",
+    "bytes": 14099,
+    "sha256": "9ff1bc9cfe104f1847dfd0899d45a45e6cab3db3720d71e92103a1cae4b0c6c3"
+  }
+]
