@@ -1,0 +1,210 @@
+{
+  "readOnlySamplerMs": 10,
+  "mayMissShortTransitions": true,
+  "events": [
+    {
+      "clock": "2026-10-09T12:26:39.098673+00:00",
+      "initial": {
+        "/": {
+          "dev": 27,
+          "ino": 262145,
+          "size": 4096,
+          "mtimeNs": 1791114720210158835,
+          "ctimeNs": 1791114735767208628
+        },
+        "/workspace": {
+          "dev": 27,
+          "ino": 9223372036854775855,
+          "size": 12288,
+          "mtimeNs": 1791548738546754283,
+          "ctimeNs": 1791548738546754283
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09": {
+          "dev": 27,
+          "ino": 1497583,
+          "size": 4096,
+          "mtimeNs": 1791548513345054089,
+          "ctimeNs": 1791548513345054089
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09/docs": {
+          "dev": 27,
+          "ino": 1498298,
+          "size": 4096,
+          "mtimeNs": 1791548320789832802,
+          "ctimeNs": 1791548320789832802
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09/docs/research": {
+          "dev": 27,
+          "ino": 1498421,
+          "size": 4096,
+          "mtimeNs": 1791548320788459659,
+          "ctimeNs": 1791548320788459659
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09/docs/research/2026-10-08-auo": {
+          "dev": 27,
+          "ino": 1498463,
+          "size": 4096,
+          "mtimeNs": 1791548320780064920,
+          "ctimeNs": 1791548320780064920
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09/docs/research/2026-10-08-auo-four-segment-model": {
+          "dev": 27,
+          "ino": 1498422,
+          "size": 4096,
+          "mtimeNs": 1791548320772770771,
+          "ctimeNs": 1791548320772770771
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09/docs/research/2026-10-08-auo-full-financial": {
+          "dev": 27,
+          "ino": 1498432,
+          "size": 4096,
+          "mtimeNs": 1791548320774801186,
+          "ctimeNs": 1791548320774801186
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09/docs/research/2026-10-08-auo-market": {
+          "dev": 27,
+          "ino": 1498438,
+          "size": 4096,
+          "mtimeNs": 1791548320776184312,
+          "ctimeNs": 1791548320776184312
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09/docs/research/2026-10-08-auo-working-draft": {
+          "dev": 27,
+          "ino": 1498450,
+          "size": 4096,
+          "mtimeNs": 1791548320778841383,
+          "ctimeNs": 1791548320778841383
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09/docs/research/2026-10-08-discovery-live": {
+          "dev": 27,
+          "ino": 1498482,
+          "size": 4096,
+          "mtimeNs": 1791548320784184516,
+          "ctimeNs": 1791548320784184516
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09/docs/research/2026-10-08-emc-company-model": {
+          "dev": 27,
+          "ino": 1498493,
+          "size": 4096,
+          "mtimeNs": 1791548320788459659,
+          "ctimeNs": 1791548320788459659
+        },
+        "/workspace/cloud-author-packet-http-vm-oct09/docs/research/2026-10-08-emc-official-evidence": {
+          "dev": 27,
+          "ino": 1498503,
+          "size": 4096,
+          "mtimeNs": 1791548320789832802,
+          "ctimeNs": 1791548320789832802
+        }
+      }
+    },
+    {
+      "clock": "2026-10-09T12:26:39.663268+00:00",
+      "path": "/workspace",
+      "before": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548738546754283,
+        "ctimeNs": 1791548738546754283
+      },
+      "after": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548799660302129,
+        "ctimeNs": 1791548799660302129
+      }
+    },
+    {
+      "clock": "2026-10-09T12:26:55.192749+00:00",
+      "path": "/workspace",
+      "before": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548799660302129,
+        "ctimeNs": 1791548799660302129
+      },
+      "after": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548815189347118,
+        "ctimeNs": 1791548815189347118
+      }
+    },
+    {
+      "clock": "2026-10-09T12:26:55.223632+00:00",
+      "path": "/workspace",
+      "before": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548815189347118,
+        "ctimeNs": 1791548815189347118
+      },
+      "after": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548815212695959,
+        "ctimeNs": 1791548815212695959
+      }
+    },
+    {
+      "clock": "2026-10-09T12:27:03.848102+00:00",
+      "path": "/workspace",
+      "before": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548815212695959,
+        "ctimeNs": 1791548815212695959
+      },
+      "after": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548823836914433,
+        "ctimeNs": 1791548823836914433
+      }
+    },
+    {
+      "clock": "2026-10-09T12:27:08.289232+00:00",
+      "path": "/workspace",
+      "before": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548823836914433,
+        "ctimeNs": 1791548823836914433
+      },
+      "after": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548828277026944,
+        "ctimeNs": 1791548828277026944
+      }
+    },
+    {
+      "clock": "2026-10-09T12:27:08.320001+00:00",
+      "path": "/workspace",
+      "before": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548828277026944,
+        "ctimeNs": 1791548828277026944
+      },
+      "after": {
+        "dev": 27,
+        "ino": 9223372036854775855,
+        "size": 12288,
+        "mtimeNs": 1791548828309027755,
+        "ctimeNs": 1791548828309027755
+      }
+    }
+  ]
+}

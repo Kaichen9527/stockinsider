@@ -1,0 +1,18 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "build-cbd-localdeps",
+  "command": [
+    "npm",
+    "run",
+    "build"
+  ],
+  "startedAt": "2026-10-09T12:23:43.523Z",
+  "completedAt": "2026-10-09T12:24:25.247Z",
+  "elapsedSeconds": 41.724033076985506,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 2032496640,
+  "observedTaskDiskPeakBytes": 1287184384,
+  "availableBeforeBytes": 15482748928,
+  "availableAfterBytes": 15153438720,
+  "guardTermination": null
+}
