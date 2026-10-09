@@ -13,6 +13,7 @@ on:
       - 'migrations/20260929*.sql'
       - 'scripts/research-*.test.mjs'
       - 'scripts/test-support/isolated-pg-clock*'
+      - 'scripts/test-support/*isolated_pg_clock_build.py'
       - 'scripts/candidate-dossier-outbox-v6-postgres.test.mjs'
       - 'deployment/vps/**'
       - 'scripts/model-runner-v3/**'
@@ -77,10 +78,9 @@ jobs:
             package-lock.json
             web/package-lock.json
       - name: Install PostgreSQL
-        id: pg-clock
         run: |
           sudo apt-get update
-          sudo apt-get install --yes postgresql libfaketime
+          sudo apt-get install --yes postgresql libfaketime build-essential binutils
           postgres_bin="$(pg_config --bindir)"
           test -x "$postgres_bin/initdb"
           test -x "$postgres_bin/pg_ctl"
@@ -90,7 +90,21 @@ jobs:
           test -f "$clock_library"
           dpkg-query --show --showformat='${Package} ${Version}\n' libfaketime
           sha256sum "$clock_library"
-          echo "library=$clock_library" >> "$GITHUB_OUTPUT"
+      - name: Build pinned test-only PostgreSQL clock library
+        id: pg-clock
+        run: |
+          /usr/bin/python3 -I -S scripts/test-support/test_isolated_pg_clock_build.py
+          /usr/bin/python3 -I -S scripts/test-support/isolated_pg_clock_build.py \
+            --output "$RUNNER_TEMP/stockinsider-pg-clock-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" \
+            > "$RUNNER_TEMP/stockinsider-pg-clock-build.json"
+          python3 - "$RUNNER_TEMP/stockinsider-pg-clock-build.json" "$GITHUB_OUTPUT" <<'PY'
+          import json, sys
+          with open(sys.argv[1]) as source:
+              receipt = json.load(source)
+          print(json.dumps(receipt))
+          with open(sys.argv[2], 'a') as output:
+              output.write('library=' + receipt['library'] + '\n')
+          PY
       - name: Install root dependencies
         run: npm ci
       - uses: actions/setup-python@v5
