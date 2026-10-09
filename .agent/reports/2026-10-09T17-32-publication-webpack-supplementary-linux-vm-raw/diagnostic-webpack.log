@@ -1,0 +1,24 @@
+
+> web@0.1.0 prebuild
+> node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs && node ../scripts/sync-research-strategy-release.mjs --check
+
+Official authority build bridge verified (5 canonical modules).
+{"codeHash":"a5367b9c2ae935897612b096f7f533fd7f12e22790e5bf539bfb3bce35d96fa0","parameterHash":"8bbad7c16c55b4ef1483e1f0c348f35d2404397717e10d1daed49fba30843a39","files":31}
+
+> web@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.3.8 (webpack)
+✓ Running next.config.ts took 22ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 20.1s
+  Running TypeScript ...
+.next/types/app/layout.ts(14,13): error TS2344: Type 'OmitWithTag<typeof import("/workspace/cloud-reviewer-result-http-vm-oct09/web/src/app/layout"), "viewport" | "default" | "metadata" | "instant" | "prefetch" | "config" | "generateStaticParams" | ... 9 more ... | "generateViewport", "">' does not satisfy the constraint '{ [x: string]: never; }'.
+  Property 'CANONICAL_APP_URL' is incompatible with index signature.
+    Type '"http://5.104.83.211"' is not assignable to type 'never'.
+.next/types/app/opportunity-v3/page.ts(14,13): error TS2344: Type 'OmitWithTag<typeof import("/workspace/cloud-reviewer-result-http-vm-oct09/web/src/app/opportunity-v3/page"), "viewport" | "default" | "metadata" | "instant" | "prefetch" | "config" | "generateStaticParams" | ... 9 more ... | "generateViewport", "">' does not satisfy the constraint '{ [x: string]: never; }'.
+  Property 'OpportunityV3Page' is incompatible with index signature.
+    Type '({ searchParams, }: { searchParams: Promise<Record<string, string | string[] | undefined>>; }) => Promise<Element>' is not assignable to type 'never'.
+Failed to type check.
+
