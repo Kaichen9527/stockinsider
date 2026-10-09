@@ -194,3 +194,48 @@ observation reports both companies create/read/replay succeed, but final expiry
 fixture attempted to mutate an append-only dossier. That RED is retained pending
 a legal expiry fixture and exact successor review. No main merge or deployment
 has occurred at this checkpoint.
+
+## Guarded author route checkpoint — PR340, not released
+
+Current staged development subject6f20d4fee2b0b7f960e36e6e104605acf6ded55c
+(tree91bae170b0ee88b9e540f42d5fe5c10bb2d013c2) is pushed as draftPR340.
+Existing model-reservation gains explicit marker2 assignAuthor/readAuthorAssignment
+with exact bearer/server-derived author identity,8192-byte closed body and actual
+current compiled input validation on every create/read/replay. Assignment RPC
+rechecks live original fences atomically. Private principal is omitted from the
+response; no dispatch/reserve/finish/publication occurs. Unmarkedv1 is unchanged.
+
+Independent85f review found test/approval credentials aliasing writer could invoke
+the author path despite21existing unit tests. Root added a failing alias regression
+then fixed resolver4eb; same independent reviewer returned scopedCODEPASS after
+21unit and6additional alias probes, all401/zeroDBIO. OriginalRED stays saved.
+Separately0d complete-input identity encoding had changed under the sameversion;
+VM962 restores sorted-key canonicalization and adds independent re-computation.
+Original reviewer returned unsigned scopedCODEPASS after32pure tests.
+
+6f stages the3exact962 blobs alongside reviewed4eb. Root combined53pure+24actual
+PG TAP (parents included), types,lint0errors/33existing warnings and normalbuild
+pass. Raw logs and exact hashes are preserved in this timestamped author-route
+checkpoint. No Git-only precursor fallback was enabled. PG roles/complete rows
+remain explicitly synthetic private fixtures, not genuine model execution.
+A local merge-resolution script initially asserted the wrong expected script list;
+its sequential shell continued and committed markers atf74. Immediate06e53ef
+resolved the exact script union; no invalid tree was pushed or built. This setup
+error is not a product acceptance result.
+
+New native fixture uses existing isolatedPG/PostgREST/compiledNext harness, actual
+fixed financial inputs, and ephemeral test-only separate credentials. It is queued
+on the existing VM after its owned work, with latest6f required; old85fbuild/HTTP
+must not be relabelled. Complete-input cumulativebytes/rollback/lockexpiry/120sec/
+sourcecommitorder/rightsABA/real response-loss inventory stays open. Actual author
+and reviewer execution, result/handoff, v2publication/reader, true price-context
+adapter, full exact protected release and deployment remain outstanding.
+
+Consumer d75 whole native file is now24/24zero skip on VM receipt1fb1dfdc, replacing
+fixture-order RED22/2 while preserving it. Root verified Git originalstdout6565B,
+SHA9c80366cb2b8bbef00d9a57b839a26a8113b0781721ffafe33d6cfb73c6b9b68
+and exact testblob equality d75=28028845; profileJSON itself was not read onMac.
+All1978unique candidates/price contexts are accounted, with immutable first
+discoveries5347/6531. OldMarch publicEP8 description may create an observed-only
+research job under a manual low-impact assessment; it is not audio/transcript,
+current-order evidence, investment qualification or an early-discovery success.
