@@ -39,7 +39,12 @@ anon/authenticated insertion and ordinary v2 claim fail closed. This inert slice
 rejects ALL v2 outbox UPDATE/DELETE, including delivery-state changes, until the
 reviewed atomic writer slice explicitly replaces that guard. BEFORE TRUNCATE
 statement triggers reject truncation of either table whenever any v2 row exists;
-v1-only truncate behavior stays unchanged. RLS cannot hide v2 rows from these
+v1-only READ COMMITTED truncate behavior stays unchanged. TRUNCATE rejects
+REPEATABLE READ/SERIALIZABLE even if its old snapshot cannot see v2 rows. The
+VOLATILE trigger checks transaction_isolation before checking existence, after
+TRUNCATE acquired ACCESS EXCLUSIVE; READ COMMITTED existence uses a fresh command
+snapshot, never STABLE. This conservative isolation restriction is explicit.
+RLS cannot hide v2 rows from these
 checks: the trigger performs a security-definer existence check owned by the
 existing trusted input owner with explicit SELECT/RLS visibility on both tables. v1 owner/writer
 permissions and row bytes remain unchanged. Future guarded RPCs must run as the
@@ -64,7 +69,10 @@ identities reject; legacy duplicate rules unchanged. Verify ordinary claim never
 selects v2, branch switching and ALL v2 outbox UPDATE/DELETE/TRUNCATE reject,
 legacy first deep claim and retry attempt transitions still work, v1-only
 TRUNCATE stays available, mixed v1/v2 TRUNCATE rejects, failed changes roll back
-and rows survive restart.
+and rows survive restart. Two-session tests cover old REPEATABLE READ snapshot
+then committed v2 insertion before TRUNCATE (must reject), and READ COMMITTED
+TRUNCATE waiting behind v2 insertion then rejecting after commit. No permission
+revocation or old writer modification substitutes for these concurrency tests.
 Run existing real-PG outbox/deep-publication regression tests, type/lint/build and
 independent design/code review. Native HTTP publication remains later acceptance;
 this slice does not claim publication or genuine author/reviewer execution.
