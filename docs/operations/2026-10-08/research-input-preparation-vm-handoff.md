@@ -38,3 +38,9 @@ At docs head443c251b, actual `npm run test:research-agents` ran500 TAP:478pass/2
 ## Independent growth finding / approved bounded repair design
 
 Root reports actual isolated PG: eight public sources and129 legitimate subsets grew the original unit from1 to130 rows in3.4seconds with one reservation. Original9/9 and later46/32 green receipts remain valid for their narrower scopes, not final release approval. Probe SHA03ba58d0424be2becaf7fc61891e1576d3d7df09d3bbe8bc8b54431dee3b6a6b. Independently reviewed repair design:4 preparations AND524288 logical canonical UTF-8 bytes of full request/payload/new seal per original unit, nonrefundable; exact replay remains first after live lineage/lease/fence checks; same transaction and existing source→global lock order. Source-wide seal traffic and physical WAL are not bounded by this repair.
+
+## Cap successor maker verification
+
+Exact code3ac619dd3f70fbed2aef7a4def444e634630633d: final50/50focused routes+realPG and32/32actual clean Next/PostgREST/PG, zero skip. Typecheck/lint(0errors,33warnings)/normalbuild passed. Original fifth-admission red(8pass/2failTAP) and first private-owner root-function permission failure(4pass/9fail) are preserved. Exact replay at4 slots succeeds; expired/withdrawn replay rejects; concurrent final-slot clients yield1admission; byte rejection leaves prep/seal/reservation/completion counts unchanged. The524288/+1 exact-byte check is serialization-level via the same private charge function, not a claimed end-to-end exact-sized positive packet.
+
+Sanitized receipt `.agent/reports/2026-10-09T05-16-input-preparation-cap-vm.json` binds source/build/hash, original independent130-row red, clocks, native source provenance and sampled resource measurements. All schemas are fresh disposable fixtures; no production upgrade or role execution is inferred. Independent successor code review remains pending. Original full-suite22fail and original receipts remain unchanged.
