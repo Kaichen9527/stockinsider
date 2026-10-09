@@ -156,3 +156,15 @@ test('SCT09 response hash binds exact wire bytes, including UTF8 BOM; TLS remain
   assert.equal(mocked.calls[0].options.rejectUnauthorized,true);
   assert.equal(mocked.calls[0].options.headers['Accept-Encoding'],'identity');
 });
+
+// SCT-POD01: hostile future feed links do not become another request.
+test('SCT-POD01 controller-only publisher RSS cannot follow transcript, chapters or audio',async()=>{
+ const url='https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml';
+ const s=scope({id:'investanchors-index',platform:'podcast',url,scope:'exact public publisher RSS metadata only',contentScope:'metadata_index',rights:{basis:'creator_published_index',checkedAt:new Date(Date.now()-1000).toISOString(),checkedBy:'public-directory-review'}});
+ const mocked=transport({contentType:'application/rss+xml',body:'<rss xmlns:podcast="https://podcastindex.org/namespace/1.0"><channel><item><title>index</title><podcast:transcript url="https://feeds.soundon.fm/transcript.json" type="application/json"/><podcast:chapters url="https://feeds.soundon.fm/chapters.json" type="application/json"/><enclosure url="https://filesb.soundon.fm/audio.mp3" type="audio/mpeg"/></item></channel></rss>'});
+ const reader=(scope,options)=>readPinnedPublicSource(scope,{...options,lookup,request:mocked.request});
+ const run=await executeSourceController(input([s]),{reader});
+ assert.equal(mocked.calls.length,1);assert.equal(mocked.calls[0].url,url);
+ assert.equal(run.receipts[0].outcome,'metadata_only');assert.equal(run.receipts[0].bodyPresent,false);
+ assert.equal(run.inboxRequest.items.length,0);assert.equal(run.authoritativePublication,false);assert.equal(run.strategyApproved,false);
+});
