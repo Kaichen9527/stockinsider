@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "stockinsider-ordinary-ci-observation-v1",
+  "recordedAt": "2026-10-09T06:12:03.379108+00:00",
+  "subjectHead": "85f8fc3b7e21372187a8cebc010eaee37cfd1fae",
+  "runtimeHead": "1b8aa0d03e2b50df3b067ff99b78002ccfe36c4a",
+  "runId": 37891396523,
+  "jobId": 113692897882,
+  "runUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/37891396523",
+  "conclusion": "success",
+  "historyContracts": {
+    "tests": 9,
+    "pass": 9,
+    "fail": 0,
+    "skip": 0
+  },
+  "researchContracts": {
+    "tests": 519,
+    "pass": 516,
+    "fail": 0,
+    "skip": 3,
+    "skippedTests": [
+      "ok 146 - real existing PostgreSQL cursor DDL retains CAS/replay progress after restart # SKIP PostgreSQL unavailable",
+      "ok 196 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled",
+      "ok 197 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled"
+    ]
+  },
+  "strictPostgresSuites": {
+    "immutableInputPreparations": "pass",
+    "sharedSourceFence": "pass",
+    "source": "actual TAP parent outcomes; real PostgreSQL installed in job"
+  },
+  "productDiagnostic": {
+    "normalProductionBuild": "pass",
+    "browserChecksPassed": 9
+  },
+  "log": {
+    "bytes": 1352255,
+    "sha256": "568b352442ef3cee06b4ea87dfa81157b84f5d65194839e65052ff4b822d8317",
+    "privateLocalPath": "/tmp/stockinsider-queue-85f-ordinary-ci.log"
+  },
+  "protectedCodeGateEvidence": false,
+  "productionDeployed": false,
+  "officialFinancialRefreshCompleted": false,
+  "limitations": [
+    "Ordinary diagnostic CI does not supply protected external review authority.",
+    "VM queue positive receipt experiment is synthetic; no live official refresh or live queue write was performed."
+  ]
+}
