@@ -282,7 +282,9 @@ for(const symbol of ['2409','2383'])test(`compiled atomic publication ${symbol},
   report.publicationAttempts=[];
   report.publicationHttp={symbol,dependencies,partialDevelopmentProfile:true,syntheticAuthorReview:true,
    actualAuthorExecuted:false,actualReviewerExecuted:false,researchQualified:false,strategyApproved:false,entryEligible:false};
-  await t.test('publication exact auth, marker and closed fields reject; unpublished read and preview do not fall back',async()=>{
+  let publicationCaseFailed=false;
+  const publicationCheck=async(name,fn)=>{await t.test(name,async()=>{try{await fn();}catch(error){publicationCaseFailed=true;throw error;}});if(publicationCaseFailed)throw Error('dependent_native_publication_case_stopped');};
+  await publicationCheck('publication exact auth, marker and closed fields reject; unpublished read and preview do not fall back',async()=>{
    const before=audit();
    for(const role of [false,'reviewer','tester','cron'])assert.equal((await publicationCall(publicationRequest,role)).response.status,401);
    for(const patch of [{extra:true},{authorId:'caller-authority'},{article:{}},{inputHash:'f'.repeat(64)}]){
@@ -295,7 +297,7 @@ for(const symbol of ['2409','2383'])test(`compiled atomic publication ${symbol},
    assert.equal(audit(),before);
   });
   let original;
-  await t.test('first publication commits but TCP response is dropped; original read recovers exactly once',async()=>{
+  await publicationCheck('first publication commits but TCP response is dropped; original read recovers exactly once',async()=>{
    const before=JSON.parse(audit());
    const dropped=await dropPublicationResponse(publicationRequest);
    assert.deepEqual(dropped,{upstreamStatus:200,callerErrorCode:'ECONNRESET',requests:1,forwardedResponseBytes:0});
@@ -311,7 +313,7 @@ for(const symbol of ['2409','2383'])test(`compiled atomic publication ${symbol},
    report.publicationHttp.firstResponseDrop=dropped;report.publicationHttp.original=original;
   });
   assert.ok(original,'first publication recovery failed; no business retry');
-  await t.test('concurrent exact HTTP replay and PostgreSQL restart preserve original receipt and all state',async()=>{
+  await publicationCheck('concurrent exact HTTP replay and PostgreSQL restart preserve original receipt and all state',async()=>{
    const before=audit();
    const responses=await Promise.all([publicationCall(publicationRequest),publicationCall(publicationRequest),publicationCall(publicationRead)]);
    for(const {response,body}of responses){assert.equal(response.status,200,JSON.stringify(body));assert.deepEqual(body.publication,original);}
@@ -321,7 +323,7 @@ for(const symbol of ['2409','2383'])test(`compiled atomic publication ${symbol},
    const {response,body}=await publicationCall(publicationRead);assert.equal(response.status,200);assert.deepEqual(body.publication,original);assert.equal(audit(),before);
    report.publicationHttp.restartPreserved=true;
   });
-  await t.test('compiled company preview renders the actual accepted content, computed periods and strict identity bounds',async()=>{
+  await publicationCheck('compiled company preview renders the actual accepted content, computed periods and strict identity bounds',async()=>{
    const before=audit(),response=await rpc('read_research_company_publication_v2',{p_company:companyId});assert.equal(response.status,200);
    const raw=await response.json(),view=parseResearchPublicationView(raw,companyId,symbol);
    assert.deepEqual(raw.publication.content,original.content);assert.deepEqual(view.valuations,original.content.deepResearch.valuations);
@@ -340,7 +342,7 @@ for(const symbol of ['2409','2383'])test(`compiled atomic publication ${symbol},
    const draft=await get(`preview/research-working/${symbol}`);assert.equal(draft.status,200);assert.equal((await draft.text()).includes('published-research-title'),false);
    assert.equal(audit(),before);report.publicationHttp.compiledPreview=true;
   });
-  await t.test('inbox HTTP withdrawal changes display state but retains original publication bytes, receipt and budget',async()=>{
+  await publicationCheck('inbox HTTP withdrawal changes display state but retains original publication bytes, receipt and budget',async()=>{
    const revisedAt=new Date().toISOString();const response=await post('api/internal/research-inbox',{items:[{...item,observedAt:revisedAt,revisionObservedAt:revisedAt,retracted:true}]});assert.equal(response.status,200,await response.text());
    const before=audit(),{response:readResponse,body}=await publicationCall(publicationRead);assert.equal(readResponse.status,200,JSON.stringify(body));
    assert.equal(body.publication.researchState,'withdrawn');assert.deepEqual(body.publication.content,original.content);assert.deepEqual(body.publication.receipt,original.receipt);
