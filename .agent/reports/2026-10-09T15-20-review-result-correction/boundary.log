@@ -1,0 +1,218 @@
+TAP version 13
+# (node:219) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:219) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-packet.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: reviewer result: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+    # Subtest: existing exact author invocation backfilled, null review read without writes
+    ok 1 - existing exact author invocation backfilled, null review read without writes
+      ---
+      duration_ms: 467.26025
+      ...
+# ERROR:  duplicate key value violates unique constraint "research_execution_invocations_v2_pkey"
+# DETAIL:  Key (invocation_id)=(synthetic-history-56bc76d0-1e8f-4129-a15f-e185f59513c9) already exists.
+# CONTEXT:  SQL statement "INSERT INTO public.research_execution_invocations_v2 VALUES(NEW.invocation_id,
+#   CASE WHEN TG_TABLE_NAME='research_author_results_v2' THEN 'author' ELSE 'reviewer' END,NEW.result_id,NEW.result_hash)"
+# PL/pgSQL function fence_research_execution_invocation_v2() line 7 at SQL statement
+# SQL statement "INSERT INTO public.research_reviewer_results_v2(assignment_id,invocation_id,result_hash,logical_bytes,received_at,payload)
+#  VALUES((ra->>'assignment_id')::uuid,o->>'invocationId',public.research_complete_hash_v2(p_result),bytes,n,p_result) RETURNING *"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 67 at SQL statement
+# ERROR:  research_editorial_review_finding
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 36 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_check
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 22 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_finding
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 36 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_shape
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 10 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  research_editorial_review_check
+# CONTEXT:  PL/pgSQL function assert_research_editorial_review_v2(jsonb,jsonb) line 22 at RAISE
+# SQL statement "SELECT public.assert_research_editorial_review_v2(packet,review)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 16 at PERFORM
+# ERROR:  synthetic_completion_insert_abort
+# CONTEXT:  PL/pgSQL function fixture_review_completion_abort() line 1 at RAISE
+# SQL statement "INSERT INTO public.research_model_completions_v1(reservation_id,owner,outcome,result_hash)
+#  VALUES((ra->>'reservation_id')::uuid,ra->>'work_owner','completed',saved.result_hash)"
+# PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 69 at SQL statement
+    # Subtest: same thread/invocation, before-author and changed packet denied without writes
+    ok 2 - same thread/invocation, before-author and changed packet denied without writes
+      ---
+      duration_ms: 2048.006
+      ...
+    # Subtest: registry blocks different existing author invocation before first review commit
+    ok 3 - registry blocks different existing author invocation before first review commit
+      ---
+      duration_ms: 347.779625
+      ...
+    # Subtest: shared canonical65536 bytes exact in TS and PG, +1 actual RPC refuses with zero rows
+    not ok 4 - shared canonical65536 bytes exact in TS and PG, +1 actual RPC refuses with zero rows
+      ---
+      duration_ms: 15005.331625
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-result-postgres.test.mjs:33:28'
+      failureType: 'testCodeFailure'
+      error: 'spawnSync /opt/homebrew/opt/postgresql@17/bin/psql ETIMEDOUT'
+      code: 'ETIMEDOUT'
+      stack: |-
+        Object.spawnSync (node:internal/child_process:1120:20)
+        spawnSync (node:child_process:868:24)
+        execFileSync (node:child_process:911:15)
+        run (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-result-postgres.test.mjs:34:38)
+        sql (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-result-postgres.test.mjs:35:20)
+        file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-result-postgres.test.mjs:152:104
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-result-postgres.test.mjs:33:60)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+      ...
+    # Subtest: direct RPC closed nested fields refuse array/object coercion before result/registry/completion
+    ok 5 - direct RPC closed nested fields refuse array/object coercion before result/registry/completion
+      ---
+      duration_ms: 1044.601541
+      ...
+    # Subtest: injected completion failure rolls back result and invocation together
+    ok 6 - injected completion failure rolls back result and invocation together
+      ---
+      duration_ms: 320.094542
+      ...
+    # Subtest: concurrent exact receive commits one result, one invocation and one original completion
+    ok 7 - concurrent exact receive commits one result, one invocation and one original completion
+      ---
+      duration_ms: 430.58975
+      ...
+    # Subtest: real calculation packet revalidation, exact read/replay/restart and active reader rejection
+    ok 8 - real calculation packet revalidation, exact read/replay/restart and active reader rejection
+      ---
+      duration_ms: 2654.003042
+      ...
+# ERROR:  research_reviewer_result_review_binding
+# CONTEXT:  PL/pgSQL function receive_research_reviewer_result_v2(jsonb,uuid,text,text,text,uuid,text,jsonb) line 35 at RAISE
+    # Subtest: changed review/packet/replay reject with original accepted bytes
+    ok 9 - changed review/packet/replay reject with original accepted bytes
+      ---
+      duration_ms: 1557.176791
+      ...
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(v.source_seal_id)"
+# PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 35 at PERFORM
+# PL/pgSQL function read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) line 6 at assignment
+# ERROR:  research_author_handoff_claim
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 49 at RAISE
+# PL/pgSQL function read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) line 6 at assignment
+# ERROR:  research_reviewer_result_original_fence
+# CONTEXT:  PL/pgSQL function read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) line 22 at RAISE
+# ERROR:  research_reviewer_result_completion_conflict
+# CONTEXT:  PL/pgSQL function read_research_reviewer_result_context_v2(jsonb,uuid,text,text,text,uuid,text) line 39 at RAISE
+    # Subtest: reviewer invocation cannot become later author invocation (opposite insertion order)
+    ok 10 - reviewer invocation cannot become later author invocation (opposite insertion order)
+      ---
+      duration_ms: 1928.706667
+      ...
+    # Subtest: source withdrawal, takeover, expired reservation and conflicting completion reject; histories retained
+    ok 11 - source withdrawal, takeover, expired reservation and conflicting completion reject; histories retained
+      ---
+      duration_ms: 509.111125
+      ...
+# ERROR:  permission denied for table research_execution_invocations_v2
+# ERROR:  permission denied for table research_execution_invocations_v2
+# ERROR:  permission denied for table research_execution_invocations_v2
+# ERROR:  permission denied for table research_execution_invocations_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  permission denied for table research_reviewer_results_v2
+# ERROR:  permission denied for table research_reviewer_results_v2
+# ERROR:  permission denied for table research_reviewer_results_v2
+# ERROR:  permission denied for table research_reviewer_results_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+    # Subtest: author/reviewer credential rotation after completion cannot read or replay stored report
+    ok 12 - author/reviewer credential rotation after completion cannot read or replay stored report
+      ---
+      duration_ms: 400.998875
+      ...
+    # Subtest: private registry/results deny service direct access and owner mutation
+    ok 13 - private registry/results deny service direct access and owner mutation
+      ---
+      duration_ms: 311.881584
+      ...
+    1..13
+not ok 1 - reviewer result: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+  ---
+  duration_ms: 31479.494167
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-reviewer-result-postgres.test.mjs:28:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Failure evidence retained at /tmp/si-rresult-1GZct2
+# (node:1904) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:1904) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-editorial-review.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: 2409 exact review result/read/replay with actual calculation and synthetic transport
+ok 2 - 2409 exact review result/read/replay with actual calculation and synthetic transport
+  ---
+  duration_ms: 1745.925458
+  ...
+# Subtest: 2383 exact review result/read/replay with actual calculation and synthetic transport
+ok 3 - 2383 exact review result/read/replay with actual calculation and synthetic transport
+  ---
+  duration_ms: 1110.007833
+  ...
+# Subtest: closed review checks, exact article/packet, selected IDs and decision semantics
+ok 4 - closed review checks, exact article/packet, selected IDs and decision semantics
+  ---
+  duration_ms: 183.691
+  ...
+# Subtest: receiveReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+ok 5 - receiveReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+  ---
+  duration_ms: 174.037666
+  ...
+# Subtest: readReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+ok 6 - readReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+  ---
+  duration_ms: 136.008459
+  ...
+# Subtest: author/cron/test/unknown cannot enter reviewer body, expired result starts no I/O
+ok 7 - author/cron/test/unknown cannot enter reviewer body, expired result starts no I/O
+  ---
+  duration_ms: 114.732958
+  ...
+# Subtest: closed editorial enums and paragraphId reject array/object/null coercions before receive
+ok 8 - closed editorial enums and paragraphId reject array/object/null coercions before receive
+  ---
+  duration_ms: 1357.391042
+  ...
+# Subtest: shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate
+ok 9 - shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate
+  ---
+  duration_ms: 107.006958
+  ...
+1..9
+# tests 22
+# suites 0
+# pass 20
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 37159.506083

@@ -8,6 +8,28 @@ list is valid; research priority is not entry authority.
 
 ## Latest verified state — supersedes older checkpoints below
 
+
+### October 9 review-result correction and reviewer HTTP RED diagnosis
+
+- PR348 correctiona106d0001b64f30896db8ca6443333a1605fc228 closes the original
+  two independentP2 findings: canonicalUTF8 byte boundary and nested type coercion.
+  Root23unit/realPG and30related pass, zero skip, types/lint0errors33existingwarnings
+  and normalbuildIIBZVCuq4B-Xbj9cY1e7b pass. Independent31lighttests pass.
+- Exact re-review found a newP2 in addedSQL validation: btrim uses a narrower
+  whitespace set and trims the maximum-length input, unlike TS. Correction and
+  actualRPC zero-write tests are in progress; this is NOT finalCODEPASS.
+- Frozen7f reviewer assignment native successor8be8179f retains35/44HTTPPASS,
+  ninefailures, zero skip. Original AUOfinancial_parent_replaced writer remains
+  unknown. EMCoversized negative changed a shared input owner from30to9000chars;
+  reviewed3448405b deep-clones that fixture, preserves400/zero-write criteria,
+  and adds input-hash immutability assertion. CorrectedHTTP not yet rerun.
+- Root and independent reviewer verified all52raw bytes/SHA. Independent unsigned
+  scopedTEST CODE/RED receiptPASS covers the new harness/fixture only, not native
+  acceptance. ExistingVM is diagnosing AUO namespace identity before one bounded
+  fresh run on unchanged7f runtime. No overlapping assignment or blind retries.
+- Genuine author/reviewer tool execution, publication, protected release,
+  merge/deploy and five future trading days remain incomplete. Main unchanged.
+
 ### October 9 native handoff complete; review result implementation awaiting correction
 
 - Exact492 native handoff successor833c9a4 passed64HTTP/20realPG/6unit,

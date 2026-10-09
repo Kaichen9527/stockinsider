@@ -1,0 +1,180 @@
+TAP version 13
+# (node:7189) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:7189) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-handoff.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: handoffAuthorResult original8192 wire limit exact/+1 and strict decoding
+ok 1 - handoffAuthorResult original8192 wire limit exact/+1 and strict decoding
+  ---
+  duration_ms: 15.996167
+  ...
+# Subtest: readAuthorHandoff original8192 wire limit exact/+1 and strict decoding
+ok 2 - readAuthorHandoff original8192 wire limit exact/+1 and strict decoding
+  ---
+  duration_ms: 1.654166
+  ...
+# Subtest: stalled body cancels and expired body launches no reads
+ok 3 - stalled body cancels and expired body launches no reads
+  ---
+  duration_ms: 31.0525
+  ...
+# Subtest: review/cron/unknown credentials reject; exact author malformed request rejects
+ok 4 - review/cron/unknown credentials reject; exact author malformed request rejects
+  ---
+  duration_ms: 2.233458
+  ...
+# Subtest: 2409 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+ok 5 - 2409 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+  ---
+  duration_ms: 708.541875
+  ...
+# Subtest: 2383 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+ok 6 - 2383 actual calculator, synthetic immutable transport: no receipt, lost response, exact read/replay and no renewal
+  ---
+  duration_ms: 626.024209
+  ...
+# (node:7218) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:7218) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: readAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+ok 7 - readAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+  ---
+  duration_ms: 11.486916
+  ...
+# Subtest: receiveAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+ok 8 - receiveAuthorResult streaming wire exact/+1 remains distinct from article/envelope limits
+  ---
+  duration_ms: 17.697875
+  ...
+# Subtest: duplicate decoded keys, excessive nesting, invalid UTF8 and header/body disagreement reject
+ok 9 - duplicate decoded keys, excessive nesting, invalid UTF8 and header/body disagreement reject
+  ---
+  duration_ms: 1.4545
+  ...
+# Subtest: stalled streaming body expires and is cancelled under same deadline
+ok 10 - stalled streaming body expires and is cancelled under same deadline
+  ---
+  duration_ms: 30.621709
+  ...
+# Subtest: exhausted deadline launches no body read
+ok 11 - exhausted deadline launches no body read
+  ---
+  duration_ms: 0.313416
+  ...
+# Subtest: auth separation and malformed result discriminator fail before result handling
+ok 12 - auth separation and malformed result discriminator fail before result handling
+  ---
+  duration_ms: 1.694917
+  ...
+# Subtest: 2409 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+ok 13 - 2409 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+  ---
+  duration_ms: 782.505
+  ...
+# Subtest: 2383 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+ok 14 - 2383 actual financial calculation with synthetic transport/execution; uncertain-write exact read
+  ---
+  duration_ms: 722.853042
+  ...
+# (node:7252) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:7252) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-reviewer-assignment.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: assignReviewer strict8192 byte body, header discrimination and UTF8
+ok 15 - assignReviewer strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 11.996917
+  ...
+# Subtest: readReviewerAssignment strict8192 byte body, header discrimination and UTF8
+ok 16 - readReviewerAssignment strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 1.750375
+  ...
+# Subtest: readReviewerPacket strict8192 byte body, header discrimination and UTF8
+ok 17 - readReviewerPacket strict8192 byte body, header discrimination and UTF8
+  ---
+  duration_ms: 2.46775
+  ...
+# Subtest: body stall cancelled; expired read launches no I/O
+ok 18 - body stall cancelled; expired read launches no I/O
+  ---
+  duration_ms: 31.052208
+  ...
+# Subtest: author, cron, tester and unknown credentials cannot enter reviewer body/DB
+ok 19 - author, cron, tester and unknown credentials cannot enter reviewer body/DB
+  ---
+  duration_ms: 1.464333
+  ...
+# Subtest: 2409 actual fixed calculation, synthetic completed author and atomic reviewer transport
+ok 20 - 2409 actual fixed calculation, synthetic completed author and atomic reviewer transport
+  ---
+  duration_ms: 352.52725
+  ...
+# Subtest: 2383 actual fixed calculation, synthetic completed author and atomic reviewer transport
+ok 21 - 2383 actual fixed calculation, synthetic completed author and atomic reviewer transport
+  ---
+  duration_ms: 193.859334
+  ...
+# (node:7253) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:7253) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-reviewer-result.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: 2409 exact review result/read/replay with actual calculation and synthetic transport
+ok 22 - 2409 exact review result/read/replay with actual calculation and synthetic transport
+  ---
+  duration_ms: 1082.220208
+  ...
+# Subtest: 2383 exact review result/read/replay with actual calculation and synthetic transport
+ok 23 - 2383 exact review result/read/replay with actual calculation and synthetic transport
+  ---
+  duration_ms: 653.935041
+  ...
+# Subtest: closed review checks, exact article/packet, selected IDs and decision semantics
+ok 24 - closed review checks, exact article/packet, selected IDs and decision semantics
+  ---
+  duration_ms: 100.5005
+  ...
+# Subtest: receiveReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+ok 25 - receiveReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+  ---
+  duration_ms: 106.917041
+  ...
+# Subtest: readReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+ok 26 - readReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+  ---
+  duration_ms: 81.724334
+  ...
+# Subtest: author/cron/test/unknown cannot enter reviewer body, expired result starts no I/O
+ok 27 - author/cron/test/unknown cannot enter reviewer body, expired result starts no I/O
+  ---
+  duration_ms: 59.622416
+  ...
+# Subtest: closed editorial enums and paragraphId reject array/object/null coercions before receive
+ok 28 - closed editorial enums and paragraphId reject array/object/null coercions before receive
+  ---
+  duration_ms: 1009.155834
+  ...
+# Subtest: shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate
+ok 29 - shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate
+  ---
+  duration_ms: 123.668625
+  ...
+# Subtest: Unicode scalar text limits agree with PostgreSQL characters, astral min/max explicit
+ok 30 - Unicode scalar text limits agree with PostgreSQL characters, astral min/max explicit
+  ---
+  duration_ms: 136.702208
+  ...
+1..30
+# tests 30
+# suites 0
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7663.221959
