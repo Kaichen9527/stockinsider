@@ -9,6 +9,41 @@ list is valid; research priority is not entry authority.
 ## Latest verified state — supersedes older checkpoints below
 
 
+### October 10 01:53 TW — packaging dependency repair and native startup diagnosis
+
+- PR357 runtime1490472 removes two invalid Next route named exports only. Exact
+  independent scoped CODE PASS; Mac normal build/typecheck/lint pass, web tree
+  a2116b787cc6d227b9581c28b077aa3257aecb27. Evidence ec1d5413 retains initial
+  absent `types` npm command separately from successful `typecheck`. Linux
+  original normal/Turbopack EPERM and supplementary webpack TS2344 remain RED.
+- Existing VM now reports original reviewer HTTP94/94 on the repaired build;
+  exact final receipt/raw manifest still pending root verification. New publication
+  scenario stopped at PostgreSQL startup: Unix socket pathname108bytes exceeds107.
+  No publication business case ran in that failed setup. Original RED retained.
+  One shorter artifact-root retry is authorized only inside the original
+  17:27–17:57Z window, with unchanged runtime/assertions and resource admission;
+  no duplicate VM work or fresh window is inferred.
+- PR358 code84d06a61 + evidencec63ab5f4 fixes both deployment packagers. Exact
+  20 pinned financial/draft inputs,907264bytes, follow readers' cwd/.. layout;
+  no entire repo, PDF, database, credentials or raw acceptance logs shipped.
+  Actual AUO/EMC readers in3layouts and complete package/verifier tests12/12pass,
+  zero skip. Independent unsigned scoped CODE/TEST-REVIEW PASS; reviewer did
+  not rerun tests. Web tree unchanged from149; compilation evidence is reused
+  only for that identical web tree, not claimed as native/protected/deploy proof.
+- Five exact unused ignored Mac .next caches removed after no-open-file and
+  live gui/system service-reference checks, with all file hashes/build/source
+  identities retained. Logical removed1420886894bytes; measured free increase
+  1578827776bytes; free after2425495552bytes. Initial broad-plist permission
+  preflight failure removed nothing and is retained. No code, dependencies,
+  history, financial source, research evidence or DB removed. VPS unchanged.
+- Integration58b90e48 remains development-only, PR334 ordinary product runtime
+  SUCCESS; protected run37966203521 fails missing exact-review ref for58b90e48.
+  No main merge, production migration/deploy, genuine model/controller role work,
+  strategy approval or formal schedule activation is claimed. Final full protected
+  review must bind the final subject; scoped reviews do not substitute.
+
+
+
 ### October 9 native reviewer-result receipt accepted; remaining failures isolated
 
 - VM exact7f82f1d8 records compiledHTTP94/94, zero skip on runtime9136.

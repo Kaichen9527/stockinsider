@@ -1,0 +1,4 @@
+{
+  "deletionPerformed": false,
+  "failure": "Unrelated /Library/LaunchDaemons/com.microsoft.teams.TeamsUpdaterDaemon.plist is unreadable; no file was removed. Replaced broad unrelated plist scan with successful live gui/501 and system launchctl reference checks plus exact lsof."
+}
