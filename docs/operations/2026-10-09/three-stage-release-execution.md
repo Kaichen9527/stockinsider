@@ -9,6 +9,22 @@ list is valid; research priority is not entry authority.
 ## Latest verified state — supersedes older checkpoints below
 
 
+### October 9 independent review-result CODE PASS
+
+- Final subject9136a09a75492ced1af9ba27a922c04ad23e0c39 received unsigned scoped
+  independentCODEPASS. Root25/25unit/realPG includes all25ECMAScript whitespace
+  negatives and original rawscalar maximum; zero skip. Independent10pure and31
+  isolatedPG/TS comparisons plus fullUnicode trim scan pass. Original threeP2
+  failures remain recorded. No limit, clock, authority or execution proof relaxed.
+- Existing webtree is byte-identical to a106 normalbuildIIBZVCuq4B-Xbj9cY1e7b,
+  type/lint pass. Native reviewer-result HTTP remains pending after the current
+  reviewer-assignment diagnosis; no overlappingVM work is sent.
+- The next bounded existing bundle/outbox lineage design is under independent
+  review. It preserves v1 claim/retry and makes v2 private/inert until its atomic
+  writer exists, including DML/TRUNCATE concurrency defenses. This is progress
+  toward publication, not a published article or protected release approval.
+
+
 ### October 9 review-result correction and reviewer HTTP RED diagnosis
 
 - PR348 correctiona106d0001b64f30896db8ca6443333a1605fc228 closes the original
