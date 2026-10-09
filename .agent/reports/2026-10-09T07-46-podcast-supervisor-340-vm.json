@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "offline-podcast-supervisor-vm-acceptance-v1",
+  "subject": "340ccb110cfa62b8286491118e64588429a74015",
+  "tree": "df6ef9e4ac860ce458b9531aa9641bb26c1ad8c9",
+  "recordedAt": "2026-10-09T07:46:51.417350+00:00",
+  "scope": "manual Linux supervisor synthetic fixtures only; not actual podcast transport/content experiment",
+  "independentReviewAttribution": "root reported unsigned scoped CODE PASS24/24, not independent actual Linux acceptance",
+  "units": {
+    "pass": 24,
+    "fail": 0,
+    "skip": 0
+  },
+  "actualLinuxFixtures": {
+    "pass": 3,
+    "expectedRejections": {
+      "leader-exit": [
+        "leader_exited_with_descendants"
+      ],
+      "over-writer": [
+        "task_storage_limit"
+      ],
+      "stalled-download": [
+        "work_deadline"
+      ]
+    },
+    "cleanupConfirmed": true
+  },
+  "pythonVersion": "Python 3.12.14",
+  "sourceFiles": [
+    {
+      "file": "scripts/podcast-offline-pilot.py",
+      "bytes": 27477,
+      "sha256": "175101ddf900e619bdfe0d1dadbeb644fda6962109658030fbd529082aa4476c"
+    },
+    {
+      "file": "scripts/podcast-offline-pilot.test.py",
+      "bytes": 17311,
+      "sha256": "a0ea9277b3594a7f7f497ef9fd187ea8645caed3bfe9b31cfef8e32ad6fa1c1f"
+    }
+  ],
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "supervisor-units-340",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "scripts/podcast-offline-pilot.test.py"
+      ],
+      "startedAt": "2026-10-09T07:44:21.250Z",
+      "completedAt": "2026-10-09T07:44:21.500Z",
+      "elapsedSeconds": 0.24925504499697126,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 35282944,
+      "observedTaskDiskPeakBytes": 33718272,
+      "availableBeforeBytes": 14269636608,
+      "availableAfterBytes": 14269579264,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "supervisor-linux-fixtures-340",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "scripts/podcast-offline-pilot.py",
+        "--run-isolated",
+        "--supervisor-fixtures",
+        "--artifact-root",
+        "/workspace/cloud-podcast-supervisor-340-artifacts-oct09/private-run"
+      ],
+      "startedAt": "2026-10-09T07:44:37.228Z",
+      "completedAt": "2026-10-09T07:44:41.363Z",
+      "elapsedSeconds": 4.135959614999592,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 22212608,
+      "observedTaskDiskPeakBytes": 33804288,
+      "availableBeforeBytes": 14269591552,
+      "availableAfterBytes": 14268497920,
+      "guardTermination": null
+    }
+  ],
+  "resourceMethod": "100ms wrapper sampled process group+live descendants; short processes may be missed, not cgroup peak. Inner supervisor has separate samples in exact raw receipt; over-writer bound failed before completing a sample.",
+  "sampledRssPeakBytes": 35282944,
+  "observedTaskDiskPeakBytes": 33804288,
+  "minimumAvailableBytes": 14268497920,
+  "networkAcquisition": false,
+  "audioAcquired": false,
+  "packagesInstalled": false,
+  "asrExecuted": false,
+  "contentCapabilitySuccess": false,
+  "protectedApproval": false,
+  "deleteRootAuthorized": false,
+  "files": [
+    {
+      "file": ".agent/reports/2026-10-09T07-46-podcast-supervisor-340-supervisor-units-340.json",
+      "bytes": 641,
+      "sha256": "1baeb46535f693aa2d406aec63c87fc997d0d0c619a2209e6647cdea4b022215"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T07-46-podcast-supervisor-340-supervisor-units-340.log.txt",
+      "bytes": 3395,
+      "sha256": "73e49e923bde61067a3419c78cf68a70c8526a83d644d6e5c09899283513eb9d"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T07-46-podcast-supervisor-340-supervisor-linux-fixtures-340.json",
+      "bytes": 792,
+      "sha256": "efca5f3e3b52bb9c6936a329eea5d757f65d45c5e773ec86355fa12494f4ff8b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T07-46-podcast-supervisor-340-supervisor-linux-fixtures-340.log.txt",
+      "bytes": 94,
+      "sha256": "e6d0b4950182f62bc780c9dfc4d16c2dcdfd1494822a304363a5a426d4667b5f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T07-46-podcast-supervisor-340-supervisor-receipt.json",
+      "bytes": 2587,
+      "sha256": "82c5ce2660748e4f5ff719066ffbd7c59c403590fea4fc31fc70257037638e89"
+    }
+  ],
+  "remaining": [
+    "reviewed complete transport/install/decoder/ASR orchestration not yet available; no actual pilot performed",
+    "supervisor subset is not full content experiment or research-model role execution"
+  ]
+}

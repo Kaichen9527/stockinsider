@@ -1,0 +1,29 @@
+test_actual_private_files_count_allocated_and_logical_not_hash_dedup (__main__.PilotTests.test_actual_private_files_count_allocated_and_logical_not_hash_dedup) ... ok
+test_closed_json_and_metadata_pins (__main__.PilotTests.test_closed_json_and_metadata_pins) ... ok
+test_continuously_growing_tree_refuses_bounded_reconciliation (__main__.PilotTests.test_continuously_growing_tree_refuses_bounded_reconciliation) ... ok
+test_empty_proc_snapshot_with_kernel_live_child_is_never_empty_proof (__main__.PilotTests.test_empty_proc_snapshot_with_kernel_live_child_is_never_empty_proof) ... ok
+test_free_reserve_refuses_before_launch (__main__.PilotTests.test_free_reserve_refuses_before_launch) ... ok
+test_git_blob_identity_is_not_plain_sha1 (__main__.PilotTests.test_git_blob_identity_is_not_plain_sha1) ... ok
+test_hash_lock_rejects_root_mismatch_sdist_and_unhashed_transitive (__main__.PilotTests.test_hash_lock_rejects_root_mismatch_sdist_and_unhashed_transitive) ... ok
+test_initial_resource_scan_crossing_deadline_never_launches (__main__.PilotTests.test_initial_resource_scan_crossing_deadline_never_launches) ... ok
+test_kernel_child_probe_error_is_cleanup_uncertainty (__main__.PilotTests.test_kernel_child_probe_error_is_cleanup_uncertainty) ... ok
+test_launch_exception_cannot_claim_confirmed_no_process (__main__.PilotTests.test_launch_exception_cannot_claim_confirmed_no_process) ... ok
+test_leader_exit_with_descendant_is_failure_not_success (__main__.PilotTests.test_leader_exit_with_descendant_is_failure_not_success) ... ok
+test_new_root_no_reuse_and_private_permissions (__main__.PilotTests.test_new_root_no_reuse_and_private_permissions) ... ok
+test_noindex_hashlocked_binary_only_arguments (__main__.PilotTests.test_noindex_hashlocked_binary_only_arguments) ... ok
+test_only_echild_allows_empty_tree_and_adopted_zombie_is_reaped (__main__.PilotTests.test_only_echild_allows_empty_tree_and_adopted_zombie_is_reaped) ... ok
+test_over_budget_writer_rejected_and_next_stage_prohibited (__main__.PilotTests.test_over_budget_writer_rejected_and_next_stage_prohibited) ... ok
+test_pidfd_race_closes_unowned_descriptor_and_never_signals (__main__.PilotTests.test_pidfd_race_closes_unowned_descriptor_and_never_signals) ... ok
+test_post_pidfd_snapshot_adopted_child_cannot_be_discarded (__main__.PilotTests.test_post_pidfd_snapshot_adopted_child_cannot_be_discarded) ... ok
+test_preflight_is_network_free_and_run_refuses_before_root_creation (__main__.PilotTests.test_preflight_is_network_free_and_run_refuses_before_root_creation) ... ok
+test_sampling_includes_previous_scan_cost (__main__.PilotTests.test_sampling_includes_previous_scan_cost) ... ok
+test_source_exact_public_only_policy (__main__.PilotTests.test_source_exact_public_only_policy) ... ok
+test_stalled_download_stage_deadline_term_then_kill (__main__.PilotTests.test_stalled_download_stage_deadline_term_then_kill) ... ok
+test_supervisor_own_rss_counts_toward_limit (__main__.PilotTests.test_supervisor_own_rss_counts_toward_limit) ... ok
+test_synthetic_credentials_and_configs_never_enter_child (__main__.PilotTests.test_synthetic_credentials_and_configs_never_enter_child) ... ok
+test_unknown_cleanup_preserves_root_and_negative_verdict (__main__.PilotTests.test_unknown_cleanup_preserves_root_and_negative_verdict) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.090s
+
+OK

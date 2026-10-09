@@ -1,0 +1,18 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "supervisor-units-340",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-I",
+    "scripts/podcast-offline-pilot.test.py"
+  ],
+  "startedAt": "2026-10-09T07:44:21.250Z",
+  "completedAt": "2026-10-09T07:44:21.500Z",
+  "elapsedSeconds": 0.24925504499697126,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 35282944,
+  "observedTaskDiskPeakBytes": 33718272,
+  "availableBeforeBytes": 14269636608,
+  "availableAfterBytes": 14269579264,
+  "guardTermination": null
+}

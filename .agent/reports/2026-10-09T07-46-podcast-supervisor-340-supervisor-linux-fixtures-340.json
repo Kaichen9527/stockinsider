@@ -1,0 +1,22 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "supervisor-linux-fixtures-340",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-I",
+    "scripts/podcast-offline-pilot.py",
+    "--run-isolated",
+    "--supervisor-fixtures",
+    "--artifact-root",
+    "/workspace/cloud-podcast-supervisor-340-artifacts-oct09/private-run"
+  ],
+  "startedAt": "2026-10-09T07:44:37.228Z",
+  "completedAt": "2026-10-09T07:44:41.363Z",
+  "elapsedSeconds": 4.135959614999592,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 22212608,
+  "observedTaskDiskPeakBytes": 33804288,
+  "availableBeforeBytes": 14269591552,
+  "availableAfterBytes": 14268497920,
+  "guardTermination": null
+}
