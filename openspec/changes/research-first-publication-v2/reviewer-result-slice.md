@@ -9,7 +9,10 @@ job owner/attempt/lease and complete input/calculator fences remain mandatory.
 Reject mixed author/review-assignment/result headers. Receive closed body contains
 action,input,inputRevisionId,inputHash,resultId,resultHash,review,observation;
 read omits review/observation. Wire bounds1MiB/8192B, strictUTF8/duplicates/depth12,
-single10sdeadline/cancellation; review max65536 UTF8 bytes, envelope max1MiB.
+single10sdeadline/cancellation; review max65536 UTF8 bytes of the existing
+completeCanonical(review) representation in BOTH TypeScript and PostgreSQL,
+envelope max1MiB. This canonical byte basis is separate from compact request
+JSON wire bytes; do not use jsonb::text whitespace size or raise the limit.
 
 ## Review meaning and closed contract
 
@@ -99,3 +102,14 @@ reservation/conflicting completion reject; old reviewer active reader rejects
 completion; no publication/qualification/strategy/job-state change. Independent
 design/code review, related tests/type/lint/normalbuild and native HTTP required.
 This slice does not complete genuine author/reviewer execution or publication.
+
+## Preserved128fec85 review finding
+
+Independent P2 found compact JSON.stringify(review) exactly65536 bytes becomes
+65853 bytes in PostgreSQL jsonb::text because object whitespace differs. Neither
+representation was a consistent shared byte basis. Standardize the existing
+type-tagged completeCanonical representation, already shared by TS/SQL hashes,
+at65536 UTF8 bytes. Do not strip spaces inside strings or loosen a bound. Add
+actual RPC canonical exact/+1 acceptance with multibyte and escaped text, while
+keeping wire1MiB and envelope1MiB checks independent. Original rejected128fec85
+and reviewer RED remain preserved; this correction needs independent re-review.
