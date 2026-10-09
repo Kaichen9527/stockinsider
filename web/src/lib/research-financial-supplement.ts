@@ -134,8 +134,8 @@ function project(symbol: '2409'|'2383', files: Map<string,{pin:FinancialFilePin;
   assertFinancialJsonBytes(projection,FINANCIAL_READ_LIMITS.projection);return projection;
 }
 export async function loadResearchFinancialSupplement(db:Pick<SupabaseClient,'rpc'>,input:FinancialSupplementRequest,
-  root=path.resolve(process.cwd(),'..')): Promise<Row> {
-  const deadline=new FinancialDeadline();let files:Awaited<ReturnType<typeof readPinnedFinancialFiles>>|undefined;
+  root=path.resolve(process.cwd(),'..'), sharedDeadline?:FinancialDeadline): Promise<Row> {
+  const deadline=sharedDeadline??new FinancialDeadline();let files:Awaited<ReturnType<typeof readPinnedFinancialFiles>>|undefined;
   const check=async()=>{
     const result=await deadline.wait(db.rpc('assert_research_input_preparation_v2',{p_request:input.request,p_preparation_id:input.preparationId,p_input_hash:input.preparationInputHash}).abortSignal(deadline.controller.signal));
     ensure(!result.error);const saved=row(result.data),payload=row(saved.payload);
@@ -161,5 +161,5 @@ export async function loadResearchFinancialSupplement(db:Pick<SupabaseClient,'rp
       financialVerified:false,dispatchReady:false,modelDispatched:false,publishableResearch:false,researchQualified:false,strategyApproved:false,entryEligible:false};
     const complete = {...result,supplementHash:hash(result)};assertFinancialJsonBytes(complete,FINANCIAL_READ_LIMITS.result);await files.validate();const after=await check();ensure(hash(before)===hash(after));await files.validate();deadline.check();
     await files.close();deadline.check();return complete;
-  }catch(error){if(files)await files.fail(error);throw error;}finally{deadline.controller.abort();}
+  }catch(error){if(files)await files.fail(error);throw error;}finally{if(!sharedDeadline)deadline.controller.abort();}
 }
