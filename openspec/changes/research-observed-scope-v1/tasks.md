@@ -52,3 +52,11 @@ Remaining: Slice3 typed observed claim/context/author input and original lease/m
 - [x] Real PG/HTTP Taipei midnight refusal21/21TAP with zero budget consumed; not a positive claim/input acceptance.
 - [ ] Positive native claim/input in a lawful real admission window; independent exact code review.
 - [ ] Approved64f7 first-publication implementation, trusted actual role dispatch/review, qualification/strategy/deployment (not inferred from compatibility).
+
+### 2026-10-08 scoped priority/claim repair checkpoint
+
+- [x] Preserve exact 4868472 three P2 request-changes and native red probes.
+- [x] Reject BYPASSRLS forged observed run INSERT and require private immutable store lineage.
+- [x] Reap expired jobs across both scopes before formal/observed claim without refund or rewriting attempts.
+- [x] Real rollback-only enqueue Monday crossing: all admitted jobs and charges share the lock-captured DB clock; old exact trigger fails this property.
+- [ ] Independent exact repair review; first-publication v2 and true author/reviewer dispatch remain separate pending work.
