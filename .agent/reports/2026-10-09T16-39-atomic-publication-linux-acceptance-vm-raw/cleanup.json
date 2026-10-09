@@ -1,0 +1,9 @@
+{
+  "observedAt": "2026-10-09T16:39:52.660220+00:00",
+  "ownedActiveProcesses": [],
+  "manualDeletions": [],
+  "originalTestClusterCleanupUnchanged": true,
+  "rawEvidenceOldRedModelInputsPreserved": true,
+  "availableBytes": 10976210944,
+  "reasonNoExtraCleanup": "Capacity remains above8GiB reserve; no broad prune or deletion required."
+}

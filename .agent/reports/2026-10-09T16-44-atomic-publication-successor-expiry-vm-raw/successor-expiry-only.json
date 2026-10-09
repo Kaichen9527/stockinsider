@@ -1,0 +1,21 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "successor-expiry-only",
+  "command": [
+    "node",
+    "scripts/run-node22.js",
+    "--experimental-strip-types",
+    "--test",
+    "--test-name-pattern=expires-waiting",
+    "scripts/research-atomic-publication-postgres.test.mjs"
+  ],
+  "startedAt": "2026-10-09T16:43:10.695Z",
+  "completedAt": "2026-10-09T16:43:42.601Z",
+  "elapsedSeconds": 31.905853768985253,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 198623232,
+  "observedTaskDiskPeakBytes": 1367445504,
+  "availableBeforeBytes": 10974937088,
+  "availableAfterBytes": 10974928896,
+  "guardTermination": null
+}
