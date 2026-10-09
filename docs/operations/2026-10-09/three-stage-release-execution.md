@@ -8,6 +8,34 @@ list is valid; research priority is not entry authority.
 
 ## Latest verified state — supersedes older checkpoints below
 
+### October 9 author handoff continuation
+
+- PR346 subject492729b349b4ffa6e6a28f9603de30e7ec9fba3e follows private
+  resultb8c3df4d. Exact design71ea9397 received unsigned scoped DESIGN PASS.
+  Original source→global locks, observed claim reader and completion owner/trigger
+  are retained. Only the original author reservation is completed against the
+  immutable result; no new reservation, refund, clock renewal or publication.
+- Root107related tests and20actual PG tests pass, zero skip; type/lint pass.
+  Exact null-before, commit/read/replay/restart, concurrent one completion,
+  source withdrawal, expiry/takeover and conflicting completion reject; old
+  active-work result reader still rejects after completion. Independent code
+  review and normal build running; native handoff HTTP not yet complete.
+- PG1 SQL operator precedence RED and PG2 inconsistent synthetic claim-clock
+  fixture RED are preserved. Corrected new fixture before preparation, without
+  changing original reader or old acceptance. PG3 nineteen passed; final twenty
+  includes incompatible original completion. Logs are in the timestamped report.
+- VM upstream private-result receiptafe260b7 preserves42pass/8fail native RED
+  on actualb8 normal buildAwvYbZjxpDludvMr16gWE,2070server files. Source fixture
+  calculated a different function-toString execution fingerprint from compiled
+  receiver. Existing guarded financialSupplement returns actual compiled core
+  fingerprint. VM is testing a single-variable negative/positive controller
+  binding, keeping raw article, runtime, SQL and equality checks unchanged.
+  No native result success or actual product authorship is claimed yet.
+- Main and production remain unchanged; real author/reviewer dispatch, review
+  pack/reservation/results, same-outbox publication, price adapter, complete
+  release review/merge/deploy and future five-trading-day acceptance remain.
+
+
 Integration0fc4ee239c7bbebb2f221c6fa3f092c3f063cb02 remains clean and pushed;
 main169aad1 remains unchanged. No production migration/deployment/publication.
 

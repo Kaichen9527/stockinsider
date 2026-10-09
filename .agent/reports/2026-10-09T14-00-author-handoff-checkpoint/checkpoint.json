@@ -1,0 +1,81 @@
+{
+  "recordedAt": "2026-10-09T14:01:06.738462+00:00",
+  "subject": "492729b349b4ffa6e6a28f9603de30e7ec9fba3e",
+  "tree": "08be2c4b0749c81fa7e421679539dbc6e889240e",
+  "base": "b8c3df4d1c21b4aeee28341b6935302b42463f94",
+  "pr": 346,
+  "independentDesign": {
+    "subject": "71ea9397b645630b690591677e3a82657e31933f",
+    "specSha256": "f92eb75a92a4ee06e7a0f1b4fee69e8c0c645de67e455d404d0e458f14c7b73a",
+    "status": "unsigned scoped DESIGN PASS",
+    "reviewer": "author_input_review_oct08"
+  },
+  "rootTests": {
+    "related": {
+      "pass": 107,
+      "fail": 0,
+      "skip": 0
+    },
+    "postgresFinal": {
+      "pass": 20,
+      "fail": 0,
+      "skip": 0
+    },
+    "types": "pass",
+    "lint": "pass, 33 pre-existing warnings"
+  },
+  "redHistory": [
+    "PG1 SQL operator precedence needed explicit JSON parentheses; no acceptance changed",
+    "PG2 synthetic fixture violated original claimed_at/start and exact lease chronology; new test setup normalizes before preparation, original reader unchanged",
+    "PG3 19 pass then final20 after adding completion-conflict rejection"
+  ],
+  "limitations": [
+    "Synthetic upstream schema, credentials, observations and prose; actual fixed financial calculation and original observed claim/completion trigger",
+    "No actual model dispatch, independent product review, publication, production migration/deployment",
+    "Scoped code review, normal build and native HTTP handoff still pending at checkpoint"
+  ],
+  "upstreamVm": {
+    "receipt": "afe260b7be4276161f31df9f3f9c530f6e36d9b9",
+    "runtime": "b8c3df4d",
+    "native": {
+      "pass": 42,
+      "fail": 8,
+      "skip": 0
+    },
+    "status": "Source vs compiled calculator fingerprint mismatch diagnosed; counterfactual and correctly bound synthetic controller payload native acceptance in progress, no runtime weakening"
+  },
+  "rawFiles": {
+    "unit": {
+      "bytes": 2135,
+      "sha256": "8d2c11be7f82fc7acb39de1e8fe606835b5929656d70114daa3bb31a3efe9f00"
+    },
+    "related": {
+      "bytes": 22883,
+      "sha256": "b1aacdd357a3e8a731a1b6da3a42c0229f99e1095d8486bcbf02ce53b9a1cb46"
+    },
+    "pg1": {
+      "bytes": 28718,
+      "sha256": "e4a50e498be5aa8d05b9505e3f72a4291be008efcb7f6908ec10da689bc1a156"
+    },
+    "pg2": {
+      "bytes": 18282,
+      "sha256": "725f8a4f70e0532735a0f09466551349a75788e74b10304b842857b9327e921f"
+    },
+    "pg3": {
+      "bytes": 8452,
+      "sha256": "dc237957318528d7c9282dabac1816e56d9a560e6e628e84f57d456bfd83b06a"
+    },
+    "pg-final": {
+      "bytes": 8690,
+      "sha256": "317f7b20037c2f4e4eb8030b94563b3c2b6b674d70db76f15905a96954c4f6ee"
+    },
+    "types": {
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "lint": {
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    }
+  }
+}
