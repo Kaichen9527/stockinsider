@@ -1,0 +1,210 @@
+TAP version 13
+# (node:163840) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:163840) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-author-assignment-route-vm-oct09/web/src/lib/research-observed-roster.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-author-assignment-route-vm-oct09/web/package.json.
+# Subtest: compiled private author assignment 2409, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 50.98055
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 63.504631
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 22.367186
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 357.726287
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 28.486031
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 13.506604
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 4.482335
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 477.642103
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 83.751236
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 332.249475
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 391.858137
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 803.905328
+      ...
+    # Subtest: actual role authentication and closed body reject before assignment
+    ok 13 - actual role authentication and closed body reject before assignment
+      ---
+      duration_ms: 168.835213
+      ...
+    # Subtest: read before admission is null; two HTTP first admissions converge without recharging
+    ok 14 - read before admission is null; two HTTP first admissions converge without recharging
+      ---
+      duration_ms: 1024.848798
+      ...
+    # Subtest: replay/restart return exact assignment and preserve original counts
+    ok 15 - replay/restart return exact assignment and preserve original counts
+      ---
+      duration_ms: 1493.015456
+      ...
+    # Subtest: source withdrawal or original expiry blocks read/replay without deleting assignment
+    not ok 16 - source withdrawal or original expiry blocks read/replay without deleting assignment
+      ---
+      duration_ms: 18.864036
+      location: '/workspace/cloud-author-assignment-route-vm-oct09/scripts/research-author-assignment-http.test.mjs:61:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql -X -A -t -v ON_ERROR_STOP=1 -h /workspace/aah-r1-2409/socket -p 35579 -d postgres -f -
+        psql:<stdin>:1: ERROR:  permission denied for table source_raw_documents
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        checkExecSyncError (node:child_process:882:11)
+        execFileSync (node:child_process:918:15)
+        sql (file:///workspace/cloud-author-assignment-route-vm-oct09/scripts/research-local-inbox-dataplane.mjs:161:24)
+        TestContext.<anonymous> (file:///workspace/cloud-author-assignment-route-vm-oct09/scripts/research-author-assignment-http.test.mjs:62:45)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+      ...
+    1..16
+not ok 1 - compiled private author assignment 2409, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 21097.29507
+  location: '/workspace/cloud-author-assignment-route-vm-oct09/scripts/research-author-assignment-http.test.mjs:13:37'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# {"field":"base Q4 display revenue, manual research assumption projection","actual":31090.078766235238,"expectedFrozen":31090.078766235238}
+# Subtest: compiled private author assignment 2383, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 63.349036
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 78.146598
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 9.295259
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 511.048428
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 30.111765
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 12.409057
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 7.644386
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 475.399428
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 75.387163
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 319.470133
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 382.491826
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 767.583525
+      ...
+    # Subtest: actual role authentication and closed body reject before assignment
+    ok 13 - actual role authentication and closed body reject before assignment
+      ---
+      duration_ms: 153.885644
+      ...
+    # Subtest: read before admission is null; two HTTP first admissions converge without recharging
+    ok 14 - read before admission is null; two HTTP first admissions converge without recharging
+      ---
+      duration_ms: 956.186395
+      ...
+    # Subtest: replay/restart return exact assignment and preserve original counts
+    ok 15 - replay/restart return exact assignment and preserve original counts
+      ---
+      duration_ms: 1433.041191
+      ...
+    # Subtest: source withdrawal or original expiry blocks read/replay without deleting assignment
+    ok 16 - source withdrawal or original expiry blocks read/replay without deleting assignment
+      ---
+      duration_ms: 55.45992
+      ...
+    1..16
+ok 2 - compiled private author assignment 2383, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 21451.769922
+  ...
+1..2
+# tests 34
+# suites 0
+# pass 32
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 45612.889698

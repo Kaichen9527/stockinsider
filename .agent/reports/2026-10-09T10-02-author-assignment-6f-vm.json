@@ -1,0 +1,440 @@
+{
+  "schemaVersion": "author-assignment-guarded-native-vm-receipt-v1",
+  "recordedAt": "2026-10-09T10:04:11.628071+00:00",
+  "sourceSubject": "6f20d4fee2b0b7f960e36e6e104605acf6ded55c",
+  "testSubject": "6f20d4fee2b0b7f960e36e6e104605acf6ded55c",
+  "buildSubject": "6f20d4fee2b0b7f960e36e6e104605acf6ded55c",
+  "localCompositionCommit": "27c1424a4f64ae3070a146408f545587f59553db",
+  "tree": "91bae170b0ee88b9e540f42d5fe5c10bb2d013c2",
+  "treeMatchesRootSubjectExactly": true,
+  "webTree": "655345527e929c2329b23eb19dd58355009c54d3",
+  "buildId": "I-fUAZYDmfCD4nDT76Cu4",
+  "branch": "codex/author-assignment-route-vm-oct09",
+  "scope": "Normal merge root6f into separate VM test composition; no root source/test edits, main integration, deployment or production writes.",
+  "sourceClosureHash": "79cd3d7b57f47b9e4545625b734a321d98d914aed6fe2efd8b9e0c6544d2d21f",
+  "checks": {
+    "old85Composition": {
+      "fileWrapperTapPass": 2,
+      "types": "pass",
+      "build": "not_run",
+      "native": "not_run",
+      "note": "Superseded by root6f before build; old results not relabeled."
+    },
+    "currentFileWrapperTap": {
+      "pass": 2,
+      "fail": 0,
+      "note": "Only file-level wrapper output visible; not21unit claim."
+    },
+    "currentRouteDirectTap": {
+      "pass": 7,
+      "fail": 0,
+      "skip": 0
+    },
+    "currentIdentityDirectTap": {
+      "pass": 12,
+      "fail": 0,
+      "skip": 0
+    },
+    "types": "pass",
+    "lint": {
+      "errors": 0,
+      "warnings": 33
+    },
+    "normalBuild": "pass",
+    "compiledHttp": {
+      "total": 34,
+      "pass": 32,
+      "fail": 2,
+      "skip": 0,
+      "parentCases": 2,
+      "childCases": 32,
+      "primaryFailedChildren": 1,
+      "overallAccepted": false,
+      "assignmentCreateBothCompanies": true,
+      "concurrentFirstAdmissionBothCompanies": true,
+      "replayRestartBothCompanies": true,
+      "roleBodyDenials": true,
+      "2383ExpiryRejection": true,
+      "2409Withdrawal": "not reached; fixture UPDATE denied by existing ACL"
+    }
+  },
+  "firstFailure": {
+    "path": "scripts/research-author-assignment-http.test.mjs:62",
+    "sql": "SET ROLE service_role; UPDATE source_raw_documents SET metadata = metadata || withdrawal marker WHERE id = fixture document;",
+    "error": "psql:<stdin>:1: ERROR: permission denied for table source_raw_documents",
+    "attribution": "Actual fresh PG ACL refuses test mutation before withdrawal HTTP assertions; not a demonstrated author-route source-withdrawal failure. Root owns repair, no ACL or assertion relaxation performed."
+  },
+  "harnessFlagCaveat": "Both shared profile receipts say passed:true because t.test does not throw failed child outcomes. TAP34/32/2 is authoritative.",
+  "profiles": [
+    {
+      "symbol": "2409",
+      "path": "/workspace/aah-r1-2409/acceptance-receipt.json",
+      "bytes": 22162,
+      "sha256": "67e09e12227f64823e40786bfb0665d39c1ec62128a866ea326afdd45f70158d",
+      "completeInput": {
+        "symbol": "2409",
+        "revisionId": "1ece43fa-e13b-4b98-bfe1-17c6c75705a4",
+        "inputHash": "ac9d423f028d953a8bf215cd5b42bbf9660ce802859c403acbfee5e31679445a",
+        "charge": 166398,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "assignment": {
+        "symbol": "2409",
+        "assignmentId": "2f57d948-4ad5-43da-b6fe-aeb3f6c6f7e2",
+        "inputRevisionId": "1ece43fa-e13b-4b98-bfe1-17c6c75705a4",
+        "inputHash": "ac9d423f028d953a8bf215cd5b42bbf9660ce802859c403acbfee5e31679445a",
+        "syntheticControllerCredentials": true,
+        "actualTrustedRoleExecution": false,
+        "publishableResearch": false
+      },
+      "harnessPassed": true,
+      "note": "Harness flag does not override failed TAP subtests."
+    },
+    {
+      "symbol": "2383",
+      "path": "/workspace/aah-r1-2383/acceptance-receipt.json",
+      "bytes": 22161,
+      "sha256": "caa9358136e4249c711377025e1ecf742b61fe36482fe2316211608e6385880d",
+      "completeInput": {
+        "symbol": "2383",
+        "revisionId": "5ba66285-3a7c-4f5a-ba32-f13424de0719",
+        "inputHash": "bef6b81dcd1d91b0def0b882a233d3790922524376a4176a7c191eaceffe7261",
+        "charge": 99114,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "assignment": {
+        "symbol": "2383",
+        "assignmentId": "022ad4a2-bc18-451e-887a-a2b09459d4ac",
+        "inputRevisionId": "5ba66285-3a7c-4f5a-ba32-f13424de0719",
+        "inputHash": "bef6b81dcd1d91b0def0b882a233d3790922524376a4176a7c191eaceffe7261",
+        "syntheticControllerCredentials": true,
+        "actualTrustedRoleExecution": false,
+        "publishableResearch": false
+      },
+      "harnessPassed": true,
+      "note": "Harness flag does not override failed TAP subtests."
+    }
+  ],
+  "sourceManifest": [
+    {
+      "path": "scripts/research-author-assignment-http.test.mjs",
+      "bytes": 11274,
+      "sha256": "fc47558caf274ed983bfb86c0c4d9e49c633669389b1f1e2534386c6a16b9716"
+    },
+    {
+      "path": "scripts/research-local-inbox-dataplane.mjs",
+      "bytes": 33278,
+      "sha256": "84e28ba845c852dcc50d692fd48c701c3676ee771cfc980af0680a91e909f5c5"
+    },
+    {
+      "path": "migrations/20261009_research_author_assignments_v2.sql",
+      "bytes": 10433,
+      "sha256": "91629781ad52191ae4ef096d2f56af020066973556988713305bc7c10a80b99c"
+    },
+    {
+      "path": "migrations/20261009_research_complete_input_v2.sql",
+      "bytes": 446691,
+      "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c"
+    },
+    {
+      "path": "web/src/lib/research-author-assignment.ts",
+      "bytes": 5910,
+      "sha256": "4c74d397c381bfba186df3f24468f1e6672deeb07258a24905cf22be9a2e3918"
+    },
+    {
+      "path": "web/src/lib/research-execution-binding.ts",
+      "bytes": 9898,
+      "sha256": "3e7bb59d0d941321d7aec13e57d49bb09ec8bbd558cd0db0f76e99890d79c796"
+    },
+    {
+      "path": "web/src/lib/research-complete-mapping.json",
+      "bytes": 7609,
+      "sha256": "3847dbeb38c576571873313f6e9ed6c2440f183c15d6cb541a996596013e9a03"
+    },
+    {
+      "path": "web/src/app/api/internal/research-model-reservation/route.ts",
+      "bytes": 3795,
+      "sha256": "916c071accb36f8ba4feb06b716393064a2f034e221f51cf1617c48b95151212"
+    }
+  ],
+  "logs": [
+    {
+      "path": ".agent/reports/2026-10-09T10-02-author-assignment-6f-vm-author-route-focused.log.txt",
+      "bytes": 421,
+      "sha256": "d624adbf6436048254c4deff1537265cc03a24eb46cfd6b72466e66f5c44c17b",
+      "originalPath": "/workspace/cloud-author-assignment-artifacts-oct09/author-route-focused.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T10-02-author-assignment-6f-vm-types-author-assignment.log.txt",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+      "originalPath": "/workspace/cloud-author-assignment-artifacts-oct09/types-author-assignment.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T10-02-author-assignment-6f-vm-author-route-6f-focused.log.txt",
+      "bytes": 418,
+      "sha256": "58d24f3955b7b5f95ad71cf518aba49bc78f95bfae64ceee83487e63d73e0cc6",
+      "originalPath": "/workspace/cloud-author-assignment-artifacts-oct09/author-route-6f-focused.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T10-02-author-assignment-6f-vm-author-route-6f-direct.log.txt",
+      "bytes": 2439,
+      "sha256": "f31c8c2bef859279811cea270dac5d3d7278759610dfa1c5923c599e20f02e77",
+      "originalPath": "/workspace/cloud-author-assignment-artifacts-oct09/author-route-6f-direct.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T10-02-author-assignment-6f-vm-execution-binding-6f-direct.log.txt",
+      "bytes": 3655,
+      "sha256": "7bb132e1e414034f8b9f640764f382f4c6f84beb56a86107c653ad81080b50df",
+      "originalPath": "/workspace/cloud-author-assignment-artifacts-oct09/execution-binding-6f-direct.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T10-02-author-assignment-6f-vm-types-author-assignment-6f.log.txt",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+      "originalPath": "/workspace/cloud-author-assignment-artifacts-oct09/types-author-assignment-6f.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T10-02-author-assignment-6f-vm-lint-author-assignment-6f.log.txt",
+      "bytes": 4774,
+      "sha256": "630de8589b317681674477340f0bf7d2c5472842b78a95f02eb77b63578af558",
+      "originalPath": "/workspace/cloud-author-assignment-artifacts-oct09/lint-author-assignment-6f.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T10-02-author-assignment-6f-vm-normal-build-author-assignment-6f.log.txt",
+      "bytes": 6500,
+      "sha256": "63a6a9baf5732e1d60533b7271a7c5a0f5d29315189a234cfefb6c3c6372f71f",
+      "originalPath": "/workspace/cloud-author-assignment-artifacts-oct09/normal-build-author-assignment-6f.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T10-02-author-assignment-6f-vm-native-author-assignment-r1.log.txt",
+      "bytes": 9988,
+      "sha256": "8fb446453f3a3666741994a4883b254250ef6305965e40a01f6a0c9467141fac",
+      "originalPath": "/workspace/cloud-author-assignment-artifacts-oct09/native-author-assignment-r1.log"
+    }
+  ],
+  "resources": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "author-route-focused",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-author-assignment-route.test.mjs",
+        "scripts/research-execution-binding.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:54:39.711Z",
+      "completedAt": "2026-10-09T09:54:41.786Z",
+      "elapsedSeconds": 2.075146877003135,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 298229760,
+      "observedTaskDiskPeakBytes": 956768256,
+      "availableBeforeBytes": 17130237952,
+      "availableAfterBytes": 17130229760,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-author-assignment",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T09:55:17.222Z",
+      "completedAt": "2026-10-09T09:55:34.710Z",
+      "elapsedSeconds": 17.488356054993346,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1359659008,
+      "observedTaskDiskPeakBytes": 958763008,
+      "availableBeforeBytes": 17130225664,
+      "availableAfterBytes": 17127944192,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "author-route-6f-focused",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-author-assignment-route.test.mjs",
+        "scripts/research-execution-binding.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:56:02.840Z",
+      "completedAt": "2026-10-09T09:56:05.059Z",
+      "elapsedSeconds": 2.2193205149960704,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 295772160,
+      "observedTaskDiskPeakBytes": 959066112,
+      "availableBeforeBytes": 17127837696,
+      "availableAfterBytes": 17127829504,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "author-route-6f-direct",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-author-assignment-route.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:57:20.037Z",
+      "completedAt": "2026-10-09T09:57:22.113Z",
+      "elapsedSeconds": 2.0760046140057966,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 288681984,
+      "observedTaskDiskPeakBytes": 959090688,
+      "availableBeforeBytes": 17127813120,
+      "availableAfterBytes": 17127804928,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "execution-binding-6f-direct",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-execution-binding.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:58:03.352Z",
+      "completedAt": "2026-10-09T09:58:03.670Z",
+      "elapsedSeconds": 0.31763884401880205,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 24977408,
+      "observedTaskDiskPeakBytes": 959098880,
+      "availableBeforeBytes": 17127800832,
+      "availableAfterBytes": 17127792640,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-author-assignment-6f",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T09:56:36.303Z",
+      "completedAt": "2026-10-09T09:56:39.473Z",
+      "elapsedSeconds": 3.1704677149828058,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 569847808,
+      "observedTaskDiskPeakBytes": 959078400,
+      "availableBeforeBytes": 17127825408,
+      "availableAfterBytes": 17127817216,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-author-assignment-6f",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T09:58:32.812Z",
+      "completedAt": "2026-10-09T09:58:59.371Z",
+      "elapsedSeconds": 26.55879741499666,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1614426112,
+      "observedTaskDiskPeakBytes": 959115264,
+      "availableBeforeBytes": 17127788544,
+      "availableAfterBytes": 17111613440,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-author-assignment-6f",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T09:59:24.481Z",
+      "completedAt": "2026-10-09T10:00:04.380Z",
+      "elapsedSeconds": 39.89895174000412,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1859248128,
+      "observedTaskDiskPeakBytes": 1300172800,
+      "availableBeforeBytes": 17111625728,
+      "availableAfterBytes": 16783794176,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-author-assignment-r1",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-author-assignment-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T10:00:23.248Z",
+      "completedAt": "2026-10-09T10:01:08.992Z",
+      "elapsedSeconds": 45.74411791798775,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 638091264,
+      "observedTaskDiskPeakBytes": 1432477696,
+      "availableBeforeBytes": 16783790080,
+      "availableAfterBytes": 16654434304,
+      "guardTermination": null
+    }
+  ],
+  "versions": {
+    "node": "22.14.0",
+    "postgres": "17.11 Debian17.11-0+deb13u1",
+    "postgrest": "16.3",
+    "next": "16.3.8"
+  },
+  "environment": {
+    "dotenvFilenameInventory": [
+      ".env.example",
+      "scraper/.env.example"
+    ],
+    "dotenvValuesRead": false,
+    "ephemeralSyntheticKeysGeneratedByExistingHarness": true,
+    "keysNotCommitted": true,
+    "noInstallDownload": true
+  },
+  "cleanup": {
+    "ownedProcessesObserved": [],
+    "scratchLogsRetained": true,
+    "availableBytes": 16654360576,
+    "noDeletion": true
+  },
+  "manualIncrement": {
+    "startedAt": "2026-10-09T09:52:00Z",
+    "startPrecision": "approximate composition checkpoint; individual command clocks exact",
+    "maxSeconds": 1800,
+    "singleHeavySequential": true,
+    "notAutomatedModelBudgetAcceptance": true
+  },
+  "reviewAttribution": "Root reports unsigned scoped CODE PASS962 closure+4eb author alias repair;6f is mechanical merge. This receipt is maker VM runtime evidence, not independent review or protected approval.",
+  "remaining": [
+    "Root-owned test withdrawal mechanism must respect installed source ACL; full native green not achieved",
+    "Actual trusted author/reviewer invocation",
+    "Article completion/submission/outbox/publication flow",
+    "Complete-input byte/rollback/concurrency boundary gaps preserved"
+  ],
+  "capabilities": {
+    "financialVerified": false,
+    "modelDispatched": false,
+    "publishableResearch": false,
+    "researchQualified": false,
+    "strategyApproved": false,
+    "entryEligible": false,
+    "protectedApproved": false,
+    "deployed": false
+  }
+}
