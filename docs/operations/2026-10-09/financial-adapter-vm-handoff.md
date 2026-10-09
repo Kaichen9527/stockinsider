@@ -49,3 +49,12 @@ PostgREST HTTP supplement acceptance; integration with the root's reviewed
 combined development branch and its full research/native/type/lint/build checks.
 No trusted author/reviewer capability is configured, and no real model roles,
 article publication, official qualification, deployment or production jobs ran.
+
+Final clean code subject: abd58da2289222f2fef6777c0da50652aefe5f34.
+Receipt: `.agent/reports/2026-10-09T06-24-financial-adapter-vm.json`.
+The final route selection is 38/38, adapter 25/25, core 31/31 and actual PG
+15/15, zero skips. Final typecheck and normal build pass; lint has zero errors
+and 33 existing warnings. Build ID `PLFEHeZwyYXBKYYCNMmw4`, exact web tree
+`d512b0b362477d3f29f2a009613c857485744936`. Owned stage processes stopped.
+Detailed RED/green log hashes and sampled resources are preserved in the receipt;
+this is maker VM acceptance, with independent implementation review still pending.
