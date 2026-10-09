@@ -1,0 +1,90 @@
+{
+  "syntheticPin": {
+    "path": "docs/research/synthetic-controls/pin.json",
+    "bytes": 72,
+    "sha256": "9e40760a75cc23e2bb606d1434fb495edc5dabc2387a74e3e5d36557f5916974"
+  },
+  "cases": [
+    {
+      "kind": "write_within_existing_sibling",
+      "checkpointCalled": true,
+      "before": {
+        "dev": "27",
+        "ino": "1709277",
+        "size": "4096",
+        "mtimeNs": "1791551422502755804",
+        "ctimeNs": "1791551422502755804"
+      },
+      "after": {
+        "dev": "27",
+        "ino": "1709277",
+        "size": "4096",
+        "mtimeNs": "1791551422502755804",
+        "ctimeNs": "1791551422502755804"
+      },
+      "rootBefore": {
+        "dev": "27",
+        "ino": "1709278",
+        "size": "4096",
+        "mtimeNs": "1791551422502755804",
+        "ctimeNs": "1791551422502755804"
+      },
+      "rootAfter": {
+        "dev": "27",
+        "ino": "1709278",
+        "size": "4096",
+        "mtimeNs": "1791551422502755804",
+        "ctimeNs": "1791551422502755804"
+      },
+      "result": "success",
+      "error": null,
+      "writer": {
+        "pid": 182109,
+        "operation": "write_within_existing_sibling"
+      },
+      "historicalR1CauseProven": false
+    },
+    {
+      "kind": "add_sibling_entry_to_common_ancestor",
+      "checkpointCalled": true,
+      "before": {
+        "dev": "27",
+        "ino": "1709277",
+        "size": "4096",
+        "mtimeNs": "1791551422502755804",
+        "ctimeNs": "1791551422502755804"
+      },
+      "after": {
+        "dev": "27",
+        "ino": "1709277",
+        "size": "4096",
+        "mtimeNs": "1791551422510756007",
+        "ctimeNs": "1791551422510756007"
+      },
+      "rootBefore": {
+        "dev": "27",
+        "ino": "1709278",
+        "size": "4096",
+        "mtimeNs": "1791551422502755804",
+        "ctimeNs": "1791551422502755804"
+      },
+      "rootAfter": {
+        "dev": "27",
+        "ino": "1709278",
+        "size": "4096",
+        "mtimeNs": "1791551422502755804",
+        "ctimeNs": "1791551422502755804"
+      },
+      "result": "rejected",
+      "error": "financial_parent_replaced",
+      "writer": {
+        "pid": 182109,
+        "operation": "add_sibling_entry_to_common_ancestor"
+      },
+      "historicalR1CauseProven": false
+    }
+  ],
+  "guardChanged": false,
+  "realFilesystem": true,
+  "historicalR1CauseProven": false
+}

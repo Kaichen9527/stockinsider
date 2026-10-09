@@ -1,0 +1,80 @@
+TAP version 13
+# Subtest: schema-cache startup is recorded before exact no-write shape readiness
+ok 1 - schema-cache startup is recorded before exact no-write shape readiness
+  ---
+  duration_ms: 2.128111
+  ...
+# Subtest: functional 400 is never retried or hidden by later readiness
+ok 2 - functional 400 is never retried or hidden by later readiness
+  ---
+  duration_ms: 0.767819
+  ...
+# Subtest: functional 401 is never retried or hidden by later readiness
+ok 3 - functional 401 is never retried or hidden by later readiness
+  ---
+  duration_ms: 0.163126
+  ...
+# Subtest: functional 409 is never retried or hidden by later readiness
+ok 4 - functional 409 is never retried or hidden by later readiness
+  ---
+  duration_ms: 0.145981
+  ...
+# Subtest: functional 500 is never retried or hidden by later readiness
+ok 5 - functional 500 is never retried or hidden by later readiness
+  ---
+  duration_ms: 0.162185
+  ...
+# Subtest: only matching schema function lookup can be retried
+ok 6 - only matching schema function lookup can be retried
+  ---
+  duration_ms: 0.193282
+  ...
+# Subtest: known database startup errors have a fixed three-call limit
+ok 7 - known database startup errors have a fixed three-call limit
+  ---
+  duration_ms: 0.333914
+  ...
+# Subtest: unclassified 503 and transport failures cannot become green retries
+ok 8 - unclassified 503 and transport failures cannot become green retries
+  ---
+  duration_ms: 0.26499
+  ...
+# Subtest: restart readiness requires the formal authority to remain empty
+ok 9 - restart readiness requires the formal authority to remain empty
+  ---
+  duration_ms: 0.618143
+  ...
+# Subtest: ready then single business 400 stays rejected
+ok 10 - ready then single business 400 stays rejected
+  ---
+  duration_ms: 0.423359
+  ...
+# Subtest: ready then single business 401 stays rejected
+ok 11 - ready then single business 401 stays rejected
+  ---
+  duration_ms: 0.133201
+  ...
+# Subtest: ready then single business 409 stays rejected
+ok 12 - ready then single business 409 stays rejected
+  ---
+  duration_ms: 0.073361
+  ...
+# Subtest: ready then single business 500 stays rejected
+ok 13 - ready then single business 500 stays rejected
+  ---
+  duration_ms: 0.211609
+  ...
+# Subtest: readiness rejection prevents the business request entirely
+ok 14 - readiness rejection prevents the business request entirely
+  ---
+  duration_ms: 0.251339
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 76.174159

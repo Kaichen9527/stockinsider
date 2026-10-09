@@ -1,0 +1,31 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "native-namespace-http",
+  "command": [
+    "/usr/bin/strace",
+    "-f",
+    "-qq",
+    "-ttt",
+    "-e",
+    "trace=mkdir,mkdirat,rmdir,rename,renameat,renameat2,unlink,unlinkat,symlink,symlinkat,link,linkat",
+    "-o",
+    "/workspace/cloud-author-packet-artifacts-oct09/nsdiag/http-file-mutations.trace",
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--import",
+    "./scripts/research-author-packet-namespace-diagnostic-preload.mjs",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "--test-reporter=tap",
+    "scripts/research-author-packet-http.test.mjs"
+  ],
+  "startedAt": "2026-10-09T13:11:00.046Z",
+  "completedAt": "2026-10-09T13:12:02.646Z",
+  "elapsedSeconds": 62.5999666179996,
+  "exitCode": 1,
+  "sampledAggregateRssPeakBytes": 649330688,
+  "observedTaskDiskPeakBytes": 1512488960,
+  "availableBeforeBytes": 15128313856,
+  "availableAfterBytes": 15034298368,
+  "guardTermination": null
+}

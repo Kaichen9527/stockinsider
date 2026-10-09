@@ -1,0 +1,246 @@
+TAP version 13
+# (node:183033) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:183033) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-author-packet-http-vm-oct09/web/src/lib/research-financial-clock.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-author-packet-http-vm-oct09/web/package.json.
+# Subtest: compiled read-only author packet 2409, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 120.522751
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 90.211003
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 10.882033
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 356.769139
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 26.314855
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 13.719816
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 3.479252
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 473.659411
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 95.338843
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 432.055465
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 467.065517
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 863.666174
+      ...
+    # Subtest: packet marker2 authentication and closed-body rejection leave all rows unchanged
+    ok 13 - packet marker2 authentication and closed-body rejection leave all rows unchanged
+      ---
+      duration_ms: 195.348074
+      ...
+    # Subtest: complete input without original author assignment cannot produce a packet
+    ok 14 - complete input without original author assignment cannot produce a packet
+      ---
+      duration_ms: 283.461357
+      ...
+    # Subtest: existing guarded author admission binds this original input without a new reservation
+    ok 15 - existing guarded author admission binds this original input without a new reservation
+      ---
+      duration_ms: 377.941509
+      ...
+    # Subtest: compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+    ok 16 - compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+      ---
+      duration_ms: 794.539255
+      ...
+    # Subtest: two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+    not ok 17 - two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+      ---
+      duration_ms: 1712.385084
+      location: '/workspace/cloud-author-packet-http-vm-oct09/scripts/research-author-packet-http.test.mjs:80:11'
+      failureType: 'testCodeFailure'
+      error: 'readiness_unexpected_response: {"name":"candidate_research_stock_authority_page","attempt":1,"status":503,"body":{"code":"57P01","details":null,"hint":null,"message":"terminating connection due to administrator command"},"elapsedMs":4.118094000001292}'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        waitForResearchReadiness (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-http-readiness.mjs:17:21)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async readAfterResearchReadiness (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-http-readiness.mjs:24:2)
+        async TestContext.<anonymous> (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-author-packet-http.test.mjs:82:19)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-author-packet-http.test.mjs:80:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-author-packet-http.test.mjs:17:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+    ok 18 - guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+      ---
+      duration_ms: 346.566108
+      ...
+    1..18
+not ok 1 - compiled read-only author packet 2409, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 23142.611888
+  location: '/workspace/cloud-author-packet-http-vm-oct09/scripts/research-author-packet-http.test.mjs:15:37'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# {"field":"base Q4 display revenue, manual research assumption projection","actual":31090.078766235238,"expectedFrozen":31090.078766235238}
+# Subtest: compiled read-only author packet 2383, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 49.76034
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 78.31186
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 11.118801
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 377.684125
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 27.549489
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 10.695181
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 5.23467
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 478.79183
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 85.491942
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 363.333793
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 405.891351
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 832.118343
+      ...
+    # Subtest: packet marker2 authentication and closed-body rejection leave all rows unchanged
+    ok 13 - packet marker2 authentication and closed-body rejection leave all rows unchanged
+      ---
+      duration_ms: 204.460783
+      ...
+    # Subtest: complete input without original author assignment cannot produce a packet
+    ok 14 - complete input without original author assignment cannot produce a packet
+      ---
+      duration_ms: 277.748119
+      ...
+    # Subtest: existing guarded author admission binds this original input without a new reservation
+    ok 15 - existing guarded author admission binds this original input without a new reservation
+      ---
+      duration_ms: 394.690095
+      ...
+    # Subtest: compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+    ok 16 - compiled packet contains full public excerpts, unknown precision, actual seal clock and exact financial result
+      ---
+      duration_ms: 823.867391
+      ...
+    # Subtest: two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+    not ok 17 - two packet reads and actual PostgreSQL restart preserve hash, clocks, rows and charges
+      ---
+      duration_ms: 1806.262824
+      location: '/workspace/cloud-author-packet-http-vm-oct09/scripts/research-author-packet-http.test.mjs:80:11'
+      failureType: 'testCodeFailure'
+      error: 'readiness_unexpected_response: {"name":"candidate_research_stock_authority_page","attempt":1,"status":503,"body":{"code":"57P01","details":null,"hint":null,"message":"terminating connection due to administrator command"},"elapsedMs":4.523176000002422}'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        waitForResearchReadiness (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-http-readiness.mjs:17:21)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async readAfterResearchReadiness (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-http-readiness.mjs:24:2)
+        async TestContext.<anonymous> (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-author-packet-http.test.mjs:82:19)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-author-packet-http.test.mjs:80:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-local-inbox-dataplane.mjs:319:24)
+        async TestContext.<anonymous> (file:///workspace/cloud-author-packet-http-vm-oct09/scripts/research-author-packet-http.test.mjs:17:20)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+      ...
+    # Subtest: guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+    ok 18 - guarded source withdrawal rejects original packet and preserves sealed input/assignment/source bytes
+      ---
+      duration_ms: 385.875017
+      ...
+    1..18
+not ok 2 - compiled read-only author packet 2383, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 22795.901877
+  location: '/workspace/cloud-author-packet-http-vm-oct09/scripts/research-author-packet-http.test.mjs:15:37'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..2
+# tests 38
+# suites 0
+# pass 34
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 49013.328861

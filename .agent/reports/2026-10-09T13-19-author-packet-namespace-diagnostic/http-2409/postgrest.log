@@ -1,0 +1,39 @@
+09/Oct/2026:13:11:05 +0000: Starting PostgREST 16.3...
+09/Oct/2026:13:11:05 +0000: Successfully connected to PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+09/Oct/2026:13:11:05 +0000: Connection Pool initialized with a maximum size of 2 connections
+09/Oct/2026:13:11:05 +0000: Listener connected to PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit on "/workspace/cloud-author-packet-artifacts-oct09/nsdiag/http-2409/socket:39325" and listening for database notifications on the "pgrst" channel
+09/Oct/2026:13:11:05 +0000: Config reloaded
+09/Oct/2026:13:11:05 +0000: Schema cache queried in 111.5 milliseconds 
+09/Oct/2026:13:11:05 +0000: Schema cache loaded 28 Relations, 27 Relationships, 23 RPCs, 0 Domain Representations, 4 Media Type Handlers
+09/Oct/2026:13:11:05 +0000: Schema cache loaded in 0.6 milliseconds
+09/Oct/2026:13:11:05 +0000: API server listening on 127.0.0.1:43059
+FATAL:  terminating connection due to administrator command
+09/Oct/2026:13:11:08 +0000: Failed listening for database notifications on the "pgrst" channel. server closed the connection unexpectedly This probably means the server terminated abnormally before or while processing the request.
+09/Oct/2026:13:11:08 +0000: Retrying listening for database notifications in 1 seconds...
+09/Oct/2026:13:11:09 +0000: {"code":"57P01","details":null,"hint":null,"message":"terminating connection due to administrator command"}
+127.0.0.1 - service_role [09/Oct/2026:13:11:09 +0000] "POST /source_raw_documents?on_conflict=platform%2Cdocument_url&columns=%22source_entity_id%22%2C%22platform%22%2C%22document_url%22%2C%22title%22%2C%22summary%22%2C%22content_text%22%2C%22published_at%22%2C%22collected_at%22%2C%22symbols%22%2C%22sentiment_label%22%2C%22confidence%22%2C%22content_semantics%22%2C%22publisher_key%22%2C%22publisher_name%22%2C%22canonical_content_hash%22%2C%22stance_semantics%22%2C%22metadata%22&select=id%2Cdocument_url HTTP/1.1" 503 107 "" "node"
+09/Oct/2026:13:11:09 +0000: {"code":"57P01","details":null,"hint":null,"message":"terminating connection due to administrator command"}
+09/Oct/2026:13:11:09 +0000: Failed to query the PostgreSQL version. {"code":"57P01","details":null,"hint":null,"message":"terminating connection due to administrator command"}
+09/Oct/2026:13:11:09 +0000: {"code":"PGRST001","details":"no connection to the server\n","hint":null,"message":"Database client error. Retrying the connection."}
+09/Oct/2026:13:11:09 +0000: Failed to query database settings for the config parameters.{"code":"PGRST001","details":"no connection to the server\n","hint":null,"message":"Database client error. Retrying the connection."}
+09/Oct/2026:13:11:09 +0000: {"code":"PGRST001","details":"no connection to the server\n","hint":null,"message":"Database client error. Retrying the connection."}
+09/Oct/2026:13:11:09 +0000: Failed to query the role settings. {"code":"PGRST001","details":"no connection to the server\n","hint":null,"message":"Database client error. Retrying the connection."}
+09/Oct/2026:13:11:09 +0000: Config reloaded
+09/Oct/2026:13:11:09 +0000: Schema cache queried in 120.3 milliseconds 
+09/Oct/2026:13:11:09 +0000: Schema cache loaded 28 Relations, 27 Relationships, 23 RPCs, 0 Domain Representations, 4 Media Type Handlers
+09/Oct/2026:13:11:09 +0000: Schema cache loaded in 0.3 milliseconds
+09/Oct/2026:13:11:09 +0000: Listener connected to PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit on "/workspace/cloud-author-packet-artifacts-oct09/nsdiag/http-2409/socket:39325" and listening for database notifications on the "pgrst" channel
+09/Oct/2026:13:11:10 +0000: Attempting to reconnect to the database in 1 seconds...
+09/Oct/2026:13:11:10 +0000: Successfully connected to PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+09/Oct/2026:13:11:10 +0000: Connection Pool initialized with a maximum size of 2 connections
+09/Oct/2026:13:11:10 +0000: Config reloaded
+09/Oct/2026:13:11:10 +0000: Schema cache queried in 88.9 milliseconds 
+09/Oct/2026:13:11:10 +0000: Schema cache loaded 28 Relations, 27 Relationships, 23 RPCs, 0 Domain Representations, 4 Media Type Handlers
+09/Oct/2026:13:11:10 +0000: Schema cache loaded in 0.2 milliseconds
+09/Oct/2026:13:11:10 +0000: Successfully connected to PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+09/Oct/2026:13:11:10 +0000: Connection Pool initialized with a maximum size of 2 connections
+09/Oct/2026:13:11:10 +0000: Config reloaded
+09/Oct/2026:13:11:10 +0000: Schema cache queried in 90.1 milliseconds 
+09/Oct/2026:13:11:10 +0000: Schema cache loaded 28 Relations, 27 Relationships, 23 RPCs, 0 Domain Representations, 4 Media Type Handlers
+09/Oct/2026:13:11:10 +0000: Schema cache loaded in 0.2 milliseconds
+09/Oct/2026:13:11:31 +0000: Received termination unix signal SIGTERM

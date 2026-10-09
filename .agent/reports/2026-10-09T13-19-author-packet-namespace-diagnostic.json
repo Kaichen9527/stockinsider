@@ -1,0 +1,4489 @@
+{
+  "schemaVersion": "author-packet-namespace-diagnostic-v1",
+  "manualStartedAt": "2026-10-09T13:06:39Z",
+  "manualCompletedAt": "2026-10-09T13:19:11.270705+00:00",
+  "manualLimitSeconds": 1800,
+  "manualTimeNotRoleBudgetEvidence": true,
+  "diagnosticSubject": "abf04f7a6f21e68b3cfc097ebf967add722ee199",
+  "diagnosticTree": "1ab45f1b99c9d584cc6c0a2a488086ce50234029",
+  "branch": "codex/author-packet-namespace-diagnostic-oct09",
+  "reusedRuntimeAndBuildSubject": "cbd1a9e93ae77930684f0ca45726790b6871721c",
+  "runtimeTree": "80326f52b01d206873ab3c15df6adfc182e1b749",
+  "runtimeWebTree": "488da1f2daad0c862bbe7efb0915179822389614",
+  "buildId": "3oZq3yySKwBlvfjMs_cJD",
+  "compiledServerFilesMatchedBeforeAndAfter": 2066,
+  "compiledManifestSha256": "1d24fbfea4c9e1540b99a3919cc8472fe1657bf459b80fd9e8cca2de0a7b32c2",
+  "rebuildPerformed": false,
+  "runtimeSqlMappingPackageAndHarnessChanged": false,
+  "testSubjects": {
+    "original": "6fcd30649dc24955b5f620762f33f5c2e52f0e0b",
+    "approvedSuccessor": "31bd2e87884205fec48483fb207ed401ae85597d"
+  },
+  "codeFiles": [
+    {
+      "path": "scripts/research-author-packet-namespace-diagnostic-preload.mjs",
+      "bytes": 2806,
+      "sha256": "43971b373cbaa5778678cdbc879868b17cf06a0a565cc51326ad698596929df0"
+    },
+    {
+      "path": "scripts/research-financial-ancestor-controls.mjs",
+      "bytes": 2876,
+      "sha256": "70ed43ae73c2f816d7b9c337a1f23b0ebbfb596d0853ca687e920cc51b373a69"
+    },
+    {
+      "path": "scripts/research-author-packet-http.test.mjs",
+      "bytes": 17175,
+      "sha256": "9947f271a469b39462d7e7b4a9a5247d8c93c6ebfc2eca1369db074558475182"
+    },
+    {
+      "path": "scripts/research-http-readiness.mjs",
+      "bytes": 1341,
+      "sha256": "5808e23453f5067fac81e40d9aa5beb0544ca4334551dad59e1b204a24c640cf"
+    },
+    {
+      "path": "scripts/research-http-readiness.test.mjs",
+      "bytes": 3778,
+      "sha256": "2896dd064387ca3979d2430d0082bc2c6a8ac3b1730cefd7db09f48146c7ebbc"
+    }
+  ],
+  "nativeResults": {
+    "6fcdObserved": {
+      "runs": 1,
+      "total": 20,
+      "pass": 18,
+      "fail": 2,
+      "skip": 0,
+      "error": "HTTP timeout before preparation/financial/packet calls",
+      "syscallTracingEnabled": true,
+      "tracingMayPerturbTiming": true,
+      "financialRequestsObserved": 0
+    },
+    "31bdObserved": {
+      "runs": 1,
+      "total": 38,
+      "pass": 34,
+      "fail": 4,
+      "skip": 0,
+      "failedChildren": 2,
+      "failedParents": 2,
+      "unitTotal": 14,
+      "unitPass": 14,
+      "unitSkip": 0,
+      "error": "Both restart readiness probes 503/57P01 terminating connection due to administrator command, rejected without generic retry",
+      "financialSealAndPacketBeforeRestartPassedBothCompanies": true,
+      "withdrawalPacketRejectionPassedBothCompanies": true,
+      "positivePacketReadAfterRestart": "not attempted because readonly readiness rejected",
+      "syscallTracingEnabled": false
+    }
+  },
+  "filesystemControls": {
+    "syntheticPin": {
+      "path": "docs/research/synthetic-controls/pin.json",
+      "bytes": 72,
+      "sha256": "9e40760a75cc23e2bb606d1434fb495edc5dabc2387a74e3e5d36557f5916974"
+    },
+    "cases": [
+      {
+        "kind": "write_within_existing_sibling",
+        "checkpointCalled": true,
+        "before": {
+          "dev": "27",
+          "ino": "1709277",
+          "size": "4096",
+          "mtimeNs": "1791551422502755804",
+          "ctimeNs": "1791551422502755804"
+        },
+        "after": {
+          "dev": "27",
+          "ino": "1709277",
+          "size": "4096",
+          "mtimeNs": "1791551422502755804",
+          "ctimeNs": "1791551422502755804"
+        },
+        "rootBefore": {
+          "dev": "27",
+          "ino": "1709278",
+          "size": "4096",
+          "mtimeNs": "1791551422502755804",
+          "ctimeNs": "1791551422502755804"
+        },
+        "rootAfter": {
+          "dev": "27",
+          "ino": "1709278",
+          "size": "4096",
+          "mtimeNs": "1791551422502755804",
+          "ctimeNs": "1791551422502755804"
+        },
+        "result": "success",
+        "error": null,
+        "writer": {
+          "pid": 182109,
+          "operation": "write_within_existing_sibling"
+        },
+        "historicalR1CauseProven": false
+      },
+      {
+        "kind": "add_sibling_entry_to_common_ancestor",
+        "checkpointCalled": true,
+        "before": {
+          "dev": "27",
+          "ino": "1709277",
+          "size": "4096",
+          "mtimeNs": "1791551422502755804",
+          "ctimeNs": "1791551422502755804"
+        },
+        "after": {
+          "dev": "27",
+          "ino": "1709277",
+          "size": "4096",
+          "mtimeNs": "1791551422510756007",
+          "ctimeNs": "1791551422510756007"
+        },
+        "rootBefore": {
+          "dev": "27",
+          "ino": "1709278",
+          "size": "4096",
+          "mtimeNs": "1791551422502755804",
+          "ctimeNs": "1791551422502755804"
+        },
+        "rootAfter": {
+          "dev": "27",
+          "ino": "1709278",
+          "size": "4096",
+          "mtimeNs": "1791551422502755804",
+          "ctimeNs": "1791551422502755804"
+        },
+        "result": "rejected",
+        "error": "financial_parent_replaced",
+        "writer": {
+          "pid": 182109,
+          "operation": "add_sibling_entry_to_common_ancestor"
+        },
+        "historicalR1CauseProven": false
+      }
+    ],
+    "guardChanged": false,
+    "realFilesystem": true,
+    "historicalR1CauseProven": false
+  },
+  "requestEventCorrelations": [
+    {
+      "label": "original-6fcd-observed",
+      "filesystemEvents": [
+        {
+          "clock": "2026-10-09T13:11:13.989Z",
+          "monotonicNs": "194116423235941",
+          "pid": 182135,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".git",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551473984057273",
+            "ctimeNs": "1791551473984057273",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "fs.watch has no PID; original trace covers only owned test descendants; no matching mutation syscall"
+        },
+        {
+          "clock": "2026-10-09T13:11:13.989Z",
+          "monotonicNs": "194116423426338",
+          "pid": 182135,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".agents",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551473984057273",
+            "ctimeNs": "1791551473984057273",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "fs.watch has no PID; original trace covers only owned test descendants; no matching mutation syscall"
+        },
+        {
+          "clock": "2026-10-09T13:11:13.989Z",
+          "monotonicNs": "194116423630697",
+          "pid": 182135,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".codex",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551473984057273",
+            "ctimeNs": "1791551473984057273",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "fs.watch has no PID; original trace covers only owned test descendants; no matching mutation syscall"
+        },
+        {
+          "clock": "2026-10-09T13:11:13.989Z",
+          "monotonicNs": "194116423725300",
+          "pid": 182135,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".aws",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551473984057273",
+            "ctimeNs": "1791551473984057273",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "fs.watch has no PID; original trace covers only owned test descendants; no matching mutation syscall"
+        },
+        {
+          "clock": "2026-10-09T13:11:14.042Z",
+          "monotonicNs": "194116476894106",
+          "pid": 182135,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".aws",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551474036058587",
+            "ctimeNs": "1791551474036058587",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "fs.watch has no PID; original trace covers only owned test descendants; no matching mutation syscall"
+        },
+        {
+          "clock": "2026-10-09T13:11:14.043Z",
+          "monotonicNs": "194116477052225",
+          "pid": 182135,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".codex",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551474036058587",
+            "ctimeNs": "1791551474036058587",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "fs.watch has no PID; original trace covers only owned test descendants; no matching mutation syscall"
+        },
+        {
+          "clock": "2026-10-09T13:11:14.043Z",
+          "monotonicNs": "194116477134028",
+          "pid": 182135,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".agents",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551474036058587",
+            "ctimeNs": "1791551474036058587",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "fs.watch has no PID; original trace covers only owned test descendants; no matching mutation syscall"
+        },
+        {
+          "clock": "2026-10-09T13:11:14.043Z",
+          "monotonicNs": "194116477212797",
+          "pid": 182135,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".git",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551474036058587",
+            "ctimeNs": "1791551474036058587",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "fs.watch has no PID; original trace covers only owned test descendants; no matching mutation syscall"
+        }
+      ],
+      "requests": [],
+      "requestCount": 0,
+      "requestsWithFilesystemEvents": 0,
+      "historicalR1CauseProven": false,
+      "inference": "Controls demonstrate mechanism only. Prior historical R1 has no matching filesystem/request observation."
+    },
+    {
+      "label": "31bd-observed",
+      "filesystemEvents": [
+        {
+          "clock": "2026-10-09T13:15:35.388Z",
+          "monotonicNs": "194377822104438",
+          "pid": 183033,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".git",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551735278672890",
+            "ctimeNs": "1791551735278672890",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "successor has fs.watch only, no PID tracing"
+        },
+        {
+          "clock": "2026-10-09T13:15:35.388Z",
+          "monotonicNs": "194377822155154",
+          "pid": 183033,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".agents",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551735278672890",
+            "ctimeNs": "1791551735278672890",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "successor has fs.watch only, no PID tracing"
+        },
+        {
+          "clock": "2026-10-09T13:15:35.388Z",
+          "monotonicNs": "194377822167743",
+          "pid": 183033,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".codex",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551735278672890",
+            "ctimeNs": "1791551735278672890",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "successor has fs.watch only, no PID tracing"
+        },
+        {
+          "clock": "2026-10-09T13:15:35.388Z",
+          "monotonicNs": "194377822177488",
+          "pid": 183033,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".aws",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551735278672890",
+            "ctimeNs": "1791551735278672890",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "successor has fs.watch only, no PID tracing"
+        },
+        {
+          "clock": "2026-10-09T13:15:35.388Z",
+          "monotonicNs": "194377822185610",
+          "pid": 183033,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".aws",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551735278672890",
+            "ctimeNs": "1791551735278672890",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "successor has fs.watch only, no PID tracing"
+        },
+        {
+          "clock": "2026-10-09T13:15:35.388Z",
+          "monotonicNs": "194377822193482",
+          "pid": 183033,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".codex",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551735278672890",
+            "ctimeNs": "1791551735278672890",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "successor has fs.watch only, no PID tracing"
+        },
+        {
+          "clock": "2026-10-09T13:15:35.388Z",
+          "monotonicNs": "194377822201364",
+          "pid": 183033,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".agents",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551735278672890",
+            "ctimeNs": "1791551735278672890",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "successor has fs.watch only, no PID tracing"
+        },
+        {
+          "clock": "2026-10-09T13:15:35.388Z",
+          "monotonicNs": "194377822209967",
+          "pid": 183033,
+          "kind": "filesystem_event",
+          "path": "/workspace",
+          "event": "rename",
+          "filename": ".git",
+          "stat": {
+            "dev": "27",
+            "ino": "-9223372036854775761",
+            "size": "12288",
+            "mtimeNs": "1791551735278672890",
+            "ctimeNs": "1791551735278672890",
+            "directory": true,
+            "symlink": false
+          },
+          "writer": "unknown",
+          "ownedSyscallMatchCount": 0,
+          "writerAttributionLimit": "successor has fs.watch only, no PID tracing"
+        }
+      ],
+      "requests": [
+        {
+          "requestId": 1,
+          "pid": 183033,
+          "action": "financialSupplement",
+          "startClock": "2026-10-09T13:15:13.062Z",
+          "endClock": "2026-10-09T13:15:13.526Z",
+          "elapsedMs": 463.902503,
+          "status": 200,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 2,
+          "pid": 183033,
+          "action": "sealResearchInput",
+          "startClock": "2026-10-09T13:15:13.529Z",
+          "endClock": "2026-10-09T13:15:14.374Z",
+          "elapsedMs": 845.012612,
+          "status": 200,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 3,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:14.409Z",
+          "endClock": "2026-10-09T13:15:14.418Z",
+          "elapsedMs": 8.473629,
+          "status": 401,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 4,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:14.418Z",
+          "endClock": "2026-10-09T13:15:14.421Z",
+          "elapsedMs": 3.227311,
+          "status": 401,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 5,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:14.421Z",
+          "endClock": "2026-10-09T13:15:14.423Z",
+          "elapsedMs": 2.484399,
+          "status": 401,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 6,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:14.424Z",
+          "endClock": "2026-10-09T13:15:14.426Z",
+          "elapsedMs": 2.383077,
+          "status": 401,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 7,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:14.426Z",
+          "endClock": "2026-10-09T13:15:14.429Z",
+          "elapsedMs": 3.143384,
+          "status": 400,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 8,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:14.430Z",
+          "endClock": "2026-10-09T13:15:14.434Z",
+          "elapsedMs": 4.236243,
+          "status": 400,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 9,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:14.434Z",
+          "endClock": "2026-10-09T13:15:14.438Z",
+          "elapsedMs": 4.434793,
+          "status": 400,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 10,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:14.439Z",
+          "endClock": "2026-10-09T13:15:14.442Z",
+          "elapsedMs": 3.592271,
+          "status": 400,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 11,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:14.442Z",
+          "endClock": "2026-10-09T13:15:14.571Z",
+          "elapsedMs": 128.505074,
+          "status": 409,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 12,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:14.605Z",
+          "endClock": "2026-10-09T13:15:14.855Z",
+          "elapsedMs": 250.646467,
+          "status": 409,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 13,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:15.265Z",
+          "endClock": "2026-10-09T13:15:15.964Z",
+          "elapsedMs": 698.891841,
+          "status": 200,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 14,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:16.060Z",
+          "endClock": "2026-10-09T13:15:16.762Z",
+          "elapsedMs": 701.686424,
+          "status": 200,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 15,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:16.765Z",
+          "endClock": "2026-10-09T13:15:17.534Z",
+          "elapsedMs": 768.597144,
+          "status": 200,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 16,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:17.834Z",
+          "endClock": "2026-10-09T13:15:18.073Z",
+          "elapsedMs": 238.418157,
+          "status": 409,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 17,
+          "pid": 183033,
+          "action": "financialSupplement",
+          "startClock": "2026-10-09T13:15:35.749Z",
+          "endClock": "2026-10-09T13:15:36.153Z",
+          "elapsedMs": 404.166067,
+          "status": 200,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 18,
+          "pid": 183033,
+          "action": "sealResearchInput",
+          "startClock": "2026-10-09T13:15:36.155Z",
+          "endClock": "2026-10-09T13:15:36.975Z",
+          "elapsedMs": 820.353077,
+          "status": 200,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 19,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.005Z",
+          "endClock": "2026-10-09T13:15:37.014Z",
+          "elapsedMs": 9.171792,
+          "status": 401,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 20,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.014Z",
+          "endClock": "2026-10-09T13:15:37.018Z",
+          "elapsedMs": 4.03477,
+          "status": 401,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 21,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.018Z",
+          "endClock": "2026-10-09T13:15:37.021Z",
+          "elapsedMs": 2.893587,
+          "status": 401,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 22,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.021Z",
+          "endClock": "2026-10-09T13:15:37.024Z",
+          "elapsedMs": 2.743271,
+          "status": 401,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 23,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.024Z",
+          "endClock": "2026-10-09T13:15:37.027Z",
+          "elapsedMs": 3.365829,
+          "status": 400,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 24,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.028Z",
+          "endClock": "2026-10-09T13:15:37.033Z",
+          "elapsedMs": 5.066687,
+          "status": 400,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 25,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.033Z",
+          "endClock": "2026-10-09T13:15:37.036Z",
+          "elapsedMs": 2.94507,
+          "status": 400,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 26,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.036Z",
+          "endClock": "2026-10-09T13:15:37.039Z",
+          "elapsedMs": 2.934083,
+          "status": 400,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 27,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.039Z",
+          "endClock": "2026-10-09T13:15:37.174Z",
+          "elapsedMs": 135.061157,
+          "status": 409,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 28,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.210Z",
+          "endClock": "2026-10-09T13:15:37.449Z",
+          "elapsedMs": 238.923463,
+          "status": 409,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 29,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:37.881Z",
+          "endClock": "2026-10-09T13:15:38.600Z",
+          "elapsedMs": 719.572782,
+          "status": 200,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 30,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:38.710Z",
+          "endClock": "2026-10-09T13:15:39.481Z",
+          "elapsedMs": 770.716683,
+          "status": 200,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 31,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:39.484Z",
+          "endClock": "2026-10-09T13:15:40.264Z",
+          "elapsedMs": 780.063017,
+          "status": 200,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        },
+        {
+          "requestId": 32,
+          "pid": 183033,
+          "action": "readAuthorPacket",
+          "startClock": "2026-10-09T13:15:40.588Z",
+          "endClock": "2026-10-09T13:15:40.848Z",
+          "elapsedMs": 260.181224,
+          "status": 409,
+          "errorClass": null,
+          "eventsInWholeHttpInterval": [],
+          "parentStatChangedAcrossRequest": []
+        }
+      ],
+      "requestCount": 32,
+      "requestsWithFilesystemEvents": 0,
+      "historicalR1CauseProven": false,
+      "inference": "Controls demonstrate mechanism only. Prior historical R1 has no matching filesystem/request observation."
+    }
+  ],
+  "writerAttribution": {
+    "eventsPerObservedRun": 8,
+    "entryNames": [
+      ".git",
+      ".agents",
+      ".codex",
+      ".aws"
+    ],
+    "workspaceInodeChanged": false,
+    "workspaceMtimeCtimeChanged": true,
+    "actualWriter": "unknown",
+    "ownedChildSyscallTraceMatchedWorkspaceEntries": false,
+    "limitation": "fs.watch does not identify writer PID. Tracing covers only owned descendants; no matching entry mutation found. Late owned-thread census was empty after completion. Platform/sandbox namespace changes are only a hypothesis, not attributed proof."
+  },
+  "historicalR1": {
+    "originalReceiptHead": "103a50f4981ef32d7e7dacbaefeba04e556bf42c",
+    "failure": "financial_parent_replaced",
+    "causeProven": false,
+    "mechanismConfirmedByControls": true,
+    "observedFilesystemEventsDuringFinancialHttpIntervals": 0,
+    "runtimeGuardModified": false
+  },
+  "harnessFlagClarification": {
+    "inheritedModelReservedFalse": "Legacy static harness field, not evidence of zero reservation rows",
+    "actual31bdNestedAuditReservationCountPerCompany": {
+      "2409": 1,
+      "2383": 1
+    },
+    "modelActuallyDispatched": false,
+    "harnessPassedDoesNotOverrideTap": true
+  },
+  "stages": {
+    "controls.json": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "controls",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "scripts/research-financial-ancestor-controls.mjs"
+      ],
+      "startedAt": "2026-10-09T13:10:22.305Z",
+      "completedAt": "2026-10-09T13:10:22.665Z",
+      "elapsedSeconds": 0.35969691499485634,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 26820608,
+      "observedTaskDiskPeakBytes": 1289895936,
+      "availableBeforeBytes": 15128367104,
+      "availableAfterBytes": 15128317952,
+      "guardTermination": null
+    },
+    "native-namespace-http.json": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-namespace-http",
+      "command": [
+        "/usr/bin/strace",
+        "-f",
+        "-qq",
+        "-ttt",
+        "-e",
+        "trace=mkdir,mkdirat,rmdir,rename,renameat,renameat2,unlink,unlinkat,symlink,symlinkat,link,linkat",
+        "-o",
+        "/workspace/cloud-author-packet-artifacts-oct09/nsdiag/http-file-mutations.trace",
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--import",
+        "./scripts/research-author-packet-namespace-diagnostic-preload.mjs",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-reporter=tap",
+        "scripts/research-author-packet-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T13:11:00.046Z",
+      "completedAt": "2026-10-09T13:12:02.646Z",
+      "elapsedSeconds": 62.5999666179996,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 649330688,
+      "observedTaskDiskPeakBytes": 1512488960,
+      "availableBeforeBytes": 15128313856,
+      "availableAfterBytes": 15034298368,
+      "guardTermination": null
+    },
+    "successor/readiness-unit.json": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "readiness-unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "--test-reporter=tap",
+        "scripts/research-http-readiness.test.mjs"
+      ],
+      "startedAt": "2026-10-09T13:14:34.332Z",
+      "completedAt": "2026-10-09T13:14:34.568Z",
+      "elapsedSeconds": 0.23605706199305132,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 26570752,
+      "observedTaskDiskPeakBytes": 1289900032,
+      "availableBeforeBytes": 15034204160,
+      "availableAfterBytes": 15034195968,
+      "guardTermination": null
+    },
+    "successor/native-31bd-http.json": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-31bd-http",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--import",
+        "./scripts/research-author-packet-namespace-diagnostic-preload.mjs",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-reporter=tap",
+        "scripts/research-author-packet-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T13:14:54.804Z",
+      "completedAt": "2026-10-09T13:15:43.994Z",
+      "elapsedSeconds": 49.18974665098358,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 622768128,
+      "observedTaskDiskPeakBytes": 1549619200,
+      "availableBeforeBytes": 15034191872,
+      "availableAfterBytes": 14904238080,
+      "guardTermination": null
+    }
+  },
+  "profiles": {
+    "6fcd-2409": {
+      "startedAt": "2026-10-09T13:11:01.197Z",
+      "postgrest": {
+        "version": "PostgREST 16.3",
+        "archiveBytes": 4519976,
+        "archiveSha256": "4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d",
+        "binaryBytes": 20502640,
+        "binarySha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+      },
+      "partialDevelopmentProfile": true,
+      "databaseAdapterInjected": false,
+      "officialAuthorityRowsSeeded": 0,
+      "observedRosterPromoted": false,
+      "modelReserved": false,
+      "productionImported": false,
+      "top20": null,
+      "checks": [
+        "unauthorized_401_zero_write",
+        "inbox_three_industry_only",
+        "anonymous_table_rpc_denied",
+        "ancillary_read_only_empty_authority",
+        "production_writer_not_fabricated",
+        "real_source_heads_cutoff",
+        "real_authority_empty",
+        "restart_dedup",
+        "priority_blocked_restart_fenced"
+      ],
+      "limitations": [
+        "Node test-runner controlled loopback configuration, not production runtime activation",
+        "Partial schema profile does not attest the complete installed migration policy",
+        "No official roster/sector authority has been ingested; Top20 remains blocked"
+      ],
+      "observedRosterMigrationSha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b",
+      "observedPriorityMigrationSha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3",
+      "observedClaimDependencySourceHashes": {
+        "state": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+        "jobs": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+        "dossier": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+        "immutableDefinition": "d2edbeae7c77f25924a3a9c21acb9ad65109cb0f1a6206aad83dff8d88b60985"
+      },
+      "observedClaimMigrationSha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2",
+      "installedDefinitions": [
+        {
+          "file": "supabase_schema.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stocks (",
+          "sourceSha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3",
+          "definitionSha256": "b3d9d87b4dd2cd2570c657f6d9edeca9474409198f1ce2f2d4b143b313d1b1d2"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_entities (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "03c78b435837ecd782b14e36f8f51a7bdbeeefc130cb19d36bf3ff7120292f74"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_raw_documents (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "1ddf2e178a9dcbb5608535eaf32f9f508908ace0a804283f614e02c64338e7da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "6f9cf89764e00a16dd2630f9aaa92be8c26e375c05bb738f9ac4638e8d914c52"
+        },
+        {
+          "file": "migrations/20260906_source_identity_v4.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+          "definitionSha256": "c1d15e7436fef37b0d959e009f50ac67c9588f43d2000f3b82424794bb5a7969"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE authority_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "de0456eee24d4a21f288f00843e1c7ea2bf26c4475e4035cfa976d98f38df541"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE stock_exchange_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "bb7c4a9dcf3cb5356c8dbd6b1e363d7532c19bed93e17528d1c8a0d129c7d73a"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE instrument_type_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "81cb876a7635be9f157396262a638bf6de5831b1e764a9c86a469c070f6b7afb"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE listing_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "03070b2edae9d1f1b2f15514852a6ae61d4b8e980fd7406bb05bedcb1d6d2a78"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE official_roster_provider_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "c85a62f8be9eca5f006ed60d7ee9e366246dc44678e32be2466f1129df37a61d"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE tw_market_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "be7acd6c47b936c20739f01bceec5a206b9cdfaed0cf9250bdb1c5a8883e8792"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE canonical_sector_key_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "e92dfaa281fddd0da3154e2429ebae9553fc96393289986ec30267722c8475b9"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_instruments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "411f053cf5273c207fb1567a391c02986ce5b849128f2d3b47ac1cc85a2c4a3c"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "9c2b0c74ea924ef94f143b37d7de13b57e2c5530eebbbc0911cdaa5b676a5194"
+        },
+        {
+          "file": "migrations/20260831_candidate_shadow_performance.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_runs (",
+          "sourceSha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+          "definitionSha256": "c37f899abd5d57f924a8cd2c1bace068bb2dc5e539ae0809381c7ff6115973da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.market_evidence_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "9f7b07f170febec813a9c67bba8e33338cf3ff5fa35de6e2df2cd9fc14578957"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_detail_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2c2fc7a718d8f0335ca4f718bf7f71ff0d447639910811276c9a965d76981139"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_bundles (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "49bfec32f5a5e712cc1158c391168699cf81876bcfb9dcbec3bcd30f33cb14c4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_dossiers (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2151ab0e8433a794f4bed71fa4fcfea65ab3df045ad5c88b9c2a63912c7d0db0"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_submission_receipts (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "5337c2d9217883181acbc053e205d78cb5d0b54605aca893790a07cc28f452c1"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "3418aa78ecbfaf879f426561e30cb35cd223fdfe5ba8f7d849e6dc36281579d7"
+        },
+        {
+          "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_issuer_document_domains_v6 (",
+          "sourceSha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+          "definitionSha256": "5d66b75c1bff55126ada62aaedcf489128769ef3ec3f1e390c6cf93267812845"
+        },
+        {
+          "file": "migrations/20260929_research_deep_jobs_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_deep_jobs_v1 (",
+          "sourceSha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+          "definitionSha256": "f6b905d282b566dd2d80cd2cf19ec418e35a8951aa04004deecf801ddf9d3eb4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority(",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "a6749bacb864ab7c6c61dd9b6cd2d1bdfcb4b09c40e99489ed8d072d84719e95"
+        },
+        {
+          "file": "migrations/20260906_authority_pagination_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority_page(",
+          "sourceSha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+          "definitionSha256": "e76a34cde20546b651b64713313ea63e784ee93be606c6804f0e2a32b5578598"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "088283446f2f3ded3deca7cc2e8328325abe4490470954219c2954850851d8cf"
+        }
+      ],
+      "developmentProfileSqlSha256": "666264467963b75fec638b685e4f2eae9081635f389c00b5472f2154647b9b39",
+      "readOnlyDependencyTables": [
+        "candidate_research_runs",
+        "market_evidence_snapshots",
+        "candidate_detail_snapshots",
+        "candidate_dossier_bundles",
+        "candidate_research_dossiers",
+        "candidate_dossier_submission_receipts",
+        "research_priority_runs_v1",
+        "candidate_issuer_document_domains_v6",
+        "research_deep_jobs_v1"
+      ],
+      "installedRoutines": [
+        {
+          "name": "candidate_research_stock_authority",
+          "bodySha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "bodySha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "research_source_heads_page_v1",
+          "bodySha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        }
+      ],
+      "classificationEvidence": {
+        "schemaVersion": "stockinsider-observed-official-security-scope-reconciliation-v1",
+        "recordedAt": "2026-10-08T12:23:18.366811+00:00",
+        "counts": {
+          "twseMasterMatched": 1095,
+          "twseOrdinaryResearchCandidates": 1085,
+          "twseInnovationBoard": 31,
+          "twseOrdinaryAdditionalTransferRestrictionCfi": 1,
+          "twseTdrExcludedFromOrdinaryScope": 10,
+          "unchangedObservedTpexOrdinary": 893,
+          "reconciledObservedOrdinaryResearchCohort": 1978,
+          "legacyStrictObservedCohort": 1946
+        },
+        "sourceReferences": [
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=2",
+            "observedAt": "2026-10-08T12:21:15.657943+00:00",
+            "responseBytes": 9063029,
+            "responseSha256": "920828356712b85375e504b4633446ad8af39f6f59eddbb7efc0f47e7ca54311"
+          },
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=4",
+            "observedAt": "2026-10-08T09:04:35.607658+00:00",
+            "responseBytes": 3030198,
+            "responseSha256": "0a719dcffca37de025a3d5be17e83c39019d9d78ffb6e6992ca140b18707e65e"
+          }
+        ],
+        "rawSourceHashesVerifiedByVm": false,
+        "selectedPacketHash": "50fd3e96233b4a0386c09729371283c703f9e9ae147cc4bfd667914a8a753518",
+        "trustedAuthorityActivated": false,
+        "currentTradingEligibilityVerified": false,
+        "historicalPITEligible": false
+      },
+      "excludedNonCommon": [
+        {
+          "symbol": "9103",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910322",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9105",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910861",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9110",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911608",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911622",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911868",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "912000",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9136",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        }
+      ],
+      "observedClassificationAccounting": {
+        "total": 1978,
+        "legacySnapshotTotal": 1946,
+        "excludedTdr": 10,
+        "needsEvidence": 2,
+        "notAssessed": 1976,
+        "qualified": 0,
+        "ranked": 0
+      },
+      "sourceAttempts": [
+        {
+          "id": "investanchors-public",
+          "outcome": "metadata_only"
+        },
+        {
+          "id": "nittobo-electronic",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-products",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-production",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "auo-tech",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "threads-partial-surface",
+          "outcome": "read_failed"
+        },
+        {
+          "id": "telegram-investanchors-869",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-881",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-882",
+          "outcome": "item_ready"
+        }
+      ],
+      "controllerRunHash": "f6cb6b37775d7a6bb208c1f85b6d5e064b4978a02752c49024b933f270914e30",
+      "inputCanonicalSymbols": [
+        {
+          "url": "https://t.me/investanchors/869",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/881",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/882",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        }
+      ],
+      "distinctPublishers": 1,
+      "persistedDocuments": 3,
+      "dependencyPrivileges": [
+        {
+          "table": "candidate_research_runs",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        }
+      ],
+      "dependencyPolicies": [
+        {
+          "table": "candidate_research_runs",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        }
+      ],
+      "initialPriorityFailure": "research_priority_official_roster_missing",
+      "unchangedEmptyTables": {
+        "candidate_research_runs": 0,
+        "market_evidence_snapshots": 0,
+        "candidate_detail_snapshots": 0,
+        "candidate_dossier_bundles": 0,
+        "candidate_research_dossiers": 0,
+        "candidate_dossier_submission_receipts": 0,
+        "research_priority_runs_v1": 0,
+        "candidate_issuer_document_domains_v6": 0,
+        "research_deep_jobs_v1": 0,
+        "stocks": 0,
+        "stock_instruments_v3": 0,
+        "stock_sector_assignments_v3": 0
+      },
+      "rosterIngestionFailure": "writer_release_identity_missing",
+      "sourceHeads": 3,
+      "postgresRestartUnchanged": true,
+      "inboxReplayAccepted": 0,
+      "priorityStatus": 409,
+      "priorityFailure": {
+        "ok": false,
+        "error": "research_priority_official_roster_missing"
+      },
+      "failure": "The operation was aborted due to timeout",
+      "completedAt": "2026-10-09T13:11:34.245Z"
+    },
+    "6fcd-2383": {
+      "startedAt": "2026-10-09T13:11:34.765Z",
+      "postgrest": {
+        "version": "PostgREST 16.3",
+        "archiveBytes": 4519976,
+        "archiveSha256": "4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d",
+        "binaryBytes": 20502640,
+        "binarySha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+      },
+      "partialDevelopmentProfile": true,
+      "databaseAdapterInjected": false,
+      "officialAuthorityRowsSeeded": 0,
+      "observedRosterPromoted": false,
+      "modelReserved": false,
+      "productionImported": false,
+      "top20": null,
+      "checks": [
+        "unauthorized_401_zero_write",
+        "inbox_three_industry_only",
+        "anonymous_table_rpc_denied",
+        "ancillary_read_only_empty_authority",
+        "production_writer_not_fabricated",
+        "real_source_heads_cutoff",
+        "real_authority_empty",
+        "restart_dedup",
+        "priority_blocked_restart_fenced"
+      ],
+      "limitations": [
+        "Node test-runner controlled loopback configuration, not production runtime activation",
+        "Partial schema profile does not attest the complete installed migration policy",
+        "No official roster/sector authority has been ingested; Top20 remains blocked"
+      ],
+      "observedRosterMigrationSha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b",
+      "observedPriorityMigrationSha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3",
+      "observedClaimDependencySourceHashes": {
+        "state": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+        "jobs": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+        "dossier": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+        "immutableDefinition": "d2edbeae7c77f25924a3a9c21acb9ad65109cb0f1a6206aad83dff8d88b60985"
+      },
+      "observedClaimMigrationSha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2",
+      "installedDefinitions": [
+        {
+          "file": "supabase_schema.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stocks (",
+          "sourceSha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3",
+          "definitionSha256": "b3d9d87b4dd2cd2570c657f6d9edeca9474409198f1ce2f2d4b143b313d1b1d2"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_entities (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "03c78b435837ecd782b14e36f8f51a7bdbeeefc130cb19d36bf3ff7120292f74"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_raw_documents (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "1ddf2e178a9dcbb5608535eaf32f9f508908ace0a804283f614e02c64338e7da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "6f9cf89764e00a16dd2630f9aaa92be8c26e375c05bb738f9ac4638e8d914c52"
+        },
+        {
+          "file": "migrations/20260906_source_identity_v4.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+          "definitionSha256": "c1d15e7436fef37b0d959e009f50ac67c9588f43d2000f3b82424794bb5a7969"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE authority_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "de0456eee24d4a21f288f00843e1c7ea2bf26c4475e4035cfa976d98f38df541"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE stock_exchange_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "bb7c4a9dcf3cb5356c8dbd6b1e363d7532c19bed93e17528d1c8a0d129c7d73a"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE instrument_type_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "81cb876a7635be9f157396262a638bf6de5831b1e764a9c86a469c070f6b7afb"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE listing_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "03070b2edae9d1f1b2f15514852a6ae61d4b8e980fd7406bb05bedcb1d6d2a78"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE official_roster_provider_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "c85a62f8be9eca5f006ed60d7ee9e366246dc44678e32be2466f1129df37a61d"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE tw_market_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "be7acd6c47b936c20739f01bceec5a206b9cdfaed0cf9250bdb1c5a8883e8792"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE canonical_sector_key_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "e92dfaa281fddd0da3154e2429ebae9553fc96393289986ec30267722c8475b9"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_instruments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "411f053cf5273c207fb1567a391c02986ce5b849128f2d3b47ac1cc85a2c4a3c"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "9c2b0c74ea924ef94f143b37d7de13b57e2c5530eebbbc0911cdaa5b676a5194"
+        },
+        {
+          "file": "migrations/20260831_candidate_shadow_performance.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_runs (",
+          "sourceSha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+          "definitionSha256": "c37f899abd5d57f924a8cd2c1bace068bb2dc5e539ae0809381c7ff6115973da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.market_evidence_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "9f7b07f170febec813a9c67bba8e33338cf3ff5fa35de6e2df2cd9fc14578957"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_detail_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2c2fc7a718d8f0335ca4f718bf7f71ff0d447639910811276c9a965d76981139"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_bundles (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "49bfec32f5a5e712cc1158c391168699cf81876bcfb9dcbec3bcd30f33cb14c4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_dossiers (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2151ab0e8433a794f4bed71fa4fcfea65ab3df045ad5c88b9c2a63912c7d0db0"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_submission_receipts (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "5337c2d9217883181acbc053e205d78cb5d0b54605aca893790a07cc28f452c1"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "3418aa78ecbfaf879f426561e30cb35cd223fdfe5ba8f7d849e6dc36281579d7"
+        },
+        {
+          "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_issuer_document_domains_v6 (",
+          "sourceSha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+          "definitionSha256": "5d66b75c1bff55126ada62aaedcf489128769ef3ec3f1e390c6cf93267812845"
+        },
+        {
+          "file": "migrations/20260929_research_deep_jobs_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_deep_jobs_v1 (",
+          "sourceSha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+          "definitionSha256": "f6b905d282b566dd2d80cd2cf19ec418e35a8951aa04004deecf801ddf9d3eb4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority(",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "a6749bacb864ab7c6c61dd9b6cd2d1bdfcb4b09c40e99489ed8d072d84719e95"
+        },
+        {
+          "file": "migrations/20260906_authority_pagination_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority_page(",
+          "sourceSha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+          "definitionSha256": "e76a34cde20546b651b64713313ea63e784ee93be606c6804f0e2a32b5578598"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "088283446f2f3ded3deca7cc2e8328325abe4490470954219c2954850851d8cf"
+        }
+      ],
+      "developmentProfileSqlSha256": "666264467963b75fec638b685e4f2eae9081635f389c00b5472f2154647b9b39",
+      "readOnlyDependencyTables": [
+        "candidate_research_runs",
+        "market_evidence_snapshots",
+        "candidate_detail_snapshots",
+        "candidate_dossier_bundles",
+        "candidate_research_dossiers",
+        "candidate_dossier_submission_receipts",
+        "research_priority_runs_v1",
+        "candidate_issuer_document_domains_v6",
+        "research_deep_jobs_v1"
+      ],
+      "installedRoutines": [
+        {
+          "name": "candidate_research_stock_authority",
+          "bodySha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "bodySha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "research_source_heads_page_v1",
+          "bodySha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        }
+      ],
+      "classificationEvidence": {
+        "schemaVersion": "stockinsider-observed-official-security-scope-reconciliation-v1",
+        "recordedAt": "2026-10-08T12:23:18.366811+00:00",
+        "counts": {
+          "twseMasterMatched": 1095,
+          "twseOrdinaryResearchCandidates": 1085,
+          "twseInnovationBoard": 31,
+          "twseOrdinaryAdditionalTransferRestrictionCfi": 1,
+          "twseTdrExcludedFromOrdinaryScope": 10,
+          "unchangedObservedTpexOrdinary": 893,
+          "reconciledObservedOrdinaryResearchCohort": 1978,
+          "legacyStrictObservedCohort": 1946
+        },
+        "sourceReferences": [
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=2",
+            "observedAt": "2026-10-08T12:21:15.657943+00:00",
+            "responseBytes": 9063029,
+            "responseSha256": "920828356712b85375e504b4633446ad8af39f6f59eddbb7efc0f47e7ca54311"
+          },
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=4",
+            "observedAt": "2026-10-08T09:04:35.607658+00:00",
+            "responseBytes": 3030198,
+            "responseSha256": "0a719dcffca37de025a3d5be17e83c39019d9d78ffb6e6992ca140b18707e65e"
+          }
+        ],
+        "rawSourceHashesVerifiedByVm": false,
+        "selectedPacketHash": "50fd3e96233b4a0386c09729371283c703f9e9ae147cc4bfd667914a8a753518",
+        "trustedAuthorityActivated": false,
+        "currentTradingEligibilityVerified": false,
+        "historicalPITEligible": false
+      },
+      "excludedNonCommon": [
+        {
+          "symbol": "9103",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910322",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9105",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910861",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9110",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911608",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911622",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911868",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "912000",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9136",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        }
+      ],
+      "observedClassificationAccounting": {
+        "total": 1978,
+        "legacySnapshotTotal": 1946,
+        "excludedTdr": 10,
+        "needsEvidence": 2,
+        "notAssessed": 1976,
+        "qualified": 0,
+        "ranked": 0
+      },
+      "sourceAttempts": [
+        {
+          "id": "investanchors-public",
+          "outcome": "metadata_only"
+        },
+        {
+          "id": "nittobo-electronic",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-products",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-production",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "auo-tech",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "threads-partial-surface",
+          "outcome": "read_failed"
+        },
+        {
+          "id": "telegram-investanchors-869",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-881",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-882",
+          "outcome": "item_ready"
+        }
+      ],
+      "controllerRunHash": "1d55190e02e4333e6fac2b352aecec679fadce13bc232d03c62fbf1c636ae9f9",
+      "inputCanonicalSymbols": [
+        {
+          "url": "https://t.me/investanchors/869",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/881",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/882",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        }
+      ],
+      "distinctPublishers": 1,
+      "persistedDocuments": 3,
+      "dependencyPrivileges": [
+        {
+          "table": "candidate_research_runs",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        }
+      ],
+      "dependencyPolicies": [
+        {
+          "table": "candidate_research_runs",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        }
+      ],
+      "initialPriorityFailure": "research_priority_official_roster_missing",
+      "unchangedEmptyTables": {
+        "candidate_research_runs": 0,
+        "market_evidence_snapshots": 0,
+        "candidate_detail_snapshots": 0,
+        "candidate_dossier_bundles": 0,
+        "candidate_research_dossiers": 0,
+        "candidate_dossier_submission_receipts": 0,
+        "research_priority_runs_v1": 0,
+        "candidate_issuer_document_domains_v6": 0,
+        "research_deep_jobs_v1": 0,
+        "stocks": 0,
+        "stock_instruments_v3": 0,
+        "stock_sector_assignments_v3": 0
+      },
+      "rosterIngestionFailure": "writer_release_identity_missing",
+      "sourceHeads": 3,
+      "postgresRestartUnchanged": true,
+      "inboxReplayAccepted": 0,
+      "priorityStatus": 409,
+      "priorityFailure": {
+        "ok": false,
+        "error": "research_priority_official_roster_missing"
+      },
+      "failure": "The operation was aborted due to timeout",
+      "completedAt": "2026-10-09T13:12:02.599Z"
+    },
+    "31bd-2409": {
+      "startedAt": "2026-10-09T13:14:55.431Z",
+      "postgrest": {
+        "version": "PostgREST 16.3",
+        "archiveBytes": 4519976,
+        "archiveSha256": "4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d",
+        "binaryBytes": 20502640,
+        "binarySha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+      },
+      "partialDevelopmentProfile": true,
+      "databaseAdapterInjected": false,
+      "officialAuthorityRowsSeeded": 0,
+      "observedRosterPromoted": false,
+      "modelReserved": false,
+      "productionImported": false,
+      "top20": null,
+      "checks": [
+        "unauthorized_401_zero_write",
+        "inbox_three_industry_only",
+        "anonymous_table_rpc_denied",
+        "ancillary_read_only_empty_authority",
+        "production_writer_not_fabricated",
+        "real_source_heads_cutoff",
+        "real_authority_empty",
+        "restart_dedup",
+        "priority_blocked_restart_fenced"
+      ],
+      "limitations": [
+        "Node test-runner controlled loopback configuration, not production runtime activation",
+        "Partial schema profile does not attest the complete installed migration policy",
+        "No official roster/sector authority has been ingested; Top20 remains blocked"
+      ],
+      "observedRosterMigrationSha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b",
+      "observedPriorityMigrationSha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3",
+      "observedClaimDependencySourceHashes": {
+        "state": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+        "jobs": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+        "dossier": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+        "immutableDefinition": "d2edbeae7c77f25924a3a9c21acb9ad65109cb0f1a6206aad83dff8d88b60985"
+      },
+      "observedClaimMigrationSha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2",
+      "installedDefinitions": [
+        {
+          "file": "supabase_schema.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stocks (",
+          "sourceSha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3",
+          "definitionSha256": "b3d9d87b4dd2cd2570c657f6d9edeca9474409198f1ce2f2d4b143b313d1b1d2"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_entities (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "03c78b435837ecd782b14e36f8f51a7bdbeeefc130cb19d36bf3ff7120292f74"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_raw_documents (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "1ddf2e178a9dcbb5608535eaf32f9f508908ace0a804283f614e02c64338e7da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "6f9cf89764e00a16dd2630f9aaa92be8c26e375c05bb738f9ac4638e8d914c52"
+        },
+        {
+          "file": "migrations/20260906_source_identity_v4.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+          "definitionSha256": "c1d15e7436fef37b0d959e009f50ac67c9588f43d2000f3b82424794bb5a7969"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE authority_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "de0456eee24d4a21f288f00843e1c7ea2bf26c4475e4035cfa976d98f38df541"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE stock_exchange_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "bb7c4a9dcf3cb5356c8dbd6b1e363d7532c19bed93e17528d1c8a0d129c7d73a"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE instrument_type_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "81cb876a7635be9f157396262a638bf6de5831b1e764a9c86a469c070f6b7afb"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE listing_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "03070b2edae9d1f1b2f15514852a6ae61d4b8e980fd7406bb05bedcb1d6d2a78"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE official_roster_provider_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "c85a62f8be9eca5f006ed60d7ee9e366246dc44678e32be2466f1129df37a61d"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE tw_market_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "be7acd6c47b936c20739f01bceec5a206b9cdfaed0cf9250bdb1c5a8883e8792"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE canonical_sector_key_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "e92dfaa281fddd0da3154e2429ebae9553fc96393289986ec30267722c8475b9"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_instruments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "411f053cf5273c207fb1567a391c02986ce5b849128f2d3b47ac1cc85a2c4a3c"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "9c2b0c74ea924ef94f143b37d7de13b57e2c5530eebbbc0911cdaa5b676a5194"
+        },
+        {
+          "file": "migrations/20260831_candidate_shadow_performance.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_runs (",
+          "sourceSha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+          "definitionSha256": "c37f899abd5d57f924a8cd2c1bace068bb2dc5e539ae0809381c7ff6115973da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.market_evidence_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "9f7b07f170febec813a9c67bba8e33338cf3ff5fa35de6e2df2cd9fc14578957"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_detail_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2c2fc7a718d8f0335ca4f718bf7f71ff0d447639910811276c9a965d76981139"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_bundles (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "49bfec32f5a5e712cc1158c391168699cf81876bcfb9dcbec3bcd30f33cb14c4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_dossiers (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2151ab0e8433a794f4bed71fa4fcfea65ab3df045ad5c88b9c2a63912c7d0db0"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_submission_receipts (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "5337c2d9217883181acbc053e205d78cb5d0b54605aca893790a07cc28f452c1"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "3418aa78ecbfaf879f426561e30cb35cd223fdfe5ba8f7d849e6dc36281579d7"
+        },
+        {
+          "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_issuer_document_domains_v6 (",
+          "sourceSha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+          "definitionSha256": "5d66b75c1bff55126ada62aaedcf489128769ef3ec3f1e390c6cf93267812845"
+        },
+        {
+          "file": "migrations/20260929_research_deep_jobs_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_deep_jobs_v1 (",
+          "sourceSha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+          "definitionSha256": "f6b905d282b566dd2d80cd2cf19ec418e35a8951aa04004deecf801ddf9d3eb4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority(",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "a6749bacb864ab7c6c61dd9b6cd2d1bdfcb4b09c40e99489ed8d072d84719e95"
+        },
+        {
+          "file": "migrations/20260906_authority_pagination_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority_page(",
+          "sourceSha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+          "definitionSha256": "e76a34cde20546b651b64713313ea63e784ee93be606c6804f0e2a32b5578598"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "088283446f2f3ded3deca7cc2e8328325abe4490470954219c2954850851d8cf"
+        }
+      ],
+      "developmentProfileSqlSha256": "666264467963b75fec638b685e4f2eae9081635f389c00b5472f2154647b9b39",
+      "readOnlyDependencyTables": [
+        "candidate_research_runs",
+        "market_evidence_snapshots",
+        "candidate_detail_snapshots",
+        "candidate_dossier_bundles",
+        "candidate_research_dossiers",
+        "candidate_dossier_submission_receipts",
+        "research_priority_runs_v1",
+        "candidate_issuer_document_domains_v6",
+        "research_deep_jobs_v1"
+      ],
+      "installedRoutines": [
+        {
+          "name": "candidate_research_stock_authority",
+          "bodySha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "bodySha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "research_source_heads_page_v1",
+          "bodySha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        }
+      ],
+      "classificationEvidence": {
+        "schemaVersion": "stockinsider-observed-official-security-scope-reconciliation-v1",
+        "recordedAt": "2026-10-08T12:23:18.366811+00:00",
+        "counts": {
+          "twseMasterMatched": 1095,
+          "twseOrdinaryResearchCandidates": 1085,
+          "twseInnovationBoard": 31,
+          "twseOrdinaryAdditionalTransferRestrictionCfi": 1,
+          "twseTdrExcludedFromOrdinaryScope": 10,
+          "unchangedObservedTpexOrdinary": 893,
+          "reconciledObservedOrdinaryResearchCohort": 1978,
+          "legacyStrictObservedCohort": 1946
+        },
+        "sourceReferences": [
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=2",
+            "observedAt": "2026-10-08T12:21:15.657943+00:00",
+            "responseBytes": 9063029,
+            "responseSha256": "920828356712b85375e504b4633446ad8af39f6f59eddbb7efc0f47e7ca54311"
+          },
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=4",
+            "observedAt": "2026-10-08T09:04:35.607658+00:00",
+            "responseBytes": 3030198,
+            "responseSha256": "0a719dcffca37de025a3d5be17e83c39019d9d78ffb6e6992ca140b18707e65e"
+          }
+        ],
+        "rawSourceHashesVerifiedByVm": false,
+        "selectedPacketHash": "50fd3e96233b4a0386c09729371283c703f9e9ae147cc4bfd667914a8a753518",
+        "trustedAuthorityActivated": false,
+        "currentTradingEligibilityVerified": false,
+        "historicalPITEligible": false
+      },
+      "excludedNonCommon": [
+        {
+          "symbol": "9103",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910322",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9105",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910861",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9110",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911608",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911622",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911868",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "912000",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9136",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        }
+      ],
+      "observedClassificationAccounting": {
+        "total": 1978,
+        "legacySnapshotTotal": 1946,
+        "excludedTdr": 10,
+        "needsEvidence": 2,
+        "notAssessed": 1976,
+        "qualified": 0,
+        "ranked": 0
+      },
+      "sourceAttempts": [
+        {
+          "id": "investanchors-public",
+          "outcome": "metadata_only"
+        },
+        {
+          "id": "nittobo-electronic",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-products",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-production",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "auo-tech",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "threads-partial-surface",
+          "outcome": "read_failed"
+        },
+        {
+          "id": "telegram-investanchors-869",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-881",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-882",
+          "outcome": "item_ready"
+        }
+      ],
+      "controllerRunHash": "7c78bd70c4fb050536013d85b10c6e365ca338e6836bfece499cfe6efb6f491b",
+      "inputCanonicalSymbols": [
+        {
+          "url": "https://t.me/investanchors/869",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/881",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/882",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        }
+      ],
+      "distinctPublishers": 1,
+      "persistedDocuments": 3,
+      "dependencyPrivileges": [
+        {
+          "table": "candidate_research_runs",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        }
+      ],
+      "dependencyPolicies": [
+        {
+          "table": "candidate_research_runs",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        }
+      ],
+      "initialPriorityFailure": "research_priority_official_roster_missing",
+      "unchangedEmptyTables": {
+        "candidate_research_runs": 0,
+        "market_evidence_snapshots": 0,
+        "candidate_detail_snapshots": 0,
+        "candidate_dossier_bundles": 0,
+        "candidate_research_dossiers": 0,
+        "candidate_dossier_submission_receipts": 0,
+        "research_priority_runs_v1": 0,
+        "candidate_issuer_document_domains_v6": 0,
+        "research_deep_jobs_v1": 0,
+        "stocks": 0,
+        "stock_instruments_v3": 0,
+        "stock_sector_assignments_v3": 0
+      },
+      "rosterIngestionFailure": "writer_release_identity_missing",
+      "sourceHeads": 3,
+      "postgresRestartUnchanged": true,
+      "inboxReplayAccepted": 0,
+      "priorityStatus": 409,
+      "priorityFailure": {
+        "ok": false,
+        "error": "research_priority_official_roster_missing"
+      },
+      "authorPacketReadiness": [
+        {
+          "name": "prepare_research_input_v2",
+          "attempt": 1,
+          "status": 404,
+          "body": {
+            "code": "PGRST202",
+            "details": "Searched for the function public.prepare_research_input_v2 with parameter p_request or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.",
+            "hint": null,
+            "message": "Could not find the function public.prepare_research_input_v2(p_request) in the schema cache"
+          },
+          "elapsedMs": 6.482313000000431
+        },
+        {
+          "name": "prepare_research_input_v2",
+          "attempt": 2,
+          "status": 400,
+          "body": {
+            "code": "P0001",
+            "details": null,
+            "hint": null,
+            "message": "input_preparation_shape"
+          },
+          "elapsedMs": 166.14357999999993
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "attempt": 1,
+          "status": 503,
+          "body": {
+            "code": "57P01",
+            "details": null,
+            "hint": null,
+            "message": "terminating connection due to administrator command"
+          },
+          "elapsedMs": 4.118094000001292
+        }
+      ],
+      "completeInputHttp": {
+        "symbol": "2409",
+        "revisionId": "ee4a012d-1ef7-4b60-920e-0d0b6d03dc8d",
+        "inputHash": "08fcb23fa61dc04dc50bf468532def885fe19f2d99ada1220068fc574c232130",
+        "charge": 166395,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "authorPacketHttp": {
+        "symbol": "2409",
+        "packetHash": "768c047244809ecb51399599b7f9d8dc6557a2fd06ba14008be9788b669a5714",
+        "packetBytes": 130657,
+        "sourceCount": 1,
+        "sourceSealReceivedAt": "2026-10-09T13:15:13.049738+00:00",
+        "dbSealReceivedAt": "2026-10-09T13:15:13.049738+00:00",
+        "nodeReadAt": "2026-10-09T13:15:16.006Z",
+        "pgReadAt": "2026-10-09 13:15:16.014306+00",
+        "writingWindow": {
+          "assignedAt": "2026-10-09T13:15:15.228314+00:00",
+          "originalJobDeadline": "2026-10-09T13:45:12.063426+00:00",
+          "originalReservationDeadline": "2026-10-09T13:45:12.063426+00:00"
+        },
+        "syntheticSourceJobCredentials": true,
+        "actualFinancialRelayProjection": true,
+        "modelDispatched": false,
+        "researchQualified": false,
+        "stateAuditBefore": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 168982,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "2509ad1361c34a886708d2988176394f7344f576f21a82fae9f1fb6142181194"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "83b2126ccbd9fa27139f3b9aa88c165fa5dbc5c850b0ca16c2b642ff9ea9e309"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "3f2da29b73ccfeecf83e303631decccbf3bc3bd18ea87b97aea5afe5faddd931"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "9e8fca956adf5d753b8c60319417a6e28956b2a6bb2972a4f2f48afb5b20e08a"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "48c94f5b959aec5bc276c18516904a91eb29f738e88453a94586fa0e34b8be16"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "9bc772a337cd37a7f8f8c6f75cec88d9ae865eba70be19a2ccab5b8f8e2afea4"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "cdbda85d499231a947cc6f86dba98427c3541d589e9f439a93a372d0664bbd3b"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "01bdf5128c48fc9d9c57cfb0946cdad382e6bc30cc21fbcb50cd6877665034c5"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "stateAuditAfter": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 168982,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "2509ad1361c34a886708d2988176394f7344f576f21a82fae9f1fb6142181194"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "83b2126ccbd9fa27139f3b9aa88c165fa5dbc5c850b0ca16c2b642ff9ea9e309"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "3f2da29b73ccfeecf83e303631decccbf3bc3bd18ea87b97aea5afe5faddd931"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "9e8fca956adf5d753b8c60319417a6e28956b2a6bb2972a4f2f48afb5b20e08a"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "48c94f5b959aec5bc276c18516904a91eb29f738e88453a94586fa0e34b8be16"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "9bc772a337cd37a7f8f8c6f75cec88d9ae865eba70be19a2ccab5b8f8e2afea4"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "cdbda85d499231a947cc6f86dba98427c3541d589e9f439a93a372d0664bbd3b"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "01bdf5128c48fc9d9c57cfb0946cdad382e6bc30cc21fbcb50cd6877665034c5"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      "authorPacketWithdrawal": {
+        "before": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 168982,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "2509ad1361c34a886708d2988176394f7344f576f21a82fae9f1fb6142181194"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "83b2126ccbd9fa27139f3b9aa88c165fa5dbc5c850b0ca16c2b642ff9ea9e309"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "3f2da29b73ccfeecf83e303631decccbf3bc3bd18ea87b97aea5afe5faddd931"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "9e8fca956adf5d753b8c60319417a6e28956b2a6bb2972a4f2f48afb5b20e08a"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "48c94f5b959aec5bc276c18516904a91eb29f738e88453a94586fa0e34b8be16"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "9bc772a337cd37a7f8f8c6f75cec88d9ae865eba70be19a2ccab5b8f8e2afea4"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "cdbda85d499231a947cc6f86dba98427c3541d589e9f439a93a372d0664bbd3b"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "01bdf5128c48fc9d9c57cfb0946cdad382e6bc30cc21fbcb50cd6877665034c5"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "afterWithdrawal": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 168982,
+          "source_raw_documents": {
+            "count": 5,
+            "rowHash": "800fa176af9cde15f579f58fc97ddb70c89af3c5aaacc731c58a95ed0ca0f396"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "83b2126ccbd9fa27139f3b9aa88c165fa5dbc5c850b0ca16c2b642ff9ea9e309"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "3f2da29b73ccfeecf83e303631decccbf3bc3bd18ea87b97aea5afe5faddd931"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "9e8fca956adf5d753b8c60319417a6e28956b2a6bb2972a4f2f48afb5b20e08a"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "48c94f5b959aec5bc276c18516904a91eb29f738e88453a94586fa0e34b8be16"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "9bc772a337cd37a7f8f8c6f75cec88d9ae865eba70be19a2ccab5b8f8e2afea4"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "cdbda85d499231a947cc6f86dba98427c3541d589e9f439a93a372d0664bbd3b"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "01bdf5128c48fc9d9c57cfb0946cdad382e6bc30cc21fbcb50cd6877665034c5"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 1,
+            "rowHash": "b06dd2ad235e8271499d668d1944a296ce9cc5beb1a57be66e8851fce4e26a21"
+          }
+        },
+        "afterRead": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 168982,
+          "source_raw_documents": {
+            "count": 5,
+            "rowHash": "800fa176af9cde15f579f58fc97ddb70c89af3c5aaacc731c58a95ed0ca0f396"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "83b2126ccbd9fa27139f3b9aa88c165fa5dbc5c850b0ca16c2b642ff9ea9e309"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "3f2da29b73ccfeecf83e303631decccbf3bc3bd18ea87b97aea5afe5faddd931"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "9e8fca956adf5d753b8c60319417a6e28956b2a6bb2972a4f2f48afb5b20e08a"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "48c94f5b959aec5bc276c18516904a91eb29f738e88453a94586fa0e34b8be16"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "9bc772a337cd37a7f8f8c6f75cec88d9ae865eba70be19a2ccab5b8f8e2afea4"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "cdbda85d499231a947cc6f86dba98427c3541d589e9f439a93a372d0664bbd3b"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "01bdf5128c48fc9d9c57cfb0946cdad382e6bc30cc21fbcb50cd6877665034c5"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 1,
+            "rowHash": "b06dd2ad235e8271499d668d1944a296ce9cc5beb1a57be66e8851fce4e26a21"
+          }
+        },
+        "originalSourceUnchanged": true,
+        "acceptedNewRevision": 1,
+        "packetHttpStatus": 409
+      },
+      "passed": true,
+      "completedAt": "2026-10-09T13:15:18.226Z"
+    },
+    "31bd-2383": {
+      "startedAt": "2026-10-09T13:15:18.522Z",
+      "postgrest": {
+        "version": "PostgREST 16.3",
+        "archiveBytes": 4519976,
+        "archiveSha256": "4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d",
+        "binaryBytes": 20502640,
+        "binarySha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+      },
+      "partialDevelopmentProfile": true,
+      "databaseAdapterInjected": false,
+      "officialAuthorityRowsSeeded": 0,
+      "observedRosterPromoted": false,
+      "modelReserved": false,
+      "productionImported": false,
+      "top20": null,
+      "checks": [
+        "unauthorized_401_zero_write",
+        "inbox_three_industry_only",
+        "anonymous_table_rpc_denied",
+        "ancillary_read_only_empty_authority",
+        "production_writer_not_fabricated",
+        "real_source_heads_cutoff",
+        "real_authority_empty",
+        "restart_dedup",
+        "priority_blocked_restart_fenced"
+      ],
+      "limitations": [
+        "Node test-runner controlled loopback configuration, not production runtime activation",
+        "Partial schema profile does not attest the complete installed migration policy",
+        "No official roster/sector authority has been ingested; Top20 remains blocked"
+      ],
+      "observedRosterMigrationSha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b",
+      "observedPriorityMigrationSha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3",
+      "observedClaimDependencySourceHashes": {
+        "state": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+        "jobs": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+        "dossier": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+        "immutableDefinition": "d2edbeae7c77f25924a3a9c21acb9ad65109cb0f1a6206aad83dff8d88b60985"
+      },
+      "observedClaimMigrationSha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2",
+      "installedDefinitions": [
+        {
+          "file": "supabase_schema.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stocks (",
+          "sourceSha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3",
+          "definitionSha256": "b3d9d87b4dd2cd2570c657f6d9edeca9474409198f1ce2f2d4b143b313d1b1d2"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_entities (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "03c78b435837ecd782b14e36f8f51a7bdbeeefc130cb19d36bf3ff7120292f74"
+        },
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS source_raw_documents (",
+          "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+          "definitionSha256": "1ddf2e178a9dcbb5608535eaf32f9f508908ace0a804283f614e02c64338e7da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "6f9cf89764e00a16dd2630f9aaa92be8c26e375c05bb738f9ac4638e8d914c52"
+        },
+        {
+          "file": "migrations/20260906_source_identity_v4.sql",
+          "marker": "ALTER TABLE public.source_raw_documents",
+          "sourceSha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+          "definitionSha256": "c1d15e7436fef37b0d959e009f50ac67c9588f43d2000f3b82424794bb5a7969"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE authority_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "de0456eee24d4a21f288f00843e1c7ea2bf26c4475e4035cfa976d98f38df541"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE stock_exchange_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "bb7c4a9dcf3cb5356c8dbd6b1e363d7532c19bed93e17528d1c8a0d129c7d73a"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE instrument_type_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "81cb876a7635be9f157396262a638bf6de5831b1e764a9c86a469c070f6b7afb"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE listing_status_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "03070b2edae9d1f1b2f15514852a6ae61d4b8e980fd7406bb05bedcb1d6d2a78"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE official_roster_provider_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "c85a62f8be9eca5f006ed60d7ee9e366246dc44678e32be2466f1129df37a61d"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE tw_market_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "be7acd6c47b936c20739f01bceec5a206b9cdfaed0cf9250bdb1c5a8883e8792"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TYPE canonical_sector_key_v3 AS ENUM",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "e92dfaa281fddd0da3154e2429ebae9553fc96393289986ec30267722c8475b9"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_instruments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "411f053cf5273c207fb1567a391c02986ce5b849128f2d3b47ac1cc85a2c4a3c"
+        },
+        {
+          "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (",
+          "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+          "definitionSha256": "9c2b0c74ea924ef94f143b37d7de13b57e2c5530eebbbc0911cdaa5b676a5194"
+        },
+        {
+          "file": "migrations/20260831_candidate_shadow_performance.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_runs (",
+          "sourceSha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+          "definitionSha256": "c37f899abd5d57f924a8cd2c1bace068bb2dc5e539ae0809381c7ff6115973da"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.market_evidence_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "9f7b07f170febec813a9c67bba8e33338cf3ff5fa35de6e2df2cd9fc14578957"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_detail_snapshots (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2c2fc7a718d8f0335ca4f718bf7f71ff0d447639910811276c9a965d76981139"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_bundles (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "49bfec32f5a5e712cc1158c391168699cf81876bcfb9dcbec3bcd30f33cb14c4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_dossiers (",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "2151ab0e8433a794f4bed71fa4fcfea65ab3df045ad5c88b9c2a63912c7d0db0"
+        },
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_submission_receipts (",
+          "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+          "definitionSha256": "5337c2d9217883181acbc053e205d78cb5d0b54605aca893790a07cc28f452c1"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "3418aa78ecbfaf879f426561e30cb35cd223fdfe5ba8f7d849e6dc36281579d7"
+        },
+        {
+          "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.candidate_issuer_document_domains_v6 (",
+          "sourceSha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+          "definitionSha256": "5d66b75c1bff55126ada62aaedcf489128769ef3ec3f1e390c6cf93267812845"
+        },
+        {
+          "file": "migrations/20260929_research_deep_jobs_v1.sql",
+          "marker": "CREATE TABLE IF NOT EXISTS public.research_deep_jobs_v1 (",
+          "sourceSha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+          "definitionSha256": "f6b905d282b566dd2d80cd2cf19ec418e35a8951aa04004deecf801ddf9d3eb4"
+        },
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority(",
+          "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+          "definitionSha256": "a6749bacb864ab7c6c61dd9b6cd2d1bdfcb4b09c40e99489ed8d072d84719e95"
+        },
+        {
+          "file": "migrations/20260906_authority_pagination_v2.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority_page(",
+          "sourceSha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+          "definitionSha256": "e76a34cde20546b651b64713313ea63e784ee93be606c6804f0e2a32b5578598"
+        },
+        {
+          "file": "migrations/20260929_research_agent_state_v1.sql",
+          "marker": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(",
+          "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+          "definitionSha256": "088283446f2f3ded3deca7cc2e8328325abe4490470954219c2954850851d8cf"
+        }
+      ],
+      "developmentProfileSqlSha256": "666264467963b75fec638b685e4f2eae9081635f389c00b5472f2154647b9b39",
+      "readOnlyDependencyTables": [
+        "candidate_research_runs",
+        "market_evidence_snapshots",
+        "candidate_detail_snapshots",
+        "candidate_dossier_bundles",
+        "candidate_research_dossiers",
+        "candidate_dossier_submission_receipts",
+        "research_priority_runs_v1",
+        "candidate_issuer_document_domains_v6",
+        "research_deep_jobs_v1"
+      ],
+      "installedRoutines": [
+        {
+          "name": "candidate_research_stock_authority",
+          "bodySha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "bodySha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        },
+        {
+          "name": "research_source_heads_page_v1",
+          "bodySha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+          "securityDefiner": true,
+          "searchPath": [
+            "search_path=public, pg_temp"
+          ],
+          "serviceExecute": true,
+          "anonExecute": false
+        }
+      ],
+      "classificationEvidence": {
+        "schemaVersion": "stockinsider-observed-official-security-scope-reconciliation-v1",
+        "recordedAt": "2026-10-08T12:23:18.366811+00:00",
+        "counts": {
+          "twseMasterMatched": 1095,
+          "twseOrdinaryResearchCandidates": 1085,
+          "twseInnovationBoard": 31,
+          "twseOrdinaryAdditionalTransferRestrictionCfi": 1,
+          "twseTdrExcludedFromOrdinaryScope": 10,
+          "unchangedObservedTpexOrdinary": 893,
+          "reconciledObservedOrdinaryResearchCohort": 1978,
+          "legacyStrictObservedCohort": 1946
+        },
+        "sourceReferences": [
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=2",
+            "observedAt": "2026-10-08T12:21:15.657943+00:00",
+            "responseBytes": 9063029,
+            "responseSha256": "920828356712b85375e504b4633446ad8af39f6f59eddbb7efc0f47e7ca54311"
+          },
+          {
+            "url": "https://isin.twse.com.tw/isin/C_public.jsp?strMode=4",
+            "observedAt": "2026-10-08T09:04:35.607658+00:00",
+            "responseBytes": 3030198,
+            "responseSha256": "0a719dcffca37de025a3d5be17e83c39019d9d78ffb6e6992ca140b18707e65e"
+          }
+        ],
+        "rawSourceHashesVerifiedByVm": false,
+        "selectedPacketHash": "50fd3e96233b4a0386c09729371283c703f9e9ae147cc4bfd667914a8a753518",
+        "trustedAuthorityActivated": false,
+        "currentTradingEligibilityVerified": false,
+        "historicalPITEligible": false
+      },
+      "excludedNonCommon": [
+        {
+          "symbol": "9103",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910322",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9105",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "910861",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9110",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911608",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911622",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "911868",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "912000",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        },
+        {
+          "symbol": "9136",
+          "cfi": "EDSDDR",
+          "sourceSection": "臺灣存託憑證(TDR)",
+          "reason": "non_ordinary_tdr"
+        }
+      ],
+      "observedClassificationAccounting": {
+        "total": 1978,
+        "legacySnapshotTotal": 1946,
+        "excludedTdr": 10,
+        "needsEvidence": 2,
+        "notAssessed": 1976,
+        "qualified": 0,
+        "ranked": 0
+      },
+      "sourceAttempts": [
+        {
+          "id": "investanchors-public",
+          "outcome": "metadata_only"
+        },
+        {
+          "id": "nittobo-electronic",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-products",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "emc-production",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "auo-tech",
+          "outcome": "pending_publication_precision"
+        },
+        {
+          "id": "threads-partial-surface",
+          "outcome": "read_failed"
+        },
+        {
+          "id": "telegram-investanchors-869",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-881",
+          "outcome": "item_ready"
+        },
+        {
+          "id": "telegram-investanchors-882",
+          "outcome": "item_ready"
+        }
+      ],
+      "controllerRunHash": "b17bac702f057eab1dd5d7a497610eba682dbb7af9337989a3c706740361df5a",
+      "inputCanonicalSymbols": [
+        {
+          "url": "https://t.me/investanchors/869",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/881",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        },
+        {
+          "url": "https://t.me/investanchors/882",
+          "symbols": [],
+          "subjectScope": "industry_context"
+        }
+      ],
+      "distinctPublishers": 1,
+      "persistedDocuments": 3,
+      "dependencyPrivileges": [
+        {
+          "table": "candidate_research_runs",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "serviceSelect": true,
+          "serviceInsert": false,
+          "serviceUpdate": false,
+          "serviceDelete": false,
+          "anonSelect": false,
+          "authenticatedSelect": false
+        }
+      ],
+      "dependencyPolicies": [
+        {
+          "table": "candidate_research_runs",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "market_evidence_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_detail_snapshots",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_bundles",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_research_dossiers",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_dossier_submission_receipts",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_priority_runs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "candidate_issuer_document_domains_v6",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        },
+        {
+          "table": "research_deep_jobs_v1",
+          "rlsEnabled": true,
+          "command": "SELECT",
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "withCheck": null
+        }
+      ],
+      "initialPriorityFailure": "research_priority_official_roster_missing",
+      "unchangedEmptyTables": {
+        "candidate_research_runs": 0,
+        "market_evidence_snapshots": 0,
+        "candidate_detail_snapshots": 0,
+        "candidate_dossier_bundles": 0,
+        "candidate_research_dossiers": 0,
+        "candidate_dossier_submission_receipts": 0,
+        "research_priority_runs_v1": 0,
+        "candidate_issuer_document_domains_v6": 0,
+        "research_deep_jobs_v1": 0,
+        "stocks": 0,
+        "stock_instruments_v3": 0,
+        "stock_sector_assignments_v3": 0
+      },
+      "rosterIngestionFailure": "writer_release_identity_missing",
+      "sourceHeads": 3,
+      "postgresRestartUnchanged": true,
+      "inboxReplayAccepted": 0,
+      "priorityStatus": 409,
+      "priorityFailure": {
+        "ok": false,
+        "error": "research_priority_official_roster_missing"
+      },
+      "authorPacketReadiness": [
+        {
+          "name": "prepare_research_input_v2",
+          "attempt": 1,
+          "status": 404,
+          "body": {
+            "code": "PGRST202",
+            "details": "Searched for the function public.prepare_research_input_v2 with parameter p_request or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.",
+            "hint": null,
+            "message": "Could not find the function public.prepare_research_input_v2(p_request) in the schema cache"
+          },
+          "elapsedMs": 7.654151000002457
+        },
+        {
+          "name": "prepare_research_input_v2",
+          "attempt": 2,
+          "status": 400,
+          "body": {
+            "code": "P0001",
+            "details": null,
+            "hint": null,
+            "message": "input_preparation_shape"
+          },
+          "elapsedMs": 125.51389799999743
+        },
+        {
+          "name": "candidate_research_stock_authority_page",
+          "attempt": 1,
+          "status": 503,
+          "body": {
+            "code": "57P01",
+            "details": null,
+            "hint": null,
+            "message": "terminating connection due to administrator command"
+          },
+          "elapsedMs": 4.523176000002422
+        }
+      ],
+      "completeInputHttp": {
+        "symbol": "2383",
+        "revisionId": "01cdca36-8b4f-4aee-a8c8-195fde6c1db0",
+        "inputHash": "7cd672230354ff876f51466210bda40808951f475166cdb089976e4f90a13540",
+        "charge": 99112,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "authorPacketHttp": {
+        "symbol": "2383",
+        "packetHash": "3c33595dcfc598b7de18cc39a9f1023851aecacb68ca18296c5fe618167d6dcc",
+        "packetBytes": 78683,
+        "sourceCount": 1,
+        "sourceSealReceivedAt": "2026-10-09T13:15:35.741802+00:00",
+        "dbSealReceivedAt": "2026-10-09T13:15:35.741802+00:00",
+        "nodeReadAt": "2026-10-09T13:15:38.641Z",
+        "pgReadAt": "2026-10-09 13:15:38.653524+00",
+        "writingWindow": {
+          "assignedAt": "2026-10-09T13:15:37.839462+00:00",
+          "originalJobDeadline": "2026-10-09T13:45:34.884359+00:00",
+          "originalReservationDeadline": "2026-10-09T13:45:34.884359+00:00"
+        },
+        "syntheticSourceJobCredentials": true,
+        "actualFinancialRelayProjection": true,
+        "modelDispatched": false,
+        "researchQualified": false,
+        "stateAuditBefore": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 101703,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "09d7f7d460bc5185b1efefd4e452a51509d3cc48baf219c150b84d0aa561df80"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "011579c82b9239be02bedf19fddce3285e56f7526b06727bb8001f3acb62e335"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "eb3fb76d5916637c7bbea5d0d56d0678b590257c72cf40ebd0bd303bd1ec1035"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "3dccce4fe6be359a7307dc0432430f9282878e8cfe9705c9e1f30ac7e3200f19"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "f94c20f3f2e1e628941549ddb7148ee0ae66728539959f7d1ff22e97288f9b02"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "855ba91a749cc4dfae6a4d4fd60658fa2a230e8c62d3e12201ad186719bf717e"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "64e2b0a242e1bf6d75a3ab1a2050217ad65145a1767e2050a0cd0d011dcbebf8"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "1fba8eb792a82fb0484813efe5c3b2f9526fe42374dabe0d8aa15b449343abc4"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "stateAuditAfter": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 101703,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "09d7f7d460bc5185b1efefd4e452a51509d3cc48baf219c150b84d0aa561df80"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "011579c82b9239be02bedf19fddce3285e56f7526b06727bb8001f3acb62e335"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "eb3fb76d5916637c7bbea5d0d56d0678b590257c72cf40ebd0bd303bd1ec1035"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "3dccce4fe6be359a7307dc0432430f9282878e8cfe9705c9e1f30ac7e3200f19"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "f94c20f3f2e1e628941549ddb7148ee0ae66728539959f7d1ff22e97288f9b02"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "855ba91a749cc4dfae6a4d4fd60658fa2a230e8c62d3e12201ad186719bf717e"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "64e2b0a242e1bf6d75a3ab1a2050217ad65145a1767e2050a0cd0d011dcbebf8"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "1fba8eb792a82fb0484813efe5c3b2f9526fe42374dabe0d8aa15b449343abc4"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      "authorPacketWithdrawal": {
+        "before": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 101703,
+          "source_raw_documents": {
+            "count": 4,
+            "rowHash": "09d7f7d460bc5185b1efefd4e452a51509d3cc48baf219c150b84d0aa561df80"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "011579c82b9239be02bedf19fddce3285e56f7526b06727bb8001f3acb62e335"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "eb3fb76d5916637c7bbea5d0d56d0678b590257c72cf40ebd0bd303bd1ec1035"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "3dccce4fe6be359a7307dc0432430f9282878e8cfe9705c9e1f30ac7e3200f19"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "f94c20f3f2e1e628941549ddb7148ee0ae66728539959f7d1ff22e97288f9b02"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "855ba91a749cc4dfae6a4d4fd60658fa2a230e8c62d3e12201ad186719bf717e"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "64e2b0a242e1bf6d75a3ab1a2050217ad65145a1767e2050a0cd0d011dcbebf8"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "1fba8eb792a82fb0484813efe5c3b2f9526fe42374dabe0d8aa15b449343abc4"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "afterWithdrawal": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 101703,
+          "source_raw_documents": {
+            "count": 5,
+            "rowHash": "ea845880e81ba8bab9f5aad19aef5cbfc3d8585b48d2e216eaa6ba8be34fcefd"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "011579c82b9239be02bedf19fddce3285e56f7526b06727bb8001f3acb62e335"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "eb3fb76d5916637c7bbea5d0d56d0678b590257c72cf40ebd0bd303bd1ec1035"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "3dccce4fe6be359a7307dc0432430f9282878e8cfe9705c9e1f30ac7e3200f19"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "f94c20f3f2e1e628941549ddb7148ee0ae66728539959f7d1ff22e97288f9b02"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "855ba91a749cc4dfae6a4d4fd60658fa2a230e8c62d3e12201ad186719bf717e"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "64e2b0a242e1bf6d75a3ab1a2050217ad65145a1767e2050a0cd0d011dcbebf8"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "1fba8eb792a82fb0484813efe5c3b2f9526fe42374dabe0d8aa15b449343abc4"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 1,
+            "rowHash": "c3b7c00fd9d0d45e7c10d7deb1adc33517719911601e32aeb12bd725171a9033"
+          }
+        },
+        "afterRead": {
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "logicalCharge": 101703,
+          "source_raw_documents": {
+            "count": 5,
+            "rowHash": "ea845880e81ba8bab9f5aad19aef5cbfc3d8585b48d2e216eaa6ba8be34fcefd"
+          },
+          "stock_instruments_v3": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_deep_jobs_v1": {
+            "count": 1,
+            "rowHash": "011579c82b9239be02bedf19fddce3285e56f7526b06727bb8001f3acb62e335"
+          },
+          "research_source_seals_v2": {
+            "count": 1,
+            "rowHash": "eb3fb76d5916637c7bbea5d0d56d0678b590257c72cf40ebd0bd303bd1ec1035"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 1,
+            "rowHash": "3dccce4fe6be359a7307dc0432430f9282878e8cfe9705c9e1f30ac7e3200f19"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_author_assignments_v2": {
+            "count": 1,
+            "rowHash": "f94c20f3f2e1e628941549ddb7148ee0ae66728539959f7d1ff22e97288f9b02"
+          },
+          "research_input_preparations_v2": {
+            "count": 1,
+            "rowHash": "855ba91a749cc4dfae6a4d4fd60658fa2a230e8c62d3e12201ad186719bf717e"
+          },
+          "research_model_reservations_v1": {
+            "count": 1,
+            "rowHash": "64e2b0a242e1bf6d75a3ab1a2050217ad65145a1767e2050a0cd0d011dcbebf8"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "1fba8eb792a82fb0484813efe5c3b2f9526fe42374dabe0d8aa15b449343abc4"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 1,
+            "rowHash": "c3b7c00fd9d0d45e7c10d7deb1adc33517719911601e32aeb12bd725171a9033"
+          }
+        },
+        "originalSourceUnchanged": true,
+        "acceptedNewRevision": 1,
+        "packetHttpStatus": 409
+      },
+      "passed": true,
+      "completedAt": "2026-10-09T13:15:41.023Z"
+    }
+  },
+  "capacity": {
+    "initialDiskAvailableBytes": 15128412160,
+    "minimumReserveBytes": 8589934592,
+    "memoryCgroupLimitBytes": 34359738368,
+    "cgroupLimitFreshReadDuringOriginalRun": true,
+    "peakSampledOwnedAggregateRssBytes": 649330688,
+    "currentAvailableBytes": 15120449536,
+    "oneHeavyAtATime": true,
+    "filesystemTotalBytes": 33770192896
+  },
+  "cleanup": [
+    {
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/nsdiag/http-2409/cluster",
+      "stoppedPidFileAbsent": true,
+      "ownedProcesses": [],
+      "bytesRemoved": 46170112,
+      "availableBeforeBytes": 14900297728,
+      "availableAfterBytes": 14946467840,
+      "logsSavedBeforeRemoval": true
+    },
+    {
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/nsdiag/http-2383/cluster",
+      "stoppedPidFileAbsent": true,
+      "ownedProcesses": [],
+      "bytesRemoved": 46129152,
+      "availableBeforeBytes": 14946467840,
+      "availableAfterBytes": 14992596992,
+      "logsSavedBeforeRemoval": true
+    },
+    {
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/nsdiag/successor/http-2409/cluster",
+      "stoppedPidFileAbsent": true,
+      "ownedProcesses": [],
+      "bytesRemoved": 63930368,
+      "availableBeforeBytes": 14992596992,
+      "availableAfterBytes": 15056527360,
+      "logsSavedBeforeRemoval": true
+    },
+    {
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/nsdiag/successor/http-2383/cluster",
+      "stoppedPidFileAbsent": true,
+      "ownedProcesses": [],
+      "bytesRemoved": 63922176,
+      "availableBeforeBytes": 15056527360,
+      "availableAfterBytes": 15120449536,
+      "logsSavedBeforeRemoval": true
+    }
+  ],
+  "ownedProcessesAfter": [],
+  "rawEvidence": [
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/ancestor-controls.json",
+      "bytes": 2349,
+      "sha256": "5837cb9346e0c22f73f2ad0c2f0031648eb333d417d114631a7780f1037fe728"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/build-precheck.json",
+      "bytes": 292,
+      "sha256": "48752cb8bb492f5bbfcea3fa9aabef7864028a45efbfd90e32de6bcce0c39cf2"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/controls.json",
+      "bytes": 640,
+      "sha256": "5a4a78342cd6caa64739fed8ceefea4b17ba254374c794efc6cf3689c9737445"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/controls.log",
+      "bytes": 829,
+      "sha256": "0dc0d0173e0eaffeaaf2b3d810cca7c27d82d6a7632af6548db2ad085db35cc0"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/controls.time",
+      "bytes": 844,
+      "sha256": "44ede10e5ed177fb994f2987a2275bde0ce280890621c70adca87412b785acd5"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/event-request-correlation.json",
+      "bytes": 23488,
+      "sha256": "a6d9095a1e3f02a660de6fb2916e73ba5836551474646b35e36464ec75b4c784"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2383/acceptance-receipt.json",
+      "bytes": 21469,
+      "sha256": "978c0f1585fd7e680d60906fdf4740d28a2a4ef3f729032351d98bcee68ddad8"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2383/assessments.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2383/controller.json",
+      "bytes": 33209,
+      "sha256": "1a7a7c134976995b3d020f98401cd15f3f84c89f959b2dca20be5e3a4fdad69e"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2383/journal/attempt.json",
+      "bytes": 247,
+      "sha256": "822efdacd56f1b86837e83bfd5ace4345b6c36f89725ff01ff802051cc7f81d5"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2383/next.log",
+      "bytes": 274,
+      "sha256": "7bc6020b8067806eafaca1a1aae287ba6d235bf5c86acb14fc49b653d618a161"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2383/observed-classification-status.json",
+      "bytes": 616215,
+      "sha256": "a3249fb40562540b60fb28865902ed4fe57d3efde6555602d885332374588ecc"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2383/pg-test-clock.rc",
+      "bytes": 3,
+      "sha256": "bfccdd6c5c2faa710a992013eb60ebc3159d693e638b8215aaf74602a09fd058"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2383/postgres.log",
+      "bytes": 11498,
+      "sha256": "129949a5606bd0e2ca6e2dff04f17fa12d3d068a6248fd3446b5c5cf0e9deec0"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2383/postgrest.log",
+      "bytes": 5078,
+      "sha256": "cd38bddc4aee7719c43feaf9fec4e6eacca94f4a014c7a2eb264dec1c85e6f08"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2409/acceptance-receipt.json",
+      "bytes": 21469,
+      "sha256": "724c9dc39203447e90b08b747e55199ed0cb9b8ec1854c3bb0dec413446b694b"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2409/assessments.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2409/controller.json",
+      "bytes": 33209,
+      "sha256": "969a728f2ae34305a55de3e859477af72f46a84ba89d21a32107f45c4ca462f4"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2409/journal/attempt.json",
+      "bytes": 247,
+      "sha256": "5872296206213486a16092ff736094c070ee676caabad6177604c0d91f5c2ddd"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2409/next.log",
+      "bytes": 274,
+      "sha256": "06fbe39527b0d0fb55cd34ec1789b9cd7db8a537785223c1736e837071f4d820"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2409/observed-classification-status.json",
+      "bytes": 616215,
+      "sha256": "a3249fb40562540b60fb28865902ed4fe57d3efde6555602d885332374588ecc"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2409/pg-test-clock.rc",
+      "bytes": 3,
+      "sha256": "bfccdd6c5c2faa710a992013eb60ebc3159d693e638b8215aaf74602a09fd058"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2409/postgres.log",
+      "bytes": 11498,
+      "sha256": "8c2f37f1597067a3814a4323ae18dd22e240ff5c81cd0e30d48747223e615b81"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-2409/postgrest.log",
+      "bytes": 5079,
+      "sha256": "f113d4e7b411b9359e9945f3307f2feeda21b298802c8e1a2cf65630081dfec4"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/http-file-mutations.trace",
+      "bytes": 237393,
+      "sha256": "cef634cd02783cc2a5bcfc469706d5dd5b1993a4bd834a2b4883cfd95b388a6d"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/live-owned-thread-inventory.json",
+      "bytes": 109,
+      "sha256": "746bd8c67d8bd297711cfadc9e0bfe39dc1e1845e56c8547bb05d051540db373"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/namespace-observations-182135.jsonl",
+      "bytes": 6609,
+      "sha256": "85ff85818287f152498109fc54375681469f9f000eae67c39ecfe85bb32f9472"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/native-namespace-http.json",
+      "bytes": 1073,
+      "sha256": "867c88c0131f37caf602f76269d42361929691e75c14af0faf3bfe5fba195c0d"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/native-namespace-http.log",
+      "bytes": 5700,
+      "sha256": "2052cf4a34c562ff2c138b915fa40e5997b88d3a2c66d4d1b2adc82a2587a61c"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/native-namespace-http.time",
+      "bytes": 1226,
+      "sha256": "30f0e04530b87a9ee08f388cbfccf4aa253aa69ac89eaf62a217f3c6113c4f5a"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/run-check.py",
+      "bytes": 4780,
+      "sha256": "1f3f55cad1f635df5e79176b56cc3390f51a6ce16218b8b8449f85f868e3e68f"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/acceptance-receipt.json",
+      "bytes": 33306,
+      "sha256": "60b6c8f173c98a6b428236040f659d57eaf05019aaea677dd453e3190ad702b6"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/assessments.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/author-packet-response.json",
+      "bytes": 78830,
+      "sha256": "c1a6c7d2fc92947023289fc770767b49854f313ea3359c2fe90b6b7934f529d4"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/controller.json",
+      "bytes": 33209,
+      "sha256": "813f917a1d57577303268f8f924d058e301f596a0cd8aaf54d6d06d5d38bd7be"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/financial-supplement-diagnostic.json",
+      "bytes": 76944,
+      "sha256": "5408451caa59574720482a5ae0e081c01842f23cf6ae2ea97ce8ea8818b7e1b4"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/journal/attempt.json",
+      "bytes": 247,
+      "sha256": "591669ae3c711c61de9aa81257d8f277dd1a6550f59f7592d15208cb8861af43"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/next.log",
+      "bytes": 353,
+      "sha256": "87b81addaab384be78acbcfc5d0727d2999f05ba3fbf7fbeee4d9c40719150dc"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/observed-classification-status.json",
+      "bytes": 616215,
+      "sha256": "a3249fb40562540b60fb28865902ed4fe57d3efde6555602d885332374588ecc"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/pg-test-clock.rc",
+      "bytes": 3,
+      "sha256": "bfccdd6c5c2faa710a992013eb60ebc3159d693e638b8215aaf74602a09fd058"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/postgres.log",
+      "bytes": 12060,
+      "sha256": "b158abcc8e8e2dd79d596e60cd06bdeb09fded248098bbf2aba5877cbcefb691"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2383/postgrest.log",
+      "bytes": 7104,
+      "sha256": "b64e53cbeb50e56bb5206d986a488f3b956e611c406e2e324fa20fe82eb3c0e0"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/acceptance-receipt.json",
+      "bytes": 33308,
+      "sha256": "9f729e0f12a092f4d37d3b01c380d474be5561f27092c46955237a63e00a5ec6"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/assessments.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/author-packet-response.json",
+      "bytes": 130804,
+      "sha256": "2382bfba4d8624ed2f748871a21a5330766daacd31f6333a1c1ecb15d22465bf"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/controller.json",
+      "bytes": 33209,
+      "sha256": "8aeb7e73c18182a6a09e441a95e131ebad9ab9a524b7600971c0b93c20f845cd"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/financial-supplement-diagnostic.json",
+      "bytes": 128920,
+      "sha256": "e3217bf214cd62d59c10e8c29cc21115f0a74a0d76fbce5f927030b04044e9b5"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/journal/attempt.json",
+      "bytes": 247,
+      "sha256": "424116f58efa13fb27ee91911a6205602abca73132d02885d620985f674863bd"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/next.log",
+      "bytes": 353,
+      "sha256": "e28288ec57c72b53bdf8338d12b9d90deb9e2d0622010c366d4da2a7497e6a8f"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/observed-classification-status.json",
+      "bytes": 616215,
+      "sha256": "a3249fb40562540b60fb28865902ed4fe57d3efde6555602d885332374588ecc"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/pg-test-clock.rc",
+      "bytes": 3,
+      "sha256": "bfccdd6c5c2faa710a992013eb60ebc3159d693e638b8215aaf74602a09fd058"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/postgres.log",
+      "bytes": 12060,
+      "sha256": "2adf4928c53c3ee9dc3b0e81af385bb9428077c70c344c49a7d22b432437230a"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/http-2409/postgrest.log",
+      "bytes": 7104,
+      "sha256": "317b51da474611b86f45cff7513906c698df5527ee626a724cdfa535b24a1f2e"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/namespace-observations-183033.jsonl",
+      "bytes": 173297,
+      "sha256": "c6063ecaee2dec195a9d4ca24a1f11eca28871d36658ada71e7ad0964325996e"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/native-31bd-http.json",
+      "bytes": 801,
+      "sha256": "f55aced37c52287c2b7a0547c8b250dbfa06542ff804d8dbdac358f4798f8b9c"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/native-31bd-http.log",
+      "bytes": 13368,
+      "sha256": "68174d8108089657982de8e9bbee1f346188957b149e14c2ee17044ff3433c37"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/native-31bd-http.time",
+      "bytes": 1010,
+      "sha256": "5a22f3235b9f7b6859be8817441bd6480d19e2395905b6d20c6a304e09dae3c6"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/readiness-unit.json",
+      "bytes": 645,
+      "sha256": "112ff1555217826de9535831e529ea3edb2cf84c1567090ee1567f18d9fbc6ff"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/readiness-unit.log",
+      "bytes": 2485,
+      "sha256": "daf021d6addaff24fe58139eb700f09f2a307e712e14eceaeaba0095c353df90"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/readiness-unit.time",
+      "bytes": 833,
+      "sha256": "f4f7398cba1d7ac9fe95e81cd354a73b4819b089a9ec59c4adb55cbebd612853"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T13-19-author-packet-namespace-diagnostic/successor/run-check.py",
+      "bytes": 4790,
+      "sha256": "6407f720c4c7c113dd52f930c0855fd76ccf3ef61d2a4e64a2c40a8a4d4cb334"
+    }
+  ],
+  "claims": {
+    "actualProductionWrites": false,
+    "actualAuthorReviewerModelExecution": false,
+    "researchQualified": false,
+    "publicationApproved": false,
+    "mainMergeDeployOrRuntimeRepair": false,
+    "newHelperIndependentReview": "pending; root-reported 31bd test-only unsigned pass separately"
+  },
+  "pending": [
+    "Root review of diagnosis and preserved 31bd readiness 57P01 boundary",
+    "Historical R1 actual writer/root cause remains unknown",
+    "No further native rerun authorized in this diagnostic; no assertion, ACL or guard change"
+  ]
+}

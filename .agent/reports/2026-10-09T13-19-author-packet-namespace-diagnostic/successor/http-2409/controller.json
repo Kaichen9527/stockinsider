@@ -1,0 +1,773 @@
+{
+  "policyVersion": "research-source-attempt-controller-v1",
+  "runId": "d0960cee-5ac0-464f-8efd-d2f0a8b17ac1",
+  "asOf": "2026-10-09T13:14:57.305Z",
+  "limits": {
+    "scopes": 20,
+    "pagesPerScope": 1,
+    "bodyBytes": 4000000,
+    "timeoutMs": 12000,
+    "runMs": 60000,
+    "inputBytes": 2000000,
+    "priorItems": 1000
+  },
+  "receipts": [
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "d0960cee-5ac0-464f-8efd-d2f0a8b17ac1",
+      "scopeId": "investanchors-public",
+      "platform": "investanchors",
+      "sourceUrl": "https://www.investanchors.com/",
+      "scope": "one attributed public body/introduction; publication instant unavailable",
+      "method": "public_summary_relay",
+      "contentScope": "metadata_index",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T13:14:57.241Z",
+        "checkedBy": "authorized-VM-relay-boundary-review"
+      },
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-08T09:02:40.305163+00:00",
+        "acquisition": {
+          "responseSha256": "03e3a5b80ff93efb59887a626e85840d9dec7b156095674f2ca9c1043bf144ee",
+          "responseBytes": 48220,
+          "readSurfaceUrl": "https://www.investanchors.com/"
+        },
+        "publication": {
+          "precision": "unknown",
+          "value": null
+        },
+        "pendingSummary": "定錨公開首頁將AI平台升級連結到板層與低損耗材料需求，並討論封裝擴產、電源及光通訊。這是產業研究方向，非個別台股的訂單確認。"
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-08T09:02:38.682624+00:00",
+      "completedAt": "2026-10-08T09:02:40.305163+00:00",
+      "readOutcome": "read_success",
+      "outcome": "metadata_only",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": false,
+      "responseHash": null,
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_metadata_only",
+      "legacyConnectorDisposition": "manual_only",
+      "platformEnabled": false,
+      "receiptHash": "e7d4056fe443bcb8282a0c61e6d570e16486b16f4aa1e4b440c609c3afe47b53",
+      "attempt": {
+        "platform": "investanchors",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:02:38.682624+00:00",
+        "scope": "investanchors-public: one attributed public body/introduction; publication instant unavailable | https://www.investanchors.com/",
+        "resultCount": null,
+        "errorCode": "source_metadata_only",
+        "receiptHash": "e7d4056fe443bcb8282a0c61e6d570e16486b16f4aa1e4b440c609c3afe47b53"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "d0960cee-5ac0-464f-8efd-d2f0a8b17ac1",
+      "scopeId": "nittobo-electronic",
+      "platform": "official",
+      "sourceUrl": "https://www.nittobo.co.jp/eng/business/electronicmaterials/index.htm",
+      "scope": "one attributed public body/introduction; publication instant unavailable",
+      "method": "public_summary_relay",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T13:14:57.241Z",
+        "checkedBy": "authorized-VM-relay-boundary-review"
+      },
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-08T09:02:42.503915+00:00",
+        "acquisition": {
+          "responseSha256": "f93cc0b249fa19c374762337cc7d0fd07bc46bd75d48ee0c3506124699887061",
+          "responseBytes": 6419,
+          "readSurfaceUrl": "https://www.nittobo.co.jp/eng/business/electronicmaterials/index.htm"
+        },
+        "publication": {
+          "precision": "unknown",
+          "value": null
+        },
+        "pendingSummary": "日東紡官方產品頁區分低熱膨脹T-glass與低介電NE/NER玻纖，說明其封裝及高速傳輸應用。"
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-08T09:02:42.313553+00:00",
+      "completedAt": "2026-10-08T09:02:42.503915+00:00",
+      "readOutcome": "read_success",
+      "outcome": "pending_publication_precision",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_publication_instant_missing",
+      "legacyConnectorDisposition": null,
+      "platformEnabled": false,
+      "receiptHash": "7844d11db42b71ccaf37e8c06a343063c8c2647c887b17cc0b8884b51fe0f214",
+      "attempt": {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:02:42.313553+00:00",
+        "scope": "nittobo-electronic: one attributed public body/introduction; publication instant unavailable | https://www.nittobo.co.jp/eng/business/electronicmaterials/index.htm",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "7844d11db42b71ccaf37e8c06a343063c8c2647c887b17cc0b8884b51fe0f214"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "d0960cee-5ac0-464f-8efd-d2f0a8b17ac1",
+      "scopeId": "emc-products",
+      "platform": "official",
+      "sourceUrl": "https://www.emctw.com/en-global/product_name/index",
+      "scope": "one attributed public body/introduction; publication instant unavailable",
+      "method": "public_summary_relay",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T13:14:57.241Z",
+        "checkedBy": "authorized-VM-relay-boundary-review"
+      },
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-08T09:04:37.786583+00:00",
+        "acquisition": {
+          "responseSha256": "0c957851c13d5190cd8ab7721d2137d15bfe1b0842ba169687e0ed811e9d0145",
+          "responseBytes": 122881,
+          "readSurfaceUrl": "https://www.emctw.com/en-global/product_name/index"
+        },
+        "publication": {
+          "precision": "unknown",
+          "value": null
+        },
+        "pendingSummary": "台光電官方產品頁列出不同板材與介電性能，支持公司具有低損耗材料產品布局。"
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-08T09:04:37.615890+00:00",
+      "completedAt": "2026-10-08T09:04:37.786583+00:00",
+      "readOutcome": "read_success",
+      "outcome": "pending_publication_precision",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_publication_instant_missing",
+      "legacyConnectorDisposition": null,
+      "platformEnabled": false,
+      "receiptHash": "0b1d79870620961a361d2c6f5295c60ddaba9491ad7d0ad8f37ea75ab71d6346",
+      "attempt": {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:04:37.615890+00:00",
+        "scope": "emc-products: one attributed public body/introduction; publication instant unavailable | https://www.emctw.com/en-global/product_name/index",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "0b1d79870620961a361d2c6f5295c60ddaba9491ad7d0ad8f37ea75ab71d6346"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "d0960cee-5ac0-464f-8efd-d2f0a8b17ac1",
+      "scopeId": "emc-production",
+      "platform": "official",
+      "sourceUrl": "https://www.emctw.com/en-global/about_production/index",
+      "scope": "one attributed public body/introduction; publication instant unavailable",
+      "method": "public_summary_relay",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T13:14:57.241Z",
+        "checkedBy": "authorized-VM-relay-boundary-review"
+      },
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-08T09:04:39.978882+00:00",
+        "acquisition": {
+          "responseSha256": "3d322c76d832de69dc1eb2626652a2c64dd72b0428b43b33c661ae32897f64e2",
+          "responseBytes": 108229,
+          "readSurfaceUrl": "https://www.emctw.com/en-global/about_production/index"
+        },
+        "publication": {
+          "precision": "unknown",
+          "value": null
+        },
+        "pendingSummary": "台光電官方產能頁列出多地生產據點及不同產品單位的名目容量。"
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-08T09:04:39.787118+00:00",
+      "completedAt": "2026-10-08T09:04:39.978882+00:00",
+      "readOutcome": "read_success",
+      "outcome": "pending_publication_precision",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_publication_instant_missing",
+      "legacyConnectorDisposition": null,
+      "platformEnabled": false,
+      "receiptHash": "f8df5ef6f25a86a81d70014a74dce654255f6cab8bafdb1ecc380a6003b8ff4b",
+      "attempt": {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:04:39.787118+00:00",
+        "scope": "emc-production: one attributed public body/introduction; publication instant unavailable | https://www.emctw.com/en-global/about_production/index",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "f8df5ef6f25a86a81d70014a74dce654255f6cab8bafdb1ecc380a6003b8ff4b"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "d0960cee-5ac0-464f-8efd-d2f0a8b17ac1",
+      "scopeId": "auo-tech",
+      "platform": "official",
+      "sourceUrl": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+      "scope": "one attributed public body/introduction; publication instant unavailable",
+      "method": "public_summary_relay",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T13:14:57.241Z",
+        "checkedBy": "authorized-VM-relay-boundary-review"
+      },
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-08T09:02:47.137191+00:00",
+        "acquisition": {
+          "responseSha256": "10e22f4539cd1bd92b29ed959139005c337a4a60366623f522cca5d87c0fac62",
+          "responseBytes": 56288,
+          "readSurfaceUrl": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831"
+        },
+        "publication": {
+          "precision": "date",
+          "value": "2026-08-31"
+        },
+        "pendingSummary": "友達8/31官方消息介紹MicroLED光互連及玻璃核心基板相關布局。"
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-08T09:02:46.660355+00:00",
+      "completedAt": "2026-10-08T09:02:47.137191+00:00",
+      "readOutcome": "read_success",
+      "outcome": "pending_publication_precision",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_publication_instant_missing",
+      "legacyConnectorDisposition": null,
+      "platformEnabled": false,
+      "receiptHash": "a197eaaa024a3c1dcfc5ab829590c1f82db8a2c531e382ee2504e13f62b978c3",
+      "attempt": {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:02:46.660355+00:00",
+        "scope": "auo-tech: one attributed public body/introduction; publication instant unavailable | https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "a197eaaa024a3c1dcfc5ab829590c1f82db8a2c531e382ee2504e13f62b978c3"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "d0960cee-5ac0-464f-8efd-d2f0a8b17ac1",
+      "scopeId": "threads-partial-surface",
+      "platform": "threads",
+      "sourceUrl": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+      "scope": "parent body visible on reply surface; direct post/reply availability conflicts",
+      "method": "local_authorized_summary",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "authorized_local_summary",
+        "checkedAt": "2026-10-09T13:14:57.241Z",
+        "checkedBy": "user-authorized-public-only-browser-read"
+      },
+      "readSurfaceUrl": "https://www.threads.com/@gooptions/post/DdngHBpkoGb",
+      "attemptedAt": "2026-10-08T09:10:50.843Z",
+      "completedAt": "2026-10-08T09:10:50.932Z",
+      "readOutcome": "read_failed",
+      "outcome": "read_failed",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": false,
+      "responseHash": null,
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_surface_conflict",
+      "legacyConnectorDisposition": "blocked_auth",
+      "platformEnabled": false,
+      "receiptHash": "ac3465bc84eab14bdf3e79e1306e8f44024021fac97c223d45678a39108cad8c",
+      "attempt": {
+        "platform": "threads",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:10:50.843Z",
+        "scope": "threads-partial-surface: parent body visible on reply surface; direct post/reply availability conflicts | https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+        "resultCount": null,
+        "errorCode": "source_surface_conflict",
+        "receiptHash": "ac3465bc84eab14bdf3e79e1306e8f44024021fac97c223d45678a39108cad8c"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "d0960cee-5ac0-464f-8efd-d2f0a8b17ac1",
+      "scopeId": "telegram-investanchors-869",
+      "platform": "telegram",
+      "sourceUrl": "https://t.me/investanchors/869",
+      "scope": "one attributed public Telegram message; same publisher, no company mention",
+      "method": "public_summary_relay",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T13:14:57.241Z",
+        "checkedBy": "authorized-VM-relay-boundary-review"
+      },
+      "readSurfaceUrl": "https://t.me/s/investanchors",
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-08T09:18:07.785051+00:00",
+        "acquisition": {
+          "responseSha256": "31fae9b88725ce092aec24284e53f8b0054696b6e4786832062d33207a9f3d3c",
+          "responseBytes": 116691,
+          "readSurfaceUrl": "https://t.me/s/investanchors"
+        },
+        "publication": {
+          "precision": "instant",
+          "value": "2026-07-07T03:33:38+00:00"
+        }
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+      "completedAt": "2026-10-08T09:18:07.785051+00:00",
+      "readOutcome": "read_success",
+      "outcome": "item_ready",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": "2026-07-07T03:33:38+00:00",
+      "sourcePublishedAt": "2026-07-07T03:33:38+00:00",
+      "summaryPublishedAt": "2026-07-07T03:33:38+00:00",
+      "firstObservedAt": "2026-10-08T09:18:07.785051+00:00",
+      "revisionObservedAt": "2026-10-08T09:18:07.785051+00:00",
+      "rootUrl": "https://t.me/investanchors/869",
+      "contentHash": "d4726753c346e8d1dd76c5b197d074efecf3d5a80a3d8907dee65ac95623e56c",
+      "retracted": false,
+      "errorCode": null,
+      "legacyConnectorDisposition": "blocked_license",
+      "platformEnabled": false,
+      "receiptHash": "1572cb6db4ce1e4d22149326ec29d9b2571c76f9f4915b007edd12b8a2e0f141",
+      "attempt": {
+        "platform": "telegram",
+        "status": "success",
+        "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+        "scope": "telegram-investanchors-869: one attributed public Telegram message; same publisher, no company mention | https://t.me/investanchors/869",
+        "resultCount": 1,
+        "errorCode": null,
+        "receiptHash": "1572cb6db4ce1e4d22149326ec29d9b2571c76f9f4915b007edd12b8a2e0f141"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "d0960cee-5ac0-464f-8efd-d2f0a8b17ac1",
+      "scopeId": "telegram-investanchors-881",
+      "platform": "telegram",
+      "sourceUrl": "https://t.me/investanchors/881",
+      "scope": "one attributed public Telegram message; same publisher, no company mention",
+      "method": "public_summary_relay",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T13:14:57.241Z",
+        "checkedBy": "authorized-VM-relay-boundary-review"
+      },
+      "readSurfaceUrl": "https://t.me/s/investanchors",
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-08T09:18:07.785051+00:00",
+        "acquisition": {
+          "responseSha256": "31fae9b88725ce092aec24284e53f8b0054696b6e4786832062d33207a9f3d3c",
+          "responseBytes": 116691,
+          "readSurfaceUrl": "https://t.me/s/investanchors"
+        },
+        "publication": {
+          "precision": "instant",
+          "value": "2026-09-14T12:10:13+00:00"
+        }
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+      "completedAt": "2026-10-08T09:18:07.785051+00:00",
+      "readOutcome": "read_success",
+      "outcome": "item_ready",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": "2026-09-14T12:10:13+00:00",
+      "sourcePublishedAt": "2026-09-14T12:10:13+00:00",
+      "summaryPublishedAt": "2026-09-14T12:10:13+00:00",
+      "firstObservedAt": "2026-10-08T09:18:07.785051+00:00",
+      "revisionObservedAt": "2026-10-08T09:18:07.785051+00:00",
+      "rootUrl": "https://t.me/investanchors/881",
+      "contentHash": "0de8effc657d7e00fb80e81d70cbda321f8544aeb7eb982e18e08275ead0f173",
+      "retracted": false,
+      "errorCode": null,
+      "legacyConnectorDisposition": "blocked_license",
+      "platformEnabled": false,
+      "receiptHash": "703a9a6d153acd46ab2f7ca1aca3a370675fe2bcd9681926571eef4dd07fe4e4",
+      "attempt": {
+        "platform": "telegram",
+        "status": "success",
+        "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+        "scope": "telegram-investanchors-881: one attributed public Telegram message; same publisher, no company mention | https://t.me/investanchors/881",
+        "resultCount": 1,
+        "errorCode": null,
+        "receiptHash": "703a9a6d153acd46ab2f7ca1aca3a370675fe2bcd9681926571eef4dd07fe4e4"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "d0960cee-5ac0-464f-8efd-d2f0a8b17ac1",
+      "scopeId": "telegram-investanchors-882",
+      "platform": "telegram",
+      "sourceUrl": "https://t.me/investanchors/882",
+      "scope": "one attributed public Telegram message; same publisher, no company mention",
+      "method": "public_summary_relay",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "public_summary_relay",
+        "checkedAt": "2026-10-09T13:14:57.241Z",
+        "checkedBy": "authorized-VM-relay-boundary-review"
+      },
+      "readSurfaceUrl": "https://t.me/s/investanchors",
+      "publicRelay": {
+        "observer": "authorized-mac-public-https-relay",
+        "observedAt": "2026-10-08T09:18:07.785051+00:00",
+        "acquisition": {
+          "responseSha256": "31fae9b88725ce092aec24284e53f8b0054696b6e4786832062d33207a9f3d3c",
+          "responseBytes": 116691,
+          "readSurfaceUrl": "https://t.me/s/investanchors"
+        },
+        "publication": {
+          "precision": "instant",
+          "value": "2026-09-18T05:52:16+00:00"
+        }
+      },
+      "vmHttpRead": false,
+      "historicalPITEligible": false,
+      "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+      "completedAt": "2026-10-08T09:18:07.785051+00:00",
+      "readOutcome": "read_success",
+      "outcome": "item_ready",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": "2026-09-18T05:52:16+00:00",
+      "sourcePublishedAt": "2026-09-18T05:52:16+00:00",
+      "summaryPublishedAt": "2026-09-18T05:52:16+00:00",
+      "firstObservedAt": "2026-10-08T09:18:07.785051+00:00",
+      "revisionObservedAt": "2026-10-08T09:18:07.785051+00:00",
+      "rootUrl": "https://t.me/investanchors/882",
+      "contentHash": "26abf50a3340205a79b2b297d9b55119a4f02fd0dd3768f1f9d7bbdbc3a1fb79",
+      "retracted": false,
+      "errorCode": null,
+      "legacyConnectorDisposition": "blocked_license",
+      "platformEnabled": false,
+      "receiptHash": "f335abb2a09b6157b7f9c906811215acd30f517aac4ade040d279cc26253fddd",
+      "attempt": {
+        "platform": "telegram",
+        "status": "success",
+        "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+        "scope": "telegram-investanchors-882: one attributed public Telegram message; same publisher, no company mention | https://t.me/investanchors/882",
+        "resultCount": 1,
+        "errorCode": null,
+        "receiptHash": "f335abb2a09b6157b7f9c906811215acd30f517aac4ade040d279cc26253fddd"
+      }
+    }
+  ],
+  "unattemptedPlatforms": [
+    "news",
+    "broker",
+    "ptt",
+    "instagram",
+    "facebook",
+    "podcast",
+    "youtube",
+    "bulltalk",
+    "twse_insider"
+  ],
+  "priorityRequest": {
+    "asOf": "2026-10-09T13:14:57.305Z",
+    "sourceAttempts": [
+      {
+        "platform": "investanchors",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:02:38.682624+00:00",
+        "scope": "investanchors-public: one attributed public body/introduction; publication instant unavailable | https://www.investanchors.com/",
+        "resultCount": null,
+        "errorCode": "source_metadata_only",
+        "receiptHash": "e7d4056fe443bcb8282a0c61e6d570e16486b16f4aa1e4b440c609c3afe47b53"
+      },
+      {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:02:42.313553+00:00",
+        "scope": "nittobo-electronic: one attributed public body/introduction; publication instant unavailable | https://www.nittobo.co.jp/eng/business/electronicmaterials/index.htm",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "7844d11db42b71ccaf37e8c06a343063c8c2647c887b17cc0b8884b51fe0f214"
+      },
+      {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:04:37.615890+00:00",
+        "scope": "emc-products: one attributed public body/introduction; publication instant unavailable | https://www.emctw.com/en-global/product_name/index",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "0b1d79870620961a361d2c6f5295c60ddaba9491ad7d0ad8f37ea75ab71d6346"
+      },
+      {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:04:39.787118+00:00",
+        "scope": "emc-production: one attributed public body/introduction; publication instant unavailable | https://www.emctw.com/en-global/about_production/index",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "f8df5ef6f25a86a81d70014a74dce654255f6cab8bafdb1ecc380a6003b8ff4b"
+      },
+      {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:02:46.660355+00:00",
+        "scope": "auo-tech: one attributed public body/introduction; publication instant unavailable | https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+        "resultCount": null,
+        "errorCode": "source_publication_instant_missing",
+        "receiptHash": "a197eaaa024a3c1dcfc5ab829590c1f82db8a2c531e382ee2504e13f62b978c3"
+      },
+      {
+        "platform": "threads",
+        "status": "failed",
+        "attemptedAt": "2026-10-08T09:10:50.843Z",
+        "scope": "threads-partial-surface: parent body visible on reply surface; direct post/reply availability conflicts | https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+        "resultCount": null,
+        "errorCode": "source_surface_conflict",
+        "receiptHash": "ac3465bc84eab14bdf3e79e1306e8f44024021fac97c223d45678a39108cad8c"
+      },
+      {
+        "platform": "telegram",
+        "status": "success",
+        "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+        "scope": "telegram-investanchors-869: one attributed public Telegram message; same publisher, no company mention | https://t.me/investanchors/869",
+        "resultCount": 1,
+        "errorCode": null,
+        "receiptHash": "1572cb6db4ce1e4d22149326ec29d9b2571c76f9f4915b007edd12b8a2e0f141"
+      },
+      {
+        "platform": "telegram",
+        "status": "success",
+        "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+        "scope": "telegram-investanchors-881: one attributed public Telegram message; same publisher, no company mention | https://t.me/investanchors/881",
+        "resultCount": 1,
+        "errorCode": null,
+        "receiptHash": "703a9a6d153acd46ab2f7ca1aca3a370675fe2bcd9681926571eef4dd07fe4e4"
+      },
+      {
+        "platform": "telegram",
+        "status": "success",
+        "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+        "scope": "telegram-investanchors-882: one attributed public Telegram message; same publisher, no company mention | https://t.me/investanchors/882",
+        "resultCount": 1,
+        "errorCode": null,
+        "receiptHash": "f335abb2a09b6157b7f9c906811215acd30f517aac4ade040d279cc26253fddd"
+      }
+    ]
+  },
+  "inboxRequest": {
+    "items": [
+      {
+        "sourcePlatform": "telegram",
+        "sourceUrl": "https://t.me/investanchors/869",
+        "author": "InvestAnchors",
+        "publishedAt": "2026-07-07T03:33:38+00:00",
+        "observedAt": "2026-10-08T09:18:07.785051+00:00",
+        "symbols": [],
+        "subjectScope": "industry_context",
+        "industryTerms": [
+          "先進封裝",
+          "載板",
+          "EMIB",
+          "玻璃核心基板"
+        ],
+        "shortSummary": "定錨公開貼文認為AI封裝尺寸與載板層數增加，可能拉高單顆晶片消耗的載板產能，並討論全球擴產及新製程的資本密集度。",
+        "catalyst": "供產業研究查核；不代表公司被提及或訂單確認。",
+        "risk": "這是7月公開分析，不是10月最新訂單確認；台系客戶、投資金額與獲利影響仍須回到公司資料查核。",
+        "claimStatus": "reported",
+        "visibility": "public",
+        "contentForm": "research_summary",
+        "acquisitionMethod": "public_document",
+        "parentSourceUrl": null,
+        "firstObservedAt": "2026-10-08T09:18:07.785051+00:00",
+        "revisionObservedAt": "2026-10-08T09:18:07.785051+00:00"
+      },
+      {
+        "sourcePlatform": "telegram",
+        "sourceUrl": "https://t.me/investanchors/881",
+        "author": "InvestAnchors",
+        "publishedAt": "2026-09-14T12:10:13+00:00",
+        "observedAt": "2026-10-08T09:18:07.785051+00:00",
+        "symbols": [],
+        "subjectScope": "industry_context",
+        "industryTerms": [
+          "探針卡",
+          "MEMS",
+          "高電流",
+          "CPO測試"
+        ],
+        "shortSummary": "定錨公開貼文將AI晶片測試需求連結到探針數增加、MEMS及高電流要求，也提出維修與清潔耗材可能受惠的方向。",
+        "catalyst": "供產業研究查核；不代表公司被提及或訂單確認。",
+        "risk": "未點名台股公司，不能直接增加任何公司的獨立討論根源或當成訂單。未取得連結會員全文。",
+        "claimStatus": "reported",
+        "visibility": "public",
+        "contentForm": "research_summary",
+        "acquisitionMethod": "public_document",
+        "parentSourceUrl": null,
+        "firstObservedAt": "2026-10-08T09:18:07.785051+00:00",
+        "revisionObservedAt": "2026-10-08T09:18:07.785051+00:00"
+      },
+      {
+        "sourcePlatform": "telegram",
+        "sourceUrl": "https://t.me/investanchors/882",
+        "author": "InvestAnchors",
+        "publishedAt": "2026-09-18T05:52:16+00:00",
+        "observedAt": "2026-10-08T09:18:07.785051+00:00",
+        "symbols": [],
+        "subjectScope": "industry_context",
+        "industryTerms": [
+          "CPO",
+          "光引擎",
+          "檢測",
+          "良率"
+        ],
+        "shortSummary": "定錨公開貼文指出光引擎檢測可能影響封裝良率，並明說當時檢測流程及供應鏈尚在形成。",
+        "catalyst": "供產業研究查核；不代表公司被提及或訂單確認。",
+        "risk": "沒有友達或其他台股客戶訂單確認。與同作者Threads相似內容屬同源傳播，不能算成另一獨立確認；未取得會員全文。",
+        "claimStatus": "reported",
+        "visibility": "public",
+        "contentForm": "research_summary",
+        "acquisitionMethod": "public_document",
+        "parentSourceUrl": null,
+        "firstObservedAt": "2026-10-08T09:18:07.785051+00:00",
+        "revisionObservedAt": "2026-10-08T09:18:07.785051+00:00"
+      }
+    ]
+  },
+  "roots": [
+    {
+      "rootId": "https://t.me/investanchors/869",
+      "url": "https://t.me/investanchors/869",
+      "publishedAt": "2026-07-07T03:33:38.000Z",
+      "firstObservedAt": "2026-10-08T09:18:07.785Z",
+      "revisionObservedAt": "2026-10-08T09:18:07.785Z",
+      "revisionId": "d4726753c346e8d1dd76c5b197d074efecf3d5a80a3d8907dee65ac95623e56c",
+      "isOriginalSource": true,
+      "kind": "social_rumor",
+      "status": "current"
+    },
+    {
+      "rootId": "https://t.me/investanchors/881",
+      "url": "https://t.me/investanchors/881",
+      "publishedAt": "2026-09-14T12:10:13.000Z",
+      "firstObservedAt": "2026-10-08T09:18:07.785Z",
+      "revisionObservedAt": "2026-10-08T09:18:07.785Z",
+      "revisionId": "0de8effc657d7e00fb80e81d70cbda321f8544aeb7eb982e18e08275ead0f173",
+      "isOriginalSource": true,
+      "kind": "social_rumor",
+      "status": "current"
+    },
+    {
+      "rootId": "https://t.me/investanchors/882",
+      "url": "https://t.me/investanchors/882",
+      "publishedAt": "2026-09-18T05:52:16.000Z",
+      "firstObservedAt": "2026-10-08T09:18:07.785Z",
+      "revisionObservedAt": "2026-10-08T09:18:07.785Z",
+      "revisionId": "26abf50a3340205a79b2b297d9b55119a4f02fd0dd3768f1f9d7bbdbc3a1fb79",
+      "isOriginalSource": true,
+      "kind": "social_rumor",
+      "status": "current"
+    }
+  ],
+  "priorItemsUnchanged": true,
+  "limitations": [
+    "Exact supplied scopes only; no exhaustive search or platform activation.",
+    "No summary/model adapter, authenticated browser dispatcher, submission, publication or strategy approval.",
+    "Prior items are controller-retained context; authoritative heads remain in VPS."
+  ],
+  "authoritativePublication": false,
+  "strategyApproved": false,
+  "startedAt": "2026-10-09T13:14:57.304Z",
+  "explicitRunOnly": true,
+  "inputHash": "7fe51244e25dd5300df7289560bb96c6c55e1f8ec89bdd1dea4e36808343d551",
+  "runHash": "7c78bd70c4fb050536013d85b10c6e365ca338e6836bfece499cfe6efb6f491b"
+}

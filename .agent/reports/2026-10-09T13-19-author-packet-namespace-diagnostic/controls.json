@@ -1,0 +1,18 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "controls",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "scripts/research-financial-ancestor-controls.mjs"
+  ],
+  "startedAt": "2026-10-09T13:10:22.305Z",
+  "completedAt": "2026-10-09T13:10:22.665Z",
+  "elapsedSeconds": 0.35969691499485634,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 26820608,
+  "observedTaskDiskPeakBytes": 1289895936,
+  "availableBeforeBytes": 15128367104,
+  "availableAfterBytes": 15128317952,
+  "guardTermination": null
+}

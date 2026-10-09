@@ -1,0 +1,6 @@
+(node:182109) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:182109) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-author-packet-http-vm-oct09/web/src/lib/research-financial-file-reader.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-author-packet-http-vm-oct09/web/package.json.
+{"controls":[{"kind":"write_within_existing_sibling","result":"success","error":null},{"kind":"add_sibling_entry_to_common_ancestor","result":"rejected","error":"financial_parent_replaced"}],"historicalR1CauseProven":false}

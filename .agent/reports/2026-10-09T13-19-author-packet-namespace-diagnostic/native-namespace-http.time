@@ -1,0 +1,24 @@
+Command exited with non-zero status 1
+	Command being timed: "/usr/bin/strace -f -qq -ttt -e trace=mkdir,mkdirat,rmdir,rename,renameat,renameat2,unlink,unlinkat,symlink,symlinkat,link,linkat -o /workspace/cloud-author-packet-artifacts-oct09/nsdiag/http-file-mutations.trace /workspace/.tools/node22/node_modules/.bin/node --import ./scripts/research-author-packet-namespace-diagnostic-preload.mjs --experimental-strip-types --test --test-concurrency=1 --test-reporter=tap scripts/research-author-packet-http.test.mjs"
+	User time (seconds): 9.27
+	System time (seconds): 24.27
+	Percent of CPU this job got: 53%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:02.50
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 344348
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 614178
+	Voluntary context switches: 3049770
+	Involuntary context switches: 26639
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 162608
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
