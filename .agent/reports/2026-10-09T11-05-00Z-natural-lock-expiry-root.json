@@ -76,7 +76,7 @@
     "productionDeployed": false,
     "researchPublished": false,
     "strategyApproved": false,
-    "integrationMerge": "pending GitHub checks at record time"
+    "integrationMerge": "not merged; protected checks missing exact evidence ref, ordinary diagnostic pending"
   },
   "limitations": [
     "Synthetic initial6/20-second leases and seeded reserved seconds are not actual30-minute/model daily admission proof",
@@ -85,5 +85,17 @@
     "Response-loss recovery pending",
     "Real role execution, existing publication transaction and actual discovery-price adapter pending",
     "Protected/full release and future five trading days pending"
-  ]
+  ],
+  "githubProtected": {
+    "run": 37921360771,
+    "failure": "missing refs/heads/evidence/source-led-opportunity-v3-exact-review-b38d2826dcbb2678c696438eb83d980d2f50a16f",
+    "retry": false,
+    "bypass": false,
+    "rawLog": {
+      "path": ".agent/reports/2026-10-09T11-05-00Z-natural-lock-expiry-root-protected-failure.log.txt",
+      "bytes": 35205,
+      "sha256": "7d4426c639a0c6a1e44c1b7065ada3dc1ca9a43ff18eb916c2b4d23ac2c1f4fe"
+    },
+    "scope": "Scoped test code review does not satisfy whole main-to-subject protected evidence. Prepare genuine release evidence after freezing final R."
+  }
 }

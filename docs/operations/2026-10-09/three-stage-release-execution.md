@@ -24,8 +24,11 @@ Main remains169aad1; no production migration or deployment occurred.
   logical charges or seeded reserved budgets. Missing PG explicitly fails.
 - Exactb38d2826 test-only increment has unsigned independent CODE PASS,
   zeroP1/P2; twelve original VM evidence and four migration hashes match.
-  PR342 targets integration only and awaits GitHub checks/feature merge at this
-  checkpoint. Runtime/migrations/ACL unchanged; exact722 web build reused.
+  PR342 targets integration only; protected run37921360771 failed because
+  its exact-review-b38d2826 evidence ref is absent. No merge, bypass or retry.
+  Scoped test review cannot substitute for whole-release evidence. Ordinary
+  diagnostic was still running. Runtime/migrations/ACL unchanged; exact722 web
+  build reused.
 - Synthetic short initial leases prove original recheck, not production role
   budget admission.120s freshness, source race/rights ABA and response-loss
   remain pending. Genuine role execution, atomic v2 publication/reader, actual
