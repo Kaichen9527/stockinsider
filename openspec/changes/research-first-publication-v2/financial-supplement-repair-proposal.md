@@ -70,3 +70,22 @@ listed; no truncate-success or silent loss of Other/group/owner/NCI/share basis.
 Tests bind each operand/value/locator/clock, preserve source precision, prove the
 sum and interval, reject missing/duplicate months, and keep local clocks separate.
 No original inventory/model/source bytes or model cutoffs are changed.
+
+## Implementation checkpoint, 2026-10-09
+
+Root's subsequent explicit repair instruction authorizes implementing these two
+boundaries without waiting for another probe message. This is not an independent
+code approval. The implementation permits at most one process-owned file reader;
+pending opens/reads/stats/closes retain that slot until confirmed cleanup. A close
+rejection retains it for controlled process recovery. No deadline/budget renewal,
+DB state, request path or forceful kernel-cancellation claim is added. The new
+six-case cleanup regression uses actual descriptors with synthetic Promise gates;
+these are developer counterexamples, not production kernel-I/O experiments.
+
+The monthly projection keeps three reported operands and one derived bridge, with
+named locators/source clocks, all seven EMC historical differences, and AUO's
+rounding intervals. To remain within 64 fact/derived rows, H1 EPS detail is an
+explicit omission; Q2 basic/diluted EPS, share basis, group/owners/NCI and all four
+segments remain. Original 14-file inventory and model results are unchanged.
+Normal build and broader PG acceptance are pending the separately reviewed
+financial successor plus latest combined integration, as requested by root.

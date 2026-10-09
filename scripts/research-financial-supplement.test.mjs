@@ -27,3 +27,22 @@ test('actual read exact per-file/aggregate caps; +1 fails without truncate succe
 for(const kind of ['fifo','directory','symlink','replaceBeforeOpen','replaceParent','shortRead','mutateAfterRead'])test('bounded regular FD rejects '+kind,async()=>{const f=await fixture();try{const filename=f.root+'/'+f.pins[0].path;let hook=()=>{};if(kind==='fifo'){await rm(filename);execFileSync('mkfifo',[filename]);}if(kind==='directory'){await rm(filename);await mkdir(filename);}if(kind==='symlink'){await rename(filename,filename+'.saved');await symlink(filename+'.saved',filename);}if(kind==='replaceBeforeOpen')hook=async name=>{if(name.startsWith('before_open')){await rename(filename,filename+'.saved');execFileSync('mkfifo',[filename]);}};if(kind==='replaceParent')hook=async name=>{if(name.startsWith('before_open')){await rename(path.dirname(filename),path.dirname(filename)+'.saved');await mkdir(path.dirname(filename));await writeFile(filename,'1');}};if(kind==='shortRead')hook=async name=>{if(name.startsWith('before_open'))await writeFile(filename,'');};if(kind==='mutateAfterRead')hook=async name=>{if(name.startsWith('after_read'))await writeFile(filename,'2');};const start=performance.now();await assert.rejects(readPinnedFinancialFiles(f.root,f.pins,new FinancialDeadline(),hook));assert.ok(performance.now()-start<1000);}finally{await f.close();}});
 test('projection/result UTF8 exact and +1, not character count',()=>{for(const cap of[FINANCIAL_READ_LIMITS.projection,FINANCIAL_READ_LIMITS.result]){assert.doesNotThrow(()=>assertFinancialJsonBytes('x'.repeat(cap-2),cap));assert.throws(()=>assertFinancialJsonBytes('x'.repeat(cap-1),cap));assert.throws(()=>assertFinancialJsonBytes('界'.repeat(Math.ceil(cap/3)),cap));}});
 test('late async success discarded by monotonic deadline',async()=>{const d=new FinancialDeadline();Object.defineProperty(d,'end',{value:performance.now()+15});await assert.rejects(d.wait(new Promise(r=>setTimeout(()=>r('late'),40))),/financial_deadline/);});
+
+for(const symbol of ['2409','2383'])test(symbol+' monthly anchor keeps actual operands, precision, reconciliation and source clocks',async()=>{
+ const f=dbFixture(symbol),r=await loadResearchFinancialSupplement(f.db,f.input,root),p=r.projection;
+ assert.equal(p.monthlyFacts.length,3);assert.deepEqual(p.monthlyFacts.map(m=>m.period),['2026-07','2026-08','2026-09']);
+ assert.deepEqual(p.monthlyBridge.operands,p.monthlyFacts.map(m=>m.locator));assert.equal(p.monthlyBridge.status,'derived_not_reported_q3_income_statement');
+ assert.ok(p.reportedFacts.length+p.monthlyFacts.length+1<=64);
+ assert.ok(p.projected.observations.every(o=>o.observedAt!==o.admittedAt));
+ if(symbol==='2409'){
+  assert.deepEqual(p.monthlyFacts.map(m=>m.value),[20370,23102,23404]);assert.equal(p.monthlyBridge.value,66876);
+  assert.deepEqual(p.monthlyBridge.roundingInterval,{lower:66874.5,upper:66877.5,lowerInclusive:true,upperInclusive:false});
+  assert.deepEqual(p.monthlyFacts.map(m=>m.locator.jsonPointer),[21,22,23].map(i=>'/monthlyConsolidatedRevenue/'+i+'/reportedRevenue'));
+  assert.ok(p.monthlyFacts.every(m=>m.source.rawObservedAt==='2026-10-08T06:52:48Z'&&m.source.publication.value===null));
+ }else{
+  assert.deepEqual(p.monthlyFacts.map(m=>m.value),[19206698000,20145589000,21532230000]);assert.equal(p.monthlyBridge.value,60884.517);
+  assert.deepEqual(p.monthlyFacts.map(m=>m.locator.jsonPointer),[21,22,23].map(i=>'/monthlyRevenue/rows/'+i+'/revenueTwd'));
+  assert.ok(p.monthlyFacts.every(m=>m.source.rawObservedAt==='2026-10-08T09:27:58.821107+00:00'&&m.source.extractionRecordedAt==='2026-10-08T09:28:37.654569+00:00'&&m.source.publication.value==='2026-10-08'&&m.roundingInterval===null));
+  assert.deepEqual(p.monthlyBridge.historicalReconciliation.map(x=>x.differenceMonthlyMinusFinancialTwd),[2212000,4191000,-4188000,-22000,-18573000,-26000,14000]);
+ }
+});

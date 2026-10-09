@@ -23,6 +23,67 @@ export class FinancialDeadline {
     } finally { clearTimeout(timer); }
   }
 }
+// One process-owned financial reader at a time; unresolved cleanup retains the
+// slot. This is a resource fence, not a model lease or durable budget admission.
+const financialReadOwners = new Set<FinancialReadOwner>();
+class FinancialReadOwner {
+  pending = new Set<Promise<unknown>>();
+  handles = new Map<FileHandle, { closed: boolean; closing?: Promise<void> }>();
+  cleaning = false;
+  cleanupFailed = false;
+  constructor() {
+    if (financialReadOwners.size) throw new Error('financial_cleanup_or_read_in_progress');
+    financialReadOwners.add(this);
+  }
+  track<T>(work: Promise<T>): Promise<T> {
+    this.pending.add(work);
+    work.then(() => { this.pending.delete(work); this.release(); }, () => { this.pending.delete(work); this.release(); });
+    return work;
+  }
+  closeHandle(handle: FileHandle) {
+    const state = this.handles.get(handle)!;
+    if (!state.closing) {
+      // Always attach settlement handlers, including when the deadline expired.
+      state.closing = Promise.resolve().then(() => handle.close()).then(() => { state.closed = true; }, error => { this.cleanupFailed = true; throw error; });
+      this.track(state.closing);
+    }
+    return state.closing;
+  }
+  opened(handle: FileHandle) {
+    this.handles.set(handle, { closed: false });
+    if (this.cleaning) this.closeHandle(handle);
+    return handle;
+  }
+  release() {
+    if (this.cleaning && !this.cleanupFailed && !this.pending.size && [...this.handles.values()].every(s => s.closed)) financialReadOwners.delete(this);
+  }
+  status() {
+    this.release();
+    return { cleanupComplete: !financialReadOwners.has(this), recoveryRequired: financialReadOwners.has(this),
+      pendingOperations: this.pending.size, unconfirmedHandles: [...this.handles.values()].filter(s => !s.closed).length,
+      cleanupFailed: this.cleanupFailed, kernelIoCancellationConfirmed: false };
+  }
+  async cleanup(deadline: FinancialDeadline, primary?: unknown) {
+    this.cleaning = true;
+    for (const handle of this.handles.keys()) this.closeHandle(handle);
+    // Pending open may deliver a new handle; opened() closes it on settlement.
+    const settled = async () => {
+      while (this.pending.size) await Promise.allSettled([...this.pending]);
+      this.release();
+      if (!this.status().cleanupComplete) throw new Error('financial_cleanup_failed');
+    };
+    const work = settled();
+    work.catch(() => {}); // observed even if wait() rejects before subscribing
+    try { await deadline.wait(work); }
+    catch (cleanupError) {
+      const error = primary !== undefined ? (primary !== null && (typeof primary === 'object' || typeof primary === 'function') ? primary : new Error('financial_primary_failure', { cause: primary })) : cleanupError;
+      if (!error || (typeof error !== 'object' && typeof error !== 'function')) throw error;
+      Object.assign(error, { financialCleanup: this.status() });
+      throw error;
+    }
+    if (primary !== undefined) throw primary;
+  }
+}
 function same(a: BigIntStats, b: BigIntStats) {
   return a.dev === b.dev && a.ino === b.ino && a.size === b.size && a.mtimeNs === b.mtimeNs && a.ctimeNs === b.ctimeNs;
 }
@@ -46,6 +107,7 @@ export async function readPinnedFinancialFiles(root: string, pins: readonly Fina
   let total = 0; const names = new Set<string>();
   for (const p of pins) { validPin(p); total += p.bytes; if (names.has(p.path)) throw new Error('financial_inventory_invalid'); names.add(p.path); }
   if (total > FINANCIAL_READ_LIMITS.aggregate) throw new Error('financial_read_bound');
+  const owner = new FinancialReadOwner();
   const parents = new Map<string, BigIntStats>(), handles: Array<{ handle: FileHandle; filename: string; before: BigIntStats; pin: FinancialFilePin }> = [];
   const records = new Map<string, { pin: FinancialFilePin; value: unknown }>();
   try {
@@ -54,22 +116,21 @@ export async function readPinnedFinancialFiles(root: string, pins: readonly Fina
       let current = path.parse(filename).root;
       for (const segment of filename.slice(current.length).split(path.sep).slice(0,-1)) {
         current = path.join(current,segment);
-        const stat = await deadline.wait(lstat(current,{bigint:true})); directory(stat);
+        const stat = await deadline.wait(owner.track(lstat(current,{bigint:true}))); directory(stat);
         const prior = parents.get(current); if (prior && !same(prior,stat)) throw new Error('financial_parent_replaced'); parents.set(current,stat);
       }
-      const leaf = await deadline.wait(lstat(filename,{bigint:true})); regular(leaf,pin.bytes);
+      const leaf = await deadline.wait(owner.track(lstat(filename,{bigint:true}))); regular(leaf,pin.bytes);
       await deadline.wait(Promise.resolve(checkpoint('before_open:'+pin.path)));
       // O_NONBLOCK prevents FIFO replacement between lstat and descriptor open
       // from monopolizing a filesystem worker before fstat can reject it.
-      const pending = open(filename,constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
-      pending.then(h => { if (deadline.controller.signal.aborted) void h.close(); }, () => {});
+      const pending = owner.track(open(filename,constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK).then(h => owner.opened(h)));
       const handle = await deadline.wait(pending);
       const entry = {handle,filename,before:leaf,pin}; handles.push(entry);
-      const before = await deadline.wait(handle.stat({bigint:true})); entry.before = before; regular(before,pin.bytes); if (!same(before,leaf)) throw new Error('financial_file_replaced');
+      const before = await deadline.wait(owner.track(handle.stat({bigint:true}))); entry.before = before; regular(before,pin.bytes); if (!same(before,leaf)) throw new Error('financial_file_replaced');
       const raw = Buffer.alloc(pin.bytes+1); let offset = 0;
       try {
         while (offset < raw.length) {
-          const read = await deadline.wait(handle.read(raw,offset,raw.length-offset,offset));
+          const read = await deadline.wait(owner.track(handle.read(raw,offset,raw.length-offset,offset)));
           if (!read.bytesRead) break; offset += read.bytesRead;
         }
         if (offset !== pin.bytes || createHash('sha256').update(raw.subarray(0,offset)).digest('hex') !== pin.sha256) throw new Error('financial_file_hash_or_length');
@@ -80,17 +141,17 @@ export async function readPinnedFinancialFiles(root: string, pins: readonly Fina
     }
     const validate = async () => {
       deadline.check();
-      for (const [name,before] of parents) { const after = await deadline.wait(lstat(name,{bigint:true})); directory(after); if (!same(before,after)) throw new Error('financial_parent_replaced'); }
+      for (const [name,before] of parents) { const after = await deadline.wait(owner.track(lstat(name,{bigint:true}))); directory(after); if (!same(before,after)) throw new Error('financial_parent_replaced'); }
       for (const item of handles) {
-        const fd = await deadline.wait(item.handle.stat({bigint:true})), named = await deadline.wait(lstat(item.filename,{bigint:true}));
+        const fd = await deadline.wait(owner.track(item.handle.stat({bigint:true}))), named = await deadline.wait(owner.track(lstat(item.filename,{bigint:true})));
         regular(fd,item.pin.bytes); regular(named,item.pin.bytes);
         if (!same(item.before,fd) || !same(fd,named)) throw new Error('financial_file_replaced');
       }
     };
     await validate();
-    return { records, validate, close: async () => { for (const h of handles) await h.handle.close(); } };
-  } catch (error) { for (const h of handles) await h.handle.close().catch(() => {}); throw error; }
+    return { records, validate, close: () => owner.cleanup(deadline), fail: (error: unknown) => owner.cleanup(deadline,error) };
+  } catch (error) { await owner.cleanup(deadline,error); throw error; }
 }
 export function financialReaderExecutionIdentity() {
-  return { limits:FINANCIAL_READ_LIMITS, functions:[FinancialDeadline.toString(),same.toString(),regular.toString(),directory.toString(),validPin.toString(),readPinnedFinancialFiles.toString()] };
+  return { admission:{maxProcessOwnedReaders:1,retainUntilConfirmedCleanup:true},limits:FINANCIAL_READ_LIMITS, functions:[FinancialDeadline.toString(),FinancialReadOwner.toString(),same.toString(),regular.toString(),directory.toString(),validPin.toString(),readPinnedFinancialFiles.toString()] };
 }
