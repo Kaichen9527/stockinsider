@@ -1,0 +1,22 @@
+{
+  "runtimeSubject": "492729b349b4ffa6e6a28f9603de30e7ec9fba3e",
+  "runtimeTree": "08be2c4b0749c81fa7e421679539dbc6e889240e",
+  "testSubject": "a47cb18ed88ba1117d47b5298da51069cd273e59",
+  "testTree": "a548c79d43dc739764c744a5f8b0a6964fa5bc55",
+  "webTree": "46c8bacfe98d193b31ef13ba64cc22adf9dafbf7",
+  "dotenvFilenameInventory": [
+    ".env.example",
+    "scraper/.env.example"
+  ],
+  "cgroupMemoryMax": "34359738368",
+  "node": "v22.14.0",
+  "pg": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+  "clockLibrarySha256": "483dfc28d0b87718ce50b48d382f03b8615fe861c5f859c958ddfc934fa0b3c6",
+  "runtimeBlobs": {
+    "web/src/lib/research-author-handoff.ts": "1559412f343e453a02ea7c9e3241421abf29add7",
+    "migrations/20261009_research_author_handoffs_v2.sql": "61152a4efe608c830ed06bbeede68d16f6bb21cb",
+    "web/src/app/api/internal/research-model-reservation/route.ts": "cdf906621a498b52a52955360e3344a5bf4e25e7",
+    "scripts/research-local-inbox-dataplane.mjs": "2b8fea66a47e309b572403a3331ab136af51bd54",
+    "package.json": "8dd258e9e28d7b2498645ae216b0bd661b202f4b"
+  }
+}

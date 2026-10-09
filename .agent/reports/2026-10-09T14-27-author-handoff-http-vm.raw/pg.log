@@ -1,0 +1,161 @@
+TAP version 13
+# (node:191674) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:191674) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-author-handoff-http-vm-oct09/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-author-handoff-http-vm-oct09/web/package.json.
+# Subtest: author handoff: real original claim/completion fences, synthetic upstream/execution and actual AUO calculator
+    # Subtest: no result before receive, all original rows and budget unchanged
+    ok 1 - no result before receive, all original rows and budget unchanged
+      ---
+      duration_ms: 341.438752
+      ...
+    # Subtest: actual calculator and authenticated binding persist one private draft only
+    ok 2 - actual calculator and authenticated binding persist one private draft only
+      ---
+      duration_ms: 510.708101
+      ...
+    # Subtest: exact receive replay/read and PostgreSQL restart preserve original bytes and charge
+    ok 3 - exact receive replay/read and PostgreSQL restart preserve original bytes and charge
+      ---
+      duration_ms: 1366.408756
+      ...
+# ERROR:  research_author_result_replay_conflict
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 71 at RAISE
+    # Subtest: changed article or execution bindings fail with no new row
+    ok 4 - changed article or execution bindings fail with no new row
+      ---
+      duration_ms: 1679.614365
+      ...
+    # Subtest: same assignment conflicting immutable envelope is rejected by SQL
+    ok 5 - same assignment conflicting immutable envelope is rejected by SQL
+      ---
+      duration_ms: 173.553162
+      ...
+    # Subtest: concurrent exact first receive creates one result and no completion
+    ok 6 - concurrent exact first receive creates one result and no completion
+      ---
+      duration_ms: 891.283319
+      ...
+    # Subtest: invocation cannot be reused across different original assignments
+    ok 7 - invocation cannot be reused across different original assignments
+      ---
+      duration_ms: 1024.995625
+      ...
+# ERROR:  research_author_result_bound
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 17 at RAISE
+    # Subtest: SQL canonical envelope exact1MiB/+1 quota, synthetic validation-limit text only
+    ok 8 - SQL canonical envelope exact1MiB/+1 quota, synthetic validation-limit text only
+      ---
+      duration_ms: 969.808335
+      ...
+# ERROR:  research_author_result_binding
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 61 at RAISE
+# ERROR:  research_author_result_binding
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 61 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_validated_context
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 28 at RAISE
+# ERROR:  research_author_result_shape
+# CONTEXT:  PL/pgSQL function receive_research_author_result_v2(jsonb,uuid,text,text,jsonb) line 15 at RAISE
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  permission denied for table research_author_results_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+    # Subtest: SQL null identities, changed calculation and promoted capabilities reject
+    ok 9 - SQL null identities, changed calculation and promoted capabilities reject
+      ---
+      duration_ms: 1359.77697
+      ...
+    # Subtest: service table mutations denied; owner UPDATE DELETE TRUNCATE rejected
+    ok 10 - service table mutations denied; owner UPDATE DELETE TRUNCATE rejected
+      ---
+      duration_ms: 75.706722
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# research_complete_input_failure_phase read_rpc unclassified
+    # Subtest: withdrawal rejects read/replay without changing stored draft
+    ok 11 - withdrawal rejects read/replay without changing stored draft
+      ---
+      duration_ms: 131.643108
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+# research_complete_input_failure_phase read_rpc unclassified
+    # Subtest: expired original job cannot read or receive a private result
+    ok 12 - expired original job cannot read or receive a private result
+      ---
+      duration_ms: 635.983125
+      ...
+# ERROR:  research_author_handoff_binding
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 34 at RAISE
+# PL/pgSQL function commit_research_author_handoff_v2(jsonb,uuid,text,text,uuid,text) line 4 at assignment
+# ERROR:  observed_completion_requires_scoped_controller
+# CONTEXT:  PL/pgSQL function fence_observed_model_completion_v2() line 3 at RAISE
+    # Subtest: handoff null before commit; result identity and principal mismatch leave state unchanged
+    ok 13 - handoff null before commit; result identity and principal mismatch leave state unchanged
+      ---
+      duration_ms: 292.108603
+      ...
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+    # Subtest: generic completion trigger rejects even superuser; scoped commit creates only original immutable completion
+    ok 14 - generic completion trigger rejects even superuser; scoped commit creates only original immutable completion
+      ---
+      duration_ms: 389.059891
+      ...
+# research_complete_input_failure_phase read_rpc unclassified
+    # Subtest: handoff replay/read and restart preserve exact receipt; active-work result reader still rejects
+    ok 15 - handoff replay/read and restart preserve exact receipt; active-work result reader still rejects
+      ---
+      duration_ms: 793.478382
+      ...
+    # Subtest: concurrent first handoff inserts one completion without changing original charge or deadlines
+    ok 16 - concurrent first handoff inserts one completion without changing original charge or deadlines
+      ---
+      duration_ms: 1407.292461
+      ...
+    # Subtest: completed result still denies withdrawn source, expired job and takeover without rewriting history
+    ok 17 - completed result still denies withdrawn source, expired job and takeover without rewriting history
+      ---
+      duration_ms: 5142.845715
+      ...
+# ERROR:  permission denied for table research_model_completions_v1
+# ERROR:  research_author_handoff_read_committed_required
+# CONTEXT:  PL/pgSQL function read_research_author_handoff_context_v2(jsonb,uuid,text,text,uuid,text) line 6 at RAISE
+    # Subtest: different original completion cannot be adopted as an accepted author handoff
+    ok 18 - different original completion cannot be adopted as an accepted author handoff
+      ---
+      duration_ms: 1307.618013
+      ...
+    # Subtest: service direct completion write forbidden and serializable context forbidden
+    ok 19 - service direct completion write forbidden and serializable context forbidden
+      ---
+      duration_ms: 196.45465
+      ...
+    1..19
+ok 1 - author handoff: real original claim/completion fences, synthetic upstream/execution and actual AUO calculator
+  ---
+  duration_ms: 21254.883285
+  ...
+1..1
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 21602.544767
