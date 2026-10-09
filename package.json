@@ -198,7 +198,9 @@
     "test:research-author-assignment": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-author-assignment-route.test.mjs scripts/research-author-assignment-postgres.test.mjs",
     "test:research-author-assignment:http": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-author-assignment-http.test.mjs",
     "test:research-author-handoff": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-author-handoff.test.mjs",
-    "test:research-author-handoff:postgres": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-author-handoff-postgres.test.mjs"
+    "test:research-author-handoff:postgres": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-author-handoff-postgres.test.mjs",
+    "test:research-reviewer-assignment": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-reviewer-assignment.test.mjs scripts/research-reviewer-identity.test.mjs",
+    "test:research-reviewer-assignment:postgres": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-reviewer-assignment-postgres.test.mjs"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
