@@ -47,9 +47,11 @@ for(const symbol of ['2409','2383'])test(`compiled complete-input ${symbol}, syn
    for(const patch of [{command:'never-run'},{clock:new Date().toISOString()},{financial:{} }])assert.equal((await post('api/internal/research-deep-job',{action:'sealResearchInput',...input,...patch})).status,400);
    assert.equal((await post('api/internal/research-deep-job',{action:'sealResearchInput',...input,owner:'another-owner'})).status,409);
   });
-  await t.test('actual restart reread persists and expired reservation refuses historical replay',async()=>{
+  await t.test('actual restart reread persists and completed reservation refuses historical replay',async()=>{
    restart();for(let n=0;n<20;n++){r=await post('api/internal/research-deep-job',{action:'readResearchInputRevision',...input});if(r.status===200)break;await new Promise(resolve=>setTimeout(resolve,100));}assert.equal(r.status,200);assert.equal((await r.json()).revision.input_hash,sealed.input_hash);
-   sql(`UPDATE research_model_reservations_v1 SET lease_expires_at=clock_timestamp()-interval '1 microsecond' WHERE reservation_id='${request.reservationId}';`);assert.equal((await post('api/internal/research-deep-job',{action:'readResearchInputRevision',...input})).status,409);assert.equal(sql('SELECT count(*) FROM research_article_input_revisions_v2;'),'1');
+   // The installed production reservation is append-only: terminate through its existing RPC.
+   // Expiry is separately covered by the minimal PG fixture; this HTTP case claims completion only.
+   sql(`SET ROLE service_role;SELECT finish_research_model_v1('${request.reservationId}','${owner}','failed','${'0'.repeat(64)}');`);assert.equal((await post('api/internal/research-deep-job',{action:'readResearchInputRevision',...input})).status,409);assert.equal(sql('SELECT count(*) FROM research_article_input_revisions_v2;'),'1');
   });
  }});assert.ok(report.completeInputHttp);
  }finally{globalThis.fetch=realFetch;}
