@@ -1,0 +1,23 @@
+# Bounded financial adapter slice — design pending
+
+Manual engineering increment starts2026-10-09T05:25:01Z, deadline2026-10-09T05:55:01Z. Independent design approval is required before new preparation/input hash or DB revision bindings. Current base0feb2b0eee5ab17bdadd284fdac90577972633f8; old pure calculator399c592 is preserved, not code-approved by this design.
+
+## Narrow behavior
+
+Use the existing authenticated deep-job preparation path and original job/attempt/reservation/scope/snapshot. A server-owned finite mapping supports2409/AUO and2383/EMC only. The request cannot select executable code, imports, commands, filesystem paths, model outputs, financial verification or qualification. Unsupported companies return an explicit unavailable calculation; EP8's5347/6531 cannot be replaced with these companies. Static source imports may read the two existing immutable working-model artifacts, but the adapter must rebuild an explicit assumptions packet and re-execute the fixed financial core rather than accepting stored EPS/results. No report-script execution in the server.
+
+Reported financial observations and the hand-written forecast assumptions are distinct typed sections. Artifact byte/canonical hashes establish content identity only. Mac relay raw hashes remain attributed and are not VM raw-byte verification. Date-only/unknown publication is retained; no midnight instant or historical PIT is created. Exact reported fields require their original evidence provenance; no adapter-wide verified flag may imply that assumptions, margins, normalization or orders are reported facts. Original model cutoffs (AUO10:20Z/EMC12:12Z onOct8), source original observed clocks, current local artifact-read knownAt, DB admitted/received clock and input cutoff are separate. Current reading cannot backdate availability.
+
+## Calculation and output
+
+Three different business scenarios retain six successive unreported quarters, four-quarter forward and full2027 separately. AUO includes Other and jurisdiction tax floor; EMC separates FX/interest/finance costs and signed NCI. Revenue→gross profit→expenses→OP→nonop→tax→net→NCI→owners→ordinary/potential EPS is rebuilt. Ordinary issuance needs period weighting; potential awards are excluded for loss/zero. Q3 monthly revenue is not Q3 EPS. Reported2026 YTD plus estimates requires its own bridge; until implemented it is incomplete. Unknown commercial capacity/yield/utilization/ASP/order/normalization stays not_quantifiable or explicitly conditional. Neither selected PE sensitivity nor this code supplies a target or approved entry.
+
+Return a bounded, read-only calculation supplement with original preparation identity/hash, exact calculator source/build execution identity, immutable artifact hashes, assumptions hash, result hash, original/current clocks and explicit gaps. This supplement is unsealed_calculation_only and all publishableResearch/researchQualified/strategyApproved/entryEligible/modelDispatched flags remain false. Never alter the original preparation hash or retrofit a manual draft/review into role execution. Recheck original live job/reservation/status and source seal before and after calculation; no claim/reserve/lease extension/refund. At expiry any retained draft is non-submittable. Initial slice does not add a durable DB calculation table or change preparation quotas. Any durable full input revision needs a separately frozen additive signature under64f7, original source→deep lock order and bounded transaction charging.
+
+## Acceptance before implementation completion
+
+1. Rebuild both actual immutable model inputs and compare every profit/EPS period with independently reviewed original results while retaining assumption labels. Tampered artifact, wrong company/unit/period/hash, supplied output/executable path and nonfinite values reject.
+2. Guarded anonymous HTTP401; live synthetic original unit can read/recalculate without any DB mutation beyond its existing preparation. Actual EP8 unit gets unsupported-company gap. Label synthetic bindings separately from public relay acquisition.
+3. Original preparation hash/bytes unchanged; wrong reservation/attempt/scope/source hash, withdrawn source, concurrent expiry and cross-company request reject. Restart/replay creates no extra seal/preparation/reservation/budget. Future/microsecond clock inversions reject.
+4. No stocks/instruments/stage/recommendation/strategy/paper/publication writes; no genuine model capability exists in current runtime, so trusted execution remains unavailable.
+5. Focused adversarial/real numeric tests, related integration, types/lint/normal build and bounded VM receipt, followed by independent exact code review. No new API/publication system or production activation.
