@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { copyResearchRuntimeFiles } from './research-release-artifacts.mjs';
 
 const FORBIDDEN_COMPONENT = /^(?:backup|\.env(?:\..*)?)$/i;
 const RELEASE_ID = /^[0-9a-f]{40}$/;
@@ -134,6 +135,7 @@ export async function packageStandaloneRelease({ sourceRepository, packagerRepos
     }
     await cp(path.join(packager, 'deployment', 'vps'), path.join(releaseDirectory, 'deployment', 'vps'),
       { recursive: true, dereference: true, errorOnExist: true, force: false });
+    await copyResearchRuntimeFiles({sourceRoot:source,releaseRoot:releaseDirectory,entrypointDirectory});
     const files = await inspectTree(releaseDirectory);
     const manifest = {
       schema: 'stockinsider-standalone-release-v2', releaseId: sourceCommit,
