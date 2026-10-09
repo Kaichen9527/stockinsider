@@ -564,3 +564,14 @@ v1,financial core,migrations,protected gates and production state are unchanged.
 No claim of new source acquisition or completed company article follows from the
 synthetic pure contract fixtures. Actual provider/role identities and citations
 must still pass the same guarded receive/review/publication transaction.
+
+
+## 2026-10-10 publication completion checkpoint (Taipei)
+
+Development integration is now e88236d9 (PR334), product source27a7a9bc and webtree2759d979 unchanged by the evidence-only commit. Original Linux `npm run test:research-agents` passed731, failed0 and skipped2 explicitly inactive native profiles. Extra transport/reviewer35 passed without skip; types/lint/build passed (33 existing lint warnings). Raw28 files/924312bytes were independently verified by root and existing reviewer; scoped unsigned receipt/TEST PASS is not protected release approval. Original5-fail long PostgreSQL socket RED was retained; only a short private TMPDIR corrected test infrastructure.
+
+PR352 preserves production financial deadlines while fixing the CI test's read/close orchestration. PR353 adds current-configuration revalidation of ORIGINAL saved controller observations without a fake reviewer HTTP Request. PR354 preserves six-second/memory bounds while fixing large test SQL argv with bounded stdin; original25 reviewer unit/PG and10 transport cases pass. All are included in development integration; main remains169aad1.
+
+PR355 implements the approved existing-pipeline atomic research publication. Maker22/22 isolated unit/PG and82/82 related legacy tests pass; exact independent review found a legacy-to-v2 mixed-branch INSERT gap. The fix and actual service-role adversarial tests are being validated before successor review. Code, tests, deployment and genuine research execution remain distinct states. Full normal build of the final successor is pending.
+
+Still unfinished: shared readable v2 renderer/native HTTP successor acceptance; configured genuine author/reviewer dispatch and tool/source evidence; full AUO and another-industry publication; current market-calendar/benchmark price-window wiring; real platform reads and discovery consumer; full-universe PIT strategy/approval/paper-book acceptance; exact protected main-to-final review/recovery, main merge/deploy; formal research schedules and five future trading days. Synthetic tests do not establish article quality or strategy profitability. VPS free space was freshly33.11GB and is not used as the current blocking explanation. No additional obsolete app deployment has been confirmed safe to delete.
