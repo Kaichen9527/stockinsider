@@ -27,3 +27,11 @@ The deployed `9fd86fe620ccc63c89c4acd208327bf2c4e15332` financial queue drain fe
 ## Non-goals
 
 No financial policy/history/schema change; no new artifact system; no proof of lease incarnation fencing; no protected review bypass, live queue execution, production configuration, source credentials, or cleanup.
+
+## CI integration repair, independently reviewed before implementation
+
+Ordinary CI at docs head `549d97a48fbcb0c5c2ba3905a6b0b9e2c5acad9a` exposed 21 failures outside the queue behavior: two strict PostgreSQL suites only recognized a VM-specific environment variable, and 19 priority route cases omitted a newly required actual module. The original 561,223-byte log (SHA256 `c89e336a7814d8e0e92d1922317552897586a3e25216cf5b12b89cea48d509aa`) is preserved.
+
+Bounded test-only requirements (unsigned independent design PASS, 2026-10-09): select a nonempty explicit `RESEARCH_LOCAL_DATAPLANE_PG_BIN` first, then nonempty protected `OPPORTUNITY_V3_POSTGRES_BIN`, otherwise fixed `pg_config --bindir` with a five-second / 4096-byte bound. A nonempty invalid explicit path cannot fall through. Discovery failure keeps the existing strict unavailable assertion; no skip, mock DB, workflow, SQL or acceptance relaxation. Apply the already reviewed `42e16135708780c5fbc5b559d5beb59db9fe326c` priority contract diff only, importing the real module and preserving formal/observed scope assertions.
+
+CI-FQL-01: exact queue/document plus repaired priority selection passes without skips; unrelated scope cannot obtain formal priority. CI-FQL-02: ordinary CI actually runs both strict PG suites via the installed tools; absence still fails. CI-FQL-03: preserve original RED and distinguish the new combined test subject from unchanged queue runtime.

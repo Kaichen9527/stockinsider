@@ -6,7 +6,12 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {randomUUID} from 'node:crypto';
-const bin=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN;
+// Preserve explicit environment selection (including an invalid nonempty path).
+// Ordinary CI exposes pg_config on PATH; protected CI provides its pinned bin.
+const bin=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN || process.env.OPPORTUNITY_V3_POSTGRES_BIN || (()=>{
+ try {return execFileSync('pg_config',['--bindir'],{encoding:'utf8',timeout:5000,maxBuffer:4096}).trim();}
+ catch {return '';}
+})();
 const q=v=>"'"+String(v).replaceAll("'","''")+"'";
 test('real PostgreSQL shared source fence and immutable dependency seals (synthetic)',async t=>{
  assert.ok(bin&&['initdb','pg_ctl','psql'].every(n=>fs.existsSync(path.join(bin,n))),'actual PostgreSQL required; unavailable is not a pass');

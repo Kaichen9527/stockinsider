@@ -7,3 +7,13 @@
 - [x] Preserve original red (3 pass / 5 fail) and obtain focused green (16/16 including existing document-route regression, zero skip). Existing strategy release check passes unchanged; queue route is outside its selected strategy source closure.
 - [ ] Independent exact-code review and VM real-stack/type/lint/build verification.
 - [ ] Push sanitized evidence and attach draft PR; release only after actual protected prerequisites pass.
+
+### Subsequent evidence and test-only CI repair
+
+- [x] Independent exact runtime review passed `1b8aa0d`: 16 focused cases plus three adversarial probes.
+- [x] VM exact `549d97a` type/lint/normal build and 16 focused + 6 real-stack cases passed; HTTP real-stack cases are rejection-only, helper/artifact cases use actual PG/PostgREST/private FD store. Full positive official worker remains unverified. Initial sandbox/cache build failures preserved.
+- [x] Push/attach draft PR333, retain no protected-release claim.
+- [x] Preserve ordinary CI 469 pass / 21 fail / 3 skip out of 493; diagnose two missing PG discoveries and 19 priority harness imports.
+- [x] Independent bounded CI-design PASS; implement only two PG discovery preludes and the reviewed actual-module priority fixture patch. Local queue/document/priority selection 35/35, zero skip.
+- [ ] Exact test-only review and actual ordinary CI rerun of both strict PG suites.
+- [ ] Protected review, production rollout and actual official queue success; the original deployment still has the missing lease until reviewed deployment.
