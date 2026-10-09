@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "manual-public-publisher-notes-observation-v1",
+  "recordedAt": "2026-10-09T04:35:21.000Z",
+  "observationType": "bounded_root_read_not_automated_role_execution",
+  "attempts": [
+    {
+      "tool": "web.open",
+      "scope": "exact public episode URL",
+      "status": "failed",
+      "reason": "URL not accessible via this tool; not no relevant results"
+    },
+    {
+      "tool": "Codex in-app browser",
+      "scope": "public episode heading, publisher notes, related-report links and DOM time datetime",
+      "status": "success",
+      "contentScope": "publisher_notes_only",
+      "transcriptRead": false,
+      "audioListened": false,
+      "memberReportsRead": false
+    },
+    {
+      "tool": "Codex in-app browser",
+      "scope": "public program landing page",
+      "status": "partial",
+      "contentScope": "program metadata only; no episode list visible",
+      "cannotInferNoNewEpisodes": true
+    }
+  ],
+  "publicationTimeEvidence": {
+    "visibleDate": "2026-03-17",
+    "domElement": "time",
+    "attribute": "datetime",
+    "value": "2026-03-16T22:30:00.000Z",
+    "timezoneNotInferredFromDateLabel": true
+  },
+  "rootUrl": "https://player.soundon.fm/p/06e16cf5-5b45-4863-bcdf-9343aa584f73/episodes/12f44f89-723a-4b7a-9b81-da916fdf07da",
+  "publisherIdentityCaution": "Same creator as investanchors.com and its social posts; cross-platform records do not imply independent confirmation. No content-repost origin beyond this episode has been established.",
+  "directMentionEvidence": {
+    "5347": "publisher related-reading label 世界先進(5347)：營運簡評",
+    "6531": "publisher related-reading label 愛普(6531)：法說會報告"
+  },
+  "item": {
+    "sourcePlatform": "podcast",
+    "sourceUrl": "https://player.soundon.fm/p/06e16cf5-5b45-4863-bcdf-9343aa584f73/episodes/12f44f89-723a-4b7a-9b81-da916fdf07da",
+    "author": "定錨財經資訊工作室",
+    "publishedAt": "2026-03-16T22:30:00.000Z",
+    "observedAt": "2026-10-09T04:35:21.000Z",
+    "firstObservedAt": "2026-10-09T04:35:21.000Z",
+    "revisionObservedAt": "2026-10-09T04:35:21.000Z",
+    "symbols": [
+      "5347",
+      "6531"
+    ],
+    "subjectScope": "company_mentions",
+    "industryTerms": [
+      "成熟製程",
+      "PMIC",
+      "功率元件",
+      "產能利用率",
+      "轉單",
+      "中國擴產"
+    ],
+    "shortSummary": "定錨 EP8 的公開節目說明討論成熟製程供給、轉單、伺服器電源相關投片與議價條件，並列出世界先進（5347）營運簡評、愛普（6531）法說會報告為相關閱讀。這證明節目說明具名提及兩家公司，沒有證明兩家公司取得特定訂單或已可進場。",
+    "catalyst": "待查假說：若成熟製程稼動率、客戶轉單及議價條件改善，須再回官方法說分別驗證公司產品曝險、量價及獲利傳導；相關閱讀連結本身不代表作者看多。",
+    "risk": "出版方同時列出中國供給、消費性需求及驗證遞延風險。只讀公開節目說明，未聽音檔、未取得逐字稿或會員報告；2026年3月內容不是10月新消息。",
+    "claimStatus": "reported",
+    "visibility": "public",
+    "contentForm": "research_summary",
+    "acquisitionMethod": "public_document",
+    "timedExcerpts": []
+  },
+  "publicRelatedReadingUrls": [
+    "https://investanchors.com/user/vip_contents/17695745641512",
+    "https://investanchors.com/user/vip_contents/17722040341524",
+    "https://investanchors.com/user/vip_contents/17734086071530"
+  ],
+  "rightsBoundary": "original bounded summary and public citation only; no member report or transcript redistributed",
+  "canonicalHashMeaning": "researchInboxContentHash hashes this structured summary revision, not an uncollected original transcript",
+  "inboxSummaryRevisionHash": "295389679f5256ba1f2cd04b76c2c0d5dc52f3d2f1a9b9f8ff3f21d16752182b",
+  "projectedContentSemantics": "editorial_discussion",
+  "newMarketNews": false,
+  "researchQualificationGranted": false,
+  "productionWritePerformed": false,
+  "pastKnowledgeBackfillAllowed": false
+}
