@@ -1,0 +1,20 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "lock-expiry-pg-r1",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-complete-input-lock-expiry-postgres.test.mjs"
+  ],
+  "startedAt": "2026-10-09T10:48:43.796Z",
+  "completedAt": "2026-10-09T10:49:23.186Z",
+  "elapsedSeconds": 39.390762393013574,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 158679040,
+  "observedTaskDiskPeakBytes": 209993728,
+  "availableBeforeBytes": 16445411328,
+  "availableAfterBytes": 16444514304,
+  "guardTermination": null
+}

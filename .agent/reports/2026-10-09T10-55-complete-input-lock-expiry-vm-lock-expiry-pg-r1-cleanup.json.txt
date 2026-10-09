@@ -1,0 +1,1 @@
+{"ownedTemporaryCluster":"/workspace/cloud-complete-lock-expiry-artifacts-oct09/si-complete-lock-VyKskl","stopped":true,"activeChildrenAfterStop":0,"noFakeClock":true,"originalSqlUnchanged":true}

@@ -1,0 +1,1166 @@
+{
+  "schemaVersion": "research-complete-input-lock-expiry-vm-receipt-v1",
+  "recordedAt": "2026-10-09T10:55:46.933291+00:00",
+  "baseSubject": "2db7bdac696cfc416b7946a912229bf9e4dee102",
+  "testSubject": "8acc10e9a9e329892c57645fce6708d701fd97b3",
+  "branch": "codex/complete-input-lock-expiry-vm-oct09",
+  "testFile": {
+    "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/scripts/research-complete-input-lock-expiry-postgres.test.mjs",
+    "bytes": 19569,
+    "sha256": "8e94603b50601e53fe6e9e7ff217539d55e92bb939067239f648c6fdb4b8dcd8"
+  },
+  "runtimeUnchanged": {
+    "web": true,
+    "migrations": true,
+    "package.json": true,
+    "scripts/research-local-inbox-dataplane.mjs": true
+  },
+  "runtimeBuildReuse": {
+    "buildSubject": "6f20d4fee2b0b7f960e36e6e104605acf6ded55c",
+    "buildId": "I-fUAZYDmfCD4nDT76Cu4",
+    "webTree": "655345527e929c2329b23eb19dd58355009c54d3",
+    "buildRerun": false,
+    "typeLintRerun": false,
+    "HTTPRerun": false,
+    "reason": "User explicitly allowed named build reuse for unchanged runtime; new isolated test only, no root package or business article edits."
+  },
+  "environment": {
+    "node": "22.14.0",
+    "postgres": "17.11",
+    "postgrestUsed": false,
+    "nextUsed": false,
+    "libfaketimeUsed": false,
+    "clockFunctionPatched": false,
+    "preload": "No LD_PRELOAD or FAKETIME configuration; test explicitly refuses them; ordinary original clock_timestamp advances."
+  },
+  "fixtureBoundary": {
+    "source": "Synthetic public-citation example.invalid source and UUID, not a fetched/trusted document",
+    "identityAndLeases": "Existing disposable complete-input fixture DDL and explicitly seeded original job/attempt/reservation; only initial INSERTs choose 6/20-second live deadlines. No UPDATE of leases, immutable rows or stored charges.",
+    "budget": "Synthetic initial reserved_seconds=1800 and taipei_day fields, plus reservation/completion whole-row hashes and original preparation/revision logical charges. All original budget/charge counters are unchanged by rejection/read/replay. Multiple separately seeded units can exceed a live daily allocation; this proves no delta, NOT 120min/day/global-one-model admission or product30min job budget.",
+    "financial": "Actual fixed AUO files, original completeMaterial and fixed calculator; attributed relay/manual assumptions retained, original source cutoff unchanged; all eight capabilities false. No original raw PDFs imported or independently reverified.",
+    "SQLAndACL": "Original source fence/preparation/assert/complete SQL installed unchanged. Fixture substrate/table seeds are synthetic as in existing PG test. Actual request calls run original service_role RPCs; no helper/body/cap patch/new private grants."
+  },
+  "results": {
+    "tapTotal": 10,
+    "parentCases": 1,
+    "childCases": 9,
+    "pass": 10,
+    "fail": 0,
+    "skip": 0,
+    "positiveControls": [
+      {
+        "lock": "shared_source",
+        "original": {
+          "bothLive": true,
+          "serverNow": "2026-10-09T10:52:48.565821+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:08.449075+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:08.450589+00:00",
+          "reservationStartedAt": "2026-10-09T10:52:48.450589+00:00"
+        },
+        "proof": {
+          "pid": 171697,
+          "granted": false,
+          "blockedBy": [
+            171693
+          ],
+          "waitEvent": "advisory",
+          "observedAt": "2026-10-09T10:52:48.623431+00:00",
+          "beforeOriginalDeadline": true
+        },
+        "holderPid": 171693,
+        "releaseAt": {
+          "bothLive": true,
+          "serverNow": "2026-10-09T10:52:48.67309+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:08.449075+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:08.450589+00:00",
+          "reservationStartedAt": "2026-10-09T10:52:48.450589+00:00"
+        },
+        "elapsedMs": 174.77725299999997,
+        "savedRevisionId": "ff8174f6-7247-4872-994a-1fd69d522563",
+        "capabilities": {
+          "dispatchReady": false,
+          "entryEligible": false,
+          "modelDispatched": false,
+          "strategyApproved": false,
+          "financialVerified": false,
+          "researchQualified": false,
+          "publishableResearch": false,
+          "historicalPITEligible": false
+        }
+      },
+      {
+        "lock": "global_deep",
+        "original": {
+          "bothLive": true,
+          "serverNow": "2026-10-09T10:53:07.453911+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:27.350982+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:27.35278+00:00",
+          "reservationStartedAt": "2026-10-09T10:53:07.35278+00:00"
+        },
+        "proof": {
+          "pid": 173325,
+          "granted": false,
+          "blockedBy": [
+            173321
+          ],
+          "waitEvent": "advisory",
+          "observedAt": "2026-10-09T10:53:07.521708+00:00",
+          "beforeOriginalDeadline": true
+        },
+        "holderPid": 173321,
+        "releaseAt": {
+          "bothLive": true,
+          "serverNow": "2026-10-09T10:53:07.575053+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:27.350982+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:27.35278+00:00",
+          "reservationStartedAt": "2026-10-09T10:53:07.35278+00:00"
+        },
+        "elapsedMs": 193.8676059999998,
+        "savedRevisionId": "191a0a3d-cef6-4cbb-a2b3-322cf851c64f",
+        "capabilities": {
+          "dispatchReady": false,
+          "entryEligible": false,
+          "modelDispatched": false,
+          "strategyApproved": false,
+          "financialVerified": false,
+          "researchQualified": false,
+          "publishableResearch": false,
+          "historicalPITEligible": false
+        }
+      }
+    ],
+    "negativeUnsealedCases": [
+      {
+        "lock": "shared_source",
+        "expired": "job",
+        "original": {
+          "bothLive": true,
+          "serverNow": "2026-10-09T10:52:48.948046+00:00",
+          "jobExpiresAt": "2026-10-09T10:52:54.845942+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:08.847154+00:00",
+          "reservationStartedAt": "2026-10-09T10:52:48.847154+00:00"
+        },
+        "deadline": "2026-10-09T10:52:54.845942+00:00",
+        "proof": {
+          "pid": 171727,
+          "granted": false,
+          "blockedBy": [
+            171723
+          ],
+          "waitEvent": "advisory",
+          "observedAt": "2026-10-09T10:52:49.011501+00:00",
+          "beforeOriginalDeadline": true
+        },
+        "holderPid": 171723,
+        "releaseAt": {
+          "bothLive": false,
+          "serverNow": "2026-10-09T10:52:54.873338+00:00",
+          "jobExpiresAt": "2026-10-09T10:52:54.845942+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:08.847154+00:00",
+          "reservationStartedAt": "2026-10-09T10:52:48.847154+00:00"
+        },
+        "elapsedMs": 5909.078125999999,
+        "rejection": "ERROR:  input_preparation_original_lease_lost\\nCONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE\\nPL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment\\nPL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment\\nPL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment\\nPL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 4 at assignment",
+        "before": {
+          "charge": 171418,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 5400,
+          "research_deep_jobs_v1": {
+            "count": 3,
+            "rowHash": "8f2b417848c9d09e7a58a85660475822ba2ffce13328290112a99e443e87ba64"
+          },
+          "research_source_seals_v2": {
+            "count": 2,
+            "rowHash": "6417a802fc8affbef2489ff6ac04ccebef130833b24a87fde3ac902362b3f579"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 3,
+            "rowHash": "87a5b3615cd737e26ca023e3b8d4f8fa9e64cdf9c9659ea2f9bd0512f4435f7b"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 2,
+            "rowHash": "c1e3def1274afd3f1f3a071fb97ec91a16dacd03fa956ee73ee5a8d06c5322ff"
+          },
+          "research_model_reservations_v1": {
+            "count": 3,
+            "rowHash": "59c7e297b00a925ed9e33d031f365a76bb9c899f08645cefd2bec303580839fa"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "93a21442a100be2c06a64f781b5d65da06522c483505225d329f3a05e1022adf"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "after": {
+          "charge": 171418,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 5400,
+          "research_deep_jobs_v1": {
+            "count": 3,
+            "rowHash": "8f2b417848c9d09e7a58a85660475822ba2ffce13328290112a99e443e87ba64"
+          },
+          "research_source_seals_v2": {
+            "count": 2,
+            "rowHash": "6417a802fc8affbef2489ff6ac04ccebef130833b24a87fde3ac902362b3f579"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 3,
+            "rowHash": "87a5b3615cd737e26ca023e3b8d4f8fa9e64cdf9c9659ea2f9bd0512f4435f7b"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 2,
+            "rowHash": "c1e3def1274afd3f1f3a071fb97ec91a16dacd03fa956ee73ee5a8d06c5322ff"
+          },
+          "research_model_reservations_v1": {
+            "count": 3,
+            "rowHash": "59c7e297b00a925ed9e33d031f365a76bb9c899f08645cefd2bec303580839fa"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "93a21442a100be2c06a64f781b5d65da06522c483505225d329f3a05e1022adf"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      {
+        "lock": "shared_source",
+        "expired": "reservation",
+        "original": {
+          "bothLive": true,
+          "serverNow": "2026-10-09T10:52:55.124784+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:15.036557+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:01.037819+00:00",
+          "reservationStartedAt": "2026-10-09T10:52:55.037819+00:00"
+        },
+        "deadline": "2026-10-09T10:53:01.037819+00:00",
+        "proof": {
+          "pid": 172261,
+          "granted": false,
+          "blockedBy": [
+            172257
+          ],
+          "waitEvent": "advisory",
+          "observedAt": "2026-10-09T10:52:55.188344+00:00",
+          "beforeOriginalDeadline": true
+        },
+        "holderPid": 172257,
+        "releaseAt": {
+          "bothLive": false,
+          "serverNow": "2026-10-09T10:53:01.066203+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:15.036557+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:01.037819+00:00",
+          "reservationStartedAt": "2026-10-09T10:52:55.037819+00:00"
+        },
+        "elapsedMs": 5925.744043999999,
+        "rejection": "ERROR:  input_preparation_original_lease_lost\\nCONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE\\nPL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment\\nPL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment\\nPL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment\\nPL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 4 at assignment",
+        "before": {
+          "charge": 173948,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 7200,
+          "research_deep_jobs_v1": {
+            "count": 4,
+            "rowHash": "54cde2be48ebbd6f5d8922d3ddd91e642933313091c6277a4150fdfac62ca8fb"
+          },
+          "research_source_seals_v2": {
+            "count": 3,
+            "rowHash": "122eb6a9a9cef1a667bd2822f52523bcb9ba16814d5cfeb3adcda52c310f88ea"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 4,
+            "rowHash": "0da783c027dc5d65d78dd94d281863f9f019b3b3f42c448e490173225782d246"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 3,
+            "rowHash": "ada3c1961a40684e9815101e39e6cfdc5670c3dfcc5a538d7763aad575763995"
+          },
+          "research_model_reservations_v1": {
+            "count": 4,
+            "rowHash": "feafd9402844a9e159ed3fd6e546a3eb267c230a0dc57fa7da90b5ee88d50721"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "93a21442a100be2c06a64f781b5d65da06522c483505225d329f3a05e1022adf"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "after": {
+          "charge": 173948,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 7200,
+          "research_deep_jobs_v1": {
+            "count": 4,
+            "rowHash": "54cde2be48ebbd6f5d8922d3ddd91e642933313091c6277a4150fdfac62ca8fb"
+          },
+          "research_source_seals_v2": {
+            "count": 3,
+            "rowHash": "122eb6a9a9cef1a667bd2822f52523bcb9ba16814d5cfeb3adcda52c310f88ea"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 4,
+            "rowHash": "0da783c027dc5d65d78dd94d281863f9f019b3b3f42c448e490173225782d246"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 3,
+            "rowHash": "ada3c1961a40684e9815101e39e6cfdc5670c3dfcc5a538d7763aad575763995"
+          },
+          "research_model_reservations_v1": {
+            "count": 4,
+            "rowHash": "feafd9402844a9e159ed3fd6e546a3eb267c230a0dc57fa7da90b5ee88d50721"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 1,
+            "rowHash": "93a21442a100be2c06a64f781b5d65da06522c483505225d329f3a05e1022adf"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      {
+        "lock": "global_deep",
+        "expired": "job",
+        "original": {
+          "bothLive": true,
+          "serverNow": "2026-10-09T10:53:07.863694+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:13.771655+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:27.772875+00:00",
+          "reservationStartedAt": "2026-10-09T10:53:07.772875+00:00"
+        },
+        "deadline": "2026-10-09T10:53:13.771655+00:00",
+        "proof": {
+          "pid": 173357,
+          "granted": false,
+          "blockedBy": [
+            173353
+          ],
+          "waitEvent": "advisory",
+          "observedAt": "2026-10-09T10:53:07.933187+00:00",
+          "beforeOriginalDeadline": true
+        },
+        "holderPid": 173353,
+        "releaseAt": {
+          "bothLive": false,
+          "serverNow": "2026-10-09T10:53:13.803595+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:13.771655+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:27.772875+00:00",
+          "reservationStartedAt": "2026-10-09T10:53:07.772875+00:00"
+        },
+        "elapsedMs": 5918.0601879999995,
+        "rejection": "ERROR:  input_preparation_original_lease_lost\\nCONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE\\nPL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment\\nPL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment\\nPL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment\\nPL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 4 at assignment",
+        "before": {
+          "charge": 514248,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 12600,
+          "research_deep_jobs_v1": {
+            "count": 7,
+            "rowHash": "184d8659dea8ddca529a1cb9cd0a1198250d3c81fa7a19889246e990ea115b25"
+          },
+          "research_source_seals_v2": {
+            "count": 6,
+            "rowHash": "fc044412f0d4265520b6fc695da12d9f565aa7c74d5a9a91432ec7ab31b7d805"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 7,
+            "rowHash": "67d43d23309e22af41b3a7a382953e229f1e8d4fa5318ca94bef5207d897c0e1"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 6,
+            "rowHash": "ffce19caecc3aa00928a12057385f961b268e0a3555fa03a001194045826ec2b"
+          },
+          "research_model_reservations_v1": {
+            "count": 7,
+            "rowHash": "b14cb6f05f8925c69cf570aa3da0751d2c082b7a9348697aebb180a5dd876143"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 3,
+            "rowHash": "484083b69df782c138f45791c46f641afa8f43435d34c9412c31a2569c26dd6c"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "after": {
+          "charge": 514248,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 12600,
+          "research_deep_jobs_v1": {
+            "count": 7,
+            "rowHash": "184d8659dea8ddca529a1cb9cd0a1198250d3c81fa7a19889246e990ea115b25"
+          },
+          "research_source_seals_v2": {
+            "count": 6,
+            "rowHash": "fc044412f0d4265520b6fc695da12d9f565aa7c74d5a9a91432ec7ab31b7d805"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 7,
+            "rowHash": "67d43d23309e22af41b3a7a382953e229f1e8d4fa5318ca94bef5207d897c0e1"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 6,
+            "rowHash": "ffce19caecc3aa00928a12057385f961b268e0a3555fa03a001194045826ec2b"
+          },
+          "research_model_reservations_v1": {
+            "count": 7,
+            "rowHash": "b14cb6f05f8925c69cf570aa3da0751d2c082b7a9348697aebb180a5dd876143"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 3,
+            "rowHash": "484083b69df782c138f45791c46f641afa8f43435d34c9412c31a2569c26dd6c"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      {
+        "lock": "global_deep",
+        "expired": "reservation",
+        "original": {
+          "bothLive": true,
+          "serverNow": "2026-10-09T10:53:14.07329+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:33.990218+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:19.991359+00:00",
+          "reservationStartedAt": "2026-10-09T10:53:13.991359+00:00"
+        },
+        "deadline": "2026-10-09T10:53:19.991359+00:00",
+        "proof": {
+          "pid": 173921,
+          "granted": false,
+          "blockedBy": [
+            173909
+          ],
+          "waitEvent": "advisory",
+          "observedAt": "2026-10-09T10:53:14.141041+00:00",
+          "beforeOriginalDeadline": true
+        },
+        "holderPid": 173909,
+        "releaseAt": {
+          "bothLive": false,
+          "serverNow": "2026-10-09T10:53:20.032817+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:33.990218+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:19.991359+00:00",
+          "reservationStartedAt": "2026-10-09T10:53:13.991359+00:00"
+        },
+        "elapsedMs": 5937.027342999998,
+        "rejection": "ERROR:  input_preparation_original_lease_lost\\nCONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE\\nPL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment\\nPL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment\\nPL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment\\nPL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 4 at assignment",
+        "before": {
+          "charge": 516778,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 14400,
+          "research_deep_jobs_v1": {
+            "count": 8,
+            "rowHash": "940eb5ae7eb6f6147823ee026210d47202668b478574b4ba5a2f0ea1f9b73e09"
+          },
+          "research_source_seals_v2": {
+            "count": 7,
+            "rowHash": "0fb6bdc9724a9b44d2e7baeadab0337aff2860e7509d1afa838ab4ed29c7c989"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 8,
+            "rowHash": "9c5675394cc28cbc3ff5a26523e6a1277bf7242ef96a1209c0f6c085432841d5"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 7,
+            "rowHash": "255f3fb8878e9f71dc0635028e9ba0ffe319e5a83f28afb27a9aa2a626220a13"
+          },
+          "research_model_reservations_v1": {
+            "count": 8,
+            "rowHash": "0153ac5ccc4bd768e0043ed592c68cd36be1e9ea206951d2409aa49b5ec79d60"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 3,
+            "rowHash": "484083b69df782c138f45791c46f641afa8f43435d34c9412c31a2569c26dd6c"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "after": {
+          "charge": 516778,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 14400,
+          "research_deep_jobs_v1": {
+            "count": 8,
+            "rowHash": "940eb5ae7eb6f6147823ee026210d47202668b478574b4ba5a2f0ea1f9b73e09"
+          },
+          "research_source_seals_v2": {
+            "count": 7,
+            "rowHash": "0fb6bdc9724a9b44d2e7baeadab0337aff2860e7509d1afa838ab4ed29c7c989"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 8,
+            "rowHash": "9c5675394cc28cbc3ff5a26523e6a1277bf7242ef96a1209c0f6c085432841d5"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 7,
+            "rowHash": "255f3fb8878e9f71dc0635028e9ba0ffe319e5a83f28afb27a9aa2a626220a13"
+          },
+          "research_model_reservations_v1": {
+            "count": 8,
+            "rowHash": "0153ac5ccc4bd768e0043ed592c68cd36be1e9ea206951d2409aa49b5ec79d60"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 3,
+            "rowHash": "484083b69df782c138f45791c46f641afa8f43435d34c9412c31a2569c26dd6c"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      }
+    ],
+    "persistedReadCases": [
+      {
+        "lock": "shared_source",
+        "original": {
+          "bothLive": true,
+          "serverNow": "2026-10-09T10:53:01.398719+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:21.21465+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:07.215778+00:00",
+          "reservationStartedAt": "2026-10-09T10:53:01.215778+00:00"
+        },
+        "proof": {
+          "pid": 172799,
+          "granted": false,
+          "blockedBy": [
+            172795
+          ],
+          "waitEvent": "advisory",
+          "observedAt": "2026-10-09T10:53:01.438197+00:00",
+          "beforeOriginalDeadline": true
+        },
+        "holderPid": 172795,
+        "releaseAt": {
+          "bothLive": false,
+          "serverNow": "2026-10-09T10:53:07.257321+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:21.21465+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:07.215778+00:00",
+          "reservationStartedAt": "2026-10-09T10:53:01.215778+00:00"
+        },
+        "elapsedMs": 5838.07545,
+        "rejection": "ERROR:  input_preparation_original_lease_lost\\nCONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE\\nPL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment\\nPL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment\\nPL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment",
+        "preservedRevisionId": "a668fec6-206e-4479-b8dd-646193ce020f",
+        "preservedInputHash": "0f8336be5f713a7d21820c729da16496518c20cc4c702a2db5d1090a0b5b5f18",
+        "before": {
+          "charge": 342834,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 9000,
+          "research_deep_jobs_v1": {
+            "count": 5,
+            "rowHash": "5337f1d1e8913e793f2cfdb8359324fcdfb2924c93b6950eae03aa969e1619a6"
+          },
+          "research_source_seals_v2": {
+            "count": 4,
+            "rowHash": "367fb129092c7865e67dc325e7a6e6ea70dc6f1290c1ed0ebfc3d8e13296ae56"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 5,
+            "rowHash": "2ef98b60ba58742d7138f3bf863ce2a0bdc3f2e60c71020030d057597b1fa53d"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 4,
+            "rowHash": "315286b3022433896b784f8ac80bfc8ecc4b069599e0966371c0749d5a2aaada"
+          },
+          "research_model_reservations_v1": {
+            "count": 5,
+            "rowHash": "3f039b4cf46b64f483affceb64f5ecded93374084b06fbdbdfa34ec92e210b61"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 2,
+            "rowHash": "3a919d5ae857802247285320a6ffe80dad74d569e03806b3624ff187877c1d80"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "after": {
+          "charge": 342834,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 9000,
+          "research_deep_jobs_v1": {
+            "count": 5,
+            "rowHash": "5337f1d1e8913e793f2cfdb8359324fcdfb2924c93b6950eae03aa969e1619a6"
+          },
+          "research_source_seals_v2": {
+            "count": 4,
+            "rowHash": "367fb129092c7865e67dc325e7a6e6ea70dc6f1290c1ed0ebfc3d8e13296ae56"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 5,
+            "rowHash": "2ef98b60ba58742d7138f3bf863ce2a0bdc3f2e60c71020030d057597b1fa53d"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 4,
+            "rowHash": "315286b3022433896b784f8ac80bfc8ecc4b069599e0966371c0749d5a2aaada"
+          },
+          "research_model_reservations_v1": {
+            "count": 5,
+            "rowHash": "3f039b4cf46b64f483affceb64f5ecded93374084b06fbdbdfa34ec92e210b61"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 2,
+            "rowHash": "3a919d5ae857802247285320a6ffe80dad74d569e03806b3624ff187877c1d80"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      {
+        "lock": "global_deep",
+        "original": {
+          "bothLive": true,
+          "serverNow": "2026-10-09T10:53:20.425199+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:40.222896+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:26.226824+00:00",
+          "reservationStartedAt": "2026-10-09T10:53:20.226824+00:00"
+        },
+        "proof": {
+          "pid": 174492,
+          "granted": false,
+          "blockedBy": [
+            174488
+          ],
+          "waitEvent": "advisory",
+          "observedAt": "2026-10-09T10:53:20.502531+00:00",
+          "beforeOriginalDeadline": true
+        },
+        "holderPid": 174488,
+        "releaseAt": {
+          "bothLive": false,
+          "serverNow": "2026-10-09T10:53:26.255802+00:00",
+          "jobExpiresAt": "2026-10-09T10:53:40.222896+00:00",
+          "reservationExpiresAt": "2026-10-09T10:53:26.226824+00:00",
+          "reservationStartedAt": "2026-10-09T10:53:20.226824+00:00"
+        },
+        "elapsedMs": 5799.017991000001,
+        "rejection": "ERROR:  input_preparation_original_lease_lost\\nCONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE\\nPL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment\\nPL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment\\nPL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment",
+        "preservedRevisionId": "6890bb91-a06a-4ecd-8b68-aa1553bbe0eb",
+        "preservedInputHash": "6a14c4f82f07bd9150f0530f5047fd742376f9009dacc3293845dbd70dd55a19",
+        "before": {
+          "charge": 685665,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 16200,
+          "research_deep_jobs_v1": {
+            "count": 9,
+            "rowHash": "adbce20952249c141c295736cdc51f34029ba9a7de4ff1ce40ca9b7bfbe78766"
+          },
+          "research_source_seals_v2": {
+            "count": 8,
+            "rowHash": "c867a517c4e422585f9f8629d5f0481a20cedf8cbf3655c4c808e8526882ec82"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 9,
+            "rowHash": "026f72ba94de150dd47cc9c915f7360d1b07dfae394da5df340a805a7a3973b7"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 8,
+            "rowHash": "5be2ceec1aca34a5ca3e1d04b9a0a36ab672b8911c4e116ec099dd599e13e9eb"
+          },
+          "research_model_reservations_v1": {
+            "count": 9,
+            "rowHash": "63878f7c19943b211f761472579ce6dc1f387dbbe3fe5e060580ecc8ee16ce68"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 4,
+            "rowHash": "f8fec4760d505068957de8e6654f7c17d988bd53bf064a4f8e784db66a88fa7a"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "after": {
+          "charge": 685665,
+          "stocks": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "source_raw_documents": {
+            "count": 1,
+            "rowHash": "3a874cd46b00241f41c72e8011695a60725a70b97c62d6f576fd62bb6363ad9a"
+          },
+          "budgetReservedSeconds": 16200,
+          "research_deep_jobs_v1": {
+            "count": 9,
+            "rowHash": "adbce20952249c141c295736cdc51f34029ba9a7de4ff1ce40ca9b7bfbe78766"
+          },
+          "research_source_seals_v2": {
+            "count": 8,
+            "rowHash": "c867a517c4e422585f9f8629d5f0481a20cedf8cbf3655c4c808e8526882ec82"
+          },
+          "research_deep_job_attempts_v1": {
+            "count": 9,
+            "rowHash": "026f72ba94de150dd47cc9c915f7360d1b07dfae394da5df340a805a7a3973b7"
+          },
+          "research_model_completions_v1": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "research_input_preparations_v2": {
+            "count": 8,
+            "rowHash": "5be2ceec1aca34a5ca3e1d04b9a0a36ab672b8911c4e116ec099dd599e13e9eb"
+          },
+          "research_model_reservations_v1": {
+            "count": 9,
+            "rowHash": "63878f7c19943b211f761472579ce6dc1f387dbbe3fe5e060580ecc8ee16ce68"
+          },
+          "research_source_fence_events_v2": {
+            "count": 1,
+            "rowHash": "a5f2f93a3855461fb66bedd7cbf9a8d6ca50a53bf50a55a04102bc29880c55ee"
+          },
+          "research_article_input_revisions_v2": {
+            "count": 4,
+            "rowHash": "f8fec4760d505068957de8e6654f7c17d988bd53bf064a4f8e784db66a88fa7a"
+          },
+          "research_source_seal_invalidations_v2": {
+            "count": 0,
+            "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      }
+    ],
+    "lockProof": "Exact advisory classid/objid/objsubid in pg_locks, granted=false and pg_blocking_pids includes actual holder backend. Waiting proof captured before original deadline; natural DB clock crosses original deadline before COMMIT releases holder.",
+    "expectedRejectReason": "input_preparation_original_lease_lost",
+    "negativeCountAndRowHashesAllEqual": true,
+    "budgetReservedSecondsUnchanged": true,
+    "savedRevisionHistoryPreserved": true,
+    "unexpectedFailureOrRuntimeDefectFound": false
+  },
+  "runs": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lock-expiry-pg-r1",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-lock-expiry-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T10:48:43.796Z",
+      "completedAt": "2026-10-09T10:49:23.186Z",
+      "elapsedSeconds": 39.390762393013574,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 158679040,
+      "observedTaskDiskPeakBytes": 209993728,
+      "availableBeforeBytes": 16445411328,
+      "availableAfterBytes": 16444514304,
+      "guardTermination": null,
+      "testSubject": "1363a1640c6b947bdf1e7751fc36bb9fc1f06af3",
+      "rawLog": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-r1.log",
+        "bytes": 34571,
+        "sha256": "41da0064466a1317c361dd8aedef0d1ba4c8b6ac718be5aebbeabb0009296de0"
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lock-expiry-pg-budget-final",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-lock-expiry-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T10:52:47.202Z",
+      "completedAt": "2026-10-09T10:53:26.567Z",
+      "elapsedSeconds": 39.36454929699539,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 171413504,
+      "observedTaskDiskPeakBytes": 81555456,
+      "availableBeforeBytes": 16444477440,
+      "availableAfterBytes": 16443580416,
+      "guardTermination": null,
+      "testSubject": "8acc10e9a9e329892c57645fce6708d701fd97b3",
+      "rawLog": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-budget-final.log",
+        "bytes": 34928,
+        "sha256": "1350864b16fa7e388bdfd596e027372d6b1c52853b42fba0e72b25d3df5cee65"
+      }
+    }
+  ],
+  "history": {
+    "firstRun": "10/10 zero skip with lock/deadline/hash controls. Kept raw original TAP/source1363; no unexpected RED.",
+    "finalRun": "10/10 zero skip after test-only initial reserved_seconds/taipei_day fields and explicit aggregate budget no-refund oracle were added. No existing expectations weakened.",
+    "expectedNegativeErrors": "Six deliberate expiry waiting calls and immediate post-expiry read/old-preparation/duplicate-seal probes fail as asserted; those errors are expected rejection evidence, not suite failures.",
+    "previousTaskRed": "All prior complete input/native/byte-boundary RED receipts on their existing branches remain untouched."
+  },
+  "cleanup": {
+    "report": {
+      "ownedTemporaryCluster": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/si-complete-lock-FAK6wb",
+      "stopped": true,
+      "activeChildrenAfterStop": 0,
+      "noFakeClock": true,
+      "originalSqlUnchanged": true
+    },
+    "ownedProcessReferencesAfterRun": [],
+    "uniqueRawLogsRetained": true,
+    "disposablePgDirectoryRemoved": true,
+    "availableAfterBytes": 16441737216
+  },
+  "manualWindow": {
+    "firstCapturedWorkClock": "2026-10-09T10:44:31Z",
+    "lastHeavyCompletedAt": "2026-10-09T10:53:26.567Z",
+    "receiptRecordedAt": "2026-10-09T10:55:46.933539+00:00",
+    "notAutomatedRoleBudgetProof": true
+  },
+  "remaining": [
+    "Independent exact code/receipt review pending",
+    "120-second natural freshness boundary not covered",
+    "Source two commit orders/rights ABA not covered",
+    "Actual response-loss reconciliation not covered",
+    "No real author/reviewer/model dispatch, publication, protected approval, main merge, production DB or deployment",
+    "No package/CI hook changed; root owns integration/explicit test registration"
+  ],
+  "migrationSourceHashes": [
+    {
+      "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/migrations/20261009_research_publication_source_fence_v2.sql",
+      "bytes": 12454,
+      "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621"
+    },
+    {
+      "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/migrations/20261009_research_input_preparations_v2.sql",
+      "bytes": 14713,
+      "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e"
+    },
+    {
+      "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/migrations/20261009_research_input_preparation_assert_v2.sql",
+      "bytes": 2086,
+      "sha256": "c63a923be36e5f7ba06001a6d8be57287d80f5e6524dc866bad93b80666a9cbc"
+    },
+    {
+      "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/migrations/20261009_research_complete_input_v2.sql",
+      "bytes": 446691,
+      "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c"
+    }
+  ],
+  "rawEvidence": [
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-r1.log",
+        "bytes": 34571,
+        "sha256": "41da0064466a1317c361dd8aedef0d1ba4c8b6ac718be5aebbeabb0009296de0"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-r1.log.txt",
+        "bytes": 34571,
+        "sha256": "41da0064466a1317c361dd8aedef0d1ba4c8b6ac718be5aebbeabb0009296de0"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-r1.json",
+        "bytes": 660,
+        "sha256": "17b97b4588bc4aded7ad1e4b5e08460ff3ebb15e409686b44f961f4f5ab7565f"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-r1.json.txt",
+        "bytes": 660,
+        "sha256": "17b97b4588bc4aded7ad1e4b5e08460ff3ebb15e409686b44f961f4f5ab7565f"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-r1.time",
+        "bytes": 851,
+        "sha256": "7995ba67251f29033bb8c081bdd63f803a2fb92f6949f98943ee828318c11099"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-r1.time.txt",
+        "bytes": 851,
+        "sha256": "7995ba67251f29033bb8c081bdd63f803a2fb92f6949f98943ee828318c11099"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-r1-pg-proof/children.json",
+        "bytes": 308484,
+        "sha256": "384302111de1c9f7c968b6b3c1d5e1431c722df1f66ed22e93db0845b1ce41af"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-r1-children.json.txt",
+        "bytes": 308484,
+        "sha256": "384302111de1c9f7c968b6b3c1d5e1431c722df1f66ed22e93db0845b1ce41af"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-r1-pg-proof/pg.log",
+        "bytes": 534368,
+        "sha256": "9863238da4edc971a5f3333afc947b0cea2312343feb41a72fa381463886dc3c"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-r1-pg.log.txt",
+        "bytes": 534368,
+        "sha256": "9863238da4edc971a5f3333afc947b0cea2312343feb41a72fa381463886dc3c"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-r1-pg-proof/cleanup.json",
+        "bytes": 196,
+        "sha256": "e9c90596a03c614ea2174475094cebf0d9e3e845afccf393843aec540bcdf330"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-r1-cleanup.json.txt",
+        "bytes": 196,
+        "sha256": "e9c90596a03c614ea2174475094cebf0d9e3e845afccf393843aec540bcdf330"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-budget-final.log",
+        "bytes": 34928,
+        "sha256": "1350864b16fa7e388bdfd596e027372d6b1c52853b42fba0e72b25d3df5cee65"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-budget-final.log.txt",
+        "bytes": 34928,
+        "sha256": "1350864b16fa7e388bdfd596e027372d6b1c52853b42fba0e72b25d3df5cee65"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-budget-final.json",
+        "bytes": 668,
+        "sha256": "ae08cd80415f75e35bcd23ed76c9eace5cc9cd2643f2e3d3cc345433dc1a4024"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-budget-final.json.txt",
+        "bytes": 668,
+        "sha256": "ae08cd80415f75e35bcd23ed76c9eace5cc9cd2643f2e3d3cc345433dc1a4024"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-budget-final.time",
+        "bytes": 851,
+        "sha256": "7426ed02974dda886da356ddcdbc653cae2e8fc99cd95ae239dfaed8bc9fb438"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-budget-final.time.txt",
+        "bytes": 851,
+        "sha256": "7426ed02974dda886da356ddcdbc653cae2e8fc99cd95ae239dfaed8bc9fb438"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-budget-final-pg-proof/children.json",
+        "bytes": 308499,
+        "sha256": "52345aca555ee54474022a3eb9a3b59ee3df0b8bb0fa858e2fdb9ada5639eed1"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-budget-final-children.json.txt",
+        "bytes": 308499,
+        "sha256": "52345aca555ee54474022a3eb9a3b59ee3df0b8bb0fa858e2fdb9ada5639eed1"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-budget-final-pg-proof/pg.log",
+        "bytes": 534368,
+        "sha256": "a00c8af1428f45fc47b82a38726d82ac87f8fe265f32f0c5983849d2288fef8a"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-budget-final-pg.log.txt",
+        "bytes": 534368,
+        "sha256": "a00c8af1428f45fc47b82a38726d82ac87f8fe265f32f0c5983849d2288fef8a"
+      }
+    },
+    {
+      "original": {
+        "path": "/workspace/cloud-complete-lock-expiry-artifacts-oct09/lock-expiry-pg-budget-final-pg-proof/cleanup.json",
+        "bytes": 196,
+        "sha256": "45c9ff59c3c3e1626853703f462a956812a3f8a5001cb52af00f77b4606c8a3a"
+      },
+      "committed": {
+        "path": "/workspace/cloud-complete-lock-expiry-vm-oct09/.agent/reports/2026-10-09T10-55-complete-input-lock-expiry-vm-lock-expiry-pg-budget-final-cleanup.json.txt",
+        "bytes": 196,
+        "sha256": "45c9ff59c3c3e1626853703f462a956812a3f8a5001cb52af00f77b4606c8a3a"
+      }
+    }
+  ]
+}
