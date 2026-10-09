@@ -43,3 +43,27 @@ archive optimization and minute strategies are subsequent work. This does not
 waive protected release review, article evidence, strategy approval, persistent
 history, or five actual trading days of schedule acceptance. VPS capacity was
 expanded; old October 4/8 capacity failures are historical observations.
+
+## Independent capacity finding and successor
+
+The independent scoped review of4c3874f451542aa53f93d006dea348ebccca07c3
+requested changes: actual enrichment over a synthetic1,978-company empty roster
+already produced3,651,407 compact bytes for price contexts alone, and5,249,664
+pretty receipt bytes before rows. The old two-million-byte journal and
+four-million-byte HTTP transport could fail after successful server writes.
+This is a genuine failed review, not a passed native acceptance.
+
+The successor gives this trusted cohort caller an explicit32,000,000-byte HTTP
+response budget while ordinary monitoring retains4,000,000. Controller and
+assessment files retain their separate2,000,000-byte limits. The complete
+candidate/price response is persisted compactly with a finite34,016,384-byte
+receipt limit and the existing canonical hash. Replay validates that same
+complete receipt; no rows are dropped and an uncertain write is never resent.
+The server count is additionally bounded to5,000. No public API or source
+acquisition policy changes.
+
+New tests use the actual scoring/enrichment modules to create a synthetic
+1,978-company response above the old four-MB limit; actual HTTP persistence and
+full replay are required on Linux. This is distinct from the real PostgreSQL
+roster/native case. Portable successor pre-I/O/size checks5/5 and transport/
+monitor tests14/14 pass; neither substitutes for pending Linux/native execution.

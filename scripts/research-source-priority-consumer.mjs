@@ -9,6 +9,10 @@ import { parseResearchPriorityScope } from '../web/src/lib/research-observed-pri
 import { jsonPost } from './research-monitor-controller.mjs';
 
 const MAX_BYTES = 2_000_000;
+export const SOURCE_PRIORITY_RESPONSE_BYTES = 32_000_000;
+// One compact response plus the bounded inbox and journal metadata. Input
+// controller/assessments remain limited to two million bytes independently.
+const RECEIPT_BYTES = SOURCE_PRIORITY_RESPONSE_BYTES + MAX_BYTES + 16_384;
 export function sourcePriorityScope(args) {
   const flags = new Map();
   if (![8, 10, 12].includes(args.length)) throw new Error('source_priority_arguments_invalid');
@@ -39,12 +43,12 @@ function assertPriorityScope(body, scope) {
     throw new Error('source_priority_response_scope_mismatch');
   }
 }
-async function readJson(filename) {
+async function readJson(filename, maximum = MAX_BYTES) {
   if (!path.isAbsolute(filename || '')) throw new Error('source_priority_absolute_path_required');
   const handle = await open(filename, constants.O_RDONLY | constants.O_NOFOLLOW);
   try {
     const before = await handle.stat();
-    if (!before.isFile() || before.size > MAX_BYTES) throw new Error('source_priority_file_bound');
+    if (!before.isFile() || before.size > maximum) throw new Error('source_priority_file_bound');
     const bytes = await handle.readFile();
     const after = await handle.stat();
     if (bytes.length !== before.size || before.ctimeMs !== after.ctimeMs || before.ino !== after.ino)
@@ -52,9 +56,9 @@ async function readJson(filename) {
     return JSON.parse(bytes.toString('utf8'));
   } finally { await handle.close(); }
 }
-async function writeJson(filename, value) {
-  const bytes = JSON.stringify(value, null, 2) + '\n';
-  if (Buffer.byteLength(bytes) > MAX_BYTES) throw new Error('source_priority_file_bound');
+async function writeJson(filename, value, maximum = MAX_BYTES, compact = false) {
+  const bytes = JSON.stringify(value, null, compact ? 0 : 2) + '\n';
+  if (Buffer.byteLength(bytes) > maximum) throw new Error('source_priority_file_bound');
   const handle = await open(filename, 'wx', 0o600);
   try { await handle.writeFile(bytes); await handle.sync(); } finally { await handle.close(); }
 }
@@ -102,7 +106,7 @@ export async function sourcePriorityCommand(args, { env = process.env, post = js
     const attempt = await readJson(path.join(anchored, 'attempt.json'));
     if (attempt.inputHash !== inputHash) throw new Error('source_priority_replay_binding_mismatch');
     let result;
-    try { result = await readJson(path.join(anchored, 'receipt.json')); }
+    try { result = await readJson(path.join(anchored, 'receipt.json'), RECEIPT_BYTES); }
     catch { throw new Error('source_priority_uncertain_submission'); }
     const { receiptHash, ...content } = result;
     if (result.inputHash !== inputHash || result.completed !== true || receiptHash !== researchCanonicalHash(content))
@@ -138,19 +142,23 @@ export async function sourcePriorityCommand(args, { env = process.env, post = js
   }
   const priority = await post(new URL('/api/internal/research-priority-run', origin), {
     ...run.priorityRequest, assessments, ...observed,
-  }, key, 15000);
+  }, key, 15000, { maxResponseBytes: SOURCE_PRIORITY_RESPONSE_BYTES });
   if (priority.rejected || priority.body?.ok !== true || !Array.isArray(priority.body.rows)
+    || !Number.isInteger(priority.body.expectedCount) || priority.body.expectedCount < 0 || priority.body.expectedCount > 5000
     || priority.body.rows.length !== priority.body.accountedCount || priority.body.expectedCount !== priority.body.accountedCount
     || !Array.isArray(priority.body.queue) || priority.body.queue.length > 20)
     throw new Error('source_priority_priority_rejected_or_uncertain');
   assertPriorityScope(priority.body, scope);
+  // Injected test transports must obey the same byte budget as actual HTTP.
+  if (Buffer.byteLength(JSON.stringify(priority.body)) > SOURCE_PRIORITY_RESPONSE_BYTES)
+    throw new Error('source_priority_response_bound');
   const result = { inputHash, controllerRunHash: runHash, completed: true, completedAt: new Date().toISOString(),
     developmentOnly: true, ...observed, inbox, priority: priority.body, publication: false, strategyApproved: false,
     limitation: 'Explicit local run only; no automatic acquisition/dispatch or production acceptance.' };
   const receipt = { ...result, receiptHash: researchCanonicalHash(result) };
   await assertDirectory();
-  await writeJson(path.join(anchored, 'receipt.json'), receipt);
-  const persisted = await readJson(path.join(anchored, 'receipt.json'));
+  await writeJson(path.join(anchored, 'receipt.json'), receipt, RECEIPT_BYTES, true);
+  const persisted = await readJson(path.join(anchored, 'receipt.json'), RECEIPT_BYTES);
   if (researchCanonicalHash(persisted) !== researchCanonicalHash(receipt)) throw new Error('source_priority_receipt_changed');
   await directory.sync();
   await assertDirectory();

@@ -6,7 +6,7 @@ import path from 'node:path';
 import { createServer } from 'node:http';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { monitorControllerCommand, validateMonitorWorklist } from './research-monitor-controller.mjs';
+import { monitorControllerCommand, validateMonitorWorklist, jsonPost } from './research-monitor-controller.mjs';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
 
 const clock = '2026-10-05T01:00:00.000Z';
@@ -23,6 +23,23 @@ const snapshot = symbol => ({ ok: true, snapshotId: id, idempotentReplay: false,
   thesisRevisionId: id, articleRevisionId: id, articleHash: hash, reviewReceiptHash: hash,
   marketDatasetHash: hash, calendarHash: hash, signalState: 'confirmed', entryResearchEligible: false,
   monitorExistingPosition: symbol === '2409', blockers: ['thesis_review_due'] } });
+
+test('bounded cohort transport is explicit; ordinary monitor keeps its original response limit',async()=>{
+  const server=createServer(async(request,reply)=>{
+    for await(const _chunk of request){/* drain */}
+    reply.setHeader('content-type','application/json');reply.end(JSON.stringify({payload:'x'.repeat(4_000_001)}));
+  });
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  try{
+    const url=`http://127.0.0.1:${server.address().port}/`;
+    await assert.rejects(jsonPost(url,{},key,15000),/response_bound/);
+    const accepted=await jsonPost(url,{},key,15000,{maxResponseBytes:5_000_000});
+    assert.equal(accepted.body.payload.length,4_000_001);
+    await assert.rejects(jsonPost(url,{},key,15000,{maxResponseBytes:4_000_000}),/response_bound/);
+    for(const maxResponseBytes of [0,-1,1.5,NaN,Infinity,32_000_001])
+      await assert.rejects(jsonPost(url,{},key,15000,{maxResponseBytes}),/response_budget_invalid/);
+  }finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
+});
 async function fixture(fn) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'si-monitor-'));
   try {
