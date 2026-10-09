@@ -7,6 +7,10 @@ export async function POST(request: Request) {
   if (request.headers.has('x-research-execution-version')) {
     if (request.headers.get('x-research-execution-version') !== '2')
       return NextResponse.json({ ok: false, error: 'research_execution_version_invalid' }, { status: 400 });
+    if (request.headers.has('x-research-review-result-action')) {
+      const { handleResearchReviewerResult } = await import('@/lib/research-reviewer-result');
+      return handleResearchReviewerResult(request);
+    }
     if (request.headers.has('x-research-review-assignment-action')) {
       const { handleResearchReviewerAssignment } = await import('@/lib/research-reviewer-assignment');
       return handleResearchReviewerAssignment(request);
