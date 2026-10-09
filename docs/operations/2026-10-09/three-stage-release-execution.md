@@ -9,6 +9,36 @@ list is valid; research priority is not entry authority.
 ## Latest verified state — supersedes older checkpoints below
 
 
+### October 9 native reviewer-result receipt accepted; remaining failures isolated
+
+- VM exact7f82f1d8 records compiledHTTP94/94, zero skip on runtime9136.
+  Root and independent reviewer verified50raw blobs/18,285,543bytes and source
+  bindings. Unsigned scoped TEST/receiptPASS covers transport/immutable result,
+  replay/restart/withdrawal and unchanged budgets; no genuine model work implied.
+- Separate standalone unit/PG suite remains20pass/5fail. Existing async psql -c
+  exceeds Linux single-argument limits before SQL runs; two later failures are
+  not yet independently attributed. Same idle VM now owns one bounded test-only
+  stdin transport correction, preserving all assertions/runtime/SQL and oldRED.
+  It will not repeat businessHTTP requests or grant publication authority.
+- Readonly current-calendar audit found retained full official schedule/provider
+  and successful facts_refresh receipts. Existing reader omits recorded/accepted
+  clocks and cannot establish completeness/latest freshness as of priority.asOf.
+  A bounded pure accepted-receipt reader is needed; no new calendar database.
+  Production availability remains unverified. Do not use sourceCutoff-relabelled
+  calendar observedAt as acquisition availability or backfill first-discovery.
+- Atomic publication prerequisite design4a1e34fd is under independent review:
+  keep actual bearer authentication at receive time and separately revalidate
+  saved structural observations against current configured private principals.
+  No fake reviewer HTTP request, production route or new publication authority.
+- Existing PR334 general CI has one actual financial-cleanup test failure
+  (financial_deadline during stalled-read recovery); original remote log saved.
+  Readonly diagnosis is in progress, with runtime deadline/acceptance unchanged.
+- Actual atomic dossier/receipt transaction/shared reader, genuine role dispatch,
+  full protected release/recovery, production deployment and formal schedule
+  acceptance remain outstanding. No main/prod writes or false completion claim.
+
+
+
 ### October 9 historical core and deployment-authority inventory
 
 - DraftPR350 finaleed77a07/treea9c83d00 has unsigned scoped independentCODEPASS.
