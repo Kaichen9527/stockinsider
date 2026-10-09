@@ -1,0 +1,18 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "types-combined-27d",
+  "command": [
+    "npm",
+    "run",
+    "typecheck"
+  ],
+  "startedAt": "2026-10-09T07:06:09.803Z",
+  "completedAt": "2026-10-09T07:06:22.484Z",
+  "elapsedSeconds": 12.681150033022277,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 1121202176,
+  "observedTaskDiskPeakBytes": 1327013888,
+  "availableBeforeBytes": 14703280128,
+  "availableAfterBytes": 14701416448,
+  "guardTermination": null
+}

@@ -1,0 +1,161 @@
+TAP version 13
+# (node:140620) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:140620) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-source-attempt-controller.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: real observed priority accounts1978 and admits an old public company research lead without formal identity
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 125.386156
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 55.801857
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 15.878785
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 315.643017
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 28.056743
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 9.376161
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 6.346068
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 477.837957
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 86.131952
+      ...
+    # Subtest: guarded1978 admission retains formal stocks count zero
+    ok 10 - guarded1978 admission retains formal stocks count zero
+      ---
+      duration_ms: 1991.683069
+      ...
+    # Subtest: formal409, observed200 all1978 needs evidence and no synthetic queue
+    ok 11 - formal409, observed200 all1978 needs evidence and no synthetic queue
+      ---
+      duration_ms: 10646.550449
+      ...
+    # Subtest: existing controller and guarded inbox consume actual EP8 description with original March/October clocks
+    ok 12 - existing controller and guarded inbox consume actual EP8 description with original March/October clocks
+      ---
+      duration_ms: 11.827245
+      ...
+    # Subtest: reasoned low-impact zero-novelty old lead creates one real observed-only job and accounts all other companies
+    ok 13 - reasoned low-impact zero-novelty old lead creates one real observed-only job and accounts all other companies
+      ---
+      duration_ms: 10737.276671
+      ...
+    # Subtest: exact durable RPC replay after restart preserves charge and first discovery; inbox redelivery0new
+    ok 14 - exact durable RPC replay after restart preserves charge and first discovery; inbox redelivery0new
+      ---
+      duration_ms: 1463.009289
+      ...
+    # Subtest: direct service RPC rejects invented source root, backdated first observation and crossscope receipt
+    ok 15 - direct service RPC rejects invented source root, backdated first observation and crossscope receipt
+      ---
+      duration_ms: 2060.403991
+      ...
+    # Subtest: future scope, anonymous write and crossscope receipt reject with no formal products
+    ok 16 - future scope, anonymous write and crossscope receipt reject with no formal products
+      ---
+      duration_ms: 88.713148
+      ...
+    # Subtest: current admission week ignores different old asOf weeks, exact zero-job replay is durable
+    ok 17 - current admission week ignores different old asOf weeks, exact zero-job replay is durable
+      ---
+      duration_ms: 28.068902
+      ...
+    # Subtest: global current-week fifth cap and same issuer dedup reject; no past-week or caller-createdAt bypass
+    ok 18 - global current-week fifth cap and same issuer dedup reject; no past-week or caller-createdAt bypass
+      ---
+      duration_ms: 59.691753
+      ...
+    # Subtest: DB clock is captured after actual shared-lock wait and Taiwan Monday expressions retain microseconds
+    ok 19 - DB clock is captured after actual shared-lock wait and Taiwan Monday expressions retain microseconds
+      ---
+      duration_ms: 553.353673
+      ...
+    # Subtest: BYPASSRLS service direct observed priority INSERT rejects empty-accounting
+    ok 20 - BYPASSRLS service direct observed priority INSERT rejects empty-accounting
+      ---
+      duration_ms: 25.554038
+      ...
+    # Subtest: BYPASSRLS service direct observed priority INSERT rejects invented-root
+    ok 21 - BYPASSRLS service direct observed priority INSERT rejects invented-root
+      ---
+      duration_ms: 25.799057
+      ...
+    # Subtest: BYPASSRLS service direct observed priority INSERT rejects forged-receipt
+    ok 22 - BYPASSRLS service direct observed priority INSERT rejects forged-receipt
+      ---
+      duration_ms: 22.825178
+      ...
+    # Subtest: v1 claim alone seals expired observed attempt and can claim a queued formal fixture
+    ok 23 - v1 claim alone seals expired observed attempt and can claim a queued formal fixture
+      ---
+      duration_ms: 38.626986
+      ...
+    # Subtest: guarded v2 claim reserves original real model budget with research-only company identity
+    ok 24 - guarded v2 claim reserves original real model budget with research-only company identity
+      ---
+      duration_ms: 337.109972
+      ...
+    # Subtest: v1 status cannot see observed claim; restart status preserves same attempt and original deadlines
+    ok 25 - v1 status cannot see observed claim; restart status preserves same attempt and original deadlines
+      ---
+      duration_ms: 568.717338
+      ...
+    # Subtest: actual author v2 input retains real EP8 document and missing financial/publication gaps
+    ok 26 - actual author v2 input retains real EP8 document and missing financial/publication gaps
+      ---
+      duration_ms: 418.751642
+      ...
+    # Subtest: direct v1 completion/review/publication RPCs reject observed job without completing budget or writing outbox
+    ok 27 - direct v1 completion/review/publication RPCs reject observed job without completing budget or writing outbox
+      ---
+      duration_ms: 47.338354
+      ...
+    # Subtest: cross snapshot, anonymous, missing explicit scope and unmapped publication refuse
+    ok 28 - cross snapshot, anonymous, missing explicit scope and unmapped publication refuse
+      ---
+      duration_ms: 52.904419
+      ...
+    1..28
+ok 1 - real observed priority accounts1978 and admits an old public company research lead without formal identity
+  ---
+  duration_ms: 32748.239699
+  ...
+1..1
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 35801.884822
