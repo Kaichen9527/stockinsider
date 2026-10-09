@@ -1,0 +1,461 @@
+TAP version 13
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+ok 1 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 5932.150875
+  ...
+# (node:33736) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:33736) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-discovery-price-enrichment.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: DP01 approved synthetic window computes all horizons; breakout does not grant research eligibility
+ok 2 - DP01 approved synthetic window computes all horizons; breakout does not grant research eligibility
+  ---
+  duration_ms: 49.415958
+  ...
+# Subtest: DP19 124+ ordinary historical sessions do not exhaust latest-head admission
+ok 3 - DP19 124+ ordinary historical sessions do not exhaust latest-head admission
+  ---
+  duration_ms: 9.38
+  ...
+# Subtest: DP20 newest head ties remain bounded and newer cancellation cannot resurrect a completion
+ok 4 - DP20 newest head ties remain bounded and newer cancellation cannot resurrect a completion
+  ---
+  duration_ms: 4.00475
+  ...
+# Subtest: DP21 actual TWSE/TPEx collector month URLs and exact-day quotes are admitted
+ok 5 - DP21 actual TWSE/TPEx collector month URLs and exact-day quotes are admitted
+  ---
+  duration_ms: 933.006916
+  ...
+# Subtest: DP22 endpoint-specific stock/date/host/parameter mismatches reject both exchanges
+ok 6 - DP22 endpoint-specific stock/date/host/parameter mismatches reject both exchanges
+  ---
+  duration_ms: 459.096084
+  ...
+# Subtest: DP23 strict-reader rejected row cannot be upgraded by a later weak immutable registry capture
+ok 7 - DP23 strict-reader rejected row cannot be upgraded by a later weak immutable registry capture
+  ---
+  duration_ms: 9.639916
+  ...
+# Subtest: DP24 a first missing capture remains frozen after admission/date/available-data changes
+ok 8 - DP24 a first missing capture remains frozen after admission/date/available-data changes
+  ---
+  duration_ms: 1.151083
+  ...
+# Subtest: DP02 wrong benchmark, incomplete calendar or stale last session never yields relative returns
+ok 9 - DP02 wrong benchmark, incomplete calendar or stale last session never yields relative returns
+  ---
+  duration_ms: 26.636792
+  ...
+# Subtest: DP03 future available/session and validation clocks fail closed
+ok 10 - DP03 future available/session and validation clocks fail closed
+  ---
+  duration_ms: 19.5015
+  ...
+# Subtest: DP04 missing quotes, corporate actions and failed official verification are explicit unknowns
+ok 11 - DP04 missing quotes, corporate actions and failed official verification are explicit unknowns
+  ---
+  duration_ms: 17.750458
+  ...
+# Subtest: DP05 valid returns do not invent a phase when metadata is absent, future or wrong ruleset
+ok 12 - DP05 valid returns do not invent a phase when metadata is absent, future or wrong ruleset
+  ---
+  duration_ms: 14.678
+  ...
+# Subtest: DP06 overheating and established pullback preserve existing thresholds
+ok 13 - DP06 overheating and established pullback preserve existing thresholds
+  ---
+  duration_ms: 12.391542
+  ...
+# Subtest: DP07 immutable first quote/gap survives later reads and a changed current firstSeenAt
+ok 14 - DP07 immutable first quote/gap survives later reads and a changed current firstSeenAt
+  ---
+  duration_ms: 1.963
+  ...
+# Subtest: DP08 missing discovery, admitted success and failed read each account for a full symbol
+ok 15 - DP08 missing discovery, admitted success and failed read each account for a full symbol
+  ---
+  duration_ms: 6.329958
+  ...
+# Subtest: DP09 deterministic sorted admission caps reads at 32 without losing symbols
+ok 16 - DP09 deterministic sorted admission caps reads at 32 without losing symbols
+  ---
+  duration_ms: 161.350334
+  ...
+# Subtest: DP10 registry failure and read deadline do not backfill an unconfirmed first capture
+ok 17 - DP10 registry failure and read deadline do not backfill an unconfirmed first capture
+  ---
+  duration_ms: 0.943709
+  ...
+# Subtest: DS01 weak first quote and verified current raw observation coexist without promotion
+ok 18 - DS01 weak first quote and verified current raw observation coexist without promotion
+  ---
+  duration_ms: 5.99325
+  ...
+# Subtest: DS02 server priority at lexical rear consumes the shared32 budget first and accounts all45
+ok 19 - DS02 server priority at lexical rear consumes the shared32 budget first and accounts all45
+  ---
+  duration_ms: 145.833917
+  ...
+# Subtest: DS03 no future source clock/session or weak provenance enters an earlier current cutoff
+ok 20 - DS03 no future source clock/session or weak provenance enters an earlier current cutoff
+  ---
+  duration_ms: 30.049334
+  ...
+# Subtest: DS04 current priority is independent of missing first evidence or registry read failure
+ok 21 - DS04 current priority is independent of missing first evidence or registry read failure
+  ---
+  duration_ms: 1.898708
+  ...
+# Subtest: DS05 supplemental reads and earlier first reads share32 without leaking current data into first
+ok 22 - DS05 supplemental reads and earlier first reads share32 without leaking current data into first
+  ---
+  duration_ms: 33.741583
+  ...
+# Subtest: DS06 invalid server clock/unknown priority rejects before reads; deadline accounts all candidates
+ok 23 - DS06 invalid server clock/unknown priority rejects before reads; deadline accounts all candidates
+  ---
+  duration_ms: 1.803667
+  ...
+# Subtest: DS07 a late completed read is discarded and cannot enter current or first receipt
+ok 24 - DS07 a late completed read is discarded and cannot enter current or first receipt
+  ---
+  duration_ms: 1.044167
+  ...
+# Subtest: DP11 fixed DB reader obtains only cutoff-visible raw quote; absent adapters remain missing
+ok 25 - DP11 fixed DB reader obtains only cutoff-visible raw quote; absent adapters remain missing
+  ---
+  duration_ms: 1.031292
+  ...
+# Subtest: DP12 cache official conflicts, future availability and invalid price source never verify a quote
+ok 26 - DP12 cache official conflicts, future availability and invalid price source never verify a quote
+  ---
+  duration_ms: 1.078792
+  ...
+# Subtest: DP13 no weekday or holiday guess certifies a stale latest completed session
+ok 27 - DP13 no weekday or holiday guess certifies a stale latest completed session
+  ---
+  duration_ms: 1.474708
+  ...
+# Subtest: DP14 calendar correction conflicts and incomplete clocks cannot become completed authority
+ok 28 - DP14 calendar correction conflicts and incomplete clocks cannot become completed authority
+  ---
+  duration_ms: 0.960875
+  ...
+# Subtest: DP15 exchange/provider conflict and ambiguous integrity flags remain visible failures
+ok 29 - DP15 exchange/provider conflict and ambiguous integrity flags remain visible failures
+  ---
+  duration_ms: 0.840917
+  ...
+# Subtest: DP16 row clock before actual calendar close fails even with a recomputed dataset hash
+ok 30 - DP16 row clock before actual calendar close fails even with a recomputed dataset hash
+  ---
+  duration_ms: 4.499792
+  ...
+# Subtest: DP17 malformed/future immutable registry record cannot be replaced by a current quote
+ok 31 - DP17 malformed/future immutable registry record cannot be replaced by a current quote
+  ---
+  duration_ms: 1.674333
+  ...
+# Subtest: DP18 registry over the fixed row bound accounts all candidates as missing without new reads
+ok 32 - DP18 registry over the fixed row bound accounts all candidates as missing without new reads
+  ---
+  duration_ms: 7.202708
+  ...
+# (node:33737) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:33737) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-monitor-benchmark-context.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# (node:33737) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: TWSE: official aligned61 context returns explicit wealth-ratio fractions
+ok 33 - TWSE: official aligned61 context returns explicit wealth-ratio fractions
+  ---
+  duration_ms: 86.79375
+  ...
+# Subtest: TPEX: official aligned61 context returns explicit wealth-ratio fractions
+ok 34 - TPEX: official aligned61 context returns explicit wealth-ratio fractions
+  ---
+  duration_ms: 33.36125
+  ...
+# Subtest: missing session, insufficient authority and cancelled latest calendar never become zero strength
+ok 35 - missing session, insufficient authority and cancelled latest calendar never become zero strength
+  ---
+  duration_ms: 30.53225
+  ...
+# Subtest: latest calendar correction requires a matching latest official index observation
+ok 36 - latest calendar correction requires a matching latest official index observation
+  ---
+  duration_ms: 98.295375
+  ...
+# Subtest: wrong authority/unit/provider, invalid clocks and conflicts are unavailable
+ok 37 - wrong authority/unit/provider, invalid clocks and conflicts are unavailable
+  ---
+  duration_ms: 214.105666
+  ...
+# Subtest: corporate action price basis and source revision are bound without changing authority
+ok 38 - corporate action price basis and source revision are bound without changing authority
+  ---
+  duration_ms: 59.034333
+  ...
+# Subtest: actual adapter requests official relations, unique order, exact count and abort signal
+ok 39 - actual adapter requests official relations, unique order, exact count and abort signal
+  ---
+  duration_ms: 42.328292
+  ...
+# Subtest: short server page and absent exact count refuse successful-partial reads
+ok 40 - short server page and absent exact count refuse successful-partial reads
+  ---
+  duration_ms: 10.243625
+  ...
+# Subtest: future revision is excluded by the same frozen server cutoff
+ok 41 - future revision is excluded by the same frozen server cutoff
+  ---
+  duration_ms: 117.278583
+  ...
+# Subtest: equal-time conflict across500-row pages is never hidden
+ok 42 - equal-time conflict across500-row pages is never hidden
+  ---
+  duration_ms: 283.120083
+  ...
+# Subtest: shared deadline aborts stalled read and never starts another page
+ok 43 - shared deadline aborts stalled read and never starts another page
+  ---
+  duration_ms: 7.04975
+  ...
+# Subtest: successful response delivered after the monotonic deadline is discarded
+ok 44 - successful response delivered after the monotonic deadline is discarded
+  ---
+  duration_ms: 12.211
+  ...
+# Subtest: row bound exact and+1 remain finite
+ok 45 - row bound exact and+1 remain finite
+  ---
+  duration_ms: 253.787541
+  ...
+# Subtest: all-read serialized byte exact and+1 include discarded revisions
+ok 46 - all-read serialized byte exact and+1 include discarded revisions
+  ---
+  duration_ms: 597.179292
+  ...
+# (node:33738) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:33738) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/tw-entry-plan-authority.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: loads 240 proved observations and an official next session after a holiday and weekend
+ok 47 - loads 240 proved observations and an official next session after a holiday and weekend
+  ---
+  duration_ms: 505.607834
+  ...
+# Subtest: verified event chain rescales prior prices to the unchanged signal-session price
+ok 48 - verified event chain rescales prior prices to the unchanged signal-session price
+  ---
+  duration_ms: 725.193417
+  ...
+# Subtest: market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+ok 49 - market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+  ---
+  duration_ms: 276.7115
+  ...
+# Subtest: absent price/session/action authority and read failure never abort the candidate run
+ok 50 - absent price/session/action authority and read failure never abort the candidate run
+  ---
+  duration_ms: 74.186166
+  ...
+# Subtest: corporate-action hash corruption and changed daily factor fail closed
+ok 51 - corporate-action hash corruption and changed daily factor fail closed
+  ---
+  duration_ms: 106.653709
+  ...
+# Subtest: post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+ok 52 - post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+  ---
+  duration_ms: 320.178875
+  ...
+# Subtest: an absent weekday and conflicting calendar heads cannot be skipped
+ok 53 - an absent weekday and conflicting calendar heads cannot be skipped
+  ---
+  duration_ms: 329.173875
+  ...
+# Subtest: zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+ok 54 - zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+  ---
+  duration_ms: 29.020666
+  ...
+# Subtest: shared market authority is acquired once for the immutable run cutoff
+ok 55 - shared market authority is acquired once for the immutable run cutoff
+  ---
+  duration_ms: 523.52575
+  ...
+# Subtest: an older raw observation remains valid against its own immutable calendar revision
+ok 56 - an older raw observation remains valid against its own immutable calendar revision
+  ---
+  duration_ms: 213.853166
+  ...
+# Subtest: a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+ok 57 - a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+  ---
+  duration_ms: 193.04625
+  ...
+# Subtest: a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+ok 58 - a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+  ---
+  duration_ms: 183.40675
+  ...
+# Subtest: a recent share-changing action does not manufacture a comparable volume ratio
+ok 59 - a recent share-changing action does not manufacture a comparable volume ratio
+  ---
+  duration_ms: 28.328584
+  ...
+# Subtest: anchor action context uses corrected zero-event head and ignores old, future and other-exchange events
+ok 60 - anchor action context uses corrected zero-event head and ignores old, future and other-exchange events
+  ---
+  duration_ms: 181.525584
+  ...
+# Subtest: anchor action context retains a verified current event and fails closed on incomplete evidence
+ok 61 - anchor action context retains a verified current event and fails closed on incomplete evidence
+  ---
+  duration_ms: 239.294792
+  ...
+# Subtest: historical core retains selected evidence without inventing forward execution authority
+ok 62 - historical core retains selected evidence without inventing forward execution authority
+  ---
+  duration_ms: 301.744833
+  ...
+# Subtest: historical core validates real TPEX zero-event evidence and fails unchanged authority defects
+ok 63 - historical core validates real TPEX zero-event evidence and fails unchanged authority defects
+  ---
+  duration_ms: 237.006916
+  ...
+# Subtest: historical reads never cache results, including aborted calls
+ok 64 - historical reads never cache results, including aborted calls
+  ---
+  duration_ms: 203.221917
+  ...
+# Subtest: abort races a noncooperative pending query and stops all later relation dispatch
+ok 65 - abort races a noncooperative pending query and stops all later relation dispatch
+  ---
+  duration_ms: 4.488209
+  ...
+# Subtest: shared serialized bytes include every relation and oversized server pages fail closed
+ok 66 - shared serialized bytes include every relation and oversized server pages fail closed
+  ---
+  duration_ms: 164.361
+  ...
+# Subtest: legacy rejected shared authority is evicted so a later repaired read is fresh
+ok 67 - legacy rejected shared authority is evicted so a later repaired read is fresh
+  ---
+  duration_ms: 161.873167
+  ...
+# Subtest: full legacy authority bytes equal base2878038 across selected history cases
+ok 68 - full legacy authority bytes equal base2878038 across selected history cases
+  ---
+  duration_ms: 486.938292
+  ...
+# Subtest: deadline bounds a noncooperative shared query and does not poison its later repaired cache
+ok 69 - deadline bounds a noncooperative shared query and does not poison its later repaired cache
+  ---
+  duration_ms: 15126.411625
+  ...
+# Subtest: legacy missing-forward and read-error complete outputs retain base2878038 identities
+ok 70 - legacy missing-forward and read-error complete outputs retain base2878038 identities
+  ---
+  duration_ms: 77.220208
+  ...
+# (node:33739) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:33739) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/tw-entry-plan.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: P1-01: prior20 excludes the signal high and its exactly 1.5x volume
+ok 71 - P1-01: prior20 excludes the signal high and its exactly 1.5x volume
+  ---
+  duration_ms: 132.66725
+  ...
+# Subtest: P1-02: a confirmed signal retains unchanged formal market/overseas blockers
+ok 72 - P1-02: a confirmed signal retains unchanged formal market/overseas blockers
+  ---
+  duration_ms: 13.804792
+  ...
+# Subtest: P1-03: a touch without stabilization never confirms a pullback
+ok 73 - P1-03: a touch without stabilization never confirms a pullback
+  ---
+  duration_ms: 12.55725
+  ...
+# Subtest: P1-03: a stabilized uptrend pullback produces a bounded current-scale research zone
+ok 74 - P1-03: a stabilized uptrend pullback produces a bounded current-scale research zone
+  ---
+  duration_ms: 12.412583
+  ...
+# Subtest: P1-03: a valid breakout that is too far above resistance keeps the signal without a usable entry zone
+ok 75 - P1-03: a valid breakout that is too far above resistance keeps the signal without a usable entry zone
+  ---
+  duration_ms: 21.800625
+  ...
+# Subtest: P1-03: tick rounding that leaves U below L cannot publish an entry zone
+ok 76 - P1-03: tick rounding that leaves U below L cannot publish an entry zone
+  ---
+  duration_ms: 19.658125
+  ...
+# Subtest: P1-04: Taiwan ticks use the correct tier on both sides of every boundary
+ok 77 - P1-04: Taiwan ticks use the correct tier on both sides of every boundary
+  ---
+  duration_ms: 0.473083
+  ...
+# Subtest: P1-04: only the supplied official next session determines validity across closures
+ok 78 - P1-04: only the supplied official next session determines validity across closures
+  ---
+  duration_ms: 16.24325
+  ...
+# Subtest: P1-04: late knowledge cannot manufacture next-open eligibility; close-time publication is expired
+ok 79 - P1-04: late knowledge cannot manufacture next-open eligibility; close-time publication is expired
+  ---
+  duration_ms: 38.779167
+  ...
+# Subtest: P1-01/P1-05: insufficient, unfinished, missing-adjustment and conflicting inputs fail closed
+ok 80 - P1-01/P1-05: insufficient, unfinished, missing-adjustment and conflicting inputs fail closed
+  ---
+  duration_ms: 142.159417
+  ...
+# Subtest: P1-05: official session gaps, duplicate dates, impossible dates, bad OHLC and future observations fail closed
+ok 81 - P1-05: official session gaps, duplicate dates, impossible dates, bad OHLC and future observations fail closed
+  ---
+  duration_ms: 64.619667
+  ...
+# Subtest: P1-09: rebind/retry preserves semantic plan identity and frozen knowledge time
+ok 82 - P1-09: rebind/retry preserves semantic plan identity and frozen knowledge time
+  ---
+  duration_ms: 70.998291
+  ...
+# Subtest: missing liquidity/formal authority never changes a technical observation into actionable permission
+ok 83 - missing liquidity/formal authority never changes a technical observation into actionable permission
+  ---
+  duration_ms: 48.391875
+  ...
+# Subtest: zero-volume history cannot provide a breakout denominator and input size is bounded
+ok 84 - zero-volume history cannot provide a breakout denominator and input size is bounded
+  ---
+  duration_ms: 44.795625
+  ...
+# Subtest: shared raw extraction preserves six full base2878038 plan JSON hashes
+ok 85 - shared raw extraction preserves six full base2878038 plan JSON hashes
+  ---
+  duration_ms: 182.402333
+  ...
+# Subtest: raw fixed-window formulas equal entry signals and do not confer entry authority
+ok 86 - raw fixed-window formulas equal entry signals and do not confer entry authority
+  ---
+  duration_ms: 154.427709
+  ...
+1..86
+# tests 86
+# suites 0
+# pass 86
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 21199.345667

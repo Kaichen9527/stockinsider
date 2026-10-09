@@ -1,0 +1,10 @@
+(node:33490) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33490) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/tw-entry-plan-authority.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+base a559c57329cd774f84098fa567fa96ca3dfceb3db21ac5d242b4c50fba2b57f8
+split 9beb64cd0c03f7eedeee4954f54935f62a08a04a6aec10b296b68c7420364e2d
+cancel 677b7070b00d95248da1fae083e98fc2ea3b829dc63b4c5893352e03547e03b4
+missing-forward 155a07f2d6d864a0d5aa80f935ad896f27a09e9c4652d285ea9d2a09279c8e52
+read-error 4a66cc616d001d43c388c3cdb1e879cf98fd353365e832a2073f9d9fdb8c0d25

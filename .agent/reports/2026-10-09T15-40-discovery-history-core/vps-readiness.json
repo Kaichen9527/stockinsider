@@ -1,0 +1,48 @@
+{
+  "measuredAtApprox": "2026-10-09T15:34:00Z",
+  "readOnly": true,
+  "filesystem": {
+    "totalBytes": 154894188544,
+    "usedBytes": 121762844672,
+    "availableBytes": 33114566656
+  },
+  "allocatedAppPaths": {
+    "/opt/stockinsider": 258142208,
+    "/opt/stockinsider-standalone": 69087232,
+    "/opt/stockinsider-previews": 69029888,
+    "/opt/stockinsider-builds": 4096,
+    "/var/lib/postgresql/17/stockinsider": 2845503488
+  },
+  "productionReleasePath": "/opt/stockinsider-standalone/releases/9fd86fe620ccc63c89c4acd208327bf2c4e15332",
+  "previewRelease": "8e2791f96fc07e6141ee40b2ced7a4a260805932",
+  "running": [
+    "stockinsider-web-standalone",
+    "stockinsider-internal-worker",
+    "stockinsider-auo-preview",
+    "stockinsider-financial-parser",
+    "stockinsider-postgrest",
+    "postgresql@17-stockinsider"
+  ],
+  "configuredNonempty": {
+    "INTERNAL_API_KEY": true,
+    "CRON_SECRET": true,
+    "RESEARCH_REVIEW_KEY": false,
+    "RESEARCH_TEST_KEY": false,
+    "RESEARCH_STRATEGY_APPROVAL_KEY": false
+  },
+  "equalNonemptyRolePairs": [
+    [
+      "INTERNAL_API_KEY",
+      "CRON_SECRET"
+    ]
+  ],
+  "credentialValuesExported": false,
+  "filesModified": false,
+  "queueDrain": {
+    "status": "failed",
+    "exitStatus": 1,
+    "exitTime": "Fri 2026-10-09 17:12:06 CEST",
+    "causeNotInspected": true
+  },
+  "cleanup": "Only one active official and one active preview release observed; no unreferenced old release candidate. Tiny deployment/source result receipts and live systemd private directories retained."
+}

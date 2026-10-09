@@ -9,6 +9,44 @@ list is valid; research priority is not entry authority.
 ## Latest verified state — supersedes older checkpoints below
 
 
+### October 9 historical core and deployment-authority inventory
+
+- DraftPR350 finaleed77a07/treea9c83d00 has unsigned scoped independentCODEPASS.
+  Root86corrected related/manifest checks pass (zero skip), type/lint0errors33
+  existingwarnings and normalbuildarGq5GubeZW2uDWiBOKp_ pass. Six full original
+  entry outputs and five full original authority outputs match base2878 exactly.
+  PriorP2failure-sentinel regression is retained and fixed; no strategy adoption.
+- Bounded historical read core and fixed raw entry formulas are now shared.
+  Current61-session/benchmark/phase receipt activation remains unimplemented;
+  first-discovery, ranking and entry authority are unchanged. Historical DB
+  selected rows alone do not prove the complete expected trading schedule.
+- DraftPR351 diagnostic-only91212edb has root/independent2unit and unsigned
+  scopedTEST CODEPASS. Collector10000-cap failures now stop collecting and fail
+  teardown after saving the failure receipt. Original actual80/80 receipt had
+  failed=null; it remains valid scoped execution evidence, not role execution.
+- VM reported94/94 reviewer-result compiledHTTP, zero skip, on frozen9136;
+  final receipt is still being sealed. Root has not yet audited the final raw
+  inventory and does not mark this native acceptance finished.
+- Fresh read-only VPS measurement:154.89GB total,33.11GB available; no old capacity
+  blocker reused. Running web/internal worker and preview still use9fd86fe6 and
+  8e2791f9. Only one active release each, no new verified old-release deletion.
+- Live process environment inspection exported only booleans: reviewer/test/
+  strategy role keys absent; INTERNAL_API_KEY equals CRON_SECRET. Existing author
+  identity validator rejects that alias. No key values exported or config changed.
+  Genuine role setup is a separate deployment prerequisite, not synthetic proof.
+- Product protected graph/ref audit corrects earlier assumptions: #334/#349
+  resolve existingV3.18graph and fail on missing subject-addressed exact-review ref.
+  FreezefinalR, genuine fullmain..R independent review and its unique3-file child
+  evidence precede another protected run. ScopedCODEPASS does not substitute.
+  Nativehost pin successor recovery remains an independent external-authority gap.
+- Source-refresh was running; old formal queue-drain service was failed(exit1),
+  cause not inspected. Formal data refresh still requires follow-up; no blind rerun.
+- Engineering heartbeat remainsACTIVE (hourly); formal research schedule still
+  unaccepted. Main169aad1 not modified/merged. Atomic dossier publication, real
+  author/reviewer dispatch, current price adapter, fullrelease and five future
+  trading days are outstanding.
+
+
 ### October 9 publication lineage CODE PASS and native assignment acceptance
 
 - Draft PR349 subject2878038e22362a1f09790ba5ded1b71cdbd114d5 received
