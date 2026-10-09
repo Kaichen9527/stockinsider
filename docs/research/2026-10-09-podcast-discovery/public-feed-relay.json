@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stockinsider-podcast-public-directory-relay-v1",
-  "recordedAt": "2026-10-09T06:08:11.183770+00:00",
+  "recordedAt": "2026-10-09T06:13:30.814614+00:00",
   "observer": "root-Mac-public-HTTPS-and-IAB",
   "directory": {
     "url": "https://itunes.apple.com/lookup?id=1872298769&entity=podcast",
@@ -132,5 +132,7 @@
     "mediaBytesAcquired": 0,
     "audioContentAnalyzed": false,
     "rightsEscalationOrLogin": false
-  }
+  },
+  "originalIndexRecordedAt": "2026-10-09T06:08:11.183770+00:00",
+  "recordedAtMeaning": "Assembly of index relay plus later public enclosure HEAD receipt; original individual acquisition clocks retained."
 }

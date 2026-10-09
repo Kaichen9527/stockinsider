@@ -9,3 +9,5 @@ RSS提供EP8音檔enclosure、時長1984秒，但length為1，不能拿它作實
 音檔／ASR暫存以VM有界工作保存，不搬到VPS常駐；VPS只收必要摘要、可支撐主張的時間碼／短摘錄、來源與結果收據。獨一份證據未驗證回存前不得刪除；可重建的中間音訊完成驗收後才回收。這次僅索引／能力準備，沒有策略、買點或未公開訂單結論。
 
 實際 HEAD 查核：2026-10-09 06:08:44Z，RSS enclosure 回302導向 filesb.soundon.fm 公開 HTTPS 音檔；第二跳 HEAD 為200、audio/mpeg、Content-Length 79,341,218 bytes、支援 Range。這只證實當時可讀取標頭，未下載音檔或完成轉錄；不能把 HEAD 成功標成內容已讀。下載仍須實測上限，不依賴 RSS 的 length=1。
+
+獨立資料 review 指出：原 relay 頂層記錄時間早於追加的 HEAD 收據。已保留 originalIndexRecordedAt，整份組裝時間改記為修正當下；各次 HTTP 收據原時鐘保持不變。未將之回填成早已取得音檔或整集內容。
