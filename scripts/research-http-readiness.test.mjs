@@ -19,6 +19,12 @@ test('only matching schema function lookup can be retried',async()=>{
 test('known database startup errors have a fixed three-call limit',async()=>{
  const h=setup(Array.from({length:4},()=>response(503,{code:'PGRST002',message:'schema cache startup'})));await assert.rejects(h.run(),/readiness_exhausted/);assert.equal(h.calls,3);assert.equal(h.pauses,2);assert.equal(h.attempts.length,3);
 });
+test('observed PostgreSQL restart disconnect is recorded and only retried by readiness',async()=>{
+ const h=setup([response(503,{code:'57P01',message:'terminating connection due to administrator command'}),ready]);await h.run();assert.equal(h.calls,2);assert.equal(h.attempts[0].body.code,'57P01');
+});
+test('57P01 requires the observed status and exact shutdown message',async()=>{
+ for(const r of [response(500,{code:'57P01',message:'terminating connection due to administrator command'}),response(503,{code:'57P01',message:'different failure'})]){const h=setup([r,ready]);await assert.rejects(h.run(),/readiness_unexpected_response/);assert.equal(h.calls,1);}
+});
 test('unclassified 503 and transport failures cannot become green retries',async()=>{
  const h=setup([response(503,{error:'unknown'}),ready]);await assert.rejects(h.run(),/readiness_unexpected_response/);assert.equal(h.calls,1);
  let calls=0;await assert.rejects(waitForResearchReadiness(async()=>{calls++;throw new Error('original transport failure');},{name:'x',ready:()=>true,attempts:[]}),/original transport failure/);assert.equal(calls,1);

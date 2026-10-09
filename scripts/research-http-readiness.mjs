@@ -13,6 +13,7 @@ export async function waitForResearchReadiness(probe,{name,ready,attempts,maxCal
   attempts.push(attempt);
   if(ready(attempt))return;
   const startup=(response.status===503&&['PGRST000','PGRST001','PGRST002'].includes(body?.code))
+   ||(response.status===503&&body?.code==='57P01'&&body.message==='terminating connection due to administrator command')
    ||(response.status===404&&body?.code==='PGRST202'&&String(body.message).includes(name));
   if(!startup)throw new Error('readiness_unexpected_response: '+JSON.stringify(attempt));
   if(n+1<maxCalls)await pause(100);
