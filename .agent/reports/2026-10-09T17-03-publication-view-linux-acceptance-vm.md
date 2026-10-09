@@ -1,0 +1,7 @@
+# Publication view exact847d Linux acceptance — RED
+
+Source `847d5f18d1af3d2bb7da399bb6e188d179466b7f`, tree `e7a7a6acede841e2c8675ef8e4b9196d6022547b`, web tree `05ecdfb77e1820dea0f78860ab8b6b98fc15e3b4`. Original `npm run test:research-agents` selected74 files:759 total,755 pass,2 fail,2 explicit native-profile skips. The two failures are the original reader-before-publication child (psql SQLNULL prints empty string, assertion expected literal null) and its stopped dependent parent. Subsequent positive reader cases were not reached. All6 new view/SSR units passed. No CI rerun or source fix.
+
+Types passed; lint0 errors/33existing warnings. Normal build failed EPERM while Turbopack tried worker local-port binding. One identical-command capability correction via escalation also failed; no third retry. A later standalone loopback bind succeeded and closed; that does not identify the persisted worker failure cause. No successful BUILD_ID or complete compiled manifest exists; present incomplete artifacts are inventoried honestly.
+
+Original failed PG cluster stopped and retained at `/tmp/si-rresult-s8gijK`; PG.log is copied and hashed. Resources, all raw output bytes/SHA and every stage exit/clock are in the JSON. No owned process remains; no manual deletion, deployment, production write or main merge. Fixture/model observations are synthetic, not actual model execution or product role budget. Root independent review remains necessary.

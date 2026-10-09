@@ -1,0 +1,17 @@
+{
+  "startedAt": "2026-10-09T16:57:16Z",
+  "manualDeadline": "2026-10-09T17:27:16Z",
+  "admissionAt": "2026-10-09T16:58:24.024788+00:00",
+  "sourceHead": "847d5f18d1af3d2bb7da399bb6e188d179466b7f",
+  "sourceTree": "e7a7a6acede841e2c8675ef8e4b9196d6022547b",
+  "webTree": "05ecdfb77e1820dea0f78860ab8b6b98fc15e3b4",
+  "availableBytes": 10974744576,
+  "totalDiskBytes": 33770192896,
+  "workspaceActiveProcesses": [],
+  "pgVersion": "8.18.0",
+  "dependencyInstallPerformed": false,
+  "tempDir": "/tmp/si-apub-qhk3mbo7",
+  "tempMode": "0o700",
+  "networkPolicy": "restricted; runtime state unknown; existing proxy/CA retained; no new capability claimed",
+  "configuredEnvironmentSecretsInspected": false
+}

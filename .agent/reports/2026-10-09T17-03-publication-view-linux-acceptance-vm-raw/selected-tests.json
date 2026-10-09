@@ -1,0 +1,377 @@
+{
+  "literalCommand": "npm run test:research-agents",
+  "expandedScript": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/research-agent-*.test.ts web/src/lib/research-deep-*.test.ts web/src/lib/research-paper-books.test.ts web/src/lib/research-review-auth.test.ts web/src/lib/research-strategy-governance.test.ts web/src/lib/research-weekly-bars.test.ts scripts/research-agent-migration-gate.test.mjs scripts/research-agent-routes.test.mjs scripts/research-paper-session-route.test.mjs scripts/research-approval-replay-route.test.mjs scripts/research-strategy-release.test.mjs scripts/research-source-budget-postgres.test.mjs web/src/lib/research-source-extensions.test.ts web/src/lib/research-broker-estimate.test.ts web/src/lib/research-execution-context.test.ts web/src/lib/technical-features-v2.test.ts scripts/research-deep-*-postgres.test.mjs scripts/candidate-dossier-outbox-v6-postgres.test.mjs scripts/research-capacity-admission.test.mjs scripts/research-host-resource-check.test.mjs web/src/lib/research-cloud-work.test.ts scripts/research-cloud-capacity.test.mjs scripts/research-cloud-work-cli.test.mjs scripts/research-cloud-result-route.test.mjs scripts/research-cloud-receipts-postgres.test.mjs web/src/lib/research-source-attempt-controller.test.ts scripts/research-source-controller.test.mjs web/src/lib/research-source-roots.test.ts web/src/lib/research-inbox.test.ts web/src/lib/research-agent-priority.test.ts scripts/release-owner-bridge-postgres.test.mjs scripts/research-cloud-controller.test.mjs web/src/lib/research-discovery-evidence.test.ts web/src/lib/research-discovery-price-enrichment.test.ts web/src/app/api/internal/research-priority-run/route.contract.test.ts scripts/research-monitor-controller.test.mjs scripts/research-monitor-progress.test.mjs scripts/research-deep-controller.test.mjs scripts/research-deep-draft-controller.test.mjs scripts/research-deep-job-context-route.test.mjs web/src/lib/research-source-association.test.ts scripts/candidate-financial-document-write-lease-route.test.mjs web/src/lib/research-insider-official.test.ts web/src/lib/source-health.test.ts scripts/research-insider-collector.test.mjs scripts/research-insider-health-route.test.mjs scripts/research-insider-cursor-postgres.test.mjs web/src/lib/research-observed-roster.test.ts web/src/lib/research-observed-priority.test.ts web/src/lib/research-observed-deep.test.ts scripts/research-observed-roster-native.test.mjs scripts/research-observed-priority-native.test.mjs scripts/research-publication-source-fence-postgres.test.mjs scripts/research-input-preparation-postgres.test.mjs scripts/candidate-financial-queue-write-lease-route.test.mjs web/src/lib/research-monitor-benchmark-context.test.ts web/src/lib/research-attention-shadow-v2.test.ts scripts/research-business-calculator.test.mjs scripts/research-financial-supplement.test.mjs scripts/research-financial-cleanup.test.mjs scripts/research-execution-binding.test.mjs scripts/research-saved-observation.test.mjs scripts/research-publication-view.test.mjs scripts/research-atomic-publication.test.mjs scripts/research-atomic-publication-postgres.test.mjs scripts/research-source-priority-consumer.test.mjs scripts/research-complete-input.test.mjs scripts/research-complete-input-postgres.test.mjs scripts/research-author-assignment-route.test.mjs scripts/research-author-assignment-postgres.test.mjs",
+  "selectedFileCount": 74,
+  "files": [
+    {
+      "file": "web/src/lib/research-agent-priority.test.ts",
+      "bytes": 3490,
+      "sha256": "76eaba78e5a2b2180e65432659a90527eda5ffc69fd35d7a0ee9fe8f641334ed"
+    },
+    {
+      "file": "web/src/lib/research-agent-qualification.test.ts",
+      "bytes": 4784,
+      "sha256": "c6ed14cecf8d96b9ed4041fc7664fbeec1876978a115e0e7b6b07b5b6796b6e9"
+    },
+    {
+      "file": "web/src/lib/research-deep-article.test.ts",
+      "bytes": 16481,
+      "sha256": "7a08766e3543c46bfc8ec764decb740f921696490c2e54fa93c2b09cbf4dc8c2"
+    },
+    {
+      "file": "web/src/lib/research-deep-claim-context.test.ts",
+      "bytes": 4754,
+      "sha256": "5d3dc796384ccd1dfe86dc481c9311f420e1577bc522735f1904d6a84c44023a"
+    },
+    {
+      "file": "web/src/lib/research-deep-source-rights.test.ts",
+      "bytes": 2829,
+      "sha256": "8f7fc298ac4586abec15cc6d8451cedd95611c31d24d192f320f39d3bd5d0d61"
+    },
+    {
+      "file": "web/src/lib/research-paper-books.test.ts",
+      "bytes": 15604,
+      "sha256": "dc2faf6ec5a50de08bfecb1a74bed1ce2038d53e45a40ca84a76113f320d64e6"
+    },
+    {
+      "file": "web/src/lib/research-review-auth.test.ts",
+      "bytes": 3349,
+      "sha256": "7d2180663b394beb26124d28953f2ed1e0379dfdccf9aaf73cac5fd28bb05c8b"
+    },
+    {
+      "file": "web/src/lib/research-strategy-governance.test.ts",
+      "bytes": 9770,
+      "sha256": "a5e806d1b4fc77562bc49e88e623c3fb4870ce78a979a99375b4c053bc8ede80"
+    },
+    {
+      "file": "web/src/lib/research-weekly-bars.test.ts",
+      "bytes": 2190,
+      "sha256": "f480ba4943516bfe83c7074c5ad3ddcf68f25b68b3ef069ead671f08fda8a157"
+    },
+    {
+      "file": "scripts/research-agent-migration-gate.test.mjs",
+      "bytes": 4771,
+      "sha256": "d15b022a5d2997d7a63778e52f102720d943187bd7aba7ac14bd22e0e1df9240"
+    },
+    {
+      "file": "scripts/research-agent-routes.test.mjs",
+      "bytes": 17001,
+      "sha256": "e58c08473226f1f1ad1e998992d5ff73f55be81b9f32511c86671e676dfcccb2"
+    },
+    {
+      "file": "scripts/research-paper-session-route.test.mjs",
+      "bytes": 12651,
+      "sha256": "9e8a4fd1ccf2ed2e5ef46430ff88162979aab1340bc3bf0a7fa7b2d6aa7b97a3"
+    },
+    {
+      "file": "scripts/research-approval-replay-route.test.mjs",
+      "bytes": 2333,
+      "sha256": "0da0c7d9d290cbb106b9dd8871aaa6e26e039bb2e12c6a65c67187e384dfab23"
+    },
+    {
+      "file": "scripts/research-strategy-release.test.mjs",
+      "bytes": 2612,
+      "sha256": "06d6023bef068d726d6c90ef70b38c765a2e93a25cbd9f6e6a6168892d2ac26d"
+    },
+    {
+      "file": "scripts/research-source-budget-postgres.test.mjs",
+      "bytes": 16560,
+      "sha256": "939de2de4e26cc7c8eb3ff4a2e0358e7cb017fd3fc32bcbe300792e34f2ad80e"
+    },
+    {
+      "file": "web/src/lib/research-source-extensions.test.ts",
+      "bytes": 8516,
+      "sha256": "e35feccc8a996071aed013afc0c107c02bc5f42bd7f85c203053101355b93c5c"
+    },
+    {
+      "file": "web/src/lib/research-broker-estimate.test.ts",
+      "bytes": 671,
+      "sha256": "3b3fb33b1fe29a071ef7716f6078b9e58471f5313c65dfe5851026225ded564b"
+    },
+    {
+      "file": "web/src/lib/research-execution-context.test.ts",
+      "bytes": 912,
+      "sha256": "555f64ddc43fb99358bd1b0c76e47c1634943986818471e1d6e9f194588d9c8b"
+    },
+    {
+      "file": "web/src/lib/technical-features-v2.test.ts",
+      "bytes": 3498,
+      "sha256": "a81521ded4e8ded1f0ecea1589f4324500576fb26bd6976d59dc54bf79edd9e8"
+    },
+    {
+      "file": "scripts/research-deep-jobs-postgres.test.mjs",
+      "bytes": 6521,
+      "sha256": "b72e0a4e6bad5bc917ded7018ab400a751daf1dcfdde8cab2d2e73d7c2224c14"
+    },
+    {
+      "file": "scripts/research-deep-publication-postgres.test.mjs",
+      "bytes": 15208,
+      "sha256": "1554851cb3aaa10ca71a8dc96bf22b8c81e14262b33a6667b8e6e6af5e186b92"
+    },
+    {
+      "file": "scripts/candidate-dossier-outbox-v6-postgres.test.mjs",
+      "bytes": 19839,
+      "sha256": "8b33bec792a73230813970d50e60b774139a555c3a1aa58d498cf727705073d3"
+    },
+    {
+      "file": "scripts/research-capacity-admission.test.mjs",
+      "bytes": 2155,
+      "sha256": "ccfd0da94b1d3b8c8346d2a0d447dd1a947f6833ce3b504289e71045e9a948d2"
+    },
+    {
+      "file": "scripts/research-host-resource-check.test.mjs",
+      "bytes": 4255,
+      "sha256": "360f538dec3d31f3003f4a38aec4b6c7281db5339adeca6396b86b0fe2a9e298"
+    },
+    {
+      "file": "web/src/lib/research-cloud-work.test.ts",
+      "bytes": 5944,
+      "sha256": "ce835387d70e5c533b4fd39d836aedd5c7bddc4e4cb27a08d855f3634b3751b0"
+    },
+    {
+      "file": "scripts/research-cloud-capacity.test.mjs",
+      "bytes": 1773,
+      "sha256": "2b38c8f6d0ac357c9ad34ce144734d6a5660e66b7d5b5557c76f93a41cef330e"
+    },
+    {
+      "file": "scripts/research-cloud-work-cli.test.mjs",
+      "bytes": 6228,
+      "sha256": "1b9ff94c61a49df243c30788afebadb997301fd68987172128d50223d7d23d66"
+    },
+    {
+      "file": "scripts/research-cloud-result-route.test.mjs",
+      "bytes": 5532,
+      "sha256": "8167c2d22f9d1d6b98b5d84b1aa55a246789d540d2b9c75ea94f0f4543439a2d"
+    },
+    {
+      "file": "scripts/research-cloud-receipts-postgres.test.mjs",
+      "bytes": 7929,
+      "sha256": "7a63da56d57ff111d23aec0edfb8464f4cea013ea6060a72d77c71dbe23c3022"
+    },
+    {
+      "file": "web/src/lib/research-source-attempt-controller.test.ts",
+      "bytes": 25976,
+      "sha256": "8ebe42f56b9e8c7c2d42f9148f7f27690fead9c70506c196dc1016b7d0321727"
+    },
+    {
+      "file": "scripts/research-source-controller.test.mjs",
+      "bytes": 11921,
+      "sha256": "43ec609fe73ca827faa962fc8c9457f1d379ae0b57a9fbcb97af4d3cc2db090d"
+    },
+    {
+      "file": "web/src/lib/research-source-roots.test.ts",
+      "bytes": 1614,
+      "sha256": "28b4562d7a8f1c68bc92f32516b5ec0b6934a54a735151e9933a1d44172f785e"
+    },
+    {
+      "file": "web/src/lib/research-inbox.test.ts",
+      "bytes": 9795,
+      "sha256": "e5e7425383a72d4466abe70594d5d202cbfc62ed67f633c563e39630a2e6c94c"
+    },
+    {
+      "file": "web/src/lib/research-agent-priority.test.ts",
+      "bytes": 3490,
+      "sha256": "76eaba78e5a2b2180e65432659a90527eda5ffc69fd35d7a0ee9fe8f641334ed"
+    },
+    {
+      "file": "scripts/release-owner-bridge-postgres.test.mjs",
+      "bytes": 7522,
+      "sha256": "6fd05b6abea442ceac835dd56663700d287ca934480e0ce6aada7ba2e41d3bfb"
+    },
+    {
+      "file": "scripts/research-cloud-controller.test.mjs",
+      "bytes": 14706,
+      "sha256": "1c0765be4bc2b640ab47e1d2662824d7bb8047b3bf60fffe804f45d239723aa1"
+    },
+    {
+      "file": "web/src/lib/research-discovery-evidence.test.ts",
+      "bytes": 3610,
+      "sha256": "f749347bfa623d2b85a61d6ce3ccf4b14b29db677eb99112fe175ad6995e0f1c"
+    },
+    {
+      "file": "web/src/lib/research-discovery-price-enrichment.test.ts",
+      "bytes": 34118,
+      "sha256": "67da9a9469c4209722805edd5913b854607f5edd532387352a5d6eaf62790834"
+    },
+    {
+      "file": "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+      "bytes": 29788,
+      "sha256": "05be3041dabace723a9de9fde65647a5ec4275117eb98a51d146c8e153a83d04"
+    },
+    {
+      "file": "scripts/research-monitor-controller.test.mjs",
+      "bytes": 17182,
+      "sha256": "5c0fd7f69e9fe0a27be24be3f41dce01789bcbdf0169825f4864b53d2508025b"
+    },
+    {
+      "file": "scripts/research-monitor-progress.test.mjs",
+      "bytes": 19004,
+      "sha256": "4c0f7b974936972fd2cf7e55a9f8992d239a8d682819e4af837be5be03d7a2af"
+    },
+    {
+      "file": "scripts/research-deep-controller.test.mjs",
+      "bytes": 21425,
+      "sha256": "395db95fb22ea146e2f995003320b2e7fa848e2b361dd10af063e341baa183a4"
+    },
+    {
+      "file": "scripts/research-deep-draft-controller.test.mjs",
+      "bytes": 18626,
+      "sha256": "b776103f94c5b0d1f7060b9eb663b8fee5d74c1b21ae2ce9eea22383a15ef748"
+    },
+    {
+      "file": "scripts/research-deep-job-context-route.test.mjs",
+      "bytes": 39600,
+      "sha256": "b2c162e1bc916bacb9d5b8b2baa8fa41e29e91d3c9fd04cfbad7dd417d8d2d5a"
+    },
+    {
+      "file": "web/src/lib/research-source-association.test.ts",
+      "bytes": 26855,
+      "sha256": "2a43a690baeed5e2af57ca8fcbaaffebab711dff49c5675c581ed5bd28770be2"
+    },
+    {
+      "file": "scripts/candidate-financial-document-write-lease-route.test.mjs",
+      "bytes": 9201,
+      "sha256": "7ef91ccd098c7fc4f38bfb34b5bbb60de08001e97b15740ebf3619bcbf019c12"
+    },
+    {
+      "file": "web/src/lib/research-insider-official.test.ts",
+      "bytes": 8396,
+      "sha256": "6d79dde9dc7cc654539741bd8c2c66815acbe1554bddce52f083f15e3123f7c6"
+    },
+    {
+      "file": "web/src/lib/source-health.test.ts",
+      "bytes": 4693,
+      "sha256": "31988e1901bc4a9fbf94415cc5ef4607c552e8b7cedc3017ade86fbb9ceaafdf"
+    },
+    {
+      "file": "scripts/research-insider-collector.test.mjs",
+      "bytes": 7489,
+      "sha256": "54dfabb61cd653f74d452756c92cee4aee281f973cfb7a47f9523dfcdc4b3e16"
+    },
+    {
+      "file": "scripts/research-insider-health-route.test.mjs",
+      "bytes": 5731,
+      "sha256": "a9ff7d4a7137645755ea3f4515538109dd4bdb10bdd1ccb1c0bfeb0e9e7b85d8"
+    },
+    {
+      "file": "scripts/research-insider-cursor-postgres.test.mjs",
+      "bytes": 3608,
+      "sha256": "80409f1333d82f1b5e1028f46b451dc43b775bdcd5141ef2b90be9d9c6961018"
+    },
+    {
+      "file": "web/src/lib/research-observed-roster.test.ts",
+      "bytes": 2741,
+      "sha256": "508ea70c6208ab149a6ebf5c150d8afcb9f075d6c1247d15cd4cbff0a9872bb0"
+    },
+    {
+      "file": "web/src/lib/research-observed-priority.test.ts",
+      "bytes": 2934,
+      "sha256": "2208145ee5bb6b75b7da23b5716a12ee38f843ec808111240dbf6ba54f5965ca"
+    },
+    {
+      "file": "web/src/lib/research-observed-deep.test.ts",
+      "bytes": 6001,
+      "sha256": "2a0e6e2ba49844d546ff0773cdfe392a3353c40b5c534b924c4074bd5d78cf49"
+    },
+    {
+      "file": "scripts/research-observed-roster-native.test.mjs",
+      "bytes": 7862,
+      "sha256": "8a135bfb39c8618b9ddc4ec8af8d154217bf55057971df06c02a5b87c3ea7bfa"
+    },
+    {
+      "file": "scripts/research-observed-priority-native.test.mjs",
+      "bytes": 38102,
+      "sha256": "fafdeebe66ffe5719382410dfaf52a41bfc22d68ed07c183de0271edbca59d2e"
+    },
+    {
+      "file": "scripts/research-publication-source-fence-postgres.test.mjs",
+      "bytes": 12444,
+      "sha256": "365c3c3214dc2b715af052b6dbe98ac3c542403ce4e6102b90aba65a1f33ed26"
+    },
+    {
+      "file": "scripts/research-input-preparation-postgres.test.mjs",
+      "bytes": 19863,
+      "sha256": "53c6fa08fc2c6566a9be108c72304c6309c2514db26f8820536d78df2c62b481"
+    },
+    {
+      "file": "scripts/candidate-financial-queue-write-lease-route.test.mjs",
+      "bytes": 8746,
+      "sha256": "ecdc94c96d7c6af0600a9e551e9eb0e1744cdea33d859295f31f43ecd332c717"
+    },
+    {
+      "file": "web/src/lib/research-monitor-benchmark-context.test.ts",
+      "bytes": 14499,
+      "sha256": "c54076115482797aae2f0d4d900bd63cd03e15acd55779b03cdef09f68592bad"
+    },
+    {
+      "file": "web/src/lib/research-attention-shadow-v2.test.ts",
+      "bytes": 13935,
+      "sha256": "4feb688edfaccc8c1dea43525ce8a2dcedf9e074b24dc3ead9c05b44578c6b44"
+    },
+    {
+      "file": "scripts/research-business-calculator.test.mjs",
+      "bytes": 9055,
+      "sha256": "183b66f4c2106465984517fc04996f85b94514f9b3568ffd07d8930ecdce46d6"
+    },
+    {
+      "file": "scripts/research-financial-supplement.test.mjs",
+      "bytes": 11071,
+      "sha256": "cd53e971c7dae13fee1f3a99112b2c21f129e405b4cce16f8d0e73a07297e668"
+    },
+    {
+      "file": "scripts/research-financial-cleanup.test.mjs",
+      "bytes": 7479,
+      "sha256": "9cb54a434ed50a6092f9428c5cf5683e4a75e62133294816f28a5bfacd0d5286"
+    },
+    {
+      "file": "scripts/research-execution-binding.test.mjs",
+      "bytes": 11569,
+      "sha256": "8c1c445d41b4a283ec36926151d64d1dd623242568008854539a7fd3a3a7f07f"
+    },
+    {
+      "file": "scripts/research-saved-observation.test.mjs",
+      "bytes": 8155,
+      "sha256": "e5ebd465c57f0af55d7949ac38d1a79a30699ab8a790bf5c58bd44a98484d66b"
+    },
+    {
+      "file": "scripts/research-publication-view.test.mjs",
+      "bytes": 7656,
+      "sha256": "5f91f20ffeb6f4db0535b28ee030de53d4fbc78cd3704bb1d8e18827123124d1"
+    },
+    {
+      "file": "scripts/research-atomic-publication.test.mjs",
+      "bytes": 6771,
+      "sha256": "6c9cc74f2ab23069d6e30ccd16d5ba33ea0c9457abffd912a1540863753bd9da"
+    },
+    {
+      "file": "scripts/research-atomic-publication-postgres.test.mjs",
+      "bytes": 39100,
+      "sha256": "2ff23b80918270788e131902dd72b06153042ebe78aec7619b3e41fa286875ef"
+    },
+    {
+      "file": "scripts/research-source-priority-consumer.test.mjs",
+      "bytes": 11685,
+      "sha256": "edc4b5830c15d276b3635fb9d4235b77e803e83e16b925c08de942d1e1403807"
+    },
+    {
+      "file": "scripts/research-complete-input.test.mjs",
+      "bytes": 5371,
+      "sha256": "4f438421c9c885253662b36ff67bd3c089bb7c2caf24dea63d786d6645d4df56"
+    },
+    {
+      "file": "scripts/research-complete-input-postgres.test.mjs",
+      "bytes": 18083,
+      "sha256": "75d60a0ff270caab664c9b56c676fdde59774e21d6422ed29a4c9b83bf0e715c"
+    },
+    {
+      "file": "scripts/research-author-assignment-route.test.mjs",
+      "bytes": 12613,
+      "sha256": "b81f5a213c480cc0d4a4d885a5df2a5fe200046e212ff4fa91f4234b81538c37"
+    },
+    {
+      "file": "scripts/research-author-assignment-postgres.test.mjs",
+      "bytes": 14030,
+      "sha256": "dabd692e28366b988d7ade2f57cd91622fd45c50b6e638d27cc876ba0cee2252"
+    }
+  ]
+}
