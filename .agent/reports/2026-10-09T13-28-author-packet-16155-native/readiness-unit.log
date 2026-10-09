@@ -1,0 +1,90 @@
+TAP version 13
+# Subtest: schema-cache startup is recorded before exact no-write shape readiness
+ok 1 - schema-cache startup is recorded before exact no-write shape readiness
+  ---
+  duration_ms: 1.397709
+  ...
+# Subtest: functional 400 is never retried or hidden by later readiness
+ok 2 - functional 400 is never retried or hidden by later readiness
+  ---
+  duration_ms: 0.733527
+  ...
+# Subtest: functional 401 is never retried or hidden by later readiness
+ok 3 - functional 401 is never retried or hidden by later readiness
+  ---
+  duration_ms: 0.200543
+  ...
+# Subtest: functional 409 is never retried or hidden by later readiness
+ok 4 - functional 409 is never retried or hidden by later readiness
+  ---
+  duration_ms: 0.109396
+  ...
+# Subtest: functional 500 is never retried or hidden by later readiness
+ok 5 - functional 500 is never retried or hidden by later readiness
+  ---
+  duration_ms: 0.229767
+  ...
+# Subtest: only matching schema function lookup can be retried
+ok 6 - only matching schema function lookup can be retried
+  ---
+  duration_ms: 0.194934
+  ...
+# Subtest: known database startup errors have a fixed three-call limit
+ok 7 - known database startup errors have a fixed three-call limit
+  ---
+  duration_ms: 0.419543
+  ...
+# Subtest: observed PostgreSQL restart disconnect is recorded and only retried by readiness
+ok 8 - observed PostgreSQL restart disconnect is recorded and only retried by readiness
+  ---
+  duration_ms: 0.159541
+  ...
+# Subtest: 57P01 requires the observed status and exact shutdown message
+ok 9 - 57P01 requires the observed status and exact shutdown message
+  ---
+  duration_ms: 0.659976
+  ...
+# Subtest: unclassified 503 and transport failures cannot become green retries
+ok 10 - unclassified 503 and transport failures cannot become green retries
+  ---
+  duration_ms: 0.580195
+  ...
+# Subtest: restart readiness requires the formal authority to remain empty
+ok 11 - restart readiness requires the formal authority to remain empty
+  ---
+  duration_ms: 0.253483
+  ...
+# Subtest: ready then single business 400 stays rejected
+ok 12 - ready then single business 400 stays rejected
+  ---
+  duration_ms: 0.425712
+  ...
+# Subtest: ready then single business 401 stays rejected
+ok 13 - ready then single business 401 stays rejected
+  ---
+  duration_ms: 0.077797
+  ...
+# Subtest: ready then single business 409 stays rejected
+ok 14 - ready then single business 409 stays rejected
+  ---
+  duration_ms: 0.06666
+  ...
+# Subtest: ready then single business 500 stays rejected
+ok 15 - ready then single business 500 stays rejected
+  ---
+  duration_ms: 0.145499
+  ...
+# Subtest: readiness rejection prevents the business request entirely
+ok 16 - readiness rejection prevents the business request entirely
+  ---
+  duration_ms: 0.16608
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 97.829531

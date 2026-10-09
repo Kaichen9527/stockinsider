@@ -1,0 +1,11 @@
+{
+  "observedAt": "2026-10-09T13:24:29Z",
+  "initialDiskAvailableBytes": 15119851520,
+  "filesystemTotalBytes": 33770192896,
+  "memoryLimitBytes": 34359738368,
+  "memoryCurrentBytes": 18117390336,
+  "ownedProcesses": [],
+  "compiledFilesMatched": 2066,
+  "buildId": "3oZq3yySKwBlvfjMs_cJD",
+  "successorTestBlobsMatched": true
+}

@@ -1,0 +1,13 @@
+# 16155 compiled author packet native acceptance
+
+Runtime/build subject `cbd1a9e93ae77930684f0ca45726790b6871721c`, tree `80326f52b01d206873ab3c15df6adfc182e1b749`; original build ID `3oZq3yySKwBlvfjMs_cJD`. Reused2066 compiled server files verified exact lengths/SHA before and after. No runtime/SQL/mapping/package/harness changes, no build/install/download. Upstream test-only subject `16155a8514eea967d620e15c47d3fc0a2c2b6383`, exact three relevant test/helper blobs on local subject `b82ec09fe76393d279302083b1197137374ab0c6`.
+
+One16-unit run:16/16pass0skip. One compiledHTTP whole-file run:38/38pass0skip (2parents,36children;18unchanged shared-harness and18author pipeline/packet children). Both actual guarded flows process1978observed members, original claim/preparation/complete fixed AUO/EMC material/assignment, packet public summary+unknown publication precision+actualsealclock+financial result, private binding omission, exact repeated packet/hash/row audits, real PG restart, guarded source withdrawal rejection and original immutable rows unchanged.
+
+Every readiness attempt is retained. Both companies prepare-schema probe404/PGRST202 then400/P0001 input_preparation_shape; restart read-only empty-authority probe503/57P01 exact `terminating connection due to administrator command` then200emptyarray. Only bounded readonly readiness retries this exact observed tuple. Ready business requests remain single-shot; no generic retry of400/401/409/500. No strace or diagnostic preload in this run.
+
+The old6fcd/R1 financial_parent_replaced,6fcd observed timeout and31bd restart-readiness failures remain separately retained at103a50f4 and75f47c9. This success does not prove historicalR1 writer/rootcause. Root independent successor/receipt review is not inferred from maker green.
+
+Inherited harness modelReserved:false is a stale static generic flag: actual nested row audits show1synthetic reservation and0completions per company. Company sources, jobs and controller credentials are synthetic; baseline industry relay and fixed financial inputs are attributed public Git evidence, not VM raw-PDF verification. No model dispatch/real author/reviewer/publication/research or investment qualification. Manual time is not role-budget proof.
+
+Fresh32GiB cgroup limit, initial disk15,119,851,520B; native51.26s, sampled aggregateRSS660,533,248B. All owned services stopped; logs/resources saved and hashed before only two stopped disposable clusters removed. Final free~15.1GB retains8GiBreserve. Exact commands, rawTAP, ready attempts, source/tree/build/file hashes, audits and cleanup are in companion JSON/evidence directory. Stop for root review; no main/productionDB/deployment.
