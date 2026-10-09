@@ -36,9 +36,11 @@ for(const symbol of ['2409','2383'])test(`compiled private author result ${symbo
   });
 
   const input={owner,jobId:request.jobId,attempt:request.attempt,reservationId:request.reservationId,...scope,preparationId:saved.preparation_id,preparationHash:saved.input_hash,expectedArtifactManifestHash:mapping.companies[symbol].inventoryHash,expectedCalculatorExecutionHash:mapping.sourceClosureHash};
+  let serverObservedCoreHash;
   await t.test('compiled read-only financial diagnostic before immutable admission',async()=>{
    const response=await post('api/internal/research-deep-job',{action:'financialSupplement',...request,preparationId:saved.preparation_id,preparationInputHash:saved.input_hash});const body=await response.json();assert.equal(response.status,200,JSON.stringify(body));
    fs.writeFileSync(process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol+'/financial-supplement-diagnostic.json',JSON.stringify(body),{flag:'wx',mode:0o600});
+   serverObservedCoreHash=body.supplement.calculation.executionCodeHash;assert.match(serverObservedCoreHash,/^[a-f0-9]{64}$/u);
    if(symbol==='2409')t.diagnostic(JSON.stringify({field:'base Q4 display revenue, manual research assumption projection',actual:body.supplement.projection.projected.scenarios[1].quarters[1].segments[0].revenue,expectedFrozen:31090.078766235238}));
   });
   let sealed;
@@ -93,8 +95,23 @@ for(const symbol of ['2409','2383'])test(`compiled private author result ${symbo
    const before=audit(),response=await post('api/internal/research-model-reservation',resultIdentity),body=await response.json();assert.equal(response.status,200,JSON.stringify(body));assert.equal(body.result,null);assert.equal(body.controllerReportOnly,true);assert.equal(body.modelDispatched,false);assert.equal(body.publishableResearch,false);assert.equal(audit(),before);
   });
   await t.test('synthetic controller observation and prose, actual fixed financial recalculation, one immutable private result',async()=>{
-   fixture=authorResultFixture(resultIdentity,sealed,packetResponse.packet);const before=JSON.parse(audit());
-   const response=await post('api/internal/research-model-reservation',fixture.request),body=await response.json();assert.equal(response.status,200,JSON.stringify(body));responseResult=body;savedResult=body.result;
+   fixture=authorResultFixture(resultIdentity,sealed,packetResponse.packet);const originalFixture=structuredClone(fixture);
+   // This controller fixture was validated in source Node, whereas the receiver
+   // independently validates with its compiled core. Bind the observed server
+   // identity from the existing guarded diagnostic; do not bypass its equality.
+   const sourceValidated=structuredClone(fixture.envelope.validatedArticle),receiverValidated=structuredClone(sourceValidated);
+   const sourceCoreHash=sourceValidated.calculatorExecutionHash;assert.notEqual(sourceCoreHash,serverObservedCoreHash);
+   receiverValidated.calculatorExecutionHash=serverObservedCoreHash;
+   assert.deepEqual({...receiverValidated,calculatorExecutionHash:sourceCoreHash},sourceValidated,'only the core identity field changes before rehash');
+   delete receiverValidated.articleHash;const expectedReceiverArticleHash=completeHash(receiverValidated);receiverValidated.articleHash=expectedReceiverArticleHash;
+   assert.notEqual(expectedReceiverArticleHash,sourceValidated.articleHash);
+   fixture.request.observation.articleHash=expectedReceiverArticleHash;
+   assert.deepEqual({...fixture.request,observation:{...fixture.request.observation,articleHash:originalFixture.request.observation.articleHash}},originalFixture.request,'raw article, all clocks and other bindings remain untouched');
+   assert.deepEqual(fixture.envelope,originalFixture.envelope,'shared fixture envelope is untouched');
+   const identityBinding={sourceCoreHash,serverObservedCoreHash,sourceArticleHash:sourceValidated.articleHash,expectedReceiverArticleHash,sourceValidated,receiverValidated,changedField:'calculatorExecutionHash',requestDiff:['observation.articleHash'],rawArticleHash:completeHash(fixture.request.article),syntheticControllerObservation:true,actualModelExecuted:false};
+   fs.writeFileSync(process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol+'/single-core-identity-binding.json',JSON.stringify(identityBinding),{flag:'wx',mode:0o600});report.authorResultIdentityBinding=identityBinding;
+   const before=JSON.parse(audit());
+   const response=await post('api/internal/research-model-reservation',fixture.request),body=await response.json();assert.equal(response.status,200,JSON.stringify(body));responseResult=body;savedResult=body.result;assert.deepEqual(savedResult.payload.validatedArticle,receiverValidated,'receiver independently recalculates the expected compiled identity');
    assert.equal(savedResult.result_hash,completeHash(savedResult.payload));assert.deepEqual(savedResult.payload.rawArticle,fixture.request.article);assert.deepEqual(savedResult.payload.validatedArticle.calculation,sealed.canonical_payload.financial.material.calculation);assert.equal(savedResult.payload.observation.modelIdentity,null);
    for(const key of ['financialVerified','publishableResearch','researchQualified','strategyApproved','entryEligible'])assert.equal(savedResult.payload.validatedArticle[key],false);
    assert.equal(body.controllerReportOnly,true);assert.equal(body.modelDispatched,false);assert.equal(body.dispatchReady,false);assert.equal(body.publishableResearch,false);
