@@ -97,7 +97,7 @@ export function parseResearchPublicationView(value: unknown, companyId: string, 
   const reference = (value: unknown): Reference => {
     const row = value as Row; ensure(row && typeof row === 'object');
     if (row.kind === 'source') { const ref = exact(row,['kind','documentId','rowHash','locator']);
-      text(ref.locator,300); ensure(sourceMap.get(String(ref.documentId))?.rowHash === ref.rowHash); }
+      text(ref.locator,500); ensure(sourceMap.get(String(ref.documentId))?.rowHash === ref.rowHash); }
     else if (row.kind === 'gap') { const ref = exact(row,['kind','namespace','reason']); ensure(['source','financial','execution'].includes(String(ref.namespace))); text(ref.reason,500); }
     else { const ref = exact(row,['kind','pointer']); ensure(['reported_observation','calculation','assumption'].includes(String(ref.kind))); text(ref.pointer,500); ensure((ref.pointer as string).startsWith('/')); }
     return row as Reference;
@@ -108,7 +108,7 @@ export function parseResearchPublicationView(value: unknown, companyId: string, 
     text(row.text); ensure(['reported','rumor','inference','scenario','gap'].includes(String(row.kind))); list(row.references,1,30).forEach(reference); };
   paragraph(a.summary);
   list(a.sections,7,7).forEach((value,i) => { const s = exact(value,['key','title','paragraphs']); ensure(s.key === DEEP_ARTICLE_SECTION_ORDER[i]); text(s.title,80); list(s.paragraphs,1,20).forEach(paragraph); });
-  list(a.catalysts,0,12).forEach(value => { const x = exact(value,['name','stage','paragraphIds','affectedBusiness','earliestFinancialPeriod','financialTransmission','strongestCounterEvidence','falsifier']);
+  list(a.catalysts,1,15).forEach(value => { const x = exact(value,['name','stage','paragraphIds','affectedBusiness','earliestFinancialPeriod','financialTransmission','strongestCounterEvidence','falsifier']);
     ensure(['rumor','discussion','customer_validation','pilot','reported_order','production'].includes(String(x.stage)));
     for (const k of ['name','affectedBusiness','earliestFinancialPeriod']) text(x[k],100);
     for (const k of ['financialTransmission','strongestCounterEvidence','falsifier']) text(x[k],1000);
@@ -139,8 +139,13 @@ export function parseResearchPublicationView(value: unknown, companyId: string, 
       const r = exact(value,['label','reference','value','unit','periods','scenarioId','valueStatus']), original = exact(rs[j],['label','reference']);
       text(r.label,100); ensure(r.label === original.label && completeHash(r.reference) === completeHash(original.reference));
       const ref = reference(r.reference); ensure(['reported_observation','calculation','assumption'].includes(ref.kind) && r.valueStatus === ref.kind);
-      number(r.value); ensure(['TWD_per_share','million_shares','fraction','TWD_million'].includes(String(r.unit)));
-      if (list(r.periods,0,4).length) periods(r.periods); ensure(r.scenarioId === null || scenarioIds.includes(String(r.scenarioId)));
+      number(r.value); text(r.unit,80);
+      const ps = list(r.periods,0,4);
+      // Reported observations retain the original fiscal/monthly/half-year
+      // labels and units. Only forecast valuations require four quarters.
+      if (ref.kind === 'reported_observation') ps.forEach(p => text(p,100));
+      else if (ps.length) periods(ps);
+      ensure(r.scenarioId === null || scenarioIds.includes(String(r.scenarioId)));
     }); return t as PublishedTable;
   });
   const limitations = list(d.limitations,0,20); limitations.forEach(v => text(v,1000));

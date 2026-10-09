@@ -66,7 +66,7 @@ export function PublishedResearchView({ publication: p }: {publication: Research
       {p.tables.length === 0 && <p className="mt-4 text-sm">此版本未提供附表。</p>}
       {p.tables.map(t => <div key={t.id} className="mt-5 overflow-x-auto" tabIndex={0} role="region" aria-label={t.title}>
         <table className="w-full min-w-[540px] text-left text-sm"><caption className="mb-2 text-left font-semibold">{t.title}</caption><thead><tr>{['項目','數值／單位','期間','性質'].map(label => <th key={label} className="p-2" scope="col">{label}</th>)}</tr></thead>
-          <tbody>{t.rows.map((r,i) => <tr key={i} className="border-t border-slate-200"><th className="p-2 font-normal" scope="row">{r.label}</th><td className="p-2">{number(r.value)} {({TWD_per_share:'元／股',TWD_million:'百萬元',million_shares:'百萬股',fraction:'比例'})[r.unit]}</td><td className="p-2">{r.periods.join('、') || '未指定期間'}</td><td className="p-2">{r.valueStatus === 'calculation' ? '計算結果' : r.valueStatus === 'assumption' ? '研究假設' : '公告觀察'}</td></tr>)}</tbody>
+          <tbody>{t.rows.map((r,i) => <tr key={i} className="border-t border-slate-200"><th className="p-2 font-normal" scope="row">{r.label}</th><td className="p-2">{number(r.value)} {({TWD_per_share:'元／股',TWD_million:'百萬元',TWD_thousands:'千元',TWD:'元',million_shares:'百萬股',fraction:'比例'})[r.unit] || r.unit}</td><td className="p-2">{r.periods.join('、') || '未指定期間'}</td><td className="p-2">{r.valueStatus === 'calculation' ? '計算結果' : r.valueStatus === 'assumption' ? '研究假設' : '公告觀察'}</td></tr>)}</tbody>
         </table></div>)}
     </details>
     <details className="my-5 rounded-lg border border-slate-200 p-4"><summary className="cursor-pointer font-semibold">來源與研究限制</summary>
