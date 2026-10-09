@@ -12,6 +12,17 @@ export async function POST(request: Request) {
   if (!requireExactInternalBearer(request)) {
     return NextResponse.json({ ok: false, error: 'exact_internal_bearer_required' }, { status: 401 });
   }
+  if (request.headers.has('x-research-input-version')) {
+    if(request.headers.get('x-research-input-version')!=='2') return NextResponse.json({ok:false,error:'research_complete_marker_invalid'},{status:400});
+    const {FinancialDeadline}=await import('@/lib/research-financial-file-reader');
+    const {readCompleteBody,parseCompleteRequest,runCompleteInput}=await import('@/lib/research-complete-input');
+    const deadline=new FinancialDeadline();let input;let action;
+    try {const body=await readCompleteBody(request,deadline);({action,...input}=body);if(action!=='sealResearchInput'&&action!=='readResearchInputRevision')throw new Error('action');input=parseCompleteRequest(input);}
+    catch {deadline.controller.abort();return NextResponse.json({ok:false,error:'research_complete_request_invalid'},{status:400});}
+    try {const revision=await runCompleteInput(getSupabaseServerClient(),input,action==='sealResearchInput',deadline);deadline.check();return NextResponse.json({ok:true,revision,dispatchReady:false});}
+    catch {return NextResponse.json({ok:false,error:'research_complete_input_unavailable',outcome:'uncertain',retryClaim:false},{status:409});}
+    finally {deadline.controller.abort();}
+  }
   const parsed = await request.json().catch(() => null);
   const body = parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed as Row : {};
   const action = String(body.action || '');

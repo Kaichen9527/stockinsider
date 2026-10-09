@@ -2,7 +2,8 @@ import { createHash, timingSafeEqual } from 'node:crypto';
 
 /** Private controller identity only. Never serialize this into an article or general log. */
 export type ResearchControllerRole = 'author' | 'reviewer';
-type Credentials = { INTERNAL_API_KEY?: string; RESEARCH_REVIEW_KEY?: string; CRON_SECRET?: string };
+type Credentials = { INTERNAL_API_KEY?: string; RESEARCH_REVIEW_KEY?: string; CRON_SECRET?: string;
+  RESEARCH_TEST_KEY?: string; STRATEGY_APPROVAL_KEY?: string };
 type Failure = { ok: false; error: string };
 type Identity = { ok: true; role: ResearchControllerRole; principalId: string };
 const HASH = /^[a-f0-9]{64}$/u;
@@ -10,7 +11,8 @@ const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-
 
 function configuredCredentials(): Credentials {
   return { INTERNAL_API_KEY: process.env.INTERNAL_API_KEY,
-    RESEARCH_REVIEW_KEY: process.env.RESEARCH_REVIEW_KEY, CRON_SECRET: process.env.CRON_SECRET };
+    RESEARCH_REVIEW_KEY: process.env.RESEARCH_REVIEW_KEY, CRON_SECRET: process.env.CRON_SECRET,
+    RESEARCH_TEST_KEY: process.env.RESEARCH_TEST_KEY, STRATEGY_APPROVAL_KEY: process.env.STRATEGY_APPROVAL_KEY };
 }
 
 export function resolveResearchControllerIdentity(
@@ -18,8 +20,9 @@ export function resolveResearchControllerIdentity(
 ): Identity | Failure {
   const writer = credentials.INTERNAL_API_KEY;
   const reviewer = credentials.RESEARCH_REVIEW_KEY;
+  const otherRoles = [credentials.CRON_SECRET, credentials.RESEARCH_TEST_KEY, credentials.STRATEGY_APPROVAL_KEY];
   if ((role !== 'author' && role !== 'reviewer') || !writer || !reviewer
-    || writer === reviewer || writer === credentials.CRON_SECRET || reviewer === credentials.CRON_SECRET) {
+    || writer === reviewer || otherRoles.some(key => Boolean(key) && (key === writer || key === reviewer))) {
     return { ok: false, error: 'research_controller_authority_unavailable' };
   }
   const header = request.headers.get('authorization');

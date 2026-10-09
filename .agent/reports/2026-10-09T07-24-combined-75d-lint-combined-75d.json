@@ -1,0 +1,18 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "lint-combined-75d",
+  "command": [
+    "npm",
+    "run",
+    "lint"
+  ],
+  "startedAt": "2026-10-09T07:11:49.799Z",
+  "completedAt": "2026-10-09T07:12:15.334Z",
+  "elapsedSeconds": 25.53459791300702,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 1995427840,
+  "observedTaskDiskPeakBytes": 1345122304,
+  "availableBeforeBytes": 14685044736,
+  "availableAfterBytes": 14685032448,
+  "guardTermination": null
+}

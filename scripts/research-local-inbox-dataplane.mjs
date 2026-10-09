@@ -140,7 +140,7 @@ export async function localInboxProfile(root) {
 
 /** Runs only in the existing Node test-runner loopback projection boundary.
  * Uses real Next, Supabase client, PostgREST and PostgreSQL; no DB/client injection. */
-export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgrestBin, check = async (_name, fn) => fn(), observedRoster = false, observedPriority = false, observedClaim = false, testPgClockLibrary = null, afterBaseline = null }) {
+export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgrestBin, check = async (_name, fn) => fn(), observedRoster = false, observedPriority = false, observedClaim = false, testPgClockLibrary = null, researchControllers = false, afterBaseline = null }) {
   assert.equal(process.env.NODE_TEST_CONTEXT, 'child-v8', 'local_profile_requires_node_test_runner');
   for (const value of [root, artifacts, pgBin, postgrestBin]) assert.ok(path.isAbsolute(value));
   const environment = localProcessEnvironment();
@@ -163,10 +163,13 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
   const pgStop = () => exec('pg_ctl', ['-D',cluster,'-m','fast','-w','stop']);
   const sqlAsync=query=>new Promise((resolve,reject)=>{const child=spawn(path.join(pgBin,'psql'),['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(pgPort),'-d','postgres','-f','-'],{env:environment,stdio:['pipe','pipe','pipe']});const output=[];let bytes=0;const timeout=setTimeout(()=>child.kill('SIGKILL'),20000);for(const stream of [child.stdout,child.stderr])stream.on('data',chunk=>{bytes+=chunk.length;if(bytes>1_000_000)child.kill('SIGKILL');else output.push(chunk);});child.on('error',reject);child.on('close',code=>{clearTimeout(timeout);const text=Buffer.concat(output).toString('utf8').trim();if(code===0)resolve(text);else reject(Error('local_pg_async_failed'));});child.stdin.end(query);});
   const key = randomBytes(32).toString('hex'); const secret = randomBytes(48).toString('hex');
+  // Isolated test identities, never inherited credentials or real role-execution proof.
+  const reviewKey = randomBytes(32).toString('hex'), testKey = randomBytes(32).toString('hex'), cronKey = randomBytes(32).toString('hex');
   const encode = value => Buffer.from(JSON.stringify(value)).toString('base64url');
   const unsigned = `${encode({alg:'HS256',typ:'JWT'})}.${encode({role:'service_role',exp:Math.floor(Date.now()/1000)+1800})}`;
   const bearer = `${unsigned}.${createHmac('sha256',secret).update(unsigned).digest('base64url')}`;
-  const safe = text => String(text).replaceAll(key,'[ephemeral internal key]').replaceAll(bearer,'[ephemeral service JWT]').replaceAll(secret,'[ephemeral JWT secret]');
+  const localSecrets = [key,bearer,secret,reviewKey,testKey,cronKey];
+  const safe = text => redactLocalLogChunks([String(text)],localSecrets);
   const report = { startedAt:new Date().toISOString(), postgrest:tool, partialDevelopmentProfile:true, databaseAdapterInjected:false,
     officialAuthorityRowsSeeded:0, observedRosterPromoted:false, modelReserved:false, productionImported:false,
     top20:null, checks:[], limitations:['Node test-runner controlled loopback configuration, not production runtime activation',
@@ -224,7 +227,7 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
       } catch {res.writeHead(502);res.end('{"error":"local_compatibility_failed"}');}
     });
     await new Promise(resolve=>compatibility.listen(apiPort,'127.0.0.1',resolve));
-    next=spawn(process.execPath,[path.join(root,'web/node_modules/next/dist/bin/next'),'start','--hostname','127.0.0.1','--port',String(appPort)],{cwd:path.join(root,'web'),env:{...environment,NODE_ENV:'production',INTERNAL_API_KEY:key,LEGACY_RADAR_CORRECTNESS_PROJECTION:'enabled',SUPABASE_URL:`http://127.0.0.1:${apiPort}/`,SUPABASE_SERVICE_ROLE_KEY:bearer,RADAR_PUBLIC_SNAPSHOTS_ENABLED:'disabled',SOURCE_LED_OPPORTUNITY_V3:'disabled'},stdio:['ignore','pipe','pipe']});
+    next=spawn(process.execPath,[path.join(root,'web/node_modules/next/dist/bin/next'),'start','--hostname','127.0.0.1','--port',String(appPort)],{cwd:path.join(root,'web'),env:{...environment,NODE_ENV:'production',INTERNAL_API_KEY:key,...(researchControllers?{RESEARCH_REVIEW_KEY:reviewKey,RESEARCH_TEST_KEY:testKey,CRON_SECRET:cronKey}:{}),LEGACY_RADAR_CORRECTNESS_PROJECTION:'enabled',SUPABASE_URL:`http://127.0.0.1:${apiPort}/`,SUPABASE_SERVICE_ROLE_KEY:bearer,RADAR_PUBLIC_SNAPSHOTS_ENABLED:'disabled',SOURCE_LED_OPPORTUNITY_V3:'disabled'},stdio:['ignore','pipe','pipe']});
     for(const stream of [next.stdout,next.stderr])stream.on('data',b=>logs.next.push(safe(b)));
     const origin=`http://127.0.0.1:${appPort}/`;await ready(origin+'api/internal/research-inbox',next);
     const directory=path.join(root,'docs/research/2026-10-08-discovery-live');
@@ -246,7 +249,11 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
     report.sourceAttempts=run.receipts.map(row=>({id:row.scopeId,outcome:row.outcome}));
     report.controllerRunHash=run.runHash;report.inputCanonicalSymbols=run.inboxRequest.items.map(i=>({url:i.sourceUrl,symbols:i.symbols,subjectScope:i.subjectScope}));
     await save(path.join(artifacts,'controller.json'),run);await save(path.join(artifacts,'assessments.json'),[]);
-    const post = (endpoint, payload, authenticated=true) => fetch(origin+endpoint,{method:'POST',headers:{'content-type':'application/json',...(authenticated?{authorization:`Bearer ${key}`}:{})},body:JSON.stringify(payload),redirect:'error',signal:AbortSignal.timeout(15000)});
+    const post = (endpoint, payload, authenticated=true) => {
+      assert.ok(typeof authenticated==='boolean'||(researchControllers&&['reviewer','tester','cron'].includes(authenticated)),'isolated_role_not_configured');
+      const token=authenticated==='reviewer'?reviewKey:authenticated==='tester'?testKey:authenticated==='cron'?cronKey:key;
+      return fetch(origin+endpoint,{method:'POST',headers:{'content-type':'application/json',...(authenticated?{authorization:`Bearer ${token}`}:{})},body:JSON.stringify(payload),redirect:'error',signal:AbortSignal.timeout(15000)});
+    };
     await check('unauthorized real Next inbox returns 401 without a DB write',async()=>{
       const r=await post('api/internal/research-inbox',run.inboxRequest,false);assert.equal(r.status,401);assert.equal(sql('SELECT count(*) FROM source_raw_documents'),'0');report.checks.push('unauthorized_401_zero_write');
       const priority=await post('api/internal/research-priority-run',{...run.priorityRequest,assessments:[]},false);
@@ -317,7 +324,7 @@ export async function verifyLocalInboxDataPlane({ root, artifacts, pgBin, postgr
   finally {
     await stop(next);if(compatibility)await new Promise(resolve=>compatibility.close(resolve));await stop(postgrest);if(running)pgStop();
     report.completedAt=new Date().toISOString();await save(path.join(artifacts,'acceptance-receipt.json'),report);
-    for(const [name,lines] of Object.entries(logs))await writeFile(path.join(artifacts,name+'.log'),redactLocalLogChunks(lines,[key,bearer,secret]),{flag:'wx',mode:0o600});
+    for(const [name,lines] of Object.entries(logs))await writeFile(path.join(artifacts,name+'.log'),redactLocalLogChunks(lines,localSecrets),{flag:'wx',mode:0o600});
   }
   return report;
 }

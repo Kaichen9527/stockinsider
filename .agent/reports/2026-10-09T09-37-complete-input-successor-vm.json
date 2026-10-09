@@ -1,0 +1,553 @@
+{
+  "schemaVersion": "complete-input-successor-vm-receipt-v1",
+  "recordedAt": "2026-10-09T09:38:19.079103+00:00",
+  "sourceSubject": "49cdb18be08d297ba61c237475c3ae8926fd272a",
+  "testSubject": "1b8f11b1f73885919ac5c6fceeafe16c03bd004b",
+  "buildSubject": "49cdb18be08d297ba61c237475c3ae8926fd272a",
+  "buildTree": "73ac1455f5c376fff3f5a66696fec17c96174047",
+  "webTree": "cf9c2f29ddc22b3a3b91858668b1c702a5a1d29e",
+  "buildId": "HiOM8gNN4eoMb1daGsNxc",
+  "postBuildDelta": "HTTP test only: disposable PG test clock advances +1900 seconds; web/package/migrations byte-identical to build subject. Node/PostgREST/Next clocks unchanged.",
+  "sourceClosureHash": "ef95096ff64e63dd4def51fa1aa5ec608837100fbdad780274becda5463b40ff",
+  "checks": {
+    "pureAndPg": {
+      "total": 46,
+      "pure": 31,
+      "pgTapIncludingParent": 15,
+      "pgChildCases": 14,
+      "fail": 0,
+      "skip": 0
+    },
+    "compiledHttp": {
+      "tests": 32,
+      "pass": 32,
+      "fail": 0,
+      "skipped": 0
+    },
+    "types": "pass",
+    "lint": {
+      "errors": 0,
+      "warnings": 33
+    },
+    "normalBuild": "pass"
+  },
+  "historicalCountCorrection": "Original 42 =28 pure+14 PG TAP including parent (13 PG child cases), not42 independent PG cases. Original receipt retained unchanged.",
+  "p2Repair": "Every absent/sealed replay validates current fixed company mapping, closure/inventory/hash, full payload and false capabilities before returning; valid read/replay performs no artifact I/O, re-clock or charge.",
+  "httpRootCause": {
+    "phase": "fixed_schema",
+    "path": "/financialMaterial/projection/projected/scenarios/1/quarters/1/segments/0/revenue",
+    "expectedAndActualCalculator": 31090.078766235238,
+    "priorCompiledJsonConstant": 31090.07876623524,
+    "repair": "JSON.parse static allowlisted schema text preserves numeric/Unicode constants. Original schema JSON and formulas unchanged; no rounding/tolerance relaxation. Prior compiled numeric value observed in r9/r10 diagnosis; old compiled chunk not independently archived."
+  },
+  "redHistory": [
+    "Original compiled unavailable22pass8fail preserved",
+    "r11 append-only reservation UPDATE denied,32total28pass4fail",
+    "r12 old finish RPC rejected observed scope,32total28pass4fail; no production protection changed",
+    "Old replay mock read/seal incorrectly accepted stale mapping; direct RED30total28pass2fail then new GREEN30/30"
+  ],
+  "resources": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "replay-mapping-red-direct",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-complete-input.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:09:23.886Z",
+      "completedAt": "2026-10-09T09:09:24.343Z",
+      "elapsedSeconds": 0.45679277801536955,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 79843328,
+      "observedTaskDiskPeakBytes": 1335820288,
+      "availableBeforeBytes": 19145760768,
+      "availableAfterBytes": 19145748480,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "replay-mapping-green-direct",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-complete-input.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:10:19.632Z",
+      "completedAt": "2026-10-09T09:10:20.121Z",
+      "elapsedSeconds": 0.4895787819987163,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 79826944,
+      "observedTaskDiskPeakBytes": 1335840768,
+      "availableBeforeBytes": 19145740288,
+      "availableAfterBytes": 19145728000,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "replay-repair-pg",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input.test.mjs",
+        "scripts/research-complete-input-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:11:46.418Z",
+      "completedAt": "2026-10-09T09:11:52.109Z",
+      "elapsedSeconds": 5.691106419020798,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 202014720,
+      "observedTaskDiskPeakBytes": 1378942976,
+      "availableBeforeBytes": 19145740288,
+      "availableAfterBytes": 19145707520,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-schema-successor",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T09:26:26.537Z",
+      "completedAt": "2026-10-09T09:26:31.466Z",
+      "elapsedSeconds": 4.928736978996312,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 729628672,
+      "observedTaskDiskPeakBytes": 1321955328,
+      "availableBeforeBytes": 18870525952,
+      "availableAfterBytes": 18870517760,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-schema-final",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input.test.mjs",
+        "scripts/research-complete-input-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:27:15.454Z",
+      "completedAt": "2026-10-09T09:27:20.810Z",
+      "elapsedSeconds": 5.3563419000129215,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 164229120,
+      "observedTaskDiskPeakBytes": 1365135360,
+      "availableBeforeBytes": 18870530048,
+      "availableAfterBytes": 18870497280,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-schema-final",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T09:28:03.640Z",
+      "completedAt": "2026-10-09T09:28:27.897Z",
+      "elapsedSeconds": 24.256447046995163,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1059622912,
+      "observedTaskDiskPeakBytes": 1322004480,
+      "availableBeforeBytes": 18870476800,
+      "availableAfterBytes": 18854309888,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-schema-final",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T09:28:52.256Z",
+      "completedAt": "2026-10-09T09:29:01.823Z",
+      "elapsedSeconds": 9.567253480985528,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1409241088,
+      "observedTaskDiskPeakBytes": 1338171392,
+      "availableBeforeBytes": 18854322176,
+      "availableAfterBytes": 18848595968,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-complete-http-r6",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T08:56:55.938Z",
+      "completedAt": "2026-10-09T08:57:36.791Z",
+      "elapsedSeconds": 40.85322925000219,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 650571776,
+      "observedTaskDiskPeakBytes": 1447800832,
+      "availableBeforeBytes": 20620836864,
+      "availableAfterBytes": 20508790784,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-complete-http-r7",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:13:54.599Z",
+      "completedAt": "2026-10-09T09:14:36.099Z",
+      "elapsedSeconds": 41.49991318298271,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 609755136,
+      "observedTaskDiskPeakBytes": 1467346944,
+      "availableBeforeBytes": 19141206016,
+      "availableAfterBytes": 19029168128,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-complete-http-r8",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern",
+        "2409",
+        "scripts/research-complete-input-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:17:37.119Z",
+      "completedAt": "2026-10-09T09:18:00.838Z",
+      "elapsedSeconds": 23.718288657983067,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 610328576,
+      "observedTaskDiskPeakBytes": 1407016960,
+      "availableBeforeBytes": 19026800640,
+      "availableAfterBytes": 18962350080,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-complete-http-r9",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern",
+        "2409",
+        "scripts/research-complete-input-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:21:45.533Z",
+      "completedAt": "2026-10-09T09:22:07.510Z",
+      "elapsedSeconds": 21.977400280011352,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 591634432,
+      "observedTaskDiskPeakBytes": 1385734144,
+      "availableBeforeBytes": 18983395328,
+      "availableAfterBytes": 18935754752,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-complete-http-r10",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern",
+        "2409",
+        "scripts/research-complete-input-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:23:59.589Z",
+      "completedAt": "2026-10-09T09:24:22.596Z",
+      "elapsedSeconds": 23.006877089996124,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 588296192,
+      "observedTaskDiskPeakBytes": 1386033152,
+      "availableBeforeBytes": 18935746560,
+      "availableAfterBytes": 18871173120,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-complete-http-r11",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:29:40.817Z",
+      "completedAt": "2026-10-09T09:30:22.179Z",
+      "elapsedSeconds": 41.36178402698715,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 623087616,
+      "observedTaskDiskPeakBytes": 1473126400,
+      "availableBeforeBytes": 18848591872,
+      "availableAfterBytes": 18719367168,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-complete-http-r12",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:34:58.813Z",
+      "completedAt": "2026-10-09T09:35:40.418Z",
+      "elapsedSeconds": 41.6047525210015,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 632848384,
+      "observedTaskDiskPeakBytes": 1473110016,
+      "availableBeforeBytes": 18719338496,
+      "availableAfterBytes": 18590146560,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-complete-http-r13",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-complete-input-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T09:36:38.173Z",
+      "completedAt": "2026-10-09T09:37:20.017Z",
+      "elapsedSeconds": 41.84409617798519,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 635289600,
+      "observedTaskDiskPeakBytes": 1473150976,
+      "availableBeforeBytes": 18590113792,
+      "availableAfterBytes": 18460897280,
+      "guardTermination": null
+    }
+  ],
+  "logs": [
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-replay-mapping-red-direct.log.txt",
+      "bytes": 5441,
+      "sha256": "7d5544d8d81cd08f8c0c438f1b079acdea55817bab100a37c67fb2e1d40f4161",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/replay-mapping-red-direct.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-replay-mapping-green-direct.log.txt",
+      "bytes": 4482,
+      "sha256": "173aca06893d56ece418a4e44ea6a87cc6c500e8dc3a425279b32b0ffb5c9f78",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/replay-mapping-green-direct.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-replay-repair-pg.log.txt",
+      "bytes": 26020,
+      "sha256": "e67345c0c995053975b630804c1e107694c6c50f7499e3a62e7f6dc1477e1369",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/replay-repair-pg.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-types-schema-successor.log.txt",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/types-schema-successor.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-pg-schema-final.log.txt",
+      "bytes": 26682,
+      "sha256": "933ba6b25f859627b7e67a325909821c08041e2a6ca7ce54f5e3d228d27fd474",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/pg-schema-final.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-lint-schema-final.log.txt",
+      "bytes": 4718,
+      "sha256": "0686ec53732067856ab77563bea095896330d2d67e57b18d1a614faae9b6b2ad",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/lint-schema-final.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-normal-build-schema-final.log.txt",
+      "bytes": 6500,
+      "sha256": "434e9bf745aff584c46684bec6e34a00351c7820e491f469839dd0b41fadcfaa",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/normal-build-schema-final.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-native-complete-http-r6.log.txt",
+      "bytes": 15832,
+      "sha256": "2ae7d2db71ac5d06c5b52604df0d8504eb3ae8c67d0c819a0af7d75ffb2f8458",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/native-complete-http-r6.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-native-complete-http-r7.log.txt",
+      "bytes": 15833,
+      "sha256": "a094dd9618a7f1b6d69677fdafd07951a47c9b1081766f43153dc9ea14c1249e",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/native-complete-http-r7.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-native-complete-http-r8.log.txt",
+      "bytes": 8282,
+      "sha256": "325783ce575653c38a3337d4ac9eb58697e8aac399b97af4bbb6f96d9f7916fb",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/native-complete-http-r8.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-native-complete-http-r9.log.txt",
+      "bytes": 8283,
+      "sha256": "14d04bee29531972c649e5f70a56af5f995e6f6be24e5b127109639085837ff4",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/native-complete-http-r9.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-native-complete-http-r10.log.txt",
+      "bytes": 8636,
+      "sha256": "d84163d62ffe07b594b39479b817ff3368b15108ff1baa210d2bef2007d89052",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/native-complete-http-r10.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-native-complete-http-r11.log.txt",
+      "bytes": 11349,
+      "sha256": "48ab26ea820f6bf35f49aa9d5f622818d18fea6a4eab2f28b3ad1add47c501eb",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/native-complete-http-r11.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-native-complete-http-r12.log.txt",
+      "bytes": 11895,
+      "sha256": "29d4e0ba455bbbcded3964ac6f60d87e67542e0e914cbe48be8542d62d79ce32",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/native-complete-http-r12.log"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T09-37-complete-input-successor-vm-native-complete-http-r13.log.txt",
+      "bytes": 8022,
+      "sha256": "11d0d8d070baf2cadf94045aff600f6067c9c4cba88b9c3ed6e12e94808f1c88",
+      "originalPath": "/workspace/cloud-complete-input-runtime-artifacts-oct09/native-complete-http-r13.log"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "migrations/20261009_research_complete_input_v2.sql",
+      "bytes": 446691,
+      "sha256": "c82501b8ba0c5082596c742a2532a3fee350d4fcc0c1a7d9345aa990d13b7f64"
+    },
+    {
+      "path": "scripts/research-complete-input-http.test.mjs",
+      "bytes": 8987,
+      "sha256": "a12a467cd8e95857cd280672e77b3e4513ee6f19d2c40e956cef80f0e03e4539"
+    },
+    {
+      "path": "scripts/research-complete-input-postgres.test.mjs",
+      "bytes": 18083,
+      "sha256": "75d60a0ff270caab664c9b56c676fdde59774e21d6422ed29a4c9b83bf0e715c"
+    },
+    {
+      "path": "scripts/research-complete-input.test.mjs",
+      "bytes": 3780,
+      "sha256": "1f56ecb067da4a44308b86b991632dcee7742cc103f149e84ac632f86c07d1dc"
+    },
+    {
+      "path": "web/src/lib/research-complete-canonical.ts",
+      "bytes": 4343,
+      "sha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5"
+    },
+    {
+      "path": "web/src/lib/research-complete-input.ts",
+      "bytes": 10526,
+      "sha256": "787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d"
+    },
+    {
+      "path": "web/src/lib/research-complete-mapping.json",
+      "bytes": 7609,
+      "sha256": "8c5212ea4e502306800d10ea33e3fe7af477cb56c6d727a82ec5bbdaf3d19e08"
+    },
+    {
+      "path": "web/src/lib/research-complete-schema-bundles.ts",
+      "bytes": 463467,
+      "sha256": "ca5bc876d5820c3f910a4847c84f504a952896f7affe5d9e88a9f224df3b0d98"
+    }
+  ],
+  "profiles": [
+    {
+      "symbol": "2409",
+      "path": "/workspace/cih-r13-2409/acceptance-receipt.json",
+      "bytes": 21781,
+      "sha256": "5e51dba2b2024edb9c2b8c742f30be791a343b360f6985e52298893fcf2de3f6",
+      "completeInputHttp": {
+        "symbol": "2409",
+        "revisionId": "a89d83f5-4b95-4832-80b3-74c7b2b4cb35",
+        "inputHash": "87f68f98b33cbfb9ecf0d21ccb310b6a9d94346c305dcaee7c35d8464a97c295",
+        "charge": 166399,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "passedHarness": true,
+      "note": "TAP totals, not harness passed alone, are authoritative."
+    },
+    {
+      "symbol": "2383",
+      "path": "/workspace/cih-r13-2383/acceptance-receipt.json",
+      "bytes": 21780,
+      "sha256": "89f6f4499d929e8dc550b5bae441db12c2a3df75c57ed950591fa3c2b408c67e",
+      "completeInputHttp": {
+        "symbol": "2383",
+        "revisionId": "3bc5fccd-8dd3-4c87-9e13-281ddb49b79d",
+        "inputHash": "9faaddb32cd6723fe8ab8b8af5d1ab5c2bc2080619d6248f2d5cac8c8b6d40fe",
+        "charge": 99111,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialVerified": false,
+        "dispatchReady": false
+      },
+      "passedHarness": true,
+      "note": "TAP totals, not harness passed alone, are authoritative."
+    }
+  ],
+  "cleanup": {
+    "r13OwnedProcessesObserved": [],
+    "allUniqueLogsAndScratchRetained": true,
+    "availableBytes": 18460680192,
+    "noDeletion": true
+  },
+  "manualIncrement": {
+    "startedAt": "2026-10-09T09:07:00Z",
+    "codeFrozenAt": "2026-10-09T09:36:30Z",
+    "sealingOnlyAfterFreeze": true,
+    "notAutomatedRoleBudgetAcceptance": true,
+    "startedAtPrecision": "approximate checkpoint; individual command clocks authoritative",
+    "overrun": "Final command began before30-minute checkpoint and completed~20 seconds afterward; receipt sealing subsequently, not automated budget acceptance."
+  },
+  "remaining": [
+    "Independent exact code review",
+    "Byte cumulative exact boundary/rollback",
+    "Lock-wait lease expiry and120-second boundary",
+    "Concurrent source withdrawal both orders/rights ABA",
+    "Actual committed-response-loss reconciliation",
+    "Trusted assigned author/reviewer executions and publication v2 linkage"
+  ],
+  "capabilities": {
+    "financialVerified": false,
+    "dispatchReady": false,
+    "modelDispatched": false,
+    "publishableResearch": false,
+    "strategyApproved": false,
+    "entryEligible": false,
+    "protectedApproved": false,
+    "productionDeployed": false
+  }
+}

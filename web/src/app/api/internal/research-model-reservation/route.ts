@@ -4,6 +4,12 @@ import { getSupabaseServerClient } from '@/lib/supabase-server';
 
 /** The trusted Mac controller keeps credentials outside the model process. */
 export async function POST(request: Request) {
+  if (request.headers.has('x-research-execution-version')) {
+    if (request.headers.get('x-research-execution-version') !== '2')
+      return NextResponse.json({ ok: false, error: 'research_execution_version_invalid' }, { status: 400 });
+    const { handleResearchAuthorAssignment } = await import('@/lib/research-author-assignment');
+    return handleResearchAuthorAssignment(request);
+  }
   const writer = requireExactInternalBearer(request);
   const reviewer = requireIndependentResearchReviewer(request);
   const testAuth = requireInternalAuth(request, { allowResearchTester: true });

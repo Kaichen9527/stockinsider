@@ -1,0 +1,230 @@
+TAP version 13
+# (node:158394) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:158394) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-observed-roster.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: compiled complete-input 2409, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 54.845415
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 69.151786
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 12.978497
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 382.907499
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 26.657002
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 9.710826
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 4.591339
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 473.16604
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 86.755926
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 320.276415
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 385.766335
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 906.039969
+      ...
+    # Subtest: guarded read and exact duplicate preserve original payload/hash/charge
+    ok 13 - guarded read and exact duplicate preserve original payload/hash/charge
+      ---
+      duration_ms: 266.756717
+      ...
+    # Subtest: anonymous, extra executable/body/clock and wrong original binding reject
+    ok 14 - anonymous, extra executable/body/clock and wrong original binding reject
+      ---
+      duration_ms: 20.808408
+      ...
+    # Subtest: actual restart reread persists and completed reservation refuses historical replay
+    not ok 15 - actual restart reread persists and completed reservation refuses historical replay
+      ---
+      duration_ms: 682.554831
+      location: '/workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:50:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql -X -A -t -v ON_ERROR_STOP=1 -h /workspace/cih-r12-2409/socket -p 44629 -d postgres -f -
+        psql:<stdin>:1: ERROR:  observed_completion_requires_scoped_controller
+        CONTEXT:  PL/pgSQL function fence_observed_model_completion_v2() line 3 at RAISE
+        SQL statement "INSERT INTO public.research_model_completions_v1(reservation_id,owner,outcome,result_hash)
+            VALUES(p_reservation,p_owner,p_outcome,p_result_hash)"
+        PL/pgSQL function finish_research_model_v1(uuid,text,text,text) line 14 at SQL statement
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        checkExecSyncError (node:child_process:882:11)
+        execFileSync (node:child_process:918:15)
+        sql (file:///workspace/cloud-research-converged-oct08/scripts/research-local-inbox-dataplane.mjs:161:24)
+        TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:54:4)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:50:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-research-converged-oct08/scripts/research-local-inbox-dataplane.mjs:312:24)
+      ...
+    1..15
+not ok 1 - compiled complete-input 2409, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 19129.141177
+  location: '/workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:13:37'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# {"field":"base Q4 display revenue, manual research assumption projection","actual":31090.078766235238,"expectedFrozen":31090.078766235238}
+# Subtest: compiled complete-input 2383, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 132.506724
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 61.592619
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 10.256048
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 345.869089
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 28.132619
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 8.316531
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 3.61788
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 469.85202
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 88.132579
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 327.177295
+      ...
+    # Subtest: compiled read-only financial diagnostic before immutable admission
+    ok 11 - compiled read-only financial diagnostic before immutable admission
+      ---
+      duration_ms: 444.002515
+      ...
+    # Subtest: actual compiled marker path seals fixed calculation with all false capabilities
+    ok 12 - actual compiled marker path seals fixed calculation with all false capabilities
+      ---
+      duration_ms: 792.843511
+      ...
+    # Subtest: guarded read and exact duplicate preserve original payload/hash/charge
+    ok 13 - guarded read and exact duplicate preserve original payload/hash/charge
+      ---
+      duration_ms: 233.364492
+      ...
+    # Subtest: anonymous, extra executable/body/clock and wrong original binding reject
+    ok 14 - anonymous, extra executable/body/clock and wrong original binding reject
+      ---
+      duration_ms: 19.556215
+      ...
+    # Subtest: actual restart reread persists and completed reservation refuses historical replay
+    not ok 15 - actual restart reread persists and completed reservation refuses historical replay
+      ---
+      duration_ms: 679.410417
+      location: '/workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:50:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql -X -A -t -v ON_ERROR_STOP=1 -h /workspace/cih-r12-2383/socket -p 35245 -d postgres -f -
+        psql:<stdin>:1: ERROR:  observed_completion_requires_scoped_controller
+        CONTEXT:  PL/pgSQL function fence_observed_model_completion_v2() line 3 at RAISE
+        SQL statement "INSERT INTO public.research_model_completions_v1(reservation_id,owner,outcome,result_hash)
+            VALUES(p_reservation,p_owner,p_outcome,p_result_hash)"
+        PL/pgSQL function finish_research_model_v1(uuid,text,text,text) line 14 at SQL statement
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        checkExecSyncError (node:child_process:882:11)
+        execFileSync (node:child_process:918:15)
+        sql (file:///workspace/cloud-research-converged-oct08/scripts/research-local-inbox-dataplane.mjs:161:24)
+        TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:54:4)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async afterBaseline (file:///workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:50:3)
+        async verifyLocalInboxDataPlane (file:///workspace/cloud-research-converged-oct08/scripts/research-local-inbox-dataplane.mjs:312:24)
+      ...
+    1..15
+not ok 2 - compiled complete-input 2383, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 19107.946458
+  location: '/workspace/cloud-research-converged-oct08/scripts/research-complete-input-http.test.mjs:13:37'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..2
+# tests 32
+# suites 0
+# pass 28
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 41455.931442
