@@ -8,7 +8,7 @@ CREATE TABLE public.research_input_preparations_v2 (
  reservation_id uuid NOT NULL REFERENCES public.research_model_reservations_v1(reservation_id),
  request_hash text NOT NULL CHECK(request_hash ~ '^[a-f0-9]{64}$'),
  request jsonb NOT NULL, input_hash text NOT NULL CHECK(input_hash ~ '^[a-f0-9]{64}$'),
- payload jsonb NOT NULL, source_seal_id uuid REFERENCES public.research_source_seals_v2(seal_id),
+ payload jsonb NOT NULL, logical_bytes integer NOT NULL CHECK(logical_bytes BETWEEN 1 AND 524288), source_seal_id uuid REFERENCES public.research_source_seals_v2(seal_id),
  admitted_at timestamptz NOT NULL DEFAULT clock_timestamp(),
  UNIQUE(job_id,attempt,reservation_id,request_hash)
 );
@@ -16,7 +16,7 @@ ALTER TABLE public.research_input_preparations_v2 OWNER TO research_input_prepar
 ALTER TABLE public.research_input_preparations_v2 ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON public.research_input_preparations_v2 FROM PUBLIC,anon,authenticated,service_role;
 CREATE TRIGGER immutable_research_input_preparation_v2 BEFORE UPDATE OR DELETE OR TRUNCATE ON public.research_input_preparations_v2 FOR EACH STATEMENT EXECUTE FUNCTION public.reject_research_source_receipt_mutation_v2();
-GRANT EXECUTE ON FUNCTION public.reject_research_source_receipt_mutation_v2(),public.research_observed_canonical_json_v1(jsonb),public.seal_research_sources_v2(jsonb,timestamptz),public.assert_research_source_seal_v2(uuid) TO research_input_preparation_owner_v2;
+GRANT EXECUTE ON FUNCTION public.reject_research_source_receipt_mutation_v2(),public.research_observed_canonical_json_v1(jsonb),public.seal_research_sources_v2(jsonb,timestamptz),public.assert_research_source_seal_v2(uuid),public.research_source_root_v2(jsonb) TO research_input_preparation_owner_v2;
 DO $$ DECLARE name text; BEGIN
  FOREACH name IN ARRAY ARRAY['research_deep_jobs_v1','research_deep_job_attempts_v1','research_model_reservations_v1','research_model_completions_v1','research_priority_runs_v1','research_observed_priority_store_receipts_v1','research_observed_companies_v1','research_observed_roster_snapshots_v1','research_observed_roster_members_v1','source_raw_documents'] LOOP
   EXECUTE format('GRANT SELECT ON public.%I TO research_input_preparation_owner_v2',name);
@@ -31,12 +31,24 @@ GRANT UPDATE(reservation_id) ON public.research_model_reservations_v1 TO researc
 CREATE POLICY input_preparation_lock_v2 ON public.research_deep_jobs_v1 FOR UPDATE TO research_input_preparation_owner_v2 USING(true) WITH CHECK(false);
 CREATE POLICY input_preparation_lock_v2 ON public.research_model_reservations_v1 FOR UPDATE TO research_input_preparation_owner_v2 USING(true) WITH CHECK(false);
 CREATE POLICY input_preparation_source_sealer_v2 ON public.source_raw_documents FOR SELECT TO research_source_fence_owner_v2 USING(true);
+-- Fixed full canonical UTF-8 serialization, not PostgreSQL physical storage or WAL.
+CREATE FUNCTION public.research_input_preparation_bytes_v2(p_request jsonb,p_payload jsonb,p_new_seal jsonb) RETURNS integer
+ LANGUAGE sql IMMUTABLE STRICT SET search_path=pg_catalog,public AS $$
+ SELECT octet_length(convert_to(public.research_observed_canonical_json_v1(p_request),'UTF8'))
+  +octet_length(convert_to(public.research_observed_canonical_json_v1(p_payload),'UTF8'))
+  +CASE WHEN p_new_seal='null'::jsonb THEN 0 ELSE octet_length(convert_to(public.research_observed_canonical_json_v1(p_new_seal),'UTF8')) END
+ $$;
+ALTER FUNCTION public.research_input_preparation_bytes_v2(jsonb,jsonb,jsonb) OWNER TO research_input_preparation_owner_v2;
+REVOKE ALL ON FUNCTION public.research_input_preparation_bytes_v2(jsonb,jsonb,jsonb) FROM PUBLIC,anon,authenticated,service_role;
+GRANT SELECT ON public.research_source_seals_v2 TO research_input_preparation_owner_v2;
+CREATE POLICY input_preparation_seal_read_v2 ON public.research_source_seals_v2 FOR SELECT TO research_input_preparation_owner_v2 USING(true);
 CREATE FUNCTION public.prepare_research_input_v2(p_request jsonb) RETURNS jsonb
  LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
 DECLARE j public.research_deep_jobs_v1; r public.research_model_reservations_v1;
  pri public.research_priority_runs_v1; snap public.research_observed_roster_snapshots_v1;
  old public.research_input_preparations_v2; saved public.research_input_preparations_v2;
  rh text; n timestamptz; docs jsonb; seal jsonb; material jsonb;
+ used_count bigint; used_bytes bigint; charged_bytes integer; seal_manifest jsonb; seal_hash text; new_seal boolean:=false;
 BEGIN
  IF current_setting('transaction_isolation')<>'read committed' THEN RAISE EXCEPTION 'input_preparation_read_committed_required'; END IF;
  IF p_request IS NULL OR jsonb_typeof(p_request)<>'object' OR octet_length(p_request::text)>8192
@@ -85,9 +97,23 @@ BEGIN
   IF clock_timestamp()>=least(j.lease_expires_at,r.lease_expires_at) THEN RAISE EXCEPTION 'input_preparation_original_lease_lost'; END IF;
   RETURN to_jsonb(old)||jsonb_build_object('replay',true,'dispatchReady',false);
  END IF;
+ -- Original-unit history is permanent: expiry, invalidation and takeover never refund it.
+ SELECT count(*),coalesce(sum(logical_bytes),0) INTO used_count,used_bytes FROM public.research_input_preparations_v2
+  WHERE job_id=j.job_id AND attempt=j.attempts AND reservation_id=r.reservation_id;
+ IF used_count>=4 THEN RAISE EXCEPTION 'input_preparation_count_bound'; END IF;
  SELECT coalesce(jsonb_agg(jsonb_build_object('id',d.id,'rowHash',encode(sha256(convert_to(to_jsonb(d)::text,'UTF8')),'hex')) ORDER BY d.id),'[]') INTO docs FROM public.source_raw_documents d WHERE p_request->'sourceDocumentIds' @> jsonb_build_array(d.id::text);
  IF jsonb_array_length(docs)<>jsonb_array_length(p_request->'sourceDocumentIds') THEN RAISE EXCEPTION 'input_preparation_source_missing'; END IF;
- IF jsonb_array_length(docs)>0 THEN seal:=public.seal_research_sources_v2(docs,n); END IF;
+ IF jsonb_array_length(docs)>0 THEN
+  -- Exact existing-seal lookup under the shared source fence; full receipt is charged only when new.
+  SELECT jsonb_agg(jsonb_build_object('id',d.id::text,'rowHash',encode(sha256(convert_to(to_jsonb(d)::text,'UTF8')),'hex'),
+   'root',public.research_source_root_v2(to_jsonb(d)),'publishedAt',to_jsonb(d)->'published_at',
+   'observedAt',to_jsonb(d)->'collected_at','rights',d.metadata->>'rights_boundary') ORDER BY d.id) INTO seal_manifest
+   FROM public.source_raw_documents d WHERE p_request->'sourceDocumentIds' @> jsonb_build_array(d.id::text);
+  seal_hash:=encode(sha256(convert_to(jsonb_build_object('documents',seal_manifest,'cutoff',n)::text,'UTF8')),'hex');
+  new_seal:=NOT EXISTS(SELECT FROM public.research_source_seals_v2 WHERE request_hash=seal_hash);
+  seal:=public.seal_research_sources_v2(docs,n);
+  IF seal->>'request_hash' IS DISTINCT FROM seal_hash THEN RAISE EXCEPTION 'input_preparation_seal_projection_changed'; END IF;
+ END IF;
  -- Freeze DB-derived manifests; full original rows remain behind the private source seal.
  -- No supplied model output, financial facts, calculator or role identity is accepted here.
  material:=jsonb_build_object('schemaVersion','research-input-preparation-v2','researchCompanyId',j.research_company_id,'symbol',j.symbol,
@@ -98,9 +124,11 @@ BEGIN
   'sourceManifest',coalesce(seal->'documents','[]'),'sourceSelectionComplete',false,'financial',NULL,'calculator',NULL,
   'status','draft_incomplete','gaps',jsonb_build_array('financial_input_revision_missing','trusted_calculator_not_bound','original_model_not_selected','trusted_execution_authority_unavailable')||CASE WHEN jsonb_array_length(docs)=0 THEN jsonb_build_array('sources_not_selected') ELSE '[]'::jsonb END,
   'modelDispatched',false,'publishableResearch',false,'researchQualified',false,'strategyApproved',false,'entryEligible',false);
+ charged_bytes:=public.research_input_preparation_bytes_v2(p_request,material,CASE WHEN new_seal THEN seal ELSE 'null'::jsonb END);
+ IF used_bytes+charged_bytes>524288 THEN RAISE EXCEPTION 'input_preparation_byte_bound'; END IF;
  IF clock_timestamp()>=least(j.lease_expires_at,r.lease_expires_at) THEN RAISE EXCEPTION 'input_preparation_original_lease_lost'; END IF;
- INSERT INTO public.research_input_preparations_v2(job_id,attempt,reservation_id,request_hash,request,input_hash,payload,source_seal_id,admitted_at)
- VALUES(j.job_id,j.attempts,r.reservation_id,rh,p_request,encode(sha256(convert_to(public.research_observed_canonical_json_v1(material),'UTF8')),'hex'),material,(seal->>'seal_id')::uuid,n) RETURNING * INTO saved;
+ INSERT INTO public.research_input_preparations_v2(job_id,attempt,reservation_id,request_hash,request,input_hash,payload,logical_bytes,source_seal_id,admitted_at)
+ VALUES(j.job_id,j.attempts,r.reservation_id,rh,p_request,encode(sha256(convert_to(public.research_observed_canonical_json_v1(material),'UTF8')),'hex'),material,charged_bytes,(seal->>'seal_id')::uuid,n) RETURNING * INTO saved;
  RETURN to_jsonb(saved)||jsonb_build_object('replay',false,'dispatchReady',false);
 END $$;
 ALTER FUNCTION public.prepare_research_input_v2(jsonb) OWNER TO research_input_preparation_owner_v2;

@@ -1,10 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {execFileSync} from 'node:child_process';
+import {execFileSync,execFile} from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {randomUUID} from 'node:crypto';
+import {promisify} from 'node:util';
 const bin=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN;
 const q=v=>"'"+String(v).replaceAll("'","''")+"'";
 test('real PostgreSQL immutable input preparations, original leases and source fences (synthetic)',async t=>{
@@ -43,6 +44,7 @@ test('real PostgreSQL immutable input preparations, original leases and source f
   sql(fs.readFileSync('migrations/20261009_research_input_preparations_v2.sql','utf8'));
   sql('ALTER TABLE source_raw_documents ENABLE ROW LEVEL SECURITY;ALTER TABLE research_deep_jobs_v1 ENABLE ROW LEVEL SECURITY;ALTER TABLE research_model_reservations_v1 ENABLE ROW LEVEL SECURITY;');
   const req={owner,jobId:job,attempt:1,reservationId:reservation,bundleId:null,sourceDocumentIds:[id],scope:'research_observed_v1',snapshotHash:snapshot};
+  const unit=()=>{const j=randomUUID(),r=randomUUID();sql(`INSERT INTO research_deep_jobs_v1 SELECT ${q(j)},priority_run_id,symbol,stock_id,research_scope,research_company_id,observed_snapshot_hash,status,attempts,lease_owner,lease_expires_at FROM research_deep_jobs_v1 WHERE job_id=${q(job)};INSERT INTO research_deep_job_attempts_v1 SELECT ${q(j)},attempt,owner,claimed_at,lease_expires_at FROM research_deep_job_attempts_v1 WHERE job_id=${q(job)};INSERT INTO research_model_reservations_v1 SELECT ${q(r)},role,owner,${q('deep:'+j+':1')},started_at,lease_expires_at FROM research_model_reservations_v1 WHERE reservation_id=${q(reservation)};`);return {...req,jobId:j,reservationId:r};};
   const prepare=r=>JSON.parse(sql(`SET ROLE service_role;SELECT prepare_research_input_v2(${q(JSON.stringify(r))});`));
   add();let saved;
   await t.test('company absent from stocks prepares an immutable incomplete input without claiming or dispatching',()=>{
@@ -70,12 +72,49 @@ test('real PostgreSQL immutable input preparations, original leases and source f
    sql(`INSERT INTO research_model_completions_v1 VALUES(${q(reservation)});`);assert.throws(()=>prepare(req),/original_lease_lost/);sql('DELETE FROM research_model_completions_v1;');
    sql(`UPDATE research_model_reservations_v1 SET lease_expires_at=now()-interval '1 microsecond';`);assert.throws(()=>prepare(req),/original_lease_lost/);
    sql(`UPDATE research_model_reservations_v1 SET lease_expires_at=now()+interval '27 minute';`);
-   assert.equal(sql(`SELECT input_hash FROM research_input_preparations_v2;`),saved.input_hash);
+   assert.equal(sql(`SELECT input_hash FROM research_input_preparations_v2 WHERE job_id=${q(job)};`),saved.input_hash);
+  });
+  await t.test('four preparations fill one original unit; fifth rejects instead of durable growth',()=>{
+   const r=unit();const ids=Array.from({length:8},()=>randomUUID());ids.forEach(x=>add(x,base+'/'+x));
+   for(let i=0;i<4;i++)prepare({...r,sourceDocumentIds:ids.slice(0,i+1).sort()});
+   const counts=sql(`SELECT count(*) FROM research_input_preparations_v2 WHERE job_id=${q(r.jobId)};SELECT count(*) FROM research_source_seals_v2;SELECT count(*) FROM research_model_reservations_v1;`);
+   assert.throws(()=>prepare({...r,sourceDocumentIds:ids.slice(0,5).sort()}),/input_preparation_count_bound/);
+   assert.equal(sql(`SELECT count(*) FROM research_input_preparations_v2 WHERE job_id=${q(r.jobId)};SELECT count(*) FROM research_source_seals_v2;SELECT count(*) FROM research_model_reservations_v1;`),counts);
+   assert.equal(prepare({...r,sourceDocumentIds:[ids[0]]}).replay,true);
+   sql(`UPDATE research_model_reservations_v1 SET lease_expires_at=now()-interval '1 microsecond' WHERE reservation_id=${q(r.reservationId)};`);
+   assert.throws(()=>prepare({...r,sourceDocumentIds:[ids[0]]}),/original_lease_lost/);
+   sql(`UPDATE research_model_reservations_v1 SET lease_expires_at=now()+interval '26 minute' WHERE reservation_id=${q(r.reservationId)};`);
+   sql(`SET ROLE service_role;UPDATE source_raw_documents SET metadata=metadata||'{"rights_boundary":"none"}' WHERE id=${q(ids[0])};`);
+   assert.throws(()=>prepare({...r,sourceDocumentIds:[ids[0]]}),/source_seal_invalidated_or_missing/);
+   assert.equal(sql(`SELECT count(*) FROM research_input_preparations_v2 WHERE job_id=${q(r.jobId)};SELECT count(*) FROM research_source_seals_v2;SELECT count(*) FROM research_model_reservations_v1;`),counts);
+  });
+  await t.test('full UTF-8 serialized request/payload/new seal charges include exact524288 and +1 bytes',()=>{
+   const n=Number(sql(`SELECT research_input_preparation_bytes_v2('{}','{}','null');`));
+   const overhead=Number(sql(`SELECT research_input_preparation_bytes_v2('{"padding":""}','{}','null');`));
+   assert.equal(Number(sql(`SELECT research_input_preparation_bytes_v2(jsonb_build_object('padding',repeat('x',524288-${overhead})),'{}','null');`)),524288);
+   assert.equal(Number(sql(`SELECT research_input_preparation_bytes_v2(jsonb_build_object('padding',repeat('x',524289-${overhead})),'{}','null');`)),524289);
+   assert.equal(n,4);assert.equal(Number(sql(`SELECT research_input_preparation_bytes_v2('{"s":"界"}','{}','{"receipt":"é"}');`)),Buffer.byteLength('{"s":"界"}{}{"receipt":"é"}','utf8'));
+   const row=prepare(req);const source=JSON.parse(sql(`SELECT row_to_json(s) FROM research_source_seals_v2 s WHERE seal_id=${q(row.source_seal_id)};`));
+   const receipt={...source,publicationAuthorized:false,historicalPITEligible:false};
+   assert.equal(row.logical_bytes,Number(sql(`SELECT research_input_preparation_bytes_v2(${q(JSON.stringify(row.request))},${q(JSON.stringify(row.payload))},${q(JSON.stringify(receipt))});`)));
+  });
+  await t.test('cumulative bytes reject below count cap and rollback seal/preparation/budget counts',()=>{
+   const r=unit(),ids=Array.from({length:30},()=>randomUUID());ids.forEach((x,i)=>add(x,'https://example.invalid/'+String(i).padStart(2,'0')+'/'+'x'.repeat(3700)));
+   prepare({...r,sourceDocumentIds:ids.slice().sort()});prepare({...r,sourceDocumentIds:ids.slice(0,29).sort()});
+   const query=`SELECT count(*),sum(logical_bytes) FROM research_input_preparations_v2 WHERE job_id=${q(r.jobId)};SELECT count(*) FROM research_source_seals_v2;SELECT count(*) FROM research_model_reservations_v1;SELECT count(*) FROM research_model_completions_v1;`;
+   const counts=sql(query);assert.throws(()=>prepare({...r,sourceDocumentIds:ids.slice(0,28).sort()}),/input_preparation_byte_bound/);assert.equal(sql(query),counts);
+   assert.equal(prepare({...r,sourceDocumentIds:ids.slice().sort()}).replay,true);assert.equal(sql(query),counts);
+  });
+  await t.test('two actual concurrent clients compete for the last original-unit slot',async()=>{
+   const r=unit(),ids=Array.from({length:5},()=>randomUUID());ids.forEach(x=>add(x,base+'/'+x));
+   for(let i=0;i<3;i++)prepare({...r,sourceDocumentIds:ids.slice(0,i+1).sort()});
+   const race=x=>promisify(execFile)(path.join(bin,'psql'),[...args,'-c',`SET statement_timeout='5s';SET ROLE service_role;SELECT prepare_research_input_v2(${q(JSON.stringify({...r,sourceDocumentIds:x}))});`],{encoding:'utf8',timeout:10000,maxBuffer:4*1024*1024});
+   const result=await Promise.allSettled([race(ids.slice(0,4).sort()),race(ids.slice().sort())]);assert.equal(result.filter(x=>x.status==='fulfilled').length,1);assert.match(result.find(x=>x.status==='rejected').reason.stderr,/input_preparation_count_bound/);assert.equal(sql(`SELECT count(*) FROM research_input_preparations_v2 WHERE job_id=${q(r.jobId)};`),'4');
   });
   await t.test('source withdrawal rejects replay without replacing old bytes or returning publishable',()=>{
    sql(`SET ROLE service_role;UPDATE source_raw_documents SET metadata=metadata||'{"rights_boundary":"none"}' WHERE id=${q(id)};`);
    assert.throws(()=>prepare(req),/source_seal_invalidated_or_missing/);
-   assert.equal(sql('SELECT count(*) FROM research_input_preparations_v2;'),'1');assert.equal(sql('SELECT input_hash FROM research_input_preparations_v2;'),saved.input_hash);
+   assert.equal(sql(`SELECT count(*) FROM research_input_preparations_v2 WHERE job_id=${q(job)};`),'1');assert.equal(sql(`SELECT input_hash FROM research_input_preparations_v2 WHERE job_id=${q(job)};`),saved.input_hash);
   });
   await t.test('repeatable read cannot seal stale input; null/oversized/invalid-ID requests reject',()=>{
    assert.throws(()=>sql(`BEGIN ISOLATION LEVEL REPEATABLE READ;SET ROLE service_role;SELECT prepare_research_input_v2(${q(JSON.stringify(req))});`),/read_committed_required/);
