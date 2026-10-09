@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "stockinsider-execution-checkpoint-v1",
+  "recordedAt": "2026-10-09T08:38:29.090732+00:00",
+  "subject": "4c3874f451542aa53f93d006dea348ebccca07c3",
+  "base": "75d91024ce365606989bfe42b2d7e6227b65044d",
+  "pullRequest": "https://github.com/Kaichen9527/stockinsider/pull/337",
+  "evidence": [
+    {
+      "name": "source_scope",
+      "status": "passed",
+      "passedCount": 35,
+      "bytes": 9038,
+      "sha256": "1473f76aa76cae69e47e07b42771c2c22f2b2480c83ad1fc1ff75139679fef50",
+      "rawLocalPath": "/tmp/stockinsider-observed-consumer-local.tap"
+    },
+    {
+      "name": "typecheck_initial",
+      "status": "failed_environment_eexist",
+      "passedCount": null,
+      "bytes": 1020,
+      "sha256": "82f22400b17032ace870b8755dd4d168047f50da28e8e05516e07e70a9b26c89",
+      "rawLocalPath": "/tmp/stockinsider-observed-consumer-typecheck.log"
+    },
+    {
+      "name": "typecheck",
+      "status": "passed",
+      "passedCount": null,
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+      "rawLocalPath": "/tmp/stockinsider-observed-consumer-typecheck-rerun.log"
+    },
+    {
+      "name": "lint",
+      "status": "passed_33_existing_warnings",
+      "passedCount": null,
+      "bytes": 4984,
+      "sha256": "6345b9ab1563479a4afaa9fe7ff62304b39b7063bb80fb5841753f0d8ff32354",
+      "rawLocalPath": "/tmp/stockinsider-observed-consumer-lint.log"
+    },
+    {
+      "name": "build_initial",
+      "status": "failed_external_dependency_symlink",
+      "passedCount": null,
+      "bytes": 3298,
+      "sha256": "1ad77410544975a72f0ea5d5a08300e26fe97b2420b307c2fb4dae5b97584e28",
+      "rawLocalPath": "/tmp/stockinsider-observed-consumer-build.log"
+    },
+    {
+      "name": "build",
+      "status": "passed_normal_turbopack",
+      "passedCount": null,
+      "bytes": 6502,
+      "sha256": "d8fd7d17989e5ded5994a684b31581f91ec0ab58abef5aeac14cb75679b4469e",
+      "rawLocalPath": "/tmp/stockinsider-observed-consumer-build-rerun.log"
+    }
+  ],
+  "independentReview": "pending",
+  "linuxConsumerAndNativeAcceptance": "pending",
+  "productionDeployed": false,
+  "researchScheduleEnabled": false,
+  "strategyApproved": false
+}
