@@ -1,0 +1,9 @@
+# Research inbox production write lease
+
+The operator reported one real guarded main169 inbox request at 2026-10-11T14:11:53Z failing HTTP 500 `production_writer_lease_required`, with no successful writes. The route authenticated and validated input but did not acquire the production writer lease. This VM does not retry or independently read that production request.
+
+After existing auth, item count/validation and deterministic row construction, acquire the existing global lease for 3,600 seconds. Busy returns 409; acquisition failure returns 503. Only the returned owner can be released, exactly once in finally after success, database error or thrown exception. Keep existing `platform,document_url` conflict handling, ignoreDuplicates and revision construction. No changes to auth, source semantics, SQL triggers, credentials, schedules or strategy settings.
+
+Release failure produces HTTP 500, never complete success: after a successful write it explicitly reports `writeMayHaveSucceeded`; after a write failure it preserves the primary error and adds a cleanup diagnostic. This is an unconfirmed cleanup state, not proof that the database write rolled back. Successful responses are constructed after lease cleanup.
+
+Explicit route tests transpile the real route using the existing TypeScript dependency and synthetic auth/database/lease boundary doubles. Existing real inbox validators and row construction are exercised; this is not an HTTP/PG production lease integration run. Test auth/invalid input without acquisition, busy/unavailable without writes or foreign release, the 100-item boundary, duplicate/revision behavior, DB/client/throw errors, and cleanup failures. Run `node --experimental-strip-types --test scripts/research-inbox-write-lease.test.mjs web/src/lib/research-inbox.test.ts`; this task does not change the frozen package script catalog or register a new canonical test selection.
