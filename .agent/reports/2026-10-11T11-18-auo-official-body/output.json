@@ -1,0 +1,159 @@
+{
+  "policyVersion": "research-source-attempt-controller-v1",
+  "runId": "8dc642c3-3650-40ba-9fd5-a189858bddaf",
+  "asOf": "2026-10-11T11:16:07.248Z",
+  "limits": {
+    "scopes": 20,
+    "pagesPerScope": 1,
+    "bodyBytes": 4000000,
+    "timeoutMs": 12000,
+    "runMs": 60000,
+    "inputBytes": 2000000,
+    "priorItems": 1000
+  },
+  "receipts": [
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "8dc642c3-3650-40ba-9fd5-a189858bddaf",
+      "scopeId": "auo-cpo-gcs-body",
+      "platform": "official",
+      "sourceUrl": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+      "scope": "One official technical announcement body; no order inference or publication-date time fabricated",
+      "method": "public_read",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "official_public_document",
+        "checkedAt": "2026-10-11T11:16:05.902564+00:00",
+        "checkedBy": "existing reviewed AUO official detail public grant"
+      },
+      "attemptedAt": "2026-10-11T11:16:06.128Z",
+      "completedAt": "2026-10-11T11:16:06.533Z",
+      "readOutcome": "read_success",
+      "outcome": "awaiting_summary",
+      "httpStatus": 200,
+      "bytes": 56299,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": "50d2fcacc562c43c6cba8f3d721687508319cbe8d07cc1dbdf36edeb07913562",
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_awaiting_summary",
+      "legacyConnectorDisposition": null,
+      "platformEnabled": false,
+      "receiptHash": "6b4d617e3d9ec000001652e68a352fd32a814ad43779b4fae812971d6562e83f",
+      "attempt": {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-11T11:16:06.128Z",
+        "scope": "auo-cpo-gcs-body: One official technical announcement body; no order inference or publication-date time fabricated | https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+        "resultCount": null,
+        "errorCode": "source_awaiting_summary",
+        "receiptHash": "6b4d617e3d9ec000001652e68a352fd32a814ad43779b4fae812971d6562e83f"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "8dc642c3-3650-40ba-9fd5-a189858bddaf",
+      "scopeId": "auo-september-revenue-body",
+      "platform": "official",
+      "sourceUrl": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_FinanceReport_20261008",
+      "scope": "One official monthly revenue announcement body; unaudited figures, no earnings inference",
+      "method": "public_read",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "official_public_document",
+        "checkedAt": "2026-10-11T11:16:05.902564+00:00",
+        "checkedBy": "existing reviewed AUO official detail public grant"
+      },
+      "attemptedAt": "2026-10-11T11:16:06.533Z",
+      "completedAt": "2026-10-11T11:16:07.248Z",
+      "readOutcome": "read_success",
+      "outcome": "awaiting_summary",
+      "httpStatus": 200,
+      "bytes": 52515,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": "8bb472e28f4a51274b100f1b4e684c866ff35cd762afc9548ff9a87fbff1a52c",
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_awaiting_summary",
+      "legacyConnectorDisposition": null,
+      "platformEnabled": false,
+      "receiptHash": "8453be17aa767bd2cb56a9cc452a4c4fc76559a200287aabefd99f6f12194408",
+      "attempt": {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-11T11:16:06.533Z",
+        "scope": "auo-september-revenue-body: One official monthly revenue announcement body; unaudited figures, no earnings inference | https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_FinanceReport_20261008",
+        "resultCount": null,
+        "errorCode": "source_awaiting_summary",
+        "receiptHash": "8453be17aa767bd2cb56a9cc452a4c4fc76559a200287aabefd99f6f12194408"
+      }
+    }
+  ],
+  "unattemptedPlatforms": [
+    "news",
+    "broker",
+    "ptt",
+    "investanchors",
+    "threads",
+    "instagram",
+    "facebook",
+    "podcast",
+    "youtube",
+    "telegram",
+    "bulltalk",
+    "twse_insider"
+  ],
+  "priorityRequest": {
+    "asOf": "2026-10-11T11:16:07.248Z",
+    "sourceAttempts": [
+      {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-11T11:16:06.128Z",
+        "scope": "auo-cpo-gcs-body: One official technical announcement body; no order inference or publication-date time fabricated | https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+        "resultCount": null,
+        "errorCode": "source_awaiting_summary",
+        "receiptHash": "6b4d617e3d9ec000001652e68a352fd32a814ad43779b4fae812971d6562e83f"
+      },
+      {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-11T11:16:06.533Z",
+        "scope": "auo-september-revenue-body: One official monthly revenue announcement body; unaudited figures, no earnings inference | https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_FinanceReport_20261008",
+        "resultCount": null,
+        "errorCode": "source_awaiting_summary",
+        "receiptHash": "8453be17aa767bd2cb56a9cc452a4c4fc76559a200287aabefd99f6f12194408"
+      }
+    ]
+  },
+  "inboxRequest": {
+    "items": []
+  },
+  "roots": [],
+  "priorItemsUnchanged": true,
+  "limitations": [
+    "Exact supplied scopes only; no exhaustive search or platform activation.",
+    "No summary/model adapter, authenticated browser dispatcher, submission, publication or strategy approval.",
+    "Prior items are controller-retained context; authoritative heads remain in VPS."
+  ],
+  "authoritativePublication": false,
+  "strategyApproved": false,
+  "startedAt": "2026-10-11T11:16:06.127Z",
+  "explicitRunOnly": true,
+  "inputHash": "b6343f789a64321be6000ed2d4e5103d4460d35764e3d76b0d5011ce17e0ff6d",
+  "runHash": "36eaf6ead0a5f612018e8e7d660abcad7a4c85587ced56aabb96e49623d5694a"
+}

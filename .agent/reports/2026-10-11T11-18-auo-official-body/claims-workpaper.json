@@ -1,0 +1,80 @@
+{
+  "schema": "stockinsider-public-claim-review-workpaper-v1",
+  "observedAt": "2026-10-11T11:17:08.785473+00:00",
+  "status": "unsubmitted_workpaper_not_author_or_review_result",
+  "sourceCutoff": "2026-10-11T11:17:08.785473+00:00",
+  "company": "2409",
+  "sources": [
+    {
+      "url": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+      "sourceDate": "2026-08-31",
+      "publicationPrecision": "date_only_from_official_index; exact instant unknown",
+      "responseHash": "50d2fcacc562c43c6cba8f3d721687508319cbe8d07cc1dbdf36edeb07913562",
+      "companyClaims": [
+        "Micro LED interconnect uses group emitter/receiver components and AUO integration processes",
+        "Corning materials and AUO RDL are part of glass-core substrate technical work"
+      ],
+      "commercializationStatus": "Technical exhibition and staged verification; no customer purchase order established by this announcement",
+      "notEstablished": [
+        "Intel order",
+        "commercial volume",
+        "capacity utilization",
+        "yield",
+        "selling price",
+        "attributable profit"
+      ]
+    },
+    {
+      "url": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_FinanceReport_20261008",
+      "sourceDate": "2026-10-08",
+      "publicationPrecision": "date_only_from_official_index; exact instant unknown",
+      "responseHash": "8bb472e28f4a51274b100f1b4e684c866ff35cd762afc9548ff9a87fbff1a52c",
+      "unaudited": true,
+      "currency": "TWD",
+      "unit": "million",
+      "revenue": {
+        "2026-09": 23404,
+        "2026-08": 23102,
+        "2025-09": 24445,
+        "2026-YTD09": 206798,
+        "2025-YTD09": 211246
+      },
+      "companyRoundedChangePercent": {
+        "month": 1.3,
+        "year": -4.3,
+        "ytd": -2.1
+      },
+      "companyThirdQuarterRoundedRevenueTwdBillion": 66.88,
+      "companyThirdQuarterChangePercent": {
+        "quarter": -5.7,
+        "year": -4.3
+      }
+    }
+  ],
+  "researchImplications": [
+    {
+      "type": "inference",
+      "claim": "Technical position supports a conditional commercialization thesis, not confirmed EPS",
+      "nextEvidence": [
+        "customer validation",
+        "orders",
+        "volume and margin economics"
+      ],
+      "baseEpsChanged": false
+    },
+    {
+      "type": "inference",
+      "claim": "September revenue improved sequentially but declined annually; revenue alone cannot establish transformation profit",
+      "nextEvidence": [
+        "segment mix",
+        "gross margin",
+        "operating cost",
+        "attributable profit"
+      ],
+      "baseEpsChanged": false
+    }
+  ],
+  "blockingInputGap": "No exact published timestamp from either current page. Keep unknown precision; do not synthesize midnight for existing exact-instant inbox validation. No backdated signal or submission.",
+  "independentReview": "not performed for this workpaper",
+  "productionPublished": false
+}

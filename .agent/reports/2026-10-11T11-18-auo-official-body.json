@@ -1,0 +1,57 @@
+{
+  "schema": "stockinsider-auo-official-body-verification-v1",
+  "observedAt": "2026-10-11T11:17:08.785473+00:00",
+  "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "runId": "8dc642c3-3650-40ba-9fd5-a189858bddaf",
+  "runHash": "36eaf6ead0a5f612018e8e7d660abcad7a4c85587ced56aabb96e49623d5694a",
+  "bodyReads": 2,
+  "http200": 2,
+  "itemsSubmitted": 0,
+  "platformsEnabled": false,
+  "modelDispatch": false,
+  "modelIndependentReview": false,
+  "revenueRoundedArithmeticChecks": 3,
+  "sourceControllerRegression": {
+    "pass": 10,
+    "fail": 0,
+    "skip": 0
+  },
+  "publicationDateGap": "date-only official index; pages supply no exact published timestamp; left null",
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T11-18-auo-official-body/input.json",
+      "bytes": 1186,
+      "sha256": "82573ab3f020f6b3145f80a35b09c2f174cb49e061a5bc927e47623d3f3b1326"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-18-auo-official-body/output.json",
+      "bytes": 6422,
+      "sha256": "116d8c8c25eaaded807587971ec930ea6d3a2151d47412180a90940011123ae2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-18-auo-official-body/stdout",
+      "bytes": 192,
+      "sha256": "a22e62511c6bd6caa94e86e1a2a9bf228f41e23685d49d45f13ceaeb6e73f7d1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-18-auo-official-body/stderr",
+      "bytes": 669,
+      "sha256": "8119b12bfdcbcfe50ab6b4260069893cb3c75aea725cc1f72ecdc680ab0dbac1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-18-auo-official-body/tests.tap",
+      "bytes": 3041,
+      "sha256": "b52e40f266a8df443eb3056c6e089fb66440496b7d7c6a413d8a40302c4c5227"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-18-auo-official-body/tests.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-18-auo-official-body/claims-workpaper.json",
+      "bytes": 2946,
+      "sha256": "2201624af437e9ec049abe8827f644118a792a415ecf36d0d0f6a0a560017eda"
+    }
+  ]
+}

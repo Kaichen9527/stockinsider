@@ -280,3 +280,9 @@ Evidence: `.agent/reports/2026-10-11T07-48-release-review-repairs.json`; current
 - [x] Existing bounded controller actual three-scope public read: SoundOnRSS77,983B metadata, AUOnewsindex59,545B metadata, TWSEissuers1,327,578B body. AllHTTP200; precise terminal metadata_only/awaiting_summary retained, no inferred candidate/summary or publication. Source2e blob proof and raw receipts saved.
 - [ ] Transcript/article extraction, verified claim summary and authenticated inbox submission, full candidate processing, live author/reviewer publication and strategy forward validation remain open. Index access is not platform content acceptance.
 - [ ] Protected model runner still oldnativeENOENT; real trusted recovery ingress missing. No unchanged retry, merge/deploy or schedule activation. VM unchanged idle; no duplicate work dispatched.
+
+## October11 official body source acceptance continuation
+
+- [x] Two actual AUO detail bodies read with existing bounded controller: technical8/31 and revenue10/8, bothHTTP200/read_success. Reader regression10/10zero-skip. Root source workpaper distinguishes company claims, inference and unavailable order/economics; revenue three rounded growth values recompute.
+- [ ] Both current pages expose no exact published timestamp. Official index supplies date-only; preserve null exact instant, no invented midnight/backdated inbox item. Typed publication-precision treatment remains necessary before these workpapers can enter exact-instant authored input. No new order/customer/EPS inferred.
+- [ ] Workpaper is unsubmitted, not a budgeted author or independent review result. Native recovery, formal publication and prior product acceptance remain open. Evidence `.agent/reports/2026-10-11T11-18-auo-official-body.json`; main/PR364 frozen unchanged.

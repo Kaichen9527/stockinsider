@@ -1,0 +1,65 @@
+TAP version 13
+# (node:37905) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:37905) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-source-attempt-controller.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: SCT01 pins a validated public address, one page, no credentials, and keeps only hashes/metadata
+ok 1 - SCT01 pins a validated public address, one page, no credentials, and keeps only hashes/metadata
+  ---
+  duration_ms: 7.024416
+  ...
+# Subtest: SCT02 private/mixed DNS answers reject before HTTP; no DNS-rebinding fallback
+ok 2 - SCT02 private/mixed DNS answers reject before HTTP; no DNS-rebinding fallback
+  ---
+  duration_ms: 3.941958
+  ...
+# Subtest: SCT03 404, upstream failure, login and redirects stay failed without following links
+ok 3 - SCT03 404, upstream failure, login and redirects stay failed without following links
+  ---
+  duration_ms: 0.922125
+  ...
+# Subtest: SCT04 body bound, total DNS/read deadlines and invalid UTF8 reject
+ok 4 - SCT04 body bound, total DNS/read deadlines and invalid UTF8 reject
+  ---
+  duration_ms: 25.120125
+  ...
+# Subtest: SCT05 no irrelevant inference or summary fabrication; exact scope sourceAttempts retain failures
+ok 5 - SCT05 no irrelevant inference or summary fabrication; exact scope sourceAttempts retain failures
+  ---
+  duration_ms: 7.525291
+  ...
+# Subtest: SCT06 controller consumes authorized local summaries without public HTTP or paid/model dispatch
+ok 6 - SCT06 controller consumes authorized local summaries without public HTTP or paid/model dispatch
+  ---
+  duration_ms: 2.372666
+  ...
+# Subtest: SCT07 CLI bounds files, rejects symlinks/URL injection, writes mode0600 and cannot overwrite
+ok 7 - SCT07 CLI bounds files, rejects symlinks/URL injection, writes mode0600 and cannot overwrite
+  ---
+  duration_ms: 12.230166
+  ...
+# Subtest: SCT08 run deadline does not pretend remaining scopes were attempted
+ok 8 - SCT08 run deadline does not pretend remaining scopes were attempted
+  ---
+  duration_ms: 0.744417
+  ...
+# Subtest: SCT09 response hash binds exact wire bytes, including UTF8 BOM; TLS remains verified
+ok 9 - SCT09 response hash binds exact wire bytes, including UTF8 BOM; TLS remains verified
+  ---
+  duration_ms: 0.281208
+  ...
+# Subtest: SCT-POD01 controller-only publisher RSS cannot follow transcript, chapters or audio
+ok 10 - SCT-POD01 controller-only publisher RSS cannot follow transcript, chapters or audio
+  ---
+  duration_ms: 0.887625
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 166.04025

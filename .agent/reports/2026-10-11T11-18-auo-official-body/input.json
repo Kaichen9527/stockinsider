@@ -1,0 +1,31 @@
+{
+  "runId": "8dc642c3-3650-40ba-9fd5-a189858bddaf",
+  "scopes": [
+    {
+      "id": "auo-cpo-gcs-body",
+      "platform": "official",
+      "url": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831",
+      "scope": "One official technical announcement body; no order inference or publication-date time fabricated",
+      "method": "public_read",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "official_public_document",
+        "checkedAt": "2026-10-11T11:16:05.902564+00:00",
+        "checkedBy": "existing reviewed AUO official detail public grant"
+      }
+    },
+    {
+      "id": "auo-september-revenue-body",
+      "platform": "official",
+      "url": "https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_FinanceReport_20261008",
+      "scope": "One official monthly revenue announcement body; unaudited figures, no earnings inference",
+      "method": "public_read",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "official_public_document",
+        "checkedAt": "2026-10-11T11:16:05.902564+00:00",
+        "checkedBy": "existing reviewed AUO official detail public grant"
+      }
+    }
+  ]
+}
