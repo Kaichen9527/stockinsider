@@ -75,6 +75,30 @@
       "path": "stockinsider-pr370-pinned-web-ci-oct11.log",
       "bytes": 479,
       "sha256": "cb20e87392d9946ac6e5ec6c6f7e577d491d0a163f9eb50de3b8579402c2113f"
+    },
+    {
+      "path": "stockinsider-pr370-pinned-build-oct11.log",
+      "bytes": 5554,
+      "sha256": "3a64b4f514aa845301416fa32937d74cad05faf708559e6d41e6909a60fa80d8"
+    },
+    {
+      "path": "stockinsider-pr370-pinned-typecheck-oct11.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "stockinsider-pr370-pinned-lint-oct11.log",
+      "bytes": 5005,
+      "sha256": "26b16106933fedd4b9df1ccb75fd06b2ca888aa1bafcbf04570bbcbc07a681a8"
     }
-  ]
+  ],
+  "pinnedChecks": {
+    "webCi": "exit0, Next16.3.4",
+    "build": "exit0",
+    "typecheck": "exit0",
+    "lint": "exit0,33 existing warnings,0 errors"
+  },
+  "exactReviewEvidenceCommit": "ceec62b8bbbe9536f5006dcc9e70d65910830a5c",
+  "protectedRerun": "38147470839 attempt2 requested only after exact ref verified",
+  "updatedAt": "2026-10-11T14:52:35.195471+00:00"
 }
