@@ -64,12 +64,12 @@ test('actual mention boundary leaves non-PTT provenance unchanged', async () => 
 async function collector(body) {
   const docs = [], signalRows = [];
   const fn = actual('scrapePttStock', { getSupabaseServerClient: () => ({ from: () => ({ upsert: async rows => { signalRows.push(...rows); return { error: null }; } }) }),
-    loadTwStockAuthority: async () => [{ id: 'stock-2409', symbol: '2409', name: '友達' }], compactText,
+    loadTwStockAuthority: async () => [{ id: 'stock-2409', symbol: '2409', name: '友達' }, { id: 'stock-2383', symbol: '2383', name: '台光電' }], compactText,
     getSymbolAliases: () => ['友達'], upsertSourceEntity: async () => ({ id: 'entity' }),
     fetchTextWithRetry: async ({ url }) => { if (url === parent) { if (body instanceof Error) throw body; return { text: body }; }
       return { text: '<div class="title"><a href="/bbs/Stock/M.1791737000.A.123.html">[情報] 2409</a></div>' }; },
     sourceFetchFailureCode: () => 'synthetic_failure', isExpectedPttArticleMissing: () => false,
-    extractTwSymbolsWithEvidence: text => ({ symbols: text.includes('2409') ? ['2409'] : [], excludedFalsePositives: [] }),
+    extractTwSymbolsWithEvidence: actual('extractTwSymbolsWithEvidence', { compactText }),
     roundTo: x => x, classifyPttContentSemantics: () => 'editorial_discussion', publisherKeyFor: x => `ptt:${x.author}`,
     filterSymbolScopedDocs: x => x, upsertSourceRawDocuments: async x => { docs.push(...x); return x.length; }, nowIso: () => '2026-10-11T16:45:00Z' });
   await fn(); return { docs, signalRows };
@@ -81,7 +81,7 @@ test('actual body-fetch failure stores title-only status and never manufactures 
 });
 test('actual bounded collector retains minimum per-comment matches, no post body or full-coverage claim', async () => {
   const push = (author, text) => `<div class="push"><span class="push-tag">推</span><span class="push-userid">${author}</span><span class="push-content">: ${text}</span></div>`;
-  const { docs } = await collector(`<div id="main-content">2409 public synthetic body${push('a', '2409 未證實')}${push('b', '2409 有風險')}${push('c', '無關回覆')}</div><div id="article-polling">`);
+  const { docs } = await collector(`<div id="main-content">友達 2409 股票 public synthetic body${push('a', '2409 股票未證實')}${push('b', '2409 股票有風險')}${push('c', '無關回覆')}</div><div id="article-polling">`);
   assert.equal(docs.length, 3); assert.equal(docs[0].contentText, '[情報] 2409'); assert.equal(docs[0].metadata.body_read_status, 'body_read_bounded');
   for (const d of docs.slice(1)) { assert.equal(d.metadata.parent_document_url, parent); assert.equal(d.metadata.body_retained, false);
     assert.equal(d.metadata.replies_read_completeness, 'partial'); assert.deepEqual(Array.from(d.metadata.matched_symbols), ['2409']); }
@@ -89,4 +89,11 @@ test('actual bounded collector retains minimum per-comment matches, no post body
 test('actual fetched shell reports missing body instead of full text', async () => {
   const { docs } = await collector('<html><title>2409 title only</title></html>');
   assert.equal(docs[0].metadata.body_read_status, 'title_only_body_missing'); assert.equal(docs[0].metadata.body_retained, false);
+});
+test('actual symbol extractor keeps reply2383 separate from parent2409', async () => {
+  const { docs } = await collector('<div id="main-content">友達 2409 股票正文<div class="push"><span class="push-tag">→</span><span class="push-userid">reader</span><span class="push-content">: 2383 股票另有風險</span></div></div><div id="article-polling">');
+  assert.equal(docs.length, 2); assert.deepEqual(Array.from(docs[0].symbols), ['2409']);
+  assert.deepEqual(Array.from(docs[1].metadata.matched_symbols), ['2383']);
+  assert.equal(buildPttMentionProvenance({ ...docs[1], symbol: '2409' }).stock_local_match_basis_retained, false);
+  assert.equal(buildPttMentionProvenance({ ...docs[1], symbol: '2383' }).stock_local_match_basis_retained, true);
 });
