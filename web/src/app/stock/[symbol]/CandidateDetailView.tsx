@@ -23,6 +23,13 @@ function hideIdentifiers(value: unknown, fallback = "尚待確認") {
   return text ? text.replace(/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/giu, fallback) : fallback;
 }
 
+function deepSourceState(source: NonNullable<CandidateDetailPayload['deepResearchSources']>[number]) {
+  if (source.retracted || source.evidenceStatus === 'retracted') return '已撤回';
+  if (source.evidenceStatus === 'superseded') return '已有新版，待重新研究';
+  if (source.evidenceStatus === 'unavailable') return '最新來源狀態未能確認';
+  return '';
+}
+
 function validHttpUrl(value: unknown) {
   return sanitizePublicSourceUrl(value);
 }
@@ -386,7 +393,7 @@ export function DeepResearchView({ article, sourceLinks, layoutPreview = false, 
                       return source ? (
                         <a key={id} href={source.url} target="_blank" rel="noopener noreferrer"
                           className="underline underline-offset-2 hover:text-orange-700">
-                          [{sourceNumbers.get(id) ?? sourceIndex + 1}]{source.retracted ? "（已撤回）" : ""}
+                          [{sourceNumbers.get(id) ?? sourceIndex + 1}]{deepSourceState(source) ? `（${deepSourceState(source)}）` : ""}
                         </a>
                       ) : <span key={id}>來源目前無法公開連結</span>;
                     })}
@@ -438,7 +445,7 @@ export function DeepResearchView({ article, sourceLinks, layoutPreview = false, 
             <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
               [{index + 1}] {source.title}
             </a>
-            <span className="ml-2 text-stone-500">{dateLabel(source.publishedAt)}{source.retracted ? ' · 已撤回' : ''}</span>
+            <span className="ml-2 text-stone-500">{dateLabel(source.publishedAt)}{deepSourceState(source) ? ` · ${deepSourceState(source)}` : ''}</span>
           </li>)}
         </ol>
       </details>
@@ -655,6 +662,11 @@ export default function CandidateDetailView({
           </ul>
         </section>
       ) : null}
+      {detail.deepResearch && detail.thesisQualification?.reason === 'article_source_retracted_superseded_or_unavailable' && (
+        <p className="mt-6 rounded-xl bg-amber-50 p-4 text-sm text-amber-900 dark:bg-amber-950 dark:text-amber-100">
+          文章保留作研究紀錄；來源已撤回、更新或最新狀態未能確認，暫停新進場資格，等待重新查核。
+        </p>
+      )}
       <DeepResearchView article={detail.deepResearch || null} sourceLinks={detail.deepResearchSources || []} />
       {detail.deepResearch ? <details className="mt-8 rounded-2xl border border-line p-5">
         <summary className="cursor-pointer font-semibold">通用研究與原始財務明細</summary>
