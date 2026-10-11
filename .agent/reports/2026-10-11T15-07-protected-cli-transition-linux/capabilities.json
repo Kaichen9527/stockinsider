@@ -1,0 +1,14 @@
+{
+  "platform": "Linux",
+  "architecture": "x86_64",
+  "osUser": "agent",
+  "nodeVersion": "v22.14.0",
+  "macTargetExists": false,
+  "codesignAvailable": false,
+  "xcodeSelectAvailable": false,
+  "platformLinuxCodexPath": "/opt/codex/bin/codex",
+  "platformLinuxCodexExecuted": false,
+  "environmentConfigurationChanged": false,
+  "dependenciesInstalled": false,
+  "proxyAndCAPreservedWithoutValueExport": true
+}

@@ -1,0 +1,19 @@
+{
+  "stage": "lifecycle-diagnostic",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "scripts/model-runner-v3/process-lifecycle.test.js"
+  ],
+  "startedAt": "2026-10-11T15:14:14.625763+00:00",
+  "endedAt": "2026-10-11T15:14:16.026807+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 1.4010542699834332,
+  "sampledAggregatePeakRssBytes": 104157184,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9656520704,
+  "diskAvailableAfterBytes": 9656520704,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

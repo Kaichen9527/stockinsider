@@ -1,0 +1,314 @@
+{
+  "schema": "protected-cli-transition-linux-review-evidence-v1",
+  "manualEngineeringOnly": true,
+  "window": {
+    "admittedAt": "2026-10-11T15:07:52Z",
+    "deadline": "2026-10-11T15:37:52Z",
+    "recordedAt": "2026-10-11T15:18:22.307099+00:00",
+    "limitMinutes": 30
+  },
+  "branch": "codex/protected-cli-transition-review-oct11",
+  "sourceIdentity": {
+    "candidateCommit": "892c93e2d4d44e863be9b6aed7407cf975e905b4",
+    "candidateTree": "2df896d7ca54cfb8f58b362842b84f3419c49354",
+    "protectedParent": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "reviewDocumentCommit": "40c5d60fe25b0b147928001d8810c203988b9708",
+    "reviewDocumentTree": "c009dc20cda01d43951a6093c550325b6236e76a",
+    "webTree": "a95cf75a86377a1f49c0bb54d2883e4c9b87f80a",
+    "ownDiffOnly": [
+      "docs/engineering/protected-cli-transition-20261011/README.md",
+      "docs/engineering/protected-cli-transition-20261011/host-identity-changes.json",
+      "docs/engineering/protected-cli-transition-20261011/host-identity.reference.diff"
+    ]
+  },
+  "phases": [
+    {
+      "stage": "portable",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/protected-external-gate-worker.test.mjs",
+        "scripts/opportunity-v3/runner-recovery-candidate.test.mjs",
+        "scripts/model-runner-v3/jsonl-parser.test.js",
+        "scripts/model-runner-v3/process-lifecycle.test.js"
+      ],
+      "startedAt": "2026-10-11T15:13:46.204241+00:00",
+      "endedAt": "2026-10-11T15:13:48.020016+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 1.8157835369929671,
+      "sampledAggregatePeakRssBytes": 137224192,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9656520704,
+      "diskAvailableAfterBytes": 9656520704,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "lifecycle-diagnostic",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "scripts/model-runner-v3/process-lifecycle.test.js"
+      ],
+      "startedAt": "2026-10-11T15:14:14.625763+00:00",
+      "endedAt": "2026-10-11T15:14:16.026807+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 1.4010542699834332,
+      "sampledAggregatePeakRssBytes": 104157184,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9656520704,
+      "diskAvailableAfterBytes": 9656520704,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "worker-diagnostic",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "scripts/opportunity-v3/protected-external-gate-worker.test.mjs"
+      ],
+      "startedAt": "2026-10-11T15:14:21.783459+00:00",
+      "endedAt": "2026-10-11T15:14:21.974844+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 0.19139150896808133,
+      "sampledAggregatePeakRssBytes": 31784960,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9656520704,
+      "diskAvailableAfterBytes": 9656520704,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "portable-native",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/protected-external-gate-worker.test.mjs",
+        "scripts/opportunity-v3/runner-recovery-candidate.test.mjs",
+        "scripts/model-runner-v3/jsonl-parser.test.js",
+        "scripts/model-runner-v3/process-lifecycle.test.js"
+      ],
+      "startedAt": "2026-10-11T15:14:44.453504+00:00",
+      "endedAt": "2026-10-11T15:14:47.069089+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.615590556000825,
+      "sampledAggregatePeakRssBytes": 164536320,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9656537088,
+      "diskAvailableAfterBytes": 9656537088,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    }
+  ],
+  "results": {
+    "firstRestrictedInvocation": {
+      "fileLevelTests": 4,
+      "pass": 1,
+      "fail": 3,
+      "skip": 0,
+      "notEquivalentToFullCaseCount": true
+    },
+    "directLifecycleDiagnostic": {
+      "tests": 31,
+      "pass": 28,
+      "fail": 3,
+      "skip": 0
+    },
+    "directWorkerDiagnostic": {
+      "tests": 16,
+      "pass": 13,
+      "fail": 3,
+      "skip": 0,
+      "concreteError": "spawnSync /usr/bin/git EPERM"
+    },
+    "nativeApprovedInvocation": {
+      "tests": 103,
+      "pass": 103,
+      "fail": 0,
+      "skip": 0,
+      "actualControlledLinuxProcesses": true,
+      "sourceAndTestBytesChanged": false
+    },
+    "retryReason": "Automatic execution-tool approval permitted native synthetic child processes outside the restricted tool sandbox. Product sandbox policy and tests unchanged. All first RED kept.",
+    "diagnosticCausalityLimit": "Direct lifecycle failures included Git state failure and large-output assertion under the restricted execution; successful same-source native execution supports an execution-environment cause but did not independently instrument every restricted child.",
+    "macCanary": {
+      "vmExecuted": false,
+      "reason": "Exact Mac executable, Apple codesign and developer toolchain are unavailable on Linux. No repeat of missing-path ENOENT.",
+      "existingMakerObservationOnly": "892 documents record actual Mac 14/14; not independent VM evidence."
+    },
+    "normalBuild": {
+      "executed": false,
+      "reason": "This slice changes only review documentation/evidence; runner candidate and main application bytes retained. No new application build asserted."
+    }
+  },
+  "reviewArtifact": {
+    "changedHostFields": 18,
+    "diff": {
+      "path": "docs/engineering/protected-cli-transition-20261011/host-identity.reference.diff",
+      "bytes": 4284,
+      "sha256": "5ff847bcd29b1dfff780b4d4dd83d920f80cf5a7afeb15f0ec97fed9b4eca542"
+    },
+    "applied": false,
+    "workerPathSelectionCodeDelta": 0,
+    "selectedOldPathIsBaseFixtureDerived": true
+  },
+  "immutability": {
+    "activeFixturePreserved": true,
+    "frozenContractInventoryPreserved": true,
+    "packageCommandsPreserved": true,
+    "workflowRegistryAndMapsPreserved": true,
+    "inactiveFencesPreserved": true,
+    "noTrustBaselineUpdate": true
+  },
+  "resources": {
+    "aggregateSampledPeakRssBytes": 164536320,
+    "method": "100ms aggregate observed process group/recursive descendants; may miss short/reparented processes",
+    "minMeasuredFreeBytes": 9656520704,
+    "diskFreeAtReceiptBytes": 9656336384,
+    "diskReserveBytes": 8589934592,
+    "rssTargetBytes": 8589934592,
+    "stageLimitSeconds": 900,
+    "singleHeavyTask": true
+  },
+  "cleanup": {
+    "allObservedChildrenStopped": true,
+    "noStartedPersistentServices": true,
+    "ownedScratchRetainedForEvidence": "/tmp/si-cli-transition-6t5xceki",
+    "uniqueEvidenceDeleted": false,
+    "otherWorktreesModified": false
+  },
+  "priorCapabilityLimits": {
+    "pullRequestApi": "Previously unavailable through authenticated gh/API; not repeated. Exact Git remote candidate and local worktree/process inventory checked; root owns PR/review."
+  },
+  "roleAndAuthority": {
+    "makerEvidence": true,
+    "selfIndependentApproval": false,
+    "protectedPass": false,
+    "trustEstablished": false,
+    "modelInvoked": false,
+    "credentialsReadOrCopied": false,
+    "providerInvoked": false,
+    "productionChanged": false,
+    "deployed": false,
+    "mergedToMain": false
+  },
+  "remaining": [
+    "fresh target Mac identity/signature/architecture remeasurement",
+    "reviewed final trusted fixture and consumer version/hash/bytes/selector amendment",
+    "finite frozen acceptance/manifest/routing/identity/command mirror amendments",
+    "genuine exact-subject reviews and human first-establishment decision",
+    "dependency network-enabled sandbox phase and full protected model track",
+    "activation only in explicitly authorized reviewed successor"
+  ],
+  "rawAndManifestFiles": [
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/capabilities.json",
+      "bytes": 413,
+      "sha256": "2fae038eff835d45bd28f386e71879a7b9d76282a06422fcc118f66e6f225c32"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/lifecycle-diagnostic.json",
+      "bytes": 702,
+      "sha256": "2a41e395a1efa752d831ea34808fac5eaf2cad8496ad12dfb9a119bf895dcc7b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/lifecycle-diagnostic.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/lifecycle-diagnostic.stdout",
+      "bytes": 10204,
+      "sha256": "3d9381770c5a68320eda6275bc2fa999723f594d18e1018c096e544b2399863b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/lifecycle-diagnostic.time",
+      "bytes": 854,
+      "sha256": "c6d2ddeea43673257d491c7d5a258c75317051c4b43eb86f26b950f19db8a890"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/portable-native.json",
+      "bytes": 925,
+      "sha256": "96e9ebdcc1d0455696696a063aad5caabed4743fe08193278921dc0e632b515a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/portable-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/portable-native.stdout",
+      "bytes": 19894,
+      "sha256": "8bf7e34f3d6568a03fa4a152652a8650046b73bb92b9c59f1cffb708fc533def"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/portable-native.time",
+      "bytes": 1014,
+      "sha256": "0d27d4a9339beeb86e4750b7bc076ac2e9f1c7ceeeead828c97ac606bd43a398"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/portable.json",
+      "bytes": 919,
+      "sha256": "1f2ea16b652967685728cd34b246b63ca136aff770a7d3a3458f521c0aef1488"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/portable.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/portable.stdout",
+      "bytes": 1483,
+      "sha256": "992aa5f436c202c0a18d208b1dcbbde04abb33ee4ddabe9f879c338e6978fdfc"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/portable.time",
+      "bytes": 1050,
+      "sha256": "2bca20aab69394c2eaf39df8efb3fe69bf9aa3e2fb05c27c18b4052c8c12388c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/run.py",
+      "bytes": 3439,
+      "sha256": "220a37af30e8be90848ee0ec8e2576f672ea272a79f9044d22289f4e326fd053"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/source-manifest.json",
+      "bytes": 12700,
+      "sha256": "9087bed76abf13cace578e50e1387f1597bb5c79c53c45479f1e916160185cdb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/test-inventory.json",
+      "bytes": 6811,
+      "sha256": "a4dec0d84a0911fc0fedd3c739a065657409b9e4c34e11c4d9fa34041428eae7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/worker-diagnostic.json",
+      "bytes": 712,
+      "sha256": "89c2b287706658729a9ccf1f7b0706ba7eb754520ccc21ab1f7f107a5b49950d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/worker-diagnostic.stderr",
+      "bytes": 482,
+      "sha256": "80971547c9b16697fc7a8e05595d9c1eb193a2b6abfa8c18f4d1ddff003e935c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/worker-diagnostic.stdout",
+      "bytes": 6790,
+      "sha256": "c979a841062b690beef7141699610a59cbbf7f6e67bf4aab0be910ae652c586e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-07-protected-cli-transition-linux/worker-diagnostic.time",
+      "bytes": 866,
+      "sha256": "5b7d6dc3ee26cfc1508e7ae01246e273fcc13e01ab3fee6cc2a04caabcebdcdd"
+    }
+  ]
+}

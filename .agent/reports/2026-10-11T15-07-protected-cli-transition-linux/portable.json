@@ -1,0 +1,24 @@
+{
+  "stage": "portable",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/protected-external-gate-worker.test.mjs",
+    "scripts/opportunity-v3/runner-recovery-candidate.test.mjs",
+    "scripts/model-runner-v3/jsonl-parser.test.js",
+    "scripts/model-runner-v3/process-lifecycle.test.js"
+  ],
+  "startedAt": "2026-10-11T15:13:46.204241+00:00",
+  "endedAt": "2026-10-11T15:13:48.020016+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 1.8157835369929671,
+  "sampledAggregatePeakRssBytes": 137224192,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9656520704,
+  "diskAvailableAfterBytes": 9656520704,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

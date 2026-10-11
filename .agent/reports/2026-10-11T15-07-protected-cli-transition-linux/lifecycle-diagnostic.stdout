@@ -1,0 +1,246 @@
+TAP version 13
+# Subtest: separate stdout 16 MiB and stderr 8 MiB bounds permit combined >17 MiB
+ok 1 - separate stdout 16 MiB and stderr 8 MiB bounds permit combined >17 MiB
+  ---
+  duration_ms: 19.621704
+  ...
+# Subtest: stderr between old 1 MiB and approved 8 MiB is accepted
+ok 2 - stderr between old 1 MiB and approved 8 MiB is accepted
+  ---
+  duration_ms: 2.668599
+  ...
+# Subtest: stdout over-limit terminates TERM then bounded KILL
+ok 3 - stdout over-limit terminates TERM then bounded KILL
+  ---
+  duration_ms: 7.338486
+  ...
+# Subtest: stderr over-limit terminates TERM then bounded KILL
+ok 4 - stderr over-limit terminates TERM then bounded KILL
+  ---
+  duration_ms: 2.889321
+  ...
+# Subtest: idle deadline is 300 seconds, not 30
+ok 5 - idle deadline is 300 seconds, not 30
+  ---
+  duration_ms: 0.344279
+  ...
+# Subtest: partial stdout and complete stderr lines cannot reset stdout idle-line deadline
+ok 6 - partial stdout and complete stderr lines cannot reset stdout idle-line deadline
+  ---
+  duration_ms: 0.584772
+  ...
+# Subtest: a complete stdout line resets only the idle deadline
+ok 7 - a complete stdout line resets only the idle deadline
+  ---
+  duration_ms: 0.326532
+  ...
+# Subtest: manifest wall deadline is checked at events even when timer callback is delayed
+ok 8 - manifest wall deadline is checked at events even when timer callback is delayed
+  ---
+  duration_ms: 0.173211
+  ...
+# Subtest: successful close cannot outrun delayed monotonic wall check
+ok 9 - successful close cannot outrun delayed monotonic wall check
+  ---
+  duration_ms: 0.368586
+  ...
+# Subtest: prompt and stdout/stderr pipe errors fail closed without uncaught errors
+ok 10 - prompt and stdout/stderr pipe errors fail closed without uncaught errors
+  ---
+  duration_ms: 0.729681
+  ...
+# Subtest: close without successful pipe EOF is rejected
+ok 11 - close without successful pipe EOF is rejected
+  ---
+  duration_ms: 0.222877
+  ...
+# Subtest: exit with descendant-retained pipe is bounded and cannot pass
+ok 12 - exit with descendant-retained pipe is bounded and cannot pass
+  ---
+  duration_ms: 0.180733
+  ...
+# Subtest: nonzero exit and signal never produce stdout result
+ok 13 - nonzero exit and signal never produce stdout result
+  ---
+  duration_ms: 0.237389
+  ...
+# Subtest: identity recheck failure cannot become success and preserves routing failure
+ok 14 - identity recheck failure cannot become success and preserves routing failure
+  ---
+  duration_ms: 0.172029
+  ...
+# Subtest: TERM followed by leader exit revokes all later group signalling
+ok 15 - TERM followed by leader exit revokes all later group signalling
+  ---
+  duration_ms: 0.142675
+  ...
+# Subtest: normal leader exit with retained pipes never signals a potentially recycled PGID
+ok 16 - normal leader exit with retained pipes never signals a potentially recycled PGID
+  ---
+  duration_ms: 0.116375
+  ...
+# Subtest: late events after bounded rejection cannot invoke journal callbacks
+ok 17 - late events after bounded rejection cannot invoke journal callbacks
+  ---
+  duration_ms: 0.197869
+  ...
+# Subtest: failed spawn has no PID fallback or ambient group signals
+ok 18 - failed spawn has no PID fallback or ambient group signals
+  ---
+  duration_ms: 1.051166
+  ...
+# Subtest: monotonic clock regression is a terminal invariant failure
+ok 19 - monotonic clock regression is a terminal invariant failure
+  ---
+  duration_ms: 0.176626
+  ...
+# Subtest: wall deadline remains fixed despite frequent complete lines
+ok 20 - wall deadline remains fixed despite frequent complete lines
+  ---
+  duration_ms: 0.2188
+  ...
+# Subtest: identity failure immediately after spawn return follows owned-group teardown
+ok 21 - identity failure immediately after spawn return follows owned-group teardown
+  ---
+  duration_ms: 0.179781
+  ...
+# Subtest: actual controlled Node child concurrently drains >17 MiB valid JSONL plus diagnostics
+not ok 22 - actual controlled Node child concurrently drains >17 MiB valid JSONL plus diagnostics
+  ---
+  duration_ms: 103.292076
+  location: '/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/process-lifecycle.test.js:153:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(output.length > 12 * 1_048_576 && output.length < 16_777_216)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/process-lifecycle.test.js:170:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: actual controlled Node child timeout is terminated without waiting for provider
+ok 23 - actual controlled Node child timeout is terminated without waiting for provider
+  ---
+  duration_ms: 1003.309983
+  ...
+# Subtest: ownership loss (leader_exited) retains caller resources and round across persisted retry
+not ok 24 - ownership loss (leader_exited) retains caller resources and round across persisted retry
+  ---
+  duration_ms: 42.514496
+  location: '/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/process-lifecycle.test.js:181:69'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: trusted Git state validation failed
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: [Function (anonymous)]
+  actual:
+    exit: 4
+  error: 'trusted Git state validation failed'
+  code: 'GIT_STATE_INVALID'
+  stack: |-
+    run (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/execution.js:48:67)
+    repositoryRoot (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/execution.js:53:10)
+    executeOperation (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/execution.js:1130:16)
+    TestContext.<anonymous> (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/process-lifecycle.test.js:227:26)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/process-lifecycle.test.js:227:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: ownership loss (kill_unconfirmed) retains caller resources and round across persisted retry
+not ok 25 - ownership loss (kill_unconfirmed) retains caller resources and round across persisted retry
+  ---
+  duration_ms: 24.837176
+  location: '/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/process-lifecycle.test.js:181:69'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: trusted Git state validation failed
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: [Function (anonymous)]
+  actual:
+    exit: 4
+  error: 'trusted Git state validation failed'
+  code: 'GIT_STATE_INVALID'
+  stack: |-
+    run (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/execution.js:48:67)
+    repositoryRoot (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/execution.js:53:10)
+    executeOperation (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/execution.js:1130:16)
+    TestContext.<anonymous> (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/process-lifecycle.test.js:227:26)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (/workspace/cloud-protected-cli-transition-oct11/scripts/model-runner-v3/process-lifecycle.test.js:227:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: natural EOF and exit may arrive in either order, but close requires both
+ok 26 - natural EOF and exit may arrive in either order, but close requires both
+  ---
+  duration_ms: 0.376338
+  ...
+# Subtest: late valid exit/EOF cannot reverse a locked timeout failure
+ok 27 - late valid exit/EOF cannot reverse a locked timeout failure
+  ---
+  duration_ms: 0.354936
+  ...
+# Subtest: child exit and pending KILL at the same time cannot signal the expired anchor
+ok 28 - child exit and pending KILL at the same time cannot signal the expired anchor
+  ---
+  duration_ms: 0.228806
+  ...
+# Subtest: raw UTF-8 split across stdout chunks is preserved losslessly
+ok 29 - raw UTF-8 split across stdout chunks is preserved losslessly
+  ---
+  duration_ms: 0.365422
+  ...
+# Subtest: drain deadline is fixed and further data cannot prolong or recover it
+ok 30 - drain deadline is fixed and further data cannot prolong or recover it
+  ---
+  duration_ms: 0.436639
+  ...
+# Subtest: pipe data after EOF rejects rather than becoming accepted result bytes
+ok 31 - pipe data after EOF rejects rather than becoming accepted result bytes
+  ---
+  duration_ms: 0.193082
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 28
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1223.175021

@@ -1,0 +1,555 @@
+TAP version 13
+# Subtest: closed JSONL accepts a sealed completed-only terminal with optional final LF
+ok 1 - closed JSONL accepts a sealed completed-only terminal with optional final LF
+  ---
+  duration_ms: 2.931504
+  ...
+# Subtest: closed JSONL rejects missing_starts
+ok 2 - closed JSONL rejects missing_starts
+  ---
+  duration_ms: 0.49643
+  ...
+# Subtest: closed JSONL rejects missing_turn
+ok 3 - closed JSONL rejects missing_turn
+  ---
+  duration_ms: 0.176657
+  ...
+# Subtest: closed JSONL rejects missing_thread
+ok 4 - closed JSONL rejects missing_thread
+  ---
+  duration_ms: 0.15923
+  ...
+# Subtest: closed JSONL rejects duplicate_thread
+ok 5 - closed JSONL rejects duplicate_thread
+  ---
+  duration_ms: 0.124848
+  ...
+# Subtest: closed JSONL rejects duplicate_turn
+ok 6 - closed JSONL rejects duplicate_turn
+  ---
+  duration_ms: 0.312671
+  ...
+# Subtest: closed JSONL rejects unknown_event
+ok 7 - closed JSONL rejects unknown_event
+  ---
+  duration_ms: 0.115995
+  ...
+# Subtest: closed JSONL rejects unknown_member
+ok 8 - closed JSONL rejects unknown_member
+  ---
+  duration_ms: 0.151759
+  ...
+# Subtest: closed JSONL rejects invalid_uuid
+ok 9 - closed JSONL rejects invalid_uuid
+  ---
+  duration_ms: 0.307384
+  ...
+# Subtest: closed JSONL rejects uppercase_uuid
+ok 10 - closed JSONL rejects uppercase_uuid
+  ---
+  duration_ms: 0.432242
+  ...
+# Subtest: closed JSONL rejects missing_usage
+ok 11 - closed JSONL rejects missing_usage
+  ---
+  duration_ms: 0.984045
+  ...
+# Subtest: closed JSONL rejects negative_usage
+ok 12 - closed JSONL rejects negative_usage
+  ---
+  duration_ms: 0.222886
+  ...
+# Subtest: closed JSONL rejects unsafe_usage
+ok 13 - closed JSONL rejects unsafe_usage
+  ---
+  duration_ms: 0.207353
+  ...
+# Subtest: closed JSONL rejects extra_usage
+ok 14 - closed JSONL rejects extra_usage
+  ---
+  duration_ms: 0.181133
+  ...
+# Subtest: closed JSONL rejects duplicate_terminal
+ok 15 - closed JSONL rejects duplicate_terminal
+  ---
+  duration_ms: 0.238019
+  ...
+# Subtest: closed JSONL rejects duplicate_item_id
+ok 16 - closed JSONL rejects duplicate_item_id
+  ---
+  duration_ms: 0.197808
+  ...
+# Subtest: closed JSONL rejects progress_after_terminal
+ok 17 - closed JSONL rejects progress_after_terminal
+  ---
+  duration_ms: 0.321946
+  ...
+# Subtest: closed JSONL rejects duplicate_end
+ok 18 - closed JSONL rejects duplicate_end
+  ---
+  duration_ms: 0.318661
+  ...
+# Subtest: closed JSONL rejects trailing_event
+ok 19 - closed JSONL rejects trailing_event
+  ---
+  duration_ms: 0.177288
+  ...
+# Subtest: closed JSONL rejects no_terminal
+ok 20 - closed JSONL rejects no_terminal
+  ---
+  duration_ms: 0.127472
+  ...
+# Subtest: closed JSONL rejects arbitrary_json_terminal
+ok 21 - closed JSONL rejects arbitrary_json_terminal
+  ---
+  duration_ms: 0.107592
+  ...
+# Subtest: closed JSONL rejects invalid_result_schema
+ok 22 - closed JSONL rejects invalid_result_schema
+  ---
+  duration_ms: 0.251369
+  ...
+# Subtest: closed JSONL rejects incomplete_turn
+ok 23 - closed JSONL rejects incomplete_turn
+  ---
+  duration_ms: 0.184338
+  ...
+# Subtest: closed JSONL rejects unknown_item
+ok 24 - closed JSONL rejects unknown_item
+  ---
+  duration_ms: 0.095434
+  ...
+# Subtest: closed JSONL rejects extra_item_member
+ok 25 - closed JSONL rejects extra_item_member
+  ---
+  duration_ms: 0.079089
+  ...
+# Subtest: closed JSONL rejects update_without_start
+ok 26 - closed JSONL rejects update_without_start
+  ---
+  duration_ms: 0.088954
+  ...
+# Subtest: closed JSONL rejects unfinished_item
+ok 27 - closed JSONL rejects unfinished_item
+  ---
+  duration_ms: 1.002733
+  ...
+# Subtest: closed JSONL rejects changed_item_type
+ok 28 - closed JSONL rejects changed_item_type
+  ---
+  duration_ms: 0.132791
+  ...
+# Subtest: closed JSONL rejects non_ascii_id
+ok 29 - closed JSONL rejects non_ascii_id
+  ---
+  duration_ms: 0.228365
+  ...
+# Subtest: closed JSONL rejects long_id
+ok 30 - closed JSONL rejects long_id
+  ---
+  duration_ms: 0.174614
+  ...
+# Subtest: closed JSONL rejects surrogate_text
+ok 31 - closed JSONL rejects surrogate_text
+  ---
+  duration_ms: 0.209486
+  ...
+# Subtest: closed JSONL rejects error_extra_member
+ok 32 - closed JSONL rejects error_extra_member
+  ---
+  duration_ms: 0.094763
+  ...
+# Subtest: closed JSONL rejects failed_extra_member
+ok 33 - closed JSONL rejects failed_extra_member
+  ---
+  duration_ms: 0.082514
+  ...
+# Subtest: closed JSONL rejects prohibited item file_change
+ok 34 - closed JSONL rejects prohibited item file_change
+  ---
+  duration_ms: 0.14528
+  ...
+# Subtest: closed JSONL rejects prohibited item web_search
+ok 35 - closed JSONL rejects prohibited item web_search
+  ---
+  duration_ms: 0.107822
+  ...
+# Subtest: closed JSONL rejects prohibited item collab_tool_call
+ok 36 - closed JSONL rejects prohibited item collab_tool_call
+  ---
+  duration_ms: 0.093641
+  ...
+# Subtest: closed JSONL rejects prohibited item todo_list
+ok 37 - closed JSONL rejects prohibited item todo_list
+  ---
+  duration_ms: 0.09297
+  ...
+# Subtest: closed JSONL rejects prohibited item error
+ok 38 - closed JSONL rejects prohibited item error
+  ---
+  duration_ms: 0.087192
+  ...
+# Subtest: closed JSONL validates ordered item lifecycle and command diagnostic only
+ok 39 - closed JSONL validates ordered item lifecycle and command diagnostic only
+  ---
+  duration_ms: 0.780939
+  ...
+# Subtest: closed JSONL rejects invalid bytes, duplicate JSON keys and byte/line bounds
+ok 40 - closed JSONL rejects invalid bytes, duplicate JSON keys and byte/line bounds
+  ---
+  duration_ms: 9.955827
+  ...
+# Subtest: closed JSONL recognizes typed model failure without accepting malformed failure
+ok 41 - closed JSONL recognizes typed model failure without accepting malformed failure
+  ---
+  duration_ms: 0.300855
+  ...
+# Subtest: diagnostic oracle terminal requires explicit bounded protocol and exact operation
+ok 42 - diagnostic oracle terminal requires explicit bounded protocol and exact operation
+  ---
+  duration_ms: 0.465002
+  ...
+# Subtest: closed JSONL rejects every outer unknown member
+ok 43 - closed JSONL rejects every outer unknown member
+  ---
+  duration_ms: 0.304049
+  ...
+# Subtest: closed JSONL preserves progress text and completed agent lifecycle before terminal
+ok 44 - closed JSONL preserves progress text and completed agent lifecycle before terminal
+  ---
+  duration_ms: 0.395126
+  ...
+# Subtest: closed JSONL checks every usage field and UUID variant
+ok 45 - closed JSONL checks every usage field and UUID variant
+  ---
+  duration_ms: 2.660325
+  ...
+# Subtest: closed JSONL rejects data after typed failures and malformed failure shapes
+ok 46 - closed JSONL rejects data after typed failures and malformed failure shapes
+  ---
+  duration_ms: 0.501637
+  ...
+# Subtest: closed JSONL validates original bytes inside otherwise valid progress and result
+ok 47 - closed JSONL validates original bytes inside otherwise valid progress and result
+  ---
+  duration_ms: 0.524612
+  ...
+# Subtest: closed JSONL applies the exact line byte bound
+ok 48 - closed JSONL applies the exact line byte bound
+  ---
+  duration_ms: 28.03923
+  ...
+# Subtest: closed JSONL counts nonempty lines rather than allowing unbounded valid items
+ok 49 - closed JSONL counts nonempty lines rather than allowing unbounded valid items
+  ---
+  duration_ms: 79.503016
+  ...
+# Subtest: closed JSONL binds production operation and rejects diagnostic option expansion
+ok 50 - closed JSONL binds production operation and rejects diagnostic option expansion
+  ---
+  duration_ms: 0.752926
+  ...
+# Subtest: separate stdout 16 MiB and stderr 8 MiB bounds permit combined >17 MiB
+ok 51 - separate stdout 16 MiB and stderr 8 MiB bounds permit combined >17 MiB
+  ---
+  duration_ms: 25.559698
+  ...
+# Subtest: stderr between old 1 MiB and approved 8 MiB is accepted
+ok 52 - stderr between old 1 MiB and approved 8 MiB is accepted
+  ---
+  duration_ms: 2.85581
+  ...
+# Subtest: stdout over-limit terminates TERM then bounded KILL
+ok 53 - stdout over-limit terminates TERM then bounded KILL
+  ---
+  duration_ms: 11.373197
+  ...
+# Subtest: stderr over-limit terminates TERM then bounded KILL
+ok 54 - stderr over-limit terminates TERM then bounded KILL
+  ---
+  duration_ms: 4.322714
+  ...
+# Subtest: idle deadline is 300 seconds, not 30
+ok 55 - idle deadline is 300 seconds, not 30
+  ---
+  duration_ms: 0.332903
+  ...
+# Subtest: partial stdout and complete stderr lines cannot reset stdout idle-line deadline
+ok 56 - partial stdout and complete stderr lines cannot reset stdout idle-line deadline
+  ---
+  duration_ms: 0.393604
+  ...
+# Subtest: a complete stdout line resets only the idle deadline
+ok 57 - a complete stdout line resets only the idle deadline
+  ---
+  duration_ms: 0.223437
+  ...
+# Subtest: manifest wall deadline is checked at events even when timer callback is delayed
+ok 58 - manifest wall deadline is checked at events even when timer callback is delayed
+  ---
+  duration_ms: 0.176376
+  ...
+# Subtest: successful close cannot outrun delayed monotonic wall check
+ok 59 - successful close cannot outrun delayed monotonic wall check
+  ---
+  duration_ms: 0.382347
+  ...
+# Subtest: prompt and stdout/stderr pipe errors fail closed without uncaught errors
+ok 60 - prompt and stdout/stderr pipe errors fail closed without uncaught errors
+  ---
+  duration_ms: 0.586706
+  ...
+# Subtest: close without successful pipe EOF is rejected
+ok 61 - close without successful pipe EOF is rejected
+  ---
+  duration_ms: 0.223147
+  ...
+# Subtest: exit with descendant-retained pipe is bounded and cannot pass
+ok 62 - exit with descendant-retained pipe is bounded and cannot pass
+  ---
+  duration_ms: 0.164758
+  ...
+# Subtest: nonzero exit and signal never produce stdout result
+ok 63 - nonzero exit and signal never produce stdout result
+  ---
+  duration_ms: 0.172451
+  ...
+# Subtest: identity recheck failure cannot become success and preserves routing failure
+ok 64 - identity recheck failure cannot become success and preserves routing failure
+  ---
+  duration_ms: 0.166521
+  ...
+# Subtest: TERM followed by leader exit revokes all later group signalling
+ok 65 - TERM followed by leader exit revokes all later group signalling
+  ---
+  duration_ms: 0.138899
+  ...
+# Subtest: normal leader exit with retained pipes never signals a potentially recycled PGID
+ok 66 - normal leader exit with retained pipes never signals a potentially recycled PGID
+  ---
+  duration_ms: 0.11916
+  ...
+# Subtest: late events after bounded rejection cannot invoke journal callbacks
+ok 67 - late events after bounded rejection cannot invoke journal callbacks
+  ---
+  duration_ms: 0.148885
+  ...
+# Subtest: failed spawn has no PID fallback or ambient group signals
+ok 68 - failed spawn has no PID fallback or ambient group signals
+  ---
+  duration_ms: 0.701829
+  ...
+# Subtest: monotonic clock regression is a terminal invariant failure
+ok 69 - monotonic clock regression is a terminal invariant failure
+  ---
+  duration_ms: 0.161194
+  ...
+# Subtest: wall deadline remains fixed despite frequent complete lines
+ok 70 - wall deadline remains fixed despite frequent complete lines
+  ---
+  duration_ms: 0.246653
+  ...
+# Subtest: identity failure immediately after spawn return follows owned-group teardown
+ok 71 - identity failure immediately after spawn return follows owned-group teardown
+  ---
+  duration_ms: 0.180773
+  ...
+# Subtest: actual controlled Node child concurrently drains >17 MiB valid JSONL plus diagnostics
+ok 72 - actual controlled Node child concurrently drains >17 MiB valid JSONL plus diagnostics
+  ---
+  duration_ms: 246.459552
+  ...
+# Subtest: actual controlled Node child timeout is terminated without waiting for provider
+ok 73 - actual controlled Node child timeout is terminated without waiting for provider
+  ---
+  duration_ms: 1003.062166
+  ...
+# Subtest: ownership loss (leader_exited) retains caller resources and round across persisted retry
+ok 74 - ownership loss (leader_exited) retains caller resources and round across persisted retry
+  ---
+  duration_ms: 69.390527
+  ...
+# Subtest: ownership loss (kill_unconfirmed) retains caller resources and round across persisted retry
+ok 75 - ownership loss (kill_unconfirmed) retains caller resources and round across persisted retry
+  ---
+  duration_ms: 53.755874
+  ...
+# Subtest: natural EOF and exit may arrive in either order, but close requires both
+ok 76 - natural EOF and exit may arrive in either order, but close requires both
+  ---
+  duration_ms: 0.343839
+  ...
+# Subtest: late valid exit/EOF cannot reverse a locked timeout failure
+ok 77 - late valid exit/EOF cannot reverse a locked timeout failure
+  ---
+  duration_ms: 0.203448
+  ...
+# Subtest: child exit and pending KILL at the same time cannot signal the expired anchor
+ok 78 - child exit and pending KILL at the same time cannot signal the expired anchor
+  ---
+  duration_ms: 0.199171
+  ...
+# Subtest: raw UTF-8 split across stdout chunks is preserved losslessly
+ok 79 - raw UTF-8 split across stdout chunks is preserved losslessly
+  ---
+  duration_ms: 0.219711
+  ...
+# Subtest: drain deadline is fixed and further data cannot prolong or recover it
+ok 80 - drain deadline is fixed and further data cannot prolong or recover it
+  ---
+  duration_ms: 0.210177
+  ...
+# Subtest: pipe data after EOF rejects rather than becoming accepted result bytes
+ok 81 - pipe data after EOF rejects rather than becoming accepted result bytes
+  ---
+  duration_ms: 0.138128
+  ...
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# Subtest: PCR-023 actual protected aggregate rejects missing, reordered, failed and unreviewed inputs
+ok 82 - PCR-023 actual protected aggregate rejects missing, reordered, failed and unreviewed inputs
+  ---
+  duration_ms: 5.20824
+  ...
+# Subtest: the configured protected check includes the independent model-runner envelope aggregate
+ok 83 - the configured protected check includes the independent model-runner envelope aggregate
+  ---
+  duration_ms: 0.508167
+  ...
+# Subtest: candidate execution waits for exact review and model-runner failure cannot be bypassed
+ok 84 - candidate execution waits for exact review and model-runner failure cannot be bypassed
+  ---
+  duration_ms: 0.698844
+  ...
+# Subtest: public candidate detail changes trigger the protected product workflow
+ok 85 - public candidate detail changes trigger the protected product workflow
+  ---
+  duration_ms: 0.180462
+  ...
+# Subtest: every third-party action is pinned to an immutable commit
+ok 86 - every third-party action is pinned to an immutable commit
+  ---
+  duration_ms: 1.034021
+  ...
+# Subtest: subject preparation pins Node from the protected base
+ok 87 - subject preparation pins Node from the protected base
+  ---
+  duration_ms: 0.356919
+  ...
+# Subtest: the base worker owns validation and performs the final exclusive envelope write
+ok 88 - the base worker owns validation and performs the final exclusive envelope write
+  ---
+  duration_ms: 0.209497
+  ...
+# Subtest: review envelopes require reviewed-parent evidence with an exact closed diff and bound attestation
+ok 89 - review envelopes require reviewed-parent evidence with an exact closed diff and bound attestation
+  ---
+  duration_ms: 0.17284
+  ...
+# Subtest: the protected root selects closed graph-bound Requirements/Architecture evidence and subject-addressed exact review evidence
+ok 90 - the protected root selects closed graph-bound Requirements/Architecture evidence and subject-addressed exact review evidence
+  ---
+  duration_ms: 0.765526
+  ...
+# Subtest: the production parser accepts the actual immutable PR210 architecture evidence bytes
+ok 91 - the production parser accepts the actual immutable PR210 architecture evidence bytes
+  ---
+  duration_ms: 1.075112
+  ...
+# Subtest: the protected root executes the closed v1 and v2 graph algorithms and rejects unknown catalogs
+ok 92 - the protected root executes the closed v1 and v2 graph algorithms and rejects unknown catalogs
+  ---
+  duration_ms: 519.085759
+  ...
+# Subtest: the protected model-oracle rotation executes the exact v3.15 to v3.16 listing transition
+ok 93 - the protected model-oracle rotation executes the exact v3.15 to v3.16 listing transition
+  ---
+  duration_ms: 6.300059
+  ...
+# Subtest: the protected model-oracle rotation approves only the exact v3.16 to v3.17 successor
+ok 94 - the protected model-oracle rotation approves only the exact v3.16 to v3.17 successor
+  ---
+  duration_ms: 5.415815
+  ...
+# Subtest: the protected model-oracle rotation approves only the exact v3.17 to v3.18 successor
+ok 95 - the protected model-oracle rotation approves only the exact v3.17 to v3.18 successor
+  ---
+  duration_ms: 0.381065
+  ...
+# Subtest: each candidate command is isolated in a process group that is cleared on return
+ok 96 - each candidate command is isolated in a process group that is cleared on return
+  ---
+  duration_ms: 0.121803
+  ...
+# Subtest: candidate model code receives no credential and is enclosed by a base-owned filesystem/network sandbox
+ok 97 - candidate model code receives no credential and is enclosed by a base-owned filesystem/network sandbox
+  ---
+  duration_ms: 0.768781
+  ...
+# Subtest: measured candidate is inactive, separate from unchanged frozen active authority
+ok 98 - measured candidate is inactive, separate from unchanged frozen active authority
+  ---
+  duration_ms: 18.024345
+  ...
+# Subtest: candidate route rejects legacy strategy and operation/model swaps
+ok 99 - candidate route rejects legacy strategy and operation/model swaps
+  ---
+  duration_ms: 0.536079
+  ...
+# Subtest: actual execution parser rejects terminal transcript without thread/turn start
+ok 100 - actual execution parser rejects terminal transcript without thread/turn start
+  ---
+  duration_ms: 0.45716
+  ...
+# Subtest: worker policy extraction preserves all legacy bytes for ordinary canonical roots
+ok 101 - worker policy extraction preserves all legacy bytes for ordinary canonical roots
+  ---
+  duration_ms: 4.050513
+  ...
+# Subtest: actual candidate CLI validate/route works while all model operations stop at inactive fence
+ok 102 - actual candidate CLI validate/route works while all model operations stop at inactive fence
+  ---
+  duration_ms: 3.800335
+  ...
+# Subtest: candidate real oracle refuses before authentication transport or provider launch
+ok 103 - candidate real oracle refuses before authentication transport or provider launch
+  ---
+  duration_ms: 0.524482
+  ...
+1..103
+# tests 103
+# suites 0
+# pass 103
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2396.368425
