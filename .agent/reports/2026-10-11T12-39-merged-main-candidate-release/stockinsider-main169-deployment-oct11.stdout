@@ -1,0 +1,32 @@
+{"schema":"stockinsider-host-resource-check-v1","availableBytes":20815044608,"availableMemoryBytes":3481083904,"swapFreeBytes":181592064,"observedAt":"2026-10-11T12:41:30.928Z","allowed":true,"disposition":"warning","reasons":["capacity_below_20_gib_warning"],"disk":{"disposition":"warning","allowed":true,"reasons":["capacity_below_20_gib_warning"],"additionalPeakBytes":3892314112,"projectedAvailableBytes":16922730496,"minimumReserveBytes":16106127360},"peakMemoryBytes":1073741824,"projectedAvailableMemoryBytes":2407342080,"minimumAvailableMemoryBytes":1610612736}
+{"releaseVerified":true,"releaseId":"9fd86fe620ccc63c89c4acd208327bf2c4e15332","sourceCommit":"9fd86fe620ccc63c89c4acd208327bf2c4e15332","packagerCommit":"9fd86fe620ccc63c89c4acd208327bf2c4e15332","manifestSha256":"349b907483618e94aedafb5137b939007e83fd130d81060092a453af0cce9a0e","bytes":58793176,"entrypoint":"app/server.js"}
+artifact_stream_exact_bytes=27563099
+/run/stockinsider-main169-deploy.JRzHuJ/artifact.tar.gz: OK
+{"releaseVerified":true,"releaseId":"169aad1b6cfa747f78ae3464b614f43c0749d806","sourceCommit":"169aad1b6cfa747f78ae3464b614f43c0749d806","packagerCommit":"169aad1b6cfa747f78ae3464b614f43c0749d806","manifestSha256":"2893ad708f4164abdc269e40bfcf15d167e00ee7e4e6b539e82305e25830575a","bytes":79290260,"entrypoint":"app/server.js"}
+/run/stockinsider-main169-deploy.JRzHuJ/migration.sql: OK
+DO
+ALTER TABLE
+ALTER TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+REVOKE
+GRANT
+DO
+NOTIFY
+{"schema":"stockinsider-host-resource-check-v1","availableBytes":20725813248,"availableMemoryBytes":3144781824,"swapFreeBytes":288808960,"observedAt":"2026-10-11T12:41:46.316Z","allowed":true,"disposition":"warning","reasons":["capacity_below_20_gib_warning"],"disk":{"disposition":"warning","allowed":true,"reasons":["capacity_below_20_gib_warning"],"additionalPeakBytes":3892314112,"projectedAvailableBytes":16833499136,"minimumReserveBytes":16106127360},"peakMemoryBytes":1073741824,"projectedAvailableMemoryBytes":2071040000,"minimumAvailableMemoryBytes":1610612736}
+{"ok":true,"releaseId":"169aad1b6cfa747f78ae3464b614f43c0749d806","writerKind":"vps","previousReleaseId":"9fd86fe620ccc63c89c4acd208327bf2c4e15332","deploymentLeaseReleased":false,"backendIdentityRotated":true}
+active
+active
+active
+active
+active
+DO
+{"releaseId" : "169aad1b6cfa747f78ae3464b614f43c0749d806", "writerKind" : "vps", "active" : true}
+/opt/stockinsider-standalone/releases/169aad1b6cfa747f78ae3464b614f43c0749d806
+Filesystem        1B-blocks         Used   Available Use% Mounted on
+/dev/sda1      154894188544 134151626752 20725784576  87% /

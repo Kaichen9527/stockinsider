@@ -41,7 +41,11 @@
 
 一般CI隔離修復另已推送 PR369（code da660bfc、證據7913bc7）：820項中818PASS、0FAIL、2項明示native-profile skip；型別、lint、build及獨立局部複審通過。原斷言、讀取器與14項批准腳本不變；它是後續PR364修復，不阻擋本次main169發布。新runner候選892c93e的fixture保持未啟用，獨立審查接續，沒有冒稱受保護閘門已修復。
 
-首批切換後立即走既有 authenticated core pipeline，全候選、非dryRun、不設symbols、不使用skipIfResearchSessionComplete。核對 `expected = evaluated + dataInsufficient`、同run revision、公開快照及桌面／手機。缺資料可明列，不能偽造可交易結果；第一批目前仍未部署。
+2026-10-11T12:41:54Z 已完成真實正式切換：同機App在自己的範圍清理舊映像／快取後，鎖內可用20,815,044,608 bytes、預留後16,922,730,496 bytes，准入通過。精確artifact與migration再次核hash、套用正式SQL、RLS／ACL驗證、writer啟用及服務／loopback健康全部成功；正式current及唯一active writer皆為main169。啟動初期一次3100連線拒絕由既有ready重試恢復，最後驗證成功，原stderr保留。沒有以失敗的runner或PR364批准取代main169原批准。
+
+切換後已啟動既有 authenticated core pipeline，全候選、非dryRun、不設symbols、不使用skipIfResearchSessionComplete；pipeline `918db413-a56c-4cd6-86f8-617b4a6b1239`、research `d500fa84-e57b-4c3d-bafd-deac37ebf249`、model `candidate-research-v4.4.2`，12:43仍running。本次也獨立通過原4GiB工作配置准入。接續核對 `expected = evaluated + dataInsufficient`、同run revision及新公開快照；running不能記作已發布。
+
+Internal Browser 已驗證新版首頁候選搜尋、友達既有immutable revision及新增進出場計畫區塊；該舊revision如實顯示尚無可驗證計畫，不用新行情改寫。桌面與390×844手機可讀，手機未見橫向溢出，當次瀏覽器error紀錄為空。新run產生後仍須驗證新計畫與快照。缺資料可明列，不能偽造可交易結果。
 
 精確量測、腳本、unsigned審查與版本清單保存在 `.agent/reports/2026-10-11T12-39-merged-main-candidate-release.json` 及同名目錄。
 

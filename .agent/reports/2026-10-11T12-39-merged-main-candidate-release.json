@@ -33,11 +33,11 @@
     "evidenceCommit": "2e9723aff0c8cfe656f8ba3e57cdb4bea4091da3",
     "groupCount": 9,
     "expectedSqlstateRejections": 49,
-    "productionApplied": false
+    "productionApplied": true
   },
   "operatorReview": "unsigned scoped CODE PASS, not a protected attestation",
   "productionBefore": "9fd86fe620ccc63c89c4acd208327bf2c4e15332",
-  "productionActivated": false,
+  "productionActivated": true,
   "admission": {
     "at": "2026-10-11T12:29:13.700Z",
     "availableBytes": 18135646208,
@@ -52,7 +52,7 @@
     "serviceRoleBypassRls": true
   },
   "cleanupPerformed": false,
-  "sharedDockerCleanupAuthority": "pending human response; existing StockInsider-only scope excludes other apps",
+  "sharedDockerCleanupAuthority": "No root shared Docker cleanup. Other-app owner reported cleaning their own eight obsolete images and eight project cache entries; deployment independently measured capacity under locks.",
   "testRepair": {
     "codeCommit": "da660bfc120663a64a9efb19e982c018f79a2f4f",
     "evidenceCommit": "7913bc7db29865aaf409e31238652e15df020973",
@@ -140,6 +140,47 @@
       "path": "stockinsider-runner-recovery-892-independent-review.md",
       "bytes": 6405,
       "sha256": "29d9826b4cb179e0b1587dff4210117887c5502cb7136814d1c35806d43305fd"
+    },
+    {
+      "path": "stockinsider-main169-deployment-oct11.json",
+      "bytes": 261,
+      "sha256": "7ff97892ae77d1f1ae6449e9f89ca6a205ab7ed806ebd55b6f58c058a778c1f8"
+    },
+    {
+      "path": "stockinsider-main169-deployment-oct11.stdout",
+      "bytes": 2647,
+      "sha256": "b53176cacf026fa4e3038fc07b537a410aa095944bbce5f850c7068b315ac99d"
+    },
+    {
+      "path": "stockinsider-main169-deployment-oct11.stderr",
+      "bytes": 90,
+      "sha256": "bd396b394c982234c0d51b1dfbe898e891dcda0feeb3ebf201efb998a220a0fa"
+    },
+    {
+      "path": "stockinsider-main169-preflight-readonly.sql",
+      "bytes": 999,
+      "sha256": "2ff7967c881d9fff4e87bfba5ac5ed223a76dd68f8e54c733f12a162d38c5748"
+    },
+    {
+      "path": "stockinsider-main169-preflight-readonly.stdout",
+      "bytes": 2777,
+      "sha256": "d9edf48192c5cf2833a7d9d576554ca43e11fc1d98c4c606210050f6779631d2"
     }
-  ]
+  ],
+  "productionAfter": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "deployedAt": "2026-10-11T12:41:54.788371Z",
+  "postDeployAdmission": {
+    "availableBytes": 20729634816,
+    "additionalPeakBytes": 4294967296,
+    "projectedAvailableBytes": 16434667520,
+    "allowed": true,
+    "at": "2026-10-11T12:42:31.045Z"
+  },
+  "firstCurrentPipeline": {
+    "runId": "918db413-a56c-4cd6-86f8-617b4a6b1239",
+    "researchRunId": "d500fa84-e57b-4c3d-bafd-deac37ebf249",
+    "model": "candidate-research-v4.4.2",
+    "state": "running",
+    "noSymbolsOrDryRunOrCompletionSkip": true
+  }
 }
