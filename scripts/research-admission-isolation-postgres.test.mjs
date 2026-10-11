@@ -44,7 +44,7 @@ test('successor installs exact RC admission guards; real PG connections conserve
         'reap_expired_research_deep_jobs_v2', 'claim_research_deep_job_v1', 'claim_research_observed_job_v2'];
       const definitions = () => JSON.parse(sql(`SELECT json_agg(x ORDER BY name) FROM (SELECT p.proname AS name,
         pg_get_functiondef(p.oid) AS definition,p.prosrc AS body,pg_get_userbyid(p.proowner) AS owner,
-        p.proacl::text AS acl,p.prosecdef,p.proconfig,p.provolatile,p.proleakproof,p.proparallel,
+        p.proacl::text AS acl,p.prosecdef,p.proconfig,p.provolatile,p.proisstrict,p.proleakproof,p.proparallel,
         p.prorettype::text,p.proargtypes::text,p.prolang::text,p.procost,p.prorows
         FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND
         p.proname IN (${names.map(name => "'" + name + "'").join(',')})) x`));
@@ -58,7 +58,8 @@ test('successor installs exact RC admission guards; real PG connections conserve
         }
         install(successor); assert.deepEqual(definitions(), after);
       });
-      const connect = async () => { const client = new Client({ host: dir, port, database: 'postgres' }); clients.push(client); await client.connect(); return client; };
+      assert.ok(definitions().every(routine => routine.body.includes(guard)), 'failed installation must stop before concurrent probes');
+      const connect = async () => { const client = new Client({ host: dir, port, database: 'postgres', options: '-c statement_timeout=5000' }); clients.push(client); await client.connect(); return client; };
       const a = await connect(); const b = await connect();
       const reserve = (client, role, owner, key) => client.query('SELECT reservation_id FROM reserve_research_model_v1($1,$2,$3)', [role, owner, key]);
       await t.test('actual stale RR snapshot cannot add a second lease; RC replay, exclusion and release remain', async () => {
@@ -153,6 +154,28 @@ test('successor installs exact RC admission guards; real PG connections conserve
         await b.query('ROLLBACK');
         assert.equal(sql('SELECT count(*) FROM research_deep_admission_charges_v1'),'5');
         assert.equal(sql('SELECT count(*) FROM research_deep_jobs_v1'),'5');
+      });
+      for(const [label,change] of [
+        ['SECURITY INVOKER','SECURITY INVOKER'],
+        ['search_path','SET search_path=pg_temp,public'],
+        ['volatility','STABLE'],
+        ['strict','STRICT'],
+        ['leakproof','LEAKPROOF'],
+        ['parallel','PARALLEL SAFE'],
+        ['cost','COST 7'],
+        ['rows','ROWS 7'],
+      ]) await t.test(`attribute-only ${label} alteration rejects before any replacement`,()=>{
+        const before=definitions();
+        sql('ALTER FUNCTION public.reserve_research_model_v1(text,text,text) '+change);
+        const changed=definitions();
+        assert.equal(changed.find(r=>r.name==='reserve_research_model_v1').body,before.find(r=>r.name==='reserve_research_model_v1').body);
+        try {
+          assert.throws(()=>install(successor),/research_admission_predecessor_changed/);
+          assert.deepEqual(definitions(),changed);
+        } finally {
+          for(const routine of before) sql(routine.definition);
+        }
+        assert.deepEqual(definitions(),before);
       });
       await t.test('changed predecessor rejects before replacing any of the other eight routines',()=>{
         const before=definitions(); const last=before.find(r=>r.name==='claim_research_observed_job_v2');

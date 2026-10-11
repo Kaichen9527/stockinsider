@@ -4,23 +4,37 @@ BEGIN;
 -- Successor installation also repairs already-applied predecessor functions.
 -- Never replace an absent or independently changed routine with an old body.
 DO $precondition$
-DECLARE target record; routine oid; body_hash text;
+DECLARE target record; routine oid; body_hash text; attributes jsonb; expected_attributes jsonb;
 BEGIN
   FOR target IN SELECT * FROM (VALUES
-    ('public.reserve_research_model_v1(text,text,text)','bc8a7ea5427e1601383d1857b70f35da44de22b3227b39de19790371a7e3ed6e','eb4c7cd312de8e493ca1f76a377187e88dd9c9a23b1a9f78db7cc04d27a5c9fc'),
-    ('public.validate_research_deep_scope_v1()','02f78ce1999476042b0223e1107f86493c4ec54a555a90dded77450a4b9efe7b','3206f117f3088454543cc0c5bf30589a209eebeb04795b74e76c745fd33b4df7'),
-    ('public.charge_research_deep_admission_v1()','1ce1ec2aa92422d8889f398a32e9343cca8efc5b28a33b8f9f9cc6c5c7f37a50','3bb0190c2a3efbd619c7fda9260c1aa1fab5eef25ad3d7dd6b4367e03a240069'),
-    ('public.reconcile_research_deep_admissions_v1()','7972568e2233c900b0225315d710415aee3cebe2ca2060fca8eacda8e32c25c3','e234c217de2776bc2b7882526ce90230e3d272b42afd853989dbb8e531d7abe0'),
-    ('public.enqueue_research_deep_jobs_v1(uuid)','c1c82364dea9e7ea88d4daa367731e527f6141e459a6ff10549264a7f4101acb','fca59bf364f852e606c66b3ac6a5aa96f1dccd55a6163d56c2898f7974d175ae'),
-    ('public.store_observed_research_priority_v1(text,timestamptz,text,jsonb,jsonb,jsonb,jsonb)','ac9ecdfa5c60ae9d98b435a5ff48d053cd91b026b9d160aa2fc9c432437d8065','6cd5cca1f16f0f4064fcce24adcdd83041bfe8d3aa16ebef63bdf150762538d5'),
-    ('public.reap_expired_research_deep_jobs_v2()','8cf5c9e06ca7133616d81c22e8056bafc0aa9ebfd6ec24c1817afea9a5f3e43c','fbc8fe7b1f7cf75a4ebb40776116ce5aa724f53bacaa4fbc156aa3cc3fd65ea9'),
-    ('public.claim_research_deep_job_v1(text)','14e10d281cf736a1648d11445b07bea2abeff2def5999cc7a540f2374f2bb1a4','a7233d74acafc7661576b4e4426bdf4e95051d18fcd28800628ad73580e6adc6'),
-    ('public.claim_research_observed_job_v2(text,text)','34c85723a6109c14a7ce24ccd092ac968380eb02d3bb20b1ee70beca68fbf5df','c950426c57c830ebe1bd83b20bf39fbc67ffdddbb073a2a68c9e4209b547bd96')
-  ) AS expected(signature,predecessor_hash,successor_hash) LOOP
+    ('public.reserve_research_model_v1(text,text,text)','bc8a7ea5427e1601383d1857b70f35da44de22b3227b39de19790371a7e3ed6e','eb4c7cd312de8e493ca1f76a377187e88dd9c9a23b1a9f78db7cc04d27a5c9fc',true,1000),
+    ('public.validate_research_deep_scope_v1()','02f78ce1999476042b0223e1107f86493c4ec54a555a90dded77450a4b9efe7b','3206f117f3088454543cc0c5bf30589a209eebeb04795b74e76c745fd33b4df7',false,0),
+    ('public.charge_research_deep_admission_v1()','1ce1ec2aa92422d8889f398a32e9343cca8efc5b28a33b8f9f9cc6c5c7f37a50','3bb0190c2a3efbd619c7fda9260c1aa1fab5eef25ad3d7dd6b4367e03a240069',true,0),
+    ('public.reconcile_research_deep_admissions_v1()','7972568e2233c900b0225315d710415aee3cebe2ca2060fca8eacda8e32c25c3','e234c217de2776bc2b7882526ce90230e3d272b42afd853989dbb8e531d7abe0',true,0),
+    ('public.enqueue_research_deep_jobs_v1(uuid)','c1c82364dea9e7ea88d4daa367731e527f6141e459a6ff10549264a7f4101acb','fca59bf364f852e606c66b3ac6a5aa96f1dccd55a6163d56c2898f7974d175ae',true,0),
+    ('public.store_observed_research_priority_v1(text,timestamptz,text,jsonb,jsonb,jsonb,jsonb)','ac9ecdfa5c60ae9d98b435a5ff48d053cd91b026b9d160aa2fc9c432437d8065','6cd5cca1f16f0f4064fcce24adcdd83041bfe8d3aa16ebef63bdf150762538d5',true,0),
+    ('public.reap_expired_research_deep_jobs_v2()','8cf5c9e06ca7133616d81c22e8056bafc0aa9ebfd6ec24c1817afea9a5f3e43c','fbc8fe7b1f7cf75a4ebb40776116ce5aa724f53bacaa4fbc156aa3cc3fd65ea9',true,0),
+    ('public.claim_research_deep_job_v1(text)','14e10d281cf736a1648d11445b07bea2abeff2def5999cc7a540f2374f2bb1a4','a7233d74acafc7661576b4e4426bdf4e95051d18fcd28800628ad73580e6adc6',true,1000),
+    ('public.claim_research_observed_job_v2(text,text)','34c85723a6109c14a7ce24ccd092ac968380eb02d3bb20b1ee70beca68fbf5df','c950426c57c830ebe1bd83b20bf39fbc67ffdddbb073a2a68c9e4209b547bd96',true,0)
+  ) AS expected(signature,predecessor_hash,successor_hash,security_definer,estimated_rows) LOOP
     routine:=to_regprocedure(target.signature);
     IF routine IS NULL THEN RAISE EXCEPTION 'research_admission_predecessor_missing: %',target.signature; END IF;
     SELECT encode(sha256(convert_to(prosrc,'UTF8')),'hex') INTO body_hash FROM pg_proc WHERE oid=routine;
+    SELECT jsonb_build_object('language',l.lanname,'securityDefiner',p.prosecdef,
+      'volatility',p.provolatile::text,'strict',p.proisstrict,'leakproof',p.proleakproof,
+      'parallel',p.proparallel::text,'cost',p.procost,'rows',p.prorows,'kind',p.prokind::text,
+      'returnsSet',p.proretset,'defaults',p.pronargdefaults,'variadic',p.provariadic::text,
+      'support',p.prosupport::oid::text,'transforms',p.protrftypes::text,'binary',p.probin,
+      'configuration',(SELECT jsonb_agg(regexp_replace(setting,'[[:space:]]','','g') ORDER BY setting)
+        FROM unnest(p.proconfig) setting)) INTO attributes
+      FROM pg_proc p JOIN pg_language l ON l.oid=p.prolang WHERE p.oid=routine;
+    expected_attributes:=jsonb_build_object('language','plpgsql','securityDefiner',target.security_definer,
+      'volatility','v','strict',false,'leakproof',false,'parallel','u','cost',100,
+      'rows',target.estimated_rows,'kind','f','returnsSet',target.estimated_rows>0,
+      'defaults',0,'variadic','0','support','0','transforms','','binary',NULL,
+      'configuration',jsonb_build_array('search_path=public,pg_temp'));
     IF body_hash NOT IN (target.predecessor_hash,target.successor_hash)
+      OR attributes IS DISTINCT FROM expected_attributes
       THEN RAISE EXCEPTION 'research_admission_predecessor_changed: %',target.signature; END IF;
   END LOOP;
 END $precondition$;
