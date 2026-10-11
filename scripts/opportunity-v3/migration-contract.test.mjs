@@ -10,6 +10,9 @@ import { fileURLToPath } from 'node:url';
 import { canonicalJson, sha256Canonical } from '../../web/src/lib/opportunity-v3/canonical.ts';
 import { executeWorkerPayload } from '../../web/src/lib/opportunity-v3/worker-executors.ts';
 import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
+// Keep additive installer coverage under the governed single-file test entrypoint.
+import './migration-successor-guard.test.mjs';
+import './atomic-migration-chain.test.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const require = createRequire(import.meta.url);
