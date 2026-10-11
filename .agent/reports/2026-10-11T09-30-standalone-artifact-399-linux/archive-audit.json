@@ -1,0 +1,19 @@
+{
+  "stage": "archive-audit",
+  "command": [
+    "python3",
+    "/tmp/si-artifact-399-gwlxuq40/archive-audit.py"
+  ],
+  "startedAt": "2026-10-11T09:33:13.840619+00:00",
+  "endedAt": "2026-10-11T09:33:14.456464+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.6158528050291352,
+  "sampledAggregatePeakRssBytes": 21450752,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10042568704,
+  "diskAvailableAfterBytes": 10042568704,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-11T09:36:33.416136+00:00",
+  "liveRelevantProcesses": [],
+  "stageRemainingChildren": [
+    [],
+    [],
+    [],
+    []
+  ],
+  "temporaryChildrenAllStopped": true,
+  "releaseAndArchiveIntentionallyRetained": true,
+  "uniqueResearchOrRawDeleted": false,
+  "noGlobalPrune": true,
+  "workspaceDiskAvailableBytes": 10042568704,
+  "artifactTmpfsAvailableBytes": 17211969536,
+  "artifactTemporaryFilesystem": true,
+  "memAvailableKiB": 33061448
+}

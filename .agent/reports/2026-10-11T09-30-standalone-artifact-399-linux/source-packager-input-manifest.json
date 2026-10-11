@@ -1,0 +1,422 @@
+[
+  {
+    "path": "deployment/vps/CAPACITY_AND_BACKUP.md",
+    "bytes": 10546,
+    "sha256": "13d336cfd1203f10fab69f6bcad750825ca2690d935bfa9a8a0286e8cf9e18c4"
+  },
+  {
+    "path": "deployment/vps/activate-contabo-cutover.sh",
+    "bytes": 4106,
+    "sha256": "f3b0a1b00dcd6185155b61b643581c50fd3c6e2477114ea59ee1bceb258078df"
+  },
+  {
+    "path": "deployment/vps/activate-contabo-data-plane.sql",
+    "bytes": 2136,
+    "sha256": "93c28d3fc3c0adf660341e9f502b13974753899129bbfd0c64ef03abddbe9e0d"
+  },
+  {
+    "path": "deployment/vps/activate-writer-release.sh",
+    "bytes": 2811,
+    "sha256": "0719de5667f23f571357f2db7750297de7f7f405d2d8c06bc2d39105b237e243"
+  },
+  {
+    "path": "deployment/vps/all-app-retention-policy.json",
+    "bytes": 1197,
+    "sha256": "6515330821036396deb55a5a47b71966cce8866d5fa6dc4de6cc0832c4dfc267"
+  },
+  {
+    "path": "deployment/vps/arelle-config-root",
+    "bytes": 32,
+    "sha256": "2a98ac9f1bb761e4b1b82f02c6d7ba7848352ce65f02d16a3609f0782d439310"
+  },
+  {
+    "path": "deployment/vps/bootstrap-stockinsider-postgres.sql",
+    "bytes": 1979,
+    "sha256": "6d08fbb7545b4a76aa740927a6519cd8eda1e90d6003d920b4ec3c08d5f4768a"
+  },
+  {
+    "path": "deployment/vps/capacity-watch-budget.json",
+    "bytes": 598,
+    "sha256": "1b14c3863d19fbd425f6a903d0c950a32aaddaafe22eb1c47ace96f8f6fd2036"
+  },
+  {
+    "path": "deployment/vps/import-provider-recovery-client.mjs",
+    "bytes": 3605,
+    "sha256": "d72dba66ac1d595830d3730b4b023e1ed8d0bb4a62317ac82f742a55f6205d4f"
+  },
+  {
+    "path": "deployment/vps/install-contabo-data-plane.sh",
+    "bytes": 3356,
+    "sha256": "e18e0e59f894613d3aa1a521eb4c0411d7c9a1664a7edc90b06114589a1df467"
+  },
+  {
+    "path": "deployment/vps/install-official-financial-taxonomy.sh",
+    "bytes": 2720,
+    "sha256": "fbc151191a0565bdd29e98adf91966e3b2e0d4add01c21369689a2d56318f6e3"
+  },
+  {
+    "path": "deployment/vps/install-systemd-schedules.sh",
+    "bytes": 3769,
+    "sha256": "89cde9c866778ca7db47061ffce81c4a8a1110e03ddfdbaad3a8be7ae4ffbe9b"
+  },
+  {
+    "path": "deployment/vps/install-tpex-ca-intermediate.sh",
+    "bytes": 1601,
+    "sha256": "597e9d01d3b07b6328f13985bd747b4c813143a634dcff4dac12c8f6daeb8c88"
+  },
+  {
+    "path": "deployment/vps/nginx/stockinsider-postgrest-loopback.conf",
+    "bytes": 1599,
+    "sha256": "8f3f338c83b7a6bf1f906560ee88cf03ab98677303d9bc1f7be887f88dfbae0b"
+  },
+  {
+    "path": "deployment/vps/pg_hba-stockinsider.conf",
+    "bytes": 322,
+    "sha256": "209e51a7525f1add6b27c70ec5cdaaf04f195808074b4ff23873737c3cfd22a3"
+  },
+  {
+    "path": "deployment/vps/postgresql-common-createcluster.conf",
+    "bytes": 239,
+    "sha256": "61a330e46e1104691777a48efb485184753ff8ef7931c1234a30734c816490c5"
+  },
+  {
+    "path": "deployment/vps/postgresql-stockinsider.conf",
+    "bytes": 624,
+    "sha256": "c38f57b8a599ea7c2840f4faf524fca447b4e8809ea3aee38b73d90d6d1df30a"
+  },
+  {
+    "path": "deployment/vps/postgrest-stockinsider.conf",
+    "bytes": 341,
+    "sha256": "315ca83cf7f7566589888d4d4d09e19d97fa202622408a32a6c91fe4126ae582"
+  },
+  {
+    "path": "deployment/vps/prepare-contabo-postgres.sh",
+    "bytes": 4609,
+    "sha256": "1944bc2c0c238f56ddac72d28a7a8e35164aa9a1ae34678aef2dc66f3a682552"
+  },
+  {
+    "path": "deployment/vps/prepare-financial-parser-code.sh",
+    "bytes": 1307,
+    "sha256": "e6fc85a65176490a070fc6c0d88476288fa2e772be37e3cbf95ad085e6653ff5"
+  },
+  {
+    "path": "deployment/vps/provision-contabo-data-plane-credentials.mjs",
+    "bytes": 8192,
+    "sha256": "183048e17f545821d1a802ce7626f8e583b3076de212cb959d071ed84d1539ed"
+  },
+  {
+    "path": "deployment/vps/receive-contabo-private-artifact.mjs",
+    "bytes": 4014,
+    "sha256": "fcae3614a0a75ab8c178f04c640326693cd96904a71a5380a14c93585ec7722a"
+  },
+  {
+    "path": "deployment/vps/research-backtest-budget.json",
+    "bytes": 244,
+    "sha256": "62b415d522e215a30e67c6f0efa77ae08827d43ad9e51532a30270e89bec7e69"
+  },
+  {
+    "path": "deployment/vps/research-runtime-files-v1.json",
+    "bytes": 4026,
+    "sha256": "940ebe66b68375054019f28e4bcf29f20b7d055d93ec66e9724a614340ad9a5f"
+  },
+  {
+    "path": "deployment/vps/restore-contabo-database.sh",
+    "bytes": 3818,
+    "sha256": "e3493f967da0f1977ef0a9e8ef684a6cbcbc979f458808031a5b386d9c935bfa"
+  },
+  {
+    "path": "deployment/vps/run-heavy-operation.sh",
+    "bytes": 1299,
+    "sha256": "fb93199ec909821a483a924334d8bc75e754e368066b516eb5134829e54d5f69"
+  },
+  {
+    "path": "deployment/vps/soho-image-retention-policy.json",
+    "bytes": 6451,
+    "sha256": "c9ceea6b90b81acd4306f62376f05292881842e3b0c929d6f2c3ed2f9c21348e"
+  },
+  {
+    "path": "deployment/vps/stockinsider-auo-preview.nginx.conf",
+    "bytes": 534,
+    "sha256": "5f673ac610a67f7c81a83052053f10633c0b93f1d5d346c7b836905f10b5debb"
+  },
+  {
+    "path": "deployment/vps/stockinsider-auo-preview.service",
+    "bytes": 552,
+    "sha256": "c9778e4e274a354ad26fe9be0cc69507ed056d32e18aba1210cef15ad58f47ae"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-candidate-history-backfill.service",
+    "bytes": 1095,
+    "sha256": "138451310d93cfd3f9baa5ab5a324579d4693c9f7fdf9dcc92f2add68d3c7002"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-candidate-history-backfill.timer",
+    "bytes": 273,
+    "sha256": "2032fe7eb811480da491c5182c97d2d869c91cb5fb41b0b22be8f9ea4e4a6489"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-capacity-watch.service",
+    "bytes": 504,
+    "sha256": "d7b5d38c834df6c1967fd1f91b8ee10018803f6f8c06e78b160725b2d5f76a50"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-capacity-watch.timer",
+    "bytes": 204,
+    "sha256": "a9f47919a769b2b436e794d4f3b1a5e6d09bd3e48705962014960a46f9a01aee"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-financial-parser.service",
+    "bytes": 1044,
+    "sha256": "41bbd5a9bac6d9579077cdea5b184ed0f7c30d186d4246a6b64c4b0c1a95f02e"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-financial-parser.socket",
+    "bytes": 428,
+    "sha256": "c01a4972aebc8616cd6fcc04cde6d9d38ef9173fc3590de9964d38872670a6a7"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-health-check.service",
+    "bytes": 882,
+    "sha256": "b733421131e1c886ca6f6da8393d9e6f6dfad9b259f87e4bbd017a5fa7cfb6cb"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-health-check.timer",
+    "bytes": 237,
+    "sha256": "205400ea1f6f2046b1917e35104ba13de773f6cbeaab7ad12a1b93bd6ec78612"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-internal-worker.service",
+    "bytes": 1374,
+    "sha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-official-calendar-sync.service",
+    "bytes": 923,
+    "sha256": "657a38002afa0103e260f29d6d74ec5d25d84bdced79c72166c4254a84649d4f"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-official-calendar-sync.timer",
+    "bytes": 291,
+    "sha256": "11662a3ac32a1b7e814fce579b70e93ffb62eb16acd4c90fa92b3ae60d288883"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-postgrest.service",
+    "bytes": 862,
+    "sha256": "73097c3a1054261c9ffcf48641c2fb8a680d80c7daf3f49a9f2e8d5cd8f77bf2"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-research-cycle.service",
+    "bytes": 1158,
+    "sha256": "0d773a12f1631193a05541a16aa9f0cd55a247d10a14ad8ef96677e344921b15"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-research-cycle.timer",
+    "bytes": 253,
+    "sha256": "249b32a1230490c7149b08479559711c5844b929ba504196e73de9ba6d6e1bfa"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-source-refresh.service",
+    "bytes": 899,
+    "sha256": "edccd41f44f8cd7e121058a904e494ebeeb3e8816721ad7972c9bfa778e33715"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-source-refresh.timer",
+    "bytes": 244,
+    "sha256": "ee656564567d91462de0ceb0e767a34911b564020d403fc30e24a3479b40141a"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-close-preliminary.service",
+    "bytes": 1177,
+    "sha256": "9b54336612ec5e945292093fe32379c9543fac9f4b8bae870fed0bd9473a0040"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-close-preliminary.timer",
+    "bytes": 251,
+    "sha256": "a630204ba5325c4c34ca62f508e29507afc15692a84bbb76e005dfdb41e72871"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-final-freeze.service",
+    "bytes": 1121,
+    "sha256": "77d017477ab318a6ea3882c3bd4c5a46474df9f9d8eae0b42cf5a8d640aca04f"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-final-freeze.timer",
+    "bytes": 238,
+    "sha256": "f254eb83d2100007f17a45be46f32359ee741c3adb6cc9edca5498996e3e66c9"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-final-reconcile.service",
+    "bytes": 1130,
+    "sha256": "9fbf8573ce9890d3128a82745b3d9241592784046b19eab69ff22aea984c3345"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-final-reconcile.timer",
+    "bytes": 261,
+    "sha256": "e2d6daecdc554d1ee165cf3c83e986b47370bed2d37764f9545f4bb97cee802c"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-master-calendar.service",
+    "bytes": 1054,
+    "sha256": "7e768c75d6c764de547700d93b29afbabe87ca4cc7bd481b4d6847dc0fbbbd3b"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-master-calendar.timer",
+    "bytes": 258,
+    "sha256": "7eef52b94cb0556b9a82d3b0cfb3a07e671e4f1ae50c429cc3374b862c9a1b59"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-preliminary.service",
+    "bytes": 1371,
+    "sha256": "84d9a356a8e284fee2f3a9d9d330066619fc6af0f7b77ce0eaf775c0be23b69a"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-preliminary.timer",
+    "bytes": 239,
+    "sha256": "02879e133a3e4756e3c4320b97a156ed27c86c39327a269b6c430619a956a7d9"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-queue-drain.service",
+    "bytes": 1416,
+    "sha256": "e96369e125e83e3385eb8f269d9f8436ced5e7f3ac40326427f4236f97c888a1"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-taiwan-data-queue-drain.timer",
+    "bytes": 252,
+    "sha256": "e7059425d6e3bb21e7ec212224b3ca6582174f5e230696019b57e5d5d09f06e3"
+  },
+  {
+    "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+    "bytes": 1312,
+    "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"
+  },
+  {
+    "path": "deployment/vps/verify-contabo-database.sql",
+    "bytes": 3516,
+    "sha256": "64d3a8539a649a46f6c019447460cf372d3633466cfbd50addbbf4fbb3866d04"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo-four-segment-model/article.md",
+    "bytes": 21067,
+    "sha256": "5fd8f5a7a6043bd614efb7e781ad68372b83cf35c6a4853e8f8ae2418415905e"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json",
+    "bytes": 1706,
+    "sha256": "bfa404d6078a33194ac8040a0d6e6b63509b328ce70c303edc9385e4d1444beb"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo-four-segment-model/hashes.json",
+    "bytes": 1702,
+    "sha256": "b11d2572f7f72e46b308efcf74e99d885da744fecc7889051a10e06c862b3c63"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+    "bytes": 88790,
+    "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+    "bytes": 19837,
+    "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+    "bytes": 2910,
+    "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+    "bytes": 40271,
+    "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+    "bytes": 3549,
+    "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+    "bytes": 6599,
+    "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo-market/dataset.json",
+    "bytes": 393280,
+    "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
+  },
+  {
+    "path": "docs/research/2026-10-08-auo/dataset.json",
+    "bytes": 86638,
+    "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
+  },
+  {
+    "path": "docs/research/2026-10-08-emc-company-model/article.md",
+    "bytes": 20855,
+    "sha256": "762f27593c28114644e9b7fb90b8a6d8a392b855a2bd5d44e2025fc114159822"
+  },
+  {
+    "path": "docs/research/2026-10-08-emc-company-model/draft-metadata.json",
+    "bytes": 1192,
+    "sha256": "e26f29ebe7b97a5410bc70c89b1461b686d311d5545dd75537b1ba2b4a1ec857"
+  },
+  {
+    "path": "docs/research/2026-10-08-emc-company-model/hashes.json",
+    "bytes": 2012,
+    "sha256": "2c6a3efd3ea7fa150dd15a953d12f49203424d633f8c0e729f013dd694d0730b"
+  },
+  {
+    "path": "docs/research/2026-10-08-emc-company-model/model-results.json",
+    "bytes": 54602,
+    "sha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c"
+  },
+  {
+    "path": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+    "bytes": 10693,
+    "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
+  },
+  {
+    "path": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+    "bytes": 3671,
+    "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
+  },
+  {
+    "path": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+    "bytes": 3630,
+    "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
+  },
+  {
+    "path": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+    "bytes": 33734,
+    "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
+  },
+  {
+    "path": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+    "bytes": 110526,
+    "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
+  },
+  {
+    "path": "package-lock.json",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38"
+  },
+  {
+    "path": "scripts/package-standalone-release.mjs",
+    "bytes": 8922,
+    "sha256": "0cb1488a1407cb8bcb96b6d5897b3be0b93d72b75990ea57eb61b767a4fd6314"
+  },
+  {
+    "path": "scripts/research-release-artifacts.mjs",
+    "bytes": 4651,
+    "sha256": "59bec6b79b9466c6db37de563ac2488d9ec0915f459db52c444709ffc6d3f0d3"
+  },
+  {
+    "path": "scripts/verify-standalone-release.mjs",
+    "bytes": 3901,
+    "sha256": "1e4bb10d2ee694eefd0493653a71d54b8d94deade74fa66a86b579b25ebe930b"
+  },
+  {
+    "path": "web/package-lock.json",
+    "bytes": 274090,
+    "sha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516"
+  }
+]

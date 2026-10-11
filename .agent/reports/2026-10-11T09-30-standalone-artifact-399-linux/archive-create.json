@@ -1,0 +1,23 @@
+{
+  "stage": "archive-create",
+  "command": [
+    "tar",
+    "-czf",
+    "/tmp/si-artifact-399-gwlxuq40/stockinsider-399e9bde-linux-standalone.tar.gz",
+    "-C",
+    "/tmp/si-artifact-399-gwlxuq40/packages",
+    "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd"
+  ],
+  "startedAt": "2026-10-11T09:32:18.639699+00:00",
+  "endedAt": "2026-10-11T09:32:21.954031+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 3.3143392800120637,
+  "sampledAggregatePeakRssBytes": 4141056,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10042568704,
+  "diskAvailableAfterBytes": 10042568704,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
