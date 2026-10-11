@@ -1,0 +1,19 @@
+{
+  "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "tree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+  "evidence": "e802254bc34432cdb32c5b553b8fd5b30009b66c",
+  "evidenceTree": "e14a2bb659e8790bca7a6761a75a466c0241cc58",
+  "immutableRef": "evidence/source-led-opportunity-v3-exact-review-2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "parent": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "addedPaths": [
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json"
+  ],
+  "reviewSha256": "e16fb588969c46f0047ccab03676e0c3eedb1ff01e6e6b096442a43586ee92ed",
+  "recordSha256": "abcec2f7fd1fa34fb537f34b27dabf04607803e2b3bc69b74e32283a8c227062",
+  "reviewedAt": "2026-10-11T09:52:42Z",
+  "actualWriterExecuted": true,
+  "protectedPassed": false,
+  "deployed": false
+}

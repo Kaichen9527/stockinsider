@@ -110,3 +110,13 @@ Evidence: `.agent/reports/2026-10-11T07-48-release-review-repairs.json`; current
 - Product acceptance completed272 cases:271PASS/1FAIL/0SKIP. GOV-001 correctly rejects the broadened migration package command against its frozen exact script inventory. Next repair preserves approved command and all added installer tests; approved inventory/assertions must not be weakened.
 - Model track independently failed at the trusted host old Codex executable ENOENT before tests. Bounded audit found no callable recovery ingress in trusted main; operator recovery mechanism requested. No unchanged failed rerun, binary replacement, fake approval or gate bypass.
 - Cloud packaging of399 remains active in the existing authorized task; no duplicate work dispatched. Main and production unchanged.
+
+
+## Governed migration command repaired and sent to protected execution (09:55Z)
+
+- PR364 final subject2e078dfdd74272d3d50dffdd4cc6c14df3152c78/tree6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd. Supplemental PR366 is included by ancestry; main is not merged.
+- Restored exact governed single-file command; canonical file imports both unchanged extra installer suites. All14 approved script values exact, original assertions/hooks retained, four added cases run once each. No approved inventory/runtime/SQL/web/strategy change.
+- VM full canonical PostgreSQL17 execution87/87zero-skip, normal build and standalone package/member audit passed. Root independently rehashed38raw/1,927,143B and668source files. Ordinary CI38129034362 succeeded. Current tar28,211,002B remains VM-local; binary cross-host transfer not established, metadata persisted in Git.
+- Genuine independent main-to2e CODE PASS and31per-ID provenance:20d6+9prior399 exact-source reuse;007/011 actual2e87native. Actual unchanged writer record abcec2f7fd1fa34fb537f34b27dabf04607803e2b3bc69b74e32283a8c227062. Unique3-file direct-childe802254bc34432cdb32c5b553b8fd5b30009b66c pushed immutable subject ref before PR364 source advance.
+- Actual main-based protected run38130037645: requirements/architecture/exact-review SUCCESS; product active, model FAILURE oldnativeENOENT. Unsigned CODE review/ordinary CI do not certify protectedPASS. Known trusted-native oldpath ENOENT remains a separate external recovery prerequisite; no same-input manual rerun or bypass.
+- No main merge, production DB mutation/deployment, strategy adoption or schedule enablement. AUO remains a demonstration research direction.

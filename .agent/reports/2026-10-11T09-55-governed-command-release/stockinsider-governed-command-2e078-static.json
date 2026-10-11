@@ -1,0 +1,109 @@
+{
+  "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "tree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+  "base": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+  "changedPaths": [
+    "package.json",
+    "scripts/opportunity-v3/migration-contract.test.mjs"
+  ],
+  "governedCommands": [
+    {
+      "name": "build:source-led-opportunity-v3",
+      "value": "npm --prefix web run build",
+      "equal": true
+    },
+    {
+      "name": "lint:source-led-opportunity-v3",
+      "value": "npm --prefix web run lint -- --quiet",
+      "equal": true
+    },
+    {
+      "name": "test:legacy-v1-v2-regression",
+      "value": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/opportunity-v3/legacy-v1-v2-regression.test.ts",
+      "equal": true
+    },
+    {
+      "name": "test:model-runner-v3",
+      "value": "node scripts/run-node22.js --test scripts/model-runner-v3/model-runner-v3.test.js",
+      "equal": true
+    },
+    {
+      "name": "test:source-led-opportunity-v3",
+      "value": "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/gate-evidence.test.mjs web/src/lib/candidate-detail-view-contract.test.ts web/src/lib/opportunity-v3/opportunity-v3.test.ts web/src/lib/opportunity-v3/public-schema.test.ts",
+      "equal": true
+    },
+    {
+      "name": "test:source-led-opportunity-v3:migration",
+      "value": "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/migration-contract.test.mjs",
+      "equal": true
+    },
+    {
+      "name": "test:source-led-opportunity-v3:performance",
+      "value": "node scripts/run-node22.js --test scripts/opportunity-v3/performance.test.mjs",
+      "equal": true
+    },
+    {
+      "name": "test:source-led-opportunity-v3:product-correctness",
+      "value": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "equal": true
+    },
+    {
+      "name": "typecheck:source-led-opportunity-v3",
+      "value": "node scripts/run-node22.js web/node_modules/typescript/bin/tsc -p web/tsconfig.json --noEmit --pretty false",
+      "equal": true
+    },
+    {
+      "name": "v3:doctor",
+      "value": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/doctor.mjs",
+      "equal": true
+    },
+    {
+      "name": "verify:source-led-opportunity-v3:evaluation-governance",
+      "value": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track evaluation_governance && node scripts/run-node22.js --experimental-strip-types --test --test-name-pattern=\"evaluation and product-value readiness|hybrid verified-change product boundary\" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252",
+      "equal": true
+    },
+    {
+      "name": "verify:source-led-opportunity-v3:model-runner",
+      "value": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.18",
+      "equal": true
+    },
+    {
+      "name": "verify:source-led-opportunity-v3:product-runtime",
+      "value": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track product_runtime && npm run diagnostic:source-led-opportunity-v3:product-runtime",
+      "equal": true
+    },
+    {
+      "name": "web:test:e2e:v3-correctness",
+      "value": "playwright test --config playwright.v3-correctness.config.ts",
+      "equal": true
+    }
+  ],
+  "inventorySHA256": "12391dfdc34c55908abd25c50af6313f2b046dbf5992ec153054992a2f392219",
+  "canonicalBeforeSHA256": "955f24190af97322bcdbc9295a298ef2e339f5166aff19c3517da66f5d0ba0e9",
+  "canonicalAfterSHA256": "9942c1f31c0ca61a6715fb04bc2af69c17828629fbcf4f7df5ba388d8a8cb105",
+  "packageAfterSHA256": "c23aaf85d3bd53c959006693c67e92604a5e8f83216de03a4fa89e89f2a4e952",
+  "canonicalOtherBytesIdentical": true,
+  "addedSuites": [
+    {
+      "path": "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+      "sha256": "20c4c6ae74794bfa31141658662dc79a468b11cc0642ec111945dfed2a39b5f8",
+      "tests": [
+        "installed successors reject base replay and omitted extensions before any mutation",
+        "an unextended base remains installable but unknown detection cannot authorize replay"
+      ],
+      "unchangedFrom399": true,
+      "staticImportOccurrences": 1
+    },
+    {
+      "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+      "sha256": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466",
+      "tests": [
+        "transaction normalization preserves quoted PL/pgSQL and rejects embedded control",
+        "every explicitly reviewed migration is compatible with one atomic transaction"
+      ],
+      "unchangedFrom399": true,
+      "staticImportOccurrences": 1
+    }
+  ],
+  "registration": "Static imports each once in single governed entrypoint; suites have no hooks/process environment mutations/PG or child processes. Canonical root before/after applies to imported tests. Actual canonical execution remains pending."
+}

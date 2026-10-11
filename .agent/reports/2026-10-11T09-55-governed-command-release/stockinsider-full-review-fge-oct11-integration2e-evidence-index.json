@@ -1,0 +1,109 @@
+{
+  "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "tree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+  "reviewedAt": "2026-10-11T09:52:42Z",
+  "result": "UNSIGNED CODE PASS",
+  "protectedPass": false,
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "independentVerification": {
+    "rawGitCount": 38,
+    "rawBytes": 1927143,
+    "sourceFilesAgainstExactSubject": 668,
+    "sourceBytes": 10479005,
+    "canonicalNamesIndependentlyParsed": 87,
+    "PCR007011Occurrences": 1,
+    "eachImportedPureCaseOccurrences": 1,
+    "writerValidation": "31 entries; exact pure declarations in memory, no main/write"
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/stockinsider-2e-ci-success.json",
+      "bytes": 4575,
+      "sha256": "44ecc37df9b1bc762e841ecd63562b05b16f63c9545a4e6adc0717630be0b8d2"
+    },
+    {
+      "path": "/tmp/stockinsider-2e-linux-receipt.json",
+      "bytes": 30607,
+      "sha256": "8872dcc888a0fe33e6159739bb0d15623e5c97ae3fa9743e1a2839dddcac094d"
+    },
+    {
+      "path": "/tmp/stockinsider-2e-root-verified.json",
+      "bytes": 1861,
+      "sha256": "0503eebe760aab3c203f5b1071f3ec357ce5345f01fa5b7e94bf4773cc4542aa"
+    },
+    {
+      "path": "/tmp/stockinsider-2e-vm-canonical-migration.json",
+      "bytes": 659,
+      "sha256": "db4030e5afbd315ba81903c15b6e5bcb69d48314cad171957014a184cf0d4390"
+    },
+    {
+      "path": "/tmp/stockinsider-2e-vm-canonical-migration.stdout",
+      "bytes": 21075,
+      "sha256": "3b4ba0204b3267dd93fef06fb6b2aef334ffdffc889f0841ba9d05713a0ffb3f"
+    },
+    {
+      "path": "/tmp/stockinsider-2e-vm-source-manifest.json",
+      "bytes": 130736,
+      "sha256": "03c71c433c5bbb443019a1ed17b85f2a3c256852bd13dacbbbf01a35f1ef8e1f"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration2e-coverage.json",
+      "bytes": 463171,
+      "sha256": "2cacbe5d0593a01742dd32151888dbdca8226bd5a817150102bf46026b68dee3"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration2e-exact-commit-review-final.md",
+      "bytes": 14374,
+      "sha256": "e16fb588969c46f0047ccab03676e0c3eedb1ff01e6e6b096442a43586ee92ed"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration2e-matrix.json",
+      "bytes": 234030,
+      "sha256": "47c1611a5c04fe7964c12f30719934d97ceb4d30e1915b137d4cbe98c1a7212c"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration2e-provenance.json",
+      "bytes": 77380,
+      "sha256": "8059547a640ae112bf9625c029d6505c6599897cfafdddca5e3a9d397578d683"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration2e-scoped-evidence.json",
+      "bytes": 589,
+      "sha256": "28b0504a24ce9510eb077b0dd2ac197bef9ddc97133066559060ca7da635be5f"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration2e-writer-validation.json",
+      "bytes": 177,
+      "sha256": "1d60148549b96930447aed3d4427a307b0fe0c321b26eb197eb8a7f4084e386d"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration2e-writerinput.json",
+      "bytes": 32815,
+      "sha256": "b408593d5267e5abab3ae83ff97232abc8f64f2edbb223beebec39ece09cdcac"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration399-evidence-index.json",
+      "bytes": 6014,
+      "sha256": "9209e80ada3a054568187eb1f7be1a346d1becc69a90692e837b8123d53f5366"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration399-exact-commit-review-final.md",
+      "bytes": 10997,
+      "sha256": "95ef8c798af35f34e4d51ba8853f1df7ea1c1dd233799129c639a4cf57e01f78"
+    },
+    {
+      "path": "/tmp/stockinsider-governed-command-2e078-pure.tap",
+      "bytes": 1044,
+      "sha256": "23dc5db6142209dcd864177ef46ecc71b92076ffce89ec493d2703a7f7f6849d"
+    },
+    {
+      "path": "/tmp/stockinsider-governed-command-2e078-review.json",
+      "bytes": 8712,
+      "sha256": "5aca00bc83efbe12684440dc4126b29b0e6b1c88c5abfe0f7a54aa46f31b0247"
+    }
+  ]
+}

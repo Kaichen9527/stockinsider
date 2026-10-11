@@ -1,0 +1,17 @@
+{
+  "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "tree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+  "evidence": [
+    {
+      "path": "/tmp/stockinsider-governed-command-2e078-static.json",
+      "sha256": "c5f3a5f95f8905d42e208e40dded75c23f0959bde77a855597cfab9f4456976f",
+      "bytes": 5997
+    },
+    {
+      "path": "/tmp/stockinsider-governed-command-2e078-pure.tap",
+      "sha256": "23dc5db6142209dcd864177ef46ecc71b92076ffce89ec493d2703a7f7f6849d",
+      "bytes": 1044
+    }
+  ],
+  "status": "SCOPED_CODE_PASS; awaiting actual2e VM for final dynamic fulfillment"
+}

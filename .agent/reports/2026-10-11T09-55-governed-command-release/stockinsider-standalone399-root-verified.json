@@ -1,0 +1,34 @@
+{
+  "commit": "83c93713ca39d9509a94ed65b88eea8d5fb04f8b",
+  "verifiedRawCount": 27,
+  "verifiedRawBytes": 1076143,
+  "archive": {
+    "archivePath": "/tmp/si-artifact-399-gwlxuq40/stockinsider-399e9bde-linux-standalone.tar.gz",
+    "archiveSha256": "415fe579ecc8545ec294d69744f114b3a068ce979e9d81a528e8b81ccf4bc69e",
+    "archiveBytes": 28209315,
+    "fileCountIncludingReleaseManifest": 2820,
+    "releaseManifestFileCount": 2819,
+    "directoryCount": 560,
+    "totalRegularFileBytesIncludingReleaseManifest": 83612029,
+    "releaseManifestJsonFileBytes": 656004,
+    "releaseManifestJsonFileSha256": "f305390485855ac8d52072eeb80a0ca8ce032cf7563463d305700a8d675b9388",
+    "manifestSha256": "5e0231a1641a964332ca4ba08ac30d14603a17083aa7919feca90277e8895478",
+    "allArchiveRegularMembersComparedToReleaseHashes": true,
+    "absoluteTraversalDuplicateUnexpectedPaths": 0,
+    "symlinksHardlinksSpecialFiles": 0,
+    "dotenvOrKnownCredentialStorePrivateKeyPaths": 0,
+    "pathAuditNotGenericSecretContentScan": true
+  },
+  "transfer": {
+    "metadataRoute": "Existing authenticated Git HTTPS evidence branch; binary never committed.",
+    "binaryCrossVMTransferVerified": false,
+    "availableUploadOrArtifactExportToolFound": false,
+    "managedCapabilitiesReported": [],
+    "binaryServedOrUploaded": false,
+    "newApiOrPaidServiceUsed": false,
+    "binaryCurrentAccess": "VM local filesystem; private parent0700,tar0600 owned by agent.",
+    "retention": "Retain this VM/task filesystem; /tmp is tmpfs and no durability or access from another host is established.",
+    "deploymentAuthorized": false
+  },
+  "deployed": false
+}

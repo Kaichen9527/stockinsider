@@ -1,0 +1,138 @@
+{
+  "schema": "governed-command-release-verification-v1",
+  "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "tree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+  "exactEvidence": "e802254bc34432cdb32c5b553b8fd5b30009b66c",
+  "protectedRun": 38130037645,
+  "protectedStatus": {
+    "requirements": "SUCCESS",
+    "architecture": "SUCCESS",
+    "exactReview": "SUCCESS",
+    "productRuntime": "in_progress",
+    "modelRunner": "FAILURE oldnative ENOENT"
+  },
+  "ordinaryCi": {
+    "id": 38129034362,
+    "status": "success"
+  },
+  "fullCanonicalNative": {
+    "pass": 87,
+    "fail": 0,
+    "skip": 0,
+    "importedExtraEachOnce": 4
+  },
+  "build": "PASS",
+  "packageVerifier": "PASS",
+  "independentCode": "PASS",
+  "callerObligations": 31,
+  "nativeRecovery": "known trusted oldpath ENOENT; real recovery ingress requested, not bypassed",
+  "mainMerged": false,
+  "productionDeployed": false,
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-2e-ci-success.json",
+      "bytes": 4575,
+      "sha256": "44ecc37df9b1bc762e841ecd63562b05b16f63c9545a4e6adc0717630be0b8d2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-2e-root-verified.json",
+      "bytes": 1861,
+      "sha256": "0503eebe760aab3c203f5b1071f3ec357ce5345f01fa5b7e94bf4773cc4542aa"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-exact2e-evidence-commit.json",
+      "bytes": 1022,
+      "sha256": "f0d964aecb53167f15e58608ec5449d1e4f2334a5fe63fcd05e4438ca6158156"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-exact2e-writer.stderr",
+      "bytes": 659,
+      "sha256": "8cdde9eb3a69372a92bf1ddc144e72b798dd702b23c24a9a04993e3ff6a77126"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-exact2e-writer.stdout",
+      "bytes": 116,
+      "sha256": "88fb2a45d2e1ef51874e7c456dff16b2e78e7bdc1387101d290028658460f572"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-coverage-preliminary.json",
+      "bytes": 463162,
+      "sha256": "7c5311a0339a7604e0e8d7565dc002674774de420b346abc157409bc8112faba"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-coverage.json",
+      "bytes": 463171,
+      "sha256": "2cacbe5d0593a01742dd32151888dbdca8226bd5a817150102bf46026b68dee3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-evidence-index.json",
+      "bytes": 3976,
+      "sha256": "98e8309791eab2c3e59bfc785081fc02412d9fef184073fc560c8ec21f232d96"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-exact-commit-review-final.md",
+      "bytes": 14374,
+      "sha256": "e16fb588969c46f0047ccab03676e0c3eedb1ff01e6e6b096442a43586ee92ed"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-matrix.json",
+      "bytes": 234030,
+      "sha256": "47c1611a5c04fe7964c12f30719934d97ceb4d30e1915b137d4cbe98c1a7212c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-preliminary.md",
+      "bytes": 3150,
+      "sha256": "13a135308f9e9da8023c586526c9f43e7a14040963ade7179dba963a18f34835"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-provenance.json",
+      "bytes": 77380,
+      "sha256": "8059547a640ae112bf9625c029d6505c6599897cfafdddca5e3a9d397578d683"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-review-draft.md",
+      "bytes": 13320,
+      "sha256": "252217160dd1357d84250b986b4d94538564879faf070a2fc3ff14b1d0c788ab"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-scoped-evidence.json",
+      "bytes": 589,
+      "sha256": "28b0504a24ce9510eb077b0dd2ac197bef9ddc97133066559060ca7da635be5f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-writer-validation.json",
+      "bytes": 177,
+      "sha256": "1d60148549b96930447aed3d4427a307b0fe0c321b26eb197eb8a7f4084e386d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-full-review-fge-oct11-integration2e-writerinput.json",
+      "bytes": 32815,
+      "sha256": "b408593d5267e5abab3ae83ff97232abc8f64f2edbb223beebec39ece09cdcac"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-governed-command-2e078-pure.tap",
+      "bytes": 1044,
+      "sha256": "23dc5db6142209dcd864177ef46ecc71b92076ffce89ec493d2703a7f7f6849d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-governed-command-2e078-review.json",
+      "bytes": 8712,
+      "sha256": "5aca00bc83efbe12684440dc4126b29b0e6b1c88c5abfe0f7a54aa46f31b0247"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-governed-command-2e078-review.md",
+      "bytes": 1871,
+      "sha256": "525598a1657b97168c6ddcc868b56087c8034ad62e62f9c7aa67c80c4ddef0b3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-governed-command-2e078-static.json",
+      "bytes": 5997,
+      "sha256": "c5f3a5f95f8905d42e208e40dded75c23f0959bde77a855597cfab9f4456976f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-55-governed-command-release/stockinsider-standalone399-root-verified.json",
+      "bytes": 1632,
+      "sha256": "608523d704e4246ce4fc2e1a718337811633bb34ca5478172281d3bb1ab28777"
+    }
+  ]
+}

@@ -1,0 +1,1231 @@
+{
+  "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "tree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "historicalInput": {
+    "path": "/tmp/stockinsider-pcr399-fulfillment-input.json",
+    "sha256": "a420887af9d2e6844fe0aa1d6ea9d3e88ada34eb5b2908da0ba3450654a3c1ba"
+  },
+  "newCommand": {
+    "executedSubject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "evidenceCommit": "7ee8a294fec701ba02aa4f868aeb8078a35f69b8",
+    "commandName": "test:source-led-opportunity-v3:migration",
+    "executedArgv": [
+      "npm",
+      "run",
+      "test:source-led-opportunity-v3:migration"
+    ],
+    "executedCommand": "npm run test:source-led-opportunity-v3:migration",
+    "commandSha256": "cea8b75573384dfb0fe9565f5b456a192f898400a817f2093ae540eca8a0dbca",
+    "commandRendering": "Exact UTF-8 command string, no trailing newline; VM executed recorded npm argv.",
+    "expandedRegisteredCommand": "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/migration-contract.test.mjs",
+    "logPath": "/tmp/stockinsider-2e-vm-canonical-migration.stdout",
+    "gitLogPath": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/canonical-migration.stdout",
+    "stdoutSha256": "3b4ba0204b3267dd93fef06fb6b2aef334ffdffc889f0841ba9d05713a0ffb3f",
+    "counts": {
+      "passed": 87,
+      "failed": 0,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "exitCode": 0,
+    "testName": "PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker",
+    "metadataSha256": "db4030e5afbd315ba81903c15b6e5bcb69d48314cad171957014a184cf0d4390",
+    "executionProvenance": "Actual VM canonical full native command on exact2e, real PG17.11; independently verified 38 Git raw blobs and668 exact-source files; no local rerun."
+  },
+  "historical29EntriesByteEquivalentAsObjects": true,
+  "sourceBindings": [
+    {
+      "id": "PCR-001",
+      "selectedExecution": {
+        "executedSubject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+        "evidenceCommit": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+        "commandName": "pcr-callers-four",
+        "executedArgv": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+          "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+          "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+          "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+        ],
+        "executedCommand": "node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/pcr-caller-boundaries.test.mjs scripts/opportunity-v3/pcr-installation-caller.test.mjs scripts/opportunity-v3/pcr-cli-callers.test.mjs scripts/opportunity-v3/pcr-aggregate-caller.test.mjs",
+        "commandRendering": "POSIX shell-equivalent rendering of recorded argv; SHA256 exact UTF8 no newline. Actual VM executed argv directly.",
+        "logPath": "/tmp/stockinsider-pcr399-vm-pcr-callers-four.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+        "stdoutSha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef",
+        "counts": {
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "testNames": [
+          "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+          "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+          "PCR-025 caller returns bounded history or the actual unavailable reason",
+          "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+          "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+          "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+          "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+          "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+          "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+        ],
+        "metadataSha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766",
+        "executionProvenance": "VM executed exact399; reviewer verified Git bytes, manifest and raw TAP; not local rerun.",
+        "testName": "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+      },
+      "owner": {
+        "export": "installTrackedAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker-installer.js"
+      },
+      "caller": {
+        "function": "runRuntimeInstallation",
+        "path": "scripts/runtime/runtime-installation-gate.mjs"
+      },
+      "ownerSha256": "4250f70e2dd4836e157f3528c730e22d6296c5a12ff26ace25652ad933a1b072",
+      "callerSha256": "4f86dc91c4834457b3d35c6170dc987b705a62d65b529764e38723f22e6c1292"
+    },
+    {
+      "id": "PCR-002",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-001",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "validateRuntimeInstallationManifest",
+        "path": "scripts/runtime/auth-source-worker-installation.js"
+      },
+      "caller": {
+        "function": "installTrackedAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker-installer.js"
+      },
+      "ownerSha256": "165739dd256e92a3ffdaf1db34438ab9c88c8fd88b68a3616875ee014a109cb7",
+      "callerSha256": "4250f70e2dd4836e157f3528c730e22d6296c5a12ff26ace25652ad933a1b072"
+    },
+    {
+      "id": "PCR-003",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-001",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "activateTrackedRuntimeRelease",
+        "path": "scripts/runtime/auth-source-worker-installation.js"
+      },
+      "caller": {
+        "function": "installTrackedAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker-installer.js"
+      },
+      "ownerSha256": "165739dd256e92a3ffdaf1db34438ab9c88c8fd88b68a3616875ee014a109cb7",
+      "callerSha256": "4250f70e2dd4836e157f3528c730e22d6296c5a12ff26ace25652ad933a1b072"
+    },
+    {
+      "id": "PCR-004",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-004",
+        "coverage": "original owner plus caller evidence where reviewed present"
+      },
+      "owner": {
+        "export": "assessTrackedRuntimeHealth",
+        "path": "web/src/lib/opportunity-v3/runtime-health.ts"
+      },
+      "caller": {
+        "function": "GET",
+        "path": "web/src/app/api/internal/health-check/route.ts"
+      },
+      "ownerSha256": "01bed6290b2d7095615d7301dd4124458888772edb851ff255436c77c2c0ac20",
+      "callerSha256": "2b5a6e3e94646e4516c09ef7a6a2b9310fc7300a8d27959f363a2bee1dc3238d"
+    },
+    {
+      "id": "PCR-005",
+      "selectedExecution": {
+        "executedSubject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+        "evidenceCommit": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+        "commandName": "pcr-callers-four",
+        "executedArgv": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+          "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+          "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+          "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+        ],
+        "executedCommand": "node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/pcr-caller-boundaries.test.mjs scripts/opportunity-v3/pcr-installation-caller.test.mjs scripts/opportunity-v3/pcr-cli-callers.test.mjs scripts/opportunity-v3/pcr-aggregate-caller.test.mjs",
+        "commandRendering": "POSIX shell-equivalent rendering of recorded argv; SHA256 exact UTF8 no newline. Actual VM executed argv directly.",
+        "logPath": "/tmp/stockinsider-pcr399-vm-pcr-callers-four.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+        "stdoutSha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef",
+        "counts": {
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "testNames": [
+          "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+          "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+          "PCR-025 caller returns bounded history or the actual unavailable reason",
+          "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+          "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+          "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+          "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+          "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+          "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+        ],
+        "metadataSha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766",
+        "executionProvenance": "VM executed exact399; reviewer verified Git bytes, manifest and raw TAP; not local rerun.",
+        "testName": "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition"
+      },
+      "owner": {
+        "export": "validateAuthSourceDagConfig",
+        "path": "scripts/runtime/source-run-config.js"
+      },
+      "caller": {
+        "function": "main",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "ownerSha256": "32259811ce1fb363b28c471ce1ea1080e16780a306d1048e27cb4f9fff5714ff",
+      "callerSha256": "602948f0eb960a78a75a88b0ac6ffa080a8adb6755abe544b8530d93384b22ba"
+    },
+    {
+      "id": "PCR-006",
+      "selectedExecution": {
+        "executedSubject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+        "evidenceCommit": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+        "commandName": "pcr-callers-four",
+        "executedArgv": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+          "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+          "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+          "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+        ],
+        "executedCommand": "node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/pcr-caller-boundaries.test.mjs scripts/opportunity-v3/pcr-installation-caller.test.mjs scripts/opportunity-v3/pcr-cli-callers.test.mjs scripts/opportunity-v3/pcr-aggregate-caller.test.mjs",
+        "commandRendering": "POSIX shell-equivalent rendering of recorded argv; SHA256 exact UTF8 no newline. Actual VM executed argv directly.",
+        "logPath": "/tmp/stockinsider-pcr399-vm-pcr-callers-four.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+        "stdoutSha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef",
+        "counts": {
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "testNames": [
+          "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+          "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+          "PCR-025 caller returns bounded history or the actual unavailable reason",
+          "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+          "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+          "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+          "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+          "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+          "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+        ],
+        "metadataSha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766",
+        "executionProvenance": "VM executed exact399; reviewer verified Git bytes, manifest and raw TAP; not local rerun.",
+        "testName": "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure"
+      },
+      "owner": {
+        "export": "runDurableAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker.js"
+      },
+      "caller": {
+        "function": "main",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "ownerSha256": "0b41d558d131c75d9bd5fe26fb1ed3876ccb5ba329bd52295c67a1de82624a1a",
+      "callerSha256": "602948f0eb960a78a75a88b0ac6ffa080a8adb6755abe544b8530d93384b22ba"
+    },
+    {
+      "id": "PCR-007",
+      "selectedExecution": {
+        "executedSubject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+        "evidenceCommit": "7ee8a294fec701ba02aa4f868aeb8078a35f69b8",
+        "commandName": "test:source-led-opportunity-v3:migration",
+        "executedArgv": [
+          "npm",
+          "run",
+          "test:source-led-opportunity-v3:migration"
+        ],
+        "executedCommand": "npm run test:source-led-opportunity-v3:migration",
+        "commandSha256": "cea8b75573384dfb0fe9565f5b456a192f898400a817f2093ae540eca8a0dbca",
+        "commandRendering": "Exact UTF-8 command string, no trailing newline; VM executed recorded npm argv.",
+        "expandedRegisteredCommand": "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/migration-contract.test.mjs",
+        "logPath": "/tmp/stockinsider-2e-vm-canonical-migration.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/canonical-migration.stdout",
+        "stdoutSha256": "3b4ba0204b3267dd93fef06fb6b2aef334ffdffc889f0841ba9d05713a0ffb3f",
+        "counts": {
+          "passed": 87,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "exitCode": 0,
+        "testName": "PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker",
+        "metadataSha256": "db4030e5afbd315ba81903c15b6e5bcb69d48314cad171957014a184cf0d4390",
+        "executionProvenance": "Actual VM canonical full native command on exact2e, real PG17.11; independently verified 38 Git raw blobs and668 exact-source files; no local rerun."
+      },
+      "owner": {
+        "export": "claimLegacyProducerJob",
+        "path": "scripts/runtime/postgres-legacy-producer-adapter.js"
+      },
+      "caller": {
+        "function": "runDurableAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker.js"
+      },
+      "ownerSha256": "035ea2786fa9790a346b029a5d1d082f7053863edfd760c5186491759c828a12",
+      "callerSha256": "0b41d558d131c75d9bd5fe26fb1ed3876ccb5ba329bd52295c67a1de82624a1a"
+    },
+    {
+      "id": "PCR-008",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-008",
+        "coverage": "original owner plus caller evidence where reviewed present"
+      },
+      "owner": {
+        "export": "resolveInstrumentAuthorityJoin",
+        "path": "scripts/runtime/instrument-authority-join.js"
+      },
+      "caller": {
+        "function": "extractRevisionCandidates",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "ownerSha256": "646501c95e83095782c7dedea824026c811e0df0251dd3f14860ecd52bff5bd0",
+      "callerSha256": "602948f0eb960a78a75a88b0ac6ffa080a8adb6755abe544b8530d93384b22ba"
+    },
+    {
+      "id": "PCR-009",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-009",
+        "coverage": "original owner plus caller evidence where reviewed present"
+      },
+      "owner": {
+        "export": "deriveDiscoveryDisposition",
+        "path": "scripts/runtime/discovery-disposition.js"
+      },
+      "caller": {
+        "function": "buildCandidateFunnel",
+        "path": "scripts/runtime/candidate-funnel.js"
+      },
+      "ownerSha256": "df39e0798c5c59ada5a635ab25a46d656a9fbf96eca75ed578087d37a712b12e",
+      "callerSha256": "025f83011a2486d3e0dcdc4b8a374b14ced0e7a562e4c53cfa8278fc108148b6"
+    },
+    {
+      "id": "PCR-010",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-010",
+        "coverage": "original owner plus caller evidence where reviewed present"
+      },
+      "owner": {
+        "export": "selectLiveDiscoveryCards",
+        "path": "scripts/runtime/candidate-funnel.js"
+      },
+      "caller": {
+        "function": "publishCompactRadarProjection",
+        "path": "scripts/runtime/compact-radar-projection.js"
+      },
+      "ownerSha256": "025f83011a2486d3e0dcdc4b8a374b14ced0e7a562e4c53cfa8278fc108148b6",
+      "callerSha256": "a61867b6a19760c7f904f9d49ca5824bcbde3ea99e61cee214d301f7a0164cf1"
+    },
+    {
+      "id": "PCR-011",
+      "selectedExecution": {
+        "executedSubject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+        "evidenceCommit": "7ee8a294fec701ba02aa4f868aeb8078a35f69b8",
+        "commandName": "test:source-led-opportunity-v3:migration",
+        "executedArgv": [
+          "npm",
+          "run",
+          "test:source-led-opportunity-v3:migration"
+        ],
+        "executedCommand": "npm run test:source-led-opportunity-v3:migration",
+        "commandSha256": "cea8b75573384dfb0fe9565f5b456a192f898400a817f2093ae540eca8a0dbca",
+        "commandRendering": "Exact UTF-8 command string, no trailing newline; VM executed recorded npm argv.",
+        "expandedRegisteredCommand": "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/migration-contract.test.mjs",
+        "logPath": "/tmp/stockinsider-2e-vm-canonical-migration.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/canonical-migration.stdout",
+        "stdoutSha256": "3b4ba0204b3267dd93fef06fb6b2aef334ffdffc889f0841ba9d05713a0ffb3f",
+        "counts": {
+          "passed": 87,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "exitCode": 0,
+        "testName": "PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker",
+        "metadataSha256": "db4030e5afbd315ba81903c15b6e5bcb69d48314cad171957014a184cf0d4390",
+        "executionProvenance": "Actual VM canonical full native command on exact2e, real PG17.11; independently verified 38 Git raw blobs and668 exact-source files; no local rerun."
+      },
+      "owner": {
+        "export": "complete_legacy_producer_job_v3_11",
+        "path": "migrations/20260724_source_led_opportunity_engine_v3.sql"
+      },
+      "caller": {
+        "function": "completeLegacyProducerJob",
+        "path": "scripts/runtime/postgres-legacy-producer-adapter.js"
+      },
+      "ownerSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "callerSha256": "035ea2786fa9790a346b029a5d1d082f7053863edfd760c5186491759c828a12"
+    },
+    {
+      "id": "PCR-012",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-013",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "buildPointInTimeOperatingBridge",
+        "path": "scripts/runtime/valuation-operating-bridge.js"
+      },
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "ownerSha256": "61cd119980bf55f2ee154c3142c5e9cf0ab6cb5f7eb4ce03243810605cec5208",
+      "callerSha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58"
+    },
+    {
+      "id": "PCR-013",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-013",
+        "coverage": "original owner plus caller evidence where reviewed present"
+      },
+      "owner": {
+        "export": "selectComparableValuationInputs",
+        "path": "scripts/runtime/valuation-comparables.js"
+      },
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "ownerSha256": "9273909e9eee887f6ddb3cf9883a44065c8c101ed389bb79fdf09edc7b15119b",
+      "callerSha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58"
+    },
+    {
+      "id": "PCR-014",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-013",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "selectSectorValuationMethod",
+        "path": "scripts/runtime/valuation-method.js"
+      },
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "ownerSha256": "589d959a538b97e3abe1e38fc31a9c137359e2dace1a738f9b28d8643225be8d",
+      "callerSha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58"
+    },
+    {
+      "id": "PCR-015",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-013",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "verifyCompanyValuationEvidence",
+        "path": "scripts/runtime/valuation-evidence.js"
+      },
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "ownerSha256": "6f6fbea1075ea6f079c8a70f80bee48365659ccc72edeba3f912ec396ea093da",
+      "callerSha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58"
+    },
+    {
+      "id": "PCR-016",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "public fundamental provenance remains bounded and fail-closed outside the approved PCR expectation registry",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "deriveTechnicalEntryState",
+        "path": "scripts/runtime/technical-state.js"
+      },
+      "caller": {
+        "function": "deriveActionDecision",
+        "path": "scripts/runtime/action-decision.js"
+      },
+      "ownerSha256": "28797cda111d331c7dd496d085f73f2c91251c858b8f9a9341977e8f38b25ec9",
+      "callerSha256": "2ca1968b1fad1950f6d94aaf7f09c5411910256c7fa7e5b10d3d7c082b417f32"
+    },
+    {
+      "id": "PCR-017",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "public fundamental provenance remains bounded and fail-closed outside the approved PCR expectation registry",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "validateLongEntryGeometry",
+        "path": "scripts/runtime/technical-entry-geometry.js"
+      },
+      "caller": {
+        "function": "deriveActionDecision",
+        "path": "scripts/runtime/action-decision.js"
+      },
+      "ownerSha256": "a007eb8b726457dc2cc2b51e23d3490a7c613ec456f13c51a4803c2592be649c",
+      "callerSha256": "2ca1968b1fad1950f6d94aaf7f09c5411910256c7fa7e5b10d3d7c082b417f32"
+    },
+    {
+      "id": "PCR-018",
+      "selectedExecution": {
+        "executedSubject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+        "evidenceCommit": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+        "commandName": "pcr-callers-four",
+        "executedArgv": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+          "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+          "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+          "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+        ],
+        "executedCommand": "node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/pcr-caller-boundaries.test.mjs scripts/opportunity-v3/pcr-installation-caller.test.mjs scripts/opportunity-v3/pcr-cli-callers.test.mjs scripts/opportunity-v3/pcr-aggregate-caller.test.mjs",
+        "commandRendering": "POSIX shell-equivalent rendering of recorded argv; SHA256 exact UTF8 no newline. Actual VM executed argv directly.",
+        "logPath": "/tmp/stockinsider-pcr399-vm-pcr-callers-four.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+        "stdoutSha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef",
+        "counts": {
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "testNames": [
+          "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+          "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+          "PCR-025 caller returns bounded history or the actual unavailable reason",
+          "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+          "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+          "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+          "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+          "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+          "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+        ],
+        "metadataSha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766",
+        "executionProvenance": "VM executed exact399; reviewer verified Git bytes, manifest and raw TAP; not local rerun.",
+        "testName": "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane"
+      },
+      "owner": {
+        "export": "calculateAdjustedTechnicalPlane",
+        "path": "scripts/runtime/technical-plane.js"
+      },
+      "caller": {
+        "function": "deriveTechnicalEntryState",
+        "path": "scripts/runtime/technical-state.js"
+      },
+      "ownerSha256": "103ceab35ffd449650d583ca26501114881b0afb02e3ab5e132fd75b6a076556",
+      "callerSha256": "28797cda111d331c7dd496d085f73f2c91251c858b8f9a9341977e8f38b25ec9"
+    },
+    {
+      "id": "PCR-019",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-020",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "hashMaterialAnalysisChange",
+        "path": "scripts/runtime/analysis-material-change.js"
+      },
+      "caller": {
+        "function": "appendAnalysisRevision",
+        "path": "scripts/runtime/analysis-revision.js"
+      },
+      "ownerSha256": "cb5de86203b899de0540a419f8b55c5fe1ed54134f2aaa13cc5b8f889dab24c7",
+      "callerSha256": "ab5a7370e6e951201c3c6c9035416fbf450df1df9307a0d6a764f0a0e58bb2ce"
+    },
+    {
+      "id": "PCR-020",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-005",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "appendAnalysisRevision",
+        "path": "scripts/runtime/analysis-revision.js"
+      },
+      "caller": {
+        "function": "buildStageHandlers",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "ownerSha256": "ab5a7370e6e951201c3c6c9035416fbf450df1df9307a0d6a764f0a0e58bb2ce",
+      "callerSha256": "602948f0eb960a78a75a88b0ac6ffa080a8adb6755abe544b8530d93384b22ba"
+    },
+    {
+      "id": "PCR-021",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-021",
+        "coverage": "original owner plus caller evidence where reviewed present"
+      },
+      "owner": {
+        "export": "serializePublishedResearchDecision",
+        "path": "scripts/runtime/published-research-decision.js"
+      },
+      "caller": {
+        "function": "availableResearchDecision",
+        "path": "scripts/runtime/compact-radar-projection.js"
+      },
+      "ownerSha256": "50547d52df8ac4278da4507f9e3dd3083076efe770ee6a7fbb27f54b15c707ac",
+      "callerSha256": "a61867b6a19760c7f904f9d49ca5824bcbde3ea99e61cee214d301f7a0164cf1"
+    },
+    {
+      "id": "PCR-022",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-022",
+        "coverage": "original owner plus caller evidence where reviewed present"
+      },
+      "owner": {
+        "export": "loadCompactRadarProjection",
+        "path": "web/src/lib/opportunity-v3/compact-radar-read.ts"
+      },
+      "caller": {
+        "function": "loadPublishedRadarProjection",
+        "path": "web/src/lib/radar-projection-read.ts"
+      },
+      "ownerSha256": "cf03f15e7cdfa28f3e797e524167deb7411ec3c2aa8671ddc949a02ee376a26a",
+      "callerSha256": "91377feb7bdefc6d94bdabeff8350475b1a88948fc791974048ebbe8b2b68b50"
+    },
+    {
+      "id": "PCR-023",
+      "selectedExecution": {
+        "executedSubject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+        "evidenceCommit": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+        "commandName": "pcr-callers-four",
+        "executedArgv": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+          "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+          "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+          "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+        ],
+        "executedCommand": "node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/pcr-caller-boundaries.test.mjs scripts/opportunity-v3/pcr-installation-caller.test.mjs scripts/opportunity-v3/pcr-cli-callers.test.mjs scripts/opportunity-v3/pcr-aggregate-caller.test.mjs",
+        "commandRendering": "POSIX shell-equivalent rendering of recorded argv; SHA256 exact UTF8 no newline. Actual VM executed argv directly.",
+        "logPath": "/tmp/stockinsider-pcr399-vm-pcr-callers-four.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+        "stdoutSha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef",
+        "counts": {
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "testNames": [
+          "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+          "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+          "PCR-025 caller returns bounded history or the actual unavailable reason",
+          "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+          "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+          "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+          "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+          "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+          "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+        ],
+        "metadataSha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766",
+        "executionProvenance": "VM executed exact399; reviewer verified Git bytes, manifest and raw TAP; not local rerun.",
+        "testName": "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing"
+      },
+      "owner": {
+        "export": "validateProtectedCodeGateAggregateInputs",
+        "path": "scripts/opportunity-v3/protected-code-gate-aggregate.mjs"
+      },
+      "caller": {
+        "function": "main",
+        "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs"
+      },
+      "ownerSha256": "d6ec0565aaf27824e3c0ddd4a78634a830c43d76d8a4c8daf2c8a0f960fd9c8b",
+      "callerSha256": "0906ca3c1cbcac003f0708fd753ec0726874e57a5d68282bd051ca6bd2a2b68c"
+    },
+    {
+      "id": "PCR-024",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-024",
+        "coverage": "original owner plus caller evidence where reviewed present"
+      },
+      "owner": {
+        "export": "StockCard",
+        "path": "web/src/app/components/RadarTabs.tsx"
+      },
+      "caller": {
+        "function": "Home",
+        "path": "web/src/app/page.tsx"
+      },
+      "ownerSha256": "6a256cfd90a41ea67ad1a4cf92e563b69d83f29917f0074a8c2029da2d6bbf9e",
+      "callerSha256": "cdccf35099f982f69be9635ff61fa83f9a0208b180c9f8d7634bafb98d01d157"
+    },
+    {
+      "id": "PCR-025",
+      "selectedExecution": {
+        "executedSubject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+        "evidenceCommit": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+        "commandName": "pcr-callers-four",
+        "executedArgv": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+          "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+          "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+          "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+        ],
+        "executedCommand": "node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/pcr-caller-boundaries.test.mjs scripts/opportunity-v3/pcr-installation-caller.test.mjs scripts/opportunity-v3/pcr-cli-callers.test.mjs scripts/opportunity-v3/pcr-aggregate-caller.test.mjs",
+        "commandRendering": "POSIX shell-equivalent rendering of recorded argv; SHA256 exact UTF8 no newline. Actual VM executed argv directly.",
+        "logPath": "/tmp/stockinsider-pcr399-vm-pcr-callers-four.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+        "stdoutSha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef",
+        "counts": {
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "testNames": [
+          "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+          "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+          "PCR-025 caller returns bounded history or the actual unavailable reason",
+          "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+          "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+          "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+          "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+          "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+          "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+        ],
+        "metadataSha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766",
+        "executionProvenance": "VM executed exact399; reviewer verified Git bytes, manifest and raw TAP; not local rerun.",
+        "testName": "PCR-025 caller returns bounded history or the actual unavailable reason"
+      },
+      "owner": {
+        "export": "selectBiasTechnicalHistory",
+        "path": "scripts/runtime/bias-technical-history.js"
+      },
+      "caller": {
+        "function": "buildFactorSnapshot",
+        "path": "scripts/runtime/factor-snapshot.js"
+      },
+      "ownerSha256": "b68378b567289a3f042c72499c55536069fa640122496def721de66128c2036b",
+      "callerSha256": "873f8769664f4479eb3f79f2e46a36bd83558e7a7e6d8e40142f79206b99a33f"
+    },
+    {
+      "id": "PCR-026",
+      "selectedExecution": {
+        "executedSubject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+        "evidenceCommit": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+        "commandName": "pcr-callers-four",
+        "executedArgv": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+          "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+          "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+          "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+        ],
+        "executedCommand": "node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/pcr-caller-boundaries.test.mjs scripts/opportunity-v3/pcr-installation-caller.test.mjs scripts/opportunity-v3/pcr-cli-callers.test.mjs scripts/opportunity-v3/pcr-aggregate-caller.test.mjs",
+        "commandRendering": "POSIX shell-equivalent rendering of recorded argv; SHA256 exact UTF8 no newline. Actual VM executed argv directly.",
+        "logPath": "/tmp/stockinsider-pcr399-vm-pcr-callers-four.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+        "stdoutSha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef",
+        "counts": {
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "testNames": [
+          "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+          "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+          "PCR-025 caller returns bounded history or the actual unavailable reason",
+          "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+          "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+          "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+          "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+          "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+          "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+        ],
+        "metadataSha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766",
+        "executionProvenance": "VM executed exact399; reviewer verified Git bytes, manifest and raw TAP; not local rerun.",
+        "testName": "PCR-026 caller retains the roster manifest and rejects invalid universe inputs"
+      },
+      "owner": {
+        "export": "buildBiasUniverseManifest",
+        "path": "scripts/runtime/bias-universe-manifest.js"
+      },
+      "caller": {
+        "function": "buildFactorSnapshot",
+        "path": "scripts/runtime/factor-snapshot.js"
+      },
+      "ownerSha256": "ff5baa00b8afd38473e60045cd3ce147a3dec7b7b9a223e8fc48bad70f091fcb",
+      "callerSha256": "873f8769664f4479eb3f79f2e46a36bd83558e7a7e6d8e40142f79206b99a33f"
+    },
+    {
+      "id": "PCR-027",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "public fundamental provenance remains bounded and fail-closed outside the approved PCR expectation registry",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "applyBiasActionCap",
+        "path": "scripts/runtime/bias-action-cap.js"
+      },
+      "caller": {
+        "function": "deriveActionDecision",
+        "path": "scripts/runtime/action-decision.js"
+      },
+      "ownerSha256": "cb32276f202b080306ce801fe624b005cf4cff14f4daa59946e60dac2ba3eb37",
+      "callerSha256": "2ca1968b1fad1950f6d94aaf7f09c5411910256c7fa7e5b10d3d7c082b417f32"
+    },
+    {
+      "id": "PCR-028",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-013",
+        "coverage": "declared caller coverage (where reviewed present; gaps replaced below)"
+      },
+      "owner": {
+        "export": "selectOfficialReportedPe",
+        "path": "scripts/runtime/reported-pe-authority.js"
+      },
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "ownerSha256": "a4f11a5d84b897efa1207d7fb4dd556ff216bb72adb3f5b4d0c9258849578448",
+      "callerSha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58"
+    },
+    {
+      "id": "PCR-029",
+      "selectedExecution": {
+        "executedSubject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+        "evidenceCommit": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+        "commandName": "pcr-callers-four",
+        "executedArgv": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+          "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+          "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+          "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+        ],
+        "executedCommand": "node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/pcr-caller-boundaries.test.mjs scripts/opportunity-v3/pcr-installation-caller.test.mjs scripts/opportunity-v3/pcr-cli-callers.test.mjs scripts/opportunity-v3/pcr-aggregate-caller.test.mjs",
+        "commandRendering": "POSIX shell-equivalent rendering of recorded argv; SHA256 exact UTF8 no newline. Actual VM executed argv directly.",
+        "logPath": "/tmp/stockinsider-pcr399-vm-pcr-callers-four.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+        "stdoutSha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef",
+        "counts": {
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "testNames": [
+          "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+          "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+          "PCR-025 caller returns bounded history or the actual unavailable reason",
+          "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+          "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+          "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+          "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+          "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+          "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+        ],
+        "metadataSha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766",
+        "executionProvenance": "VM executed exact399; reviewer verified Git bytes, manifest and raw TAP; not local rerun.",
+        "testName": "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted"
+      },
+      "owner": {
+        "export": "calculateFundamentalQualityAxes",
+        "path": "scripts/runtime/fundamental-quality.js"
+      },
+      "caller": {
+        "function": "calculateFactorScore",
+        "path": "scripts/runtime/factor-score.js"
+      },
+      "ownerSha256": "0409db5e3f6faac4d083d32417c6e5dac4c611fc9579c48b21a168f2edc07290",
+      "callerSha256": "359f0cc65bf93c5075a9f3148318638f403258f3ea6b3babd4323ee72e04e552"
+    },
+    {
+      "id": "PCR-030",
+      "selectedExecution": {
+        "executedSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+        "commandName": "test:source-led-opportunity-v3:product-correctness",
+        "executedCommand": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+        "logPath": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+        "stdoutSha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+        "counts": {
+          "passed": 155,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "executionProvenance": "Root executed; reviewer verified raw TAP/hash. Historical exact-source reuse; NOT a399 rerun.",
+        "testName": "acceptance PCR-030",
+        "coverage": "original owner plus caller evidence where reviewed present"
+      },
+      "owner": {
+        "export": "serializeCorrectnessPublicUnion",
+        "path": "scripts/runtime/public-projection.js"
+      },
+      "caller": {
+        "function": "serializePublishedResearchDecision",
+        "path": "scripts/runtime/published-research-decision.js"
+      },
+      "ownerSha256": "a78b212f19fc2e0b3dab0a31fe529e943eae32a6a440fe5ca8b62670c9393494",
+      "callerSha256": "50547d52df8ac4278da4507f9e3dd3083076efe770ee6a7fbb27f54b15c707ac"
+    },
+    {
+      "id": "PCR-031",
+      "selectedExecution": {
+        "executedSubject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+        "evidenceCommit": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+        "commandName": "pcr-callers-four",
+        "executedArgv": [
+          "node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+          "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+          "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+          "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+        ],
+        "executedCommand": "node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/pcr-caller-boundaries.test.mjs scripts/opportunity-v3/pcr-installation-caller.test.mjs scripts/opportunity-v3/pcr-cli-callers.test.mjs scripts/opportunity-v3/pcr-aggregate-caller.test.mjs",
+        "commandRendering": "POSIX shell-equivalent rendering of recorded argv; SHA256 exact UTF8 no newline. Actual VM executed argv directly.",
+        "logPath": "/tmp/stockinsider-pcr399-vm-pcr-callers-four.stdout",
+        "gitLogPath": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+        "stdoutSha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef",
+        "counts": {
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "testNames": [
+          "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+          "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+          "PCR-025 caller returns bounded history or the actual unavailable reason",
+          "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+          "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+          "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+          "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+          "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+          "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+        ],
+        "metadataSha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766",
+        "executionProvenance": "VM executed exact399; reviewer verified Git bytes, manifest and raw TAP; not local rerun.",
+        "testName": "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes"
+      },
+      "owner": {
+        "export": "buildComparableRunIdentity",
+        "path": "scripts/runtime/comparison-identity.js"
+      },
+      "caller": {
+        "function": "evaluateComparableRun",
+        "path": "scripts/runtime/comparable-evaluation.js"
+      },
+      "ownerSha256": "aeaf087e25e3bacb6c8a35d88928616dfcce48a1c0c7d99536bf7c7b82c374c2",
+      "callerSha256": "2dd253ca80c93426f5e31843467ae42db4dc9791c179d37debd782267cc8f599"
+    }
+  ],
+  "vmAudit": {
+    "evidenceCommit": "7ee8a294fec701ba02aa4f868aeb8078a35f69b8",
+    "rawCount": 38,
+    "rawBytes": 1927143,
+    "sourceFiles": 668,
+    "sourceBytes": 10479005,
+    "sourceManifestSha256": "03c71c433c5bbb443019a1ed17b85f2a3c256852bd13dacbbbf01a35f1ef8e1f",
+    "canonicalExecution": {
+      "executedSubject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "evidenceCommit": "7ee8a294fec701ba02aa4f868aeb8078a35f69b8",
+      "commandName": "test:source-led-opportunity-v3:migration",
+      "executedArgv": [
+        "npm",
+        "run",
+        "test:source-led-opportunity-v3:migration"
+      ],
+      "executedCommand": "npm run test:source-led-opportunity-v3:migration",
+      "commandSha256": "cea8b75573384dfb0fe9565f5b456a192f898400a817f2093ae540eca8a0dbca",
+      "commandRendering": "Exact UTF-8 command string, no trailing newline; VM executed recorded npm argv.",
+      "expandedRegisteredCommand": "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/migration-contract.test.mjs",
+      "logPath": "/tmp/stockinsider-2e-vm-canonical-migration.stdout",
+      "gitLogPath": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/canonical-migration.stdout",
+      "stdoutSha256": "3b4ba0204b3267dd93fef06fb6b2aef334ffdffc889f0841ba9d05713a0ffb3f",
+      "counts": {
+        "passed": 87,
+        "failed": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "exitCode": 0,
+      "testName": "PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker",
+      "metadataSha256": "db4030e5afbd315ba81903c15b6e5bcb69d48314cad171957014a184cf0d4390",
+      "executionProvenance": "Actual VM canonical full native command on exact2e, real PG17.11; independently verified 38 Git raw blobs and668 exact-source files; no local rerun."
+    },
+    "protectedPass": false
+  },
+  "limits": [
+    "No protected gate PASS claimed",
+    "No original155 rerun at2e",
+    "No production schema install or deployment performed",
+    "No signature or authority generated"
+  ]
+}
