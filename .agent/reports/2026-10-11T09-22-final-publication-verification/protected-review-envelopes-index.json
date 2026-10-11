@@ -1,0 +1,30 @@
+{
+  "actualProtectedReviewEnvelopes": [
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/opportunity-gate-result-requirements-399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd.json",
+      "bytes": 2880,
+      "sha256": "84c7101973a8a4f18df70147f4af992b6aa0bab1eafc1248ffed56944b8620c7",
+      "check": "requirements",
+      "evidenceCommit": "9e7d913b597c57b3d3d2ebfbc8065df95482785e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/opportunity-gate-result-architecture-399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd.json",
+      "bytes": 2880,
+      "sha256": "141085c9d7540a2a530bb8230bbd158dcc6b8c383d5272f096cfedd88e42a678",
+      "check": "architecture",
+      "evidenceCommit": "5f960cd4905996233a08b807f582fed49d4c7395"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/opportunity-gate-result-exact-review-399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd.json",
+      "bytes": 3220,
+      "sha256": "7476cf786d7ab795cf93c5521c178d383a74a953d9363af806737e4257837c11",
+      "check": "exact-review",
+      "evidenceCommit": "e1749cb3614368ed4c2b80ab13a315040f0aba22"
+    }
+  ],
+  "independentBlockerReport": {
+    "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-protected399-native-blocker.md",
+    "sha256": "a6147aad0361c33e468c696483d2a54a08d000367900c4875a831bbd23641748"
+  },
+  "limits": "These three actual review envelopes do not substitute for failed model track or pending product track."
+}

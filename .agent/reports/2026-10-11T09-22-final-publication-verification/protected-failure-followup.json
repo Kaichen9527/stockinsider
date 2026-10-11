@@ -1,0 +1,25 @@
+{
+  "schema": "protected-publication-failure-followup-v1",
+  "sourceCommit": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+  "runId": 38128096991,
+  "requirements": "SUCCESS",
+  "architecture": "SUCCESS",
+  "exactReview": "SUCCESS",
+  "productRuntime": {
+    "status": "FAILURE",
+    "pass": 271,
+    "fail": 1,
+    "skip": 0,
+    "failedCase": "GOV-001",
+    "reason": "expanded migration npm command differs from approved frozen command",
+    "rawSha256": "53bb253c037482a7b4fb94a53b60af86cb470a41c086ba83f0099ec05ed7cdb3"
+  },
+  "modelRunner": {
+    "status": "FAILURE",
+    "reason": "trusted bootstrap old Codex executable path ENOENT",
+    "recoveryIngressAvailable": false
+  },
+  "mainMerged": false,
+  "deployed": false,
+  "next": "Restore canonical approved invocation while retaining every added installer test; independent review and new subject evidence required."
+}

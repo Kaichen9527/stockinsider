@@ -102,3 +102,11 @@ Evidence: `.agent/reports/2026-10-11T07-48-release-review-repairs.json`; current
 - Attempted required-check-constrained merge-commit auto-merge; GitHub disallows auto merge for this repo. Policy unchanged; no main push/production migration/deployment.
 - Fresh VPS measurement:154894188544 total/19451998208 available bytes. Actual service names stockinsider-web-standalone/internal-worker; inactive short-name probes do not prove service outage. Current release/preview still referenced and preserved. Only unreferenced own Mac Next cache224843024 logical bytes removed; unique evidence/history untouched.
 -33 supporting raw/review files saved in .agent/reports/2026-10-11T09-22-final-publication-verification; VM evidence2ada86ce/d5c60254 hash-verified17+22 raw files. AUO remains a research-direction demonstration; operational article/strategy/schedule acceptance is separate.
+
+
+## Protected run completed: two independent failures
+
+- Actual run38128096991 finished FAILURE. Requirements, architecture and exact review passed; genuine result envelopes retained with hashes.
+- Product acceptance completed272 cases:271PASS/1FAIL/0SKIP. GOV-001 correctly rejects the broadened migration package command against its frozen exact script inventory. Next repair preserves approved command and all added installer tests; approved inventory/assertions must not be weakened.
+- Model track independently failed at the trusted host old Codex executable ENOENT before tests. Bounded audit found no callable recovery ingress in trusted main; operator recovery mechanism requested. No unchanged failed rerun, binary replacement, fake approval or gate bypass.
+- Cloud packaging of399 remains active in the existing authorized task; no duplicate work dispatched. Main and production unchanged.
