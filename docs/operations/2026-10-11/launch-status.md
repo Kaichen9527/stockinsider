@@ -1,4 +1,21 @@
-# 上線進度：2026-10-11 21:13 台灣時間
+# 上線進度：2026-10-11 22:12 台灣時間
+
+## 最新：全量重算及快照發布已完成，後續只補缺口
+
+main169 仍為正式版本。pipeline `918db413-a56c-4cd6-86f8-617b4a6b1239` 於13:29:07Z成功，research `d500fa84-e57b-4c3d-bafd-deac37ebf249` 終態partial：343檔全部處理，26 success／317 partial／0 failed，saved／outcomes皆343，漏件、重複及非預期標的皆0。**343份進出場計畫全部資料不足、usable為0；處理完整不代表研究完整或可交易。** 不重送全量。watcher已因終態退出，DB lease為0。
+
+home `911534d6-372e-4345-8b66-13d5473320b4`、daily `7bac3286-762c-45e3-8664-2d4b605b5504` 已valid。Internal Browser實讀21:29新快照272 found／1 waiting／0 actionable，搜尋及友達新revision `31adb899-9f4b-8338-bf11-01077137cc17` 可用。343研究母體與272來源命中展示的逐檔差異仍待核對，不混算。
+
+後續實際進度與阻擋：
+
+- 單次PTT2409來源更新成功：9頁、46正文、3939推文、21新紀錄、26 duplicates、無抓取錯誤；匹配跨24檔，不宣稱21個友達獨立傳聞，亦沒有重新發布快照或再跑全量。
+- 兩市場各1367個completed交易日，但公司行動snapshots與既有authority jobs均為0。一次budget1官方補資料在建run前拒絕 `entry_plan_calendar_240_missing:TWSE`。真SQL重現3000原始修訂列僅125日期／120完整交易日；根因是calendarFor以原始列截斷。已交既有idle Cloud task修復，保持最新取消頭、cutoff及240日門檻，不以假無事件填空。
+- 已核對三筆友達官方／中央社摘要。第一次OS鎖衝突未發API；確認鎖釋放後一次請求被DB以 `production_writer_lease_required` 拒絕。main與pending inbox route缺lease取得，不冒稱匯入成功；已交同一Cloud task於calendar獨立commit後修復。來源與失敗raw均保存，不再用相同輸入重試。
+- 財報1723仍出現3個bound_violation；修復已在未批准PR364，不直接套用pending migration。v5 bundle／outbox尚空，真實作者→獨立審查→文章發布鏈仍未完成。
+- 來源更新後首頁友達仍9筆／6發布者，bound個股正文變20筆／10發布者，顯示快照與即時來源混用待查；行情完整度訊息亦仍待修，不能宣稱跨區數字一致。
+- 使用者禁止刪一個月內快取；733筆BuildKit紀錄無超過30日項目，本次未刪檔。已要求其他App Codex盤點累積原因；SOHO確認多專案共享，詳細歸屬仍在調查。另一被詢問聊天實為Sites yuzu-care，並非VPS BabyCalendar owner，不據此歸屬快取。
+
+VPS154.894GB擴容已確認，14:11:53Z可用20.653GB，仍依原准入與雙鎖。工程heartbeat已校正全量終態及Cloud active工作，沒有啟用未驗收的新研究排程。證據：`.agent/reports/2026-10-11T14-12-full-refresh-complete/`。下文running敘述是13:13Z歷史快照，已由本節取代。
 
 首批已於12:41:54Z正式部署main169：實際容量准入、artifact完整驗證、migration、RLS／ACL、服務與active writer核對通過。Linux發布包（98+7項計算／打包、4項瀏覽器、型別、lint、build）與VM安裝驗證完成，不等PR364、全平台或全部文章。同機App自行清理其舊映像／快取後，實測20.815GB可用，root未清未授權的共享Docker資料。正式站已取得候選功能，桌面／手機及搜尋可用。全候選首輪重算research d500fa84、pipeline918db413仍running；尚不能宣稱新版資料已全量發布。詳見 `phased-candidate-release.md` 最新節及12:39收據。
 

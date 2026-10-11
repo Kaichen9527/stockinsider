@@ -61,6 +61,16 @@ VPS已擴容，實體154.894GB；同機其他App建置令可用空間再次波�
 
 桌面／手機先前檢查通過；13:11Z再讀首頁HTTP200、web／worker／preview active，已保存首頁截圖。一次DOM helper逾時單獨記錄，後續截圖成功，不將工具逾時當網站故障。公開候選仍272／1／0，價格日期10/08及資料缺口明示；新run快照、完整度文字範圍與母體差異仍待驗證。
 
+## 全量終態與逐批補資料（14:12Z）
+
+全量pipeline918db413於13:29:07Z成功，researchd500fa84為partial：343檔26success／317partial／0failed，expected／processed／saved／outcomes343，漏件與重複0；所有343份交易計畫均dataInsufficient，usable0。不重跑全量；唯讀watcher已終態退出、DB lease釋放。home911534d6及daily7bac3286已valid，Internal Browser確認21:29新快照272／1／0與友達新revision31adb899，搜尋可用。
+
+本次只做一次PTT2409來源更新（46文章／3939推文／21new／26duplicate）。已找到補資料主因：日曆每市場1367完整日期、但修訂很多，calendarFor讀3000原始列僅剩120完整交易日；一次authority budget1拒絕且未建立run。既有Cloud工作負責最小修復及反例測試，不重疊派工。另三筆友達核對摘要被inbox缺production lease拒絕，未寫入；同工作在獨立commit修復，保留真實失敗。
+
+公司行動快照尚空、財報bound_violation、v5作者佇列空、來源快照混用與母體範圍仍是實際缺口，不以部署成功代替研究完成。原主線保護與策略批准保持；未批准的新runner、PR364及正式模型排程沒有啟用。
+
+快取月內禁止刪除；已查733筆無超過30日，其他App Codex正在確認共享BuildKit累積原因，本次沒有清理。VPS擴容154.894GB，14:11可用20.653GB，所有後續重型工作仍現測准入。完整raw／manifest見 `.agent/reports/2026-10-11T14-12-full-refresh-complete/`。
+
 ## 後續逐批增加
 
 先核對候選覆蓋及資料日期，再依現有Top20研究佇列逐檔完成作者→獨立反證→財測→發布；各平台僅在實讀通過後啟用。策略按獨立實驗與使用者批准版本接入，不把部署或文章長度當獲利證明。

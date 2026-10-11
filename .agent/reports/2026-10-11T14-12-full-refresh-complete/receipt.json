@@ -1,0 +1,146 @@
+{
+  "schema": "stockinsider-phased-release-followup-v1",
+  "observedAt": "2026-10-11T14:12:00Z",
+  "release": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "pipeline": {
+    "id": "918db413-a56c-4cd6-86f8-617b4a6b1239",
+    "status": "success",
+    "finishedAt": "2026-10-11T13:29:07.823Z",
+    "rerun": false
+  },
+  "research": {
+    "id": "d500fa84-e57b-4c3d-bafd-deac37ebf249",
+    "model": "candidate-research-v4.4.2",
+    "status": "partial",
+    "candidates": 343,
+    "completed": 26,
+    "partial": 317,
+    "failed": 0,
+    "coverage": {
+      "expected": 343,
+      "processed": 343,
+      "saved": 343,
+      "outcomes": 343,
+      "missing": 0,
+      "duplicate": 0,
+      "unexpected": 0,
+      "evaluated": 0,
+      "dataInsufficient": 343,
+      "usable": 0,
+      "validationStatus": "research_only"
+    }
+  },
+  "publication": {
+    "home": "911534d6-372e-4345-8b66-13d5473320b4",
+    "daily": "7bac3286-762c-45e3-8664-2d4b605b5504",
+    "status": "valid",
+    "updatedAt": "2026-10-11T13:29:07.527Z",
+    "browserVerified": "2026-10-11 21:29",
+    "public": {
+      "found": 272,
+      "waiting": 1,
+      "actionable": 0
+    },
+    "scopeDifference": "343 research roster versus 272 source-hit published list still requires per-symbol reconciliation",
+    "auoRevision": "31adb899-9f4b-8338-bf11-01077137cc17"
+  },
+  "source": {
+    "connector": "ptt",
+    "runId": "2c47e3f1-c356-4ec2-99a3-15dc46dbaeaa",
+    "requestedSymbol": "2409",
+    "boardAndSearchPages": 9,
+    "articles": 46,
+    "pushComments": 3939,
+    "matchedDirectHits": 24,
+    "newRows": 21,
+    "duplicatesSkipped": 26,
+    "fetchErrors": 0,
+    "contentAnalyzable": true,
+    "claims": "Not 21 independent AUO rumors; matched symbols span 24 stocks; no full recalculation or snapshot republish."
+  },
+  "authority": {
+    "calendarCompletedDatesPerExchange": 1367,
+    "calendarCompletedRevisionRowsPerExchange": 13411,
+    "cancelledRevisionRowsPerExchange": 899,
+    "corporateActionSnapshots": 0,
+    "existingAuthorityRuns": 0,
+    "existingAuthorityJobs": 0,
+    "oneAttempt": {
+      "endpoint": "candidate-history-backfill",
+      "purpose": "entry_plan_authority",
+      "requestBudget": 1,
+      "status": 503,
+      "error": "entry_plan_calendar_240_missing:TWSE",
+      "createdRun": false
+    },
+    "reproduced": {
+      "rawLimit": 3000,
+      "uniqueDates": 125,
+      "completedDates": 120
+    },
+    "fixOwner": {
+      "title": "Set up stockinsider",
+      "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+      "host": "durable",
+      "status": "active; no duplicate dispatch"
+    }
+  },
+  "inbox": {
+    "itemsPrepared": 3,
+    "sourceKinds": [
+      "AUO September revenue release",
+      "AUO CPO/GCS technology announcement",
+      "CNA September 21 Intel rumor"
+    ],
+    "firstAttempt": "OS lock unavailable; exit75; no API request",
+    "secondAttempt": {
+      "observedAt": "2026-10-11T14:11:53.056Z",
+      "status": 500,
+      "error": "production_writer_lease_required",
+      "written": false
+    },
+    "knownCause": "main and pending research-inbox route omit production write lease; DB rejects correctly",
+    "retry": false,
+    "fixOwner": "same existing Cloud task, sequential separate commit after calendar"
+  },
+  "dataGaps": {
+    "financialWriteFailures": [
+      "1723 fallback_record bound_violation x2",
+      "1723 generalIncome job_completion bound_violation"
+    ],
+    "fixAlreadyPending": "PR364 financial-history-admission-v1; do not apply unapproved SQL",
+    "articleFlow": "main v5 bundle/outbox empty; deep articles and independent author/reviewer publication not complete",
+    "revisionConsistencyFinding": "After PTT refresh homepage AUO shows 9/6 while bound detail shows 20/10 source hits/publishers; snapshot/live evidence blending requires review; not claimed consistent"
+  },
+  "cache": {
+    "deleteWithinMonth": false,
+    "deletedThisIncrement": 0,
+    "recordsAudited": 733,
+    "recordsOlder30Days": 0,
+    "buildCacheReportedGb": 71.54,
+    "attribution": "Shared multi-project cache; generic layers cannot be assigned to SOHO",
+    "sohoCoordination": {
+      "threadId": "019fbfd2-f671-7f90-858f-683bc2114af4",
+      "title": "規劃金流驗證與VPS部署",
+      "status": "active; detailed buildup diagnosis requested; confirmed shared cache, no cleanup"
+    },
+    "wrongOwnerProbe": {
+      "threadId": "01a111b6-0b24-75f2-8c8e-1971f565bbab",
+      "actualProject": "Sites yuzu-care, not VPS BabyCalendar; no Docker config found; no cache attribution"
+    }
+  },
+  "capacity": {
+    "totalBytes": 154894188544,
+    "availableBytesAt1411": 20653375488,
+    "note": "expanded capacity verified; available space fluctuates; locks and original admission preserved"
+  },
+  "safety": {
+    "mainPushed": false,
+    "pendingResearchReleaseDeployed": false,
+    "trustExceptionApproved": false,
+    "formalResearchScheduleEnabled": false,
+    "stockHistoryDeleted": false,
+    "articlePublished": false,
+    "strategyApproved": false
+  }
+}

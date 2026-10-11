@@ -1,0 +1,2 @@
+{"endpoint":"/api/internal/research-inbox","status":500,"error":"production_writer_lease_required"}
+internal endpoint failed
