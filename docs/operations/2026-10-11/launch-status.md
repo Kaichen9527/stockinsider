@@ -14,3 +14,12 @@
 先收斂正式安裝與完整審查兩個發布必要條件，並行完成真實內容交接。來源／候選程式與文章測試完成，不代表已讀完所有平台或已找到有效獲利策略。短期不新增框架。
 
 精確代碼、原始RED、PASS及限制見本次receipt。PR359修補不能直接視為main發布批准；新增隔離修補以獨立PR接續。部署後只保留持久歷史、證據與帳本，無引用可重建暫存才清理，這次沒有新確認可刪VPS項目。
+
+
+## 工程接續狀態（2026-10-11T05:12:19.300096+00:00）
+
+- PR359：`codex/research-package-linux-fixture-oct11`，exact5e3ee67bc2afe07ac7653743d227318aed77f6d8。一般CI成功；protected checks未完成。
+- PR360：`codex/research-admission-isolation-oct11`，已推送進度與失敗證據；最終code887355ca0479d957d9b0472bba70ea4f8f9d5961已獨立scoped CODE PASS。這是development依賴PR，不是正式main發布批准。
+- 既有Cloud聊天「Set up stockinsider」`01a106b8-a883-7185-9962-f7372109a093`／durable已接受一件Linux admission21案例驗收，最新狀態active，turn`01a1295f-0e2a-71be-906f-25e55fe21946`、cursor`fb0ce0df-ca49-43e0-99fc-e874b21fb53d:5`。勿重派或修改其精確source；先讀compact狀態。僅合成隔離PG，不部署。
+- 下一個發布工程項目是installer完整18-successor清單／first-install／owner-ACL-trigger／rollback契約，依既有獨立migration設計接續，不能只追加路徑或移除TRUNCATE保護。
+- 全main-to-final審查與外部runner信任復原仍獨立阻擋；不能用這次bounded21PASS替代。真正作者／獨立審查文章、正式策略與排程驗收維持未完成。
