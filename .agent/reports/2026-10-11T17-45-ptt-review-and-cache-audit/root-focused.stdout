@@ -1,0 +1,180 @@
+TAP version 13
+# (node:82773) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82773) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12/web/src/lib/ptt-mention-provenance.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12/web/package.json.
+# Subtest: actual upsert boundary retains stock-local reply provenance for two authors without ID substitution
+ok 1 - actual upsert boundary retains stock-local reply provenance for two authors without ID substitution
+  ---
+  duration_ms: 54.074292
+  ...
+# Subtest: actual mention boundary leaves non-PTT provenance unchanged
+ok 2 - actual mention boundary leaves non-PTT provenance unchanged
+  ---
+  duration_ms: 15.774208
+  ...
+# Subtest: actual body-fetch failure stores title-only status and never manufactures reply records
+ok 3 - actual body-fetch failure stores title-only status and never manufactures reply records
+  ---
+  duration_ms: 45.331
+  ...
+# Subtest: actual bounded collector retains minimum per-comment matches, no post body or full-coverage claim
+ok 4 - actual bounded collector retains minimum per-comment matches, no post body or full-coverage claim
+  ---
+  duration_ms: 27.860916
+  ...
+# Subtest: actual fetched shell reports missing body instead of full text
+ok 5 - actual fetched shell reports missing body instead of full text
+  ---
+  duration_ms: 25.1495
+  ...
+# Subtest: actual symbol extractor keeps reply2383 separate from parent2409
+ok 6 - actual symbol extractor keeps reply2383 separate from parent2409
+  ---
+  duration_ms: 26.066542
+  ...
+# (node:82774) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82774) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12/web/src/lib/ptt-mention-provenance.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12/web/package.json.
+# Subtest: reply retains bounded local lineage and exact excerpt hash without independent authority
+ok 7 - reply retains bounded local lineage and exact excerpt hash without independent authority
+  ---
+  duration_ms: 1.106
+  ...
+# Subtest: article keeps no body or pooled reply evidence
+ok 8 - article keeps no body or pooled reply evidence
+  ---
+  duration_ms: 0.098958
+  ...
+# Subtest: missing parent_document_url stays partial
+ok 9 - missing parent_document_url stays partial
+  ---
+  duration_ms: 0.147625
+  ...
+# Subtest: missing author_name stays partial
+ok 10 - missing author_name stays partial
+  ---
+  duration_ms: 0.067959
+  ...
+# Subtest: missing comment_index stays partial
+ok 11 - missing comment_index stays partial
+  ---
+  duration_ms: 0.129083
+  ...
+# Subtest: same article authors remain local observations, never separate news roots
+ok 12 - same article authors remain local observations, never separate news roots
+  ---
+  duration_ms: 0.201458
+  ...
+# Subtest: non PTT metadata is not projected
+ok 13 - non PTT metadata is not projected
+  ---
+  duration_ms: 0.10725
+  ...
+# Subtest: stock-specific matched symbols do not inherit article or other stock context
+ok 14 - stock-specific matched symbols do not inherit article or other stock context
+  ---
+  duration_ms: 0.170417
+  ...
+# Subtest: title_only_fetch_failed body read cannot prove full text or local body basis
+ok 15 - title_only_fetch_failed body read cannot prove full text or local body basis
+  ---
+  duration_ms: 0.274916
+  ...
+# Subtest: title_only_body_missing body read cannot prove full text or local body basis
+ok 16 - title_only_body_missing body read cannot prove full text or local body basis
+  ---
+  duration_ms: 0.299916
+  ...
+# Subtest: unknown body read cannot prove full text or local body basis
+ok 17 - unknown body read cannot prove full text or local body basis
+  ---
+  duration_ms: 0.095459
+  ...
+# Subtest: malicious metadata never copies fulltext, credentials or overbound excerpt
+ok 18 - malicious metadata never copies fulltext, credentials or overbound excerpt
+  ---
+  duration_ms: 0.463042
+  ...
+# Subtest: getters and prototype inheritance cannot supply authority
+ok 19 - getters and prototype inheritance cannot supply authority
+  ---
+  duration_ms: 0.094708
+  ...
+# Subtest: foreign parent, invalid URL and index mismatch reject local linkage
+ok 20 - foreign parent, invalid URL and index mismatch reject local linkage
+  ---
+  duration_ms: 0.108
+  ...
+# Subtest: metadata-only retention cannot export even a small reply excerpt
+ok 21 - metadata-only retention cannot export even a small reply excerpt
+  ---
+  duration_ms: 0.047959
+  ...
+# Subtest: invalid stock symbol is bounded, cannot be serialized as arbitrary metadata
+ok 22 - invalid stock symbol is bounded, cannot be serialized as arbitrary metadata
+  ---
+  duration_ms: 0.061084
+  ...
+# Subtest: exact240 UTF-16 excerpt bound preserves Unicode bytes; plus1 is omitted
+ok 23 - exact240 UTF-16 excerpt bound preserves Unicode bytes; plus1 is omitted
+  ---
+  duration_ms: 0.06025
+  ...
+# (node:82775) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82775) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12/web/src/lib/ptt-policy.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12/web/package.json.
+# Subtest: PTT article deletion races are skipped without masking provider failures
+ok 24 - PTT article deletion races are skipped without masking provider failures
+  ---
+  duration_ms: 0.491792
+  ...
+# (node:82776) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:82776) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12/web/src/lib/source-content-semantics.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12/web/package.json.
+# Subtest: invalidated source mentions remain auditable but leave discovery
+ok 25 - invalidated source mentions remain auditable but leave discovery
+  ---
+  duration_ms: 0.38925
+  ...
+# Subtest: legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+ok 26 - legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+  ---
+  duration_ms: 0.062958
+  ...
+# Subtest: PTT institutional ranking is chip evidence instead of discovery
+ok 27 - PTT institutional ranking is chip evidence instead of discovery
+  ---
+  duration_ms: 1.74425
+  ...
+# Subtest: publisher and content identities are canonical and stance is three-valued
+ok 28 - publisher and content identities are canonical and stance is three-valued
+  ---
+  duration_ms: 2.156959
+  ...
+# Subtest: source concentration dedupes content and caps thin platform coverage
+ok 29 - source concentration dedupes content and caps thin platform coverage
+  ---
+  duration_ms: 0.431
+  ...
+# Subtest: source links rotate platforms and limit one platform
+ok 30 - source links rotate platforms and limit one platform
+  ---
+  duration_ms: 0.107417
+  ...
+1..30
+# tests 30
+# suites 0
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 799.087292

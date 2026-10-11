@@ -1,0 +1,372 @@
+PTT stock-local evidence and collector diagnostics	Set up job	﻿2026-10-11T17:51:04.7080142Z Current runner version: '2.337.0'
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7107169Z ##[group]Runner Image Provisioner
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7108261Z Hosted Compute Agent
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7108890Z Version: 20261002.596
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7109527Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7110325Z Build Date: 2026-10-02T22:28:27Z
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7111018Z Worker ID: {0e0c1c7b-bb04-4c6f-80f6-87e20cbb263a}
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7111756Z Region: westcentralus
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7112394Z Cloud: Azure
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7112932Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7114499Z ##[group]Operating System
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7115223Z Ubuntu
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7115774Z 24.04.5
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7116352Z LTS
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7116870Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7117684Z ##[group]Runner Image
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7118335Z Image: ubuntu-24.04
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7118945Z Version: 20261004.327.1
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7120131Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7121939Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7122932Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7124173Z ##[group]GITHUB_TOKEN Permissions
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7126067Z Contents: read
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7126710Z Metadata: read
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7127590Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7129752Z Secret source: Actions
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7130806Z Cache mode: write
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7131572Z Prepare workflow directory
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7475373Z Prepare all required actions
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:04.7523374Z Getting action download info
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:05.0430584Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:05.1304102Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+PTT stock-local evidence and collector diagnostics	Set up job	2026-10-11T17:51:05.3172892Z Complete job name: PTT stock-local evidence and collector diagnostics
+PTT stock-local evidence and collector diagnostics	Checkout pull request	﻿2026-10-11T17:51:05.3965447Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3966526Z with:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3967222Z   persist-credentials: false
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3967789Z   repository: Kaichen9527/stockinsider
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3971883Z   token: ***
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3972322Z   ssh-strict: true
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3972760Z   ssh-user: git
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3973185Z   clean: true
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3973639Z   sparse-checkout-cone-mode: true
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3974166Z   fetch-depth: 1
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3974608Z   fetch-tags: false
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3975057Z   show-progress: true
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3975521Z   lfs: false
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3975934Z   submodules: false
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3976393Z   set-safe-directory: true
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3977035Z   allow-unsafe-pr-checkout: false
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.3977830Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5011474Z Syncing repository: Kaichen9527/stockinsider
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5013935Z ##[group]Getting Git version info
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5014849Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5016223Z [command]/usr/bin/git version
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5077253Z git version 2.55.0
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5106426Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5123255Z Temporarily overriding HOME='/home/runner/work/_temp/5f9aed9b-0e0c-46b3-b018-4ee22baabcfc' before making global git config changes
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5125668Z Adding repository directory to the temporary git global config as a safe directory
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5129492Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5179972Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5188727Z ##[group]Initializing the repository
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5198750Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5291621Z hint: Using 'master' as the name for the initial branch. This default branch name
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5293130Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5294336Z hint: to use in all of your new repositories, which will suppress this warning,
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5295368Z hint: call:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5295844Z hint:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5296422Z hint: 	git config --global init.defaultBranch <name>
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5297765Z hint:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5298590Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5300575Z hint: 'development'. The just-created branch can be renamed via this command:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5301962Z hint:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5302686Z hint: 	git branch -m <name>
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5303507Z hint:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5304587Z hint: Disable this message with "git config set advice.defaultBranchName false"
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5306380Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5309593Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5357883Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5359135Z ##[group]Disabling automatic garbage collection
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5362081Z [command]/usr/bin/git config --local gc.auto 0
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5396085Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5397388Z ##[group]Setting up auth
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5404890Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5441194Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5827177Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.5869980Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.6109762Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.6147984Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.6371981Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.6411596Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.6412440Z ##[group]Fetching the repository
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:05.6424419Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e7ece5d2a820d03c8ac800f6aca5fe003dd639c2:refs/remotes/pull/372/merge
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:06.9398999Z From https://github.com/Kaichen9527/stockinsider
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:06.9403347Z  * [new ref]         e7ece5d2a820d03c8ac800f6aca5fe003dd639c2 -> pull/372/merge
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:06.9409075Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:06.9410911Z ##[group]Determining the checkout info
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:06.9413884Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:06.9420720Z [command]/usr/bin/git sparse-checkout disable
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:06.9475895Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:06.9512717Z ##[group]Checking out the ref
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:06.9516519Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/372/merge
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0721921Z Note: switching to 'refs/remotes/pull/372/merge'.
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0723127Z 
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0724016Z You are in 'detached HEAD' state. You can look around, make experimental
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0725868Z changes and commit them, and you can discard any commits you make in this
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0728358Z state without impacting any branches by switching back to a branch.
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0730082Z 
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0731177Z If you want to create a new branch to retain commits you create, you may
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0734044Z do so (now or later) by using -c with the switch command. Example:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0735570Z 
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0736199Z   git switch -c <new-branch-name>
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0737444Z 
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0738026Z Or undo this operation with:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0738826Z 
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0739339Z   git switch -
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0739974Z 
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0741331Z Turn off this advice by setting config variable advice.detachedHead to false
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0743377Z 
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0745415Z HEAD is now at e7ece5d Merge 7af8cba0347010a1d2b007fc8e733ce30faf0ef3 into 169aad1b6cfa747f78ae3464b614f43c0749d806
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0751140Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0790615Z [command]/usr/bin/git log -1 --format=%H
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0819625Z e7ece5d2a820d03c8ac800f6aca5fe003dd639c2
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0833188Z ##[group]Removing auth
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0837219Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.0872542Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.1101783Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.1129351Z http.https://github.com/.extraheader
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.1136765Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.1174198Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.1402985Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.1442933Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+PTT stock-local evidence and collector diagnostics	Checkout pull request	2026-10-11T17:51:07.1700833Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	﻿2026-10-11T17:51:07.1953523Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:07.1954051Z with:
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:07.1954314Z   node-version: 22.14.0
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:07.1954603Z   always-auth: false
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:07.1954881Z   check-latest: false
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:07.1958002Z   token: ***
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:07.1958274Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:07.3404765Z Attempting to download 22.14.0...
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:07.3511113Z (node:2461) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:07.3512799Z (Use `node --trace-deprecation ...` to show where the warning was created)
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:08.2493303Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:08.9339047Z Extracting ...
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:08.9465025Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/3ced4de7-410c-4b78-aa6f-408de3af058f -f /home/runner/work/_temp/a6f2b044-67a8-4742-807a-92527d542ed0
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:10.1509873Z Adding to the cache ...
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:12.1174868Z ##[group]Environment details
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:12.3362668Z node: v22.14.0
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:12.3363150Z npm: 10.9.2
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:12.3363450Z yarn: 1.22.22
+PTT stock-local evidence and collector diagnostics	Set up pinned Node 22	2026-10-11T17:51:12.3368620Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	﻿2026-10-11T17:51:12.3545935Z ##[group]Run npm --prefix web ci --ignore-scripts
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:12.3546473Z ^[[36;1mnpm --prefix web ci --ignore-scripts^[[0m
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:12.3809521Z shell: /usr/bin/bash -e {0}
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:12.3809929Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:13.8391673Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.1470665Z 
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.1471571Z added 432 packages, and audited 433 packages in 18s
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.1472078Z 
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.1472310Z 169 packages are looking for funding
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.1473070Z   run `npm fund` for details
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.2663743Z 
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.2664995Z 11 vulnerabilities (10 high, 1 critical)
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.2665774Z 
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.2666588Z To address issues that do not require attention, run:
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.2667909Z   npm audit fix
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.2668369Z 
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.2668922Z To address all issues (including breaking changes), run:
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.2669770Z   npm audit fix --force
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.2670091Z 
+PTT stock-local evidence and collector diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-11T17:51:30.2670341Z Run `npm audit` for details.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	﻿2026-10-11T17:51:30.3472971Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 web/src/lib/ptt-mention-provenance.test.ts scripts/ptt-mention-provenance-boundary.test.mjs web/src/lib/ptt-policy.test.ts web/src/lib/source-content-semantics.test.ts
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:30.3474850Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 web/src/lib/ptt-mention-provenance.test.ts scripts/ptt-mention-provenance-boundary.test.mjs web/src/lib/ptt-policy.test.ts web/src/lib/source-content-semantics.test.ts^[[0m
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:30.3540140Z shell: /usr/bin/bash -e {0}
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:30.3540417Z ##[endgroup]
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:30.4013028Z TAP version 13
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1088957Z # (node:2522) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1118557Z # (Use `node --trace-warnings ...` to show where the warning was created)
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1121115Z # (node:2522) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/ptt-mention-provenance.ts is not specified and it doesn't parse as CommonJS.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1123444Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1125037Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1126728Z # Subtest: actual upsert boundary retains stock-local reply provenance for two authors without ID substitution
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1128617Z ok 1 - actual upsert boundary retains stock-local reply provenance for two authors without ID substitution
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1129571Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1129987Z   duration_ms: 70.754246
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1130415Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1131120Z # Subtest: actual mention boundary leaves non-PTT provenance unchanged
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1132121Z ok 2 - actual mention boundary leaves non-PTT provenance unchanged
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1132804Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1133243Z   duration_ms: 33.43234
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1133657Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1134975Z # Subtest: actual body-fetch failure stores title-only status and never manufactures reply records
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1136514Z ok 3 - actual body-fetch failure stores title-only status and never manufactures reply records
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1137668Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1138033Z   duration_ms: 62.220661
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1138489Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1139472Z # Subtest: actual bounded collector retains minimum per-comment matches, no post body or full-coverage claim
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1140969Z ok 4 - actual bounded collector retains minimum per-comment matches, no post body or full-coverage claim
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1141826Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1142159Z   duration_ms: 43.156446
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1142544Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1143214Z # Subtest: actual fetched shell reports missing body instead of full text
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1144178Z ok 5 - actual fetched shell reports missing body instead of full text
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1144813Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1145141Z   duration_ms: 35.575599
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1145519Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1146201Z # Subtest: actual symbol extractor keeps reply2383 separate from parent2409
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1147438Z ok 6 - actual symbol extractor keeps reply2383 separate from parent2409
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1148077Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1149037Z   duration_ms: 33.139705
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1149531Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1978114Z # (node:2533) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.1980062Z # (Use `node --trace-warnings ...` to show where the warning was created)
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2186559Z # (node:2533) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/ptt-mention-provenance.test.ts is not specified and it doesn't parse as CommonJS.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2191023Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2193079Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2566545Z # Subtest: reply retains bounded local lineage and exact excerpt hash without independent authority
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2568692Z ok 7 - reply retains bounded local lineage and exact excerpt hash without independent authority
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2569917Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2570513Z   duration_ms: 3.738316
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2571083Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2571894Z # Subtest: article keeps no body or pooled reply evidence
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2578188Z ok 8 - article keeps no body or pooled reply evidence
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2579036Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2579870Z   duration_ms: 0.232424
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2584634Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2585579Z # Subtest: missing parent_document_url stays partial
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2586756Z ok 9 - missing parent_document_url stays partial
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2588001Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2588635Z   duration_ms: 0.361064
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2589343Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2590133Z # Subtest: missing author_name stays partial
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2591068Z ok 10 - missing author_name stays partial
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2591820Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2592393Z   duration_ms: 0.197438
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2593088Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2593875Z # Subtest: missing comment_index stays partial
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2596053Z ok 11 - missing comment_index stays partial
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2597381Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2597846Z   duration_ms: 0.313735
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2598282Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2601785Z # Subtest: same article authors remain local observations, never separate news roots
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2603043Z ok 12 - same article authors remain local observations, never separate news roots
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2603817Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2637673Z   duration_ms: 0.570806
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2640649Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2641487Z # Subtest: non PTT metadata is not projected
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2642228Z ok 13 - non PTT metadata is not projected
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2642750Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2643117Z   duration_ms: 0.241702
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2643509Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2644226Z # Subtest: stock-specific matched symbols do not inherit article or other stock context
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2644952Z ok 14 - stock-specific matched symbols do not inherit article or other stock context
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2645368Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2645564Z   duration_ms: 0.505504
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2645785Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2646227Z # Subtest: title_only_fetch_failed body read cannot prove full text or local body basis
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2647239Z ok 15 - title_only_fetch_failed body read cannot prove full text or local body basis
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2647917Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2648251Z   duration_ms: 0.595962
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2648672Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2668434Z # Subtest: title_only_body_missing body read cannot prove full text or local body basis
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2698116Z ok 16 - title_only_body_missing body read cannot prove full text or local body basis
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2707726Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2718254Z   duration_ms: 0.52012
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2718506Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2718911Z # Subtest: unknown body read cannot prove full text or local body basis
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2719825Z ok 17 - unknown body read cannot prove full text or local body basis
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2720184Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2720377Z   duration_ms: 0.268942
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2720589Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2721021Z # Subtest: malicious metadata never copies fulltext, credentials or overbound excerpt
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2721689Z ok 18 - malicious metadata never copies fulltext, credentials or overbound excerpt
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2722125Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2722317Z   duration_ms: 0.940695
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2722525Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2722893Z # Subtest: getters and prototype inheritance cannot supply authority
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2723599Z ok 19 - getters and prototype inheritance cannot supply authority
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2724117Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2724353Z   duration_ms: 0.218187
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2724635Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2725330Z # Subtest: foreign parent, invalid URL and index mismatch reject local linkage
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2726535Z ok 20 - foreign parent, invalid URL and index mismatch reject local linkage
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2727597Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2728036Z   duration_ms: 0.296794
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2728508Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2729316Z # Subtest: metadata-only retention cannot export even a small reply excerpt
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2730557Z ok 21 - metadata-only retention cannot export even a small reply excerpt
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2731169Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2731390Z   duration_ms: 0.147615
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2731665Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2732134Z # Subtest: invalid stock symbol is bounded, cannot be serialized as arbitrary metadata
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2732851Z ok 22 - invalid stock symbol is bounded, cannot be serialized as arbitrary metadata
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2733295Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2733496Z   duration_ms: 0.208749
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2733755Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2734203Z # Subtest: exact240 UTF-16 excerpt bound preserves Unicode bytes; plus1 is omitted
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2734875Z ok 23 - exact240 UTF-16 excerpt bound preserves Unicode bytes; plus1 is omitted
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2735295Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2735496Z   duration_ms: 0.218548
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.2735914Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.3350701Z # (node:2544) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.3352551Z # (Use `node --trace-warnings ...` to show where the warning was created)
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.3435781Z # (node:2544) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/ptt-policy.test.ts is not specified and it doesn't parse as CommonJS.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.3438448Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.3440207Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.3548113Z # Subtest: PTT article deletion races are skipped without masking provider failures
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.3549777Z ok 24 - PTT article deletion races are skipped without masking provider failures
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.3550956Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.3552011Z   duration_ms: 0.919126
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.3552684Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4273981Z # (node:2555) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4276000Z # (Use `node --trace-warnings ...` to show where the warning was created)
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4370562Z # (node:2555) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/source-content-semantics.test.ts is not specified and it doesn't parse as CommonJS.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4375818Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4377785Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4665902Z # Subtest: invalidated source mentions remain auditable but leave discovery
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4667781Z ok 25 - invalidated source mentions remain auditable but leave discovery
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4669093Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4669860Z   duration_ms: 0.850768
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4670527Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4671859Z # Subtest: legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4673733Z ok 26 - legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4674930Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4676145Z   duration_ms: 0.153496
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4676804Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4678104Z # Subtest: PTT institutional ranking is chip evidence instead of discovery
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4679476Z ok 27 - PTT institutional ranking is chip evidence instead of discovery
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4680464Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4681081Z   duration_ms: 1.85391
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4681749Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4682828Z # Subtest: publisher and content identities are canonical and stance is three-valued
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4684380Z ok 28 - publisher and content identities are canonical and stance is three-valued
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4685405Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4686022Z   duration_ms: 1.421262
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4686709Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4688023Z # Subtest: source concentration dedupes content and caps thin platform coverage
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4689540Z ok 29 - source concentration dedupes content and caps thin platform coverage
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4690483Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4691124Z   duration_ms: 0.797758
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4691797Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4692743Z # Subtest: source links rotate platforms and limit one platform
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4693961Z ok 30 - source links rotate platforms and limit one platform
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4695007Z   ---
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4695633Z   duration_ms: 0.224359
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4696303Z   ...
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4788049Z 1..30
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4788570Z # tests 30
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4788934Z # suites 0
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4789380Z # pass 30
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4789813Z # fail 0
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4790202Z # cancelled 0
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4790643Z # skipped 0
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4791081Z # todo 0
+PTT stock-local evidence and collector diagnostics	Test PTT local provenance and actual collector boundaries	2026-10-11T17:51:31.4791436Z # duration_ms 1091.607083
+PTT stock-local evidence and collector diagnostics	Post Set up pinned Node 22	﻿2026-10-11T17:51:31.4958325Z Post job cleanup.
+PTT stock-local evidence and collector diagnostics	Post Set up pinned Node 22	2026-10-11T17:51:31.6200084Z (node:2566) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+PTT stock-local evidence and collector diagnostics	Post Set up pinned Node 22	2026-10-11T17:51:31.6201564Z (Use `node --trace-deprecation ...` to show where the warning was created)
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	﻿2026-10-11T17:51:31.6490132Z Post job cleanup.
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.7397490Z [command]/usr/bin/git version
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.7440845Z git version 2.55.0
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.7481135Z Temporarily overriding HOME='/home/runner/work/_temp/7ef2a0cb-0544-40a2-9cf1-d151092b8abf' before making global git config changes
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.7482721Z Adding repository directory to the temporary git global config as a safe directory
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.7487864Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.7529064Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.7565526Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.7820302Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.7859710Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.8120907Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+PTT stock-local evidence and collector diagnostics	Post Checkout pull request	2026-10-11T17:51:31.8162492Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+PTT stock-local evidence and collector diagnostics	Complete job	﻿2026-10-11T17:51:31.8569287Z Cleaning up orphan processes
+PTT stock-local evidence and collector diagnostics	Complete job	2026-10-11T17:51:31.8861412Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

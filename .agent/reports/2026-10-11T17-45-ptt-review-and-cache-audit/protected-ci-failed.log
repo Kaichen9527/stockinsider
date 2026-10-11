@@ -1,0 +1,204 @@
+exact-review	Retrieve bootstrap and prepare detached subject	﻿2026-10-11T17:51:16.2237658Z Prepare all required actions
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.2239429Z Getting action download info
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.2961096Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.3838158Z Download action repository 'actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6233273Z ##[group]Run ./.github/actions/prepare-source-led-external-subject
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6234695Z with:
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6236550Z   bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6238672Z   subject-root: /home/runner/work/_temp/stockinsider-v3-subject
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6239985Z ##[endgroup]
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6306922Z ##[start-action display=Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020;id=__self.__actions_setup-node]
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6465074Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6466533Z with:
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6467316Z   node-version: 22.14.0
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6468193Z   always-auth: false
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6469044Z   check-latest: false
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6478144Z   token: ***
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6478947Z ##[endgroup]
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.7876068Z Attempting to download 22.14.0...
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.7993962Z (node:2364) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.7998099Z (Use `node --trace-deprecation ...` to show where the warning was created)
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.3859437Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.8517241Z Extracting ...
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.8642679Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/1df68d2a-f285-47aa-b623-cff071c75d8a -f /home/runner/work/_temp/028c04a6-9fe4-4595-bff2-a55a9312136c
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:19.0155311Z Adding to the cache ...
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.0844297Z ##[group]Environment details
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3003710Z node: v22.14.0
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3004619Z npm: 10.9.2
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3005013Z yarn: 1.22.22
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3005964Z ##[endgroup]
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3144591Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=4683]
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3148442Z ##[start-action display=Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093;id=__self.__actions_download-artifact]
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3215555Z ##[group]Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3215971Z with:
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3216323Z   name: stockinsider-v3-gate-bootstrap-7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3216837Z   path: /home/runner/work/_temp/stockinsider-v3-gate-bootstrap
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3217246Z   merge-multiple: false
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3217515Z   repository: Kaichen9527/stockinsider
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3217791Z   run-id: 38161353435
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3218012Z ##[endgroup]
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.4726289Z Downloading single artifact
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.4870501Z (node:2401) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.4871416Z (Use `node --trace-deprecation ...` to show where the warning was created)
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.5823265Z Preparing to download the following artifacts:
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.5824917Z - stockinsider-v3-gate-bootstrap-7af8cba0347010a1d2b007fc8e733ce30faf0ef3 (ID: 11710891593, Size: 661, Expected Digest: sha256:deefde88625be87c98bce41bcb38c800488a54f3c1de4d36c288eb410465be0e)
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7017865Z Redirecting to blob download url: https://productionresultssa8.blob.core.windows.net/actions-results/1728fcac-67a6-8515-80c3-f6fbb4f7ae4d/workflow-job-run-6851373e-8979-54d1-a08f-cb5c2b28ae92/artifacts/df9370695937666e8c3e54da51ec1c14e56a03b828cc12103d811f9893a0d212.zip
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7020414Z Starting download of artifact to: /home/runner/work/_temp/stockinsider-v3-gate-bootstrap
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7250334Z (node:2401) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7310796Z SHA256 digest of downloaded artifact is deefde88625be87c98bce41bcb38c800488a54f3c1de4d36c288eb410465be0e
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7311540Z Artifact download completed successfully.
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7311949Z Total of 1 artifact(s) downloaded
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7316602Z Download artifact has finished successfully
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7401541Z ##[end-action id=__self.__actions_download-artifact;outcome=success;conclusion=success;duration_ms=425]
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7424805Z ##[start-action display=Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject";id=__self.__run]
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7466204Z ##[group]Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject"
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7468210Z ^[[36;1mnode scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject"^[[0m
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7725025Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7725422Z ##[endgroup]
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.8713415Z From https://github.com/Kaichen9527/stockinsider
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.8714455Z  * branch              7af8cba0347010a1d2b007fc8e733ce30faf0ef3 -> FETCH_HEAD
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.4493476Z fatal: couldn't find remote ref refs/heads/evidence/source-led-opportunity-v3-exact-review-7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.4503861Z protected external gate worker failed: Command failed: /usr/bin/git fetch --no-tags origin refs/heads/evidence/source-led-opportunity-v3-exact-review-7af8cba0347010a1d2b007fc8e733ce30faf0ef3:refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-7af8cba0347010a1d2b007fc8e733ce30faf0ef3 refs/heads/evidence/source-led-opportunity-v3-requirements-v318-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v318-digest refs/heads/evidence/source-led-opportunity-v3-architecture-v318-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v318-digest
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.4554765Z ##[error]Process completed with exit code 1.
+exact-review	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.4562233Z ##[end-action id=__self.__run;outcome=failure;conclusion=failure;duration_ms=713]
+architecture	Retrieve bootstrap and prepare detached subject	﻿2026-10-11T17:51:17.8127505Z Prepare all required actions
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.8127892Z Getting action download info
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.9420822Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.4962197Z Download action repository 'actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7731265Z ##[group]Run ./.github/actions/prepare-source-led-external-subject
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7731490Z with:
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7731738Z   bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7732065Z   subject-root: /home/runner/work/_temp/stockinsider-v3-subject
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7732257Z ##[endgroup]
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7767370Z ##[start-action display=Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020;id=__self.__actions_setup-node]
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7820789Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7821029Z with:
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7821146Z   node-version: 22.14.0
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7821272Z   always-auth: false
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7821394Z   check-latest: false
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7822859Z   token: ***
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.7822973Z ##[endgroup]
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.8666798Z Attempting to download 22.14.0...
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.8734226Z (node:2157) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.8734876Z (Use `node --trace-deprecation ...` to show where the warning was created)
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:19.3904651Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:19.8100291Z Extracting ...
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:19.8184864Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/68011a68-a1ea-4424-9f69-ddf6e9a56423 -f /home/runner/work/_temp/8d28077e-b2e7-44ba-85bf-be7f00c4f699
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:20.6809170Z Adding to the cache ...
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.8419066Z ##[group]Environment details
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9829345Z node: v22.14.0
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9829839Z npm: 10.9.2
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9830014Z yarn: 1.22.22
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9830462Z ##[endgroup]
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9942934Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=4217]
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9944978Z ##[start-action display=Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093;id=__self.__actions_download-artifact]
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9972435Z ##[group]Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9972658Z with:
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9972857Z   name: stockinsider-v3-gate-bootstrap-7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9973135Z   path: /home/runner/work/_temp/stockinsider-v3-gate-bootstrap
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9973342Z   merge-multiple: false
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9973489Z   repository: Kaichen9527/stockinsider
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9973634Z   run-id: 38161353435
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.9973754Z ##[endgroup]
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.0932908Z Downloading single artifact
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.1018256Z (node:2191) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.1018792Z (Use `node --trace-deprecation ...` to show where the warning was created)
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.3809017Z Preparing to download the following artifacts:
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.3810238Z - stockinsider-v3-gate-bootstrap-7af8cba0347010a1d2b007fc8e733ce30faf0ef3 (ID: 11710891593, Size: 661, Expected Digest: sha256:deefde88625be87c98bce41bcb38c800488a54f3c1de4d36c288eb410465be0e)
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.6151668Z Redirecting to blob download url: https://productionresultssa8.blob.core.windows.net/actions-results/1728fcac-67a6-8515-80c3-f6fbb4f7ae4d/workflow-job-run-6851373e-8979-54d1-a08f-cb5c2b28ae92/artifacts/df9370695937666e8c3e54da51ec1c14e56a03b828cc12103d811f9893a0d212.zip
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.6152737Z Starting download of artifact to: /home/runner/work/_temp/stockinsider-v3-gate-bootstrap
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9015958Z (node:2191) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9052150Z SHA256 digest of downloaded artifact is deefde88625be87c98bce41bcb38c800488a54f3c1de4d36c288eb410465be0e
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9052782Z Artifact download completed successfully.
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9053102Z Total of 1 artifact(s) downloaded
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9056581Z Download artifact has finished successfully
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9129745Z ##[end-action id=__self.__actions_download-artifact;outcome=success;conclusion=success;duration_ms=918]
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9145218Z ##[start-action display=Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject";id=__self.__run]
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9170696Z ##[group]Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject"
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9171733Z ^[[36;1mnode scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject"^[[0m
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9518001Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:23.9518211Z ##[endgroup]
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:24.0397602Z From https://github.com/Kaichen9527/stockinsider
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:24.0397979Z  * branch              7af8cba0347010a1d2b007fc8e733ce30faf0ef3 -> FETCH_HEAD
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:24.5804801Z fatal: couldn't find remote ref refs/heads/evidence/source-led-opportunity-v3-exact-review-7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:24.5810131Z protected external gate worker failed: Command failed: /usr/bin/git fetch --no-tags origin refs/heads/evidence/source-led-opportunity-v3-exact-review-7af8cba0347010a1d2b007fc8e733ce30faf0ef3:refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-7af8cba0347010a1d2b007fc8e733ce30faf0ef3 refs/heads/evidence/source-led-opportunity-v3-requirements-v318-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v318-digest refs/heads/evidence/source-led-opportunity-v3-architecture-v318-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v318-digest
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:24.5845100Z ##[error]Process completed with exit code 1.
+architecture	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:24.5850812Z ##[end-action id=__self.__run;outcome=failure;conclusion=failure;duration_ms=670]
+requirements	Retrieve bootstrap and prepare detached subject	﻿2026-10-11T17:51:16.5822366Z Prepare all required actions
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.5823681Z Getting action download info
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.6571329Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:16.7702531Z Download action repository 'actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0065525Z ##[group]Run ./.github/actions/prepare-source-led-external-subject
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0066587Z with:
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0067756Z   bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0069315Z   subject-root: /home/runner/work/_temp/stockinsider-v3-subject
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0070281Z ##[endgroup]
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0121837Z ##[start-action display=Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020;id=__self.__actions_setup-node]
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0244017Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0245438Z with:
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0246103Z   node-version: 22.14.0
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0246828Z   always-auth: false
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0247545Z   check-latest: false
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0253996Z   token: ***
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.0254746Z ##[endgroup]
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.1357363Z Attempting to download 22.14.0...
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.1440591Z (node:2161) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.1443048Z (Use `node --trace-deprecation ...` to show where the warning was created)
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:17.6986522Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.1118168Z Extracting ...
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:18.1215670Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/c5b60010-03af-44f2-9c5e-8e10214dc43b -f /home/runner/work/_temp/50cf4bd5-c3ea-43ce-a953-4e5bbb233021
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:19.1168757Z Adding to the cache ...
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.0763604Z ##[group]Environment details
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2492256Z node: v22.14.0
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2492612Z npm: 10.9.2
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2492863Z yarn: 1.22.22
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2493601Z ##[endgroup]
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2600947Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=4247]
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2603522Z ##[start-action display=Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093;id=__self.__actions_download-artifact]
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2648019Z ##[group]Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2648344Z with:
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2648626Z   name: stockinsider-v3-gate-bootstrap-7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2649014Z   path: /home/runner/work/_temp/stockinsider-v3-gate-bootstrap
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2649313Z   merge-multiple: false
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2649535Z   repository: Kaichen9527/stockinsider
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2649761Z   run-id: 38161353435
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.2649937Z ##[endgroup]
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3843273Z Downloading single artifact
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3983563Z (node:2199) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.3984717Z (Use `node --trace-deprecation ...` to show where the warning was created)
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.4643661Z Preparing to download the following artifacts:
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.4645586Z - stockinsider-v3-gate-bootstrap-7af8cba0347010a1d2b007fc8e733ce30faf0ef3 (ID: 11710891593, Size: 661, Expected Digest: sha256:deefde88625be87c98bce41bcb38c800488a54f3c1de4d36c288eb410465be0e)
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.5834535Z Redirecting to blob download url: https://productionresultssa8.blob.core.windows.net/actions-results/1728fcac-67a6-8515-80c3-f6fbb4f7ae4d/workflow-job-run-6851373e-8979-54d1-a08f-cb5c2b28ae92/artifacts/df9370695937666e8c3e54da51ec1c14e56a03b828cc12103d811f9893a0d212.zip
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.5835965Z Starting download of artifact to: /home/runner/work/_temp/stockinsider-v3-gate-bootstrap
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.6285481Z (node:2199) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.6330292Z SHA256 digest of downloaded artifact is deefde88625be87c98bce41bcb38c800488a54f3c1de4d36c288eb410465be0e
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.6331043Z Artifact download completed successfully.
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.6331355Z Total of 1 artifact(s) downloaded
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.6334675Z Download artifact has finished successfully
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.6406903Z ##[end-action id=__self.__actions_download-artifact;outcome=success;conclusion=success;duration_ms=380]
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.6425061Z ##[start-action display=Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject";id=__self.__run]
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.6455602Z ##[group]Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject"
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.6457140Z ^[[36;1mnode scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/home/runner/work/_temp/stockinsider-v3-subject"^[[0m
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7242605Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.7242945Z ##[endgroup]
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.8341589Z From https://github.com/Kaichen9527/stockinsider
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:21.8342115Z  * branch              7af8cba0347010a1d2b007fc8e733ce30faf0ef3 -> FETCH_HEAD
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.3113479Z fatal: couldn't find remote ref refs/heads/evidence/source-led-opportunity-v3-exact-review-7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.3138798Z protected external gate worker failed: Command failed: /usr/bin/git fetch --no-tags origin refs/heads/evidence/source-led-opportunity-v3-exact-review-7af8cba0347010a1d2b007fc8e733ce30faf0ef3:refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-7af8cba0347010a1d2b007fc8e733ce30faf0ef3 refs/heads/evidence/source-led-opportunity-v3-requirements-v318-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v318-digest refs/heads/evidence/source-led-opportunity-v3-architecture-v318-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v318-digest
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.5896352Z ##[error]Process completed with exit code 1.
+requirements	Retrieve bootstrap and prepare detached subject	2026-10-11T17:51:22.5903753Z ##[end-action id=__self.__run;outcome=failure;conclusion=failure;duration_ms=947]
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	﻿2026-10-11T17:51:30.3256787Z ##[group]Run test "$REQUIREMENTS_RESULT" = success
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3257628Z ^[[36;1mtest "$REQUIREMENTS_RESULT" = success^[[0m
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3258299Z ^[[36;1mtest "$ARCHITECTURE_RESULT" = success^[[0m
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3258949Z ^[[36;1mtest "$PRODUCT_RUNTIME_RESULT" = success^[[0m
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3259614Z ^[[36;1mtest "$MODEL_RUNNER_RESULT" = success^[[0m
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3260468Z ^[[36;1mtest "$EXACT_REVIEW_RESULT" = success^[[0m
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3512843Z shell: /usr/bin/bash -e {0}
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3513785Z env:
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3514285Z   ARCHITECTURE_RESULT: failure
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3514890Z   EXACT_REVIEW_RESULT: failure
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3515470Z   MODEL_RUNNER_RESULT: skipped
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3516075Z   PRODUCT_RUNTIME_RESULT: skipped
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3516670Z   REQUIREMENTS_RESULT: failure
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3517222Z ##[endgroup]
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T17:51:30.3681848Z ##[error]Process completed with exit code 1.

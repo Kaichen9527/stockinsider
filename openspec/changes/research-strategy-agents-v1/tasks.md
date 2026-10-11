@@ -1,5 +1,15 @@
 # Execution ledger
 
+## 2026-10-11T17:54Z scoped source evidence increment
+
+- [x] PTT new-document mention lineage/read-completeness helper and actual source-function synthetic boundary tests; root30/30, maker40raw/16source hashes verified. No historical backfill or live crawl.
+- [x] PR372 ordinary diagnostic workflow registered and actually passed30/30 at7af8cba0.
+- [ ] Root-authored workflow independent review, final exact protected handoff and all release gates; first protected run38161353435 failed missing exact evidence ref, not a native model execution.
+- [ ] PTT admission adapter, independent root/creator resolution, official latest-session projection, research scheduler and complete author/reviewer publication.
+- [x] Other-App owner cache-cause audit received: avoidable runtime ENV/apt rebuild confirmed, npm same-SHA cache misses only partially explained; zero cache entries older than30days, no deletion.
+
+Current deployment and remaining runtime conditions are in docs/operations/2026-10-11/launch-status.md; earlier capacity and running-flow sections are historical.
+
 ## Human-directed phased delivery — 2026-10-11T11:54Z
 
 - [x] Verify current production candidate availability through public API, read-only DB and Internal Browser search2409:272found／1waiting／0actionable. Existing release9fd86fe remains active; not a new PR364 deployment.

@@ -1,0 +1,379 @@
+{
+  "schema": "ptt-provenance-root-scope-review-v1",
+  "recordedAt": "2026-10-11T17:51:58.564081+00:00",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "makerCode": "04384e9c3b2aab0d54a1ebd622dac64b9cdb5157",
+  "makerEvidenceHead": "dd6be09e8c0e22698bbce4c77c9cc55d09be7a5d",
+  "rootWorkflowHead": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3",
+  "finalTree": "05065f79c9023135eac56c0522bb44a043e6b843",
+  "webTree": "869ad0662b486108c1d74ae3736a1baca6b825e2",
+  "reviewerAuthorship": {
+    "makerCode": "existing authorized durable Cloud task",
+    "codeReview": "root, not maker of four reviewed runtime/test files",
+    "workflow": "root-authored successor; NOT independently approved by root",
+    "protectedOrSignedApproval": false
+  },
+  "scopeResult": {
+    "newCodeBlockerFindings": [],
+    "tests": 30,
+    "pass": 30,
+    "fail": 0,
+    "skip": 0,
+    "node": "22.14.0",
+    "arch": "arm64",
+    "command": [
+      "/usr/bin/arch",
+      "-arm64",
+      "/usr/local/bin/node",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "web/src/lib/ptt-mention-provenance.test.ts",
+      "scripts/ptt-mention-provenance-boundary.test.mjs",
+      "web/src/lib/ptt-policy.test.ts",
+      "web/src/lib/source-content-semantics.test.ts"
+    ],
+    "actualSourceFunctionsWithSyntheticAdapters": true,
+    "verifiedRaw": 40,
+    "verifiedSourceFiles": 16,
+    "makerReceiptSha256": "8b43d51a5fad5c151c7c80eb8c79e51f2b046d6d092f6f1fb8e52e4d15d0707d"
+  },
+  "reviewed": [
+    "finite metadata allowlist and URL/parent/index alignment",
+    "non-PTT projection unchanged, raw-document FK remains null",
+    "title-only/unknown reads retain gaps, no body copied",
+    "local identity/conversation grouping explicitly not independent roots",
+    "per-stock reply extractor does not inherit parent stock",
+    "unknown and excessive fields bounded; excerpt hash UTF8",
+    "new documents only; existing missing mention backfill not silently claimed"
+  ],
+  "limitations": [
+    "Ordinary GitHub workflow38161353537 actually passed30/30zero skip; not protected approval",
+    "root-authored workflow still needs independent release review",
+    "build/type/lint evidence reused from maker exact identical webtree; no fresh root build",
+    "this Mac had about2.5GB free; no dependency installation or build attempted",
+    "no live source acquisition or production write",
+    "matched_symbols records transient extractor results; not proof the retained excerpt contains a stock code",
+    "PTT20-author admission adapter, independent-root resolution, official-session projection and scheduler remain pending",
+    "article/strategy author-independent-review and approved publication chain remain incomplete"
+  ],
+  "pr": "https://github.com/Kaichen9527/stockinsider/pull/372",
+  "ciInitiallyObserved": [
+    {
+      "id": 38161353537,
+      "kind": "ordinary",
+      "status": "in_progress"
+    },
+    {
+      "id": 38161353435,
+      "kind": "protected",
+      "status": "in_progress"
+    }
+  ],
+  "sourceAndRawChecks": [
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/baseline.json",
+      "bytes": 764,
+      "sha256": "8bc8ab5a98888c9fcd7b4c557b75651c8f455e06135fc0672ac2a88bba5302ae"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/baseline.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/baseline.stdout",
+      "bytes": 4347,
+      "sha256": "2c03855756090569f48f512038baf3ef3fdc8c43eb26a2a27d4d665bfe3ae069"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/baseline.time",
+      "bytes": 910,
+      "sha256": "2b991e67abe6315039c637c585e0e9413038e3d83f619c81498b820237350d0e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build-identity.json",
+      "bytes": 461,
+      "sha256": "825399f6f199dc6aaa6dcd17c8aad96805d6f3dec33c91c0a35647e15b69086e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build-local-deps.json",
+      "bytes": 648,
+      "sha256": "b00aed5c1e403deb3c8d1d1859a5df190e2ca9bafa3a7c7f8415acb0254db52b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build-local-deps.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build-local-deps.stdout",
+      "bytes": 5556,
+      "sha256": "7dd12975202212e18cc163d723f18cd5d2fda787f7334a8b90441b98c1fbb2a1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build-local-deps.time",
+      "bytes": 760,
+      "sha256": "639119e31dd41c112acd0a699d40ec626d4b5144422a80756f45b3352bfc661d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build.json",
+      "bytes": 637,
+      "sha256": "94008a03a0039e3bf48c6ac198c7624c018e3a987c992bdb8b5395b08ba6e7b1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build.stderr",
+      "bytes": 2713,
+      "sha256": "df4ba229435b15f477d41d486da7b9c55d73ae0c28c1d45c211c5cf63356bef1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build.stdout",
+      "bytes": 332,
+      "sha256": "b7a6d6a43d3fff0e8762f8259d44e0ef8e82af97701f6e09495fe44d07422dcf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build.time",
+      "bytes": 789,
+      "sha256": "81811e0be93bd087274cfa976703b75fa78aed0b2d25c9305c711fe6c15e09c9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/compiled-server-manifest.json",
+      "bytes": 332873,
+      "sha256": "b993ccf4dd78725a3c64defcdd072498386f477e1539c365a23501528aa3d1df"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/dependency-placement.json",
+      "bytes": 1198,
+      "sha256": "65e03f3b936fac4e618c469d4d8444f5a8fe4b7cf64229d80091f3eb6247da66"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-final.json",
+      "bytes": 909,
+      "sha256": "a43c568243c1827b1a9cffacd0e7fa983d60dcfb67a66534cf8f4126b4eade0d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-final.stdout",
+      "bytes": 8009,
+      "sha256": "f92016a270dafea18ecadad94ab2c7b581402802ae5ab237f83606d828716b38"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-final.time",
+      "bytes": 993,
+      "sha256": "c7fe06be395ec28d912b5590019ea6ad5746977a91026ebb70c18e2856a901a4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-real-matcher.json",
+      "bytes": 916,
+      "sha256": "bf04c4537d8261f09fd8cda88bea2140417b63773bbd96c937f7a9638d7f58ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-real-matcher.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-real-matcher.stdout",
+      "bytes": 8196,
+      "sha256": "efd51f24d85d0e3737fc3f627aaaa930020ff2710b3c2a87f697f68620a4ec9e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-real-matcher.time",
+      "bytes": 992,
+      "sha256": "179d5eff677c75f28f6584eab97ce98ed1a069d4a36809a93fd94544c36953b8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused.json",
+      "bytes": 904,
+      "sha256": "1bf811b27a7cdff6733f798236b0df72c1af046168f82abbe5b5fa1a9d359941"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused.stdout",
+      "bytes": 7603,
+      "sha256": "c7a48db3bd177fd739b2a600063e0ce87340a13275ed2e07e62d504702dc5e08"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused.time",
+      "bytes": 994,
+      "sha256": "97b5df70aa9efdce258d252cd7d15e467b5a0b30b6211ee05e25fcc7a2327b5c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/handoff.md",
+      "bytes": 3991,
+      "sha256": "5aef825ef1b0164ccd497cc100c002ae809f533b5baea8d9ebb9c369aa450480"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/lint.json",
+      "bytes": 636,
+      "sha256": "6d3cfdf76c11e4f9bea3f306065505d464f076728f3cfcab222844576ca01985"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/lint.stderr",
+      "bytes": 156,
+      "sha256": "ba1b60e29dbd3b57b0c0e2a709b426addc654f02936f5dd4246a88ed830b9730"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/lint.stdout",
+      "bytes": 4534,
+      "sha256": "e148cc227b2b65e26684c81747405a4802ed55b0ad2e392e19540a2f54baeda0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/lint.time",
+      "bytes": 756,
+      "sha256": "a299ab4614a3a3f2b845c51899ae70d31976dc157dbbabc2fdf0ad3d0f2716d2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/next-panic-7332cce8870cee5c07bf071907748191.log",
+      "bytes": 886,
+      "sha256": "25f1238e5d5dc28a6a4341fb709b55a3ce6f01f284ed01fb0ba21ed157067bcf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/run.py",
+      "bytes": 3308,
+      "sha256": "bf024659b296d4c61426c0ab65551a7f4e164cc156d0401f12c19581a620762a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/source-manifest.json",
+      "bytes": 3448,
+      "sha256": "73c49b2cf5441464f527615f01b2949264a6dc9b96fa19838530feebf759ca3e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/test-inventory.json",
+      "bytes": 2180,
+      "sha256": "27a2599dd157550e777fd0cd1c5bd392c0ed81b210948e357b3b11342400c811"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/typecheck.json",
+      "bytes": 644,
+      "sha256": "98df8c662e4933538ee7aa024f302c6ed121e593f4f8f884a6c50b598d2e9380"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/typecheck.time",
+      "bytes": 759,
+      "sha256": "ec8fb92ca7a15a397887dc8219e39ff51a52436c71fcabfe37bcf15b8706733b"
+    },
+    {
+      "path": "scripts/ptt-mention-provenance-boundary.test.mjs",
+      "bytes": 8457,
+      "sha256": "fb96bcc8f9721057594e7da2b0a84c8bff21f791f506ab2cf341fd4c2ca908a8"
+    },
+    {
+      "path": "web/src/lib/ptt-mention-provenance.test.ts",
+      "bytes": 6408,
+      "sha256": "701ab3d1db8953746f752412b5b0bc41ab1f23ad918da95d2192899697dcf63e"
+    },
+    {
+      "path": "web/src/lib/ptt-mention-provenance.ts",
+      "bytes": 5986,
+      "sha256": "3a7112be751eebcf1e6c76540ef5520682c9df02603335eac9a5f428d534884b"
+    },
+    {
+      "path": "web/src/lib/research-v2.ts",
+      "bytes": 281771,
+      "sha256": "0ff13df86573d16922689858fba8ed845251f8fbb50f79c8ae4f20a6ee7b8c5d"
+    },
+    {
+      "path": "web/src/lib/source-content-semantics.ts",
+      "bytes": 5709,
+      "sha256": "1701ac7287d72b2d7faa7cd62cedf11a0df3ff71e16d36e713205d0a11903cdb"
+    },
+    {
+      "path": "web/src/lib/source-content-semantics.test.ts",
+      "bytes": 3216,
+      "sha256": "e41bd0802ea026a59fcb0810e24bd56bca8dce3df362b5c326f101ec7e3dc28b"
+    },
+    {
+      "path": "web/src/lib/ptt-policy.ts",
+      "bytes": 194,
+      "sha256": "3b104914e4e104b731a224e35207dfa4b74be7e9863e2b8dcde1ba02d3a3150b"
+    },
+    {
+      "path": "web/src/lib/ptt-policy.test.ts",
+      "bytes": 608,
+      "sha256": "4b7f085edcb9c0cde89b7148319bd9142380ba08b400ae366f7bcd661cd9e4ff"
+    },
+    {
+      "path": "migrations/20260830_source_ranking_v2.sql",
+      "bytes": 17381,
+      "sha256": "8bff800465680306da4aa2bf84321af564132adf021d4ff53fd001759d11f9ae"
+    },
+    {
+      "path": "migrations/20260901_source_research_shadow_v2.sql",
+      "bytes": 16015,
+      "sha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795"
+    },
+    {
+      "path": "web/package.json",
+      "bytes": 1943,
+      "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e"
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274088,
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+    },
+    {
+      "path": "package.json",
+      "bytes": 24733,
+      "sha256": "6dae2b07a0d6ac9e653cc06aba741060a0cb50a0730ab3874e09a3919f0986cc"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38"
+    },
+    {
+      "path": "web/scripts/sync-official-authority.mjs",
+      "bytes": 4171,
+      "sha256": "d1e30d7e538d98ce5e5a012a0e007bb137bf7df829491d3b4ec5b5a316c5644d"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 6685,
+      "sha256": "0e4af0349489576004271dfdca3736df6e83cc74b1ed4fda30d765d68c4f0dc5"
+    }
+  ],
+  "ordinaryCiFinal": {
+    "id": 38161353537,
+    "status": "completed",
+    "conclusion": "success",
+    "head": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3"
+  },
+  "protectedCiFinal": {
+    "id": 38161353435,
+    "conclusion": "failure",
+    "notRerun": true,
+    "raw": "protected-ci-failed.log",
+    "notNativeCheckExecuted": true,
+    "reason": "exact version evidence/source-led-opportunity-v3-exact-review-7af8cba0347010a1d2b007fc8e733ce30faf0ef3 remote ref absent",
+    "logFetchSyntaxFailureRetained": "protected-ci.stderr"
+  },
+  "workflowIndependentReviewTask": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "hostId": "durable",
+    "turnId": "01a12c18-9af0-76f3-9ca8-e92638e3e11f",
+    "cursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:2",
+    "status": "active",
+    "readOnlyMinutes": 10,
+    "scope": "root-authored workflow only; no self approval of maker code"
+  }
+}

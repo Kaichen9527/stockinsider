@@ -1,5 +1,17 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 17:54Z：PTT逐則證據完成普通CI；其他App快取成因已有答覆
+
+既有Cloud任務已完成並idle後，root取得maker branch `codex/ptt-mention-provenance-oct12`。四個程式／測試檔由Cloud編寫，root獨立審查並實跑30/30、零skip，40份raw及16份source hash全部核對。新增有界逐則作者、parent、index、stock-local extractor basis、必要短excerpt/hash與title-only／partial讀取狀態；平台作者與討論串仍明確不等於獨立消息根源。Repo migration的FK實為source_raw_documents，先前normalized-ID是假說；本次保留source_document_id:null，沒有借ID或查正式schema。只影響未來新增來源，不回填272線索、不crawl、不寫DB、不重跑core。
+
+Root另補普通診斷workflow，final7af8cba0347010a1d2b007fc8e733ce30faf0ef3、tree05065f79c9023135eac56c0522bb44a043e6b843；[PR372](https://github.com/Kaichen9527/stockinsider/pull/372)已draft並附本聊天。真實GitHub run38161353537已30PASS／0FAIL／0SKIP。Maker正常Next16.3.4 build、types/lint成功僅對完全相同webtree869ad066重用，沒有冒稱root新build；Mac目前可用約2.5GB，沒有新增依賴安裝或build。原main169四項regression RED及symlink build RED保留。Root是workflow作者，已向原Cloud任務單次請求10分鐘唯讀workflow獨立核對；不能把root對maker code的review延伸成自己workflow的獨立批准。
+
+PR372初次protected run38161353435因exact-review evidence ref尚未建立而FAIL，code/model jobs未執行；不是新的native ENOENT實測，也沒有重跑。PR370/371原head仍OPEN/BLOCKED、發布工具首次信任遷移決策仍未收到，正式main169沒有切換。完整PTT20作者准入adapter、resolved根源、官方最新交易日投影、研究排程和作者／獨立審查發布鏈仍未完成。普通CI成功不代表研究可進場或發布已批准。
+
+其他App「規劃金流驗證與VPS部署」Codex已完成唯讀專項：報告Build Cache64.21GB、明示@soho8.56GB、shared8.67GB、歸屬未知46.99GB，VPS可用16.51GB；這些是該次量測，非相互獨立磁碟可回收量。644筆最早10/01，0筆滿30日，所以沒有清除。確認SOHO runtime的release／URL ENV在apt前，映像history帶值且兩環境operation digest不同，造成可避免的OS層重建；1.29GB npm層在release參數前，同SHA的local-source signature不同，但完整原因尚未定位，不能全部怪ENV或SOHO。Root已讀實際Dockerfile及owner診斷文件；不改其App或Docker全域設定，後續改善是把穩定OS層移前、拆OpenSSL/npm並補查context。約666MB只是每環境每發布可避免的未壓縮層估算，非保證實際回收容量。維持月內及未知/shared不刪。
+
+新raw、逐項hash、GitHub普通成功與protected原始失敗：`.agent/reports/2026-10-11T17-45-ptt-review-and-cache-audit/`。沒有重跑已完成343全量或PTT2409，AUO3份prepared摘要仍未匯入，正式研究排程未啟用。
+
 ## 16:46Z：等待決策期間繼續來源接線與跨 App 查核
 
 PR370/371精確head及BLOCKED未變，人類首次信任遷移決策尚未答覆；不重跑同一失敗、不改保護。既有Cloud cursor50確認idle後，接獨立main169分支`codex/ptt-mention-provenance-oct12`：只補PTT來源讀取完整度與已保留逐則留言關係至mention provenance，有界allowlist與測試。FK先核對，不能拿raw-document ID冒充source_document ID；parent只是討論串、作者只是平台身份，不能偽造獨立消息根源。凍結PR370/371不動，30分鐘工程工作，無實際抓取/寫DB/重算/改策略或排程。Root不重疊修改。

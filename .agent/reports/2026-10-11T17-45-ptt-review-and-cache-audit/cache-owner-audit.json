@@ -1,0 +1,48 @@
+{
+  "schema": "other-app-cache-owner-audit-attribution-v1",
+  "recordedAt": "2026-10-11T17:51:58.566322+00:00",
+  "sourceThread": {
+    "id": "019fbfd2-f671-7f90-858f-683bc2114af4",
+    "title": "規劃金流驗證與VPS部署",
+    "turnId": "01a12bd9-8ded-77e2-b7f3-016d375f6da3",
+    "cursor": "c2296c15-aa45-4885-8510-8a1f12c4128d:30",
+    "status": "idle"
+  },
+  "attribution": "Owner Codex read-only audit; root read returned actual history/digest summaries and local Dockerfile/diagnosis; no new root host-wide inventory claimed",
+  "reportedGB": {
+    "vpsAvailable": 16.51,
+    "buildCache": 64.21,
+    "explicitSohoMarker": 8.56,
+    "shared": 8.67,
+    "unattributed": 46.99
+  },
+  "reportedRecords": 644,
+  "oldestReportedDate": "2026-10-01",
+  "eligibleOver30Days": 0,
+  "confirmedCause": "runtime release/url ENV precedes apt RUN; image histories include changing values and staging/production operation digests differ",
+  "unresolvedCause": "1.29GB npm dependency layers are before release ENV; some manifests changed, same-SHA two-environment builds also have different local-source signatures; complete cause unresolved",
+  "recommendationsOnly": [
+    "stable OS dependencies before release ENV",
+    "separate OpenSSL install from npm ci",
+    "investigate context/cache signatures",
+    "consider CI image builds and VPS pulls"
+  ],
+  "notImplemented": true,
+  "estimatedAvoidableRuntimeLayerUncompressedBytes": 666000000,
+  "estimateIsNotExclusiveDiskReclaim": true,
+  "stockinsiderDockerDeployment": false,
+  "noDeletionNoBuildNoDeployNoGcChange": true,
+  "preserveUnder30DaysAndUnknownShared": true,
+  "rootLocalEvidence": [
+    {
+      "path": "/Users/kaerchen/.codex/coachconsole-evidence-20261011/docker-cache-cause-readonly.md",
+      "bytes": 1512,
+      "sha256": "49a32845c95212c7b3c449662c2ac5bba858f0ce9db75b0f9d5772c932dd1409"
+    },
+    {
+      "path": "/Users/kaerchen/.codex/worktrees/coach-qr-https.adIGoA/repo/Dockerfile",
+      "bytes": 5832,
+      "sha256": "d2644d2fed2b2456b189121043cf1059bd01c4a4a8c7398e33ee280f6a660e0d"
+    }
+  ]
+}
