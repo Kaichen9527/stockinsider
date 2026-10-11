@@ -1,0 +1,605 @@
+{
+  "schemaVersion": "bounded-linux-engineering-receipt-v1",
+  "recordedAt": "2026-10-11T07:53:51.373522+00:00",
+  "task": "Frozen precise discovery/thesis isolation/complete mapping Linux validation",
+  "source": {
+    "head": "e0885815b39f86df34763279dc5fc22e54037a40",
+    "tree": "3a3302a16466a4b42ad8d661458f2c4f36c7d8ff",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "node": "v22.14.0",
+    "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "pgConfigBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "nativeToolsExecutable": {
+      "initdb": true,
+      "pg_ctl": true,
+      "psql": true,
+      "postgres": true
+    },
+    "pgClient": {
+      "version": "8.18.0",
+      "user": "agent"
+    },
+    "osUser": "agent",
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "diskAvailableBytes": 10054541312,
+    "sourceStatus": "",
+    "admissionAt": "2026-10-11T07:45:09.496284Z",
+    "manualHardStopAt": "2026-10-11T08:15:09Z",
+    "memoryAvailableKiB": 33244052,
+    "activeHeavyAtAdmission": []
+  },
+  "branch": "codex/research-precision-install-linux-evidence-oct11",
+  "manualWindow": {
+    "admittedAt": "2026-10-11T07:45:09.496284Z",
+    "hardStopAt": "2026-10-11T08:15:09Z",
+    "commandGuardStopAt": "2026-10-11T08:14:25Z",
+    "manualEngineeringNotModelRoleBudget": true
+  },
+  "result": "PARTIAL_VALIDATION_WITH_ORIGINAL_FULL_SUITE_RED",
+  "selection": {
+    "originalPackageScript": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/research-agent-*.test.ts web/src/lib/research-deep-*.test.ts web/src/lib/research-paper-books.test.ts web/src/lib/research-review-auth.test.ts web/src/lib/research-strategy-governance.test.ts web/src/lib/research-weekly-bars.test.ts scripts/research-agent-migration-gate.test.mjs scripts/research-agent-routes.test.mjs scripts/research-paper-session-route.test.mjs scripts/research-approval-replay-route.test.mjs scripts/research-strategy-release.test.mjs scripts/research-source-budget-postgres.test.mjs scripts/research-admission-isolation-postgres.test.mjs web/src/lib/research-source-extensions.test.ts web/src/lib/research-broker-estimate.test.ts web/src/lib/research-execution-context.test.ts web/src/lib/technical-features-v2.test.ts scripts/research-deep-*-postgres.test.mjs scripts/candidate-dossier-outbox-v6-postgres.test.mjs scripts/research-capacity-admission.test.mjs scripts/research-host-resource-check.test.mjs web/src/lib/research-cloud-work.test.ts scripts/research-cloud-capacity.test.mjs scripts/research-cloud-work-cli.test.mjs scripts/research-cloud-result-route.test.mjs scripts/research-cloud-receipts-postgres.test.mjs web/src/lib/research-source-attempt-controller.test.ts scripts/research-source-controller.test.mjs scripts/research-bounded-file.test.mjs web/src/lib/research-source-roots.test.ts web/src/lib/research-inbox.test.ts web/src/lib/research-agent-priority.test.ts scripts/release-owner-bridge-postgres.test.mjs scripts/research-cloud-controller.test.mjs web/src/lib/research-discovery-evidence.test.ts web/src/lib/research-discovery-price-enrichment.test.ts web/src/app/api/internal/research-priority-run/route.contract.test.ts scripts/research-monitor-controller.test.mjs scripts/research-monitor-progress.test.mjs scripts/research-deep-controller.test.mjs scripts/research-deep-draft-controller.test.mjs scripts/research-deep-job-context-route.test.mjs web/src/lib/research-source-association.test.ts scripts/candidate-financial-document-write-lease-route.test.mjs web/src/lib/research-insider-official.test.ts web/src/lib/source-health.test.ts scripts/research-insider-collector.test.mjs scripts/research-insider-health-route.test.mjs scripts/research-insider-cursor-postgres.test.mjs web/src/lib/research-observed-roster.test.ts web/src/lib/research-observed-priority.test.ts web/src/lib/research-observed-deep.test.ts scripts/research-observed-roster-native.test.mjs scripts/research-observed-priority-native.test.mjs scripts/research-publication-source-fence-postgres.test.mjs scripts/research-input-preparation-postgres.test.mjs scripts/candidate-financial-queue-write-lease-route.test.mjs web/src/lib/research-monitor-benchmark-context.test.ts web/src/lib/research-attention-shadow-v2.test.ts scripts/research-business-calculator.test.mjs scripts/research-financial-supplement.test.mjs scripts/research-financial-cleanup.test.mjs scripts/research-execution-binding.test.mjs scripts/research-saved-observation.test.mjs scripts/research-publication-http-drop.test.mjs scripts/research-release-artifacts.test.mjs scripts/research-publication-view.test.mjs scripts/research-atomic-publication.test.mjs scripts/research-atomic-publication-postgres.test.mjs scripts/research-source-priority-consumer.test.mjs scripts/research-complete-input.test.mjs scripts/research-complete-input-postgres.test.mjs scripts/research-author-assignment-route.test.mjs scripts/research-author-assignment-postgres.test.mjs",
+    "serialScript": "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 web/src/lib/research-agent-*.test.ts web/src/lib/research-deep-*.test.ts web/src/lib/research-paper-books.test.ts web/src/lib/research-review-auth.test.ts web/src/lib/research-strategy-governance.test.ts web/src/lib/research-weekly-bars.test.ts scripts/research-agent-migration-gate.test.mjs scripts/research-agent-routes.test.mjs scripts/research-paper-session-route.test.mjs scripts/research-approval-replay-route.test.mjs scripts/research-strategy-release.test.mjs scripts/research-source-budget-postgres.test.mjs scripts/research-admission-isolation-postgres.test.mjs web/src/lib/research-source-extensions.test.ts web/src/lib/research-broker-estimate.test.ts web/src/lib/research-execution-context.test.ts web/src/lib/technical-features-v2.test.ts scripts/research-deep-*-postgres.test.mjs scripts/candidate-dossier-outbox-v6-postgres.test.mjs scripts/research-capacity-admission.test.mjs scripts/research-host-resource-check.test.mjs web/src/lib/research-cloud-work.test.ts scripts/research-cloud-capacity.test.mjs scripts/research-cloud-work-cli.test.mjs scripts/research-cloud-result-route.test.mjs scripts/research-cloud-receipts-postgres.test.mjs web/src/lib/research-source-attempt-controller.test.ts scripts/research-source-controller.test.mjs scripts/research-bounded-file.test.mjs web/src/lib/research-source-roots.test.ts web/src/lib/research-inbox.test.ts web/src/lib/research-agent-priority.test.ts scripts/release-owner-bridge-postgres.test.mjs scripts/research-cloud-controller.test.mjs web/src/lib/research-discovery-evidence.test.ts web/src/lib/research-discovery-price-enrichment.test.ts web/src/app/api/internal/research-priority-run/route.contract.test.ts scripts/research-monitor-controller.test.mjs scripts/research-monitor-progress.test.mjs scripts/research-deep-controller.test.mjs scripts/research-deep-draft-controller.test.mjs scripts/research-deep-job-context-route.test.mjs web/src/lib/research-source-association.test.ts scripts/candidate-financial-document-write-lease-route.test.mjs web/src/lib/research-insider-official.test.ts web/src/lib/source-health.test.ts scripts/research-insider-collector.test.mjs scripts/research-insider-health-route.test.mjs scripts/research-insider-cursor-postgres.test.mjs web/src/lib/research-observed-roster.test.ts web/src/lib/research-observed-priority.test.ts web/src/lib/research-observed-deep.test.ts scripts/research-observed-roster-native.test.mjs scripts/research-observed-priority-native.test.mjs scripts/research-publication-source-fence-postgres.test.mjs scripts/research-input-preparation-postgres.test.mjs scripts/candidate-financial-queue-write-lease-route.test.mjs web/src/lib/research-monitor-benchmark-context.test.ts web/src/lib/research-attention-shadow-v2.test.ts scripts/research-business-calculator.test.mjs scripts/research-financial-supplement.test.mjs scripts/research-financial-cleanup.test.mjs scripts/research-execution-binding.test.mjs scripts/research-saved-observation.test.mjs scripts/research-publication-http-drop.test.mjs scripts/research-release-artifacts.test.mjs scripts/research-publication-view.test.mjs scripts/research-atomic-publication.test.mjs scripts/research-atomic-publication-postgres.test.mjs scripts/research-source-priority-consumer.test.mjs scripts/research-complete-input.test.mjs scripts/research-complete-input-postgres.test.mjs scripts/research-author-assignment-route.test.mjs scripts/research-author-assignment-postgres.test.mjs",
+    "onlyInsertedFlag": "--test-concurrency=1",
+    "expandedTestFiles": [
+      "web/src/lib/research-agent-priority.test.ts",
+      "web/src/lib/research-agent-qualification.test.ts",
+      "web/src/lib/research-deep-article.test.ts",
+      "web/src/lib/research-deep-claim-context.test.ts",
+      "web/src/lib/research-deep-source-rights.test.ts",
+      "web/src/lib/research-paper-books.test.ts",
+      "web/src/lib/research-review-auth.test.ts",
+      "web/src/lib/research-strategy-governance.test.ts",
+      "web/src/lib/research-weekly-bars.test.ts",
+      "scripts/research-agent-migration-gate.test.mjs",
+      "scripts/research-agent-routes.test.mjs",
+      "scripts/research-paper-session-route.test.mjs",
+      "scripts/research-approval-replay-route.test.mjs",
+      "scripts/research-strategy-release.test.mjs",
+      "scripts/research-source-budget-postgres.test.mjs",
+      "scripts/research-admission-isolation-postgres.test.mjs",
+      "web/src/lib/research-source-extensions.test.ts",
+      "web/src/lib/research-broker-estimate.test.ts",
+      "web/src/lib/research-execution-context.test.ts",
+      "web/src/lib/technical-features-v2.test.ts",
+      "scripts/research-deep-jobs-postgres.test.mjs",
+      "scripts/research-deep-publication-postgres.test.mjs",
+      "scripts/candidate-dossier-outbox-v6-postgres.test.mjs",
+      "scripts/research-capacity-admission.test.mjs",
+      "scripts/research-host-resource-check.test.mjs",
+      "web/src/lib/research-cloud-work.test.ts",
+      "scripts/research-cloud-capacity.test.mjs",
+      "scripts/research-cloud-work-cli.test.mjs",
+      "scripts/research-cloud-result-route.test.mjs",
+      "scripts/research-cloud-receipts-postgres.test.mjs",
+      "web/src/lib/research-source-attempt-controller.test.ts",
+      "scripts/research-source-controller.test.mjs",
+      "scripts/research-bounded-file.test.mjs",
+      "web/src/lib/research-source-roots.test.ts",
+      "web/src/lib/research-inbox.test.ts",
+      "web/src/lib/research-agent-priority.test.ts",
+      "scripts/release-owner-bridge-postgres.test.mjs",
+      "scripts/research-cloud-controller.test.mjs",
+      "web/src/lib/research-discovery-evidence.test.ts",
+      "web/src/lib/research-discovery-price-enrichment.test.ts",
+      "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+      "scripts/research-monitor-controller.test.mjs",
+      "scripts/research-monitor-progress.test.mjs",
+      "scripts/research-deep-controller.test.mjs",
+      "scripts/research-deep-draft-controller.test.mjs",
+      "scripts/research-deep-job-context-route.test.mjs",
+      "web/src/lib/research-source-association.test.ts",
+      "scripts/candidate-financial-document-write-lease-route.test.mjs",
+      "web/src/lib/research-insider-official.test.ts",
+      "web/src/lib/source-health.test.ts",
+      "scripts/research-insider-collector.test.mjs",
+      "scripts/research-insider-health-route.test.mjs",
+      "scripts/research-insider-cursor-postgres.test.mjs",
+      "web/src/lib/research-observed-roster.test.ts",
+      "web/src/lib/research-observed-priority.test.ts",
+      "web/src/lib/research-observed-deep.test.ts",
+      "scripts/research-observed-roster-native.test.mjs",
+      "scripts/research-observed-priority-native.test.mjs",
+      "scripts/research-publication-source-fence-postgres.test.mjs",
+      "scripts/research-input-preparation-postgres.test.mjs",
+      "scripts/candidate-financial-queue-write-lease-route.test.mjs",
+      "web/src/lib/research-monitor-benchmark-context.test.ts",
+      "web/src/lib/research-attention-shadow-v2.test.ts",
+      "scripts/research-business-calculator.test.mjs",
+      "scripts/research-financial-supplement.test.mjs",
+      "scripts/research-financial-cleanup.test.mjs",
+      "scripts/research-execution-binding.test.mjs",
+      "scripts/research-saved-observation.test.mjs",
+      "scripts/research-publication-http-drop.test.mjs",
+      "scripts/research-release-artifacts.test.mjs",
+      "scripts/research-publication-view.test.mjs",
+      "scripts/research-atomic-publication.test.mjs",
+      "scripts/research-atomic-publication-postgres.test.mjs",
+      "scripts/research-source-priority-consumer.test.mjs",
+      "scripts/research-complete-input.test.mjs",
+      "scripts/research-complete-input-postgres.test.mjs",
+      "scripts/research-author-assignment-route.test.mjs",
+      "scripts/research-author-assignment-postgres.test.mjs"
+    ],
+    "expandedFileCount": 78,
+    "noOmissionOrNamePattern": true,
+    "CI03NotSelectedByOriginalPackage": true,
+    "originalScriptSha256": "2be10c32b922062d8f1702cf07eb53793da12da18ced89f27f89eac5ab8a25c0",
+    "serialScriptSha256": "7d4698ec3b47bad29b60b00f8e3311e74d309f4b6cb878d3010bd89f978266d3"
+  },
+  "packageLifecycle": {
+    "pretest:research-agents": null,
+    "posttest:research-agents": null,
+    "packageNotEdited": true
+  },
+  "stages": [
+    {
+      "stage": "research-agents-serial",
+      "command": [
+        "bash",
+        "/tmp/si-e088-dwocjkkd/research-agents-serial.sh"
+      ],
+      "startedAt": "2026-10-11T07:46:40.749435+00:00",
+      "endedAt": "2026-10-11T07:49:14.989122+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 154.23969437903725,
+      "sampledAggregatePeakRssBytes": 564084736,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10054541312,
+      "diskAvailableAfterBytes": 10054541312,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "d9ae38de0a14b99c290fb5cd1b24926f15f5195270713d5aef080df150172215",
+      "commandHashEncoding": "compact_utf8_json_array_v1"
+    },
+    {
+      "stage": "thesis-install-selection",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-thesis-isolation-postgres.test.mjs",
+        "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+        "scripts/research-agent-migration-gate.test.mjs",
+        "scripts/research-strategy-release.test.mjs"
+      ],
+      "startedAt": "2026-10-11T07:49:30.231581+00:00",
+      "endedAt": "2026-10-11T07:49:42.729305+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 12.497732046002056,
+      "sampledAggregatePeakRssBytes": 195141632,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10054541312,
+      "diskAvailableAfterBytes": 10054541312,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "6e737167e1bb502264ac8a8a7647869273e97495d6eb22f4b7123b11d162d121",
+      "commandHashEncoding": "compact_utf8_json_array_v1"
+    },
+    {
+      "stage": "typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T07:50:17.081470+00:00",
+      "endedAt": "2026-10-11T07:50:23.387265+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 6.30580278596608,
+      "sampledAggregatePeakRssBytes": 810250240,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10054541312,
+      "diskAvailableAfterBytes": 10054541312,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "8ac999e55fa5ea36d85b28b65866851498beb4c9609f7f1c0f741dae1ee223a2",
+      "commandHashEncoding": "compact_utf8_json_array_v1"
+    },
+    {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T07:50:53.340671+00:00",
+      "endedAt": "2026-10-11T07:51:17.521757+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 24.181098630011547,
+      "sampledAggregatePeakRssBytes": 1149095936,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10054541312,
+      "diskAvailableAfterBytes": 10054541312,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "1ded22d1a648d19d7e494b6cf545f81772d40d2512b2d33c34e58eeb8c47fde0",
+      "commandHashEncoding": "compact_utf8_json_array_v1"
+    },
+    {
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T07:51:26.808070+00:00",
+      "endedAt": "2026-10-11T07:51:37.115167+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 10.307102203951217,
+      "sampledAggregatePeakRssBytes": 1439645696,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10054541312,
+      "diskAvailableAfterBytes": 10046562304,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "30afddbd6164a1c9a1745d7a4eeba53e9fb618211d6ee0b8caf850215486d5ce",
+      "commandHashEncoding": "compact_utf8_json_array_v1"
+    }
+  ],
+  "tests": [
+    {
+      "stage": "research-agents-serial",
+      "counts": {
+        "tests": 818,
+        "pass": 815,
+        "fail": 1,
+        "skipped": 2,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "listedExecutedNames": 818,
+      "skipLines": [
+        "ok 350 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled",
+        "ok 351 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled"
+      ]
+    },
+    {
+      "stage": "thesis-install-selection",
+      "counts": {
+        "tests": 15,
+        "pass": 15,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "listedExecutedNames": 15,
+      "skipLines": []
+    }
+  ],
+  "noCrossSelectionTotal": "Four-file selection overlaps original suite files; counts kept separate and not added as distinct acceptance.",
+  "firstFailure": {
+    "failMarkers": 1,
+    "blocks": [
+      "  duration_ms: 0.243948\n  ...\n# Subtest: cross-role budget, revision heads and first-discovery gaps survive real PostgreSQL\nnot ok 380 - cross-role budget, revision heads and first-discovery gaps survive real PostgreSQL\n  ---\n  duration_ms: 1175.690916\n  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-source-budget-postgres.test.mjs:16:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      {\n        argumentCount: 0,\n        argumentTypes: '',\n    +   bodySha256: '108ffb2c9a6c3497e25b485c98640865f9b8ccc53b0efc4a474b42a3c4fbee8b',\n    -   bodySha256: 'e93aab1e75c3ba28eabed3b0c198182e12936b3e4bbb39259ff278bc2ebb7784',\n        configuration: [\n          'search_path=public,pg_temp'\n        ],\n        name: 'fence_candidate_thesis_append_v1',\n        securityDefiner: true,\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    name: 'fence_candidate_thesis_append_v1'\n    bodySha256: 'e93aab1e75c3ba28eabed3b0c198182e12936b3e4bbb39259ff278bc2ebb7784'\n    securityDefiner: true\n    volatility: 'v'\n    argumentCount: 0\n    configuration:\n      0: 'search_path=public,pg_temp'\n    argumentTypes: ''\n  actual:\n    name: 'fence_candidate_thesis_append_v1'\n    bodySha256: '108ffb2c9a6c3497e25b485c98640865f9b8ccc53b0efc4a474b42a3c4fbee8b'\n    volatility: 'v'\n    argumentCount: 0\n    argumentTypes: ''\n    configuration:\n      0: 'search_path=public,pg_temp'\n    securityDefiner: true\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-source-budget-postgres.test.mjs:149:46)\n    Test.runInAsyncScope (node:async_hooks:211:14)\n    Test.run (node:internal/test_runner/test:979:25)\n    Test.start (node:internal/test_runner/test:877:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)\n  ...\n# (node:335455) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time\n# (Use `node --trace-warnings ...` to show where the warning was created)"
+    ]
+  },
+  "diagnosis": {
+    "finding": "source-budget fixture installs predecessor trigger but compares against successor execution manifest",
+    "actualSha256": "108ffb2c9a6c3497e25b485c98640865f9b8ccc53b0efc4a474b42a3c4fbee8b",
+    "expectedSha256": "e93aab1e75c3ba28eabed3b0c198182e12936b3e4bbb39259ff278bc2ebb7784",
+    "actualIsExactSuccessorMigrationPinnedPredecessor": true,
+    "expectedIsExactSuccessorMigrationPinnedSuccessor": true,
+    "fixtureMentionsSuccessorMigration": false,
+    "testCodeChanged": false,
+    "failureNotRetried": true,
+    "limitedConclusion": "Actual failed comparison and immutable source inspection establish fixture predecessor/successor mismatch. The separate commanded four-file selection passed15 cases in this VM; this is not an independent reviewer rerun or full-suite green."
+  },
+  "minimalRepairProposalNotApplied": "Root may repair the source-budget fixture to install the unchanged approved thesis successor after the last original technical_identity_v2 upgrade and before generated policy comparison; preserve the exact hash assertion/SQL guard. This task does not change or rerun that test.",
+  "fullChain": {
+    "selectedMigrations": 76,
+    "appliedMigrations": 75,
+    "supersededMigrations": 1,
+    "threeFixedCatalogStagesChecked": true,
+    "fixture": "Existing VPS schema-only dump restored into owned PG17; no synthetic full-chain prerequisite stubs and no VPS connection",
+    "thesisFixture": "Original isolated partial synthetic table prerequisites plus reviewed predecessor/successor SQL, not full production deployment"
+  },
+  "build": {
+    "source": "e0885815b39f86df34763279dc5fc22e54037a40",
+    "tree": "3a3302a16466a4b42ad8d661458f2c4f36c7d8ff",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "compiler": "normal npm --prefix web run build (Turbopack)",
+    "buildId": "Bv6FW39iE9II6pvbC4qtm",
+    "serverFiles": 2088,
+    "serverLogicalBytes": 67439593,
+    "serverManifestSha256": "e01c8ade6ccd5f075abb5582d2a29ac42b55036d1e6f8f16da2161028b79ad45",
+    "node": "v22.14.0",
+    "nextVersion": "16.3.8",
+    "npmVersion": "11.9.0",
+    "prebuildExecuted": true
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 33
+  },
+  "CI03Capability": {
+    "expectedClockSha256": "483dfc28d0b87718ce50b48d382f03b8615fe861c5f859c958ddfc934fa0b3c6",
+    "searchRoots": [
+      "/tmp",
+      "/workspace/.tools",
+      "/workspace/cloud-acceptance-0faebfd/tools"
+    ],
+    "foundLibraries": [],
+    "reviewedExactLibraryAvailable": false,
+    "CI03Status": "not_selected_by_original_package, not_run",
+    "noInstallNoShim": true,
+    "clockLibraryNotPassedToSuite": true,
+    "configuredLibraryVariablePresent": false
+  },
+  "environment": {
+    "osDerivedUser": "agent",
+    "pgClientUserMatchesOs": true,
+    "pgVersion": "17.11 Debian17.11-0+deb13u1",
+    "pgDependency": "8.18.0",
+    "node": "v22.14.0",
+    "RESEARCH_LOCAL_DATAPLANE_PG_BIN": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "umask": "0077",
+    "privateTmpRoot": "/tmp/si-e088-dwocjkkd",
+    "proxyCaPreserved": true,
+    "secretsReadOrPrinted": false,
+    "productionConnection": false,
+    "clockOverride": false,
+    "noDependencySourceLockSqlGuardChange": true,
+    "noBrowserDownload": true
+  },
+  "resources": {
+    "peakSampledAggregateRssBytes": 1439645696,
+    "lowestObservedAvailableBytes": 10046545920,
+    "minimumReserveBytes": 8589934592,
+    "rssGoalBytes": 8589934592,
+    "method": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "gnuTimeRetained": true,
+    "limitations": "100ms aggregate process group/recursive children sampling may miss short-lived or reparented children; no cgroup peak claim."
+  },
+  "cleanup": {
+    "observedAt": "2026-10-11T07:52:34.931003+00:00",
+    "activeRelevantProcesses": [],
+    "testClusterDirectoriesRemaining": {
+      "/tmp": {
+        "si-full-chain-*": [],
+        "si-thesis-*": [],
+        "stockinsider-source-budget-*": []
+      },
+      "/tmp/si-e088-dwocjkkd": {
+        "si-full-chain-*": [],
+        "si-thesis-*": [],
+        "stockinsider-source-budget-*": []
+      }
+    },
+    "remainingNestedArtifactDirectories": [
+      "node-compile-cache",
+      "source-priority-consumer-YwiJPP",
+      "source-priority-consumer-8zsA08",
+      "source-priority-consumer-qjkNV5",
+      "source-priority-consumer-I6Bb5D",
+      "source-priority-consumer-Eibwp1",
+      "source-priority-consumer-CMrxEw",
+      "source-priority-consumer-6aaGBJ",
+      "source-priority-consumer-lEU86M",
+      "source-priority-consumer-xgXg2v",
+      "source-priority-consumer-OYId2V",
+      "source-priority-consumer-ZAvlCH",
+      "source-priority-consumer-N48le2",
+      "source-priority-consumer-DI90NF",
+      "source-priority-consumer-mSiOSP"
+    ],
+    "trackedStatus": "",
+    "diskAvailableBytes": 10046545920,
+    "method": "Original test finally blocks stop/delete owned disposable PG; full observer finds no live PG/Node/npm/browser. No external deletion/prune and all raw retained."
+  },
+  "sourceManifestFiles": 182,
+  "sourceManifestScope": "Entire tracked Git head/tree/webtree plus readable SHA/length manifest of all current selected tests, migration chain, diff from130, original profile/fixture, complete mapping and locks.",
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/before-build-inventory.json",
+      "bytes": 237,
+      "sha256": "dd333012814814125e59e2615a1f162a2b4f723c96c8b9533ba19037cf6ff9b5"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/build-identity.json",
+      "bytes": 525,
+      "sha256": "6851fb0dee4a58cebc014c69f6c003f1530a289b9812e226cbb0264ccf85cef5"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/ci03-capability.json",
+      "bytes": 444,
+      "sha256": "1f690ccf84c02f258d41856a5bf35b8729bccd30d29f6fde9521730fc686651f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/cleanup.json",
+      "bytes": 1233,
+      "sha256": "49b9d80bbc32c0373aba08557e8c3ff3c09438d8b97bddb09053257d10f690d4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/compiled-server-manifest.json",
+      "bytes": 387190,
+      "sha256": "e01c8ade6ccd5f075abb5582d2a29ac42b55036d1e6f8f16da2161028b79ad45"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/executed-test-inventory.json",
+      "bytes": 71332,
+      "sha256": "6467250750ddafc2c7c607c1dad89cdd9ecd3a3928b725ef4e861f0159c58189"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/failure-diagnosis.json",
+      "bytes": 783,
+      "sha256": "d241a10de3c93d8bc3b0ab2add5aefe7aed7913460c743eb2d1614ca4b1d45c7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/lint.json",
+      "bytes": 638,
+      "sha256": "b154ab7ca1403fea40a221e2563c46fd48c8333143ce1435e1a7775782786f6f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/lint.stderr",
+      "bytes": 165,
+      "sha256": "53ff59b476fd010d11fef53ad7aa4ce767f0d66ecdf81f0beb2574e64d3cf653"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/lint.stdout",
+      "bytes": 4588,
+      "sha256": "f87ea0d0119a73ea1de32052bea45d673cf13f72999e57cd44ae707acb4433cb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/lint.time",
+      "bytes": 754,
+      "sha256": "eea5b66ceea763803c05cb1272b2891506e61660766bd5cc1205a68f0e3d766d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/migration-plan.json",
+      "bytes": 18339,
+      "sha256": "4ddbaffaea712c021bf4c73d67991802450a8dbe5862fe8d56b29986445f8f9f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/normal-build.json",
+      "bytes": 647,
+      "sha256": "c797981c1ee643a09a9ae3ae955656ded6776eda5abb2e4df73ac933fffbc007"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/normal-build.stdout",
+      "bytes": 6499,
+      "sha256": "f9953039e97f9e2d6aefa16f4223ae35b0768f42a4ed01a00114d93aaf61c697"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/normal-build.time",
+      "bytes": 758,
+      "sha256": "debd8b0fe4a7bbd9a556260ca2e80efc43afb1b60cc37459a738a299626ade0c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/package-lifecycle.json",
+      "bytes": 102,
+      "sha256": "47d1ec44ee6a1c8ef6891e374a4ad5f232f38ac1f9ee5a95410a25f72160f414"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/preflight.json",
+      "bytes": 940,
+      "sha256": "24fb3a1ec08dad7d0fd165e8afcedc484afaaa50ff402b6915f2e23c59798da9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/research-agents-first-failure.json",
+      "bytes": 2209,
+      "sha256": "4982eb05349ae5dbd207340a4b95fc85ceb2623e779a87f62ec41778113cd0d2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/research-agents-selection.json",
+      "bytes": 11508,
+      "sha256": "54734875dc3b9ca36e8da488b3fc972ab0b954d67c6ed4b62b71cd3ed47d9130"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/research-agents-serial.json",
+      "bytes": 661,
+      "sha256": "9da8d984c127f1b96b939149abb2d5fbdddf731673c3c8fe559a28ed6d98a5a8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/research-agents-serial.sh",
+      "bytes": 3539,
+      "sha256": "01ba5eb68126201080b0afc95270f4ed17e27b26b2671d490a4b7b0997626d61"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/research-agents-serial.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/research-agents-serial.stdout",
+      "bytes": 263095,
+      "sha256": "a25b8dc231e2821fe24aaee48f960293fa7c85743f106ce2fe648ad7e623f7c5"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/research-agents-serial.time",
+      "bytes": 824,
+      "sha256": "1f5507760b7e016392cd880499eed551e97703ca56194c1637e757573981ff22"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/run.py",
+      "bytes": 3494,
+      "sha256": "c0895433cb4d574a7c45739020e087d14ee8e57ba0d3f86401dffcc875155a31"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/source-manifest.json",
+      "bytes": 32233,
+      "sha256": "d709ea89b8f1591483b6245f0ab6e185386e929cd3c014263ac479fb7f03f8c6"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/thesis-install-selection.json",
+      "bytes": 918,
+      "sha256": "1cf67dd60f60f0024f0d2238ac12ee7e020fcc6f016d20bce1d2bd10f7b49587"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/thesis-install-selection.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/thesis-install-selection.stdout",
+      "bytes": 3588,
+      "sha256": "515f1228029809d19caeda7c37c56d61f280c09b97d5a4cc6405639e4a7c2764"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/thesis-install-selection.time",
+      "bytes": 988,
+      "sha256": "e9d729d71585f9e62637f4eb36e6a44ce431cf40c502538f14161644b262f0ea"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/typecheck.json",
+      "bytes": 645,
+      "sha256": "3fd898ca956f05c9dc5eb6f27ebc558a31a75eafd12f421fa866e2e51832ec30"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-45-research-precision-install-linux/typecheck.time",
+      "bytes": 757,
+      "sha256": "d8b6cc594098e0114b7256935e132cfa6ca356691d6112a36bf04b09aa3cb43c"
+    }
+  ],
+  "rawTotalBytes": 819821,
+  "notRun": [
+    "Full browser PCR / any browser install or alternate browser",
+    "CI03 exact byte-boundary; required existing reviewed clock library absent in inspected roots and no configured binding",
+    "Native observed HTTP profile stages (original2SKIP)",
+    "Actual author/reviewer/model/production/strategy/deploy"
+  ],
+  "authority": {
+    "fullResearchSuitePassed": false,
+    "protectedPassed": false,
+    "fullIndependentCodeReview": false,
+    "productionInstalled": false,
+    "researchQualified": false,
+    "strategyApproved": false,
+    "entryEligible": false,
+    "modelsDispatched": false
+  },
+  "historicalEvidence": "All previous130/1a receipts and original REDs retained unchanged. No current failure was rerun or expectation relaxed."
+}

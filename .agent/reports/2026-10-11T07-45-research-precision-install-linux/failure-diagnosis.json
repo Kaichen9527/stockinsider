@@ -1,0 +1,11 @@
+{
+  "finding": "source-budget fixture installs predecessor trigger but compares against successor execution manifest",
+  "actualSha256": "108ffb2c9a6c3497e25b485c98640865f9b8ccc53b0efc4a474b42a3c4fbee8b",
+  "expectedSha256": "e93aab1e75c3ba28eabed3b0c198182e12936b3e4bbb39259ff278bc2ebb7784",
+  "actualIsExactSuccessorMigrationPinnedPredecessor": true,
+  "expectedIsExactSuccessorMigrationPinnedSuccessor": true,
+  "fixtureMentionsSuccessorMigration": false,
+  "testCodeChanged": false,
+  "failureNotRetried": true,
+  "limitedConclusion": "Actual failed comparison and immutable source inspection establish fixture predecessor/successor mismatch. The separate commanded four-file selection passed15 cases in this VM; this is not an independent reviewer rerun or full-suite green."
+}

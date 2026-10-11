@@ -1,0 +1,19 @@
+{
+  "stage": "research-agents-serial",
+  "command": [
+    "bash",
+    "/tmp/si-e088-dwocjkkd/research-agents-serial.sh"
+  ],
+  "startedAt": "2026-10-11T07:46:40.749435+00:00",
+  "endedAt": "2026-10-11T07:49:14.989122+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 154.23969437903725,
+  "sampledAggregatePeakRssBytes": 564084736,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10054541312,
+  "diskAvailableAfterBytes": 10054541312,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
