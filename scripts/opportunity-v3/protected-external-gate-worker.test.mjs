@@ -11,6 +11,7 @@ import {
   hostPinForModelOracleListing,
   trustedHostAuthenticationPath,
   validateModelOracleReuseTime,
+  shouldReuseModelOracle,
   modelOracleListing,
   modelOracleListingSha256,
   parseReviewActiveGraph,
@@ -603,4 +604,14 @@ test('fresh model oracle does not reuse expired evidence and auth path ignores i
   assert.throws(()=>validateModelOracleReuseTime({...evidence,expiresAt:evidence.completedAt},false),/ordered/);
   assert.match(worker,/const reuse = readModelOracleReuse\(false\);/);
   assert.match(worker,/function trustedReusableHostModelOracle[\s\S]*?const reuse = readModelOracleReuse\(\);/);
+});
+
+test('expired reuse never loads old Git objects, including matching listing; unexpired reuse remains exact', () => {
+  const old={completedAt:'2026-01-01T00:00:00Z',expiresAt:'2026-01-02T00:00:00Z'};
+  const now=Date.parse('2026-10-12T00:00:00Z');
+  for(const listing of ['same','different'])assert.equal(shouldReuseModelOracle(old,listing,()=>assert.fail('expired old Git object read'),now),false);
+  const live={...old,expiresAt:'2026-10-13T00:00:00Z'};let reads=0;
+  assert.equal(shouldReuseModelOracle(live,'same',()=>{reads++;return 'same';},now),true);
+  assert.equal(shouldReuseModelOracle(live,'different',()=>{reads++;return 'same';},now),false);assert.equal(reads,2);
+  assert.throws(()=>shouldReuseModelOracle({...old,expiresAt:'bad'},'same',()=>assert.fail(),now));
 });

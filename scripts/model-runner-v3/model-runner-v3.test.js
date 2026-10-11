@@ -1138,4 +1138,5 @@ ordinaryTest('successor never resumes old ready reviewed recovery or sealed stat
 if (process.env.OPPORTUNITY_V3_PROTECTED_LIVE_ONLY !== '1') {
   require('./jsonl-parser.test');
   require('./process-lifecycle.test');
+  require('./oracle-recovery.test');
 }

@@ -871,7 +871,7 @@ const modelOracleSuccessorApprovals = Object.freeze({
 
 const modelOracleHostPinByListingSha256 = Object.freeze({
   // Initial migration: recognized only once this independently reviewed code is protected base.
-  '80703945942d7823cdcaa34972dc7225b96fad83f82befe00d88d81c2648c86a': 'model-runner-host-pins-v3.25',
+  'dbc19f885607aaada0fb4f058ae5878c6c62fd55b6906cf7c217062671f5bb28': 'model-runner-host-pins-v3.25',
   bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3.14',
   cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
   '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': 'model-runner-host-pins-v3.16',
@@ -938,6 +938,12 @@ export function validateModelOracleReuseTime(value, requireUnexpired = true, now
   assert.ok(Date.parse(value.expiresAt) > Date.parse(value.completedAt), 'model oracle reuse ordered time');
   if (requireUnexpired) assert.ok(Date.parse(value.expiresAt) > now, 'model oracle reuse evidence has not expired');
   return true;
+}
+
+export function shouldReuseModelOracle(record, subjectListing, loadPriorListing, now = Date.now()) {
+  validateModelOracleReuseTime(record, false, now);
+  if (Date.parse(record.expiresAt) <= now) return false;
+  return subjectListing === loadPriorListing();
 }
 
 function readModelOracleReuse(requireUnexpired = true) {
@@ -1032,7 +1038,8 @@ function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
   const authority = trustedModelOracleAuthority(subjectRoot, attestation.subjectCommitSha);
   // Expiry prevents reuse, not a fresh independently executed live oracle.
   const reuse = readModelOracleReuse(false);
-  if (modelOracleListing(subjectRoot, attestation.subjectCommitSha) === modelOracleListing(subjectRoot, reuse.subjectCommitSha)) {
+  if (shouldReuseModelOracle(reuse, modelOracleListing(subjectRoot, attestation.subjectCommitSha),
+    () => modelOracleListing(subjectRoot, reuse.subjectCommitSha))) {
     return trustedReusableHostModelOracle(subjectRoot, attestation);
   }
   const authentication = trustedHostAuthenticationPath();

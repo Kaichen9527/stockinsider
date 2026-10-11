@@ -1,21 +1,23 @@
 'use strict';
 
 const fs = require('node:fs');
-const os = require('node:os');
 const path = require('node:path');
 
 const { loadHostPins } = require('./hostPreflight');
 const { executeModel, prepareTransport } = require('./execution');
 const { routeOperation } = require('./routing');
+const { oracleRecoveryRoot, withOracleAttempt } = require('./oracleRecovery');
 
 async function runRealModelAttempt() {
   const fixture = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json');
   const pins = loadHostPins(fixture);
+  return withOracleAttempt(oracleRecoveryRoot(), async (attemptRoot) => {
   const completedRoutes = [];
   for (const operation of ['make', 'review', 'verify']) {
     // Separate transports/views prevent one successful operation from standing
     // in for either independently required reviewer/verifier invocation.
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-model-attempt-'));
+    const directory = path.join(attemptRoot, operation);
+    fs.mkdirSync(directory, { mode: 0o700 });
     const view = path.join(directory, 'view');
     const scratch = path.join(directory, 'scratch');
     const transport = path.join(directory, 'transport');
@@ -23,7 +25,7 @@ async function runRealModelAttempt() {
     fs.mkdirSync(scratch, { mode: 0o700 });
     fs.writeFileSync(path.join(view, 'tracked.txt'), 'tracked\n', { mode: 0o400 });
     const source = { view };
-    try {
+    {
       prepareTransport({ source, scratch, transport });
       const route = routeOperation(operation, 'sol61-make-astra-review');
       const terminal = { modelAttempt: 'completed', operation };
@@ -48,11 +50,10 @@ async function runRealModelAttempt() {
         throw new Error('real model attempt returned an unexpected terminal object');
       }
       completedRoutes.push({ operation, model: route.model, reasoningEffort: route.reasoningEffort });
-    } finally {
-      fs.rmSync(directory, { recursive: true, force: true });
     }
   }
   return { protocol: 'model-runner-real-attempt-v2', status: 'pass', completedRoutes };
+  });
 }
 
 module.exports = { runRealModelAttempt };
