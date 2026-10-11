@@ -17,6 +17,7 @@ import { canonicalContentHash, canonicalPublisherKey, classifyPttContentSemantic
 import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 import { isExpectedPttArticleMissing } from './ptt-policy';
+import { buildPttMentionProvenance, type PttBodyReadStatus } from './ptt-mention-provenance';
 import { fetchPinnedHttpsText, isPublicNetworkAddress } from './pinned-https-fetch';
 
 type Row = Record<string, unknown>;
@@ -2271,6 +2272,9 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
           canonical_content_hash: canonicalHash,
           canonical_publisher_key: publisherKey,
           stance_semantics: stanceSemantics,
+          ...(item.platform === 'ptt' ? { ptt: buildPttMentionProvenance({
+            platform: item.platform, documentUrl: item.documentUrl, symbol, metadata: item.metadata,
+          }) } : {}),
         },
         ruleset_version: 'source-ranking-v2.2.0',
       }];
@@ -2787,6 +2791,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     let articleBodyText = title;
     let comments: Array<{ tag: string; author: string | null; text: string }> = [];
     let articleAuthor: string | null = null;
+    let bodyReadStatus: PttBodyReadStatus = 'title_only_fetch_failed';
 
     try {
       const { text: bodyHtml } = await fetchTextWithRetry({
@@ -2803,6 +2808,8 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         bodyHtml;
       const bodyWithoutPushes = mainBlock.replace(/<div class="push">[\s\S]*?<\/div>/g, ' ');
       const bodyText = stripHtml(bodyWithoutPushes).slice(0, 5000);
+      bodyReadStatus = bodyHtml.includes('<div id="main-content">') && bodyText
+        ? 'body_read_bounded' : 'title_only_body_missing';
       const commentText = comments.map((item) => `${item.tag} ${item.text}`).join('\n').slice(0, 3000);
       articleBodyText = bodyText || title;
       contentText = compactText([bodyText, commentText].filter(Boolean).join('\n\n推噓留言：\n')) || title;
@@ -2861,6 +2868,11 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         post_type: postType,
         content_semantics: contentSemantics,
         author_name: articleAuthor,
+        body_read_status: bodyReadStatus,
+        body_retained: false,
+        replies_read_completeness: 'partial',
+        reply_sample_truncated: comments.length > 20,
+        matched_symbols: symbols,
         comment_evidence: comments.slice(0, 20).map((item) => ({ author: item.author, tag: item.tag, excerpt: item.text.slice(0, 120) })),
         push_score: pushScore,
         push_count: pushCount,
@@ -2906,6 +2918,8 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
           comment_index: commentIndex + 1, comment_tag: comment.tag, evidence_excerpt: comment.text.slice(0, 240),
           matched_symbol_reason: 'comment_local_tw_symbol_or_name_proximity',
           matched_symbols: commentExtracted.symbols,
+          body_read_status: bodyReadStatus, body_retained: false,
+          replies_read_completeness: 'partial', reply_sample_truncated: comments.length > 20,
           content_semantics: 'editorial_discussion', retention_mode: 'metadata_local_excerpt',
           excluded_false_positives: commentExtracted.excludedFalsePositives,
         },
