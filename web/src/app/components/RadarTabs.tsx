@@ -12,6 +12,7 @@ import { DEFAULT_CANDIDATE_STAGE_FILTERS, candidateStageFilterOptions, filterAnd
 import { LOCAL_RESEARCH_STORAGE_KEY, decodeLocalResearchState } from '@/lib/local-research-state';
 import CandidateTradePlanSummary from './CandidateTradePlanSummary';
 import CurrentTechnicalResearchLink from './CurrentTechnicalResearchLink';
+import { admissionForLegacyCard, discoveryCardPresentation } from '@/lib/candidate-discovery-admission';
 
 type Props = {
   radar: RadarDailyPayload;
@@ -461,7 +462,9 @@ const candidateConditionLabel: Record<string, string> = {
   market_regime_missing: '缺少可用的大盤狀態',
 };
 
-function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
+export function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
+  const presentation = discoveryCardPresentation(card);
+  const admission = admissionForLegacyCard(card);
   const stanceLabel = { positive: '支持', negative: '保留／負向', neutral: '中性', mixed: '多空混合' } as const;
   return (
     <article className="decision-panel min-w-0 overflow-hidden p-4 sm:p-5" data-testid={`candidate-stage-${card.symbol}`}>
@@ -469,9 +472,9 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
         <div>
           <p className="research-kicker">{card.symbol} · {card.lifecycleStage.toUpperCase()}</p>
           <Link href={card.detailHref || `/stock/${card.symbol}`} className="mt-1 block text-xl font-semibold tracking-[-0.02em] hover:text-accent">{card.chineseName}</Link>
-          <p className="mt-1 text-xs text-stone-500">{card.sector || '產業待補'} · 官方收盤後更新</p>
+          <p className="mt-1 text-xs text-stone-500">{card.sector || '產業待補'} · 來源線索與研究摘要</p>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">來源 {card.effectiveMentionCount}/{card.rawMentionCount} 筆有效／原始 · {card.publisherCount} 個發布者 · {card.platformCount} 個平台</p>
-          <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">獨立推薦 {card.positivePublisherCount} · 負向 {card.negativePublisherCount} · 一般討論 {card.generalPublisherCount}</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">正向提及 {card.positivePublisherCount} · 負向 {card.negativePublisherCount} · 一般討論 {card.generalPublisherCount}（展示統計，非獨立根源確認）</p>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">單一平台占比 {Math.round(card.dominantPlatformShare * 100)}% · 最新 {formatTaipeiDateTime(card.latestMentionAt, 'compact')}</p>
         </div>
         <div className="rounded-2xl border border-line px-3 py-2 text-right text-xs">
@@ -483,14 +486,14 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
         </div>
       </div>
       <div className="mt-4 grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-line bg-line text-xs">
-        <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">現價</span><strong className="mt-1 block">{card.valuation.currentPrice?.toFixed(2) ?? '待補'}</strong></div>
-        <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">Base 目標</span><strong className="mt-1 block">{card.valuation.baseTarget?.toFixed(2) ?? '待補'}</strong></div>
-        <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">Base 空間</span><strong className="mt-1 block">{card.valuation.baseUpsidePct == null ? '待補' : `${card.valuation.baseUpsidePct.toFixed(1)}%`}</strong></div>
+        <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">{presentation.session || '日期待補'} 收盤價</span><strong className="mt-1 block">{presentation.close?.toFixed(2) ?? '待補'}</strong><span>最新完整交易日待核對</span></div>
+        <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">{presentation.valuationLabel}</span><strong className="mt-1 block">{presentation.referenceValue?.toFixed(2) ?? '待補'}</strong></div>
+        <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">估值日期</span><strong className="mt-1 block">{presentation.valuationDateLabel}</strong></div>
       </div>
       <div className="mt-4 flex flex-wrap gap-2 text-xs">
-        {card.sources.slice(0, 5).map((source, index) => (
+        {card.sources.map((source, index) => (
           <a key={`${source.sourceUrl}-${index}`} href={source.sourceUrl} target="_blank" rel="noreferrer" className="rounded-full border border-line px-3 py-1 hover:border-accent">
-            {source.sourceName || source.platform}{source.publisherName || source.author ? ` · ${source.publisherName || source.author}` : ' · 未具名來源'}{source.stance ? ` · ${stanceLabel[source.stance]}` : ' · 立場待判'}
+            {sourceTypeLabel[source.platform] || source.sourceName || source.platform}{source.publisherName || source.author ? ` · ${source.publisherName || source.author}` : ' · 未具名來源'}{source.stance ? ` · ${stanceLabel[source.stance]}` : ' · 立場待判'}
           </a>
         ))}
       </div>
@@ -500,13 +503,15 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
         <p className="mt-2 text-slate-500">技術日 {card.technical.sessionDate || '待補'} · MA20 {card.technical.ma20?.toFixed(2) ?? '-'} · MA60 {card.technical.ma60?.toFixed(2) ?? '-'} · RSI {card.technical.rsi14?.toFixed(1) ?? '-'}</p>
         {card.riskAction ? <p className="mt-2 text-slate-500">風險狀態 {card.riskAction.state} · {card.riskAction.reasons.length ? card.riskAction.reasons.join('、') : '未觸發退出條件'}</p> : null}
       </div>
+      <p className="mt-3 text-xs text-amber-700">研究准入待接線：卡片 links 非完整根源，PTT 逐則股票回覆未提供（{admission.reason}）。</p>
       <CandidateTradePlanSummary card={card} />
     </article>
   );
 }
 
-function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload; stageCounts?: Props['initialStageCounts'] }) {
+export function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload; stageCounts?: Props['initialStageCounts'] }) {
   const [selected, setSelected] = useState<CandidateStageKey>('found');
+  const [discoveryMode, setDiscoveryMode] = useState<'research' | 'all'>('research');
   const [stages, setStages] = useState(radar.stages!);
   const [loadingStage, setLoadingStage] = useState<CandidateStageKey | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -593,7 +598,8 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
   const closest = filterAndSortCandidateStages(stages.waiting, { ...filters, sort: 'stage_rank' }, watchedSymbols).slice(0, 5);
   const actual = filterAndSortCandidateStages(stages[selected], filters, watchedSymbols);
   const showClosestWaiting = shouldShowClosestWaiting(selected, totals.actionable);
-  const displayed = showClosestWaiting ? closest : actual;
+  const discoveryEligible = actual.filter(card => admissionForLegacyCard(card).status === 'admitted');
+  const displayed = showClosestWaiting ? closest : selected === 'found' && discoveryMode === 'research' ? discoveryEligible : actual;
   return (
     <div className="min-w-0">
       <header className="mb-5 border-b border-line pb-5">
@@ -608,6 +614,14 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
           </button>
         ))}
       </div>
+      {selected === 'found' ? <section className="mb-4 rounded-xl border border-line p-3" aria-label="研究來源准入">
+        <div className="flex flex-wrap gap-2">
+          <button type="button" aria-pressed={discoveryMode === 'research'} onClick={() => setDiscoveryMode('research')} className="min-h-11 rounded-lg border border-line px-4">研究候選</button>
+          <button type="button" aria-pressed={discoveryMode === 'all'} onClick={() => setDiscoveryMode('all')} className="min-h-11 rounded-lg border border-line px-4">所有線索（{totals.found}）</button>
+        </div>
+        <p className="mt-2 text-xs leading-5">目前卡片未提供完整 publisher／根源／PTT 逐則股票回覆，研究准入待接線。所有線索完整保留，不以 links 或總推文量湊確認；不是買點或交易限制。</p>
+        <p className="mt-1 text-xs">研究名額最多 15 一般＋5 低聲量，每週最多 5 個新深研；既有 priority／預算契約不變，此篩選尚未接研究排程。</p>
+      </section> : null}
       <section aria-label="完整名單篩選" aria-busy={!fullSnapshotReady} className="mb-5 rounded-xl border border-line bg-[var(--surface)] p-3">
         <div className="grid min-w-0 gap-2 sm:grid-cols-2 lg:grid-cols-6">
           <label className="min-w-0 lg:col-span-2"><span className="sr-only">搜尋股票</span><input disabled={!fullSnapshotReady} type="search" value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder={fullSnapshotReady ? '搜尋代碼、公司或產業' : '正在載入完整名單…'} className="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm outline-none focus:border-orange-500 disabled:cursor-wait disabled:opacity-60" /></label>
@@ -638,7 +652,7 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
           {loadError ? <p role="alert" className="text-xs text-rose-600 dark:text-rose-300">{loadError}</p> : null}
         </div>
       ) : loadError ? <p role="alert" className="mt-4 text-center text-xs text-rose-600 dark:text-rose-300">{loadError}</p> : null}
-      {displayed.length === 0 ? <div className="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500">{selected === 'found' ? '最近七日沒有有效股票來源命中。' : selected === 'waiting' ? <><p>目前沒有完成最低研究與估值門檻的等待標的。</p><p className="mt-2 text-xs leading-5">研究佇列會優先補齊：官方財務橋接、Bear／Base／Bull 估值、技術收盤確認、以及來源作者與發布日期。</p></> : '目前沒有通過全部硬門檻的可行動標的。'}</div> : null}
+      {displayed.length === 0 ? <div className="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500">{selected === 'found' ? discoveryMode === 'research' ? '完整來源准入待接線；請切至「所有線索」查看保留的命中與原因。' : '最近七日沒有有效股票來源命中。' : selected === 'waiting' ? <><p>目前沒有完成最低研究與估值門檻的等待標的。</p><p className="mt-2 text-xs leading-5">研究佇列會優先補齊：官方財務橋接、Bear／Base／Bull 估值、技術收盤確認、以及來源作者與發布日期。</p></> : '目前沒有通過全部硬門檻的可行動標的。'}</div> : null}
     </div>
   );
 }
