@@ -1,0 +1,73 @@
+name: Merged main candidate Linux artifact
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/merged-main-candidate-artifact.yml'
+  workflow_dispatch:
+
+# Artifact preparation only: no deployment, database, approval or release authority.
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      REVIEWED_SOURCE: 169aad1b6cfa747f78ae3464b614f43c0749d806
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - name: Checkout exact independently reviewed source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: 169aad1b6cfa747f78ae3464b614f43c0749d806
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            web/package-lock.json
+      - name: Install locked build dependencies
+        run: |
+          npm ci
+          npm --prefix web ci
+      - name: Verify candidate calculations, packaging, type and lint
+        run: |
+          npm run test:tw-entry-plan
+          node --test scripts/package-standalone-release.test.mjs
+          npm --prefix web run typecheck
+          npm --prefix web run lint
+      - name: Build exact reviewed web source on Linux
+        run: npm --prefix web run build
+      - name: Verify candidate page behavior
+        run: |
+          cd web
+          npx playwright install --with-deps chromium
+          npx playwright test --config playwright.trade-plan.config.ts
+      - name: Package and verify exact source without credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$REVIEWED_SOURCE"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          destination="$RUNNER_TEMP/reviewed-standalone"
+          export_dir="$RUNNER_TEMP/standalone-export"
+          mkdir -p "$destination" "$export_dir"
+          node scripts/package-standalone-release.mjs "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE" "$destination" "$REVIEWED_SOURCE" "$REVIEWED_SOURCE" > "$export_dir/package.json"
+          node scripts/verify-standalone-release.mjs "$destination/$REVIEWED_SOURCE" > "$export_dir/verification.json"
+          cp "$destination/$REVIEWED_SOURCE/release-manifest.json" "$export_dir/release-manifest.json"
+          git rev-parse HEAD HEAD^{tree} HEAD:web > "$export_dir/source-identity.txt"
+          tar -czf "$export_dir/stockinsider-linux.tar.gz" -C "$destination" "$REVIEWED_SOURCE"
+          (cd "$export_dir" && sha256sum stockinsider-linux.tar.gz release-manifest.json package.json verification.json source-identity.txt > SHA256SUMS)
+      - name: Retain downloadable binary outside Git history
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: reviewed-linux-standalone-169aad1b6cfa747f78ae3464b614f43c0749d806-${{ github.run_id }}
+          path: ${{ runner.temp }}/standalone-export/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
