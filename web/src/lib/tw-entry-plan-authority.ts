@@ -29,6 +29,8 @@ export type TwEntryAuthorityResult = {
   /** Missing/null is unavailable; event:null is a proved zero-event selected head. */
   anchorAction?: TwEntryAnchorAction | null;
 };
+/** Completed-session settlement only: deliberately has no next-entry calendar. */
+export type TwEntrySettlementAuthorityResult = Omit<TwEntryAuthorityResult, 'calendar'> & { completedSessions: string[] };
 export const TW_ENTRY_HISTORY_LIMITS = Object.freeze({ deadlineMs: 15_000, readBytes: 16 * 1024 * 1024 });
 export type TwEntryHistoricalAuthorityResult = {
   bars: TwEntryBar[]; completedSessions: string[]; selectedCalendarRows: Row[];
@@ -246,7 +248,7 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
       ...feeds.map((row) => row.recorded_at), ...events.map((row) => row.recorded_at)) };
 }
 
-function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRequest): TwEntryCalendar {
+function annualHistory(authority: SharedAuthority, request: TwEntryAuthorityRequest) {
   const evidence = request.forwardCalendar;
   requireAuthority(evidence?.schema === 'official-calendar-acquisition-v3.14'
     && timestamp(evidence.availableAt) <= timestamp(request.cutoff) && Array.isArray(evidence.calendarSessions)
@@ -276,6 +278,14 @@ function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRe
     requireAuthority(row && (row.status === 'holiday' || row.status === 'completed'), 'official_calendar_history_gap');
     requireAuthority(row.status === 'holiday' ? !authority.sessions.includes(session) : authority.sessions.includes(session), 'official_calendar_history_gap');
   }
+  const historyRows = [...byDate.values()].filter(row => text(row.session) <= request.signalSession);
+  return { evidence, byDate, knownCancellations,
+    version: hash([authority.sessions.map(session => [session, authority.calendarRows.get(session)!.session_authority_id]), historyRows, knownCancellations]),
+    knownAt: maxTime(evidence.availableAt, ...authority.sessions.map(session => authority.calendarRows.get(session)!.recorded_at), ...knownCancellations.map(row => row.recorded_at)),
+  };
+}
+function forwardCalendar(authority: SharedAuthority, request: TwEntryAuthorityRequest): TwEntryCalendar {
+  const { evidence, byDate, knownCancellations } = annualHistory(authority, request);
   let next: Row | undefined;
   const intervening: Row[] = [];
   // The existing validated annual acquisition enumerates every weekday and omits
@@ -399,6 +409,39 @@ export async function loadTwEntryHistoricalAuthority(client: TwEntryAuthorityCli
   } finally { scope.close(); }
 }
 
+function anchorActionContext(shared: SharedAuthority, request: TwEntryAuthorityRequest, sourceDatasetRevision: string): TwEntryAnchorAction {
+  const { signalSession, exchange, cutoff } = request;
+  const snapshot = shared.snapshots.get(signalSession)!;
+  const event = shared.events.get(text(snapshot.snapshot_id))!.find(row => row.symbol === request.symbol);
+  return {
+    schema: 'tw-entry-anchor-action-v1', status: 'verified', symbol: request.symbol, exchange,
+    session: signalSession, cutoff, snapshotId: text(snapshot.snapshot_id),
+    sessionAuthorityId: text(snapshot.session_authority_id), datasetHash: text(snapshot.dataset_hash), sourceDatasetRevision,
+    event: event ? { kind: event.event_kind as NonNullable<TwEntryAnchorAction['event']>['kind'], sourceRowRef: text(event.source_row_ref) } : null,
+  };
+}
+
+/** Prove every historical session and the selected anchor action without granting
+ * future entry authority. New orders still consume their frozen pre-open plan. */
+export async function loadTwEntrySettlementAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<TwEntrySettlementAuthorityResult> {
+  const base: TwEntrySettlementAuthorityResult = { bars: [], completedSessions: [], priceBasis: null,
+    sourceDatasetRevision: `${VERSION}:settlement:unavailable`, availableAt: request.cutoff, missingData: [], anchorAction: null };
+  const scope = createReadScope();
+  try {
+    scope.check(); validateRequest(request);
+    const shared = await readSharedAuthority(client, request, scope);
+    const { bars, priceBasis, evidenceHashes } = await readHistoricalCore(client, request, shared, scope);
+    const history = annualHistory(shared, request);
+    const sourceDatasetRevision = `${VERSION}:settlement:${hash([evidenceHashes, history.version])}`;
+    const anchorAction = anchorActionContext(shared, request, sourceDatasetRevision);
+    scope.check();
+    return { bars, completedSessions: [...shared.sessions], priceBasis, sourceDatasetRevision, anchorAction,
+      availableAt: maxTime(history.knownAt, ...bars.map(bar => bar.availableAt)), missingData: [] };
+  } catch (error) {
+    scope.fail(); return { ...base, missingData: [missingCode(error)] };
+  } finally { scope.close(); }
+}
+
 export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, request: TwEntryAuthorityRequest): Promise<TwEntryAuthorityResult> {
   const base: TwEntryAuthorityResult = { bars: [], calendar: null, priceBasis: null, sourceDatasetRevision: `${VERSION}:unavailable`, availableAt: request.cutoff, missingData: [], anchorAction: null };
   const scope = createReadScope();
@@ -409,17 +452,9 @@ export async function loadTwEntryPlanAuthority(client: TwEntryAuthorityClient, r
     const shared = await scope.wait(sharedAuthority(client, request));
     scope.charge(shared.readBytes);
     const { bars, priceBasis, evidenceHashes } = await readHistoricalCore(client, request, shared, scope);
-    const { cutoff, signalSession, exchange } = request;
     const calendar = forwardCalendar(shared, request);
     const sourceDatasetRevision = `${VERSION}:${hash([evidenceHashes, calendar.version])}`;
-    const snapshot = shared.snapshots.get(signalSession)!;
-    const event = shared.events.get(text(snapshot.snapshot_id))!.find(row => row.symbol === request.symbol);
-    const anchorAction: TwEntryAnchorAction = {
-      schema: 'tw-entry-anchor-action-v1', status: 'verified', symbol: request.symbol, exchange,
-      session: signalSession, cutoff, snapshotId: text(snapshot.snapshot_id),
-      sessionAuthorityId: text(snapshot.session_authority_id), datasetHash: text(snapshot.dataset_hash), sourceDatasetRevision,
-      event: event ? { kind: event.event_kind as NonNullable<TwEntryAnchorAction['event']>['kind'], sourceRowRef: text(event.source_row_ref) } : null,
-    };
+    const anchorAction = anchorActionContext(shared, request, sourceDatasetRevision);
     scope.check();
     return { bars, calendar, priceBasis, sourceDatasetRevision, anchorAction,
       availableAt: maxTime(calendar.knownAt, ...bars.map((bar) => bar.availableAt)), missingData: [] };

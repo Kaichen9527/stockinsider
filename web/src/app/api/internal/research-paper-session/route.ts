@@ -6,7 +6,7 @@ import { loadDeepArticleEvidence } from '@/lib/research-deep-evidence';
 import { fillPaperOrder, markPaperPositions, newPaperBook, settlePaperSession, sizePaperOrder,
   type PaperBook, type PaperBookId, type PaperOrder, type PaperSessionBar } from '@/lib/research-paper-books';
 import { loadResearchExecutionContext, assertResearchExecutionDatabasePolicy } from '@/lib/research-execution-context';
-import { acquireTwEntryForwardCalendar, loadTwEntryPlanAuthority } from '@/lib/tw-entry-plan-authority';
+import { acquireTwEntryForwardCalendar, loadTwEntrySettlementAuthority } from '@/lib/tw-entry-plan-authority';
 import { calculateTechnicalFeatures } from '@/lib/technical-features-v2';
 
 type Row = Record<string, unknown>;
@@ -113,11 +113,11 @@ export async function POST(request: Request) {
           && (!assignment.valid_to || Date.parse(assignment.valid_to) > Date.parse(cutoffOpen))
           ? assignment.canonical_sector_key : null;
         if (!held && !canonicalSector) { entryBlocks.set(symbol, 'canonical_sector_missing_at_entry'); continue; }
-        const authority = await loadTwEntryPlanAuthority(db, { stockId: stock.data.id, symbol, exchange, signalSession: session, cutoff: asOf, forwardCalendar });
+        const authority = await loadTwEntrySettlementAuthority(db, { stockId: stock.data.id, symbol, exchange, signalSession: session, cutoff: asOf, forwardCalendar });
         if (authority.missingData.length || authority.priceBasis?.status !== 'verified'
           || authority.bars.at(-1)?.session !== session) throw new Error(`paper_official_session_pending:${symbol}`);
         if (book.lastProcessedSession) {
-          const next = authority.calendar?.completedSessions.find((day) => day > book.lastProcessedSession!);
+          const next = authority.completedSessions.find((day) => day > book.lastProcessedSession!);
           if (next !== session) throw new Error('paper_sessions_must_be_processed_in_order');
         }
         const current = authority.bars.at(-1)!;

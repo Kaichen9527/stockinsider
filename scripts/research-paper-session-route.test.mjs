@@ -43,8 +43,8 @@ test('an inactive unheld entry cannot block monitoring an existing inactive posi
     '@/lib/research-deep-evidence': {},
     '@/lib/research-paper-books': { markPaperPositions: (input) => { marked = input; return input.book; }, settlePaperSession: (input) => input.book },
     '@/lib/research-execution-context': { loadResearchExecutionContext: async () => ({}), assertResearchExecutionDatabasePolicy: async () => {} },
-    '@/lib/tw-entry-plan-authority': { acquireTwEntryForwardCalendar: async () => ({}), loadTwEntryPlanAuthority: async (_db, input) => {
-      fetched.push(input.symbol); return { sourceDatasetRevision:'fixture-revision', anchorAction:anchorContext(input), missingData: [], priceBasis: { status: 'verified' }, calendar: { completedSessions: [session] }, bars: [{ session, open: 30, high: 31, low: 29, close: 30, volume: 5000 }] };
+    '@/lib/tw-entry-plan-authority': { acquireTwEntryForwardCalendar: async () => ({}), loadTwEntrySettlementAuthority: async (_db, input) => {
+      fetched.push(input.symbol); return { sourceDatasetRevision:'fixture-revision', anchorAction:anchorContext(input), missingData: [], priceBasis: { status: 'verified' }, completedSessions: [session], bars: [{ session, open: 30, high: 31, low: 29, close: 30, volume: 5000 }] };
     } },
     '@/lib/technical-features-v2': { calculateTechnicalFeatures: () => ({ ma20: 30 }) },
   };
@@ -81,9 +81,9 @@ function anchorContext(input,event=null) {
     sessionAuthorityId:'22222222-2222-4222-8222-222222222222',datasetHash:'a'.repeat(64),sourceDatasetRevision:'fixture-revision',event};
 }
 
-async function anchorRouteFixture({held=true,event=null,mutate=proof=>proof,replay=null,authorityMissing=[],revision='fixture-revision'}={}) {
+async function anchorRouteFixture({held=true,event=null,mutate=proof=>proof,replay=null,authorityMissing=[],revision='fixture-revision',completedSessions=['2026-10-02'],lastProcessedSession='2026-10-01'}={}) {
   const session='2026-10-02';let saves=0,marks=0,eventReads=0,authorityReads=0;
-  const book={bookId:'growth',positions:held?[{symbol:'2409',shares:1000,sector:'display'}]:[],lastProcessedSession:'2026-10-01',
+  const book={bookId:'growth',positions:held?[{symbol:'2409',shares:1000,sector:'display'}]:[],lastProcessedSession,
     inceptionAt:'2026-09-30T00:00:00Z',activationAt:'2026-09-30T00:00:01Z'};
   const db={rpc:async(name,args)=>({error:null,data:name.includes('instrument')
     ?[{symbol:args.p_stock_id,instrument_type:'common_stock',exchange:'TWSE',listing_status:'active'}]
@@ -113,9 +113,9 @@ async function anchorRouteFixture({held=true,event=null,mutate=proof=>proof,repl
     '@/lib/research-deep-evidence':{},
     '@/lib/research-paper-books':{markPaperPositions:input=>{marks++;return input.book;},settlePaperSession:input=>input.book},
     '@/lib/research-execution-context':{loadResearchExecutionContext:async()=>({}),assertResearchExecutionDatabasePolicy:async()=>{}},
-    '@/lib/tw-entry-plan-authority':{acquireTwEntryForwardCalendar:async()=>({}),loadTwEntryPlanAuthority:async(_db,input)=>{
+    '@/lib/tw-entry-plan-authority':{acquireTwEntryForwardCalendar:async()=>({}),loadTwEntrySettlementAuthority:async(_db,input)=>{
       authorityReads++;return{missingData:authorityMissing,sourceDatasetRevision:revision,anchorAction:mutate(anchorContext(input,event)),
-        priceBasis:{status:'verified'},calendar:{completedSessions:[session]},bars:[{session,open:30,high:31,low:29,close:30,volume:5000}]};
+        priceBasis:{status:'verified'},completedSessions,bars:[{session,open:30,high:31,low:29,close:30,volume:5000}]};
     }},
     '@/lib/technical-features-v2':{calculateTechnicalFeatures:()=>({ma20:30})},
   };
@@ -164,4 +164,13 @@ test('paper exact replay returns its original immutable receipt without current 
   const result=await anchorRouteFixture({replay,mutate:()=>{throw new Error('must not read current authority');}});
   assert.equal(result.response.status,200);assert.equal(result.response.body.idempotentReplay,true);
   assert.equal(result.response.body.revision_hash,'original');assert.equal(result.saves,0);assert.equal(result.marks,0);assert.equal(result.authorityReads,0);
+});
+
+
+test('delayed held settlement consumes completed-session authority and cannot skip an older completed day', async () => {
+  const delayed = await anchorRouteFixture();
+  assert.equal(delayed.response.status,200);assert.equal(delayed.saves,1);assert.equal(delayed.marks,1);
+  const gap = await anchorRouteFixture({ completedSessions:['2026-10-01','2026-10-02'],lastProcessedSession:'2026-09-30' });
+  assert.equal(gap.response.status,409);assert.equal(gap.response.body.error,'paper_sessions_must_be_processed_in_order');
+  assert.equal(gap.saves,0);assert.equal(gap.marks,0);
 });
