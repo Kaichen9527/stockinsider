@@ -1,0 +1,73 @@
+{
+  "snapshotPublishedAt": "2026-10-11T15:29:07.527+02:00",
+  "expected": 272,
+  "received": 272,
+  "unique": 272,
+  "pages": 7,
+  "technicalSessionCounts": {
+    "2026-10-08": 266,
+    "missing": 3,
+    "2026-09-30": 1,
+    "2026-10-06": 1,
+    "2021-09-30": 1
+  },
+  "latestCompletedReference": "2026-10-08 (TWSE holiday calendar checked earlier)",
+  "olderOrMissing": [
+    {
+      "symbol": "6000",
+      "name": "6000",
+      "session": null,
+      "close": null,
+      "valuationStatus": "missing",
+      "method": null
+    },
+    {
+      "symbol": "2323",
+      "name": "中環",
+      "session": "2026-09-30",
+      "close": 11,
+      "valuationStatus": "missing",
+      "method": null
+    },
+    {
+      "symbol": "6173",
+      "name": "信昌電",
+      "session": "2026-10-06",
+      "close": 284,
+      "valuationStatus": "missing",
+      "method": null
+    },
+    {
+      "symbol": "1589",
+      "name": "永冠-KY",
+      "session": "2021-09-30",
+      "close": 67,
+      "valuationStatus": "missing",
+      "method": null
+    },
+    {
+      "symbol": "7000",
+      "name": "7000",
+      "session": null,
+      "close": null,
+      "valuationStatus": "missing",
+      "method": null
+    },
+    {
+      "symbol": "7500",
+      "name": "7500",
+      "session": null,
+      "close": null,
+      "valuationStatus": "missing",
+      "method": null
+    }
+  ],
+  "valuationStatusCounts": {
+    "missing": 248,
+    "complete": 24
+  },
+  "valuationMethodCounts": {
+    "missing": 248,
+    "pb_reference": 24
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "schema": "stockinsider-independent-candidate-review-v1",
+  "observedAt": "2026-10-11T15:20:03.476891+00:00",
+  "pr": 371,
+  "subject": "7150164cac2136bde3cc117be10b7f90c1cb63cb",
+  "code": "9154d59b1b2af638f7a84e98498c3b1a4546c4b7",
+  "exactEvidence": "54f9644efbe234befdf69c8d6b619fd8bc1ef074",
+  "rawVmHashesVerified": 87,
+  "successorSourceManifestHashesVerified": 428,
+  "rootTests": {
+    "focused": 28,
+    "canonicalProduct": 155,
+    "failures": 0,
+    "skips": 0,
+    "todos": 0,
+    "nextVersion": "16.3.4",
+    "normalBuild": "PASS",
+    "types": "PASS",
+    "lint": "PASS with existing warnings"
+  },
+  "scope": "independent scoped source review and actual checks; no protected approval, merge or deployment",
+  "actualAdmissionIntegrated": false,
+  "researchSchedulerIntegrated": false,
+  "latestCompletedSessionAdapterIntegrated": false,
+  "purePolicy": "two independent roots and resolved publishers, or20 unique stock-code reply authors within one PTT article; separate low-volume lane",
+  "sourceBrowserProbesImported": false,
+  "productionWrites": false,
+  "fullRefreshRepeated": false,
+  "dockerDeleted": false,
+  "protected370": {
+    "run": 38147470839,
+    "requirements": "PASS",
+    "architecture": "PASS",
+    "exactReview": "PASS",
+    "productRuntime": "PASS",
+    "model": "FAIL old native path ENOENT",
+    "aggregate": "FAIL"
+  },
+  "cloudTask": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "host": "durable",
+    "cursor": 47,
+    "work": "active isolated publishing-tool migration preparation, no overlap on candidate repair"
+  },
+  "otherApp": {
+    "threadId": "019fbfd2-f671-7f90-858f-683bc2114af4",
+    "cursor": 23,
+    "status": "active; cache root-cause response pending",
+    "inference": "changing SOHO release ENV precedes runtime apt layers; possible invalidation, not confirmed global attribution"
+  },
+  "files": [
+    {
+      "path": "stockinsider-candidate-root-review-oct11.log",
+      "bytes": 7852,
+      "sha256": "6f93df9268efd48e29ecfe7857bcd5b183fabb1790392b25198ee666f75e2fc3"
+    },
+    {
+      "path": "stockinsider-candidate-root-types-oct11.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "stockinsider-candidate-root-lint-oct11.log",
+      "bytes": 5005,
+      "sha256": "26b16106933fedd4b9df1ccb75fd06b2ca888aa1bafcbf04570bbcbc07a681a8"
+    },
+    {
+      "path": "stockinsider-candidate-root-build-oct11.log",
+      "bytes": 5557,
+      "sha256": "8e828b6a5a9d4e4330c736bebfa28fa18fb4ba4d143448061b4e5108e2a17f62"
+    },
+    {
+      "path": "stockinsider-candidate-root-product-oct11.log",
+      "bytes": 40312,
+      "sha256": "b2f665ccb75b660337b0818e4622d5410693fa749269b4d51532b249e27221a3"
+    },
+    {
+      "path": "stockinsider-candidate-threshold-inventory-oct11.sql",
+      "bytes": 1244,
+      "sha256": "0eddee1f001f6a80cf0dd6893c7d324d2aa5a36adb548f1f8450ac99b40c71b8"
+    },
+    {
+      "path": "stockinsider-candidate-threshold-inventory-oct11.json",
+      "bytes": 293,
+      "sha256": "f31300ebfc1acd7dcd10d13cbc59be68bb460dcb63a5e06c51c20bb2fdaa22b7"
+    },
+    {
+      "path": "stockinsider-public-candidates-all-oct11.json",
+      "bytes": 662672,
+      "sha256": "95ed97bc04b63febcf46bddb21ec14de1241d17384b48a47669af0e4606e0cfb"
+    },
+    {
+      "path": "stockinsider-public-candidates-quality-oct11.json",
+      "bytes": 1519,
+      "sha256": "4c9ecbd9b2726cb9991c0d2bbd13adab4b9dd03dfda94ce5e4473e95f2a07fbf"
+    }
+  ]
+}

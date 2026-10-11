@@ -1,0 +1,160 @@
+TAP version 13
+# (node:93895) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:93895) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/candidate-discovery-admission.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/package.json.
+# Subtest: actual main card displays technical dated close and reference method, hides old price and upside
+ok 1 - actual main card displays technical dated close and reference method, hides old price and upside
+  ---
+  duration_ms: 36.83575
+  ...
+# Subtest: actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+ok 2 - actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+  ---
+  duration_ms: 2.730042
+  ...
+# Subtest: missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+ok 3 - missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+  ---
+  duration_ms: 2.083208
+  ...
+# Subtest: actual main defaults to existing clues while research admission remains explicitly pending
+ok 4 - actual main defaults to existing clues while research admission remains explicitly pending
+  ---
+  duration_ms: 29.750625
+  ...
+# Subtest: existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+ok 5 - existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+  ---
+  duration_ms: 2.27825
+  ...
+# Subtest: actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+ok 6 - actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+  ---
+  duration_ms: 37.370375
+  ...
+# Subtest: actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+ok 7 - actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+  ---
+  duration_ms: 4.703791
+  ...
+# Subtest: saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+ok 8 - saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+  ---
+  duration_ms: 10.216958
+  ...
+# (node:93896) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:93896) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/candidate-discovery-admission.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/package.json.
+# Subtest: only a pair with different canonical publishers and roots enters general research
+ok 9 - only a pair with different canonical publishers and roots enters general research
+  ---
+  duration_ms: 3.986208
+  ...
+# Subtest: same author across platforms
+ok 10 - same author across platforms
+  ---
+  duration_ms: 0.223125
+  ...
+# Subtest: syndicated original root
+ok 11 - syndicated original root
+  ---
+  duration_ms: 0.117792
+  ...
+# Subtest: same-platform original authors with independent roots qualify; platform diversity is display-only
+ok 12 - same-platform original authors with independent roots qualify; platform diversity is display-only
+  ---
+  duration_ms: 0.298833
+  ...
+# Subtest: retracted root cannot be laundered by a current repost
+ok 13 - retracted root cannot be laundered by a current repost
+  ---
+  duration_ms: 0.574208
+  ...
+# Subtest: industry-only and unresolved aliases cannot count as direct company confirmation
+ok 14 - industry-only and unresolved aliases cannot count as direct company confirmation
+  ---
+  duration_ms: 0.156542
+  ...
+# Subtest: bounded legacy links, counters and missing PTT detail are unsupported
+ok 15 - bounded legacy links, counters and missing PTT detail are unsupported
+  ---
+  duration_ms: 0.248917
+  ...
+# Subtest: PTT 19/20 actual different stock-mention authors boundary
+ok 16 - PTT 19/20 actual different stock-mention authors boundary
+  ---
+  duration_ms: 0.599167
+  ...
+# Subtest: PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+ok 17 - PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+  ---
+  duration_ms: 0.68075
+  ...
+# Subtest: PTT requires stock in body, current article, and one post, not pooled reply totals
+ok 18 - PTT requires stock in body, current article, and one post, not pooled reply totals
+  ---
+  duration_ms: 1.034333
+  ...
+# Subtest: reasoned new official event can enter low-volume lane, never multi-source confirmation
+ok 19 - reasoned new official event can enter low-volume lane, never multi-source confirmation
+  ---
+  duration_ms: 0.294583
+  ...
+# Subtest: high-impact new lead requires explained known direct source; ordinary news is not official
+ok 20 - high-impact new lead requires explained known direct source; ordinary news is not official
+  ---
+  duration_ms: 0.105458
+  ...
+# Subtest: existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+ok 21 - existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+  ---
+  duration_ms: 2.349291
+  ...
+# Subtest: bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+ok 22 - bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+  ---
+  duration_ms: 0.723792
+  ...
+# Subtest: technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+ok 23 - technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+  ---
+  duration_ms: 5.176625
+  ...
+# Subtest: PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+ok 24 - PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+  ---
+  duration_ms: 1.143583
+  ...
+# Subtest: missing, future, malformed dates never manufacture a displayed current close
+ok 25 - missing, future, malformed dates never manufacture a displayed current close
+  ---
+  duration_ms: 0.209083
+  ...
+# Subtest: clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+ok 26 - clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+  ---
+  duration_ms: 1.360959
+  ...
+# Subtest: coverage states distinguish retired/blocked/duplicate without inventing source enablement
+ok 27 - coverage states distinguish retired/blocked/duplicate without inventing source enablement
+  ---
+  duration_ms: 0.442167
+  ...
+# Subtest: coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+ok 28 - coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+  ---
+  duration_ms: 0.473542
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1208.827875

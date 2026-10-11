@@ -1,5 +1,13 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 候選顯示 PR371 與正式資料唯讀量測
+
+PR371 exact7150164已推，root獨立28特定／155 canonical全部通過且零skip；正常Next16.3.4 build/type/lint成功。87份VM raw及428份source manifest hash核對完成，真正三檔direct-child exact evidence54f9644e已推。早於evidence的首次protected缺件失敗保留，不為已知舊native ENOENT反覆重跑。尚未合併部署，完整准入adapter、官方最新交易日投影及排程仍未接線。
+
+15:12Z只讀資料庫七日eligible來源272檔中，108具至少兩個publisher_key、35跨平台、151具至少兩個URL、164單一publisher或缺值。這是降低工作量的診斷，不將平台前綴key或URL數當獨立消息確認。公開相同快照7頁共272唯一檔全讀：266行情2026-10-08；中環2323為9/30、信昌電6173為10/06、永冠-KY1589為2021/9/30；6000/7000/7500缺行情。估值248缺值，24筆皆pb_reference。不能把這24筆當forward合理價，亦未宣稱本輪已補行情。沒有重跑全量、寫DB、匯入本機瀏覽器摘要或刪Docker。
+
+完整原始與hash：`.agent/reports/2026-10-11T15-16-candidate-independent-review/receipt.json`。既有Cloud active做發布工具隔離準備；其他App cursor23仍active、cache成因待回覆，runtime release ENV父層僅為已交查證的假說。
+
 ## 15:08Z 接續：產品受保護驗證通過，模型發布工具仍失敗
 
 PR370 exact b43c0414 已有真實 exact evidence ceec62b8。第二次 run38147470839 的 requirements／architecture／exact-review／product-runtime 均成功；product envelope hash d6c20e85f872e03dae57297f2e7c4c5fde8ffc42922c2cc2a660405ed8f79e37。model-runner 實際失敗仍為 protected base 啟動已不存在的舊 Codex CLI 路徑 ENOENT，aggregate FAIL；沒有合併或部署、不重跑相同失敗。root 新 native sandbox canary14/14成功，但沒有讀真實憑證、呼叫模型、啟用候選信任基準，也不代表舊 gate 通過。既有 Cloud 工作接續最小發布工具修復準備，治理例外尚未批准。
