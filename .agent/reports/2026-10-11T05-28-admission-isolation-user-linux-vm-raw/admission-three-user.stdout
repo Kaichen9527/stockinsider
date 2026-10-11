@@ -1,0 +1,116 @@
+TAP version 13
+# Subtest: successor installs exact RC admission guards; real PG connections conserve global and weekly quotas
+    # Subtest: missing predecessor rejects atomically instead of manufacturing functions
+    ok 1 - missing predecessor rejects atomically instead of manufacturing functions
+      ---
+      duration_ms: 64.097824
+      ...
+    # Subtest: nine installed bodies change only by first-statement guard; owner ACL and attributes survive retry
+    ok 2 - nine installed bodies change only by first-statement guard; owner ACL and attributes survive retry
+      ---
+      duration_ms: 73.567562
+      ...
+    # Subtest: actual stale RR snapshot cannot add a second lease; RC replay, exclusion and release remain
+    ok 3 - actual stale RR snapshot cannot add a second lease; RC replay, exclusion and release remain
+      ---
+      duration_ms: 13.396479
+      ...
+    # Subtest: concurrent RC callers serialize before counting and retain 1800/7200 shared budget
+    ok 4 - concurrent RC callers serialize before counting and retain 1800/7200 shared budget
+      ---
+      duration_ms: 28.47679
+      ...
+    # Subtest: REPEATABLE READ rejects every admission RPC including replay and empty queues without writes
+    ok 5 - REPEATABLE READ rejects every admission RPC including replay and empty queues without writes
+      ---
+      duration_ms: 21.783262
+      ...
+    # Subtest: SERIALIZABLE rejects every admission RPC including replay and empty queues without writes
+    ok 6 - SERIALIZABLE rejects every admission RPC including replay and empty queues without writes
+      ---
+      duration_ms: 19.400992
+      ...
+    # Subtest: REPEATABLE READ actual job INSERT rejects in both independent triggers
+    ok 7 - REPEATABLE READ actual job INSERT rejects in both independent triggers
+      ---
+      duration_ms: 53.695253
+      ...
+    # Subtest: SERIALIZABLE actual job INSERT rejects in both independent triggers
+    ok 8 - SERIALIZABLE actual job INSERT rejects in both independent triggers
+      ---
+      duration_ms: 70.336169
+      ...
+    # Subtest: two RC connections competing for fifth weekly slot cannot charge a sixth issuer
+    ok 9 - two RC connections competing for fifth weekly slot cannot charge a sixth issuer
+      ---
+      duration_ms: 104.23247
+      ...
+    # Subtest: attribute-only SECURITY INVOKER alteration rejects before any replacement
+    ok 10 - attribute-only SECURITY INVOKER alteration rejects before any replacement
+      ---
+      duration_ms: 144.013839
+      ...
+    # Subtest: attribute-only search_path alteration rejects before any replacement
+    ok 11 - attribute-only search_path alteration rejects before any replacement
+      ---
+      duration_ms: 121.336829
+      ...
+    # Subtest: attribute-only volatility alteration rejects before any replacement
+    ok 12 - attribute-only volatility alteration rejects before any replacement
+      ---
+      duration_ms: 181.481854
+      ...
+    # Subtest: attribute-only strict alteration rejects before any replacement
+    ok 13 - attribute-only strict alteration rejects before any replacement
+      ---
+      duration_ms: 142.716839
+      ...
+    # Subtest: attribute-only leakproof alteration rejects before any replacement
+    ok 14 - attribute-only leakproof alteration rejects before any replacement
+      ---
+      duration_ms: 138.575788
+      ...
+    # Subtest: attribute-only parallel alteration rejects before any replacement
+    ok 15 - attribute-only parallel alteration rejects before any replacement
+      ---
+      duration_ms: 142.680333
+      ...
+    # Subtest: attribute-only cost alteration rejects before any replacement
+    ok 16 - attribute-only cost alteration rejects before any replacement
+      ---
+      duration_ms: 136.580322
+      ...
+    # Subtest: attribute-only rows alteration rejects before any replacement
+    ok 17 - attribute-only rows alteration rejects before any replacement
+      ---
+      duration_ms: 111.611476
+      ...
+    # Subtest: changed predecessor rejects before replacing any of the other eight routines
+    ok 18 - changed predecessor rejects before replacing any of the other eight routines
+      ---
+      duration_ms: 67.227014
+      ...
+    1..18
+ok 1 - successor installs exact RC admission guards; real PG connections conserve global and weekly quotas
+  ---
+  duration_ms: 2643.072668
+  ...
+# Subtest: cross-role budget, revision heads and first-discovery gaps survive real PostgreSQL
+ok 2 - cross-role budget, revision heads and first-discovery gaps survive real PostgreSQL
+  ---
+  duration_ms: 1863.55748
+  ...
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+ok 3 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 2230.922784
+  ...
+1..3
+# tests 21
+# suites 0
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2727.680045
