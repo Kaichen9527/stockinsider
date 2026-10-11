@@ -113,3 +113,10 @@ Original GitHub37970639183 Linux packaging financial_parent_invalid RED is retai
 - [ ] Full protected review/external runner recovery, genuine AUO+EMC author/reviewer flow, positive published-v2 visual acceptance, main merge/deploy and schedule/five actual trading days remain unfinished.
 
 Evidence: `.agent/reports/2026-10-11T04-37-admission-isolation/receipt.json`. Strategy identity regeneration remains a536... because model-admission routines are outside current signal-execution roots; this is not approval of the new release. All new release authorization still binds exact Git code and genuine independent evidence. Frozen integration51a and production are unchanged.
+
+
+### Same-day independent repair follow-up
+
+Original c15 scoped CODE review requested changes: body-only precondition allowed an attribute-only SECURITY INVOKER installation to silently restore SECURITY DEFINER. Successor887355ca checks all replace-sensitive semantic attributes before any9-function replacement. Eight attribute-only regressions preserve the original RED; final maker21/21zero skip, independent21/21scoped CODE PASS and normal Mac build PASS. Intermediate PostgreSQL metadata encoding failures and timeout cancellation remain visible in `.agent/reports/2026-10-11T04-49-admission-attributes/receipt.json`; old13-case receipt is not rewritten. This completes the bounded admission repair, not full production migration approval.
+
+Exact5e Linux VM now passes six script files81/81 and the6 previously PG-path-failed PCR parents6/6, allzero skip. Root verifies19raw/43142bytes. Full Linux PCR remains incomplete: current Playwright binary missing and original2browser-error root cause unproved. Existing VM is idle; no duplicate job started. PR359 product-runtime/diagnostic are SUCCESS on5e; requirements/architecture/exact-review/root remain FAILURE for genuine evidence gaps.

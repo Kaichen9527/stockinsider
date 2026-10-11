@@ -4,9 +4,9 @@
 
 | 範圍 | 最新可驗證成果 | 還缺什麼 |
 |---|---|---|
-| 一般 CI／打包 | PR359 舊 head e8c 的 product-runtime 與 diagnostic 成功；Linux 打包13/13。新版5e修正 umask 測試條件，沒有弱化讀取器 | 新 head Linux 驗收與精確範圍審查；保護 gate 尚未通過 |
+| 一般 CI／打包 | PR359 舊 head e8c 的 product-runtime 與 diagnostic 成功；Linux 打包13/13。新版5e修正 umask 測試條件，Linux六檔81/81與6項PG案例通過，沒有弱化讀取器 | 完整Linux瀏覽器PCR尚未完成；保護gate尚未通過 |
 | 原產品正確性 | Mac4ff155/155；Linux同源147/155，原8個失敗保留 | 6個PG PATH錯誤及2個瀏覽器錯誤須實證解決，不能把 Mac PASS 當 Linux PASS |
-| 研究工作配額 | 真實雙連線 RR 反例重現；c15新增9入口RC guard。PG maker13/13與正常build成功 | 獨立CODE審查及 production 安裝鏈整合 |
+| 研究工作配額 | 真實雙連線 RR 反例重現；887修正9入口RC guard及函式屬性前置核對。maker21/21、獨立scoped CODE PASS與正常build成功 | 完整production安裝鏈整合；不是局部CODE PASS就能部署 |
 | 文章發布 | 隔離 guarded HTTP／PG94案例與斷線恢復已實作驗證 | 真實可信作者、獨立審查執行及友達／另一產業文章；synthetic fixture不算內容完成 |
 | 正式部署 | 凍結整合51a、正式main169維持不動，VPS擴容已實測 | installer缺原17個publication migration加新isolation successor；完整受保護審查及runner信任復原 |
 | 策略／排程 | 原模組與失敗紀錄保留 | 完整母體、樣本外／前瞻驗證、使用者批准確切策略、排程及五實際交易日驗收 |

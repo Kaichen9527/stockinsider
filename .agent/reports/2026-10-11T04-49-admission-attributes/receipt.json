@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "stockinsider-admission-attributes-repair-v1",
+  "recordedAt": "2026-10-11T05:09:19.450781+00:00",
+  "sourceHead": "887355ca0479d957d9b0472bba70ea4f8f9d5961",
+  "sourceTree": "eb0a4ada8ede4b791d10129f8151938e7ee586a2",
+  "originalFinding": {
+    "review": "unsigned independent scoped REQUEST_CHANGES c15d113c",
+    "severity": "P2",
+    "actualCounterexample": "SECURITY INVOKER keeps original body hash; old migration silently restored SECURITY DEFINER",
+    "reviewer": "/root/author_input_review_oct08"
+  },
+  "fix": "before any replacement verify9 original/successor body hashes and18 semantic attribute fields; preserve original9 guarded function bodies, owner and ACL",
+  "maker": {
+    "command": "PATH=/usr/local/bin:/opt/homebrew/opt/postgresql@17/bin:/opt/homebrew/bin:/usr/bin:/bin /usr/local/bin/node --experimental-strip-types --test scripts/research-admission-isolation-postgres.test.mjs scripts/research-source-budget-postgres.test.mjs scripts/research-strategy-release.test.mjs",
+    "tests": 21,
+    "pass": 21,
+    "fail": 0,
+    "skipped": 0,
+    "runtime": "Mac PostgreSQL17.10 Node22"
+  },
+  "independentReview": {
+    "decision": "unsigned scoped CODE PASS",
+    "sourceHead": "887355ca0479d957d9b0472bba70ea4f8f9d5961",
+    "reportedActualTests": {
+      "pass": 21,
+      "fail": 0,
+      "skipped": 0
+    },
+    "reviewer": "/root/author_input_review_oct08",
+    "reviewerRawIncluded": false,
+    "fullProtectedReview": false
+  },
+  "normalBuild": {
+    "sourceHead": "887355ca0479d957d9b0472bba70ea4f8f9d5961",
+    "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+    "exitCode": 0,
+    "command": "npm run build",
+    "runtime": "Mac Node22"
+  },
+  "intermediateFailures": [
+    {
+      "attributeOnly": "original c15 against8 new alterations10pass9fail zero skip; all8 false accepts retained"
+    },
+    {
+      "initialMetadataEncoding": "regproc0 rendered as hyphen and transform vectorNULL expected empty; no guarded installation, downstream tests cancelled after original45s timeout;1pass18fail2cancel retained"
+    },
+    {
+      "secondMetadataEncoding": "supportOID fixed, transformNULL still mismatched;1pass4fail0skip retained"
+    },
+    {
+      "diagnosis": "actual isolated PG metadata proves supportOID string0 and transformsNULL; exact precondition corrected, no guard removed"
+    }
+  ],
+  "fixtureTimeout": "5s statement_timeout on isolated test clients plus stop after failed installation; production limits unchanged",
+  "linuxEvidenceVerified": {
+    "source": "5e3ee67bc2afe07ac7653743d227318aed77f6d8",
+    "evidence": "699b6e4164790396eaf1ab55040ee08eced832ea",
+    "rawFiles": 19,
+    "bytes": 43142,
+    "sixFiles": "81/81PASS zero skip under umask077",
+    "selectedPG": "6/6PASS zero skip after proven existingPG PATH repair",
+    "fullPCR": false,
+    "browser": "current Playwright executable missing; historical2 browser error root cause not proved; not rerun"
+  },
+  "limitations": [
+    "Partial synthetic development prerequisites, not complete production installation",
+    "Full reviewed installer still lacks17publication migrations plus isolation successor",
+    "Protected full exact review and external runner trust recovery remain incomplete",
+    "No genuine company author/reviewer result, strategy adoption, main merge, deployment or formal schedule activation"
+  ],
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T04-49-admission-attributes/attribute-only-red.tap",
+      "bytes": 14119,
+      "sha256": "fa526c26c8b62057ce354add3dffb0b2c913db21d9c3371db7be0d1a73ede8a7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-49-admission-attributes/attribute-only-red-test.mjs",
+      "bytes": 15392,
+      "sha256": "26c02793fc89b8531881eacb1fccbcb8e9c5807c7c213a054fd690893f6f147a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-49-admission-attributes/first-metadata-mismatch-and-cancellation.tap",
+      "bytes": 19904,
+      "sha256": "733b60d3555732120c463e4a240bf751773726f48207014a84577f876379f671"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-49-admission-attributes/second-transform-mismatch.tap",
+      "bytes": 8997,
+      "sha256": "03a97239095bcff12e8a9e9a3c39ef58a739bc037c12fe36591bb697c587ed70"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-49-admission-attributes/pg-attribute-diagnostic.mjs",
+      "bytes": 2417,
+      "sha256": "26c63cbb3418df61e1e494ab2c9bf5b809e86749fb951f70b0226fa5d9b2b85d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-49-admission-attributes/pg-attribute-diagnostic.json",
+      "bytes": 315,
+      "sha256": "547ee334c330662c6bd669cee58eab5aac7d7469ff857285fa2ba416782d18e6"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-49-admission-attributes/actual-three-files-21.tap",
+      "bytes": 4915,
+      "sha256": "73bcbe1a3d8067151460a0849acc11a2f0afeffd78393d563cc91abe32f5b935"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-49-admission-attributes/normal-build.log",
+      "bytes": 6502,
+      "sha256": "4fba3761ce56c41a2db91de03119f000544610641d49f1045d6732f4c3d2cd07"
+    }
+  ]
+}
