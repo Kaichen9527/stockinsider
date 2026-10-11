@@ -4,10 +4,10 @@ import https from 'node:https';
 import net from 'node:net';
 import { createHash } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
-import { constants } from 'node:fs';
 import { open } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readResearchBoundedFile } from './research-bounded-file.mjs';
 import { isPublicNetworkAddress } from '../web/src/lib/pinned-https-fetch.ts';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
 import { assembleSourceControllerRun, inspectSourceBody, publicSourceGrant, sourceControllerUrl,
@@ -121,20 +121,10 @@ export async function executeSourceController(value,{reader=readPinnedPublicSour
 }
 
 async function readPacket(filename) {
-  if (!path.isAbsolute(filename || '')) throw new Error('source_controller_absolute_path_required');
-  const handle=await open(filename,constants.O_RDONLY | constants.O_NOFOLLOW);
-  try {
-    const info=await handle.stat();
-    if (!info.isFile() || info.size>SOURCE_CONTROLLER_LIMITS.inputBytes) throw new Error('source_controller_input_file_bound');
-    const bytes=Buffer.alloc(info.size+1);
-    let offset=0;
-    while(offset<bytes.length) {
-      const {bytesRead}=await handle.read(bytes,offset,bytes.length-offset,offset);
-      if (!bytesRead) break;offset+=bytesRead;
-    }
-    if(offset!==info.size) throw new Error('source_controller_input_changed');
-    return JSON.parse(bytes.subarray(0,offset).toString('utf8'));
-  } finally {await handle.close();}
+  const bytes = await readResearchBoundedFile(filename, { maximum: SOURCE_CONTROLLER_LIMITS.inputBytes,
+    absoluteError: 'source_controller_absolute_path_required', boundError: 'source_controller_input_file_bound',
+    changedError: 'source_controller_input_changed' });
+  return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
 }
 export async function sourceControllerCommand(args,options={}) {
   if(args.length!==4 || args[0]!=='--input' || args[2]!=='--output'

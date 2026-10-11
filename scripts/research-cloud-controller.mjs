@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readResearchBoundedFile } from './research-bounded-file.mjs';
 import { createCloudWork, validateCloudWork, verifyCloudResult, cloudReservationWorkKey } from '../web/src/lib/research-cloud-work.ts';
 
 const MAX_BYTES = 4_000_000;
@@ -15,22 +16,10 @@ const endpoint = (origin, route) => {
   return new URL(`/api/internal/${route}`, url).href;
 };
 async function readJson(filename) {
-  if (!path.isAbsolute(filename || '')) throw new Error('cloud_controller_absolute_path_required');
-  const handle = await open(filename, 'r');
-  try {
-    const info = await handle.stat();
-    if (!info.isFile() || info.size > MAX_BYTES) throw new Error('cloud_controller_input_bound');
-    const buffer = Buffer.alloc(info.size);
-    let offset = 0;
-    while (offset < buffer.length) {
-      const part = await handle.read(buffer, offset, buffer.length - offset, offset);
-      if (!part.bytesRead) break;
-      offset += part.bytesRead;
-    }
-    const extra = await handle.read(Buffer.alloc(1), 0, 1, info.size);
-    if (offset !== info.size || extra.bytesRead) throw new Error('cloud_controller_input_changed');
-    return JSON.parse(buffer.toString('utf8'));
-  } finally { await handle.close(); }
+  const bytes = await readResearchBoundedFile(filename, { maximum: MAX_BYTES,
+    absoluteError: 'cloud_controller_absolute_path_required', boundError: 'cloud_controller_input_bound',
+    changedError: 'cloud_controller_input_changed' });
+  return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
 }
 async function jsonPost(url, body, key) {
   const text = JSON.stringify(body);
