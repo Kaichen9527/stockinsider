@@ -1,0 +1,19 @@
+{
+  "label": "install-chromium",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "web/node_modules/playwright/cli.js",
+    "install",
+    "chromium"
+  ],
+  "startAt": "2026-10-11T18:46:12.863469+00:00",
+  "endAt": "2026-10-11T18:46:13.754428+00:00",
+  "exitCode": -15,
+  "durationSeconds": 0.8909866969916038,
+  "stopReason": "first_network_denial_no_retry",
+  "peakProcessGroupRssBytes": 172634112,
+  "minimumFreeBytes": {
+    "/workspace": 9268420608,
+    "/tmp": 16980258816
+  }
+}

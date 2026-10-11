@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-11T18:47:19.923345+00:00",
+  "activeOwnedBrowserNodeProcesses": [],
+  "method": "post-stage ps non-zombie Node/npm/PostgreSQL/chrome inventory empty",
+  "supervisorInstallGroupTerminated": true,
+  "expectedExecutableExists": false,
+  "cacheDirectories": [
+    ".links"
+  ],
+  "deletedPaths": [],
+  "reason": "disk above8GiB; no own rebuildable cleanup needed; original evidence preserved",
+  "availableDiskBytes": {
+    "/workspace": 9267675136,
+    "/tmp": 16980250624
+  }
+}

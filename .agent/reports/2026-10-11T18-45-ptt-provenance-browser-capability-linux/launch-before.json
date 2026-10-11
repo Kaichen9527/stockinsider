@@ -1,0 +1,17 @@
+{
+  "label": "launch-before",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "/tmp/si-7af-browser-653vc8l1/launch.cjs"
+  ],
+  "startAt": "2026-10-11T18:45:33.938329+00:00",
+  "endAt": "2026-10-11T18:45:34.389754+00:00",
+  "exitCode": 1,
+  "durationSeconds": 0.4514534240006469,
+  "stopReason": null,
+  "peakProcessGroupRssBytes": 82956288,
+  "minimumFreeBytes": {
+    "/workspace": 9268428800,
+    "/tmp": 16980283392
+  }
+}

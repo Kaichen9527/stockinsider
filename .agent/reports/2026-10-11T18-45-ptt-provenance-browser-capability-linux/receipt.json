@@ -1,0 +1,177 @@
+{
+  "schema": "bounded-manual-browser-capability-evidence-v1",
+  "source": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3",
+  "tree": "05065f79c9023135eac56c0522bb44a043e6b843",
+  "webTree": "869ad0662b486108c1d74ae3736a1baca6b825e2",
+  "evidenceParent": "60b93b763d7eaefe5542404b4808b64d17786e5c",
+  "sourceChanges": [],
+  "manualBudgetMinutes": 20,
+  "preflight": {
+    "startedAt": "2026-10-11T18:45:21.910305+00:00",
+    "source": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3",
+    "previousEvidence": "60b93b763d7eaefe5542404b4808b64d17786e5c",
+    "runtimeUnmodified": true,
+    "manualDeadlineMinutes": 20,
+    "node": "22.14.0",
+    "playwright": "1.58.2",
+    "CLI": "web/node_modules/playwright/cli.js",
+    "proxyCA": "inherited unchanged; values not printed",
+    "networkStatus": "current restricted state unknown; actual failure authoritative",
+    "diskAvailableBytes": {
+      "/workspace": 9268428800,
+      "/tmp": 16980295680
+    },
+    "secretFilesRead": false
+  },
+  "launchBefore": {
+    "label": "launch-before",
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "/tmp/si-7af-browser-653vc8l1/launch.cjs"
+    ],
+    "startAt": "2026-10-11T18:45:33.938329+00:00",
+    "endAt": "2026-10-11T18:45:34.389754+00:00",
+    "exitCode": 1,
+    "durationSeconds": 0.4514534240006469,
+    "stopReason": null,
+    "peakProcessGroupRssBytes": 82956288,
+    "minimumFreeBytes": {
+      "/workspace": 9268428800,
+      "/tmp": 16980283392
+    }
+  },
+  "install": {
+    "label": "install-chromium",
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "web/node_modules/playwright/cli.js",
+      "install",
+      "chromium"
+    ],
+    "startAt": "2026-10-11T18:46:12.863469+00:00",
+    "endAt": "2026-10-11T18:46:13.754428+00:00",
+    "exitCode": -15,
+    "durationSeconds": 0.8909866969916038,
+    "stopReason": "first_network_denial_no_retry",
+    "peakProcessGroupRssBytes": 172634112,
+    "minimumFreeBytes": {
+      "/workspace": 9268420608,
+      "/tmp": 16980258816
+    }
+  },
+  "directLaunchFinding": "browserType.launch: Executable doesn't exist at /home/agent/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell",
+  "networkFinding": {
+    "status": 403,
+    "body": "Domain forbidden",
+    "url": "https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip",
+    "cliInvocations": 1,
+    "downloadStartMessages": 2,
+    "errorMessages": 1,
+    "clarification": "Playwright built-in retry began printing second Downloading before supervisor detected first403 and terminated process group. No second CLI invocation or policy bypass. Exit -15 is supervisor SIGTERM, not fabricated CLI exit1."
+  },
+  "launchAfter": {
+    "status": "not_started",
+    "reason": "environment not repaired; executable still absent"
+  },
+  "canonical": {
+    "status": "not_started",
+    "reason": "successful launch prerequisite not satisfied; original60b canonical155/153PASS/2FAIL/0SKIP retained without relabel"
+  },
+  "scope": {
+    "playwright": "1.58.2",
+    "node": "22.14.0",
+    "pinnedChromiumRevision": "1208",
+    "expectedChromeForTestingVersion": "145.0.7632.6 (from pinned CLI download message, not successful browser.version())",
+    "networkProxyCA": "inherited unchanged, TLS verification kept",
+    "noApt": true,
+    "noLockOrPackageChanges": true,
+    "noBrowserConfigOrSandboxChange": true,
+    "noProductionOrProtectedActions": true,
+    "noActualModel": true,
+    "noSignedReviewClaim": true
+  },
+  "cleanup": {
+    "at": "2026-10-11T18:47:19.923345+00:00",
+    "activeOwnedBrowserNodeProcesses": [],
+    "method": "post-stage ps non-zombie Node/npm/PostgreSQL/chrome inventory empty",
+    "supervisorInstallGroupTerminated": true,
+    "expectedExecutableExists": false,
+    "cacheDirectories": [
+      ".links"
+    ],
+    "deletedPaths": [],
+    "reason": "disk above8GiB; no own rebuildable cleanup needed; original evidence preserved",
+    "availableDiskBytes": {
+      "/workspace": 9267675136,
+      "/tmp": 16980250624
+    }
+  },
+  "rawManifest": [
+    {
+      "path": "cleanup.json",
+      "bytes": 495,
+      "sha256": "96066d283d060d1783582b3e1d717cc22fd5bfec79008a603dd7ab10dbad5a58"
+    },
+    {
+      "path": "input-manifest.json",
+      "bytes": 1067,
+      "sha256": "9d122ea75b74108c3d6b051623338f0c5a837d2c8aa261758f05e2b15e7b744e"
+    },
+    {
+      "path": "install-chromium.json",
+      "bytes": 510,
+      "sha256": "cfe2c25237cec663c38561e8b965077eae28cbe3fab5bc4fbb5e04fac421cc9a"
+    },
+    {
+      "path": "install-chromium.resources.jsonl",
+      "bytes": 2228,
+      "sha256": "609edb45a8efaaaa0fe2f8810f61be3bf57a9c10a30d5486da59a5429fce0db9"
+    },
+    {
+      "path": "install-chromium.stderr",
+      "bytes": 511,
+      "sha256": "807a9409c0d71e87889fd0d1af0d6060acd67ab1122007cf2bf706a9a0310c45"
+    },
+    {
+      "path": "install-chromium.stdout",
+      "bytes": 328,
+      "sha256": "a55c9b6cf8e4fce8da39f241370f624651601e72944b0a298814af7af486d9ab"
+    },
+    {
+      "path": "launch-before.json",
+      "bytes": 451,
+      "sha256": "84c3e4143bee5c039612b18664feb68fe441db3f10c3c2c0016fc126e3838f6d"
+    },
+    {
+      "path": "launch-before.resources.jsonl",
+      "bytes": 202,
+      "sha256": "8dcb0254acedd2e439345cff6c191dbf43e0618d6d67ae7d228203b00c92e0dd"
+    },
+    {
+      "path": "launch-before.stderr",
+      "bytes": 1221,
+      "sha256": "bd02927265ac8887c111044f0e070badc362cb813c9c2beb9ba739fb91129154"
+    },
+    {
+      "path": "launch-before.stdout",
+      "bytes": 198,
+      "sha256": "d2e4e899c3c790bc7ce9cacf606d34afc15e0f73383621b360522177391ba96a"
+    },
+    {
+      "path": "launch.cjs",
+      "bytes": 619,
+      "sha256": "a838eef2396ff020da4d6c18259d5ca4b6645168ec6ec032de257233ab3fb1e0"
+    },
+    {
+      "path": "preflight.json",
+      "bytes": 584,
+      "sha256": "a01098316ace038f804a269c2f3870a3e8c0d4dd6fd33cd4080418bca6854716"
+    },
+    {
+      "path": "stage.py",
+      "bytes": 2168,
+      "sha256": "6c6c2e94c4d9d91abce342a1029eaeed20670e201a16f4e40ba5fa6ee20a63d7"
+    }
+  ],
+  "createdAt": "2026-10-11T18:47:19.924430+00:00"
+}

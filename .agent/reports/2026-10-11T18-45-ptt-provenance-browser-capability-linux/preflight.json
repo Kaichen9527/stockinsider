@@ -1,0 +1,17 @@
+{
+  "startedAt": "2026-10-11T18:45:21.910305+00:00",
+  "source": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3",
+  "previousEvidence": "60b93b763d7eaefe5542404b4808b64d17786e5c",
+  "runtimeUnmodified": true,
+  "manualDeadlineMinutes": 20,
+  "node": "22.14.0",
+  "playwright": "1.58.2",
+  "CLI": "web/node_modules/playwright/cli.js",
+  "proxyCA": "inherited unchanged; values not printed",
+  "networkStatus": "current restricted state unknown; actual failure authoritative",
+  "diskAvailableBytes": {
+    "/workspace": 9268428800,
+    "/tmp": 16980295680
+  },
+  "secretFilesRead": false
+}
