@@ -74,3 +74,16 @@ test('unbranded uncertain probe failure retains fence, explicitly quiescent fail
  await assert.rejects(withOracleAttempt(safeRoot,async(d,safety)=>{safety.processStarting();safety.quiescent();throw error;}),e=>e===error);
  assert.equal(fs.existsSync(path.join(safeRoot,'active.json')),false);
 });
+test('actual wrapper fences unbranded post-start rejection, releases pre-transport failure and all-role success',async t=>{
+ const parent=fixture(t);let calls=0;
+ function load(root,mode){const module={exports:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'real-model-attempt.js'),'utf8'),{module,exports:module.exports,__dirname,require:name=>{
+  if(name==='./oracleRecovery')return{withOracleAttempt,oracleRecoveryRoot:()=>root};
+  if(name==='./hostPreflight')return{loadHostPins:()=>({executables:[]})};
+  if(name==='./execution')return{prepareTransport(){if(mode==='pre')throw new Error('synthetic pre-transport failure');},async executeModel(args){calls++;if(mode==='unknown')throw new Error('synthetic host-after-spawn rejection');args.onQuiescent();return{modelAttempt:'completed',operation:args.request.operation};}};
+  return require(name);
+ }});return module.exports.runRealModelAttempt;}
+ const unsafe=path.join(path.dirname(parent),'unsafe');await assert.rejects(load(unsafe,'unknown')(),e=>e.exit===11);assert.equal(calls,1);assert.equal(JSON.parse(fs.readFileSync(path.join(unsafe,'active.json'))).state,'recovery_required');
+ await assert.rejects(load(unsafe,'success')(),e=>e.exit===11);assert.equal(calls,1);
+ const pre=path.join(path.dirname(parent),'pre');await assert.rejects(load(pre,'pre')(),/pre-transport/);assert.equal(calls,1);assert.equal(fs.existsSync(path.join(pre,'active.json')),false);
+ const success=path.join(path.dirname(parent),'success');const result=await load(success,'success')();assert.equal(result.completedRoutes.length,3);assert.equal(calls,4);assert.equal(fs.existsSync(path.join(success,'active.json')),false);
+});

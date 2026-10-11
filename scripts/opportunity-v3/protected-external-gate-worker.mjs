@@ -871,7 +871,7 @@ const modelOracleSuccessorApprovals = Object.freeze({
 
 const modelOracleHostPinByListingSha256 = Object.freeze({
   // Initial migration: recognized only once this independently reviewed code is protected base.
-  '64d0f7a298240d044d08117f5497772581dfc9f5cac0151e4116ccd240db07cd': 'model-runner-host-pins-v3.25',
+  '39feb8c4f66a697b21b499da3d1535b1112b31d53c095cc767c8090ea66c43f8': 'model-runner-host-pins-v3.25',
   bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3.14',
   cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
   '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': 'model-runner-host-pins-v3.16',
