@@ -90,3 +90,15 @@ Evidence: `.agent/reports/2026-10-11T07-48-release-review-repairs.json`; current
 - 31項 caller audit：原 d6 20項加已審6項補證，剩 PCR005／006／007／011／023。尚未製作完整31項PASS，不能把原155測試綠燈當完整履約。下一件補真 CLI main 的 config→acquire／worker→序列化邊界，再補真 PG adapter 及 aggregate main。
 - Cloud既有聊天仍 idle/cursor21，沒有重複派工。ordinary CI38124241862在本收據快照仍執行；protected38124240138缺7073 exact-review ref，沒有同輸入重跑。main未合併、未部署、未改正式資料／排程。d6完整安裝及Linux成果仍保留但未改標為7073執行。
 - 來源、真實兩篇文章、策略與五交易日驗收仍未完成；友達維持示範方向。詳見 `.agent/reports/2026-10-11T08-19-installation-caller-progress.json`。
+
+
+## Five publication checks and actual protected execution (2026-10-11T09:23Z)
+
+- Frozen source399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd/tree d3a623aff477b74fb0e217234958630742585250; PR364 is main-facing and ready. PR365 test delta is included; GitHub marked that stacked PR merged, but main remains unchanged.
+- All31 caller obligations verified:20 reuse unchanged d6 original155 evidence;11 use399 native PG1 + caller9 tests, zero failures/skips.399 normal build and ordinary CI38127311703 passed.
+- P2 swallowed assertions repaired and independently reproduced: payload/read hash/JSON assertions outside worker handlers and intentionalStopReached required. All original REDs and e67 evidence preserved.
+- Genuine main-to399 independent application/release CODE PASS. Actual writer output31 entries;record b4ac0cfd371c666837ba8d6403a6a72d5e5b909db63fa92749419ab5f6a6bec6. Unique direct-child e1749cb3614368ed4c2b80ab13a315040f0aba22 adds exactly3 agreed evidence files on its immutable subject-addressed ref; no fake signature/protected verdict.
+- Actual main-based protected run38128096991: requirements/architecture/exact-review SUCCESS. Model job114436645777 failed with spawnSync /Applications/ChatGPT.app/Contents/Resources/codex ENOENT. This new actual failure replaces the earlier missing-exact-ref diagnosis. Product track still running.
+- Attempted required-check-constrained merge-commit auto-merge; GitHub disallows auto merge for this repo. Policy unchanged; no main push/production migration/deployment.
+- Fresh VPS measurement:154894188544 total/19451998208 available bytes. Actual service names stockinsider-web-standalone/internal-worker; inactive short-name probes do not prove service outage. Current release/preview still referenced and preserved. Only unreferenced own Mac Next cache224843024 logical bytes removed; unique evidence/history untouched.
+-33 supporting raw/review files saved in .agent/reports/2026-10-11T09-22-final-publication-verification; VM evidence2ada86ce/d5c60254 hash-verified17+22 raw files. AUO remains a research-direction demonstration; operational article/strategy/schedule acceptance is separate.

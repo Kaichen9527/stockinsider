@@ -1,0 +1,146 @@
+{
+  "subject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+  "evidence": [
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-callersb17-review.json",
+      "bytes": 2609,
+      "sha256": "0d0444448e62e9c7b389ec02301f79cb4991c18b2e375ca36b79002d455984f9"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-callersb17.tap",
+      "bytes": 1298,
+      "sha256": "f5340fd848e80bd0cd76d226863ae6eb9edf82d8ab559511e212da44d7dbfe4e"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-callersb17-bindings.json",
+      "bytes": 1224,
+      "sha256": "6aa2b00cc471c47c7740e3163e262de24581107c905bbc13013317f74e57bc1c"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-install7073-review.json",
+      "bytes": 3261,
+      "sha256": "0aee0bd34f623b5877934790cbd7b955ac8ee76486b9d9492f04480c5b71470c"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-install7073.tap",
+      "bytes": 422,
+      "sha256": "1697946c8a513349aea5262e85a591c492bb07ff657c2c8ceec1b6d02562b68c"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-install7073-bindings.json",
+      "bytes": 7818,
+      "sha256": "55d0b91522d643650e1590b19615a67e5e9b3b94cd7a20fcebec44e5e138c2c6"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-cli622-review.json",
+      "bytes": 3460,
+      "sha256": "158893e23465e3ecc7f877d8418ca3e1897162171ab67eccb63dea0970b5534c"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-cli622.tap",
+      "bytes": 641,
+      "sha256": "73e78a0a391bf77c129e216a456afecf954494aed73425f32419820b6fce9864"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-cli622-bindings.json",
+      "bytes": 7329,
+      "sha256": "bc41300e5cf3348201e14e9b9243c73cab464b923eac37645402c42a85a1c0de"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-aggregate-d998-review.json",
+      "bytes": 3762,
+      "sha256": "b3fccc2d6c9b0111aae75651903e441a3555d64f210ec8a501b817fb5b0b8cb0"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-aggregate-d998.tap",
+      "bytes": 506,
+      "sha256": "cf42170860cb5bb3ce5913e53614d461defbe5c7a6ca631cffb2c2a10bff6bdb"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-aggregate-d998-bindings.json",
+      "bytes": 10496,
+      "sha256": "8d1d962e91d09684035f7289f240ff1fb2d0892282706b0fbd0fe35df1142cc3"
+    },
+    {
+      "path": "/tmp/stockinsider-pcr-fulfillment-review-oct11-399-matrix.json",
+      "bytes": 137260,
+      "sha256": "4597a9a25e95521c377504d627a46446eab7764247db80b73f1d06472d865678"
+    },
+    {
+      "path": "/tmp/stockinsider-pcr-fulfillment-review-oct11-399-report.md",
+      "bytes": 6154,
+      "sha256": "6b4a283fcdb695ed5db729d50b28f06a71bd8a2d995f27a44e589e3447a70258"
+    },
+    {
+      "path": "/tmp/stockinsider-pcr-fulfillment-review-oct11-399-assertion-closure.log",
+      "bytes": 350,
+      "sha256": "9854e57d23ef7de0ad60e6a0ad238a4100559b7772b3e0a0b5ce4e82d840c58c"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration-d6-report.md",
+      "bytes": 8768,
+      "sha256": "4651a5097e5fcc184b722271a4858b5e00c191243779f9fa66a1a9e5e23a1756"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration-d6-corrigendum.md",
+      "bytes": 1549,
+      "sha256": "9ad5cd6faccbb04ef39c6c297d0893f62dd07b93383a4bb79bdd242fc503128b"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration-d6-evidence-index.json",
+      "bytes": 3393,
+      "sha256": "15fa27ec4d4e539d211a31a7a9063bd2afd9971b243da800648eb0b98d180f04"
+    },
+    {
+      "path": "/tmp/stockinsider-vm-pcr399-receipt-oct11.json",
+      "bytes": 14510,
+      "sha256": "b1bf95bb382bbdca0c380d3c3d5620b3f6dd92ec0a804b368de4737bf8e7cf43"
+    },
+    {
+      "path": "/tmp/stockinsider-pcr399-vm-pcr-native-adapter.stdout",
+      "bytes": 997,
+      "sha256": "8fe1f67368f41963c171d92dd58b2f263a84236e8be59e8e751469dd14bb293f"
+    },
+    {
+      "path": "/tmp/stockinsider-pcr399-vm-pcr-callers-four.stdout",
+      "bytes": 2378,
+      "sha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef"
+    },
+    {
+      "path": "/tmp/stockinsider-pcr-fulfillment-review-oct11-399-final-matrix.json",
+      "bytes": 230842,
+      "sha256": "450a06803f81a08bee4a293f5747bb26ed78158bb95492932287b82f19a4b550"
+    },
+    {
+      "path": "/tmp/stockinsider-pcr-fulfillment-review-oct11-399-vm-final-receipt.json",
+      "bytes": 6018,
+      "sha256": "765fb49626e26b69e0eb823ba3488b52c475d82be5ec4de817a93f22daa5c1a6"
+    },
+    {
+      "path": "/tmp/stockinsider-pcr399-fulfillment-input.json",
+      "bytes": 32769,
+      "sha256": "a420887af9d2e6844fe0aa1d6ea9d3e88ada34eb5b2908da0ba3450654a3c1ba"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration399-exact-commit-review-final.md",
+      "bytes": 10997,
+      "sha256": "95ef8c798af35f34e4d51ba8853f1df7ea1c1dd233799129c639a4cf57e01f78"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration399-coverage.json",
+      "bytes": 462890,
+      "sha256": "b42c46508e1d073c6bf8794df7fa0c72d0c65ab513158494a1b7c01d43f7ceb8"
+    },
+    {
+      "path": "/tmp/stockinsider-pcr399-ci-success-oct11.json",
+      "bytes": 4487,
+      "sha256": "49275fba98cf9e31ae6195c25484487a9f99f020d1d446c98f63c8ee1cbf58c8"
+    }
+  ],
+  "migrationTestSha256": "955f24190af97322bcdbc9295a298ef2e339f5166aff19c3517da66f5d0ba0e9",
+  "activeGraphSha256": "722095adecd208b54cc794f72e262dd5b77ed970da80f0ab5771a55259651625",
+  "graphVerification": "treeIdentity exported from unchanged protected worker run against exact399 Git tree",
+  "acceptanceVersion": "1.46.0",
+  "dynamicFulfillmentPending": [],
+  "dynamicFulfillmentAuditStatus": "Independent final31 matrix verified:20 historical d6 exact-source-reused obligations,11 obligations from exact399 nativePG+caller executions. Reviewerverified22raw479738bytes and313source manifest. Not protected gate approval."
+}

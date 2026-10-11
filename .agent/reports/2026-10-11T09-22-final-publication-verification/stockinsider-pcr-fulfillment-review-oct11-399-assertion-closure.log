@@ -1,0 +1,8 @@
+{
+  "subject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+  "exactBlockSha256": "bb1974edf203de84ac81a06484babec3cd477c2f0433ec680d2acadad52d16fc",
+  "goodPass": 1,
+  "corruptSuccessorVariantsRejected": 5,
+  "intentionalStopFalseRejected": true,
+  "scope": "Exact assertions extracted outside worker handler; no native PG or production execution"
+}

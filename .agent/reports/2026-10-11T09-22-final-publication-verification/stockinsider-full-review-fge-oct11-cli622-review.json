@@ -1,0 +1,56 @@
+{
+  "kind": "unsigned_independent_scoped_test_code_review",
+  "subject": "622b61102d2204006dc2bb27b96a584de4ca3eeb",
+  "tree": "6d30622cc2f3e338ad4cba7c79f09fb4bc268a4b",
+  "base": "7073f3a77ed235045b0eefb1db52ce4f7101a856",
+  "scope": [
+    "scripts/opportunity-v3/pcr-cli-callers.test.mjs"
+  ],
+  "sourceSha256": "9ff4ecf0d07eae511125439035a10abab91ad1dd96841de57db3fbe7037cc9af",
+  "verdict": "SCOPED_CODE_PASS",
+  "findings": [],
+  "delta": "One new116-line test file; every runtime/config and previous caller test byte unchanged.",
+  "execution": {
+    "command": "/Users/kaerchen/.nvm/versions/node/v22.23.3/bin/node --test /tmp/stockinsider-full-review-fge-oct11-cli622/scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+    "exactGitFilesExtracted": 64,
+    "pass": 2,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 81.15525,
+    "log": {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-cli622.tap",
+      "bytes": 641,
+      "sha256": "73e78a0a391bf77c129e216a456afecf954494aed73425f32419820b6fce9864"
+    },
+    "bindings": {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-cli622-bindings.json",
+      "bytes": 7329,
+      "sha256": "bc41300e5cf3348201e14e9b9243c73cab464b923eac37645402c42a85a1c0de"
+    },
+    "historicalMakerRedRetained": {
+      "path": "/tmp/stockinsider-pcr-cli-callers-initial-red-oct11.tap",
+      "bytes": 2546,
+      "sha256": "4464e84d3a614937792f457327eec79486845e27c31096474c838a205b181eb3"
+    }
+  },
+  "closure": {
+    "PCR-005": "Actual CLI source entire bytes are executed by vm.runInNewContext without wrapper/source rewriting. Its actual exported main validates exact canonical config, runs real bundle hashing/worker, and passes original config bytes/hash, owner label, reviewed subject,lease120 and generated token to fixture acquisition. Tampered config rejects before any credential resolution/adapter creation/acquisition and emits no stdout.",
+    "PCR-006": "Actual CLI main invokes actual runDurableAuthSourceWorker for null lease,already-leased,succeeded,non-trading and acquired-running-with-no-job paths. Canonical stdout exactly equals the actual worker-derived envelope; each case acquires once and closes. Acquisition throw is preserved by identity, emits no success envelope and actual main finally closes adapter."
+  },
+  "isolation": [
+    "Only OS credential resolver boundary and external PostgreSQL adapter are replaced; credentials are explicit synthetic strings, VM process.env is closed, no real Keychain/provider/database access.",
+    "Main CJS source is loaded whole, including shebang; module exports.main is invoked explicitly. The executable require.main===module error-printing branch is not exercised.",
+    "Handler factory is real and constructed; no job means no stage handler executes. Claimed coverage is caller/worker return integration, not full DAG,real durable persistence or provider acquisition.",
+    "Filesystem bundle hashing uses original extracted source/config bytes; no mutable shared checkout code is executed."
+  ],
+  "remainingPCRGaps": [
+    "PCR-007",
+    "PCR-011",
+    "PCR-023"
+  ],
+  "limits": [
+    "Closes only the previously missingPCR005/PCR006 actual-caller exercise together with existing owner-level coverage; does not establish all31 obligations.",
+    "No155/build/nativePG rerun, protected acceptance, installation, signing authority or release approval.",
+    "Standalone explicit command executed; no package hook changed."
+  ]
+}

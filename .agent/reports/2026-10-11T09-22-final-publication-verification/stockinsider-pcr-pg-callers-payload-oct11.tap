@@ -1,0 +1,56 @@
+TAP version 13
+# (node:49915) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:49915) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker
+not ok 1 - PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker
+  ---
+  duration_ms: 0.640292
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1017:1'
+  failureType: 'hookFailed'
+  error: |-
+    initdb failed with 1
+    The files belonging to this database system will be owned by user "kaerchen".
+    This user must also own the server process.
+    
+    The database cluster will be initialized with locale "C".
+    The default text search configuration will be set to "english".
+    
+    Data page checksums are disabled.
+    
+    creating directory /var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/opportunity-v3-pg-vGWCQe/data ... ok
+    creating subdirectories ... ok
+    selecting dynamic shared memory implementation ... posix
+    selecting default "max_connections" ... 100
+    selecting default "shared_buffers" ... 128MB
+    selecting default time zone ... Asia/Taipei
+    creating configuration files ... ok
+    running bootstrap script ... 
+    2026-10-11 17:01:22.821 CST [49925] FATAL:  could not write to file "pg_wal/xlogtemp.49925": No space left on device
+    child process exited with exit code 1
+    initdb: removing data directory "/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/opportunity-v3-pg-vGWCQe/data"
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    command (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/opportunity-v3/migration-contract.test.mjs:704:11)
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/opportunity-v3/migration-contract.test.mjs:769:3)
+    TestHook.runInAsyncScope (node:async_hooks:211:14)
+    TestHook.run (node:internal/test_runner/test:979:25)
+    TestHook.run (node:internal/test_runner/test:1270:18)
+    TestHook.run (node:internal/util:544:20)
+    Test.createHook (node:internal/test_runner/test:805:33)
+    node:internal/test_runner/harness:335:12
+    file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+    ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 357.72925

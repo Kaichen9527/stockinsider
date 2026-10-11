@@ -1,0 +1,37 @@
+TAP version 13
+# (node:49391) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:49391) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker
+not ok 1 - PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker
+  ---
+  duration_ms: 77.806458
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1017:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    {"result":{"status":"failed","disposition":"failed","failure":"data_integrity_failure","completedJobs":0},"claims":[{"stage":"source_sync","jobKind":"stage_barrier","readKind":null,"readHash":null}]}
+    
+    1 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1047:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3378.31075

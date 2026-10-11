@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition
+ok 1 - PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition
+  ---
+  duration_ms: 19.993583
+  type: 'test'
+  ...
+# Subtest: PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure
+ok 2 - PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure
+  ---
+  duration_ms: 18.595416
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 81.15525

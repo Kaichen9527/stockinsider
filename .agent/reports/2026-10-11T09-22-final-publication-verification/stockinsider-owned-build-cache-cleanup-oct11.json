@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-11T09:15:43.231953+00:00",
+  "deletedRebuildableCache": "/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/.next/cache",
+  "logicalBytes": 224843024,
+  "beforeAvailableBytes": 332140544,
+  "afterAvailableBytes": 558776320,
+  "references": "lsof exit1 no open files",
+  "preserved": "source, dependencies, compiled outputs, all unique research/test evidence"
+}

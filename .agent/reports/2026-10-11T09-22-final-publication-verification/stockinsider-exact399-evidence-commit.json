@@ -1,0 +1,15 @@
+{
+  "subject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+  "tree": "d3a623aff477b74fb0e217234958630742585250",
+  "evidenceCommit": "e1749cb3614368ed4c2b80ab13a315040f0aba22",
+  "evidenceTree": "0efe25d08b88d28afa65075db070e10fa3c6f141",
+  "ref": "refs/heads/evidence/source-led-opportunity-v3-exact-review-399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+  "changedRows": [
+    "A\t.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+    "A\t.loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+    "A\t.loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json"
+  ],
+  "reviewSha256": "95ef8c798af35f34e4d51ba8853f1df7ea1c1dd233799129c639a4cf57e01f78",
+  "reviewedAt": "2026-10-11T09:20:40Z",
+  "basis": "genuine independent unsigned CODE review, no protected-pass claim"
+}

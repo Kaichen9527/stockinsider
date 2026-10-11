@@ -1,0 +1,214 @@
+{
+  "at": "2026-10-11T09:23:43.536189+00:00",
+  "source": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+  "tree": "d3a623aff477b74fb0e217234958630742585250",
+  "exactEvidenceCommit": "e1749cb3614368ed4c2b80ab13a315040f0aba22",
+  "fiveFileDeltaFrom": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+  "obligationsVerified": 31,
+  "actual399Tests": {
+    "native": 1,
+    "otherCaller": 9,
+    "failed": 0,
+    "skipped": 0
+  },
+  "reusedD6Obligations": 20,
+  "ordinaryCI": {
+    "run": 38127311703,
+    "conclusion": "success"
+  },
+  "protectedCI": {
+    "run": 38128096991,
+    "requirements": "success",
+    "architecture": "success",
+    "exactReview": "success",
+    "modelRunner": "failure",
+    "modelRunnerJob": 114436645777,
+    "firstFailure": "spawnSync /Applications/ChatGPT.app/Contents/Resources/codex ENOENT",
+    "productRuntime": "in_progress",
+    "root": "pending"
+  },
+  "production": "not yet merged or deployed",
+  "vmEvidence": [
+    "2ada86cea70461e52f735a8b87644b909f712c53",
+    "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df"
+  ],
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-integration399-evidence-index.json",
+      "bytes": 6014,
+      "sha256": "9209e80ada3a054568187eb1f7be1a346d1becc69a90692e837b8123d53f5366"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-integration399-review-before-final-matrix.md",
+      "bytes": 10202,
+      "sha256": "59459df7b0a4c223b1e2ff06fb84766c1cb6bd987a4322a4b92e90f1df37ec98"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-integration399-coverage.json",
+      "bytes": 462890,
+      "sha256": "b42c46508e1d073c6bf8794df7fa0c72d0c65ab513158494a1b7c01d43f7ceb8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-integration399-exact-commit-review-final.md",
+      "bytes": 10997,
+      "sha256": "95ef8c798af35f34e4d51ba8853f1df7ea1c1dd233799129c639a4cf57e01f78"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-fulfillment-review-oct11-399-report.md",
+      "bytes": 6154,
+      "sha256": "6b4a283fcdb695ed5db729d50b28f06a71bd8a2d995f27a44e589e3447a70258"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-fulfillment-review-oct11-399-assertion-closure.log",
+      "bytes": 350,
+      "sha256": "9854e57d23ef7de0ad60e6a0ad238a4100559b7772b3e0a0b5ce4e82d840c58c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-fulfillment-review-oct11-399-final-writer-provenance.json",
+      "bytes": 164848,
+      "sha256": "46ca820fe8339abfa6411ec38501c03087f56949cf891ff15572cf9e43305fba"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-fulfillment-review-oct11-399-matrix.json",
+      "bytes": 137260,
+      "sha256": "4597a9a25e95521c377504d627a46446eab7764247db80b73f1d06472d865678"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-fulfillment-review-oct11-399-writer-validation.log",
+      "bytes": 238,
+      "sha256": "2cacda99d6dcab95e600ad69f7f51b92683654bab248b0b58234ccb417b56246"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-fulfillment-review-oct11-399-vm-final-receipt.json",
+      "bytes": 6018,
+      "sha256": "765fb49626e26b69e0eb823ba3488b52c475d82be5ec4de817a93f22daa5c1a6"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-fulfillment-review-oct11-399-writer-provenance.json",
+      "bytes": 123545,
+      "sha256": "c8677e2386adc854d706a55075c044a4f276f45e49aceca4ee9343a68a9894b1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-fulfillment-review-oct11-399-writer-input-pending-retained.json",
+      "bytes": 33837,
+      "sha256": "827c4709749c28b1ea8c861d385f1677c694e4dc7a20cbb5d3b2489934c36407"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-fulfillment-review-oct11-399-final-matrix.json",
+      "bytes": 230842,
+      "sha256": "450a06803f81a08bee4a293f5747bb26ed78158bb95492932287b82f19a4b550"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-cli622-bindings.json",
+      "bytes": 7329,
+      "sha256": "bc41300e5cf3348201e14e9b9243c73cab464b923eac37645402c42a85a1c0de"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-cli622.tap",
+      "bytes": 641,
+      "sha256": "73e78a0a391bf77c129e216a456afecf954494aed73425f32419820b6fce9864"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-cli622-review.json",
+      "bytes": 3460,
+      "sha256": "158893e23465e3ecc7f877d8418ca3e1897162171ab67eccb63dea0970b5534c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-aggregate-d998-bindings.json",
+      "bytes": 10496,
+      "sha256": "8d1d962e91d09684035f7289f240ff1fb2d0892282706b0fbd0fe35df1142cc3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-aggregate-d998-review.json",
+      "bytes": 3762,
+      "sha256": "b3fccc2d6c9b0111aae75651903e441a3555d64f210ec8a501b817fb5b0b8cb0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-aggregate-d998-paths.json",
+      "bytes": 6144,
+      "sha256": "f86c8e81b3c1eda5ccedad747ef8666484267eaafbfcf4c39eaa75ea118bf276"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-full-review-fge-oct11-aggregate-d998.tap",
+      "bytes": 506,
+      "sha256": "cf42170860cb5bb3ce5913e53614d461defbe5c7a6ca631cffb2c2a10bff6bdb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr399-fulfillment-input.json",
+      "bytes": 32769,
+      "sha256": "a420887af9d2e6844fe0aa1d6ea9d3e88ada34eb5b2908da0ba3450654a3c1ba"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr399-ci-success-oct11.json",
+      "bytes": 4487,
+      "sha256": "49275fba98cf9e31ae6195c25484487a9f99f020d1d446c98f63c8ee1cbf58c8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-exact399-writer.stdout",
+      "bytes": 116,
+      "sha256": "2290d8f1bce2e788e42b97ccc253f3ce8a85eb42f5caf771db77bd020d968b97"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-exact399-writer.stderr",
+      "bytes": 659,
+      "sha256": "3d49d4dbda8f31d171050649e0a7adbd4b05165fbfa21639cd021039ba22df28"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-exact399-evidence-commit.json",
+      "bytes": 898,
+      "sha256": "611016e32bb870e8103c4360dc5268e89d5b3adf84c255154b09fdd010579245"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-owned-build-cache-cleanup-oct11.json",
+      "bytes": 409,
+      "sha256": "de816beb9cc32b82f9dc372d1d4b9eb37d2c67e38d95a7a10106cce03b76c282"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-cli-callers-initial-red-oct11.tap",
+      "bytes": 2546,
+      "sha256": "4464e84d3a614937792f457327eec79486845e27c31096474c838a205b181eb3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-aggregate-initial-red-oct11.tap",
+      "bytes": 1464,
+      "sha256": "38e134a5d526fe9807fbfb0d289b111fe1fb77e82971c2192fce23890557d9a1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-aggregate-path-red-oct11.tap",
+      "bytes": 1299,
+      "sha256": "7578d4bc3e73d68d66884178060d1833be1004f419b07fc3bbdbe3c3438d4681"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-pg-callers-initial-red-oct11.tap",
+      "bytes": 1873,
+      "sha256": "d36cb7bf1e554ad5dfadc13ef8ad455d9475cd769df7301affa10969f0db2dfb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-pg-callers-diagnostic-oct11.tap",
+      "bytes": 1976,
+      "sha256": "7718bf541bb3a65c02160e60a2f2fee50b2100dbd7e96dce3ca5287f3b666878"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-pg-callers-payload-oct11.tap",
+      "bytes": 3180,
+      "sha256": "4891319227248c1597130e4ca867038b285a875cc2101d8dd9264d6844ccb5bc"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-pcr-fulfillment-review-oct11-d998-swallowed-assertion-probe.log",
+      "bytes": 415,
+      "sha256": "6045085b3b2ccf2d2aa0b5679e3bb28c9eb1fc83a8c44b53c10d78f2e33882fc"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-22-final-publication-verification/stockinsider-protected399-model-runner-failure-oct11.log",
+      "bytes": 20033,
+      "sha256": "2b8c7861da63ecc49f27e27302ccde6101b3d8de3d689ef3427d3d176d229cc9"
+    }
+  ],
+  "limits": [
+    "e67 native result preserved but final assertions strengthened in399",
+    "historical d6 runs not relabeled399",
+    "CODE review is not protected CI",
+    "AUO remains demonstration; operational article/strategy/schedule acceptance separate"
+  ],
+  "autoMergeAttempt": "Repository disallows auto merge; policy unchanged."
+}

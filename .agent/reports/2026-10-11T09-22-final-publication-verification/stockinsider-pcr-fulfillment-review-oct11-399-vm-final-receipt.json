@@ -1,0 +1,129 @@
+{
+  "kind": "unsigned_scoped_vm_evidence_review",
+  "subject": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+  "tree": "d3a623aff477b74fb0e217234958630742585250",
+  "evidenceCommit": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+  "verdict": "SCOPED_EVIDENCE_PASS",
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/assertion-contract.json",
+      "bytes": 1675,
+      "sha256": "8309708d6a6303c2e7a37a7947dde8d8a9e39e1afd98d03c28aea8d63aa4b67d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/build-identity.json",
+      "bytes": 551,
+      "sha256": "5c3ed5b6018d788253ae9d132bbb2a022f1491ded7d8fd437ce7f4622a3e349a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/cleanup.json",
+      "bytes": 480,
+      "sha256": "57924fb4988a039525dd8802d886777fdb2de3f7be8d7c50cabbc891a5a59cbe"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/compiled-server-manifest.json",
+      "bytes": 387190,
+      "sha256": "c555e210cde700297e2e39f10376de7840b4629cab9dc137a98d14e603eedb50"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/normal-build.json",
+      "bytes": 645,
+      "sha256": "4353d4b7c1ce2667f1b3c4f1804310e2d6c9b22ac63ba062998ce9d528ff71bb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/normal-build.stdout",
+      "bytes": 6499,
+      "sha256": "84d835d33324f3ffb72f91eb7d12f427c54df4c17a9afc387f5b68ddcbbc7807"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/normal-build.time",
+      "bytes": 758,
+      "sha256": "8747c29550c07229c6839c0cfcdf59f7fe9bfd1750fce8c44737bc1f2cda4469"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.json",
+      "bytes": 914,
+      "sha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+      "bytes": 2378,
+      "sha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.time",
+      "bytes": 997,
+      "sha256": "f2a046d5ceae989b695040593645045fac4b8d040cbaf2be17ddddc08e3b8730"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-native-adapter.json",
+      "bytes": 781,
+      "sha256": "8e68f1d1f685a67ec0de7713dac55d88e650126d473b0d0a3b0cd711308512ec"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-native-adapter.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-native-adapter.stdout",
+      "bytes": 997,
+      "sha256": "8fe1f67368f41963c171d92dd58b2f263a84236e8be59e8e751469dd14bb293f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-native-adapter.time",
+      "bytes": 879,
+      "sha256": "0f7c01a986d9e5aa3dd21d19f0baa89d474eef99895ade21d1b74b355b63fbc1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/preflight.json",
+      "bytes": 1144,
+      "sha256": "7ceb9ea06341359ffff8f37773854ddc48225fdbb767db96984c12381566009e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/run.py",
+      "bytes": 3427,
+      "sha256": "b68a7b76865901ec5c6afb7c414d4b658aa342e08fd5e23bec5c454ed216a521"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/runtime-comparison.json",
+      "bytes": 293,
+      "sha256": "3e415b0d52f09b15c06ee9aac216b6b8cb6a30371e16a6f6a261f4e980c1f884"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/source-delta.patch",
+      "bytes": 14424,
+      "sha256": "4f58f9ecf2a19f236d2ab05876fed60769a7773e916c81cf47e254e467495df9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/source-manifest.json",
+      "bytes": 54325,
+      "sha256": "5dde7cb98c6b8018646a532fab42bc4e85161e7c6e5dbf4ab5d834265b145c43"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/test-inventory.json",
+      "bytes": 1381,
+      "sha256": "3085ad31640c58005e6ec43615d5d3179d21c7848797b5d7982bde4268e600be"
+    }
+  ],
+  "receiptSha256": "b1bf95bb382bbdca0c380d3c3d5620b3f6dd92ec0a804b368de4737bf8e7cf43",
+  "sourceFilesVerified": 313,
+  "runtimeComparison": "d6..399 has only five test paths; all31 owner/caller hashes equal prior reviewed d6.",
+  "closure": "007/011 exact repaired native test1/1 zero skip;9 other caller tests cover9 obligations;31 complete by explicit original+new evidence aggregation.",
+  "resources": "Stages completed09:13:58Z before09:41:45Z deadline; no guard termination/remaining children reported. Sampled RSS maximum897126400B; stage-boundary disk minimum10042789888B. Sampling limitation retained.",
+  "scope": "Read-only Git/raw audit, no local PG/build/rerun; no protected or deployment approval.",
+  "matrix": "/tmp/stockinsider-pcr-fulfillment-review-oct11-399-final-matrix.json",
+  "matrixSha256": "450a06803f81a08bee4a293f5747bb26ed78158bb95492932287b82f19a4b550",
+  "writerInput": "/tmp/stockinsider-pcr399-fulfillment-input.json",
+  "writerInputSha256": "a420887af9d2e6844fe0aa1d6ea9d3e88ada34eb5b2908da0ba3450654a3c1ba"
+}

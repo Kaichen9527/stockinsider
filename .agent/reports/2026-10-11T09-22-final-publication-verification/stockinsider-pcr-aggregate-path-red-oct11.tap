@@ -1,0 +1,28 @@
+TAP version 13
+# HEAD is now at 09797ca test-only protected base
+# Preparing worktree (detached HEAD 5e7da15)
+# Subtest: PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing
+not ok 1 - PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing
+  ---
+  duration_ms: 2531.960792
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/opportunity-v3/pcr-aggregate-caller.test.mjs:19:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/stockinsider-pcr023-test-only-prQNyN/aggregate.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:442:20)
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/opportunity-v3/pcr-aggregate-caller.test.mjs:119:33)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2576.10375

@@ -1,0 +1,18 @@
+TAP version 13
+# HEAD is now at df3cbc2 test-only protected base
+# Preparing worktree (detached HEAD e8f5120)
+# Subtest: PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing
+ok 1 - PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing
+  ---
+  duration_ms: 29683.097
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 29727.139417

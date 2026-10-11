@@ -1,0 +1,66 @@
+{
+  "kind": "unsigned_independent_scoped_test_code_review",
+  "subject": "d998f4cfae71694ad7de37c8fb67e148b448e451",
+  "tree": "e9fc989082be2ae05b3f088db3f9801be35f76ad",
+  "base": "e67a17c7a24ddfec5235a8f4a708077a6ba0ddd4",
+  "scope": [
+    "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+  ],
+  "sourceSha256": "f537dfdb0f94103ffcdcee59a0d90ce65ebacc3f95e819e2037c313a27733264",
+  "verdict": "SCOPED_CODE_PASS",
+  "findings": [],
+  "delta": "One new142-line test; protected worker,aggregate,runtime and active graph bytes unchanged.",
+  "execution": {
+    "command": "/Users/kaerchen/.nvm/versions/node/v22.23.3/bin/node --test /tmp/stockinsider-full-review-fge-oct11-aggregate-d998/scripts/opportunity-v3/pcr-aggregate-caller.test.mjs",
+    "exactGitFilesExtracted": 64,
+    "extractedSourceBytes": 1570134,
+    "pass": 1,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 29727.139417,
+    "log": {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-aggregate-d998.tap",
+      "bytes": 506,
+      "sha256": "cf42170860cb5bb3ce5913e53614d461defbe5c7a6ca631cffb2c2a10bff6bdb"
+    },
+    "bindings": {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-aggregate-d998-bindings.json",
+      "bytes": 10496,
+      "sha256": "8d1d962e91d09684035f7289f240ff1fb2d0892282706b0fbd0fe35df1142cc3"
+    },
+    "historicalMakerReds": [
+      {
+        "path": "/tmp/stockinsider-pcr-aggregate-initial-red-oct11.tap",
+        "bytes": 1464,
+        "sha256": "38e134a5d526fe9807fbfb0d289b111fe1fb77e82971c2192fce23890557d9a1"
+      },
+      {
+        "path": "/tmp/stockinsider-pcr-aggregate-path-red-oct11.tap",
+        "bytes": 1299,
+        "sha256": "7578d4bc3e73d68d66884178060d1833be1004f419b07fc3bbdbe3c3438d4681"
+      }
+    ]
+  },
+  "sourceIdentity": [
+    {
+      "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs",
+      "sha256": "0906ca3c1cbcac003f0708fd753ec0726874e57a5d68282bd051ca6bd2a2b68c",
+      "equalProtectedMain169": true
+    },
+    {
+      "path": "scripts/opportunity-v3/protected-code-gate-aggregate.mjs",
+      "sha256": "d6ec0565aaf27824e3c0ddd4a78634a830c43d76d8a4c8daf2c8a0f960fd9c8b",
+      "equalProtectedMain169": true
+    }
+  ],
+  "closure": {
+    "PCR-023": "Closes the missing actual protected worker main→validateProtectedCodeGateAggregateInputs caller exercise. Separate Node CLI processes invoke unchanged main using realpath temporary roots. Real active graph and registry bytes stay intact; requirements/architecture/exact-review verbs validate disposable Git lineage and write actual bound envelopes. Actual aggregate consumes ordered five-input envelopes, validates them and recaptures review Git bindings, writes canonical output, preserves input evidence hashes and reports check identity on stdout. Missing input,reordered input,failed status and recomputed-but-Git-unbound review input reject without output file or stdout."
+  },
+  "limits": [
+    "All review/attestation/three-file evidence artifacts and Git refs belong exclusively to the synthetic disposable repository; no actual release approval,review evidence ref or trust authority created.",
+    "Two track envelopes are explicitly synthetic protocol inputs. Neither product-runtime nor model-runner executable track, bootstrap script or live provider is executed; no track PASS claimed.",
+    "Registry/bootstrap bytes are copied as inert fixture data, not altered or activated. Real graph matches722095adecd208b54cc794f72e262dd5b77ed970da80f0ab5771a55259651625.",
+    "This is onlyPCR023 caller closure with existing owner-level coverage. PCR007/PCR011 and complete31-obligation audit remain outside this review; no fullreleasePASS.",
+    "No shared repository mutation,155/build/nativePG rerun or realprotectedCI execution."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "subject": "d998f4cfae71694ad7de37c8fb67e148b448e451",
+  "probe": "actual immutable worker, synthetic adapter only; no PG",
+  "outerAcceptanceChecksPassed": true,
+  "intentionalStopReached": false,
+  "corruptSecondClaimAcceptedAsExpectedStop": true,
+  "result": {
+    "status": "failed",
+    "disposition": "failed",
+    "failure": "data_integrity_failure",
+    "completedJobs": 1
+  },
+  "diagnosticCount": 1
+}
