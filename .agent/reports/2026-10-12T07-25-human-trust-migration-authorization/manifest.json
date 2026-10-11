@@ -1,0 +1,42 @@
+[
+  {
+    "path": "cloud-browser-handoff.md",
+    "bytes": 1446,
+    "sha256": "681405a2bb3957b985a8246869c475a9baafdd3c9643358207f5248d1197f273"
+  },
+  {
+    "path": "cloud-browser-install-chromium.stderr",
+    "bytes": 511,
+    "sha256": "807a9409c0d71e87889fd0d1af0d6060acd67ab1122007cf2bf706a9a0310c45"
+  },
+  {
+    "path": "cloud-browser-install-chromium.stdout",
+    "bytes": 328,
+    "sha256": "a55c9b6cf8e4fce8da39f241370f624651601e72944b0a298814af7af486d9ab"
+  },
+  {
+    "path": "cloud-browser-launch-before.stderr",
+    "bytes": 1221,
+    "sha256": "bd02927265ac8887c111044f0e070badc362cb813c9c2beb9ba739fb91129154"
+  },
+  {
+    "path": "cloud-browser-receipt.json",
+    "bytes": 6143,
+    "sha256": "c213477042867256c2ffdd91f5d5110e2bfa20edf9a24ee0520b074822f5cf7c"
+  },
+  {
+    "path": "continuation.json",
+    "bytes": 653,
+    "sha256": "f176fdf6294118d665b0fbae7789e034134a2425446cf9da8bd8bfec078389b7"
+  },
+  {
+    "path": "human-authorization.json",
+    "bytes": 1492,
+    "sha256": "3b27198148b9a888a0034b1cf8516e4ff0bc6a21176008ae79ef0383e9b5004a"
+  },
+  {
+    "path": "original-ruleset.json",
+    "bytes": 1224,
+    "sha256": "a612bca82531473d61352bcbed5dfaef20ec921a5f28ce6c1b0969ff06bebf07"
+  }
+]

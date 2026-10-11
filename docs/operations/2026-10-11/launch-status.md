@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 07:25台灣時間：人類批准一次性工具信任遷移，網站保護不變
+
+人類直接答覆「同意，只限發布工具修復 PR；網站仍須全部檢查」。這項明確決策取代以下歷史的「待答覆」，只授權獨立發布工具修復PR一次初始例外，不授權網站／策略跳過檢查，不把舊失敗改寫成功。原ruleset20177392已唯讀保存：active、無bypass actors、main必需stockinsider-v3-gate-root；尚未修改保護、啟用新trust或合併。精確工具patch、獨立審查及真實新runner驗證仍須完成，之後才在確切PR/head執行例外並恢復原保護。
+
+原maker Astra recovery已idle，現在單次接30分鐘最小tool-only installation patch：由892c93e準備canonical fixture／loader／doctor-map／有限contract一起對齊，branch codex/protected-runner-trust-migration-oct12；不改應用370/371/372。Root不重疊修改，maker不能核准或簽自己結果，root保留另一作者獨立審查及真正落地責任。
+
+Cloud瀏覽器工作已終態且idle，evidence0587293f。直接normal launch真實確認缺pinned Chromium1208；指定locked CLI單次下載遇官方CDN403 Domain forbidden，已停止，無重跑canonical／換browser／繞網路。原153PASS／2FAIL保留。Root改由現有GitHub普通workflow單次dispatch exact7af8，run38184227555，目前in_progress；原model-runner變數不存在故該job依既定條件skip，沒有改變數或重跑已知native ENOENT。這是普通驗證，不取代protected。
+
+正式main仍169。Mac目前僅約1.72GB可用，不新增本機依賴或build。VPS不在本輪做重型工作或刪Docker；343全量與PTT2409保持既有終態。授權、原保護與CDN失敗原證據見`.agent/reports/2026-10-12T07-25-human-trust-migration-authorization/`。
+
 ## 18:45Z：VM canonical原始結果已核對，單次修復缺失的瀏覽器能力
 
 GitHub main仍169、PR372仍凍結7af8cba0／OPEN BLOCKED；沒有合併部署或重跑全量。Cloud前次20分鐘工作已終態且idle，證據branch `codex/ptt-provenance-canonical-evidence-oct12` head60b93b763d7eaefe5542404b4808b64d17786e5c。Root真正核對17份raw與575份source hash／blob，與精確7af8完全一致，該branch僅新增證據。未修改canonical九檔選擇：153PASS／2FAIL／0SKIP，31PCR為30PASS／1FAIL；PCR022真PASS，PCR024與V314004瀏覽器子命令FAIL。這不是155或31全過。

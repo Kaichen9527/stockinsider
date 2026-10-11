@@ -1,0 +1,13 @@
+{
+  "cloudThread": "01a106b8-a883-7185-9962-f7372109a093",
+  "cursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:7",
+  "status": "idle",
+  "browserOutcome": "pinned Chromium1208 normal launch missing; existing CLI install denied403 Domain forbidden by Cloud CDN policy, stopped; no retry or override",
+  "canonicalNotRerun": true,
+  "newOrdinaryGithubRun": 38184227555,
+  "exactSubject": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3",
+  "modelRunnerRepoVariable": "absent => existing model job skipped; no variable changed",
+  "runnerWorker": "/root/astra_recovery_oct04",
+  "ownedBranch": "codex/protected-runner-trust-migration-oct12",
+  "noOverlap": true
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "human-scoped-initial-trust-migration-authorization-v1",
+  "recordedAtUtc": "2026-10-11T23:27:00.559797+00:00",
+  "recordedAtTaiwan": "2026-10-12T07:25+08:00",
+  "source": "direct human answer to request_user_input_async call_azmTUxiHqKWmUgCadZCIOByn question0 in this chat",
+  "exactAnswer": "同意，只限發布工具修復 PR；網站仍須全部檢查",
+  "scope": {
+    "oneInitialException": true,
+    "allowedOnly": "independently reviewed publication-tool repair PR to establish new pinned runner baseline",
+    "applicationPRs": [
+      370,
+      371,
+      372
+    ],
+    "applicationChecksRemainRequired": true,
+    "mustNotRelabelFailedChecks": true,
+    "noDirectMainPush": true,
+    "noStrategyApproval": true
+  },
+  "stateAtRecord": {
+    "main": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "toolRepairCandidate": "892c93e2d4d44e863be9b6aed7407cf975e905b4",
+    "toolRepairPR": "not created yet",
+    "protectionMutated": false,
+    "trustActivated": false,
+    "exceptionMergePerformed": false
+  },
+  "remainingSteps": [
+    "prepare exact tool-only installation patch and finite contracts",
+    "independent review and real new-runner verification",
+    "create concrete tool-only PR",
+    "apply authorized one-time PR merge exception only at final reviewed head; preserve and immediately restore original ruleset",
+    "re-run all normal protected application gates before application merge/deploy"
+  ],
+  "notASignatureOrTechnicalAttestation": true
+}

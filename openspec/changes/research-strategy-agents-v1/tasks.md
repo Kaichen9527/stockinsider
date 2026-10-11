@@ -1,5 +1,12 @@
 # Execution ledger
 
+## 2026-10-12 human-scoped trust migration authorization
+
+- [x] Human explicitly authorizes one initial publication-tool-only exception; application370/371/372 still require all normal gates. Original main ruleset saved read-only.
+- [ ] Prepare exact tool-only installation patch, independent review and real new runner verification; no ruleset mutation or exception merge yet.
+- [x] Cloud pinned Chromium launch failure and CDN403 saved; no same-input retry/network override.
+- [ ] Existing ordinary GitHub runtime38184227555 running exactPR3727af8 in its normal browser-capable environment; not protected approval.
+
 ## 2026-10-11T17:54Z scoped source evidence increment
 
 - [x] PTT new-document mention lineage/read-completeness helper and actual source-function synthetic boundary tests; root30/30, maker40raw/16source hashes verified. No historical backfill or live crawl.
