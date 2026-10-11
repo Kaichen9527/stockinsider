@@ -1,0 +1,23 @@
+{
+  "stage": "packaging-three",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "scripts/research-release-artifacts.test.mjs",
+    "scripts/package-standalone-release.test.mjs",
+    "scripts/package-vps-standalone.test.mjs"
+  ],
+  "startedAt": "2026-10-11T04:16:26.967358+00:00",
+  "endedAt": "2026-10-11T04:16:27.922383+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.9550555190071464,
+  "sampledAggregatePeakRssBytes": 180838400,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10082193408,
+  "diskAvailableAfterBytes": 10082193408,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
