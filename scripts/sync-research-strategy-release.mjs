@@ -65,6 +65,23 @@ for (const name of sqlSources) {
     }).join(', ') : '',
     argumentCount: match[2].trim() ? match[2].split(',').length : 0 });
 }
+// V3.15 upgrades this resolver through a reviewed DO-block replacement rather
+// than another CREATE FUNCTION. Resolve that exact source transformation too;
+// otherwise the manifest asks production to install the older linear lookup.
+const instrumentRewriteFile = 'migrations/20260813_opportunity_recovery_v3_15.sql';
+const instrumentRewriteSource = fs.readFileSync(path.join(root, instrumentRewriteFile), 'utf8');
+const instrumentBlock = instrumentRewriteSource.match(/DO \$accelerate_instrument_registry_lookup\$([\s\S]*?)\$accelerate_instrument_registry_lookup\$/u)?.[1];
+const replacements = [...(instrumentBlock ?? '').matchAll(/v_rewritten:=replace\(v_definition,\s*\$\$([\s\S]*?)\$\$,\s*\$\$([\s\S]*?)\$\$\);/gu)];
+const instrumentName = 'resolve_legacy_instrument_authority_v3_13_internal';
+const instrumentDefinition = definitions.get(instrumentName);
+if (!instrumentDefinition || instrumentDefinition.file !== 'migrations/20260809_decision_integrity_v3_13.sql'
+  || replacements.length !== 1) throw new Error('strategy_instrument_rewrite_source_unsupported');
+const [,oldInstrument,newInstrument] = replacements[0];
+if (instrumentDefinition.body.split(oldInstrument).length !== 2
+  || instrumentDefinition.body.includes(newInstrument)) throw new Error('strategy_instrument_rewrite_shape');
+instrumentDefinition.body = instrumentDefinition.body.replace(oldInstrument,newInstrument);
+instrumentDefinition.bodySha256 = hash(instrumentDefinition.body);
+
 const databaseFunctions = new Map();
 function sqlVisit(name) {
   if (databaseFunctions.has(name)) return;
@@ -86,7 +103,7 @@ const databasePolicy = [...databaseFunctions].sort(([a],[b]) => a.localeCompare(
   argumentTypes: item.argumentTypes,
 }));
 const databasePaths = [...new Set([...databaseFunctions.values()].map((item) => item.file)
-  .concat('migrations/20261004_research_technical_identity_v2.sql'))].sort();
+  .concat('migrations/20261004_research_technical_identity_v2.sql',instrumentRewriteFile))].sort();
 databasePaths.forEach((file) => visited.add(file));
 const files = [...visited].sort().map((file) => ({ path: file, sha256: hash(fs.readFileSync(path.join(root, file))) }));
 const parameterFiles = parameterPaths.sort().map((file) => {

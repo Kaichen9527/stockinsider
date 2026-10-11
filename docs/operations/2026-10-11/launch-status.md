@@ -25,3 +25,14 @@
 - 新證據345a284cc7a12a923bc83f98aecc8188ea87138c已由root逐檔核對26raw／17,815bytes及source tree；無新依賴、build、模型呼叫或正式寫入。抽樣峰值RSS約295MB、可用磁碟10.08GB，自有程序已結束。收據`.agent/reports/2026-10-11T05-28-admission-isolation-user-linux-vm.json`，使用合成partial prerequisite profile，並非完整production安裝。
 - 下一個發布工程項目是installer完整18-successor清單／first-install／owner-ACL-trigger／rollback契約，依既有獨立migration設計接續，不能只追加路徑或移除TRUNCATE保護。
 - 全main-to-final審查與外部runner信任復原仍獨立阻擋；不能用這次bounded21PASS替代。真正作者／獨立審查文章、正式策略與排程驗收維持未完成。
+
+
+## 完整資料庫安裝鏈接續（2026-10-11T06:45Z）
+
+- 已補入18個遺漏 successor，維持48-file base原始SQL及digest；73個選定檔案實際套用72個，1個由既有superseded檢測跳過。
+- 以實際VPS的schema-only dump在隔離PG17完整還原，沒有用stub取代prerequisite。完整安裝、真正最終postcondition、原子回滾、斷線、雙安裝程序競爭與catalog/owner/ACL/trigger/role mutation測試通過。
+- 真實執行修復了最終verifier的括號語法、兩個歷史wrapper名稱及owner檢查；release manifest也補上V3.15原始DO-block resolver變更，沒有自動批准新策略。
+- 獨立WIP審查另提出2個P2：pgpass回退和把HBA檔案當載入規則。已用拒絕密碼challenge callback、`system_user=peer:postgres`、實際runtime本地HBA拒絕探測及前後profile一致性修復。22/22測試、型別、lint、正常build通過；精確版本獨立複審與Linux新鏈驗證尚待執行。
+- VPS唯讀探測確認peer及實際拒絕成立，沒有修改runtime角色或正式schema。舊空間不足不是此次阻擋。
+- Cloud244eccba的27raw/44,875bytes逐一核對成功，原始empty-PG schema RED保留；該結果不表示正式VPS缺auth。
+- 受保護發布仍缺真正完整main-to-final審查/PCR及trusted runner復原機制；此批安裝測試不會冒充合併/部署批准。具體交接見database-installation-handoff.md與本次receipt。

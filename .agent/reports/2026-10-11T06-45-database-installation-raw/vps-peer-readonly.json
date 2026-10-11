@@ -1,0 +1,14 @@
+{
+  "database": "stockinsider",
+  "system_user": "peer:postgres",
+  "tcp_disabled": true,
+  "runtime_limit": -1,
+  "runtime_login": false,
+  "runtime_inherit": false,
+  "readonly": true,
+  "effectiveRuntimeHbaReject": true,
+  "probeExitCode": 2,
+  "probeStderr": "WARNING: password file \"/dev/null\" is not a plain file\npsql: error: connection to server on socket \"/run/postgresql/.s.PGSQL.5432\" failed: FATAL:  pg_hba.conf rejects connection for host \"[local]\", user \"stockinsider_runtime_v319\", database \"stockinsider\", no encryption\n",
+  "roleAltered": false,
+  "productionSchemaChanged": false
+}

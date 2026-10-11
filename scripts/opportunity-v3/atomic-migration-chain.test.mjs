@@ -22,6 +22,6 @@ test('every explicitly reviewed migration is compatible with one atomic transact
   for (const path of paths) assert.ok(migrationBodyInAtomicTransaction(fs.readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8')), path);
   const runner = fs.readFileSync(new URL('./apply-reviewed-migrations.mjs', import.meta.url), 'utf8');
   assert.ok(runner.indexOf("await client.query('BEGIN')") < runner.indexOf('for(const migration of plan.migrations)'));
-  assert.ok(runner.indexOf("await client.query('COMMIT')") > runner.indexOf('migration_postcondition_failed'));
+  assert.ok(runner.lastIndexOf("await client.query('COMMIT')") > runner.indexOf('await verifyReviewedMigrationPostconditions(client, options)'));
   assert.match(runner, /if\(transactionOpen\)try\{await client.query\('ROLLBACK'\)/u);
 });

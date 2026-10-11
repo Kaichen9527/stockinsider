@@ -30,6 +30,14 @@ test('release identity covers imported execution sources and rejects altered dep
     fs.appendFileSync(sql, '\n-- Changed database policy fixture.\n');
     assert.notEqual(run().status, 0);
     fs.copyFileSync(path.join(root, 'migrations/20260929_research_agent_state_v1.sql'), sql);
+    const rewrite = path.join(directory, 'migrations/20260813_opportunity_recovery_v3_15.sql');
+    fs.appendFileSync(rewrite, '\n-- Modified resolver transformation.\n');
+    assert.notEqual(run().status, 0);
+    fs.copyFileSync(path.join(root, 'migrations/20260813_opportunity_recovery_v3_15.sql'), rewrite);
+    const originalRewrite = fs.readFileSync(rewrite, 'utf8');
+    fs.writeFileSync(rewrite, originalRewrite.replace('v_rewritten:=replace(v_definition,', 'v_rewritten:=replace(v_unknown,'));
+    assert.match(run().stderr, /strategy_instrument_rewrite_source_unsupported/u);
+    fs.writeFileSync(rewrite, originalRewrite);
     fs.appendFileSync(path.join(directory, 'web/package-lock.json'), '\n');
     assert.notEqual(run().status, 0);
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }

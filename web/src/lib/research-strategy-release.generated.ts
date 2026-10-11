@@ -11,6 +11,10 @@ export const RESEARCH_STRATEGY_RELEASE = {
       "sha256": "5e843da1049bc2f075d5f8bf901095b3047c42215fc87ada01a1a984d240f95b"
     },
     {
+      "path": "migrations/20260813_opportunity_recovery_v3_15.sql",
+      "sha256": "3e4cb338f8773689f5c760e40a9474266ad24e841f7b0e0b2646a5a1467aabb8"
+    },
+    {
       "path": "migrations/20260906_candidate_dossier_v4.sql",
       "sha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016"
     },
@@ -218,7 +222,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "name": "resolve_legacy_instrument_authority_v3_13_internal",
-      "bodySha256": "afb9bcfddbd2c6020aab222bf36837cfacdd22184ebf8e8db12a745f355c7d06",
+      "bodySha256": "15b1e2f299deb61cb0380db2856d992190cc7ec53b47159826942b72e09fd468",
       "securityDefiner": true,
       "volatility": "s",
       "argumentCount": 2,
@@ -251,7 +255,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     }
   ],
   "dependencyLockHash": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
-  "codeHash": "a5367b9c2ae935897612b096f7f533fd7f12e22790e5bf539bfb3bce35d96fa0",
+  "codeHash": "9f76f754a38f4e8928dfce135151ad8ad97fdf710cf430ee3d73d5e8f9854806",
   "parameterMode": "fixed_baseline_source_bound",
   "parameterHash": "8bbad7c16c55b4ef1483e1f0c348f35d2404397717e10d1daed49fba30843a39",
   "parameterFiles": [

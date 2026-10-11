@@ -224,3 +224,14 @@ Continue on existing CodexVM; VPSheavycapacity is not a development stop conditi
 - Insiderc96 actualPG:16TAP7pass/9fail0skip, first token-resolution UPDATE has missing FROM-clause error; worker-owned fix/full guarded transport pending. Linuxjournal1/1pass0skip is injected-response FD acceptance only.
 - Native0825 inactive actual143portable0skip; original23suite19pass/4fail0skip retained. No Mac live oracle/auth transport/model/activation success claimed.
 - First-publication64f7, real author/reviewer trusted assignment, outbox publication and operational five-day acceptance remain unfinished; manual engineering is not automatic role-budget acceptance.
+
+
+## 2026-10-11 complete existing-schema installer increment
+
+- [x] Add all18 omitted publication/observed/insider/admission successors to the reviewed planner/apply path; preserve48-file base SQL/digest and exact protective-SQL byte pins.
+- [x] Guard complete/partial installation before any base/extended replay; compare fixed three-stage catalogs, owners/ACLs/types/roles/triggers and real postconditions in the same transaction.
+- [x] Restore actual schema-only VPS baseline in isolated PG17; test72 applied migrations, rollback, disconnect, concurrency and semantic mutations without prerequisite stubs.
+- [x] Repair stale final-verifier syntax/wrapper/owner checks and exact V3.15 release-identity resolver transformation; no strategy approval generated.
+- [x] Address independent WIP P2 findings: prohibit pgpass/password challenge fallback; require authenticated peer identity, actual local HBA reject and stable before/after profiles. Native regression22/22zero skips, type/lint/normalbuildPASS.
+- [ ] Exact final scoped independent re-review and Linux new full-chain verification. This increment does not fulfill full main-to-final protected review/PCR.
+- [ ] Trusted protected runner recovery/legitimate owner ingress, complete release evidence, reviewed merge/deploy, real author/reviewer publications, strategy/coverage and five-day acceptance remain open. See docs/operations/2026-10-11/database-installation-handoff.md and trusted-recovery-handoff.md. Existing VPS expanded; no production role/schema or history deletion performed.
