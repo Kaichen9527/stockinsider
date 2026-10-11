@@ -1,0 +1,33 @@
+{
+  "subject": "5b8a5c57e13079b76614235a762b7894914e7e86",
+  "observedAt": "2026-10-11T15:35:40.458771+00:00",
+  "commands": [
+    {
+      "name": "focused",
+      "argv": [
+        "/usr/local/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "scripts/candidate-discovery-admission-ui.test.mjs"
+      ],
+      "exitCode": 0,
+      "path": "/tmp/stockinsider-candidate-head5b8-root-focused-oct11.log",
+      "bytes": 7854,
+      "sha256": "77ed947b91cbc95b543e08c230f53d5167322580a6bdef0a9e8b9c9b814fade9"
+    },
+    {
+      "name": "product",
+      "argv": [
+        "npm",
+        "run",
+        "test:source-led-opportunity-v3:product-correctness"
+      ],
+      "exitCode": 1,
+      "path": "/tmp/stockinsider-candidate-head5b8-root-product-oct11.log",
+      "bytes": 66075,
+      "sha256": "d702450b1a70254c00c50170c9744929c9d8353c2dc63f5c58ef901bcb25b000"
+    }
+  ]
+}

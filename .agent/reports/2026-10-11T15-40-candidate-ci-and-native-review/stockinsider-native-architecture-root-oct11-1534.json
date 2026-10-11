@@ -1,0 +1,50 @@
+{
+  "observedAt": "2026-10-11T15:34:33.574171+00:00",
+  "validationSource": "scripts/model-runner-v3/hostPreflight.js:221-222 checks process.platform/process.arch, not uname",
+  "scope": "explicit native probes only; not full actual protected runner startup/preflight",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/file",
+        "/usr/local/bin/node",
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+      ],
+      "exitCode": 0,
+      "stdout": "/usr/local/bin/node:                                                                      Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64]\n/usr/local/bin/node (for architecture x86_64):\tMach-O 64-bit executable x86_64\n/usr/local/bin/node (for architecture arm64):\tMach-O 64-bit executable arm64\n/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex: Mach-O 64-bit executable arm64\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/usr/sbin/sysctl",
+        "-n",
+        "hw.optional.arm64"
+      ],
+      "exitCode": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/arch",
+        "-arm64",
+        "/usr/bin/uname",
+        "-m"
+      ],
+      "exitCode": 0,
+      "stdout": "arm64\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/arch",
+        "-arm64",
+        "/usr/local/bin/node",
+        "-p",
+        "JSON.stringify({arch:process.arch,platform:process.platform,version:process.version})"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"arch\":\"arm64\",\"platform\":\"darwin\",\"version\":\"v22.14.0\"}\n",
+      "stderr": ""
+    }
+  ]
+}

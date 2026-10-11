@@ -1,0 +1,131 @@
+{
+  "schema": "stockinsider-final-candidate-ci-and-native-independent-review-v1",
+  "observedAt": "2026-10-11T15:43:20.137715+00:00",
+  "pr371Subject": "5b8a5c57e13079b76614235a762b7894914e7e86",
+  "exactReviewEvidence": "606f5fab482c306def1991efa01b4106913038e6",
+  "ordinaryCandidateQualityCI": {
+    "run": 38151644908,
+    "status": "SUCCESS",
+    "tests": 28,
+    "authority": "ordinary diagnostic only"
+  },
+  "rootFinalTests": {
+    "focused": 28,
+    "firstProduct": {
+      "pass": 153,
+      "fail": 2,
+      "reason": "system Python child selected x64 universal Node against installed arm64 LightningCSS; original raw retained"
+    },
+    "explicitNativeProduct": {
+      "pass": 155,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0,
+      "allPCR": 31
+    },
+    "unchangedWebPreviousNormalBuild": "Next16.3.4 types/lint/build PASS at exact715; reused only identical web+lock"
+  },
+  "vm": {
+    "thread": "01a106b8-a883-7185-9962-f7372109a093",
+    "host": "durable",
+    "cursor": 50,
+    "state": "idle completed ordinary workflow slice; no overlapping edits"
+  },
+  "nativeReview": {
+    "candidate": "892c93e2d4d44e863be9b6aed7407cf975e905b4",
+    "documents": "c012efb728de039b90a094019d087dc1b3a5ad6e",
+    "unsignedScoped": "PASS no new P0/P1/P2",
+    "activation": "not authorized or performed",
+    "fullFinalNativeHostPreflight": "not executed",
+    "architecture": "host validator uses process.arch; universal Node launch context matters; explicit arm64 matches, shell uname x86_64 is not predicate"
+  },
+  "protected": {
+    "pr370": "product/requirements/architecture/exact PASS; native ENOENT FAIL; not merged",
+    "pr371": "initial final-head reviews ran before new exact ref and failed; unchanged native failure not rerun",
+    "pendingHumanDecision": "one-time tool-repair-only first trust transition exception; application PRs still require genuine all checks; no answer received"
+  },
+  "pttThresholdDiagnostic": {
+    "pairs": 47,
+    "maxRetainedAuthors": 2,
+    "twentyExplicitCodeAuthors": 0,
+    "warning": "retained local stock-code reply excerpts only, not full community responses; policy and ingestion adapter gap remains, no fake qualification"
+  },
+  "otherApp": {
+    "thread": "019fbfd2-f671-7f90-858f-683bc2114af4",
+    "cursor": 26,
+    "state": "active own CI/deployment; cache attribution response still pending",
+    "inferenceOnly": "release ENV before runtime apt can invalidate large layers; build-deps preceding ENV requires separate analysis"
+  },
+  "productionMain": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "fullRefreshRepeated": false,
+  "productionWrites": false,
+  "sourceProbesImported": false,
+  "dockerDeleted": false,
+  "files": [
+    {
+      "path": "stockinsider-candidate-quality-ci-oct11.log",
+      "bytes": 59090,
+      "sha256": "15e2ec3460b7c073643cb6f6f0635973701c347e6f551dba9b2f7ce05b57e01b"
+    },
+    {
+      "path": "stockinsider-ordinary-pr371-ci-oct11.log",
+      "bytes": 874888,
+      "sha256": "32d5067a8e44a572ff0e2223607a549f4bb356ba41ae6ca4375bfa387118db84"
+    },
+    {
+      "path": "stockinsider-candidate-head5b8-root-focused-oct11.log",
+      "bytes": 7854,
+      "sha256": "77ed947b91cbc95b543e08c230f53d5167322580a6bdef0a9e8b9c9b814fade9"
+    },
+    {
+      "path": "stockinsider-candidate-head5b8-root-product-oct11.log",
+      "bytes": 66075,
+      "sha256": "d702450b1a70254c00c50170c9744929c9d8353c2dc63f5c58ef901bcb25b000"
+    },
+    {
+      "path": "stockinsider-candidate-head5b8-root-product-native-oct11.log",
+      "bytes": 40309,
+      "sha256": "fa260d45cf0d9705c85d5acbff8a27f2df2c57df9516d0043f30620d0eec460e"
+    },
+    {
+      "path": "stockinsider-candidate-head5b8-root-checks-oct11.json",
+      "bytes": 992,
+      "sha256": "2ca7a75a9d9eb965a4642982f8c33ed809bfa75740559252e14b128e8e9c1636"
+    },
+    {
+      "path": "stockinsider-native-identity-root-oct11-1521.json",
+      "bytes": 7586,
+      "sha256": "16a8b97741c547e8457153b28a4a127223303975808628c1869ae90f734dc2ce"
+    },
+    {
+      "path": "stockinsider-native-architecture-root-oct11-1534.json",
+      "bytes": 1723,
+      "sha256": "d60de2738ab04649bd85f41696a8acccccab4d029237905415af0cf66825aba4"
+    },
+    {
+      "path": "stockinsider-runner-transition-c012-independent-review.md",
+      "bytes": 7389,
+      "sha256": "27e23dc06af87f48dae3a5b0fed6b3a63146afb85e140d7dd9e415151b175b28"
+    },
+    {
+      "path": "stockinsider-runner-transition-c012-independent-review.json",
+      "bytes": 5113,
+      "sha256": "d1b231c99e57726abc1e0f0dd6d7f033ec3aef1f2aaeca3917c715a426c4c3bb"
+    },
+    {
+      "path": "stockinsider-runner-transition-c012-architecture-supplement.json",
+      "bytes": 2100,
+      "sha256": "1908399af8ae4afb6c7c5444916acc5da2cc5544dfdf814191f1152cec0f6956"
+    },
+    {
+      "path": "stockinsider-ptt-author-threshold-oct11.sql",
+      "bytes": 1791,
+      "sha256": "d6de7769426e688daf7324e34397745fc5849244076f1ca148f71b6f0b046118"
+    },
+    {
+      "path": "stockinsider-ptt-author-threshold-oct11.json",
+      "bytes": 2611,
+      "sha256": "45e5f83244f701205117d3b67beda30380bb3f5aca477087d175b0253d187e73"
+    }
+  ]
+}

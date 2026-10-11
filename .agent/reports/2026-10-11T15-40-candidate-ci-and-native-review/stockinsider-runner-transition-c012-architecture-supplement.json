@@ -1,0 +1,70 @@
+{
+  "recordedAt": "2026-10-11T15:33:02.746634+00:00",
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/uname",
+        "-m"
+      ],
+      "exitCode": 0,
+      "stdout": "x86_64\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/file",
+        "/usr/local/bin/node",
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+      ],
+      "exitCode": 0,
+      "stdout": "/usr/local/bin/node:                                                                      Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64]\n/usr/local/bin/node (for architecture x86_64):\tMach-O 64-bit executable x86_64\n/usr/local/bin/node (for architecture arm64):\tMach-O 64-bit executable arm64\n/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex: Mach-O 64-bit executable arm64\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/sbin/sysctl",
+        "-n",
+        "hw.optional.arm64"
+      ],
+      "exitCode": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/arch",
+        "-arm64",
+        "/usr/bin/uname",
+        "-m"
+      ],
+      "exitCode": 0,
+      "stdout": "arm64\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/local/bin/node",
+        "-p",
+        "JSON.stringify({arch:process.arch,platform:process.platform,execPath:process.execPath})"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"arch\":\"x64\",\"platform\":\"darwin\",\"execPath\":\"/usr/local/bin/node\"}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/arch",
+        "-arm64",
+        "/usr/local/bin/node",
+        "-p",
+        "JSON.stringify({arch:process.arch,platform:process.platform,execPath:process.execPath})"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"arch\":\"arm64\",\"platform\":\"darwin\",\"execPath\":\"/usr/local/bin/node\"}\n",
+      "stderr": ""
+    }
+  ],
+  "credentialsRead": false,
+  "providerInvoked": false,
+  "fullHostValidatorExecuted": false
+}

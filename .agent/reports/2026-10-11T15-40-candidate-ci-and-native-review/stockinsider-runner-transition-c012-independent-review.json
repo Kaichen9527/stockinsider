@@ -1,0 +1,104 @@
+{
+  "schema": "unsigned-scoped-runner-transition-review-v1",
+  "recordedAt": "2026-10-11T15:29:03.733565+00:00",
+  "candidate": "892c93e2d4d44e863be9b6aed7407cf975e905b4",
+  "candidateTree": "2df896d7ca54cfb8f58b362842b84f3419c49354",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "documentsSubject": "c012efb728de039b90a094019d087dc1b3a5ad6e",
+  "documentsTree": "0fbeeec5a96ba32151ef3ffd6a8dfaa3684c3efb",
+  "verdict": "UNSIGNED_SCOPED_INACTIVE_CODE_AND_TRANSITION_DOCUMENTS_PASS",
+  "findings": [],
+  "documents": [
+    {
+      "path": "docs/engineering/protected-cli-transition-20261011/README.md",
+      "bytes": 7249,
+      "sha256": "f114627e0eb8d59e48ff1763be6e589b722049180d263aafe618dce55688950f"
+    },
+    {
+      "path": "docs/engineering/protected-cli-transition-20261011/host-identity-changes.json",
+      "bytes": 5136,
+      "sha256": "4ec2c34f8be74f483b81a3a4c174ec755099801ea811da8e9da44117a4662c0f"
+    },
+    {
+      "path": "docs/engineering/protected-cli-transition-20261011/host-identity.reference.diff",
+      "bytes": 4284,
+      "sha256": "5ff847bcd29b1dfff780b4d4dd83d920f80cf5a7afeb15f0ec97fed9b4eca542"
+    }
+  ],
+  "priorIndependentReview": {
+    "path": "/tmp/stockinsider-runner-recovery-892-independent-review.json",
+    "sha256": "7ad3e2450a761c45bc3f54e49501b5e3e24896b9a9b12e00215664a09d430120",
+    "testsReused": {
+      "passed": 103,
+      "failed": 0,
+      "skipped": 0
+    },
+    "rawPath": "/tmp/stockinsider-runner-recovery-892-independent-focused.tap",
+    "rawSha256": "cc87200ef0acd4598da8f06f0d896a140e2e6fff45410c579e8a2b0bc34b7165",
+    "notRerunThisSupplement": true
+  },
+  "verified": {
+    "c012DeltaOnlyDocumentsAndEvidence": true,
+    "rawAndManifestEntries": 20,
+    "rawAndManifestBytes": 69258,
+    "sourceManifestEntries": 54,
+    "sourceManifestBytes": 1191488,
+    "hashMismatches": 0,
+    "exactChangedHostFields": 18,
+    "oldAndCandidateFixtureHashesVerified": true,
+    "linuxRestrictedRedRetained": true,
+    "linuxNativePortableTap": {
+      "passed": 103,
+      "failed": 0,
+      "skipped": 0
+    },
+    "currentSourceUnmodified": true
+  },
+  "newRootEvidence": [
+    {
+      "path": "/tmp/stockinsider-native-identity-root-oct11-1521.json",
+      "bytes": 7586,
+      "sha256": "16a8b97741c547e8457153b28a4a127223303975808628c1869ae90f734dc2ce",
+      "attribution": "root execution; independently read and matched, not reviewer native execution"
+    },
+    {
+      "path": "/tmp/stockinsider-runner-recovery-root-canary-oct11-1458.json",
+      "bytes": 5594,
+      "sha256": "f50756ea9fba33ba00bc5b3b7ff22809a2e318cc6b618ec1f8a9d30019f8b343",
+      "attribution": "root execution; independently read and matched, not reviewer native execution"
+    }
+  ],
+  "remaining": {
+    "humanFirstEstablishmentDecision": "pending; no ordinary repair authorization is substituted",
+    "fullArm64HostPreflight": "Explicit arch -arm64 pinned Node satisfies architecture predicate. Ordinary universal Node follows launch context (x64 under system Python). Must verify actual protected runner process.arch in its real launch chain; complete final trusted-fixture host validator remains unexecuted.",
+    "finalCanonicalTrustedFixture": "not established; candidate approvalAuthority null and codesign requirement output suffix still requires explicit canonical representation review",
+    "networkEnabledDependencySandbox": "not established by 14 network-disabled checks",
+    "fullFrozenRunnerAcceptance": "not passed; old literal expectations remain unchanged",
+    "actualAuthorizedLiveRunReviewVerify": "not performed",
+    "exactProtectedTransitionAndModelTrack": "not passed"
+  },
+  "authority": {
+    "unsigned": true,
+    "protectedApproval": false,
+    "activationApproved": false,
+    "deploymentApproved": false,
+    "providerInvokedByReviewer": false,
+    "credentialsReadByReviewer": false,
+    "repoModified": false
+  },
+  "markdownSha256": "27e23dc06af87f48dae3a5b0fed6b3a63146afb85e140d7dd9e415151b175b28",
+  "architectureClarification": {
+    "priorJsonSha256": "a8d2aed1d0c96684db1b890c92c69ca3d664086804e8f604587750a593553961",
+    "priorMarkdownSha256": "aa17e5b1f4eeb2d5970a5d3aba77c99fbd6aba0f3367b85b13abdc85e7cf2eb1",
+    "rootIdentityReceiptUnchangedSha256": "16a8b97741c547e8457153b28a4a127223303975808628c1869ae90f734dc2ce",
+    "validatorSource": "scripts/model-runner-v3/hostPreflight.js:221-222 at exact892",
+    "actualPredicate": "process.platform === fixture.platform && process.arch === fixture.architecture",
+    "plainShellUnameIsNotValidatorInput": true,
+    "rootEarlierPlainShell": "x86_64 (preserved)",
+    "independentCurrentNode": "Launch-context dependent: direct tool shell ordinary pinned Node darwin/arm64; system Python child ordinary pinned Node darwin/x64; explicit arch -arm64 pinned Node darwin/arm64 in both.",
+    "supplementPath": "/tmp/stockinsider-runner-transition-c012-architecture-supplement.json",
+    "supplementSha256": "1908399af8ae4afb6c7c5444916acc5da2cc5544dfdf814191f1152cec0f6956",
+    "fullHostValidatorExecuted": false,
+    "actualRunnerLaunchChainStillRequired": true
+  }
+}
