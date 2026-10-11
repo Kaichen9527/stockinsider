@@ -72,6 +72,7 @@ test('reviewer assignment: real original reservation budget/claim/fences, synthe
     sql(roster.slice(roster.indexOf('CREATE FUNCTION public.research_observed_canonical_json_v1'), roster.indexOf('-- Fail closed beyond PostgreSQL')));
     for (const name of ['research_input_preparations', 'research_input_preparation_assert', 'research_complete_input', 'research_author_assignments', 'research_author_packet', 'research_author_results', 'research_author_handoffs', 'research_reviewer_assignments'])
       sql(fs.readFileSync(`migrations/20261009_${name}_v2.sql`, 'utf8'));
+    sql(fs.readFileSync('migrations/20261011_research_complete_mapping_precision_v2.sql','utf8'));
     // Install original reservation/completion functions over the explicit upstream
     // fixture. Synthetic initial rows are not claimed as production admission.
     sql(`ALTER TABLE research_model_reservations_v1 ALTER COLUMN reservation_id SET DEFAULT gen_random_uuid();

@@ -45,7 +45,7 @@ test('private author assignment persistence on actual PG; synthetic role/input f
     // Actual pinned predecessor SQL, never a stubbed RPC or claimed accepted runtime.
     const predecessorSql=predecessor('migrations/20261009_research_complete_input_v2.sql');
     t.diagnostic(`Complete-input predecessor SQL SHA256 ${createHash('sha256').update(predecessorSql).digest('hex')}; seeded assignment fixture is not financial or model acceptance.`);
-    sql(predecessorSql);
+    sql(predecessorSql);sql(fs.readFileSync('migrations/20261011_research_complete_mapping_precision_v2.sql','utf8'));
     const source = randomUUID();
     sql(`SET ROLE service_role;INSERT INTO source_raw_documents VALUES(${q(source)},'https://example.invalid/assignment-fixture',NULL,clock_timestamp()-interval '1 second','{"canonical_url":"https://example.invalid/assignment-fixture","rights_boundary":"public_citation"}');RESET ROLE;`);
     const old = { owner: ids.owner, jobId: ids.job, attempt: 1, reservationId: ids.reservation, bundleId: null,

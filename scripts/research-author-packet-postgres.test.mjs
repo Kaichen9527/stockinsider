@@ -44,6 +44,7 @@ test('actual original PG input/assignment and read-only author packet; synthetic
     sql(roster.slice(roster.indexOf('CREATE FUNCTION public.research_observed_canonical_json_v1'), roster.indexOf('-- Fail closed beyond PostgreSQL')));
     for (const name of ['research_input_preparations', 'research_input_preparation_assert', 'research_complete_input', 'research_author_assignments', 'research_author_packet'])
       sql(fs.readFileSync(`migrations/20261009_${name}_v2.sql`, 'utf8'));
+    sql(fs.readFileSync('migrations/20261011_research_complete_mapping_precision_v2.sql','utf8'));
     const principal = 'e'.repeat(64);
     const make = async (changes = {}, assign = true) => {
       const job = randomUUID(), reservation = randomUUID(), source = randomUUID(), url = `https://example.com/synthetic-packet-${source}`;

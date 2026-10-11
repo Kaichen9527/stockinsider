@@ -69,7 +69,7 @@ test('CI-03 original SQL real PG exact cumulative bytes, +1 rollback and shared 
   const prepare=r=>JSON.parse(sql(`SET ROLE service_role;SELECT prepare_research_input_v2(${q(JSON.stringify(r))});`));
   add();
 
-  sql(fs.readFileSync('migrations/20261009_research_complete_input_v2.sql','utf8'));
+  sql(fs.readFileSync('migrations/20261009_research_complete_input_v2.sql','utf8'));sql(fs.readFileSync('migrations/20261011_research_complete_mapping_precision_v2.sql','utf8'));
   const db={rpc(name,a){const arg=Object.values(a).map(v=>q(typeof v==='object'?JSON.stringify(v):v)).join(',');const response=promisify(execFile)(path.join(bin,'psql'),[...args,'-c',`SET ROLE service_role;SELECT ${name}(${arg});`],{encoding:'utf8',timeout:6000,maxBuffer:1048576}).then(({stdout})=>({data:JSON.parse(stdout.trim()),error:null}));return Object.assign(response,{abortSignal:()=>response});}};
 
   await t.test('PG-only deterministic serialization clock; original RPC bodies/cap unchanged',async()=>{

@@ -81,7 +81,7 @@ test('complete reviewed existing-schema installation is atomic and verifies actu
         await client.query(migrationBodyInAtomicTransaction(fs.readFileSync(path.join(root,item.migration),'utf8')));
         applied.push(item.migration);
       }
-      assert.equal(applied.length,73);assert.equal(superseded,true);
+      assert.equal(applied.length,75);assert.equal(superseded,true);
       return verifyReviewedMigrationPostconditions(client,{researchAgentExtension:true});
     };
     await t.test('full chain and semantic mutations are verified before rollback',async()=>{
