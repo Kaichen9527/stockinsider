@@ -1,0 +1,36 @@
+{
+  "pcr-native-adapter": {
+    "counts": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "testNames": [
+      "PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker"
+    ]
+  },
+  "pcr-callers-four": {
+    "counts": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "testNames": [
+      "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+      "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+      "PCR-025 caller returns bounded history or the actual unavailable reason",
+      "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+      "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+      "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+      "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+      "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+      "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+    ]
+  }
+}

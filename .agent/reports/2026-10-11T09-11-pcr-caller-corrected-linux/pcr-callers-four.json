@@ -1,0 +1,25 @@
+{
+  "stage": "pcr-callers-four",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+    "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+    "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+    "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+  ],
+  "startedAt": "2026-10-11T09:13:33.931421+00:00",
+  "endedAt": "2026-10-11T09:13:40.464669+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 6.533257351955399,
+  "sampledAggregatePeakRssBytes": 108875776,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10043609088,
+  "diskAvailableAfterBytes": 10043609088,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
