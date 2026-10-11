@@ -1031,21 +1031,13 @@ test('PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persis
   const connectionString = `postgresql://${encodeURIComponent(cluster.user)}@localhost:${cluster.port}/postgres?host=${encodeURIComponent(cluster.socket)}`;
   const adapter = runtime('postgres-legacy-producer-adapter.js').createPostgresLegacyProducerAdapter({ connectionString });
   const observed = [];
+  let intentionalStopReached = false;
   const stageHandlers = Object.fromEntries(runtime('source-run-config.js').LEGACY_STAGES.map((stage) => [stage, async (claim) => {
     observed.push(claim);
-    assert.equal(codec.sha256(claim.payloadCanonical), claim.payloadHash);
-    assert.equal(codec.canonicalJson(JSON.parse(Buffer.from(claim.payloadCanonical).toString())), codec.canonicalJson(claim.payloadJson));
-    if (claim.readKind !== null) {
-      assert.equal(codec.sha256(claim.readCanonical), claim.readHash);
-      assert.equal(codec.canonicalJson(JSON.parse(Buffer.from(claim.readCanonical).toString())), codec.canonicalJson(claim.readJson));
-    } else {
-      assert.equal(claim.readCanonical, null);
-      assert.equal(claim.readJson, null);
-      assert.equal(claim.readHash, null);
-    }
     if (stage === 'source_sync') return sourceResult;
     // Stop after observing the genuine SQL-scheduled successor. This intentional
     // failure proves the bounded probe cannot masquerade as a full successful run.
+    intentionalStopReached = true;
     throw new Error('test-only stop after persisted source completion');
   }]));
   try {
@@ -1054,6 +1046,21 @@ test('PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persis
     });
     assert.equal(observed.length, 2, JSON.stringify({ result, claims: observed.map(({ stage, jobKind, readKind, readHash, readCanonical }) =>
       ({ stage, jobKind, readKind, readHash, readCanonical: readCanonical?.toString() })) }));
+    assert.equal(intentionalStopReached, true);
+    // These assertions must remain outside worker handlers: its expected
+    // failure terminalization must never swallow a test AssertionError.
+    for (const claim of observed) {
+      assert.equal(codec.sha256(claim.payloadCanonical), claim.payloadHash);
+      assert.equal(codec.canonicalJson(JSON.parse(Buffer.from(claim.payloadCanonical).toString())), codec.canonicalJson(claim.payloadJson));
+      if (claim.readKind !== null) {
+        assert.equal(codec.sha256(claim.readCanonical), claim.readHash);
+        assert.equal(codec.canonicalJson(JSON.parse(Buffer.from(claim.readCanonical).toString())), codec.canonicalJson(claim.readJson));
+      } else {
+        assert.equal(claim.readCanonical, null);
+        assert.equal(claim.readJson, null);
+        assert.equal(claim.readHash, null);
+      }
+    }
     assert.equal(observed[0].stage, 'source_sync');
     assert.notEqual(observed[1].stage, 'source_sync');
     assert.equal(observed[0].runId, observed[1].runId);
