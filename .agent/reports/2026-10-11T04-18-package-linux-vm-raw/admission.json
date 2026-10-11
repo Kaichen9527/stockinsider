@@ -1,0 +1,35 @@
+{
+  "manualOriginalStart": "2026-10-11T04:08:07Z",
+  "manualOriginalDeadline": "2026-10-11T04:38:07Z",
+  "stageAdmissionAt": "2026-10-11T04:16:26.939659+00:00",
+  "sourceHead": "2f74c1eeb1c21af32884903f38590da9cc70f668",
+  "sourceTree": "525b94b1eabeb6bc7c09367fd38ffc6398de5824",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "exactFetchedLatestNotAdopted": "e8c942e7239dc11e700452cd8d6257eb69c85743",
+  "requestedFiles": [
+    {
+      "file": "scripts/research-release-artifacts.test.mjs",
+      "exists": true,
+      "bytes": 6337,
+      "sha256": "4c1e6c2e217849b0b66f734f73817e02d211d00cd423d69b6eafffed9b87d21d"
+    },
+    {
+      "file": "scripts/package-standalone-release.test.mjs",
+      "exists": true,
+      "bytes": 10394,
+      "sha256": "8e168a0c462c49fb73649bc8a6449f82b9a14dbee2c4cc02b73629f0a4a7eb42"
+    },
+    {
+      "file": "scripts/package-vps-standalone.test.mjs",
+      "exists": false,
+      "bytes": null,
+      "sha256": null
+    }
+  ],
+  "node": "22.14.0",
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "reuseExistingLockMatchedDependencies": true,
+  "diskAvailableBytes": 10082193408,
+  "buildOrPGNotRequested": true,
+  "preflightFileNotFoundPreserved": "scripts/package-vps-standalone.test.mjs absent in exact tree, not substituted"
+}

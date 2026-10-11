@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "package-linux-fixture-evidence-v1",
+  "sealedAt": "2026-10-11T04:17:25.883642+00:00",
+  "sealedAtAsiaTaipei": "2026-10-11T12:17:25.883642+08:00",
+  "manualOriginalStart": "2026-10-11T04:08:07Z",
+  "manualOriginalDeadline": "2026-10-11T04:38:07Z",
+  "manualElapsedSeconds": 558.883642,
+  "sourceHead": "2f74c1eeb1c21af32884903f38590da9cc70f668",
+  "sourceTree": "525b94b1eabeb6bc7c09367fd38ffc6398de5824",
+  "sourceParent": "436113460493c7132f81d22023bd90f8a338a4ac",
+  "branch": "codex/research-package-linux-evidence-oct11",
+  "admission": {
+    "manualOriginalStart": "2026-10-11T04:08:07Z",
+    "manualOriginalDeadline": "2026-10-11T04:38:07Z",
+    "stageAdmissionAt": "2026-10-11T04:16:26.939659+00:00",
+    "sourceHead": "2f74c1eeb1c21af32884903f38590da9cc70f668",
+    "sourceTree": "525b94b1eabeb6bc7c09367fd38ffc6398de5824",
+    "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+    "exactFetchedLatestNotAdopted": "e8c942e7239dc11e700452cd8d6257eb69c85743",
+    "requestedFiles": [
+      {
+        "file": "scripts/research-release-artifacts.test.mjs",
+        "exists": true,
+        "bytes": 6337,
+        "sha256": "4c1e6c2e217849b0b66f734f73817e02d211d00cd423d69b6eafffed9b87d21d"
+      },
+      {
+        "file": "scripts/package-standalone-release.test.mjs",
+        "exists": true,
+        "bytes": 10394,
+        "sha256": "8e168a0c462c49fb73649bc8a6449f82b9a14dbee2c4cc02b73629f0a4a7eb42"
+      },
+      {
+        "file": "scripts/package-vps-standalone.test.mjs",
+        "exists": false,
+        "bytes": null,
+        "sha256": null
+      }
+    ],
+    "node": "22.14.0",
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "reuseExistingLockMatchedDependencies": true,
+    "diskAvailableBytes": 10082193408,
+    "buildOrPGNotRequested": true,
+    "preflightFileNotFoundPreserved": "scripts/package-vps-standalone.test.mjs absent in exact tree, not substituted"
+  },
+  "stage": {
+    "stage": "packaging-three",
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "--experimental-strip-types",
+      "--test",
+      "scripts/research-release-artifacts.test.mjs",
+      "scripts/package-standalone-release.test.mjs",
+      "scripts/package-vps-standalone.test.mjs"
+    ],
+    "startedAt": "2026-10-11T04:16:26.967358+00:00",
+    "endedAt": "2026-10-11T04:16:27.922383+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 0.9550555190071464,
+    "sampledAggregatePeakRssBytes": 180838400,
+    "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "diskAvailableBeforeBytes": 10082193408,
+    "diskAvailableAfterBytes": 10082193408,
+    "guardTermination": null,
+    "remainingObservedChildren": [],
+    "inheritedProxyAndCA": true,
+    "credentialValuesCopied": false
+  },
+  "tapCounts": {
+    "tests": 13,
+    "pass": 13,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "coverage": {
+    "requestedPatterns": 3,
+    "existingTestFilesExecuted": 2,
+    "absentPattern": "scripts/package-vps-standalone.test.mjs",
+    "missingPatternNotAnExecutedCase": true,
+    "commandUnchanged": true,
+    "nodeDidNotErrorOnUnmatchedPattern": true,
+    "testNames": [
+      "packages only the standalone runtime and binds a full git identity",
+      "release manifest covers every research dependency and verification rejects altered evidence",
+      "release verification rejects a modified runtime file",
+      "accepts identical bundled static and public assets, but rejects mismatches",
+      "verification CLI cannot skip a release symlink invocation",
+      "packager CLI cannot skip a checkout symlink invocation",
+      "rejects incomplete builds, short commit ids and traced backup or env files",
+      "rejects mismatched source or packager identity and dirty tracked tooling",
+      "both runtime layouts contain only pinned research inputs and real readers load both companies",
+      "missing, altered and symlinked inputs reject before any research output is created",
+      "output symlinks, existing files and escaped entrypoints cannot redirect or overwrite evidence",
+      "legacy fixtures skip research; a feature-enabled release cannot omit its manifest",
+      "real financial reader still refuses a writable release ancestor"
+    ]
+  },
+  "priorStageSeparate": {
+    "sourceHead": "4ff224baa6e00e73198d9f2cc8b29b2045374744",
+    "evidenceHead": "caa013cdb7b6a933acc7734ce90021cb2c527cab",
+    "countsNotCombined": true,
+    "noRerun": true
+  },
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-11T04-18-package-linux-vm-raw/packaging-three.json",
+      "bytes": 839,
+      "sha256": "f0caeb89db1cf58d19f35e49226d42fea5c545aaf1a4abe38396d6517a6060a0"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-18-package-linux-vm-raw/packaging-three.time",
+      "bytes": 940,
+      "sha256": "8b960199da570752437502fafafff31ff5170b276d605d060f3aaf117bf4992b"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-18-package-linux-vm-raw/packaging-three.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-18-package-linux-vm-raw/packaging-three.stdout",
+      "bytes": 11488,
+      "sha256": "6da630978235bd62a158ead3781c6cc83444e3788cc0f9fbd3c9df5fb62fced0"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-18-package-linux-vm-raw/admission.json",
+      "bytes": 1323,
+      "sha256": "6563223ae3ddf30f959b3dedb96815e7c7163a5ab2f6129d03f71bdc029c8250"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-18-package-linux-vm-raw/run.py",
+      "bytes": 3139,
+      "sha256": "fe08bed36444dd30625e1f76d21999dc85841afce745cf54ca2af3171517c72c"
+    }
+  ],
+  "cleanup": {
+    "activeNodePostgresOrNpm": [],
+    "noDeletedUniqueEvidence": true,
+    "artifactRootRetained": "/tmp/si-pkg-2f74-3v3jh5bl"
+  },
+  "diskAvailableBytes": 10082144256,
+  "limitations": [
+    "13/13 proves the two existing matched files; absent third file was not verified",
+    "No source tests runtime guard clock permissions modified",
+    "No explicit build PG or model execution, production write or deploy",
+    "No inherited Mac maker or independent code approval claimed as Linux execution"
+  ]
+}
