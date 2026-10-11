@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "research-linux-packaging-fixture-v1",
+  "recordedAt": "2026-10-11T04:13:04.828678+00:00",
+  "sourceCommit": "2f74c1eeb1c21af32884903f38590da9cc70f668",
+  "baseCommit": "43611346",
+  "change": "test-only secure OS account-owned fixture path and real writable-ancestor rejection; production reader unchanged",
+  "makerExecution": {
+    "command": "Node22 --experimental-strip-types --test scripts/research-release-artifacts.test.mjs scripts/package-standalone-release.test.mjs scripts/package-vps-standalone.test.mjs",
+    "platform": "darwin",
+    "exitCode": 0,
+    "tests": 13,
+    "passed": 13,
+    "failed": 0,
+    "skipped": 0,
+    "raw": "maker-13.tap",
+    "bytes": 3448,
+    "sha256": "e18aa2312137128a738309807419462ab2b9c32261329e1588d6f6bbdaa0e84e"
+  },
+  "independentReview": {
+    "reviewer": "/root/author_input_review_oct08",
+    "sourceCommit": "2f74c1eeb1c21af32884903f38590da9cc70f668",
+    "sourceTree": "525b94b1eabeb6bc7c09367fd38ffc6398de5824",
+    "decision": "unsigned scoped TEST CODE PASS; no P1/P2",
+    "observedExecution": {
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0
+    },
+    "attribution": "reviewer message; independent raw logs not part of this receipt"
+  },
+  "priorIoReview": {
+    "reviewer": "/root/author_input_review_oct08",
+    "sourceCommit": "4ff224baa6e00e73198d9f2cc8b29b2045374744",
+    "sourceTree": "93ce27fb87b79f537626bcc71d6e8d5199515a2a",
+    "decision": "unsigned scoped CODE PASS; no P1/P2",
+    "observedExecution": {
+      "newTestsPassed": 11,
+      "extraErrorProbesPassed": 9
+    },
+    "attribution": "reviewer message; not full release review and not root executions"
+  },
+  "webBuild": "4ff normal build already saved; web tree unchanged by test-only2f",
+  "linuxExecution": "pending existing VM, separate receipt",
+  "mainMerged": false,
+  "productionDeployment": false,
+  "genuineResearchExecution": false,
+  "protectedApproval": false
+}
