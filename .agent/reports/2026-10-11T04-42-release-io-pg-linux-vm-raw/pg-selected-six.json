@@ -1,0 +1,25 @@
+{
+  "stage": "pg-selected-six",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "--test-name-pattern=^(acceptance PCR-022|V3\\.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material|V3\\.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry|V314-009 official calendar and backfill coverage remain typed and non-synthetic|V314-011 every approved profile/provider has one honest terminal outcome|V314-012 migration persists redacted diagnostics append-only with recorded time)$",
+    "scripts/opportunity-v3/product-correctness.test.mjs",
+    "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+    "scripts/opportunity-v3/v314-actionability-recovery.test.mjs"
+  ],
+  "startedAt": "2026-10-11T04:36:47.676439+00:00",
+  "endedAt": "2026-10-11T04:38:26.097056+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 98.42062188399723,
+  "sampledAggregatePeakRssBytes": 355291136,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10081734656,
+  "diskAvailableAfterBytes": 10081734656,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

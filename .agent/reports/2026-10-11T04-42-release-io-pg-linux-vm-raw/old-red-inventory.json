@@ -1,0 +1,27 @@
+{
+  "oldSource": "4ff224baa6e00e73198d9f2cc8b29b2045374744",
+  "oldEvidence": "caa013cdb7b6a933acc7734ce90021cb2c527cab",
+  "oldFailed8": [
+    "acceptance PCR-022",
+    "acceptance PCR-024",
+    "V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material",
+    "V3.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry",
+    "V314-004 discovery and report visibility are backed by payload data",
+    "V314-009 official calendar and backfill coverage remain typed and non-synthetic",
+    "V314-011 every approved profile/provider has one honest terminal outcome",
+    "V314-012 migration persists redacted diagnostics append-only with recorded time"
+  ],
+  "selectedPG6": [
+    "acceptance PCR-022",
+    "V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material",
+    "V3.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry",
+    "V314-009 official calendar and backfill coverage remain typed and non-synthetic",
+    "V314-011 every approved profile/provider has one honest terminal outcome",
+    "V314-012 migration persists redacted diagnostics append-only with recorded time"
+  ],
+  "notSelectedBrowser2": [
+    "acceptance PCR-024",
+    "V314-004 discovery and report visibility are backed by payload data"
+  ],
+  "newPattern": "^(acceptance PCR-022|V3\\.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material|V3\\.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry|V314-009 official calendar and backfill coverage remain typed and non-synthetic|V314-011 every approved profile/provider has one honest terminal outcome|V314-012 migration persists redacted diagnostics append-only with recorded time)$"
+}
