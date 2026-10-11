@@ -162,7 +162,7 @@ test('boundary date is fully resolved across two full pages before returning240 
   const rows = calendarRows(242);
   // 239 complete newer heads +261 identical head revisions = exactly500.
   const boundary = rows[239];
-  const tied = Array.from({ length: 262 }, (_, index) => ({ ...boundary, session_authority_id: authorityId(1000 + index) }));
+  const tied: CalendarRow[] = Array.from({ length: 262 }, (_, index) => ({ ...boundary, session_authority_id: authorityId(1000 + index) }));
   tied[261].status = 'cancelled';
   const source = [...rows.slice(0, 239), ...tied, ...rows.slice(240), ...Array.from({ length: 500 }, (_, index) => ({ ...boundary,
     session_id: '2025-01-01', close_at: '2025-01-01T05:30:00.000Z', session_authority_id: authorityId(5000 + index) }))];
