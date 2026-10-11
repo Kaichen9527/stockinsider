@@ -1,0 +1,132 @@
+{
+  "schema": "stockinsider-engineering-progress-v1",
+  "observedAt": "2026-10-11T08:19:00Z",
+  "source": {
+    "head": "7073f3a77ed235045b0eefb1db52ce4f7101a856",
+    "tree": "b98d1061e36ff5f86dd5a662a184f390e0f880f4",
+    "base": "b17b60896ac0c85a855812ed4a4a2f4aa2a0fb95",
+    "pr": 365
+  },
+  "change": {
+    "files": [
+      "scripts/opportunity-v3/pcr-installation-caller.test.mjs"
+    ],
+    "runtimeChanged": false,
+    "syntheticEvidence": "Disposable test Git only, not real release approval or full PCR evidence."
+  },
+  "validation": {
+    "rootSingle": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    },
+    "rootCombined": {
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "command": "/usr/local/bin/node scripts/run-node22.js --test scripts/opportunity-v3/pcr-caller-boundaries.test.mjs scripts/opportunity-v3/pcr-installation-caller.test.mjs"
+    },
+    "normalBuild": {
+      "exitCode": 0,
+      "command": "cd web && npm run build"
+    },
+    "independentScopedReview": {
+      "verdict": "SCOPED_CODE_PASS",
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "receiptSha256": "0aee0bd34f623b5877934790cbd7b955ac8ee76486b9d9492f04480c5b71470c"
+    }
+  },
+  "callerCoverage": {
+    "originalD6Boundaries": 20,
+    "supplementsClosed": [
+      "PCR-001",
+      "PCR-018",
+      "PCR-025",
+      "PCR-026",
+      "PCR-029",
+      "PCR-031"
+    ],
+    "remaining": [
+      "PCR-005",
+      "PCR-006",
+      "PCR-007",
+      "PCR-011",
+      "PCR-023"
+    ],
+    "complete31Fulfillment": false
+  },
+  "cloud": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "hostId": "durable",
+    "status": "idle",
+    "cursor": "fb0ce0df-ca49-43e0-99fc-e874b21fb53d:21",
+    "newDispatch": false
+  },
+  "release": {
+    "mainUnchanged": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "ordinaryCiRun": 38124241862,
+    "ordinaryCiAtSnapshot": "in_progress",
+    "protectedRun": 38124240138,
+    "protectedFailure": "Missing genuine exact-review ref for this source; no unchanged rerun.",
+    "mergedMain": false,
+    "deployed": false,
+    "productionDataChanged": false,
+    "formalResearchScheduleEnabled": false
+  },
+  "nextBoundedWork": "Exercise actual auth-source-worker-cli main with real config validation and durable worker return/serialization using isolated credential and adapter fixtures; retain external authority boundaries. Then real PostgreSQL adapter claim/completion and protected worker aggregate caller.",
+  "limits": [
+    "155 tests and Linux 816 passes refer to frozen d6, not a new 7073 execution.",
+    "Filesystem fixture performs real owned manifest I/O; production activation and complete installed bundle are outside this caller test.",
+    "Actual-source reading, two genuine articles, strategy approval and five trading-day operation acceptance remain incomplete."
+  ],
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-11T08-19-installation-caller-progress-raw/stockinsider-pcr001-real-git-oct11.tap",
+      "bytes": 403,
+      "sha256": "c7ce4350319c6d1d2250beec68ac88d7cab1db6de5a20e372ffe2498e550f53f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-19-installation-caller-progress-raw/stockinsider-pcr-six-callers-7073-oct11.tap",
+      "bytes": 1509,
+      "sha256": "0d60f9fa227edd153209ff1e3398d5d4d268e5f0e45749686bb435ebc7af47c4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-19-installation-caller-progress-raw/stockinsider-pcr001-caller-build-oct11.log",
+      "bytes": 6500,
+      "sha256": "317dcbc12360b0577ada171ad83afdecdb2f5cbe59cfccab37f44925d9c86795"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-19-installation-caller-progress-raw/stockinsider-full-review-fge-oct11-install7073-review.json",
+      "bytes": 3261,
+      "sha256": "0aee0bd34f623b5877934790cbd7b955ac8ee76486b9d9492f04480c5b71470c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-19-installation-caller-progress-raw/stockinsider-full-review-fge-oct11-install7073.tap",
+      "bytes": 422,
+      "sha256": "1697946c8a513349aea5262e85a591c492bb07ff657c2c8ceec1b6d02562b68c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-19-installation-caller-progress-raw/stockinsider-full-review-fge-oct11-install7073-bindings.json",
+      "bytes": 7818,
+      "sha256": "55d0b91522d643650e1590b19615a67e5e9b3b94cd7a20fcebec44e5e138c2c6"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-19-installation-caller-progress-raw/stockinsider-pcr7073-protected-failure-oct11.log",
+      "bytes": 35206,
+      "sha256": "b9ee4f1c7b0f40ff19865bff9585a5318a5266c17f5c2b466b0ae37613f11c97"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-19-installation-caller-progress-raw/stockinsider-pcr7073-ci-status-oct11.json",
+      "bytes": 3485,
+      "sha256": "c2fa07aa75c57a5394e116a7123d4087eef454e7e7dd6d8e70973d8f19801087"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-19-installation-caller-progress-raw/stockinsider-pcr-callers-pr-oct11.md",
+      "bytes": 2404,
+      "sha256": "3d5b9624ff0aa45e6f128a89dbd8d7c54a57ad520fa8cfc6151141d25cbc0038"
+    }
+  ],
+  "rawTotalBytes": 61008
+}

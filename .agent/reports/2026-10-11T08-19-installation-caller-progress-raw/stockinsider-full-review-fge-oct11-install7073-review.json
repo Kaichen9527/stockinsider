@@ -1,0 +1,54 @@
+{
+  "kind": "unsigned_independent_scoped_test_code_review",
+  "subject": "7073f3a77ed235045b0eefb1db52ce4f7101a856",
+  "tree": "b98d1061e36ff5f86dd5a662a184f390e0f880f4",
+  "base": "b17b60896ac0c85a855812ed4a4a2f4aa2a0fb95",
+  "scope": [
+    "scripts/opportunity-v3/pcr-installation-caller.test.mjs"
+  ],
+  "sourceSha256": "14dd25f96c438eab04483786f7975218d7e5118b92dbb586478c13d89284f3fd",
+  "delta": "Exactly one new108-line test file; runtime and prior five caller tests unchanged.",
+  "verdict": "SCOPED_CODE_PASS",
+  "findings": [],
+  "execution": {
+    "command": "/Users/kaerchen/.nvm/versions/node/v22.23.3/bin/node --test /tmp/stockinsider-full-review-fge-oct11-install7073/scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+    "exactGitFilesExtracted": 68,
+    "trackedBundleMembers": 61,
+    "pass": 1,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 8631.706417,
+    "log": {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-install7073.tap",
+      "bytes": 422,
+      "sha256": "1697946c8a513349aea5262e85a591c492bb07ff657c2c8ceec1b6d02562b68c"
+    },
+    "bindings": {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-install7073-bindings.json",
+      "bytes": 7818,
+      "sha256": "55d0b91522d643650e1590b19615a67e5e9b3b94cd7a20fcebec44e5e138c2c6"
+    }
+  },
+  "closure": {
+    "PCR-001": "Closes the missing actual runRuntimeInstallation caller exercise in prepare-only mode. Actual /usr/bin/git creates synthetic base/source/evidence lineage with exact tracked source/config bytes; real resolver reads Git parents/diffs/blob modes, attestation identities, worker bundle and configuration hashes; actual installer validates and calls real-I/O owned fixture stage/verify callbacks, returning prepared and matching manifest hash. Caller-supplied reviewedRelease, non-direct-child subject, extra fourth evidence file and mismatched worker hash are rejected before staging callbacks."
+  },
+  "observations": [
+    "No resolver or installer mock, repository override, scheduler, install=true, activation grant or database is supplied.",
+    "Filesystem adapter is deliberately fixture-owned and writes/reads one real manifest in its temporary stage; this is not the production filesystem adapter or a complete installed worker release.",
+    "The negative cases verify zero additional stage/verify callbacks after successful prepare; code inspection confirms validation/resolution precede either callback.",
+    "Synthetic three-artifact review/PCR/attestation values are clearly labeled fixture-only, live solely in disposable test Git and are deleted in finally. They are not actual PCR or protected review evidence."
+  ],
+  "remainingPCRGaps": [
+    "PCR-005",
+    "PCR-006",
+    "PCR-007",
+    "PCR-011",
+    "PCR-023"
+  ],
+  "limits": [
+    "The new test closes only the previously missing PCR001 caller boundary, alongside existing owner-level coverage; it does not establish full31-obligation fulfillment.",
+    "No protected runtime acceptance, real installation, activation, production write, signing authority or fullreleasePASS claimed.",
+    "Standalone command executed independently; no155/build/nativePG rerun and no automatic package-hook change.",
+    "Previous b17/9187 review receipts remain unchanged."
+  ]
+}

@@ -1,0 +1,16 @@
+TAP version 13
+# HEAD is now at 8d04df5 test-only tracked source
+# Subtest: PCR-001 actual installation caller resolves real Git lineage before preparing owned files
+ok 1 - PCR-001 actual installation caller resolves real Git lineage before preparing owned files
+  ---
+  duration_ms: 5365.755875
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5438.28

@@ -263,3 +263,12 @@ Evidence: `.agent/reports/2026-10-11T07-48-release-review-repairs.json`; current
 - 尚待001/005/006/007/011/023的指定caller證據。011真SQL及023真aggregate owner各1/1補測有用，但不能冒稱JS adapter／main-envelope caller已跑。下一件工程應直接按已保存矩陣補這6項，而不是再重跑沒有改變輸入的gate或同一155套件。
 - 更正：exact runtime-review-attestation原grammar只有10欄unsigned canonical JSON，沒有額外signature要求。真正CODE及31履約完成後可按原協定建立精確三檔direct-child evidence；trusted runner復原屬另一條邊界。沒有偽造PASS evidence、簽章、作者或批准。
 - 已保存完整raw、coverage、matrix及更正於release-final-review/caller-progress收據。友達仍為示範研究方向。未合併、未正式migration/deploy、未批准策略或啟用研究排程；VPS舊空間不足不是阻擋，也沒有新確認可刪資料。
+
+
+## 安裝 caller 補證（2026-10-11T08:19Z）
+
+- PR365 更新 exact `7073f3a77ed235045b0eefb1db52ce4f7101a856`，只新增 PCR001 實際 `runRuntimeInstallation` 測試；runtime、migration、策略及原驗收不變。真實隔離 Git direct-child 經 resolver 到 installer prepare，自有 manifest 寫入／讀回；注入 reviewedRelease、錯誤 lineage、第四檔 diff、worker hash 錯誤皆在 staging 前拒絕。
+- root 新案例1/1、兩補充檔合計6/6，零失敗／skip；正常 build 通過。獨立 Git-extract68檔後新案例1/1及 scoped CODE PASS，原始收據／TAP 保留。合成三件證據僅測試 fixture，不是正式審查批准。
+- 31項 caller audit：原 d6 20項加已審6項補證，剩 PCR005／006／007／011／023。尚未製作完整31項PASS，不能把原155測試綠燈當完整履約。下一件補真 CLI main 的 config→acquire／worker→序列化邊界，再補真 PG adapter 及 aggregate main。
+- Cloud既有聊天仍 idle/cursor21，沒有重複派工。ordinary CI38124241862在本收據快照仍執行；protected38124240138缺7073 exact-review ref，沒有同輸入重跑。main未合併、未部署、未改正式資料／排程。d6完整安裝及Linux成果仍保留但未改標為7073執行。
+- 來源、真實兩篇文章、策略與五交易日驗收仍未完成；友達維持示範方向。詳見 `.agent/reports/2026-10-11T08-19-installation-caller-progress.json`。
