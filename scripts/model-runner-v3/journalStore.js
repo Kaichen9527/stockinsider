@@ -7,7 +7,7 @@ const { RunnerError, assert } = require('./artifacts');
 const { canonicalJson, sha256 } = require('./canonicalJson');
 const { resourceAttemptKey } = require('./resourceJournal');
 
-const IDENTITY = 'ba88a6551f8640036ecc4d31c4217fb8a55a10c44e82636e4b9739781068d9cf';
+const IDENTITY = '0945109f816596276ffaaae51fc6b365eb4301bdeae653fb8547e3bda4bb849f';
 
 function atSecond() {
   return new Date(Math.floor(Date.now() / 1000) * 1000).toISOString().replace('.000Z', 'Z');
@@ -193,7 +193,7 @@ function appendJournal(filename, identity, base) {
 }
 
 function runtimePaths(root, manifestSha256, taskKey) {
-  const anchor = path.join(root, '.loop-engineering', 'runtime', 'model-runner-v3');
+  const anchor = path.join(root, '.loop-engineering', 'runtime', 'model-runner-v3-oct11-candidate');
   privateDirectory(anchor);
   const task = path.join(anchor, manifestSha256, taskKey);
   privateDirectory(task);

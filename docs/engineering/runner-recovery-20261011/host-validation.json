@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/usr/local/bin/node",
+    "-e",
+    "const {loadRecoveryCandidatePins}=require('./scripts/model-runner-v3/recoveryCandidate');const {verifyCurrentNode}=require('./scripts/model-runner-v3/hostPreflight');console.log(JSON.stringify({verified:verifyCurrentNode(loadRecoveryCandidatePins()),candidateOnly:true,modelInvoked:false,credentialsRead:false}));"
+  ],
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "/Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/scripts/model-runner-v3/artifacts.js:37\n  if (!condition) throw new RunnerError(exit, detail);\n                  ^\n\nError: routing or host preflight blocked\n    at assert (/Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/scripts/model-runner-v3/artifacts.js:37:25)\n    at verifyCurrentNode (/Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/scripts/model-runner-v3/hostPreflight.js:222:3)\n    at [eval]:1:204\n    at runScriptInThisContext (node:internal/vm:209:10)\n    at node:internal/process/execution:449:12\n    at [eval]-wrapper:6:24\n    at runScriptInContext (node:internal/process/execution:447:60)\n    at evalFunction (node:internal/process/execution:87:30)\n    at evalScript (node:internal/process/execution:99:3)\n    at node:internal/main/eval_string:74:3 {\n  exit: 5,\n  code: 'ROUTING_BLOCKED'\n}\n\nNode.js v22.14.0\n",
+  "candidateOnly": true,
+  "noRealCredentials": true,
+  "noProvider": true,
+  "gatekeeperNote": "This noncredential hostPreflight omits spctl by original design; separate public observation has actual full spctl exit0."
+}

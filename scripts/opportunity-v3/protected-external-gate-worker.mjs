@@ -778,15 +778,15 @@ function trustedAppleDeveloperToolchainRoot() {
   return { gitBin: path.dirname(gitExecutable), root: developerRoot };
 }
 
-function candidateSandbox(subjectRoot, scratch, environment, executable, args, { writableSource = false, network = false } = {}) {
-  const fixture = protectedHostPinFixture();
-  const codex = fixture.executables.find(({ name }) => name === 'codex');
-  assert.ok(codex && path.isAbsolute(codex.path), 'protected Codex path');
-  const pinnedNodeExecutable = trustedPinnedNodeExecutable();
-  const nodeToolchainRoot = trustedNodeToolchainRoot();
-  const appleDeveloperToolchain = trustedAppleDeveloperToolchainRoot();
-  const policyRoot = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-candidate-policy-'));
-  try {
+// Pure policy construction, not authority. The protected caller still obtains
+// executable identities exclusively from its own base tree.
+export function candidateSandboxPolicy({ subjectRoot, scratch, policyRoot,
+  nodeToolchainRoot, pinnedNodeExecutable, developerRoot, writableSource = false, network = false }) {
+  const paths = [subjectRoot, scratch, policyRoot, nodeToolchainRoot, pinnedNodeExecutable, developerRoot];
+  assert.ok(paths.every(value => typeof value === 'string' && path.isAbsolute(value)
+    && path.resolve(value) === value && !/[\u0000-\u001f\u007f]/u.test(value)), 'canonical policy paths');
+  assert.equal(typeof writableSource, 'boolean'); assert.equal(typeof network, 'boolean');
+  const appleDeveloperToolchain = { root: developerRoot };
     const escaped = (value) => value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
     const profile = [
       'default_permissions = "external-gate-candidate"', '',
@@ -803,6 +803,21 @@ function candidateSandbox(subjectRoot, scratch, environment, executable, args, {
       '[permissions.external-gate-candidate.network]',
       `enabled = ${network ? 'true' : 'false'}`, '',
     ].join('\n');
+  return profile;
+}
+
+function candidateSandbox(subjectRoot, scratch, environment, executable, args, { writableSource = false, network = false } = {}) {
+  const fixture = protectedHostPinFixture();
+  const codex = fixture.executables.find(({ name }) => name === 'codex');
+  assert.ok(codex && path.isAbsolute(codex.path), 'protected Codex path');
+  const pinnedNodeExecutable = trustedPinnedNodeExecutable();
+  const nodeToolchainRoot = trustedNodeToolchainRoot();
+  const appleDeveloperToolchain = trustedAppleDeveloperToolchainRoot();
+  const policyRoot = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-candidate-policy-'));
+  try {
+    const profile = candidateSandboxPolicy({ subjectRoot, scratch, policyRoot,
+      nodeToolchainRoot, pinnedNodeExecutable, developerRoot: appleDeveloperToolchain.root,
+      writableSource, network });
     writeFileSync(path.join(policyRoot, 'config.toml'), profile, { flag: 'wx', mode: 0o600 });
     return run(subjectRoot, codex.path, [
       'sandbox', '--profile', 'external-gate-candidate', '--permission-profile', 'external-gate-candidate',

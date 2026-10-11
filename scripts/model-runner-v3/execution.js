@@ -15,6 +15,8 @@ const { readablePath, promptPathAllowed, sourceViewIdentity } = require('./sourc
 const { codexArgs, profileToml, sanitizedEnvironment } = require('./codexAdapter');
 const { validatePatch } = require('./patchParser');
 const { sealResult } = require('./seal');
+const { terminalResultFromJsonl } = require('./jsonlParser');
+const { runModelProcess, isOwnershipLost } = require('./processLifecycle');
 const { commitMessage, resultRef } = require('./trustedGit');
 const { operationKey } = require('./transactionJournal');
 const {
@@ -31,7 +33,7 @@ const {
   writeExclusive,
 } = require('./journalStore');
 
-const RUNNER_IDENTITY = 'ba88a6551f8640036ecc4d31c4217fb8a55a10c44e82636e4b9739781068d9cf';
+const RUNNER_IDENTITY = '0945109f816596276ffaaae51fc6b365eb4301bdeae653fb8547e3bda4bb849f';
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -139,35 +141,6 @@ function promptFor(request) {
   ].join('\n\n');
 }
 
-function terminalResultFromJsonl(stdout) {
-  assert(Buffer.byteLength(stdout) <= 16_777_216 && !stdout.includes('\0'), 12);
-  let terminal = null;
-  let completed = false;
-  for (const line of stdout.split('\n')) {
-    if (!line) continue;
-    assert(Buffer.byteLength(line) <= 1_048_576 && !completed, 12);
-    let event;
-    try {
-      event = parseJsonWithNoDuplicateKeys(line);
-    } catch {
-      throw new RunnerError(12);
-    }
-    if (event.type === 'item.completed' && event.item?.type === 'agent_message') {
-      try {
-        terminal = parseJsonWithNoDuplicateKeys(event.item.text);
-      } catch {
-        // Progress messages are allowed.
-      }
-    } else if (event.type === 'turn.completed') {
-      completed = true;
-    } else if (event.type === 'error' || event.type === 'turn.failed') {
-      throw new RunnerError(10);
-    }
-  }
-  assert(completed && terminal, 12);
-  return terminal;
-}
-
 function authenticationSourcePath() {
   let account;
   try {
@@ -205,7 +178,7 @@ function copyAuthenticationMaterial(transport) {
 
 function prepareTransport({ source, scratch, transport }) {
   fs.mkdirSync(transport, { recursive: true, mode: 0o700 });
-  const profile = profileToml(source.view, scratch);
+  const profile = profileToml(source.view, scratch, transport);
   fs.writeFileSync(path.join(transport, 'model-runner-v3.config.toml'), profile, {
     mode: 0o600,
     flag: 'wx',
@@ -606,100 +579,30 @@ async function executeModel({
   onExit = () => {},
   verifyHostFn = verifyCurrentNode,
   spawnFn = spawn,
+  terminalProtocol = 'loop-model-result-v3.5',
 }) {
+  // Bind the actual spawn to the request's operation and role, not merely a
+  // two-model allowlist. No caller may swap the maker into the reviewer slot.
+  assert(request && ['make', 'review', 'verify'].includes(request.operation)
+    && request.role === ({ make: 'maker', review: 'reviewer', verify: 'verifier' })[request.operation]
+    && request.strategy === 'sol61-make-astra-review' && request.terraWaiver === null && route
+    && request.model === route.model && request.reasoningEffort === route.reasoningEffort, 5);
+  assert(terminalProtocol === 'loop-model-result-v3.5'
+    ? request.timeLimitSeconds === timeout
+    : terminalProtocol === 'model-runner-oracle-v2', 12);
+  const args = codexArgs({ operation: request.operation, model: route.model,
+    reasoningEffort: route.reasoningEffort, viewPath: source.view });
+  const sealedPrompt = promptFor(request);
   const codex = pins.executables.find((entry) => entry.name === 'codex');
   assert(codex, 5);
   await probePermissions({ pins, source, scratch, transport, verifyHostFn, spawnFn });
-  return new Promise((resolve, reject) => {
-    verifyHostFn(pins);
-    const child = spawnFn(codex.path, codexArgs({
-      model: route.model,
-      reasoningEffort: route.reasoningEffort,
-      viewPath: source.view,
-    }), {
-      cwd: source.view,
-      env: sanitizedEnvironment({ scratchPath: scratch, transportPath: transport }),
-      shell: false,
-      detached: true,
-      stdio: ['pipe', 'pipe', 'pipe'],
-    });
-    try {
-      verifyHostFn(pins);
-    } catch (error) {
-      try {
-        if (child.pid) process.kill(-child.pid, 'SIGKILL');
-        else child.kill('SIGKILL');
-      } catch {
-        child.kill('SIGKILL');
-      }
-      reject(error instanceof RunnerError ? error : new RunnerError(5));
-      return;
-    }
-    const stdout = [];
-    const stderr = [];
-    let byteCount = 0;
-    let timedOut = false;
-    let settled = false;
-    const wallMilliseconds = timeout * 1000;
-    const idleMilliseconds = Math.min(30_000, wallMilliseconds);
-    let idleTimer;
-    const terminate = () => {
-      timedOut = true;
-      try {
-        process.kill(-child.pid, 'SIGKILL');
-      } catch {
-        child.kill('SIGKILL');
-      }
-    };
-    const resetIdle = () => {
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(terminate, idleMilliseconds);
-    };
-    const wallTimer = setTimeout(terminate, wallMilliseconds);
-    child.once('spawn', () => {
-      onStart(child.pid, child.pid);
-      resetIdle();
-      child.stdin.end(promptFor(request));
-    });
-    child.once('error', () => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(wallTimer);
-      clearTimeout(idleTimer);
-      reject(new RunnerError(10));
-    });
-    for (const [stream, chunks] of [[child.stdout, stdout], [child.stderr, stderr]]) {
-      stream.on('data', (chunk) => {
-        byteCount += chunk.length;
-        if (byteCount > 17 * 1024 * 1024) terminate();
-        chunks.push(chunk);
-        resetIdle();
-      });
-    }
-    child.once('close', (code, signal) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(wallTimer);
-      clearTimeout(idleTimer);
-      onExit(code, signal);
-      try {
-        verifyHostFn(pins);
-      } catch (error) {
-        reject(error instanceof RunnerError ? error : new RunnerError(5));
-        return;
-      }
-      const stderrText = Buffer.concat(stderr).toString('utf8');
-      if (timedOut || signal || code !== 0 || stderrText.length > 1_048_576) {
-        reject(new RunnerError(10));
-        return;
-      }
-      try {
-        resolve(terminalResultFromJsonl(Buffer.concat(stdout).toString('utf8')));
-      } catch (error) {
-        reject(error);
-      }
-    });
+  const stdout = await runModelProcess({
+    executable: codex.path, args, cwd: source.view,
+    env: sanitizedEnvironment({ scratchPath: scratch, transportPath: transport }),
+    input: sealedPrompt, timeout, onStart, onExit, spawnFn,
+    verifyHost: () => verifyHostFn(pins),
   });
+  return terminalResultFromJsonl(stdout, { terminalProtocol, operation: request.operation });
 }
 
 function gitOid(root, value) {
@@ -1219,13 +1122,16 @@ async function executeOperation({
   removeOwnedResourceFn = removeOwnedResource,
   waiver = null,
 }) {
+  // Direct callers cannot use an override to revive a legacy manifest/waiver.
+  assert(parsed?.manifest?.protocol === 'loop-model-manifest-v3.7'
+    && parsed.manifest.defaultStrategy === 'sol61-make-astra-review' && waiver === null, 5);
+  const effectiveStrategy = strategy || parsed.manifest.defaultStrategy;
+  const route = routeOperation(operation, effectiveStrategy);
   const root = repositoryRoot(manifestPath);
   assert(gitOid(root, parsed.manifest.inputHead) === parsed.manifest.inputHead, 4);
   const paths = runtimePaths(root, parsed.manifestSha256, sha256(task.id));
   const filename = paths.status;
   const state = readState(filename, parsed, task);
-  const effectiveStrategy = strategy || parsed.manifest.defaultStrategy;
-  const route = routeOperation(operation, effectiveStrategy);
   assert((route.waiverRequired && waiver) || (!route.waiverRequired && waiver === null), 5);
   const activeState = operation === 'make' ? 'making' : operation === 'review' ? 'reviewing' : 'verifying';
   const inFlight = (state.state === activeState || state.state === 'recovery_required') &&
@@ -1521,6 +1427,27 @@ async function executeOperation({
   } catch (caught) {
     const error = caught instanceof RunnerError ? caught : new RunnerError(12);
     try {
+      if (reservation && isOwnershipLost(error)) {
+        processClassification = 'ownership_lost';
+        // No cleanup/retry authority follows from a lost process-group anchor.
+        // Keep the reservation and live bytes; terminal IO_ERROR replay remains blocked.
+        const failure = {
+          phase: 'model', primaryFailureCode: error.primaryFailureCode,
+          primaryExit: error.primaryExit, retainedResultSha256: null,
+          proposalCommit: state.proposalCommit, resultRef: state.resultRef,
+        };
+        if (prepared) {
+          operationRecord('failure_pending', failure);
+          operationRecord('failed', failure, 'IO_ERROR', 11);
+        }
+        writeAttemptRecord(error.primaryFailureCode, error.primaryExit, 11);
+        writeState(filename, {
+          ...state, [`${operation}Round`]: round,
+          state: 'recovery_required', integrity: 'recovery_required',
+          lastOperation: operation, lastExit: 11,
+        });
+        return Promise.reject(new RunnerError(11));
+      }
       if (!reservation && error.resourceReservation) {
         reservation = error.resourceReservation;
         resourceJournal = path.join(
@@ -1629,7 +1556,8 @@ async function executeOperation({
         });
       }
     } catch {
-      const recovery = { ...state, state: 'recovery_required', integrity: 'recovery_required', lastExit: 11 };
+      const recovery = { ...state, ...(prepared ? { [`${operation}Round`]: round, lastOperation: operation } : {}),
+        state: 'recovery_required', integrity: 'recovery_required', lastExit: 11 };
       writeState(filename, recovery);
       throw new RunnerError(11);
     }
