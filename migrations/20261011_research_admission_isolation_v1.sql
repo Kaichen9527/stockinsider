@@ -31,7 +31,7 @@ BEGIN
     expected_attributes:=jsonb_build_object('language','plpgsql','securityDefiner',target.security_definer,
       'volatility','v','strict',false,'leakproof',false,'parallel','u','cost',100,
       'rows',target.estimated_rows,'kind','f','returnsSet',target.estimated_rows>0,
-      'defaults',0,'variadic','0','support','0','transforms','','binary',NULL,
+      'defaults',0,'variadic','0','support','0','transforms',NULL,'binary',NULL,
       'configuration',jsonb_build_array('search_path=public,pg_temp'));
     IF body_hash NOT IN (target.predecessor_hash,target.successor_hash)
       OR attributes IS DISTINCT FROM expected_attributes
