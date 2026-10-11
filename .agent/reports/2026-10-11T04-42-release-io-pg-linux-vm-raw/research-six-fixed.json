@@ -1,0 +1,26 @@
+{
+  "stage": "research-six-fixed",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "scripts/research-bounded-file.test.mjs",
+    "scripts/research-source-controller.test.mjs",
+    "scripts/research-cloud-controller.test.mjs",
+    "scripts/research-source-priority-consumer.test.mjs",
+    "scripts/research-deep-controller.test.mjs",
+    "scripts/research-discovery-relay-prepare.test.mjs"
+  ],
+  "startedAt": "2026-10-11T04:35:58.023806+00:00",
+  "endedAt": "2026-10-11T04:36:13.901813+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 15.878015017020516,
+  "sampledAggregatePeakRssBytes": 496799744,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10081734656,
+  "diskAvailableAfterBytes": 10081734656,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
