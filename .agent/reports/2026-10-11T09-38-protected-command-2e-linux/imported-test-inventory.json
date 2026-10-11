@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "path": "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+      "name": "installed successors reject base replay and omitted extensions before any mutation",
+      "sha256": "20c4c6ae74794bfa31141658662dc79a468b11cc0642ec111945dfed2a39b5f8"
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+      "name": "an unextended base remains installable but unknown detection cannot authorize replay",
+      "sha256": "20c4c6ae74794bfa31141658662dc79a468b11cc0642ec111945dfed2a39b5f8"
+    },
+    {
+      "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+      "name": "transaction normalization preserves quoted PL/pgSQL and rejects embedded control",
+      "sha256": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466"
+    },
+    {
+      "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+      "name": "every explicitly reviewed migration is compatible with one atomic transaction",
+      "sha256": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466"
+    }
+  ],
+  "count": 4,
+  "all4BlobsIdenticalTo399": true,
+  "unconditionalImports": true,
+  "originalNativeAssertionsUnchanged": true
+}

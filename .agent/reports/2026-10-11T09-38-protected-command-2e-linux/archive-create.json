@@ -1,0 +1,23 @@
+{
+  "stage": "archive-create",
+  "command": [
+    "tar",
+    "-czf",
+    "/tmp/si-2e-m35wlxg5/stockinsider-2e078dfd-linux-standalone.tar.gz",
+    "-C",
+    "/tmp/si-2e-m35wlxg5/packages",
+    "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  ],
+  "startedAt": "2026-10-11T09:43:45.831299+00:00",
+  "endedAt": "2026-10-11T09:43:49.004604+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 3.1733125040191226,
+  "sampledAggregatePeakRssBytes": 4145152,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10041339904,
+  "diskAvailableAfterBytes": 10041339904,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

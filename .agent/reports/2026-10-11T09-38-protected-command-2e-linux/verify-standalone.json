@@ -1,0 +1,20 @@
+{
+  "stage": "verify-standalone",
+  "command": [
+    "node",
+    "scripts/verify-standalone-release.mjs",
+    "/tmp/si-2e-m35wlxg5/packages/2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  ],
+  "startedAt": "2026-10-11T09:43:22.985796+00:00",
+  "endedAt": "2026-10-11T09:43:23.767990+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.7821995530393906,
+  "sampledAggregatePeakRssBytes": 68812800,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10041339904,
+  "diskAvailableAfterBytes": 10041339904,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

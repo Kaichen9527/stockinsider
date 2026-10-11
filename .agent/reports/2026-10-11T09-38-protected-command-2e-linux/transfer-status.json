@@ -1,0 +1,9 @@
+{
+  "metadataRoute": "Existing authenticated Git HTTPS evidence branch",
+  "binaryCrossVmTransferVerified": false,
+  "binaryServedUploadedOrCommitted": false,
+  "availableVerifiedUploadApi": null,
+  "binaryLocalAccess": "Private VM filesystem, parent0700/archive0600, owned by agent.",
+  "durability": "/tmp is temporary tmpfs; no access from another host or durable binary retention proven.",
+  "newApiOrPaidService": false
+}

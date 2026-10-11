@@ -1,0 +1,92 @@
+{
+  "inventory": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/acceptance-tests.json",
+  "approvedSha256": "b3ef11c01c20ee7f9308ac8aff297316cd2e761252ef16326a76f550ee9277ab",
+  "actualCanonicalSha256": "b3ef11c01c20ee7f9308ac8aff297316cd2e761252ef16326a76f550ee9277ab",
+  "rows": [
+    {
+      "key": "build:source-led-opportunity-v3",
+      "approved": "npm --prefix web run build",
+      "actual": "npm --prefix web run build",
+      "matches": true
+    },
+    {
+      "key": "lint:source-led-opportunity-v3",
+      "approved": "npm --prefix web run lint -- --quiet",
+      "actual": "npm --prefix web run lint -- --quiet",
+      "matches": true
+    },
+    {
+      "key": "test:legacy-v1-v2-regression",
+      "approved": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/opportunity-v3/legacy-v1-v2-regression.test.ts",
+      "actual": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/opportunity-v3/legacy-v1-v2-regression.test.ts",
+      "matches": true
+    },
+    {
+      "key": "test:model-runner-v3",
+      "approved": "node scripts/run-node22.js --test scripts/model-runner-v3/model-runner-v3.test.js",
+      "actual": "node scripts/run-node22.js --test scripts/model-runner-v3/model-runner-v3.test.js",
+      "matches": true
+    },
+    {
+      "key": "test:source-led-opportunity-v3",
+      "approved": "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/gate-evidence.test.mjs web/src/lib/candidate-detail-view-contract.test.ts web/src/lib/opportunity-v3/opportunity-v3.test.ts web/src/lib/opportunity-v3/public-schema.test.ts",
+      "actual": "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/gate-evidence.test.mjs web/src/lib/candidate-detail-view-contract.test.ts web/src/lib/opportunity-v3/opportunity-v3.test.ts web/src/lib/opportunity-v3/public-schema.test.ts",
+      "matches": true
+    },
+    {
+      "key": "test:source-led-opportunity-v3:migration",
+      "approved": "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/migration-contract.test.mjs",
+      "actual": "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/migration-contract.test.mjs",
+      "matches": true
+    },
+    {
+      "key": "test:source-led-opportunity-v3:performance",
+      "approved": "node scripts/run-node22.js --test scripts/opportunity-v3/performance.test.mjs",
+      "actual": "node scripts/run-node22.js --test scripts/opportunity-v3/performance.test.mjs",
+      "matches": true
+    },
+    {
+      "key": "test:source-led-opportunity-v3:product-correctness",
+      "approved": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "actual": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "matches": true
+    },
+    {
+      "key": "typecheck:source-led-opportunity-v3",
+      "approved": "node scripts/run-node22.js web/node_modules/typescript/bin/tsc -p web/tsconfig.json --noEmit --pretty false",
+      "actual": "node scripts/run-node22.js web/node_modules/typescript/bin/tsc -p web/tsconfig.json --noEmit --pretty false",
+      "matches": true
+    },
+    {
+      "key": "v3:doctor",
+      "approved": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/doctor.mjs",
+      "actual": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/doctor.mjs",
+      "matches": true
+    },
+    {
+      "key": "verify:source-led-opportunity-v3:evaluation-governance",
+      "approved": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track evaluation_governance && node scripts/run-node22.js --experimental-strip-types --test --test-name-pattern=\"evaluation and product-value readiness|hybrid verified-change product boundary\" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252",
+      "actual": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track evaluation_governance && node scripts/run-node22.js --experimental-strip-types --test --test-name-pattern=\"evaluation and product-value readiness|hybrid verified-change product boundary\" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252",
+      "matches": true
+    },
+    {
+      "key": "verify:source-led-opportunity-v3:model-runner",
+      "approved": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.18",
+      "actual": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.18",
+      "matches": true
+    },
+    {
+      "key": "verify:source-led-opportunity-v3:product-runtime",
+      "approved": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track product_runtime && npm run diagnostic:source-led-opportunity-v3:product-runtime",
+      "actual": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track product_runtime && npm run diagnostic:source-led-opportunity-v3:product-runtime",
+      "matches": true
+    },
+    {
+      "key": "web:test:e2e:v3-correctness",
+      "approved": "playwright test --config playwright.v3-correctness.config.ts",
+      "actual": "playwright test --config playwright.v3-correctness.config.ts",
+      "matches": true
+    }
+  ],
+  "all14Match": true
+}

@@ -1,0 +1,454 @@
+
+> test:source-led-opportunity-v3:migration
+> node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/migration-contract.test.mjs
+
+TAP version 13
+# (node:350653) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:350653) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: installed successors reject base replay and omitted extensions before any mutation
+ok 1 - installed successors reject base replay and omitted extensions before any mutation
+  ---
+  duration_ms: 2.240011
+  ...
+# Subtest: an unextended base remains installable but unknown detection cannot authorize replay
+ok 2 - an unextended base remains installable but unknown detection cannot authorize replay
+  ---
+  duration_ms: 0.242556
+  ...
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 3 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 1.705013
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+ok 4 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 69.224887
+  ...
+# Subtest: V3.20 widens only the KOL connector matrix and installs an exact-identity expired-lease reaper
+ok 5 - V3.20 widens only the KOL connector matrix and installs an exact-identity expired-lease reaper
+  ---
+  duration_ms: 64.203874
+  ...
+# Subtest: V3.20.2 terminalizes one exact expired run even before its first job claim
+ok 6 - V3.20.2 terminalizes one exact expired run even before its first job claim
+  ---
+  duration_ms: 21.002348
+  ...
+# Subtest: V3.20.1 bridges only a revalidated InvestAnchors structured claim across empty runs
+ok 7 - V3.20.1 bridges only a revalidated InvestAnchors structured claim across empty runs
+  ---
+  duration_ms: 0.665194
+  ...
+# Subtest: V3.20.2 compacts the candidate claim transport before a worker lease can expire
+ok 8 - V3.20.2 compacts the candidate claim transport before a worker lease can expire
+  ---
+  duration_ms: 0.826487
+  ...
+# Subtest: V3.20.3 keeps KOL retention source authority behind its owning RPC boundary
+ok 9 - V3.20.3 keeps KOL retention source authority behind its owning RPC boundary
+  ---
+  duration_ms: 13.453464
+  ...
+# Subtest: V3.19.7 reconstructs current-run lineage only from immutable, hash-bound acquisition references
+ok 10 - V3.19.7 reconstructs current-run lineage only from immutable, hash-bound acquisition references
+  ---
+  duration_ms: 0.502588
+  ...
+# Subtest: V3.16.12 bounds deep fact authority while preserving the complete candidate ledger
+ok 11 - V3.16.12 bounds deep fact authority while preserving the complete candidate ledger
+  ---
+  duration_ms: 0.533655
+  ...
+# Subtest: V3.18 retains the immutable prior candidate ledger without widening the source claim
+ok 12 - V3.18 retains the immutable prior candidate ledger without widening the source claim
+  ---
+  duration_ms: 0.392061
+  ...
+# Subtest: V3.19.10 restores retained candidate authority only from the exact prior immutable ledger
+ok 13 - V3.19.10 restores retained candidate authority only from the exact prior immutable ledger
+  ---
+  duration_ms: 0.80855
+  ...
+# Subtest: V3.19.11 restores complete retained objects before exact-ledger authority enrichment
+ok 14 - V3.19.11 restores complete retained objects before exact-ledger authority enrichment
+  ---
+  duration_ms: 0.516941
+  ...
+# Subtest: V3.20.2 compact claims carry the exact persisted source terminal plane
+ok 15 - V3.20.2 compact claims carry the exact persisted source terminal plane
+  ---
+  duration_ms: 0.326783
+  ...
+# Subtest: V3.19.12 selects the sole retained JSONB candidate result without an unsupported aggregate
+ok 16 - V3.19.12 selects the sole retained JSONB candidate result without an unsupported aggregate
+  ---
+  duration_ms: 0.434416
+  ...
+# Subtest: V3.19.16 refreshes the lease after the complete successor claim chain
+ok 17 - V3.19.16 refreshes the lease after the complete successor claim chain
+  ---
+  duration_ms: 0.360544
+  ...
+# Subtest: V3.16.15 restores immutable analysis payload reuse outside the lease handoff
+ok 18 - V3.16.15 restores immutable analysis payload reuse outside the lease handoff
+  ---
+  duration_ms: 0.173472
+  ...
+# Subtest: V3.16.16 preserves true recollection time without consuming a financial fact revision
+ok 19 - V3.16.16 preserves true recollection time without consuming a financial fact revision
+  ---
+  duration_ms: 0.236437
+  ...
+# Subtest: V3.16.18 resolves same-cutoff immutable payloads and skips payload-less legacy metadata
+ok 20 - V3.16.18 resolves same-cutoff immutable payloads and skips payload-less legacy metadata
+  ---
+  duration_ms: 0.202796
+  ...
+# Subtest: every legacy mutating RPC and terminal failure requires live run/job lease authority
+ok 21 - every legacy mutating RPC and terminal failure requires live run/job lease authority
+  ---
+  duration_ms: 1.403127
+  ...
+# Subtest: PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker
+ok 22 - PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker
+  ---
+  duration_ms: 162.224267
+  ...
+# Subtest: entry-plan authority migration accepts full market action symbols and keeps ledgers private
+ok 23 - entry-plan authority migration accepts full market action symbols and keeps ledgers private
+  ---
+  duration_ms: 8.955025
+  ...
+# Subtest: V3.14 acceptance upgrade accepts the deployed V3.11 predecessor identity
+ok 24 - V3.14 acceptance upgrade accepts the deployed V3.11 predecessor identity
+  ---
+  duration_ms: 59.217574
+  ...
+# Subtest: migration declares the complete closed V3 catalog
+ok 25 - migration declares the complete closed V3 catalog
+  ---
+  duration_ms: 24.947311
+  ...
+# Subtest: release reconciliation scopes transient owner CREATE rights and restores the executor role
+ok 26 - release reconciliation scopes transient owner CREATE rights and restores the executor role
+  ---
+  duration_ms: 10.9594
+  ...
+# Subtest: runtime diagnostic persistence accepts every closed runtime invariant
+ok 27 - runtime diagnostic persistence accepts every closed runtime invariant
+  ---
+  duration_ms: 8.676384
+  ...
+# Subtest: V3.19.2 installs the compact projection comparison without weakening detail revisions
+ok 28 - V3.19.2 installs the compact projection comparison without weakening detail revisions
+  ---
+  duration_ms: 18.358237
+  ...
+# Subtest: migration includes the exact three view security modes
+ok 29 - migration includes the exact three view security modes
+  ---
+  duration_ms: 1.521697
+  ...
+# Subtest: candidate financial selection bounds analyst and broker families independently
+ok 30 - candidate financial selection bounds analyst and broker families independently
+  ---
+  duration_ms: 1.448937
+  ...
+# Subtest: allocation and projection persist only hash-valid authoritative decision geometry
+ok 31 - allocation and projection persist only hash-valid authoritative decision geometry
+  ---
+  duration_ms: 2.707236
+  ...
+# Subtest: migration applies twice and exposes the exact granted/private function boundary
+ok 32 - migration applies twice and exposes the exact granted/private function boundary
+  ---
+  duration_ms: 95.236797
+  ...
+# Subtest: V3.16.21 freezes one provider revision, reuses it, and quarantines conflicting bytes
+ok 33 - V3.16.21 freezes one provider revision, reuses it, and quarantines conflicting bytes
+  ---
+  duration_ms: 207.058373
+  ...
+# Subtest: V3.16.21 validates one roster snapshot per bounded official ingestion chunk
+ok 34 - V3.16.21 validates one roster snapshot per bounded official ingestion chunk
+  ---
+  duration_ms: 10.796154
+  ...
+# Subtest: V3.16.21 appends a newer reviewed evaluation at one content cutoff and rejects ambiguity
+ok 35 - V3.16.21 appends a newer reviewed evaluation at one content cutoff and rejects ambiguity
+  ---
+  duration_ms: 14.279702
+  ...
+# Subtest: V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread
+ok 36 - V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread
+  ---
+  duration_ms: 41.491261
+  ...
+# Subtest: V3.15 production-sized authority lookup and staged resume are installed
+ok 37 - V3.15 production-sized authority lookup and staged resume are installed
+  ---
+  duration_ms: 9.770396
+  ...
+# Subtest: V3.16.9 resolves same-run calendar dependencies by knowledge and transaction time without weakening point-in-time reads
+ok 38 - V3.16.9 resolves same-run calendar dependencies by knowledge and transaction time without weakening point-in-time reads
+  ---
+  duration_ms: 49.764677
+  ...
+# Subtest: V3.14 completion persists a non-empty exact decision revision and heartbeat
+ok 39 - V3.14 completion persists a non-empty exact decision revision and heartbeat
+  ---
+  duration_ms: 44.321277
+  ...
+# Subtest: V3.14 SQL envelope validator preserves diagnostics for unavailable cards
+ok 40 - V3.14 SQL envelope validator preserves diagnostics for unavailable cards
+  ---
+  duration_ms: 16.093809
+  ...
+# Subtest: V3.13 source acquisition persists seventeen terminals, citation, and typed claim/entity conservation
+ok 41 - V3.13 source acquisition persists seventeen terminals, citation, and typed claim/entity conservation
+  ---
+  duration_ms: 158.217355
+  ...
+# Subtest: V3.13 source completion rejects unsupported empty terminals and unconserved item multisets atomically
+ok 42 - V3.13 source completion rejects unsupported empty terminals and unconserved item multisets atomically
+  ---
+  duration_ms: 110.145908
+  ...
+# Subtest: V3.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts
+ok 43 - V3.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts
+  ---
+  duration_ms: 86.7714
+  ...
+# Subtest: every principal-bound RPC rejects conflicting active role bindings
+ok 44 - every principal-bound RPC rejects conflicting active role bindings
+  ---
+  duration_ms: 25.199161
+  ...
+# Subtest: legacy producer resolves one scheduled occurrence and resumes the same deterministic SQL graph
+ok 45 - legacy producer resolves one scheduled occurrence and resumes the same deterministic SQL graph
+  ---
+  duration_ms: 2092.378784
+  ...
+# Subtest: legacy analysis completion persists a typed material-revision evaluation
+ok 46 - legacy analysis completion persists a typed material-revision evaluation
+  ---
+  duration_ms: 29.441634
+  ...
+# Subtest: V3.13 invalid completion is zero-write and analysis claims replay the exact immutable fact payload
+ok 47 - V3.13 invalid completion is zero-write and analysis claims replay the exact immutable fact payload
+  ---
+  duration_ms: 37.028621
+  ...
+# Subtest: legacy producer advances exactly once for newly recorded material authority outside the scheduled cutoff
+ok 48 - legacy producer advances exactly once for newly recorded material authority outside the scheduled cutoff
+  ---
+  duration_ms: 2025.973787
+  ...
+# Subtest: legacy fact-plane benchmark reads the market observation timestamp contract
+ok 49 - legacy fact-plane benchmark reads the market observation timestamp contract
+  ---
+  duration_ms: 41.048691
+  ...
+# Subtest: legacy producer claim plane carries prior discovery and analysis lineage across successful runs
+ok 50 - legacy producer claim plane carries prior discovery and analysis lineage across successful runs
+  ---
+  duration_ms: 4.581314
+  ...
+# Subtest: applied blinded assignment preserves reviewer isolation and audits every success
+ok 51 - applied blinded assignment preserves reviewer isolation and audits every success
+  ---
+  duration_ms: 21.089078
+  ...
+# Subtest: applied blinded assignment executes all eight dispositions without cross-principal leakage
+ok 52 - applied blinded assignment executes all eight dispositions without cross-principal leakage
+  ---
+  duration_ms: 20.733271
+  ...
+# Subtest: applied catalog has the closed section enum, RLS and security-barrier view options
+ok 53 - applied catalog has the closed section enum, RLS and security-barrier view options
+  ---
+  duration_ms: 10.002006
+  ...
+# Subtest: applied catalog exposes exact composite arities, named indexes and primary-key coverage
+ok 54 - applied catalog exposes exact composite arities, named indexes and primary-key coverage
+  ---
+  duration_ms: 163.539598
+  ...
+# Subtest: manifest v3.14 persistence and Taiwan calendar expose their exact durable catalog
+ok 55 - manifest v3.14 persistence and Taiwan calendar expose their exact durable catalog
+  ---
+  duration_ms: 12.387735
+  ...
+# Subtest: Taiwan calendar v3.4 resolves two completed equal schedules and begin re-resolves the exact cutoff
+ok 56 - Taiwan calendar v3.4 resolves two completed equal schedules and begin re-resolves the exact cutoff
+  ---
+  duration_ms: 43.796609
+  ...
+# Subtest: authority append RPCs recompute source hashes and converge roster sector calendar and market streams
+ok 57 - authority append RPCs recompute source hashes and converge roster sector calendar and market streams
+  ---
+  duration_ms: 129.797633
+  ...
+# Subtest: authority registries enforce exact 64/65 family bounds and serialized boundary races
+ok 58 - authority registries enforce exact 64/65 family bounds and serialized boundary races
+  ---
+  duration_ms: 7219.780684
+  ...
+# Subtest: applied checks, privileges, RLS boundary and immutable relations reject negative writes
+ok 59 - applied checks, privileges, RLS boundary and immutable relations reject negative writes
+  ---
+  duration_ms: 35.677987
+  ...
+# Subtest: applied begin creates one deterministic canonical v3.3 bootstrap job and payload
+ok 60 - applied begin creates one deterministic canonical v3.3 bootstrap job and payload
+  ---
+  duration_ms: 25.622761
+  ...
+# Subtest: applied empty-run lifecycle commits each predecessor and deterministic successor atomically
+ok 61 - applied empty-run lifecycle commits each predecessor and deterministic successor atomically
+  ---
+  duration_ms: 2206.419573
+  ...
+# Subtest: nonempty source-identity manifest executes header, bounded page, root and durable row
+ok 62 - nonempty source-identity manifest executes header, bounded page, root and durable row
+  ---
+  duration_ms: 392.355593
+  ...
+# Subtest: source-identity manifest advances a hash-bound 2,001-row sentinel into two cursor pages
+ok 63 - source-identity manifest advances a hash-bound 2,001-row sentinel into two cursor pages
+  ---
+  duration_ms: 3297.916206
+  ...
+# Subtest: all four mode graphs use closed reads; enrich executes nonempty normalized stages and converges
+ok 64 - all four mode graphs use closed reads; enrich executes nonempty normalized stages and converges
+  ---
+  duration_ms: 57902.939015
+  ...
+# Subtest: V3.13 PB authority is typed and audited while NAV history is point-in-time per distinct session
+ok 65 - V3.13 PB authority is typed and audited while NAV history is point-in-time per distinct session
+  ---
+  duration_ms: 91.877689
+  ...
+# Subtest: V3.13 official valuation append requires elapsed same-exchange completed session authority
+ok 66 - V3.13 official valuation append requires elapsed same-exchange completed session authority
+  ---
+  duration_ms: 18.869177
+  ...
+# Subtest: V3.13 equal-head reported or EV authority remains a typed candidate conflict without winner lineage
+ok 67 - V3.13 equal-head reported or EV authority remains a typed candidate conflict without winner lineage
+  ---
+  duration_ms: 68.739119
+  ...
+# Subtest: V3.13 candidate fact plane ranks complete identities before applying per-series bounds
+ok 68 - V3.13 candidate fact plane ranks complete identities before applying per-series bounds
+  ---
+  duration_ms: 47.132631
+  ...
+# Subtest: V3.13 requested calendar windows fail on the 513th distinct stream instead of truncating
+ok 69 - V3.13 requested calendar windows fail on the 513th distinct stream instead of truncating
+  ---
+  duration_ms: 41.978193
+  ...
+# Subtest: V3.13 valuation history binds distinct sessions before revision-heavy observation heads
+ok 70 - V3.13 valuation history binds distinct sessions before revision-heavy observation heads
+  ---
+  duration_ms: 137.86992
+  ...
+# Subtest: V3.13 conditional valuation completion binds scalars and counts to the cutoff official evidence root
+ok 71 - V3.13 conditional valuation completion binds scalars and counts to the cutoff official evidence root
+  ---
+  duration_ms: 695.852
+  ...
+# Subtest: V3.13 latest-recorded instrument, sector and calendar heads cannot be revived by newer business timestamps
+ok 72 - V3.13 latest-recorded instrument, sector and calendar heads cannot be revived by newer business timestamps
+  ---
+  duration_ms: 68.400778
+  ...
+# Subtest: V3.13 official shares normalizes units and propagates differing equal-head authority
+ok 73 - V3.13 official shares normalizes units and propagates differing equal-head authority
+  ---
+  duration_ms: 26.215593
+  ...
+# Subtest: V3.13 completion binds exact decision payload set and classifies only after latest authority selection
+ok 74 - V3.13 completion binds exact decision payload set and classifies only after latest authority selection
+  ---
+  duration_ms: 1.256637
+  ...
+# Subtest: V3.19.3 reconstructs decision identity from the worker non-cyclic dossier material
+ok 75 - V3.19.3 reconstructs decision identity from the worker non-cyclic dossier material
+  ---
+  duration_ms: 0.140001
+  ...
+# Subtest: V3.20 keeps compact evaluation schema persistence closed and V3.20-compatible
+ok 76 - V3.20 keeps compact evaluation schema persistence closed and V3.20-compatible
+  ---
+  duration_ms: 9.315419
+  ...
+# Subtest: V3.13 service role completes compact persistence and equal-time heartbeat disagreement fails closed
+ok 77 - V3.13 service role completes compact persistence and equal-time heartbeat disagreement fails closed
+  ---
+  duration_ms: 314.335826
+  ...
+# Subtest: V3.13 SQL decision envelope enforces the exact 15 percent and 2.0 authority boundaries
+ok 78 - V3.13 SQL decision envelope enforces the exact 15 percent and 2.0 authority boundaries
+  ---
+  duration_ms: 19.954576
+  ...
+# Subtest: V3.13 SQL decision canonicalizer is byte-equal to the tracked worker for disclosure values
+ok 79 - V3.13 SQL decision canonicalizer is byte-equal to the tracked worker for disclosure values
+  ---
+  duration_ms: 10.652085
+  ...
+# Subtest: V3.13 projection guard serializes every writer, rejects non-monotonic time, and retains exactly 1500 rows
+ok 80 - V3.13 projection guard serializes every writer, rejects non-monotonic time, and retains exactly 1500 rows
+  ---
+  duration_ms: 551.228278
+  ...
+# Subtest: V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row
+ok 81 - V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row
+  ---
+  duration_ms: 71.505685
+  ...
+# Subtest: DI-008 parser output crosses job completion and persistence before an adjusted read
+ok 82 - DI-008 parser output crosses job completion and persistence before an adjusted read
+  ---
+  duration_ms: 4096.535097
+  ...
+# Subtest: real TypeScript evaluation executor output stages and commits through PostgreSQL
+ok 83 - real TypeScript evaluation executor output stages and commits through PostgreSQL
+  ---
+  duration_ms: 23.616246
+  ...
+# Subtest: public selector is one point-in-time statement across cold, active, failed, success and tie branches
+ok 84 - public selector is one point-in-time statement across cold, active, failed, success and tie branches
+  ---
+  duration_ms: 14.294744
+  ...
+# Subtest: V3.19.12 executes the production-shaped JSONB cardinality read and reconciles exactly nine runtime RPCs
+ok 85 - V3.19.12 executes the production-shaped JSONB cardinality read and reconciles exactly nine runtime RPCs
+  ---
+  duration_ms: 169.154378
+  ...
+# Subtest: financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain
+ok 86 - financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain
+  ---
+  duration_ms: 154.734296
+  ...
+# Subtest: financial atomic replay rollback retains installed successor after predecessor replacement and forced failure
+ok 87 - financial atomic replay rollback retains installed successor after predecessor replacement and forced failure
+  ---
+  duration_ms: 70.404132
+  ...
+1..87
+# tests 87
+# suites 0
+# pass 87
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 86151.972394

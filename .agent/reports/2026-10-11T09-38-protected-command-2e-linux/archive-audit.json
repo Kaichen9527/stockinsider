@@ -1,0 +1,19 @@
+{
+  "stage": "archive-audit",
+  "command": [
+    "python3",
+    "/tmp/si-2e-m35wlxg5/archive-audit.py"
+  ],
+  "startedAt": "2026-10-11T09:44:04.124734+00:00",
+  "endedAt": "2026-10-11T09:44:04.885106+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.7603789429995231,
+  "sampledAggregatePeakRssBytes": 21471232,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10041339904,
+  "diskAvailableAfterBytes": 10041339904,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
