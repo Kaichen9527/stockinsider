@@ -12,7 +12,7 @@ test('whole-file protective exceptions keep lexical blockers and the approved ba
   const p = plan();
   assert.equal(p.migrations.length, 48);
   assert.equal(p.orderedChainSha256, '37dfacc252ec24a719b898b2b3ea31fc77c1631db083211f1f171c956772c613');
-  assert.equal(p.researchAgentExtension.migrations.length, 24);
+  assert.equal(p.researchAgentExtension.migrations.length, 25);
   const all = [...p.migrations, ...p.researchAgentExtension.preludeMigrations,
     ...p.researchAgentExtension.migrations];
   const exceptions = all.filter(row => row.protectiveSqlException);

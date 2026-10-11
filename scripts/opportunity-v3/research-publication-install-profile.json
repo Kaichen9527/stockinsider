@@ -294,6 +294,10 @@
     [
       "migrations/20261011_research_admission_isolation_v1.sql",
       "1ff8bc16e445db198747471fe126ec27e142b729779eb72a7bf3452072d9a581"
+    ],
+    [
+      "migrations/20261011_research_insider_isolation_v1.sql",
+      "29e6c343ec3846db4193f42718adea6a069af943642fced77650c749ecbfe1ce"
     ]
   ],
   "stages": {
@@ -5288,7 +5292,7 @@
           {
             "name": "admit_insider_snapshot_v1",
             "signature": "admit_insider_snapshot_v1(uuid,integer,uuid,text,text,integer,timestamp with time zone,timestamp with time zone,text,text)",
-            "sha256": "3579fb7bd2f5c873fb55f76012384f2580d60853a30047c893cdb762dd691ccb"
+            "sha256": "b1ecef32358da76af9bec1f5bae9143912912ebd354623d3290d01298721a0e7"
           },
           {
             "name": "admit_research_observed_roster_v1",
@@ -5528,7 +5532,7 @@
           {
             "name": "commit_insider_snapshot_page_v1",
             "signature": "commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer)",
-            "sha256": "af3a4c5b163d2be2cf082cde8c9d0be8c91e055cadf351156fa2269820e75f9e"
+            "sha256": "bb0789dc265f73e6dc2c3256fe498e424c8b8dcee3fa3400a10de0f7b8e0872d"
           },
           {
             "name": "commit_research_author_handoff_v2",
@@ -5753,7 +5757,7 @@
           {
             "name": "insider_snapshot_run_v1",
             "signature": "insider_snapshot_run_v1(uuid)",
-            "sha256": "276e20a64ea169cf81beb480cbc327d049909de4971fca98026702afbab57ec4"
+            "sha256": "fa20109f34735ccd61635cf3cce57f1bceec3f0cc1f421f3cb217bdbce4b1276"
           },
           {
             "name": "insider_trim_v1",
