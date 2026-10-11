@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "local-combined-validation-record-v1",
+  "recordedAt": "2026-10-05T08:41:38.783731+00:00",
+  "sourceIntegrationCommit": "5110b4a552bc8a8527b9bc50bd095528847c83e6",
+  "additionalSourceChange": "package.json includes research-source-association unit tests",
+  "independentCodeReviews": [
+    "98b9a76735dc236abd0e330433570f93b044f9a4",
+    "970b05215c84166c2fb394f37e88dad46cd395f2"
+  ],
+  "researchTests": {
+    "passed": 304,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typecheck": "passed",
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 33
+  },
+  "normalMacBuild": "passed",
+  "logs": [
+    "/tmp/stockinsider-industry-combined-tests-oct05.log",
+    "/tmp/stockinsider-industry-combined-types-oct05.log",
+    "/tmp/stockinsider-industry-combined-lint-oct05.log",
+    "/tmp/stockinsider-industry-combined-build-oct05.log"
+  ],
+  "codeHash": "02b97f85fbe0d280a641033c5e6326926d614e239a650b1e49a2dc63db90ba10",
+  "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
+  "protectedGatePassed": false,
+  "productionDeployed": false,
+  "realResearchPublished": false,
+  "strategyAdopted": false
+}

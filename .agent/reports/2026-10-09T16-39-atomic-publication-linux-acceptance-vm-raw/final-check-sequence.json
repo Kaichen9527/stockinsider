@@ -1,0 +1,14 @@
+[
+  {
+    "stage": "types",
+    "exitCode": 0
+  },
+  {
+    "stage": "lint",
+    "exitCode": 0
+  },
+  {
+    "stage": "normal-build",
+    "exitCode": 0
+  }
+]

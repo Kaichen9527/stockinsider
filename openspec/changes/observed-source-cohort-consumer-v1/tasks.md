@@ -1,0 +1,11 @@
+- [x] Consume reviewed 1978 reconciliation in the existing prepare/controller CLI; preserve old 1946 bytes.
+- [x] Account 31 innovation stocks, one ordinary restricted-CFI stock, ten excluded TDRs and separate observation clocks.
+- [x] Bound large fixed-CFI raw references without expanding ordinary HTTP/input limits.
+- [x] Correct two verified publisher IDs and narrowly grant Apple episode citation query; adversarial cases.
+- [x] Actual native guarded inbox: three attributed industry records, service-only real RPCs, PG restart and zero-new replay; no authority seed.
+- [x] 40 source + 12 native tests zero skip, types/lint/normal build; private measured receipt.
+- [ ] Independent exact source-code review (data reviews are separately attributed).
+- [ ] TWSE insider parser/coverage and TPEX finite-key/placeholder integration; queued, not current coverage.
+- [ ] Complete real ancillary priority profile/ACL so empty authority returns official_roster_missing rather than read_failed.
+- [ ] Sanctioned observed-research intake and explicit scope contract; no silent fallback or formal authority promotion.
+- [ ] Genuine candidate ranking/Top20, model dispatch, qualification/strategy/publication and production roundtrip.

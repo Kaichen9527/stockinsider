@@ -1,0 +1,651 @@
+{
+  "schemaVersion": "native-local-inbox-dataplane-development-v1",
+  "recordedAt": "2026-10-08T10:04:44.293107Z",
+  "baseSha": "d19ea16609f5337c97626faf4ce41765a187177d",
+  "branch": "codex/local-inbox-dataplane-oct08",
+  "incrementAuthorizedStart": "2026-10-08T09:50:35Z",
+  "incrementDeadline": "2026-10-08T10:20:35Z",
+  "manualEngineeringIncrement": true,
+  "modelLeaseExtended": false,
+  "automaticRoleBudgetAccepted": false,
+  "finalTests": {
+    "pass": 11,
+    "fail": 0,
+    "skip": 0,
+    "composition": "two unit cases, one native parent, eight native subcases"
+  },
+  "stages": {
+    "native-first": {
+      "stage": "native-first",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-local-inbox-dataplane.test.mjs"
+      ],
+      "startedAt": "2026-10-08T09:51:40.896Z",
+      "completedAt": "2026-10-08T09:51:47.285Z",
+      "elapsedSeconds": 6.3885108749964274,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 292511744,
+      "observedTaskDiskPeakBytes": 1340043264,
+      "availableBeforeBytes": 25994768384,
+      "availableAfterBytes": 25953632256,
+      "guardTermination": null
+    },
+    "native-final": {
+      "stage": "native-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-local-inbox-dataplane.test.mjs"
+      ],
+      "startedAt": "2026-10-08T10:00:33.819Z",
+      "completedAt": "2026-10-08T10:00:40.112Z",
+      "elapsedSeconds": 6.292816608998692,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 327639040,
+      "observedTaskDiskPeakBytes": 1381191680,
+      "availableBeforeBytes": 25953624064,
+      "availableAfterBytes": 25912479744,
+      "guardTermination": null
+    },
+    "native-accounted": {
+      "stage": "native-accounted",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-local-inbox-dataplane.test.mjs"
+      ],
+      "startedAt": "2026-10-08T10:02:20.673Z",
+      "completedAt": "2026-10-08T10:02:25.673Z",
+      "elapsedSeconds": 4.999560782991466,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 238170112,
+      "observedTaskDiskPeakBytes": 1350647808,
+      "availableBeforeBytes": 25984081920,
+      "availableAfterBytes": 25943023616,
+      "guardTermination": null
+    },
+    "native-complete": {
+      "stage": "native-complete",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-local-inbox-dataplane.test.mjs"
+      ],
+      "startedAt": "2026-10-08T10:03:25.468Z",
+      "completedAt": "2026-10-08T10:03:31.444Z",
+      "elapsedSeconds": 5.9759550220042,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 340041728,
+      "observedTaskDiskPeakBytes": 1483378688,
+      "availableBeforeBytes": 25851805696,
+      "availableAfterBytes": 25810292736,
+      "guardTermination": null
+    },
+    "types": {
+      "stage": "types",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "startedAt": "2026-10-08T10:00:52.569Z",
+      "completedAt": "2026-10-08T10:00:55.939Z",
+      "elapsedSeconds": 3.3692111499985913,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 518193152,
+      "observedTaskDiskPeakBytes": 1382535168,
+      "availableBeforeBytes": 25912459264,
+      "availableAfterBytes": 25911123968,
+      "guardTermination": null
+    },
+    "lint": {
+      "stage": "lint",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T10:01:05.739Z",
+      "completedAt": "2026-10-08T10:01:31.323Z",
+      "elapsedSeconds": 25.584654174992465,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1807372288,
+      "observedTaskDiskPeakBytes": 1382543360,
+      "availableBeforeBytes": 25911119872,
+      "availableAfterBytes": 25894412288,
+      "guardTermination": null
+    },
+    "build": {
+      "stage": "build",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T10:01:31.578Z",
+      "completedAt": "2026-10-08T10:01:33.607Z",
+      "elapsedSeconds": 2.028970159997698,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 677474304,
+      "observedTaskDiskPeakBytes": 1399250944,
+      "availableBeforeBytes": 25894408192,
+      "availableAfterBytes": 25984069632,
+      "guardTermination": null
+    },
+    "normal-build-clean": {
+      "stage": "normal-build-clean",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T10:03:02.513Z",
+      "completedAt": "2026-10-08T10:03:08.700Z",
+      "elapsedSeconds": 6.187028706001001,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 914391040,
+      "observedTaskDiskPeakBytes": 1351462912,
+      "availableBeforeBytes": 25943019520,
+      "availableAfterBytes": 25851809792,
+      "guardTermination": null
+    }
+  },
+  "nativeAcceptance": {
+    "startedAt": "2026-10-08T10:03:26.069Z",
+    "postgrest": {
+      "version": "PostgREST 16.3",
+      "archiveBytes": 4519976,
+      "archiveSha256": "4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d",
+      "binaryBytes": 20502640,
+      "binarySha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+    },
+    "partialDevelopmentProfile": true,
+    "databaseAdapterInjected": false,
+    "officialAuthorityRowsSeeded": 0,
+    "observedRosterPromoted": false,
+    "modelReserved": false,
+    "productionImported": false,
+    "top20": null,
+    "checks": [
+      "unauthorized_401_zero_write",
+      "inbox_three_industry_only",
+      "anonymous_table_rpc_denied",
+      "production_writer_not_fabricated",
+      "real_source_heads_cutoff",
+      "real_authority_empty",
+      "restart_dedup",
+      "priority_blocked_restart_fenced"
+    ],
+    "limitations": [
+      "Node test-runner controlled loopback configuration, not production runtime activation",
+      "Partial schema profile does not attest the complete installed migration policy",
+      "No official roster/sector authority has been ingested; Top20 remains blocked"
+    ],
+    "installedDefinitions": [
+      {
+        "file": "supabase_schema.sql",
+        "marker": "CREATE TABLE IF NOT EXISTS stocks (",
+        "sourceSha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3",
+        "definitionSha256": "b3d9d87b4dd2cd2570c657f6d9edeca9474409198f1ce2f2d4b143b313d1b1d2"
+      },
+      {
+        "file": "migrations/20260315_research_system_v2.sql",
+        "marker": "CREATE TABLE IF NOT EXISTS source_entities (",
+        "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+        "definitionSha256": "03c78b435837ecd782b14e36f8f51a7bdbeeefc130cb19d36bf3ff7120292f74"
+      },
+      {
+        "file": "migrations/20260315_research_system_v2.sql",
+        "marker": "CREATE TABLE IF NOT EXISTS source_raw_documents (",
+        "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+        "definitionSha256": "1ddf2e178a9dcbb5608535eaf32f9f508908ace0a804283f614e02c64338e7da"
+      },
+      {
+        "file": "migrations/20260901_source_research_shadow_v2.sql",
+        "marker": "ALTER TABLE public.source_raw_documents",
+        "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+        "definitionSha256": "6f9cf89764e00a16dd2630f9aaa92be8c26e375c05bb738f9ac4638e8d914c52"
+      },
+      {
+        "file": "migrations/20260906_source_identity_v4.sql",
+        "marker": "ALTER TABLE public.source_raw_documents",
+        "sourceSha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+        "definitionSha256": "c1d15e7436fef37b0d959e009f50ac67c9588f43d2000f3b82424794bb5a7969"
+      },
+      {
+        "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "marker": "CREATE TYPE authority_status_v3 AS ENUM",
+        "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+        "definitionSha256": "de0456eee24d4a21f288f00843e1c7ea2bf26c4475e4035cfa976d98f38df541"
+      },
+      {
+        "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "marker": "CREATE TYPE stock_exchange_v3 AS ENUM",
+        "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+        "definitionSha256": "bb7c4a9dcf3cb5356c8dbd6b1e363d7532c19bed93e17528d1c8a0d129c7d73a"
+      },
+      {
+        "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "marker": "CREATE TYPE instrument_type_v3 AS ENUM",
+        "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+        "definitionSha256": "81cb876a7635be9f157396262a638bf6de5831b1e764a9c86a469c070f6b7afb"
+      },
+      {
+        "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "marker": "CREATE TYPE listing_status_v3 AS ENUM",
+        "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+        "definitionSha256": "03070b2edae9d1f1b2f15514852a6ae61d4b8e980fd7406bb05bedcb1d6d2a78"
+      },
+      {
+        "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "marker": "CREATE TYPE official_roster_provider_v3 AS ENUM",
+        "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+        "definitionSha256": "c85a62f8be9eca5f006ed60d7ee9e366246dc44678e32be2466f1129df37a61d"
+      },
+      {
+        "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "marker": "CREATE TYPE tw_market_v3 AS ENUM",
+        "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+        "definitionSha256": "be7acd6c47b936c20739f01bceec5a206b9cdfaed0cf9250bdb1c5a8883e8792"
+      },
+      {
+        "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "marker": "CREATE TYPE canonical_sector_key_v3 AS ENUM",
+        "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+        "definitionSha256": "e92dfaa281fddd0da3154e2429ebae9553fc96393289986ec30267722c8475b9"
+      },
+      {
+        "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "marker": "CREATE TABLE IF NOT EXISTS stock_instruments_v3 (",
+        "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+        "definitionSha256": "411f053cf5273c207fb1567a391c02986ce5b849128f2d3b47ac1cc85a2c4a3c"
+      },
+      {
+        "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "marker": "CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (",
+        "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+        "definitionSha256": "9c2b0c74ea924ef94f143b37d7de13b57e2c5530eebbbc0911cdaa5b676a5194"
+      },
+      {
+        "file": "migrations/20260901_source_research_shadow_v2.sql",
+        "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority(",
+        "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+        "definitionSha256": "a6749bacb864ab7c6c61dd9b6cd2d1bdfcb4b09c40e99489ed8d072d84719e95"
+      },
+      {
+        "file": "migrations/20260906_authority_pagination_v2.sql",
+        "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority_page(",
+        "sourceSha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+        "definitionSha256": "e76a34cde20546b651b64713313ea63e784ee93be606c6804f0e2a32b5578598"
+      },
+      {
+        "file": "migrations/20260929_research_agent_state_v1.sql",
+        "marker": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(",
+        "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+        "definitionSha256": "088283446f2f3ded3deca7cc2e8328325abe4490470954219c2954850851d8cf"
+      }
+    ],
+    "installedRoutines": [
+      {
+        "name": "candidate_research_stock_authority",
+        "bodySha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf",
+        "securityDefiner": true,
+        "searchPath": [
+          "search_path=public, pg_temp"
+        ],
+        "serviceExecute": true,
+        "anonExecute": false
+      },
+      {
+        "name": "candidate_research_stock_authority_page",
+        "bodySha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d",
+        "securityDefiner": true,
+        "searchPath": [
+          "search_path=public, pg_temp"
+        ],
+        "serviceExecute": true,
+        "anonExecute": false
+      },
+      {
+        "name": "research_source_heads_page_v1",
+        "bodySha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+        "securityDefiner": true,
+        "searchPath": [
+          "search_path=public, pg_temp"
+        ],
+        "serviceExecute": true,
+        "anonExecute": false
+      }
+    ],
+    "observedClassificationAccounting": {
+      "total": 1946,
+      "needsEvidence": 2,
+      "notAssessed": 1944,
+      "qualified": 0,
+      "ranked": 0
+    },
+    "sourceAttempts": [
+      {
+        "id": "investanchors-public",
+        "outcome": "metadata_only"
+      },
+      {
+        "id": "nittobo-electronic",
+        "outcome": "pending_publication_precision"
+      },
+      {
+        "id": "emc-products",
+        "outcome": "pending_publication_precision"
+      },
+      {
+        "id": "emc-production",
+        "outcome": "pending_publication_precision"
+      },
+      {
+        "id": "auo-tech",
+        "outcome": "pending_publication_precision"
+      },
+      {
+        "id": "threads-partial-surface",
+        "outcome": "read_failed"
+      },
+      {
+        "id": "telegram-investanchors-869",
+        "outcome": "item_ready"
+      },
+      {
+        "id": "telegram-investanchors-881",
+        "outcome": "item_ready"
+      },
+      {
+        "id": "telegram-investanchors-882",
+        "outcome": "item_ready"
+      }
+    ],
+    "controllerRunHash": "fce1e6fe223e06b1b369bd84337eaf4d0917884ff3163c02b3788c97e538382d",
+    "inputCanonicalSymbols": [
+      {
+        "url": "https://t.me/investanchors/869",
+        "symbols": [],
+        "subjectScope": "industry_context"
+      },
+      {
+        "url": "https://t.me/investanchors/881",
+        "symbols": [],
+        "subjectScope": "industry_context"
+      },
+      {
+        "url": "https://t.me/investanchors/882",
+        "symbols": [],
+        "subjectScope": "industry_context"
+      }
+    ],
+    "distinctPublishers": 1,
+    "persistedDocuments": 3,
+    "rosterIngestionFailure": "writer_release_identity_missing",
+    "sourceHeads": 3,
+    "postgresRestartUnchanged": true,
+    "inboxReplayAccepted": 0,
+    "priorityStatus": 409,
+    "priorityFailure": {
+      "ok": false,
+      "error": "research_priority_read_failed"
+    },
+    "passed": true,
+    "completedAt": "2026-10-08T10:03:28.501Z"
+  },
+  "reviewAttribution": [
+    {
+      "subjectSha": "d19ea16609f5337c97626faf4ce41765a187177d",
+      "reviewer": "Astra via root delegation",
+      "result": "unsigned_scoped_code_approval",
+      "scope": [
+        "original relay envelope secrets and whitelisted outputs",
+        "exact hash/bytes/receipt/surface/time bindings",
+        "microsecond reversal and nanosecond future rejection",
+        "authenticated observed-before-attempt rejection",
+        "three industry items; replay three duplicates zero new"
+      ],
+      "excluded": [
+        "protected attestation",
+        "production activation",
+        "deployment",
+        "strategy approval"
+      ],
+      "testsAttribution": "132 maker cases; reviewer did not rerun on Mac"
+    },
+    {
+      "subjectSha": "4d3f709f6c555acad562e66e4904210cedae9cd6",
+      "reviewer": "Astra via root delegation",
+      "result": "unsigned_scoped_EMC_data_approval",
+      "scope": [
+        "268 original price rows unchanged",
+        "raw change and remarks matched; 2026-08-28 X0.00 retained"
+      ],
+      "usedInThisIncrement": false
+    },
+    {
+      "subjectSha": "d267ca5c4a978a6ad930966ac1dcd0a77ad007e8",
+      "reviewer": "Astra via root delegation",
+      "result": "unsigned_scoped_AUO_data_approval",
+      "usedInThisIncrement": false
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "scripts/research-local-inbox-dataplane.mjs",
+      "bytes": 21474,
+      "sha256": "b542cd61ffddef235be4f17bc938fd5d1bf85e9c5dd1075fa3ab0d86d0542b66"
+    },
+    {
+      "path": "scripts/research-local-inbox-dataplane.test.mjs",
+      "bytes": 1834,
+      "sha256": "4858087b9ff687cea94f96b48ff6355bb912edc084a065fa9b62cd549d5071d9"
+    }
+  ],
+  "artifactManifest": [
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/tools/acquisition.json",
+      "bytes": 348,
+      "sha256": "429a788442b6ebf11f9d4d8df7bc20dbe80661d1d9d87bfd7efdf191bc6b1ec1"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-first.json",
+      "bytes": 545,
+      "sha256": "b62e0b1952853c7ab41e2b13a57bca7bdc18d5b8b2df65f84900de691670d712"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-first.log",
+      "bytes": 2530,
+      "sha256": "b9e910fea8b83506eaa60f6c159e5e8f6862f851cc7fc0a1dabe249376e32c74"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-first.time",
+      "bytes": 856,
+      "sha256": "9e4e91dbc70002ee801a4e2ad47e9907d572f69c7c404ae361a537a3bfc7f9d2"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-final.json",
+      "bytes": 544,
+      "sha256": "9c597e2228244954253bef6f424a4dc9073b5eac7b516c6d9bca7339689ff665"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-final.log",
+      "bytes": 3187,
+      "sha256": "ff82e9a0e95ee08f6efbe20c3b28a5dd9273b7e345bfba94eb34a1522112a194"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-final.time",
+      "bytes": 856,
+      "sha256": "77b72da1274fca25e3ce397ebb1555f440c7859c071150261673302d96297a7d"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-accounted.json",
+      "bytes": 548,
+      "sha256": "0635785af3d9830e83c57b1a2c4b32971ff6fa09a8e8aebcc7a7f3dfd37cede6"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-accounted.log",
+      "bytes": 2173,
+      "sha256": "12f30721ca5734f88fb2297829d12a86eac06e246c856fa91e3fc8f55dd0fa5a"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-accounted.time",
+      "bytes": 894,
+      "sha256": "8308247952e0e4abe6b56d7ca3429864e6e1a074f52f99235ded2066c8b35c42"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-complete.json",
+      "bytes": 545,
+      "sha256": "574bea2ec248cbc959c8480862503a625a5175f3774a97445c5c5a9972bf4c31"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-complete.log",
+      "bytes": 3180,
+      "sha256": "ec676cc5fcd97e3371f10a520599b929dcc6d075295e58208544355235813c87"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-complete.time",
+      "bytes": 856,
+      "sha256": "6440cf2a7f234a1cbb40ef254e496ab7182afb624e88ea2bf2a7d3f26b1d68b6"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/types.json",
+      "bytes": 490,
+      "sha256": "76fc6d0e390577fec7cdfbf11518ee2189b946ef4316c0b0c3fc2b81744f5761"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/types.time",
+      "bytes": 815,
+      "sha256": "533cfdcf7ea05764d186dee3510a85671af8701092498a4e1ba2d3b140eec87e"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/lint.json",
+      "bytes": 478,
+      "sha256": "557b76ea09035d295b3a20ddd9339d9e0756e3b79cdbd69ab2ab153f6c29e6ac"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/lint.log",
+      "bytes": 4760,
+      "sha256": "33a71dbfe5b1ff029d709b11d89e069122c96d9632df4458dba81e58362697fe"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/lint.time",
+      "bytes": 808,
+      "sha256": "0dbe4efe69fd605631e9eb9f950f89a72abeb573b4b21aea9137cbbb341c4e22"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/build.json",
+      "bytes": 478,
+      "sha256": "62b6cc6b5035bd69a9b1624dbb26702ec2ba5c8611913d5311a9402c408a9976"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/build.log",
+      "bytes": 683,
+      "sha256": "2c9a2f846907d7cbf547292683b41827724ed28d188029a5f84bd1897b4366db"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/build.time",
+      "bytes": 844,
+      "sha256": "38bd95d8dc348322311d8c6d586f7bd47fe1bc854c2e6c8f89f652d107866cc7"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/normal-build-clean.json",
+      "bytes": 491,
+      "sha256": "1f2c42e1d5c5d338ff8e5734220a60782de227192b6e0217178e19f0497a7173"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/normal-build-clean.log",
+      "bytes": 6411,
+      "sha256": "70442c8cd42a1b01db528809e7b9767c99a5da75471eabd042343eb9b515f1ac"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/normal-build-clean.time",
+      "bytes": 809,
+      "sha256": "a19e1c22a4f48776a096d15d89a30f0a4e7dfa4de1374d6021dbda6359fd469e"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-first-run/acceptance-receipt.json",
+      "bytes": 8136,
+      "sha256": "1b836b622330fc99d159c3c9419627e4c450f3a015da7fd46d1ccdef08b58279"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-final-run/acceptance-receipt.json",
+      "bytes": 8589,
+      "sha256": "5df754a9b9902240d5ec5a0cb49fb27a7e9387bd0751116f765000717c8f4616"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-accounted-run/acceptance-receipt.json",
+      "bytes": 7546,
+      "sha256": "8d99d89c49de96ca8f1b32eb7f0ef6fd0c572679fef750d5aaeee7f0d28dc5d6"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-complete-run/acceptance-receipt.json",
+      "bytes": 9548,
+      "sha256": "0bfbdaa09be6562bc4a6ccf0fe4d57f448d1ff7c2694ab519c745b654be84912"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/native-complete-run/observed-classification-status.json",
+      "bytes": 367999,
+      "sha256": "148c33f6fddd4a13da7a55cace0a8883d9affcf76ab07844722db27ca73983d1"
+    }
+  ],
+  "resourceContext": {
+    "node": "22.14.0",
+    "postgres": "17",
+    "kernel": "Linux 6.18.44",
+    "cpuVisibleModel": "AMD EPYC 9V74 80-Core Processor",
+    "nproc": 5,
+    "cgroupMemoryMaxBytes": 34359738368,
+    "cgroupCpuMax": "400000 100000",
+    "hostVisibleMemoryTotalBytes": 35743784960,
+    "workspaceBeforeBytes": 7192420352,
+    "workspaceAfterBytes": 7377104896,
+    "filesystemAvailableBeforeBytes": 25994788864,
+    "filesystemAvailableAfterBytes": 25810272256,
+    "configuredProjectDiskQuota": null,
+    "dfIsProjectQuota": false,
+    "measurement": "GNU time -v plus process-group VmRSS sampled every 100ms; du sample every second. Sampled maxima are not continuous peak guarantees. Only one heavy build/lint job at a time.",
+    "reservePolicy": "20GB resident + 4GB temp + 8GB reserve; one heavy job <=8GiB. Actual workspace remains <20GB; task sample <4GB; available >8GB. VPS capacity not used for VM admission."
+  },
+  "failureHistory": [
+    {
+      "stage": "build",
+      "error": "Could not parse output from TypeScript --showConfig",
+      "resolution": "same normal build command succeeded with authorized subprocess permissions; precise initial capture cause unconfirmed; no App/config edits"
+    },
+    {
+      "stage": "native-accounted",
+      "error": "local_profile_service_exited; production build missing after failed build",
+      "resolution": "normal build completed; native-complete rerun passed"
+    }
+  ],
+  "gaps": [
+    "Priority actual HTTP409 research_priority_read_failed: partial profile has no candidate_issuer_document_domains_v6 or research_deep_jobs_v1 tables; no stub definitions created",
+    "Real official authority RPC exists and is empty; no CFI rows promoted to active instruments/sector authority",
+    "Existing protected stock-master queue requires production writer identity; observed CFI relay is not accepted by its request schema",
+    "Three summaries contain no company mentions; one publisher, not three independent company confirmations; no Top20 rows produced",
+    "Source acquisition remains attributed root relay, not VM HTTP collector success; original unavailable and unknown-precision outcomes retained",
+    "No live model dispatch, financial facts import, publication, strategy approval, production DB/VPS access or protected attestation"
+  ],
+  "unchangedAppTreeSha": "c61c0a67e1322ed6ca1f3b856377be4c3784be76",
+  "nextResearchInputs": {
+    "AUOBranchHead": "ace9124728985a06a38b56211e3feefe6ad7bf88",
+    "approvedSubset": "d267ca5c4a978a6ad930966ac1dcd0a77ad007e8 financial-relay only",
+    "additionalHistorical294ValuesTechnologyOwnershipReview": "pending; not promoted or consumed",
+    "EMCApprovedSubject": "4d3f709f6c555acad562e66e4904210cedae9cd6",
+    "nextScope": "real reproducible AUO/EMC models and focused article, not another framework",
+    "dateOnlyCurrentResearch": "usable as attributed current research with observedAt; exact-time inbox quarantine remains, historical PIT not invented"
+  }
+}

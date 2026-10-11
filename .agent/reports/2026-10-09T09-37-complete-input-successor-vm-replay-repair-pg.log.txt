@@ -1,0 +1,442 @@
+TAP version 13
+# (node:153367) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:153367) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: complete-input actual PG, shared preparations and original lease boundaries (synthetic)
+    # Subtest: all frozen canonical vectors agree with actual PG numeric/Unicode bytes
+    ok 1 - all frozen canonical vectors agree with actual PG numeric/Unicode bytes
+      ---
+      duration_ms: 269.712769
+      ...
+    # Subtest: 2409 real fixed files recompute and private input seals without formal stocks
+    ok 2 - 2409 real fixed files recompute and private input seals without formal stocks
+      ---
+      duration_ms: 318.025588
+      ...
+    # Subtest: 2383 real fixed files recompute and private input seals without formal stocks
+    ok 3 - 2383 real fixed files recompute and private input seals without formal stocks
+      ---
+      duration_ms: 233.475602
+      ...
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# ERROR:  complete_parent_binding
+# CONTEXT:  PL/pgSQL function research_complete_parent_v2(jsonb) line 14 at RAISE
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# ERROR:  complete_parent_binding
+# CONTEXT:  PL/pgSQL function research_complete_parent_v2(jsonb) line 14 at RAISE
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# ERROR:  complete_mapping_unavailable
+# CONTEXT:  PL/pgSQL function research_complete_parent_v2(jsonb) line 16 at RAISE
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# ERROR:  complete_mapping_unavailable
+# CONTEXT:  PL/pgSQL function research_complete_parent_v2(jsonb) line 16 at RAISE
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# ERROR:  complete_schema_constant
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_schema_constant
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_schema_constant
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_schema_keys
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 7 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_schema_constant
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_calculation_mapping
+# CONTEXT:  PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 9 at RAISE
+# ERROR:  complete_clock_binding
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 18 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_schema_constant
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_schema_constant
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_schema_constant
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->idx,s->'prefixItems'->idx,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 12 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_schema_keys
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 7 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_schema_constant
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 5 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  complete_calculation_mapping
+# CONTEXT:  PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 9 at RAISE
+# ERROR:  complete_clock_binding
+# CONTEXT:  PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 18 at RAISE
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(v->k,child,known,d+1)"
+# PL/pgSQL function research_complete_schema_check_v2(jsonb,jsonb,timestamp with time zone,integer) line 8 at PERFORM
+# SQL statement "SELECT public.research_complete_schema_check_v2(p_calculation,m->'schema',known)"
+# PL/pgSQL function seal_research_article_input_revision_v2(jsonb,jsonb) line 8 at PERFORM
+# ERROR:  permission denied for table research_article_input_revisions_v2
+# ERROR:  permission denied for table research_article_input_revisions_v2
+# ERROR:  permission denied for table research_article_input_revisions_v2
+# ERROR:  permission denied for table research_article_input_revisions_v2
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  permission denied for function read_research_article_input_revision_v2
+# ERROR:  permission denied for table research_article_input_revisions_v2
+# ERROR:  permission denied to set role "research_input_preparation_owner_v2"
+# ERROR:  input_preparation_count_bound
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 58 at RAISE
+    # Subtest: application rereads current mapping and full payload without reopening fixed files
+    ok 4 - application rereads current mapping and full payload without reopening fixed files
+      ---
+      duration_ms: 744.499401
+      ...
+    # Subtest: replay and read retain clocks and charges; changed request rejects
+    ok 5 - replay and read retain clocks and charges; changed request rejects
+      ---
+      duration_ms: 183.888027
+      ...
+    # Subtest: unknown nested, numeric, locator, clock and mapping material fails before insertion
+    ok 6 - unknown nested, numeric, locator, clock and mapping material fails before insertion
+      ---
+      duration_ms: 105.669159
+      ...
+    # Subtest: direct service RPC rejects numeric, locator, unit, nested, future and swapped material with rollback
+    ok 7 - direct service RPC rejects numeric, locator, unit, nested, future and swapped material with rollback
+      ---
+      duration_ms: 906.732291
+      ...
+    # Subtest: BYPASSRLS service and owner cannot mutate history; anonymous and helper access forbidden
+    ok 8 - BYPASSRLS service and owner cannot mutate history; anonymous and helper access forbidden
+      ---
+      duration_ms: 53.140336
+      ...
+    # Subtest: actual non-superuser login executes closed read RPC but cannot become private owner
+    ok 9 - actual non-superuser login executes closed read RPC but cannot become private owner
+      ---
+      duration_ms: 57.730753
+      ...
+    # Subtest: new table charge shares four slots with old prepare; full replay is free
+    ok 10 - new table charge shares four slots with old prepare; full replay is free
+      ---
+      duration_ms: 131.884573
+      ...
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# ERROR:  complete_read_committed_required
+# CONTEXT:  PL/pgSQL function research_complete_parent_v2(jsonb) line 4 at RAISE
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+# PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# PL/pgSQL function research_complete_parent_v2(jsonb) line 17 at assignment
+# PL/pgSQL function read_research_article_input_revision_v2(jsonb) line 4 at assignment
+    # Subtest: two actual clients race old preparation versus complete seal for final shared slot
+    ok 11 - two actual clients race old preparation versus complete seal for final shared slot
+      ---
+      duration_ms: 198.813563
+      ...
+    # Subtest: actual restart preserves revision and input hash
+    ok 12 - actual restart preserves revision and input hash
+      ---
+      duration_ms: 249.348217
+      ...
+    # Subtest: expired original reservation and RR cannot reread; no lease renewal
+    ok 13 - expired original reservation and RR cannot reread; no lease renewal
+      ---
+      duration_ms: 46.141524
+      ...
+    # Subtest: withdrawal invalidates persisted read without deleting history
+    ok 14 - withdrawal invalidates persisted read without deleting history
+      ---
+      duration_ms: 54.8228
+      ...
+    1..14
+ok 1 - complete-input actual PG, shared preparations and original lease boundaries (synthetic)
+  ---
+  duration_ms: 4959.512722
+  ...
+# (node:153750) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:153750) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# research_complete_input_failure_phase read_validate
+# research_complete_input_failure_phase read_validate
+# Subtest: canonical frozen vector 0
+ok 2 - canonical frozen vector 0
+  ---
+  duration_ms: 1.963293
+  ...
+# Subtest: canonical frozen vector 1
+ok 3 - canonical frozen vector 1
+  ---
+  duration_ms: 0.220913
+  ...
+# Subtest: canonical frozen vector 2
+ok 4 - canonical frozen vector 2
+  ---
+  duration_ms: 0.250498
+  ...
+# Subtest: canonical frozen vector 3
+ok 5 - canonical frozen vector 3
+  ---
+  duration_ms: 0.197067
+  ...
+# Subtest: canonical frozen vector 4
+ok 6 - canonical frozen vector 4
+  ---
+  duration_ms: 0.164789
+  ...
+# Subtest: canonical frozen vector 5
+ok 7 - canonical frozen vector 5
+  ---
+  duration_ms: 0.154533
+  ...
+# Subtest: canonical frozen vector 6
+ok 8 - canonical frozen vector 6
+  ---
+  duration_ms: 0.202466
+  ...
+# Subtest: canonical frozen vector 7
+ok 9 - canonical frozen vector 7
+  ---
+  duration_ms: 0.100632
+  ...
+# Subtest: canonical frozen vector 8
+ok 10 - canonical frozen vector 8
+  ---
+  duration_ms: 0.429468
+  ...
+# Subtest: canonical frozen vector 9
+ok 11 - canonical frozen vector 9
+  ---
+  duration_ms: 0.648609
+  ...
+# Subtest: canonical frozen vector 10
+ok 12 - canonical frozen vector 10
+  ---
+  duration_ms: 0.196977
+  ...
+# Subtest: canonical frozen vector 11
+ok 13 - canonical frozen vector 11
+  ---
+  duration_ms: 0.109254
+  ...
+# Subtest: canonical frozen vector 12
+ok 14 - canonical frozen vector 12
+  ---
+  duration_ms: 0.081382
+  ...
+# Subtest: canonical frozen vector 13
+ok 15 - canonical frozen vector 13
+  ---
+  duration_ms: 0.227423
+  ...
+# Subtest: canonical frozen vector 14
+ok 16 - canonical frozen vector 14
+  ---
+  duration_ms: 0.243728
+  ...
+# Subtest: strict JSON rejects {"a":1,"a":2}
+ok 17 - strict JSON rejects {"a":1,"a":2}
+  ---
+  duration_ms: 0.574447
+  ...
+# Subtest: strict JSON rejects {"a":1,"\\u0061":2}
+ok 18 - strict JSON rejects {"a":1,"\\u0061":2}
+  ---
+  duration_ms: 0.162495
+  ...
+# Subtest: strict JSON rejects {"x":NaN}
+ok 19 - strict JSON rejects {"x":NaN}
+  ---
+  duration_ms: 0.074833
+  ...
+# Subtest: strict JSON rejects {"x":1} trailing
+ok 20 - strict JSON rejects {"x":1} trailing
+  ---
+  duration_ms: 0.087202
+  ...
+# Subtest: strict JSON rejects "\\ud800"
+ok 21 - strict JSON rejects "\\ud800"
+  ---
+  duration_ms: 0.065018
+  ...
+# Subtest: strict JSON rejects "\\u0000"
+ok 22 - strict JSON rejects "\\u0000"
+  ---
+  duration_ms: 0.067081
+  ...
+# Subtest: non JSON value rejects Infinity
+ok 23 - non JSON value rejects Infinity
+  ---
+  duration_ms: 0.160682
+  ...
+# Subtest: non JSON value rejects NaN
+ok 24 - non JSON value rejects NaN
+  ---
+  duration_ms: 0.075654
+  ...
+# Subtest: non JSON value rejects ()=>{}
+ok 25 - non JSON value rejects ()=>{}
+  ---
+  duration_ms: 0.128814
+  ...
+# Subtest: non JSON value rejects undefined
+ok 26 - non JSON value rejects undefined
+  ---
+  duration_ms: 0.076466
+  ...
+# Subtest: 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+ok 27 - 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+  ---
+  duration_ms: 24.852046
+  ...
+# Subtest: closed ingress cannot select executable, financial body or clock
+ok 28 - closed ingress cannot select executable, financial body or clock
+  ---
+  duration_ms: 0.353934
+  ...
+# Subtest: schema constant and unknown nested fields reject
+ok 29 - schema constant and unknown nested fields reject
+  ---
+  duration_ms: 0.339533
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping false
+ok 30 - old DB sealed mapping cannot bypass current mapping false
+  ---
+  duration_ms: 1.041962
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping true
+ok 31 - old DB sealed mapping cannot bypass current mapping true
+  ---
+  duration_ms: 0.389307
+  ...
+1..31
+# tests 45
+# suites 0
+# pass 45
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5465.979879

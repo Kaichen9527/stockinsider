@@ -1,0 +1,333 @@
+{
+  "schemaVersion": "financial-queue-vm-acceptance-v1",
+  "recordedAt": "2026-10-09T05:56:54.837Z",
+  "subject": {
+    "docsHead": "549d97a48fbcb0c5c2ba3905a6b0b9e2c5acad9a",
+    "runtimeHead": "1b8aa0d03e2b50df3b067ff99b78002ccfe36c4a",
+    "tree": "c3f478f927519408c247bc2046fcad6a6ad4a01c",
+    "webTree": "0b35837b7c7afee42f01373d8e6af7cd839c40e7",
+    "runtimeChangedByAcceptance": false
+  },
+  "manualIncrement": {
+    "startedAt": "2026-10-09T05:44:51Z",
+    "deadline": "2026-10-09T06:14:51Z",
+    "notAutomatedRoleBudget": true
+  },
+  "checks": {
+    "focused": {
+      "pass": 16,
+      "fail": 0,
+      "skip": 0
+    },
+    "realDataPlane": {
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "includesParentTest": true
+    },
+    "types": "pass",
+    "lint": {
+      "errors": 0,
+      "warnings": 33
+    },
+    "normalBuild": "pass_after_preserved_sandbox_failures",
+    "fullOfficialFinancialWorkerSuccess": false
+  },
+  "realDataPlane": {
+    "syntheticFixture": true,
+    "productionIdentityActivated": false,
+    "formalAuthoritySeeded": false,
+    "fullWorkerSuccess": false,
+    "checks": [
+      "actual_lease_required_red",
+      "actual_lease_artifact_receipt_replay",
+      "actual_identity_anon_reject",
+      "restart_no_lease_receipt_unchanged",
+      "compiled_http_401_409"
+    ],
+    "passed": true,
+    "artifactHash": "2cf020b25767f497f45707b70a010a012b3bab24c115d1f0bd6d318b418cd48b",
+    "artifactBytes": 67,
+    "pg": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "postgrest": "PostgREST 16.3",
+    "sources": {
+      "20260831_candidate_shadow_performance.sql": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+      "20260911_contabo_data_plane_v1.sql": "2c2fd3413e2c633d70ccb171885837118a50e82a986e947fcf1dd3100c109ec1",
+      "20260724_source_led_opportunity_engine_v3.sql": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7"
+    },
+    "originalSqlBodiesInstalled": true,
+    "adapters": [
+      "synthetic identities in disposable DB",
+      "fixed Supabase client boundary to real PostgREST",
+      "artifact data-plane-mode contabo selected in test context; bucket boundary unused"
+    ],
+    "limitations": [
+      "No active production writer or real official financial acquisition/validation was invoked",
+      "Compiled HTTP acceptance is rejection-only; helper/artifact acceptance uses actual SQL and private FD store but is not full worker success"
+    ]
+  },
+  "build": {
+    "id": "-V5w27Bt8SEYu6vG7sq1z",
+    "command": "npm run build",
+    "sourceRevision": "549d97a48fbcb0c5c2ba3905a6b0b9e2c5acad9a",
+    "prerenderManifestSha256": "05e2fe5aa0716f1bb028c498214cd7144e9f6335e68072fd90f922c73d35e5b1",
+    "parametersHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
+    "strategyCodeHash": "4ff97130999ee66808e05d1a253cece453141bc704c8050a581b955f4205e664"
+  },
+  "resourceStages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/candidate-financial-queue-write-lease-route.test.mjs",
+        "scripts/candidate-financial-document-write-lease-route.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:45:55.463Z",
+      "completedAt": "2026-10-09T05:45:56.446Z",
+      "elapsedSeconds": 0.9828641939966474,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 318758912,
+      "observedTaskDiskPeakBytes": 952868864,
+      "availableBeforeBytes": 15233064960,
+      "availableAfterBytes": 15233056768,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T05:49:09.888Z",
+      "completedAt": "2026-10-09T05:49:24.879Z",
+      "elapsedSeconds": 14.990697555971565,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1322422272,
+      "observedTaskDiskPeakBytes": 954331136,
+      "availableBeforeBytes": 15233036288,
+      "availableAfterBytes": 15230754816,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T05:50:00.094Z",
+      "completedAt": "2026-10-09T05:50:22.410Z",
+      "elapsedSeconds": 22.315992807998555,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1438068736,
+      "observedTaskDiskPeakBytes": 971337728,
+      "availableBeforeBytes": 15230750720,
+      "availableAfterBytes": 15214575616,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T05:51:51.152Z",
+      "completedAt": "2026-10-09T05:52:38.192Z",
+      "elapsedSeconds": 47.03975015101605,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 890318848,
+      "observedTaskDiskPeakBytes": 972423168,
+      "availableBeforeBytes": 15214555136,
+      "availableAfterBytes": 15178440704,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-clean",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T05:52:53.563Z",
+      "completedAt": "2026-10-09T05:52:54.762Z",
+      "elapsedSeconds": 1.198261267010821,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 187256832,
+      "observedTaskDiskPeakBytes": 1007480832,
+      "availableBeforeBytes": 15178452992,
+      "availableAfterBytes": 15178289152,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-final",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T05:53:47.889Z",
+      "completedAt": "2026-10-09T05:54:22.763Z",
+      "elapsedSeconds": 34.87385655997787,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 2084950016,
+      "observedTaskDiskPeakBytes": 1295908864,
+      "availableBeforeBytes": 15214526464,
+      "availableAfterBytes": 14889992192,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-queue-real",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/workspace/cloud-financial-queue-549-artifacts-oct09/queue-real.test.mjs"
+      ],
+      "startedAt": "2026-10-09T05:54:40.154Z",
+      "completedAt": "2026-10-09T05:54:44.038Z",
+      "elapsedSeconds": 3.8841531109937932,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 322289664,
+      "observedTaskDiskPeakBytes": 1337028608,
+      "availableBeforeBytes": 14889988096,
+      "availableAfterBytes": 14848901120,
+      "guardTermination": null
+    }
+  ],
+  "limits": {
+    "rssBytes": 8589934592,
+    "temporaryBytes": 4000000000,
+    "filesystemReserveBytes": 8000000000
+  },
+  "sampledPeakRssBytes": 2084950016,
+  "sampledPeakTaskDiskBytes": 1337028608,
+  "freeBytesAtReceipt": 14848868352,
+  "heavyStageOverlap": false,
+  "resourceMeasurementLimits": "100ms process group plus live descendant RSS, one-second task du; short/reparented processes can be missed; not a cgroup peak",
+  "stoppedProcesses": {
+    "runningOwnedRuntimeCandidates": [],
+    "method": "non-zombie postgres/postgrest/node argv executable plus exact task path; initial broad text probe matched its own shell commands and was not evidence of live runtimes"
+  },
+  "failureHistory": [
+    {
+      "stage": "build",
+      "result": "sandbox CSS worker local-port EPERM; original log retained"
+    },
+    {
+      "stage": "normal-build-clean",
+      "result": "same cached failure returned after loopback-enabled run; root cause not independently isolated"
+    },
+    {
+      "stage": "normal-build-final",
+      "result": "loopback-enabled bind probe succeeded; preserved failures, removed only this stopped worktree .next cache, fresh normal build passed"
+    }
+  ],
+  "cacheCleanup": {
+    "recordedAt": "2026-10-09T05:53:47.863423+00:00",
+    "path": "/workspace/cloud-financial-queue-549-acceptance-oct09/web/.next",
+    "logicalBytesRemoved": 36082870,
+    "reason": "failed Turbopack cache replay; all owned build commands exited; exact failure logs preserved",
+    "preservedLogHashes": {
+      "build.log": "fd0ee4f2394de1691e1cd778907acb75f3d8e466574614920d74b346749d8e71",
+      "build.json": "671ebf106b85cb4935e1c7ec292122f8f82cfb02d59e15f2ec328f27a8a8412e",
+      "normal-build-clean.log": "5fc24cb06d841c0ac332990dcb0e8b6c2f5cb80c87a12926984420846a30036a",
+      "normal-build-clean.json": "92c8fabe9d8d3afadeba635daa525dfbccde0e15e32a00122a0c636f85f23909"
+    },
+    "freeBefore": 15178285056,
+    "freeAfter": 15214530560
+  },
+  "dotenvFilenameInventory": [
+    ".env.example",
+    "scraper/.env.example"
+  ],
+  "credentialValuesReadOrCopied": false,
+  "dependencies": {
+    "web": "local rebuildable copied dependency tree, matching original web lock; no package upgrade/install",
+    "root": "shared read-only node_modules symlink, not deleted or included in task disk"
+  },
+  "logEvidence": {
+    "focused": {
+      "path": "/workspace/cloud-financial-queue-549-artifacts-oct09/focused.log",
+      "bytes": 3526,
+      "sha256": "558e997b9b1603663489a2102c3d37486fcb46ba3bceafd8b3242ed3e3e76364",
+      "resourceReportHash": "7637eccd70d568fb1756d31430150facfc1a23f79a06376502ef2afb7e9ee735"
+    },
+    "types": {
+      "path": "/workspace/cloud-financial-queue-549-artifacts-oct09/types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+      "resourceReportHash": "ffdaa6c02d38dd17806885767eebcf09c04a47c9e11b2c79f7df35d825697e78"
+    },
+    "lint": {
+      "path": "/workspace/cloud-financial-queue-549-artifacts-oct09/lint.log",
+      "bytes": 4802,
+      "sha256": "1116fe90defa47a28cf81bd3936f202c50716fa139297b52c572c09998717981",
+      "resourceReportHash": "76e7dd6a7e262fe7b0b2e4a8e7167b77744e24a939d14f0ff5758fd82f0faeea"
+    },
+    "build": {
+      "path": "/workspace/cloud-financial-queue-549-artifacts-oct09/build.log",
+      "bytes": 4973,
+      "sha256": "fd0ee4f2394de1691e1cd778907acb75f3d8e466574614920d74b346749d8e71",
+      "resourceReportHash": "671ebf106b85cb4935e1c7ec292122f8f82cfb02d59e15f2ec328f27a8a8412e"
+    },
+    "normal-build-clean": {
+      "path": "/workspace/cloud-financial-queue-549-artifacts-oct09/normal-build-clean.log",
+      "bytes": 4973,
+      "sha256": "5fc24cb06d841c0ac332990dcb0e8b6c2f5cb80c87a12926984420846a30036a",
+      "resourceReportHash": "92c8fabe9d8d3afadeba635daa525dfbccde0e15e32a00122a0c636f85f23909"
+    },
+    "normal-build-final": {
+      "path": "/workspace/cloud-financial-queue-549-artifacts-oct09/normal-build-final.log",
+      "bytes": 6500,
+      "sha256": "6d3c3bf0812390ca3954dfed129c2c95054cf9c132438e455010fb9781dd1fb6",
+      "resourceReportHash": "eb5b72d33271763aedc9693521fbfe3829d3d51a9ba34f902c8ef58e062b6cde"
+    },
+    "native-queue-real": {
+      "path": "/workspace/cloud-financial-queue-549-artifacts-oct09/native-queue-real.log",
+      "bytes": 2064,
+      "sha256": "a14712f6134a01eda1d4129888419e22993ce36a0ee55ca7213aaba187b71561",
+      "resourceReportHash": "d2dda0e817854c69a0aae290b8685d8b0763eb51f0132faeb0e0d046011c0a15"
+    }
+  },
+  "sourceFileHashes": {
+    "web/src/app/api/internal/candidate-financial-queue-drain/route.ts": "f01b355eec7f6ab85c8776e8f5874523fe84230f85f96c4d83821d8775d0f69e",
+    "web/src/lib/production-write-lease.ts": "5ad25b0fa08a4e340760d653e8572fabadc639aded0e7767cdcba2c491d81f6f",
+    "web/src/lib/candidate-financial-artifact.ts": "0b0a4ae83e02b874ad96d273921050291487d7fd600108b3459402ffce984602",
+    "web/src/lib/private-artifact-store.ts": "26719b28cefdaf35483ebc8fdebcad825d2a2559243ebfff13ca30646ac70f4b",
+    "web/src/lib/taiwan-data-runtime.ts": "2f3f4ab2cb321d6c9db3ce1ac342f4c7c42d124a65412a2da375408ccb0410c9",
+    "scripts/candidate-financial-queue-write-lease-route.test.mjs": "ecdc94c96d7c6af0600a9e551e9eb0e1744cdea33d859295f31f43ecd332c717",
+    "scripts/candidate-financial-document-write-lease-route.test.mjs": "7ef91ccd098c7fc4f38bfb34b5bbb60de08001e97b15740ebf3619bcbf019c12",
+    "web/package-lock.json": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "package.json": "96746b5a409b24e8f3331b5a05874519e8e5324949fefcebc9b8e87ee6123c50"
+  },
+  "fixtureProbe": {
+    "path": ".agent/reports/2026-10-09T05-57-financial-queue-real-probe.mjs.txt",
+    "sha256": "bdcc380861734eb5b27c7e5e4717046ccec8538e8d16f229825fbf8b20288712"
+  },
+  "independentReviewAttribution": {
+    "runtimeSubject": "1b8aa0d03e2b50df3b067ff99b78002ccfe36c4a",
+    "observer": "root-delegated independent reviewer",
+    "status": "unsigned scoped code pass",
+    "tests": "16 existing focused plus 3 independent adversarial probes; this VM acceptance is maker execution, not reviewer execution"
+  },
+  "limitations": [
+    "Disposable synthetic active backend/principal fixture, not production identity/least-privilege activation",
+    "Real SQL selected verbatim and helper/private file paths executed; fixed test client/mode boundaries disclosed",
+    "HTTP 401 and missing-writer 409 only; no full positive official acquisition/validation worker run",
+    "No official authority, financial facts, publication, strategy or paper rows were admitted by this acceptance",
+    "No model/author/reviewer role execution or protected approval",
+    "Turbopack network permission failures retained; no production/network-policy change"
+  ]
+}

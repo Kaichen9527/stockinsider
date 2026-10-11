@@ -1,0 +1,20 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "owner-bridge-75d-dependency-restored",
+  "command": [
+    "node",
+    "scripts/run-node22.js",
+    "--experimental-strip-types",
+    "--test",
+    "scripts/release-owner-bridge-postgres.test.mjs"
+  ],
+  "startedAt": "2026-10-09T07:17:49.085Z",
+  "completedAt": "2026-10-09T07:17:50.180Z",
+  "elapsedSeconds": 1.0946782050014008,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 141537280,
+  "observedTaskDiskPeakBytes": 1518825472,
+  "availableBeforeBytes": 14511353856,
+  "availableAfterBytes": 14511345664,
+  "guardTermination": null
+}

@@ -1,0 +1,8 @@
+{
+  "source": "/workspace/cloud-research-converged-oct08/web/.next/cache/turbopack",
+  "retainedAt": "/workspace/cloud-research-combined-27d-artifacts-oct09/retired-failed-turbopack-cache",
+  "apparentBytes": 220412170,
+  "reason": "cached sandbox bind failure suspected, not proven",
+  "stoppedBuilds": true,
+  "recordedAt": "2026-10-09T07:15:05.778502+00:00"
+}

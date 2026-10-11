@@ -1,0 +1,433 @@
+{
+  "schemaVersion": "bounded-linux-engineering-acceptance-v1",
+  "sealedAt": "2026-10-09T17:03:41.143569+00:00",
+  "sealedAtAsiaTaipei": "2026-10-10T01:03:41.143569+08:00",
+  "manualStartedAt": "2026-10-09T16:57:16Z",
+  "manualDeadline": "2026-10-09T17:27:16Z",
+  "manualElapsedSeconds": 385.143569,
+  "sourceHead": "847d5f18d1af3d2bb7da399bb6e188d179466b7f",
+  "sourceTree": "e7a7a6acede841e2c8675ef8e4b9196d6022547b",
+  "webTree": "05ecdfb77e1820dea0f78860ab8b6b98fc15e3b4",
+  "branch": "codex/publication-view-linux-acceptance-oct10",
+  "sourceCleanAtChecksAndSealing": true,
+  "sourceFiles": [
+    {
+      "file": "migrations/20261010_research_publication_view_v2.sql",
+      "bytes": 3783,
+      "sha256": "82a158eb59e74181fe5546c255d6afa4c51184d2639cfb52a900b22eef88dd75"
+    },
+    {
+      "file": "package.json",
+      "bytes": 32719,
+      "sha256": "656430f778a746be4740102d2e65d9bf7f09d5bb2da75df16c72b7f103e073e9"
+    },
+    {
+      "file": "scripts/research-atomic-publication-postgres.test.mjs",
+      "bytes": 39100,
+      "sha256": "2ff23b80918270788e131902dd72b06153042ebe78aec7619b3e41fa286875ef"
+    },
+    {
+      "file": "scripts/research-publication-view-fixture.mjs",
+      "bytes": 1417,
+      "sha256": "e64becdb8091078bb13644baf23132e5776decd54a20fa8d87a627cdfe0350a0"
+    },
+    {
+      "file": "scripts/research-publication-view.test.mjs",
+      "bytes": 7656,
+      "sha256": "5f91f20ffeb6f4db0535b28ee030de53d4fbc78cd3704bb1d8e18827123124d1"
+    },
+    {
+      "file": "web/src/app/preview/research-working/[symbol]/page.tsx",
+      "bytes": 1710,
+      "sha256": "865ce2aa594f6399768074082f170b40c6683f3a163d296f7a9477a0b84c3be2"
+    },
+    {
+      "file": "web/src/app/stock/[symbol]/CandidateDetailView.tsx",
+      "bytes": 41419,
+      "sha256": "f0b844bbd9cfea0f8573917a5213b6e18a543b625491414303b8a3508a84a89f"
+    },
+    {
+      "file": "web/src/app/stock/[symbol]/PublishedResearchView.tsx",
+      "bytes": 9182,
+      "sha256": "fd06f33337fa689200163344a947d660a41fac99c8215eddf5e381a61d2b018e"
+    },
+    {
+      "file": "web/src/lib/research-publication-view-server.ts",
+      "bytes": 1019,
+      "sha256": "921f3623b7e45300085ef8fb8f6992a338c5b6da693130131e85769ee4d9e6a4"
+    },
+    {
+      "file": "web/src/lib/research-publication-view.ts",
+      "bytes": 13923,
+      "sha256": "7f00fa0b7f6841cc2dd4ce78f37cdbdafcf5cbe73687408434d82cc817089b9b"
+    }
+  ],
+  "admission": {
+    "startedAt": "2026-10-09T16:57:16Z",
+    "manualDeadline": "2026-10-09T17:27:16Z",
+    "admissionAt": "2026-10-09T16:58:24.024788+00:00",
+    "sourceHead": "847d5f18d1af3d2bb7da399bb6e188d179466b7f",
+    "sourceTree": "e7a7a6acede841e2c8675ef8e4b9196d6022547b",
+    "webTree": "05ecdfb77e1820dea0f78860ab8b6b98fc15e3b4",
+    "availableBytes": 10974744576,
+    "totalDiskBytes": 33770192896,
+    "workspaceActiveProcesses": [],
+    "pgVersion": "8.18.0",
+    "dependencyInstallPerformed": false,
+    "tempDir": "/tmp/si-apub-qhk3mbo7",
+    "tempMode": "0o700",
+    "networkPolicy": "restricted; runtime state unknown; existing proxy/CA retained; no new capability claimed",
+    "configuredEnvironmentSecretsInspected": false
+  },
+  "ci": {
+    "command": "npm run test:research-agents",
+    "counts": {
+      "tests": 759,
+      "pass": 755,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 2
+    },
+    "exitCode": 1,
+    "selectedFileCount": 74,
+    "selectedManifest": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/selected-tests.json",
+    "skips": [
+      "ok 337 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled",
+      "ok 338 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled"
+    ],
+    "viewUnitSsrResults": [
+      {
+        "name": "display derives only original published public content without altering hashed input",
+        "passed": true
+      },
+      {
+        "name": "tampering, private fields, identity conflicts and failed read never become a working draft",
+        "passed": true
+      },
+      {
+        "name": "public URL conversion occurs after original hash check; private targets are rejected",
+        "passed": true
+      },
+      {
+        "name": "negative EPS cannot acquire applicable P/E; annual periods cannot borrow future-four labels",
+        "passed": true
+      },
+      {
+        "name": "closed query and exclusive view preserve original legacy/draft choices without fallback",
+        "passed": true
+      },
+      {
+        "name": "actual shared published component SSR escapes prose and shows periods, withdrawal and accessible folded tables",
+        "passed": true
+      }
+    ],
+    "actualPgReaderPositiveCompleted": false,
+    "failure": {
+      "case": "private company reader is NULL before publication, RC-only and inaccessible to public roles",
+      "location": "scripts/research-atomic-publication-postgres.test.mjs:231:35",
+      "actualPsqlStdout": "",
+      "expected": "null",
+      "code": "ERR_ASSERTION",
+      "dependentParentFailure": "dependent_publication_case_stopped",
+      "failedCountsAreOneChildPlusItsParent": true,
+      "laterPositiveReaderCasesNotReached": true
+    },
+    "rerunPerformed": false
+  },
+  "checks": {
+    "types": {
+      "exitCode": 0
+    },
+    "lint": {
+      "exitCode": 0,
+      "errors": 0,
+      "existingWarnings": 33
+    },
+    "normalBuild": {
+      "exitCode": 1,
+      "status": "failed",
+      "failure": "Turbopack globals.css worker process local port bind Operation not permitted (os error 1)"
+    },
+    "normalBuildCapabilityCorrection": {
+      "exitCode": 1,
+      "status": "failed",
+      "sameBuildCommandParameters": true,
+      "permissionMode": "require_escalated",
+      "failure": "same EPERM persisted; no third build retry",
+      "subsequentSingleLoopbackBindProbe": {
+        "at": "2026-10-09T17:02:20.970451+00:00",
+        "capability": "single local loopback bind, no HTTP/no request",
+        "status": "bound",
+        "port": 56957,
+        "closed": true
+      },
+      "precisePersistedFailureCause": "unknown; later successful bind does not prove build worker/cached failure cause"
+    }
+  },
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "ci-research",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-09T16:58:24.061Z",
+      "completedAt": "2026-10-09T16:59:28.205Z",
+      "elapsedSeconds": 64.14381916102138,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 1184522240,
+      "observedTaskDiskPeakBytes": 1447784448,
+      "availableBeforeBytes": 10974740480,
+      "availableAfterBytes": 10974478336,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "startedAt": "2026-10-09T16:59:34.422Z",
+      "completedAt": "2026-10-09T16:59:39.921Z",
+      "elapsedSeconds": 5.498950341978343,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 712720384,
+      "observedTaskDiskPeakBytes": 1371213824,
+      "availableBeforeBytes": 10974457856,
+      "availableAfterBytes": 10974449664,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T16:59:51.720Z",
+      "completedAt": "2026-10-09T17:00:18.535Z",
+      "elapsedSeconds": 26.81442431799951,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1867280384,
+      "observedTaskDiskPeakBytes": 1371242496,
+      "availableBeforeBytes": 10974445568,
+      "availableAfterBytes": 10974420992,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T17:00:28.514Z",
+      "completedAt": "2026-10-09T17:00:46.646Z",
+      "elapsedSeconds": 18.132143323979108,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 566116352,
+      "observedTaskDiskPeakBytes": 1371258880,
+      "availableBeforeBytes": 10974416896,
+      "availableAfterBytes": 11133841408,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-escalated",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T17:01:21.680Z",
+      "completedAt": "2026-10-09T17:01:23.302Z",
+      "elapsedSeconds": 1.622451027011266,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 240836608,
+      "observedTaskDiskPeakBytes": 1211838464,
+      "availableBeforeBytes": 11133853696,
+      "availableAfterBytes": 11133235200,
+      "guardTermination": null
+    }
+  ],
+  "build": {
+    "sourceHead": "847d5f18d1af3d2bb7da399bb6e188d179466b7f",
+    "webTree": "05ecdfb77e1820dea0f78860ab8b6b98fc15e3b4",
+    "id": null,
+    "completed": false,
+    "completeCompiledManifestUnavailable": true,
+    "incompleteArtifactManifest": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/incomplete-server-file-manifest.json",
+    "currentIncompleteServerEntries": 0,
+    "previousBuildReused": false,
+    "businessHttpExecuted": false
+  },
+  "resources": {
+    "rssTargetBytes": 8589934592,
+    "sampledAggregateRssPeakBytes": 1867280384,
+    "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+    "memoryCgroupLimitBytes": 34359738368,
+    "diskReserveBytes": 8589934592,
+    "lowestRecordedAvailableBytes": 10974416896,
+    "guardTerminations": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "allHeavyStagesSequential": true
+  },
+  "cleanup": {
+    "at": "2026-10-09T17:03:41.143569+00:00",
+    "ownedProcessesRemaining": [],
+    "failedCluster": "/tmp/si-rresult-s8gijK",
+    "failedClusterStopped": true,
+    "failedClusterRetained": true,
+    "manualDeletionPerformed": false,
+    "availableBytes": 11133202432,
+    "previousRawEvidencePreserved": true
+  },
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/admission.json",
+      "bytes": 702,
+      "sha256": "8265422394ea144f8e2bd7a9049d106b26554e99578f6f58d7157d4b37823d84"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/ci-research.json",
+      "bytes": 548,
+      "sha256": "7aae915d573da8e7db5bfc7c873c1757308b254ad2a18e04689680386c0cf8ef"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/ci-research.log",
+      "bytes": 245484,
+      "sha256": "81b6d9569cc839f5336df865b0769fd241234511aa83084f292a7594253e60f5"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/ci-research.time",
+      "bytes": 800,
+      "sha256": "0d49f455868fa621eca02b786e7d8d23e7c900944c675a3b2545660ac9dd914c"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/cleanup.json",
+      "bytes": 299,
+      "sha256": "c195336e16361632f27d4ac91d46d4d5a5676b6c87cae05bfa16be2c2c8c918e"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/escalated-loopback-bind-probe.json",
+      "bytes": 169,
+      "sha256": "4449e8643d6703db9415d73eea3527f28ff40e272a4580f5ab82b2572d84ea99"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/incomplete-server-file-manifest.json",
+      "bytes": 46,
+      "sha256": "11b41ba6d8312777ef0b2809ee6704a5ec579b92e0976672e6134c4cc9c94db4"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/lint.json",
+      "bytes": 525,
+      "sha256": "b077afcef1b1bb66a0e7a895079283b5bce043bd2e7c88b228ab2c3ff5a0aa2b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/lint.log",
+      "bytes": 4753,
+      "sha256": "ad8c63f78b6e2415f7dedda610898a7df0a19c332b97e3a55d24f890724dac94"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/lint.time",
+      "bytes": 741,
+      "sha256": "9ab79d72c8fde424ceb2e5b37eb43c0d28ef10af1b4609a3ea096676d4fbf6f3"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/normal-build-escalated.json",
+      "bytes": 543,
+      "sha256": "033b1122e09990717172edabd7e4eaa1c7a5562f05e018bf6d269dba3bd7f97a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/normal-build-escalated.log",
+      "bytes": 4834,
+      "sha256": "46a01ed583ef33deca9621649b1258a0621109111073151ef3d245620c3c0fef"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/normal-build-escalated.time",
+      "bytes": 778,
+      "sha256": "60bc1ea0e78a3cf824d5c5a3e13ab7d3dde5931968b29de7cf5f9b6effe03207"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/normal-build.json",
+      "bytes": 534,
+      "sha256": "adf745c4d64aa157c851ca3e13a77581acb8da97068711b282c55358d5de67f0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/normal-build.log",
+      "bytes": 4834,
+      "sha256": "8305e7651fe951b59b1a0a79b608ab58d654cddb2c2f2b907d10530bda3a4b19"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/normal-build.time",
+      "bytes": 778,
+      "sha256": "520101762624cafc1276a24fc83a80197efc16312e0e2171398f8d8f849acfd9"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/red-cluster-inventory.json",
+      "bytes": 266,
+      "sha256": "1426850e7ea3d53c77cd60d4a30f3ccae44c9f5e17d1523dcd1e1b179870e967"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/run-check.py",
+      "bytes": 5032,
+      "sha256": "3849f190c41ae773860c3747c6e11fbe3ecf7ee2c950cc56668b06a0ca6bc7af"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/sandbox-build-red-inventory.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/selected-tests.json",
+      "bytes": 16882,
+      "sha256": "71493708b88f7b90d2e5cab58a326f9370148e4da8eb81c577ecd3105dbce62b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/si-rresult-s8gijK-failure-pg.log",
+      "bytes": 7461,
+      "sha256": "de24807ccaa906e8e21075b4569c8ded957102f6c44a8497ebacefc8410d5601"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/source-file-hashes.json",
+      "bytes": 1704,
+      "sha256": "8b96b05e8bd3b75d9b6ae37963b12ec6804bde244283cc5ea00e4345c957a2e0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/types.json",
+      "bytes": 587,
+      "sha256": "1feed5da5f448e4026d666af79bae55e167bd2a8685babdac73e8259d21c8ce7"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm-raw/types.time",
+      "bytes": 787,
+      "sha256": "d518bdbb73f5deff82769515c210bc2b038f5b5053a23da03506b48a9b28230c"
+    }
+  ],
+  "limits": [
+    "Exact847d overall acceptance is RED: CI reader assertion and unfinished normal build. Types/lint and six view units/SSR passing do not establish positive real-PG reader acceptance.",
+    "Root-reported Mac original15s timeout cause is unknown and was not retried or reclassified by this Linux run. Root successor changes were not adopted.",
+    "All fixture source/job/controller/prose/model observations are synthetic engineering inputs; no actual author/reviewer/model run, qualification, production publication or formal HTTP acceptance.",
+    "No runtime, SQL, tests, formula, clock, timeout, guard or accepted assertion changed. No installation, main merge, deployment or production DB mutation.",
+    "Only real disposable PostgreSQL tests ran through the original selected command; the two explicitly disabled native profiles remain skips.",
+    "RSS is sampled process groups/live descendants, not a complete cgroup peak. Manual time is not automated role budget evidence."
+  ]
+}

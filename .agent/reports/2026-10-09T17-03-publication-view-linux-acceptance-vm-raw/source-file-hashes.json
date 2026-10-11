@@ -1,0 +1,52 @@
+[
+  {
+    "file": "migrations/20261010_research_publication_view_v2.sql",
+    "bytes": 3783,
+    "sha256": "82a158eb59e74181fe5546c255d6afa4c51184d2639cfb52a900b22eef88dd75"
+  },
+  {
+    "file": "package.json",
+    "bytes": 32719,
+    "sha256": "656430f778a746be4740102d2e65d9bf7f09d5bb2da75df16c72b7f103e073e9"
+  },
+  {
+    "file": "scripts/research-atomic-publication-postgres.test.mjs",
+    "bytes": 39100,
+    "sha256": "2ff23b80918270788e131902dd72b06153042ebe78aec7619b3e41fa286875ef"
+  },
+  {
+    "file": "scripts/research-publication-view-fixture.mjs",
+    "bytes": 1417,
+    "sha256": "e64becdb8091078bb13644baf23132e5776decd54a20fa8d87a627cdfe0350a0"
+  },
+  {
+    "file": "scripts/research-publication-view.test.mjs",
+    "bytes": 7656,
+    "sha256": "5f91f20ffeb6f4db0535b28ee030de53d4fbc78cd3704bb1d8e18827123124d1"
+  },
+  {
+    "file": "web/src/app/preview/research-working/[symbol]/page.tsx",
+    "bytes": 1710,
+    "sha256": "865ce2aa594f6399768074082f170b40c6683f3a163d296f7a9477a0b84c3be2"
+  },
+  {
+    "file": "web/src/app/stock/[symbol]/CandidateDetailView.tsx",
+    "bytes": 41419,
+    "sha256": "f0b844bbd9cfea0f8573917a5213b6e18a543b625491414303b8a3508a84a89f"
+  },
+  {
+    "file": "web/src/app/stock/[symbol]/PublishedResearchView.tsx",
+    "bytes": 9182,
+    "sha256": "fd06f33337fa689200163344a947d660a41fac99c8215eddf5e381a61d2b018e"
+  },
+  {
+    "file": "web/src/lib/research-publication-view-server.ts",
+    "bytes": 1019,
+    "sha256": "921f3623b7e45300085ef8fb8f6992a338c5b6da693130131e85769ee4d9e6a4"
+  },
+  {
+    "file": "web/src/lib/research-publication-view.ts",
+    "bytes": 13923,
+    "sha256": "7f00fa0b7f6841cc2dd4ce78f37cdbdafcf5cbe73687408434d82cc817089b9b"
+  }
+]

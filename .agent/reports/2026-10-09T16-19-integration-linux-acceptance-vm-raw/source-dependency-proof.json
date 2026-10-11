@@ -1,0 +1,14 @@
+{
+  "subject": "27a7a9bc23fa42e25e02ef285ea22f175d13adc1",
+  "tree": "18d860bee37eff27b2d90e33a580aea8130f71cb",
+  "webTree": "2759d97914a5d3af4227dd51c472d93d2c0135dd",
+  "gitStatusBeforeReceipt": [],
+  "dependencyVersions": {
+    "pg": "8.18.0",
+    "next": "16.3.8"
+  },
+  "dependencyLockHashes": {
+    "package-lock.json": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "web/package-lock.json": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516"
+  }
+}

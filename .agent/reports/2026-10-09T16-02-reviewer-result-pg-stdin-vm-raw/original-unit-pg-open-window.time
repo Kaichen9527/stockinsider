@@ -1,0 +1,23 @@
+	Command being timed: "node --experimental-strip-types --test --test-reporter=tap --test-concurrency=1 scripts/research-reviewer-result.test.mjs scripts/research-reviewer-result-postgres.test.mjs"
+	User time (seconds): 9.93
+	System time (seconds): 1.98
+	Percent of CPU this job got: 55%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:21.36
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 148412
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 790929
+	Voluntary context switches: 9004
+	Involuntary context switches: 1634
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 56
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

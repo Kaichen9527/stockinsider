@@ -1,0 +1,314 @@
+{
+  "schemaVersion": "bounded-linux-evidence-v1",
+  "scope": "Exact approved fixture correction; six original script files and six formerly PG-path-related PCR cases only",
+  "sourceHead": "5e3ee67bc2afe07ac7653743d227318aed77f6d8",
+  "sourceTree": "ab842cf0346780dd9a6224b515af65edf1e52286",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "evidenceBranch": "codex/research-io-pg-linux-evidence-oct11",
+  "manualEngineering": {
+    "startedAt": "2026-10-11T04:32:38Z",
+    "deadlineAt": "2026-10-11T05:02:38Z",
+    "sealedAt": "2026-10-11T04:41:39.346225+00:00",
+    "elapsedSeconds": 541.346225,
+    "productRoleBudgetEvidence": false
+  },
+  "runtime": {
+    "manualStart": "2026-10-11T04:32:38Z",
+    "manualDeadline": "2026-10-11T05:02:38Z",
+    "admittedAt": "2026-10-11T04:35:25.854070+00:00",
+    "sourceHead": "5e3ee67bc2afe07ac7653743d227318aed77f6d8",
+    "sourceTree": "ab842cf0346780dd9a6224b515af65edf1e52286",
+    "node": "22.14.0",
+    "npm": "11.9.0",
+    "umask": "0077",
+    "PG": {
+      "initdb": {
+        "exit": 0,
+        "stdout": "initdb (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+        "stderr": ""
+      },
+      "pg_ctl": {
+        "exit": 0,
+        "stdout": "pg_ctl (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+        "stderr": ""
+      },
+      "psql": {
+        "exit": 0,
+        "stdout": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+        "stderr": ""
+      },
+      "postgres": {
+        "exit": 0,
+        "stdout": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+        "stderr": ""
+      }
+    },
+    "libraryNotFound": false,
+    "libraryPaths": "existing /lib/x86_64-linux-gnu and system loader, no LD_LIBRARY_PATH override needed",
+    "PATHAddedPG": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "dependencyInstall": false,
+    "diskAvailableBytes": 10081718272,
+    "fullPCRNotAdmitted": true,
+    "browserDefaultExecutableMissing": "/home/agent/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome",
+    "oldBrowserDetailsUnrecoverableFromRetainedLastRunIDs": true
+  },
+  "environmentRepair": {
+    "PATH": "/workspace/.tools/node22/node_modules/.bin:/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/usr/bin:/bin",
+    "reason": "Prior isolated environment omitted existing PG17 binaries; current four tools execute and ldd reports no missing library. No new dependencies installed.",
+    "umask": "0077",
+    "proxyAndCAPreserved": true,
+    "secretValuesExported": false,
+    "LD_LIBRARY_PATHOverride": false,
+    "clockPreload": false,
+    "runtimeSourceOrGuardChanges": false,
+    "testFixtureChange": "Root-approved exact source explicitly chmods negative fixture to 0644 despite umask0077. No local test edits."
+  },
+  "originalFailures": {
+    "source": "4ff224baa6e00e73198d9f2cc8b29b2045374744",
+    "evidenceHead": "caa013cdb7b6a933acc7734ce90021cb2c527cab",
+    "sixFiles": {
+      "total": 81,
+      "pass": 80,
+      "fail": 1,
+      "skip": 0
+    },
+    "canonicalPCR": {
+      "total": 155,
+      "pass": 147,
+      "fail": 8,
+      "skip": 0
+    },
+    "parentPCRRaw": {
+      "originalPath": "/tmp/si-io-4ff-5pgx05n4/product-correctness-first-suite.stdout",
+      "bytes": 92746,
+      "sha256": "e5f33a4e3737bdad6c0fce46d605e83c1095c464c136a2d1163296327d7b2654"
+    },
+    "originalBrowserChildren": "Parent TAP retains execFileSync failure without full child stdout. Last-run JSON retains two failed IDs only; no detailed report/traces retained. Historical browser root causes remain unknown.",
+    "redInventoryFile": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/old-red-inventory.json",
+    "historicalOutputsNotOverwritten": true
+  },
+  "stages": [
+    {
+      "stage": "research-six-fixed",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-bounded-file.test.mjs",
+        "scripts/research-source-controller.test.mjs",
+        "scripts/research-cloud-controller.test.mjs",
+        "scripts/research-source-priority-consumer.test.mjs",
+        "scripts/research-deep-controller.test.mjs",
+        "scripts/research-discovery-relay-prepare.test.mjs"
+      ],
+      "startedAt": "2026-10-11T04:35:58.023806+00:00",
+      "endedAt": "2026-10-11T04:36:13.901813+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 15.878015017020516,
+      "sampledAggregatePeakRssBytes": 496799744,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10081734656,
+      "diskAvailableAfterBytes": 10081734656,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "counts": {
+        "total": 81,
+        "pass": 81,
+        "fail": 0,
+        "skip": 0
+      }
+    },
+    {
+      "stage": "pg-selected-six",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^(acceptance PCR-022|V3\\.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material|V3\\.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry|V314-009 official calendar and backfill coverage remain typed and non-synthetic|V314-011 every approved profile/provider has one honest terminal outcome|V314-012 migration persists redacted diagnostics append-only with recorded time)$",
+        "scripts/opportunity-v3/product-correctness.test.mjs",
+        "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+        "scripts/opportunity-v3/v314-actionability-recovery.test.mjs"
+      ],
+      "startedAt": "2026-10-11T04:36:47.676439+00:00",
+      "endedAt": "2026-10-11T04:38:26.097056+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 98.42062188399723,
+      "sampledAggregatePeakRssBytes": 355291136,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10081734656,
+      "diskAvailableAfterBytes": 10081734656,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "counts": {
+        "total": 6,
+        "pass": 6,
+        "fail": 0,
+        "skip": 0
+      }
+    }
+  ],
+  "fullCanonicalPCRExecuted": false,
+  "selection": "Exactly six names validated against original 155 test-name inventory. Unselected cases are not counted as skips or passes. Original assertions and fixtures preserved.",
+  "browser": {
+    "newProbe": "Single installed Playwright capability launch requested chromiumSandbox:true, no application browser test/network/install.",
+    "result": "Executable missing: /home/agent/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell",
+    "historicalFailureCauseProven": false,
+    "originalBrowserCasesRerun": false,
+    "browserSandboxRemoved": false,
+    "installAttempted": false,
+    "decision": "Two browser failures have no remediable installed capability under no-install scope, so full PCR not admitted."
+  },
+  "retainedBuild": {
+    "buildPerformedThisTask": false,
+    "normalBuildPassClaim": false,
+    "nestedBuildPassClaim": false,
+    "retainedBuildId": "K6nIvIx_thLgh-ArDgucq",
+    "buildIdFile": "/workspace/cloud-reviewer-result-http-vm-oct09/web/.next/BUILD_ID",
+    "fileIdentity": {
+      "bytes": 21,
+      "sha256": "56804c9e226c0140012cef2cff93de40a68ba59595868444ed134230fa53cf48"
+    },
+    "mtimeUtc": "2026-10-11T04:12:06.194909+00:00",
+    "usage": "PCR-022 uses retained existing compiled artifact as defined by unchanged original performance harness; no new build or compiled manifest acceptance claimed."
+  },
+  "resources": {
+    "sampledAggregatePeakRssBytes": 496799744,
+    "rssLimitBytes": 8589934592,
+    "diskReserveBytes": 8589934592,
+    "minimumObservedDiskAvailableBytes": 10081730560,
+    "singleHeavyWork": true,
+    "samplingLimitations": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes"
+  },
+  "cleanup": {
+    "checkedAt": "2026-10-11T04:41:39.343334+00:00",
+    "activeRelevantProcesses": [],
+    "historicalDefunctProcessCountsExcludedFromActive": {
+      "postgres": 683,
+      "node": 86
+    },
+    "stageObservedChildrenRemaining": [],
+    "stoppedOwnedClusters": true,
+    "cleanupBasis": "Both stage wrappers observed no remaining descendants; /proc final inventory has no live Node/PostgreSQL/PostgREST/npm/compiler processes. Tests execute original teardown. No additional removal or global prune.",
+    "retainedUniqueEvidence": true,
+    "credentialFixtureDirectoriesNotExported": true,
+    "diskAvailableBytes": 10081730560
+  },
+  "rawFiles": [
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/admission.json",
+      "bytes": 1442,
+      "sha256": "6543294a0fcdf1ecede784958dd503e4a8c1c063d95b1a03380c7686a1461748"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/browser-capability.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/browser-capability.stdout",
+      "bytes": 1222,
+      "sha256": "9ef627167e2fb37bae7aa35f8bd659c63d98956cc4deed4162936bc515457abd"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/cleanup.json",
+      "bytes": 610,
+      "sha256": "9970779005121dcd50c7f8c51e476dc84c6fa548d017793effc69f8d7bc52823"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/old-red-inventory.json",
+      "bytes": 1940,
+      "sha256": "160fb0e77f0988f10058419876704c5331132a69b03a86804ceed9baad30a7e4"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/pg-selected-pattern-final.txt",
+      "bytes": 481,
+      "sha256": "edb5ac69b51ad0c2a2839c187ad250e7499b646ec3d64fd05e4249b359ee687c"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/pg-selected-pattern.txt",
+      "bytes": 481,
+      "sha256": "edb5ac69b51ad0c2a2839c187ad250e7499b646ec3d64fd05e4249b359ee687c"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/pg-selected-six.json",
+      "bytes": 1417,
+      "sha256": "5b2a193981188f2cc6d234940b8788d6cbdb315e150371c0bb9172fae408f6cb"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/pg-selected-six.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/pg-selected-six.stdout",
+      "bytes": 2020,
+      "sha256": "f76bcd89503d01c7d577fbb7a1ff89c240d601a5a563816f01f102c8f9e7daaf"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/pg-selected-six.time",
+      "bytes": 1498,
+      "sha256": "5d97fcfd8f851130ee1320771e3e5b0919057e8e8b287c7a723a6689ebbca7c0"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/postgres-ldd.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/postgres-ldd.stdout",
+      "bytes": 2354,
+      "sha256": "2af5643a73f321ec8cf155aed0fccda78efbb299cf727b1659dc8796406cfea8"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/research-six-fixed.json",
+      "bytes": 1004,
+      "sha256": "b033a96124fc2fcb40d26dc9e7c1304f3a5d8e6e040b4e90d11b7b2c8ae05849"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/research-six-fixed.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/research-six-fixed.stdout",
+      "bytes": 21437,
+      "sha256": "9fa4571d57e62a95858584f00152f60e2f1619fee405cbc7dd5d7651d21746ae"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/research-six-fixed.time",
+      "bytes": 1075,
+      "sha256": "96004cf0c9884b7ba631bcd02c1d1fe2ebba5d11e9403ed51c5f1667e7f6ba6d"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/run.py",
+      "bytes": 3330,
+      "sha256": "3825c62ea0014a41c48ecce6b229f4330ca4d909092389c4b87fc879d7dcfe24"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T04-42-release-io-pg-linux-vm-raw/source-inventory.json",
+      "bytes": 2831,
+      "sha256": "4dea9f490c2654cdcc270e13dc293d78b25c369c55498d2d2c42fad4f45caeef"
+    }
+  ],
+  "rawFileCount": 19,
+  "rawTotalBytes": 43142,
+  "limitations": [
+    "Full canonical PCR/browser validation remains incomplete.",
+    "Six selected parents include actual isolated PG contract execution; parent TAP does not expose all child test counts or retain removed internal cluster logs.",
+    "No fresh normal/nested build PASS claimed from retained BUILD_ID.",
+    "This is synthetic isolated engineering acceptance, not actual model dispatch, signed/protected authority, formal strategy, production or deployment approval."
+  ],
+  "flags": {
+    "actualModelDispatched": false,
+    "productionWrites": false,
+    "mergedMain": false,
+    "deployed": false,
+    "protectedPass": false
+  }
+}

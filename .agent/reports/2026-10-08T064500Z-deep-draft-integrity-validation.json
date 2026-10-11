@@ -1,0 +1,366 @@
+{
+  "schemaVersion": "research-deep-draft-integrity-validation-v1",
+  "recordedAt": "2026-10-08T06:51:54.962030+00:00",
+  "branch": "codex/deep-private-draft-oct08",
+  "pullRequest": "https://github.com/Kaichen9527/stockinsider/pull/304",
+  "priorCodeCommit": "06dc3cd41dd6d6ee64381c507ac15c60ca86229d",
+  "testedSuccessorCodeCommit": "1243ee1313ac1d6ff3995ff5920cc2c3fad269e8",
+  "nodeVersion": "v22.14.0",
+  "syntheticDevelopmentOnly": true,
+  "productionImported": false,
+  "modelCalls": 0,
+  "programFiles": [
+    {
+      "path": "scripts/research-deep-draft-controller.mjs",
+      "bytes": 12729,
+      "sha256": "b11aeea6286ac9b63dbbf7a00a622a9b1b26e7d1fc1ab32493acc8d40d91c07f",
+      "priorSha256": "ecbda23ab683532b17cb9b05c729e3378b0d17f9000356dcbeed69f6787f1031"
+    },
+    {
+      "path": "scripts/research-deep-draft-controller.test.mjs",
+      "bytes": 18626,
+      "sha256": "b776103f94c5b0d1f7060b9eb663b8fee5d74c1b21ae2ce9eea22383a15ef748",
+      "priorSha256": "7b93480c80feb7625da13741499e81ac670172fe4359321da22fd98b84edc2ff"
+    }
+  ],
+  "preFix": {
+    "program": "unchanged exact06dc3cd code; only DF14/DF15 added before reproduction",
+    "tests": 2,
+    "pass": 0,
+    "fail": 2,
+    "skip": 0,
+    "assertion": "Missing expected rejection",
+    "cases": [
+      "DF14 staged draft append before_commit",
+      "DF15 output rename/replacement after prepared-input.json"
+    ],
+    "originalLog": "TAP version 13\n# (node:23840) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time\n# (Use `node --trace-warnings ...` to show where the warning was created)\n# (node:23840) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-deep-private-draft-oct08/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.\n# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.\n# To eliminate this warning, add \"type\": \"module\" to /workspace/cloud-deep-private-draft-oct08/web/package.json.\n# Subtest: DF14 rewritten staged draft before commit must not be reported persisted\nnot ok 1 - DF14 rewritten staged draft before commit must not be reported persisted\n  ---\n  duration_ms: 48.509505\n  location: '/workspace/cloud-deep-private-draft-oct08/scripts/research-deep-draft-controller.test.mjs:142:1'\n  failureType: 'testCodeFailure'\n  error: 'Missing expected rejection.'\n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n  operator: 'rejects'\n  stack: |-\n    async file:///workspace/cloud-deep-private-draft-oct08/scripts/research-deep-draft-controller.test.mjs:143:3\n    async fixture (file:///workspace/cloud-deep-private-draft-oct08/scripts/research-deep-draft-controller.test.mjs:56:5)\n    async Test.run (node:internal/test_runner/test:980:9)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)\n  ...\n# Subtest: DF15 replaced output directory must reject and never write into replacement\nnot ok 2 - DF15 replaced output directory must reject and never write into replacement\n  ---\n  duration_ms: 49.633421\n  location: '/workspace/cloud-deep-private-draft-oct08/scripts/research-deep-draft-controller.test.mjs:148:1'\n  failureType: 'testCodeFailure'\n  error: 'Missing expected rejection.'\n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n  operator: 'rejects'\n  stack: |-\n    async file:///workspace/cloud-deep-private-draft-oct08/scripts/research-deep-draft-controller.test.mjs:149:3\n    async fixture (file:///workspace/cloud-deep-private-draft-oct08/scripts/research-deep-draft-controller.test.mjs:56:5)\n    async Test.run (node:internal/test_runner/test:980:9)\n    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 0\n# fail 2\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 284.22115\n"
+  },
+  "postFix": {
+    "draftCases": 17,
+    "newCases": [
+      "DF14",
+      "DF15",
+      "DF16",
+      "DF17"
+    ],
+    "focused": {
+      "tests": 114,
+      "pass": 114,
+      "fail": 0,
+      "skip": 0
+    },
+    "integration": {
+      "tests": 346,
+      "pass": 346,
+      "fail": 0,
+      "skip": 0,
+      "postgres": "cached PG17 isolated temporary clusters"
+    },
+    "types": "pass",
+    "lint": {
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 33
+    },
+    "normalBuild": "pass with existing Next.js build cache",
+    "checks": {
+      "pre-fix": {
+        "stage": "pre-fix",
+        "command": [
+          "node",
+          "scripts/run-node22.js",
+          "--experimental-strip-types",
+          "--test",
+          "--test-name-pattern=DF14|DF15",
+          "scripts/research-deep-draft-controller.test.mjs"
+        ],
+        "startedAt": "2026-10-08T06:45:24.365Z",
+        "completedAt": "2026-10-08T06:45:24.858Z",
+        "elapsedSeconds": 0.49265593399468344,
+        "exitCode": 1,
+        "sampledAggregateRssPeakBytes": 134385664,
+        "observedTaskDiskPeakBytes": 1270276096,
+        "availableBeforeBytes": 28746756096,
+        "availableAfterBytes": 28746747904,
+        "guardTermination": null,
+        "gnuTimeMaxRssBytes": 95178752
+      },
+      "post-fix-focused": {
+        "stage": "post-fix-focused",
+        "command": [
+          "node",
+          "scripts/run-node22.js",
+          "--experimental-strip-types",
+          "--test",
+          "scripts/research-deep-draft-controller.test.mjs",
+          "scripts/research-deep-controller.test.mjs",
+          "scripts/research-deep-job-context-route.test.mjs",
+          "web/src/lib/research-deep-claim-context.test.ts",
+          "web/src/lib/research-deep-article.test.ts",
+          "web/src/lib/research-source-association.test.ts"
+        ],
+        "startedAt": "2026-10-08T06:46:40.396Z",
+        "completedAt": "2026-10-08T06:46:50.489Z",
+        "elapsedSeconds": 10.09292167899548,
+        "exitCode": 0,
+        "sampledAggregateRssPeakBytes": 713596928,
+        "observedTaskDiskPeakBytes": 1270308864,
+        "availableBeforeBytes": 28746739712,
+        "availableAfterBytes": 28746702848,
+        "guardTermination": null,
+        "gnuTimeMaxRssBytes": 649965568
+      },
+      "final-focused": {
+        "stage": "final-focused",
+        "command": [
+          "node",
+          "scripts/run-node22.js",
+          "--experimental-strip-types",
+          "--test",
+          "scripts/research-deep-draft-controller.test.mjs",
+          "scripts/research-deep-controller.test.mjs",
+          "scripts/research-deep-job-context-route.test.mjs",
+          "web/src/lib/research-deep-claim-context.test.ts",
+          "web/src/lib/research-deep-article.test.ts",
+          "web/src/lib/research-source-association.test.ts"
+        ],
+        "startedAt": "2026-10-08T06:48:15.383Z",
+        "completedAt": "2026-10-08T06:48:25.941Z",
+        "elapsedSeconds": 10.558261009005946,
+        "exitCode": 0,
+        "sampledAggregateRssPeakBytes": 714190848,
+        "observedTaskDiskPeakBytes": 1270378496,
+        "availableBeforeBytes": 28746698752,
+        "availableAfterBytes": 28746661888,
+        "guardTermination": null,
+        "gnuTimeMaxRssBytes": 653336576
+      },
+      "integration": {
+        "stage": "integration",
+        "command": [
+          "npm",
+          "run",
+          "test:research-agents"
+        ],
+        "startedAt": "2026-10-08T06:48:25.971Z",
+        "completedAt": "2026-10-08T06:48:46.228Z",
+        "elapsedSeconds": 20.25645191699732,
+        "exitCode": 0,
+        "sampledAggregateRssPeakBytes": 921706496,
+        "observedTaskDiskPeakBytes": 1352404992,
+        "availableBeforeBytes": 28746657792,
+        "availableAfterBytes": 28746010624,
+        "guardTermination": null,
+        "gnuTimeMaxRssBytes": 485277696
+      },
+      "types": {
+        "stage": "types",
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "startedAt": "2026-10-08T06:48:46.257Z",
+        "completedAt": "2026-10-08T06:48:49.408Z",
+        "elapsedSeconds": 3.15041890500288,
+        "exitCode": 0,
+        "sampledAggregateRssPeakBytes": 548368384,
+        "observedTaskDiskPeakBytes": 1271029760,
+        "availableBeforeBytes": 28746006528,
+        "availableAfterBytes": 28744675328,
+        "guardTermination": null,
+        "gnuTimeMaxRssBytes": 516079616
+      },
+      "lint": {
+        "stage": "lint",
+        "command": [
+          "npm",
+          "run",
+          "lint"
+        ],
+        "startedAt": "2026-10-08T06:48:49.441Z",
+        "completedAt": "2026-10-08T06:49:10.850Z",
+        "elapsedSeconds": 21.408125153000583,
+        "exitCode": 0,
+        "sampledAggregateRssPeakBytes": 1210773504,
+        "observedTaskDiskPeakBytes": 1272365056,
+        "availableBeforeBytes": 28744671232,
+        "availableAfterBytes": 28728500224,
+        "guardTermination": null,
+        "gnuTimeMaxRssBytes": 1170980864
+      },
+      "build": {
+        "stage": "build",
+        "command": [
+          "npm",
+          "run",
+          "build"
+        ],
+        "startedAt": "2026-10-08T06:49:10.877Z",
+        "completedAt": "2026-10-08T06:49:16.663Z",
+        "elapsedSeconds": 5.786537606996717,
+        "exitCode": 0,
+        "sampledAggregateRssPeakBytes": 1213157376,
+        "observedTaskDiskPeakBytes": 1288536064,
+        "availableBeforeBytes": 28728496128,
+        "availableAfterBytes": 28727500800,
+        "guardTermination": null,
+        "gnuTimeMaxRssBytes": 637636608
+      }
+    }
+  },
+  "fixes": [
+    "Opened directory fd binds exclusive file writes and disk reads to original inode via Linux procfs. Assert unchanged named device/inode/private mode around operations.",
+    "Before commit: reread all actual staged output bytes and original file inode/ctime identities.",
+    "After fsynced marker: repeat staged validation and shared committed-manifest disk checks before persisted:true.",
+    "Restart/duplicate reconstruction retains pinned directory fd and rechecks committed disk bytes before success."
+  ],
+  "resourceMeasurement": {
+    "method": "GNU time -v per-process maximum RSS plus 100ms process-group aggregate VmRSS sampling, 1s du worktree+private validation temp and statvfs free bytes. Sampling can miss transient peaks.",
+    "memoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "availableBeforeBytes": 28746756096,
+    "availableAfterBytes": 28727427072,
+    "sampledAggregateRssPeakBytes": 1213157376,
+    "taskDiskPeakBytes": 1352404992,
+    "workspaceResidentDuBytes": 4459950080,
+    "worktreeDuBytes": 1271263232,
+    "projectDiskQuota": "unknown; visible filesystem is not guaranteed project quota",
+    "guardTermination": null,
+    "vpsOperation": false
+  },
+  "logs": [
+    {
+      "name": "build.json",
+      "bytes": 415,
+      "sha256": "daf2ab68e5313ec2cd22b6a98e1b1b58befa48c97b13ae6f1a1433df441e65f7"
+    },
+    {
+      "name": "build.log",
+      "bytes": 6411,
+      "sha256": "4e7ddf09d27ce4fdee48e3765d2f9bcaf5fb54e232fb4bbdd4a0a2ac2c456f26"
+    },
+    {
+      "name": "build.time",
+      "bytes": 746,
+      "sha256": "518c5219d397f2bea770ee0c7d39756a202e67b3c28b6a01836398986f83c37f"
+    },
+    {
+      "name": "final-focused.json",
+      "bytes": 796,
+      "sha256": "ba7776a29a1d836319151da4c741ae6719f47cfa81279d66095f9cff954e941b"
+    },
+    {
+      "name": "final-focused.log",
+      "bytes": 30877,
+      "sha256": "2d882012cb358567ef951a73bf5ca669608abb387eff46ca3b80db67986dc2e6"
+    },
+    {
+      "name": "final-focused.time",
+      "bytes": 1068,
+      "sha256": "af5b51fcda9955a5d28be1ee30cf7553c2e97fe7822dfb87919b0fe820b6278f"
+    },
+    {
+      "name": "integration.json",
+      "bytes": 435,
+      "sha256": "a1f95ffa388b521e07f47b34b82d19700046aa15593068207957bc8c7280033e"
+    },
+    {
+      "name": "integration.log",
+      "bytes": 99776,
+      "sha256": "24d50aa911b484e2a351caa729d07bdb7d515594ffe2f2a91c94ef4a13a8653c"
+    },
+    {
+      "name": "integration.time",
+      "bytes": 762,
+      "sha256": "84dd9eb890e2fd9ab79df121ba23e64d57173d4461a8f21eb91e48f4e0a83b9f"
+    },
+    {
+      "name": "lint.json",
+      "bytes": 414,
+      "sha256": "77bc167593a56dc933d35eca2acc909929f2b62bbb65cf5b88085348cfd6e7fb"
+    },
+    {
+      "name": "lint.log",
+      "bytes": 4718,
+      "sha256": "d9a0f4f2df46ff95c55cd1737094c6c161f0371f9b3ca7d639a5755573c144b9"
+    },
+    {
+      "name": "lint.time",
+      "bytes": 744,
+      "sha256": "760550a466016be275735f7b322ee5830c85f64d1905a21f1754dfdda16b00ae"
+    },
+    {
+      "name": "post-fix-focused.json",
+      "bytes": 798,
+      "sha256": "280123e727d3a395382eed902f64d163a620ed9baed3b8502dcd84c83aeac1ed"
+    },
+    {
+      "name": "post-fix-focused.log",
+      "bytes": 29829,
+      "sha256": "7a326a5580fd0e436b0aa43c31a4e0a8110e96cd98db8d0b9cbd9bb9bd479a21"
+    },
+    {
+      "name": "post-fix-focused.time",
+      "bytes": 1067,
+      "sha256": "fac3f0d3b6c2fcbbb798af0582463f4388d4b01fd4d4cac305314d643b165ad9"
+    },
+    {
+      "name": "pre-fix.json",
+      "bytes": 564,
+      "sha256": "1870dce4fe841759df5afdf64403374b4f782ed54ab4a6048083edd3bd3d94f3"
+    },
+    {
+      "name": "pre-fix.log",
+      "bytes": 2435,
+      "sha256": "1763a287d8e55e9fee0974b00006d15b4fde03dc1bd2da6a881d9342dc205129"
+    },
+    {
+      "name": "pre-fix.time",
+      "bytes": 900,
+      "sha256": "9980394d2967264557d8974c28f90c2928daf0b2c38db7a9dd00b235f0cfa825"
+    },
+    {
+      "name": "types.json",
+      "bytes": 417,
+      "sha256": "91c71d479b714ef595748a053970cd443551766464da0fd5dc175749ceae3254"
+    },
+    {
+      "name": "types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "types.time",
+      "bytes": 744,
+      "sha256": "e00e7d1fb86bd8b17e59e17f017bb502e1408849de042ad9908fa6f0f88cb61e"
+    }
+  ],
+  "externalProtectedGateStatus": {
+    "reportedBy": "source thread delegation",
+    "head": "50d28efcaf179fa197bec2ce5c1a2e37dd6467f7",
+    "runId": "37739252502",
+    "bootstrap": "success",
+    "requirementsArchitectureExactReview": "prepare failed: remote ref not found",
+    "missingRef": "refs/heads/evidence/source-led-opportunity-v3-exact-review-50d28efcaf179fa197bec2ce5c1a2e37dd6467f7",
+    "productModelProtectedCodeGatesRan": false,
+    "appliesToSuccessorHead": false,
+    "evidenceFabricated": false,
+    "gatePolicyModified": false
+  },
+  "independentReview": "further review pending; no approval claimed",
+  "sourceFollowups": {
+    "path": "docs/operations/2026-10-08/deep-private-draft-relay-followups.json",
+    "sha256": "dbbd16297a11bf41b6bfd3349f47b526617917641164d9ee65f62daeef1c7758",
+    "acquisition": "root hosted reader only; no VM fetch or official import",
+    "pdfRetry": "4-page metadata fetched but table unreadable; first HTTP500 preserved",
+    "rumorAndPatent": "EDN/PCGamer same root, patent technical text is not commercial commitment, grant-version failure preserved"
+  },
+  "limitations": [
+    "Linux procfs required; non-Linux compatibility not verified, no weaker fallback.",
+    "No power-loss or cross-task volume persistence verification.",
+    "No live authenticated lease fence/formal handoff, paid model work, independent review approval, real company research or production roundtrip.",
+    "Protected run on prior50d28ef is not a successor-head gate result."
+  ]
+}

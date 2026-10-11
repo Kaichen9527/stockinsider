@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "public-financial-relay-local-arithmetic-validation-v1",
+  "checkedAt": "2026-10-08T06:54:31.391090+00:00",
+  "sourceObservedAt": "2026-10-08 06:52:48 UTC",
+  "sourceObserver": "root-hosted-web-reader",
+  "inputSha256": "d5d9d84bd0ef94530452bcc296df709e506cd4318c10f984216a56565f983be7",
+  "acquisition": "root hosted-reader relay; VM local arithmetic only",
+  "vmHttpAcquisition": false,
+  "productionImported": false,
+  "financialSourceVerifiedByVm": false,
+  "completeResearch": false,
+  "cases": [
+    {
+      "name": "24 continuous unique ordered months",
+      "pass": true,
+      "detail": {
+        "first": "2024-10",
+        "last": "2026-09",
+        "count": 24
+      }
+    },
+    {
+      "name": "declared consolidated TWD million integer amounts",
+      "pass": true,
+      "detail": "Relay shape/unit checked; original source columns and values were not fetched by VM."
+    },
+    {
+      "name": "retain current observation and unknown mutable publication time",
+      "pass": true,
+      "detail": "No inferred timestamp or period-end PIT availability."
+    },
+    {
+      "name": "cumulative 2026-Jan-Sep",
+      "pass": true,
+      "detail": {
+        "period": "2026-Jan-Sep",
+        "monthlySum": 206797,
+        "reportedCumulative": 206798,
+        "reportedBy": "current relay caveat",
+        "delta": -1,
+        "absoluteToleranceTwdMillion": 1,
+        "exactMatch": false,
+        "interpretation": "Within explicit rounding tolerance; not proof rounding is the cause."
+      }
+    },
+    {
+      "name": "cumulative 2026-Jan-Aug",
+      "pass": true,
+      "detail": {
+        "period": "2026-Jan-Aug",
+        "monthlySum": 183393,
+        "reportedCumulative": 183394,
+        "reportedBy": "earlier public preparation relay AUO20260909",
+        "delta": -1,
+        "absoluteToleranceTwdMillion": 1,
+        "exactMatch": false,
+        "interpretation": "Within explicit rounding tolerance; not proof rounding is the cause."
+      }
+    },
+    {
+      "name": "gross profit",
+      "pass": true,
+      "detail": {
+        "computed": 7525,
+        "reported": 7525,
+        "delta": 0,
+        "unit": "TWD_million",
+        "tolerance": 0
+      }
+    },
+    {
+      "name": "operating profit",
+      "pass": true,
+      "detail": {
+        "computed": -1893,
+        "reported": -1893,
+        "delta": 0,
+        "unit": "TWD_million",
+        "tolerance": 0
+      }
+    },
+    {
+      "name": "pretax",
+      "pass": true,
+      "detail": {
+        "computed": 2889,
+        "reported": 2889,
+        "delta": 0,
+        "unit": "TWD_million",
+        "tolerance": 0
+      }
+    },
+    {
+      "name": "net profit",
+      "pass": true,
+      "detail": {
+        "computed": 2923,
+        "reported": 2923,
+        "delta": 0,
+        "unit": "TWD_million",
+        "tolerance": 0
+      }
+    },
+    {
+      "name": "profit attribution",
+      "pass": true,
+      "detail": {
+        "computed": 2923,
+        "reported": 2923,
+        "delta": 0,
+        "unit": "TWD_million",
+        "tolerance": 0
+      }
+    },
+    {
+      "name": "Q425 monthly to bridge revenue",
+      "pass": true,
+      "detail": {
+        "computed": 70142,
+        "reported": 70142,
+        "delta": 0,
+        "unit": "TWD_million",
+        "tolerance": 0
+      }
+    },
+    {
+      "name": "basic EPS round to two decimals",
+      "pass": true,
+      "detail": {
+        "computedFromRoundedReportedAmounts": "0.3818735921558235060288856499",
+        "rounded": "0.38",
+        "reported": 0.38,
+        "unit": "TWD_per_share",
+        "precision": ".01",
+        "note": "Weighted shares are already reported in millions; no extra 1e6 factor."
+      }
+    }
+  ],
+  "counts": {
+    "pass": 12,
+    "fail": 0,
+    "skip": 0
+  },
+  "quarterlyMonthlySumsTwdMillion": {
+    "2024-Q4": 68692,
+    "2025-Q1": 72102,
+    "2025-Q2": 69237,
+    "2025-Q3": 69907,
+    "2025-Q4": 70142,
+    "2026-Q1": 69031,
+    "2026-Q2": 70890,
+    "2026-Q3": 66876
+  },
+  "annualCoverage": {
+    "2024": {
+      "sumTwdMillion": 68692,
+      "monthCount": 3,
+      "fullCalendarYear": false
+    },
+    "2025": {
+      "sumTwdMillion": 281388,
+      "monthCount": 12,
+      "fullCalendarYear": true
+    },
+    "2026": {
+      "sumTwdMillion": 206797,
+      "monthCount": 9,
+      "fullCalendarYear": false
+    }
+  },
+  "remaining": [
+    "Check official source values/columns and mutable-document publication lineage by actual acquisition; no historical PIT admission from this relay.",
+    "Rounding differences are retained; do not rewrite monthly values or force exact cumulative equality.",
+    "Net nonoperating income4782 is not automatically oneoff.",
+    "ADLINK consolidation scope affects growth comparability; no comparable growth computed.",
+    "2Q26 financial bridge still needs actual VM render/table verification.",
+    "Eight quarterly financial statements and full research remain incomplete."
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "bounded-publication-view-maker-checkpoint-v1",
+  "recordedAt": "2026-10-09T16:57:31.910420+00:00",
+  "subject": "847d5f18d1af3d2bb7da399bb6e188d179466b7f",
+  "webTree": "05ecdfb77e1820dea0f78860ab8b6b98fc15e3b4",
+  "adapterAndActualComponentSSR": {
+    "pass": 6,
+    "fail": 0,
+    "skip": 0
+  },
+  "types": "pass",
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 33
+  },
+  "actualPostgres": {
+    "state": "pending Linux acceptance",
+    "firstRed": "reader not reached: minimal synthetic company fixture lacked original roster SELECT, now restored only in fixture",
+    "secondRed": "original input sealing psql15s timeout before new reader cases; root cause unknown"
+  },
+  "independentAtomic77aExpiryOnly": {
+    "pass": 2,
+    "fail": 0,
+    "skip": 0,
+    "attribution": "existing astra_publication_review agent unsigned scoped TEST/CODE PASS; parent+child not2clusters"
+  },
+  "build": "pending Linux normal build",
+  "formalDeployment": false,
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T16-57-publication-view-maker/0-stockinsider-publication-view-unit-final.log",
+      "source": "/tmp/stockinsider-publication-view-unit-final.log",
+      "bytes": 2215,
+      "sha256": "6b711f80f88f3eb17310fafede07c76fb492eb5949e2ff68eab7560b19f585f4"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-57-publication-view-maker/1-stockinsider-publication-view-types-final.log",
+      "source": "/tmp/stockinsider-publication-view-types-final.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-57-publication-view-maker/2-stockinsider-publication-view-lint-final.log",
+      "source": "/tmp/stockinsider-publication-view-lint-final.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-57-publication-view-maker/3-stockinsider-publication-view-pg.log",
+      "source": "/tmp/stockinsider-publication-view-pg.log",
+      "bytes": 7077,
+      "sha256": "451555efa25898f5b700590a0b0e8e1ee90300e7c269762daf5039b8d1058760"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-57-publication-view-maker/4-stockinsider-publication-view-pg-final.log",
+      "source": "/tmp/stockinsider-publication-view-pg-final.log",
+      "bytes": 2446,
+      "sha256": "de263bff546c41c3b7dce838c1bbcebf4fd34513c5355af17eba37227bc931f0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-57-publication-view-maker/5-pg.log",
+      "source": "/tmp/si-rresult-hXnzQ8/pg.log",
+      "bytes": 7909,
+      "sha256": "0273e28436bc2e114e31f36613751d65276f2a1cd5b20dbf7c9ebd9fdf44f27d"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-57-publication-view-maker/6-pg.log",
+      "source": "/tmp/si-rresult-v2tl6P/pg.log",
+      "bytes": 1244,
+      "sha256": "5a73ccaa2b5a7f637633d79580fea32c545182344958c72992af5242848934b2"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-57-publication-view-maker/7-stockinsider-atomic-independent-77a-expiry.tap",
+      "source": "/tmp/stockinsider-atomic-independent-77a-expiry.tap",
+      "bytes": 2996,
+      "sha256": "ce0abd330ed97c335a70e75e8dd313c06016dc49c026bc96af11ac0d71395cee"
+    }
+  ]
+}

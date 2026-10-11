@@ -1,0 +1,33 @@
+{
+  "observedAt": "2026-10-08T04:08:24.076687+00:00",
+  "beforeFreeBytes": 15239970816,
+  "items": [
+    {
+      "path": "/opt/stockinsider-standalone/releases/._3ea46b46c5610b11976203bf61a5d68fcd4df9cf",
+      "status": "removed",
+      "bytes": 163,
+      "allocatedBytes": 4096,
+      "sha256": "8dd74224723c781cbfae2e383061a5f4e00b2da7632b8417b2562a76d53a419e",
+      "reason": "orphan_AppleDouble_Finder_metadata_empty_resource_fork"
+    },
+    {
+      "path": "/opt/stockinsider-standalone/releases/._60099865f8a217740d89aab36e5def979c1c0ea6",
+      "status": "removed",
+      "bytes": 163,
+      "allocatedBytes": 4096,
+      "sha256": "8dd74224723c781cbfae2e383061a5f4e00b2da7632b8417b2562a76d53a419e",
+      "reason": "orphan_AppleDouble_Finder_metadata_empty_resource_fork"
+    },
+    {
+      "path": "/opt/stockinsider-standalone/releases/._95902b27827725d5ab07d17ec49fbcc771c344a8",
+      "status": "removed",
+      "bytes": 163,
+      "allocatedBytes": 4096,
+      "sha256": "8dd74224723c781cbfae2e383061a5f4e00b2da7632b8417b2562a76d53a419e",
+      "reason": "orphan_AppleDouble_Finder_metadata_empty_resource_fork"
+    }
+  ],
+  "removedAllocatedBytes": 12288,
+  "stockDataDeleted": false,
+  "afterFreeBytes": 15239983104
+}

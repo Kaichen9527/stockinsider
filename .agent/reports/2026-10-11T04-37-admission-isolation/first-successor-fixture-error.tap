@@ -1,0 +1,110 @@
+TAP version 13
+# Subtest: successor installs exact RC admission guards; real PG connections conserve global and weekly quotas
+    # Subtest: missing predecessor rejects atomically instead of manufacturing functions
+    ok 1 - missing predecessor rejects atomically instead of manufacturing functions
+      ---
+      duration_ms: 36.474416
+      ...
+    # Subtest: nine installed bodies change only by first-statement guard; owner ACL and attributes survive retry
+    ok 2 - nine installed bodies change only by first-statement guard; owner ACL and attributes survive retry
+      ---
+      duration_ms: 60.019083
+      ...
+    # Subtest: actual stale RR snapshot cannot add a second lease; RC replay, exclusion and release remain
+    ok 3 - actual stale RR snapshot cannot add a second lease; RC replay, exclusion and release remain
+      ---
+      duration_ms: 8.014959
+      ...
+    # Subtest: REPEATABLE READ rejects every admission RPC including replay and empty queues without writes
+    ok 4 - REPEATABLE READ rejects every admission RPC including replay and empty queues without writes
+      ---
+      duration_ms: 29.234208
+      ...
+    # Subtest: SERIALIZABLE rejects every admission RPC including replay and empty queues without writes
+    ok 5 - SERIALIZABLE rejects every admission RPC including replay and empty queues without writes
+      ---
+      duration_ms: 22.335875
+      ...
+    # Subtest: REPEATABLE READ actual job INSERT rejects in both independent triggers
+    ok 6 - REPEATABLE READ actual job INSERT rejects in both independent triggers
+      ---
+      duration_ms: 73.220333
+      ...
+    # Subtest: SERIALIZABLE actual job INSERT rejects in both independent triggers
+    ok 7 - SERIALIZABLE actual job INSERT rejects in both independent triggers
+      ---
+      duration_ms: 74.764375
+      ...
+    # Subtest: two RC connections competing for fifth weekly slot cannot charge a sixth issuer
+    ok 8 - two RC connections competing for fifth weekly slot cannot charge a sixth issuer
+      ---
+      duration_ms: 51.0035
+      ...
+    # Subtest: changed predecessor rejects before replacing any of the other eight routines
+    not ok 9 - changed predecessor rejects before replacing any of the other eight routines
+      ---
+      duration_ms: 24.2605
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:138:15'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/Cellar/postgresql@17/17.10/bin/psql -X -At -v ON_ERROR_STOP=1 -h /var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-admission-Kh4MS0 -p 55006 -d postgres -c CREATE OR REPLACE FUNCTION public.claim_research_observed_job_v2(p_owner text, p_snapshot_hash text)
+         RETURNS jsonb
+         LANGUAGE plpgsql
+         SECURITY DEFINER
+         SET search_path TO 'public', 'pg_temp'
+        AS $function$
+        DECLARE j public.research_deep_jobs_v1;m public.research_model_reservations_v1;
+        BEGIN
+          IF current_setting('transaction_isolation') IS DISTINCT FROM 'read committed'
+            THEN RAISE EXCEPTION 'research_admission_read_committed_required'; END IF;
+         IF p_owner IS NULL OR p_owner !~ '^[A-Za-z0-9:_-]{3,120}$function$
+         OR p_snapshot_hash IS NULL OR p_snapshot_hash !~ '^[a-f0-9]{64}$function$
+        THEN RAISE EXCEPTION 'observed_claim_identity_invalid';END IF;
+         PERFORM pg_advisory_xact_lock(2409,6002);
+         PERFORM public.reap_expired_research_deep_jobs_v2();
+         IF EXISTS(SELECT 1 FROM public.research_deep_jobs_v1 WHERE status='running'AND lease_expires_at>clock_timestamp())THEN RETURN NULL;END IF;
+         SELECT *INTO j FROM public.research_deep_jobs_v1 WHERE research_scope='research_observed_v1'AND observed_snapshot_hash=p_snapshot_hash AND status='queued'AND attempts<3 ORDER BY week_start,queue_rank,created_at,job_id FOR UPDATE SKIP LOCKED LIMIT 1;
+         IF NOT FOUND THEN RETURN NULL;END IF;
+         SELECT *INTO m FROM public.reserve_research_model_v1('company_research',p_owner,'deep:'||j.job_id||':'||(j.attempts+1));IF NOT FOUND THEN RETURN NULL;END IF;
+         UPDATE public.research_deep_jobs_v1 SET status='running',attempts=attempts+1,lease_owner=p_owner,lease_expires_at=m.lease_expires_at WHERE job_id=j.job_id RETURNING *INTO j;
+         INSERT INTO public.research_deep_job_attempts_v1(job_id,attempt,owner,lease_expires_at)VALUES(j.job_id,j.attempts,p_owner,j.lease_expires_at);
+         RETURN public.read_research_observed_claim_v2(p_owner,p_snapshot_hash,j.job_id,j.attempts);
+        END 
+        -- simulated independently modified implementation
+        $function$
+        
+        ERROR:  syntax error at or near "OR"
+        LINE 12:  OR p_snapshot_hash IS NULL OR p_snapshot_hash !~ '^[a-f0-9]...
+                  ^
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        checkExecSyncError (node:child_process:882:11)
+        execFileSync (node:child_process:918:15)
+        run (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:20:33)
+        sql (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:21:25)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:140:9)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+      ...
+    1..9
+not ok 1 - successor installs exact RC admission guards; real PG connections conserve global and weekly quotas
+  ---
+  duration_ms: 1629.324041
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:16:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 10
+# suites 0
+# pass 8
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1758.372708

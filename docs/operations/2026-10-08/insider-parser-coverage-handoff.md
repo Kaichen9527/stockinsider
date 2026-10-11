@@ -1,0 +1,23 @@
+# Insider parser/coverage — isolated manual VM increment
+
+Branch codex/insider-parser-coverage-oct08, base7baa184. Six code/test files change only the insider collector, parsed evidence and regressions; root creates the PR. Reviewed e9811c/bafa2b1 packets retain exact selected bytes and attributed Mac raw hashes. The implemented fixed TPEx11_O/12_O paths are distinct from TWSE11_P public companies.
+
+Monthly 資料年月11508 becomes2026-08; 出表日期1150918 becomes date-only2026-09-18, publishedAt stays null. Transfer declared shares use the actual轉讓股數 key, blank stays null, self/trust holdings remain separate. Snapshot/declaration is not an executed trade or aggregate ownership. Placeholder is zero recognized events only for the retrieved response. Legacy rows are not rewritten.
+
+Market scans read a bounded response and process500raw rows with durable per-dataset hash/offset CAS. Symbol reads filter the entire bounded response without60truncation. Cursor advances only after document persistence; crash/replay may duplicate idempotent writes, CAS conflict rejects success. Dataset metadata exposes total/processed/excluded/remaining/reset/nextOffset. Changed snapshots may repeatedly reset, so complete fair coverage is not guaranteed. Fixed official endpoints alone have12MiB/50k-row/15s/no-redirect bounds; general public-source limits remain unchanged.
+
+Actual final checks:20parser +6collector +1realPostgres cursor test,27pass0fail0skip; types pass, lint0errors/33existing warnings, normal web build pass. Individual test counts come from direct Node22 TAP execution; earlier --test runs expose one file-level result. Real PG test installs verbatim existing cursor definitions and verifies CAS/restart; collector integration uses synthetic transport/persistence. Full authenticated source-sync HTTP ingestion and actual VM official acquisition remain unverified.
+
+Receipt: .agent/reports/2026-10-08T13-56-insider-parser-coverage-vm.json. Stage hashes, failures and sampled resources are in that receipt; private logs/cache are retained under /workspace/cloud-insider-parser-artifacts-oct08. Initial sandbox PG/build failures, test fixture failures and TS2352 are preserved; final pass does not erase them. No production/VPS/secret reads/model dispatch/scheduling/authority activation.
+
+Observed architecture86b807392290fc6dffb9e4ad9285e88744900e30 is independently unsigned approved per root; next Slice1 starts after this frozen increment. Root owns publication-v2 spec; do not duplicate its design. Original model-runner Linux23cases19pass4fail remain retained. Root withdrew selector inconsistency suspicion: v3.24 positive/v3.9 negative is intentional; no pin/test changes. Separate newly found JSONL P1 fix awaits isolated successor verification and is not assumed to explain historical CI parser failure.
+
+## Explicit snapshot coverage successor
+
+Per-dataset results now also expose snapshot_sha256, response_bytes and cursor_before/cursor_after with remaining_rows. Successor collector6/types/lint/normalbuild all pass; unchanged parser20/PG1 retained. Receipt .agent/reports/2026-10-08T13-59-insider-coverage-metadata.json supplements, never overwrites the original receipt.
+
+## 082fcfe two-P2 repair (unsigned review still pending)
+
+The original exact082fcfe review and failed probes are retained. Schema drift previously passed as excluded rows and advanced progress; zero-new incomplete replay could become successful_empty/duplicate_only. New required-key/string checks cover every bounded response before paging or symbol selection. Failure keeps the dataset cursor unchanged and excludes its uncommitted documents. Only present-field empty transfer placeholders are accepted as non-events. Remaining pages/dataset failures precede empty/duplicate success; actual route contract tests verify HTTP502 and succeededAt null while complete duplicate/empty outcomes still succeed.
+
+Measured red: parser21pass/6fail, collector6pass/3fail, health10pass/3fail. Final green:32parser +9collector +13health +5actual-handler synthetic-dependency route +1real PG cursor =60pass/0fail/0skip. Types passed after correcting a missing required test-field (first type failure preserved); lint0errors/33existing warnings; normal web build passed. Receipt .agent/reports/2026-10-08T14-23-insider-p2-repair-vm.json stores exact file/stage hashes, failures and resource measurements. Source-sync live HTTP/PG ingestion and official VM acquisition remain unverified; this is manual engineering, not automatic role-budget or lease acceptance. No old receipt/data overwritten. Observed Slice1 changes are preserved in a separate worktree; approved86 Slice2/3 and approved64f7 publication work remain next.

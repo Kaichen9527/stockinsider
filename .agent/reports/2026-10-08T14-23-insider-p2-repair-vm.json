@@ -1,0 +1,602 @@
+{
+  "schemaVersion": "insider-review-repair-v1",
+  "recordedAt": "2026-10-08T14:24:16.962556+00:00",
+  "reviewSubject": "082fcfeadef7429763e676eafdcfee427986d42f",
+  "review": "unsigned request changes, two P2; successor independent review pending",
+  "branch": "codex/insider-parser-coverage-oct08",
+  "measurementInterval": {
+    "firstMeasuredAt": "2026-10-08T14:19:33.985Z",
+    "lastMeasuredAt": "2026-10-08T14:23:00.575Z",
+    "manualEngineering": true,
+    "automatedRoleOrLeaseValidation": false
+  },
+  "red": {
+    "parser": {
+      "pass": 21,
+      "fail": 6
+    },
+    "collector": {
+      "pass": 6,
+      "fail": 3
+    },
+    "health": {
+      "pass": 10,
+      "fail": 3
+    },
+    "fileLevelRunNotCaseCount": true
+  },
+  "green": {
+    "parser": 32,
+    "collector": 9,
+    "health": 13,
+    "actualRouteWithSyntheticDependencies": 5,
+    "realPostgresCursor": 1,
+    "totalPass": 60,
+    "fail": 0,
+    "skip": 0
+  },
+  "checks": {
+    "types": "pass after test fixture missing required duplicatesSkipped corrected",
+    "lint": "pass, 0 errors / 33 existing warnings",
+    "normalWebBuild": "pass"
+  },
+  "resource": {
+    "cgroupMemoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "sampledRssPeakBytes": 1204584448,
+    "observedTaskDiskPeakBytes": 1573203968,
+    "diskQuota": "not established; df is filesystem availability"
+  },
+  "codeFiles": [
+    {
+      "path": "web/src/lib/research-insider-official.ts",
+      "bytes": 8110,
+      "sha256": "4090c890ccf59647b9b2d6889cb8651689628f23a05941b12618c6fd8e57c0ef"
+    },
+    {
+      "path": "web/src/lib/research-v2.ts",
+      "bytes": 282726,
+      "sha256": "7bdd189fe5601855f86bfc1f6287495247fa57be89dbe57dad6df14b20810782"
+    },
+    {
+      "path": "web/src/lib/source-health.ts",
+      "bytes": 4785,
+      "sha256": "fcd9867ed25ea55e0651c8b102d067efc21ee0db526be58696d144c057b38794"
+    },
+    {
+      "path": "web/src/lib/research-insider-official.test.ts",
+      "bytes": 8396,
+      "sha256": "6d79dde9dc7cc654539741bd8c2c66815acbe1554bddce52f083f15e3123f7c6"
+    },
+    {
+      "path": "scripts/research-insider-collector.test.mjs",
+      "bytes": 7489,
+      "sha256": "54dfabb61cd653f74d452756c92cee4aee281f973cfb7a47f9523dfcdc4b3e16"
+    },
+    {
+      "path": "web/src/lib/source-health.test.ts",
+      "bytes": 4693,
+      "sha256": "31988e1901bc4a9fbf94415cc5ef4607c552e8b7cedc3017ade86fbb9ceaafdf"
+    },
+    {
+      "path": "scripts/research-insider-health-route.test.mjs",
+      "bytes": 3490,
+      "sha256": "9d6c04a544055401bb07186f49059ceffd3ea7e3f4f06d149d1772fc49693209"
+    }
+  ],
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-red",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-insider-official.test.ts",
+        "web/src/lib/source-health.test.ts",
+        "scripts/research-insider-collector.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:19:33.985Z",
+      "completedAt": "2026-10-08T14:19:34.740Z",
+      "elapsedSeconds": 0.755248934001429,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 189386752,
+      "observedTaskDiskPeakBytes": 1532301312,
+      "availableBeforeBytes": 24471318528,
+      "availableAfterBytes": 24471310336,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red.json",
+          "bytes": 697,
+          "sha256": "7d321080ec210313e314468a601dacaa012f36e72c6e3366c284112f41ef16b2"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red.log",
+          "bytes": 1196,
+          "sha256": "d828925956e9354f0ac1d0a2398e36f23a09bd8475e46d58ae8b05a4afab823d"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red.time",
+          "bytes": 922,
+          "sha256": "63aad6f4caeb40dd730ff56e825048db56eb439439f9ebfd72158a92a6715a74"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-red-parser",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "web/src/lib/research-insider-official.test.ts"
+      ],
+      "startedAt": "2026-10-08T14:19:43.234Z",
+      "completedAt": "2026-10-08T14:19:43.540Z",
+      "elapsedSeconds": 0.3063489979977021,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 74969088,
+      "observedTaskDiskPeakBytes": 1532313600,
+      "availableBeforeBytes": 24471306240,
+      "availableAfterBytes": 24471289856,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red-parser.json",
+          "bytes": 598,
+          "sha256": "a0d77369d1b7f169e93c084471b93cf10d8fc4bdf58a1021228889df16bea134"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red-parser.log",
+          "bytes": 9537,
+          "sha256": "b40a171870cb4eff53191350eb59ca6f26667ef70424561b13c1a3a3426b84d0"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red-parser.time",
+          "bytes": 836,
+          "sha256": "9962d2519d3db71320cf26675af26bab53518e74a7e6e6031f1b9647c9c57549"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-red-collector",
+      "command": [
+        "node",
+        "scripts/research-insider-collector.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:19:43.795Z",
+      "completedAt": "2026-10-08T14:19:44.530Z",
+      "elapsedSeconds": 0.7348981320101302,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 131883008,
+      "observedTaskDiskPeakBytes": 1532334080,
+      "availableBeforeBytes": 24471285760,
+      "availableAfterBytes": 24471277568,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red-collector.json",
+          "bytes": 566,
+          "sha256": "f05d636c09566c5e7d5d0b38984426737987bcb1d1aec23efeeb4f12414b80ec"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red-collector.log",
+          "bytes": 3946,
+          "sha256": "f0757464b799ff4f83e673ee23ef9e15a4d96b72ffa9623bbc7f4c5b43992c42"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red-collector.time",
+          "bytes": 807,
+          "sha256": "4af55cfe83ee1626d55df68b367e87aa6c588858c730e6509f3e88ccaed8fd37"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-red-health",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "web/src/lib/source-health.test.ts"
+      ],
+      "startedAt": "2026-10-08T14:19:44.785Z",
+      "completedAt": "2026-10-08T14:19:45.095Z",
+      "elapsedSeconds": 0.3100013250077609,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 47349760,
+      "observedTaskDiskPeakBytes": 1532346368,
+      "availableBeforeBytes": 24471273472,
+      "availableAfterBytes": 24471261184,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red-health.json",
+          "bytes": 586,
+          "sha256": "3f14518eecb92693ad08000f5e2afc4cd0bafd7e5f68df1ce372256d7786d11a"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red-health.log",
+          "bytes": 5945,
+          "sha256": "055e2e4260642d6a36165be9e6b9a52e5a99db06c405ea33200b54145c941fb1"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-red-health.time",
+          "bytes": 822,
+          "sha256": "0314e06de4cad8058136d2608e6d2c00b3dd5ecf0fefcea7d9f5f5cd54c7821c"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-green-parser",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "web/src/lib/research-insider-official.test.ts"
+      ],
+      "startedAt": "2026-10-08T14:20:56.468Z",
+      "completedAt": "2026-10-08T14:20:56.784Z",
+      "elapsedSeconds": 0.31599589400866535,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 73826304,
+      "observedTaskDiskPeakBytes": 1532370944,
+      "availableBeforeBytes": 24471248896,
+      "availableAfterBytes": 24471236608,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-green-parser.json",
+          "bytes": 601,
+          "sha256": "d9359bf1735069eec287bfd387cb1bc421a3eceb7ed106d655c484936e60f004"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-green-parser.log",
+          "bytes": 4831,
+          "sha256": "ae1a499596f2a821f930941684f7b09af34ba943385f44e9e80689a36e28da0c"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-green-parser.time",
+          "bytes": 798,
+          "sha256": "06d329e8f90d4f48a35e34cf94222adff31c965251ded6635e62c0415a931757"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-green-collector",
+      "command": [
+        "node",
+        "scripts/research-insider-collector.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:20:56.816Z",
+      "completedAt": "2026-10-08T14:20:57.580Z",
+      "elapsedSeconds": 0.7640666239894927,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 126869504,
+      "observedTaskDiskPeakBytes": 1532387328,
+      "availableBeforeBytes": 24471232512,
+      "availableAfterBytes": 24471224320,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-green-collector.json",
+          "bytes": 568,
+          "sha256": "39861c8fd9f8249811b637f77dead2479b86841ccc8a1692709a6b9c2f437f38"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-green-collector.log",
+          "bytes": 1802,
+          "sha256": "35d6b5af8a8ffe2cf182e98add446327997e6c9d795c7cb1f7c396a2cd9ebf28"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-green-collector.time",
+          "bytes": 769,
+          "sha256": "4ca2b47640131851eea2e5a6a5131fd164bf18856b5b5a9206a1bc4763e815d7"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-green-health",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "web/src/lib/source-health.test.ts"
+      ],
+      "startedAt": "2026-10-08T14:20:57.611Z",
+      "completedAt": "2026-10-08T14:20:57.927Z",
+      "elapsedSeconds": 0.3158763009996619,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 50163712,
+      "observedTaskDiskPeakBytes": 1532399616,
+      "availableBeforeBytes": 24471220224,
+      "availableAfterBytes": 24471212032,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-green-health.json",
+          "bytes": 588,
+          "sha256": "6dc3d98cb2e598ae09db6f1b90954708fd4f003824feae7eb480eee9398c2e66"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-green-health.log",
+          "bytes": 3260,
+          "sha256": "6dde9917d89e9143c983eaa80069ca031e1ea70dd97128b7d33bedbf5fc6b90d"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-green-health.time",
+          "bytes": 784,
+          "sha256": "0d4e54ccd71caf2eda9bcda4b07d90db9cc8b8c813dd028e420a556899c58a4a"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-route",
+      "command": [
+        "node",
+        "scripts/research-insider-health-route.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:20:57.969Z",
+      "completedAt": "2026-10-08T14:20:58.738Z",
+      "elapsedSeconds": 0.7689437429944519,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 117198848,
+      "observedTaskDiskPeakBytes": 1532411904,
+      "availableBeforeBytes": 24471207936,
+      "availableAfterBytes": 24471199744,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-route.json",
+          "bytes": 561,
+          "sha256": "a0eefaeba86e16b35984b2f3ed17fd24fbebead554e9ab55d31666b40d09c27e"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-route.log",
+          "bytes": 987,
+          "sha256": "eb96cb0eb2b59ae2c0a3db7d029811a4f627e845f0d01606c0919d7a03518598"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-route.time",
+          "bytes": 772,
+          "sha256": "ea2882e7b34d135402eadb45e568de2ff0f30cf4d458ab3c769e2922b819e0f0"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-final-parser",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "web/src/lib/research-insider-official.test.ts"
+      ],
+      "startedAt": "2026-10-08T14:21:22.122Z",
+      "completedAt": "2026-10-08T14:21:22.429Z",
+      "elapsedSeconds": 0.30705150500580203,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 76664832,
+      "observedTaskDiskPeakBytes": 1532428288,
+      "availableBeforeBytes": 24471191552,
+      "availableAfterBytes": 24471179264,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-final-parser.json",
+          "bytes": 601,
+          "sha256": "57ff340d6b90970ac0ae88ebb498e002bd13b7ce4336747b69ec7722d97e6488"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-final-parser.log",
+          "bytes": 5563,
+          "sha256": "b8c4bceb97728ab0bb1c8a7cd0a9e4f1f9ec04e2301b16bb5c544f97f6d1f3e6"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-final-parser.time",
+          "bytes": 797,
+          "sha256": "0e43ac58d4cca3b1a6e0eeb1feabd599c4aac2ba702783727fb53878f6f4a8c4"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "exec",
+        "--",
+        "tsc",
+        "--noEmit",
+        "-p",
+        "web/tsconfig.json"
+      ],
+      "startedAt": "2026-10-08T14:21:22.462Z",
+      "completedAt": "2026-10-08T14:21:31.772Z",
+      "elapsedSeconds": 9.3102557050006,
+      "exitCode": 2,
+      "sampledAggregateRssPeakBytes": 904429568,
+      "observedTaskDiskPeakBytes": 1532444672,
+      "availableBeforeBytes": 24471175168,
+      "availableAfterBytes": 24471162880,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-types.json",
+          "bytes": 614,
+          "sha256": "746eb69cf8a174ea78aa09d10c96f0963259164804782961b939fb73e3950202"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-types.log",
+          "bytes": 722,
+          "sha256": "facf0e0aa93860b2c5c6b40b30ff5e3569f1e6a95937ea9f1c6a7ea8668651c3"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-types.time",
+          "bytes": 823,
+          "sha256": "dd255709727bbcb403e4cb60371c3ec6aba79277ae36decac11875e49962764c"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-types-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "exec",
+        "--",
+        "tsc",
+        "--noEmit",
+        "-p",
+        "web/tsconfig.json"
+      ],
+      "startedAt": "2026-10-08T14:22:04.139Z",
+      "completedAt": "2026-10-08T14:22:07.229Z",
+      "elapsedSeconds": 3.0895761959982337,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 576479232,
+      "observedTaskDiskPeakBytes": 1532477440,
+      "availableBeforeBytes": 24471142400,
+      "availableAfterBytes": 24471142400,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-types-final.json",
+          "bytes": 623,
+          "sha256": "7549484d84563074d33ecafe9e52dc922cbad6af87994809a8b3ee45af9159b0"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-types-final.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-types-final.time",
+          "bytes": 784,
+          "sha256": "951d07ed3ec78dddb882ad7faa179b98989a716932abd025bac15e65f80d46e1"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T14:21:31.802Z",
+      "completedAt": "2026-10-08T14:21:56.162Z",
+      "elapsedSeconds": 24.35961817500356,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1147867136,
+      "observedTaskDiskPeakBytes": 1532469248,
+      "availableBeforeBytes": 24471158784,
+      "availableAfterBytes": 24471146496,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-lint.json",
+          "bytes": 555,
+          "sha256": "ddb613f483f8b689bfd2d4f662a286bc12d4b451d626c8413880560c070f3e2a"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-lint.log",
+          "bytes": 4760,
+          "sha256": "df621a3b42c21b678494a783783c95c899b827e4397dd14fca54791188f00b51"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-lint.time",
+          "bytes": 756,
+          "sha256": "2b1195e298819b8bafb88c338d34f2c5cad5571a6e4bf66c2402f183daf459a3"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-postgres",
+      "command": [
+        "node",
+        "scripts/research-insider-cursor-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-08T14:22:41.357Z",
+      "completedAt": "2026-10-08T14:22:42.836Z",
+      "elapsedSeconds": 1.478993247001199,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 81170432,
+      "observedTaskDiskPeakBytes": 1573203968,
+      "availableBeforeBytes": 24471154688,
+      "availableAfterBytes": 24471138304,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-postgres.json",
+          "bytes": 565,
+          "sha256": "b8a4cfbae7de5048e48bc902ee09350697597042bcce1fe209b887f1b30581f0"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-postgres.log",
+          "bytes": 332,
+          "sha256": "37badfac373e5d9803ebeaae4195d85a00b31cc55ccdece2e1252e860d35e355"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-postgres.time",
+          "bytes": 778,
+          "sha256": "ab6980d5694d5c1aafacb2ebe5280e6b65cff18552f453b885980c501def3897"
+        }
+      ]
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "p2-normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T14:22:42.862Z",
+      "completedAt": "2026-10-08T14:23:00.575Z",
+      "elapsedSeconds": 17.71324848898803,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1204584448,
+      "observedTaskDiskPeakBytes": 1532502016,
+      "availableBeforeBytes": 24471134208,
+      "availableAfterBytes": 24458395648,
+      "guardTermination": null,
+      "artifacts": [
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-normal-build.json",
+          "bytes": 564,
+          "sha256": "4d0842a948d759949ce6351ca2789d3aa72ce75ff47ad4b874f472a42e4d4a74"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-normal-build.log",
+          "bytes": 6452,
+          "sha256": "522a6e31a0cbcd55482fe8f136000af0ef895011ec0bce9cf9fbf2e17247006c"
+        },
+        {
+          "path": "/workspace/cloud-insider-parser-artifacts-oct08/p2-normal-build.time",
+          "bytes": 758,
+          "sha256": "8bfdab91ae2f05687addf02733f4cb5ce680ed47f2e4f15654acb6a430330d69"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "No new live official fetch or raw rehash from selected relay",
+    "Route tests execute actual handler with synthetic transport/persistence/auth/lease dependencies, not a live full source-sync HTTP/PG run",
+    "PG test is real existing cursor DDL/CAS/restart only",
+    "Full market completion/fair resume not proven; changing snapshots may reset",
+    "No production/VPS/model/credential read/schedule/authority activation",
+    "Observed Slice1 uncommitted work preserved in separate worktree; Slice2/3 and approved publication v2 still pending"
+  ]
+}

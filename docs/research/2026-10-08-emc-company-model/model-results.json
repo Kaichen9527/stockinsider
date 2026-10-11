@@ -1,0 +1,1461 @@
+{
+  "schemaVersion": "emc-company-conditional-model-v1",
+  "symbol": "2383",
+  "asOf": "2026-10-08T12:12:00Z",
+  "unit": "TWD_million; EPS TWD/share",
+  "status": "draft/incomplete",
+  "historicalPITEligible": false,
+  "published": false,
+  "strategyApproved": false,
+  "qualifiedEntry": false,
+  "price": 6000,
+  "priceSession": "2026-10-08",
+  "actualQuarters": [
+    {
+      "period": "2024Q3",
+      "values": {
+        "revenue": 17463.096,
+        "cost": -12747.903,
+        "grossProfit": 4715.193,
+        "operatingExpenses": -1548.109,
+        "operatingProfit": 3167.084,
+        "nonOperating": 6.871,
+        "pretaxProfit": 3173.955,
+        "tax": -659.3,
+        "netProfit": 2514.655,
+        "ownersNetProfit": 2516.219,
+        "nonControllingNetProfit": -1.564,
+        "reportedBasicEps": 7.3,
+        "reportedDilutedEps": 7.25
+      },
+      "method": "reported_quarter",
+      "sourceColumns": [
+        "2025q3:1"
+      ]
+    },
+    {
+      "period": "2024Q4",
+      "values": {
+        "revenue": 18562.104,
+        "cost": -13280.844,
+        "grossProfit": 5281.26,
+        "operatingExpenses": -1756.108,
+        "operatingProfit": 3525.152,
+        "nonOperating": -154.989,
+        "pretaxProfit": 3370.163,
+        "tax": -726.415,
+        "netProfit": 2643.748,
+        "ownersNetProfit": 2648.082,
+        "nonControllingNetProfit": -4.334
+      },
+      "method": "annual_minus_nine_month_flows_only",
+      "sourceColumns": [
+        "2025q4:1",
+        "2025q3:3"
+      ]
+    },
+    {
+      "period": "2025Q1",
+      "values": {
+        "revenue": 21680.064,
+        "cost": -15089.738,
+        "grossProfit": 6590.326,
+        "operatingExpenses": -2050.591,
+        "operatingProfit": 4539.735,
+        "nonOperating": 127.752,
+        "pretaxProfit": 4667.487,
+        "tax": -1200.333,
+        "netProfit": 3467.154,
+        "ownersNetProfit": 3468.9,
+        "nonControllingNetProfit": -1.746
+      },
+      "method": "half_year_minus_second_quarter_flows_only",
+      "sourceColumns": [
+        "2026q2:3",
+        "2026q2:1"
+      ]
+    },
+    {
+      "period": "2025Q2",
+      "values": {
+        "revenue": 22507.694,
+        "cost": -15678.479,
+        "grossProfit": 6829.215,
+        "operatingExpenses": -2185.63,
+        "operatingProfit": 4643.585,
+        "nonOperating": -176.574,
+        "pretaxProfit": 4467.011,
+        "tax": -989.405,
+        "netProfit": 3477.606,
+        "ownersNetProfit": 3477.879,
+        "nonControllingNetProfit": -0.273,
+        "reportedBasicEps": 10.02,
+        "reportedDilutedEps": 9.62
+      },
+      "method": "reported_quarter",
+      "sourceColumns": [
+        "2026q2:1"
+      ]
+    },
+    {
+      "period": "2025Q3",
+      "values": {
+        "revenue": 25145.642,
+        "cost": -17569.793,
+        "grossProfit": 7575.849,
+        "operatingExpenses": -2585.816,
+        "operatingProfit": 4990.033,
+        "nonOperating": 131.136,
+        "pretaxProfit": 5121.169,
+        "tax": -1157.1,
+        "netProfit": 3964.069,
+        "ownersNetProfit": 3965.068,
+        "nonControllingNetProfit": -0.999,
+        "reportedBasicEps": 11.19,
+        "reportedDilutedEps": 11.06
+      },
+      "method": "reported_quarter",
+      "sourceColumns": [
+        "2025q3:0"
+      ]
+    },
+    {
+      "period": "2025Q4",
+      "values": {
+        "revenue": 24927.178,
+        "cost": -17802.658,
+        "grossProfit": 7124.52,
+        "operatingExpenses": -2189.604,
+        "operatingProfit": 4934.916,
+        "nonOperating": -314.447,
+        "pretaxProfit": 4620.469,
+        "tax": -884.41,
+        "netProfit": 3736.059,
+        "ownersNetProfit": 3737.06,
+        "nonControllingNetProfit": -1.001
+      },
+      "method": "annual_minus_nine_month_flows_only",
+      "sourceColumns": [
+        "2025q4:0",
+        "2025q3:2"
+      ]
+    },
+    {
+      "period": "2026Q1",
+      "values": {
+        "revenue": 33067.261,
+        "cost": -23338.108,
+        "grossProfit": 9729.153,
+        "operatingExpenses": -2600.683,
+        "operatingProfit": 7128.47,
+        "nonOperating": 65.688,
+        "pretaxProfit": 7194.158,
+        "tax": -1855.381,
+        "netProfit": 5338.777,
+        "ownersNetProfit": 5339.793,
+        "nonControllingNetProfit": -1.016
+      },
+      "method": "half_year_minus_second_quarter_flows_only",
+      "sourceColumns": [
+        "2026q2:2",
+        "2026q2:0"
+      ]
+    },
+    {
+      "period": "2026Q2",
+      "values": {
+        "revenue": 47275.194,
+        "cost": -31272.203,
+        "grossProfit": 16002.991,
+        "operatingExpenses": -3269.308,
+        "operatingProfit": 12733.683,
+        "nonOperating": 51.568,
+        "pretaxProfit": 12785.251,
+        "tax": -2913.605,
+        "netProfit": 9871.646,
+        "ownersNetProfit": 9873.398,
+        "nonControllingNetProfit": -1.752,
+        "reportedBasicEps": 27.55,
+        "reportedDilutedEps": 27.55
+      },
+      "method": "reported_quarter",
+      "sourceColumns": [
+        "2026q2:0"
+      ]
+    }
+  ],
+  "actualH1": {
+    "revenue": 80342.455,
+    "cost": -54610.311,
+    "grossProfit": 25732.144,
+    "operatingExpenses": 5869.991,
+    "operatingProfit": 19862.153,
+    "nonOperating": 117.256,
+    "pretaxProfit": 19979.409,
+    "tax": -4768.986,
+    "netProfit": 15210.423,
+    "ownersNetProfit": 15213.191,
+    "nonControllingNetProfit": -2.768,
+    "taxExpense": 4768.986
+  },
+  "reportedQ1BasicEps": 14.9,
+  "shares": {
+    "basis": "reported Q2 ordinary weighted358.321m carried forward as assumption; reported Q2 diluted358.417m/H1diluted358.497m retained separately",
+    "ordinaryBaselineMillion": 358.321,
+    "reportedQ2DilutedMillion": 358.417,
+    "reportedH1DilutedMillion": 358.497,
+    "notes": {
+      "pdfPages": [
+        25,
+        26
+      ],
+      "basicOwnersProfit": [
+        9873398,
+        3477879,
+        15213191,
+        6946779
+      ],
+      "basicWeightedShares": [
+        358321,
+        347145,
+        358321,
+        346902
+      ],
+      "convertibleAfterTaxNumeratorAdjustment": [
+        0,
+        -30322,
+        0,
+        -12319
+      ],
+      "dilutedOwnersProfit": [
+        9873398,
+        3447557,
+        15213191,
+        6934460
+      ],
+      "convertibleAdditionalShares": [
+        0,
+        11140,
+        0,
+        11382
+      ],
+      "employeeAdditionalShares": [
+        96,
+        273,
+        176,
+        440
+      ],
+      "dilutedWeightedShares": [
+        358417,
+        358558,
+        358497,
+        358724
+      ],
+      "reportedBasicEps": [
+        27.55,
+        10.02,
+        42.46,
+        20.03
+      ],
+      "reportedDilutedEps": [
+        27.55,
+        9.62,
+        42.44,
+        19.33
+      ]
+    },
+    "exactHistoricalWeightedSharesVerified": true,
+    "futureSharesVerified": false,
+    "futureOrdinaryIssuanceAssumed": 0,
+    "annual2026HistoricalH1PotentialWeightMillion": 0.088,
+    "potentialScope": "future award-only sensitivity without numerator adjustment; exclude for losses; 2025 convertible numerator adjustments not reused"
+  },
+  "reportedProductRevenue": {
+    "pdfPages": [
+      26,
+      27
+    ],
+    "2026Q2": {
+      "prepreg": 19101540,
+      "copperCladLaminate": 27867033,
+      "other": 306621,
+      "total": 47275194
+    },
+    "2026H1": {
+      "prepreg": 32586020,
+      "copperCladLaminate": 47224213,
+      "other": 532222,
+      "total": 80342455
+    }
+  },
+  "reportedNonopNotes": {
+    "pdfPages": [
+      28,
+      29
+    ],
+    "bankInterestIncome": [
+      63444,
+      66010,
+      133335,
+      108831
+    ],
+    "fxGainLoss": [
+      72137,
+      -313976,
+      69449,
+      -279671
+    ],
+    "otherGainsLossesTotal": [
+      140432,
+      -128230,
+      271467,
+      64261
+    ],
+    "interestExpenseBeforeCapitalization": [
+      156649,
+      114354,
+      294583,
+      221914
+    ],
+    "capitalizedInterest": [
+      4341,
+      0,
+      7037,
+      0
+    ],
+    "financeCost": [
+      152308,
+      114354,
+      287546,
+      221914
+    ]
+  },
+  "currentMediaExpectations": {
+    "id": "emc-market-expectations-oct05",
+    "sourceLabel": "uanalyze-cnyes-oct05",
+    "rootUrl": "https://m.cnyes.com/news/id/6621513",
+    "publisher": "Uanalyze via Cnyes",
+    "publicationTimeText": "2026-10-05 09:31",
+    "publicationMinute": "2026-10-05T09:31+08:00",
+    "exactPublishedAt": null,
+    "clockScope": "displayed publisher minute, Asia/Taipei interpretation; seconds not established",
+    "symbols": [
+      "2383",
+      "2368"
+    ],
+    "evidenceStatus": "media_attributed_market_and_unnamed_broker_estimates_not_company_order_confirmation",
+    "claims": {
+      "emcM7PlusMixPctRange": [
+        60,
+        65
+      ],
+      "emcM9ShipmentStartClaim": "2026Q3",
+      "emcM9Mix2026": "single_digit_percent",
+      "emcM9Mix2027": "double_digit_percent",
+      "emc2027GrossMarginApproxPct": 38,
+      "emc2027EpsForecastRangeTwd": [
+        187,
+        226
+      ]
+    },
+    "summary": "The article connects high-grade material upgrades, supply and expansion to EMC earnings expectations, and identifies Gold Circuit as a different downstream PCB role. Sold-out contracted capacity and EPS187-226 are media-attributed claims; original broker reports, customer orders and confirmations were not read.",
+    "transmission": "Use as an attributed market-expectation comparison and reverse earnings/margin test, not replace official actuals or automatically adopt an EPS/multiple. Separate physical planned capacity, ASP/product mix, margins and share denominator; test CPO substitution versus higher-grade electrical sections.",
+    "brokerOriginalRead": false,
+    "orderVerified": false,
+    "independentForecastCount": null,
+    "targetPriceCalibrated": false
+  },
+  "currentExpectationReverse": [
+    {
+      "mediaAttributedEps": 187,
+      "requiredOwnersMillion": 67341.05713500001,
+      "requiredRevenueAtBaseMargins": 340774.5806427126,
+      "requiredGrossMarginAtBaseRevenue": 0.400441518278848,
+      "scope": "base costs/tax/NCI/shares held fixed, not current consensus or company forecast"
+    },
+    {
+      "mediaAttributedEps": 226,
+      "requiredOwnersMillion": 81385.44873,
+      "requiredRevenueAtBaseMargins": 411849.43689271255,
+      "requiredGrossMarginAtBaseRevenue": 0.4683183801205544,
+      "scope": "base costs/tax/NCI/shares held fixed, not current consensus or company forecast"
+    }
+  ],
+  "media38GrossMarginSensitivity": {
+    "assumedGrossMargin": 0.38,
+    "epsAtBaseRevenue": 175.2549194048741,
+    "sourceScope": "unnamed-broker media estimate, not adopted company guidance"
+  },
+  "q3KnownMonthlyRevenue": {
+    "sumMillion": 60884.517,
+    "months": [
+      {
+        "month": "2026-07",
+        "revenueTwd": 19206698000
+      },
+      {
+        "month": "2026-08",
+        "revenueTwd": 20145589000
+      },
+      {
+        "month": "2026-09",
+        "revenueTwd": 21532230000
+      }
+    ],
+    "preliminary": true,
+    "financialQuarterReconciliationUnknown": true,
+    "q3EpsPublished": false
+  },
+  "monthlyReconciliation": [
+    {
+      "quarter": "2024Q4",
+      "sumMonthlyTwd": 18564316000,
+      "reportedFinancialTwd": 18562104000,
+      "differenceMonthlyMinusFinancialTwd": 2212000,
+      "status": "difference_retained_not_explained",
+      "roundingExplainsDifference": false
+    },
+    {
+      "quarter": "2025Q1",
+      "sumMonthlyTwd": 21684255000,
+      "reportedFinancialTwd": 21680064000,
+      "differenceMonthlyMinusFinancialTwd": 4191000,
+      "status": "difference_retained_not_explained",
+      "roundingExplainsDifference": false
+    },
+    {
+      "quarter": "2025Q2",
+      "sumMonthlyTwd": 22503506000,
+      "reportedFinancialTwd": 22507694000,
+      "differenceMonthlyMinusFinancialTwd": -4188000,
+      "status": "difference_retained_not_explained",
+      "roundingExplainsDifference": false
+    },
+    {
+      "quarter": "2025Q3",
+      "sumMonthlyTwd": 25145620000,
+      "reportedFinancialTwd": 25145642000,
+      "differenceMonthlyMinusFinancialTwd": -22000,
+      "status": "difference_retained_not_explained",
+      "roundingExplainsDifference": false
+    },
+    {
+      "quarter": "2025Q4",
+      "sumMonthlyTwd": 24908605000,
+      "reportedFinancialTwd": 24927178000,
+      "differenceMonthlyMinusFinancialTwd": -18573000,
+      "status": "difference_retained_not_explained",
+      "roundingExplainsDifference": false
+    },
+    {
+      "quarter": "2026Q1",
+      "sumMonthlyTwd": 33067235000,
+      "reportedFinancialTwd": 33067261000,
+      "differenceMonthlyMinusFinancialTwd": -26000,
+      "status": "difference_retained_not_explained",
+      "roundingExplainsDifference": false
+    },
+    {
+      "quarter": "2026Q2",
+      "sumMonthlyTwd": 47275208000,
+      "reportedFinancialTwd": 47275194000,
+      "differenceMonthlyMinusFinancialTwd": 14000,
+      "status": "difference_retained_not_explained",
+      "roundingExplainsDifference": false
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "bear",
+      "assumptions": {
+        "growth": [
+          -0.05,
+          -0.1,
+          0.02,
+          0.02,
+          0.02
+        ],
+        "grossMargin": 0.29,
+        "opexRatio": 0.09,
+        "marginStep": 0,
+        "bankInterest": 50,
+        "financeCost": -200,
+        "fx": -100,
+        "otherGainsExFx": 100,
+        "taxRate": 0.25,
+        "nci": -1,
+        "potentialRatio": 0.005
+      },
+      "quarters": [
+        {
+          "period": "2026Q3",
+          "revenue": 60884.517,
+          "grossProfit": 17656.50993,
+          "operatingExpenses": 5479.60653,
+          "operatingProfit": 12176.9034,
+          "nonOperating": -150,
+          "pretaxProfit": 12026.9034,
+          "taxExpense": 3006.72585,
+          "netProfit": 9020.17755,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 9021.17755,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 0,
+          "potentialIncludedMillion": 0,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 358.321,
+          "basicEpsConditional": 25.17624574055107,
+          "dilutedEpsConditional": 25.17624574055107,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.29,
+          "opexRatioAssumed": 0.09,
+          "interestBreakdown": {
+            "bankInterestAssumed": 50,
+            "financeCostAssumed": -200,
+            "fxAssumed": -100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2026Q4",
+          "revenue": 57840.29115,
+          "grossProfit": 16773.6844335,
+          "operatingExpenses": 5205.6262035,
+          "operatingProfit": 11568.058229999999,
+          "nonOperating": -150,
+          "pretaxProfit": 11418.058229999999,
+          "taxExpense": 2854.5145574999997,
+          "netProfit": 8563.5436725,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 8564.5436725,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 0,
+          "potentialIncludedMillion": 0,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 358.321,
+          "basicEpsConditional": 23.901874778480746,
+          "dilutedEpsConditional": 23.901874778480746,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.29,
+          "opexRatioAssumed": 0.09,
+          "interestBreakdown": {
+            "bankInterestAssumed": 50,
+            "financeCostAssumed": -200,
+            "fxAssumed": -100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q1",
+          "revenue": 52056.262035,
+          "grossProfit": 15096.315990149998,
+          "operatingExpenses": 4685.063583149999,
+          "operatingProfit": 10411.252407,
+          "nonOperating": -150,
+          "pretaxProfit": 10261.252407,
+          "taxExpense": 2565.31310175,
+          "netProfit": 7695.93930525,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 7696.93930525,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+          "potentialIncludedMillion": 1.7916050000000001,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 360.11260500000003,
+          "basicEpsConditional": 21.48056995054713,
+          "dilutedEpsConditional": 21.373701443330482,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.29,
+          "opexRatioAssumed": 0.09,
+          "interestBreakdown": {
+            "bankInterestAssumed": 50,
+            "financeCostAssumed": -200,
+            "fxAssumed": -100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q2",
+          "revenue": 53097.3872757,
+          "grossProfit": 15398.242309952999,
+          "operatingExpenses": 4778.764854813,
+          "operatingProfit": 10619.477455139999,
+          "nonOperating": -150,
+          "pretaxProfit": 10469.477455139999,
+          "taxExpense": 2617.3693637849997,
+          "netProfit": 7852.1080913549995,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 7853.1080913549995,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+          "potentialIncludedMillion": 1.7916050000000001,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 360.11260500000003,
+          "basicEpsConditional": 21.91640481957518,
+          "dilutedEpsConditional": 21.807367979676798,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.29,
+          "opexRatioAssumed": 0.09,
+          "interestBreakdown": {
+            "bankInterestAssumed": 50,
+            "financeCostAssumed": -200,
+            "fxAssumed": -100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q3",
+          "revenue": 54159.335021214,
+          "grossProfit": 15706.207156152059,
+          "operatingExpenses": 4874.3401519092595,
+          "operatingProfit": 10831.867004242798,
+          "nonOperating": -150,
+          "pretaxProfit": 10681.867004242798,
+          "taxExpense": 2670.4667510606996,
+          "netProfit": 8011.400253182099,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 8012.400253182099,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+          "potentialIncludedMillion": 1.7916050000000001,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 360.11260500000003,
+          "basicEpsConditional": 22.36095638598379,
+          "dilutedEpsConditional": 22.24970784675004,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.29,
+          "opexRatioAssumed": 0.09,
+          "interestBreakdown": {
+            "bankInterestAssumed": 50,
+            "financeCostAssumed": -200,
+            "fxAssumed": -100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q4",
+          "revenue": 55242.52172163828,
+          "grossProfit": 16020.3312992751,
+          "operatingExpenses": 4971.826954947445,
+          "operatingProfit": 11048.504344327655,
+          "nonOperating": -150,
+          "pretaxProfit": 10898.504344327655,
+          "taxExpense": 2724.626086081914,
+          "netProfit": 8173.878258245742,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 8174.878258245742,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+          "potentialIncludedMillion": 1.7916050000000001,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 360.11260500000003,
+          "basicEpsConditional": 22.814398983720576,
+          "dilutedEpsConditional": 22.700894511164755,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.29,
+          "opexRatioAssumed": 0.09,
+          "interestBreakdown": {
+            "bankInterestAssumed": 50,
+            "financeCostAssumed": -200,
+            "fxAssumed": -100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        }
+      ],
+      "calendar2026": {
+        "revenue": 199067.26315,
+        "grossProfit": 60162.3383635,
+        "operatingExpenses": 16555.2237335,
+        "operatingProfit": 43607.11463,
+        "nonOperating": -182.744,
+        "pretaxProfit": 43424.37063,
+        "taxExpense": 10630.226407499998,
+        "netProfit": 32794.14422250001,
+        "nonControllingNetProfit": -4.768,
+        "ownersNetProfit": 32798.9122225,
+        "ordinaryWeightedSharesMillionAssumed": 358.321,
+        "potentialWeightedSharesMillionAssumed": 0.088,
+        "potentialIncludedMillion": 0.088,
+        "antiDilutiveExcludedMillion": 0,
+        "dilutedSharesMillionAssumed": 358.40900000000005,
+        "basicEpsConditional": 91.53499856971821,
+        "dilutedEpsConditional": 91.51252402283424,
+        "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified"
+      },
+      "calendar2027": {
+        "revenue": 214555.50605355226,
+        "grossProfit": 62221.096755530154,
+        "operatingExpenses": 19309.995544819703,
+        "operatingProfit": 42911.10121071045,
+        "nonOperating": -600,
+        "pretaxProfit": 42311.10121071045,
+        "taxExpense": 10577.775302677612,
+        "netProfit": 31733.325908032843,
+        "nonControllingNetProfit": -4,
+        "ownersNetProfit": 31737.325908032843,
+        "ordinaryWeightedSharesMillionAssumed": 358.321,
+        "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+        "potentialIncludedMillion": 1.7916050000000001,
+        "antiDilutiveExcludedMillion": 0,
+        "dilutedSharesMillionAssumed": 360.11260500000003,
+        "basicEpsConditional": 88.57233013982669,
+        "dilutedEpsConditional": 88.13167178092208,
+        "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified"
+      },
+      "nextFourUnreported": {
+        "revenue": 223878.45746069998,
+        "grossProfit": 64924.752663602994,
+        "operatingExpenses": 20149.061171463,
+        "operatingProfit": 44775.691492139995,
+        "nonOperating": -600,
+        "pretaxProfit": 44175.691492139995,
+        "taxExpense": 11043.922873034999,
+        "netProfit": 33131.768619105,
+        "nonControllingNetProfit": -4,
+        "ownersNetProfit": 33135.768619105,
+        "ordinaryWeightedSharesMillionAssumed": 358.321,
+        "potentialWeightedSharesMillionAssumed": 0.8958025000000001,
+        "potentialIncludedMillion": 0.8958025000000001,
+        "antiDilutiveExcludedMillion": 0,
+        "dilutedSharesMillionAssumed": 359.21680250000003,
+        "basicEpsConditional": 92.47509528915414,
+        "dilutedEpsConditional": 92.24448407895675,
+        "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+        "periods": [
+          "2026Q3",
+          "2026Q4",
+          "2027Q1",
+          "2027Q2"
+        ]
+      },
+      "targetPrice": null,
+      "multipleCalibrated": false
+    },
+    {
+      "id": "base",
+      "assumptions": {
+        "growth": [
+          0.05,
+          -0.05,
+          0.08,
+          0.08,
+          0.06
+        ],
+        "grossMargin": 0.335,
+        "opexRatio": 0.075,
+        "marginStep": 0,
+        "bankInterest": 60,
+        "financeCost": -160,
+        "fx": 0,
+        "otherGainsExFx": 100,
+        "taxRate": 0.24,
+        "nci": -1,
+        "potentialRatio": 0.005
+      },
+      "quarters": [
+        {
+          "period": "2026Q3",
+          "revenue": 60884.517,
+          "grossProfit": 20396.313195000002,
+          "operatingExpenses": 4566.338775,
+          "operatingProfit": 15829.974420000002,
+          "nonOperating": 0,
+          "pretaxProfit": 15829.974420000002,
+          "taxExpense": 3799.1938608000005,
+          "netProfit": 12030.780559200002,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 12031.780559200002,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 0,
+          "potentialIncludedMillion": 0,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 358.321,
+          "basicEpsConditional": 33.57821774107574,
+          "dilutedEpsConditional": 33.57821774107574,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.335,
+          "opexRatioAssumed": 0.075,
+          "interestBreakdown": {
+            "bankInterestAssumed": 60,
+            "financeCostAssumed": -160,
+            "fxAssumed": 0,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2026Q4",
+          "revenue": 63928.74285,
+          "grossProfit": 21416.12885475,
+          "operatingExpenses": 4794.65571375,
+          "operatingProfit": 16621.473141000002,
+          "nonOperating": 0,
+          "pretaxProfit": 16621.473141000002,
+          "taxExpense": 3989.1535538400003,
+          "netProfit": 12632.319587160002,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 12633.319587160002,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 0,
+          "potentialIncludedMillion": 0,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 358.321,
+          "basicEpsConditional": 35.25698908844305,
+          "dilutedEpsConditional": 35.25698908844305,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.335,
+          "opexRatioAssumed": 0.075,
+          "interestBreakdown": {
+            "bankInterestAssumed": 60,
+            "financeCostAssumed": -160,
+            "fxAssumed": 0,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q1",
+          "revenue": 60732.305707499996,
+          "grossProfit": 20345.3224120125,
+          "operatingExpenses": 4554.9229280624995,
+          "operatingProfit": 15790.399483950001,
+          "nonOperating": 0,
+          "pretaxProfit": 15790.399483950001,
+          "taxExpense": 3789.695876148,
+          "netProfit": 12000.703607802001,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 12001.703607802001,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+          "potentialIncludedMillion": 1.7916050000000001,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 360.11260500000003,
+          "basicEpsConditional": 33.494279173707376,
+          "dilutedEpsConditional": 33.32764096886306,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.335,
+          "opexRatioAssumed": 0.075,
+          "interestBreakdown": {
+            "bankInterestAssumed": 60,
+            "financeCostAssumed": -160,
+            "fxAssumed": 0,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q2",
+          "revenue": 65590.8901641,
+          "grossProfit": 21972.9482049735,
+          "operatingExpenses": 4919.3167623075,
+          "operatingProfit": 17053.631442666003,
+          "nonOperating": 0,
+          "pretaxProfit": 17053.631442666003,
+          "taxExpense": 4092.8715462398404,
+          "netProfit": 12960.759896426163,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 12961.759896426163,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+          "potentialIncludedMillion": 1.7916050000000001,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 360.11260500000003,
+          "basicEpsConditional": 36.1735982441056,
+          "dilutedEpsConditional": 35.993630093637414,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.335,
+          "opexRatioAssumed": 0.075,
+          "interestBreakdown": {
+            "bankInterestAssumed": 60,
+            "financeCostAssumed": -160,
+            "fxAssumed": 0,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q3",
+          "revenue": 70838.161377228,
+          "grossProfit": 23730.78406137138,
+          "operatingExpenses": 5312.862103292099,
+          "operatingProfit": 18417.92195807928,
+          "nonOperating": 0,
+          "pretaxProfit": 18417.92195807928,
+          "taxExpense": 4420.301269939027,
+          "netProfit": 13997.620688140254,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 13998.620688140254,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+          "potentialIncludedMillion": 1.7916050000000001,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 360.11260500000003,
+          "basicEpsConditional": 39.06726284013567,
+          "dilutedEpsConditional": 38.8728983483937,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.335,
+          "opexRatioAssumed": 0.075,
+          "interestBreakdown": {
+            "bankInterestAssumed": 60,
+            "financeCostAssumed": -160,
+            "fxAssumed": 0,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q4",
+          "revenue": 75088.45105986168,
+          "grossProfit": 25154.631105053664,
+          "operatingExpenses": 5631.633829489626,
+          "operatingProfit": 19522.997275564037,
+          "nonOperating": 0,
+          "pretaxProfit": 19522.997275564037,
+          "taxExpense": 4685.519346135369,
+          "netProfit": 14837.477929428667,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 14838.477929428667,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+          "potentialIncludedMillion": 1.7916050000000001,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 360.11260500000003,
+          "basicEpsConditional": 41.41113116292002,
+          "dilutedEpsConditional": 41.205105634746296,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.335,
+          "opexRatioAssumed": 0.075,
+          "interestBreakdown": {
+            "bankInterestAssumed": 60,
+            "financeCostAssumed": -160,
+            "fxAssumed": 0,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        }
+      ],
+      "calendar2026": {
+        "revenue": 205155.71485000002,
+        "grossProfit": 67544.58604975001,
+        "operatingExpenses": 15230.98548875,
+        "operatingProfit": 52313.60056100001,
+        "nonOperating": 117.256,
+        "pretaxProfit": 52430.856561,
+        "taxExpense": 12557.333414640001,
+        "netProfit": 39873.52314636001,
+        "nonControllingNetProfit": -4.768,
+        "ownersNetProfit": 39878.29114636,
+        "ordinaryWeightedSharesMillionAssumed": 358.321,
+        "potentialWeightedSharesMillionAssumed": 0.088,
+        "potentialIncludedMillion": 0.088,
+        "antiDilutiveExcludedMillion": 0,
+        "dilutedSharesMillionAssumed": 358.40900000000005,
+        "basicEpsConditional": 111.29208488020518,
+        "dilutedEpsConditional": 111.26475938483686,
+        "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified"
+      },
+      "calendar2027": {
+        "revenue": 272249.8083086897,
+        "grossProfit": 91203.68578341104,
+        "operatingExpenses": 20418.735623151726,
+        "operatingProfit": 70784.95016025932,
+        "nonOperating": 0,
+        "pretaxProfit": 70784.95016025932,
+        "taxExpense": 16988.38803846224,
+        "netProfit": 53796.56212179709,
+        "nonControllingNetProfit": -4,
+        "ownersNetProfit": 53800.56212179709,
+        "ordinaryWeightedSharesMillionAssumed": 358.321,
+        "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+        "potentialIncludedMillion": 1.7916050000000001,
+        "antiDilutiveExcludedMillion": 0,
+        "dilutedSharesMillionAssumed": 360.11260500000003,
+        "basicEpsConditional": 150.1462714208687,
+        "dilutedEpsConditional": 149.39927504564048,
+        "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified"
+      },
+      "nextFourUnreported": {
+        "revenue": 251136.45572159998,
+        "grossProfit": 84130.71266673601,
+        "operatingExpenses": 18835.234179119998,
+        "operatingProfit": 65295.478487616005,
+        "nonOperating": 0,
+        "pretaxProfit": 65295.478487616005,
+        "taxExpense": 15670.914837027842,
+        "netProfit": 49624.56365058817,
+        "nonControllingNetProfit": -4,
+        "ownersNetProfit": 49628.56365058817,
+        "ordinaryWeightedSharesMillionAssumed": 358.321,
+        "potentialWeightedSharesMillionAssumed": 0.8958025000000001,
+        "potentialIncludedMillion": 0.8958025000000001,
+        "antiDilutiveExcludedMillion": 0,
+        "dilutedSharesMillionAssumed": 359.21680250000003,
+        "basicEpsConditional": 138.50308424733177,
+        "dilutedEpsConditional": 138.15769002227609,
+        "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+        "periods": [
+          "2026Q3",
+          "2026Q4",
+          "2027Q1",
+          "2027Q2"
+        ]
+      },
+      "targetPrice": null,
+      "multipleCalibrated": false
+    },
+    {
+      "id": "bull",
+      "assumptions": {
+        "growth": [
+          0.1,
+          -0.02,
+          0.12,
+          0.12,
+          0.08
+        ],
+        "grossMargin": 0.36,
+        "opexRatio": 0.07,
+        "marginStep": 0.002,
+        "bankInterest": 70,
+        "financeCost": -170,
+        "fx": 100,
+        "otherGainsExFx": 100,
+        "taxRate": 0.23,
+        "nci": -1,
+        "potentialRatio": 0.01
+      },
+      "quarters": [
+        {
+          "period": "2026Q3",
+          "revenue": 60884.517,
+          "grossProfit": 21918.42612,
+          "operatingExpenses": 4261.916190000001,
+          "operatingProfit": 17656.50993,
+          "nonOperating": 100,
+          "pretaxProfit": 17756.50993,
+          "taxExpense": 4083.9972839,
+          "netProfit": 13672.5126461,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 13673.5126461,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 0,
+          "potentialIncludedMillion": 0,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 358.321,
+          "basicEpsConditional": 38.15995335495268,
+          "dilutedEpsConditional": 38.15995335495268,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.36,
+          "opexRatioAssumed": 0.07,
+          "interestBreakdown": {
+            "bankInterestAssumed": 70,
+            "financeCostAssumed": -170,
+            "fxAssumed": 100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2026Q4",
+          "revenue": 66972.96870000001,
+          "grossProfit": 24244.214669400004,
+          "operatingExpenses": 4688.107809000001,
+          "operatingProfit": 19556.106860400003,
+          "nonOperating": 100,
+          "pretaxProfit": 19656.106860400003,
+          "taxExpense": 4520.904577892001,
+          "netProfit": 15135.202282508002,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 15136.202282508002,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 0,
+          "potentialIncludedMillion": 0,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 358.321,
+          "basicEpsConditional": 42.24201842065634,
+          "dilutedEpsConditional": 42.24201842065634,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.362,
+          "opexRatioAssumed": 0.07,
+          "interestBreakdown": {
+            "bankInterestAssumed": 70,
+            "financeCostAssumed": -170,
+            "fxAssumed": 100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q1",
+          "revenue": 65633.50932600001,
+          "grossProfit": 23890.597394664004,
+          "operatingExpenses": 4594.345652820001,
+          "operatingProfit": 19296.251741844004,
+          "nonOperating": 100,
+          "pretaxProfit": 19396.251741844004,
+          "taxExpense": 4461.137900624121,
+          "netProfit": 14935.113841219882,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 14936.113841219882,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+          "potentialIncludedMillion": 3.5832100000000002,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 361.90421000000003,
+          "basicEpsConditional": 41.683612853335084,
+          "dilutedEpsConditional": 41.27090381518325,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.364,
+          "opexRatioAssumed": 0.07,
+          "interestBreakdown": {
+            "bankInterestAssumed": 70,
+            "financeCostAssumed": -170,
+            "fxAssumed": 100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q2",
+          "revenue": 73509.53044512002,
+          "grossProfit": 26904.488142913928,
+          "operatingExpenses": 5145.667131158402,
+          "operatingProfit": 21758.821011755525,
+          "nonOperating": 100,
+          "pretaxProfit": 21858.821011755525,
+          "taxExpense": 5027.528832703771,
+          "netProfit": 16831.292179051754,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 16832.292179051754,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+          "potentialIncludedMillion": 3.5832100000000002,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 361.90421000000003,
+          "basicEpsConditional": 46.97545546884428,
+          "dilutedEpsConditional": 46.51035194935078,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.366,
+          "opexRatioAssumed": 0.07,
+          "interestBreakdown": {
+            "bankInterestAssumed": 70,
+            "financeCostAssumed": -170,
+            "fxAssumed": 100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q3",
+          "revenue": 82330.67409853444,
+          "grossProfit": 30297.68806826067,
+          "operatingExpenses": 5763.147186897411,
+          "operatingProfit": 24534.54088136326,
+          "nonOperating": 100,
+          "pretaxProfit": 24634.54088136326,
+          "taxExpense": 5665.9444027135505,
+          "netProfit": 18968.59647864971,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 18969.59647864971,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+          "potentialIncludedMillion": 3.5832100000000002,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 361.90421000000003,
+          "basicEpsConditional": 52.94023090650481,
+          "dilutedEpsConditional": 52.416070204460205,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.368,
+          "opexRatioAssumed": 0.07,
+          "interestBreakdown": {
+            "bankInterestAssumed": 70,
+            "financeCostAssumed": -170,
+            "fxAssumed": 100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        },
+        {
+          "period": "2027Q4",
+          "revenue": 88917.1280264172,
+          "grossProfit": 32899.33736977436,
+          "operatingExpenses": 6224.198961849204,
+          "operatingProfit": 26675.138407925155,
+          "nonOperating": 100,
+          "pretaxProfit": 26775.138407925155,
+          "taxExpense": 6158.281833822786,
+          "netProfit": 20616.85657410237,
+          "nonControllingNetProfit": -1,
+          "ownersNetProfit": 20617.85657410237,
+          "ordinaryWeightedSharesMillionAssumed": 358.321,
+          "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+          "potentialIncludedMillion": 3.5832100000000002,
+          "antiDilutiveExcludedMillion": 0,
+          "dilutedSharesMillionAssumed": 361.90421000000003,
+          "basicEpsConditional": 57.54018484571758,
+          "dilutedEpsConditional": 56.97048004526493,
+          "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+          "grossMarginAssumed": 0.37,
+          "opexRatioAssumed": 0.07,
+          "interestBreakdown": {
+            "bankInterestAssumed": 70,
+            "financeCostAssumed": -170,
+            "fxAssumed": 100,
+            "otherGainsExFxAssumed": 100
+          },
+          "nonopScope": "assumed reported-style net bridge; FX is part of other gains, never counted twice",
+          "oneOffGainAssumed": 0,
+          "commercialVolumeBridge": null
+        }
+      ],
+      "calendar2026": {
+        "revenue": 208199.94070000004,
+        "grossProfit": 71894.7847894,
+        "operatingExpenses": 14820.014999000003,
+        "operatingProfit": 57074.7697904,
+        "nonOperating": 317.256,
+        "pretaxProfit": 57392.0257904,
+        "taxExpense": 13373.887861792002,
+        "netProfit": 44018.137928608005,
+        "nonControllingNetProfit": -4.768,
+        "ownersNetProfit": 44022.905928608,
+        "ordinaryWeightedSharesMillionAssumed": 358.321,
+        "potentialWeightedSharesMillionAssumed": 0.088,
+        "potentialIncludedMillion": 0.088,
+        "antiDilutiveExcludedMillion": 0,
+        "dilutedSharesMillionAssumed": 358.40900000000005,
+        "basicEpsConditional": 122.85884982629541,
+        "dilutedEpsConditional": 122.82868434835062,
+        "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified"
+      },
+      "calendar2027": {
+        "revenue": 310390.8418960717,
+        "grossProfit": 113992.11097561297,
+        "operatingExpenses": 21727.35893272502,
+        "operatingProfit": 92264.75204288795,
+        "nonOperating": 400,
+        "pretaxProfit": 92664.75204288795,
+        "taxExpense": 21312.89296986423,
+        "netProfit": 71351.85907302372,
+        "nonControllingNetProfit": -4,
+        "ownersNetProfit": 71355.85907302372,
+        "ordinaryWeightedSharesMillionAssumed": 358.321,
+        "potentialWeightedSharesMillionAssumed": 3.5832100000000002,
+        "potentialIncludedMillion": 3.5832100000000002,
+        "antiDilutiveExcludedMillion": 0,
+        "dilutedSharesMillionAssumed": 361.90421000000003,
+        "basicEpsConditional": 199.13948407440176,
+        "dilutedEpsConditional": 197.16780601425916,
+        "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified"
+      },
+      "nextFourUnreported": {
+        "revenue": 267000.52547112,
+        "grossProfit": 96957.72632697792,
+        "operatingExpenses": 18690.036782978405,
+        "operatingProfit": 78267.68954399953,
+        "nonOperating": 400,
+        "pretaxProfit": 78667.68954399953,
+        "taxExpense": 18093.568595119894,
+        "netProfit": 60574.120948879645,
+        "nonControllingNetProfit": -4,
+        "ownersNetProfit": 60578.120948879645,
+        "ordinaryWeightedSharesMillionAssumed": 358.321,
+        "potentialWeightedSharesMillionAssumed": 1.7916050000000001,
+        "potentialIncludedMillion": 1.7916050000000001,
+        "antiDilutiveExcludedMillion": 0,
+        "dilutedSharesMillionAssumed": 360.11260500000003,
+        "basicEpsConditional": 169.0610400977884,
+        "dilutedEpsConditional": 168.21994039580937,
+        "shareAssumption": "no new ordinary issuance; weighted potential awards without numerator adjustment; not future verified",
+        "periods": [
+          "2026Q3",
+          "2026Q4",
+          "2027Q1",
+          "2027Q2"
+        ]
+      },
+      "targetPrice": null,
+      "multipleCalibrated": false
+    }
+  ],
+  "capacityPlan": {
+    "pdfPage": 12,
+    "kind": "company_plan",
+    "unit": "million_CCL_sheets_per_month",
+    "capacityByYear": {
+      "2024": 4.35,
+      "2025": 5.85,
+      "2026": 6.15,
+      "2027": 9.3,
+      "2028": 11.1
+    },
+    "scope": "dated expansion plan, not realized capacity or output; no utilization/yield/ASP verified"
+  },
+  "capacityStatus": "dated plan not actual qualified output; undated5.25 and historicalbroker7.6 not reconciled into actual",
+  "productEconomics": {
+    "capacity": null,
+    "utilization": null,
+    "yield": null,
+    "asp": null,
+    "productMix": null,
+    "perGradeRevenue": null,
+    "customerOrders": null,
+    "reason": "only category growth and total financials supplied; no calibrated physical bridge"
+  },
+  "rawTechnicalDiagnostic": {
+    "component": "auo-deep-dive-model.calculateTechnicalSnapshot: seeded EMA, Wilder RSI first14 actual deltas, ATR excludes first TR; not AUO-market calculator version",
+    "values": {
+      "asOf": "115/10/08",
+      "close": 6000,
+      "ma5": 5766,
+      "ma20": 5236.5,
+      "ma60": 5272,
+      "ma120": 5117.25,
+      "ma240": 3508.15,
+      "macd": 114.91,
+      "macdSignal": -16.95,
+      "macdHistogram": 131.86,
+      "rsi14": 66.8,
+      "atr14": 284.88,
+      "averageVolume20": 2311798,
+      "volumeRatio20": 0.8,
+      "priorHigh20": 6325,
+      "priorHigh60": 6470,
+      "stale": false
+    },
+    "nonComparableDates": [
+      {
+        "date": "2026-08-28",
+        "rawPriceChange": "X0.00",
+        "rawRemark": "",
+        "scope": "Observed TWSE non-comparable price-change flag; underlying company action and adjusted prices are not independently verified. Do not treat cross-boundary raw return as an economic/total return or silently ignore this event."
+      }
+    ],
+    "adjusted": false,
+    "totalReturn": false,
+    "benchmarkRelativeReturn": null,
+    "officialCalendarComplete": false,
+    "flows": null,
+    "entryApproved": false
+  },
+  "reversePriceSensitivity": [
+    {
+      "multipleTestParameter": 20,
+      "eps": 300,
+      "netIncome": 108034,
+      "netMargin": 0.3968,
+      "shareBasis": "base2027 conditional diluted weighted shares; future assumption",
+      "sharesMillionAssumed": 360.11260500000003,
+      "calibrated": false
+    },
+    {
+      "multipleTestParameter": 30,
+      "eps": 200,
+      "netIncome": 72023,
+      "netMargin": 0.2645,
+      "shareBasis": "base2027 conditional diluted weighted shares; future assumption",
+      "sharesMillionAssumed": 360.11260500000003,
+      "calibrated": false
+    },
+    {
+      "multipleTestParameter": 40,
+      "eps": 150,
+      "netIncome": 54017,
+      "netMargin": 0.1984,
+      "shareBasis": "base2027 conditional diluted weighted shares; future assumption",
+      "sharesMillionAssumed": 360.11260500000003,
+      "calibrated": false
+    },
+    {
+      "multipleTestParameter": 50,
+      "eps": 120,
+      "netIncome": 43214,
+      "netMargin": 0.1587,
+      "shareBasis": "base2027 conditional diluted weighted shares; future assumption",
+      "sharesMillionAssumed": 360.11260500000003,
+      "calibrated": false
+    }
+  ],
+  "contextUse": {
+    "historicalBroker": "2025-08-01 EPS53.61/PE24/1300/capacity7.6 historical only",
+    "independentRoots": "PTT and linked news same root; MorganStanley original not read",
+    "failedSource": "KGI URLError retained",
+    "contextApproval": "root relayed Astra unsigned scoped data pass ab2fda19; not this model"
+  },
+  "limitations": [
+    "Future ordinary/potential shares assumed; historical exact share notes read",
+    "No physical grade-level production/orders/mix; consolidated sensitivity only",
+    "Future bank interest/finance/FX/other gains assumed; normalization incomplete",
+    "Q3 monthly is not Q3 financial revenue or EPS",
+    "Raw X0.00 on Aug28 prohibits total/economic-return claim; no approved entry",
+    "No current broker consensus, calibrated multiples, current PB or target price"
+  ],
+  "canonicalHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
+  "inputManifest": [
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+      "bytes": 33734,
+      "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+      "bytes": 110526,
+      "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+      "bytes": 10693,
+      "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+      "bytes": 3630,
+      "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+      "bytes": 3671,
+      "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
+    }
+  ]
+}

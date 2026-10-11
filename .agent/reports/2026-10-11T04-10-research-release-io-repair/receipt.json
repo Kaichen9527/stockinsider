@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "research-release-io-maker-evidence-v1",
+  "recordedAt": "2026-10-11T04:10:32.519893+00:00",
+  "sourceCommit": "4ff224baa6e00e73198d9f2cc8b29b2045374744",
+  "sourceTree": "93ce27fb87b79f537626bcc71d6e8d5199515a2a",
+  "baseCommit": "51a80cbaa1bbe719794ce9ca400532bc48cb1c58",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "platform": "darwin",
+  "node": "v22.14.0",
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "dependencyReuse": {
+    "rootNodeModules": "existing integration checkout node_modules symlink; identical package-lock bytes; pg8.18.0",
+    "packageChanges": false
+  },
+  "checks": [
+    {
+      "command": "npm run test:source-led-opportunity-v3:product-correctness",
+      "exitCode": 0,
+      "tests": 155,
+      "passed": 155,
+      "failed": 0,
+      "skipped": 0,
+      "rawFile": "mac-product-correctness-155.tap"
+    },
+    {
+      "command": "npm run build",
+      "cwd": "web",
+      "exitCode": 0,
+      "rawFile": "mac-normal-build.log"
+    }
+  ],
+  "previousObservedResultsWithMissingRaw": {
+    "relatedMacTests": {
+      "tests": 81,
+      "passed": 70,
+      "failed": 11,
+      "skipped": 0,
+      "newBoundedCases": {
+        "tests": 11,
+        "passed": 11
+      },
+      "failureScope": "10 priority cases depend on Linux /proc/self/fd;1 deep draft follows Mac /tmp symlink"
+    },
+    "baselineLocalProduct": {
+      "tests": 146,
+      "passed": 142,
+      "failed": 4,
+      "skipped": 0,
+      "rawSha256ReportedByIndependentReader": "4d8c489c50b35993c5e61af4edcc9eedcff03ab870ffcdb36b19d0055c3306b2"
+    },
+    "status": "previous transcript-observed results only; original /tmp raw files no longer exist on2026-10-11; not reconstructed, not counted as current reproducible acceptance"
+  },
+  "baselineGithubFailure": {
+    "runId": 37970639183,
+    "rawFile": "baseline51-linux-ci-failure.log",
+    "reason": "financial_parent_invalid: packaging fixture rooted under Linux world-writable /tmp; production parent guard retained"
+  },
+  "buildId": "JQxBHS8c6BNBLjEU5NOvs",
+  "exactStartClockCaptured": false,
+  "rawFiles": [
+    {
+      "file": "mac-product-correctness-155.tap",
+      "bytes": 40171,
+      "sha256": "4f67fbe8a6a5a5ffd05dd1fbcbe2f380b39e91906a8c5a05c4bcee68157786d6",
+      "observedRawMtime": "2026-10-11T04:08:29.226425+00:00"
+    },
+    {
+      "file": "mac-normal-build.log",
+      "bytes": 6500,
+      "sha256": "764411c112dc508094066baab7a42fd764eeec1f3ca245a4d7a65bf93f42de0f",
+      "observedRawMtime": "2026-10-11T04:08:52.061631+00:00"
+    },
+    {
+      "file": "baseline51-linux-ci-failure.log",
+      "bytes": 605134,
+      "sha256": "4b38577e82c82c63c30b235185168cfe7d7354618b4eea4ec65d63c9a2e0656b",
+      "observedRawMtime": "2026-10-11T04:07:13.332473+00:00"
+    }
+  ],
+  "independentReview": "pending scoped review; no full protected review completed",
+  "productionMigration": false,
+  "mainMerged": false,
+  "deployed": false,
+  "genuineResearchExecution": false
+}

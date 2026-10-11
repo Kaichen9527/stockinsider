@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "paper-cloud-reader-converged-vm-v1",
+  "recordedAt": "2026-10-08T16:39:06.146239+00:00",
+  "testedCommit": "8d751dc6fcb7edeb547b0362581b62519cdbb215",
+  "branch": "codex/research-development-converged-oct09",
+  "approvedInputs": [
+    "d868d53e56a3084face40a24eadc1d5964cfe122",
+    "8560e5e96d50e2b1f8df540bf4cbd9da86c4f02f"
+  ],
+  "base": "4868472ee479aa14aed24587311d1a5f1118d07b",
+  "baseObservedRepairPendingAtSeparateCommit": "43d19d6e3daf609a904335eb7c8d963bdd45fa7f",
+  "cases": {
+    "tests": 25,
+    "pass": 25,
+    "fail": 0,
+    "skip": 0
+  },
+  "checks": {
+    "typecheck": "pass",
+    "lint": "0 errors;33 existing warnings",
+    "normalWebBuild": "pass"
+  },
+  "measurements": {
+    "convergence-paper-reader": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "convergence-paper-reader",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-cloud-work-cli.test.mjs",
+        "scripts/research-paper-session-route.test.mjs",
+        "web/src/lib/tw-entry-plan-authority.test.ts"
+      ],
+      "startedAt": "2026-10-08T16:35:52.033Z",
+      "completedAt": "2026-10-08T16:35:53.999Z",
+      "elapsedSeconds": 1.9661906839901349,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 370528256,
+      "observedTaskDiskPeakBytes": 1976291328,
+      "availableBeforeBytes": 21060116480,
+      "availableAfterBytes": 21060104192,
+      "guardTermination": null
+    },
+    "convergence-types": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "convergence-types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T16:36:11.126Z",
+      "completedAt": "2026-10-08T16:36:22.209Z",
+      "elapsedSeconds": 11.082599449000554,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 963510272,
+      "observedTaskDiskPeakBytes": 1976307712,
+      "availableBeforeBytes": 21060100096,
+      "availableAfterBytes": 21060096000,
+      "guardTermination": null
+    },
+    "convergence-lint": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "convergence-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T16:36:42.576Z",
+      "completedAt": "2026-10-08T16:37:08.144Z",
+      "elapsedSeconds": 25.56892744700599,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1056329728,
+      "observedTaskDiskPeakBytes": 1976315904,
+      "availableBeforeBytes": 21060091904,
+      "availableAfterBytes": 21025816576,
+      "guardTermination": null
+    },
+    "convergence-build": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "convergence-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T16:37:33.067Z",
+      "completedAt": "2026-10-08T16:37:52.639Z",
+      "elapsedSeconds": 19.571867894002935,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1221988352,
+      "observedTaskDiskPeakBytes": 1976328192,
+      "availableBeforeBytes": 21025812480,
+      "availableAfterBytes": 21019283456,
+      "guardTermination": null
+    }
+  },
+  "privateEvidenceHashes": {
+    "convergence-paper-reader.json": {
+      "bytes": 723,
+      "sha256": "4e5ef188ba677a7caf807f6f9c2f40bb7f8feaae825f0d890b4088728e445a6b"
+    },
+    "convergence-paper-reader.log": {
+      "bytes": 7361,
+      "sha256": "241c4ee30ce7154aa66d385fa98d697186053d8e25adeb66c22345a889ab372f"
+    },
+    "convergence-paper-reader.time": {
+      "bytes": 896,
+      "sha256": "1fb9bb8bd91b96e245f9a7a252ad9c6d04539d78e9fc19836c97857c78ef69ef"
+    },
+    "convergence-types.json": {
+      "bytes": 570,
+      "sha256": "56ba9d3f2cf3e7941c01aa85c7dddfd8a8dff6901c897d9472e43c0fcde5b3b0"
+    },
+    "convergence-types.log": {
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "convergence-types.time": {
+      "bytes": 757,
+      "sha256": "5a32b5bfc418e222bdbde9502f941d9954efa71bf5f8af426d5d70af2fb4b784"
+    },
+    "convergence-lint.json": {
+      "bytes": 564,
+      "sha256": "f3f1c17305b273d46dec9d374723eba1dd87091094603f1c444c390c9de79661"
+    },
+    "convergence-lint.log": {
+      "bytes": 4718,
+      "sha256": "08dc636eb541cc8b68c21f4149b523ab347ff6e4a474fa6a378f006e124571ff"
+    },
+    "convergence-lint.time": {
+      "bytes": 753,
+      "sha256": "29016d859510e588dd582977c7d777992af44a96b5bb36eb66735ba4fbfe076e"
+    },
+    "convergence-build.json": {
+      "bytes": 567,
+      "sha256": "ac82a105e4a41e258efc0d23008d91d74ff5bdb96cf06b177f3c9684eafa1d31"
+    },
+    "convergence-build.log": {
+      "bytes": 6499,
+      "sha256": "de8f53291d2c46881d5e691e1065ce744baa4a66e2ae1fc9129a16ef5933a7e4"
+    },
+    "convergence-build.time": {
+      "bytes": 758,
+      "sha256": "a6237de61feaf439e9f9f157a27a32c8829e045ec0dc6a190556ec84bbb9d5a6"
+    }
+  },
+  "clockDiagnostic": {
+    "bytes": 7197,
+    "sha256": "6095f9438dc37484273d35cb0b07b44c4cdc47727c0a4b80c9a052ac803fc6fb"
+  },
+  "limits": [
+    "Maker VM checks, not independent review execution",
+    "No claim original CI timeout fixed; positive fake offset reproduces timeout defect",
+    "Observed P2 repair exact is preserved separately pending review; not merged into this branch",
+    "No production/VPS/paid model/activation/authority/publication/strategy writes"
+  ]
+}

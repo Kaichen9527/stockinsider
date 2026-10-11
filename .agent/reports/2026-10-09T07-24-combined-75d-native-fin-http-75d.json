@@ -1,0 +1,21 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "native-fin-http-75d",
+  "command": [
+    "node",
+    "scripts/run-node22.js",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "/workspace/cloud-research-combined-27d-artifacts-oct09/financial-http.test.mjs"
+  ],
+  "startedAt": "2026-10-09T07:18:17.383Z",
+  "completedAt": "2026-10-09T07:18:56.126Z",
+  "elapsedSeconds": 38.74228159699123,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 653979648,
+  "observedTaskDiskPeakBytes": 1630081024,
+  "availableBeforeBytes": 14511341568,
+  "availableAfterBytes": 14416519168,
+  "guardTermination": null
+}

@@ -1,0 +1,400 @@
+{
+  "schemaVersion": "public-relay-priority-vm-delivery-v1",
+  "recordedAt": "2026-10-08T09:31:15.587438+00:00",
+  "base": "f4f1a354e704a1820a914a54dd078ab7b9fdbd38",
+  "correctedDataReviewSubject": "66b7f026f7f7cd61a70b89e060f1410efb0f5e31",
+  "wrong869VersionConsumed": false,
+  "stages": {
+    "focused.json": {
+      "stage": "focused",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-public-relay.test.ts",
+        "web/src/lib/research-source-attempt-controller.test.ts",
+        "scripts/research-source-controller.test.mjs",
+        "scripts/research-source-priority-consumer.test.mjs",
+        "web/src/app/api/internal/research-priority-run/route.contract.test.ts"
+      ],
+      "startedAt": "2026-10-08T09:09:44.398Z",
+      "completedAt": "2026-10-08T09:09:45.585Z",
+      "elapsedSeconds": 1.1874810540030012,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 339722240,
+      "observedTaskDiskPeakBytes": 949067776,
+      "availableBeforeBytes": 26406244352,
+      "availableAfterBytes": 26406158336,
+      "guardTermination": null
+    },
+    "focused-visible.json": {
+      "stage": "focused-visible",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--experimental-test-isolation=none",
+        "--test",
+        "web/src/lib/research-public-relay.test.ts",
+        "web/src/lib/research-source-attempt-controller.test.ts",
+        "scripts/research-source-controller.test.mjs",
+        "scripts/research-source-priority-consumer.test.mjs",
+        "web/src/app/api/internal/research-priority-run/route.contract.test.ts"
+      ],
+      "startedAt": "2026-10-08T09:10:40.501Z",
+      "completedAt": "2026-10-08T09:10:41.487Z",
+      "elapsedSeconds": 0.9855110380012775,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 177717248,
+      "observedTaskDiskPeakBytes": 949075968,
+      "availableBeforeBytes": 26406170624,
+      "availableAfterBytes": 26406060032,
+      "guardTermination": null
+    },
+    "types.json": {
+      "stage": "types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T09:11:31.200Z",
+      "completedAt": "2026-10-08T09:11:47.540Z",
+      "elapsedSeconds": 16.340052579005715,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1336471552,
+      "observedTaskDiskPeakBytes": 949317632,
+      "availableBeforeBytes": 26406039552,
+      "availableAfterBytes": 26403762176,
+      "guardTermination": null
+    },
+    "lint.json": {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint",
+        "--",
+        "--quiet"
+      ],
+      "startedAt": "2026-10-08T09:12:08.951Z",
+      "completedAt": "2026-10-08T09:12:30.156Z",
+      "elapsedSeconds": 21.204535088996636,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1141719040,
+      "observedTaskDiskPeakBytes": 965607424,
+      "availableBeforeBytes": 26403758080,
+      "availableAfterBytes": 26387587072,
+      "guardTermination": null
+    },
+    "related.json": {
+      "stage": "related",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--experimental-test-isolation=none",
+        "--test",
+        "web/src/lib/research-public-relay.test.ts",
+        "web/src/lib/research-source-attempt-controller.test.ts",
+        "scripts/research-source-controller.test.mjs",
+        "scripts/research-source-priority-consumer.test.mjs",
+        "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+        "web/src/lib/research-inbox.test.ts",
+        "web/src/lib/research-source-association.test.ts",
+        "web/src/lib/research-source-roots.test.ts",
+        "web/src/lib/research-agent-priority.test.ts",
+        "scripts/research-source-budget-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-08T09:13:58.340Z",
+      "completedAt": "2026-10-08T09:14:01.423Z",
+      "elapsedSeconds": 3.082909179996932,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 203182080,
+      "observedTaskDiskPeakBytes": 1009516544,
+      "availableBeforeBytes": 26387599360,
+      "availableAfterBytes": 26387476480,
+      "guardTermination": null
+    },
+    "build.json": {
+      "stage": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T09:16:09.843Z",
+      "completedAt": "2026-10-08T09:16:45.151Z",
+      "elapsedSeconds": 35.307364183012396,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1691426816,
+      "observedTaskDiskPeakBytes": 1199820800,
+      "availableBeforeBytes": 26386927616,
+      "availableAfterBytes": 26064855040,
+      "guardTermination": null
+    },
+    "actual-relay.json": {
+      "stage": "actual-relay",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-discovery-relay-prepare.mjs",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/public-source-relay.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/social-surface-observations.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/observed-security-classification.json",
+        "/workspace/cloud-public-relay-priority-artifacts-oct08/actual-relay-result.json"
+      ],
+      "startedAt": "2026-10-08T09:17:52.953Z",
+      "completedAt": "2026-10-08T09:17:53.243Z",
+      "elapsedSeconds": 0.289945030992385,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 83226624,
+      "observedTaskDiskPeakBytes": 1290293248,
+      "availableBeforeBytes": 26064826368,
+      "availableAfterBytes": 26064818176,
+      "guardTermination": null
+    },
+    "actual-relay-fixed.json": {
+      "stage": "actual-relay-fixed",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-discovery-relay-prepare.mjs",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/public-source-relay.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/social-surface-observations.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/observed-security-classification.json",
+        "/workspace/cloud-public-relay-priority-artifacts-oct08/actual-relay-result.json"
+      ],
+      "startedAt": "2026-10-08T09:18:30.782Z",
+      "completedAt": "2026-10-08T09:18:31.065Z",
+      "elapsedSeconds": 0.28263687300204765,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 79814656,
+      "observedTaskDiskPeakBytes": 1290305536,
+      "availableBeforeBytes": 26064814080,
+      "availableAfterBytes": 26064805888,
+      "guardTermination": null
+    },
+    "actual-relay-final.json": {
+      "stage": "actual-relay-final",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/research-discovery-relay-prepare.mjs",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/public-source-relay.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/social-surface-observations.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/observed-security-classification.json",
+        "/workspace/cloud-public-relay-priority-artifacts-oct08/actual-relay-result.json"
+      ],
+      "startedAt": "2026-10-08T09:20:01.185Z",
+      "completedAt": "2026-10-08T09:20:01.590Z",
+      "elapsedSeconds": 0.40516715600097086,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 72175616,
+      "observedTaskDiskPeakBytes": 1290317824,
+      "availableBeforeBytes": 26064801792,
+      "availableAfterBytes": 26064359424,
+      "guardTermination": null
+    },
+    "actual-timed-relay.json": {
+      "stage": "actual-timed-relay",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "scripts/research-discovery-relay-prepare.mjs",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/public-source-relay.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/social-surface-observations.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/observed-security-classification.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/timed-public-source-relay.json",
+        "/workspace/cloud-public-relay-priority-artifacts-oct08/actual-timed-relay-result.json"
+      ],
+      "startedAt": "2026-10-08T09:28:29.870Z",
+      "completedAt": "2026-10-08T09:28:30.278Z",
+      "elapsedSeconds": 0.40751728700706735,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 103710720,
+      "observedTaskDiskPeakBytes": 1290788864,
+      "availableBeforeBytes": 26064265216,
+      "availableAfterBytes": 26063802368,
+      "guardTermination": null
+    },
+    "local-inbox-pg.json": {
+      "stage": "local-inbox-pg",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "/workspace/cloud-public-relay-priority-artifacts-oct08/local-inbox-pg.mjs"
+      ],
+      "startedAt": "2026-10-08T09:28:46.730Z",
+      "completedAt": "2026-10-08T09:28:49.183Z",
+      "elapsedSeconds": 2.4526062119985,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 211472384,
+      "observedTaskDiskPeakBytes": 1332043776,
+      "availableBeforeBytes": 26063814656,
+      "availableAfterBytes": 26023010304,
+      "guardTermination": null
+    },
+    "local-inbox-pg-receipt.json": {
+      "scope": "Actual attributed Telegram summaries through genuine internal route handlers and isolated PostgreSQL; injected local DB adapter, not production app/data-plane activation",
+      "startedAt": "2026-10-08T09:28:47.166Z",
+      "formalImported": false,
+      "unauthorizedStatus": 401,
+      "unauthorizedWrites": 0,
+      "submissionFailure": "source_priority_priority_rejected_or_uncertain",
+      "persistedDocuments": 3,
+      "persistedIndustryOnly": 3,
+      "postgresRestartBytesUnchanged": true,
+      "inboxReplayStatus": 200,
+      "inboxReplay": {
+        "ok": true,
+        "accepted": 0,
+        "received": 3,
+        "revisions": [],
+        "authSource": "internal_api_key"
+      },
+      "consumerRestartFailure": "source_priority_uncertain_submission",
+      "consumerRestartWrites": 0,
+      "actualMissingRpc": [
+        "candidate_research_stock_authority_page",
+        "research_source_heads_page_v1"
+      ],
+      "top20": null,
+      "companySourceMentions": 0,
+      "limitations": [
+        "No official authority RPC/schema was installed or fabricated",
+        "Priority receipt/Top20 not completed",
+        "Raw source bytes remain on Mac; VM only consumed attributed relay",
+        "No model reservation, publication or business roundtrip"
+      ],
+      "checksPassed": true,
+      "completedAt": "2026-10-08T09:28:49.150Z"
+    },
+    "related-final.json": {
+      "stage": "related-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--experimental-test-isolation=none",
+        "--test",
+        "web/src/lib/research-public-relay.test.ts",
+        "web/src/lib/research-source-attempt-controller.test.ts",
+        "scripts/research-source-controller.test.mjs",
+        "scripts/research-source-priority-consumer.test.mjs",
+        "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+        "web/src/lib/research-inbox.test.ts",
+        "web/src/lib/research-source-association.test.ts",
+        "web/src/lib/research-source-roots.test.ts",
+        "web/src/lib/research-agent-priority.test.ts",
+        "scripts/research-source-budget-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-08T09:29:07.690Z",
+      "completedAt": "2026-10-08T09:29:11.156Z",
+      "elapsedSeconds": 3.465423714995268,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 201474048,
+      "observedTaskDiskPeakBytes": 1373794304,
+      "availableBeforeBytes": 26023006208,
+      "availableAfterBytes": 26022883328,
+      "guardTermination": null
+    }
+  },
+  "receiptFiles": [
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/focused.json",
+      "bytes": 738,
+      "sha256": "558d9cf63dae2c2d14888be67e4480d4dbfdf96015f3194e2a84b2858015ec7c"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/focused-visible.json",
+      "bytes": 788,
+      "sha256": "72d3bf3587a79c5a48b81a2a16b61c5d73808c6c4d52bdb9921a544789b7c4a2"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/types.json",
+      "bytes": 419,
+      "sha256": "484b022f5ae4884ad81a13eb990fc7e21ddaf7d77a9eeaeffab9b00977cb0f40"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/lint.json",
+      "bytes": 438,
+      "sha256": "c1e44f0629ba80e96578d5ff2401c34059a57affe736dfee781efc96c0630e13"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/related.json",
+      "bytes": 1033,
+      "sha256": "8bb02b242511c004ebaae4d3dda1ea837568f8671e5e945f1d92eea1e68aafc6"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/build.json",
+      "bytes": 416,
+      "sha256": "525c4c469e8d436fc42d3d6688b768240ac368a05fdff83b3c4e735fd20ceb64"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/actual-relay.json",
+      "bytes": 951,
+      "sha256": "02bc5f8068ff9a2a7dc246cf4b75e752dff6ea22720ec3e175d112cae65d3d33"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/actual-relay-fixed.json",
+      "bytes": 959,
+      "sha256": "9162db54eb85a571bade651df1ab3bca1824271c33f1d8f163402431a93b619c"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/actual-relay-final.json",
+      "bytes": 959,
+      "sha256": "8607ba3d9acf132a7662e1718ad1df87f849ced5539d5dd2b33f741d04165a69"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/actual-timed-relay.json",
+      "bytes": 1135,
+      "sha256": "448755b1c50fe6b34ed685e7823181c5e4cc4f5089fd02f828a1263bc807a411"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/local-inbox-pg.json",
+      "bytes": 556,
+      "sha256": "610776ccb6d0b48c1033694feeed4344be4a9cbc59589e4e03a6a063b299a068"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/local-inbox-pg-receipt.json",
+      "bytes": 1245,
+      "sha256": "4db51a0a17af5370fc6e7937673b25b2f63eaa9f17ef2856802661769d2f4d06"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/related-final.json",
+      "bytes": 1082,
+      "sha256": "fc9657c90514826b3f9ec10e85cfa8bb1c448c5630e8dac9cfee1f5622e2ab62"
+    }
+  ],
+  "finalCodeVerification": {
+    "relatedTests": 117,
+    "passed": 117,
+    "failed": 0,
+    "skipped": 0,
+    "types": "earlier pass; final successor pending",
+    "lint": "earlier pass; final successor pending",
+    "normalWebBuild": "earlier pass; final successor pending"
+  },
+  "limits": [
+    "No complete official authority RPC/Top20 result",
+    "Actual local inbox handlers use injected isolated PostgreSQL adapter, not production app activation",
+    "Mac source bytes not transferred or rehashed by VM",
+    "Unsigned data approval is not code/strategy/publication approval",
+    "Manual engineering increment; not automatic model-budget acceptance"
+  ],
+  "resources": {
+    "memoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "nproc": 5,
+    "projectDiskQuota": "not confirmed; df is filesystem visibility",
+    "memoryMeasurement": "100ms aggregate process-group VmRSS sampling plus GNU time -v; not cgroup peak",
+    "guard": "8GiB RSS,4GB task disk,one heavy job; no VPS admission dependency"
+  },
+  "actualRelay": {
+    "scopeCount": 9,
+    "inboxItems": 3,
+    "companyMentions": 0,
+    "runHash": "c088b92de5091df7df64bcfe114e97ffceeadc5505d373d4b531d13bd336aab0",
+    "observedSecurityCount": 1946,
+    "trustedAuthorityActivated": false,
+    "top20": null
+  }
+}

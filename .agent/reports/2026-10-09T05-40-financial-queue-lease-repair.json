@@ -1,0 +1,27 @@
+{
+  "schema": "stockinsider-financial-queue-lease-repair-v1",
+  "designCommit": "c4d376d27317776a3d045bd172aae246a21230f7",
+  "designSpecSha256": "1d48d14da951d24cc8104b039d7a554b20cebc83d6e78bd9899c5a7e3d9cd862",
+  "designReview": "unsigned_scoped_pass",
+  "productionObservation": {
+    "readOnly": true,
+    "release": "9fd86fe620ccc63c89c4acd208327bf2c4e15332",
+    "sessionDate": "2026-10-08",
+    "fetched": 11,
+    "written": 0,
+    "receiptFailure": "stockinsider_backend_lease_required",
+    "privateJournalBytes": 80483,
+    "privateJournalSha256": "ec24546543447e22ed72fe2a0d9705e372a2d8187ebe81583b1f091958db5c98"
+  },
+  "tests": {
+    "original": { "pass": 3, "fail": 5, "skip": 0, "bytes": 7678, "sha256": "cc72494d4c015fe75702ac830a417a2a578b493d9f998a34aba4048a793358dc" },
+    "repairedWithDocumentRegression": { "pass": 16, "fail": 0, "skip": 0, "bytes": 3523, "sha256": "83905c856ea81c13a439c8d602063d10c91c044301c81fcc3b36897d6dcf596a" },
+    "boundary": "actual_route_synthetic_external_adapters"
+  },
+  "independentCodeReviewPassed": false,
+  "realStackPassed": false,
+  "fullTypesLintBuildPassed": false,
+  "protectedAuthorityPassed": false,
+  "deployed": false,
+  "productionWritesPerformed": false
+}

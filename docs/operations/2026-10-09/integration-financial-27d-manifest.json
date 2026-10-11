@@ -1,0 +1,331 @@
+{
+  "schemaVersion": "development-integration-financial-manifest-v1",
+  "assembledAt": "2026-10-09T07:04:01.921266+00:00",
+  "subject": "27d06c2c147883af3eec8b36403e94442be7160b",
+  "tree": "1b6b30aa1c75dec77697685f2ff7bc5b56f21e7b",
+  "parents": [
+    "24333aaa091f07703a163b7a81d0e87b08611f23",
+    "acc673ed4fd81fe7f1e5a0b0eb211fb93bea015f"
+  ],
+  "incomingRuntime": "fa35f43b7c16e38b8eba641ee413636005a17862",
+  "reviewAttribution": {
+    "financialCode": "independent unsigned scoped PASS;64/64 zero skip; no remaining P1/P2",
+    "integrationMechanicalReview": "pending",
+    "nonblockingLimit": "Late pending read may overwrite an earlier buffer wipe; no returned data/IO-ownership bypass. Do not claim guaranteed final clearing."
+  },
+  "changedFiles": [
+    {
+      "path": ".agent/reports/2026-10-08T16-12-business-calculator-vm.json",
+      "sha256": "15cf5446cadcf6b0083c06035ae5d4356ab853ad366e201d4f7f0fa7ef59ac9b",
+      "bytes": 6249,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "f0dd224117c1f79600b62f7ec2270d9edcc0fe82"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-24-financial-adapter-vm.json",
+      "sha256": "f198adec575416753a391af17f013b0ad62cecc0802291804156c5a5cca05087",
+      "bytes": 29338,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "e2d3ac79a2b22a28785bc10321a2ab568e298cb8"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-24-financial-core-final.tap.txt",
+      "sha256": "4189d56a6fef2d27cd3aedb09bb244cada88ddce5194b85f04ed2b1f85c9d630",
+      "bytes": 5324,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "f1e5c6e5f0b46e660c9ec6b9b68b28869a6d0763"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-24-financial-focused-clean.tap.txt",
+      "sha256": "69977d3a03c2a8523fc884bde14eeeec310927b0c258a21e79741aa3df28d8dc",
+      "bytes": 4709,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "0a964b2b76cbfeb494c16a19cefb977e65b6d111"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-24-financial-native-financial.tap.txt",
+      "sha256": "232527f4171a31bb65845a90f2f083e6c0eff3537ce8e662e72935e3df2c4598",
+      "bytes": 9835,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "1e12ea73979b1dd55b07b55a382989d0a52bcdeb"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-24-financial-route-clean.tap.txt",
+      "sha256": "8d88a815c7c35ec257c96fcf08b1ef7f5089324644414b02e3bee4ab5bd8cc8d",
+      "bytes": 9133,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "73a1fe585f1706c3b6ab8f9036484dd6fd4169b0"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-cleanup-probe-setup-failure.json",
+      "sha256": "0f263cacc08924c5a8fba55d39967d34db3cef642b6a2e5ee85ec60b4e430a33",
+      "bytes": 687,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "a18138e41fe085a307fe7e33ea4eb274e0c83533"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-cleanup-probe-setup-failure.mjs.txt",
+      "sha256": "60e2edb460882aeece80802c55c3c1423aaebac70b9ea40754bbd9eb69d1b63c",
+      "bytes": 2803,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "b4f5f976ab35e16c1f6034fa937dde20c355a7e1"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-cleanup-red-probe.json",
+      "sha256": "1231ab8bfe8d7e1a8d9d5b7c20e382740d628197f1f2437920443b9b4a5116e3",
+      "bytes": 646,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "34d0811bb79c43d9b048c089508923ad1231d0fe"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-cleanup-red-probe.mjs.txt",
+      "sha256": "e0d56684bf6cc64d7625f11ef5223a26f1bd6df2a5c28a046fb8d2f7aeb25b35",
+      "bytes": 2824,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "0200ae8f235c41638fa988d196ed0bcb361f9b6e"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-lint-financial-repair-frozen.log.txt",
+      "sha256": "08dc636eb541cc8b68c21f4149b523ab347ff6e4a474fa6a378f006e124571ff",
+      "bytes": 4718,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "8e92804d6e4e15acc7a7a49c84aed4ecfebb4751"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-normal-close-red-probe.json",
+      "sha256": "0475a3bc88172d6aa9da370c4e4ce93f6c1674cb8a94c1c20f70edd3240f26f3",
+      "bytes": 659,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "bc0324df9ba30a33d5269e23cb922b3ad54f0bcd"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-normal-close-red-probe.mjs.txt",
+      "sha256": "babbaad0ec94da3bceb06e1c25f66b88fd3c091b59d54af7855df5788f54a11f",
+      "bytes": 2821,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "221a6b716128809b46f3648415a44f6be8e03354"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-repair-cleanup.tap.txt",
+      "sha256": "34947d3675ade5b4451b62fc1889c34f05bb7ae1990c29ead200dfa72a9c77e4",
+      "bytes": 2367,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "53b42eed24faf6491bb87ba4a971d6e0b081e799"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-repair-core-frozen.log.txt",
+      "sha256": "8ed773d07d22afd330a5072d3402d815c521a43dc3e63d4956268c7f9ad9d745",
+      "bytes": 5341,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "773e205f564956a4ec8404f660b39eb3ae40c010"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-repair-focused-direct.tap.txt",
+      "sha256": "613e9f0147e591999733db57147cb0cf13a05c264d21ea97c96193e716fd37c5",
+      "bytes": 5336,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "ff3643441ddeeef0b37377f11974321a02903340"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-repair-focused-final.tap.txt",
+      "sha256": "d54dc547dd850056653bcef677fe311d9060474473153d8dc8e7f76910baac48",
+      "bytes": 5795,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "f814422c15dafd6505b28be1d7287a51d13820b3"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-repair-focused-first.tap.txt",
+      "sha256": "40f8d800bc46ab6625fad7664daf44ab3ca96a3075fc9de4862c3f36902539d6",
+      "bytes": 508,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "66e015694905bee31e49a6ebcaccc262feebe043"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-repair-focused-frozen.log.txt",
+      "sha256": "a86159fe1d2a05d0816d59c9bb5d20faa3c413ff518eee2cedea04096cbbfb36",
+      "bytes": 6453,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "d2d54631985802288f820631f1cc13f0c9d96731"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-types-financial-repair-frozen.log.txt",
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad",
+      "bytes": 188,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "b37244df34d98d3ed9ad47f2b454c1ad505b2c72"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T06-48-financial-repair-vm.json",
+      "sha256": "e8049fe1069212d89b3b973d4f03ee00efc5f860a5c32a8c860e87adba66847a",
+      "bytes": 17144,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "92d905b7a56e9ea55b2662e9e761c4ed03f24b9b"
+    },
+    {
+      "path": "docs/operations/2026-10-08/research-business-calculator-v2-handoff.md",
+      "sha256": "e25e3d7bdcb89e80d442cd2ec6fd4ec8bc0e556645031b1e1fdadb801e909069",
+      "bytes": 2654,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "50ea130dd2d64bf4695ee1dfaf5434f5a0671534"
+    },
+    {
+      "path": "docs/operations/2026-10-09/financial-adapter-vm-handoff.md",
+      "sha256": "00c5dbd9b4cb54c1e62e953f2b2bdc93812ec88d2c20ba3102b2ff706986b77e",
+      "bytes": 5844,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "144fb3b2c47daa34569f2f2e46429d8f9001f75f"
+    },
+    {
+      "path": "migrations/20261009_research_input_preparation_assert_v2.sql",
+      "sha256": "c63a923be36e5f7ba06001a6d8be57287d80f5e6524dc866bad93b80666a9cbc",
+      "bytes": 2086,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "fb7e49f28a56cb5eb085c9d6ba8ad6c19bc5d8d9"
+    },
+    {
+      "path": "openspec/changes/research-first-publication-v2/financial-adapter-files.json",
+      "sha256": "fc299201a7e49dee91416e3105bb3996a13514bc459476443967a7beeec5bd4d",
+      "bytes": 3091,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "c4eec9e48cda0f326c04301d8c7730b1233f545e"
+    },
+    {
+      "path": "openspec/changes/research-first-publication-v2/financial-adapter-slice.md",
+      "sha256": "c5a7a3e53eee0f2c41223fef6ee76cd6364904431c05d5e586085887598eaf6c",
+      "bytes": 12421,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "6eedeea9220ef299037fbc3546ae425b8b54397c"
+    },
+    {
+      "path": "openspec/changes/research-first-publication-v2/financial-supplement-repair-proposal.md",
+      "sha256": "884acbe36f4bf579e22969380e12f17c61e97088d6cdf70bdc29e0ff868ad647",
+      "bytes": 5911,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "4c1d4af440f5f25892bc67e6eba52f0ba1386e64"
+    },
+    {
+      "path": "openspec/changes/research-first-publication-v2/tasks.md",
+      "sha256": "214dbd3c5f2d405ed12f91d2ba66692f41f50b30571841aafb7f556b2cc207b7",
+      "bytes": 5487,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "3bd9ce9eb3cab5aafa9b3b9a70286424fce3b894"
+    },
+    {
+      "path": "package.json",
+      "sha256": "674623185b6b5330fe45869e5996fdd54d653749f2bcadf64edbda8d39da7238",
+      "bytes": 29387,
+      "matchesFinancialSourceBlob": false,
+      "gitBlob": "1c3d1bd09c773980c86f9ca14835765d3b56dbb4"
+    },
+    {
+      "path": "scripts/research-business-calculator.test.mjs",
+      "sha256": "183b66f4c2106465984517fc04996f85b94514f9b3568ffd07d8930ecdce46d6",
+      "bytes": 9055,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "0939ca84985b02b33b3ab8fa7c7b9c8b6aa6ed82"
+    },
+    {
+      "path": "scripts/research-deep-job-context-route.test.mjs",
+      "sha256": "b2c162e1bc916bacb9d5b8b2baa8fa41e29e91d3c9fd04cfbad7dd417d8d2d5a",
+      "bytes": 39600,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "abd71785d6d84178e15f5b02df37ccefc6c86858"
+    },
+    {
+      "path": "scripts/research-financial-cleanup.test.mjs",
+      "sha256": "729e1f36809db6ed2e25058d9721bc764cc7b98bf60694b911b90e146009b042",
+      "bytes": 4943,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "71ddc7e3c68447b59350a27f738f4daf61c2e743"
+    },
+    {
+      "path": "scripts/research-financial-supplement.test.mjs",
+      "sha256": "cd53e971c7dae13fee1f3a99112b2c21f129e405b4cce16f8d0e73a07297e668",
+      "bytes": 11071,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "dc91f3d0f254b1da7ac1285fb541bb638680e2c6"
+    },
+    {
+      "path": "scripts/research-input-preparation-postgres.test.mjs",
+      "sha256": "53c6fa08fc2c6566a9be108c72304c6309c2514db26f8820536d78df2c62b481",
+      "bytes": 19863,
+      "matchesFinancialSourceBlob": false,
+      "gitBlob": "6071471b6156b32af9e36ffa51fb9e40bca25410"
+    },
+    {
+      "path": "web/src/app/api/internal/research-deep-job/route.ts",
+      "sha256": "29aff686612aa80abdfd10121e55ad6219c1ebedb2223957b4dc18dc7df7f7e9",
+      "bytes": 11125,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "65667895e049b92b639a91babf2ed26a2b1e45d9"
+    },
+    {
+      "path": "web/src/lib/research-business-calculator.ts",
+      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+      "bytes": 14206,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "81f4cb09ae2849fdf2dbde497f6675736c995f90"
+    },
+    {
+      "path": "web/src/lib/research-financial-clock.ts",
+      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+      "bytes": 807,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "bf6301733d6c5150093e94a870e7c6f54f1d8042"
+    },
+    {
+      "path": "web/src/lib/research-financial-file-reader.ts",
+      "sha256": "263b0dcd0c30efa79b422f77440885c7528fc002eb8a5836b99880f7c6946b28",
+      "bytes": 9747,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "647319e15770e77c57fdea4b0a13f76926cf9e43"
+    },
+    {
+      "path": "web/src/lib/research-financial-inventory.ts",
+      "sha256": "f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5",
+      "bytes": 3294,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "959089196afc0e678e02b6ca7fb6face0012df0d"
+    },
+    {
+      "path": "web/src/lib/research-financial-supplement.ts",
+      "sha256": "3231299b99c08d9a1d359e972bfd410ee2f6c635677e763d1c1884b0a894657e",
+      "bytes": 19072,
+      "matchesFinancialSourceBlob": true,
+      "gitBlob": "6e26ee8dbdaded85ad75e877ea570ab110bcaa66"
+    }
+  ],
+  "resolutions": {
+    "package.json": "Preserve full integration test list, append exactly business calculator, financial supplement and cleanup tests. No other package values changed.",
+    "scripts/research-input-preparation-postgres.test.mjs": "Keep integration LOCAL>OPPORTUNITY>boundedpg_config discovery and financial incoming import plus positive synthetic PG test/body. No skip/assertion/schema relaxation."
+  },
+  "rootFocused": {
+    "tests": 102,
+    "pass": 102,
+    "fail": 0,
+    "skip": 0,
+    "runtimeSubject": "27d06c2c147883af3eec8b36403e94442be7160b",
+    "logBytes": 20916,
+    "logSha256": "9a3367261f0f2e4b1ab7925916a56c430c27510533b64383608eb5329d91164c",
+    "privateLogPath": "/tmp/stockinsider-integration-financial-27d-focused.tap"
+  },
+  "strategyReleaseCheck": {
+    "codeHash": "40da8d95e86bd096e387b1618833957db6af969cd2e1cb0f4c5ab75d1a3dcabe",
+    "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
+    "files": 31,
+    "result": "actual supported --check passed; no regeneration needed"
+  },
+  "whitespaceCheck": {
+    "codeAndDocs": "pass",
+    "wholeIncomingPatch": "failed on preserved raw .agent log whitespace; original evidence bytes/hash intentionally unchanged"
+  },
+  "remaining": {
+    "combinedNativePG": "pending",
+    "combinedTypesLintBuild": "pending",
+    "compiledPositiveFinancialHttp": "pending",
+    "completeInputRuntime": "not implemented",
+    "genuineRolesPublication": "not executed",
+    "protectedAuthority": "not satisfied",
+    "productionDeployed": false
+  }
+}

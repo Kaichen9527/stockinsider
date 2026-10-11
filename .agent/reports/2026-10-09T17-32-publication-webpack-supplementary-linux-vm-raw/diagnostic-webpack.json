@@ -1,0 +1,22 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "diagnostic-webpack",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "build",
+    "--",
+    "--webpack"
+  ],
+  "startedAt": "2026-10-09T17:28:56.173Z",
+  "completedAt": "2026-10-09T17:29:39.258Z",
+  "elapsedSeconds": 43.084916145016905,
+  "exitCode": 1,
+  "sampledAggregateRssPeakBytes": 1571942400,
+  "observedTaskDiskPeakBytes": 1358794752,
+  "availableBeforeBytes": 11338432512,
+  "availableAfterBytes": 10993135616,
+  "guardTermination": null
+}

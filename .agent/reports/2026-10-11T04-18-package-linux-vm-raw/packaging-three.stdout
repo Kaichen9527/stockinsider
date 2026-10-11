@@ -1,0 +1,240 @@
+TAP version 13
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# Subtest: packages only the standalone runtime and binds a full git identity
+ok 1 - packages only the standalone runtime and binds a full git identity
+  ---
+  duration_ms: 205.782819
+  ...
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# Subtest: release manifest covers every research dependency and verification rejects altered evidence
+ok 2 - release manifest covers every research dependency and verification rejects altered evidence
+  ---
+  duration_ms: 177.571776
+  ...
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# Subtest: release verification rejects a modified runtime file
+ok 3 - release verification rejects a modified runtime file
+  ---
+  duration_ms: 56.868008
+  ...
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# Subtest: accepts identical bundled static and public assets, but rejects mismatches
+ok 4 - accepts identical bundled static and public assets, but rejects mismatches
+  ---
+  duration_ms: 179.99324
+  ...
+# Subtest: verification CLI cannot skip a release symlink invocation
+ok 5 - verification CLI cannot skip a release symlink invocation
+  ---
+  duration_ms: 45.371918
+  ...
+# Subtest: packager CLI cannot skip a checkout symlink invocation
+ok 6 - packager CLI cannot skip a checkout symlink invocation
+  ---
+  duration_ms: 39.423846
+  ...
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# Subtest: rejects incomplete builds, short commit ids and traced backup or env files
+ok 7 - rejects incomplete builds, short commit ids and traced backup or env files
+  ---
+  duration_ms: 58.394593
+  ...
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# hint: Using 'master' as the name for the initial branch. This default branch name
+# hint: is subject to change. To configure the initial branch name to use in all
+# hint: of your new repositories, which will suppress this warning, call:
+# hint:
+# hint: \\tgit config --global init.defaultBranch <name>
+# hint:
+# hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+# hint: 'development'. The just-created branch can be renamed via this command:
+# hint:
+# hint: \\tgit branch -m <name>
+# Subtest: rejects mismatched source or packager identity and dirty tracked tooling
+ok 8 - rejects mismatched source or packager identity and dirty tracked tooling
+  ---
+  duration_ms: 43.110264
+  ...
+# (node:315538) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:315538) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-financial-inventory.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: both runtime layouts contain only pinned research inputs and real readers load both companies
+ok 9 - both runtime layouts contain only pinned research inputs and real readers load both companies
+  ---
+  duration_ms: 341.379724
+  ...
+# Subtest: missing, altered and symlinked inputs reject before any research output is created
+ok 10 - missing, altered and symlinked inputs reject before any research output is created
+  ---
+  duration_ms: 141.016229
+  ...
+# Subtest: output symlinks, existing files and escaped entrypoints cannot redirect or overwrite evidence
+ok 11 - output symlinks, existing files and escaped entrypoints cannot redirect or overwrite evidence
+  ---
+  duration_ms: 55.614246
+  ...
+# Subtest: legacy fixtures skip research; a feature-enabled release cannot omit its manifest
+ok 12 - legacy fixtures skip research; a feature-enabled release cannot omit its manifest
+  ---
+  duration_ms: 16.941048
+  ...
+# Subtest: real financial reader still refuses a writable release ancestor
+ok 13 - real financial reader still refuses a writable release ancestor
+  ---
+  duration_ms: 49.433348
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 870.134781

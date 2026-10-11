@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "stockinsider-monitor-fair-clock-repair-evidence-v1",
+  "recordedAt": "2026-10-08T14:27:46.505512+00:00",
+  "reviewedFailingSource": "d495c69deb9b606a8bb91cf189aa31b65df0ac83",
+  "verificationLevel": "maker-lightweight-synthetic-and-loopback-http",
+  "finding": "P2 normal request log precedes server worklist asOf; cycleStartedAt is not trace lower bound",
+  "red": {
+    "selectedTest": "real clocks: request log precedes delayed server worklist cutoff and continuation remains valid",
+    "baselineExitCode": 1,
+    "failed": 1,
+    "skipped": 0
+  },
+  "green": {
+    "passed": 41,
+    "failed": 0,
+    "skipped": 0,
+    "actualClockLoopbackDelayMs": 25
+  },
+  "sourceHashes": {
+    "scripts/research-monitor-controller.mjs": "3dd9470fba31fa8d58bc46f0f70fa9d50a6f32a612a5f8a1793a7cfb48a655eb",
+    "scripts/research-monitor-progress.mjs": "1ff84a0d75ab8db848c5f2b9076cda5b5e3a036d0db22abe1603828ee4e5c725",
+    "scripts/research-monitor-controller.test.mjs": "c922235bb36d5d8c7badc08a64e6423cf3b0cdba8e18bb0003fd175662f8db6d",
+    "scripts/research-monitor-progress.test.mjs": "7d704963dd2d24d8013e1a8f9e27fd3940b04032a123fd444a4010297a04ed8c"
+  },
+  "previousMakerReceiptSha256": "330626d7b0a6bb4fe33154e2b334b2c834f4ea36c6b2b33654d82bd929fd3bda",
+  "normalBuildVerified": false,
+  "vmIntegrationVerified": false,
+  "independentFinalCodeReviewPassed": false,
+  "productionWrites": false,
+  "actualOrders": false,
+  "modelsDispatched": 0
+}

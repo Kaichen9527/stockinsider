@@ -1,0 +1,4 @@
+BEGIN READ ONLY;
+SELECT jsonb_build_object('dbClock',clock_timestamp(),'taipeiClock',clock_timestamp() AT TIME ZONE 'Asia/Taipei','fits30MinuteLease',research_model_lease_fits_day_v1(clock_timestamp()),'reservations',(SELECT count(*) FROM research_model_reservations_v1),'reservedSeconds',(SELECT sum(reserved_seconds) FROM research_model_reservations_v1),'completions',(SELECT count(*) FROM research_model_completions_v1),'assignments',(SELECT count(*) FROM research_reviewer_assignments_v2),'reservationRowsHash',(SELECT md5(coalesce(jsonb_agg(to_jsonb(x) ORDER BY reservation_id)::text,'null')) FROM research_model_reservations_v1 x),'completionRowsHash',(SELECT md5(coalesce(jsonb_agg(to_jsonb(x) ORDER BY reservation_id)::text,'null')) FROM research_model_completions_v1 x));
+SELECT pg_get_functiondef('research_model_lease_fits_day_v1(timestamptz)'::regprocedure);
+COMMIT;

@@ -1,0 +1,37 @@
+{
+  "source": "18d6c86ffabfa0fc88c6f0ed807a860024d0f144",
+  "review": "unsigned scoped static CODE PASS after original P2; independent suite24PASS/1FAIL/0skip (expiry fixture seal psql15sec timeout, cause unknown);11PASS probes/positive",
+  "successorTestOnly": "Original synthetic upstream lease30sec set BEFORE seal; actual wall wait until4sec remains; no production timeout/clock/guard/renewal change. Maker expiry-only2/2 PASS, zero skipped; not replacement for unresolved old RED or full successor suite.",
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-independent-checkpoint/stockinsider-atomic-independent-18d6-original.tap",
+      "bytes": 28104,
+      "sha256": "a033bac2b3cfb9d8b37bb476f2637ec5ce482a15a8676a7169c04a2695dd83c7"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-independent-checkpoint/independent.tap",
+      "bytes": 12985,
+      "sha256": "9adf13a889fde4a3751d932fa80fcd96eb46235649d0b5b9ba7d120eff270a20"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-independent-checkpoint/independent.test.mjs",
+      "bytes": 38322,
+      "sha256": "8013210837d4147c19610b5b96bdb854b7a68e72cc416984a5903eaf0d7bb97c"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-independent-checkpoint/pg.log",
+      "bytes": 1256,
+      "sha256": "9c83baa349db5d40adddd957b8b93892d92afaa9ea17088b9d1410951bc61eb9"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-independent-checkpoint/stockinsider-atomic-expiry-30s.log",
+      "bytes": 3003,
+      "sha256": "64193f1d885c4be91bc082c66d7bf6a29ae5db89b1ba878f2a424aaa0e08fef3"
+    }
+  ],
+  "cleanup": "independent reviewer confirmed ownPG stopped; removed only42,011,488-byte rebuildablepgdata and retained originalpg.log/TAP",
+  "limitations": [
+    "Minimal upstream synthetic fixtures, not full-schema/native HTTP/model or protected release.",
+    "The unknown old psql15sec timeout is not proven caused by seven-second lease."
+  ]
+}

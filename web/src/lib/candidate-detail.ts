@@ -8,6 +8,9 @@ import { resolveTaiwanFinalPublicationSemantics } from './tw-market.ts';
 import { readCandidateRevisionContext, type CandidateRevisionScores } from './candidate-revision-context.ts';
 import { readCandidateTradePlan } from './candidate-trade-plan.ts';
 import type { TwEntryPlanBundle } from './tw-entry-plan-contract.ts';
+import type { ValidatedDeepArticle } from './research-deep-article.ts';
+import { deepSourceCitation } from './research-deep-source-rights.ts';
+import { researchCanonicalHash, researchEntryQualification, type ThesisQualification, type TechnicalDecisionSnapshot } from './research-agent-qualification.ts';
 
 type Row = Record<string, unknown>;
 
@@ -60,6 +63,10 @@ export type CandidateDetailPayload = {
   datasetCompletenessPct?: number;
   datasetMissingComponents?: string[];
   narrativeKind: 'deterministic_fact' | 'codex_enriched';
+  deepResearch?: ValidatedDeepArticle | null;
+  deepResearchSources?: Array<{ id: string; title: string; url: string; publishedAt: string; retracted: boolean; evidenceStatus?: 'current' | 'retracted' | 'superseded' | 'unavailable' }>;
+  thesisQualification?: { status: string; nextReviewAt: string; entryResearchAllowed: boolean; reason: string } | null;
+  latestTechnicalSnapshot?: TechnicalDecisionSnapshot | null;
 };
 
 function n(value: number | null | undefined, suffix = '') {
@@ -199,7 +206,7 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
     supabase.from('candidate_research_dossiers')
       .select('id,narrative_kind,content,validation_status,bundle_id,bundle_hash,input_hash,published_at,created_at')
       .eq('detail_snapshot_id', String(row.id)).eq('narrative_kind', 'codex_enriched').eq('validation_status', 'valid')
-      .order('created_at', { ascending: false }).limit(1),
+      .order('created_at', { ascending: false }).limit(20),
     // A valid-looking dossier is not publishable evidence by itself.  The
     // append-only receipt proves that the exact same revision and input hash
     // passed the submission boundary.
@@ -220,7 +227,12 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
       && String(receipt.input_hash || '') === expectedInputHash
       && String(receipt.status || '') === 'accepted')
     .map((receipt) => `${String(receipt.dossier_id || '')}:${String(receipt.bundle_id || '')}`));
-  const enriched = ((dossiers.data || []) as Row[]).find((dossier) =>
+  // Prefer accepted deep research even if the ordinary worker finishes later.
+  // Read by content so the public reader stays compatible during schema cutover.
+  const enriched = ((dossiers.data || []) as Row[])
+    .sort((left, right) => Number(Boolean((right.content as Row | null)?.deepResearch))
+      - Number(Boolean((left.content as Row | null)?.deepResearch)))
+    .find((dossier) =>
     String(dossier.bundle_hash || dossier.input_hash || '') === expectedInputHash
       && Boolean(dossier.published_at)
       && acceptedReceiptKeys.has(`${String(dossier.id || '')}:${String(dossier.bundle_id || '')}`)) || null;
@@ -278,7 +290,99 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
       const { factIds: claimFactIds, ...publicClaim } = claim;
       return { ...publicClaim, sourceReferences: [...new Set((claimFactIds || []).map((factId) => references.get(String(factId))).filter((reference): reference is number => reference != null))] };
     });
-    return { ...base, summary: typeof overlay.summary === 'string' ? overlay.summary : base.summary, sections: Array.isArray(overlay.sections) ? publicSections(overlay.sections as CandidateDetailSection[]) : base.sections, claims, narrativeKind: 'codex_enriched' };
+    let deepResearch: ValidatedDeepArticle | null = null;
+    let deepResearchSources: CandidateDetailPayload['deepResearchSources'] = [];
+    const candidate = overlay.deepResearch as ValidatedDeepArticle | null;
+    if (candidate?.schemaVersion === 'candidate-deep-research-v1'
+      && candidate.symbol === String(stock.symbol)
+      && /^[0-9a-f]{64}$/u.test(String(candidate.articleHash || ''))
+      && Array.isArray(candidate.sourceDocumentIds) && candidate.sourceDocumentIds.length <= 100) {
+      const reviewRead = await supabase.from('candidate_deep_article_reviews_v1')
+        .select('id,decision,article_hash,revision_id,input_hash')
+        .eq('revision_id', String(row.id)).eq('input_hash', expectedInputHash)
+        .eq('article_hash', candidate.articleHash).eq('decision', 'accepted').limit(1);
+      if (reviewRead.error) throw new Error(`candidate_deep_article_review_read_failed:${reviewRead.error.message}`);
+      if (reviewRead.data?.length) {
+        deepResearch = candidate; // Keep the reviewed historical article readable even when current sources fail.
+        const docs = candidate.sourceDocumentIds.length ? await supabase.from('source_raw_documents')
+          .select('id,document_url,published_at,metadata').in('id', candidate.sourceDocumentIds)
+          .limit(candidate.sourceDocumentIds.length) : { data: [], error: null };
+        const documents = Array.isArray(docs.data) ? docs.data : [];
+        const documentsComplete = !docs.error && documents.length === candidate.sourceDocumentIds.length
+          && new Set(documents.map(doc => doc.id)).size === candidate.sourceDocumentIds.length
+          && documents.every(doc => candidate.sourceDocumentIds.includes(String(doc.id)));
+        let sourceHeads: Row[] = [];
+        try {
+          const heads = candidate.sourceDocumentIds.length ? await supabase.rpc('research_evidence_heads_v1', {
+            p_ids: candidate.sourceDocumentIds, p_cutoff: new Date().toISOString(),
+          }) : { data: [], error: null };
+          const unique = new Set(candidate.sourceDocumentIds);
+          if (documentsComplete && !heads.error && Array.isArray(heads.data) && heads.data.length === unique.size
+            && unique.size === candidate.sourceDocumentIds.length
+            && new Set(heads.data.map((head: Row) => head.id)).size === unique.size
+            && heads.data.every((head: Row) => head && unique.has(String(head.id))
+              && typeof head.retracted === 'boolean' && typeof head.superseded === 'boolean'
+              && (head.headId === null || typeof head.headId === 'string'
+                && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu.test(head.headId)))) sourceHeads = heads.data;
+        } catch { /* A failed current-head read denies new entry; it does not erase the historical article. */ }
+        if (!docs.error) {
+          deepResearchSources = documents.flatMap((doc) => {
+            const metadata = doc.metadata && typeof doc.metadata === 'object' ? doc.metadata as Row : {};
+            const candidateUrl = String(metadata.canonical_url || doc.document_url || '').split('#si-revision-')[0];
+            const { url } = deepSourceCitation(doc.metadata, candidateUrl);
+            const head = sourceHeads.find((head) => head.id === doc.id);
+            const evidenceStatus = metadata.retracted_at || head?.retracted === true ? 'retracted' as const
+              : head?.superseded === true ? 'superseded' as const
+              : head?.headId === doc.id ? 'current' as const : 'unavailable' as const;
+            return url
+              ? [{ id: String(doc.id), title: String(metadata.title || new URL(url).hostname),
+                url, publishedAt: String(doc.published_at || ''),
+                retracted: evidenceStatus === 'retracted', evidenceStatus }] : [];
+          });
+        }
+      }
+    }
+    let thesisQualification: CandidateDetailPayload['thesisQualification'] = null;
+    let latestTechnicalSnapshot: CandidateDetailPayload['latestTechnicalSnapshot'] = null;
+    if (deepResearch) {
+      const qualificationRead = await supabase.from('candidate_thesis_qualifications_v1')
+        .select('id,status,payload,article_hash,created_at')
+        .eq('stock_id', String(row.stock_id)).order('created_at', { ascending: false })
+        .order('id', { ascending: false }).limit(1).maybeSingle();
+      if (qualificationRead.error && !/does not exist|schema cache/iu.test(qualificationRead.error.message)) {
+        throw new Error(`candidate_thesis_qualification_read_failed:${qualificationRead.error.message}`);
+      }
+      const latest = qualificationRead.data;
+      if (latest) {
+        const thesis = latest.payload as ThesisQualification;
+        if (thesis?.articleHash === researchCanonicalHash(overlay)
+          && thesis.articleHash === latest.article_hash && thesis.status === latest.status) {
+          const eligibility = researchEntryQualification(thesis, new Date().toISOString());
+          const sourceEvidenceCurrent = deepResearch.sourceDocumentIds.length > 0
+            && deepResearchSources.length === deepResearch.sourceDocumentIds.length
+            && deepResearchSources.every((source) => source.evidenceStatus === 'current');
+          thesisQualification = { status: thesis.status, nextReviewAt: thesis.nextReviewAt,
+            entryResearchAllowed: eligibility.allowed && sourceEvidenceCurrent,
+            reason: sourceEvidenceCurrent ? eligibility.reason : 'article_source_retracted_superseded_or_unavailable' };
+          const technicalRead = await supabase.from('candidate_technical_decisions_v1')
+            .select('snapshot').eq('thesis_qualification_id', latest.id)
+            .order('session_date', { ascending: false }).order('observed_at', { ascending: false })
+            .limit(1).maybeSingle();
+          if (technicalRead.error && !/does not exist|schema cache/iu.test(technicalRead.error.message)) {
+            throw new Error(`candidate_technical_snapshot_read_failed:${technicalRead.error.message}`);
+          }
+          const snapshot = technicalRead.data?.snapshot as TechnicalDecisionSnapshot | null;
+          if (snapshot?.reviewReceiptHash === thesis.reviewReceiptHash
+            && snapshot.articleHash === thesis.articleHash && snapshot.symbol === String(stock.symbol)) {
+            latestTechnicalSnapshot = snapshot;
+          }
+        }
+      }
+    }
+    return { ...base, summary: typeof overlay.summary === 'string' ? overlay.summary : base.summary,
+      sections: Array.isArray(overlay.sections) ? publicSections(overlay.sections as CandidateDetailSection[]) : base.sections,
+      claims, narrativeKind: 'codex_enriched', deepResearch, deepResearchSources,
+      thesisQualification, latestTechnicalSnapshot };
   }
   return base;
 }

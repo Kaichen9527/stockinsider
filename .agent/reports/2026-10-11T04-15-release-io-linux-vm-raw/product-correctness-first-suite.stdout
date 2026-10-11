@@ -1,0 +1,1728 @@
+
+> test:source-led-opportunity-v3:product-correctness
+> OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs
+
+TAP version 13
+# (node:314359) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314359) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/deployment.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: public fundamental provenance remains bounded and fail-closed outside the approved PCR expectation registry
+ok 1 - public fundamental provenance remains bounded and fail-closed outside the approved PCR expectation registry
+  ---
+  duration_ms: 48.071041
+  ...
+# Subtest: acceptance PCR-001
+ok 2 - acceptance PCR-001
+  ---
+  duration_ms: 107.095956
+  ...
+# Subtest: acceptance PCR-002
+ok 3 - acceptance PCR-002
+  ---
+  duration_ms: 1.167282
+  ...
+# Subtest: acceptance PCR-003
+ok 4 - acceptance PCR-003
+  ---
+  duration_ms: 1.792696
+  ...
+# Subtest: acceptance PCR-004
+ok 5 - acceptance PCR-004
+  ---
+  duration_ms: 31.549186
+  ...
+# Subtest: acceptance PCR-005
+ok 6 - acceptance PCR-005
+  ---
+  duration_ms: 298.531922
+  ...
+# (node:314618) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314618) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314630) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314630) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314642) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314642) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314654) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314654) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314666) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314666) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314678) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314678) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314690) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314690) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: acceptance PCR-006
+ok 7 - acceptance PCR-006
+  ---
+  duration_ms: 2920.670737
+  ...
+# Subtest: acceptance PCR-007
+ok 8 - acceptance PCR-007
+  ---
+  duration_ms: 10.052211
+  ...
+# Subtest: acceptance PCR-008
+ok 9 - acceptance PCR-008
+  ---
+  duration_ms: 1.778844
+  ...
+# Subtest: acceptance PCR-009
+ok 10 - acceptance PCR-009
+  ---
+  duration_ms: 12.053733
+  ...
+# Subtest: acceptance PCR-010
+ok 11 - acceptance PCR-010
+  ---
+  duration_ms: 2.927778
+  ...
+# Subtest: acceptance PCR-011
+ok 12 - acceptance PCR-011
+  ---
+  duration_ms: 17.950612
+  ...
+# Subtest: acceptance PCR-012
+ok 13 - acceptance PCR-012
+  ---
+  duration_ms: 8.563504
+  ...
+# Subtest: acceptance PCR-013
+ok 14 - acceptance PCR-013
+  ---
+  duration_ms: 3.714235
+  ...
+# Subtest: acceptance PCR-014
+ok 15 - acceptance PCR-014
+  ---
+  duration_ms: 0.236107
+  ...
+# Subtest: acceptance PCR-015
+ok 16 - acceptance PCR-015
+  ---
+  duration_ms: 0.303328
+  ...
+# Subtest: acceptance PCR-016
+ok 17 - acceptance PCR-016
+  ---
+  duration_ms: 0.634858
+  ...
+# Subtest: acceptance PCR-017
+ok 18 - acceptance PCR-017
+  ---
+  duration_ms: 0.252621
+  ...
+# Subtest: acceptance PCR-018
+ok 19 - acceptance PCR-018
+  ---
+  duration_ms: 1.283968
+  ...
+# Subtest: acceptance PCR-019
+ok 20 - acceptance PCR-019
+  ---
+  duration_ms: 0.306232
+  ...
+# Subtest: acceptance PCR-020
+ok 21 - acceptance PCR-020
+  ---
+  duration_ms: 0.751665
+  ...
+# Subtest: acceptance PCR-021
+ok 22 - acceptance PCR-021
+  ---
+  duration_ms: 17.383175
+  ...
+# Subtest: acceptance PCR-022
+not ok 23 - acceptance PCR-022
+  ---
+  duration_ms: 19.08239
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/product-correctness.test.mjs:1991:3'
+  failureType: 'testCodeFailure'
+  error: 'PostgreSQL tools are mandatory'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: ~
+  operator: '=='
+  stack: |-
+    runControlledProjectionPerformanceOracle (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/performance-harness.mjs:92:10)
+    PCR-022 (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/product-correctness.test.mjs:1728:11)
+    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/product-correctness.test.mjs:1993:29)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: acceptance PCR-023
+ok 24 - acceptance PCR-023
+  ---
+  duration_ms: 1.433233
+  ...
+# Subtest: acceptance PCR-024
+not ok 25 - acceptance PCR-024
+  ---
+  duration_ms: 33088.569253
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/product-correctness.test.mjs:1991:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: npm --prefix web run test:e2e:v3-correctness
+    (node:314618) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314618) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314630) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314630) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314642) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314642) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314654) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314654) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314666) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314666) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314678) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314678) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314690) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    (node:314690) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    genericNodeError (node:internal/errors:983:15)
+    wrappedFn (node:internal/errors:537:14)
+    checkExecSyncError (node:child_process:882:11)
+    execFileSync (node:child_process:918:15)
+    PCR-024 (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/product-correctness.test.mjs:1788:20)
+    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/product-correctness.test.mjs:1993:29)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+  ...
+# Subtest: acceptance PCR-025
+ok 26 - acceptance PCR-025
+  ---
+  duration_ms: 16.726534
+  ...
+# Subtest: acceptance PCR-026
+ok 27 - acceptance PCR-026
+  ---
+  duration_ms: 37.654934
+  ...
+# Subtest: acceptance PCR-027
+ok 28 - acceptance PCR-027
+  ---
+  duration_ms: 0.567246
+  ...
+# Subtest: acceptance PCR-028
+ok 29 - acceptance PCR-028
+  ---
+  duration_ms: 12.285853
+  ...
+# Subtest: acceptance PCR-029
+ok 30 - acceptance PCR-029
+  ---
+  duration_ms: 0.373894
+  ...
+# Subtest: acceptance PCR-030
+ok 31 - acceptance PCR-030
+  ---
+  duration_ms: 2.37218
+  ...
+# Subtest: acceptance PCR-031
+ok 32 - acceptance PCR-031
+  ---
+  duration_ms: 2.633615
+  ...
+# Subtest: V3.12 product-value recovery ranks partial evidence without fabricating a trade target
+ok 33 - V3.12 product-value recovery ranks partial evidence without fabricating a trade target
+  ---
+  duration_ms: 0.439173
+  ...
+# Subtest: V3.12 official valuation parser rejects swapped or non-authoritative values
+ok 34 - V3.12 official valuation parser rejects swapped or non-authoritative values
+  ---
+  duration_ms: 1.183957
+  ...
+# Subtest: V3.12 official index history supplies at least 20 sessions without inventing dates
+ok 35 - V3.12 official index history supplies at least 20 sessions without inventing dates
+  ---
+  duration_ms: 0.401085
+  ...
+# Subtest: V3.12 official source failure degrades independently instead of erasing valid valuation data
+ok 36 - V3.12 official source failure degrades independently instead of erasing valid valuation data
+  ---
+  duration_ms: 9030.524984
+  ...
+# Subtest: V3.12 evidence snippets are local to the matched stock
+ok 37 - V3.12 evidence snippets are local to the matched stock
+  ---
+  duration_ms: 0.383659
+  ...
+# Subtest: V3.12 market analysis suppresses risk budget when components are missing
+ok 38 - V3.12 market analysis suppresses risk budget when components are missing
+  ---
+  duration_ms: 0.625915
+  ...
+# (node:314702) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314702) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/decision-publication.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: V3.13 decision envelope closes all eight user actions without an action quota
+ok 39 - V3.13 decision envelope closes all eight user actions without an action quota
+  ---
+  duration_ms: 167.859693
+  ...
+# Subtest: V3.13 formal valuation requires four consecutive quarters and rejects the 2337 one-quarter shortcut
+ok 40 - V3.13 formal valuation requires four consecutive quarters and rejects the 2337 one-quarter shortcut
+  ---
+  duration_ms: 6.395723
+  ...
+# Subtest: V3.14 cumulative reported EPS is reconciled without subtracting EPS across changing share counts
+ok 41 - V3.14 cumulative reported EPS is reconciled without subtracting EPS across changing share counts
+  ---
+  duration_ms: 2.817713
+  ...
+# Subtest: V3.13 official facts and 252-session peer authority reach a formal valuation without hidden inputs
+ok 42 - V3.13 official facts and 252-session peer authority reach a formal valuation without hidden inputs
+  ---
+  duration_ms: 118.239914
+  ...
+# Subtest: V3.13 FULL detail remains authoritative while LIGHT fills only genuinely missing leaves
+ok 43 - V3.13 FULL detail remains authoritative while LIGHT fills only genuinely missing leaves
+  ---
+  duration_ms: 4.346941
+  ...
+# Subtest: V3.13 projection freshness uses scheduled trading runs, not a 24-hour wall clock
+ok 44 - V3.13 projection freshness uses scheduled trading runs, not a 24-hour wall clock
+  ---
+  duration_ms: 7.610897
+  ...
+# Subtest: generic migration discovery is a closed legacy allowlist and the V3.13 plan is authority-bound
+ok 45 - generic migration discovery is a closed legacy allowlist and the V3.13 plan is authority-bound
+  ---
+  duration_ms: 89.296882
+  ...
+# Subtest: V3.13 operator docs and positive consumers use tracked authority and exact decision revisions
+ok 46 - V3.13 operator docs and positive consumers use tracked authority and exact decision revisions
+  ---
+  duration_ms: 1.446713
+  ...
+# Subtest: V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material
+not ok 47 - V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material
+  ---
+  duration_ms: 425.134005
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v313-decision-integrity.test.mjs:101:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    migration evidence process exit
+    tract.test.mjs:7511:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.13 SQL decision canonicalizer is byte-equal to the tracked worker for disclosure values
+    not ok 74 - V3.13 SQL decision canonicalizer is byte-equal to the tracked worker for disclosure values
+      ---
+      duration_ms: 0.023486
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7572:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.13 projection guard serializes every writer, rejects non-monotonic time, and retains exactly 1500 rows
+    not ok 75 - V3.13 projection guard serializes every writer, rejects non-monotonic time, and retains exactly 1500 rows
+      ---
+      duration_ms: 0.02628
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7581:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row
+    not ok 76 - V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row
+      ---
+      duration_ms: 0.024247
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7618:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: DI-008 parser output crosses job completion and persistence before an adjusted read
+    not ok 77 - DI-008 parser output crosses job completion and persistence before an adjusted read
+      ---
+      duration_ms: 0.051007
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7679:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: real TypeScript evaluation executor output stages and commits through PostgreSQL
+    not ok 78 - real TypeScript evaluation executor output stages and commits through PostgreSQL
+      ---
+      duration_ms: 0.026229
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7798:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: public selector is one point-in-time statement across cold, active, failed, success and tie branches
+    not ok 79 - public selector is one point-in-time statement across cold, active, failed, success and tie branches
+      ---
+      duration_ms: 0.024216
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7944:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.19.12 executes the production-shaped JSONB cardinality read and reconciles exactly nine runtime RPCs
+    not ok 80 - V3.19.12 executes the production-shaped JSONB cardinality read and reconciles exactly nine runtime RPCs
+      ---
+      duration_ms: 0.025839
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:8042:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain
+    not ok 81 - financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain
+      ---
+      duration_ms: 0.024307
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:8131:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: financial atomic replay rollback retains installed successor after predecessor replacement and forced failure
+    not ok 82 - financial atomic replay rollback retains installed successor after predecessor replacement and forced failure
+      ---
+      duration_ms: 0.049875
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:8231:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    1..82
+    # tests 82
+    # suites 0
+    # pass 0
+    # fail 82
+    # cancelled 0
+    # skipped 0
+    # todo 0
+    # duration_ms 278.878499
+    
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    appliedMigrationContract (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v313-decision-integrity.test.mjs:30:10)
+    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v313-decision-integrity.test.mjs:1338:17)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: V3.13 official statement parser requires reported diluted shares and never derives the 30.04 shortcut
+ok 48 - V3.13 official statement parser requires reported diluted shares and never derives the 30.04 shortcut
+  ---
+  duration_ms: 3.253931
+  ...
+# Subtest: V3.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry
+not ok 49 - V3.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry
+  ---
+  duration_ms: 0.881901
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v313-decision-integrity.test.mjs:101:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    migration evidence process exit
+    tract.test.mjs:7511:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.13 SQL decision canonicalizer is byte-equal to the tracked worker for disclosure values
+    not ok 74 - V3.13 SQL decision canonicalizer is byte-equal to the tracked worker for disclosure values
+      ---
+      duration_ms: 0.023486
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7572:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.13 projection guard serializes every writer, rejects non-monotonic time, and retains exactly 1500 rows
+    not ok 75 - V3.13 projection guard serializes every writer, rejects non-monotonic time, and retains exactly 1500 rows
+      ---
+      duration_ms: 0.02628
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7581:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row
+    not ok 76 - V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row
+      ---
+      duration_ms: 0.024247
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7618:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: DI-008 parser output crosses job completion and persistence before an adjusted read
+    not ok 77 - DI-008 parser output crosses job completion and persistence before an adjusted read
+      ---
+      duration_ms: 0.051007
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7679:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: real TypeScript evaluation executor output stages and commits through PostgreSQL
+    not ok 78 - real TypeScript evaluation executor output stages and commits through PostgreSQL
+      ---
+      duration_ms: 0.026229
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7798:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: public selector is one point-in-time statement across cold, active, failed, success and tie branches
+    not ok 79 - public selector is one point-in-time statement across cold, active, failed, success and tie branches
+      ---
+      duration_ms: 0.024216
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:7944:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.19.12 executes the production-shaped JSONB cardinality read and reconciles exactly nine runtime RPCs
+    not ok 80 - V3.19.12 executes the production-shaped JSONB cardinality read and reconciles exactly nine runtime RPCs
+      ---
+      duration_ms: 0.025839
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:8042:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain
+    not ok 81 - financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain
+      ---
+      duration_ms: 0.024307
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:8131:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: financial atomic replay rollback retains installed successor after predecessor replacement and forced failure
+    not ok 82 - financial atomic replay rollback retains installed successor after predecessor replacement and forced failure
+      ---
+      duration_ms: 0.049875
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:8231:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    1..82
+    # tests 82
+    # suites 0
+    # pass 0
+    # fail 82
+    # cancelled 0
+    # skipped 0
+    # todo 0
+    # duration_ms 278.878499
+    
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    appliedMigrationContract (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v313-decision-integrity.test.mjs:30:10)
+    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v313-decision-integrity.test.mjs:1399:17)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: V3.13 entity linking rejects naked calendar years even when they are listed symbols
+ok 50 - V3.13 entity linking rejects naked calendar years even when they are listed symbols
+  ---
+  duration_ms: 19.111865
+  ...
+# Subtest: V3.13 official corporate-action adapter distinguishes complete empty snapshots from transport failure
+ok 51 - V3.13 official corporate-action adapter distinguishes complete empty snapshots from transport failure
+  ---
+  duration_ms: 2.373552
+  ...
+# Subtest: V3.13 stale-readonly projection disables compatibility actions without mutating immutable decision identity
+ok 52 - V3.13 stale-readonly projection disables compatibility actions without mutating immutable decision identity
+  ---
+  duration_ms: 0.276798
+  ...
+# (node:314758) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:314758) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/projection-freshness.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: V314-001 calendar authority loss preserves checksum-valid last-good research as readonly
+ok 53 - V314-001 calendar authority loss preserves checksum-valid last-good research as readonly
+  ---
+  duration_ms: 53.062605
+  ...
+# Subtest: V314-002 unchanged discovery outcomes conserve seed membership
+ok 54 - V314-002 unchanged discovery outcomes conserve seed membership
+  ---
+  duration_ms: 3.089123
+  ...
+# Subtest: V314-003 research ranking never improves when an available axis is removed
+ok 55 - V314-003 research ranking never improves when an available axis is removed
+  ---
+  duration_ms: 0.867489
+  ...
+# Subtest: V314-004 discovery and report visibility are backed by payload data
+not ok 56 - V314-004 discovery and report visibility are backed by payload data
+  ---
+  duration_ms: 9823.461881
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:146:1'
+  failureType: 'testCodeFailure'
+  error: 'Command failed: /workspace/.tools/node22/node_modules/node/bin/node /workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules/@playwright/test/cli.js test v314-readonly-visibility.spec.ts --config=playwright.v3-correctness.config.ts'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    genericNodeError (node:internal/errors:983:15)
+    wrappedFn (node:internal/errors:537:14)
+    checkExecSyncError (node:child_process:882:11)
+    execFileSync (node:child_process:918:15)
+    v314BrowserEvidence (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:34:27)
+    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:158:18)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+  ...
+# Subtest: V314-004a internal health uses the reviewed release SHA when Vercel git metadata is absent
+ok 57 - V314-004a internal health uses the reviewed release SHA when Vercel git metadata is absent
+  ---
+  duration_ms: 9.447679
+  ...
+# Subtest: V314-005 one actionable card without a cited brief degrades only that card
+ok 58 - V314-005 one actionable card without a cited brief degrades only that card
+  ---
+  duration_ms: 16.575498
+  ...
+# Subtest: V314-006 selective market raises thresholds and exposes wait_value or wait_market without score gate
+ok 59 - V314-006 selective market raises thresholds and exposes wait_value or wait_market without score gate
+  ---
+  duration_ms: 1.615649
+  ...
+# Subtest: V314-006a raw authority metrics cannot round up into an actionable decision
+ok 60 - V314-006a raw authority metrics cannot round up into an actionable decision
+  ---
+  duration_ms: 0.637562
+  ...
+# Subtest: V314-006b action overrides clear incompatible V3.14-only fields
+ok 61 - V314-006b action overrides clear incompatible V3.14-only fields
+  ---
+  duration_ms: 0.888991
+  ...
+# Subtest: V314-007 runtime diagnostics never serialize SQL text or connection credentials
+ok 62 - V314-007 runtime diagnostics never serialize SQL text or connection credentials
+  ---
+  duration_ms: 1.120411
+  ...
+# Subtest: V314-008 Web and runtime share exact release compatibility authority
+ok 63 - V314-008 Web and runtime share exact release compatibility authority
+  ---
+  duration_ms: 2.454114
+  ...
+# Subtest: V314-009 official calendar and backfill coverage remain typed and non-synthetic
+not ok 64 - V314-009 official calendar and backfill coverage remain typed and non-synthetic
+  ---
+  duration_ms: 318.045053
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:360:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    migration evidence process exit
+    TAP version 13
+    # (node:315042) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+    # (Use `node --trace-warnings ...` to show where the warning was created)
+    # (node:315042) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+    # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+    # To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+    # Subtest: migration applies twice and exposes the exact granted/private function boundary
+    not ok 1 - migration applies twice and exposes the exact granted/private function boundary
+      ---
+      duration_ms: 0.923564
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1317:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.16.21 freezes one provider revision, reuses it, and quarantines conflicting bytes
+    not ok 2 - V3.16.21 freezes one provider revision, reuses it, and quarantines conflicting bytes
+      ---
+      duration_ms: 0.050987
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1535:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread
+    not ok 3 - V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread
+      ---
+      duration_ms: 0.043255
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1710:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts
+    not ok 4 - V3.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts
+      ---
+      duration_ms: 0.087852
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:2552:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    1..4
+    # tests 4
+    # suites 0
+    # pass 0
+    # fail 4
+    # cancelled 0
+    # skipped 0
+    # todo 0
+    # duration_ms 212.473621
+    
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    appliedV314MigrationEvidence (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:29:10)
+    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:416:17)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: V314-009a candidate authority metadata remains separate from the peer population
+ok 65 - V314-009a candidate authority metadata remains separate from the peer population
+  ---
+  duration_ms: 18.093113
+  ...
+# Subtest: V314-010 all ten decision actions are closed and operationally reachable
+ok 66 - V314-010 all ten decision actions are closed and operationally reachable
+  ---
+  duration_ms: 86.864468
+  ...
+# Subtest: V314-011 every approved profile/provider has one honest terminal outcome
+not ok 67 - V314-011 every approved profile/provider has one honest terminal outcome
+  ---
+  duration_ms: 22.336592
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:530:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    migration evidence process exit
+    TAP version 13
+    # (node:315042) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+    # (Use `node --trace-warnings ...` to show where the warning was created)
+    # (node:315042) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+    # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+    # To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+    # Subtest: migration applies twice and exposes the exact granted/private function boundary
+    not ok 1 - migration applies twice and exposes the exact granted/private function boundary
+      ---
+      duration_ms: 0.923564
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1317:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.16.21 freezes one provider revision, reuses it, and quarantines conflicting bytes
+    not ok 2 - V3.16.21 freezes one provider revision, reuses it, and quarantines conflicting bytes
+      ---
+      duration_ms: 0.050987
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1535:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread
+    not ok 3 - V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread
+      ---
+      duration_ms: 0.043255
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1710:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts
+    not ok 4 - V3.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts
+      ---
+      duration_ms: 0.087852
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:2552:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    1..4
+    # tests 4
+    # suites 0
+    # pass 0
+    # fail 4
+    # cancelled 0
+    # skipped 0
+    # todo 0
+    # duration_ms 212.473621
+    
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    appliedV314MigrationEvidence (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:29:10)
+    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:555:17)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: V314-012 migration persists redacted diagnostics append-only with recorded time
+not ok 68 - V314-012 migration persists redacted diagnostics append-only with recorded time
+  ---
+  duration_ms: 0.484532
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:561:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    migration evidence process exit
+    TAP version 13
+    # (node:315042) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+    # (Use `node --trace-warnings ...` to show where the warning was created)
+    # (node:315042) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+    # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+    # To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+    # Subtest: migration applies twice and exposes the exact granted/private function boundary
+    not ok 1 - migration applies twice and exposes the exact granted/private function boundary
+      ---
+      duration_ms: 0.923564
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1317:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.16.21 freezes one provider revision, reuses it, and quarantines conflicting bytes
+    not ok 2 - V3.16.21 freezes one provider revision, reuses it, and quarantines conflicting bytes
+      ---
+      duration_ms: 0.050987
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1535:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread
+    not ok 3 - V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread
+      ---
+      duration_ms: 0.043255
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:1710:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    # Subtest: V3.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts
+    not ok 4 - V3.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts
+      ---
+      duration_ms: 0.087852
+      location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:2552:1'
+      failureType: 'hookFailed'
+      error: 'PostgreSQL executable unavailable: initdb'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:760:26)
+        TestHook.runInAsyncScope (node:async_hooks:211:14)
+        TestHook.run (node:internal/test_runner/test:979:25)
+        TestHook.run (node:internal/test_runner/test:1270:18)
+        TestHook.run (node:internal/util:544:20)
+        Test.createHook (node:internal/test_runner/test:805:33)
+        node:internal/test_runner/harness:335:12
+        file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/migration-contract.test.mjs:758:1
+        ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+        async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      ...
+    1..4
+    # tests 4
+    # suites 0
+    # pass 0
+    # fail 4
+    # cancelled 0
+    # skipped 0
+    # todo 0
+    # duration_ms 212.473621
+    
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    appliedV314MigrationEvidence (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:29:10)
+    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/opportunity-v3/v314-actionability-recovery.test.mjs:568:17)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: V314-013 official annual calendar is cross-market source material, not index inference
+ok 69 - V314-013 official annual calendar is cross-market source material, not index inference
+  ---
+  duration_ms: 0.476509
+  ...
+# Subtest: V314-014 MOPS inline parser validates units and never derives diluted shares from rounded EPS
+ok 70 - V314-014 MOPS inline parser validates units and never derives diluted shares from rounded EPS
+  ---
+  duration_ms: 2.176635
+  ...
+# Subtest: V314-014ab MOPS debt aliases cover current and non-current liabilities without double counting
+ok 71 - V314-014ab MOPS debt aliases cover current and non-current liabilities without double counting
+  ---
+  duration_ms: 0.681709
+  ...
+# Subtest: V314-014a MOPS retains the authoritative year-to-date series and rejects duplicate discrete contexts
+ok 72 - V314-014a MOPS retains the authoritative year-to-date series and rejects duplicate discrete contexts
+  ---
+  duration_ms: 0.349737
+  ...
+# Subtest: V314-014aa MOPS rejects dimensional segment and scenario contexts
+ok 73 - V314-014aa MOPS rejects dimensional segment and scenario contexts
+  ---
+  duration_ms: 0.270458
+  ...
+# Subtest: V314-014b MOPS loader binds the requested official URL into parsed provenance
+ok 74 - V314-014b MOPS loader binds the requested official URL into parsed provenance
+  ---
+  duration_ms: 4515.480488
+  ...
+# Subtest: V314-014c MOPS fact selection preserves cycle history without crossing the 128-row authority bound
+ok 75 - V314-014c MOPS fact selection preserves cycle history without crossing the 128-row authority bound
+  ---
+  duration_ms: 0.795822
+  ...
+# Subtest: V314-015 full-market valuation parsers filter the bounded authority set while parsing
+ok 76 - V314-015 full-market valuation parsers filter the bounded authority set while parsing
+  ---
+  duration_ms: 2.23235
+  ...
+# Subtest: V314-015a effective valuation and corporate-action request graphs remain closed after union
+ok 77 - V314-015a effective valuation and corporate-action request graphs remain closed after union
+  ---
+  duration_ms: 1.275735
+  ...
+# Subtest: V314-015b range corporate-action feed counts are scoped to each emitted session
+ok 78 - V314-015b range corporate-action feed counts are scoped to each emitted session
+  ---
+  duration_ms: 1.792014
+  ...
+# Subtest: market-wide action rows retain alphanumeric instruments in PostgreSQL ordinal order
+ok 79 - market-wide action rows retain alphanumeric instruments in PostgreSQL ordinal order
+  ---
+  duration_ms: 0.873668
+  ...
+# Subtest: V314-016 official ingestion streams bounded idempotency-addressed chunks and one terminal root
+ok 80 - V314-016 official ingestion streams bounded idempotency-addressed chunks and one terminal root
+  ---
+  duration_ms: 3.602447
+  ...
+# Subtest: V314-016b a staged ingestion resume is replayed without refetching mutable provider state
+ok 81 - V314-016b a staged ingestion resume is replayed without refetching mutable provider state
+  ---
+  duration_ms: 2.973648
+  ...
+# Subtest: V316-016c an interrupted legacy chunk graph is verified and continued without identity conflicts
+ok 82 - V316-016c an interrupted legacy chunk graph is verified and continued without identity conflicts
+  ---
+  duration_ms: 1.006208
+  ...
+# Subtest: V314-016a unchanged financial semantics are not appended on every collection heartbeat
+ok 83 - V314-016a unchanged financial semantics are not appended on every collection heartbeat
+  ---
+  duration_ms: 0.190278
+  ...
+# Subtest: V314-017 malformed RuntimeHealth enums fail closed identically in Node and Web
+ok 84 - V314-017 malformed RuntimeHealth enums fail closed identically in Node and Web
+  ---
+  duration_ms: 4.9494
+  ...
+# Subtest: V314-018 provisional valuation refs require real non-future embedded dates
+ok 85 - V314-018 provisional valuation refs require real non-future embedded dates
+  ---
+  duration_ms: 0.699105
+  ...
+# Subtest: V314-019 exact-review compatibility boundaries accept V3.14 and remain fail-closed
+ok 86 - V314-019 exact-review compatibility boundaries accept V3.14 and remain fail-closed
+  ---
+  duration_ms: 7.123931
+  ...
+# Subtest: V315 analysis transport stays below the durable bound without dropping facts or candidates
+ok 87 - V315 analysis transport stays below the durable bound without dropping facts or candidates
+  ---
+  duration_ms: 61.880014
+  ...
+# Subtest: V315 official TPEX history uses Gregorian query authority and scales lots/thousands to base units
+ok 88 - V315 official TPEX history uses Gregorian query authority and scales lots/thousands to base units
+  ---
+  duration_ms: 9039.681228
+  ...
+# Subtest: V315 TPEX corporate-action range accepts the official compact ROC date form
+ok 89 - V315 TPEX corporate-action range accepts the official compact ROC date form
+  ---
+  duration_ms: 1.159791
+  ...
+# Subtest: V316 TWSE corporate-action history uses the report-serving wwwc authority alias
+ok 90 - V316 TWSE corporate-action history uses the report-serving wwwc authority alias
+  ---
+  duration_ms: 1.829341
+  ...
+# Subtest: V315 official monthly revenue carries filing time and a persistable monthly fact period
+ok 91 - V315 official monthly revenue carries filing time and a persistable monthly fact period
+  ---
+  duration_ms: 0.469468
+  ...
+# Subtest: V315 PE bridge derives a bounded diluted-share denominator from official cumulative EPS when MOPS omits the share concept
+ok 92 - V315 PE bridge derives a bounded diluted-share denominator from official cumulative EPS when MOPS omits the share concept
+  ---
+  duration_ms: 10.534258
+  ...
+# Subtest: V316 live acquisition collected after the scheduled cutoff keeps point-in-time facts but rejects future source timestamps
+ok 93 - V316 live acquisition collected after the scheduled cutoff keeps point-in-time facts but rejects future source timestamps
+  ---
+  duration_ms: 0.414256
+  ...
+# Subtest: V316 MOPS retention keeps the prior cumulative anchor needed to derive four consecutive quarters
+ok 94 - V316 MOPS retention keeps the prior cumulative anchor needed to derive four consecutive quarters
+  ---
+  duration_ms: 0.28519
+  ...
+# Subtest: V315 fundamental quality derives ROE directly from official attributable income and equity
+ok 95 - V315 fundamental quality derives ROE directly from official attributable income and equity
+  ---
+  duration_ms: 0.678033
+  ...
+# Subtest: V315 official coarse research rejects revenue filed after the point-in-time cutoff
+ok 96 - V315 official coarse research rejects revenue filed after the point-in-time cutoff
+  ---
+  duration_ms: 5.081259
+  ...
+# Subtest: V315 official factor discovery admits out-of-source undervaluation research without minting an action
+ok 97 - V315 official factor discovery admits out-of-source undervaluation research without minting an action
+  ---
+  duration_ms: 2.001631
+  ...
+# Subtest: V320 candidate funnel does not acquire or rank the full official market before KOL nominations
+ok 98 - V320 candidate funnel does not acquire or rank the full official market before KOL nominations
+  ---
+  duration_ms: 13.599656
+  ...
+# Subtest: V316 shallow official research can reach the near-buy lane without minting a buy action
+ok 99 - V316 shallow official research can reach the near-buy lane without minting a buy action
+  ---
+  duration_ms: 0.577021
+  ...
+# Subtest: V315 duplicate authority roster heads emit one persistence identity per stock and revision
+ok 100 - V315 duplicate authority roster heads emit one persistence identity per stock and revision
+  ---
+  duration_ms: 1.870292
+  ...
+# Subtest: V315 mention barrier consumes the compact candidate-only authoritative transport
+ok 101 - V315 mention barrier consumes the compact candidate-only authoritative transport
+  ---
+  duration_ms: 14.526925
+  ...
+# Subtest: V315 REST producer adapter maps canonical bytea and never exposes its service credential in failures
+ok 102 - V315 REST producer adapter maps canonical bytea and never exposes its service credential in failures
+  ---
+  duration_ms: 68.743802
+  ...
+# Subtest: V315 resumed facts completion retains the run authority identity from lease acquisition
+ok 103 - V315 resumed facts completion retains the run authority identity from lease acquisition
+  ---
+  duration_ms: 4.853235
+  ...
+# Subtest: V315 official ingestion retries only idempotent transient chunk transport failures
+ok 104 - V315 official ingestion retries only idempotent transient chunk transport failures
+  ---
+  duration_ms: 250.86592
+  ...
+# Subtest: V315 REST doctor reads private producer state only through the bounded health RPC
+ok 105 - V315 REST doctor reads private producer state only through the bounded health RPC
+  ---
+  duration_ms: 1.949903
+  ...
+# Subtest: V319 activation accepts the bounded run lease before the first heavyweight job claim is visible
+ok 106 - V319 activation accepts the bounded run lease before the first heavyweight job claim is visible
+  ---
+  duration_ms: 0.494356
+  ...
+# Subtest: V315 migration is additive, bounded, upgrade-safe, and binds authority to REST claim and completion
+ok 107 - V315 migration is additive, bounded, upgrade-safe, and binds authority to REST claim and completion
+  ---
+  duration_ms: 1.492573
+  ...
+# Subtest: V315 production repair pre-applies bounded official chunks and makes terminal completion constant-work
+ok 108 - V315 production repair pre-applies bounded official chunks and makes terminal completion constant-work
+  ---
+  duration_ms: 3.091456
+  ...
+# Subtest: V316 direct claim transaction raises only its local statement timeout and always closes the transaction
+ok 109 - V316 direct claim transaction raises only its local statement timeout and always closes the transaction
+  ---
+  duration_ms: 11.772558
+  ...
+# Subtest: V315 official ingestion keeps valid PB when the exchange PE exceeds the authority range
+ok 110 - V315 official ingestion keeps valid PB when the exchange PE exceeds the authority range
+  ---
+  duration_ms: 0.610392
+  ...
+# Subtest: V31613 reported valuations defer rows without an official same-session close dependency
+ok 111 - V31613 reported valuations defer rows without an official same-session close dependency
+  ---
+  duration_ms: 0.534206
+  ...
+# Subtest: V31621 operator migration plan exactly matches the reviewed apply chain
+ok 112 - V31621 operator migration plan exactly matches the reviewed apply chain
+  ---
+  duration_ms: 2.420674
+  ...
+# Subtest: V3.18 candidate retention reuses only the preceding immutable terminal ledger
+ok 113 - V3.18 candidate retention reuses only the preceding immutable terminal ledger
+  ---
+  duration_ms: 0.595349
+  ...
+# Subtest: V31621 projection repair separates immutable content cutoff from reviewed evaluation order
+ok 114 - V31621 projection repair separates immutable content cutoff from reviewed evaluation order
+  ---
+  duration_ms: 0.299532
+  ...
+# Subtest: V31621 production-cardinality repair keeps pooler-safe chunks and snapshots roster integrity once
+ok 115 - V31621 production-cardinality repair keeps pooler-safe chunks and snapshots roster integrity once
+  ---
+  duration_ms: 1.022604
+  ...
+# Subtest: V31621 provider acquisition freezes true fetched time and exact response bytes
+ok 116 - V31621 provider acquisition freezes true fetched time and exact response bytes
+  ---
+  duration_ms: 20.036751
+  ...
+# Subtest: V31621 same request reuses immutable acquisition and produces identical evidence without refetch
+ok 117 - V31621 same request reuses immutable acquisition and produces identical evidence without refetch
+  ---
+  duration_ms: 0.91452
+  ...
+# Subtest: V31621 partial retry fetches only missing request keys and quarantines a response conflict
+ok 118 - V31621 partial retry fetches only missing request keys and quarantines a response conflict
+  ---
+  duration_ms: 3.178408
+  ...
+# Subtest: V31621 provider failure diagnostic cannot echo URI, SQL, payload or secret
+ok 119 - V31621 provider failure diagnostic cannot echo URI, SQL, payload or secret
+  ---
+  duration_ms: 0.658664
+  ...
+# Subtest: V31621 action authority commits to the complete provider lineage rather than one fact fetch
+ok 120 - V31621 action authority commits to the complete provider lineage rather than one fact fetch
+  ---
+  duration_ms: 27.48401
+  ...
+# (node:315085) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:315085) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/effective-health.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: V31621 effective public and internal health disables actions for every authority mismatch but retains last-good research
+ok 121 - V31621 effective public and internal health disables actions for every authority mismatch but retains last-good research
+  ---
+  duration_ms: 43.850642
+  ...
+# (node:315096) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:315096) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/decision-publication.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: V317 preserves a research-only detail and waiting next step while global action authority is disabled
+ok 122 - V317 preserves a research-only detail and waiting next step while global action authority is disabled
+  ---
+  duration_ms: 73.435473
+  ...
+# Subtest: V317 evaluates the current frozen official union and emits a real liquidity input
+ok 123 - V317 evaluates the current frozen official union and emits a real liquidity input
+  ---
+  duration_ms: 21.055017
+  ...
+# Subtest: V317 never acquires paid source text and leaves no black anchor override
+ok 124 - V317 never acquires paid source text and leaves no black anchor override
+  ---
+  duration_ms: 18.744381
+  ...
+# Subtest: V3.18 keeps no-new source candidates through twenty completed sessions without re-promoting them
+ok 125 - V3.18 keeps no-new source candidates through twenty completed sessions without re-promoting them
+  ---
+  duration_ms: 7.203172
+  ...
+# Subtest: V3.18 reserves the full bounded ledger for still-retained cards and types fresh overflow
+ok 126 - V3.18 reserves the full bounded ledger for still-retained cards and types fresh overflow
+  ---
+  duration_ms: 14.749541
+  ...
+# (node:315107) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:315107) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/decision-publication.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: V3.19 dossier stays within one decision revision and keeps the full readiness contract
+ok 127 - V3.19 dossier stays within one decision revision and keeps the full readiness contract
+  ---
+  duration_ms: 79.819969
+  ...
+# Subtest: V3.18 uses an explicit contrasting CTA rather than inherited foreground colour
+ok 128 - V3.18 uses an explicit contrasting CTA rather than inherited foreground colour
+  ---
+  duration_ms: 0.856012
+  ...
+# Subtest: V3.18 Threads topic discovery accepts non-tracked public authors without impersonating profile monitoring
+ok 129 - V3.18 Threads topic discovery accepts non-tracked public authors without impersonating profile monitoring
+  ---
+  duration_ms: 30.501915
+  ...
+# Subtest: V3.18 Threads filters invalid rows before its document bound and rejects unsafe cursors
+ok 130 - V3.18 Threads filters invalid rows before its document bound and rejects unsafe cursors
+  ---
+  duration_ms: 5.987196
+  ...
+# Subtest: source refresh preserves API failure through tee
+ok 131 - source refresh preserves API failure through tee
+  ---
+  duration_ms: 0.260573
+  ...
+# Subtest: public Threads keyword discovery enters found without impersonating approved KOL authority
+ok 132 - public Threads keyword discovery enters found without impersonating approved KOL authority
+  ---
+  duration_ms: 0.647727
+  ...
+# Subtest: V3.20 preserves unauthorized paid-source and metadata-only terminals while accepting public Telegram claims
+ok 133 - V3.20 preserves unauthorized paid-source and metadata-only terminals while accepting public Telegram claims
+  ---
+  duration_ms: 14.256777
+  ...
+# Subtest: V3.18 research dossier code is part of the reviewed runtime bundle identity
+ok 134 - V3.18 research dossier code is part of the reviewed runtime bundle identity
+  ---
+  duration_ms: 2.679764
+  ...
+# Subtest: V3.19 release state advances once per closed checkpoint and cannot skip runtime identity
+ok 135 - V3.19 release state advances once per closed checkpoint and cannot skip runtime identity
+  ---
+  duration_ms: 2.824042
+  ...
+# Subtest: V3.19 disk policy fails closed below the reviewed capacity floor without deleting artifacts
+ok 136 - V3.19 disk policy fails closed below the reviewed capacity floor without deleting artifacts
+  ---
+  duration_ms: 1.203397
+  ...
+# Subtest: V3.19 readiness gives every candidate one visibility lane without treating missing authority as avoid
+ok 137 - V3.19 readiness gives every candidate one visibility lane without treating missing authority as avoid
+  ---
+  duration_ms: 0.749221
+  ...
+# Subtest: V3.19 release reconciliation migration is additive, private and in the reviewed chain
+ok 138 - V3.19 release reconciliation migration is additive, private and in the reviewed chain
+  ---
+  duration_ms: 1.521817
+  ...
+# Subtest: V3.19.4 reviewed replay skips only V3.19.2 after the stronger V3.19.3 contract is installed
+ok 139 - V3.19.4 reviewed replay skips only V3.19.2 after the stronger V3.19.3 contract is installed
+  ---
+  duration_ms: 0.276938
+  ...
+# Subtest: V3.19.1 runtime diagnostic contract preserves projection conflicts
+ok 140 - V3.19.1 runtime diagnostic contract preserves projection conflicts
+  ---
+  duration_ms: 0.259111
+  ...
+# Subtest: V3.19.2 compares compact landing cards with full detail revisions without dropping dossiers
+ok 141 - V3.19.2 compares compact landing cards with full detail revisions without dropping dossiers
+  ---
+  duration_ms: 0.459974
+  ...
+# Subtest: V3.19.3 validates bound dossier identities with the worker cyclic fields removed
+ok 142 - V3.19.3 validates bound dossier identities with the worker cyclic fields removed
+  ---
+  duration_ms: 0.246032
+  ...
+# Subtest: V3.19.6 admits every supported compact evaluation schema without reopening CREATE
+ok 143 - V3.19.6 admits every supported compact evaluation schema without reopening CREATE
+  ---
+  duration_ms: 0.474726
+  ...
+# Subtest: V3.19.7 binds reused frozen acquisitions to the current immutable job graph
+ok 144 - V3.19.7 binds reused frozen acquisitions to the current immutable job graph
+  ---
+  duration_ms: 0.57659
+  ...
+# Subtest: V3.20 admits only KOL-authorized nominations and evicts legacy official-only retention immediately
+ok 145 - V3.20 admits only KOL-authorized nominations and evicts legacy official-only retention immediately
+  ---
+  duration_ms: 6.654964
+  ...
+# Subtest: V3.20.1 retains only a DB-revalidated historical InvestAnchors structured claim
+ok 146 - V3.20.1 retains only a DB-revalidated historical InvestAnchors structured claim
+  ---
+  duration_ms: 0.678665
+  ...
+# Subtest: V3.20 retained legacy candidate uses database-derived historical lineage without minting the current run
+ok 147 - V3.20 retained legacy candidate uses database-derived historical lineage without minting the current run
+  ---
+  duration_ms: 1.359492
+  ...
+# Subtest: V3.20 rejects the 2605 new-emerging-market ETF false positive but accepts a public Telegram nomination
+ok 148 - V3.20 rejects the 2605 new-emerging-market ETF false positive but accepts a public Telegram nomination
+  ---
+  duration_ms: 20.204033
+  ...
+# Subtest: V3.20 produces a complete five-connector terminal matrix and metadata-only input cannot become a thesis
+ok 149 - V3.20 produces a complete five-connector terminal matrix and metadata-only input cannot become a thesis
+  ---
+  duration_ms: 19.760213
+  ...
+# Subtest: V3.20 records Telegram publication time only when the public message provides one and advertises cursor authority
+ok 150 - V3.20 records Telegram publication time only when the public message provides one and advertises cursor authority
+  ---
+  duration_ms: 2.833386
+  ...
+# Subtest: V3.20 projection is a second KOL-first boundary: it strips legacy cards and rejects official-only source signals
+ok 151 - V3.20 projection is a second KOL-first boundary: it strips legacy cards and rejects official-only source signals
+  ---
+  duration_ms: 5.383025
+  ...
+# Subtest: V3.20 bounds live and reused connector envelopes without refetching or losing item conservation
+ok 152 - V3.20 bounds live and reused connector envelopes without refetching or losing item conservation
+  ---
+  duration_ms: 7.043791
+  ...
+# Subtest: V3.20 authority bootstrap appends only the new public Telegram and structured-claim identities
+ok 153 - V3.20 authority bootstrap appends only the new public Telegram and structured-claim identities
+  ---
+  duration_ms: 0.527816
+  ...
+# Subtest: V3.20 turns a lost lease into an authoritative recoverable terminal instead of leaving a stuck run
+ok 154 - V3.20 turns a lost lease into an authoritative recoverable terminal instead of leaving a stuck run
+  ---
+  duration_ms: 7.01691
+  ...
+# Subtest: V3.20 recovery CLI accepts only a complete exact reviewed identity
+ok 155 - V3.20 recovery CLI accepts only a complete exact reviewed identity
+  ---
+  duration_ms: 14.208845
+  ...
+1..155
+# tests 155
+# suites 0
+# pass 147
+# fail 8
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 72301.921603

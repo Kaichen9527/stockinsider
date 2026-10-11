@@ -1,0 +1,3 @@
+# Attributed unsigned scoped review
+
+Reviewer `/root/author_input_review_oct08` reports CODE PASS for887355ca0479d957d9b0472bba70ea4f8f9d5961/treeeb0a4ada8ede4b791d10129f8151938e7ee586a2. Original c15 P2 is closed; nine guarded function bodies and transaction tail are byte-identical to c15, attributes checked before replacement, owner/ACL unchanged. Reviewer independently ran three files21/21zero skip. Original c15 review and all maker REDs remain preserved. Reviewer did not rerun build or complete production schema/protected release review. This attribution is not a signed or protected attestation; reviewer raw is not included.

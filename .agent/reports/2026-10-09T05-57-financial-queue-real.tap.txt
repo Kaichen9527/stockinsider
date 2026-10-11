@@ -1,0 +1,46 @@
+TAP version 13
+# (node:128286) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:128286) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-financial-queue-549-acceptance-oct09/web/src/lib/private-artifact-store.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-financial-queue-549-acceptance-oct09/web/package.json.
+# Subtest: isolated real SQL leases/private receipts with synthetic identity; compiled route rejects missing writer
+    # Subtest: unleased private receipt fails actual backend fence; no DB receipt
+    ok 1 - unleased private receipt fails actual backend fence; no DB receipt
+      ---
+      duration_ms: 28.942131
+      ...
+    # Subtest: same actual lease encloses private artifact hash/receipt; busy owner and replay
+    ok 2 - same actual lease encloses private artifact hash/receipt; busy owner and replay
+      ---
+      duration_ms: 38.272032
+      ...
+    # Subtest: missing/wrong identity and anonymous calls rejected by genuine SQL
+    ok 3 - missing/wrong identity and anonymous calls rejected by genuine SQL
+      ---
+      duration_ms: 13.333243
+      ...
+    # Subtest: restart receipt bytes persist but lease remains released
+    ok 4 - restart receipt bytes persist but lease remains released
+      ---
+      duration_ms: 234.679397
+      ...
+    # Subtest: compiled guarded queue actual HTTP401/409, no writer activated
+    ok 5 - compiled guarded queue actual HTTP401/409, no writer activated
+      ---
+      duration_ms: 18.37316
+      ...
+    1..5
+ok 1 - isolated real SQL leases/private receipts with synthetic identity; compiled route rejects missing writer
+  ---
+  duration_ms: 2558.826476
+  ...
+1..1
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3721.934349

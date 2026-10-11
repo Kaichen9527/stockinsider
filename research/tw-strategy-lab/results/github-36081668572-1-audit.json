@@ -1,0 +1,168 @@
+{
+  "reviewed_at": "2026-09-25T01:48:23Z",
+  "assessment": "share_with_caveats_not_strategy_promotion",
+  "github_run": 36081668572,
+  "job_id": 107904773457,
+  "artifact_id": 10842044543,
+  "archive_sha256": "21313d06d7188db7c6d2afcbd850fee6eb1ddf9ae0ff1c931997809851fb8477",
+  "source_commit": "e1fb505a894105e05fb08aa28fd0fb8ad8e520fa",
+  "checks_passed": 23752,
+  "simulations_audited": 18,
+  "ledger_status_counts": {
+    "exploratory": 15,
+    "blocked": 2
+  },
+  "rows": [
+    {
+      "file": "S1-baseline.json",
+      "net_cagr": 0.00021264517549957063,
+      "drawdown": -0.030903910791692413,
+      "completed_trades": 33,
+      "open_positions": 2,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S1-cost_stress.json",
+      "net_cagr": -0.004769712843937346,
+      "drawdown": -0.038430329244589,
+      "completed_trades": 32,
+      "open_positions": 2,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S1-small_capacity.json",
+      "net_cagr": 0.0009501470110666599,
+      "drawdown": -0.01977099887293654,
+      "completed_trades": 15,
+      "open_positions": 0,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S2-baseline.json",
+      "net_cagr": -0.01027827384369906,
+      "drawdown": -0.062184030007847224,
+      "completed_trades": 79,
+      "open_positions": 3,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S2-cost_stress.json",
+      "net_cagr": -0.013309552657718493,
+      "drawdown": -0.07607303119307574,
+      "completed_trades": 67,
+      "open_positions": 3,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S2-small_capacity.json",
+      "net_cagr": -0.008810535844154699,
+      "drawdown": -0.044196749999999674,
+      "completed_trades": 48,
+      "open_positions": 1,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S3-baseline.json",
+      "net_cagr": 0.012261945375513283,
+      "drawdown": -0.04599536100320889,
+      "completed_trades": 36,
+      "open_positions": 1,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S3-cost_stress.json",
+      "net_cagr": 0.007396670048651188,
+      "drawdown": -0.04412102362491799,
+      "completed_trades": 36,
+      "open_positions": 1,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S3-small_capacity.json",
+      "net_cagr": 0.012202075474430085,
+      "drawdown": -0.030919283591514635,
+      "completed_trades": 15,
+      "open_positions": 0,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S4-baseline.json",
+      "net_cagr": 0,
+      "drawdown": 0,
+      "completed_trades": 0,
+      "open_positions": 0,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S4-cost_stress.json",
+      "net_cagr": 0,
+      "drawdown": 0,
+      "completed_trades": 0,
+      "open_positions": 0,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S4-small_capacity.json",
+      "net_cagr": 0,
+      "drawdown": 0,
+      "completed_trades": 0,
+      "open_positions": 0,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S6-baseline.json",
+      "net_cagr": -0.0009599994437401449,
+      "drawdown": -0.016627614541631863,
+      "completed_trades": 25,
+      "open_positions": 0,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S6-cost_stress.json",
+      "net_cagr": -0.0033917222234544075,
+      "drawdown": -0.021550448540211375,
+      "completed_trades": 23,
+      "open_positions": 0,
+      "equity_rows": 1217
+    },
+    {
+      "file": "S6-small_capacity.json",
+      "net_cagr": 0.0005761897682183825,
+      "drawdown": -0.007056174707486873,
+      "completed_trades": 10,
+      "open_positions": 0,
+      "equity_rows": 1217
+    },
+    {
+      "file": "panel-benchmark-baseline.json",
+      "net_cagr": 0.1383369013225475,
+      "drawdown": -0.17239274238426527,
+      "completed_trades": 0,
+      "open_positions": 5,
+      "equity_rows": 1217
+    },
+    {
+      "file": "panel-benchmark-cost_stress.json",
+      "net_cagr": 0.13819159313137663,
+      "drawdown": -0.1725011322408615,
+      "completed_trades": 0,
+      "open_positions": 5,
+      "equity_rows": 1217
+    },
+    {
+      "file": "panel-benchmark-small_capacity.json",
+      "net_cagr": 0.09836085393768501,
+      "drawdown": -0.15197341387193686,
+      "completed_trades": 0,
+      "open_positions": 3,
+      "equity_rows": 1217
+    }
+  ],
+  "limitations": [
+    "Arithmetic was independently recomputed from derived curves/fills; engine helpers were not imported.",
+    "Raw source and normalized CSV bytes are deliberately absent from CI evidence. Their manifest hashes are recorded, not independently rehashed locally; no full dataset replay.",
+    "Equity decomposition checks exported fields, not independent market marks. Slippage cannot be independently recomputed without raw opening prices.",
+    "No new simulation, parameter search, 2024+ data access, production write, deployment or exact-review attestation.",
+    "Initial verification assertion guessed 1214 curve rows and failed. Harness corrected to compare actual unique ordered calendars (1217 rows); no engine or evidence change."
+  ]
+}

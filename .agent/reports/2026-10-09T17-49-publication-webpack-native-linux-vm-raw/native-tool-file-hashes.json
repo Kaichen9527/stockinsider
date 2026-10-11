@@ -1,0 +1,21 @@
+{
+  "tools": [
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/postgres",
+      "bytes": 10189096,
+      "sha256": "6468a969338215cb3912cf9c0b894bdbbd37b9a709926db078e9a5bf8bdc3e16"
+    },
+    {
+      "path": "/workspace/cloud-local-dataplane-artifacts-oct08/tools/postgrest",
+      "bytes": 20502640,
+      "sha256": "0cf367dc2ee47d5c648baa2952e25bdf299de4e1998d31e251bb00d129262d71"
+    },
+    {
+      "path": "/workspace/cloud-clock-builder-770-artifacts-oct09/build-770/libfaketime.so.1",
+      "bytes": 65856,
+      "sha256": "483dfc28d0b87718ce50b48d382f03b8615fe861c5f859c958ddfc934fa0b3c6"
+    }
+  ],
+  "pgOnlyOffset": "+0",
+  "nodeParentPreload": false
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "existing-automation-configuration-repair-v1",
+  "automationId": "candidate-dossier-enrichment",
+  "status": "ACTIVE",
+  "modelPreserved": "gpt-5.6-sol",
+  "reasoningEffortPreserved": "high",
+  "notificationPolicyPreserved": "failed_runs_only",
+  "scheduleTaipeiWeekdays": [
+    "21:20",
+    "21:50",
+    "22:20",
+    "22:50",
+    "23:20",
+    "23:50"
+  ],
+  "promptSha256": "6af85bbf7f009f1f6f2e76a09aa2d04f53ac6ed449e464f034fc45f436ec65bb",
+  "rruleSha256": "3177d8ad651c39b521d8414b627340d96f5a9f5daafcc10abd8d5db798d9f87f",
+  "explicitLoopbackOrigin": "http://127.0.0.1:3100",
+  "timeWindowGuardBeforeAnySshOrApi": true,
+  "newSixRoleScheduleEnabled": false,
+  "scheduledExecutionAccepted": false
+}

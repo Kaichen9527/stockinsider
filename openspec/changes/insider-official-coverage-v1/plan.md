@@ -1,0 +1,3 @@
+# Isolated implementation
+
+Base7baa184, reviewed e9811c/bafa2b1 data commits only. Implement finite official parser/response grant and reusable page logic, then replace the legacy collector field reads/truncation with those helpers. Existing source-sync auth and production writer lease remain unchanged. Existing source_connector_cursors is reused with per-dataset CAS after document persistence; no schema changes. Test actual selected values and adversarial quantities/dates/paging, exact collector body with synthetic dependencies, and real PG existing cursor DDL/restart. Then types/lint/normal build. No official live fetch/full-flow activation claim.

@@ -1,0 +1,22 @@
+{
+  "admissionAt": "2026-10-09T17:28:56.128900+00:00",
+  "manualStartedAt": "2026-10-09T17:27:55Z",
+  "manualDeadline": "2026-10-09T17:57:55Z",
+  "sourceHead": "17820a6cc3d69cc62cc92680d954b94ab951a289",
+  "sourceTree": "1253e1dc245438a790ebfc23b59ed6b8ede6817b",
+  "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+  "nodeVersion": "v22.14.0",
+  "nextVersion": "16.3.8",
+  "buildScript": "next build",
+  "prebuildScript": "node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs && node ../scripts/sync-research-strategy-release.mjs --check",
+  "prebuildPreserved": true,
+  "availableBytes": 11338444800,
+  "diskTotalBytes": 33770192896,
+  "memoryCgroupLimitBytes": 34359738368,
+  "workspaceActiveHeavyAtAdmission": [],
+  "dotenvFilenameInventory": [],
+  "newDependenciesInstalled": false,
+  "networkPolicy": "restricted, state unknown; configured proxy/CA retained; no credentials inspected",
+  "normalBuildRetryAuthorizedOrPerformed": false,
+  "nativeHttpRunAuthorizedOrPerformed": false
+}

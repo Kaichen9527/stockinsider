@@ -1,0 +1,28 @@
+TAP version 13
+# Subtest: actual reservation RPC rejects stale RR/serializable snapshots before admission and preserves RC global lease/replay
+not ok 1 - actual reservation RPC rejects stale RR/serializable snapshots before admission and preserves RC global lease/replay
+  ---
+  duration_ms: 841.74125
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:15:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    message: 'research_admission_read_committed_required'
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:39:7)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 902.414417

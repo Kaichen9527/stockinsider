@@ -10,6 +10,9 @@ on:
       - 'migrations/20260907*.sql'
       - 'migrations/20260909*.sql'
       - 'migrations/20260911*.sql'
+      - 'migrations/20260929*.sql'
+      - 'scripts/research-*.test.mjs'
+      - 'scripts/candidate-dossier-outbox-v6-postgres.test.mjs'
       - 'deployment/vps/**'
       - 'scripts/model-runner-v3/**'
       - 'scripts/opportunity-v3/**'
@@ -19,6 +22,7 @@ on:
       - 'scripts/run-node22.js'
       - 'web/src/app/api/internal/financial-fact-v3/**'
       - 'web/src/app/api/internal/candidate-*/**'
+      - 'web/src/app/api/internal/research-*/**'
       - 'web/src/app/api/internal/finmind-*/**'
       - 'web/src/app/api/internal/instrument-roster-v3/**'
       - 'web/src/app/api/internal/market-observation-v3/**'
@@ -40,6 +44,7 @@ on:
       - 'web/src/app/components/RadarTabs.tsx'
       - 'web/src/lib/types.ts'
       - 'web/src/lib/candidate-*.ts'
+      - 'web/src/lib/research-*.ts'
       - 'web/src/lib/finmind-*.ts'
       - 'web/src/lib/shadow-*.ts'
       - 'web/src/app/components/ShadowOpportunityV3.tsx'
@@ -94,6 +99,8 @@ jobs:
         run: npm ci
       - name: Verify candidate revision and historical date contracts
         run: npm run test:candidate-revision-history
+      - name: Verify research agent contracts and real PostgreSQL recovery
+        run: npm run test:research-agents
       - name: Install project-local Playwright Chromium
         working-directory: web
         run: ./node_modules/.bin/playwright install --with-deps chromium

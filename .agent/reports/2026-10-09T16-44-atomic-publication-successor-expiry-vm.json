@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "bounded-linux-test-successor-receipt-v1",
+  "sealedAt": "2026-10-09T16:44:41.226493+00:00",
+  "manualIncrementStartedAt": "2026-10-09T16:34:50Z",
+  "manualDeadline": "2026-10-09T17:04:50Z",
+  "upstreamTestSubject": "77a84448c52739cd4a8c7725df1103d96a26512f",
+  "localTestHead": "4ea06752a340c41222ae9309a5ccaca9bb74dfef",
+  "localTestTree": "f8ac4df7c60df380a7b09bace04d41958839a698",
+  "runtimeBuildSubject": "18d6c86ffabfa0fc88c6f0ed807a860024d0f144",
+  "webTree": "14528d8e1d435f881f6e3da91ccfeb4e7808c408",
+  "testFile": {
+    "file": "scripts/research-atomic-publication-postgres.test.mjs",
+    "bytes": 35068,
+    "sha256": "5c2f2b955fb7deb67ba74a7df21e913bd7e4d7c636fc2704c685159e00dfb1ef"
+  },
+  "scope": "Only the upstream test file was adopted: synthetic pre-seal lease setup 7 to 30 seconds and original remaining-window assertion. No production duration, clock, guard, transport or assertions relaxed. Root successor independent review was pending in the instruction.",
+  "runtimeWebMigrationPackageEqualToUpstream": true,
+  "originalAcceptance": {
+    "evidenceHead": "7e2ca6a764a7f447fbf10266feea555e5cac4f88",
+    "receipt": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm.json",
+    "bytes": 12839,
+    "sha256": "be1c7786dcd525052b50bbd9c2265846c178231e15e642715c6aea7dc218bbfa",
+    "unchanged": true,
+    "counts": {
+      "total": 759,
+      "pass": 757,
+      "fail": 0,
+      "skip": 2
+    }
+  },
+  "stage": {
+    "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+    "stage": "successor-expiry-only",
+    "command": [
+      "node",
+      "scripts/run-node22.js",
+      "--experimental-strip-types",
+      "--test",
+      "--test-name-pattern=expires-waiting",
+      "scripts/research-atomic-publication-postgres.test.mjs"
+    ],
+    "startedAt": "2026-10-09T16:43:10.695Z",
+    "completedAt": "2026-10-09T16:43:42.601Z",
+    "elapsedSeconds": 31.905853768985253,
+    "exitCode": 0,
+    "sampledAggregateRssPeakBytes": 198623232,
+    "observedTaskDiskPeakBytes": 1367445504,
+    "availableBeforeBytes": 10974937088,
+    "availableAfterBytes": 10974928896,
+    "guardTermination": null
+  },
+  "counts": {
+    "total": 2,
+    "pass": 2,
+    "fail": 0,
+    "skip": 0,
+    "parentTests": 1,
+    "childTests": 1
+  },
+  "build": {
+    "id": "GSmt2-9hVUeJ5PJ9H3Roy",
+    "reusedExact18dBuild": true,
+    "newBuildExecuted": false,
+    "manifest": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/compiled-server-file-manifest.json",
+    "entries": 2092,
+    "bytes": 400267,
+    "sha256": "7175a07ff0f49685834e967ddb2f73d80db3dd0cbe59484749d9834107f43bd8",
+    "allCurrentFilesVerified": true
+  },
+  "cleanup": {
+    "ownedProcessesRemaining": [],
+    "originalTestStopAndCleanupUnchanged": true,
+    "manualDeletionPerformed": false,
+    "availableBytes": 10974892032
+  },
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T16-44-atomic-publication-successor-expiry-vm-raw/successor-expiry-only.log",
+      "bytes": 2946,
+      "sha256": "7797a1fe03896a56731a090f92020616a205a85d3b8b5864601f7c02f1b7b494"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-44-atomic-publication-successor-expiry-vm-raw/successor-expiry-only.json",
+      "bytes": 701,
+      "sha256": "6969998d60dc262b8c4966f36b7d40d4525e8acadc400c53022b97374b72c2d8"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-44-atomic-publication-successor-expiry-vm-raw/successor-expiry-only.time",
+      "bytes": 872,
+      "sha256": "ee274807041f410052f2f904a6b0b6513034cedf37ca5fe78e05205064d6313a"
+    }
+  ],
+  "limits": [
+    "Expiry-only successor result does not replace original18d suite result or explain the independent Mac psql15s timeout.",
+    "Two counted tests are one real-PG parent and one child, not two separate clusters.",
+    "Fixtures and controller observations are synthetic; no actual author/reviewer/model execution or protected authority.",
+    "No business HTTP, production DB, merge or deployment. Manual engineering time is not product-role budget evidence.",
+    "The resource sample can miss short-lived or reparented processes."
+  ]
+}

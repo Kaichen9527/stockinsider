@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "synthetic-shared-renderer-ui-observation-v1",
+  "sourceCommit": "98b9a76735dc236abd0e330433570f93b044f9a4",
+  "browser": "Codex In-app Browser",
+  "method": "Actual DeepResearchView/value/dateLabel declarations extracted from TS AST, transpiled and React server-rendered with synthetic article; built CSS served locally",
+  "url": "http://127.0.0.1:3119/",
+  "fixtureNotRealResearch": true,
+  "productionDeployment": false,
+  "actualArticlePublication": false,
+  "desktop": {
+    "width": 1280,
+    "height": 800,
+    "documentWidth": 1280,
+    "sectionCount": 7,
+    "industryScopeLabels": 1,
+    "backgroundInitiallyCollapsed": true,
+    "keyboardEnterExpandedBackground": true
+  },
+  "mobile": {
+    "width": 390,
+    "height": 844,
+    "documentWidth": 390,
+    "industryScopeLabels": 1,
+    "keyboardEnterCollapsedBackground": true,
+    "sourceDetailsClickExpanded": true,
+    "syntheticCitationLinks": 8
+  },
+  "temporaryViewportReset": true,
+  "temporaryTabClosed": true,
+  "fixtureServerStopped": true,
+  "fullNextApplicationAcceptance": false,
+  "realLongArticleAcceptance": false
+}

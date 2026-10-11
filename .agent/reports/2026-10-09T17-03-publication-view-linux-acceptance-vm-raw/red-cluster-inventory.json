@@ -1,0 +1,10 @@
+[
+  {
+    "cluster": "/tmp/si-rresult-s8gijK",
+    "postmasterPidExists": false,
+    "rawLog": "si-rresult-s8gijK-failure-pg.log",
+    "bytes": 7461,
+    "sha256": "de24807ccaa906e8e21075b4569c8ded957102f6c44a8497ebacefc8410d5601",
+    "clusterRetained": true
+  }
+]

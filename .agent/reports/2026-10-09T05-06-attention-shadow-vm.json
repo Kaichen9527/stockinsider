@@ -1,0 +1,303 @@
+{
+  "schemaVersion": "bounded-manual-vm-verification-v1",
+  "subjectSha": "afa3b89907823a7b96408165ab001dc79bc24cc4",
+  "webTree": "ac395bb5b15672694abb95f5877ca9e2eac8e8c2",
+  "manualIncrement": {
+    "startedAt": "2026-10-09T04:58:13Z",
+    "deadline": "2026-10-09T05:28:13Z",
+    "completedAt": "2026-10-09T05:06:23.941332+00:00",
+    "automatedRoleLease": false
+  },
+  "runtime": {
+    "node": "22.14.0",
+    "postgres": "17.11",
+    "memoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "dotenvFilenameInventory": [],
+    "configuredModelIdentityAvailable": false
+  },
+  "dependencyReuse": {
+    "webLockIdenticalToPriorWorkspace": true,
+    "method": "local reflink-capable copy; no installation",
+    "pg": "8.18.0"
+  },
+  "fileHashes": {
+    "web/src/lib/research-attention-shadow-v2.ts": "799f07564669bec921835f9a8d3c7f0b5a67009c62f4d9867e7b9eedc02c341d",
+    "web/src/lib/research-attention-shadow-v2.test.ts": "4feb688edfaccc8c1dea43525ce8a2dcedf9e074b24dc3ead9c05b44578c6b44",
+    "openspec/changes/research-attention-shadow-v2/spec.md": "c2344e84f438e6a8c065816d9ee3d91e7ce60ec7d81bdfb11e558b1b4e82a433",
+    "package.json": "cf9ff248f492817132aea98d55281a4e15d959e0ac675c3440c916edd61c32ff"
+  },
+  "build": {
+    "buildId": "gbAt0bS_x2k7xScoXN_od",
+    "buildIdSha256": "c14309c70e4d5f12f3cb8aa6fe9e273e363cfef89d629be3068f9e8774ec7da3",
+    "exactCleanSubjectAtExecution": true
+  },
+  "checks": {
+    "focused": {
+      "pass": 22,
+      "fail": 0,
+      "skip": 0,
+      "handoffReportedCount": 28,
+      "countDiscrepancy": "Exact Git subject contains 22 top-level tests; original TAP retained. No claim of 28 maker executions."
+    },
+    "researchBeforeGeneration": {
+      "pass": 368,
+      "fail": 1,
+      "skip": 0,
+      "failure": "strategy_local_import_unresolved generated official-authority bridge absent"
+    },
+    "researchAfterSupportedPretypecheckAndBuild": {
+      "pass": 369,
+      "fail": 0,
+      "skip": 0,
+      "actualPostgres": true
+    },
+    "typecheck": "pass",
+    "lint": {
+      "errors": 0,
+      "warnings": 33,
+      "initialRun": "manually interrupted; preserved, subsequent complete run passed"
+    },
+    "normalBuild": "pass"
+  },
+  "stages": {
+    "focused": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-attention-shadow-v2.test.ts"
+      ],
+      "startedAt": "2026-10-09T04:59:26.465Z",
+      "completedAt": "2026-10-09T04:59:27.962Z",
+      "elapsedSeconds": 1.4973287800094113,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 234541056,
+      "observedTaskDiskPeakBytes": 985427968,
+      "availableBeforeBytes": 18315087872,
+      "availableAfterBytes": 18315075584,
+      "guardTermination": null
+    },
+    "research-agents": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "research-agents",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-09T04:59:41.053Z",
+      "completedAt": "2026-10-09T05:00:00.361Z",
+      "elapsedSeconds": 19.308048248989508,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 836468736,
+      "observedTaskDiskPeakBytes": 1050890240,
+      "availableBeforeBytes": 18315071488,
+      "availableAfterBytes": 18314412032,
+      "guardTermination": null
+    },
+    "types": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T05:00:20.039Z",
+      "completedAt": "2026-10-09T05:00:35.263Z",
+      "elapsedSeconds": 15.22352584800683,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1326022656,
+      "observedTaskDiskPeakBytes": 986222592,
+      "availableBeforeBytes": 18314407936,
+      "availableAfterBytes": 18312671232,
+      "guardTermination": null
+    },
+    "lint": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T05:00:37.389Z",
+      "completedAt": "2026-10-09T05:00:48.328Z",
+      "elapsedSeconds": 10.939361797005404,
+      "exitCode": -15,
+      "sampledAggregateRssPeakBytes": 805498880,
+      "observedTaskDiskPeakBytes": 987848704,
+      "availableBeforeBytes": 18312667136,
+      "availableAfterBytes": 18312663040,
+      "guardTermination": null
+    },
+    "lint-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-final",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T05:01:06.247Z",
+      "completedAt": "2026-10-09T05:01:27.960Z",
+      "elapsedSeconds": 21.713427998998668,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1167986688,
+      "observedTaskDiskPeakBytes": 987856896,
+      "availableBeforeBytes": 18312658944,
+      "availableAfterBytes": 18296483840,
+      "guardTermination": null
+    },
+    "build": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T05:01:38.820Z",
+      "completedAt": "2026-10-09T05:02:14.736Z",
+      "elapsedSeconds": 35.91563823301112,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 2073710592,
+      "observedTaskDiskPeakBytes": 1327001600,
+      "availableBeforeBytes": 18296479744,
+      "availableAfterBytes": 17973510144,
+      "guardTermination": null
+    },
+    "research-agents-prepared": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "research-agents-prepared",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-09T05:05:13.906Z",
+      "completedAt": "2026-10-09T05:05:33.139Z",
+      "elapsedSeconds": 19.233793263003463,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 914206720,
+      "observedTaskDiskPeakBytes": 1395212288,
+      "availableBeforeBytes": 17973506048,
+      "availableAfterBytes": 17973395456,
+      "guardTermination": null
+    }
+  },
+  "artifactHashes": {
+    "lint.json": {
+      "bytes": 526,
+      "sha256": "597ec7f14a55d85393c6dde5b60ceca17a3f9088ea333543192d7c4f81d3cea6"
+    },
+    "types.json": {
+      "bytes": 530,
+      "sha256": "5190ba9878f2a9cef7842cde186baa12b713f128e9d5882de72c30eac4e8ae65"
+    },
+    "research-agents-prepared.json": {
+      "bytes": 561,
+      "sha256": "7558433b3e1e3244040974d1ba6951f0358ef79f39f644a5cbf7d69a7000a9ac"
+    },
+    "lint-final.json": {
+      "bytes": 531,
+      "sha256": "ff3741fe991c44d10da38df22ffcfb2a9e1da1226f3170dea3d6f1be9f7d90bc"
+    },
+    "lint-final.time": {
+      "bytes": 744,
+      "sha256": "4160db699c7a3eb5290633108fc81aee9d125522322c983993a4c41b2f1c1c55"
+    },
+    "focused.log": {
+      "bytes": 5395,
+      "sha256": "93103569d538c1ce98b6f23125e07d9bdbb0033e1936926bcde4b35acf18697e"
+    },
+    "research-agents.time": {
+      "bytes": 802,
+      "sha256": "3bfc178d9feeada23796e34546bb524031a6dda3c88aa8461f6d62d9b60faed0"
+    },
+    "build.json": {
+      "bytes": 527,
+      "sha256": "7c0ae05e90da327f1cc40fb3824dac49efc1262943207f67c3766546321124a9"
+    },
+    "lint.log": {
+      "bytes": 157,
+      "sha256": "a10797431c650047d3d060e80c41d66bfda56ccd5dc5407509ace1a9d5e562fb"
+    },
+    "lint.time": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build.time": {
+      "bytes": 749,
+      "sha256": "5c720089c9cc5b0fb6960cb7b7073d5a08456d793521def57a141ccd608a9c6a"
+    },
+    "research-agents.json": {
+      "bytes": 552,
+      "sha256": "bae7c891bae78c439a383e68657bade0c5903ad25976d4efb1fd5f6aa35c74ac"
+    },
+    "types.log": {
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    "research-agents-prepared.time": {
+      "bytes": 762,
+      "sha256": "d2195f0a36c175523fec7c71e055eaa1fe9bc78b5dc4163633e64f2ebc2fb93f"
+    },
+    "lint-final.log": {
+      "bytes": 4739,
+      "sha256": "7628aeae64974cc141dac79b6dc05d42213b87526c7f972be6e4435ff3a27310"
+    },
+    "build.log": {
+      "bytes": 6454,
+      "sha256": "7c3bbbf3addae1754aba33af131aa8209c2f9ac3a52f7b2386f1e84172df51bf"
+    },
+    "focused.time": {
+      "bytes": 831,
+      "sha256": "1840c2590c041c494cd79cb39a88dfbc49cbcc30764c11f91e3ccf2cdca26774"
+    },
+    "focused.json": {
+      "bytes": 638,
+      "sha256": "0f67f57dce8b5b85116e3db8c759d20500a6a2dbdebcc406d61a71109b50448c"
+    },
+    "research-agents-prepared.log": {
+      "bytes": 105664,
+      "sha256": "c3597daf5a0ff58069919aa9632543f2dcf519e5a0e229cf5e389c225dbf3a49"
+    },
+    "types.time": {
+      "bytes": 746,
+      "sha256": "d820a9a3014602a68f57ec1bfa1f2baa4b269f2c20c4dafa302a0b9bd0970490"
+    },
+    "research-agents.log": {
+      "bytes": 111002,
+      "sha256": "c310fc369aba77a6b8c5c89137f786bf59288611a5ee5d4cb992f73fdf0674b5"
+    },
+    "run-check.py": {
+      "bytes": 4261,
+      "sha256": "595d3021b2d51b3bb50b18c5393feee19e620fab0e4e428124d1ab1078043134"
+    }
+  },
+  "resource": {
+    "maximumSampledAggregateRssBytes": 2073710592,
+    "maximumObservedTaskDiskBytes": 1395212288,
+    "reserveBytes": 8000000000,
+    "singleHeavyExecution": true,
+    "rssMethod": "100ms process group plus live descendant RSS; short or reparented processes may be missed",
+    "cgroupPeakNotTaskAttributable": true
+  },
+  "cleanup": {
+    "candidateCacheBytes": 159727207,
+    "deletedPaths": [],
+    "reason": "No deletion required for resource admission; preserve reusable outputs and unique evidence."
+  },
+  "limitations": [
+    "Pure shadow only; v1 ranking and queues unchanged",
+    "No production write, dispatch, authority activation or protected attestation",
+    "This branch is based on 7baa and does not validate later converged observed/preparation changes",
+    "Prior a4 full suite failure receipt and independent growth counterexample remain valid",
+    "Unexpected ELF diagnostic was a mistyped version command, not a test/build result; corrected direct Node executable reports22.14.0"
+  ]
+}

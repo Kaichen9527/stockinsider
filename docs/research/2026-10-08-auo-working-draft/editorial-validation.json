@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "auo-working-draft-editorial-delta-validation-v1",
+  "originalArticleCommit": "a38ccf9a831fce46d7bd4385acba397d735816ca",
+  "originalValidationCommit": "16562c1d8021e2db6314cdcb47d5ddea9b0b52ce",
+  "validationScope": "actual lightweight editorial delta; not original 61-check rerun, App build or article approval",
+  "startedAt": "2026-10-08T08:37:16.553350+00:00",
+  "completedAt": "2026-10-08T08:37:16.584026+00:00",
+  "originalArticleSha256": "30f4bd5c12199c1b48730a4697dfc6a6832deb494c5fe4c75e37d029ccfaca3e",
+  "successorArticleSha256": "90309611783a5d6ce3e2c7fc59eafa2e9cae864a9abb56fda924c1b9fce76168",
+  "successorArticleBytes": 25076,
+  "primaryHanCharacters": 4420,
+  "typedPrimaryParagraphs": 28,
+  "referenceCodes": 24,
+  "unchangedMarkdownTableLines": 73,
+  "pass": 23,
+  "fail": 0,
+  "skip": 0,
+  "checks": [
+    {
+      "name": "all Markdown table rows byte-identical",
+      "passed": true
+    },
+    {
+      "name": "all reference codes defined",
+      "passed": true
+    },
+    {
+      "name": "reference codes unchanged",
+      "passed": true
+    },
+    {
+      "name": "seven ordered primary chapters",
+      "passed": true
+    },
+    {
+      "name": "engineering vocabulary moved from primary narrative",
+      "passed": true
+    },
+    {
+      "name": "genuine QoQ improvement explicit",
+      "passed": true
+    },
+    {
+      "name": "sustainability qualifier explicit",
+      "passed": true
+    },
+    {
+      "name": "conditional forward EPS PE preserved",
+      "passed": true
+    },
+    {
+      "name": "no target or entry conclusion",
+      "passed": true
+    },
+    {
+      "name": "incomplete and no formal authority",
+      "passed": true
+    },
+    {
+      "name": "unchanged from validated HEAD docs/research/2026-10-08-auo/dataset.json",
+      "passed": true
+    },
+    {
+      "name": "unchanged from validated HEAD docs/research/2026-10-08-auo-market/dataset.json",
+      "passed": true
+    },
+    {
+      "name": "unchanged from validated HEAD docs/research/2026-10-08-auo-working-draft/content-validation.json",
+      "passed": true
+    },
+    {
+      "name": "unchanged from validated HEAD docs/research/2026-10-08-auo-working-draft/public-context-relay.json",
+      "passed": true
+    },
+    {
+      "name": "unchanged from validated HEAD docs/research/2026-10-08-auo-working-draft/public-news-clue-relay.json",
+      "passed": true
+    },
+    {
+      "name": "unchanged from validated HEAD docs/research/2026-10-08-auo-working-draft/corporate-action-relay.json",
+      "passed": true
+    },
+    {
+      "name": "unchanged from validated HEAD docs/research/2026-10-08-auo-working-draft/source-ledger.json",
+      "passed": true
+    },
+    {
+      "name": "unchanged from validated HEAD docs/research/2026-10-08-auo-working-draft/table-calculations.json",
+      "passed": true
+    },
+    {
+      "name": "unchanged from validated HEAD docs/research/2026-10-08-auo-working-draft/reverse-sensitivity.json",
+      "passed": true
+    },
+    {
+      "name": "original receipt in committed HEAD",
+      "passed": true
+    },
+    {
+      "name": "original receipt SHA preserved",
+      "passed": true
+    },
+    {
+      "name": "all 28 typed primary paragraphs cited",
+      "passed": true
+    },
+    {
+      "name": "web tree unchanged",
+      "passed": true
+    }
+  ],
+  "priorAttempt": {
+    "status": "validation tool error; no completion receipt written",
+    "error": "content-validation.json did not exist at a38 checkpoint; comparison erroneously used that ancestor",
+    "correction": "compare subsequently committed original validation against 16562c1 HEAD; original article still compared against a38",
+    "productFailure": false
+  },
+  "resources": {
+    "measurement": "Python getrusage self/child max RSS; monotonic elapsed; statvfs free bytes, no heavy job",
+    "elapsedSeconds": 0.034267683993675746,
+    "selfMaxRssBytes": 11927552,
+    "childrenMaxRssBytes": 11927552,
+    "diskAvailableBeforeBytes": 27355701248,
+    "diskAvailableAfterBytes": 27355701248
+  },
+  "originalReceipt": ".agent/reports/2026-10-08T082600Z-auo-working-draft-validation.json",
+  "originalReceiptSha256": "cb7ee222325b6f92dd80019c819fff459fcbf458b516db5250e4159191dae5b9",
+  "limitations": [
+    "manual editing continuation exceeded original 30-minute engineering window; not automatic model budget acceptance",
+    "manual draft incomplete; independent scoped difference review pending",
+    "no App code or dataset changes",
+    "no production import, publication, strategy approval or live handoff"
+  ]
+}

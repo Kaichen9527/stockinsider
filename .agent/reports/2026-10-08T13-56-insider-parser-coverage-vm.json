@@ -1,0 +1,257 @@
+{
+  "schemaVersion": "insider-parser-coverage-vm-v1",
+  "recordedAt": "2026-10-08T13:57:25.840590+00:00",
+  "branch": "codex/insider-parser-coverage-oct08",
+  "incrementStartedAtApproximate": "2026-10-08T13:36:00Z",
+  "manualIncrementLimitMinutes": 30,
+  "automatedRolesValidated": false,
+  "baseline": "7baa184cddc712110342a5ef79e4e79958d16558",
+  "sourcePackets": [
+    {
+      "originalCommit": "e9811c76547fbf18f360f012e9bfd095fa9fdb24",
+      "file": "docs/research/2026-10-08-discovery-live/insider-schema-relay.json",
+      "fileSha256": "c56c641b481e2d623b45e32c359ed10480cdede9f3474e0171a0f5c72c7b6e3f"
+    },
+    {
+      "originalCommit": "bafa2b1e1fabe34162e707a2eaca9c71972b285b",
+      "file": "docs/research/2026-10-08-discovery-live/tpex-insider-schema-relay.json",
+      "fileSha256": "1af558e70f1593a9e27a951aaddf23387670a3903ecaba5459843dc770fa7854"
+    }
+  ],
+  "tests": {
+    "parser": {
+      "pass": 20,
+      "fail": 0,
+      "skip": 0
+    },
+    "collectorWithSyntheticTransportAndPersistence": {
+      "pass": 6,
+      "fail": 0,
+      "skip": 0
+    },
+    "realExistingPostgresCursorRestartCAS": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "parser-verified",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "web/src/lib/research-insider-official.test.ts"
+      ],
+      "startedAt": "2026-10-08T13:54:17.846Z",
+      "completedAt": "2026-10-08T13:54:18.141Z",
+      "elapsedSeconds": 0.294103873995482,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 74719232,
+      "observedTaskDiskPeakBytes": 1430237184,
+      "availableBeforeBytes": 24957448192,
+      "availableAfterBytes": 24957440000,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "collector-verified",
+      "command": [
+        "node",
+        "scripts/research-insider-collector.test.mjs"
+      ],
+      "startedAt": "2026-10-08T13:54:18.169Z",
+      "completedAt": "2026-10-08T13:54:18.784Z",
+      "elapsedSeconds": 0.6148726499959594,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 120586240,
+      "observedTaskDiskPeakBytes": 1430249472,
+      "availableBeforeBytes": 24957435904,
+      "availableAfterBytes": 24957427712,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "cursor-pg-final",
+      "command": [
+        "node",
+        "scripts/research-insider-cursor-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-08T13:51:48.528Z",
+      "completedAt": "2026-10-08T13:51:49.962Z",
+      "elapsedSeconds": 1.4344811760092853,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 84795392,
+      "observedTaskDiskPeakBytes": 1238757376,
+      "availableBeforeBytes": 25189650432,
+      "availableAfterBytes": 25189634048,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-verified",
+      "command": [
+        "npx",
+        "--prefix",
+        "web",
+        "tsc",
+        "--noEmit",
+        "-p",
+        "web/tsconfig.json"
+      ],
+      "startedAt": "2026-10-08T13:54:18.815Z",
+      "completedAt": "2026-10-08T13:54:27.890Z",
+      "elapsedSeconds": 9.075307356994017,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 893300736,
+      "observedTaskDiskPeakBytes": 1430261760,
+      "availableBeforeBytes": 24957423616,
+      "availableAfterBytes": 24957419520,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-final",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T13:54:27.923Z",
+      "completedAt": "2026-10-08T13:54:41.008Z",
+      "elapsedSeconds": 13.085469004989136,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1595002880,
+      "observedTaskDiskPeakBytes": 1526956032,
+      "availableBeforeBytes": 24957415424,
+      "availableAfterBytes": 24860700672,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T13:54:41.039Z",
+      "completedAt": "2026-10-08T13:55:06.595Z",
+      "elapsedSeconds": 25.556463112006895,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1921462272,
+      "observedTaskDiskPeakBytes": 1526992896,
+      "availableBeforeBytes": 24860696576,
+      "availableAfterBytes": 24860684288,
+      "guardTermination": null
+    }
+  ],
+  "codeHashes": {
+    "web/src/lib/research-insider-official.ts": "b131ed66f0d935856ce77a795220a2cd685a194e9d61afdba8e63bb4bbf5bf70",
+    "web/src/lib/research-insider-official.test.ts": "f6769d2336430e48ae9f693c2df9f4be4c940d28e10150640e6b771a7f3ce93f",
+    "web/src/lib/research-insider-evidence.ts": "c9aae47fd12472f59e87fafc8c4f2731c26905755e68eba8242889ea783ffec5",
+    "web/src/lib/research-v2.ts": "d2e5449b12a202117407a8ff56e250c4d960422022b482daa93afcf369d3dda7",
+    "scripts/research-insider-collector.test.mjs": "bc2de481e3729b08c2571864d13f58a24fae2b9ea313b1d074899ed92f0d0fdf",
+    "scripts/research-insider-cursor-postgres.test.mjs": "4328c8074131d43514fa647f9b6a1f2776ae28fad2dfd93590755720cf68ae7f"
+  },
+  "preservedFailures": [
+    "red.log: missing implementation before green",
+    "collector/collector-fixed: test fixture/guard-variable mistakes; collector-direct.log has four pass/two fail, final corrected six pass",
+    "cursor-pg: default sandbox server start refused, underlying log not retained; do not infer precise reason",
+    "build/normal-build: port binding EPERM; socket-probe succeeded in authorized execution; failed cache moved and retained",
+    "normal-build-clean: compiled but adversarial TS2352 type error; corrected explicit unknown cast",
+    "--test entrypoint runs reported one file-level result, so individual counts use explicit direct TAP test execution"
+  ],
+  "resource": {
+    "node": "22.14.0",
+    "memoryMaxBytes": "34359738368",
+    "cpuMax": "400000 100000",
+    "nproc": 5,
+    "workspaceAllocatedBytes": 8326701056,
+    "fsAvailableBytes": 24860659712,
+    "actualProjectDiskQuota": null,
+    "peakAggregateRssBytes": 1921462272,
+    "peakTaskDiskBytes": 1526992896
+  },
+  "limits": [
+    "Reviewed93selected holding rows, not27475/17568 all-market analysis",
+    "Mac relay raw hashes attributed; no VM official fetch or original raw rehash",
+    "Collector integration uses exact function body with synthetic transport/persistence; real PostgreSQL test covers existing cursor table/CAS/restart, not entire guarded source-sync HTTP flow",
+    "Full-market500raw rows per dataset/run, durable CAS cursor; changing response hash can reset before completion; no guaranteed all candidates visited",
+    "Current transfer response absence/placeholder is not historical absence or confirmed transaction",
+    "No schedule/production/VPS/main merge/official authority/qualification/Top20/model call"
+  ],
+  "privateArtifactsDirectory": "/workspace/cloud-insider-parser-artifacts-oct08",
+  "artifactHashes": {
+    "parser-direct.json": "165def6bb8497f541c68332f18839f2c2730bfa011ba62ce4b58b1475b88462f",
+    "normal-build-final.log": "34d784f94ad2e23d718d912db61e5d50e5f44da836515c743318df6aa14a3f4a",
+    "lint.json": "9c03c9c7ccd62292cef001360c5c7dec5c12816c14ace62d99be502e6770b4d0",
+    "collector-direct.json": "7a585d5aed033e1eccf69583bd1d2c2bb3afbbd43b2364076209cf45b5aee08f",
+    "normal-build.log": "984f91bc721b399ba89829b822da142c6b4d1d9bd8c9809732b0136dd429bdb3",
+    "socket-probe.time": "48afd377ade565c8eff3ddc97a54064fa638541202c88ab99ea5758be37c8ee2",
+    "types.json": "7b0cc74804d5b32526887224f11c1a2ac0407f5eb9cb63b9a0a3725310481c5d",
+    "red.log": "7d5f6acee8ee2c613e6422cfac49e4fd2edb279a168e4881675e03f03611a62a",
+    "collector-direct-final.json": "b04ba36e7b02a6e724f40a51d469ae14a6cff40b4b5d8163701fa506da5d3d5c",
+    "normal-build.time": "436d4e09d88a3c18bba5cf26c60e3df8f5ae5f3b687803364a6f9d8efe802b1b",
+    "parser-verified.time": "8a1fb6d6370b3ed3a06e18dbe62e0ede0e0aca17d22c1f75623d0e8bb5bca787",
+    "collector-direct.time": "b6a609fae254b90225d64949ef398262441fc1ad287104b56eaeb4760a4a26a2",
+    "normal-build-final.json": "7e464f38b23a56210b3fc2d80e9664844d11383444ad7c3395bab9195b4abe80",
+    "normal-build-clean.json": "5b4e267c14a4c9dc9cdfc8e14c6f573a02a3eb3e234e4780d6baf1e2e03e408d",
+    "lint-final.json": "5ecf58369f59fa5387250264af54b87a91be2816dac04c886362bd15e258ef0d",
+    "lint-final.time": "0b20d2e3a5cb7a758c5649f0cde4bfe7efe0a576dfc67d5876c92260f893152a",
+    "socket-probe.log": "1e61fa4febaf9b9fdab17ea1564afeebb7e14f4e8b43666b9b6fb33d630ebf4f",
+    "parser-verified.log": "6b5e0f27c12166529d9fc05412c02e2cca397f54e1c3ce5c826aed33b4b1dde8",
+    "cursor-pg.log": "a04a8dbde6ba6ba2111cc514f533f4959436d065f5681042215b819de04f2b5d",
+    "parser-verified.json": "1eea47d433a582156e4d3a568976476a94c16cd8ca7077cb102dea589741538b",
+    "collector-verified.json": "b3c02ded742abf3a5fbefe8f439aa8aa5fa32546952b3f93facdcb74dd7a507c",
+    "next-panic-115c670c03a24f4b9b6184639d853783.log": "98347928a451e6f3ec058a12db4c1ba9cbffad9067c314f74a9a187ecfac964f",
+    "focused.log": "8d799a0656d9f75e4fd3838260badb5df4ad24235bdf4038cd6380543fb8d9f0",
+    "parser-final.time": "da274550ea770f6f48aaf5fdaafa58db44e3ef29807b6c0e2448f5f2f82cb5c6",
+    "build.json": "94e2355fa34926869ff21295f1aec0064645203274a90ee812d1cabd29b4a467",
+    "lint.log": "09f2d53f7f7d8129da2671f5cd225efc5b5c07ce7629d1ab895e2a4763f36890",
+    "collector-direct.log": "a417ee1e860083afbcaa042bfe31f9f5969dc7b322a6ca9034c1bd751484a4d0",
+    "cursor-pg-final.log": "e94720dc01242fb22b7913345c63a2f8785d74e80a9c8680133c8c22fa5bca1b",
+    "lint.time": "a744affafff1df41e655e46b28ee7af3959c2f9aaf256ee2fa635f82afc9bb9f",
+    "parser-final.json": "f59acb0cb9d69b69c660421b1d210e554173d4963f307dc4f20ec7869d9985ca",
+    "cursor-pg-final.json": "04dba7a59f34d95aca3249467b5ff099c6be92357bba581e9977b1d647723d11",
+    "parser-direct.log": "812e9dde3852720926a9057157047aef890dcbb324798d2d11073fca8a01c05a",
+    "collector.time": "c7b567f7da54d58893fd7af459d122e697d5209e84dccd47bbdc56590672ce9a",
+    "build.time": "36ad4d0395cbe98c2ec54882a96d66658d709ed09c61b08a8b7543011ac73341",
+    "types.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "collector-direct-final.time": "c0b719ad773cc3b6ee2ffd121b0f0359c64819239056bd92f53805d1de6a3add",
+    "types-verified.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "normal-build-clean.log": "a092bc2127141b4f4ba4d33f94f8f5afd4d57d61b3d04f19c22a726a372804a2",
+    "normal-build.json": "d38910f747af600c8dcef6cef54110fa82ca4e0123f31ea81c774b16251a8fd9",
+    "normal-build-final.time": "474c3fbe4db8b17b69e742b1525938c139a020a64fdd700c9337a3416d2c2b48",
+    "types-final.json": "8ec8160f04b4a162d094cb89a688c672d50872775b47095b9ccaef443ff816cf",
+    "collector-fixed.time": "80227bd8e083ece9dd8824c8a65cb887edc65b311e05f804f637f81860045e0f",
+    "lint-final.log": "3187d92f49d7b59e2beb6ee993aac6b626e352d7f2d998cea24951e5a74969e6",
+    "build.log": "c779d9401e6dc8cee35b76e7caff24638693f95fdae211c9f2dc650abdecc537",
+    "cursor-pg.time": "b96fce11d44f2bdabfd08632d60bc39a43c2067213af2ea699d97fe8b143f62f",
+    "types-verified.json": "a00630abea51201cdbdad30c3aec7c1d474405272ca0a8a1ac3e2c764478dfe5",
+    "parser-direct.time": "72b1e9ed6440918bac34de877d2fb3fe954ce07471dc95cd7eb3e3aa27450699",
+    "focused.time": "79f1bff55b273ccc58deaa0660c9f1e26db843d47254b61ae0e7091685c97d6b",
+    "baseline-defects.json": "8b29fe59de60e5636994e26135455bf594692786e636780c2773d312a6f07cee",
+    "types-verified.time": "1bcdbafb3270a4154b6923fbd48f5d4fb5af0c9cc9dff8404174d690f34a4fa1",
+    "next-panic-5260ef02a93cb2d92178edcb288abd4a.log": "98347928a451e6f3ec058a12db4c1ba9cbffad9067c314f74a9a187ecfac964f",
+    "collector.json": "cb0c401638aa5cd0a4901738a3098d5c2a2e4a9fff1b96ce400352c6373ff678",
+    "focused.json": "eb7cc5d9b3cdd429d11a54d92e99849dd052bba7dba110f24267dd51f67bdb38",
+    "collector-direct-final.log": "21a74bdcbaff47f613dba7602368e7fa0f65bb1062376fb0aa28bdb23ada5f50",
+    "collector-verified.log": "7f7474aacd06f796340dbcb353ed5200c8d291d57beb994495121dc2b93eb92d",
+    "cursor-pg-final.time": "61901829463f3a87b3e752677a5d7ffc246bf6f280ac1c357ab72a9e78d5c944",
+    "collector-fixed.log": "dc002eb35b3a9d17a66c8ae8c8d74bf3faec51ec535e5cfee3436943d415fdbc",
+    "types.time": "6f5e9fc2d929c138bc0c6336dd5c6002706fd3db5f1f175d6d4f7af1dc8889b9",
+    "collector-verified.time": "8389bac0f631f7b6da367c73e2a5ecd5ffaea7f827788c8f54dddc5527d6a573",
+    "types-final.time": "e8d0e40b17152fc3ccad63edc17bc55b2ebc4579eb8a8551885a42f350be1015",
+    "collector.log": "829f47cef6fae622635c532a32889a141c505407a0a08aba57bce017c8371650",
+    "parser-final.log": "3a11c4e6ef1309aaf471c682a5fff8ef3deee95a01b808863e337e0d79b6e4bb",
+    "cursor-pg.json": "d0cb5316b82d47bcc406db0b6684f13c614361f16cf103ead1c5407eb279846c",
+    "collector-fixed.json": "20317d84a3900ee2d0526dd28c86b1bd51686fa4e61819d283b7862ce7b0759e",
+    "socket-probe.json": "4b7f6c3c8bd27fc60e51f060ffadd66f73e8f1c0faaa5a73df9b27b34d60a7e4",
+    "normal-build-clean.time": "270e4a987b5b79bb26d97926ba7e814ae9a95282bf0f94c479dc2f51c11caf46",
+    "types-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

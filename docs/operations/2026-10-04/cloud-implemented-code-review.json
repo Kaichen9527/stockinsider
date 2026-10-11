@@ -1,0 +1,21 @@
+{
+  "recordedAt": "2026-10-04",
+  "reviewer": "/root/astra_recovery_oct04",
+  "model": "gpt-6-astra",
+  "effort": "high",
+  "commit": "960319d7ab5446161dba0e532997c85c17294e11",
+  "tree": "eace672e7365eb5994abd3526fb0c543f2237528",
+  "verdict": "approve_cloud_implemented_code_scope",
+  "openFindings": [],
+  "signed": false,
+  "protectedApproval": false,
+  "completePlanAcceptance": false,
+  "closedFinding": "P1 generic model completion could bypass Cloud source verification on replay; immutable Cloud acceptance and atomic completion repair it.",
+  "independentTests": {"passed": 5, "skipped": 0},
+  "extraReproductions": [
+    "generic finish wins: Cloud acceptance rejects, no Cloud receipt",
+    "Cloud acceptance wins: identical generic finish leaves one immutable receipt/completion"
+  ],
+  "scope": "Exact code source review, lease/identity/replay/transaction/grants; not production or protected authority.",
+  "remaining": "Actual Linux Cloud/VPS round trip, rights-aware production projection, six-role adapter, protected recovery, migration/deployment capacity and five trading-day acceptance."
+}

@@ -1,0 +1,20 @@
+{
+  "stage": "product-correctness-first-suite",
+  "command": [
+    "npm",
+    "run",
+    "test:source-led-opportunity-v3:product-correctness"
+  ],
+  "startedAt": "2026-10-11T04:11:12.444852+00:00",
+  "endedAt": "2026-10-11T04:12:25.026101+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 72.58125757199014,
+  "sampledAggregatePeakRssBytes": 2542309376,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10311970816,
+  "diskAvailableAfterBytes": 10083221504,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

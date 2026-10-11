@@ -1,0 +1,111 @@
+{
+  "schema": "stockinsider-bounded-database-installation-v1",
+  "recordedAt": "2026-10-11T06:45:14.478561+00:00",
+  "baseCommit": "bc01c006cba307735ccd50c78841b94242e1c014",
+  "sourceBinding": "Exact changed code files below; final source commit is the enclosing commit, no self-referential head claim.",
+  "codeFileSha256": {
+    "scripts/opportunity-v3/apply-reviewed-migrations.mjs": "d200f62c13c2b85a697381ce9dfaeae60cae8995ccbb142dc2ce04340197c4eb",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466",
+    "scripts/opportunity-v3/fixtures/publication-catalog-20261011.json.gz": "3cf3784f3fe3c429762e73d168b30ed6e0d345f5e938ab21ad8a273c929f066a",
+    "scripts/opportunity-v3/fixtures/publication-install-README.md": "51cb32fb8fe8e40a7fd0d27c4605156140732a03c708bcefc675217659ee37c7",
+    "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "scripts/opportunity-v3/migration-plan.mjs": "6aca5807720dda1bb44c3d27ff8d016840ef761f87ed420d00a933b6da9dbe9f",
+    "scripts/opportunity-v3/migration-sql-policy.mjs": "054c982f02379d8d57b10fcddaf0c211b7019f08e8820e9e63adb7f3a3a75a7b",
+    "scripts/opportunity-v3/migration-sql-policy.test.mjs": "d73707afeb6dedac252e17823bd030517fed276f9421ca1ea1e115c722d526ad",
+    "scripts/opportunity-v3/research-publication-catalog.mjs": "49e3348b60d995994d864437eba8d2a38390fb09d59e2c82fe5f60c2954887f1",
+    "scripts/opportunity-v3/research-publication-full-chain.test.mjs": "0c8f8308b58c60f548d252da5a5efc6eaba3839102fcc952eecee4b64c1b95b9",
+    "scripts/opportunity-v3/research-publication-install-guard.mjs": "e21a75cde841eecb0befc43c6e46c68762538df71e9395380d6184a213f3bd45",
+    "scripts/opportunity-v3/research-publication-install-guard.test.mjs": "7973bbeb6b816ab53ecb0a7f5dd79803f75c5f9f241c3e56d01fd7ecdfae38f0",
+    "scripts/opportunity-v3/research-publication-install-inventory.json": "eaeefae7dcbfb2331bb9636ac6d07068cebe5fb92524dff81b2eaf6be2f7b3ec",
+    "scripts/opportunity-v3/research-publication-install-profile.json": "f0d9505aadfd287e04f892b6aa6a86a435b1fd2f8b6feabe7337dd0cb3f77086",
+    "scripts/opportunity-v3/vps-migration-peer.mjs": "a488b4b25141ac5f23b6a859d2366ec2c91907441b10fd3ed810bd6c5dc695c9",
+    "scripts/opportunity-v3/vps-migration-peer.test.mjs": "4012f6f7f3f57dfd0d0a8f6db818e93a230964b909184815a676f740e26e6592",
+    "scripts/research-agent-migration-gate.test.mjs": "3e0715bff3728077b83bfaf232ce07534ac32f5aee859c25f6441ccd5216e52d",
+    "scripts/research-strategy-release.test.mjs": "5d97116856052ed6b54c04310586d6b03ddc5b90d43d66750a218c880e2402ef",
+    "scripts/sync-research-strategy-release.mjs": "ff16fe2f5246145ebaf37947f87cab2f4cfc74f77c7d839ba2d8ba3bc62c4cdd",
+    "web/src/lib/research-strategy-release.generated.ts": "6d219bfd6efc1b90930893841ba84339ca575667979e9e1a886fc77452d5e3f6"
+  },
+  "nativeEnvironment": {
+    "node": "v22.14.0",
+    "postgres": "PostgreSQL 17.10 (Homebrew)",
+    "platform": "darwin"
+  },
+  "results": {
+    "regression": {
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "skip": 0
+    },
+    "build": "PASS",
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "existingSchemaFixture": {
+      "selectedMigrations": 73,
+      "appliedMigrations": 72,
+      "supersededMigrations": 1,
+      "base48DigestUnchanged": "37dfacc252ec24a719b898b2b3ea31fc77c1631db083211f1f171c956772c613"
+    },
+    "peerP2": {
+      "passwordChallengeCredentialFallbackRemoved": true,
+      "actualClientHandlers": [
+        "cleartext",
+        "MD5",
+        "SASL"
+      ],
+      "nativeHbaDiskVersusLoadedCounterexampleVerified": true
+    },
+    "liveVps": "Read-only peer/system_user and real HBA rejection probes only; no ALTER/migration/publication."
+  },
+  "priorCloudEvidence": {
+    "commit": "244eccba7ba8fea28faa7dddcf9167d69369907a",
+    "rawFilesVerified": 27,
+    "rawBytesVerified": 44875,
+    "result": "original empty-PG schema RED 3F000 missing auth",
+    "interpretation": "Not evidence that live VPS lacks auth; no stub used."
+  },
+  "rawFiles": [
+    {
+      "file": ".agent/reports/2026-10-11T06-45-database-installation-raw/regression.tap",
+      "bytes": 5158,
+      "sha256": "508194b7e5dce2b19692c0a1f0b01612048710e434a89dc53cec0467e276c427"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-45-database-installation-raw/build.log",
+      "bytes": 6501,
+      "sha256": "9f2cd83d6a0f06cb2c3f703c07c165dbfa07f25f6488229856220bf00bab116b"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-45-database-installation-raw/lint.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-45-database-installation-raw/typecheck.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-45-database-installation-raw/peer-p2-regression.tap",
+      "bytes": 1049,
+      "sha256": "82517497ff38bfe822b8f3038152c7cb658b4ee0bf214efc40d611d53eee5b02"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-45-database-installation-raw/vps-peer-readonly.json",
+      "bytes": 611,
+      "sha256": "41d57b6ee82313b5b0448923a2bc80f464b47977c1946856d974d92ab39f6dab"
+    }
+  ],
+  "independentReview": "REQUEST_CHANGES on WIP; both P2 addressed, exact final re-review pending.",
+  "notClaimed": [
+    "Full protected main-to-final review",
+    "Trusted runner recovery",
+    "Linux full-chain PASS for this revision",
+    "Fresh empty Supabase installer",
+    "Merged main",
+    "Production deploy",
+    "Real AUO and second-industry publication",
+    "Strategy profitability or adoption",
+    "Five future trading days acceptance"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "compiledFileHashesVerified": 2076,
+  "compiledManifestSha256": "4a56ef01eb875d13e1fb049e11664401dda81557817e5b11329ac30e2fe8469a",
+  "buildId": "O-tg2b5oOSwLDS5qNilKd",
+  "liveOwnedServiceProcesses": [],
+  "runtimeSqlPackageHarnessDiffEmpty": true,
+  "sourceSubject": "9136a09a75492ced1af9ba27a922c04ad23e0c39",
+  "testSubject": "32e04015daccb8c88e278bca21dda9a470166442",
+  "testTree": "f5ce2189ee0b55a6fea5059fab3047fa5d4d8643",
+  "pgSuiteTransportDefect": {
+    "testFile": "scripts/research-reviewer-result-postgres.test.mjs",
+    "lines": "39\u201340",
+    "mechanism": "Large JSON SQL passed as a single execFile psql -c argv; actual Linux spawn E2BIG before query executes. No existing test modified.",
+    "firstActualError": "spawn E2BIG",
+    "laterDependentFailuresNotIndependentlyRootCaused": true,
+    "linuxPageBytes": 4096,
+    "actualHttpEnvelopeJsonBytes_notOriginalFailedArgMeasurement": 268615
+  },
+  "namespaceObserverUsed": false
+}

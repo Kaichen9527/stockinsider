@@ -1,0 +1,62 @@
+TAP version 13
+# Subtest: readStall bounded failure tracks delayed descriptor then permits confirmed recovery
+not ok 1 - readStall bounded failure tracks delayed descriptor then permits confirmed recovery
+  ---
+  duration_ms: 133.293418
+  location: '/workspace/cloud-research-converged-oct08/scripts/research-financial-cleanup.test.mjs:33:44'
+  failureType: 'testCodeFailure'
+  error: 'late read bytes remain owned and are zeroed on settlement'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-research-converged-oct08/scripts/research-financial-cleanup.test.mjs:38:63)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: lateOpen bounded failure tracks delayed descriptor then permits confirmed recovery
+ok 2 - lateOpen bounded failure tracks delayed descriptor then permits confirmed recovery
+  ---
+  duration_ms: 138.986641
+  ...
+# Subtest: normal read cannot return successful cleanup while close is stalled
+ok 3 - normal read cannot return successful cleanup while close is stalled
+  ---
+  duration_ms: 124.630547
+  ...
+# Subtest: close rejection preserves original read failure and permanently requires controlled recovery
+ok 4 - close rejection preserves original read failure and permanently requires controlled recovery
+  ---
+  duration_ms: 36.596439
+  ...
+# Subtest: success confirms all handles closed before return, duplicate close stays confirmed
+ok 5 - success confirms all handles closed before return, duplicate close stays confirmed
+  ---
+  duration_ms: 37.443878
+  ...
+# Subtest: already exhausted deadline never acquires a descriptor
+ok 6 - already exhausted deadline never acquires a descriptor
+  ---
+  duration_ms: 37.125659
+  ...
+# Subtest: late open close rejection never releases unknown cleanup ownership
+ok 7 - late open close rejection never releases unknown cleanup ownership
+  ---
+  duration_ms: 124.902836
+  ...
+# Subtest: primary hash error survives a cleanup error with explicit failed cleanup
+ok 8 - primary hash error survives a cleanup error with explicit failed cleanup
+  ---
+  duration_ms: 38.008651
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 7
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1166.930078

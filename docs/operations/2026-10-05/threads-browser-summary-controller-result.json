@@ -1,0 +1,192 @@
+{
+  "policyVersion": "research-source-attempt-controller-v1",
+  "runId": "aedc0bc6-e78f-40e0-9bd4-5b35fc83816e",
+  "asOf": "2026-10-05T05:40:28.983Z",
+  "limits": {
+    "scopes": 20,
+    "pagesPerScope": 1,
+    "bodyBytes": 4000000,
+    "timeoutMs": 12000,
+    "runMs": 60000,
+    "inputBytes": 2000000,
+    "priorItems": 1000
+  },
+  "receipts": [
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "aedc0bc6-e78f-40e0-9bd4-5b35fc83816e",
+      "scopeId": "auo-conditional-social-rumor",
+      "platform": "threads",
+      "sourceUrl": "https://www.threads.com/@chipmunk.4552273/post/DeCNTCKE_YS",
+      "scope": "Necessary summary of publicly visible post in existing authorized Mac session; no member content or credentials",
+      "method": "local_authorized_summary",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "authorized_local_summary",
+        "checkedAt": "2026-10-05T05:40:28.854Z",
+        "checkedBy": "root actual CUA public-post inspection"
+      },
+      "attemptedAt": "2026-10-05T05:40:28.854Z",
+      "completedAt": "2026-10-05T05:40:28.983Z",
+      "readOutcome": "read_success",
+      "outcome": "item_ready",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": "2026-10-03T13:51:12.000Z",
+      "sourcePublishedAt": "2026-10-03T13:51:12.000Z",
+      "summaryPublishedAt": "2026-10-03T13:51:12.000Z",
+      "firstObservedAt": "2026-10-05T05:40:28.854Z",
+      "revisionObservedAt": "2026-10-05T05:40:28.854Z",
+      "rootUrl": "https://www.threads.com/@chipmunk.4552273/post/DeCNTCKE_YS",
+      "contentHash": "4166c4c8180bed17f59f68c26705c7cbea9c33641a7d3e2c67a45a53a1cc5cdf",
+      "retracted": false,
+      "errorCode": null,
+      "legacyConnectorDisposition": "blocked_auth",
+      "platformEnabled": false,
+      "receiptHash": "8ea1ca4a1e7e401aa6a25dccaf357f359f2755bb9bb2dcce66faedeb24375a3a",
+      "attempt": {
+        "platform": "threads",
+        "status": "success",
+        "attemptedAt": "2026-10-05T05:40:28.854Z",
+        "scope": "auo-conditional-social-rumor: Necessary summary of publicly visible post in existing authorized Mac session; no member content or credentials | https://www.threads.com/@chipmunk.4552273/post/DeCNTCKE_YS",
+        "resultCount": 1,
+        "errorCode": null,
+        "receiptHash": "8ea1ca4a1e7e401aa6a25dccaf357f359f2755bb9bb2dcce66faedeb24375a3a"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "aedc0bc6-e78f-40e0-9bd4-5b35fc83816e",
+      "scopeId": "anchors-industry-bottleneck-no-company",
+      "platform": "threads",
+      "sourceUrl": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+      "scope": "Necessary summary of publicly visible post in existing authorized Mac session; no member content or credentials",
+      "method": "local_authorized_summary",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "authorized_local_summary",
+        "checkedAt": "2026-10-05T05:40:28.854Z",
+        "checkedBy": "root actual CUA public-post inspection"
+      },
+      "attemptedAt": "2026-10-05T05:40:28.854Z",
+      "completedAt": "2026-10-05T05:40:28.983Z",
+      "readOutcome": "read_success",
+      "outcome": "awaiting_summary",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_awaiting_summary",
+      "legacyConnectorDisposition": "blocked_auth",
+      "platformEnabled": false,
+      "receiptHash": "4693b5cd204b503aa8f158bbf948b571a49f49caeaf2db421fc8cfa0fee7644b",
+      "attempt": {
+        "platform": "threads",
+        "status": "failed",
+        "attemptedAt": "2026-10-05T05:40:28.854Z",
+        "scope": "anchors-industry-bottleneck-no-company: Necessary summary of publicly visible post in existing authorized Mac session; no member content or credentials | https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+        "resultCount": null,
+        "errorCode": "source_awaiting_summary",
+        "receiptHash": "4693b5cd204b503aa8f158bbf948b571a49f49caeaf2db421fc8cfa0fee7644b"
+      }
+    }
+  ],
+  "unattemptedPlatforms": [
+    "official",
+    "news",
+    "broker",
+    "ptt",
+    "investanchors",
+    "instagram",
+    "facebook",
+    "podcast",
+    "youtube",
+    "telegram",
+    "bulltalk",
+    "twse_insider"
+  ],
+  "priorityRequest": {
+    "asOf": "2026-10-05T05:40:28.983Z",
+    "sourceAttempts": [
+      {
+        "platform": "threads",
+        "status": "success",
+        "attemptedAt": "2026-10-05T05:40:28.854Z",
+        "scope": "auo-conditional-social-rumor: Necessary summary of publicly visible post in existing authorized Mac session; no member content or credentials | https://www.threads.com/@chipmunk.4552273/post/DeCNTCKE_YS",
+        "resultCount": 1,
+        "errorCode": null,
+        "receiptHash": "8ea1ca4a1e7e401aa6a25dccaf357f359f2755bb9bb2dcce66faedeb24375a3a"
+      },
+      {
+        "platform": "threads",
+        "status": "failed",
+        "attemptedAt": "2026-10-05T05:40:28.854Z",
+        "scope": "anchors-industry-bottleneck-no-company: Necessary summary of publicly visible post in existing authorized Mac session; no member content or credentials | https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+        "resultCount": null,
+        "errorCode": "source_awaiting_summary",
+        "receiptHash": "4693b5cd204b503aa8f158bbf948b571a49f49caeaf2db421fc8cfa0fee7644b"
+      }
+    ]
+  },
+  "inboxRequest": {
+    "items": [
+      {
+        "sourcePlatform": "threads",
+        "sourceUrl": "https://www.threads.com/@chipmunk.4552273/post/DeCNTCKE_YS",
+        "author": "chipmunk.4552273",
+        "publishedAt": "2026-10-03T13:51:12.000Z",
+        "observedAt": "2026-10-05T05:40:28.854Z",
+        "symbols": [
+          "2409"
+        ],
+        "shortSummary": "公開貼文把友達列入 MicroLED 相關觀察公司，明確把與 Intel、台積電的說法列為未證實傳聞，提醒認證、良率、量產及獲利是不同階段。",
+        "catalyst": "研究假說：若相關驗證及商業化成立，可能影響友達新業務；本貼文沒有可核對的訂單、產能或財務數字。",
+        "risk": "目前只讀可見文字，截斷內容與媒體未取得；另有內容相同貼文，原始來源尚未確定，不能增加獨立確認數或基本 EPS。",
+        "claimStatus": "rumor",
+        "visibility": "authenticated_summary",
+        "contentForm": "research_summary",
+        "acquisitionMethod": "authenticated_browser_summary",
+        "parentSourceUrl": null,
+        "firstObservedAt": "2026-10-05T05:40:28.854Z",
+        "revisionObservedAt": "2026-10-05T05:40:28.854Z"
+      }
+    ]
+  },
+  "roots": [
+    {
+      "rootId": "https://www.threads.com/@chipmunk.4552273/post/DeCNTCKE_YS",
+      "url": "https://www.threads.com/@chipmunk.4552273/post/DeCNTCKE_YS",
+      "publishedAt": "2026-10-03T13:51:12.000Z",
+      "firstObservedAt": "2026-10-05T05:40:28.854Z",
+      "revisionObservedAt": "2026-10-05T05:40:28.854Z",
+      "revisionId": "4166c4c8180bed17f59f68c26705c7cbea9c33641a7d3e2c67a45a53a1cc5cdf",
+      "isOriginalSource": true,
+      "kind": "social_rumor",
+      "status": "current"
+    }
+  ],
+  "priorItemsUnchanged": true,
+  "limitations": [
+    "Exact supplied scopes only; no exhaustive search or platform activation.",
+    "No summary/model adapter, authenticated browser dispatcher, submission, publication or strategy approval.",
+    "Prior items are controller-retained context; authoritative heads remain in VPS."
+  ],
+  "authoritativePublication": false,
+  "strategyApproved": false,
+  "startedAt": "2026-10-05T05:40:28.982Z",
+  "explicitRunOnly": true,
+  "inputHash": "6b05bf778d3adbca00dd32bc3f3b263119280d765be586a33ae48be9bc0f061f",
+  "runHash": "3b4736a39b67555c6d7a38b19d0866a64cdf0cb827178cc823ddee592f031195"
+}

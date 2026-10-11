@@ -3,6 +3,7 @@ import { refreshCandidateOfficialFinancials, type CandidateOfficialFinancial } f
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { requireActiveVpsWriter, resolveLatestCompletedTaiwanSession } from '@/lib/taiwan-data-runtime';
 import { validatePendingOfficialFinancials } from '@/lib/official-financial-validation-worker';
+import { acquireProductionWriteLease, releaseProductionWriteLease } from '@/lib/production-write-lease';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 const BODY_LIMIT = 10_000;
@@ -95,15 +96,33 @@ export async function POST(request: Request) {
     return exchange && /^\d{4}$/u.test(symbol) ? [{ stockId, symbol, exchange, listedOn: listedOnByStock.get(stockId) || null,
       statementKind: /證券|期貨|securities|futures/iu.test(`${stock.name || ''} ${stock.sector || ''}`) ? 'broker' as const : 'general' as const }] : [];
   });
-  const result = await refreshCandidateOfficialFinancials(candidates, `${sessionDate}T13:30:00+08:00`, {
-    enqueueMissing: false,
-    maxJobs: limit,
-  });
-  const validation = await validatePendingOfficialFinancials(candidates.map((stock) => stock.stockId));
-  const ok = result.failures.length === 0 && validation.status === 'success';
-  return NextResponse.json({
-    ok,
-    ...(!ok ? { error: validation.status !== 'success' ? 'official_validation_incomplete' : 'candidate_financial_acquisition_failures' } : {}),
-    result: { ...result, validation, sessionDate, claimed: result.claimedJobs, releaseId: writer.releaseId },
-  }, { status: ok ? 200 : 500 });
+  let leaseOwner: string | null;
+  try { leaseOwner = await acquireProductionWriteLease(3_600); }
+  catch { return NextResponse.json({ ok: false, error: 'production_write_lease_unavailable' }, { status: 503 }); }
+  if (!leaseOwner) return NextResponse.json({ ok: false, error: 'production_write_cycle_already_running' }, { status: 409 });
+  let workerFailed = false;
+  try {
+    const result = await refreshCandidateOfficialFinancials(candidates, `${sessionDate}T13:30:00+08:00`, {
+      enqueueMissing: false,
+      maxJobs: limit,
+    });
+    const validation = await validatePendingOfficialFinancials(candidates.map((stock) => stock.stockId));
+    const ok = result.failures.length === 0 && validation.status === 'success';
+    return NextResponse.json({
+      ok,
+      ...(!ok ? { error: validation.status !== 'success' ? 'official_validation_incomplete' : 'candidate_financial_acquisition_failures' } : {}),
+      result: { ...result, validation, sessionDate, claimed: result.claimedJobs, releaseId: writer.releaseId },
+    }, { status: ok ? 200 : 500 });
+  } catch (error) {
+    workerFailed = true;
+    throw error;
+  } finally {
+    try { await releaseProductionWriteLease(leaseOwner); }
+    catch (error) {
+      if (!workerFailed) throw error;
+      // Preserve the acquisition/validation exception while recording a second
+      // failure without logging provider payloads or credentials.
+      console.error('candidate_financial_queue_write_lease_release_failed_after_worker_error');
+    }
+  }
 }

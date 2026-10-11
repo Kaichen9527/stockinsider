@@ -1,0 +1,267 @@
+{
+  "schemaVersion": "auo-evidence-vm-validation-receipt-v1",
+  "recordedAt": "2026-10-08T07:13:27.172390+00:00",
+  "branch": "codex/auo-evidence-oct08",
+  "dataAndAnalysisCommit": "debed842cbc432ef62f8915eea085d6d9f1b66fe",
+  "baseCommit": "e63ffb98794c41a03c99b9947d89f64ffff162cc",
+  "protectedProductCodeCommitUnchanged": "1243ee1313ac1d6ff3995ff5920cc2c3fad269e8",
+  "programCodeDiffFrom1243ee1": false,
+  "pr304UnsignedReviewDocsCommit": "b219ccc442a2db7a8568c34f6fcc7277727c1618",
+  "pr304Review": "unsigned scoped code approval only; no protected attestation, deployment or research-content approval",
+  "nodeVersion": "v22.14.0",
+  "coverage": {
+    "monthlyPoints": 24,
+    "monthlyStart": "2024-10",
+    "monthlyEnd": "2026-09",
+    "coreIncomeStatementQuarters": 8,
+    "financialStart": "2024-Q3",
+    "financialEnd": "2026-Q2",
+    "fullQuarterlyNotesComplete": false,
+    "balancePeriodEnd": "2026-06-30"
+  },
+  "acquisition": {
+    "plannedMaxPublicRequests": 7,
+    "actualPublicRequests": 1,
+    "vmSuccesses": 0,
+    "failure": "curl exit56; CONNECT tunnel failed response403; originHTTP0;0bodybytes",
+    "originDnsStatus": "not observed; proxy refused tunnel before origin transport",
+    "originTlsOrBodyVerified": false,
+    "proxyTunnel": "rejected403",
+    "retryOrBypass": false,
+    "otherPlannedSources": "not_attempted after transport stop",
+    "pdfRenderOnVm": "not_executed; no PDF bytes acquired",
+    "sourceValues": "root hosted/Mac public reader relays; Mac visual page source byte hashes reported, not rechecked by VM",
+    "ledgerSha256": "0b421fb285348b6074077c7dcd5d151a25e777779080593394531140176d77c1"
+  },
+  "checks": {
+    "arithmeticPrecisionAndProvenance": {
+      "pass": 109,
+      "fail": 0,
+      "skip": 0
+    },
+    "canonicalHashChecks": {
+      "pass": 38,
+      "fail": 0,
+      "skip": 0
+    },
+    "repeatability": {
+      "files": 6,
+      "bytesIdentical": true,
+      "receiptSha256": "59a990bf7a32c4e2701366bc978bd34af2b4067aeae729e0311d9c7bc92ea8ed"
+    },
+    "initialRelayCheck": {
+      "pass": 12,
+      "note": "Preserved original bounded1million comparisons; supplemental generalized precision intervals supersede that aggregate-tolerance rule."
+    },
+    "applicationTestsTypesLintBuild": "not rerun; pure data/analysis/docs increment with frozen application code",
+    "notebook": "Optional unexecuted companion; independent scripts actually executed, notebook libraries unavailable"
+  },
+  "canonicalAndFileHashes": {
+    "schemaVersion": "auo-analysis-hash-manifest-v1",
+    "algorithm": "existing researchCanonicalHash; each canonicalMaterialHash excludes its own field. Not a wire hash, protected attestation or imported research receipt.",
+    "files": [
+      {
+        "name": "dataset.json",
+        "bytes": 86638,
+        "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+        "canonicalMaterialHash": "e6f9788a24be8a293e9727b5c60a01d0dae4d0b68ffee0aa873b17d041afc665"
+      },
+      {
+        "name": "source-ledger.json",
+        "bytes": 16927,
+        "sha256": "c4735102f8dd759db61f1d57c1a6579243ec548e3300af3130cefe1ba542384d",
+        "canonicalMaterialHash": "4646f29346fe376d70bb96fd0c5bde122ab698b89498ffb255abfaa3352fe04a"
+      },
+      {
+        "name": "calculation-results.json",
+        "bytes": 44266,
+        "sha256": "81c87f4b098ce279a14a6833d35a880b4158a6bf8d777d870a5ea31ca918e1a6",
+        "canonicalMaterialHash": "bc6264678dfe14f4df4fa3a75e19860c9b8c211c6e3fba53338609cce1d0af51"
+      }
+    ]
+  },
+  "resourceMeasurements": {
+    "calculations": {
+      "stage": "calculations",
+      "command": [
+        "python3",
+        "docs/research/2026-10-08-auo/recompute.py"
+      ],
+      "startedAt": "2026-10-08T07:08:15.433Z",
+      "completedAt": "2026-10-08T07:08:15.543Z",
+      "elapsedSeconds": 0.11002885299967602,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 647168,
+      "observedTaskDiskPeakBytes": 29741056,
+      "availableBeforeBytes": 28697165824,
+      "availableAfterBytes": 28697157632,
+      "guardTermination": null,
+      "gnuTimeMaxRssBytes": 13979648
+    },
+    "canonical-hashes": {
+      "stage": "canonical-hashes",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo/hash-receipts.mjs"
+      ],
+      "startedAt": "2026-10-08T07:08:15.587Z",
+      "completedAt": "2026-10-08T07:08:15.804Z",
+      "elapsedSeconds": 0.21677224099403247,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 63840256,
+      "observedTaskDiskPeakBytes": 29753344,
+      "availableBeforeBytes": 28697153536,
+      "availableAfterBytes": 28697141248,
+      "guardTermination": null,
+      "gnuTimeMaxRssBytes": 62636032
+    },
+    "evidence-verification": {
+      "stage": "evidence-verification",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo/verify-evidence.mjs"
+      ],
+      "startedAt": "2026-10-08T07:09:40.039Z",
+      "completedAt": "2026-10-08T07:09:40.155Z",
+      "elapsedSeconds": 0.11676536899176426,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 29773824,
+      "availableBeforeBytes": 28697133056,
+      "availableAfterBytes": 28697124864,
+      "guardTermination": null,
+      "gnuTimeMaxRssBytes": 60919808
+    }
+  },
+  "resources": {
+    "memoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "initialAvailableBytes": 28727267328,
+    "currentAvailableBytes": 28696928256,
+    "visibleFilesystemBytes": 33770192896,
+    "projectDiskQuota": "unknown; filesystem/cgroup values do not guarantee every project capacity",
+    "workspaceResidentDuBytes": 4490465280,
+    "researchWorktreeDuBytes": 29716480,
+    "privateEvidenceDuBytes": 77824,
+    "sampledAggregateRssPeakBytes": 63840256,
+    "gnuTimeProcessMaxRssBytes": 62636032,
+    "networkFetchRss": "not measured; bodybytes0",
+    "residentBudgetBytes": 20000000000,
+    "temporaryBudgetBytes": 4000000000,
+    "freeReserveBytes": 8000000000,
+    "oneHeavyRssBudgetBytes": 8589934592,
+    "guardsTerminated": false,
+    "vpsCapacityChecked": false
+  },
+  "sourceClockPolicy": "Current observedAt/recordedAt only; balance approximate original time retained, actualRenderTime null; no guessed publication timestamps or historical PIT acceptance.",
+  "newFacts": {
+    "q226RevenuePrinted": 70891,
+    "q226MonthlySum": 70890,
+    "q226CumulativeDifference": 70892,
+    "h1MonthlySum": 139921,
+    "h1CumulativePrinted": 139923,
+    "q226OperatingProfit": 218,
+    "q226NetNonOperatingIncome": 2533,
+    "q226Pretax": 2751,
+    "q226TaxSigned": -631,
+    "q226NetProfit": 2120,
+    "q226NciProfit": 777,
+    "q226OwnersProfit": 1343,
+    "q226BasicEps": 0.18,
+    "ownerEquityDerivedExcludingNci": 154397,
+    "ownerEquityComponentSum": 154398,
+    "bookValuePerShare": null,
+    "priceToBook": null
+  },
+  "limitations": [
+    "Not8 full audited statements with notes/segments/dilutedEPS; detailed nonoperating normalization unverified.",
+    "No VM PDF body acquisition, extraction, rendering or OCR; preserve proxy403.",
+    "Consolidation scope changed (ADLINK); YoY ratios are unadjusted reported amounts.",
+    "No period-end shares net treasury or verified quote, so BVPS/PB null.",
+    "Not publication, strategy approval, model budget completion, formal job/reservation or production roundtrip."
+  ],
+  "files": [
+    {
+      "path": "docs/research/2026-10-08-auo/README.md",
+      "bytes": 4424,
+      "sha256": "fc31e5ec0cb24f2efbca6d82610df6284d2385f7eca9cb086100b69bfc212b60"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/arithmetic-companion.ipynb",
+      "bytes": 1324,
+      "sha256": "8ad60fda6ac1dcdb8f9a49e4f033a8fa56a80a3d606b300b827fe7dddba8da63"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/calculation-results.json",
+      "bytes": 44266,
+      "sha256": "81c87f4b098ce279a14a6833d35a880b4158a6bf8d777d870a5ea31ca918e1a6"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/eight-quarter-visual-financial-relay.json",
+      "bytes": 3680,
+      "sha256": "d73481975612877ee74b19aee350975aa5cd665bfdbbc5b7f202583368c3c76f"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/hash-manifest.json",
+      "bytes": 1001,
+      "sha256": "08f57beed1caae289ee752fffee7d9f3da69e7983f67e5e0f43f6f21fc037586"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/hash-receipts.mjs",
+      "bytes": 1681,
+      "sha256": "0f8d888a71cb2308cde1fbd3b572afcbcc5ff55fedc255f88480910d5e7c8164"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/monthly-revenue.csv",
+      "bytes": 3188,
+      "sha256": "3ae39c3a57c572dc053ed65009656e9a77934f53d4c93e75b916d91651bd3866"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/q226-balance-visual-relay.json",
+      "bytes": 1669,
+      "sha256": "540df28afa59e207877240a9045112fc5ede44077fd82ef51b6f3dc3d71321aa"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/q226-visual-financial-relay.json",
+      "bytes": 2662,
+      "sha256": "dbc73a35279fae8f2d14ce17286a5bdd93f85fa4b4d1fb7f66f2239ff444c63d"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/quarterly-income.csv",
+      "bytes": 2456,
+      "sha256": "58792f75795fd71ad2282b04fa8364ce3efb380b818d03b993db581ab3983956"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/recompute.py",
+      "bytes": 20139,
+      "sha256": "986c1515c1fb662751364936d311745ddcff52917bb6e05af7fedf20db52a619"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/rounding-supplement-relay.json",
+      "bytes": 949,
+      "sha256": "a7d87f0e8a58544591639cab8afc349c443134e2170f537c17430ad0e9025375"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/source-ledger.json",
+      "bytes": 16927,
+      "sha256": "c4735102f8dd759db61f1d57c1a6579243ec548e3300af3130cefe1ba542384d"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/verify-evidence.mjs",
+      "bytes": 1434,
+      "sha256": "5514373c050189f9b1a5ed8099053b1a8e84d8742913f7e32f4d14bd06f934e0"
+    },
+    {
+      "path": "docs/research/2026-10-08-auo/vm-acquisition-ledger.json",
+      "bytes": 2760,
+      "sha256": "0b421fb285348b6074077c7dcd5d151a25e777779080593394531140176d77c1"
+    }
+  ]
+}

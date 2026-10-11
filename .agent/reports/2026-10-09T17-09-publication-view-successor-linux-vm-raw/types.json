@@ -1,0 +1,20 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "types",
+  "command": [
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--noEmit",
+    "--pretty",
+    "false"
+  ],
+  "startedAt": "2026-10-09T17:05:43.149Z",
+  "completedAt": "2026-10-09T17:06:01.710Z",
+  "elapsedSeconds": 18.560517917008838,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 1380028416,
+  "observedTaskDiskPeakBytes": 1004986368,
+  "availableBeforeBytes": 11339902976,
+  "availableAfterBytes": 11339853824,
+  "guardTermination": null
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "auo-twse-vm-canary-v1",
+  "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=2409",
+  "attemptedAt": "2026-10-08T07:23:06.986068+00:00",
+  "completedAt": "2026-10-08T07:23:07.002126+00:00",
+  "elapsedSeconds": 0.016057393993833102,
+  "curlExitCode": 56,
+  "httpStatus": 0,
+  "bytes": 0,
+  "bodySha256": null,
+  "completeBody": false,
+  "error": "curl: (56) CONNECT tunnel failed, response 403",
+  "redirectsFollowed": 0,
+  "tlsVerificationBypassed": false,
+  "bounds": {
+    "requests": 1,
+    "seconds": 15,
+    "bodyBytes": 2000000
+  },
+  "acquisition": "VM public HTTPS GET; not pinned source controller",
+  "stopDirectFetch": true,
+  "originDnsStatus": "not observed if proxy tunnel refused",
+  "productionImported": false
+}

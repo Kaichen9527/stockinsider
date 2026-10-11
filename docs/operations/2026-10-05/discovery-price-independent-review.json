@@ -1,0 +1,30 @@
+{
+  "schema": "stockinsider-independent-code-review-record-v1",
+  "reviewedCommit": "23dffca8633f0ccfc799d45b47b4ad29dea54124",
+  "reviewedTree": "1ee32b4a062409142255a4fce297372141a98103",
+  "baseCommit": "54edb2cdf04498914446229b451ee2d96810d3a4",
+  "reviewer": "discovery_gap_audit_oct04",
+  "result": "approve",
+  "independentNamedTestsPassed": 49,
+  "skipped": 0,
+  "scope": "discovery price shadow context; ranking and entry qualification unchanged",
+  "closedFindings": [
+    "normal calendar history no longer exhausts the head bound",
+    "actual TWSE and TPEx collector URL contracts are admitted",
+    "weak immutable historical raw quotes remain unverified across runs"
+  ],
+  "additionalIsolatedChecks": [
+    "600 calendar rows, another market and cutoff-after revisions preserve correct head",
+    "cutoff-visible cancellation does not resurrect completion",
+    "wrong symbol and valuation endpoint rejected"
+  ],
+  "limitations": [
+    "32 lexical admissions are not fair resume",
+    "immutable first missing evidence is not retroactively filled",
+    "no live official or database acquisition",
+    "complete benchmark, adjusted history, validation and phase adapters remain unavailable"
+  ],
+  "signed": false,
+  "protectedGateEvidence": false,
+  "productionAcceptance": false
+}

@@ -1,0 +1,42 @@
+{
+  "scope": "docs/static schema freeze only, not runtime acceptance",
+  "sourceSubject": "75d91024ce365606989bfe42b2d7e6227b65044d",
+  "approvedParentDesign": "ff677d303e0867a3127e4be383b972691e8cdc30",
+  "files": [
+    {
+      "file": "openspec/changes/research-complete-input-v2/calculator-source-closure.json",
+      "bytes": 3160,
+      "sha256": "59909602a0979c3c6a6cef72e79a665cd1576ffd8bf17648445acd6b415030b5"
+    },
+    {
+      "file": "openspec/changes/research-complete-input-v2/canonical-vectors.json",
+      "bytes": 3893,
+      "sha256": "2b874f1c2fe14de2eb5c3c5183c4d649dd745aeb930b6cc888621bca61c32929"
+    },
+    {
+      "file": "openspec/changes/research-complete-input-v2/financial-material-2383.schema.json",
+      "bytes": 151681,
+      "sha256": "e0bc5f27a4263d151395fd2fa35a69e868b2d94836b7e26173be545300d6d043"
+    },
+    {
+      "file": "openspec/changes/research-complete-input-v2/financial-material-2409.schema.json",
+      "bytes": 264752,
+      "sha256": "efedd65c7afcf9031cd34fe6a12d4f70c78dcc1d80cadbddfa87f11b23e57932"
+    },
+    {
+      "file": "openspec/changes/research-complete-input-v2/plan.md",
+      "bytes": 8307,
+      "sha256": "018a3b00b9e4adf97b4f6b7e026ca244cec12d2a1ab0abb92790c0cfcc9c5aab"
+    },
+    {
+      "file": "openspec/changes/research-complete-input-v2/schema-freeze.md",
+      "bytes": 12365,
+      "sha256": "db6add136e9a7e4a23b3df794746e2e7b9d60a9240690739dfd302676e012f59"
+    },
+    {
+      "file": "openspec/changes/research-complete-input-v2/spec.md",
+      "bytes": 22355,
+      "sha256": "e0e63848f3a544653e597204d9077a8034827b093eee60990b3f9146339c5e78"
+    }
+  ]
+}

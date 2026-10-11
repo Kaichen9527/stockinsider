@@ -1,0 +1,307 @@
+{
+  "schemaVersion": "research-deep-private-draft-validation-v1",
+  "recordedAt": "2026-10-08T06:37:52.537060+00:00",
+  "baseCommit": "330c96b0c4068ba8cae7e94b657bb73aa9fb49d6",
+  "testedCodeCommit": "06dc3cd41dd6d6ee64381c507ac15c60ca86229d",
+  "branch": "codex/deep-private-draft-oct08",
+  "nodeVersion": "v22.14.0",
+  "syntheticDevelopmentOnly": true,
+  "productionImported": false,
+  "modelCalls": 0,
+  "independentReview": "pending GPT-6 Astra High",
+  "files": [
+    {
+      "path": "package.json",
+      "bytes": 28071,
+      "sha256": "b8bdca916d82a7a495ed134e315a69518b12cf762ee2c425783a26b33c70a182"
+    },
+    {
+      "path": "scripts/research-deep-controller.mjs",
+      "bytes": 15710,
+      "sha256": "af3ad5f42a2317039cb3dd05a0d1d09f4fe5e558c9ae6e3ba377c7ecaf23e0fe"
+    },
+    {
+      "path": "scripts/research-deep-draft-controller.mjs",
+      "bytes": 9834,
+      "sha256": "ecbda23ab683532b17cb9b05c729e3378b0d17f9000356dcbeed69f6787f1031"
+    },
+    {
+      "path": "scripts/research-deep-draft-controller.test.mjs",
+      "bytes": 15871,
+      "sha256": "7b93480c80feb7625da13741499e81ac670172fe4359321da22fd98b84edc2ff"
+    },
+    {
+      "path": "web/src/lib/research-deep-draft.ts",
+      "bytes": 12747,
+      "sha256": "01563906e0c657c38ef9627b7984997aa5b605e4620f2b495ccd6feb87490489"
+    }
+  ],
+  "focused": {
+    "tests": 110,
+    "pass": 110,
+    "fail": 0,
+    "skip": 0,
+    "newCases": [
+      "DF01",
+      "DF02",
+      "DF03",
+      "DF04",
+      "DF05",
+      "DF06",
+      "DF07",
+      "DF08",
+      "DF09",
+      "DF10",
+      "DF11",
+      "DF12",
+      "DF13"
+    ],
+    "logSha256": "2b198f2b33991de223d1c5afd9744c6d86e1bd4c63007c6860dd2adc33ec9e13",
+    "note": "Final code subsequently covered by full integration-confirm; focused run preceded small integrity refinements."
+  },
+  "checks": {
+    "integration-confirm": {
+      "stage": "integration-confirm",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-08T06:36:02.331Z",
+      "completedAt": "2026-10-08T06:36:20.210Z",
+      "elapsedSeconds": 17.879279647997464,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 903139328,
+      "observedTaskDiskPeakBytes": 1354199040,
+      "availableBeforeBytes": 28747276288,
+      "availableAfterBytes": 28747169792,
+      "guardTermination": null
+    },
+    "types": {
+      "stage": "types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T06:36:20.240Z",
+      "completedAt": "2026-10-08T06:36:36.205Z",
+      "elapsedSeconds": 15.964989968008013,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1334812672,
+      "observedTaskDiskPeakBytes": 1288519680,
+      "availableBeforeBytes": 28747165696,
+      "availableAfterBytes": 28747132928,
+      "guardTermination": null
+    },
+    "lint": {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T06:34:27.041Z",
+      "completedAt": "2026-10-08T06:34:48.925Z",
+      "elapsedSeconds": 21.883689869995578,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1604120576,
+      "observedTaskDiskPeakBytes": 948944896,
+      "availableBeforeBytes": 29086736384,
+      "availableAfterBytes": 29070565376,
+      "guardTermination": null
+    },
+    "build": {
+      "stage": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T06:34:48.953Z",
+      "completedAt": "2026-10-08T06:35:23.732Z",
+      "elapsedSeconds": 34.77943643600156,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1812815872,
+      "observedTaskDiskPeakBytes": 1197932544,
+      "availableBeforeBytes": 29070561280,
+      "availableAfterBytes": 28747304960,
+      "guardTermination": null
+    }
+  },
+  "earlierFailures": [
+    {
+      "stage": "integration-initial-path-error",
+      "exitCode": 127,
+      "reason": "npm absent from deliberately reduced PATH; no tests started",
+      "receipt": {
+        "stage": "integration",
+        "command": [
+          "npm",
+          "run",
+          "test:research-agents"
+        ],
+        "startedAt": "2026-10-08T06:30:45.685Z",
+        "completedAt": "2026-10-08T06:30:45.850Z",
+        "elapsedSeconds": 0.16532429699145723,
+        "exitCode": 127,
+        "sampledAggregateRssPeakBytes": 548864,
+        "observedTaskDiskPeakBytes": 948277248,
+        "availableBeforeBytes": 29087404032,
+        "availableAfterBytes": 29087395840,
+        "guardTermination": null
+      }
+    },
+    {
+      "stage": "integration",
+      "tests": 342,
+      "pass": 341,
+      "fail": 1,
+      "skip": 0,
+      "reason": "Unchanged candidate-dossier-outbox-v6-postgres.test.mjs:138 expected research_thesis_head_changed, received empty stderr. Confirming full suite passed without changing assertions. Intermittent failure remains a limitation.",
+      "gnuTimeAvailable": true,
+      "aggregateSamplerComplete": false,
+      "samplerError": "du raced temporary test directory deletion; wrapper failed while test process completed; repaired to consume du stdout without requiring exit0."
+    }
+  ],
+  "finalIntegrationCounts": {
+    "tests": 342,
+    "pass": 342,
+    "fail": 0,
+    "skip": 0,
+    "postgres": "existing PG17 isolated temporary clusters; no formal DB"
+  },
+  "lintWarnings": 33,
+  "resources": {
+    "measurement": "GNU time -v maxRSS per stage plus 100ms process-group aggregate VmRSS sampling; 1s du samples of isolated worktree and validation temp; statvfs available bytes. Sampling may miss transient peaks.",
+    "memoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "initialVisibleAvailableBytes": 30036443136,
+    "currentVisibleAvailableBytes": 28747001856,
+    "visibleFilesystemTotalBytes": 33770192896,
+    "projectDiskQuota": "unknown; filesystem totals are not project quota",
+    "workspaceCurrentDuBytes": 4440375296,
+    "worktreeCurrentDuBytes": 1270243328,
+    "budget": {
+      "residentBytes": 20000000000,
+      "temporaryBytes": 4000000000,
+      "freeReserveBytes": 8000000000,
+      "oneHeavyRssLimitBytes": 8589934592
+    },
+    "admittedOnVmResources": true,
+    "vpsCapacityConsulted": false
+  },
+  "logs": [
+    {
+      "name": "build.json",
+      "bytes": 415,
+      "sha256": "c9e617b6d768cd03e823b570c0cb172f9e2b3429d78f488e91ba49528be531b9"
+    },
+    {
+      "name": "build.log",
+      "bytes": 6412,
+      "sha256": "75734aec5f5fa769794fdb7e0073e6ccc1dabcf31f4db28f71f53a4a765fcfe1"
+    },
+    {
+      "name": "build.time",
+      "bytes": 748,
+      "sha256": "fab4da3326b72e65f99a2b8f5a2bedb35bd25dff01a708f4084f85d134f7ea76"
+    },
+    {
+      "name": "integration-confirm.json",
+      "bytes": 444,
+      "sha256": "1dbba88af41540fa5dfaf01151db9cf6f5c902239efd767643ea2fb5e40852f0"
+    },
+    {
+      "name": "integration-confirm.log",
+      "bytes": 98305,
+      "sha256": "010bc34647fd5b5f748669e9f42db049d64c14bd9a0450e70729d80fa8dc4a83"
+    },
+    {
+      "name": "integration-confirm.time",
+      "bytes": 762,
+      "sha256": "26587cfadab3db3747a60e357c4f9a5ab3cb07bba9cb9e4c80b828ce927588b5"
+    },
+    {
+      "name": "integration-initial-path-error.json",
+      "bytes": 435,
+      "sha256": "86bdac2be2ddc715cf908a1c665ecf4ab4037493f0dbdf315b19815aee0d3c4c"
+    },
+    {
+      "name": "integration-initial-path-error.log",
+      "bytes": 103,
+      "sha256": "18a8b07d732f5b9904a083bacbf7ca595883beaf5605869517087a0e173bbad1"
+    },
+    {
+      "name": "integration-initial-path-error.time",
+      "bytes": 781,
+      "sha256": "48aae33f1eb6f4415f3e9d6bcdadd4587e9c4200645221bd4ebcca39aeac3a2a"
+    },
+    {
+      "name": "integration.log",
+      "bytes": 99049,
+      "sha256": "559a1c2cbe61cdb6dc94cc538b2800ba1180451d3e49709acb594086710dc72b"
+    },
+    {
+      "name": "integration.time",
+      "bytes": 804,
+      "sha256": "2b4ca93d28f2fd312bf718a3a46f60a47553c335dace7ef6f62124b10c3000a5"
+    },
+    {
+      "name": "lint.json",
+      "bytes": 413,
+      "sha256": "5d2d926313e916d726b4fabe800ac9346e90d8eaa2deb70fd2605e3aa1c9517d"
+    },
+    {
+      "name": "lint.log",
+      "bytes": 4718,
+      "sha256": "d9a0f4f2df46ff95c55cd1737094c6c161f0371f9b3ca7d639a5755573c144b9"
+    },
+    {
+      "name": "lint.time",
+      "bytes": 744,
+      "sha256": "a7ddeacec9dd64d8a1186f09d1982d80676fd6cb1655e80555171508ae01328b"
+    },
+    {
+      "name": "types.json",
+      "bytes": 420,
+      "sha256": "1323e1ca4eb194b983941307c6b3e7778da8065536fb8f33cf6ceeb28286925c"
+    },
+    {
+      "name": "types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "name": "types.time",
+      "bytes": 745,
+      "sha256": "f15d87ac83897a0c5e926d852e7e8afffe032d90267be60ac54863516d0be8ec"
+    }
+  ],
+  "relay": {
+    "path": "docs/operations/2026-10-08/deep-private-draft-public-preparation-relay.json",
+    "sha256": "d87f683e7e73c2c63d2b18be3c050403e9bfa6b4d83bd3ca065f43eeb30f4c43",
+    "acquisition": "hosted web reader; not VM controller success"
+  },
+  "preservedEvidence": [
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/acceptance-receipt.json",
+      "sha256": "84fd8a78a4a7703cd0cd0e569016242a4d228d8e545b5359c35417bde384b008"
+    },
+    {
+      "path": "/workspace/source-controller-oct05/public-canary-final-result.json",
+      "sha256": "de8ab765fe736a0015ae4da675eea2b2c2a35b63463e5c1bd9b33c83e6b9f3b6"
+    },
+    {
+      "path": "/workspace/cloud-deep-author-input-9610514/receipts/verification-receipt.json",
+      "sha256": "aed3601692df7243c08b217019a9803bc0d4fd3377b56bc0150d9bfdbf0bc6fd"
+    }
+  ],
+  "limitations": [
+    "No live job/reservation status fence or actual handoffModel POST; submissionEligible always false.",
+    "No paid model dispatch, completion accounting or independent budgeted review.",
+    "No real company research, publication, strategy approval or VPS-Cloud production business roundtrip.",
+    "Restart uses a new Node process on the same VM; cross-task volume persistence and actual power-loss durability are unverified.",
+    "Original integration race failure retained; later full pass is not proof it is fixed."
+  ]
+}

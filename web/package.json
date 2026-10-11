@@ -7,8 +7,8 @@
   },
   "scripts": {
     "postinstall": "node scripts/sync-official-authority.mjs",
-    "predev": "node scripts/sync-official-authority.mjs",
-    "prebuild": "node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs",
+    "predev": "node scripts/sync-official-authority.mjs && node ../scripts/sync-research-strategy-release.mjs --check",
+    "prebuild": "node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs && node ../scripts/sync-research-strategy-release.mjs --check",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -29,7 +29,7 @@
     "@supabase/supabase-js": "^2.97.0",
     "indicatorts": "2.2.2",
     "lightweight-charts": "^5.1.0",
-    "next": "16.3.4",
+    "next": "16.3.8",
     "node-twstock": "^2.2.0",
     "pdf-parse": "^2.4.5",
     "pdfjs-dist": "^5.5.207",
@@ -44,18 +44,20 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.4",
+    "eslint-config-next": "16.3.8",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
   "overrides": {
-    "axios": "1.19.0",
+    "axios": "1.20.0",
     "follow-redirects": "1.16.0",
     "form-data": "4.0.6",
     "nanoid": "3.3.18",
     "postcss": "8.5.25",
     "sharp": "0.35.4",
-    "undici": "7.29.0",
+    "undici": "7.29.1",
+    "brace-expansion@1": "1.1.21",
+    "brace-expansion@5": "5.0.12",
     "ws": "8.21.1"
   }
 }

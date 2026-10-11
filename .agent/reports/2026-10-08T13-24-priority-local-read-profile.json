@@ -1,0 +1,555 @@
+{
+  "schemaVersion": "stockinsider-priority-local-read-profile-v1",
+  "recordedAt": "2026-10-08T13:25:01.734672Z",
+  "baseCommit": "8751318bf5fdab187de89134642a16bfffb81322",
+  "branch": "codex/priority-local-profile-oct08",
+  "manualEngineeringIncrementStartedAt": "2026-10-08T13:17:34Z",
+  "manualEngineeringDeadline": "2026-10-08T13:47:34Z",
+  "automaticRoleBudgetValidated": false,
+  "tests": {
+    "pass": 13,
+    "fail": 0,
+    "skip": 0
+  },
+  "types": "pass",
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 33
+  },
+  "normalWebBuild": "pass",
+  "webTreeUnchangedFromBase": "7ab11c9af70783b693787cf930280d03b8824fbe",
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-first",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-local-inbox-dataplane.test.mjs"
+      ],
+      "startedAt": "2026-10-08T13:20:10.185Z",
+      "completedAt": "2026-10-08T13:20:16.693Z",
+      "elapsedSeconds": 6.508174159011105,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 324280320,
+      "observedTaskDiskPeakBytes": 1370185728,
+      "availableBeforeBytes": 25162678272,
+      "availableAfterBytes": 25120460800,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-local-inbox-dataplane.test.mjs"
+      ],
+      "startedAt": "2026-10-08T13:21:37.735Z",
+      "completedAt": "2026-10-08T13:21:44.284Z",
+      "elapsedSeconds": 6.549707808997482,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 339750912,
+      "observedTaskDiskPeakBytes": 1412431872,
+      "availableBeforeBytes": 25120440320,
+      "availableAfterBytes": 25078218752,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "profile-types",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "web/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--project",
+        "web/tsconfig.json"
+      ],
+      "startedAt": "2026-10-08T13:22:07.492Z",
+      "completedAt": "2026-10-08T13:22:10.353Z",
+      "elapsedSeconds": 2.860562393994769,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 515190784,
+      "observedTaskDiskPeakBytes": 1412444160,
+      "availableBeforeBytes": 25078214656,
+      "availableAfterBytes": 25076879360,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "profile-lint",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T13:22:42.795Z",
+      "completedAt": "2026-10-08T13:23:08.268Z",
+      "elapsedSeconds": 25.47340661000635,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1464848384,
+      "observedTaskDiskPeakBytes": 1413779456,
+      "availableBeforeBytes": 25076875264,
+      "availableAfterBytes": 25060167680,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "profile-build",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T13:23:26.529Z",
+      "completedAt": "2026-10-08T13:23:32.852Z",
+      "elapsedSeconds": 6.322578936000355,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1207738368,
+      "observedTaskDiskPeakBytes": 1430487040,
+      "availableBeforeBytes": 25060163584,
+      "availableAfterBytes": 25059282944,
+      "guardTermination": null
+    }
+  ],
+  "profileSqlSha256": "666264467963b75fec638b685e4f2eae9081635f389c00b5472f2154647b9b39",
+  "nativeReceipt": {
+    "path": "/workspace/cloud-priority-profile-artifacts-oct08/native-final-run/acceptance-receipt.json",
+    "bytes": 20734,
+    "sha256": "a8ddd78df8d5b8bb805bb2b431cb78d753605ca22c70a03cbb781f63ae9591fc"
+  },
+  "installedDefinitions": [
+    {
+      "file": "supabase_schema.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS stocks (",
+      "sourceSha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3",
+      "definitionSha256": "b3d9d87b4dd2cd2570c657f6d9edeca9474409198f1ce2f2d4b143b313d1b1d2"
+    },
+    {
+      "file": "migrations/20260315_research_system_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS source_entities (",
+      "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+      "definitionSha256": "03c78b435837ecd782b14e36f8f51a7bdbeeefc130cb19d36bf3ff7120292f74"
+    },
+    {
+      "file": "migrations/20260315_research_system_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS source_raw_documents (",
+      "sourceSha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+      "definitionSha256": "1ddf2e178a9dcbb5608535eaf32f9f508908ace0a804283f614e02c64338e7da"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "ALTER TABLE public.source_raw_documents",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "6f9cf89764e00a16dd2630f9aaa92be8c26e375c05bb738f9ac4638e8d914c52"
+    },
+    {
+      "file": "migrations/20260906_source_identity_v4.sql",
+      "marker": "ALTER TABLE public.source_raw_documents",
+      "sourceSha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+      "definitionSha256": "c1d15e7436fef37b0d959e009f50ac67c9588f43d2000f3b82424794bb5a7969"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE authority_status_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "de0456eee24d4a21f288f00843e1c7ea2bf26c4475e4035cfa976d98f38df541"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE stock_exchange_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "bb7c4a9dcf3cb5356c8dbd6b1e363d7532c19bed93e17528d1c8a0d129c7d73a"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE instrument_type_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "81cb876a7635be9f157396262a638bf6de5831b1e764a9c86a469c070f6b7afb"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE listing_status_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "03070b2edae9d1f1b2f15514852a6ae61d4b8e980fd7406bb05bedcb1d6d2a78"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE official_roster_provider_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "c85a62f8be9eca5f006ed60d7ee9e366246dc44678e32be2466f1129df37a61d"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE tw_market_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "be7acd6c47b936c20739f01bceec5a206b9cdfaed0cf9250bdb1c5a8883e8792"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TYPE canonical_sector_key_v3 AS ENUM",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "e92dfaa281fddd0da3154e2429ebae9553fc96393289986ec30267722c8475b9"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS stock_instruments_v3 (",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "411f053cf5273c207fb1567a391c02986ce5b849128f2d3b47ac1cc85a2c4a3c"
+    },
+    {
+      "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS stock_sector_assignments_v3 (",
+      "sourceSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "definitionSha256": "9c2b0c74ea924ef94f143b37d7de13b57e2c5530eebbbc0911cdaa5b676a5194"
+    },
+    {
+      "file": "migrations/20260831_candidate_shadow_performance.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_runs (",
+      "sourceSha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+      "definitionSha256": "c37f899abd5d57f924a8cd2c1bace068bb2dc5e539ae0809381c7ff6115973da"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.market_evidence_snapshots (",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "9f7b07f170febec813a9c67bba8e33338cf3ff5fa35de6e2df2cd9fc14578957"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_detail_snapshots (",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "2c2fc7a718d8f0335ca4f718bf7f71ff0d447639910811276c9a965d76981139"
+    },
+    {
+      "file": "migrations/20260906_candidate_dossier_v4.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_bundles (",
+      "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+      "definitionSha256": "49bfec32f5a5e712cc1158c391168699cf81876bcfb9dcbec3bcd30f33cb14c4"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_research_dossiers (",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "2151ab0e8433a794f4bed71fa4fcfea65ab3df045ad5c88b9c2a63912c7d0db0"
+    },
+    {
+      "file": "migrations/20260906_candidate_dossier_v4.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_submission_receipts (",
+      "sourceSha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+      "definitionSha256": "5337c2d9217883181acbc053e205d78cb5d0b54605aca893790a07cc28f452c1"
+    },
+    {
+      "file": "migrations/20260929_research_agent_state_v1.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (",
+      "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+      "definitionSha256": "3418aa78ecbfaf879f426561e30cb35cd223fdfe5ba8f7d849e6dc36281579d7"
+    },
+    {
+      "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.candidate_issuer_document_domains_v6 (",
+      "sourceSha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+      "definitionSha256": "5d66b75c1bff55126ada62aaedcf489128769ef3ec3f1e390c6cf93267812845"
+    },
+    {
+      "file": "migrations/20260929_research_deep_jobs_v1.sql",
+      "marker": "CREATE TABLE IF NOT EXISTS public.research_deep_jobs_v1 (",
+      "sourceSha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d",
+      "definitionSha256": "f6b905d282b566dd2d80cd2cf19ec418e35a8951aa04004deecf801ddf9d3eb4"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority(",
+      "sourceSha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "definitionSha256": "a6749bacb864ab7c6c61dd9b6cd2d1bdfcb4b09c40e99489ed8d072d84719e95"
+    },
+    {
+      "file": "migrations/20260906_authority_pagination_v2.sql",
+      "marker": "CREATE OR REPLACE FUNCTION public.candidate_research_stock_authority_page(",
+      "sourceSha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+      "definitionSha256": "e76a34cde20546b651b64713313ea63e784ee93be606c6804f0e2a32b5578598"
+    },
+    {
+      "file": "migrations/20260929_research_agent_state_v1.sql",
+      "marker": "CREATE OR REPLACE FUNCTION public.research_source_heads_page_v1(",
+      "sourceSha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a",
+      "definitionSha256": "088283446f2f3ded3deca7cc2e8328325abe4490470954219c2954850851d8cf"
+    }
+  ],
+  "installedRoutines": [
+    {
+      "name": "candidate_research_stock_authority",
+      "bodySha256": "3b7c2a53a5e67a8142dae49d8c8518150edfccefe4ac23f927b7604cf7eb7ddf",
+      "securityDefiner": true,
+      "searchPath": [
+        "search_path=public, pg_temp"
+      ],
+      "serviceExecute": true,
+      "anonExecute": false
+    },
+    {
+      "name": "candidate_research_stock_authority_page",
+      "bodySha256": "bcbbdc8160c9d332e559f482965d7e3bd68830558e81a9ed90f50266a7b4050d",
+      "securityDefiner": true,
+      "searchPath": [
+        "search_path=public, pg_temp"
+      ],
+      "serviceExecute": true,
+      "anonExecute": false
+    },
+    {
+      "name": "research_source_heads_page_v1",
+      "bodySha256": "3f172d9ab124dd3573774a06b99f5249128002c2184b74ab3cbb1bcfc1c69a56",
+      "securityDefiner": true,
+      "searchPath": [
+        "search_path=public, pg_temp"
+      ],
+      "serviceExecute": true,
+      "anonExecute": false
+    }
+  ],
+  "dependencyPrivileges": [
+    {
+      "table": "candidate_research_runs",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "market_evidence_snapshots",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_detail_snapshots",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_dossier_bundles",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_research_dossiers",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_dossier_submission_receipts",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "research_priority_runs_v1",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "candidate_issuer_document_domains_v6",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    },
+    {
+      "table": "research_deep_jobs_v1",
+      "serviceSelect": true,
+      "serviceInsert": false,
+      "serviceUpdate": false,
+      "serviceDelete": false,
+      "anonSelect": false,
+      "authenticatedSelect": false
+    }
+  ],
+  "dependencyPolicies": [
+    {
+      "table": "candidate_research_runs",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "market_evidence_snapshots",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_detail_snapshots",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_dossier_bundles",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_research_dossiers",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_dossier_submission_receipts",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "research_priority_runs_v1",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "candidate_issuer_document_domains_v6",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    },
+    {
+      "table": "research_deep_jobs_v1",
+      "rlsEnabled": true,
+      "command": "SELECT",
+      "roles": [
+        "service_role"
+      ],
+      "qual": "true",
+      "withCheck": null
+    }
+  ],
+  "unchangedEmptyTables": {
+    "candidate_research_runs": 0,
+    "market_evidence_snapshots": 0,
+    "candidate_detail_snapshots": 0,
+    "candidate_dossier_bundles": 0,
+    "candidate_research_dossiers": 0,
+    "candidate_dossier_submission_receipts": 0,
+    "research_priority_runs_v1": 0,
+    "candidate_issuer_document_domains_v6": 0,
+    "research_deep_jobs_v1": 0,
+    "stocks": 0,
+    "stock_instruments_v3": 0,
+    "stock_sector_assignments_v3": 0
+  },
+  "priorityResultBeforeRestart": "research_priority_official_roster_missing",
+  "priorityResultAfterRestart": {
+    "ok": false,
+    "error": "research_priority_official_roster_missing"
+  },
+  "priorityStatus": 409,
+  "postgresRestartUnchanged": true,
+  "inboxReplayAccepted": 0,
+  "controllerRunHash": "e85fc2c3c4cbfcfaca5f214b2d3f2ff3edfdee8f431ee018dca0ec6c1c139078",
+  "codeFiles": [
+    {
+      "path": "scripts/research-local-inbox-dataplane.mjs",
+      "bytes": 27248,
+      "sha256": "d6be56a8bf0b6a4a05e26ece0b1defeae695c87a221825540c04da65cdb6b43c"
+    },
+    {
+      "path": "scripts/research-local-inbox-dataplane.test.mjs",
+      "bytes": 3200,
+      "sha256": "99b41525bad903449ddcd7a8f8170f1d48cdf362f8dc271e4382a347340160b4"
+    }
+  ],
+  "nodeVersion": "22.14.0",
+  "cgroupMemoryMaxBytes": 34359738368,
+  "cgroupCpuMax": "400000 100000",
+  "nproc": 5,
+  "projectDiskQuota": "unknown; df availability is not quota",
+  "measurementMethod": "100ms process-group plus live recursive descendants and GNU time-v; short/reparented processes may be missed; task checkout+artifact du not unique shared bytes",
+  "priorFailurePreserved": {
+    "subject": "8751318bf5fdab187de89134642a16bfffb81322",
+    "receipt": ".agent/reports/2026-10-08T13-12-source-cohort-consumer-vm.json",
+    "error": "research_priority_read_failed"
+  },
+  "attributedIndependentReview": {
+    "subject": "8751318bf5fdab187de89134642a16bfffb81322",
+    "source": "authorized root thread",
+    "decision": "unsigned scoped code approval",
+    "independentSourceTests": 40,
+    "boundaryProbes": 17,
+    "nativeMakerTestsIndependentlyRerun": false,
+    "appliesToNewProfileCode": false
+  },
+  "limits": [
+    "Selected development schema/ACL, not full production installed-policy attestation",
+    "No official stocks/catalog/instruments/sector rows added; no formal authority promotion",
+    "No ranking/Top20, positive research jobs, claim/input, model dispatch or submission",
+    "Observed-company/roster contract separate spec and independent architecture review required; direct stocks admission proposal withdrawn",
+    "Insider TWSE coverage/key/period and TPEX parser/placeholder work queued",
+    "No VPS/production access, protected evidence, paid API, scheduler, main merge/deploy"
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "schemaVersion": "public-financial-preparation-relay-v1",
+  "observedAt": "2026-10-08 06:52:48 UTC",
+  "observer": "root-hosted-web-reader",
+  "symbol": "2409",
+  "productionImported": false,
+  "completeResearch": false,
+  "unit": "TWD_million",
+  "monthlyConsolidatedRevenue": [
+    [
+      "2024-10",
+      20873,
+      "oct25"
+    ],
+    [
+      "2024-11",
+      23257,
+      "nov25"
+    ],
+    [
+      "2024-12",
+      24562,
+      "dec25"
+    ],
+    [
+      "2025-01",
+      21643,
+      "monthly26"
+    ],
+    [
+      "2025-02",
+      24606,
+      "monthly26"
+    ],
+    [
+      "2025-03",
+      25853,
+      "monthly26"
+    ],
+    [
+      "2025-04",
+      23138,
+      "monthly26"
+    ],
+    [
+      "2025-05",
+      24177,
+      "monthly26"
+    ],
+    [
+      "2025-06",
+      21922,
+      "monthly26"
+    ],
+    [
+      "2025-07",
+      20923,
+      "monthly26"
+    ],
+    [
+      "2025-08",
+      24539,
+      "monthly26"
+    ],
+    [
+      "2025-09",
+      24445,
+      "monthly26"
+    ],
+    [
+      "2025-10",
+      20916,
+      "oct25"
+    ],
+    [
+      "2025-11",
+      24036,
+      "nov25"
+    ],
+    [
+      "2025-12",
+      25190,
+      "dec25"
+    ],
+    [
+      "2026-01",
+      22505,
+      "monthly26"
+    ],
+    [
+      "2026-02",
+      20505,
+      "monthly26"
+    ],
+    [
+      "2026-03",
+      26021,
+      "monthly26"
+    ],
+    [
+      "2026-04",
+      22100,
+      "monthly26"
+    ],
+    [
+      "2026-05",
+      23838,
+      "monthly26"
+    ],
+    [
+      "2026-06",
+      24952,
+      "monthly26"
+    ],
+    [
+      "2026-07",
+      20370,
+      "monthly26"
+    ],
+    [
+      "2026-08",
+      23102,
+      "monthly26"
+    ],
+    [
+      "2026-09",
+      23404,
+      "monthly26"
+    ]
+  ],
+  "sources": {
+    "monthly26": {
+      "url": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+      "status": "pdf_text_table_read",
+      "publicationTime": null,
+      "mutableUrl": true
+    },
+    "oct25": {
+      "url": "https://www.auo.com/en-global/New_Archive/detail/news_MonthlySales_20251110",
+      "status": "body_table_read",
+      "publicationDateFromUrl": "2025-11-10"
+    },
+    "nov25": {
+      "url": "https://www.auo.com/ja-JP/News_Archive/detail/news_MonthlySales_20251209",
+      "status": "body_table_read",
+      "publicationDateFromUrl": "2025-12-09"
+    },
+    "dec25": {
+      "url": "https://www.auo.com/en-global/New_Archive/detail/news_MonthlySales_20260109",
+      "status": "body_table_read",
+      "publicationDateFromUrl": "2026-01-09"
+    },
+    "q425": {
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/4Q25_Handout_English_20260210.pdf",
+      "status": "pdf_text_table_read",
+      "pageZeroBased": 27,
+      "presentationDate": "2026-02-10"
+    }
+  },
+  "q425Bridge": {
+    "revenue": 70142,
+    "costOfSales": 62617,
+    "grossProfit": 7525,
+    "opex": 9418,
+    "operatingProfit": -1893,
+    "netNonOperatingIncome": 4782,
+    "pretax": 2889,
+    "taxBenefit": 34,
+    "netProfit": 2923,
+    "ownersProfit": 2882,
+    "nciProfit": 41,
+    "basicEps": 0.38,
+    "basicWeightedSharesMillion": 7547
+  },
+  "caveats": [
+    "24 points are current reconstruction, not proof each was available historically on period end; observedAt must be retained",
+    "Mutable2026PDF now includes September23404 and YTD206798; original publication time not verified; do not invent Oct9timestamp or use in past replay",
+    "Unaudited monthly figures; consolidated versus unconsolidated columns separated",
+    "Monthly sums/cumulative/quarterly may differ by rounding1million; require explicit tolerance and crosschecks",
+    "4Q25 bridge is actual reported period; net nonoperating income not automatically all oneoff",
+    "2Q26 bridge remains unreadable; need actualdownload/render/tablecheck",
+    "2025ADLINK scope changed; comparable growth must consider consolidation"
+  ]
+}

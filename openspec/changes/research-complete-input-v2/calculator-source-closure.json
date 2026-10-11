@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "research-fixed-calculator-source-closure-v2",
+  "sourceSubject": "75d91024ce365606989bfe42b2d7e6227b65044d",
+  "nodeMajor": 22,
+  "rule": "Recursive static local runtime import/export-from closure from financial supplement entry; type-only imports excluded. No caller paths. External packages and builtin ABI named separately. Newly implemented complete-input code must receive its own enlarged reviewed closure.",
+  "externalRuntimeImports": [
+    "crypto",
+    "node:crypto",
+    "node:fs",
+    "node:fs/promises",
+    "node:path",
+    "node:perf_hooks"
+  ],
+  "files": [
+    {
+      "file": "web/src/lib/candidate-dossier-contract.ts",
+      "bytes": 11851,
+      "sha256": "33920f44ffa719802476da3171baf5d8806c81877f6ae9eedfd64ecea8427887"
+    },
+    {
+      "file": "web/src/lib/public-source-url.ts",
+      "bytes": 1821,
+      "sha256": "f1f4a47c2984a59be316b94586796171adda680e64910c981b5cede88260dcea"
+    },
+    {
+      "file": "web/src/lib/research-agent-qualification.ts",
+      "bytes": 8864,
+      "sha256": "690de1fb4265366c0431da990fbe2519057562600727de6f44340060c9d34da0"
+    },
+    {
+      "file": "web/src/lib/research-business-calculator.ts",
+      "bytes": 14206,
+      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb"
+    },
+    {
+      "file": "web/src/lib/research-deep-author-input.ts",
+      "bytes": 22402,
+      "sha256": "451ee76fbbab96fe78789d7b8ccb8bc87e48fe5ad4020ab780e69b08487f7af0"
+    },
+    {
+      "file": "web/src/lib/research-deep-claim-context.ts",
+      "bytes": 12714,
+      "sha256": "c6016ca331d77cff78b05c26642ebbb8ce040a285293eebdca9fecf20f3b680c"
+    },
+    {
+      "file": "web/src/lib/research-discovery-evidence.ts",
+      "bytes": 6292,
+      "sha256": "fc1d8c73c01feee61145245aa89ad138bb21fae872370d31b62c46294329cedc"
+    },
+    {
+      "file": "web/src/lib/research-financial-clock.ts",
+      "bytes": 807,
+      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f"
+    },
+    {
+      "file": "web/src/lib/research-financial-file-reader.ts",
+      "bytes": 10211,
+      "sha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49"
+    },
+    {
+      "file": "web/src/lib/research-financial-inventory.ts",
+      "bytes": 3294,
+      "sha256": "f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5"
+    },
+    {
+      "file": "web/src/lib/research-financial-supplement.ts",
+      "bytes": 19072,
+      "sha256": "3231299b99c08d9a1d359e972bfd410ee2f6c635677e763d1c1884b0a894657e"
+    },
+    {
+      "file": "web/src/lib/research-source-association.ts",
+      "bytes": 22526,
+      "sha256": "3ee3158622d3fcd5743969faea2cd8fca3b22b36f845cfe98c49f4cc5a856ae0"
+    },
+    {
+      "file": "web/src/lib/research-source-registry.ts",
+      "bytes": 1585,
+      "sha256": "64cf50ad4f4dc65310fcef6916f9f2c5be48830fa8fd3b7e700446bce9965e61"
+    },
+    {
+      "file": "web/src/lib/research-source-roots.ts",
+      "bytes": 3552,
+      "sha256": "aa3471022cb87235f3cdb84c7e674d0af799b858735774025b6eebb3a3e6110f"
+    }
+  ],
+  "sourceClosureHash": "322174373cd069c30c5d5a4ef675fce63e7dacd189e872a011554e9a441a9a50"
+}

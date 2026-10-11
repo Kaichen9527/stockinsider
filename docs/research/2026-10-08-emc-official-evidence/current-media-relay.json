@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "stockinsider-attributed-public-context-relay-v1",
+  "recordedAt": "2026-10-08T12:06:23.721806+00:00",
+  "symbols": [
+    "2383",
+    "2368"
+  ],
+  "sources": [
+    {
+      "label": "uanalyze-cnyes-oct05",
+      "url": "https://m.cnyes.com/news/id/6621513",
+      "attemptedAt": "2026-10-08T12:05:11.552888+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://m.cnyes.com/news/id/6621513",
+      "status": "read_success",
+      "bytes": 230416,
+      "sha256": "0a15f88b03f81543b84e28212396a76ec436941b88af27ed45f9f59172b76220",
+      "observedAt": "2026-10-08T12:05:12.697441+00:00"
+    },
+    {
+      "label": "pocket-auo-sep29",
+      "url": "https://www.pocket.tw/school/report/SCHOOL/8024/",
+      "attemptedAt": "2026-10-08T12:05:11.554856+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://www.pocket.tw/school/report/SCHOOL/8024/",
+      "status": "read_success",
+      "bytes": 71548,
+      "sha256": "de81c5e34eb53ae55a00152d5ae25b58d15102ab957898393137658110f3c7c9",
+      "observedAt": "2026-10-08T12:05:11.984396+00:00"
+    }
+  ],
+  "entries": [
+    {
+      "id": "emc-market-expectations-oct05",
+      "sourceLabel": "uanalyze-cnyes-oct05",
+      "rootUrl": "https://m.cnyes.com/news/id/6621513",
+      "publisher": "Uanalyze via Cnyes",
+      "publicationTimeText": "2026-10-05 09:31",
+      "publicationMinute": "2026-10-05T09:31+08:00",
+      "exactPublishedAt": null,
+      "clockScope": "displayed publisher minute, Asia/Taipei interpretation; seconds not established",
+      "symbols": [
+        "2383",
+        "2368"
+      ],
+      "evidenceStatus": "media_attributed_market_and_unnamed_broker_estimates_not_company_order_confirmation",
+      "claims": {
+        "emcM7PlusMixPctRange": [
+          60,
+          65
+        ],
+        "emcM9ShipmentStartClaim": "2026Q3",
+        "emcM9Mix2026": "single_digit_percent",
+        "emcM9Mix2027": "double_digit_percent",
+        "emc2027GrossMarginApproxPct": 38,
+        "emc2027EpsForecastRangeTwd": [
+          187,
+          226
+        ]
+      },
+      "summary": "The article connects high-grade material upgrades, supply and expansion to EMC earnings expectations, and identifies Gold Circuit as a different downstream PCB role. Sold-out contracted capacity and EPS187-226 are media-attributed claims; original broker reports, customer orders and confirmations were not read.",
+      "transmission": "Use as an attributed market-expectation comparison and reverse earnings/margin test, not replace official actuals or automatically adopt an EPS/multiple. Separate physical planned capacity, ASP/product mix, margins and share denominator; test CPO substitution versus higher-grade electrical sections.",
+      "brokerOriginalRead": false,
+      "orderVerified": false,
+      "independentForecastCount": null,
+      "targetPriceCalibrated": false
+    }
+  ],
+  "attemptScopeNotes": [
+    {
+      "label": "pocket-auo-sep29",
+      "httpRead": "successful raw HTML fetch",
+      "articleBodyRead": "not established from returned HTML; no claim extracted or added as confirmed evidence",
+      "limits": "HTTP200 alone is not content-analysis success"
+    }
+  ],
+  "limits": [
+    "All first observations October8, not historically available strategy inputs.",
+    "October5 media estimates are not latest comprehensive consensus or independent corroboration of unnamed analysts.",
+    "2383 and2368 are textual research associations, no official instrument authority, thesis qualification, liquidity or entry approval.",
+    "Only concise paraphrases and attributed numbers published; raw news bodies remain private, no credentials or member text."
+  ]
+}

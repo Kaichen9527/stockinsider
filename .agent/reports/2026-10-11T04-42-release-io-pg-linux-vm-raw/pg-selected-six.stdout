@@ -1,0 +1,45 @@
+TAP version 13
+# (node:316954) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:316954) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: acceptance PCR-022
+ok 1 - acceptance PCR-022
+  ---
+  duration_ms: 1775.841871
+  ...
+# Subtest: V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material
+ok 2 - V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material
+  ---
+  duration_ms: 88431.046191
+  ...
+# Subtest: V3.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry
+ok 3 - V3.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry
+  ---
+  duration_ms: 3.629543
+  ...
+# Subtest: V314-009 official calendar and backfill coverage remain typed and non-synthetic
+ok 4 - V314-009 official calendar and backfill coverage remain typed and non-synthetic
+  ---
+  duration_ms: 2678.689708
+  ...
+# Subtest: V314-011 every approved profile/provider has one honest terminal outcome
+ok 5 - V314-011 every approved profile/provider has one honest terminal outcome
+  ---
+  duration_ms: 26.346195
+  ...
+# Subtest: V314-012 migration persists redacted diagnostics append-only with recorded time
+ok 6 - V314-012 migration persists redacted diagnostics append-only with recorded time
+  ---
+  duration_ms: 0.454195
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 98332.18673

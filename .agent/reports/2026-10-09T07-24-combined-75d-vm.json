@@ -1,0 +1,1142 @@
+{
+  "schemaVersion": "manual-vm-combined-acceptance-v1",
+  "recordedAt": "2026-10-09T07:24:09.026555+00:00",
+  "manualIncrement": "Final integration acceptance, not automated role/model budget acceptance",
+  "subject": "75d91024ce365606989bfe42b2d7e6227b65044d",
+  "tree": "26e5622bd43938ee86b281b52322c68c48f3d422",
+  "webTree": "714d370bda0067bbff81ceec6206a11bd659022c",
+  "buildId": "9mh_Rx5DRtP71D4NMOfmg",
+  "sourceCleanDuringAcceptance": true,
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-combined-27d",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T07:06:09.803Z",
+      "completedAt": "2026-10-09T07:06:22.484Z",
+      "elapsedSeconds": 12.681150033022277,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1121202176,
+      "observedTaskDiskPeakBytes": 1327013888,
+      "availableBeforeBytes": 14703280128,
+      "availableAfterBytes": 14701416448,
+      "guardTermination": null,
+      "tapCounts": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-combined-27d",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T07:06:48.562Z",
+      "completedAt": "2026-10-09T07:07:13.021Z",
+      "elapsedSeconds": 24.458781886991346,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1126428672,
+      "observedTaskDiskPeakBytes": 1328873472,
+      "availableBeforeBytes": 14701412352,
+      "availableAfterBytes": 14685245440,
+      "guardTermination": null,
+      "tapCounts": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-combined-75d",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T07:11:28.805Z",
+      "completedAt": "2026-10-09T07:11:31.997Z",
+      "elapsedSeconds": 3.191649849002715,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 567033856,
+      "observedTaskDiskPeakBytes": 1345110016,
+      "availableBeforeBytes": 14685057024,
+      "availableAfterBytes": 14685048832,
+      "guardTermination": null,
+      "tapCounts": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-combined-75d",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T07:11:49.799Z",
+      "completedAt": "2026-10-09T07:12:15.334Z",
+      "elapsedSeconds": 25.53459791300702,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1995427840,
+      "observedTaskDiskPeakBytes": 1345122304,
+      "availableBeforeBytes": 14685044736,
+      "availableAfterBytes": 14685032448,
+      "guardTermination": null,
+      "tapCounts": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-combined-75d",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T07:13:03.694Z",
+      "completedAt": "2026-10-09T07:13:21.584Z",
+      "elapsedSeconds": 17.89022442998248,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 617394176,
+      "observedTaskDiskPeakBytes": 1345142784,
+      "availableBeforeBytes": 14685020160,
+      "availableAfterBytes": 14836432896,
+      "guardTermination": null,
+      "tapCounts": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-combined-75d-local-permitted",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T07:13:56.646Z",
+      "completedAt": "2026-10-09T07:13:58.030Z",
+      "elapsedSeconds": 1.384095811023144,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 324927488,
+      "observedTaskDiskPeakBytes": 1193746432,
+      "availableBeforeBytes": 14836432896,
+      "availableAfterBytes": 14835785728,
+      "guardTermination": null,
+      "tapCounts": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-combined-75d-clean-cache",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T07:15:13.047Z",
+      "completedAt": "2026-10-09T07:15:45.840Z",
+      "elapsedSeconds": 32.79341373502393,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1946992640,
+      "observedTaskDiskPeakBytes": 1428021248,
+      "availableBeforeBytes": 14835777536,
+      "availableAfterBytes": 14511550464,
+      "guardTermination": null,
+      "tapCounts": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "research-suite-combined-75d",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/research-agent-priority.test.ts",
+        "web/src/lib/research-agent-qualification.test.ts",
+        "web/src/lib/research-deep-article.test.ts",
+        "web/src/lib/research-deep-claim-context.test.ts",
+        "web/src/lib/research-deep-source-rights.test.ts",
+        "web/src/lib/research-paper-books.test.ts",
+        "web/src/lib/research-review-auth.test.ts",
+        "web/src/lib/research-strategy-governance.test.ts",
+        "web/src/lib/research-weekly-bars.test.ts",
+        "scripts/research-agent-migration-gate.test.mjs",
+        "scripts/research-agent-routes.test.mjs",
+        "scripts/research-paper-session-route.test.mjs",
+        "scripts/research-approval-replay-route.test.mjs",
+        "scripts/research-strategy-release.test.mjs",
+        "scripts/research-source-budget-postgres.test.mjs",
+        "web/src/lib/research-source-extensions.test.ts",
+        "web/src/lib/research-broker-estimate.test.ts",
+        "web/src/lib/research-execution-context.test.ts",
+        "web/src/lib/technical-features-v2.test.ts",
+        "scripts/research-deep-jobs-postgres.test.mjs",
+        "scripts/research-deep-publication-postgres.test.mjs",
+        "scripts/candidate-dossier-outbox-v6-postgres.test.mjs",
+        "scripts/research-capacity-admission.test.mjs",
+        "scripts/research-host-resource-check.test.mjs",
+        "web/src/lib/research-cloud-work.test.ts",
+        "scripts/research-cloud-capacity.test.mjs",
+        "scripts/research-cloud-work-cli.test.mjs",
+        "scripts/research-cloud-result-route.test.mjs",
+        "scripts/research-cloud-receipts-postgres.test.mjs",
+        "web/src/lib/research-source-attempt-controller.test.ts",
+        "scripts/research-source-controller.test.mjs",
+        "web/src/lib/research-source-roots.test.ts",
+        "web/src/lib/research-inbox.test.ts",
+        "web/src/lib/research-agent-priority.test.ts",
+        "scripts/release-owner-bridge-postgres.test.mjs",
+        "scripts/research-cloud-controller.test.mjs",
+        "web/src/lib/research-discovery-evidence.test.ts",
+        "web/src/lib/research-discovery-price-enrichment.test.ts",
+        "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+        "scripts/research-monitor-controller.test.mjs",
+        "scripts/research-monitor-progress.test.mjs",
+        "scripts/research-deep-controller.test.mjs",
+        "scripts/research-deep-draft-controller.test.mjs",
+        "scripts/research-deep-job-context-route.test.mjs",
+        "web/src/lib/research-source-association.test.ts",
+        "scripts/candidate-financial-document-write-lease-route.test.mjs",
+        "web/src/lib/research-insider-official.test.ts",
+        "web/src/lib/source-health.test.ts",
+        "scripts/research-insider-collector.test.mjs",
+        "scripts/research-insider-health-route.test.mjs",
+        "scripts/research-insider-cursor-postgres.test.mjs",
+        "web/src/lib/research-observed-roster.test.ts",
+        "web/src/lib/research-observed-priority.test.ts",
+        "web/src/lib/research-observed-deep.test.ts",
+        "scripts/research-observed-roster-native.test.mjs",
+        "scripts/research-observed-priority-native.test.mjs",
+        "scripts/research-publication-source-fence-postgres.test.mjs",
+        "scripts/research-input-preparation-postgres.test.mjs",
+        "scripts/candidate-financial-queue-write-lease-route.test.mjs",
+        "web/src/lib/research-monitor-benchmark-context.test.ts",
+        "web/src/lib/research-attention-shadow-v2.test.ts",
+        "scripts/research-business-calculator.test.mjs",
+        "scripts/research-financial-supplement.test.mjs",
+        "scripts/research-financial-cleanup.test.mjs"
+      ],
+      "startedAt": "2026-10-09T07:16:00.520Z",
+      "completedAt": "2026-10-09T07:17:19.621Z",
+      "elapsedSeconds": 79.10054620201117,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 883048448,
+      "observedTaskDiskPeakBytes": 1560522752,
+      "availableBeforeBytes": 14511546368,
+      "availableAfterBytes": 14511357952,
+      "guardTermination": null,
+      "tapCounts": {
+        "tests": 626,
+        "pass": 623,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "owner-bridge-75d-dependency-restored",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/release-owner-bridge-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T07:17:49.085Z",
+      "completedAt": "2026-10-09T07:17:50.180Z",
+      "elapsedSeconds": 1.0946782050014008,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 141537280,
+      "observedTaskDiskPeakBytes": 1518825472,
+      "availableBeforeBytes": 14511353856,
+      "availableAfterBytes": 14511345664,
+      "guardTermination": null,
+      "tapCounts": {
+        "tests": 8,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-fin-http-75d",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "/workspace/cloud-research-combined-27d-artifacts-oct09/financial-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T07:18:17.383Z",
+      "completedAt": "2026-10-09T07:18:56.126Z",
+      "elapsedSeconds": 38.74228159699123,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 653979648,
+      "observedTaskDiskPeakBytes": 1630081024,
+      "availableBeforeBytes": 14511341568,
+      "availableAfterBytes": 14416519168,
+      "guardTermination": null,
+      "tapCounts": {
+        "tests": 28,
+        "pass": 28,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-op75",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T07:19:24.726Z",
+      "completedAt": "2026-10-09T07:20:00.684Z",
+      "elapsedSeconds": 35.95871865100344,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1034395648,
+      "observedTaskDiskPeakBytes": 1688133632,
+      "availableBeforeBytes": 14416515072,
+      "availableAfterBytes": 14350475264,
+      "guardTermination": null,
+      "tapCounts": {
+        "tests": 29,
+        "pass": 29,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native-or75",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-roster-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T07:20:21.617Z",
+      "completedAt": "2026-10-09T07:20:36.486Z",
+      "elapsedSeconds": 14.869067613006337,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 565059584,
+      "observedTaskDiskPeakBytes": 1728651264,
+      "availableBeforeBytes": 14350471168,
+      "availableAfterBytes": 14306004992,
+      "guardTermination": null,
+      "tapCounts": {
+        "tests": 23,
+        "pass": 23,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "research-suite-combined-75d-root-deps-green",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/research-agent-priority.test.ts",
+        "web/src/lib/research-agent-qualification.test.ts",
+        "web/src/lib/research-deep-article.test.ts",
+        "web/src/lib/research-deep-claim-context.test.ts",
+        "web/src/lib/research-deep-source-rights.test.ts",
+        "web/src/lib/research-paper-books.test.ts",
+        "web/src/lib/research-review-auth.test.ts",
+        "web/src/lib/research-strategy-governance.test.ts",
+        "web/src/lib/research-weekly-bars.test.ts",
+        "scripts/research-agent-migration-gate.test.mjs",
+        "scripts/research-agent-routes.test.mjs",
+        "scripts/research-paper-session-route.test.mjs",
+        "scripts/research-approval-replay-route.test.mjs",
+        "scripts/research-strategy-release.test.mjs",
+        "scripts/research-source-budget-postgres.test.mjs",
+        "web/src/lib/research-source-extensions.test.ts",
+        "web/src/lib/research-broker-estimate.test.ts",
+        "web/src/lib/research-execution-context.test.ts",
+        "web/src/lib/technical-features-v2.test.ts",
+        "scripts/research-deep-jobs-postgres.test.mjs",
+        "scripts/research-deep-publication-postgres.test.mjs",
+        "scripts/candidate-dossier-outbox-v6-postgres.test.mjs",
+        "scripts/research-capacity-admission.test.mjs",
+        "scripts/research-host-resource-check.test.mjs",
+        "web/src/lib/research-cloud-work.test.ts",
+        "scripts/research-cloud-capacity.test.mjs",
+        "scripts/research-cloud-work-cli.test.mjs",
+        "scripts/research-cloud-result-route.test.mjs",
+        "scripts/research-cloud-receipts-postgres.test.mjs",
+        "web/src/lib/research-source-attempt-controller.test.ts",
+        "scripts/research-source-controller.test.mjs",
+        "web/src/lib/research-source-roots.test.ts",
+        "web/src/lib/research-inbox.test.ts",
+        "web/src/lib/research-agent-priority.test.ts",
+        "scripts/release-owner-bridge-postgres.test.mjs",
+        "scripts/research-cloud-controller.test.mjs",
+        "web/src/lib/research-discovery-evidence.test.ts",
+        "web/src/lib/research-discovery-price-enrichment.test.ts",
+        "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+        "scripts/research-monitor-controller.test.mjs",
+        "scripts/research-monitor-progress.test.mjs",
+        "scripts/research-deep-controller.test.mjs",
+        "scripts/research-deep-draft-controller.test.mjs",
+        "scripts/research-deep-job-context-route.test.mjs",
+        "web/src/lib/research-source-association.test.ts",
+        "scripts/candidate-financial-document-write-lease-route.test.mjs",
+        "web/src/lib/research-insider-official.test.ts",
+        "web/src/lib/source-health.test.ts",
+        "scripts/research-insider-collector.test.mjs",
+        "scripts/research-insider-health-route.test.mjs",
+        "scripts/research-insider-cursor-postgres.test.mjs",
+        "web/src/lib/research-observed-roster.test.ts",
+        "web/src/lib/research-observed-priority.test.ts",
+        "web/src/lib/research-observed-deep.test.ts",
+        "scripts/research-observed-roster-native.test.mjs",
+        "scripts/research-observed-priority-native.test.mjs",
+        "scripts/research-publication-source-fence-postgres.test.mjs",
+        "scripts/research-input-preparation-postgres.test.mjs",
+        "scripts/candidate-financial-queue-write-lease-route.test.mjs",
+        "web/src/lib/research-monitor-benchmark-context.test.ts",
+        "web/src/lib/research-attention-shadow-v2.test.ts",
+        "scripts/research-business-calculator.test.mjs",
+        "scripts/research-financial-supplement.test.mjs",
+        "scripts/research-financial-cleanup.test.mjs"
+      ],
+      "startedAt": "2026-10-09T07:21:21.319Z",
+      "completedAt": "2026-10-09T07:22:44.497Z",
+      "elapsedSeconds": 83.17758286098251,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 497709056,
+      "observedTaskDiskPeakBytes": 1766109184,
+      "availableBeforeBytes": 14306000896,
+      "availableAfterBytes": 14305812480,
+      "guardTermination": null,
+      "tapCounts": {
+        "tests": 633,
+        "pass": 631,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 2
+      }
+    }
+  ],
+  "finalFullSuite": {
+    "tests": 633,
+    "pass": 631,
+    "fail": 0,
+    "skipped": 2,
+    "skipReasons": [
+      "observed priority isolated profile disabled in package run",
+      "observed roster isolated profile disabled in package run"
+    ],
+    "actualSeparateProfiles": {
+      "priority": {
+        "pass": 29,
+        "fail": 0,
+        "skip": 0
+      },
+      "roster": {
+        "pass": 23,
+        "fail": 0,
+        "skip": 0
+      }
+    },
+    "notCombinedAsOneZeroSkipSuite": true
+  },
+  "financialCompiledHttp": {
+    "tests": 28,
+    "pass": 28,
+    "fail": 0,
+    "skip": 0,
+    "companies": [
+      {
+        "symbol": "2409",
+        "status": 200,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialSourceRawVerifiedByVm": false,
+        "preparationId": "3de134a6-d7e2-4ffb-9292-02cece6bbe5c",
+        "preparationInputHash": "ad22e087d8999a4f0386abc95dba34c32fb669f4a24781c131e2bbfc1e264a2a",
+        "originalLease": "2026-10-09T07:48:32.989291+00:00",
+        "monthlyFacts": [
+          {
+            "metric": "monthlyConsolidatedRevenue",
+            "period": "2026-07",
+            "periodKind": "month",
+            "unit": "TWD_million",
+            "value": 20370,
+            "status": "reported_attributed_relay",
+            "signConvention": "positive_revenue",
+            "locator": {
+              "file": "docs/research/2026-10-08-auo/dataset.json",
+              "fileSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+              "jsonPointer": "/monthlyConsolidatedRevenue/21/reportedRevenue"
+            },
+            "source": {
+              "url": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+              "rawObservedAt": "2026-10-08T06:52:48Z",
+              "extractionRecordedAt": null,
+              "publication": {
+                "precision": "unknown",
+                "value": null
+              }
+            },
+            "roundingInterval": {
+              "lower": "20369.5",
+              "upper": "20370.5",
+              "lowerInclusive": true,
+              "upperInclusive": false,
+              "assumption": "each original amount independently rounded to nearest TWD_million; exact source precision not verified by VM"
+            },
+            "locallyReadAt": "2026-10-09T07:18:33.961Z"
+          },
+          {
+            "metric": "monthlyConsolidatedRevenue",
+            "period": "2026-08",
+            "periodKind": "month",
+            "unit": "TWD_million",
+            "value": 23102,
+            "status": "reported_attributed_relay",
+            "signConvention": "positive_revenue",
+            "locator": {
+              "file": "docs/research/2026-10-08-auo/dataset.json",
+              "fileSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+              "jsonPointer": "/monthlyConsolidatedRevenue/22/reportedRevenue"
+            },
+            "source": {
+              "url": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+              "rawObservedAt": "2026-10-08T06:52:48Z",
+              "extractionRecordedAt": null,
+              "publication": {
+                "precision": "unknown",
+                "value": null
+              }
+            },
+            "roundingInterval": {
+              "lower": "23101.5",
+              "upper": "23102.5",
+              "lowerInclusive": true,
+              "upperInclusive": false,
+              "assumption": "each original amount independently rounded to nearest TWD_million; exact source precision not verified by VM"
+            },
+            "locallyReadAt": "2026-10-09T07:18:33.961Z"
+          },
+          {
+            "metric": "monthlyConsolidatedRevenue",
+            "period": "2026-09",
+            "periodKind": "month",
+            "unit": "TWD_million",
+            "value": 23404,
+            "status": "reported_attributed_relay",
+            "signConvention": "positive_revenue",
+            "locator": {
+              "file": "docs/research/2026-10-08-auo/dataset.json",
+              "fileSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+              "jsonPointer": "/monthlyConsolidatedRevenue/23/reportedRevenue"
+            },
+            "source": {
+              "url": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+              "rawObservedAt": "2026-10-08T06:52:48Z",
+              "extractionRecordedAt": null,
+              "publication": {
+                "precision": "unknown",
+                "value": null
+              }
+            },
+            "roundingInterval": {
+              "lower": "23403.5",
+              "upper": "23404.5",
+              "lowerInclusive": true,
+              "upperInclusive": false,
+              "assumption": "each original amount independently rounded to nearest TWD_million; exact source precision not verified by VM"
+            },
+            "locallyReadAt": "2026-10-09T07:18:33.961Z"
+          }
+        ],
+        "monthlyBridge": {
+          "metric": "q3MonthlyRevenueAnchor",
+          "period": "2026Q3",
+          "periodKind": "quarter_monthly_sum",
+          "unit": "TWD_million",
+          "value": 66876,
+          "status": "derived_not_reported_q3_income_statement",
+          "formula": "sum(reported July, August, September TWD million)",
+          "conversionDivisor": 1,
+          "operands": [
+            {
+              "file": "docs/research/2026-10-08-auo/dataset.json",
+              "fileSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+              "jsonPointer": "/monthlyConsolidatedRevenue/21/reportedRevenue"
+            },
+            {
+              "file": "docs/research/2026-10-08-auo/dataset.json",
+              "fileSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+              "jsonPointer": "/monthlyConsolidatedRevenue/22/reportedRevenue"
+            },
+            {
+              "file": "docs/research/2026-10-08-auo/dataset.json",
+              "fileSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+              "jsonPointer": "/monthlyConsolidatedRevenue/23/reportedRevenue"
+            }
+          ],
+          "namedOperands": [
+            {
+              "name": "reportedMonthlyRevenue:2026-07",
+              "value": 20370,
+              "unit": "TWD_million",
+              "locator": {
+                "file": "docs/research/2026-10-08-auo/dataset.json",
+                "fileSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+                "jsonPointer": "/monthlyConsolidatedRevenue/21/reportedRevenue"
+              },
+              "source": {
+                "url": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+                "rawObservedAt": "2026-10-08T06:52:48Z",
+                "extractionRecordedAt": null,
+                "publication": {
+                  "precision": "unknown",
+                  "value": null
+                }
+              }
+            },
+            {
+              "name": "reportedMonthlyRevenue:2026-08",
+              "value": 23102,
+              "unit": "TWD_million",
+              "locator": {
+                "file": "docs/research/2026-10-08-auo/dataset.json",
+                "fileSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+                "jsonPointer": "/monthlyConsolidatedRevenue/22/reportedRevenue"
+              },
+              "source": {
+                "url": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+                "rawObservedAt": "2026-10-08T06:52:48Z",
+                "extractionRecordedAt": null,
+                "publication": {
+                  "precision": "unknown",
+                  "value": null
+                }
+              }
+            },
+            {
+              "name": "reportedMonthlyRevenue:2026-09",
+              "value": 23404,
+              "unit": "TWD_million",
+              "locator": {
+                "file": "docs/research/2026-10-08-auo/dataset.json",
+                "fileSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+                "jsonPointer": "/monthlyConsolidatedRevenue/23/reportedRevenue"
+              },
+              "source": {
+                "url": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+                "rawObservedAt": "2026-10-08T06:52:48Z",
+                "extractionRecordedAt": null,
+                "publication": {
+                  "precision": "unknown",
+                  "value": null
+                }
+              }
+            }
+          ],
+          "roundingInterval": {
+            "lower": 66874.5,
+            "upper": 66877.5,
+            "lowerInclusive": true,
+            "upperInclusive": false
+          },
+          "reconciliation": "monthly printed rounding retained; no Q3 financial statement reconciliation or EPS inferred"
+        },
+        "modelCutoff": "2026-10-08T10:20:00Z",
+        "projectionHash": "5f219652d214a15a1d434cc759ecff696de8a8ad683be17f258a9dbdfa1f593f",
+        "supplementHash": "b6a685291f467f65d9cf076896f22ea503407f493698ea8fac6ae15674a5cfc0",
+        "calculatorExecutionHash": "abc97585507da71663689b35c2f3f60a6fd3dc6e5329b4ed28420608db995d6a",
+        "resultBytes": 128873,
+        "responseSha256": "1d13de460466c95b7d64143b041a8af61a56a89f9ae37138d40fd4f6b57f8e73",
+        "beforeCounts": "1|2591\n1\n1\n0\n0\n0",
+        "afterCounts": "1|2591\n1\n1\n0\n0\n0"
+      },
+      {
+        "symbol": "2383",
+        "status": 200,
+        "syntheticJobAndOwner": true,
+        "actualTrustedRoleExecution": false,
+        "financialSourceRawVerifiedByVm": false,
+        "preparationId": "3fc2526f-6c28-49d6-a566-e8a81a12edbf",
+        "preparationInputHash": "9fe8a40f79652c3c15f0d71658561e15fe65216ac0c899068324073558e63274",
+        "originalLease": "2026-10-09T07:48:51.360503+00:00",
+        "monthlyFacts": [
+          {
+            "metric": "monthlyConsolidatedRevenue",
+            "period": "2026-07",
+            "periodKind": "month",
+            "unit": "TWD",
+            "value": 19206698000,
+            "status": "reported_attributed_relay",
+            "signConvention": "positive_revenue",
+            "locator": {
+              "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+              "fileSha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+              "jsonPointer": "/monthlyRevenue/rows/21/revenueTwd"
+            },
+            "source": {
+              "url": "https://www.twse.com.tw/pdf/ch/2383_ch.pdf",
+              "rawSha256": "658a44ad58bd691e6ec28a68c22fb0043b5e18734162b5b682f717c20c3ccabe",
+              "attemptedAt": "2026-10-08T09:27:58.586996+00:00",
+              "rawObservedAt": "2026-10-08T09:27:58.821107+00:00",
+              "extractionRecordedAt": "2026-10-08T09:28:37.654569+00:00",
+              "publication": {
+                "precision": "date_without_verified_zone",
+                "value": "2026-10-08"
+              }
+            },
+            "roundingInterval": null,
+            "locallyReadAt": "2026-10-09T07:18:52.292Z"
+          },
+          {
+            "metric": "monthlyConsolidatedRevenue",
+            "period": "2026-08",
+            "periodKind": "month",
+            "unit": "TWD",
+            "value": 20145589000,
+            "status": "reported_attributed_relay",
+            "signConvention": "positive_revenue",
+            "locator": {
+              "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+              "fileSha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+              "jsonPointer": "/monthlyRevenue/rows/22/revenueTwd"
+            },
+            "source": {
+              "url": "https://www.twse.com.tw/pdf/ch/2383_ch.pdf",
+              "rawSha256": "658a44ad58bd691e6ec28a68c22fb0043b5e18734162b5b682f717c20c3ccabe",
+              "attemptedAt": "2026-10-08T09:27:58.586996+00:00",
+              "rawObservedAt": "2026-10-08T09:27:58.821107+00:00",
+              "extractionRecordedAt": "2026-10-08T09:28:37.654569+00:00",
+              "publication": {
+                "precision": "date_without_verified_zone",
+                "value": "2026-10-08"
+              }
+            },
+            "roundingInterval": null,
+            "locallyReadAt": "2026-10-09T07:18:52.292Z"
+          },
+          {
+            "metric": "monthlyConsolidatedRevenue",
+            "period": "2026-09",
+            "periodKind": "month",
+            "unit": "TWD",
+            "value": 21532230000,
+            "status": "reported_attributed_relay",
+            "signConvention": "positive_revenue",
+            "locator": {
+              "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+              "fileSha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+              "jsonPointer": "/monthlyRevenue/rows/23/revenueTwd"
+            },
+            "source": {
+              "url": "https://www.twse.com.tw/pdf/ch/2383_ch.pdf",
+              "rawSha256": "658a44ad58bd691e6ec28a68c22fb0043b5e18734162b5b682f717c20c3ccabe",
+              "attemptedAt": "2026-10-08T09:27:58.586996+00:00",
+              "rawObservedAt": "2026-10-08T09:27:58.821107+00:00",
+              "extractionRecordedAt": "2026-10-08T09:28:37.654569+00:00",
+              "publication": {
+                "precision": "date_without_verified_zone",
+                "value": "2026-10-08"
+              }
+            },
+            "roundingInterval": null,
+            "locallyReadAt": "2026-10-09T07:18:52.292Z"
+          }
+        ],
+        "monthlyBridge": {
+          "metric": "q3MonthlyRevenueAnchor",
+          "period": "2026Q3",
+          "periodKind": "quarter_monthly_sum",
+          "unit": "TWD_million",
+          "value": 60884.517,
+          "status": "derived_not_reported_q3_income_statement",
+          "formula": "sum(reported July, August, September TWD) / 1000000",
+          "conversionDivisor": 1000000,
+          "operands": [
+            {
+              "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+              "fileSha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+              "jsonPointer": "/monthlyRevenue/rows/21/revenueTwd"
+            },
+            {
+              "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+              "fileSha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+              "jsonPointer": "/monthlyRevenue/rows/22/revenueTwd"
+            },
+            {
+              "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+              "fileSha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+              "jsonPointer": "/monthlyRevenue/rows/23/revenueTwd"
+            }
+          ],
+          "namedOperands": [
+            {
+              "name": "reportedMonthlyRevenue:2026-07",
+              "value": 19206698000,
+              "unit": "TWD",
+              "locator": {
+                "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+                "fileSha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+                "jsonPointer": "/monthlyRevenue/rows/21/revenueTwd"
+              },
+              "source": {
+                "url": "https://www.twse.com.tw/pdf/ch/2383_ch.pdf",
+                "rawSha256": "658a44ad58bd691e6ec28a68c22fb0043b5e18734162b5b682f717c20c3ccabe",
+                "attemptedAt": "2026-10-08T09:27:58.586996+00:00",
+                "rawObservedAt": "2026-10-08T09:27:58.821107+00:00",
+                "extractionRecordedAt": "2026-10-08T09:28:37.654569+00:00",
+                "publication": {
+                  "precision": "date_without_verified_zone",
+                  "value": "2026-10-08"
+                }
+              }
+            },
+            {
+              "name": "reportedMonthlyRevenue:2026-08",
+              "value": 20145589000,
+              "unit": "TWD",
+              "locator": {
+                "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+                "fileSha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+                "jsonPointer": "/monthlyRevenue/rows/22/revenueTwd"
+              },
+              "source": {
+                "url": "https://www.twse.com.tw/pdf/ch/2383_ch.pdf",
+                "rawSha256": "658a44ad58bd691e6ec28a68c22fb0043b5e18734162b5b682f717c20c3ccabe",
+                "attemptedAt": "2026-10-08T09:27:58.586996+00:00",
+                "rawObservedAt": "2026-10-08T09:27:58.821107+00:00",
+                "extractionRecordedAt": "2026-10-08T09:28:37.654569+00:00",
+                "publication": {
+                  "precision": "date_without_verified_zone",
+                  "value": "2026-10-08"
+                }
+              }
+            },
+            {
+              "name": "reportedMonthlyRevenue:2026-09",
+              "value": 21532230000,
+              "unit": "TWD",
+              "locator": {
+                "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+                "fileSha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0",
+                "jsonPointer": "/monthlyRevenue/rows/23/revenueTwd"
+              },
+              "source": {
+                "url": "https://www.twse.com.tw/pdf/ch/2383_ch.pdf",
+                "rawSha256": "658a44ad58bd691e6ec28a68c22fb0043b5e18734162b5b682f717c20c3ccabe",
+                "attemptedAt": "2026-10-08T09:27:58.586996+00:00",
+                "rawObservedAt": "2026-10-08T09:27:58.821107+00:00",
+                "extractionRecordedAt": "2026-10-08T09:28:37.654569+00:00",
+                "publication": {
+                  "precision": "date_without_verified_zone",
+                  "value": "2026-10-08"
+                }
+              }
+            }
+          ],
+          "roundingInterval": null,
+          "reconciliation": "preliminary monthly totals differ from quarterly reported revenue; unresolved differences retained, no forced adjustment or EPS inferred",
+          "historicalReconciliation": [
+            {
+              "quarter": "2024Q4",
+              "sumMonthlyTwd": 18564316000,
+              "reportedFinancialTwd": 18562104000,
+              "differenceMonthlyMinusFinancialTwd": 2212000,
+              "status": "difference_retained_not_explained"
+            },
+            {
+              "quarter": "2025Q1",
+              "sumMonthlyTwd": 21684255000,
+              "reportedFinancialTwd": 21680064000,
+              "differenceMonthlyMinusFinancialTwd": 4191000,
+              "status": "difference_retained_not_explained"
+            },
+            {
+              "quarter": "2025Q2",
+              "sumMonthlyTwd": 22503506000,
+              "reportedFinancialTwd": 22507694000,
+              "differenceMonthlyMinusFinancialTwd": -4188000,
+              "status": "difference_retained_not_explained"
+            },
+            {
+              "quarter": "2025Q3",
+              "sumMonthlyTwd": 25145620000,
+              "reportedFinancialTwd": 25145642000,
+              "differenceMonthlyMinusFinancialTwd": -22000,
+              "status": "difference_retained_not_explained"
+            },
+            {
+              "quarter": "2025Q4",
+              "sumMonthlyTwd": 24908605000,
+              "reportedFinancialTwd": 24927178000,
+              "differenceMonthlyMinusFinancialTwd": -18573000,
+              "status": "difference_retained_not_explained"
+            },
+            {
+              "quarter": "2026Q1",
+              "sumMonthlyTwd": 33067235000,
+              "reportedFinancialTwd": 33067261000,
+              "differenceMonthlyMinusFinancialTwd": -26000,
+              "status": "difference_retained_not_explained"
+            },
+            {
+              "quarter": "2026Q2",
+              "sumMonthlyTwd": 47275208000,
+              "reportedFinancialTwd": 47275194000,
+              "differenceMonthlyMinusFinancialTwd": 14000,
+              "status": "difference_retained_not_explained"
+            }
+          ]
+        },
+        "modelCutoff": "2026-10-08T12:12:00Z",
+        "projectionHash": "a3b4447a44773b78a742c57819f828590baa82e4c24f5886cadf7403c06ee901",
+        "supplementHash": "dbe10103d918b89e7abbe7235f910715ef8ce7b59a35d5da4e856333d6a0dd00",
+        "calculatorExecutionHash": "abc97585507da71663689b35c2f3f60a6fd3dc6e5329b4ed28420608db995d6a",
+        "resultBytes": 76897,
+        "responseSha256": "d96a51e39cb4cb4d72879732dfb6990ebca29b6839765cafa247cd87480c1707",
+        "beforeCounts": "1|2591\n1\n1\n0\n0\n0",
+        "afterCounts": "1|2591\n1\n1\n0\n0\n0"
+      }
+    ],
+    "jobAndOwner": "synthetic developer fixture via real guarded inbox, priority, claim and preparation endpoints; no trusted author/reviewer provider execution",
+    "durableSupplementWrites": false
+  },
+  "originalFailuresRetained": [
+    "sandbox build local port denied",
+    "second permitted build reused failed cache and failed; cache retired and clean normal build passed, exact cache root cause not independently proven",
+    "initial full suite missing root pg dependency:623pass1fail2skip; root existing pg8.18.0 dependency linked; affected8pass then final full suite631pass0fail2skip"
+  ],
+  "rootDependencyLink": {
+    "path": "node_modules",
+    "target": "/workspace/stockinsider/node_modules",
+    "pgVersion": "8.18.0",
+    "newInstall": false
+  },
+  "sampledResourceMaxima": {
+    "aggregateRssBytes": 1995427840,
+    "taskDiskBytes": 1766109184,
+    "minimumAvailableBytes": 14305812480,
+    "measurementLimits": "100ms sampled process group plus descendants, not cgroup peak; disk du sampled1s; retired cache retained"
+  },
+  "ownedProcessesStillRunning": [],
+  "dotenvInventory": [
+    ".env.example"
+  ],
+  "dotenvContentsRead": false,
+  "reviewAttribution": {
+    "fa35_acc673": "root reported unsigned scoped code PASS64/64, two P2 closed, not independent VM execution",
+    "59aea2a": "root reported unsigned scoped code PASS8cleanup+10falsy probes; first fixed60ms stall probe RED then unchanged-code GREEN timing sensitivity preserved in root history",
+    "mechanicalIntegration": "root reported reviewed exact integration40files; this receipt is maker VM evidence"
+  },
+  "remaining": [
+    "complete-input nested schema/canonical vectors/transitive dependency identity freeze and runtime not implemented",
+    "trusted author/reviewer provider/principal and live role execution unavailable",
+    "source financial live rights unverified; manual forecasts not verified company financial guidance",
+    "first publication/strategy/paper/protected authority not approved",
+    "archive587 actual measurement and podcast340 fixture verification queued"
+  ],
+  "files": [
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-types-combined-27d.json",
+      "bytes": 545,
+      "sha256": "4f63bebb8e8f03343da74f0cb2534b59112e07e104c126cc6ae100834254ef66"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-types-combined-27d.log.txt",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-lint-combined-27d.json",
+      "bytes": 539,
+      "sha256": "6e2c9b8e3fd0ff06ff726506b7fb1e1c5607d4afe45c291532b465d285daf5e1"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-lint-combined-27d.log.txt",
+      "bytes": 4718,
+      "sha256": "0686ec53732067856ab77563bea095896330d2d67e57b18d1a614faae9b6b2ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-types-combined-75d.json",
+      "bytes": 543,
+      "sha256": "85df1c35898856c4e78b6dfe4f669e5f94ba63a87cb0bf31a5eece7ea6d28609"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-types-combined-75d.log.txt",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-lint-combined-75d.json",
+      "bytes": 538,
+      "sha256": "60697c4724b972f3732dbf817796c7a79e9e0e09bbe866528456d2c77d4707b1"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-lint-combined-75d.log.txt",
+      "bytes": 4718,
+      "sha256": "0686ec53732067856ab77563bea095896330d2d67e57b18d1a614faae9b6b2ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-normal-build-combined-75d.json",
+      "bytes": 546,
+      "sha256": "bf30ccbe95f5d15ea2253dd611518d71dbb527bb9add67439274c4f22c331cc7"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-normal-build-combined-75d.log.txt",
+      "bytes": 4867,
+      "sha256": "7f792d6644c5e25e627aaee1659f4870c47012c940334d12a539048c4f9d5263"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-normal-build-combined-75d-local-permitted.json",
+      "bytes": 562,
+      "sha256": "23f66861e72eb94b4f00ede815ea1ebe5d33aea7ccba3d3766822223b7a02c6e"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-normal-build-combined-75d-local-permitted.log.txt",
+      "bytes": 4867,
+      "sha256": "efeb3fe9fc5acfb1592611409092c0f1e6932fb08f162c138c51e4e59a894518"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-normal-build-combined-75d-clean-cache.json",
+      "bytes": 559,
+      "sha256": "c928c6c4e32cd2262c9d24d87a334da931862c121bafddd9366de7697972949a"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-normal-build-combined-75d-clean-cache.log.txt",
+      "bytes": 6500,
+      "sha256": "4cdc9b993a4c46a56b6bd8ab83b3ecb5be47f5cd1dc055ed03dae3cac26be14d"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-research-suite-combined-75d.json",
+      "bytes": 4087,
+      "sha256": "9e750aefdb6732c10c9d9646c8d73ad5c6825c4210cf79e9a547871b1dd0e6e4"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-research-suite-combined-75d.log.txt",
+      "bytes": 169445,
+      "sha256": "bbbb885f6f17112f512f0ea4aa6281d5d1cb082e1c6563740e4963b49f5f371c"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-owner-bridge-75d-dependency-restored.json",
+      "bytes": 666,
+      "sha256": "e92bab642b22b64636fe4e17ac049b0d78aabcd42764caf42e7cefa70d00d6d3"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-owner-bridge-75d-dependency-restored.log.txt",
+      "bytes": 1899,
+      "sha256": "fbc606970020a5d1ec3745ab999ed213b892b540fc778c6e47237b2daab43632"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-native-fin-http-75d.json",
+      "bytes": 708,
+      "sha256": "befb3db3e4698cf95a58e2ea2e0d3ac38bbf4decd12848913469f41634a537d2"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-native-fin-http-75d.log.txt",
+      "bytes": 7038,
+      "sha256": "94554eedf24b6457197a2668e5582d540df0031b081ba5a9c0ae7045b349ca4f"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-native-op75.json",
+      "bytes": 645,
+      "sha256": "0da9b44de59a764ad323d938033083608545f5edebeb2a3168dcec31a9795a74"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-native-op75.log.txt",
+      "bytes": 7860,
+      "sha256": "b97dbba9e621e3ab1c39753034ffd4d5e0072b7165e78a70f9041b65bf4510ee"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-native-or75.json",
+      "bytes": 643,
+      "sha256": "b82025505d2859e1e07ec475afb60aef4e9ae5b00e663222f0c2432530a8a291"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-native-or75.log.txt",
+      "bytes": 6151,
+      "sha256": "61ed8676d21a5306645aac40e87108e1d535c76d0013585517e6c681ba8b4d37"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-research-suite-combined-75d-root-deps-green.json",
+      "bytes": 4103,
+      "sha256": "1210e9fb3f31167a1d43f6f4f4ecb96c49ad359e3f9bf4ca73d23e6ba05cdd41"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-research-suite-combined-75d-root-deps-green.log.txt",
+      "bytes": 169646,
+      "sha256": "2f26ab9f26e9d60e3751da9102e696f711ae9ea120b78789a63241a7c8580a97"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-build-provenance-75d.json",
+      "bytes": 1311,
+      "sha256": "23456aa9474ff4ff20b1e4658d6e45b0ddf3892cd35351a0996e2189fb46bf7b"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-tool-provenance-75d.json",
+      "bytes": 834,
+      "sha256": "3aa8759792b1884a7e7a79be12bd27adb832438c5853a6243c7dfb3cbf4036ac"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-combined-research-membership.json",
+      "bytes": 14163,
+      "sha256": "ef74a53394cf1adf7531eb13b9aa3f5a8aa967a8f035794a72738cfbd560b5aa"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-failed-cache-retirement.json",
+      "bytes": 363,
+      "sha256": "709f9d9eec0f3f4b18f70841c72ab3abaf83141e7eb9b97d068eae07db6f3690"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-financial-http.test.mjs.txt",
+      "bytes": 7184,
+      "sha256": "35f1e117f6bedec7b9cc6ca8eb41709cf0b3b77917780109d15db309a38937b1"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-run-check.py.txt",
+      "bytes": 4508,
+      "sha256": "ec39a8040b40b219ef7d5500aba1e5afa433bcf75ac7f7ab26ceb10d2385ca47"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-run-membership.py.txt",
+      "bytes": 378,
+      "sha256": "8bf8fa5614dd63d4ed597a12bfb4e9853b7675371725507472bb1f23e1f842d6"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-native-fin-http-75d-run-2409-acceptance-receipt.json",
+      "bytes": 29559,
+      "sha256": "745c1042f5c6bad5459380eb6a6dd8b657de706afd3202c187f3f4192285a503"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-native-fin-http-75d-run-2383-acceptance-receipt.json",
+      "bytes": 31850,
+      "sha256": "dff7d9cdfbe8fff12060cd7e64b2fcc3c9f0009447ecc2b353100af5450f8f0d"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-native-op75-run-acceptance-receipt.json",
+      "bytes": 25155,
+      "sha256": "00be699fd665b8fed585dc4f6b5e768d8e2f2d16b08993b087719d92007e06eb"
+    },
+    {
+      "path": ".agent/reports/2026-10-09T07-24-combined-75d-native-or75-run-acceptance-receipt.json",
+      "bytes": 21531,
+      "sha256": "fe0b02b9ad4f9ee5e40dbb35c45b4b712ba1aeffbc9a19a562ff433056add876"
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "schemaVersion": "bounded-manual-auo-working-draft-validation-v1",
+  "startedAt": "2026-10-08T08:01:38.610822+00:00",
+  "completedAt": "2026-10-08T08:26:49.098838+00:00",
+  "elapsedSecondsThroughValidation": 1510.488016,
+  "maximumTaskSeconds": 1800,
+  "baseCommit": "f020a2530c7b0e67d689103e639549f6429c3d15",
+  "articleSubjectCommit": "a38ccf9a831fce46d7bd4385acba397d735816ca",
+  "branch": "codex/auo-research-working-draft-oct08",
+  "articleSha256": "30f4bd5c12199c1b48730a4697dfc6a6832deb494c5fe4c75e37d029ccfaca3e",
+  "articleHanCharacters": 4222,
+  "typedPrimaryParagraphs": 28,
+  "referenceLabels": 24,
+  "sourceLedgerEntries": 58,
+  "contentDataClockChecks": {
+    "pass": 61,
+    "fail": 0,
+    "skip": 0
+  },
+  "existingValuationFunctionRoundtripChecks": 4,
+  "freshProcessPrivateFileHashChecks": 9,
+  "initialVerificationFailurePreserved": "ASCII-only heading parser failed to recognize normal Chinese fullwidth parentheses; original failed receipt/log retained; article was unchanged",
+  "newRepositoryCalculatorOrAppCode": false,
+  "heavySuiteOrNormalBuildRun": false,
+  "formalArticleValidatorInvoked": false,
+  "formalArticleValidatorNotRunReason": "missing legitimate typed citations, complete scenarios/diluted shares and original prepared job; manual incomplete draft is not a validated payload",
+  "privateOutput": "/workspace/cloud-auo-research-working-draft-artifacts-oct08/manual-working-draft-a38ccf9",
+  "privateExportReceiptSha256": "ee11de9386bba72a28da0afd640e9ab56eb0828bb71c7962f444d9846448b349",
+  "privateOutputIsControllerArtifact": false,
+  "immutableInputsPreserved": {
+    "docs/research/2026-10-08-auo/dataset.json": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+    "docs/research/2026-10-08-auo/calculation-results.json": "81c87f4b098ce279a14a6833d35a880b4158a6bf8d777d870a5ea31ca918e1a6",
+    "docs/research/2026-10-08-auo/source-ledger.json": "c4735102f8dd759db61f1d57c1a6579243ec548e3300af3130cefe1ba542384d",
+    "docs/research/2026-10-08-auo-market/dataset.json": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582",
+    "docs/research/2026-10-08-auo-market/recompute-market.mjs": "ad51426ae845347309bae7e16c8270c3c1ff48ba21983fff04a2926f9e27e2dd",
+    "docs/research/2026-10-08-auo-market/root-market-relay.json": "6b59d3daa60e17b79a0f2fab80a1c5b2a8083ecdbbf6cdf0a985551be1467d98",
+    "docs/research/2026-10-08-auo-market/vm-canary.json": "05d6d0898d210740cb09eb72e744e5152f561994837f7d05a9ed0ec48c1eefb7"
+  },
+  "resources": {
+    "nodeVersion": "v22.14.0",
+    "visibleNproc": 5,
+    "cgroupMemoryMaxBytes": 34359738368,
+    "cgroupCpuMax": "400000 100000",
+    "visibleAvailableBeforeBytes": 27356250112,
+    "visibleAvailableAfterBytes": 27355795456,
+    "workspaceDuAfterBytes": 5831581696,
+    "worktreeDuAfterBytes": 30449664,
+    "privateArtifactDuAfterBytes": 208896,
+    "taskDiskPeakObservedBytes": 30658560,
+    "gnuTimeProcessRssPeakBytes": 53297152,
+    "sampledProcessGroupRssPeakBytes": 40222720,
+    "measurement": "GNUtime process maximum,100ms PGID RSS samples,1s task du and final statvfs/du. Lightweight process measurements, not an exclusive whole-VM high-water mark. No guaranteed Project disk quota inferred.",
+    "projectDiskQuotaConfirmed": false,
+    "guardTerminated": false
+  },
+  "stages": [
+    {
+      "stage": "sensitivity",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--input-type=module",
+        "-"
+      ],
+      "startedAt": "2026-10-08T08:04:41.192Z",
+      "completedAt": "2026-10-08T08:04:41.403Z",
+      "elapsedSeconds": 0.2112840369954938,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 40222720,
+      "observedTaskDiskPeakBytes": 30367744,
+      "availableBeforeBytes": 27356221440,
+      "availableAfterBytes": 27356209152,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 53297152,
+      "logSha256": "6752a9ecd1fceae7098d61e3747b06136c59a25fbe5cd575d254605230566770"
+    },
+    {
+      "stage": "table-generation",
+      "command": [
+        "python3",
+        "-"
+      ],
+      "startedAt": "2026-10-08T08:13:56.663Z",
+      "completedAt": "2026-10-08T08:13:56.774Z",
+      "elapsedSeconds": 0.11057186599646229,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 30408704,
+      "availableBeforeBytes": 27356180480,
+      "availableAfterBytes": 27356164096,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 13557760,
+      "logSha256": "9b1ed34a7ee24b43b1602900c6506bf2c3513153a63c7095824e8749aaf17a9c"
+    },
+    {
+      "stage": "content-verification",
+      "command": [
+        "python3",
+        "-"
+      ],
+      "startedAt": "2026-10-08T08:22:41.370Z",
+      "completedAt": "2026-10-08T08:22:41.481Z",
+      "elapsedSeconds": 0.11024571300367825,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 647168,
+      "observedTaskDiskPeakBytes": 30478336,
+      "availableBeforeBytes": 27355975680,
+      "availableAfterBytes": 27355967488,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 12976128,
+      "logSha256": "7084350ef5f5ade02bb351c6e9311b4c24c5f7cde23063c875f11adfac04c1fc"
+    },
+    {
+      "stage": "content-verification-fixed",
+      "command": [
+        "python3",
+        "/workspace/cloud-auo-research-working-draft-artifacts-oct08/verify-content.py"
+      ],
+      "startedAt": "2026-10-08T08:23:56.217Z",
+      "completedAt": "2026-10-08T08:23:56.326Z",
+      "elapsedSeconds": 0.10925088600197341,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 30498816,
+      "availableBeforeBytes": 27355955200,
+      "availableAfterBytes": 27355938816,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 13631488,
+      "logSha256": "3c1bfa98795bb9bff0b94c5f2fb5dee2ccf58a6fb7b68ef1771d5d0c1c154a80"
+    },
+    {
+      "stage": "private-export",
+      "command": [
+        "python3",
+        "-"
+      ],
+      "startedAt": "2026-10-08T08:25:20.041Z",
+      "completedAt": "2026-10-08T08:25:20.154Z",
+      "elapsedSeconds": 0.11317210900597274,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 30519296,
+      "availableBeforeBytes": 27355934720,
+      "availableAfterBytes": 27355811840,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 11403264,
+      "logSha256": "ae67ac42d697db16f804c0fd56c36eaf0ffa55139329c05ea35d3426135d9c5a"
+    },
+    {
+      "stage": "private-readback",
+      "command": [
+        "python3",
+        "-"
+      ],
+      "startedAt": "2026-10-08T08:25:20.190Z",
+      "completedAt": "2026-10-08T08:25:20.300Z",
+      "elapsedSeconds": 0.11002049200760666,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 282624,
+      "observedTaskDiskPeakBytes": 30646272,
+      "availableBeforeBytes": 27355807744,
+      "availableAfterBytes": 27355799552,
+      "guardTermination": null,
+      "gnuTimeMaximumRssBytes": 11272192,
+      "logSha256": "b7746be6459de1e9cd7956437a5d5107233a3fb557e1b5ae533834f947698016"
+    }
+  ],
+  "remaining": [
+    "legitimate source/fact identifiers and verified citation publication clocks",
+    "four unpublished-quarter forecasts and full three scenarios",
+    "diluted and period-end common shares",
+    "normalized nonoperating/tax/NCI and common-equity bridge",
+    "full company-action adjustment/calendar/flows",
+    "independent article-content review",
+    "live authenticated original job/reservation/prepared-input handoff",
+    "second-company research and strategy qualification"
+  ],
+  "status": "draft/incomplete",
+  "published": false,
+  "researchQualified": false,
+  "strategyApproved": false,
+  "productionImported": false,
+  "vpsOperationsPerformed": false,
+  "newVmHttpRequests": 0,
+  "protectedAttestation": false,
+  "deployment": false
+}

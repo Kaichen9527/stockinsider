@@ -1,0 +1,42 @@
+name: Bounded official action-calendar diagnosis
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/action-calendar-probe.yml'
+      - 'research/tw-strategy-lab/action_calendar_probe.py'
+
+permissions:
+  contents: read
+
+jobs:
+  fixed-2023-inputs:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'codex/tw-strategy-lab-v1'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Diagnose once on the introducing commit only
+        run: |
+          changed="$(git diff --name-only HEAD^ HEAD)"
+          if printf '%s\n' "$changed" | grep -Fxq 'research/tw-strategy-lab/action_calendar_probe.py'; then
+            python research/tw-strategy-lab/action_calendar_probe.py --output "$RUNNER_TEMP/action-calendar-diagnostic"
+          else
+            mkdir -p "$RUNNER_TEMP/action-calendar-diagnostic"
+            printf '{"executed":false,"reason":"probe_source_unchanged"}\n' > "$RUNNER_TEMP/action-calendar-diagnostic/not-executed.json"
+          fi
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: action-calendar-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/action-calendar-diagnostic/
+          retention-days: 14
+          if-no-files-found: error

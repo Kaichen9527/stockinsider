@@ -1,0 +1,8 @@
+- [x] Select exact existing ancillary table definitions with FK dependency order; no seeds/fake RPCs.
+- [x] Native401/409official_roster_missing before/after PG restart; inbox replay accepts zero.
+- [x] Real service SELECT-only/anonymous refusal and POST/PATCH/DELETE403; zero catalog/authority/job/publication dependency rows.
+- [x] Final profile hash/RLS assertions and focused native rerun.
+- [x] Final types/lint/normal build and measured sanitized receipt.
+- [ ] Independent exact profile review and root-created draft PR.
+- [ ] Observed-only relation identity/roster admission/priority/deep-job contract; separate reviewed additive increment.
+- [ ] TWSE/TPEX insider fixes, true positive research jobs and complete strategy/consumer chain.

@@ -27,6 +27,13 @@ export const CREATOR_PUBLISHED_PODCAST_RSS_INDEX_ALLOWLIST = [
   'https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml',
 ] as const;
 
+/** Explicit research-controller index grant only. Kept separate from the
+ * legacy collector allowlist, which may follow publisher transcript links. */
+export const RESEARCH_CONTROLLER_PODCAST_INDEX_ALLOWLIST = [
+  ...CREATOR_PUBLISHED_PODCAST_RSS_INDEX_ALLOWLIST,
+  'https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml',
+] as const;
+
 export type SourcePolicyDisposition = 'active' | 'blocked_auth' | 'blocked_license' | 'manual_only' | 'retired';
 
 export type SourceExecutionPolicy = {

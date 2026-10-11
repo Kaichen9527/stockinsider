@@ -2,6 +2,7 @@ import { cp, mkdir, mkdtemp, access } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { copyResearchRuntimeFiles } from './research-release-artifacts.mjs';
 
 // Package build artifacts only. Never copy .env, Git objects or source databases.
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -14,4 +15,5 @@ await cp(standalone,path.join(output,'web'),{recursive:true,filter:(source)=>!pa
 await cp(path.join(root,'web/.next/static'),path.join(output,'web/.next/static'),{recursive:true});
 await cp(path.join(root,'web/public'),path.join(output,'web/public'),{recursive:true});
 for(const directory of ['scripts','deployment','config'])await cp(path.join(root,directory),path.join(output,directory),{recursive:true});
+await copyResearchRuntimeFiles({sourceRoot:root,releaseRoot:output,entrypointDirectory:path.join(output,'web')});
 console.log(JSON.stringify({artifactDirectory:output,entrypoint:'web/server.js',workingDirectory:'web'}));

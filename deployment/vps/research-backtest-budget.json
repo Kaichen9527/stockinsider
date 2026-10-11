@@ -1,0 +1,10 @@
+{
+  "databaseRestoreBytes": 0,
+  "documentBytes": 0,
+  "peakWalBytes": 536870912,
+  "peakTemporaryBytes": 2147483648,
+  "deploymentBytes": 0,
+  "localBackupStagingBytes": 0,
+  "growthReserveBytes": 1073741824,
+  "peakMemoryBytes": 2147483648
+}

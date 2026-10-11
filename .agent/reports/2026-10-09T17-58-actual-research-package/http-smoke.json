@@ -1,0 +1,44 @@
+{
+  "recordedAt": "2026-10-09T17:56:48.905Z",
+  "runtimeSource": "c63ab5f42c0d6fd704d3b1c6c103a8456077d6ab",
+  "actualStandalone": true,
+  "syntheticPublishedResearch": false,
+  "draftOnly": true,
+  "results": [
+    {
+      "url": "http://127.0.0.1:3048/preview/research-working/2409",
+      "status": 200,
+      "bytes": 150961,
+      "sha256": "ef6391e633b985d32f200e7296266c20f380431ab05cd6c2bb278d403171ff40",
+      "hasDetails": true
+    },
+    {
+      "url": "http://127.0.0.1:3048/preview/research-working/2383",
+      "status": 200,
+      "bytes": 161375,
+      "sha256": "d087a2ab7eb6efd81ad9bf4d2f80fd49c71686852c8a2658efca32c948ef66cd",
+      "hasDetails": true
+    },
+    {
+      "url": "http://127.0.0.1:3048/preview/research-working/2330",
+      "status": 404,
+      "bytes": 7443,
+      "sha256": "c3a61bc47e4d7612cf4c95a61e95234493c8537100e01435cd666a91dbe56391",
+      "hasDetails": false
+    },
+    {
+      "url": "http://127.0.0.1:3048/preview/research-working/2409?researchCompanyId=invalid",
+      "status": 404,
+      "bytes": 7539,
+      "sha256": "29643368bf2dc8e8039ae979b2987947a066df6e2f6e70e5ddf469b383d06d4d",
+      "hasDetails": false
+    },
+    {
+      "url": "http://127.0.0.1:3048/preview/research-working/2409?other=x",
+      "status": 404,
+      "bytes": 7485,
+      "sha256": "96d64256248630046f9d7c4cac95374b4d382504437ae0530bec37221caf800a",
+      "hasDetails": false
+    }
+  ]
+}

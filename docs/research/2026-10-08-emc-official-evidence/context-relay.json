@@ -1,0 +1,201 @@
+{
+  "schemaVersion": "stockinsider-attributed-public-context-relay-v1",
+  "recordedAt": "2026-10-08T10:14:42.302070+00:00",
+  "symbols": [
+    "2383",
+    "2409"
+  ],
+  "sources": [
+    {
+      "label": "ptt-ccl-20260917",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1789621701.A.C12.html",
+      "attemptedAt": "2026-10-08T10:08:53.660046+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://www.ptt.cc/bbs/Stock/M.1789621701.A.C12.html",
+      "status": "read_success",
+      "observedAt": "2026-10-08T10:08:54.327099+00:00",
+      "bytes": 27806,
+      "sha256": "4bc1a54f99f09e16c806f721416e69f6aca69727f47c3299f1c4e2983cae1838"
+    },
+    {
+      "label": "ptt-auo-20260922",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1790063409.A.25C.html",
+      "attemptedAt": "2026-10-08T10:08:53.661652+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://www.ptt.cc/bbs/Stock/M.1790063409.A.25C.html",
+      "status": "read_success",
+      "observedAt": "2026-10-08T10:08:54.338973+00:00",
+      "bytes": 26510,
+      "sha256": "1e36965a61ea5c012ea8a21c3c215abbee5c5a202fced8aec4d2c5104758b13f"
+    },
+    {
+      "label": "kgi-20260112",
+      "url": "https://www.kgi.com.hk/zh-cn/-/media/files/kgishk/research-reports/investment-perspectives/2026/kgis-global-markets-weekly-kickstart_20260112.pdf",
+      "attemptedAt": "2026-10-08T10:08:53.662346+00:00",
+      "status": "read_failed",
+      "errorType": "URLError",
+      "observedAt": "2026-10-08T10:08:53.825682+00:00"
+    },
+    {
+      "label": "yuanta-103450",
+      "url": "https://research.yuanta-consulting.com.tw/temp/ProductionYT/103450.pdf",
+      "attemptedAt": "2026-10-08T10:08:53.662955+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://research.yuanta-consulting.com.tw/temp/ProductionYT/103450.pdf",
+      "status": "read_success",
+      "observedAt": "2026-10-08T10:08:54.123447+00:00",
+      "bytes": 1116527,
+      "sha256": "7f6820c0b203980dfc9f0a4dcdf573654439e5e87d0e39f39025a28511512719",
+      "textSha256": "7c362d020fc182eb019f45d98b7286d9f0cd37f23d83ae1eb76be04a1fb3e4ae"
+    },
+    {
+      "label": "ccl-repost-root",
+      "url": "https://reurl.cc/gNN1k7",
+      "attemptedAt": "2026-10-08T10:11:11.315490+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://reurl.cc/gNN1k7",
+      "status": "read_success",
+      "observedAt": "2026-10-08T10:11:11.580004+00:00",
+      "bytes": 2118,
+      "sha256": "3a2e1fc6380e8e9edb22a972e3362619e1468c803d2443201fcc7980c3b4e4c8"
+    },
+    {
+      "label": "auo-repost-root",
+      "url": "https://reurl.cc/OQDqnD",
+      "attemptedAt": "2026-10-08T10:11:11.316526+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://reurl.cc/OQDqnD",
+      "status": "read_success",
+      "observedAt": "2026-10-08T10:11:11.616417+00:00",
+      "bytes": 1773,
+      "sha256": "a1acc4392e369ad1470517f661d3d40bce82ccfa73ba4d8e7b6c5fc951783f30"
+    },
+    {
+      "label": "ccl-repost-article",
+      "url": "https://tw.stock.yahoo.com/news/%E9%AC%BC%E6%95%85%E4%BA%8B%E5%8F%88%E4%BE%86%E4%BA%86-%E8%81%AF%E8%8C%82%E8%B7%8C%E5%81%9C-%E5%8F%B0%E5%85%89%E9%9B%BB%E9%87%8D%E6%8C%AB8-%E5%A4%A7%E6%91%A9%E9%80%99%E6%A8%A3%E8%AA%AA-040200292.html",
+      "attemptedAt": "2026-10-08T10:13:06.795735+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://tw.stock.yahoo.com/news/%E9%AC%BC%E6%95%85%E4%BA%8B%E5%8F%88%E4%BE%86%E4%BA%86-%E8%81%AF%E8%8C%82%E8%B7%8C%E5%81%9C-%E5%8F%B0%E5%85%89%E9%9B%BB%E9%87%8D%E6%8C%AB8-%E5%A4%A7%E6%91%A9%E9%80%99%E6%A8%A3%E8%AA%AA-040200292.html",
+      "status": "read_success",
+      "observedAt": "2026-10-08T10:13:07.598056+00:00",
+      "bytes": 621273,
+      "sha256": "c074dd46d76a7db7d3540ac86975e951f27e62e394f9cefa4f7c21a8e8679cf1"
+    },
+    {
+      "label": "auo-repost-article",
+      "url": "https://finance.ettoday.net/amp/3241848",
+      "attemptedAt": "2026-10-08T10:13:06.797192+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://finance.ettoday.net/amp/3241848",
+      "status": "read_success",
+      "observedAt": "2026-10-08T10:13:07.132771+00:00",
+      "bytes": 56374,
+      "sha256": "e376d6cc694065296f19a1412712bedeec2584d9dbf77452f7e0d8ec95e73938"
+    }
+  ],
+  "entries": [
+    {
+      "id": "ccl-demand-downgrade-rumor",
+      "rootUrl": "https://tw.stock.yahoo.com/news/%E9%AC%BC%E6%95%85%E4%BA%8B%E5%8F%88%E4%BE%86%E4%BA%86-%E8%81%AF%E8%8C%82%E8%B7%8C%E5%81%9C-%E5%8F%B0%E5%85%89%E9%9B%BB%E9%87%8D%E6%8C%AB8-%E5%A4%A7%E6%91%A9%E9%80%99%E6%A8%A3%E8%AA%AA-040200292.html",
+      "publisher": "東森財經 via Yahoo",
+      "publishedAtSourceClaim": "2026-09-17T04:02:00Z",
+      "sourceLabel": "ccl-repost-article",
+      "symbols": [
+        "2383",
+        "6274",
+        "6213"
+      ],
+      "evidenceStatus": "media_reports_rumor_and_broker_view_not_verified_order",
+      "summary": "報導引述市場對光互連降低高階CCL需求的傳聞，同時轉述大摩對高階材料認證門檻與供需的反方意見。未讀到該大摩原報告；不能把轉述視為獨立券商確認或公司指引。",
+      "transmission": "Test high-speed electrical interconnect content per system and adoption timing separately from optical links; do not mechanically equate CPO penetration with disappearance of all PCB/CCL.",
+      "brokerTargetExcludedFromCalibratedValuation": true
+    },
+    {
+      "id": "ptt-ccl-demand-discussion",
+      "rootUrl": "https://tw.stock.yahoo.com/news/%E9%AC%BC%E6%95%85%E4%BA%8B%E5%8F%88%E4%BE%86%E4%BA%86-%E8%81%AF%E8%8C%82%E8%B7%8C%E5%81%9C-%E5%8F%B0%E5%85%89%E9%9B%BB%E9%87%8D%E6%8C%AB8-%E5%A4%A7%E6%91%A9%E9%80%99%E6%A8%A3%E8%AA%AA-040200292.html",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1789621701.A.C12.html",
+      "sourceLabel": "ptt-ccl-20260917",
+      "author": "TT991",
+      "publishedAtSourceClaim": "2026-09-17T13:08:19+08:00",
+      "clockScope": "PTT displayed local board timestamp interpreted in Asia/Taipei; not independently certified",
+      "symbols": [
+        "2383",
+        "6274",
+        "6213"
+      ],
+      "evidenceStatus": "news_repost_plus_public_commentary",
+      "summary": "PTT轉貼上述新聞，推文同時出現取代、共存及消息可信度質疑。這是市場分歧，不是技術驗證或訂單證據。",
+      "repostOf": "ccl-demand-downgrade-rumor",
+      "independentConfirmationIncrement": 0,
+      "commentScope": "entire returned main-content with visible pushes was read; no claim of all future replies"
+    },
+    {
+      "id": "auo-intel-packaging-rumor",
+      "rootUrl": "https://finance.ettoday.net/news/3241848",
+      "url": "https://finance.ettoday.net/amp/3241848",
+      "sourceLabel": "auo-repost-article",
+      "publisher": "ETtoday",
+      "author": "巫彩蓮",
+      "publishedAtClaims": {
+        "htmlMeta": "2026-09-22T11:16:00+08:00",
+        "jsonLd": "2026-09-22T11:16:02+08:00"
+      },
+      "exactPublishedAt": null,
+      "datePrecision": "source metadata differs by two seconds; retain both claims",
+      "symbols": [
+        "2409"
+      ],
+      "originalSymbolTypo": "2408",
+      "evidenceStatus": "media_reported_unconfirmed_collaboration",
+      "summary": "報導將玻璃基板、台積電廠房及Intel洽談傳聞列為市場重估因素，也提醒資產收益一次性與面板本業壓力。無合約、訂單量或量產承諾可核實。",
+      "transmission": "Conditional commercialization scenario only; factory sale consideration is not profit and must not be double-counted as customer order.",
+      "symbolMapping": "AUO company name and later2409 occurrence support a research association; original2408 typo retained, no instrument authority activated"
+    },
+    {
+      "id": "ptt-auo-rumor-discussion",
+      "rootUrl": "https://finance.ettoday.net/news/3241848",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1790063409.A.25C.html",
+      "sourceLabel": "ptt-auo-20260922",
+      "author": "ann16",
+      "publishedAtSourceClaim": "2026-09-22T15:50:07+08:00",
+      "clockScope": "PTT displayed local board timestamp interpreted in Asia/Taipei; not independently certified",
+      "symbols": [
+        "2409"
+      ],
+      "evidenceStatus": "news_repost_plus_public_commentary",
+      "summary": "轉貼同篇報導並有突破追價與反對意見；發文者自述交易及價位未查證，不是實際成交、券商目標或獲利證據。",
+      "repostOf": "auo-intel-packaging-rumor",
+      "independentConfirmationIncrement": 0,
+      "commentScope": "entire returned main-content with visible pushes was read; no claim of all future replies"
+    },
+    {
+      "id": "yuanta-emc-historical-forecast",
+      "rootUrl": "https://research.yuanta-consulting.com.tw/temp/ProductionYT/103450.pdf",
+      "sourceLabel": "yuanta-103450",
+      "publisher": "元大投顧",
+      "publicationDateOnly": "2025-08-01",
+      "exactPublishedAt": null,
+      "pdfPage": 1,
+      "symbols": [
+        "2383"
+      ],
+      "evidenceStatus": "public_broker_original_historical_forecast_not_current_consensus",
+      "forecastYear": 2026,
+      "epsEstimate": 53.61,
+      "peAssumption": 24,
+      "targetPriceTwd": 1300,
+      "end2026CapacityMillionSheetsPerMonth": 7.6,
+      "summary": "這份公開更新報告日期是2025年8月，預測2026年底擴產與高階材料成長。其53.61元EPS、24倍估值及產能是假設當時的版本，不能當成2026年10月市場共識；應與後來公司財報、法說計畫比較。",
+      "currentModelUse": "Historical thesis and forecast revision comparison only; do not import as latest forward EPS or calibrated current multiple.",
+      "shareBasis": "broker forecast and adjustment conventions retained as historical report; do not infer compatibility with later weighted/diluted share counts"
+    }
+  ],
+  "limits": [
+    "All first observations are October8 2026; no historical availability proof or backdated strategy signal.",
+    "Short-link landing metadata was successfully read, not the destination article body; destination article reads are distinct attempts and receipts.",
+    "KGI PDF failed with URLError; its search result is not an analyzed report and contributes no confirmed source count.",
+    "Two PTT reposts add no independent confirmation to their linked news roots; separate user opinions may describe attention but not source authority.",
+    "No paid/private/member full text, raw news/article/PDF bodies, IP addresses or credentials are exported to Git. Only necessary short paraphrases and attributed numeric facts.",
+    "These messages do not establish an early discovery before a rise, thesis qualification, investability, order status, normalized/forward EPS, calibrated price target or entry approval."
+  ]
+}

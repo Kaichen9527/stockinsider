@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "manual-auo-article-table-calculation-v1",
+  "sourceFinancialDatasetSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+  "sourceMarketDatasetSha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582",
+  "quarterRows": 8,
+  "monthlyRows": 24,
+  "technicalFields": 18,
+  "ttmPeriods": [
+    "2025-Q3",
+    "2025-Q4",
+    "2026-Q1",
+    "2026-Q2"
+  ],
+  "ttmPrintedSums": {
+    "revenue": 279972,
+    "operatingProfit": -4117,
+    "netNonOperatingIncome": 8187,
+    "pretax": 4071,
+    "taxBenefitExpenseSigned": -1164,
+    "netProfit": 2906,
+    "nciProfit": 1105,
+    "ownersProfit": 1801
+  },
+  "ttmPrintedBasicEpsSum": "0.24",
+  "ttmBasicPrintedEpsIndependentRoundingInterval": [
+    "0.22",
+    "0.26"
+  ],
+  "ttmIsNormalizedOrDiluted": false,
+  "scenarioForecastsCompleted": false,
+  "monthlyValuesTakenFromExistingDataset": true,
+  "formula": "TTM field=sum of four printed quarterly values; table copies original values; sensitivity existing valuation function round trip",
+  "originalQuarterPrintedDifferencesPreserved": true
+}

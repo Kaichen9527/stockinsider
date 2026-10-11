@@ -1,0 +1,24 @@
+{
+  "recordedAt": "2026-10-04T04:27:11.851953+00:00",
+  "reviewer": "/root/astra_recovery_oct04",
+  "model": "gpt-6-astra",
+  "effort": "high",
+  "commit": "f2e711e0594c49836c44daf16280f838590e001a",
+  "tree": "bd45f435a809a74e1f0d2a97be6a03f98e4332c1",
+  "verdict": "approve_implemented_code_scope",
+  "openFindings": [],
+  "signed": false,
+  "protectedApproval": false,
+  "completePlanAcceptance": false,
+  "independentSuccessorTests": {
+    "passed": 3,
+    "skipped": 0
+  },
+  "priorIndependentTests": {
+    "commit": "d4e25ea4ab57524fb979b2c21c3a286ba4a718ec",
+    "passed": 77,
+    "skipped": 0
+  },
+  "reproduction": "09:00-crossing: same-day409, next-official-session200, later-catch-up200; frozen activation; real route/reducers",
+  "remaining": "Consumer/platform activation/AUO and second-company acceptance/schema cutover/deployment/capacity and trusted protected authority remain incomplete."
+}

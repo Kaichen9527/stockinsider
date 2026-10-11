@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "stockinsider-publisher-description-relay-v1",
+  "recordedAt": "2026-10-08T12:33:10.540178+00:00",
+  "acquisition": "Root Mac public HTTP after public publisher profile/browser verification; VM did not fetch this body",
+  "rightsScope": "Only concise original summary and public metadata; no audio, transcript, member report, credentials or private content",
+  "publisherDiscovery": {
+    "profile": "https://www.threads.com/@investanchors",
+    "observedLinkAppleShowId": "1872298769",
+    "observationClockPrecision": "browser sequence only; no signed exact clock",
+    "browserBodyScope": "Profile public posts and Apple show/episode description, not replies/history completeness"
+  },
+  "attempts": [
+    {
+      "url": "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999",
+      "attemptedAt": "2026-10-08T12:31:54.426698+00:00",
+      "httpStatus": 200,
+      "finalUrl": "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999",
+      "bytes": 149097,
+      "sha256": "425f5eebd84f20d18dcd8f2059621a67d9cf23825f24d510b5b761bf9c649997",
+      "outcome": "response_received",
+      "completedAt": "2026-10-08T12:31:55.622917+00:00"
+    },
+    {
+      "url": "https://player.soundon.fm/p/06e16cf5-5b45-4863-bcdf-9343aa584f73/episodes/12f44f89-723a-4b7a-9b81-da916fdf07da",
+      "attemptedAt": "2026-10-08T12:31:55.622950+00:00",
+      "httpStatus": 200,
+      "finalUrl": "https://player.soundon.fm/p/06e16cf5-5b45-4863-bcdf-9343aa584f73/episodes/12f44f89-723a-4b7a-9b81-da916fdf07da",
+      "bytes": 8002,
+      "sha256": "823bc3756c88b3401871c5d747c0fd0eda31672e8a1059e7c8753a34891b6e9e",
+      "outcome": "response_received",
+      "completedAt": "2026-10-08T12:31:55.931742+00:00"
+    }
+  ],
+  "publication": {
+    "rawReleaseDate": "2026-03-16T22:30:00Z",
+    "precision": "instant",
+    "basis": "Apple public page embedded releaseDate repeated for EP8; JSON-LD date only and visible UI minute retained as distinct presentations",
+    "visibleAppleText": "2026年3月16日 下午10:30 [UTC]",
+    "localDisplayDate": "3月17日",
+    "structuredDateOnly": "2026-03-16"
+  },
+  "summary": {
+    "sourcePlatform": "podcast",
+    "sourceUrl": "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999",
+    "author": "定錨財經資訊工作室",
+    "publishedAt": "2026-03-16T22:30:00Z",
+    "observedAt": "2026-10-08T12:31:55.622917+00:00",
+    "firstObservedAt": "2026-10-08T12:31:55.622917+00:00",
+    "revisionObservedAt": "2026-10-08T12:31:55.622917+00:00",
+    "symbols": [
+      "5347",
+      "6531"
+    ],
+    "subjectScope": "company_mentions",
+    "industryTerms": [
+      "成熟製程",
+      "PMIC",
+      "MCU",
+      "Nor Flash",
+      "產能利用率"
+    ],
+    "shortSummary": "EP8 的出版方公開說明討論成熟製程供需、轉單與議價條件，並直接列出世界先進（5347）與愛普（6531）的相關報告。這只是節目說明中的研究線索，未取得音訊逐字稿或會員報告，不能推定兩家公司已接到轉單。",
+    "catalyst": "後續搜尋應核對成熟製程產能利用率、報價與客戶轉單，以及公司法說是否支持；這是從產業問題擴展公司研究的線索。",
+    "risk": "內容於2026年3月發布，首次核實取得為10月8日；不能當成近期新事件或歷史當時已觀察到的選股訊號。節目說明不證明訂單、EPS或投資資格。",
+    "claimStatus": "reported",
+    "visibility": "public",
+    "contentForm": "research_summary",
+    "acquisitionMethod": "public_document",
+    "parentSourceUrl": null,
+    "retracted": false
+  },
+  "relatedUnreadReports": [
+    {
+      "url": "https://investanchors.com/user/vip_contents/17722040341524",
+      "symbol": "5347"
+    },
+    {
+      "url": "https://investanchors.com/user/vip_contents/17734086071530",
+      "symbol": "6531"
+    }
+  ],
+  "samePublisherRoot": "investanchors",
+  "independentConfirmationsAdded": 0,
+  "soundon": {
+    "responseBodyRead": false,
+    "scope": "HTTP200 SPA shell without matching episode description; IAB navigation separately timed out and reset kernel",
+    "transcriptObtained": false
+  },
+  "controllerIntegration": {
+    "ready": false,
+    "specificBlocker": "sourceControllerUrl currently rejects legitimate Apple episode query i; only bounded host/path/query grant should be amended and independently reviewed",
+    "publicationAuthority": false,
+    "formalQualification": false,
+    "historicalAvailabilityProven": false,
+    "priceAtFirstDiscovery": null
+  },
+  "privateRawReceipt": "/Users/kaerchen/.cache/stockinsider-workspaces/research-evidence/2026-10-08/investanchors-podcast-oct08/receipt.json"
+}

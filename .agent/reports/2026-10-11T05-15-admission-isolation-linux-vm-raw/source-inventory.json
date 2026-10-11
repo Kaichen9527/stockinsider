@@ -1,0 +1,77 @@
+{
+  "sourceHead": "887355ca0479d957d9b0472bba70ea4f8f9d5961",
+  "sourceTree": "eb0a4ada8ede4b791d10129f8151938e7ee586a2",
+  "files": [
+    {
+      "file": "package.json",
+      "bytes": 33110,
+      "sha256": "37d26e3341c847285d99e96cf705288e7db96392bb3578308e2ce56fcf7beb93"
+    },
+    {
+      "file": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38"
+    },
+    {
+      "file": "scripts/research-admission-isolation-postgres.test.mjs",
+      "bytes": 15567,
+      "sha256": "597fa2ea4429468baaa78f9d541b1bb9e3ff4a6aa5d48486f5487012f3c1487a"
+    },
+    {
+      "file": "scripts/research-source-budget-postgres.test.mjs",
+      "bytes": 16757,
+      "sha256": "13738358314171c0f1a64b62da2fd7b5c6ec8001c106084e81046a86c75dc157"
+    },
+    {
+      "file": "scripts/research-strategy-release.test.mjs",
+      "bytes": 2612,
+      "sha256": "06d6023bef068d726d6c90ef70b38c765a2e93a25cbd9f6e6a6168892d2ac26d"
+    },
+    {
+      "file": "scripts/sync-research-strategy-release.mjs",
+      "bytes": 7174,
+      "sha256": "f17f6bd7603975d4a25b6a81da8c7a9f4935786d06bc7205d00e71c3e0e8686a"
+    },
+    {
+      "file": "migrations/20260907_candidate_dossier_outbox_v5.sql",
+      "bytes": 2876,
+      "sha256": "48e3749f43d2eea1c2c2a4546bac9a001cdebd4b87d257f021e8260ae8f298f5"
+    },
+    {
+      "file": "migrations/20260929_candidate_dossier_outbox_v6.sql",
+      "bytes": 7567,
+      "sha256": "7dd49c2b056821761f1ee0098125ee14727b155894091e980c59f61a9eb061fb"
+    },
+    {
+      "file": "migrations/20260929_research_agent_state_v1.sql",
+      "bytes": 35269,
+      "sha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a"
+    },
+    {
+      "file": "migrations/20260929_research_deep_jobs_v1.sql",
+      "bytes": 26662,
+      "sha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d"
+    },
+    {
+      "file": "migrations/20261008_research_observed_roster_v1.sql",
+      "bytes": 29314,
+      "sha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b"
+    },
+    {
+      "file": "migrations/20261008_research_observed_priority_v1.sql",
+      "bytes": 28579,
+      "sha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3"
+    },
+    {
+      "file": "migrations/20261008_research_observed_claim_v2.sql",
+      "bytes": 26148,
+      "sha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2"
+    },
+    {
+      "file": "migrations/20261011_research_admission_isolation_v1.sql",
+      "bytes": 26345,
+      "sha256": "1ff8bc16e445db198747471fe126ec27e142b729779eb72a7bf3452072d9a581"
+    }
+  ],
+  "unchanged": true
+}

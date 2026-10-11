@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "native0825-vm-portable-v1",
+  "recordedAt": "2026-10-08T16:46:02.090934+00:00",
+  "subject": "0825db4f5cb563d7760f8e4b0e087a9c9d4bf8e7",
+  "inactive": true,
+  "sourceTreeModified": false,
+  "portable": {
+    "tests": 143,
+    "pass": 143,
+    "fail": 0,
+    "skip": 0,
+    "membership": [
+      "new parser50",
+      "new lifecycle31",
+      "original five suites62"
+    ]
+  },
+  "originalModelRunnerSuite": {
+    "tests": 23,
+    "pass": 19,
+    "fail": 4,
+    "skip": 0,
+    "namePatternFailedToExcludeHostProbes": true,
+    "failures": {
+      "12": "verifyCurrentNode routing/host preflight blocked",
+      "16": "disabled doctor compatible selector child status1; detailed checks not captured by this existing test",
+      "18": "copyAuthenticationMaterial transport fails with ROUTING_BLOCKED; no successful auth transport result",
+      "19": "real model worker status1 routing/host preflight blocked; no successful model result"
+    },
+    "historicalCIRootCause": "not proven; original JSONL test9 passed"
+  },
+  "measurements": {
+    "portable": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "portable",
+      "command": [
+        "node",
+        "--test",
+        "scripts/model-runner-v3/jsonl-parser.test.js",
+        "scripts/model-runner-v3/process-lifecycle.test.js",
+        "scripts/opportunity-v3/native-1d92-install-plan.test.mjs",
+        "scripts/opportunity-v3/native-successor-contract.test.mjs",
+        "scripts/opportunity-v3/host-recovery-install-plan.test.mjs",
+        "scripts/opportunity-v3/host-recovery-packet.test.mjs",
+        "scripts/opportunity-v3/protected-external-gate-worker.test.mjs"
+      ],
+      "startedAt": "2026-10-08T16:42:44.183Z",
+      "completedAt": "2026-10-08T16:42:46.905Z",
+      "elapsedSeconds": 2.7217610090010567,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 286904320,
+      "observedTaskDiskPeakBytes": 19132416,
+      "availableBeforeBytes": 20993007616,
+      "availableAfterBytes": 20992970752,
+      "guardTermination": null
+    },
+    "ordinary-no-auth": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "ordinary-no-auth",
+      "command": [
+        "node",
+        "--test",
+        "--test-name-pattern=^(?!pinned Codex blocks|pinned Codex propagates).*",
+        "scripts/model-runner-v3/model-runner-v3.test.js"
+      ],
+      "startedAt": "2026-10-08T16:43:25.992Z",
+      "completedAt": "2026-10-08T16:43:26.578Z",
+      "elapsedSeconds": 0.585940852004569,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 69087232,
+      "observedTaskDiskPeakBytes": 19148800,
+      "availableBeforeBytes": 20992966656,
+      "availableAfterBytes": 20992925696,
+      "guardTermination": null
+    }
+  },
+  "evidenceHashes": {
+    "portable.json": {
+      "bytes": 953,
+      "sha256": "5905f0bc1393c7844fd9450cbf6692d97bdb2f99fae4f171b669b63e9d4ebaa6"
+    },
+    "portable.log": {
+      "bytes": 29328,
+      "sha256": "ef6984e9762fcae2bea284a0fbd314d174ba3fd714e41c7cb3b82115ad83d404"
+    },
+    "portable.time": {
+      "bytes": 1124,
+      "sha256": "23c602609f4c2d581d809cf0e8d2ba43408b1b2f943f7309536c1a5c0828894f"
+    },
+    "ordinary-no-auth.json": {
+      "bytes": 658,
+      "sha256": "d10b05d628c0e83d7782811ac5ed5f78ef77a683342775ce0f98f1eb2ac09d92"
+    },
+    "ordinary-no-auth.log": {
+      "bytes": 9100,
+      "sha256": "66b9cb458aa2fd6d2e189bc753703d98be4420b466ccedc2568721b628722a3a"
+    },
+    "ordinary-no-auth.time": {
+      "bytes": 892,
+      "sha256": "c4a2fc70ba228f0fd9699f43af9d701c3e159f02e220f803725d1a9a20add203"
+    }
+  },
+  "sourceHashes": {
+    "scripts/model-runner-v3/execution.js": "c3cb3273b9346fb33f998cf8b3b9bc0784e0525387b8e619fc0a9904858c1298",
+    "scripts/model-runner-v3/jsonl-parser.test.js": "883809f4449cbc66f206afeafa51cef758fae770712c80b831103f5b794feaaa",
+    "scripts/model-runner-v3/process-lifecycle.test.js": "422f2e9443a71189988ec46658401e920719b9e7d9c0343c5ec479c0e996439a"
+  },
+  "webTree": {
+    "1d92e04e26c393c6d9c32b549854281e3f29f115": "a95cf75a86377a1f49c0bb54d2883e4c9b87f80a",
+    "0825db4f5cb563d7760f8e4b0e087a9c9d4bf8e7": "a95cf75a86377a1f49c0bb54d2883e4c9b87f80a"
+  },
+  "limits": [
+    "No Linux claim of Mac host runner/oracle compatibility",
+    "No pin/owner grant/signing/activation changes",
+    "No protected approval inferred from synthetic test keys/results",
+    "No new native build/type/lint executed; web tree unchanged versus1d92, as requested; converged paper/reader checks are a separate exact tree",
+    "Historical 23-case red data retained; this does not fix original CI or demonstrate live model dispatch"
+  ]
+}

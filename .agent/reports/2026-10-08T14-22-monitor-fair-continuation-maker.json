@@ -1,0 +1,52 @@
+{
+  "recordedAt": "2026-10-08T14:22:53Z",
+  "schemaVersion": "stockinsider-monitor-fair-continuation-maker-evidence-v1",
+  "approvedRequirementsCommit": "47aead2c924acb8040220392666d2b7c48826196",
+  "parentSource": "7baa184cddc712110342a5ef79e4e79958d16558",
+  "verificationLevel": "maker-lightweight-synthetic-and-loopback-http",
+  "sourceHashes": {
+    "scripts/research-monitor-controller.mjs": "3dd9470fba31fa8d58bc46f0f70fa9d50a6f32a612a5f8a1793a7cfb48a655eb",
+    "scripts/research-monitor-progress.mjs": "affb493454acc9bcdda3f2c65c9a11004df612d80b39fd2b48c6c2f51b201cfe",
+    "scripts/research-monitor-controller.test.mjs": "c922235bb36d5d8c7badc08a64e6423cf3b0cdba8e18bb0003fd175662f8db6d",
+    "scripts/research-monitor-progress.test.mjs": "d3205f9270681ea240d1a845f55160ca6ae8cea28bc3ce00e6a4281cd85665e5"
+  },
+  "focusedTests": {
+    "passed": 40,
+    "failed": 0,
+    "skipped": 0,
+    "command": "node --experimental-strip-types --test scripts/research-monitor-controller.test.mjs scripts/research-monitor-progress.test.mjs"
+  },
+  "redBaseline": {
+    "source": "7baa184cddc712110342a5ef79e4e79958d16558",
+    "selectedCase": "70 members continue32/32/6 held-first, preserve observation and immutable predecessor",
+    "exitCode": 1,
+    "reason": "original controller has no progress/continuation contract; selected new acceptance fails",
+    "otherCasesNotSelected": true
+  },
+  "failuresRetained": [
+    {
+      "stage": "initial implementation old13 tests",
+      "passed": 12,
+      "failed": 1,
+      "reason": "old fairResumeImplemented=false expectation explicitly amended under approved additive requirements"
+    }
+  ],
+  "guarantees": {
+    "modelsDispatched": 0,
+    "actualOrders": false,
+    "paperRiskProcessed": false,
+    "sourceCredentialsExported": false,
+    "productionWrites": false,
+    "schedulesEnabled": false,
+    "vmIntegrationVerified": false,
+    "normalBuildVerified": false,
+    "independentExactCodeReviewPassed": false,
+    "actualDailyCoverageVerified": false
+  },
+  "knownLimits": [
+    "Trusted local orchestration must exclusively own a cycle; hashes are integrity checks, not external signatures.",
+    "Current membership and server per-symbol authority are reacquired; carried observations retain original response times and hashes, not simultaneous validity.",
+    "Changed day/book heads/source require a fresh cycle; uncertain output cannot authorize continuation.",
+    "Final journal binds full receipt hash instead of duplicating cumulative receipt, keeping maximum cohort within file bounds."
+  ]
+}

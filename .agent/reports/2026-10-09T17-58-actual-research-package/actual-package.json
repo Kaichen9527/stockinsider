@@ -1,0 +1,24 @@
+{
+  "recordedAt": "2026-10-09T17:56:20.574Z",
+  "head": "c63ab5f42c0d6fd704d3b1c6c103a8456077d6ab",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "buildId": "rv2HimjZfXfOWkh7gyrLM",
+  "destinationRoot": "/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-research-release-q2mTjA",
+  "releaseDirectory": "/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-research-release-q2mTjA/c63ab5f42c0d6fd704d3b1c6c103a8456077d6ab",
+  "manifestSha256": "112437137cea06052ff68563099215ebeab61254637e5bd95e72dea637068183",
+  "bytes": 63226657,
+  "fileCount": 2812,
+  "entrypoint": "app/server.js",
+  "verified": {
+    "releaseVerified": true,
+    "releaseId": "c63ab5f42c0d6fd704d3b1c6c103a8456077d6ab",
+    "sourceCommit": "c63ab5f42c0d6fd704d3b1c6c103a8456077d6ab",
+    "packagerCommit": "c63ab5f42c0d6fd704d3b1c6c103a8456077d6ab",
+    "manifestSha256": "112437137cea06052ff68563099215ebeab61254637e5bd95e72dea637068183",
+    "bytes": 63226657,
+    "entrypoint": "app/server.js"
+  },
+  "researchFiles": 20,
+  "researchBytes": 907264,
+  "deployed": false
+}

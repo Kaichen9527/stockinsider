@@ -1,0 +1,92 @@
+TAP version 13
+# (node:204883) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:204883) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-author-packet.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: reviewer result: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+not ok 1 - reviewer result: real original reservation budget/claim/fences, synthetic source and actual AUO calculation
+  ---
+  duration_ms: 2347.742057
+  location: '/workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-postgres.test.mjs:28:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(assignment)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: ~
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/research-reviewer-result-postgres.test.mjs:123:12)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Failure evidence retained at /tmp/si-rresult-H4RTT0
+# (node:205010) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:205010) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-reviewer-result.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: 2409 exact review result/read/replay with actual calculation and synthetic transport
+ok 2 - 2409 exact review result/read/replay with actual calculation and synthetic transport
+  ---
+  duration_ms: 1558.554401
+  ...
+# Subtest: 2383 exact review result/read/replay with actual calculation and synthetic transport
+ok 3 - 2383 exact review result/read/replay with actual calculation and synthetic transport
+  ---
+  duration_ms: 885.477873
+  ...
+# Subtest: closed review checks, exact article/packet, selected IDs and decision semantics
+ok 4 - closed review checks, exact article/packet, selected IDs and decision semantics
+  ---
+  duration_ms: 157.47591
+  ...
+# Subtest: receiveReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+ok 5 - receiveReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+  ---
+  duration_ms: 159.27879
+  ...
+# Subtest: readReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+ok 6 - readReviewerResult exact wire limit/+1, strict closed JSON UTF8 mixedheaders/deadline
+  ---
+  duration_ms: 122.959108
+  ...
+# Subtest: author/cron/test/unknown cannot enter reviewer body, expired result starts no I/O
+ok 7 - author/cron/test/unknown cannot enter reviewer body, expired result starts no I/O
+  ---
+  duration_ms: 92.746024
+  ...
+# Subtest: closed editorial enums and paragraphId reject array/object/null coercions before receive
+ok 8 - closed editorial enums and paragraphId reject array/object/null coercions before receive
+  ---
+  duration_ms: 1193.334789
+  ...
+# Subtest: shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate
+ok 9 - shared canonical65536 UTF8 exact/+1 including Chinese/escaping, wire JSON basis separate
+  ---
+  duration_ms: 101.327994
+  ...
+# Subtest: Unicode scalar text limits agree with PostgreSQL characters, astral min/max explicit
+ok 10 - Unicode scalar text limits agree with PostgreSQL characters, astral min/max explicit
+  ---
+  duration_ms: 119.349243
+  ...
+# Subtest: review text rejects ECMAScript whitespace-only and untrimmed over-limit prose
+ok 11 - review text rejects ECMAScript whitespace-only and untrimmed over-limit prose
+  ---
+  duration_ms: 199.489679
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 10
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7501.570647

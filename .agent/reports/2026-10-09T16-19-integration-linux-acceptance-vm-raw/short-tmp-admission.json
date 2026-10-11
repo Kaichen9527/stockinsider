@@ -1,0 +1,9 @@
+{
+  "originalTmpdir": "/workspace/cloud-author-packet-artifacts-oct09/integration27a",
+  "shortTmpdir": "/tmp/si-ci27a-nujnllgk",
+  "startupExitCode": 1,
+  "postgresLog": "long-socket-probe.log",
+  "singleChangedSetupFactor": "TMPDIR only; CI literal command/runtime/tests/SQL/clock/fixtures unchanged",
+  "longSocketBytes": 111,
+  "shortSocketBytes": 37
+}

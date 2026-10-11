@@ -1,0 +1,322 @@
+{
+  "task": "exact18d6 atomic-publication Linux ordinary CI acceptance",
+  "branch": "codex/atomic-publication-linux-acceptance-oct10",
+  "sourceHead": "18d6c86ffabfa0fc88c6f0ed807a860024d0f144",
+  "sourceTree": "15e7d9a49285dbe11e0e47070aa3c5a11d76c517",
+  "webTree": "14528d8e1d435f881f6e3da91ccfeb4e7808c408",
+  "startedAt": "2026-10-09T16:34:50+00:00",
+  "sealedAt": "2026-10-09T16:39:52.672701+00:00",
+  "clientTimezone": "Asia/Taipei",
+  "clientStartedAt": "2026-10-10T00:34:50+08:00",
+  "manualDeadline": "2026-10-09T17:04:50Z",
+  "manualElapsedSeconds": 302.672701,
+  "manualEngineeringTimeIsProductRoleBudget": false,
+  "productMigrationClockGuardAssertionFixturePackageEdits": [],
+  "admission": {
+    "startedAt": "2026-10-09T16:34:50Z",
+    "deadline": "2026-10-09T17:04:50Z",
+    "sourceHead": "18d6c86ffabfa0fc88c6f0ed807a860024d0f144",
+    "sourceTree": "15e7d9a49285dbe11e0e47070aa3c5a11d76c517",
+    "webTree": "14528d8e1d435f881f6e3da91ccfeb4e7808c408",
+    "availableBytes": 11003392000,
+    "activeVmHeavyProcesses": [],
+    "shortPrivateTmpdir": "/tmp/si-apub-qhk3mbo7",
+    "sampleSocketBytes": 36,
+    "node": "22.14.0",
+    "postgres": "17.11",
+    "rootPgInstalledAndLockVersion": "8.18.0",
+    "dependenciesReinstalled": false,
+    "networkPolicyMode": "restricted",
+    "vpnConfigured": false,
+    "proxyCaPreserved": true,
+    "selectedFileCount": 73
+  },
+  "sourceFiles": [
+    {
+      "file": "migrations/20261010_research_atomic_publication_v2.sql",
+      "bytes": 43051,
+      "sha256": "ed2334dc46cf73fd33f61bd00d1034b50924d5e2213474372da5b121c4f3128a"
+    },
+    {
+      "file": "scripts/research-atomic-publication.test.mjs",
+      "bytes": 6771,
+      "sha256": "6c9cc74f2ab23069d6e30ccd16d5ba33ea0c9457abffd912a1540863753bd9da"
+    },
+    {
+      "file": "scripts/research-atomic-publication-postgres.test.mjs",
+      "bytes": 34954,
+      "sha256": "96fb765e66d443d92da425b0732277981f813f060e9a55da4b1c5df931e9ed55"
+    },
+    {
+      "file": "web/src/lib/research-atomic-publication.ts",
+      "bytes": 13296,
+      "sha256": "b981bde6e86ec3a52b2c47cf287493851c58af8fa28f3f577b3069839db577f0"
+    },
+    {
+      "file": "web/src/app/api/internal/research-deep-job/route.ts",
+      "bytes": 12557,
+      "sha256": "d70ceae33eb8613da1b891a0790ff21a2a90bd67fedc73a7d7d9074668cba42a"
+    },
+    {
+      "file": "package.json",
+      "bytes": 32676,
+      "sha256": "e767ffadf8afae5611bb643723e6152aeeabf6d065d9f63d6ca9e2526933b80f"
+    },
+    {
+      "file": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38"
+    },
+    {
+      "file": "web/package-lock.json",
+      "bytes": 274090,
+      "sha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516"
+    }
+  ],
+  "ci": {
+    "command": "npm run test:research-agents",
+    "selectedFileCount": 73,
+    "fullSelectionFile": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/ordinary-ci-test-membership.json",
+    "counts": {
+      "tests": 759,
+      "pass": 757,
+      "fail": 0,
+      "skipped": 2
+    },
+    "bothNewWriterTestsSelectedAndExecuted": true,
+    "newWriterTestsWereNotSeparatelyRerun": true,
+    "noRetry": true,
+    "skipReasons": [
+      "real observed priority accounts1978 and admits an old public company research lead without formal identity: explicit isolated profile not enabled",
+      "real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart: explicit isolated profile not enabled"
+    ],
+    "nativeZeroSkipClaim": false,
+    "newWriterFixtures": "Original synthetic isolated sources/jobs/controller observations/prose with actual fixed calculation and original migrations/ACL; not actual model/reviewer execution or production publication."
+  },
+  "checks": {
+    "types": 0,
+    "lint": 0,
+    "lintErrors": 0,
+    "existingLintWarnings": 33,
+    "normalBuild": 0
+  },
+  "stages": {
+    "lint": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T16:37:37.550Z",
+      "completedAt": "2026-10-09T16:38:03.737Z",
+      "elapsedSeconds": 26.18706570699578,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1176178688,
+      "observedTaskDiskPeakBytes": 1323687936,
+      "availableBeforeBytes": 11003109376,
+      "availableAfterBytes": 11003097088,
+      "guardTermination": null
+    },
+    "types": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "startedAt": "2026-10-09T16:37:32.290Z",
+      "completedAt": "2026-10-09T16:37:37.520Z",
+      "elapsedSeconds": 5.229489101009676,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 684830720,
+      "observedTaskDiskPeakBytes": 1322352640,
+      "availableBeforeBytes": 11003117568,
+      "availableAfterBytes": 11003113472,
+      "guardTermination": null
+    },
+    "ci-research": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "ci-research",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-09T16:35:56.863Z",
+      "completedAt": "2026-10-09T16:36:46.392Z",
+      "elapsedSeconds": 49.5288247410208,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 850108416,
+      "observedTaskDiskPeakBytes": 1399787520,
+      "availableBeforeBytes": 11003387904,
+      "availableAfterBytes": 11003121664,
+      "guardTermination": null
+    },
+    "normal-build": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T16:38:03.764Z",
+      "completedAt": "2026-10-09T16:38:18.000Z",
+      "elapsedSeconds": 14.236627846985357,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1311461376,
+      "observedTaskDiskPeakBytes": 1366224896,
+      "availableBeforeBytes": 11003092992,
+      "availableAfterBytes": 10976636928,
+      "guardTermination": null
+    }
+  },
+  "build": {
+    "sourceHead": "18d6c86ffabfa0fc88c6f0ed807a860024d0f144",
+    "sourceTree": "15e7d9a49285dbe11e0e47070aa3c5a11d76c517",
+    "webTree": "14528d8e1d435f881f6e3da91ccfeb4e7808c408",
+    "id": "GSmt2-9hVUeJ5PJ9H3Roy",
+    "actualServerManifestEntries": 2092,
+    "manifestFile": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/compiled-server-file-manifest.json",
+    "manifestBytes": 400267,
+    "manifestSha256": "7175a07ff0f49685834e967ddb2f73d80db3dd0cbe59484749d9834107f43bd8",
+    "newNormalBuildOnExactSubject": true,
+    "businessHttpRerun": false
+  },
+  "resources": {
+    "initialAvailableBytes": 11003392000,
+    "finalAvailableBytes": 10976210944,
+    "minimumDiskReserveBytes": 8589934592,
+    "rssGoalBytes": 8589934592,
+    "peakSampledAggregateRssBytes": 1311461376,
+    "peakObservedWorkArtifactsShortTmpBytes": 1399787520,
+    "singleHeavyQueue": true,
+    "allGuardTerminations": [
+      null
+    ],
+    "samplingLimit": "100ms process-group and recursive live-descendant sample can miss short/reparented processes; not complete cgroup peak."
+  },
+  "cleanup": {
+    "observedAt": "2026-10-09T16:39:52.660220+00:00",
+    "ownedActiveProcesses": [],
+    "manualDeletions": [],
+    "originalTestClusterCleanupUnchanged": true,
+    "rawEvidenceOldRedModelInputsPreserved": true,
+    "availableBytes": 10976210944,
+    "reasonNoExtraCleanup": "Capacity remains above8GiB reserve; no broad prune or deletion required."
+  },
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/admission.json",
+      "bytes": 641,
+      "sha256": "0ca6ff36cd01daad3b67b9c5434a0afb4b2ce55b732f996a666146752953cdab"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/ci-research.json",
+      "bytes": 546,
+      "sha256": "57fc307778bb38f4a712fa571681862570a5879c9d9fbf14716a06522ed1e59a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/ci-research.log",
+      "bytes": 249352,
+      "sha256": "9b6157a18fd03c9d8f937ee7f721516df12b539d9d124eace016c973343adead"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/ci-research.time",
+      "bytes": 761,
+      "sha256": "3c31c3e97e0ab2163a2283e93d5ee46638d8a68a29426183620ed3ca53786639"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/cleanup.json",
+      "bytes": 341,
+      "sha256": "6652cab790c8f28309bb519fcb5f78d24882b5814a55097d4605fd6b9467ae1e"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/compiled-server-file-manifest.json",
+      "bytes": 400267,
+      "sha256": "7175a07ff0f49685834e967ddb2f73d80db3dd0cbe59484749d9834107f43bd8"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/final-check-sequence.json",
+      "bytes": 156,
+      "sha256": "256d9c1bfe0626d494e53bb5496c7bc5dc30b8b7be35d8fbbd666366315f7954"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/lint.json",
+      "bytes": 525,
+      "sha256": "a81e7a20ead0c56d3ff76f782422060e517f21eefe93e5540826ad0cfd7ee3f2"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/lint.log",
+      "bytes": 4753,
+      "sha256": "ad8c63f78b6e2415f7dedda610898a7df0a19c332b97e3a55d24f890724dac94"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/lint.time",
+      "bytes": 741,
+      "sha256": "d1460bcfab49d416c51d475eb60c1a1196bcf38dae09e2f27fc4292bf5aab037"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/normal-build.json",
+      "bytes": 535,
+      "sha256": "e0ef33fc9835737a21885dbba64984af7b2aad7b388e6638987031edc501f689"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/normal-build.log",
+      "bytes": 6498,
+      "sha256": "dd5c4ec3302160d077caf8d02da2bed5debbc856c2cf4c829cd8466c2890cbf1"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/normal-build.time",
+      "bytes": 746,
+      "sha256": "e42682a25b130e5c6d04cd2b0976eec7d76c798a35627890c2b9989b12a3c346"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/ordinary-ci-test-membership.json",
+      "bytes": 16650,
+      "sha256": "70a4751cb6bc694c0165bebd0ce2f8a5c0d26467593fbe43b85416c461b98d97"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/run-check.py",
+      "bytes": 5034,
+      "sha256": "beb6824f91f0c8ebdcf6126321b3b41649182ffe06a0d9d034138f0e7302f6bc"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/source-files.json",
+      "bytes": 1305,
+      "sha256": "c197147e7c620dfa7808c963dcbc5681f76bcc279ef7d10d7a791a14c3984ede"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/types.json",
+      "bytes": 587,
+      "sha256": "deeae0beffddde957c4b590ffb031164ebee6f3e6fe5b22ba7465eb0aa3adb4b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-39-atomic-publication-linux-acceptance-vm-raw/types.time",
+      "bytes": 787,
+      "sha256": "f71bdef6b06041314832ec5e58597efabbd207bd4050f45542809753597975b6"
+    }
+  ],
+  "rawTotalBytes": 690225,
+  "status": {
+    "allRequestedOrdinaryChecksPassed": true,
+    "receiptIndependentReview": "pending root review",
+    "sourceCodeReview": "root separately owns code review; not granted by this VM receipt",
+    "actualModelDispatch": false,
+    "fakeSignaturesOrIndependentReview": false,
+    "productionWrites": false,
+    "mainMergeOrDeployment": false,
+    "fullResearchStrategyPublicationApproval": false,
+    "oldRedEvidence": "All inherited prior REDs/receipts preserved; this task introduced no new RED and did not rerun the old failures."
+  }
+}

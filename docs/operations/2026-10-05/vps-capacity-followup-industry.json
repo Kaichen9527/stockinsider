@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "read-only-vps-capacity-observation-v1",
+  "recordedAt": "2026-10-05T08:41:38.783731+00:00",
+  "host": "5.104.83.211",
+  "command": "df -B1 /",
+  "filesystem": "/dev/sda1",
+  "filesystemBytes": 76887154688,
+  "usedBytes": 63868952576,
+  "availableBytes": 13001424896,
+  "wholeHostHeavyFloorApproxBytes": 20400000000,
+  "heavyAdmissionPassed": false,
+  "effectiveFilesystemExpansionObserved": false,
+  "measurementClock": "command completed during this turn before record creation",
+  "productionMutation": false,
+  "additionalDeletion": false,
+  "previousCleanupRetained": true,
+  "dataHistoryEvidencePreserved": true
+}

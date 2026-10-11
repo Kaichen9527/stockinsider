@@ -1,0 +1,21 @@
+{
+  "schema": "stockinsider-independent-code-review-record-v1",
+  "reviewedCommit": "73e0aed1b6303c0fc4470b85d751717d225d0fa4",
+  "reviewedTree": "c00a31a428a2150618dd5437203becb1d7234539",
+  "baseCommit": "e94d21f9fe05dc436211a2458ea59adb52195e26",
+  "reviewer": "astra_publication_review",
+  "result": "approve",
+  "scope": "inactive unsigned installation proposal and pure external handoff validator",
+  "independentNamedTestsPassed": 46,
+  "skipped": 0,
+  "dryRunBytes": 4657,
+  "dryRunSha256": "483028104040e76817df13c37ba9d81195bdd4922a478e6c648d94abe26631e8",
+  "missingExternalDeploymentFields": 24,
+  "externalEvidenceObligations": 8,
+  "signed": false,
+  "executionAuthorized": false,
+  "predecessorReserved": false,
+  "activationAllowed": false,
+  "protectedGateEvidence": false,
+  "actualInstallerAdaptersImplemented": false
+}

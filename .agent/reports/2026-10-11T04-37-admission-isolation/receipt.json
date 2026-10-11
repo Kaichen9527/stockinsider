@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "stockinsider-admission-isolation-maker-v1",
+  "recordedAt": "2026-10-11T04:37:50.922307+00:00",
+  "sourceHead": "c15d113cf532988d08f8d4c06706dc9bf4936146",
+  "sourceTree": "0b3b862b88efb93b04f3eb6369f0914dccc55f40",
+  "baseline": "e8c942e7239dc11e700452cd8d6257eb69c85743",
+  "baselineActualRR": {
+    "connections": 2,
+    "activeReservations": 2,
+    "limit": 1,
+    "guardRejectionTest": "RED on unmodified baseline with untracked test snapshot preserved"
+  },
+  "successor": {
+    "path": "migrations/20261011_research_admission_isolation_v1.sql",
+    "routines": 9,
+    "historicalSqlModified": false,
+    "installedBodyDiff": "first BEGIN RC guard only; actual pg_get_functiondef, owner, ACL and attributes compared",
+    "preconditions": "all expected signatures and predecessor/successor body hashes before any replacements",
+    "replay": "same definitions and attributes after reinstall"
+  },
+  "tests": [
+    {
+      "command": "PATH=/usr/local/bin:/opt/homebrew/opt/postgresql@17/bin:/opt/homebrew/bin:/usr/bin:/bin /usr/local/bin/node --experimental-strip-types --test scripts/research-admission-isolation-postgres.test.mjs scripts/research-source-budget-postgres.test.mjs scripts/research-strategy-release.test.mjs",
+      "pass": 13,
+      "fail": 0,
+      "skipped": 0,
+      "scope": "whole7 predecessor SQL plus successor over explicitly partial synthetic prerequisites; real PG17 and two clients"
+    },
+    {
+      "pass": 4,
+      "fail": 0,
+      "skipped": 0,
+      "scope": "three legacy PostgreSQL files; original predecessor-only profile, not successor publication integration"
+    },
+    {
+      "pass": 11,
+      "fail": 0,
+      "skipped": 0,
+      "scope": "bounded-file suite with explicit umask077 on 5e3ee67 test bytes"
+    }
+  ],
+  "normalBuild": {
+    "command": "npm run build",
+    "cwd": "web",
+    "exitCode": 0,
+    "runtime": "Mac Node22",
+    "sourceHead": "c15d113cf532988d08f8d4c06706dc9bf4936146"
+  },
+  "strategyIdentity": {
+    "regenerated": true,
+    "changed": false,
+    "codeHash": "a5367b9c2ae935897612b096f7f533fd7f12e22790e5bf539bfb3bce35d96fa0",
+    "reason": "admission orchestration is outside current signal-execution transitive roots; exact Git review still required, not a new adoption approval"
+  },
+  "preservedIntermediateFailure": "first successor test8pass2fail due JS String.replace interpreting dollar markers in a replacement string; fixture now uses replacement callback, production SQL unchanged",
+  "linuxEvidence": {
+    "verifiedRawFiles": 27,
+    "originalSources": [
+      "4ff224baa6e00e73198d9f2cc8b29b2045374744",
+      "2f74c1eeb1c21af32884903f38590da9cc70f668"
+    ],
+    "sixFiles": "80pass1fail umask fixture; original RED retained",
+    "pcr": "147pass8fail6PGPATH2browser unresolved; not PASS",
+    "packaging": "13pass on two existing files; absent third pattern not executed"
+  },
+  "limitations": [
+    "Independent CODE review pending; design pass unsigned only",
+    "No protected release approval or production writes",
+    "Production runner still omits original17 publication migrations and new isolation successor:18 missing",
+    "No genuine trusted author/reviewer execution, AUO/EMC publication, positive published browser acceptance, main merge or deployment",
+    "No profitable-strategy or schedule acceptance claim"
+  ],
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T04-37-admission-isolation/baseline-rr-probe.mjs",
+      "bytes": 2767,
+      "sha256": "a328f1325bd3acf4079c6f715b71b5c023457e6b219b5cfbad297823b1d27ae4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-37-admission-isolation/baseline-rr-count2.json",
+      "bytes": 317,
+      "sha256": "53e011544fa3cea157220e56ccb0fe90559757384b0183d26d13002c6cac3e8e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-37-admission-isolation/first-rejection-red-test.mjs",
+      "bytes": 4515,
+      "sha256": "2cfaec2fa94d121376f013aad0c45f0a177c1ec99b1c7be0db7bdeb7ef0a87ef"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-37-admission-isolation/first-rejection-red.tap",
+      "bytes": 1183,
+      "sha256": "6160520158b05df24dee43b29a777090888d471f272765b96d762283081a3420"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-37-admission-isolation/first-successor-fixture-error.tap",
+      "bytes": 6292,
+      "sha256": "a0d5583d08c294c44b5693501fcbf681383f03e57e5a02bd7353245ddcf39570"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-37-admission-isolation/final-three-files-13.tap",
+      "bytes": 3238,
+      "sha256": "3f45883731ee557fb74e3475dc8ab2b22ddf3e7ca73cffa6915e9ed30aefe4c9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-37-admission-isolation/legacy-predecessor-only-4.tap",
+      "bytes": 1035,
+      "sha256": "24cf22c6f9273ad07f2d570dce8d28ac580c81fa682e31b8f8ea31feafb186ee"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-37-admission-isolation/umask077-bounded-11.tap",
+      "bytes": 2593,
+      "sha256": "9130379c4c969569e4176567263b046339a62d437a6d13cb2c90fe1895d4ff82"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T04-37-admission-isolation/normal-build.log",
+      "bytes": 6502,
+      "sha256": "21f1ac08aebedaefa9d1caf24db7c156871ce370849aed840b13db1b94a80de7"
+    }
+  ]
+}

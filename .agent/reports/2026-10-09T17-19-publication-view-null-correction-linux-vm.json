@@ -1,0 +1,348 @@
+{
+  "schemaVersion": "bounded-linux-test-correction-acceptance-v1",
+  "sealedAt": "2026-10-09T17:19:45.839112+00:00",
+  "sealedAtAsiaTaipei": "2026-10-10T01:19:45.839112+08:00",
+  "manualOriginalStartedAt": "2026-10-09T16:57:16Z",
+  "manualOriginalDeadline": "2026-10-09T17:27:16+00:00",
+  "manualElapsedSeconds": 1349.839112,
+  "upstreamTestSubject": "6b5fb0560088ab50e702f6664f57874072044065",
+  "runtimeSubject": "27f13e51fca5d64498b5ef54d4f9e5394e0f7f21",
+  "sourceHead": "bdf87ee72fd86e53b43934c3881dfc7c7b5c3436",
+  "sourceTree": "00203c88403688ec62cdc6ea80b1438e334d9642",
+  "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+  "branch": "codex/publication-view-linux-acceptance-oct10",
+  "allRuntimeAndTestsEqualUpstream": true,
+  "sourceCleanAtChecksAndSeal": true,
+  "admission": {
+    "admissionAt": "2026-10-09T17:15:09.446582+00:00",
+    "originalManualStartedAt": "2026-10-09T16:57:16Z",
+    "originalManualDeadline": "2026-10-09T17:27:16Z",
+    "upstreamTestSubject": "6b5fb0560088ab50e702f6664f57874072044065",
+    "runtimeSubject": "27f13e51fca5d64498b5ef54d4f9e5394e0f7f21",
+    "localHead": "bdf87ee72fd86e53b43934c3881dfc7c7b5c3436",
+    "localTree": "00203c88403688ec62cdc6ea80b1438e334d9642",
+    "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+    "availableBytes": 11338846208,
+    "active": [],
+    "rootMacBuildReference": "cffe3e38; not a Linux build or independently rerun here",
+    "noLinuxBuildRetry": true
+  },
+  "sourceFiles": [
+    {
+      "file": "scripts/research-atomic-publication-postgres.test.mjs",
+      "bytes": 39276,
+      "sha256": "3576a06546b2394dbbd0ade47a20c226724c3d24bc5bf5ae16afb6fd2972adb8"
+    },
+    {
+      "file": "scripts/research-publication-view-fixture.mjs",
+      "bytes": 1473,
+      "sha256": "7dae2dd716c30ad05ee829071cb3e1f275b24aedc1841bb7c540dcfdf430cf93"
+    },
+    {
+      "file": "scripts/research-publication-view.test.mjs",
+      "bytes": 9217,
+      "sha256": "b8f604bc3860700d6efa3ecb8de618e11e6318f1de8fc5a6654a4e41f54376af"
+    },
+    {
+      "file": "web/src/app/stock/[symbol]/PublishedResearchView.tsx",
+      "bytes": 9225,
+      "sha256": "4c10fbe2704e6876a22c53ceeb8bff58f60b489c98b597ef3b7a3e8a66b0a0f5"
+    },
+    {
+      "file": "web/src/lib/research-publication-view.ts",
+      "bytes": 14099,
+      "sha256": "9ff1bc9cfe104f1847dfd0899d45a45e6cab3db3720d71e92103a1cae4b0c6c3"
+    }
+  ],
+  "correction": "Only root approved SQL NULL semantic assertions: SELECT read_research_company_publication_v2(...) IS NULL -> t for unpublished/unknown company. Runtime RETURN NULL remains unchanged. No product or assertion relaxation authored by VM.",
+  "reviewAttribution": "Root conveyed independent unsigned scoped TEST-CORRECTION PASS for6b scheme; this receipt is maker execution, not independent review/protected authority.",
+  "focused": {
+    "counts": {
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "parentTests": 1,
+    "childTests": 12,
+    "positiveChildren": [
+      "ok 1 - unpublished read, altered hash/result/role and isolation reject without effects",
+      "ok 2 - private company reader is NULL before publication, RC-only and inaccessible to public roles",
+      "ok 3 - failure after each durable publication effect rolls back all rows and original lease",
+      "ok 4 - real recalculation and concurrent publish yield one immutable existing receipt with no new charges",
+      "ok 5 - company reader displays the exact immutable publication, with no durable effects or private authority",
+      "ok 6 - newest inconsistent dossier fails closed instead of selecting an older positive publication",
+      "ok 7 - company reader acquires original source fence and serializes a simultaneous withdrawal",
+      "ok 8 - legacy detail cannot disguise a v2 bundle or v2 dossier through direct service insert",
+      "ok 9 - original valid legacy writer still publishes its own bundle after v2 migration",
+      "ok 10 - restart and exact replay return original receipt without live claim",
+      "ok 11 - completed replay holds source fence before withdrawal; original bytes remain immutable",
+      "ok 12 - direct service mutation, truncate and changed completed replay denied"
+    ],
+    "command": [
+      "node",
+      "scripts/run-node22.js",
+      "--experimental-strip-types",
+      "--test",
+      "--test-name-pattern=— positive$",
+      "scripts/research-atomic-publication-postgres.test.mjs"
+    ],
+    "oneRun": true
+  },
+  "ci": {
+    "command": "npm run test:research-agents",
+    "counts": {
+      "tests": 770,
+      "pass": 768,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 2
+    },
+    "selectedFileCount": 74,
+    "selectedManifest": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/selected-tests.json",
+    "skips": [
+      "ok 337 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled",
+      "ok 338 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled"
+    ],
+    "viewUnitSsrResults": [
+      {
+        "name": "display derives only original published public content without altering hashed input",
+        "passed": true
+      },
+      {
+        "name": "tampering, private fields, identity conflicts and failed read never become a working draft",
+        "passed": true
+      },
+      {
+        "name": "public URL conversion occurs after original hash check; private targets are rejected",
+        "passed": true
+      },
+      {
+        "name": "negative EPS cannot acquire applicable P/E; annual periods cannot borrow future-four labels",
+        "passed": true
+      },
+      {
+        "name": "closed query and exclusive view preserve original legacy/draft choices without fallback",
+        "passed": true
+      },
+      {
+        "name": "writer-to-reader compatibility preserves maximum catalysts, long locators and printed month/half-year units",
+        "passed": true
+      },
+      {
+        "name": "actual shared published component SSR escapes prose and shows periods, withdrawal and accessible folded tables",
+        "passed": true
+      }
+    ],
+    "positivePgReaderCompleted": true,
+    "focusedAndFullCountsOverlap": true,
+    "oneRunAfterFocusedPassed": true
+  },
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused-positive",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "--test-name-pattern=— positive$",
+        "scripts/research-atomic-publication-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T17:15:09.482Z",
+      "completedAt": "2026-10-09T17:15:20.600Z",
+      "elapsedSeconds": 11.117476797982818,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 203689984,
+      "observedTaskDiskPeakBytes": 1009709056,
+      "availableBeforeBytes": 11338842112,
+      "availableAfterBytes": 11338821632,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "ci-research",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-09T17:16:23.855Z",
+      "completedAt": "2026-10-09T17:17:35.077Z",
+      "elapsedSeconds": 71.22168239500024,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 908312576,
+      "observedTaskDiskPeakBytes": 1052811264,
+      "availableBeforeBytes": 11338792960,
+      "availableAfterBytes": 11338522624,
+      "guardTermination": null
+    }
+  ],
+  "reusedTypesLint": {
+    "originalHead": "65bcd5f5327126b9078cbf7aa2de63547b0306b5",
+    "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+    "webMigrationsPackageUnchanged": true,
+    "typesExitCode": 0,
+    "lintExitCode": 0,
+    "lintErrors": 0,
+    "existingWarnings": 33,
+    "rawFiles": [
+      {
+        "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/lint.json",
+        "bytes": 525,
+        "sha256": "0b1463b61ef9d8b44481c551ca9e190c930d352b76e7d71f219c30e33bc6560b"
+      },
+      {
+        "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/lint.log",
+        "bytes": 4753,
+        "sha256": "ad8c63f78b6e2415f7dedda610898a7df0a19c332b97e3a55d24f890724dac94"
+      },
+      {
+        "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/lint.time",
+        "bytes": 741,
+        "sha256": "f57cfd9b0b46510fd945d721c5819e45c0fa5cab699f8dada926aa54d05d4bea"
+      },
+      {
+        "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/types.json",
+        "bytes": 589,
+        "sha256": "e0bad181f3b4a10ad6485a6049dcf8543b83300fd32baad809c3524e2fbf7dda"
+      },
+      {
+        "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/types.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm-raw/types.time",
+        "bytes": 789,
+        "sha256": "d5f2f3524acf541f5ca53376861713551500dd650e654843dc16837206e3f5f5"
+      }
+    ]
+  },
+  "linuxBuild": {
+    "pass": false,
+    "rerunPerformed": false,
+    "buildId": null,
+    "compiledServerManifest": null,
+    "reason": "Original847d Turbopack bind EPERM kept. Root instructed no further Linux build retries."
+  },
+  "otherEnvironmentBuild": {
+    "attribution": "Root-reported Mac, not rerun or independently verified in this VM",
+    "evidenceHead": "cffe3e38",
+    "receipt": ".agent/reports/2026-10-09T17-08-publication-view-successor-maker/receipt.json",
+    "runtimeSubject": "27f13e51fca5d64498b5ef54d4f9e5394e0f7f21",
+    "testSubject": "df514965072816d319ec1a1aa47b752c538d1d92",
+    "webTree": "8964c23adc391ece9d8db7b6eebd09493e26bcff",
+    "buildId": "-yKUNE4qCy1kUif8SXRbR",
+    "serverManifestEntries": 2094,
+    "notLinuxBuildPass": true,
+    "rootPreviewOnlyOldDraftRegression": "No accepted v2 positive HTTP asserted by this VM"
+  },
+  "originalRedReceipts": [
+    {
+      "file": ".agent/reports/2026-10-09T17-03-publication-view-linux-acceptance-vm.json",
+      "bytes": 17370,
+      "sha256": "ee932b2e56bc0e19a220f46d8a9e93083aa05ea3fda0471d63992a2fc4331fdc",
+      "evidenceHead": "b1c56ed06d8649de22a4f4c04c80ef0f9ec6397c",
+      "unchanged": true
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-09-publication-view-successor-linux-vm.json",
+      "bytes": 14150,
+      "sha256": "77b488ff002ce5434bf3c4f04860cc95674b8277d8d96a1be36f54c760edb6bf",
+      "evidenceHead": "17cb1991a7bfca9b035ec78fcd0d16c378bc0abe",
+      "unchanged": true
+    }
+  ],
+  "resources": {
+    "sampledAggregateRssPeakBytes": 908312576,
+    "sampledOriginalIncrementPeakAcrossReceiptsBytes": 1899757568,
+    "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+    "rssTargetBytes": 8589934592,
+    "diskReserveBytes": 8589934592,
+    "lowestStageAvailableBytes": 11338522624,
+    "guardTerminations": [
+      null,
+      null
+    ],
+    "singleHeavyAtATime": true
+  },
+  "cleanup": {
+    "at": "2026-10-09T17:19:45.839112+00:00",
+    "ownedProcessesRemaining": [],
+    "originalTestsClusterStopAndCleanupUnchanged": true,
+    "additionalManualDeletionPerformed": false,
+    "earlierFailureClustersRetained": [
+      "/tmp/si-rresult-s8gijK",
+      "/tmp/si-rresult-6hB3Kx"
+    ],
+    "earlierFailureClustersStopped": true,
+    "availableBytes": 11338502144
+  },
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/admission.json",
+      "bytes": 633,
+      "sha256": "aba4edf343738d6ec974b87890cdafaef3a0cc96595769a5038ad57e2833c7df"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/ci-research.json",
+      "bytes": 547,
+      "sha256": "fe3a45e4a3a2ebc9b56bef5e605e35a97a2b7d344dcf62445416c33d4e623438"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/ci-research.log",
+      "bytes": 253212,
+      "sha256": "d8171c85adefa259c8f7ea1ace30eb5229e24d72a740ad2b3b08bb67ee81b84e"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/ci-research.time",
+      "bytes": 762,
+      "sha256": "871ed1422cee74b8fc7857dfb5d696ff04d23ba86ed6fd3be6ebb83243d85c5c"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/cleanup.json",
+      "bytes": 357,
+      "sha256": "b9c0a20bb91818a59f3dfcb7314bfc0289d459bbc1fc1542621d26e55cec3299"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/focused-positive.json",
+      "bytes": 697,
+      "sha256": "2ba7bff577da9b5a7fe7dbd709b2c95960e268bcb2e9b3a4b31fb552425c35c7"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/focused-positive.log",
+      "bytes": 13821,
+      "sha256": "c0aca8907b97febf0d7606694e71a4e59857e17679a5894e5303e0a5a1b83aa4"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/focused-positive.time",
+      "bytes": 872,
+      "sha256": "2d0bf7645d3408d5803bc9ab4319eee30d3538996aba2b8a6ba2994a7cda2397"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/run-check.py",
+      "bytes": 5031,
+      "sha256": "ffe773b2c9100ea658a44aa381b414e4481963c00acfee2ddb9ff3b63c6ffe6a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/selected-tests.json",
+      "bytes": 16882,
+      "sha256": "1636ac0deec1ed729475c5aec6e756388639ba1673c8e61e696cbcf56218cefd"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T17-19-publication-view-null-correction-linux-vm-raw/source-file-hashes.json",
+      "bytes": 862,
+      "sha256": "0e05c2ed8754ff7ebdcc6e9aa981e6ba0094ab8894876db876f5851dad4257c1"
+    }
+  ],
+  "limitations": [
+    "770 total includes two explicitly disabled native-profile skips. Focused13 are included again in ordinary CI and must not be counted as distinct added acceptance.",
+    "Types/lint reuse is limited to unchanged exactweb/migrations/package on same web tree, not new execution on6b. Linux build remains blocked; Mac build is separate attributed evidence.",
+    "Synthetic isolated source/jobs/controller/prose are engineering fixtures, not actual author/reviewer/model execution, production publication or investment/strategy qualification.",
+    "No native/business HTTP, actual model dispatch, production DB mutation, main merge or deployment. Manual30minute increment is not product model budget proof.",
+    "Original847d and27f-df RED/log bytes remain immutable. Root Mac original sealing15s timeout and Linux build persisted EPERM precise low-level cause remain unknown."
+  ]
+}

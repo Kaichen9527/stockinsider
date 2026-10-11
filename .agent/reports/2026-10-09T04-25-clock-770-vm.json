@@ -1,0 +1,210 @@
+{
+  "schemaVersion": "clock-770-vm-acceptance-v1",
+  "recordedAt": "2026-10-09T04:26:47.136903+00:00",
+  "source": "77002376ae3a044046f3ba0c2284b259b996d9a6",
+  "builder": {
+    "schema": "stockinsider-isolated-pg-clock-build-v1",
+    "sourceCommit": "d475b925943ad404c6c728ac868dc73949e7281c",
+    "sourceUrl": "https://codeload.github.com/wolfcw/libfaketime/tar.gz/d475b925943ad404c6c728ac868dc73949e7281c",
+    "archiveSha256": "141d76954a430ee4a43dfdec8984c7507cf803a9f66b62853e5642e7131b42c8",
+    "archiveBytes": 89000,
+    "compilerVersion": "cc (Debian 14.2.0-19) 14.2.0",
+    "makeVersion": "GNU Make 4.4.1",
+    "command": [
+      "/usr/bin/make",
+      "-f",
+      "Makefile",
+      "CC=/usr/bin/cc",
+      "FAKETIME_COMPILE_CFLAGS=-UFAKE_SLEEP",
+      "libfaketime.so.1"
+    ],
+    "environment": {
+      "PATH": "/usr/bin:/bin",
+      "LC_ALL": "C",
+      "LANG": "C"
+    },
+    "library": "/workspace/cloud-clock-builder-770-artifacts-oct09/build-770/libfaketime.so.1",
+    "librarySha256": "483dfc28d0b87718ce50b48d382f03b8615fe861c5f859c958ddfc934fa0b3c6",
+    "waitWrappersAbsent": true
+  },
+  "measurements": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "builder-770",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-S",
+        "scripts/test-support/isolated_pg_clock_build.py",
+        "--output",
+        "/workspace/cloud-clock-builder-770-artifacts-oct09/build-770"
+      ],
+      "startedAt": "2026-10-09T04:12:26.411Z",
+      "completedAt": "2026-10-09T04:12:27.356Z",
+      "elapsedSeconds": 0.9441715629945975,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 55316480,
+      "observedTaskDiskPeakBytes": 33497088,
+      "availableBeforeBytes": 20916576256,
+      "availableAfterBytes": 20916465664,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-clock-770",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-deep-jobs-postgres.test.mjs",
+        "scripts/research-deep-publication-postgres.test.mjs",
+        "scripts/research-source-budget-postgres.test.mjs",
+        "scripts/research-isolated-clock-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:13:05.942Z",
+      "completedAt": "2026-10-09T04:13:17.083Z",
+      "elapsedSeconds": 11.14071541102021,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 126210048,
+      "observedTaskDiskPeakBytes": 75509760,
+      "availableBeforeBytes": 20916461568,
+      "availableAfterBytes": 20916453376,
+      "guardTermination": null
+    }
+  ],
+  "postgres": "17.11 Debian17.11-0+deb13u1",
+  "tests": {
+    "pass": 6,
+    "fail": 0,
+    "skip": 0,
+    "files": [
+      "scripts/research-deep-jobs-postgres.test.mjs",
+      "scripts/research-deep-publication-postgres.test.mjs",
+      "scripts/research-source-budget-postgres.test.mjs",
+      "scripts/research-isolated-clock-postgres.test.mjs"
+    ],
+    "canaries": [
+      "open12:00",
+      "closed23:43",
+      "restart",
+      "100ms PostgreSQL statement timeout",
+      "production migration body hashes unchanged"
+    ]
+  },
+  "nmSignalProbes": {
+    "subject": "77002376ae3a044046f3ba0c2284b259b996d9a6",
+    "sameBuiltElfSha256": "483dfc28d0b87718ce50b48d382f03b8615fe861c5f859c958ddfc934fa0b3c6",
+    "nm": [
+      {
+        "probe": "nm_version",
+        "method": "direct",
+        "exitCode": 0,
+        "elapsedSeconds": 0.0018579830066300929,
+        "stdoutBytes": 283,
+        "stdoutSha256": "caae48f7aca83bd177c80210e19f2a84f8fb324ea1059c2df326996f5955041e",
+        "stdoutSample": "GNU nm (GNU Binutils for Debian) 2.44\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) any later version.\nThis program has absolutely no warranty.\n",
+        "error": ""
+      },
+      {
+        "probe": "nm_version",
+        "method": "helper",
+        "exitCode": 0,
+        "elapsedSeconds": 0.00135393301025033,
+        "stdoutBytes": 283,
+        "stdoutSha256": "caae48f7aca83bd177c80210e19f2a84f8fb324ea1059c2df326996f5955041e",
+        "stdoutSample": "GNU nm (GNU Binutils for Debian) 2.44\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) any later version.\nThis program has absolutely no warranty.\n",
+        "error": null
+      },
+      {
+        "probe": "nm_built",
+        "method": "direct",
+        "exitCode": 0,
+        "elapsedSeconds": 0.0015469139907509089,
+        "stdoutBytes": 1443,
+        "stdoutSha256": "1e903ec685851e3b385f46d268d4a2acb178db5c1b0e299d6c4c4e1fc1b32b86",
+        "stdoutSample": "0000000000000000 A GLIBC_2.2\n0000000000000000 A GLIBC_2.2.5\n0000000000000000 A GLIBC_2.3.2\n0000000000000000 A GLIBC_2.3.3\n00000000000083f3 T __clock_gettime\n00000000000085b5 T __ftime\n0000000000003a6e T __fxstat\n0000000000003ec4 T __fxstat64\n0000000000003b7e T __fxstatat\n0000000000003fd4 T __fxstatat64\n000000000000830e T __gettimeofday\n0000000000003c9e T __lxstat\n00000000000040f4 T __lxstat64\n00000000000084fc T __time\n000000000000395b T __xstat\n0000000000003db1 T __xstat64\n0000000000005bad T clock_gettime\n0",
+        "error": ""
+      },
+      {
+        "probe": "nm_built",
+        "method": "helper",
+        "exitCode": 0,
+        "elapsedSeconds": 0.0018583939818199724,
+        "stdoutBytes": 1443,
+        "stdoutSha256": "1e903ec685851e3b385f46d268d4a2acb178db5c1b0e299d6c4c4e1fc1b32b86",
+        "stdoutSample": "0000000000000000 A GLIBC_2.2\n0000000000000000 A GLIBC_2.2.5\n0000000000000000 A GLIBC_2.3.2\n0000000000000000 A GLIBC_2.3.3\n00000000000083f3 T __clock_gettime\n00000000000085b5 T __ftime\n0000000000003a6e T __fxstat\n0000000000003ec4 T __fxstat64\n0000000000003b7e T __fxstatat\n0000000000003fd4 T __fxstatat64\n000000000000830e T __gettimeofday\n0000000000003c9e T __lxstat\n00000000000040f4 T __lxstat64\n00000000000084fc T __time\n000000000000395b T __xstat\n0000000000003db1 T __xstat64\n0000000000005bad T clock_gettime\n0",
+        "error": null
+      },
+      {
+        "probe": "nm_libc",
+        "method": "direct",
+        "exitCode": 0,
+        "elapsedSeconds": 0.0038043509994167835,
+        "stdoutBytes": 142348,
+        "stdoutSha256": "bdff53f47e778539c904dfb3a3e9bbe370ce98de5dc331fc74d6abccd50a50d3",
+        "stdoutSample": "0000000000000000 A GLIBC_2.10\n0000000000000000 A GLIBC_2.11\n0000000000000000 A GLIBC_2.12\n0000000000000000 A GLIBC_2.13\n0000000000000000 A GLIBC_2.14\n0000000000000000 A GLIBC_2.15\n0000000000000000 A GLIBC_2.16\n0000000000000000 A GLIBC_2.17\n0000000000000000 A GLIBC_2.18\n0000000000000000 A GLIBC_2.2.5\n0000000000000000 A GLIBC_2.2.6\n0000000000000000 A GLIBC_2.22\n0000000000000000 A GLIBC_2.23\n0000000000000000 A GLIBC_2.24\n0000000000000000 A GLIBC_2.25\n0000000000000000 A GLIBC_2.26\n0000000000000000 A GLIBC_2.27\n",
+        "error": ""
+      },
+      {
+        "probe": "nm_libc",
+        "method": "helper",
+        "exitCode": 0,
+        "elapsedSeconds": 0.003445770009420812,
+        "stdoutBytes": 142348,
+        "stdoutSha256": "bdff53f47e778539c904dfb3a3e9bbe370ce98de5dc331fc74d6abccd50a50d3",
+        "stdoutSample": "0000000000000000 A GLIBC_2.10\n0000000000000000 A GLIBC_2.11\n0000000000000000 A GLIBC_2.12\n0000000000000000 A GLIBC_2.13\n0000000000000000 A GLIBC_2.14\n0000000000000000 A GLIBC_2.15\n0000000000000000 A GLIBC_2.16\n0000000000000000 A GLIBC_2.17\n0000000000000000 A GLIBC_2.18\n0000000000000000 A GLIBC_2.2.5\n0000000000000000 A GLIBC_2.2.6\n0000000000000000 A GLIBC_2.22\n0000000000000000 A GLIBC_2.23\n0000000000000000 A GLIBC_2.24\n0000000000000000 A GLIBC_2.25\n0000000000000000 A GLIBC_2.26\n0000000000000000 A GLIBC_2.27\n",
+        "error": null
+      }
+    ],
+    "signals": [
+      {
+        "offset": "+0",
+        "exitCode": 0,
+        "elapsedSeconds": 0.10150492400862277,
+        "stdout": "{\"startDeltaSeconds\":0,\"handlerDeltaSeconds\":0,\"endDeltaSeconds\":0,\"caught\":1,\"epollReturn\":-1}\n",
+        "stderr": ""
+      },
+      {
+        "offset": "+3600",
+        "exitCode": 0,
+        "elapsedSeconds": 0.10163048902177252,
+        "stdout": "{\"startDeltaSeconds\":3600,\"handlerDeltaSeconds\":3600,\"endDeltaSeconds\":3600,\"caught\":1,\"epollReturn\":-1}\n",
+        "stderr": ""
+      },
+      {
+        "offset": "-3600",
+        "exitCode": 0,
+        "elapsedSeconds": 0.10168590501416475,
+        "stdout": "{\"startDeltaSeconds\":-3600,\"handlerDeltaSeconds\":-3600,\"endDeltaSeconds\":-3600,\"caught\":1,\"epollReturn\":-1}\n",
+        "stderr": ""
+      }
+    ],
+    "signalSourceSha256": "c8e8c2b09dbc843d1fafe5925910c8e10f7e785450d1ebc12def6772b0d2e37a",
+    "noParentOrPsqlPreload": true,
+    "CI16RootCauseConfirmed": false
+  },
+  "artifacts": [
+    {
+      "path": "/workspace/cloud-clock-builder-770-artifacts-oct09/pg-clock-770.log",
+      "bytes": 3494,
+      "sha256": "4385ace39cebb615ff9a3308cbdbaf3058c1073c0a806468c9615a6afa73e9e4"
+    },
+    {
+      "path": "/workspace/cloud-clock-builder-770-artifacts-oct09/build-770/receipt.json",
+      "bytes": 888,
+      "sha256": "771d03fe286f33ccf155381264767a76fe933e99738c5687919a4465b7248144"
+    },
+    {
+      "path": "/workspace/cloud-clock-builder-770-artifacts-oct09/nm-signal-probes.json",
+      "bytes": 5582,
+      "sha256": "64ff70cefae57dd8595f192185c7d93e09081f02df8c0cf9a51f975fe77ee901"
+    }
+  ],
+  "earlierFailureReceipt": ".agent/reports/2026-10-08T16-34-pg-faketime-signal-diagnostic.json",
+  "noOriginalCanaryRemoved": true,
+  "noProductionSqlOrGuardChanged": true,
+  "PG16CIRepaired": false,
+  "nmHangReproduced": false,
+  "typesLintBuildOnExactClockTree": "not newly run; no web-code delta in this test-only library change; d274 build is separate scope",
+  "parentAndPsqlPreload": false
+}

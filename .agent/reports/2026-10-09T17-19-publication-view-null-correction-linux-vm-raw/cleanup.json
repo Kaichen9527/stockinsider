@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-09T17:19:45.839112+00:00",
+  "ownedProcessesRemaining": [],
+  "originalTestsClusterStopAndCleanupUnchanged": true,
+  "additionalManualDeletionPerformed": false,
+  "earlierFailureClustersRetained": [
+    "/tmp/si-rresult-s8gijK",
+    "/tmp/si-rresult-6hB3Kx"
+  ],
+  "earlierFailureClustersStopped": true,
+  "availableBytes": 11338502144
+}

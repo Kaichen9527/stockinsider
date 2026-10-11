@@ -1,0 +1,33 @@
+{
+  "remoteVerifiedByActualLsRemote": "524d9df1de071c449e31e3ef3c70651ea0a145a3",
+  "gitRawByteHashChecks": 50,
+  "rawTotalBytes": 18285543,
+  "liveOwnedServices": [],
+  "removedOnly": [
+    {
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/cluster",
+      "allocatedBytesBefore": 64663552,
+      "existsAfter": false,
+      "postmasterPidAbsent": true,
+      "shutdownLogConfirmed": true
+    },
+    {
+      "path": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/cluster",
+      "allocatedBytesBefore": 64573440,
+      "existsAfter": false,
+      "postmasterPidAbsent": true,
+      "shutdownLogConfirmed": true
+    }
+  ],
+  "freeBeforeBytes": 10948644864,
+  "freeAfterBytes": 11077881856,
+  "retained": [
+    "all RED and raw public research/relay/calculator evidence",
+    "new exact9136 compiled build and dependency copy",
+    "standalonePG RED stopped cluster /tmp/si-rresult-OwkYCk retained for root diagnosis"
+  ],
+  "completedAt": "2026-10-09T15:38:27.840014+00:00",
+  "manualStartedAt": "2026-10-09T15:20:29Z",
+  "manualElapsedSeconds": 1078.840014,
+  "notModelRoleBudgetEvidence": true
+}

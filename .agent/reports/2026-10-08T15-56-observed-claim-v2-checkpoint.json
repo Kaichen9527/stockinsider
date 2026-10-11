@@ -1,0 +1,419 @@
+{
+  "schemaVersion": "observed-claim-v2-development-checkpoint-v1",
+  "recordedAt": "2026-10-08T15:56:19.294563+00:00",
+  "branch": "codex/research-development-converged-oct08",
+  "parent": "c2c83f94d3419575044e48448f303b2deb1d2db0",
+  "manualWindow": {
+    "startedAt": "2026-10-08T15:32:26Z",
+    "deadline": "2026-10-08T16:02:26Z",
+    "manualEngineeringOnly": true,
+    "slice2": "466450d4b4c0ce3c3884f20bbf898ffdf7890c46"
+  },
+  "approvedMergeSubjects": {
+    "slice1": "635cb97fca2963effff6ea660c8f66f97f6eed17",
+    "slice2Unreviewed": "466450d4b4c0ce3c3884f20bbf898ffdf7890c46",
+    "insider": "2cca2f8a1d96ddf66df3df8dec43e847aee4d205",
+    "monitor": "d3090fe4b3e1b2c1f4a56c4896859b584ef3cbb9",
+    "outbox": "2ebb75fe3f8eb3bcfae4530005e7aeeca52e296b"
+  },
+  "fileHashes": {
+    "openspec/changes/research-observed-scope-v1/tasks.md": {
+      "bytes": 6782,
+      "sha256": "a82bcfba93c63ebbeac07c9912474ff0d3593ce398e25089483486e2ecaae18c"
+    },
+    "package.json": {
+      "bytes": 28570,
+      "sha256": "d45271cf537fc2fe37982c3d8b218f40adcc5fb7b92c1abb50a1b7cc39f5970c"
+    },
+    "scripts/research-deep-controller.mjs": {
+      "bytes": 17079,
+      "sha256": "d65e5fb84ab429146b34fbee714f61ffb7b3d720610d5e1457cf32a6b28c94a4"
+    },
+    "scripts/research-deep-controller.test.mjs": {
+      "bytes": 21425,
+      "sha256": "395db95fb22ea146e2f995003320b2e7fa848e2b361dd10af063e341baa183a4"
+    },
+    "scripts/research-local-inbox-dataplane.mjs": {
+      "bytes": 31618,
+      "sha256": "fe30428c597dad44c92fa137dee01973781f02ddbffed48e8244df465fe626d7"
+    },
+    "scripts/research-observed-priority-native.test.mjs": {
+      "bytes": 24537,
+      "sha256": "ab5c1a2555b0e65890bec7f17a0d7a464255edf88d0c57e17eab4944b2e714a6"
+    },
+    "web/src/app/api/internal/research-deep-job/route.ts": {
+      "bytes": 9560,
+      "sha256": "074208d39de4b2f74d7f9a3d1e702196c8c17ecfe1c652b7c7d7ec1e0d1b572a"
+    },
+    "web/src/lib/research-deep-author-input.ts": {
+      "bytes": 22402,
+      "sha256": "451ee76fbbab96fe78789d7b8ccb8bc87e48fe5ad4020ab780e69b08487f7af0"
+    },
+    "web/src/lib/research-deep-claim-context.ts": {
+      "bytes": 12714,
+      "sha256": "c6016ca331d77cff78b05c26642ebbb8ce040a285293eebdca9fecf20f3b680c"
+    },
+    "web/src/lib/research-deep-draft.ts": {
+      "bytes": 14060,
+      "sha256": "30194fbe015a72f6084a04f0b257e054cee45df7faa92a267684b5c72329761c"
+    },
+    "migrations/20261008_research_observed_claim_v2.sql": {
+      "bytes": 26815,
+      "sha256": "cf2516c5d3df6c2b006591269bf391f37c661f4dd76eeedc1ea627098ac96b6e"
+    },
+    "web/src/lib/research-observed-deep.test.ts": {
+      "bytes": 6001,
+      "sha256": "2a0e6e2ba49844d546ff0773cdfe392a3353c40b5c534b924c4074bd5d78cf49"
+    },
+    "docs/operations/2026-10-08/observed-claim-input-handoff.md": {
+      "bytes": 3258,
+      "sha256": "869b6381e26663cf125126646a0206ad8df7d429487d3475a3ec316c79cdccd0"
+    }
+  },
+  "stages": {
+    "build-seal": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build-seal",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T15:52:55.821Z",
+      "completedAt": "2026-10-08T15:53:01.980Z",
+      "elapsedSeconds": 6.1591169069870375,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1221066752,
+      "observedTaskDiskPeakBytes": 1429266432,
+      "availableBeforeBytes": 21770592256,
+      "availableAfterBytes": 21769789440,
+      "guardTermination": null
+    },
+    "build1": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build1",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T15:40:02.947Z",
+      "completedAt": "2026-10-08T15:40:39.856Z",
+      "elapsedSeconds": 36.90950888200314,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 2030157824,
+      "observedTaskDiskPeakBytes": 1196056576,
+      "availableBeforeBytes": 22245429248,
+      "availableAfterBytes": 21921124352,
+      "guardTermination": null
+    },
+    "pg-midnight": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-midnight",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T15:51:14.579Z",
+      "completedAt": "2026-10-08T15:51:46.352Z",
+      "elapsedSeconds": 31.77320778099238,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 738926592,
+      "observedTaskDiskPeakBytes": 1446604800,
+      "availableBeforeBytes": 21836447744,
+      "availableAfterBytes": 21770596352,
+      "guardTermination": null
+    },
+    "scoped-unit2": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "scoped-unit2",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-observed-deep.test.ts",
+        "scripts/research-deep-controller.test.mjs",
+        "scripts/research-deep-draft-controller.test.mjs",
+        "scripts/research-deep-job-context-route.test.mjs",
+        "web/src/lib/research-deep-claim-context.test.ts"
+      ],
+      "startedAt": "2026-10-08T15:46:28.297Z",
+      "completedAt": "2026-10-08T15:46:39.786Z",
+      "elapsedSeconds": 11.488773138000397,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 507183104,
+      "observedTaskDiskPeakBytes": 1344712704,
+      "availableBeforeBytes": 21855232000,
+      "availableAfterBytes": 21855203328,
+      "guardTermination": null
+    },
+    "converged-integration": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "converged-integration",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-monitor-controller.test.mjs",
+        "scripts/research-monitor-progress.test.mjs",
+        "scripts/research-insider-collector.test.mjs",
+        "scripts/research-insider-health-route.test.mjs",
+        "scripts/research-insider-cursor-postgres.test.mjs",
+        "web/src/lib/research-insider-official.test.ts",
+        "web/src/lib/source-health.test.ts",
+        "scripts/candidate-dossier-outbox-v6-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-08T15:48:45.832Z",
+      "completedAt": "2026-10-08T15:48:49.685Z",
+      "elapsedSeconds": 3.853705727990018,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 306364416,
+      "observedTaskDiskPeakBytes": 1441771520,
+      "availableBeforeBytes": 21838970880,
+      "availableAfterBytes": 21838934016,
+      "guardTermination": null
+    },
+    "normal-build-seal": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build-seal",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T15:55:07.207Z",
+      "completedAt": "2026-10-08T15:55:13.740Z",
+      "elapsedSeconds": 6.533560823998414,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1214730240,
+      "observedTaskDiskPeakBytes": 1495916544,
+      "availableBeforeBytes": 21703946240,
+      "availableAfterBytes": 21703135232,
+      "guardTermination": null
+    },
+    "lint-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T15:47:55.220Z",
+      "completedAt": "2026-10-08T15:48:19.570Z",
+      "elapsedSeconds": 24.350311917994986,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1111887872,
+      "observedTaskDiskPeakBytes": 1360883712,
+      "availableBeforeBytes": 21855141888,
+      "availableAfterBytes": 21838974976,
+      "guardTermination": null
+    },
+    "scoped-unit": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "scoped-unit",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/research-observed-deep.test.ts",
+        "scripts/research-deep-controller.test.mjs",
+        "scripts/research-deep-draft-controller.test.mjs",
+        "scripts/research-deep-job-context-route.test.mjs",
+        "web/src/lib/research-deep-claim-context.test.ts"
+      ],
+      "startedAt": "2026-10-08T15:45:34.273Z",
+      "completedAt": "2026-10-08T15:45:44.822Z",
+      "elapsedSeconds": 10.548859085000004,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 532447232,
+      "observedTaskDiskPeakBytes": 1344675840,
+      "availableBeforeBytes": 21855268864,
+      "availableAfterBytes": 21855240192,
+      "guardTermination": null
+    },
+    "build-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T15:49:45.437Z",
+      "completedAt": "2026-10-08T15:49:54.464Z",
+      "elapsedSeconds": 9.02691748199868,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1044086784,
+      "observedTaskDiskPeakBytes": 1360928768,
+      "availableBeforeBytes": 21838929920,
+      "availableAfterBytes": 21836468224,
+      "guardTermination": null
+    },
+    "focused1": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "focused1",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-deep-controller.test.mjs",
+        "scripts/research-deep-draft-controller.test.mjs",
+        "scripts/research-deep-job-context-route.test.mjs",
+        "web/src/lib/research-deep-claim-context.test.ts"
+      ],
+      "startedAt": "2026-10-08T15:43:46.333Z",
+      "completedAt": "2026-10-08T15:43:56.881Z",
+      "elapsedSeconds": 10.547971434993087,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 593399808,
+      "observedTaskDiskPeakBytes": 1344569344,
+      "availableBeforeBytes": 21855559680,
+      "availableAfterBytes": 21855535104,
+      "guardTermination": null
+    },
+    "types1": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types1",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T15:37:55.008Z",
+      "completedAt": "2026-10-08T15:38:11.828Z",
+      "elapsedSeconds": 16.819842937999056,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1344770048,
+      "observedTaskDiskPeakBytes": 952512512,
+      "availableBeforeBytes": 22247723008,
+      "availableAfterBytes": 22245441536,
+      "guardTermination": null
+    },
+    "types-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T15:47:16.218Z",
+      "completedAt": "2026-10-08T15:47:33.006Z",
+      "elapsedSeconds": 16.788640041995677,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1357582336,
+      "observedTaskDiskPeakBytes": 1344663552,
+      "availableBeforeBytes": 21855199232,
+      "availableAfterBytes": 21855145984,
+      "guardTermination": null
+    },
+    "pg1": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg1",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T15:41:45.917Z",
+      "completedAt": "2026-10-08T15:42:19.528Z",
+      "elapsedSeconds": 33.61089829399134,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 733503488,
+      "observedTaskDiskPeakBytes": 1362075648,
+      "availableBeforeBytes": 21921120256,
+      "availableAfterBytes": 21855567872,
+      "guardTermination": null
+    },
+    "pg-midnight-seal": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-midnight-seal",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-08T15:54:00.362Z",
+      "completedAt": "2026-10-08T15:54:33.215Z",
+      "elapsedSeconds": 32.852822032000404,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 947200000,
+      "observedTaskDiskPeakBytes": 1517740032,
+      "availableBeforeBytes": 21769785344,
+      "availableAfterBytes": 21703950336,
+      "guardTermination": null
+    }
+  },
+  "counts": {
+    "scopedFocusedPass": 78,
+    "convergedPass": 112,
+    "midnightNativeTapPass": 21,
+    "midnightNativeChecks": 20,
+    "skips": 0
+  },
+  "actualNativeClaimResult": {
+    "actualTaipeiMidnightBudgetRefusal": true,
+    "positiveClaimInputNotAttempted": true,
+    "modelBudgetSeconds": 0
+  },
+  "nativeReceipt": {
+    "path": "/workspace/cloud-observed-context-artifacts-oct08/pg-midnight-seal-run/acceptance-receipt.json",
+    "bytes": 24569,
+    "sha256": "e7acb31c345b428f621811d06e751657a32806c5358d48806f7a77b8f1197e9e"
+  },
+  "suiteMembership": {
+    "packageCommand": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/research-agent-*.test.ts web/src/lib/research-deep-*.test.ts web/src/lib/research-paper-books.test.ts web/src/lib/research-review-auth.test.ts web/src/lib/research-strategy-governance.test.ts web/src/lib/research-weekly-bars.test.ts scripts/research-agent-migration-gate.test.mjs scripts/research-agent-routes.test.mjs scripts/research-paper-session-route.test.mjs scripts/research-approval-replay-route.test.mjs scripts/research-strategy-release.test.mjs scripts/research-source-budget-postgres.test.mjs web/src/lib/research-source-extensions.test.ts web/src/lib/research-broker-estimate.test.ts web/src/lib/research-execution-context.test.ts web/src/lib/technical-features-v2.test.ts scripts/research-deep-*-postgres.test.mjs scripts/candidate-dossier-outbox-v6-postgres.test.mjs scripts/research-capacity-admission.test.mjs scripts/research-host-resource-check.test.mjs web/src/lib/research-cloud-work.test.ts scripts/research-cloud-capacity.test.mjs scripts/research-cloud-work-cli.test.mjs scripts/research-cloud-result-route.test.mjs scripts/research-cloud-receipts-postgres.test.mjs web/src/lib/research-source-attempt-controller.test.ts scripts/research-source-controller.test.mjs web/src/lib/research-source-roots.test.ts web/src/lib/research-inbox.test.ts web/src/lib/research-agent-priority.test.ts scripts/release-owner-bridge-postgres.test.mjs scripts/research-cloud-controller.test.mjs web/src/lib/research-discovery-evidence.test.ts web/src/lib/research-discovery-price-enrichment.test.ts web/src/app/api/internal/research-priority-run/route.contract.test.ts scripts/research-monitor-controller.test.mjs scripts/research-monitor-progress.test.mjs scripts/research-deep-controller.test.mjs scripts/research-deep-draft-controller.test.mjs scripts/research-deep-job-context-route.test.mjs web/src/lib/research-source-association.test.ts scripts/candidate-financial-document-write-lease-route.test.mjs web/src/lib/research-insider-official.test.ts web/src/lib/source-health.test.ts scripts/research-insider-collector.test.mjs scripts/research-insider-health-route.test.mjs scripts/research-insider-cursor-postgres.test.mjs web/src/lib/research-observed-roster.test.ts web/src/lib/research-observed-priority.test.ts web/src/lib/research-observed-deep.test.ts scripts/research-observed-roster-native.test.mjs scripts/research-observed-priority-native.test.mjs",
+    "explicitNewFiles": {
+      "scripts/research-monitor-progress.test.mjs": true,
+      "web/src/lib/research-insider-official.test.ts": true,
+      "scripts/research-insider-collector.test.mjs": true,
+      "scripts/research-insider-health-route.test.mjs": true,
+      "scripts/research-insider-cursor-postgres.test.mjs": true,
+      "web/src/lib/research-observed-roster.test.ts": true,
+      "web/src/lib/research-observed-priority.test.ts": true,
+      "web/src/lib/research-observed-deep.test.ts": true,
+      "scripts/research-observed-roster-native.test.mjs": true,
+      "scripts/research-observed-priority-native.test.mjs": true
+    },
+    "entirePackageSuiteExecuted": false,
+    "nativeOptionalProfilesRequireExplicitOptIn": true
+  },
+  "capacity": {
+    "memoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "peakAggregateRssBytes": 2030157824,
+    "peakTaskDiskBytes": 1517740032,
+    "dfIsProjectQuota": false
+  },
+  "notAccepted": [
+    "positive native claim/input",
+    "independent exact Slice3 code review",
+    "actual model author/reviewer dispatch",
+    "first-publication64f7",
+    "strategy/qualification",
+    "full production installed schema policy",
+    "original CI day-window suites fixed"
+  ],
+  "paidModelCalls": 0,
+  "productionImported": false,
+  "protectedAttestation": false
+}

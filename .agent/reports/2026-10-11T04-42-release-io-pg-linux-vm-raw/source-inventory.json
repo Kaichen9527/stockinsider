@@ -1,0 +1,82 @@
+{
+  "sourceHead": "5e3ee67bc2afe07ac7653743d227318aed77f6d8",
+  "sourceTree": "ab842cf0346780dd9a6224b515af65edf1e52286",
+  "sourceUnchanged": true,
+  "files": [
+    {
+      "file": "package.json",
+      "bytes": 33055,
+      "sha256": "a86d676de6cd85bd17ae9829285593383fdcbfeb6d86b408742ac1c851b1c3a0"
+    },
+    {
+      "file": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38"
+    },
+    {
+      "file": "scripts/research-bounded-file.mjs",
+      "bytes": 1787,
+      "sha256": "5524720aa2e614f681050f029a2dd9d89c2964991902dafb15c0b080c34d9871"
+    },
+    {
+      "file": "scripts/research-bounded-file.test.mjs",
+      "bytes": 6982,
+      "sha256": "5dddebde24c0e768acd1f7f6182f18c7f2bf6e85fc49cb59c6b9227ecb30773c"
+    },
+    {
+      "file": "scripts/research-source-controller.test.mjs",
+      "bytes": 11921,
+      "sha256": "43ec609fe73ca827faa962fc8c9457f1d379ae0b57a9fbcb97af4d3cc2db090d"
+    },
+    {
+      "file": "scripts/research-cloud-controller.test.mjs",
+      "bytes": 14706,
+      "sha256": "1c0765be4bc2b640ab47e1d2662824d7bb8047b3bf60fffe804f45d239723aa1"
+    },
+    {
+      "file": "scripts/research-source-priority-consumer.test.mjs",
+      "bytes": 11685,
+      "sha256": "edc4b5830c15d276b3635fb9d4235b77e803e83e16b925c08de942d1e1403807"
+    },
+    {
+      "file": "scripts/research-deep-controller.test.mjs",
+      "bytes": 21425,
+      "sha256": "395db95fb22ea146e2f995003320b2e7fa848e2b361dd10af063e341baa183a4"
+    },
+    {
+      "file": "scripts/research-discovery-relay-prepare.test.mjs",
+      "bytes": 7994,
+      "sha256": "29a7bef976694dd813f2ed70c19800c4cbf8ad04f08b9825ce5266692d6b9660"
+    },
+    {
+      "file": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "bytes": 171667,
+      "sha256": "6e498b720b72f121c818bf5de128c09673d7e9592b204244a212dbc1ca1a8592"
+    },
+    {
+      "file": "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+      "bytes": 120796,
+      "sha256": "a04ef8f1933eb70aa1ef60e288376763b714def207677e579df45dede42068af"
+    },
+    {
+      "file": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "bytes": 74957,
+      "sha256": "9c809a743f0f1aa695dcd13e5c4dffcd016766c58bdbb250ea0e9c60b7357477"
+    },
+    {
+      "file": "scripts/opportunity-v3/performance-harness.mjs",
+      "bytes": 14234,
+      "sha256": "583e5fcc747ab8a809fcbe4c80ee228990b51db15a54e670d879f35f50c7bde6"
+    },
+    {
+      "file": "scripts/opportunity-v3/migration-contract.test.mjs",
+      "bytes": 513796,
+      "sha256": "477fa4ae840bdaac2ca8b34d033ffe0fd3fa9a83b59db5556bfb24232fdae474"
+    },
+    {
+      "file": "web/playwright.v3-correctness.config.ts",
+      "bytes": 1759,
+      "sha256": "e0e44973dd214c634301aeef961b173a3e4d37017b5e45b944ac22962f9d0730"
+    }
+  ]
+}

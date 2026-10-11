@@ -1,0 +1,19 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "transport-unit-file",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "scripts/research-reviewer-result-psql-transport.test.mjs"
+  ],
+  "startedAt": "2026-10-09T15:51:18.141Z",
+  "completedAt": "2026-10-09T15:51:18.755Z",
+  "elapsedSeconds": 0.6137889940000605,
+  "exitCode": 1,
+  "sampledAggregateRssPeakBytes": 100438016,
+  "observedTaskDiskPeakBytes": 1305296896,
+  "availableBeforeBytes": 11077787648,
+  "availableAfterBytes": 11077779456,
+  "guardTermination": null
+}

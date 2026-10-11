@@ -1,0 +1,10 @@
+[
+  {
+    "cluster": "/tmp/si-rresult-6hB3Kx",
+    "stopped": true,
+    "retained": true,
+    "log": "si-rresult-6hB3Kx-failure-pg.log",
+    "bytes": 7461,
+    "sha256": "c8acf1c266b63fedef68f570b7c02f65c685e2f43d065d124840b722f04b32fd"
+  }
+]

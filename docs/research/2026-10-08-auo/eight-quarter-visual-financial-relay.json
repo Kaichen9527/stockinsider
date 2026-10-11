@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "public-financial-visual-verification-relay-v1",
+  "observedAt": "2026-10-08T07:01:10.605242+00:00",
+  "observer": "root-Mac-public-reader",
+  "vmFetchSucceeded": false,
+  "productionImported": false,
+  "acquisition": "bounded public HTTPS verified TLS, local Poppler P1 rendered and full table inspected",
+  "unit": "TWD_million",
+  "sources": {
+    "q126": {
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/1Q26_Finance_Statement_English.pdf",
+      "bytes": 716888,
+      "sha256": "205087d70cc36394248e95d2ad841e32009f02e8f3121d84b1f9a503154b8088",
+      "pageZeroBased": 0
+    },
+    "q325": {
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/3Q25_Finance_Statement_English.pdf",
+      "bytes": 861203,
+      "sha256": "5e12036e10a5987fa8a464e91742a5c0b1f5cf7d6f7a44915d5e0beabc4d46c3",
+      "pageZeroBased": 0
+    },
+    "q425": {
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/4Q25_Finance_Statement_English.pdf",
+      "bytes": 900190,
+      "sha256": "ddcd3fdbec3423010b745904d50900097ed9a00a17c5b8bca701a39f34a4edb8",
+      "pageZeroBased": 0
+    }
+  },
+  "columns": [
+    "period",
+    "revenue",
+    "cogs",
+    "grossProfit",
+    "opex",
+    "operatingProfit",
+    "netNonOperatingIncome",
+    "pretax",
+    "taxBenefitExpenseSigned",
+    "netProfit",
+    "ownersProfit",
+    "nciProfit",
+    "basicEps",
+    "basicWeightedSharesMillion",
+    "sourceKey"
+  ],
+  "rows": [
+    [
+      "2024Q3",
+      77748,
+      69294,
+      8454,
+      8764,
+      -310,
+      -285,
+      -595,
+      -328,
+      -923,
+      -926,
+      3,
+      -0.12,
+      7668,
+      "q325"
+    ],
+    [
+      "2024Q4",
+      68692,
+      63246,
+      5446,
+      8768,
+      -3323,
+      6342,
+      3019,
+      -1232,
+      1787,
+      1619,
+      168,
+      0.21,
+      7668,
+      "q425"
+    ],
+    [
+      "2025Q1",
+      72102,
+      63323,
+      8778,
+      7638,
+      1141,
+      3347,
+      4487,
+      -1228,
+      3259,
+      3294,
+      -35,
+      0.43,
+      7645,
+      "q126"
+    ],
+    [
+      "2025Q3",
+      69908,
+      63218,
+      6690,
+      8496,
+      -1806,
+      738,
+      -1068,
+      -29,
+      -1098,
+      -1280,
+      183,
+      -0.17,
+      7547,
+      "q325"
+    ],
+    [
+      "2025Q4",
+      70142,
+      62617,
+      7525,
+      9418,
+      -1893,
+      4782,
+      2889,
+      34,
+      2923,
+      2882,
+      41,
+      0.38,
+      7547,
+      "q425"
+    ]
+  ],
+  "crosschecks": [
+    {
+      "period": "2026Q1",
+      "sourceKey": "q126",
+      "matchesPriorQ226VisualRelay": true
+    },
+    {
+      "period": "2025Q2",
+      "sourceKey": "q325",
+      "matchesPriorQ226VisualRelay": true
+    },
+    {
+      "period": "2025Q3",
+      "sourceKey": "q425",
+      "matchesQ325Row": true
+    },
+    {
+      "period": "2025Q4",
+      "sourceKey": "q126",
+      "matchesQ425Row": true
+    }
+  ],
+  "caveats": [
+    "Merge with prior q226 relay gives8 distinct consecutive quarters2024Q3–2026Q2, all income statements visually read P1; NOT8 full audited statements with all notes/segments/dilutedEPS",
+    "Fields carry printed rounding, e.g.2025Q1 grossrevenue-cogs=8779 versusprinted8778 and op+nonop4488 versuspretax4487; preserve and test precisionintervals",
+    "Do not mark detailed nonop normalization, dilutedEPS, segmentprofits or corporate actions complete from condensed tables",
+    "Dates observed now only; comparative2024columns in2025document are not proof of2024availabledata; exactoriginalpublication timestampsnotread",
+    "Retain original failed hosted/VM attempts, sourcebytehash and acquisitionhost; no VM directfetch success claimed"
+  ]
+}

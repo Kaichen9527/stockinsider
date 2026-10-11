@@ -1,0 +1,7 @@
+# EMC actual-evidence research model
+
+User-authorized <=30min independent increment, interrupted by prioritized AUO review repair, starting clean eed55b15 then normal native merge. Preserve exact original data/artifacts. Use reviewed ab2fda19/4b3f4201 evidence in separate codex branch; no production/App/schema/strategy/gate/main/VPS/paid API work.
+
+Implement real EMC-specific consolidated profit bridge with known preliminary Q3monthly baseline, research revenue/gross/expense/cost/tax/NCI/ordinary and potential share assumptions, eighteen quarters across bear/base/bull. Preserve eight actual quarters, signed costs/NCI, cumulative-derived flow EPS unknown, actual EPSnote period shares/numerator adjustments and prepreg/CCL/Other categories. Unknown grade mix/capacity-utilization/yield/ASP/order bridge stays missing. Calendar2026,2027,forward4unreported separated; annual share weights and anti-dilution correct. Currentmedia expectation range separate from historicalbroker and company actuals; independent reverse margins/revenue, no target or ceiling.
+
+Article4–6k Han main text from shared table/token renderer uses direct original citations, known failures/precision, short paraphrases plus original argument. Raw X0.00/action/calendar/flows/benchmark limits and no entry retained. Tests, independentDecimal, type/lint/normalbuild, measured resources and failure receipts. Root handles independentmodel/articlereview and PR; no claimed protected/forecast/publication/strategyapproval.

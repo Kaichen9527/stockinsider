@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { classifyReviewedMigrationSql } from './migration-sql-policy.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const authorityArtifact = path.join(root,
@@ -58,17 +59,52 @@ const migrationPaths = [
   'migrations/20260911_05_financial_fact_isolation_v10.sql',
   'migrations/20260924_entry_plan_official_action_symbols.sql',
 ];
-const migrations = migrationPaths.map((relativePath) => {
+// Preserve the approved V3 chain. Research is a separately authorized extension.
+const researchAgentMigrationPaths = [
+  'migrations/20260929_candidate_dossier_outbox_v6.sql',
+  'migrations/20260929_research_agent_state_v1.sql',
+  'migrations/20260929_research_deep_jobs_v1.sql',
+  'migrations/20261004_research_technical_identity_v2.sql',
+  'migrations/20261004_research_cloud_receipts_v1.sql',
+  'migrations/20261005_financial_history_admission_v1.sql',
+  'migrations/20261008_insider_snapshots_v1.sql',
+  'migrations/20261008_research_observed_roster_v1.sql',
+  'migrations/20261008_research_observed_priority_v1.sql',
+  'migrations/20261008_research_observed_claim_v2.sql',
+  'migrations/20261009_research_publication_source_fence_v2.sql',
+  'migrations/20261009_research_input_preparations_v2.sql',
+  'migrations/20261009_research_input_preparation_assert_v2.sql',
+  'migrations/20261009_research_complete_input_v2.sql',
+  'migrations/20261009_research_author_assignments_v2.sql',
+  'migrations/20261009_research_author_packet_v2.sql',
+  'migrations/20261009_research_author_results_v2.sql',
+  'migrations/20261009_research_author_handoffs_v2.sql',
+  'migrations/20261009_research_reviewer_assignments_v2.sql',
+  'migrations/20261009_research_reviewer_results_v2.sql',
+  'migrations/20261009_research_publication_lineage_v2.sql',
+  'migrations/20261010_research_atomic_publication_v2.sql',
+  'migrations/20261010_research_publication_view_v2.sql',
+  'migrations/20261011_research_admission_isolation_v1.sql',
+  'migrations/20261011_research_insider_isolation_v1.sql',
+  'migrations/20261011_research_complete_mapping_precision_v2.sql',
+  'migrations/20261011_research_thesis_isolation_v1.sql',
+];
+const researchAgentPreludePaths = ['migrations/20261005_release_function_ownership_bridge_v1.sql'];
+const describeMigration = (relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));
   return {
     migration: relativePath,
     bytes: bytes.length,
-    sha256: createHash('sha256').update(bytes).digest('hex'),
-    additiveOnly: !/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')),
+    ...classifyReviewedMigrationSql(relativePath, bytes),
   };
-});
+};
+const migrations = migrationPaths.map(describeMigration);
+const researchAgentMigrations = researchAgentMigrationPaths.map(describeMigration);
+const researchAgentPreludeMigrations = researchAgentPreludePaths.map(describeMigration);
 const productionDatabaseMigrationAuthorized =
   authority?.authority?.v314?.productionDatabaseMigrationAuthorized === true;
+const researchAgentProductionDatabaseMigrationAuthorized =
+  authority?.authority?.researchAgent?.productionDatabaseMigrationAuthorized === true;
 const orderedChainSha256 = createHash('sha256')
   .update(JSON.stringify(migrations.map(({ migration, sha256 }) => [migration, sha256])))
   .digest('hex');
@@ -77,6 +113,16 @@ process.stdout.write(JSON.stringify({
   protocol: 'source-led-opportunity-v3-migration-plan-v2',
   migrations,
   orderedChainSha256,
+  researchAgentExtension: {
+    preludeMigrations: researchAgentPreludeMigrations,
+    migrations: researchAgentMigrations,
+    orderedChainSha256: createHash('sha256').update(JSON.stringify([...researchAgentPreludeMigrations,...migrations,...researchAgentMigrations]
+      .map(({ migration, sha256 }) => [migration, sha256]))).digest('hex'),
+    applyAuthorized: researchAgentProductionDatabaseMigrationAuthorized,
+    dedicatedApplyCommand: researchAgentProductionDatabaseMigrationAuthorized
+      ? 'npm run db:v3:apply-reviewed -- --research-agent-extension --source-commit <reviewed-commit> --attestation-commit <attestation-commit>'
+      : null,
+  },
   authorityArtifact: {
     path: path.relative(root, authorityArtifact),
     sha256: createHash('sha256').update(authorityBytes).digest('hex'),

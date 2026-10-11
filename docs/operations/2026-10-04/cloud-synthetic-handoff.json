@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "research-cloud-handoff-v1",
+  "workHash": "9260c8ab4fa20ce970521fee7b4c8ae33c8884ea3391080e0262fc898bb47489",
+  "resultHash": "8b7fa52c6f8e93a357590d6ebd9d37a4c2b8eb11a33040f0a8e555b07ba35dae",
+  "dataScope": "synthetic_acceptance",
+  "kind": "deep_article_validation",
+  "role": "independent_test",
+  "jobId": "22222222-2222-4222-8222-222222222222",
+  "attempt": 1,
+  "reservationId": "33333333-3333-4333-8333-333333333333",
+  "status": "verified_for_existing_submission",
+  "receivedAt": "2026-10-04T15:32:20.936Z",
+  "authoritativePublication": false,
+  "strategyApproved": false,
+  "requiresLiveReservationCheck": true,
+  "requiresIndependentReview": true
+}

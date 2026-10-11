@@ -1,0 +1,45 @@
+{
+  "canonicalModelHash": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
+  "files": [
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/README.md",
+      "bytes": 3826,
+      "sha256": "0383f07972cdf261e7b9ebafe6f07f7e04b5ab758ba1490c553f808e96fa301c"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/article-template.md",
+      "bytes": 18870,
+      "sha256": "9f874ecb1480e2d25bafbc25c566af773e7fdf7b958cd54f0776d3096abcc8dc"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/article.md",
+      "bytes": 21067,
+      "sha256": "5fd8f5a7a6043bd614efb7e781ad68372b83cf35c6a4853e8f8ae2418415905e"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json",
+      "bytes": 1706,
+      "sha256": "bfa404d6078a33194ac8040a0d6e6b63509b328ce70c303edc9385e4d1444beb"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "bytes": 88790,
+      "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+      "bytes": 17975,
+      "sha256": "66ae6b2dad0308e13f3c8a836ea85a00e634d8c47a428786c77a44d6c8c6c175"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/source-ledger.json",
+      "bytes": 2557,
+      "sha256": "73ba0b728a610f92a3b549c4e82bb87472552e0ebbedd2243daddc85782f225a"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-four-segment-model/verify-output.py",
+      "bytes": 4119,
+      "sha256": "8cdd35ba5e48276ae02bcebbe8eca00f1caff6925b2846290622ac94c4ae622f"
+    }
+  ]
+}

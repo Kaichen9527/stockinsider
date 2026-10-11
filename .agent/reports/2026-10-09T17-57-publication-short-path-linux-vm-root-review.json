@@ -1,0 +1,43 @@
+{
+  "recordedAt": "2026-10-09T18:02:29.991391+00:00",
+  "evidenceCommit": "75cc3944a87120fe0b49a3fee86064a95c99006d",
+  "parentEvidence": "f50e87099aff8d4205f74675d6df8f4615bc4d44",
+  "runtimeCommit": "1490472ec21630142222db86652d28772ddb45c9",
+  "rootRawVerified": {
+    "newFiles": 28,
+    "newBytes": 6644494,
+    "priorFiles": 54,
+    "priorBytes": 6815926
+  },
+  "independentReview": {
+    "agent": "/root/author_input_review_oct08",
+    "result": "unsigned scoped TEST/receipt PASS",
+    "nativeRerunByReviewer": false,
+    "compiledVmFilesDirectlyRevalidatedByReviewer": false,
+    "receiptSha256": "be7103063f9714e292ba80c562e741968128de89baff5d1b19090ba96d81263d"
+  },
+  "newPublicationTap": {
+    "pass": 94,
+    "fail": 0,
+    "skip": 0
+  },
+  "priorReviewerTap": {
+    "pass": 94,
+    "fail": 0,
+    "skip": 0,
+    "notRerun": true
+  },
+  "counting": "Separate suites share bootstrap cases; not188 distinct acceptance requirements.",
+  "wrapperCorrection": "Besides shorter artifact base, outer runner stop was17:57:30 to reserve cleanup before unchanged17:57:55 manual deadline. No product lease/deadline or assertions changed.",
+  "actualNestedAudit": {
+    "syntheticReservations": 2,
+    "reservedSeconds": 3600,
+    "syntheticCompletions": 2
+  },
+  "compiler": "supplementary Linux Webpack; normal Turbopack EPERM remains RED; separate identical-web Mac normal build PASS",
+  "partialSchema": true,
+  "genuineModelExecuted": false,
+  "productionPublished": false,
+  "protectedApproved": false,
+  "deployed": false
+}

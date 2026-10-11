@@ -1,0 +1,142 @@
+{
+  "policyVersion": "research-source-attempt-controller-v1",
+  "runId": "34355a39-53d7-4899-b95c-68184d721b30",
+  "asOf": "2026-10-05T07:42:45.311Z",
+  "limits": {
+    "scopes": 20,
+    "pagesPerScope": 1,
+    "bodyBytes": 4000000,
+    "timeoutMs": 12000,
+    "runMs": 60000,
+    "inputBytes": 2000000,
+    "priorItems": 1000
+  },
+  "receipts": [
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "34355a39-53d7-4899-b95c-68184d721b30",
+      "scopeId": "anchors-industry-bottleneck-no-company",
+      "platform": "threads",
+      "sourceUrl": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+      "scope": "Necessary summary of publicly visible post in existing authorized Mac session; no member content or credentials",
+      "method": "local_authorized_summary",
+      "contentScope": "article_body",
+      "rights": {
+        "basis": "authorized_local_summary",
+        "checkedAt": "2026-10-05T05:40:28.854Z",
+        "checkedBy": "root actual CUA public-post inspection"
+      },
+      "attemptedAt": "2026-10-05T07:42:45.168Z",
+      "completedAt": "2026-10-05T07:42:45.311Z",
+      "readOutcome": "read_success",
+      "outcome": "item_ready",
+      "httpStatus": null,
+      "bytes": 0,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": null,
+      "publishedAt": "2026-09-18T05:52:39.000Z",
+      "sourcePublishedAt": "2026-09-18T05:52:39.000Z",
+      "summaryPublishedAt": "2026-09-18T05:52:39.000Z",
+      "firstObservedAt": "2026-10-05T05:40:28.854Z",
+      "revisionObservedAt": "2026-10-05T07:42:45.168Z",
+      "rootUrl": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+      "contentHash": "336fd4cf91dc4b8a437cd87f74e2b5037958c19c9c5d68f02c97253b6fa79e81",
+      "retracted": false,
+      "errorCode": null,
+      "legacyConnectorDisposition": "blocked_auth",
+      "platformEnabled": false,
+      "receiptHash": "776a0bc4b75ddad7c0119aaecd5ac6060a112e5c956f9cc17ed98707f4da9ba8",
+      "attempt": {
+        "platform": "threads",
+        "status": "success",
+        "attemptedAt": "2026-10-05T07:42:45.168Z",
+        "scope": "anchors-industry-bottleneck-no-company: Necessary summary of publicly visible post in existing authorized Mac session; no member content or credentials | https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+        "resultCount": 1,
+        "errorCode": null,
+        "receiptHash": "776a0bc4b75ddad7c0119aaecd5ac6060a112e5c956f9cc17ed98707f4da9ba8"
+      }
+    }
+  ],
+  "unattemptedPlatforms": [
+    "official",
+    "news",
+    "broker",
+    "ptt",
+    "investanchors",
+    "instagram",
+    "facebook",
+    "podcast",
+    "youtube",
+    "telegram",
+    "bulltalk",
+    "twse_insider"
+  ],
+  "priorityRequest": {
+    "asOf": "2026-10-05T07:42:45.311Z",
+    "sourceAttempts": [
+      {
+        "platform": "threads",
+        "status": "success",
+        "attemptedAt": "2026-10-05T07:42:45.168Z",
+        "scope": "anchors-industry-bottleneck-no-company: Necessary summary of publicly visible post in existing authorized Mac session; no member content or credentials | https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+        "resultCount": 1,
+        "errorCode": null,
+        "receiptHash": "776a0bc4b75ddad7c0119aaecd5ac6060a112e5c956f9cc17ed98707f4da9ba8"
+      }
+    ]
+  },
+  "inboxRequest": {
+    "items": [
+      {
+        "sourcePlatform": "threads",
+        "sourceUrl": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+        "author": "investanchors",
+        "publishedAt": "2026-09-18T05:52:39.000Z",
+        "observedAt": "2026-10-05T07:42:45.168Z",
+        "firstObservedAt": "2026-10-05T05:40:28.854Z",
+        "revisionObservedAt": "2026-10-05T07:42:45.168Z",
+        "subjectScope": "industry_context",
+        "industryTerms": [
+          "CPO",
+          "光引擎測試",
+          "封裝良率"
+        ],
+        "symbols": [],
+        "shortSummary": "公開貼文指出光引擎檢測用於提升封裝良率，CPO測試流程與供應鏈仍在定義，參與規格制訂的廠商可能較有機會取得供應鏈位置。原文沒有提及友達。",
+        "catalyst": "產業研究線索：光互連技術轉向CPO後，測試與封裝流程可能改變；應另找公司技術、客戶與訂單證據建立關聯。",
+        "risk": "僅重新核對可見公開原文與一則回覆，其餘回覆及會員文章未取得；不能算友達來源熱度、合作確認、訂單或基本EPS。",
+        "claimStatus": "reported",
+        "visibility": "authenticated_summary",
+        "contentForm": "research_summary",
+        "acquisitionMethod": "authenticated_browser_summary",
+        "parentSourceUrl": null
+      }
+    ]
+  },
+  "roots": [
+    {
+      "rootId": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+      "url": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+      "publishedAt": "2026-09-18T05:52:39.000Z",
+      "firstObservedAt": "2026-10-05T05:40:28.854Z",
+      "revisionObservedAt": "2026-10-05T07:42:45.168Z",
+      "revisionId": "336fd4cf91dc4b8a437cd87f74e2b5037958c19c9c5d68f02c97253b6fa79e81",
+      "isOriginalSource": true,
+      "kind": "social_rumor",
+      "status": "current"
+    }
+  ],
+  "priorItemsUnchanged": true,
+  "limitations": [
+    "Exact supplied scopes only; no exhaustive search or platform activation.",
+    "No summary/model adapter, authenticated browser dispatcher, submission, publication or strategy approval.",
+    "Prior items are controller-retained context; authoritative heads remain in VPS."
+  ],
+  "authoritativePublication": false,
+  "strategyApproved": false,
+  "startedAt": "2026-10-05T07:42:45.310Z",
+  "explicitRunOnly": true,
+  "inputHash": "faccce5fb80c3432a4d8137c74ee58140f54d9dd75e30a7d7d0fafa8ccc9f429",
+  "runHash": "d6746aadeb28bde19c448ecabb86dad5fc162a11025ffbf02de03d4cc1a06288"
+}

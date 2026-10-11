@@ -1,0 +1,20 @@
+{
+  "receiptSubject": "fd93f2ad32f775a139e29d8cb84a0751800765e9",
+  "receiptSubjectTree": "02a15fc9bd4d5255e0cfd4f9346ae187136f48b9",
+  "codeSubject": "68090b55f9abba9138e2238d68f3d956a21253b3",
+  "codeTree": "f11590e9b28ba779343d9eb320569deeec1a2355",
+  "branch": "codex/reviewer-result-pg-stdin-oct09",
+  "remoteVerifiedHead": "fd93f2ad32f775a139e29d8cb84a0751800765e9",
+  "remoteVerification": "git ls-remote --heads origin codex/reviewer-result-pg-stdin-oct09",
+  "initialSandboxPushFailure": "fatal: unable to access 'https://github.com/Kaichen9527/stockinsider.git/': Failed to connect to proxy port 8080 after 0 ms: Could not connect to server",
+  "authorizedPush": "Existing proxy authentication unchanged; require_escalated execution successfully pushed and remote head matched. No credentials copied or network/TLS policy changed.",
+  "all47SealedRawFilesBytesShaRechecked": true,
+  "stoppedOwnedPgConfirmedInPrimaryReceipt": true,
+  "originalRedEvidencePreserved": true,
+  "taskCompletedAt": "2026-10-09T16:04:36.174850+00:00",
+  "manualElapsedSeconds": 1154.17485,
+  "manual30MinuteBudgetPassed": true,
+  "productModelBudgetClaim": false,
+  "finalAvailableBytes": 11073236992,
+  "reviewStatus": "root independent code review pending; no merge/deployment/publication"
+}

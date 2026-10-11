@@ -1104,22 +1104,45 @@ const checks = {
     const { Worker } = await import('node:worker_threads');
     const pulseBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT);
     const pulseState = new Int32Array(pulseBuffer);
-    const pulseWorker = new Worker(`const {workerData}=require('node:worker_threads');
-      const state=new Int32Array(workerData); setInterval(()=>Atomics.add(state,0,1),1);`,
-    { eval: true, workerData: pulseBuffer });
+    const pulseWorker = new Worker(`const {workerData,parentPort}=require('node:worker_threads');
+      const state=new Int32Array(workerData); setInterval(()=>Atomics.add(state,0,1),1);
+      parentPort.postMessage('ready');`, { eval: true, workerData: pulseBuffer });
     let threadedPulses = 0;
-    const threaded = await runtime('auth-source-worker.js').runWithLeaseHeartbeat({
-      adapter: { beginLegacyProducerHeartbeat: async () => ({ stop: async () => {
-        threadedPulses = Atomics.load(pulseState, 0); await pulseWorker.terminate();
-        return { state: 'healthy', pulses: threadedPulses };
-      } }) },
-      lease: { runId: 'threaded-run' }, claim: { jobId: 'threaded-job' }, ownerToken: 'owner',
-      leaseSeconds: 120, heartbeatIntervalMs: 10,
-      handler: async () => { const until=Date.now()+75; while(Date.now()<until) { /* block main event loop */ }
-        return { status: 'complete' }; },
-    });
-    assert.deepEqual(threaded, { status: 'complete' });
-    assert.ok(threadedPulses > 0, 'separate heartbeat event loop must progress while the handler blocks');
+    let blockingPulses = 0;
+    try {
+      // Startup scheduling is not the behavior under test. Begin the original
+      // 75ms blocking handler only after this synthetic counter is running.
+      await new Promise((resolve, reject) => {
+        const cleanup = () => {
+          clearTimeout(timer); pulseWorker.off('message', onMessage);
+          pulseWorker.off('error', onError); pulseWorker.off('exit', onExit);
+        };
+        const onMessage = (message) => {
+          cleanup(); message === 'ready' ? resolve() : reject(new Error('pulse_worker_invalid_ready'));
+        };
+        const onError = (error) => { cleanup(); reject(error); };
+        const onExit = () => { cleanup(); reject(new Error('pulse_worker_exited_before_ready')); };
+        const timer = setTimeout(() => { cleanup(); reject(new Error('pulse_worker_ready_timeout')); }, 5000);
+        pulseWorker.once('message', onMessage); pulseWorker.once('error', onError); pulseWorker.once('exit', onExit);
+      });
+      const threaded = await runtime('auth-source-worker.js').runWithLeaseHeartbeat({
+        adapter: { beginLegacyProducerHeartbeat: async () => ({ stop: async () => {
+          threadedPulses = Atomics.load(pulseState, 0); await pulseWorker.terminate();
+          return { state: 'healthy', pulses: threadedPulses };
+        } }) },
+        lease: { runId: 'threaded-run' }, claim: { jobId: 'threaded-job' }, ownerToken: 'owner',
+        leaseSeconds: 120, heartbeatIntervalMs: 10,
+        handler: async () => {
+          const before = Atomics.load(pulseState, 0);
+          const until=Date.now()+75; while(Date.now()<until) { /* block main event loop */ }
+          blockingPulses = Atomics.load(pulseState, 0) - before;
+          return { status: 'complete' };
+        },
+      });
+      assert.deepEqual(threaded, { status: 'complete' });
+      assert.ok(blockingPulses > 0, 'separate heartbeat event loop must progress during the blocked handler');
+      assert.ok(threadedPulses > 0, 'separate heartbeat event loop must progress while the handler blocks');
+    } finally { await pulseWorker.terminate(); }
     await assert.rejects(runtime('auth-source-worker.js').runWithLeaseHeartbeat({
       adapter: { beginLegacyProducerHeartbeat: async () => ({ stop: async () => ({ state: 'lost', pulses: 1 }) }) },
       lease: { runId: 'threaded-lost' }, claim: { jobId: 'threaded-lost-job' }, ownerToken: 'owner',

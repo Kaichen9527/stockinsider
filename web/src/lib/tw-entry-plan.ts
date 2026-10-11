@@ -123,6 +123,48 @@ function chartBars(bars: TwEntryBar[]): TwEntryChartBar[] {
   }));
 }
 
+/** Shared fixed formula, not authority, qualification or an executable order.
+ * Only the final240 observations seed Wilder; older rows cannot alter a signal. */
+export function calculateTwEntryRawSignals(input: TwEntryBar[]) {
+  if (!Array.isArray(input) || input.length > MAXIMUM_INPUT_BARS) throw new RangeError('tw_entry_plan_input_bound');
+  const bars = input.slice(-TW_ENTRY_MINIMUM_BARS);
+  const unavailable = (reason: string) => ({ available: false as const, missingData: [reason] });
+  if (bars.length !== TW_ENTRY_MINIMUM_BARS) return unavailable('price_history_below_240');
+  if (bars.some((bar, i) => !bar || !date(bar.session) || i > 0 && bar.session <= bars[i - 1].session
+    || ![bar.open, bar.high, bar.low, bar.close].every(finitePositive)
+    || !Number.isFinite(bar.volume) || bar.volume < 0
+    || bar.high < Math.max(bar.open, bar.close) || bar.low > Math.min(bar.open, bar.close)))
+    return unavailable('invalid_ohlcv');
+  const current = bars.at(-1)!, previous = bars.at(-2)!, prior20 = bars.slice(-21, -1);
+  const atr = wilderAtr(bars, 14), volume20 = mean(prior20.map((bar) => bar.volume));
+  if (!atr || !finitePositive(volume20)) return unavailable(!atr ? 'atr_unavailable' : 'prior20_volume_unavailable');
+  const ma20 = mean(bars.slice(-20).map((bar) => bar.close));
+  const ma60 = mean(bars.slice(-60).map((bar) => bar.close));
+  const ma60Prior5 = mean(bars.slice(-65, -5).map((bar) => bar.close));
+  const trend = current.close > ma20 && ma20 > ma60 && ma60 >= ma60Prior5;
+  const resistance = Math.max(...prior20.map((bar) => bar.high));
+  const support = Math.min(...prior20.map((bar) => bar.low));
+  const threshold = nextTwEntryPrice(resistance)!;
+  const touch = current.low <= ma20 + 0.5 * atr && current.high >= ma20 - 0.5 * atr;
+  const stabilized = current.close >= ma20 && current.close > previous.high;
+  const signals = (['breakout', 'pullback'] as const).map((strategyId) => {
+    const breakout = strategyId === 'breakout';
+    const priceConfirmed = breakout ? current.close >= threshold : touch && stabilized;
+    const volumeConfirmed = !breakout || current.volume >= 1.5 * volume20;
+    const confirmed = trend && priceConfirmed && volumeConfirmed;
+    const reasonCodes = unique([
+      ...(!trend ? ['uptrend_not_confirmed'] : []),
+      ...(breakout && !priceConfirmed ? ['close_below_prior20_breakout'] : []),
+      ...(breakout && !volumeConfirmed ? ['breakout_volume_below_1_5_prior20_mean'] : []),
+      ...(!breakout && !touch ? ['pullback_did_not_touch_ma20_zone'] : []),
+      ...(!breakout && !stabilized ? ['pullback_stabilization_not_confirmed'] : []),
+    ]);
+    return { strategyId, rawSignalState: confirmed ? 'confirmed' as const : 'waiting' as const, reasonCodes };
+  });
+  return { available: true as const, missingData: [], rulesetVersion: TW_ENTRY_PLAN_RULESET,
+    atr, volume20, ma20, ma60, ma60Prior5, trend, resistance, support, threshold, signals };
+}
+
 /** Research-only deterministic publication. The producer validates the actual
  * hash-bound adjustment evidence before adapting it to this contract. The
  * pure engine never reads a clock, database, provider or user position. */
@@ -161,22 +203,14 @@ export function buildTwEntryPlans(input: TwEntryPlanInput): TwEntryPlanBundle {
     candidateRevisionId: input.candidateRevisionId, inputHash, plans, structures, ohlcv: [], missingData };
 
   const current = bars.at(-1)!; const previous = bars.at(-2)!; const prior20 = bars.slice(-21, -1);
-  // A fixed 240-row seed window reuses the repository's Wilder adapter. Neither
-  // extra older history nor today's high/volume enter the prior-20 baseline.
-  const atr = wilderAtr(bars, 14);
-  const volume20 = mean(prior20.map((bar) => bar.volume));
-  if (!atr || !finitePositive(volume20)) {
-    const reason = !atr ? 'atr_unavailable' : 'prior20_volume_unavailable';
+  const raw = calculateTwEntryRawSignals(bars);
+  if (!raw.available) {
+    const reason = raw.missingData[0];
     plans.forEach((plan) => { plan.reasonCodes = [reason]; plan.missingData = [reason]; });
     return { schemaVersion: TW_ENTRY_PLAN_SCHEMA, symbol: input.symbol, candidateRevisionId: input.candidateRevisionId,
       inputHash, plans, structures, ohlcv: chartBars(bars), missingData: [reason] };
   }
-  const ma20 = mean(bars.slice(-20).map((bar) => bar.close));
-  const ma60 = mean(bars.slice(-60).map((bar) => bar.close));
-  const ma60Prior5 = mean(bars.slice(-65, -5).map((bar) => bar.close));
-  const trend = current.close > ma20 && ma20 > ma60 && ma60 >= ma60Prior5;
-  const resistance = Math.max(...prior20.map((bar) => bar.high));
-  const support = Math.min(...prior20.map((bar) => bar.low));
+  const { atr, ma20, resistance, support, threshold } = raw;
   const knownAt = prior20.map((bar) => bar.availableAt).sort((a, b) => instant(a) - instant(b)).at(-1)!;
   for (const [kind, value] of [['prior20_resistance', resistance], ['prior20_support', support]] as const) {
     const anchor = prior20.filter((bar) => (kind === 'prior20_resistance' ? bar.high : bar.low) === value).at(-1)!;
@@ -184,25 +218,15 @@ export function buildTwEntryPlans(input: TwEntryPlanInput): TwEntryPlanBundle {
       startSession: prior20[0].session, endSession: previous.session, rulesetVersion: TW_ENTRY_PLAN_RULESET };
     structures.push({ ...material, structureId: `tw-entry-structure:${hash([inputHash, material])}` });
   }
-  const threshold = nextTwEntryPrice(resistance)!;
   const late = instant(input.availableAt) >= instant(calendar!.nextOpenAt);
   const expired = instant(input.availableAt) >= instant(calendar!.nextCloseAt);
   for (const plan of plans) {
     plan.structureIds = structures.map((structure) => structure.structureId);
     const breakout = plan.strategyId === 'breakout';
-    const touch = current.low <= ma20 + 0.5 * atr && current.high >= ma20 - 0.5 * atr;
-    const stabilized = current.close >= ma20 && current.close > previous.high;
-    const priceConfirmed = breakout ? current.close >= threshold : touch && stabilized;
-    const volumeConfirmed = !breakout || current.volume >= 1.5 * volume20;
-    const confirmed = trend && priceConfirmed && volumeConfirmed;
-    plan.rawSignalState = confirmed ? 'confirmed' : 'waiting';
-    plan.reasonCodes = unique([
-      ...(!trend ? ['uptrend_not_confirmed'] : []),
-      ...(breakout && !priceConfirmed ? ['close_below_prior20_breakout'] : []),
-      ...(breakout && !volumeConfirmed ? ['breakout_volume_below_1_5_prior20_mean'] : []),
-      ...(!breakout && !touch ? ['pullback_did_not_touch_ma20_zone'] : []),
-      ...(!breakout && !stabilized ? ['pullback_stabilization_not_confirmed'] : []),
-    ]);
+    const signal = raw.signals.find((row) => row.strategyId === plan.strategyId)!;
+    const confirmed = signal.rawSignalState === 'confirmed';
+    plan.rawSignalState = signal.rawSignalState;
+    plan.reasonCodes = [...signal.reasonCodes];
     plan.planState = confirmed ? 'conditional' : 'waiting_confirmation';
     if (confirmed) {
       const lower = breakout ? threshold : current.close;

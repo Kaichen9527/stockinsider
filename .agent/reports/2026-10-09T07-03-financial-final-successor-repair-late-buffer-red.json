@@ -1,0 +1,21 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "repair-late-buffer-red",
+  "command": [
+    "node",
+    "scripts/run-node22.js",
+    "--experimental-strip-types",
+    "--test",
+    "--test-reporter=tap",
+    "scripts/research-financial-cleanup.test.mjs"
+  ],
+  "startedAt": "2026-10-09T06:56:06.130Z",
+  "completedAt": "2026-10-09T06:56:07.557Z",
+  "elapsedSeconds": 1.4274730320030358,
+  "exitCode": 1,
+  "sampledAggregateRssPeakBytes": 160153600,
+  "observedTaskDiskPeakBytes": 1345024000,
+  "availableBeforeBytes": 14704840704,
+  "availableAfterBytes": 14704832512,
+  "guardTermination": null
+}

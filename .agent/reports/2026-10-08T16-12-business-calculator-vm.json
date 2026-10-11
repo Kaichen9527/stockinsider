@@ -1,0 +1,185 @@
+{
+  "schemaVersion": "static-business-calculation-vm-checkpoint-v1",
+  "recordedAt": "2026-10-08T16:12:37.998137+00:00",
+  "window": {
+    "startedAt": "2026-10-08T16:03:57.536955+00:00",
+    "deadline": "2026-10-08T16:33:57.536955+00:00",
+    "previousDeadline": "2026-10-08T16:02:26Z",
+    "previousPositiveVerificationCompletedAt": "2026-10-08T16:01:56.732Z",
+    "previousCheckpointCommitAt": "2026-10-08T16:02:35Z",
+    "previousCommitOverrunSeconds": 9,
+    "scope": "64f7 static trusted business calculator incremental implementation; no publication or role dispatch"
+  },
+  "base": "2f45d0330977b8be3cd1f31e0282023e27b943f0",
+  "files": [
+    {
+      "path": "web/src/lib/research-business-calculator.ts",
+      "bytes": 13936,
+      "sha256": "7d3beca79af05df31494000cc6c06baffbc74f780973b8ee69747e3c8ae4db80"
+    },
+    {
+      "path": "scripts/research-business-calculator.test.mjs",
+      "bytes": 9055,
+      "sha256": "183b66f4c2106465984517fc04996f85b94514f9b3568ffd07d8930ecdce46d6"
+    },
+    {
+      "path": "package.json",
+      "bytes": 28616,
+      "sha256": "10c785880e0427a3f02c731bfc5a39ffaa472ab8273bc42ab0b81868aeab6ea1"
+    },
+    {
+      "path": "docs/operations/2026-10-08/research-business-calculator-v2-handoff.md",
+      "bytes": 2654,
+      "sha256": "e25e3d7bdcb89e80d442cd2ec6fd4ec8bc0e556645031b1e1fdadb801e909069"
+    },
+    {
+      "path": "openspec/changes/research-first-publication-v2/tasks.md",
+      "bytes": 2088,
+      "sha256": "020269156bca26b669e4c3a609161a71e491285b02c843b42219b1d0632105bf"
+    }
+  ],
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "business-unit",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-business-calculator.test.mjs",
+        "scripts/research-auo-four-segment-model.test.mjs",
+        "scripts/research-emc-company-model.test.mjs"
+      ],
+      "startedAt": "2026-10-08T16:08:44.266Z",
+      "completedAt": "2026-10-08T16:08:45.029Z",
+      "elapsedSeconds": 0.7632204809924588,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 360427520,
+      "observedTaskDiskPeakBytes": 1562791936,
+      "availableBeforeBytes": 21636673536,
+      "availableAfterBytes": 21636653056,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "business-unit-from-source",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-business-calculator.test.mjs",
+        "scripts/research-auo-four-segment-model.test.mjs",
+        "scripts/research-emc-company-model.test.mjs"
+      ],
+      "startedAt": "2026-10-08T16:09:32.703Z",
+      "completedAt": "2026-10-08T16:09:33.428Z",
+      "elapsedSeconds": 0.7255473260011058,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 349433856,
+      "observedTaskDiskPeakBytes": 1562816512,
+      "availableBeforeBytes": 21636648960,
+      "availableAfterBytes": 21636628480,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "business-types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "exec",
+        "--",
+        "tsc",
+        "--noEmit"
+      ],
+      "startedAt": "2026-10-08T16:09:33.457Z",
+      "completedAt": "2026-10-08T16:09:33.986Z",
+      "elapsedSeconds": 0.5287320649949834,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 104701952,
+      "observedTaskDiskPeakBytes": 1562841088,
+      "availableBeforeBytes": 21636624384,
+      "availableAfterBytes": 21634342912,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "business-types-correct",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T16:09:54.005Z",
+      "completedAt": "2026-10-08T16:09:57.611Z",
+      "elapsedSeconds": 3.6057135550072417,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 560934912,
+      "observedTaskDiskPeakBytes": 1565130752,
+      "availableBeforeBytes": 21634338816,
+      "availableAfterBytes": 21634330624,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "business-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T16:10:18.041Z",
+      "completedAt": "2026-10-08T16:10:43.500Z",
+      "elapsedSeconds": 25.459212219997426,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1772109824,
+      "observedTaskDiskPeakBytes": 1565143040,
+      "availableBeforeBytes": 21634326528,
+      "availableAfterBytes": 21634314240,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "business-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T16:10:43.539Z",
+      "completedAt": "2026-10-08T16:10:50.418Z",
+      "elapsedSeconds": 6.8790406479965895,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1042337792,
+      "observedTaskDiskPeakBytes": 1565155328,
+      "availableBeforeBytes": 21634310144,
+      "availableAfterBytes": 21633056768,
+      "guardTermination": null
+    }
+  ],
+  "tests": {
+    "total": 66,
+    "pass": 66,
+    "fail": 0,
+    "skip": 0,
+    "newCalculator": 32,
+    "originalAuo": 18,
+    "originalEmc": 16
+  },
+  "limits": [
+    "unsealed calculation only",
+    "no publication/model role/authority",
+    "observed P2 repair has priority",
+    "exact code review pending",
+    "reported YTD+forecast bridge not implemented"
+  ]
+}

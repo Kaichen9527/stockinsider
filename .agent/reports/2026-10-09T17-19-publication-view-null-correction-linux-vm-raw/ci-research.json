@@ -1,0 +1,18 @@
+{
+  "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+  "stage": "ci-research",
+  "command": [
+    "npm",
+    "run",
+    "test:research-agents"
+  ],
+  "startedAt": "2026-10-09T17:16:23.855Z",
+  "completedAt": "2026-10-09T17:17:35.077Z",
+  "elapsedSeconds": 71.22168239500024,
+  "exitCode": 0,
+  "sampledAggregateRssPeakBytes": 908312576,
+  "observedTaskDiskPeakBytes": 1052811264,
+  "availableBeforeBytes": 11338792960,
+  "availableAfterBytes": 11338522624,
+  "guardTermination": null
+}

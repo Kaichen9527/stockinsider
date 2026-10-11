@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "insider-d274-vm-acceptance-v1",
+  "recordedAt": "2026-10-09T04:26:47.136903+00:00",
+  "source": "d274726ee2824f09539cc9197b5acd8535553b75",
+  "harnessSubject": "5977b37726aa8849c0394659fdb7f22646066789",
+  "rawOfficialFetchSucceeded": false,
+  "production": false,
+  "sourceFixtures": "all five pins preadmitted synthetic; no full-market claim",
+  "native": {
+    "snapshotTAP": {
+      "pass": 16,
+      "fail": 0,
+      "skip": 0
+    },
+    "LinuxJournal": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "transport": "injected responses, separate from actual stack"
+    }
+  },
+  "actualStack": {
+    "pass": 6,
+    "fail": 0,
+    "skip": 0,
+    "reportPassed": true,
+    "checks": {
+      "auth401_zero_documents": "passed",
+      "three_rounds_exact_five_pins": "passed",
+      "replay_no_reacquisition_or_clock_reset": "passed",
+      "actual_maximum_base64_transport": "passed",
+      "projection_rejection_atomic": "passed"
+    },
+    "requiredLifecycleChecks": null,
+    "rawBytes": 12582912,
+    "base64Bytes": 16777216,
+    "databaseBytes": 12089011,
+    "snapshotRelationBytes": 344064,
+    "walBytes": 9629415,
+    "pendingReservations": 4,
+    "fullProductionPredecessorProfile": false,
+    "bindings": "loopback HTTP only; Unix socket PG; admin/PG/PostgREST not exposed publicly",
+    "privileges": "explicit synthetic fixture service operations, not formal minimum-privilege deployment",
+    "tables": "stocks empty; not authority activation",
+    "failureCleanup": null
+  },
+  "build": {
+    "cleanSource": true,
+    "webTree": "3f310512348cf79898a2cad162671d0493d4530b",
+    "buildId": "MJBWiU_0RzqvliZs1plFz",
+    "dotenvFilenameInventory": [],
+    "noDotenvContentsRead": true,
+    "dependencies": "existing installed node_modules reused by reflink; no npm install"
+  },
+  "measurements": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-journal-d274",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-insider-snapshot-postgres.test.mjs",
+        "scripts/research-insider-journal-linux.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:15:00.147Z",
+      "completedAt": "2026-10-09T04:15:15.248Z",
+      "elapsedSeconds": 15.100267999019707,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 142540800,
+      "observedTaskDiskPeakBytes": 1002868736,
+      "availableBeforeBytes": 19963588608,
+      "availableAfterBytes": 19957207040,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types-d274",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T04:16:36.613Z",
+      "completedAt": "2026-10-09T04:16:51.993Z",
+      "elapsedSeconds": 15.380433337006252,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1356570624,
+      "observedTaskDiskPeakBytes": 958742528,
+      "availableBeforeBytes": 19957157888,
+      "availableAfterBytes": 19954880512,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint-d274",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T04:17:15.452Z",
+      "completedAt": "2026-10-09T04:17:37.730Z",
+      "elapsedSeconds": 22.27875713299727,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1192976384,
+      "observedTaskDiskPeakBytes": 977072128,
+      "availableBeforeBytes": 19954876416,
+      "availableAfterBytes": 19938697216,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "build-d274",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T04:22:36.363Z",
+      "completedAt": "2026-10-09T04:23:10.504Z",
+      "elapsedSeconds": 34.14098675199784,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 2230738944,
+      "observedTaskDiskPeakBytes": 1209798656,
+      "availableBeforeBytes": 19937685504,
+      "availableAfterBytes": 19614429184,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "actual-stack-d274",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-insider-dataplane.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:24:19.863Z",
+      "completedAt": "2026-10-09T04:24:25.308Z",
+      "elapsedSeconds": 5.445245339011308,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 598487040,
+      "observedTaskDiskPeakBytes": 1345310720,
+      "availableBeforeBytes": 19614425088,
+      "availableAfterBytes": 19569438720,
+      "guardTermination": null
+    }
+  ],
+  "lintWarnings": 33,
+  "artifacts": [
+    {
+      "path": "/workspace/cloud-insider-snapshot-d274-artifacts-oct09/pg-journal-d274.log",
+      "bytes": 4081,
+      "sha256": "497c7e9df4a848728f270ba83462ab5477b521a76695ac6d8fd07cc79f7b8df7"
+    },
+    {
+      "path": "/workspace/cloud-insider-snapshot-d274-artifacts-oct09/actual-stack-d274.log",
+      "bytes": 2145,
+      "sha256": "e075888402dcdcdf1a5fdac92477974c8083bbe47bbf23adc7dd8da7d622cfbd"
+    },
+    {
+      "path": "/workspace/cloud-insider-snapshot-d274-artifacts-oct09/actual-stack-d274-run/report.json",
+      "bytes": 3844,
+      "sha256": "0ff0accdee0eb757234f28766c97160e4baba07a051777fd1322634db684ceda"
+    }
+  ],
+  "redHistory": {
+    "c96": {
+      "pass": 7,
+      "fail": 9,
+      "skip": 0,
+      "receipt": ".agent/reports/2026-10-08T16-39-insider-c96-vm-red.json"
+    },
+    "6fd": {
+      "pass": 12,
+      "fail": 4,
+      "skip": 0,
+      "error": "operator does not exist: boolean -> unknown",
+      "receipt": ".agent/reports/2026-10-09T04-10-publication-source-fence-vm.json"
+    }
+  },
+  "tooling": {
+    "node": "22.14.0",
+    "postgres": "17.11",
+    "postgrest": "16.3 pinned archive4eb414eb948c8800863cc8c9896a17b611b2dccf9ff581f4d57f42ec9ccee40d"
+  },
+  "limits": {
+    "cgroupMemoryMax": 34359738368,
+    "cpuMax": "400000 100000",
+    "nproc": 5,
+    "sampling": "100ms live process-group plus descendants; short/reparented may be missed",
+    "dfNotProjectQuota": true
+  },
+  "codeReviewAttribution": "597 lifecycle harness unsigned scoped approved, d274 narrow SQL successor review pending at time of execution; maker VM success is separate",
+  "remaining": [
+    "full installed production ACL/dependency rehearsal",
+    "official transport/complete full-market analysis",
+    "deployment/default activation"
+  ]
+}

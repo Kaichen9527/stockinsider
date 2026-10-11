@@ -1,0 +1,89 @@
+{
+  "schema": "tw-strategy-corporate-action-audit/v1",
+  "audited_at": "2026-09-25T03:51:04Z",
+  "source_run": 36081668572,
+  "source_run_identity": "a9123545831d8ee1a39b231c",
+  "source_commit": "e1fb505a894105e05fb08aa28fd0fb8ad8e520fa",
+  "network_requests": 0,
+  "holdout_accessed": false,
+  "inputs": {
+    "committed_manifest": "research/tw-strategy-lab/results/github-36081668572-1/dataset-manifest.json",
+    "corporate_actions_checkpoint": "user-saved checkpoint; not committed",
+    "corporate_actions_bytes": 14538,
+    "corporate_actions_sha256": "6642de0cd619c1b5fc61e4220a7603d851fc9849e7487cd57f0d525246d5e8d5",
+    "manifest_output_sha256": "6642de0cd619c1b5fc61e4220a7603d851fc9849e7487cd57f0d525246d5e8d5",
+    "byte_identity_verified": true
+  },
+  "row_audit": {
+    "rows": 69,
+    "resolved_rows": 62,
+    "unresolved_rows": 7,
+    "positive_cash_dividend_rows": 63,
+    "positive_cash_dividend_rows_missing_payment_date": 63,
+    "source_hash_references": 69,
+    "detail_source_hash_references": 5,
+    "unique_referenced_source_hashes": 19,
+    "references_missing_from_manifest": 0
+  },
+  "included_cash_only_subset": {
+    "symbols": ["1216", "2330", "5347", "6488", "8069"],
+    "rows": 47,
+    "resolved_rows": 47,
+    "unresolved_rows": 0,
+    "nonunit_share_factor_rows": 0,
+    "nonzero_cash_return_rows": 0,
+    "positive_cash_dividend_rows": 47,
+    "positive_cash_dividend_rows_missing_payment_date": 47,
+    "by_symbol": {
+      "1216": { "rows": 6, "resolved": 6 },
+      "2330": { "rows": 20, "resolved": 20 },
+      "5347": { "rows": 6, "resolved": 6 },
+      "6488": { "rows": 9, "resolved": 9 },
+      "8069": { "rows": 6, "resolved": 6 }
+    }
+  },
+  "excluded_symbols": {
+    "2317": {
+      "unresolved_action_rows": 1,
+      "blocked_symbol_years": ["2018"],
+      "reasons": ["missing_explicit_cash_or_share_factor", "price_gap_needs_suspension_or_listing_evidence"],
+      "missing_benchmark_sessions": 6
+    },
+    "2603": {
+      "unresolved_action_rows": 4,
+      "blocked_symbol_years": ["2018", "2019", "2022"],
+      "reasons": ["share_distribution_delivery_date_missing", "rights_subscription_cashflow_unmodeled", "missing_explicit_cash_or_share_factor", "price_gap_needs_suspension_or_listing_evidence"],
+      "missing_benchmark_sessions": 7
+    },
+    "2882": {
+      "unresolved_action_rows": 2,
+      "blocked_symbol_years": ["2019", "2022"],
+      "reasons": ["rights_subscription_cashflow_unmodeled"],
+      "missing_benchmark_sessions": 0
+    }
+  },
+  "terminal_receivable_decomposition": {
+    "note": "Reported equity recognizes the ex-date entitlement as an asset, but absent payment dates prevent reinvestment. The ex-receivables return is a terminal accounting decomposition, not a counterfactual portfolio path.",
+    "S1": { "ending_receivables_twd": 29542.64577, "reported_total_return": 0.001064137077000371, "terminal_return_ex_receivables": -0.0018901274999996165 },
+    "S2": { "ending_receivables_twd": 18000.0, "reported_total_return": -0.05036689662499949, "terminal_return_ex_receivables": -0.052166896624999515 },
+    "S3": { "ending_receivables_twd": 127285.42605000001, "reported_total_return": 0.06285975835500057, "terminal_return_ex_receivables": 0.05013121575000068 },
+    "S4": { "ending_receivables_twd": 0.0, "reported_total_return": 0.0, "terminal_return_ex_receivables": 0.0 },
+    "S6": { "ending_receivables_twd": 0.0, "reported_total_return": -0.004792850999999598, "terminal_return_ex_receivables": -0.004792850999999598 },
+    "same_panel_buy_and_hold": { "ending_receivables_twd": 1375038.7079, "reported_total_return": 0.9119450147900001, "terminal_return_ex_receivables": 0.7744411440000001 }
+  },
+  "s3_outlier_action_check": {
+    "symbol": "8069",
+    "entry_date": "2021-10-25",
+    "exit_date": "2022-01-18",
+    "net_pnl_twd": 704066.7150000001,
+    "corporate_action_rows_inside_holding_interval": 0,
+    "interpretation": "The preserved corporate-action table does not explain this outlier trade; concentration risk remains. This is not price-path replay evidence."
+  },
+  "limitations": [
+    "Official action documents were retrieved retrospectively on 2026-09-25; historical publication timing and revisions were not verified.",
+    "The artifact does not contain the full normalized prices CSV, so this audit does not independently replay the portfolio path.",
+    "Cash payment dates are absent for all 63 positive-dividend rows; receivables cannot finance later purchases in the current engine.",
+    "The panel is eight present-day survivors and the eligible subset is five stocks; it is not a historical market or App-screened universe."
+  ],
+  "conclusion": "The five-stock subset is supported as cash-only under the preserved action rows, and all three exclusions are supported by unresolved action or calendar evidence. No profitability, alpha, promotion, publication, merge, or deployment approval follows from this audit."
+}

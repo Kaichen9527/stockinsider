@@ -1,0 +1,1097 @@
+{
+  "schemaVersion": "stockinsider-attributed-official-historical-income-v1",
+  "symbol": "2409",
+  "recordedAt": "2026-10-08T10:00:23.932767+00:00",
+  "amountUnit": "TWD_thousands",
+  "epsUnit": "TWD_per_share",
+  "reports": [
+    {
+      "label": "2026q2-consolidated-tc",
+      "pdfPage": 6,
+      "source": {
+        "label": "2026q2-consolidated-tc",
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q2026_TC.pdf",
+        "attemptedAt": "2026-10-08T09:36:32.144541+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 1578813,
+        "sha256": "94d74c75de96a6ec7b38d4d6c8a9f5d2d92750bf618543429b326ff6c95dcdb2",
+        "observedAt": "2026-10-08T09:36:32.926634+00:00",
+        "rawFile": "2026q2-consolidated-tc.pdf",
+        "textSha256": "5f69f4fba20a68e5ad98d9935d6f6feef25b384de72570b5e442a18fac792a6d"
+      },
+      "columnPeriods": [
+        "2026Q2",
+        "2025Q2",
+        "2026H1",
+        "2025H1"
+      ],
+      "columns": {
+        "revenue": [
+          70891194,
+          69236749,
+          139922549,
+          141338620
+        ],
+        "cost": [
+          61643043,
+          59874766,
+          122490911,
+          123198183
+        ],
+        "grossProfit": [
+          9248151,
+          9361983,
+          17431638,
+          18140437
+        ],
+        "sellingExpenses": [
+          1790260,
+          1631540,
+          3494653,
+          3122199
+        ],
+        "administrativeExpenses": [
+          2773774,
+          2567226,
+          5474372,
+          4949966
+        ],
+        "researchDevelopmentExpenses": [
+          4465788,
+          3659690,
+          8879892,
+          7424244
+        ],
+        "operatingExpenses": [
+          9029822,
+          7858456,
+          17848917,
+          15496409
+        ],
+        "operatingProfit": [
+          218329,
+          1503527,
+          -417279,
+          2644028
+        ],
+        "interestIncome": [
+          256466,
+          307540,
+          493554,
+          628250
+        ],
+        "otherIncome": [
+          686109,
+          1577076,
+          1246092,
+          2345045
+        ],
+        "otherGains": [
+          1879270,
+          -348162,
+          1832448,
+          2752433
+        ],
+        "financeCosts": [
+          -659218,
+          -774501,
+          -1336579,
+          -1555653
+        ],
+        "equityMethodProfit": [
+          370059,
+          -132379,
+          431357,
+          -193973
+        ],
+        "nonOperating": [
+          2532686,
+          629574,
+          2666872,
+          3976102
+        ],
+        "pretaxProfit": [
+          2751015,
+          2133101,
+          2249593,
+          6620130
+        ],
+        "taxExpense": [
+          630964,
+          228787,
+          1168992,
+          1456629
+        ],
+        "netProfit": [
+          2120051,
+          1904314,
+          1080601,
+          5163501
+        ],
+        "ownersNetProfit": [
+          1343092,
+          1947871,
+          199555,
+          5241612
+        ],
+        "nonControllingNetProfit": [
+          776959,
+          -43557,
+          881046,
+          -78111
+        ],
+        "reportedBasicEps": [
+          0.18,
+          0.26,
+          0.03,
+          0.69
+        ],
+        "reportedDilutedEps": [
+          0.18,
+          0.26,
+          0.03,
+          0.69
+        ]
+      },
+      "sourceNumericLines": {
+        "revenue": "4000   營業收入淨額(附註六(廿一)及七)              $ 70,891,194 100           69,236,749 100 139,922,549 100 141,338,620 100",
+        "cost": "5000   營業成本(附註六(六)、(十一)、(十八)、(廿二)、\n        (廿三)及七)                           61,643,043     87      59,874,766     87 122,490,911         88 123,198,183         87",
+        "grossProfit": "營業毛利                                9,248,151     13       9,361,983     13 17,431,638          12 18,140,437          13",
+        "sellingExpenses": "6100    推銷費用                               1,790,260       3      1,631,540      2       3,494,653       2      3,122,199      2",
+        "administrativeExpenses": "6200    管理費用                               2,773,774       4      2,567,226      4       5,474,372       4      4,949,966      4",
+        "researchDevelopmentExpenses": "6300    研究發展費用                             4,465,788       6      3,659,690      5       8,879,892       6      7,424,244      5",
+        "operatingExpenses": "營業費用合計                           9,029,822     13       7,858,456     11      17,848,917     12      15,496,409     11",
+        "operatingProfit": "營業淨利(損)                               218,329     -        1,503,527      2        (417,279)    -        2,644,028      2",
+        "interestIncome": "7100    利息收入(附註六(廿四))                       256,466      -          307,540     -          493,554     -          628,250     -",
+        "otherIncome": "7010    其他收入(附註六(八)、(廿四)、七及九(四))            686,109          1    1,577,076         2    1,246,092         1    2,345,045         2",
+        "otherGains": "7020    其他利益及損失(附註六(三)、(九)、(十)、(廿四)\n         及七)                               1,879,270       3       (348,162)    -        1,832,448       2      2,752,433       2",
+        "financeCosts": "7050    財務成本(附註六(十)及(廿四))                   (659,218)     (1)      (774,501)    (1)     (1,336,579)     (1)    (1,555,653)     (1)",
+        "equityMethodProfit": "7060    採用權益法認列之關聯企業及合資損益之份額\n         (附註六(七))                            370,059         1     (132,379)    -          431,357     -         (193,973)    -",
+        "nonOperating": "營業外收入及支出合計                        2,532,686         4      629,574         1    2,666,872         2    3,976,102         3",
+        "pretaxProfit": "7900   稅前淨利                                2,751,015         4    2,133,101         3    2,249,593         2    6,620,130         5",
+        "taxExpense": "7950   減：所得稅費用(附註六(廿五))                      630,964         1      228,787     -        1,168,992         1    1,456,629         1",
+        "netProfit": "8200   本期淨利                                2,120,051         3    1,904,314         3    1,080,601         1    5,163,501         4",
+        "ownersNetProfit": "8610    母公司業主                         $    1,343,092         2    1,947,871         3      199,555     -        5,241,612         4",
+        "nonControllingNetProfit": "8620    非控制權益                                776,959         1      (43,557)    -          881,046         1      (78,111)    -",
+        "reportedBasicEps": "9750    基本每股盈餘                        $                 0.18                   0.26                   0.03                   0.69",
+        "reportedDilutedEps": "9850    稀釋每股盈餘                        $                 0.18                   0.26                   0.03                   0.69"
+      }
+    },
+    {
+      "label": "2026q1-consolidated-tc",
+      "pdfPage": 6,
+      "source": {
+        "label": "2026q1-consolidated-tc",
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/1Q2026_TC.pdf",
+        "attemptedAt": "2026-10-08T09:36:33.115488+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 1480979,
+        "sha256": "320247ecd9c393b98f0c2bf75416f3d0819744f6394f5d1810f50a5c242f378c",
+        "observedAt": "2026-10-08T09:36:33.734392+00:00",
+        "rawFile": "2026q1-consolidated-tc.pdf",
+        "textSha256": "5f9ea51fd99bdef23179b61e9c9b6b81feca3a5369858bacca8e929ede3453a1"
+      },
+      "columnPeriods": [
+        "2026Q1",
+        "2025Q1"
+      ],
+      "columns": {
+        "revenue": [
+          69031355,
+          72101871
+        ],
+        "cost": [
+          60847868,
+          63323417
+        ],
+        "grossProfit": [
+          8183487,
+          8778454
+        ],
+        "sellingExpenses": [
+          1704393,
+          1490659
+        ],
+        "administrativeExpenses": [
+          2700598,
+          2382740
+        ],
+        "researchDevelopmentExpenses": [
+          4414104,
+          3764554
+        ],
+        "operatingExpenses": [
+          8819095,
+          7637953
+        ],
+        "operatingProfit": [
+          -635608,
+          1140501
+        ],
+        "interestIncome": [
+          237088,
+          320710
+        ],
+        "otherIncome": [
+          559983,
+          767969
+        ],
+        "otherGains": [
+          -46822,
+          3100595
+        ],
+        "financeCosts": [
+          -677361,
+          -781152
+        ],
+        "equityMethodProfit": [
+          61298,
+          -61594
+        ],
+        "nonOperating": [
+          134186,
+          3346528
+        ],
+        "pretaxProfit": [
+          -501422,
+          4487029
+        ],
+        "taxExpense": [
+          538028,
+          1227842
+        ],
+        "netProfit": [
+          -1039450,
+          3259187
+        ],
+        "ownersNetProfit": [
+          -1143537,
+          3293741
+        ],
+        "nonControllingNetProfit": [
+          104087,
+          -34554
+        ],
+        "reportedBasicEps": [
+          -0.15,
+          0.43
+        ],
+        "reportedDilutedEps": [
+          -0.15,
+          0.43
+        ]
+      },
+      "sourceNumericLines": {
+        "revenue": "4000   營業收入淨額(附註六(十九)及七)                   $ 69,031,355 100            72,101,871 100",
+        "cost": "5000   營業成本(附註六(六)、(九)、(十六)、(二十)、(廿一)及七)     60,847,868  88            63,323,417  88",
+        "grossProfit": "營業毛利                                   8,183,487  12             8,778,454  12",
+        "sellingExpenses": "6100    推銷費用                                   1,704,393        3      1,490,659       2",
+        "administrativeExpenses": "6200    管理費用                                   2,700,598        4      2,382,740       3",
+        "researchDevelopmentExpenses": "6300    研究發展費用                                 4,414,104        6      3,764,554       5",
+        "operatingExpenses": "營業費用合計                                8,819,095       13      7,637,953      10",
+        "operatingProfit": "營業淨利(損)                                  (635,608)      (1)     1,140,501       2",
+        "interestIncome": "7100    利息收入(附註六(廿二))                             237,088      -         320,710      -",
+        "otherIncome": "7010    其他收入(附註六(廿二)及七)                           559,983          1     767,969        1",
+        "otherGains": "7020    其他利益及損失(附註六(三)、(八)、(廿二)及七)                (46,822)     -       3,100,595        5",
+        "financeCosts": "7050    財務成本(附註六(九)及(廿二))                        (677,361)     (1)      (781,152)     (1)",
+        "equityMethodProfit": "7060    採用權益法認列之關聯企業及合資損益之份額(附註六(七))               61,298      -         (61,594)     -",
+        "nonOperating": "營業外收入及支出合計                               134,186      -       3,346,528        5",
+        "pretaxProfit": "7900   稅前淨利(損)                                   (501,422)     (1)     4,487,029        7",
+        "taxExpense": "7950   減：所得稅費用(附註六(廿三))                           538,028        1     1,227,842        2",
+        "netProfit": "8200   本期淨利(損)                                 (1,039,450)     (2)     3,259,187        5",
+        "ownersNetProfit": "8610    母公司業主                              $ (1,143,537)       (2)     3,293,741          5",
+        "nonControllingNetProfit": "8620    非控制權益                                   104,087        -         (34,554)     -",
+        "reportedBasicEps": "9750    基本每股盈餘(損失)                         $                 (0.15)                  0.43",
+        "reportedDilutedEps": "9850    稀釋每股盈餘(損失)                         $                 (0.15)                  0.43"
+      }
+    },
+    {
+      "label": "4Q2025_TC",
+      "pdfPage": 9,
+      "source": {
+        "label": "4Q2025_TC",
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/4Q2025_TC.pdf",
+        "attemptedAt": "2026-10-08T09:55:37.001740+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 2256587,
+        "sha256": "b77ddfb5f9d248c9cdb55c24e48bd69b1f4fde77157aa1a3429b0b67f9e378f6",
+        "observedAt": "2026-10-08T09:55:37.828866+00:00",
+        "rawFile": "4Q2025_TC.pdf",
+        "textSha256": "f4efb770d1bd2f2f6cc5fa598d2829680788c554533d4e953ef43af9a82bf30d"
+      },
+      "columnPeriods": [
+        "2025FY",
+        "2024FY"
+      ],
+      "columns": {
+        "revenue": [
+          281387743,
+          280245421
+        ],
+        "cost": [
+          249032935,
+          256029425
+        ],
+        "grossProfit": [
+          32354808,
+          24215996
+        ],
+        "sellingExpenses": [
+          6978956,
+          6293277
+        ],
+        "administrativeExpenses": [
+          10455050,
+          10360357
+        ],
+        "researchDevelopmentExpenses": [
+          15976391,
+          16028319
+        ],
+        "operatingExpenses": [
+          33410397,
+          32681953
+        ],
+        "operatingProfit": [
+          -1055589,
+          -8465957
+        ],
+        "interestIncome": [
+          1188602,
+          1696201
+        ],
+        "otherIncome": [
+          4366895,
+          4079495
+        ],
+        "otherGains": [
+          7264110,
+          5248651
+        ],
+        "financeCosts": [
+          -3065821,
+          -3308073
+        ],
+        "equityMethodProfit": [
+          -257557,
+          144895
+        ],
+        "nonOperating": [
+          9496229,
+          7861169
+        ],
+        "pretaxProfit": [
+          8440640,
+          -604788
+        ],
+        "taxExpense": [
+          1452117,
+          2339594
+        ],
+        "netProfit": [
+          6988523,
+          -2944382
+        ],
+        "ownersNetProfit": [
+          6843361,
+          -3064167
+        ],
+        "nonControllingNetProfit": [
+          145162,
+          119785
+        ],
+        "reportedBasicEps": [
+          0.9,
+          -0.4
+        ],
+        "reportedDilutedEps": [
+          0.9,
+          -0.4
+        ]
+      },
+      "sourceNumericLines": {
+        "revenue": "4000   營業收入淨額(附註六(廿二)及七)                      $281,387,743 100 280,245,421 100",
+        "cost": "5000   營業成本(附註六(六)、(十一)、(十九)、(廿三)、(廿四)及七)      249,032,935  89 256,029,425  91",
+        "grossProfit": "營業毛利                                     32,354,808  11 24,215,996    9",
+        "sellingExpenses": "6100    推銷費用                                       6,978,956      2       6,293,277       2",
+        "administrativeExpenses": "6200    管理費用                                      10,455,050      4      10,360,357       4",
+        "researchDevelopmentExpenses": "6300    研究發展費用                                    15,976,391      6      16,028,319       6",
+        "operatingExpenses": "營業費用合計                                   33,410,397     12      32,681,953      12",
+        "operatingProfit": "營業淨損                                       (1,055,589)    (1)     (8,465,957)     (3)",
+        "interestIncome": "7100    利息收入(附註六(廿五))                              1,188,602       1      1,696,201        1",
+        "otherIncome": "7010    其他收入(附註六(三)、(八)、(十一)、(廿五)及七)               4,366,895       1      4,079,495        1",
+        "otherGains": "7020    其他利益及損失(附註六(三)、(七)、(八)、(十一)、(廿五)及七)        7,264,110       3      5,248,651        2",
+        "financeCosts": "7050    財務成本(附註六(十)及(廿五))                         (3,065,821)    (1)     (3,308,073)     (1)",
+        "equityMethodProfit": "7060    採用權益法認列之關聯企業及合資損益之份額(附註六(七))                (257,557)    -          144,895      -",
+        "nonOperating": "營業外收入及支出合計                                9,496,229       4      7,861,169        3",
+        "pretaxProfit": "7900   稅前淨利(損)                                     8,440,640       3       (604,788)     -",
+        "taxExpense": "7950   減：所得稅費用(附註六(廿六))                            1,452,117       1      2,339,594        1",
+        "netProfit": "8200   本期淨利(損)                                     6,988,523       2     (2,944,382)     (1)",
+        "ownersNetProfit": "8610    母公司業主                                 $    6,843,361         2   (3,064,167)     (1)",
+        "nonControllingNetProfit": "8620    非控制權益                                        145,162     -          119,785      -",
+        "reportedBasicEps": "9750    基本每股盈餘(損失)                            $                 0.90                   (0.40)",
+        "reportedDilutedEps": "9850    稀釋每股盈餘(損失)                            $                 0.90                   (0.40)"
+      }
+    },
+    {
+      "label": "3Q2025_TC",
+      "pdfPage": 6,
+      "source": {
+        "label": "3Q2025_TC",
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/3Q2025_TC.pdf",
+        "attemptedAt": "2026-10-08T09:55:37.002148+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 1534416,
+        "sha256": "279a2cbdae281cc970b768b40eafe8afc526fd04bfff6e4f70c72f11049293db",
+        "observedAt": "2026-10-08T09:55:37.804460+00:00",
+        "rawFile": "3Q2025_TC.pdf",
+        "textSha256": "38559552051e6f7a7dfcc6d04e58ca235e837822b636decbec4d8c662dac8a16"
+      },
+      "columnPeriods": [
+        "2025Q3",
+        "2024Q3",
+        "2025YTD9",
+        "2024YTD9"
+      ],
+      "columns": {
+        "revenue": [
+          69907556,
+          77748135,
+          211246176,
+          211553412
+        ],
+        "cost": [
+          63217947,
+          69293958,
+          186416130,
+          192782953
+        ],
+        "grossProfit": [
+          6689609,
+          8454177,
+          24830046,
+          18770459
+        ],
+        "sellingExpenses": [
+          1814972,
+          1689924,
+          4937171,
+          4800668
+        ],
+        "administrativeExpenses": [
+          2678890,
+          2746952,
+          7628856,
+          7517233
+        ],
+        "researchDevelopmentExpenses": [
+          4002010,
+          4327175,
+          11426254,
+          11595587
+        ],
+        "operatingExpenses": [
+          8495872,
+          8764051,
+          23992281,
+          23913488
+        ],
+        "operatingProfit": [
+          -1806263,
+          -309874,
+          837765,
+          -5143029
+        ],
+        "interestIncome": [
+          271786,
+          273552,
+          900036,
+          1240924
+        ],
+        "otherIncome": [
+          1156529,
+          695027,
+          3501574,
+          2107816
+        ],
+        "otherGains": [
+          54561,
+          -587057,
+          2806994,
+          430327
+        ],
+        "financeCosts": [
+          -742585,
+          -841121,
+          -2298238,
+          -2437912
+        ],
+        "equityMethodProfit": [
+          -2297,
+          174752,
+          -196270,
+          177931
+        ],
+        "nonOperating": [
+          737994,
+          -284847,
+          4714096,
+          1519086
+        ],
+        "pretaxProfit": [
+          -1068269,
+          -594721,
+          5551861,
+          -3623943
+        ],
+        "taxExpense": [
+          29421,
+          328413,
+          1486050,
+          1107646
+        ],
+        "netProfit": [
+          -1097690,
+          -923134,
+          4065811,
+          -4731589
+        ],
+        "ownersNetProfit": [
+          -1280274,
+          -925674,
+          3961338,
+          -4683504
+        ],
+        "nonControllingNetProfit": [
+          182584,
+          2540,
+          104473,
+          -48085
+        ],
+        "reportedBasicEps": [
+          -0.17,
+          -0.12,
+          0.52,
+          -0.61
+        ],
+        "reportedDilutedEps": [
+          -0.17,
+          -0.12,
+          0.52,
+          -0.61
+        ]
+      },
+      "sourceNumericLines": {
+        "revenue": "4000   營業收入淨額(附註六(廿一)及七)               $ 69,907,556 100            77,748,135 100 211,246,176 100 211,553,412 100",
+        "cost": "5000   營業成本(附註六(六)、(十一)、(十八)、(廿二)、(廿\n        三)及七)                              63,217,947      90      69,293,958      89 186,416,130         88 192,782,953          91",
+        "grossProfit": "營業毛利                                 6,689,609      10       8,454,177      11 24,830,046          12 18,770,459            9",
+        "sellingExpenses": "6100    推銷費用                                1,814,972       3       1,689,924       2       4,937,171      2       4,800,668       3",
+        "administrativeExpenses": "6200    管理費用                                2,678,890       4       2,746,952       4       7,628,856      4       7,517,233       4",
+        "researchDevelopmentExpenses": "6300    研究發展費用                              4,002,010       6       4,327,175       6      11,426,254      5      11,595,587       5",
+        "operatingExpenses": "營業費用合計                             8,495,872      13       8,764,051      12      23,992,281     11      23,913,488      12",
+        "operatingProfit": "營業淨利(損)                             (1,806,263)     (3)       (309,874)     (1)        837,765      1      (5,143,029)     (3)",
+        "interestIncome": "7100    利息收入(附註六(廿四))                        271,786       -         273,552       -         900,036          1    1,240,924          1",
+        "otherIncome": "7010    其他收入(附註六(八)、(十))、(十二)、(廿四)及\n         七)                                 1,156,529          2     695,027           1    3,501,574         1    2,107,816          1",
+        "otherGains": "7020    其他利益及損失(附註六(三)、(七)、(十)、(廿四)\n         及七)                                   54,561      -         (587,057)     -        2,806,994       1        430,327      -",
+        "financeCosts": "7050    財務成本(附註六(十)及(廿四))                    (742,585)     (1)       (841,121)     (1)     (2,298,238)     (1)    (2,437,912)     (1)",
+        "equityMethodProfit": "7060    採用權益法認列之關聯企業及合資損益之份額(附\n         註六(七))                                (2,297)     -          174,752      -         (196,270)    -          177,931      -",
+        "nonOperating": "營業外收入及支出合計                           737,994        1       (284,847)     -        4,714,096         2    1,519,086        1",
+        "pretaxProfit": "7900   稅前淨利(損)                             (1,068,269)     (2)       (594,721)     (1)      5,551,861         3   (3,623,943)      (2)",
+        "taxExpense": "7950   減：所得稅費用(附註六(廿五))                        29,421      -          328,413      -        1,486,050         1    1,107,646        1",
+        "netProfit": "8200   本期淨利(損)                             (1,097,690)     (2)       (923,134)     (1)      4,065,811         2   (4,731,589)      (3)",
+        "ownersNetProfit": "8610    母公司業主                          $   (1,280,274)     (2)       (925,674)     (1)      3,961,338         2   (4,683,504)     (3)",
+        "nonControllingNetProfit": "8620    非控制權益                                 182,584      -            2,540      -          104,473     -          (48,085)     -",
+        "reportedBasicEps": "9750    基本每股盈餘(損失)                     $                 (0.17)                  (0.12)                  0.52                   (0.61)",
+        "reportedDilutedEps": "9850    稀釋每股盈餘(損失)                     $                 (0.17)                  (0.12)                  0.52                   (0.61)"
+      }
+    },
+    {
+      "label": "4Q2024_TC",
+      "pdfPage": 9,
+      "source": {
+        "label": "4Q2024_TC",
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/4Q2024_TC.pdf",
+        "attemptedAt": "2026-10-08T09:55:37.951694+00:00",
+        "httpStatus": 200,
+        "status": "read_success",
+        "bytes": 2085146,
+        "sha256": "31273b75b40cb581b9bdd4ea43f9bcf7e0c2d2ccca15981ebcd29f50e15034f8",
+        "observedAt": "2026-10-08T09:55:38.628806+00:00",
+        "rawFile": "4Q2024_TC.pdf",
+        "textSha256": "c39ca619dbc4ee416631ca9c186df22259d869192eaf0f43ff53288e2fa91b37"
+      },
+      "columnPeriods": [
+        "2024FY",
+        "2023FY"
+      ],
+      "columns": {
+        "revenue": [
+          280245421,
+          247964437
+        ],
+        "cost": [
+          256029425,
+          243354069
+        ],
+        "grossProfit": [
+          24215996,
+          4610368
+        ],
+        "sellingExpenses": [
+          6293277,
+          5019739
+        ],
+        "administrativeExpenses": [
+          10360357,
+          8321194
+        ],
+        "researchDevelopmentExpenses": [
+          16028319,
+          13231450
+        ],
+        "operatingExpenses": [
+          32681953,
+          26572383
+        ],
+        "operatingProfit": [
+          -8465957,
+          -21962015
+        ],
+        "interestIncome": [
+          1696201,
+          1915078
+        ],
+        "otherIncome": [
+          4079495,
+          1999172
+        ],
+        "otherGains": [
+          5248651,
+          -391363
+        ],
+        "financeCosts": [
+          -3308073,
+          -2724883
+        ],
+        "equityMethodProfit": [
+          144895,
+          -518049
+        ],
+        "nonOperating": [
+          7861169,
+          279955
+        ],
+        "pretaxProfit": [
+          -604788,
+          -21682060
+        ],
+        "taxExpense": [
+          2339594,
+          -3530906
+        ],
+        "netProfit": [
+          -2944382,
+          -18151154
+        ],
+        "ownersNetProfit": [
+          -3064167,
+          -18203274
+        ],
+        "nonControllingNetProfit": [
+          119785,
+          52120
+        ],
+        "reportedBasicEps": [
+          -0.4,
+          -2.37
+        ],
+        "reportedDilutedEps": [
+          -0.4,
+          -2.37
+        ]
+      },
+      "sourceNumericLines": {
+        "revenue": "4000   營業收入淨額(附註六(廿一)及七)                    $280,245,421 100 247,964,437 100",
+        "cost": "5000   營業成本(附註六(六)、(十)、(十八)、(廿三)及七)          256,029,425  91 243,354,069  98",
+        "grossProfit": "營業毛利                                   24,215,996   9   4,610,368   2",
+        "sellingExpenses": "6100    推銷費用                                     6,293,277       2    5,019,739           2",
+        "administrativeExpenses": "6200    管理費用                                    10,360,357       4    8,321,194           4",
+        "researchDevelopmentExpenses": "6300    研究發展費用                                  16,028,319       6 13,231,450             5",
+        "operatingExpenses": "營業費用合計                                 32,681,953      12 26,572,383            11",
+        "operatingProfit": "營業淨損                                     (8,465,957)     (3) (21,962,015)         (9)",
+        "interestIncome": "7100    利息收入(附註六(廿四))                            1,696,201        1   1,915,078              1",
+        "otherIncome": "7010    其他收入(附註六(三)、(十)、(十一)、(廿四)及七)             4,079,495        1   1,999,172              1",
+        "otherGains": "7020    其他利益及損失(附註六(七)、(九)、(十)、(廿四)及七)           5,248,651        2    (391,363)         -",
+        "financeCosts": "7050    財務成本(附註六(九)及(廿四))                       (3,308,073)     (1) (2,724,883)          (1)",
+        "equityMethodProfit": "7060    採用權益法認列之關聯企業及合資損益之份額(附註六(七))               144,895      -      (518,049)         -",
+        "nonOperating": "營業外收入及支出合計                              7,861,169        3     279,955            1",
+        "pretaxProfit": "7900   稅前淨損                                       (604,788)     -   (21,682,060)         (8)",
+        "taxExpense": "7950   減：所得稅費用(利益)(附註六(廿五))                      2,339,594        1  (3,530,906)         (1)",
+        "netProfit": "8200   本期淨損                                     (2,944,382)     (1) (18,151,154)         (7)",
+        "ownersNetProfit": "8610    母公司業主                               $ (3,064,167)       (1) (18,203,274)         (7)",
+        "nonControllingNetProfit": "8620    非控制權益                                    119,785        -        52,120          -",
+        "reportedBasicEps": "9750    基本每股損失                              $                 (0.40)                   (2.37)",
+        "reportedDilutedEps": "9850    稀釋每股損失                              $                 (0.40)                   (2.37)"
+      }
+    }
+  ],
+  "quarters": [
+    {
+      "period": "2024Q3",
+      "method": "reported_quarter",
+      "values": {
+        "revenue": 77748135,
+        "cost": 69293958,
+        "grossProfit": 8454177,
+        "sellingExpenses": 1689924,
+        "administrativeExpenses": 2746952,
+        "researchDevelopmentExpenses": 4327175,
+        "operatingExpenses": 8764051,
+        "operatingProfit": -309874,
+        "interestIncome": 273552,
+        "otherIncome": 695027,
+        "otherGains": -587057,
+        "financeCosts": -841121,
+        "equityMethodProfit": 174752,
+        "nonOperating": -284847,
+        "pretaxProfit": -594721,
+        "taxExpense": 328413,
+        "netProfit": -923134,
+        "ownersNetProfit": -925674,
+        "nonControllingNetProfit": 2540,
+        "reportedBasicEps": -0.12,
+        "reportedDilutedEps": -0.12
+      },
+      "sources": [
+        "3Q2025_TC:2024Q3"
+      ]
+    },
+    {
+      "period": "2024Q4",
+      "method": "annual_minus_nine_month_flows_only",
+      "values": {
+        "revenue": 68692009,
+        "cost": 63246472,
+        "grossProfit": 5445537,
+        "sellingExpenses": 1492609,
+        "administrativeExpenses": 2843124,
+        "researchDevelopmentExpenses": 4432732,
+        "operatingExpenses": 8768465,
+        "operatingProfit": -3322928,
+        "interestIncome": 455277,
+        "otherIncome": 1971679,
+        "otherGains": 4818324,
+        "financeCosts": -870161,
+        "equityMethodProfit": -33036,
+        "nonOperating": 6342083,
+        "pretaxProfit": 3019155,
+        "taxExpense": 1231948,
+        "netProfit": 1787207,
+        "ownersNetProfit": 1619337,
+        "nonControllingNetProfit": 167870
+      },
+      "sources": [
+        "4Q2025_TC:2024FY",
+        "3Q2025_TC:2024YTD9"
+      ]
+    },
+    {
+      "period": "2025Q1",
+      "method": "reported_quarter",
+      "values": {
+        "revenue": 72101871,
+        "cost": 63323417,
+        "grossProfit": 8778454,
+        "sellingExpenses": 1490659,
+        "administrativeExpenses": 2382740,
+        "researchDevelopmentExpenses": 3764554,
+        "operatingExpenses": 7637953,
+        "operatingProfit": 1140501,
+        "interestIncome": 320710,
+        "otherIncome": 767969,
+        "otherGains": 3100595,
+        "financeCosts": -781152,
+        "equityMethodProfit": -61594,
+        "nonOperating": 3346528,
+        "pretaxProfit": 4487029,
+        "taxExpense": 1227842,
+        "netProfit": 3259187,
+        "ownersNetProfit": 3293741,
+        "nonControllingNetProfit": -34554,
+        "reportedBasicEps": 0.43,
+        "reportedDilutedEps": 0.43
+      },
+      "sources": [
+        "2026q1-consolidated-tc:2025Q1"
+      ]
+    },
+    {
+      "period": "2025Q2",
+      "method": "reported_quarter",
+      "values": {
+        "revenue": 69236749,
+        "cost": 59874766,
+        "grossProfit": 9361983,
+        "sellingExpenses": 1631540,
+        "administrativeExpenses": 2567226,
+        "researchDevelopmentExpenses": 3659690,
+        "operatingExpenses": 7858456,
+        "operatingProfit": 1503527,
+        "interestIncome": 307540,
+        "otherIncome": 1577076,
+        "otherGains": -348162,
+        "financeCosts": -774501,
+        "equityMethodProfit": -132379,
+        "nonOperating": 629574,
+        "pretaxProfit": 2133101,
+        "taxExpense": 228787,
+        "netProfit": 1904314,
+        "ownersNetProfit": 1947871,
+        "nonControllingNetProfit": -43557,
+        "reportedBasicEps": 0.26,
+        "reportedDilutedEps": 0.26
+      },
+      "sources": [
+        "2026q2-consolidated-tc:2025Q2"
+      ]
+    },
+    {
+      "period": "2025Q3",
+      "method": "reported_quarter",
+      "values": {
+        "revenue": 69907556,
+        "cost": 63217947,
+        "grossProfit": 6689609,
+        "sellingExpenses": 1814972,
+        "administrativeExpenses": 2678890,
+        "researchDevelopmentExpenses": 4002010,
+        "operatingExpenses": 8495872,
+        "operatingProfit": -1806263,
+        "interestIncome": 271786,
+        "otherIncome": 1156529,
+        "otherGains": 54561,
+        "financeCosts": -742585,
+        "equityMethodProfit": -2297,
+        "nonOperating": 737994,
+        "pretaxProfit": -1068269,
+        "taxExpense": 29421,
+        "netProfit": -1097690,
+        "ownersNetProfit": -1280274,
+        "nonControllingNetProfit": 182584,
+        "reportedBasicEps": -0.17,
+        "reportedDilutedEps": -0.17
+      },
+      "sources": [
+        "3Q2025_TC:2025Q3"
+      ]
+    },
+    {
+      "period": "2025Q4",
+      "method": "annual_minus_nine_month_flows_only",
+      "values": {
+        "revenue": 70141567,
+        "cost": 62616805,
+        "grossProfit": 7524762,
+        "sellingExpenses": 2041785,
+        "administrativeExpenses": 2826194,
+        "researchDevelopmentExpenses": 4550137,
+        "operatingExpenses": 9418116,
+        "operatingProfit": -1893354,
+        "interestIncome": 288566,
+        "otherIncome": 865321,
+        "otherGains": 4457116,
+        "financeCosts": -767583,
+        "equityMethodProfit": -61287,
+        "nonOperating": 4782133,
+        "pretaxProfit": 2888779,
+        "taxExpense": -33933,
+        "netProfit": 2922712,
+        "ownersNetProfit": 2882023,
+        "nonControllingNetProfit": 40689
+      },
+      "sources": [
+        "4Q2025_TC:2025FY",
+        "3Q2025_TC:2025YTD9"
+      ]
+    },
+    {
+      "period": "2026Q1",
+      "method": "reported_quarter",
+      "values": {
+        "revenue": 69031355,
+        "cost": 60847868,
+        "grossProfit": 8183487,
+        "sellingExpenses": 1704393,
+        "administrativeExpenses": 2700598,
+        "researchDevelopmentExpenses": 4414104,
+        "operatingExpenses": 8819095,
+        "operatingProfit": -635608,
+        "interestIncome": 237088,
+        "otherIncome": 559983,
+        "otherGains": -46822,
+        "financeCosts": -677361,
+        "equityMethodProfit": 61298,
+        "nonOperating": 134186,
+        "pretaxProfit": -501422,
+        "taxExpense": 538028,
+        "netProfit": -1039450,
+        "ownersNetProfit": -1143537,
+        "nonControllingNetProfit": 104087,
+        "reportedBasicEps": -0.15,
+        "reportedDilutedEps": -0.15
+      },
+      "sources": [
+        "2026q1-consolidated-tc:2026Q1"
+      ]
+    },
+    {
+      "period": "2026Q2",
+      "method": "reported_quarter",
+      "values": {
+        "revenue": 70891194,
+        "cost": 61643043,
+        "grossProfit": 9248151,
+        "sellingExpenses": 1790260,
+        "administrativeExpenses": 2773774,
+        "researchDevelopmentExpenses": 4465788,
+        "operatingExpenses": 9029822,
+        "operatingProfit": 218329,
+        "interestIncome": 256466,
+        "otherIncome": 686109,
+        "otherGains": 1879270,
+        "financeCosts": -659218,
+        "equityMethodProfit": 370059,
+        "nonOperating": 2532686,
+        "pretaxProfit": 2751015,
+        "taxExpense": 630964,
+        "netProfit": 2120051,
+        "ownersNetProfit": 1343092,
+        "nonControllingNetProfit": 776959,
+        "reportedBasicEps": 0.18,
+        "reportedDilutedEps": 0.18
+      },
+      "sources": [
+        "2026q2-consolidated-tc:2026Q2"
+      ]
+    }
+  ],
+  "additionalOtherGains": [
+    {
+      "label": "4Q2025_TC",
+      "pdfPage": 73,
+      "columnPeriods": [
+        "2025FY",
+        "2024FY"
+      ],
+      "columns": {
+        "fxNet": [
+          -636026,
+          764548
+        ],
+        "fairValueGains": [
+          380869,
+          -423437
+        ],
+        "ppeDisposalGains": [
+          7784091,
+          4894753
+        ],
+        "investmentDisposalGains": [
+          2170750,
+          1151456
+        ],
+        "impairmentLosses": [
+          -765337,
+          -187700
+        ],
+        "heldForSaleDisposalGains": [
+          91797,
+          224306
+        ],
+        "litigationReversal": [
+          0,
+          77336
+        ],
+        "subsidiaryDisposalGains": [
+          26076,
+          0
+        ],
+        "restructuringLosses": [
+          -717321,
+          0
+        ],
+        "disasterOther": [
+          -1070789,
+          -1252611
+        ]
+      }
+    },
+    {
+      "label": "3Q2025_TC",
+      "pdfPage": 49,
+      "columnPeriods": [
+        "2025Q3",
+        "2024Q3",
+        "2025YTD9",
+        "2024YTD9"
+      ],
+      "columns": {
+        "fxNet": [
+          260958,
+          -533246,
+          -734365,
+          158054
+        ],
+        "fairValueGains": [
+          -128594,
+          468774,
+          464695,
+          84715
+        ],
+        "ppeDisposalGains": [
+          22139,
+          -191995,
+          2399049,
+          -170695
+        ],
+        "investmentDisposalGains": [
+          0,
+          0,
+          2164382,
+          1151456
+        ],
+        "heldForSaleDisposalGains": [
+          99201,
+          -18437,
+          92965,
+          -15669
+        ],
+        "impairmentLosses": [
+          -128780,
+          0,
+          -547730,
+          0
+        ],
+        "disasterOther": [
+          -70363,
+          -312153,
+          -1032002,
+          -777534
+        ]
+      }
+    }
+  ],
+  "notes": [
+    "Exact full-report amounts supplement previously retained rounded press-release tables; prior files and their +/-1million rounding discrepancies are not overwritten.",
+    "8 quarters cover2024Q3–2026Q2. Q4 income-statement flow items derive from annual-minus-nine-month flows only. Q4 EPS deliberately omitted: annual/cumulative weighted EPS must not be subtracted.",
+    "All five reports first acquiredOctober8; there is no earlier information-time or historical signal eligibility claim.",
+    "2025 annual and2024 annual comparative income matrices agree exactly; both 2026Q1 and2025Q1 original income statements reconcile to H1 minusQ2. Segment attribution conflicts remain in the separate full financial relay.",
+    "Reported basic/diluted printed EPS can be rounded alike while denominators differ. These are not forward EPS or normalized EPS.",
+    "Known gains include property/investment disposals, impairment and restructuring. Exact owner-attributable tax and NCI effects are not inferred by subtracting pretax gains from parent profit.",
+    "No firm orders, calibrated multiples, target prices, qualification or publication approval asserted."
+  ]
+}

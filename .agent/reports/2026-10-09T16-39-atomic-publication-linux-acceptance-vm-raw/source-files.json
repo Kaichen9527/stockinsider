@@ -1,0 +1,42 @@
+[
+  {
+    "file": "migrations/20261010_research_atomic_publication_v2.sql",
+    "bytes": 43051,
+    "sha256": "ed2334dc46cf73fd33f61bd00d1034b50924d5e2213474372da5b121c4f3128a"
+  },
+  {
+    "file": "scripts/research-atomic-publication.test.mjs",
+    "bytes": 6771,
+    "sha256": "6c9cc74f2ab23069d6e30ccd16d5ba33ea0c9457abffd912a1540863753bd9da"
+  },
+  {
+    "file": "scripts/research-atomic-publication-postgres.test.mjs",
+    "bytes": 34954,
+    "sha256": "96fb765e66d443d92da425b0732277981f813f060e9a55da4b1c5df931e9ed55"
+  },
+  {
+    "file": "web/src/lib/research-atomic-publication.ts",
+    "bytes": 13296,
+    "sha256": "b981bde6e86ec3a52b2c47cf287493851c58af8fa28f3f577b3069839db577f0"
+  },
+  {
+    "file": "web/src/app/api/internal/research-deep-job/route.ts",
+    "bytes": 12557,
+    "sha256": "d70ceae33eb8613da1b891a0790ff21a2a90bd67fedc73a7d7d9074668cba42a"
+  },
+  {
+    "file": "package.json",
+    "bytes": 32676,
+    "sha256": "e767ffadf8afae5611bb643723e6152aeeabf6d065d9f63d6ca9e2526933b80f"
+  },
+  {
+    "file": "package-lock.json",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38"
+  },
+  {
+    "file": "web/package-lock.json",
+    "bytes": 274090,
+    "sha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516"
+  }
+]

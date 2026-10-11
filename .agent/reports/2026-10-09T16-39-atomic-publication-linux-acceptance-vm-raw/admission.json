@@ -1,0 +1,19 @@
+{
+  "startedAt": "2026-10-09T16:34:50Z",
+  "deadline": "2026-10-09T17:04:50Z",
+  "sourceHead": "18d6c86ffabfa0fc88c6f0ed807a860024d0f144",
+  "sourceTree": "15e7d9a49285dbe11e0e47070aa3c5a11d76c517",
+  "webTree": "14528d8e1d435f881f6e3da91ccfeb4e7808c408",
+  "availableBytes": 11003392000,
+  "activeVmHeavyProcesses": [],
+  "shortPrivateTmpdir": "/tmp/si-apub-qhk3mbo7",
+  "sampleSocketBytes": 36,
+  "node": "22.14.0",
+  "postgres": "17.11",
+  "rootPgInstalledAndLockVersion": "8.18.0",
+  "dependenciesReinstalled": false,
+  "networkPolicyMode": "restricted",
+  "vpnConfigured": false,
+  "proxyCaPreserved": true,
+  "selectedFileCount": 73
+}

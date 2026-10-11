@@ -1,0 +1,40 @@
+{
+  "recordedAt": "2026-10-09T07:16:24.556631+00:00",
+  "subject": "75d91024ce365606989bfe42b2d7e6227b65044d",
+  "tree": "26e5622bd43938ee86b281b52322c68c48f3d422",
+  "webTree": "714d370bda0067bbff81ceec6206a11bd659022c",
+  "clean": true,
+  "buildId": "9mh_Rx5DRtP71D4NMOfmg",
+  "compiledFiles": [
+    {
+      "path": "web/.next/BUILD_ID",
+      "bytes": 21,
+      "sha256": "5cc8f449ff2711f4988fb3905c251275348cba4e3730187880f4b841250730dc"
+    },
+    {
+      "path": "web/.next/server/app/api/internal/research-deep-job/route.js",
+      "bytes": 608,
+      "sha256": "0c1e753092ca3dbb0f8bdea70502991fc3d0e35ffdee0bd602d42419a7a187a2"
+    },
+    {
+      "path": "web/.next/server/app/api/internal/research-deep-job/route.js.nft.json",
+      "bytes": 14242,
+      "sha256": "0ea6351782826382cd1db23615df5147c1a19991f66bdc5c9c4e240f6101197a"
+    },
+    {
+      "path": "web/.next/build-manifest.json",
+      "bytes": 645,
+      "sha256": "e6abcda4d6a7f3884e4c036c1e1aca7d58c9b8d4c5d043b8dd99a36c17584b8a"
+    },
+    {
+      "path": "web/.next/server/app-paths-manifest.json",
+      "bytes": 12368,
+      "sha256": "e4c9c099f71bddf74b42c723f72d4e187ca104ef7b847fbd7f9463c9e1a597dc"
+    }
+  ],
+  "dotenvFilenameInventoryOnly": [
+    ".env.example"
+  ],
+  "dotenvContentsRead": false,
+  "nodeVersion": "v22.14.0"
+}

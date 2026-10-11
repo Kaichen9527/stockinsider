@@ -1,0 +1,157 @@
+TAP version 13
+# (node:139978) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139978) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-observed-roster.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: compiled financial supplement 2409, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 111.553219
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 58.48069
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 10.135066
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 330.832041
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 23.916225
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 10.148721
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 3.728417
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 459.021362
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 81.44523
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 307.515205
+      ...
+    # Subtest: compiled positive supplement computes three monthly operands and preserves original cutoffs
+    ok 11 - compiled positive supplement computes three monthly operands and preserves original cutoffs
+      ---
+      duration_ms: 383.230764
+      ...
+    # Subtest: anonymous and changed preparation hash reject without writes
+    ok 12 - anonymous and changed preparation hash reject without writes
+      ---
+      duration_ms: 23.405839
+      ...
+    # Subtest: restart exact preparation replay keeps the same admitted time, hash and budget
+    ok 13 - restart exact preparation replay keeps the same admitted time, hash and budget
+      ---
+      duration_ms: 540.404632
+      ...
+    1..13
+ok 1 - compiled financial supplement 2409, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 17175.044163
+  ...
+# Subtest: compiled financial supplement 2383, synthetic job, actual fixed financial inputs
+    # Subtest: unauthorized real Next inbox returns 401 without a DB write
+    ok 1 - unauthorized real Next inbox returns 401 without a DB write
+      ---
+      duration_ms: 53.431478
+      ...
+    # Subtest: real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+    ok 2 - real Next/Supabase/PostgREST PostgreSQL inbox persists three industry summaries
+      ---
+      duration_ms: 69.412185
+      ...
+    # Subtest: anonymous PostgREST cannot read or call service-only source RPC
+    ok 3 - anonymous PostgREST cannot read or call service-only source RPC
+      ---
+      duration_ms: 15.511991
+      ...
+    # Subtest: ancillary priority dependencies are empty and service read-only with no authority writes
+    ok 4 - ancillary priority dependencies are empty and service read-only with no authority writes
+      ---
+      duration_ms: 340.136223
+      ...
+    # Subtest: guarded stock-master entry refuses an absent production writer identity
+    ok 5 - guarded stock-master entry refuses an absent production writer identity
+      ---
+      duration_ms: 27.82322
+      ...
+    # Subtest: unchanged real source-head RPC returns current roots and no pre-observation knowledge
+    ok 6 - unchanged real source-head RPC returns current roots and no pre-observation knowledge
+      ---
+      duration_ms: 9.372585
+      ...
+    # Subtest: real authority RPC remains empty without promoting the observed roster
+    ok 7 - real authority RPC remains empty without promoting the observed roster
+      ---
+      duration_ms: 3.79699
+      ...
+    # Subtest: PostgreSQL restart and duplicate inbox POST preserve the original records
+    ok 8 - PostgreSQL restart and duplicate inbox POST preserve the original records
+      ---
+      duration_ms: 466.602629
+      ...
+    # Subtest: priority fails honestly and consumer restart fences an uncertain submission
+    ok 9 - priority fails honestly and consumer restart fences an uncertain submission
+      ---
+      duration_ms: 77.098831
+      ...
+    # Subtest: compiled guarded preparation binds actual job, lease and source seal
+    ok 10 - compiled guarded preparation binds actual job, lease and source seal
+      ---
+      duration_ms: 317.54087
+      ...
+    # Subtest: compiled positive supplement computes three monthly operands and preserves original cutoffs
+    ok 11 - compiled positive supplement computes three monthly operands and preserves original cutoffs
+      ---
+      duration_ms: 390.905132
+      ...
+    # Subtest: anonymous and changed preparation hash reject without writes
+    ok 12 - anonymous and changed preparation hash reject without writes
+      ---
+      duration_ms: 22.834753
+      ...
+    # Subtest: restart exact preparation replay keeps the same admitted time, hash and budget
+    ok 13 - restart exact preparation replay keeps the same admitted time, hash and budget
+      ---
+      duration_ms: 546.759441
+      ...
+    1..13
+ok 2 - compiled financial supplement 2383, synthetic job, actual fixed financial inputs
+  ---
+  duration_ms: 18335.261148
+  ...
+1..2
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 38578.48998

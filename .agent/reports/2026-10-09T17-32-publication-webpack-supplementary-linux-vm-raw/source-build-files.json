@@ -1,0 +1,32 @@
+[
+  {
+    "file": "package.json",
+    "bytes": 32933,
+    "sha256": "b60ab7edafc164e5d7227238e910a42ff3d662c45eece73e226752a112133b26"
+  },
+  {
+    "file": "web/package.json",
+    "bytes": 2137,
+    "sha256": "bd2b13381a5e9e5bdafe83a2a2803b753edd8fbf27f125710d191fa2d46a600b"
+  },
+  {
+    "file": "web/next.config.ts",
+    "bytes": 762,
+    "sha256": "c82b6ea00336a41b73a0d40a0130e548fc563d679c6ea4bc5dfe917184cb4fcd"
+  },
+  {
+    "file": "scripts/assert_canonical_vercel_project.mjs",
+    "bytes": 833,
+    "sha256": "e35596be5ee9b09d83832a9f47db6922258615f16356934cf24829889070c75d"
+  },
+  {
+    "file": "web/scripts/sync-official-authority.mjs",
+    "bytes": 4171,
+    "sha256": "d1e30d7e538d98ce5e5a012a0e007bb137bf7df829491d3b4ec5b5a316c5644d"
+  },
+  {
+    "file": "scripts/sync-research-strategy-release.mjs",
+    "bytes": 7174,
+    "sha256": "f17f6bd7603975d4a25b6a81da8c7a9f4935786d06bc7205d00e71c3e0e8686a"
+  }
+]

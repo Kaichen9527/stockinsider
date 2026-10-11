@@ -1,0 +1,117 @@
+{
+  "manualObservedStartAt": "2026-10-11T05:26:02.098012+00:00",
+  "conservativeDeadlineAt": "2026-10-11T05:55:50Z",
+  "preflightAt": "2026-10-11T05:26:50.575755+00:00",
+  "sourceHead": "887355ca0479d957d9b0472bba70ea4f8f9d5961",
+  "sourceTree": "eb0a4ada8ede4b791d10129f8151938e7ee586a2",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "noActiveHeavyBeforeAdmission": true,
+  "diskAvailableBytes": 10080989184,
+  "PATH": "/workspace/.tools/node22/node_modules/.bin:/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/usr/bin:/bin",
+  "USER": "agent",
+  "USERSource": "pwd.getpwuid(os.geteuid()).pw_name",
+  "HOMEChanged": false,
+  "pgPreflight": [
+    {
+      "command": [
+        "pg_config",
+        "--bindir"
+      ],
+      "exitCode": 0,
+      "stdout": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "v22.14.0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "npm",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "11.9.0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "initdb (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "pg_ctl (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/postgres",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": ""
+    }
+  ],
+  "connectionParameterChecks": [
+    {
+      "label": "before-env-only",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "-e",
+        "const os=require('node:os'); const {Client}=require('pg'); const user=new Client({host:'/tmp/unused-preflight',database:'postgres'}).connectionParameters.user; console.log(JSON.stringify({osUsername:os.userInfo().username,environmentUser:process.env.USER??null,pgUser:user??null,pgVersion:require('pg/package.json').version,databaseConnected:false}));"
+      ],
+      "exitCode": 0,
+      "observation": {
+        "osUsername": "agent",
+        "environmentUser": null,
+        "pgUser": null,
+        "pgVersion": "8.18.0",
+        "databaseConnected": false
+      }
+    },
+    {
+      "label": "corrected-env-only",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "-e",
+        "const os=require('node:os'); const {Client}=require('pg'); const user=new Client({host:'/tmp/unused-preflight',database:'postgres'}).connectionParameters.user; console.log(JSON.stringify({osUsername:os.userInfo().username,environmentUser:process.env.USER??null,pgUser:user??null,pgVersion:require('pg/package.json').version,databaseConnected:false}));"
+      ],
+      "exitCode": 0,
+      "observation": {
+        "osUsername": "agent",
+        "environmentUser": "agent",
+        "pgUser": "agent",
+        "pgVersion": "8.18.0",
+        "databaseConnected": false
+      }
+    }
+  ],
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "rootLockBytes": 31809,
+  "dependencyInstalled": false,
+  "proxyCAInheritedWithoutExportingValues": true
+}

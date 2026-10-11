@@ -104,3 +104,11 @@ test('public matched symbols never invent a records-written placeholder', () => 
   assert.deepEqual(publicMatchedSymbols(undefined), []);
   assert.deepEqual(publicMatchedSymbols(['2330', 'records_written', '2330', '2026']), ['2330']);
 });
+
+for(const duplicatesSkipped of [0,1501]) test(`incomplete zero-new replay overrides empty/duplicate ${duplicatesSkipped}`,()=>{
+ assert.equal(classifySourceSyncTerminal({fetchedPosts:1501,recordsWritten:0,duplicatesSkipped,degradedReason:'insider_bounded_response_pages_remaining'}),'partial');
+});
+test('failed dataset overrides success of other empty/duplicate datasets',()=>{
+ assert.equal(classifySourceSyncTerminal({fetchedPosts:1,recordsWritten:0,duplicatesSkipped:1,errorCode:'twse_insider_dataset_failures:1',degradedReason:'twse_insider_partial_schema_or_transport_failure'}),'partial');
+ assert.equal(classifySourceSyncTerminal({fetchedPosts:0,recordsWritten:0,duplicatesSkipped:0,errorCode:'twse_insider_dataset_failures:1'}),'failed');
+});

@@ -1,0 +1,41 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {verifyLocalInboxDataPlane} from '/workspace/cloud-research-converged-oct08/scripts/research-local-inbox-dataplane.mjs';
+import {prepareObservedRosterAdmission} from '/workspace/cloud-research-converged-oct08/web/src/lib/research-observed-roster.ts';
+const root='/workspace/cloud-research-converged-oct08';
+const read=f=>JSON.parse(fs.readFileSync(root+'/docs/research/2026-10-08-discovery-live/'+f,'utf8'));
+const roster={legacyClassification:read('observed-security-classification.json'),securityScope:read('official-security-scope-reconciliation.json')};
+// Synthetic inbox and model owner are development fixtures. Only the fixed
+// calculator's Git relay inputs are actual attributed public financial data.
+for(const symbol of ['2409','2383'])test(`compiled financial supplement ${symbol}, synthetic job, actual fixed financial inputs`,{timeout:120000},async t=>{
+ const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,observedClaim:true,check:(name,fn)=>t.test(name,fn),afterBaseline:async({post,sql,priorityRequest,report,restart})=>{
+  const prepared=prepareObservedRosterAdmission(roster),scope={scope:'research_observed_v1',snapshotHash:prepared.snapshotHash};
+  let r=await post('api/internal/research-observed-roster',roster);assert.equal(r.status,200);
+  const now=new Date(Date.now()-1000).toISOString();
+  const item={sourcePlatform:'threads',sourceUrl:`https://example.invalid/synthetic-financial-http/${symbol}`,author:'synthetic fixture, not a publisher observation',publishedAt:now,observedAt:now,firstObservedAt:now,symbols:[symbol],shortSummary:'Synthetic company mention for isolated controller and financial calculator acceptance. Not a real source or an investment thesis.',catalyst:'No actual catalyst; developer fixture only.',risk:'No orders, qualification, or independent model execution.',claimStatus:'reported',visibility:'public',contentForm:'research_summary',acquisitionMethod:'public_document'};
+  r=await post('api/internal/research-inbox',{items:[item]});assert.equal(r.status,200);const inbox=await r.json();assert.equal(inbox.accepted,1);const documentId=inbox.revisions[0].id;
+  r=await post('api/internal/research-priority-run',{...priorityRequest,...scope,asOf:new Date().toISOString(),assessments:[{symbol,profitImpact:{level:0,reason:'合成隔離驗收，無真實獲利影響'},novelty:{level:0,reason:'合成隔離驗收，不是新催化'},researchability:{level:1,reason:'測試既有固定財務計算入口，不代表研究資格'},lane:'general',disposition:'queued',inProgress:false}]});const ranking=await r.json();assert.equal(r.status,200,JSON.stringify(ranking));assert.equal(ranking.newDeepResearchJobs,1);assert.equal(ranking.accountedCount,1978);
+  const owner='synthetic-financial-http-owner';r=await post('api/internal/research-deep-job',{action:'claim',owner,...scope});const claimed=await r.json();assert.equal(r.status,200,JSON.stringify(claimed));assert.ok(claimed.context,'actual open-window reservation required');const context=claimed.context;
+  const request={owner,...scope,jobId:context.job.jobId,attempt:context.job.attempt,reservationId:context.modelReservation.reservationId,bundleId:null,sourceDocumentIds:[documentId]};
+  for(const name of ['20261009_research_publication_source_fence_v2.sql','20261009_research_input_preparations_v2.sql','20261009_research_input_preparation_assert_v2.sql'])sql(fs.readFileSync(root+'/migrations/'+name,'utf8'));
+  sql("NOTIFY pgrst,'reload schema';");
+  let saved;
+  await t.test('compiled guarded preparation binds actual job, lease and source seal',async()=>{
+   for(let n=0;n<20;n++){r=await post('api/internal/research-deep-job',{action:'prepareResearchInput',...request});if(r.status===200)break;await new Promise(resolve=>setTimeout(resolve,100));}const d=await r.json();assert.equal(r.status,200,JSON.stringify(d));saved=d.preparation;assert.equal(saved.payload.stockId,null);assert.equal(d.dispatchReady,false);
+  });
+  const input={...request,preparationId:saved.preparation_id,preparationInputHash:saved.input_hash},counts=()=>sql('SELECT count(*),sum(logical_bytes) FROM research_input_preparations_v2;SELECT count(*) FROM research_source_seals_v2;SELECT count(*) FROM research_model_reservations_v1;SELECT count(*) FROM research_model_completions_v1;SELECT count(*) FROM stocks;SELECT count(*) FROM stock_instruments_v3;'),before=counts();
+  await t.test('compiled positive supplement computes three monthly operands and preserves original cutoffs',async()=>{
+   r=await post('api/internal/research-deep-job',{action:'financialSupplement',...input});const d=await r.json();assert.equal(r.status,200,JSON.stringify(d));const s=d.supplement;assert.equal(s.status,'unsealed_calculation_only');assert.equal(s.calculation.symbol,symbol);assert.equal(s.projection.monthlyFacts.length,3);assert.equal(s.projection.monthlyBridge.namedOperands.length,3);assert.equal(s.projection.monthlyBridge.value,symbol==='2409'?66876:60884.517);
+   for(const k of ['financialVerified','dispatchReady','modelDispatched','publishableResearch','researchQualified','strategyApproved','entryEligible'])assert.equal(s[k],false,k);
+   assert.equal(counts(),before);report.financialHttp={symbol,status:r.status,syntheticJobAndOwner:true,actualTrustedRoleExecution:false,financialSourceRawVerifiedByVm:false,preparationId:saved.preparation_id,preparationInputHash:saved.input_hash,originalLease:context.job.leaseExpiresAt,monthlyFacts:s.projection.monthlyFacts,monthlyBridge:s.projection.monthlyBridge,modelCutoff:s.projection.projected.originalModelCutoff,projectionHash:s.projectionHash,supplementHash:s.supplementHash,calculatorExecutionHash:s.calculatorExecutionHash,resultBytes:Buffer.byteLength(JSON.stringify(s)),responseSha256:createHash('sha256').update(JSON.stringify(d)).digest('hex'),beforeCounts:before,afterCounts:counts()};
+  });
+  await t.test('anonymous and changed preparation hash reject without writes',async()=>{
+   assert.equal((await post('api/internal/research-deep-job',{action:'financialSupplement',...input},false)).status,401);assert.equal((await post('api/internal/research-deep-job',{action:'financialSupplement',...input,preparationInputHash:'0'.repeat(64)})).status,409);assert.equal(counts(),before);
+  });
+  await t.test('restart exact preparation replay keeps the same admitted time, hash and budget',async()=>{
+   restart();for(let n=0;n<20;n++){r=await post('api/internal/research-deep-job',{action:'prepareResearchInput',...request});if(r.status===200)break;await new Promise(resolve=>setTimeout(resolve,100));}const d=await r.json();assert.equal(r.status,200,JSON.stringify(d));assert.deepEqual({...d.preparation,replay:false},saved);assert.equal(counts(),before);assert.equal(sql('SELECT sum(reserved_seconds) FROM research_model_reservations_v1'),'1800');
+  });
+ }});assert.ok(report.financialHttp);
+});

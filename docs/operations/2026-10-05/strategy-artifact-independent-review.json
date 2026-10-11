@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "independent-code-scope-review-v1",
+  "head": "9b6cb4d9d8716060eb12d3d8cb7374b845872857",
+  "base": "c734d97ce4fff124a7928769af1b4e9bae4adf03",
+  "implementationCommit": "7e887ef642f9aeeb66ff0dae63ffc97825c9c234",
+  "reviewerTask": "/root/astra_strategy_review",
+  "decision": "approved",
+  "scope": "five-file bounded offline retained-artifact audit",
+  "tests": {"passed": 21, "failed": 0, "skipped": 0},
+  "independentProbes": [
+    "Actual unsupported interpreter rejects before output creation",
+    "Ancestor replacement during reads stays on original directory descriptor"
+  ],
+  "retainedAudit": {
+    "files": 24,
+    "strategyScenarioPaths": 15,
+    "derivedChecksVerified": 740,
+    "discrepancies": 0,
+    "unavailableEvidenceGroups": 7,
+    "reportBytes": 73590,
+    "reportSha256": "a50b3c86eb57c64f22b781a732beb3cf8ea269dde2c7730e22b2c3349083a7bf"
+  },
+  "investmentValidation": "failed_insufficient_evidence",
+  "promotionEligible": false,
+  "submissionPerformed": false,
+  "protectedAttestation": false,
+  "productionAccepted": false,
+  "recordedBy": "root from independent reviewer message; unsigned"
+}

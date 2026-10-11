@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "public-research-preparation-relay-followup-v1",
+  "recordedAt": "2026-10-08T06:49:43.678612+00:00",
+  "reportedBy": "source thread delegation",
+  "acquisition": "root-hosted-reader; not VM HTTP controller",
+  "productionImported": false,
+  "completeResearch": false,
+  "observedAt": null,
+  "events": [
+    {
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Finance_Statement_English.pdf",
+      "event": "retry",
+      "status": "fetched_but_unreadable",
+      "pdfPagesMetadata": 4,
+      "textLayer": "dashes only",
+      "observableScreenshotPixels": false,
+      "financialTablesRead": false,
+      "financialContentVerified": false,
+      "newVerifiedNumbers": [],
+      "firstFailurePreservedIn": "deep-private-draft-public-preparation-relay.json",
+      "firstFailureStatus": "fetch_failed HTTP500/Unknown error"
+    }
+  ],
+  "remaining": [
+    "Actual VM download/render and financial table verification",
+    "Nonoperating/tax/noncontrolling bridge",
+    "Eight quarters of financial statements",
+    "24 months of revenue"
+  ],
+  "note": "Exact retry acquisition time was not supplied; recordedAt is this relay-record time only.",
+  "additionalRelays": [
+    {
+      "schemaVersion": "public-research-preparation-relay-v1",
+      "observedAt": "2026-10-08 06:49:54 UTC",
+      "observer": "root-hosted-web-reader",
+      "productionImported": false,
+      "completeResearch": false,
+      "acquisition": "root public hosted reader; not VM HTTP controller",
+      "items": [
+        {
+          "url": "https://money.udn.com/money/story/5612/9766808",
+          "publishedAt": "2026-09-21T02:30:56+08:00",
+          "authors": [
+            "鐘惠玲",
+            "李珣瑛"
+          ],
+          "status": "body_read",
+          "evidenceStatus": "attributed_rumor_not_order",
+          "summary": "具名記者報導匿名業界合作說法；文中稱 Intel 不予評論，友達先前稱共同研發但不便透露對象。這是報導當時的說法，未驗證當前訂單或合作。原文也連結該 Intel 專利作為技術路線論據。",
+          "rootIdentity": "edn-9766808"
+        },
+        {
+          "url": "https://www.pcgamer.com/hardware/gaming-monitors/intel-reportedly-collaborating-with-auo-on-microled-panels-which-could-help-make-the-ultimate-display-tech-more-mainstream/",
+          "publishedAt": "2026-09-22",
+          "publicationPrecision": "date",
+          "author": "Jeremy Laird",
+          "status": "body_read",
+          "cites": "https://money.udn.com/money/story/5612/9766808",
+          "rootIdentity": "edn-9766808",
+          "evidenceStatus": "same_root_derivative_interpretation",
+          "summary": "外媒明確引用經濟日報；將消息推論為 MicroLED 顯示器整合及成本機會。這不是第二個獨立合作確認，也不是 CPO 量產證據。"
+        },
+        {
+          "url": "https://patents.google.com/patent/US20240079530A1",
+          "publishedAt": "2024-03-07",
+          "publicationPrecision": "date",
+          "status": "primary_patent_text_read",
+          "evidenceStatus": "technical_document_not_commercial_commitment",
+          "summary": "原申請文件列 Intel 為受讓人，申請日2022-09-06。描述嵌入玻璃的晶粒、MicroLED及TGV供電，並舉晶片狀態視覺指示與美觀用途。研究推論：不能只憑該文件就證明友達合作、資料通訊性能、訂單或量產營收。授權版本未成功取讀。"
+        },
+        {
+          "url": "https://patents.google.com/patent/US12733303B2/en",
+          "status": "fetch_failed",
+          "failure": "hosted_reader_internal_error",
+          "summary": "尚未核對授權版全文；不能拿其他媒體報導的授權日期當成已核對USPTO紀錄。"
+        }
+      ],
+      "nextResearch": "應區分新聞根源、技術文件與各媒體延伸解讀；把專利和實際光通訊客戶驗證/訂單證據分開。追加來源嘗試，不覆蓋舊失敗。"
+    }
+  ],
+  "updatedAt": "2026-10-08T06:50:59.947804+00:00"
+}

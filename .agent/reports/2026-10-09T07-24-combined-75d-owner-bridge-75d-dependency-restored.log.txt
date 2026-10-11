@@ -1,0 +1,51 @@
+TAP version 13
+# Subtest: exact ownership bridge rejects drift and preserves transaction/role boundaries in real PostgreSQL
+    # Subtest: fresh missing profiles are no-op; absent supersession detection is safe
+    ok 1 - fresh missing profiles are no-op; absent supersession detection is safe
+      ---
+      duration_ms: 17.554343
+      ...
+    # Subtest: existing runtime role bootstrap is checked without silently activating the login
+    ok 2 - existing runtime role bootstrap is checked without silently activating the login
+      ---
+      duration_ms: 41.547656
+      ...
+    # Subtest: known owners transfer only exact functions, no CREATE remains, replay is idempotent
+    ok 3 - known owners transfer only exact functions, no CREATE remains, replay is idempotent
+      ---
+      duration_ms: 23.534288
+      ...
+    # Subtest: actual non-owner login cannot transfer or borrow superuser capability
+    ok 4 - actual non-owner login cannot transfer or borrow superuser capability
+      ---
+      duration_ms: 17.410637
+      ...
+    # Subtest: body and security/profile changes fail before any transfer
+    ok 5 - body and security/profile changes fail before any transfer
+      ---
+      duration_ms: 33.370704
+      ...
+    # Subtest: public execution and powerful target roles are rejected
+    ok 6 - public execution and powerful target roles are rejected
+      ---
+      duration_ms: 36.428759
+      ...
+    # Subtest: failure after owner changes rolls back all changes and temporary privileges
+    ok 7 - failure after owner changes rolls back all changes and temporary privileges
+      ---
+      duration_ms: 23.66796
+      ...
+    1..7
+ok 1 - exact ownership bridge rejects drift and preserves transaction/role boundaries in real PostgreSQL
+  ---
+  duration_ms: 833.63115
+  ...
+1..1
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 922.232576

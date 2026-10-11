@@ -1,0 +1,205 @@
+(node:131382) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:131382) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/candidate-dossier-contract.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+TAP version 13
+# Subtest: DCC-RT-01 exact internal bearer is checked before body parsing or database access
+ok 1 - DCC-RT-01 exact internal bearer is checked before body parsing or database access
+  ---
+  duration_ms: 1206.437042
+  ...
+# Subtest: DCC-RT-02 claim returns the actual durable reservation and immutable deadlines
+ok 2 - DCC-RT-02 claim returns the actual durable reservation and immutable deadlines
+  ---
+  duration_ms: 87.015203
+  ...
+# Subtest: DCC-RT-03 independent SQL timestamps preserve both original deadlines without inventing equality
+ok 3 - DCC-RT-03 independent SQL timestamps preserve both original deadlines without inventing equality
+  ---
+  duration_ms: 76.944294
+  ...
+# Subtest: DCC-RT-04 status recovers the same active claim using only bounded SELECTs
+ok 4 - DCC-RT-04 status recovers the same active claim using only bounded SELECTs
+  ---
+  duration_ms: 155.243923
+  ...
+# Subtest: DCC-RT-05 author handoff completion is returned as accounting, without claiming another job
+ok 5 - DCC-RT-05 author handoff completion is returned as accounting, without claiming another job
+  ---
+  duration_ms: 80.784249
+  ...
+# Subtest: DCC-RT-06 a finished model remains observable until the distinct job deadline
+ok 6 - DCC-RT-06 a finished model remains observable until the distinct job deadline
+  ---
+  duration_ms: 147.552541
+  ...
+# Subtest: DCC-RT-07 foreign owner and absent or non-running jobs return no context and never mutate
+ok 7 - DCC-RT-07 foreign owner and absent or non-running jobs return no context and never mutate
+  ---
+  duration_ms: 480.398224
+  ...
+# Subtest: DCC-RT-08 status requires an exact paired job/attempt selector and a valid owner
+ok 8 - DCC-RT-08 status requires an exact paired job/attempt selector and a valid owner
+  ---
+  duration_ms: 887.097041
+  ...
+# Subtest: DCC-RT-09 original attempt deadline cannot be extended by mutable job state
+ok 9 - DCC-RT-09 original attempt deadline cannot be extended by mutable job state
+  ---
+  duration_ms: 75.394458
+  ...
+# Subtest: DCC-RT-10 invalid reservation clocks fail closed
+ok 10 - DCC-RT-10 invalid reservation clocks fail closed
+  ---
+  duration_ms: 222.895645
+  ...
+# Subtest: DCC-RT-11 an otherwise valid active reservation may not cross Taipei midnight
+ok 11 - DCC-RT-11 an otherwise valid active reservation may not cross Taipei midnight
+  ---
+  duration_ms: 70.304437
+  ...
+# Subtest: DCC-RT-12 expired model reservation cannot be recovered as runnable work
+ok 12 - DCC-RT-12 expired model reservation cannot be recovered as runnable work
+  ---
+  duration_ms: 70.780665
+  ...
+# Subtest: DCC-RT-13 expiry during database reads never returns an active claim context
+ok 13 - DCC-RT-13 expiry during database reads never returns an active claim context
+  ---
+  duration_ms: 84.50607
+  ...
+# Subtest: DCC-RT-14 changed live job fence during reads is rejected without modifying the new state
+ok 14 - DCC-RT-14 changed live job fence during reads is rejected without modifying the new state
+  ---
+  duration_ms: 297.849469
+  ...
+# Subtest: DCC-RT-15 a claim with no selected job returns null without inventing a reservation
+ok 15 - DCC-RT-15 a claim with no selected job returns null without inventing a reservation
+  ---
+  duration_ms: 65.054775
+  ...
+# Subtest: DCC-RT-16 successful claim followed by missing or failed context is uncertain and never retried
+ok 16 - DCC-RT-16 successful claim followed by missing or failed context is uncertain and never retried
+  ---
+  duration_ms: 260.688329
+  ...
+# Subtest: DCC-RT-17 RPC claim identity must match the reloaded durable job in every field
+ok 17 - DCC-RT-17 RPC claim identity must match the reloaded durable job in every field
+  ---
+  duration_ms: 397.284026
+  ...
+# Subtest: DCC-RT-18 lost or malformed claim RPC replies are sanitized and never retried automatically
+ok 18 - DCC-RT-18 lost or malformed claim RPC replies are sanitized and never retried automatically
+  ---
+  duration_ms: 556.398719
+  ...
+# Subtest: DCC-RT-19 status rejects missing, mismatched, duplicate, or unreadable durable context
+ok 19 - DCC-RT-19 status rejects missing, mismatched, duplicate, or unreadable durable context
+  ---
+  duration_ms: 1030.921893
+  ...
+# Subtest: DCC-RT-20 completion identity, outcome, hash, and clocks remain bound to the reservation
+ok 20 - DCC-RT-20 completion identity, outcome, hash, and clocks remain bound to the reservation
+  ---
+  duration_ms: 480.460617
+  ...
+# Subtest: DCC-RT-21 existing handoff, finish, and publication retain their authenticated RPC contracts
+ok 21 - DCC-RT-21 existing handoff, finish, and publication retain their authenticated RPC contracts
+  ---
+  duration_ms: 294.784236
+  ...
+# Subtest: DAI-01 real input route exports only bounded facts/summary with live reservation and separate cutoffs
+ok 22 - DAI-01 real input route exports only bounded facts/summary with live reservation and separate cutoffs
+  ---
+  duration_ms: 81.755514
+  ...
+# Subtest: DAI-02 auth and exact input validation happen before all database access
+ok 23 - DAI-02 auth and exact input validation happen before all database access
+  ---
+  duration_ms: 390.284854
+  ...
+# Subtest: DAI-03 wrong reservation and a completed model cannot prepare another dispatch input
+ok 24 - DAI-03 wrong reservation and a completed model cannot prepare another dispatch input
+  ---
+  duration_ms: 149.151728
+  ...
+# Subtest: DAI-04 denied, withdrawn, malformed rights, future microsecond and unrelated company stay explicit gaps
+ok 25 - DAI-04 denied, withdrawn, malformed rights, future microsecond and unrelated company stay explicit gaps
+  ---
+  duration_ms: 667.007511
+  ...
+# Subtest: DAI-05 authenticated summary remains internal; industry is context without company/order attribution
+ok 26 - DAI-05 authenticated summary remains internal; industry is context without company/order attribution
+  ---
+  duration_ms: 73.061654
+  ...
+# Subtest: DAI-06 stale RPC head and equal-clock conflicting sibling cannot slip into author input
+ok 27 - DAI-06 stale RPC head and equal-clock conflicting sibling cannot slip into author input
+  ---
+  duration_ms: 144.214137
+  ...
+# Subtest: DAI-07 immutable dossier hash, issuer, published identity and clocks are verified
+ok 28 - DAI-07 immutable dossier hash, issuer, published identity and clocks are verified
+  ---
+  duration_ms: 428.911119
+  ...
+# Subtest: DAI-08 absent selections are explicit gaps, never a complete financial forecast
+ok 29 - DAI-08 absent selections are explicit gaps, never a complete financial forecast
+  ---
+  duration_ms: 113.141312
+  ...
+# Subtest: DAI-09 ownership changes during preparation invalidate the entire packet
+ok 30 - DAI-09 ownership changes during preparation invalidate the entire packet
+  ---
+  duration_ms: 76.702359
+  ...
+# Subtest: DAI-10 source read failure cannot be reported as no new sources
+ok 31 - DAI-10 source read failure cannot be reported as no new sources
+  ---
+  duration_ms: 69.654963
+  ...
+# Subtest: DAI-11 deadline rejects a stalled source read even when transport ignores cancellation
+ok 32 - DAI-11 deadline rejects a stalled source read even when transport ignores cancellation
+  ---
+  duration_ms: 93.375171
+  ...
+# Subtest: DAI-12 fallback revision URLs cannot hide a contradictory same-clock sibling
+ok 33 - DAI-12 fallback revision URLs cannot hide a contradictory same-clock sibling
+  ---
+  duration_ms: 65.3001
+  ...
+# Subtest: DCC-RT observed-only jobs cannot enter the legacy formal context
+ok 34 - DCC-RT observed-only jobs cannot enter the legacy formal context
+  ---
+  duration_ms: 147.877745
+  ...
+# Subtest: DAI-13 precise clocks survive packet serialization and reject invalid microsecond sibling ordering
+ok 35 - DAI-13 precise clocks survive packet serialization and reject invalid microsecond sibling ordering
+  ---
+  duration_ms: 147.041173
+  ...
+# Subtest: RIP-HTTP authentication precedes body/client for preparation
+ok 36 - RIP-HTTP authentication precedes body/client for preparation
+  ---
+  duration_ms: 68.755646
+  ...
+# Subtest: RIP-HTTP closed observed preparation delegates to one atomic RPC without claim/reserve
+ok 37 - RIP-HTTP closed observed preparation delegates to one atomic RPC without claim/reserve
+  ---
+  duration_ms: 696.052555
+  ...
+# Subtest: financial supplement auth rejects before body or database construction
+ok 38 - financial supplement auth rejects before body or database construction
+  ---
+  duration_ms: 72.844767
+  ...
+1..38
+# tests 38
+# suites 0
+# pass 38
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10522.478005

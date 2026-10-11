@@ -1,0 +1,7 @@
+# Bounded current observed source cohort consumer
+
+The existing discovery relay accepts an optional, attributed official security-scope reconciliation packet. It verifies exact selected-row classifications, distinct symbols, legacy identity, recomputed counts, high-precision clocks, forbidden secrets and bounded input. Ordinary ES-group four-digit stocks in the official stock/innovation sections enter research observation; TDRs, preferred shares and warrants do not. The old 1946 packet remains immutable. New observations preserve TWSE/TPEX acquisition clocks separately.
+
+Only the fixed official CFI reference permits up to 12MB attributed raw response bytes; selected input remains 2MB and ordinary source HTTP/reference boundaries remain 4MB. The VM does not claim to possess or rehash Mac raw files. This is not a sanctioned intake into formal authority, historical PIT, current trading eligibility or a fallback for priority ranking.
+
+The same existing source controller and guarded inbox consume three actual industry-only summaries, with real SQL RPCs and persistent replay deduplication. Every observed symbol has a bounded assessment status and unknown price phase. Authority remains empty and Top20 null. Apple episode citation queries permit exactly one numeric i parameter on the fixed Apple show path; live HTTP grants remain unchanged. Only two publisher-observed Gooaye IDs change.

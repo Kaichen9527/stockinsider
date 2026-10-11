@@ -1,0 +1,448 @@
+{
+  "schemaVersion": "auo-source-ledger-v1",
+  "rootHostedReaderSources": [
+    {
+      "relayKey": "monthly26",
+      "url": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+      "status": "pdf_text_table_read",
+      "publicationTime": null,
+      "mutableUrl": true,
+      "acquisition": "root-hosted-web-reader relay; VM acquisition status separate",
+      "observedAtOriginal": "2026-10-08 06:52:48 UTC",
+      "observedAt": "2026-10-08T06:52:48Z",
+      "verifiedHistoricalAvailability": null,
+      "publicationTimestamp": null,
+      "vmBodyRead": false,
+      "datePrecision": "date only when supplied; never exact timestamp",
+      "dateProvenance": "URL label or presentation date as relayed; not a VM publication-clock verification"
+    },
+    {
+      "relayKey": "oct25",
+      "url": "https://www.auo.com/en-global/New_Archive/detail/news_MonthlySales_20251110",
+      "status": "body_table_read",
+      "publicationDateFromUrl": "2025-11-10",
+      "acquisition": "root-hosted-web-reader relay; VM acquisition status separate",
+      "observedAtOriginal": "2026-10-08 06:52:48 UTC",
+      "observedAt": "2026-10-08T06:52:48Z",
+      "verifiedHistoricalAvailability": null,
+      "publicationTimestamp": null,
+      "vmBodyRead": false,
+      "datePrecision": "date only when supplied; never exact timestamp",
+      "dateProvenance": "URL label or presentation date as relayed; not a VM publication-clock verification"
+    },
+    {
+      "relayKey": "nov25",
+      "url": "https://www.auo.com/ja-JP/News_Archive/detail/news_MonthlySales_20251209",
+      "status": "body_table_read",
+      "publicationDateFromUrl": "2025-12-09",
+      "acquisition": "root-hosted-web-reader relay; VM acquisition status separate",
+      "observedAtOriginal": "2026-10-08 06:52:48 UTC",
+      "observedAt": "2026-10-08T06:52:48Z",
+      "verifiedHistoricalAvailability": null,
+      "publicationTimestamp": null,
+      "vmBodyRead": false,
+      "datePrecision": "date only when supplied; never exact timestamp",
+      "dateProvenance": "URL label or presentation date as relayed; not a VM publication-clock verification"
+    },
+    {
+      "relayKey": "dec25",
+      "url": "https://www.auo.com/en-global/New_Archive/detail/news_MonthlySales_20260109",
+      "status": "body_table_read",
+      "publicationDateFromUrl": "2026-01-09",
+      "acquisition": "root-hosted-web-reader relay; VM acquisition status separate",
+      "observedAtOriginal": "2026-10-08 06:52:48 UTC",
+      "observedAt": "2026-10-08T06:52:48Z",
+      "verifiedHistoricalAvailability": null,
+      "publicationTimestamp": null,
+      "vmBodyRead": false,
+      "datePrecision": "date only when supplied; never exact timestamp",
+      "dateProvenance": "URL label or presentation date as relayed; not a VM publication-clock verification"
+    },
+    {
+      "relayKey": "q425",
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/4Q25_Handout_English_20260210.pdf",
+      "status": "pdf_text_table_read",
+      "pageZeroBased": 27,
+      "presentationDate": "2026-02-10",
+      "acquisition": "root-hosted-web-reader relay; VM acquisition status separate",
+      "observedAtOriginal": "2026-10-08 06:52:48 UTC",
+      "observedAt": "2026-10-08T06:52:48Z",
+      "verifiedHistoricalAvailability": null,
+      "publicationTimestamp": null,
+      "vmBodyRead": false,
+      "datePrecision": "date only when supplied; never exact timestamp",
+      "dateProvenance": "URL label or presentation date as relayed; not a VM publication-clock verification"
+    }
+  ],
+  "rootMacVisualRelays": [
+    {
+      "schemaVersion": "public-financial-visual-verification-relay-v1",
+      "observedAt": "2026-10-08T07:00:04.520030+00:00",
+      "bytes": 841784,
+      "sha256": "21d6e1473dd460356eca80b7577ca65e24ddd488ab8979e9931b71f4dde082cb",
+      "observer": "root-Mac-public-reader",
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Finance_Statement_English.pdf",
+      "acquisition": "public curl HTTPS verified TLS, then local Poppler rendering 120dpi",
+      "pageZeroBased": 0,
+      "visualPageInspected": true,
+      "vmFetchSucceeded": false,
+      "productionImported": false,
+      "unit": "TWD_million",
+      "periods": [
+        {
+          "period": "2026Q2",
+          "revenue": 70891,
+          "cogs": 61643,
+          "grossProfit": 9248,
+          "opex": 9030,
+          "operatingProfit": 218,
+          "netNonOperatingIncome": 2533,
+          "pretax": 2751,
+          "taxBenefitExpenseSigned": -631,
+          "netProfit": 2120,
+          "ownersProfit": 1343,
+          "nciProfit": 777,
+          "basicEps": 0.18,
+          "basicWeightedSharesMillion": 7547,
+          "dilutedEps": null
+        },
+        {
+          "period": "2026Q1",
+          "revenue": 69031,
+          "cogs": 60848,
+          "grossProfit": 8183,
+          "opex": 8819,
+          "operatingProfit": -636,
+          "netNonOperatingIncome": 134,
+          "pretax": -501,
+          "taxBenefitExpenseSigned": -538,
+          "netProfit": -1039,
+          "ownersProfit": -1144,
+          "nciProfit": 104,
+          "basicEps": -0.15,
+          "basicWeightedSharesMillion": 7547,
+          "dilutedEps": null
+        },
+        {
+          "period": "2025Q2",
+          "revenue": 69237,
+          "cogs": 59875,
+          "grossProfit": 9362,
+          "opex": 7858,
+          "operatingProfit": 1504,
+          "netNonOperatingIncome": 630,
+          "pretax": 2133,
+          "taxBenefitExpenseSigned": -229,
+          "netProfit": 1904,
+          "ownersProfit": 1948,
+          "nciProfit": -44,
+          "basicEps": 0.26,
+          "basicWeightedSharesMillion": 7547,
+          "dilutedEps": null
+        }
+      ],
+      "caveats": [
+        "Values visually read complete P1 column headings/signs/NTDmillions/shares; not extracted text or OCR guess",
+        "Original public PDF byte hash provided; VM has not fetched/rendered this file, so record relay provenance",
+        "Display rounding causes e.g.Q1 op+nonop=-502 vsreportedpretax-501 andnet-NCI=-1143 vsowners-1144; use sourceprecision intervals, don’t edit published values",
+        "Net nonop is not automatically entirely oneoff; need detailednotes to normalize; no reliable dilutedEPS fromthispage",
+        "70891 reportedQ2revenue supersedes treating monthlysum70890/cumulative difference70892 as exactquarter",
+        "Quarterfinancialstatementpublication exacttimestamp not read; retain observedAt, do not backdatehistoricalsignal"
+      ]
+    },
+    {
+      "schemaVersion": "public-financial-visual-verification-relay-v1",
+      "observedAt": "2026-10-08T07:01:10.605242+00:00",
+      "observer": "root-Mac-public-reader",
+      "vmFetchSucceeded": false,
+      "productionImported": false,
+      "acquisition": "bounded public HTTPS verified TLS, local Poppler P1 rendered and full table inspected",
+      "unit": "TWD_million",
+      "sources": {
+        "q126": {
+          "url": "https://www.auo.com/upload/media/ir/Financial_Information/1Q26_Finance_Statement_English.pdf",
+          "bytes": 716888,
+          "sha256": "205087d70cc36394248e95d2ad841e32009f02e8f3121d84b1f9a503154b8088",
+          "pageZeroBased": 0
+        },
+        "q325": {
+          "url": "https://www.auo.com/upload/media/ir/Financial_Information/3Q25_Finance_Statement_English.pdf",
+          "bytes": 861203,
+          "sha256": "5e12036e10a5987fa8a464e91742a5c0b1f5cf7d6f7a44915d5e0beabc4d46c3",
+          "pageZeroBased": 0
+        },
+        "q425": {
+          "url": "https://www.auo.com/upload/media/ir/Financial_Information/4Q25_Finance_Statement_English.pdf",
+          "bytes": 900190,
+          "sha256": "ddcd3fdbec3423010b745904d50900097ed9a00a17c5b8bca701a39f34a4edb8",
+          "pageZeroBased": 0
+        }
+      },
+      "columns": [
+        "period",
+        "revenue",
+        "cogs",
+        "grossProfit",
+        "opex",
+        "operatingProfit",
+        "netNonOperatingIncome",
+        "pretax",
+        "taxBenefitExpenseSigned",
+        "netProfit",
+        "ownersProfit",
+        "nciProfit",
+        "basicEps",
+        "basicWeightedSharesMillion",
+        "sourceKey"
+      ],
+      "rows": [
+        [
+          "2024Q3",
+          77748,
+          69294,
+          8454,
+          8764,
+          -310,
+          -285,
+          -595,
+          -328,
+          -923,
+          -926,
+          3,
+          -0.12,
+          7668,
+          "q325"
+        ],
+        [
+          "2024Q4",
+          68692,
+          63246,
+          5446,
+          8768,
+          -3323,
+          6342,
+          3019,
+          -1232,
+          1787,
+          1619,
+          168,
+          0.21,
+          7668,
+          "q425"
+        ],
+        [
+          "2025Q1",
+          72102,
+          63323,
+          8778,
+          7638,
+          1141,
+          3347,
+          4487,
+          -1228,
+          3259,
+          3294,
+          -35,
+          0.43,
+          7645,
+          "q126"
+        ],
+        [
+          "2025Q3",
+          69908,
+          63218,
+          6690,
+          8496,
+          -1806,
+          738,
+          -1068,
+          -29,
+          -1098,
+          -1280,
+          183,
+          -0.17,
+          7547,
+          "q325"
+        ],
+        [
+          "2025Q4",
+          70142,
+          62617,
+          7525,
+          9418,
+          -1893,
+          4782,
+          2889,
+          34,
+          2923,
+          2882,
+          41,
+          0.38,
+          7547,
+          "q425"
+        ]
+      ],
+      "crosschecks": [
+        {
+          "period": "2026Q1",
+          "sourceKey": "q126",
+          "matchesPriorQ226VisualRelay": true
+        },
+        {
+          "period": "2025Q2",
+          "sourceKey": "q325",
+          "matchesPriorQ226VisualRelay": true
+        },
+        {
+          "period": "2025Q3",
+          "sourceKey": "q425",
+          "matchesQ325Row": true
+        },
+        {
+          "period": "2025Q4",
+          "sourceKey": "q126",
+          "matchesQ425Row": true
+        }
+      ],
+      "caveats": [
+        "Merge with prior q226 relay gives8 distinct consecutive quarters2024Q3–2026Q2, all income statements visually read P1; NOT8 full audited statements with all notes/segments/dilutedEPS",
+        "Fields carry printed rounding, e.g.2025Q1 grossrevenue-cogs=8779 versusprinted8778 and op+nonop4488 versuspretax4487; preserve and test precisionintervals",
+        "Do not mark detailed nonop normalization, dilutedEPS, segmentprofits or corporate actions complete from condensed tables",
+        "Dates observed now only; comparative2024columns in2025document are not proof of2024availabledata; exactoriginalpublication timestampsnotread",
+        "Retain original failed hosted/VM attempts, sourcebytehash and acquisitionhost; no VM directfetch success claimed"
+      ]
+    },
+    {
+      "schemaVersion": "public-financial-visual-verification-relay-v1",
+      "recordedAt": "2026-10-08T07:02:59Z",
+      "observedAt": null,
+      "actualRenderTime": null,
+      "originalMessageApproximateObservedAt": "2026-10-08T07:02:30+00:00",
+      "originalApproximateTimeIsNotVerified": true,
+      "metadataCorrection": "Source thread corrected hand-entered approximate observedAt. recordedAt is supplied clock; exact render observation time was not measured.",
+      "observer": "root-Mac-public-reader",
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Finance_Statement_English.pdf",
+      "sourceSha256": "21d6e1473dd460356eca80b7577ca65e24ddd488ab8979e9931b71f4dde082cb",
+      "pageZeroBased": 2,
+      "visualPageInspected": true,
+      "periodEnd": "2026-06-30",
+      "unit": "TWD_million",
+      "balance": {
+        "cash": 53792,
+        "inventory": 40787,
+        "totalAssets": 377676,
+        "totalLiabilities": 210774,
+        "commonStockCapital": 75471,
+        "capitalSurplus": 45949,
+        "retainedEarnings": 32089,
+        "otherEquity": 889,
+        "nonControllingInterests": 12505,
+        "totalEquity": 166902
+      },
+      "caveats": [
+        "Balance is consolidated, include NCI; P/B common-owner book numerator must exclude NCI",
+        "Period-end outstanding common shares net of treasury are not provided by this page; basic EPS weighted-average7547million is not interchangeable P/B denominator",
+        "Commonstockcapital amount cannot automatically be assumed totaloutstanding sharesnettreasury",
+        "Normalization/holding percentages/internaleliminations/capexprojectvisibility notprovenbythispage",
+        "Acquisitionrootexternalpublicreader, not VM transport success; preserve printed rounding"
+      ]
+    }
+  ],
+  "vmAcquisition": {
+    "schemaVersion": "auo-public-vm-acquisition-ledger-v1",
+    "recordedAt": "2026-10-08T06:56:51.936+00:00",
+    "requestBounds": {
+      "maxRequests": 7,
+      "attemptedRequests": 1,
+      "perRequestSeconds": 15,
+      "perBodyMaxBytes": 20000000,
+      "redirectFollow": false
+    },
+    "productionImported": false,
+    "items": [
+      {
+        "sourceKey": "q226",
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q26_Finance_Statement_English.pdf",
+        "attemptedAt": "2026-10-08T06:56:51.919+00:00",
+        "completedAt": "2026-10-08T06:56:51.936+00:00",
+        "elapsedSeconds": 0.017249885000637732,
+        "curlExitCode": 56,
+        "httpStatus": 0,
+        "status": "failed",
+        "bodyBytes": 0,
+        "sha256": null,
+        "bodyType": "none",
+        "completeBody": false,
+        "contentType": null,
+        "remoteIp": "",
+        "error": "curl: (56) CONNECT tunnel failed, response 403",
+        "redirectLocation": null,
+        "redirectsFollowed": 0,
+        "tlsVerificationBypassed": false,
+        "acquisition": "VM curl TLS public GET; not pinned research-source controller",
+        "publicationTime": null
+      },
+      {
+        "sourceKey": "q126",
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/1Q26_Finance_Statement_English.pdf",
+        "status": "not_attempted",
+        "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+      },
+      {
+        "sourceKey": "q425",
+        "url": "https://www.auo.com/upload/media/ir/Financial_Information/4Q25_Handout_English_20260210.pdf",
+        "status": "not_attempted",
+        "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+      },
+      {
+        "sourceKey": "monthly26",
+        "url": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+        "status": "not_attempted",
+        "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+      },
+      {
+        "sourceKey": "oct25",
+        "url": "https://www.auo.com/en-global/New_Archive/detail/news_MonthlySales_20251110",
+        "status": "not_attempted",
+        "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+      },
+      {
+        "sourceKey": "nov25",
+        "url": "https://www.auo.com/ja-JP/News_Archive/detail/news_MonthlySales_20251209",
+        "status": "not_attempted",
+        "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+      },
+      {
+        "sourceKey": "dec25",
+        "url": "https://www.auo.com/en-global/New_Archive/detail/news_MonthlySales_20260109",
+        "status": "not_attempted",
+        "reason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+      }
+    ],
+    "stopReason": "Cloud DNS/proxy/egress transport failed; stop without retry or bypass"
+  },
+  "clockPolicy": "Only current observedAt supplied. URL/presentation dates are labels, not verified exact availability. No historical PIT eligibility, wire hashes or official source IDs fabricated.",
+  "roundingSupplement": {
+    "schemaVersion": "public-financial-rounding-supplement-relay-v1",
+    "recordedAt": "2026-10-08T06:58:55.087067+00:00",
+    "reportedBy": "source thread delegation",
+    "observedAt": null,
+    "sourceObservationReference": "2026-10-08 06:52:48 UTC",
+    "sourceUrl": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+    "vmHttpAcquisition": false,
+    "publicationTime": null,
+    "mutableUrl": true,
+    "reportedInputs": {
+      "h1MonthlySum": 139921,
+      "h1ReportedCumulative": 139923,
+      "q2MonthlySum": 70890,
+      "h1MinusQ1ReportedCumulative": 70892
+    },
+    "q1CumulativeImpliedByRelayArithmetic": 69031,
+    "q1CumulativeImpliedNotNewSourceRead": true,
+    "roundingRule": "Use intervals for each independently rounded original value; do not impose fixed1million tolerance on every aggregate. Preserve both figures and require official quarterly statement for exact quarterly actual.",
+    "completeResearch": false,
+    "productionImported": false
+  },
+  "canonicalMaterialHash": "4646f29346fe376d70bb96fd0c5bde122ab698b89498ffb255abfaa3352fe04a"
+}

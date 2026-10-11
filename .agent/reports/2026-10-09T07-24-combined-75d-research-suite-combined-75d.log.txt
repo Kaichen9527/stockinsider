@@ -1,0 +1,3538 @@
+TAP version 13
+# Subtest: outbox v6 fences stale workers and atomically closes accepted and rejected receipts
+ok 1 - outbox v6 fences stale workers and atomically closes accepted and rejected receipts
+  ---
+  duration_ms: 2351.489239
+  ...
+# Subtest: piped child waits for inherited stderr after the leader exits
+ok 2 - piped child waits for inherited stderr after the leader exits
+  ---
+  duration_ms: 232.244465
+  ...
+# Subtest: piped child preserves output and original normal/nonzero/signal exits
+ok 3 - piped child preserves output and original normal/nonzero/signal exits
+  ---
+  duration_ms: 68.68302
+  ...
+# Subtest: piped child explicitly fails spawn and output limits
+ok 4 - piped child explicitly fails spawn and output limits
+  ---
+  duration_ms: 45.190017
+  ...
+# Subtest: piped child bounds an inherited pipe that remains open after leader exit
+ok 5 - piped child bounds an inherited pipe that remains open after leader exit
+  ---
+  duration_ms: 201.684203
+  ...
+# Subtest: piped child rejects late close despite a delayed timer, and settles once
+ok 6 - piped child rejects late close despite a delayed timer, and settles once
+  ---
+  duration_ms: 0.705615
+  ...
+# Subtest: piped child captures post-exit data, clears timer, and rejects stream errors/cancel
+ok 7 - piped child captures post-exit data, clears timer, and rejects stream errors/cancel
+  ---
+  duration_ms: 0.793607
+  ...
+# Subtest: piped child never signals a failed spawn without a positive PID and handles late errors
+ok 8 - piped child never signals a failed spawn without a positive PID and handles late errors
+  ---
+  duration_ms: 0.455748
+  ...
+# Subtest: FDL-01 exact auth and active writer precede any lease/artifact operation
+ok 9 - FDL-01 exact auth and active writer precede any lease/artifact operation
+  ---
+  duration_ms: 119.687686
+  ...
+# Subtest: FDL-02 invalid or oversized documents and invalid worker requests never acquire
+ok 10 - FDL-02 invalid or oversized documents and invalid worker requests never acquire
+  ---
+  duration_ms: 87.516601
+  ...
+# Subtest: FDL-03 contention and acquisition failure return explicit errors without writes or release
+ok 11 - FDL-03 contention and acquisition failure return explicit errors without writes or release
+  ---
+  duration_ms: 45.246084
+  ...
+# Subtest: FDL-04 upload lease encloses private artifact, receipt and idempotent linked-job reconciliation
+ok 12 - FDL-04 upload lease encloses private artifact, receipt and idempotent linked-job reconciliation
+  ---
+  duration_ms: 8.784877
+  ...
+# Subtest: FDL-05 storage, receipt, job-link errors and thrown mutations all release only their own lease
+ok 13 - FDL-05 storage, receipt, job-link errors and thrown mutations all release only their own lease
+  ---
+  duration_ms: 39.165276
+  ...
+# Subtest: FDL-06 bounded worker acquires its lease before processing and releases success/partial/error/throw
+ok 14 - FDL-06 bounded worker acquires its lease before processing and releases success/partial/error/throw
+  ---
+  duration_ms: 17.213838
+  ...
+# Subtest: FDL-07 read-only receipt GET never acquires or releases a write lease
+ok 15 - FDL-07 read-only receipt GET never acquires or releases a write lease
+  ---
+  duration_ms: 7.20273
+  ...
+# Subtest: FDL-08 a release failure cannot report a successful upload or worker response
+ok 16 - FDL-08 a release failure cannot report a successful upload or worker response
+  ---
+  duration_ms: 10.581759
+  ...
+# Subtest: FQL-01 invalid input/auth/writer cannot acquire or mutate
+ok 17 - FQL-01 invalid input/auth/writer cannot acquire or mutate
+  ---
+  duration_ms: 139.836744
+  ...
+# Subtest: FQL-02 no due jobs retains read-only empty result
+ok 18 - FQL-02 no due jobs retains read-only empty result
+  ---
+  duration_ms: 11.268205
+  ...
+# Subtest: FQL-03 read failures return failure before lease acquisition
+ok 19 - FQL-03 read failures return failure before lease acquisition
+  ---
+  duration_ms: 33.601028
+  ...
+# Subtest: FQL-04 busy/unavailable lease distinguish failures without mutation or release
+ok 20 - FQL-04 busy/unavailable lease distinguish failures without mutation or release
+  ---
+  duration_ms: 23.896553
+  ...
+# Subtest: FQL-05 acquired owner encloses refresh/validation with original inputs and output
+ok 21 - FQL-05 acquired owner encloses refresh/validation with original inputs and output
+  ---
+  duration_ms: 11.073071
+  ...
+# Subtest: FQL-06 financial failure/incomplete validation retain original error semantics and release
+ok 22 - FQL-06 financial failure/incomplete validation retain original error semantics and release
+  ---
+  duration_ms: 14.400352
+  ...
+# Subtest: FQL-07 thrown refresh/validation retain original exception even if release also fails
+ok 23 - FQL-07 thrown refresh/validation retain original exception even if release also fails
+  ---
+  duration_ms: 30.339757
+  ...
+# Subtest: FQL-08 release failure after successful workers cannot report success
+ok 24 - FQL-08 release failure after successful workers cannot report success
+  ---
+  duration_ms: 7.656576
+  ...
+# node:internal/modules/cjs/loader:1225
+#   const err = new Error(message);
+#               ^
+# Error: Cannot find module 'pg'
+# Require stack:
+# - /workspace/cloud-research-converged-oct08/scripts/opportunity-v3/apply-reviewed-migrations.mjs
+#     at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+#     at Function._load (node:internal/modules/cjs/loader:1055:27)
+#     at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+#     at Module.require (node:internal/modules/cjs/loader:1311:12)
+#     at require (node:internal/modules/helpers:136:16)
+#     at file:///workspace/cloud-research-converged-oct08/scripts/opportunity-v3/apply-reviewed-migrations.mjs:13:20
+#     at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
+#   code: 'MODULE_NOT_FOUND',
+#   requireStack: [
+#     '/workspace/cloud-research-converged-oct08/scripts/opportunity-v3/apply-reviewed-migrations.mjs'
+#   ]
+# }
+# Node.js v22.14.0
+# Subtest: scripts/release-owner-bridge-postgres.test.mjs
+not ok 4 - scripts/release-owner-bridge-postgres.test.mjs
+  ---
+  duration_ms: 38.219779
+  location: '/workspace/cloud-research-converged-oct08/scripts/release-owner-bridge-postgres.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: research schema extends the same attested operator plan and cannot use a separate raw runner
+ok 26 - research schema extends the same attested operator plan and cannot use a separate raw runner
+  ---
+  duration_ms: 1.692854
+  ...
+# Subtest: base chain stays fixed and explicit extension authority never replaces reviewed apply
+ok 27 - base chain stays fixed and explicit extension authority never replaces reviewed apply
+  ---
+  duration_ms: 199.725355
+  ...
+# (node:137486) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:137486) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: live technical snapshot freezes cutoff after the official calendar acquisition
+ok 28 - live technical snapshot freezes cutoff after the official calendar acquisition
+  ---
+  duration_ms: 87.729065
+  ...
+# Subtest: historical cutoff is not moved to admit calendar evidence first observed later
+ok 29 - historical cutoff is not moved to admit calendar evidence first observed later
+  ---
+  duration_ms: 39.699426
+  ...
+# Subtest: actual snapshot saves benchmark and correction hash; prior approval cannot authorize new code
+ok 30 - actual snapshot saves benchmark and correction hash; prior approval cannot authorize new code
+  ---
+  duration_ms: 75.052292
+  ...
+# Subtest: missing benchmark is persisted explicitly without altering price-only or held monitoring semantics
+ok 31 - missing benchmark is persisted explicitly without altering price-only or held monitoring semantics
+  ---
+  duration_ms: 33.429533
+  ...
+# Subtest: actual snapshot refuses missing exact auth before any fixture database access
+ok 32 - actual snapshot refuses missing exact auth before any fixture database access
+  ---
+  duration_ms: 28.998119
+  ...
+# Subtest: exact approval retry survives effective time; changed input does not replay
+ok 33 - exact approval retry survives effective time; changed input does not replay
+  ---
+  duration_ms: 88.290673
+  ...
+# (node:137510) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:137510) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-business-calculator.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: AUO bear: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 34 - AUO bear: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 5.383555
+  ...
+# Subtest: AUO base: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 35 - AUO base: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 2.376867
+  ...
+# Subtest: AUO bull: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 36 - AUO bull: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 2.789801
+  ...
+# Subtest: AUO: original immutable input files match byte/hash manifest
+ok 37 - AUO: original immutable input files match byte/hash manifest
+  ---
+  duration_ms: 0.190768
+  ...
+# Subtest: EMC bear: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 38 - EMC bear: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 1.201714
+  ...
+# Subtest: EMC base: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 39 - EMC base: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 1.092909
+  ...
+# Subtest: EMC bull: re-execute six real reviewed quarter bridges and forward/year EPS
+ok 40 - EMC bull: re-execute six real reviewed quarter bridges and forward/year EPS
+  ---
+  duration_ms: 1.521776
+  ...
+# Subtest: EMC: original immutable input files match byte/hash manifest
+ok 41 - EMC: original immutable input files match byte/hash manifest
+  ---
+  duration_ms: 0.071388
+  ...
+# Subtest: AUO Other and jurisdiction tax floor survive; EMC signed NCI and FX separate
+ok 42 - AUO Other and jurisdiction tax floor survive; EMC signed NCI and FX separate
+  ---
+  duration_ms: 2.824934
+  ...
+# Subtest: loss/zero excludes potential while actual hypothetical ordinary issuance retains period weight
+ok 43 - loss/zero excludes potential while actual hypothetical ordinary issuance retains period weight
+  ---
+  duration_ms: 3.481585
+  ...
+# Subtest: reject arbitrary calculator path
+ok 44 - reject arbitrary calculator path
+  ---
+  duration_ms: 0.648558
+  ...
+# Subtest: reject request command
+ok 45 - reject request command
+  ---
+  duration_ms: 0.485302
+  ...
+# Subtest: reject supplied EPS
+ok 46 - reject supplied EPS
+  ---
+  duration_ms: 0.433555
+  ...
+# Subtest: reject qualification
+ok 47 - reject qualification
+  ---
+  duration_ms: 0.308195
+  ...
+# Subtest: reject wrong company
+ok 48 - reject wrong company
+  ---
+  duration_ms: 0.711213
+  ...
+# Subtest: reject unit
+ok 49 - reject unit
+  ---
+  duration_ms: 0.619114
+  ...
+# Subtest: reject missing Other
+ok 50 - reject missing Other
+  ---
+  duration_ms: 0.408216
+  ...
+# Subtest: reject duplicate period
+ok 51 - reject duplicate period
+  ---
+  duration_ms: 0.481056
+  ...
+# Subtest: reject nonfinite margin
+ok 52 - reject nonfinite margin
+  ---
+  duration_ms: 0.326904
+  ...
+# Subtest: reject bad finance sign
+ok 53 - reject bad finance sign
+  ---
+  duration_ms: 0.49689
+  ...
+# Subtest: reject issuance weight
+ok 54 - reject issuance weight
+  ---
+  duration_ms: 0.502979
+  ...
+# Subtest: reject unknown publication instant
+ok 55 - reject unknown publication instant
+  ---
+  duration_ms: 0.460505
+  ...
+# Subtest: reject fake February date
+ok 56 - reject fake February date
+  ---
+  duration_ms: 0.48432
+  ...
+# Subtest: reject duplicate receipt
+ok 57 - reject duplicate receipt
+  ---
+  duration_ms: 0.669641
+  ...
+# Subtest: reject future nanos
+ok 58 - reject future nanos
+  ---
+  duration_ms: 0.427065
+  ...
+# Subtest: reject observed after admitted
+ok 59 - reject observed after admitted
+  ---
+  duration_ms: 0.498052
+  ...
+# Subtest: reject future reported quarter
+ok 60 - reject future reported quarter
+  ---
+  duration_ms: 0.809702
+  ...
+# Subtest: nanosecond observation/admission inversion rejects without millisecond truncation
+ok 61 - nanosecond observation/admission inversion rejects without millisecond truncation
+  ---
+  duration_ms: 0.535068
+  ...
+# Subtest: date-only remains a date with no synthetic publication instant
+ok 62 - date-only remains a date with no synthetic publication instant
+  ---
+  duration_ms: 1.798194
+  ...
+# Subtest: core hash, input hash and result hash bind deterministic recalculation
+ok 63 - core hash, input hash and result hash bind deterministic recalculation
+  ---
+  duration_ms: 4.962239
+  ...
+# Subtest: accessor/prototype objects and large packets cannot supply executable behavior
+ok 64 - accessor/prototype objects and large packets cannot supply executable behavior
+  ---
+  duration_ms: 1.571492
+  ...
+# Subtest: research admission includes peak allocation and an eight GB app reserve
+ok 65 - research admission includes peak allocation and an eight GB app reserve
+  ---
+  duration_ms: 2.005577
+  ...
+# Subtest: unused app quota cannot bypass whole-host disk or RAM admission
+ok 66 - unused app quota cannot bypass whole-host disk or RAM admission
+  ---
+  duration_ms: 0.339973
+  ...
+# Subtest: stale, duplicate and nested inventories never manufacture free capacity
+ok 67 - stale, duplicate and nested inventories never manufacture free capacity
+  ---
+  duration_ms: 0.254304
+  ...
+# Subtest: visible filesystem and counted resident input are independent; unknown quota stays explicit
+ok 68 - visible filesystem and counted resident input are independent; unknown quota stays explicit
+  ---
+  duration_ms: 1.330388
+  ...
+# Subtest: stale, missing, future and overflow measurements fail closed
+ok 69 - stale, missing, future and overflow measurements fail closed
+  ---
+  duration_ms: 0.232852
+  ...
+# Subtest: resident, temporary, free-disk and memory targets are separate constraints
+ok 70 - resident, temporary, free-disk and memory targets are separate constraints
+  ---
+  duration_ms: 0.29818
+  ...
+# (node:137543) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:137543) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/scripts/fixtures/research-cloud-article.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/package.json.
+# (node:137543) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-cloud-work.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: reserve binds server lease and persists original credential-free packet before Cloud dispatch
+ok 71 - reserve binds server lease and persists original credential-free packet before Cloud dispatch
+  ---
+  duration_ms: 52.573817
+  ...
+# Subtest: offline/ambiguous reserve is attempted once, durably marked, and cannot reuse journal or output
+ok 72 - offline/ambiguous reserve is attempted once, durably marked, and cannot reuse journal or output
+  ---
+  duration_ms: 15.230856
+  ...
+# Subtest: existing output blocks mutation and records not_sent
+ok 73 - existing output blocks mutation and records not_sent
+  ---
+  duration_ms: 8.059734
+  ...
+# Subtest: global budget/lease denial is explicit without invented reservation or retry
+ok 74 - global budget/lease denial is explicit without invented reservation or retry
+  ---
+  duration_ms: 4.091275
+  ...
+# Subtest: mismatched reservation owner cannot produce a dispatchable packet
+ok 75 - mismatched reservation owner cannot produce a dispatchable packet
+  ---
+  duration_ms: 7.388336
+  ...
+# Subtest: untrusted transport, duplicate keys, shared credentials and dirty source reject before request
+ok 76 - untrusted transport, duplicate keys, shared credentials and dirty source reject before request
+  ---
+  duration_ms: 4.165146
+  ...
+# Subtest: Taipei day overflow and synthetic scope cannot claim live budget
+ok 77 - Taipei day overflow and synthetic scope cannot claim live budget
+  ---
+  duration_ms: 4.904932
+  ...
+# Subtest: tampered result is rejected locally before send, late identical replay requires server confirmation
+ok 78 - tampered result is rejected locally before send, late identical replay requires server confirmation
+  ---
+  duration_ms: 20.791318
+  ...
+# Subtest: real loopback transport posts only to existing guarded route and refuses redirect
+ok 79 - real loopback transport posts only to existing guarded route and refuses redirect
+  ---
+  duration_ms: 44.116132
+  ...
+# Subtest: real transport bounds oversized response and preserves uncertain receipt without retry
+ok 80 - real transport bounds oversized response and preserves uncertain receipt without retry
+  ---
+  duration_ms: 30.630359
+  ...
+# Subtest: receiver cannot substitute role or strategy authority while reusing hashes
+ok 81 - receiver cannot substitute role or strategy authority while reusing hashes
+  ---
+  duration_ms: 16.60867
+  ...
+# Subtest: GC after headers cannot defeat the fifteen-second Cloud response-body deadline
+ok 82 - GC after headers cannot defeat the fifteen-second Cloud response-body deadline
+  ---
+  duration_ms: 15179.150884
+  ...
+# Subtest: Cloud validated receipts are atomic, immutable and distinct from generic completions
+ok 83 - Cloud validated receipts are atomic, immutable and distinct from generic completions
+  ---
+  duration_ms: 1313.413739
+  ...
+# (node:137691) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:137691) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/scripts/fixtures/research-cloud-article.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/package.json.
+# (node:137691) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-cloud-work.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: Cloud receive requires distinct tester auth and completes the existing reservation, never publishes
+ok 84 - Cloud receive requires distinct tester auth and completes the existing reservation, never publishes
+  ---
+  duration_ms: 121.145506
+  ...
+# Subtest: withdrawal, incorrect live binding, expiry during persistence and synthetic packets reject before acceptance
+ok 85 - withdrawal, incorrect live binding, expiry during persistence and synthetic packets reject before acceptance
+  ---
+  duration_ms: 81.687034
+  ...
+# Subtest: durable identical replay survives expiry; changed bytes do not recreate a completion
+ok 86 - durable identical replay survives expiry; changed bytes do not recreate a completion
+  ---
+  duration_ms: 26.531171
+  ...
+# Subtest: generic model accounting completion cannot bypass current source verification or mint an expired receipt
+ok 87 - generic model accounting completion cannot bypass current source verification or mint an expired receipt
+  ---
+  duration_ms: 20.206987
+  ...
+# (node:137704) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:137704) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/scripts/fixtures/research-cloud-article.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/package.json.
+# (node:137704) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-cloud-work.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: controller prepare and receive share original packet; receipt does not publish and output cannot overwrite
+ok 88 - controller prepare and receive share original packet; receipt does not publish and output cannot overwrite
+  ---
+  duration_ms: 49.230881
+  ...
+# Subtest: synthetic acceptance deadline remains within its Taipei budget day
+ok 89 - synthetic acceptance deadline remains within its Taipei budget day
+  ---
+  duration_ms: 0.765645
+  ...
+# Subtest: Cloud private input rejects actual FIFO before waiting and accepts ordinary JSON
+ok 90 - Cloud private input rejects actual FIFO before waiting and accepts ordinary JSON
+  ---
+  duration_ms: 173.130071
+  ...
+# Subtest: Cloud private input enforces exact four-million bytes and strict UTF8
+ok 91 - Cloud private input enforces exact four-million bytes and strict UTF8
+  ---
+  duration_ms: 20.431876
+  ...
+# Subtest: Cloud private input closes and rejects growth, short read, same-size mutation and path replacement
+ok 92 - Cloud private input closes and rejects growth, short read, same-size mutation and path replacement
+  ---
+  duration_ms: 0.693056
+  ...
+# (node:137745) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:137745) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: claim journals before one guarded request and saves real reservation without dispatch/publication
+ok 93 - claim journals before one guarded request and saves real reservation without dispatch/publication
+  ---
+  duration_ms: 28.401323
+  ...
+# Subtest: lost claim response recovers owner status once instead of claiming a second slot
+ok 94 - lost claim response recovers owner status once instead of claiming a second slot
+  ---
+  duration_ms: 13.790413
+  ...
+# Subtest: completed accounting remains a handoff, and exact known attempt fences status recovery
+ok 95 - completed accounting remains a handoff, and exact known attempt fences status recovery
+  ---
+  duration_ms: 9.107476
+  ...
+# Subtest: old lost response cannot recover a later claim reusing the same worker label
+ok 96 - old lost response cannot recover a later claim reusing the same worker label
+  ---
+  duration_ms: 7.106315
+  ...
+# Subtest: empty claim and expired/lost owned job have different explicit gaps
+ok 97 - empty claim and expired/lost owned job have different explicit gaps
+  ---
+  duration_ms: 9.994433
+  ...
+# Subtest: claim server rejection remains uncertain because RPC may already have committed
+ok 98 - claim server rejection remains uncertain because RPC may already have committed
+  ---
+  duration_ms: 3.486742
+  ...
+# Subtest: foreign owner, wrong role, extended deadline, changed attempt, stale clock and extra secrets fail closed
+ok 99 - foreign owner, wrong role, extended deadline, changed attempt, stale clock and extra secrets fail closed
+  ---
+  duration_ms: 19.762636
+  ...
+# Subtest: recovery binds original owner, origin, source and saved receipt before requests
+ok 100 - recovery binds original owner, origin, source and saved receipt before requests
+  ---
+  duration_ms: 23.762262
+  ...
+# Subtest: recovery rejects symlinks, public permissions and truncated journals
+ok 101 - recovery rejects symlinks, public permissions and truncated journals
+  ---
+  duration_ms: 9.913492
+  ...
+# Subtest: unsafe origins, dirty source, shared key, caller stock selection and invalid owner send nothing
+ok 102 - unsafe origins, dirty source, shared key, caller stock selection and invalid owner send nothing
+  ---
+  duration_ms: 1.37763
+  ...
+# Subtest: existing destination preserves prior receipt and prevents mutation
+ok 103 - existing destination preserves prior receipt and prevents mutation
+  ---
+  duration_ms: 5.391076
+  ...
+# Subtest: actual local HTTP lost response recovers identical reservation without a second claim
+ok 104 - actual local HTTP lost response recovers identical reservation without a second claim
+  ---
+  duration_ms: 33.605829
+  ...
+# Subtest: prepare consumes original claim journal, observes status and fetches input without another claim
+ok 105 - prepare consumes original claim journal, observes status and fetches input without another claim
+  ---
+  duration_ms: 9.273597
+  ...
+# Subtest: prepare lost response uses only status and input, never a new claim or reservation
+ok 106 - prepare lost response uses only status and input, never a new claim or reservation
+  ---
+  duration_ms: 5.138555
+  ...
+# Subtest: prepare refuses completed work before fetching any input
+ok 107 - prepare refuses completed work before fetching any input
+  ---
+  duration_ms: 7.070471
+  ...
+# Subtest: prepare rejects packet hash/owner/deadline/rights/extra fields and missing selection accounting
+ok 108 - prepare rejects packet hash/owner/deadline/rights/extra fields and missing selection accounting
+  ---
+  duration_ms: 44.735481
+  ...
+# Subtest: explicit observed claim journal recovers scoped context, prepares v2 and privately saves incomplete draft
+ok 109 - explicit observed claim journal recovers scoped context, prepares v2 and privately saves incomplete draft
+  ---
+  duration_ms: 53.553469
+  ...
+# (node:137764) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:137764) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: DF01 actual prepared receipt saves at19minutes with immutable clocks, private commit and typed handoff
+ok 110 - DF01 actual prepared receipt saves at19minutes with immutable clocks, private commit and typed handoff
+  ---
+  duration_ms: 92.062251
+  ...
+# (node:137776) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:137776) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: DF02 restart/duplicate keeps identical receipt; fresh expired inspect never proposes submission
+ok 111 - DF02 restart/duplicate keeps identical receipt; fresh expired inspect never proposes submission
+  ---
+  duration_ms: 257.517832
+  ...
+# Subtest: DF03 wrong input/job/owner/attempt/reservation and moving cutoff never create artifact
+ok 112 - DF03 wrong input/job/owner/attempt/reservation and moving cutoff never create artifact
+  ---
+  duration_ms: 84.573055
+  ...
+# Subtest: DF04 producer rewrites of trusted preparation or original journal fail even with recomputed hashes
+ok 113 - DF04 producer rewrites of trusted preparation or original journal fail even with recomputed hashes
+  ---
+  duration_ms: 18.423595
+  ...
+# Subtest: DF05 invented source/fact citations and unknown authority or secret fields reject
+ok 114 - DF05 invented source/fact citations and unknown authority or secret fields reject
+  ---
+  duration_ms: 47.70658
+  ...
+# Subtest: DF06 missing forecasts persist explicitly incomplete without an author handoff proposal
+ok 115 - DF06 missing forecasts persist explicitly incomplete without an author handoff proposal
+  ---
+  duration_ms: 30.646241
+  ...
+# Subtest: DF07 authenticated summaries and prepared gaps remain visible, never public citations
+ok 116 - DF07 authenticated summaries and prepared gaps remain visible, never public citations
+  ---
+  duration_ms: 28.94207
+  ...
+# Subtest: DF08 symlinks, hardlinks, public permissions, incomplete JSON and byte bounds reject
+ok 117 - DF08 symlinks, hardlinks, public permissions, incomplete JSON and byte bounds reject
+  ---
+  duration_ms: 40.308484
+  ...
+# Subtest: DF09 crash before commit is not resumable as success; partial directory is never taken over
+ok 118 - DF09 crash before commit is not resumable as success; partial directory is never taken over
+  ---
+  duration_ms: 21.904369
+  ...
+# Subtest: DF10 committed artifact tampering or a different second model cannot replay or overwrite
+ok 119 - DF10 committed artifact tampering or a different second model cannot replay or overwrite
+  ---
+  duration_ms: 111.247573
+  ...
+# Subtest: DF11 producer rewrite during staging leaves no commit, even when original bytes are restored
+ok 120 - DF11 producer rewrite during staging leaves no commit, even when original bytes are restored
+  ---
+  duration_ms: 18.243383
+  ...
+# Subtest: DF12 expired arrival retains only a non-submittable draft without refreshing any clocks
+ok 121 - DF12 expired arrival retains only a non-submittable draft without refreshing any clocks
+  ---
+  duration_ms: 39.944471
+  ...
+# Subtest: DF13 no backdated current clock or future author clock is accepted
+ok 122 - DF13 no backdated current clock or future author clock is accepted
+  ---
+  duration_ms: 18.927877
+  ...
+# Subtest: DF14 rewritten staged draft before commit must not be reported persisted
+ok 123 - DF14 rewritten staged draft before commit must not be reported persisted
+  ---
+  duration_ms: 24.385469
+  ...
+# Subtest: DF15 replaced output directory must reject and never write into replacement
+ok 124 - DF15 replaced output directory must reject and never write into replacement
+  ---
+  duration_ms: 13.488446
+  ...
+# Subtest: DF16 staged file replacement or restored-byte rewrite rejects before marker
+ok 125 - DF16 staged file replacement or restored-byte rewrite rejects before marker
+  ---
+  duration_ms: 55.451234
+  ...
+# (node:137788) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:137788) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: DF17 post-marker corruption rejects writer and fresh-process inspection consistently
+ok 126 - DF17 post-marker corruption rejects writer and fresh-process inspection consistently
+  ---
+  duration_ms: 239.399711
+  ...
+# (node:137800) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:137800) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/candidate-dossier-contract.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: DCC-RT-01 exact internal bearer is checked before body parsing or database access
+ok 127 - DCC-RT-01 exact internal bearer is checked before body parsing or database access
+  ---
+  duration_ms: 1001.071065
+  ...
+# Subtest: DCC-RT-02 claim returns the actual durable reservation and immutable deadlines
+ok 128 - DCC-RT-02 claim returns the actual durable reservation and immutable deadlines
+  ---
+  duration_ms: 74.502312
+  ...
+# Subtest: DCC-RT-03 independent SQL timestamps preserve both original deadlines without inventing equality
+ok 129 - DCC-RT-03 independent SQL timestamps preserve both original deadlines without inventing equality
+  ---
+  duration_ms: 79.601427
+  ...
+# Subtest: DCC-RT-04 status recovers the same active claim using only bounded SELECTs
+ok 130 - DCC-RT-04 status recovers the same active claim using only bounded SELECTs
+  ---
+  duration_ms: 153.128588
+  ...
+# Subtest: DCC-RT-05 author handoff completion is returned as accounting, without claiming another job
+ok 131 - DCC-RT-05 author handoff completion is returned as accounting, without claiming another job
+  ---
+  duration_ms: 85.34133
+  ...
+# Subtest: DCC-RT-06 a finished model remains observable until the distinct job deadline
+ok 132 - DCC-RT-06 a finished model remains observable until the distinct job deadline
+  ---
+  duration_ms: 197.161535
+  ...
+# Subtest: DCC-RT-07 foreign owner and absent or non-running jobs return no context and never mutate
+ok 133 - DCC-RT-07 foreign owner and absent or non-running jobs return no context and never mutate
+  ---
+  duration_ms: 517.183182
+  ...
+# Subtest: DCC-RT-08 status requires an exact paired job/attempt selector and a valid owner
+ok 134 - DCC-RT-08 status requires an exact paired job/attempt selector and a valid owner
+  ---
+  duration_ms: 881.727137
+  ...
+# Subtest: DCC-RT-09 original attempt deadline cannot be extended by mutable job state
+ok 135 - DCC-RT-09 original attempt deadline cannot be extended by mutable job state
+  ---
+  duration_ms: 78.091749
+  ...
+# Subtest: DCC-RT-10 invalid reservation clocks fail closed
+ok 136 - DCC-RT-10 invalid reservation clocks fail closed
+  ---
+  duration_ms: 219.830707
+  ...
+# Subtest: DCC-RT-11 an otherwise valid active reservation may not cross Taipei midnight
+ok 137 - DCC-RT-11 an otherwise valid active reservation may not cross Taipei midnight
+  ---
+  duration_ms: 74.838189
+  ...
+# Subtest: DCC-RT-12 expired model reservation cannot be recovered as runnable work
+ok 138 - DCC-RT-12 expired model reservation cannot be recovered as runnable work
+  ---
+  duration_ms: 87.553148
+  ...
+# Subtest: DCC-RT-13 expiry during database reads never returns an active claim context
+ok 139 - DCC-RT-13 expiry during database reads never returns an active claim context
+  ---
+  duration_ms: 88.678918
+  ...
+# Subtest: DCC-RT-14 changed live job fence during reads is rejected without modifying the new state
+ok 140 - DCC-RT-14 changed live job fence during reads is rejected without modifying the new state
+  ---
+  duration_ms: 314.679827
+  ...
+# Subtest: DCC-RT-15 a claim with no selected job returns null without inventing a reservation
+ok 141 - DCC-RT-15 a claim with no selected job returns null without inventing a reservation
+  ---
+  duration_ms: 75.99475
+  ...
+# Subtest: DCC-RT-16 successful claim followed by missing or failed context is uncertain and never retried
+ok 142 - DCC-RT-16 successful claim followed by missing or failed context is uncertain and never retried
+  ---
+  duration_ms: 291.858569
+  ...
+# Subtest: DCC-RT-17 RPC claim identity must match the reloaded durable job in every field
+ok 143 - DCC-RT-17 RPC claim identity must match the reloaded durable job in every field
+  ---
+  duration_ms: 342.069595
+  ...
+# Subtest: DCC-RT-18 lost or malformed claim RPC replies are sanitized and never retried automatically
+ok 144 - DCC-RT-18 lost or malformed claim RPC replies are sanitized and never retried automatically
+  ---
+  duration_ms: 539.990685
+  ...
+# Subtest: DCC-RT-19 status rejects missing, mismatched, duplicate, or unreadable durable context
+ok 145 - DCC-RT-19 status rejects missing, mismatched, duplicate, or unreadable durable context
+  ---
+  duration_ms: 1206.934131
+  ...
+# Subtest: DCC-RT-20 completion identity, outcome, hash, and clocks remain bound to the reservation
+ok 146 - DCC-RT-20 completion identity, outcome, hash, and clocks remain bound to the reservation
+  ---
+  duration_ms: 533.435131
+  ...
+# Subtest: DCC-RT-21 existing handoff, finish, and publication retain their authenticated RPC contracts
+ok 147 - DCC-RT-21 existing handoff, finish, and publication retain their authenticated RPC contracts
+  ---
+  duration_ms: 314.634068
+  ...
+# Subtest: DAI-01 real input route exports only bounded facts/summary with live reservation and separate cutoffs
+ok 148 - DAI-01 real input route exports only bounded facts/summary with live reservation and separate cutoffs
+  ---
+  duration_ms: 86.948776
+  ...
+# Subtest: DAI-02 auth and exact input validation happen before all database access
+ok 149 - DAI-02 auth and exact input validation happen before all database access
+  ---
+  duration_ms: 468.465349
+  ...
+# Subtest: DAI-03 wrong reservation and a completed model cannot prepare another dispatch input
+ok 150 - DAI-03 wrong reservation and a completed model cannot prepare another dispatch input
+  ---
+  duration_ms: 149.344247
+  ...
+# Subtest: DAI-04 denied, withdrawn, malformed rights, future microsecond and unrelated company stay explicit gaps
+ok 151 - DAI-04 denied, withdrawn, malformed rights, future microsecond and unrelated company stay explicit gaps
+  ---
+  duration_ms: 846.052955
+  ...
+# Subtest: DAI-05 authenticated summary remains internal; industry is context without company/order attribution
+ok 152 - DAI-05 authenticated summary remains internal; industry is context without company/order attribution
+  ---
+  duration_ms: 92.973249
+  ...
+# Subtest: DAI-06 stale RPC head and equal-clock conflicting sibling cannot slip into author input
+ok 153 - DAI-06 stale RPC head and equal-clock conflicting sibling cannot slip into author input
+  ---
+  duration_ms: 186.253847
+  ...
+# Subtest: DAI-07 immutable dossier hash, issuer, published identity and clocks are verified
+ok 154 - DAI-07 immutable dossier hash, issuer, published identity and clocks are verified
+  ---
+  duration_ms: 475.008053
+  ...
+# Subtest: DAI-08 absent selections are explicit gaps, never a complete financial forecast
+ok 155 - DAI-08 absent selections are explicit gaps, never a complete financial forecast
+  ---
+  duration_ms: 77.878768
+  ...
+# Subtest: DAI-09 ownership changes during preparation invalidate the entire packet
+ok 156 - DAI-09 ownership changes during preparation invalidate the entire packet
+  ---
+  duration_ms: 75.007224
+  ...
+# Subtest: DAI-10 source read failure cannot be reported as no new sources
+ok 157 - DAI-10 source read failure cannot be reported as no new sources
+  ---
+  duration_ms: 79.319973
+  ...
+# Subtest: DAI-11 deadline rejects a stalled source read even when transport ignores cancellation
+ok 158 - DAI-11 deadline rejects a stalled source read even when transport ignores cancellation
+  ---
+  duration_ms: 121.628958
+  ...
+# Subtest: DAI-12 fallback revision URLs cannot hide a contradictory same-clock sibling
+ok 159 - DAI-12 fallback revision URLs cannot hide a contradictory same-clock sibling
+  ---
+  duration_ms: 77.595811
+  ...
+# Subtest: DCC-RT observed-only jobs cannot enter the legacy formal context
+ok 160 - DCC-RT observed-only jobs cannot enter the legacy formal context
+  ---
+  duration_ms: 151.836498
+  ...
+# Subtest: DAI-13 precise clocks survive packet serialization and reject invalid microsecond sibling ordering
+ok 161 - DAI-13 precise clocks survive packet serialization and reject invalid microsecond sibling ordering
+  ---
+  duration_ms: 145.478052
+  ...
+# Subtest: RIP-HTTP authentication precedes body/client for preparation
+ok 162 - RIP-HTTP authentication precedes body/client for preparation
+  ---
+  duration_ms: 63.295118
+  ...
+# Subtest: RIP-HTTP closed observed preparation delegates to one atomic RPC without claim/reserve
+ok 163 - RIP-HTTP closed observed preparation delegates to one atomic RPC without claim/reserve
+  ---
+  duration_ms: 654.342442
+  ...
+# Subtest: financial supplement auth rejects before body or database construction
+ok 164 - financial supplement auth rejects before body or database construction
+  ---
+  duration_ms: 80.379213
+  ...
+# Subtest: weekly five-article cap and daily four-attempt/one-lease Mac queue fail closed
+ok 165 - weekly five-article cap and daily four-attempt/one-lease Mac queue fail closed
+  ---
+  duration_ms: 1220.250016
+  ...
+# Subtest: deep publication preserves ordinary history and recovers rejected plus expired leases
+ok 166 - deep publication preserves ordinary history and recovers rejected plus expired leases
+  ---
+  duration_ms: 1559.520588
+  ...
+# Subtest: deep publication preserves ordinary history and recovers explicit_failure plus expired leases
+ok 167 - deep publication preserves ordinary history and recovers explicit_failure plus expired leases
+  ---
+  duration_ms: 1550.55107
+  ...
+# Subtest: readStall bounded failure tracks delayed descriptor then permits confirmed recovery
+ok 168 - readStall bounded failure tracks delayed descriptor then permits confirmed recovery
+  ---
+  duration_ms: 143.272172
+  ...
+# Subtest: lateOpen bounded failure tracks delayed descriptor then permits confirmed recovery
+ok 169 - lateOpen bounded failure tracks delayed descriptor then permits confirmed recovery
+  ---
+  duration_ms: 132.065488
+  ...
+# Subtest: normal read cannot return successful cleanup while close is stalled
+ok 170 - normal read cannot return successful cleanup while close is stalled
+  ---
+  duration_ms: 124.355152
+  ...
+# Subtest: close rejection preserves original read failure and permanently requires controlled recovery
+ok 171 - close rejection preserves original read failure and permanently requires controlled recovery
+  ---
+  duration_ms: 35.326516
+  ...
+# Subtest: success confirms all handles closed before return, duplicate close stays confirmed
+ok 172 - success confirms all handles closed before return, duplicate close stays confirmed
+  ---
+  duration_ms: 35.372596
+  ...
+# Subtest: already exhausted deadline never acquires a descriptor
+ok 173 - already exhausted deadline never acquires a descriptor
+  ---
+  duration_ms: 33.558338
+  ...
+# Subtest: late open close rejection never releases unknown cleanup ownership
+ok 174 - late open close rejection never releases unknown cleanup ownership
+  ---
+  duration_ms: 123.430406
+  ...
+# Subtest: primary hash error survives a cleanup error with explicit failed cleanup
+ok 175 - primary hash error survives a cleanup error with explicit failed cleanup
+  ---
+  duration_ms: 38.536421
+  ...
+# (node:138280) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:138280) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-financial-file-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: bundled fixed inventory exactly equals approved design bytes/paths/hashes
+ok 176 - bundled fixed inventory exactly equals approved design bytes/paths/hashes
+  ---
+  duration_ms: 7.006815
+  ...
+# Subtest: 2409 actual immutable relay projection and independently recalculated bridges
+ok 177 - 2409 actual immutable relay projection and independently recalculated bridges
+  ---
+  duration_ms: 61.459878
+  ...
+# Subtest: 2383 actual immutable relay projection and independently recalculated bridges
+ok 178 - 2383 actual immutable relay projection and independently recalculated bridges
+  ---
+  duration_ms: 24.26316
+  ...
+# Subtest: actual EP8 company remains unsupported and does not read AUO files
+ok 179 - actual EP8 company remains unsupported and does not read AUO files
+  ---
+  duration_ms: 0.563019
+  ...
+# Subtest: closed request rejects caller command
+ok 180 - closed request rejects caller command
+  ---
+  duration_ms: 0.490911
+  ...
+# Subtest: closed request rejects caller calculatorId
+ok 181 - closed request rejects caller calculatorId
+  ---
+  duration_ms: 0.23831
+  ...
+# Subtest: closed request rejects caller path
+ok 182 - closed request rejects caller path
+  ---
+  duration_ms: 0.190578
+  ...
+# Subtest: closed request rejects caller symbol
+ok 183 - closed request rejects caller symbol
+  ---
+  duration_ms: 0.118639
+  ...
+# Subtest: closed request rejects caller financialVerified
+ok 184 - closed request rejects caller financialVerified
+  ---
+  duration_ms: 0.279923
+  ...
+# Subtest: live original preparation recheck rejects wrongHash
+ok 185 - live original preparation recheck rejects wrongHash
+  ---
+  duration_ms: 0.873399
+  ...
+# Subtest: live original preparation recheck rejects withdrawn
+ok 186 - live original preparation recheck rejects withdrawn
+  ---
+  duration_ms: 0.277039
+  ...
+# Subtest: live original preparation recheck rejects completedAfterRead
+ok 187 - live original preparation recheck rejects completedAfterRead
+  ---
+  duration_ms: 22.277362
+  ...
+# Subtest: live original preparation recheck rejects crossScope
+ok 188 - live original preparation recheck rejects crossScope
+  ---
+  duration_ms: 0.342246
+  ...
+# Subtest: stalled lease dependency cannot produce a late success under shared10s deadline
+ok 189 - stalled lease dependency cannot produce a late success under shared10s deadline
+  ---
+  duration_ms: 10000.628624
+  ...
+# Subtest: nanosecond ordering and invalid finite calendar retained
+ok 190 - nanosecond ordering and invalid finite calendar retained
+  ---
+  duration_ms: 0.269086
+  ...
+# Subtest: actual read exact per-file/aggregate caps; +1 fails without truncate success
+ok 191 - actual read exact per-file/aggregate caps; +1 fails without truncate success
+  ---
+  duration_ms: 16.670468
+  ...
+# Subtest: bounded regular FD rejects fifo
+ok 192 - bounded regular FD rejects fifo
+  ---
+  duration_ms: 9.040153
+  ...
+# Subtest: bounded regular FD rejects directory
+ok 193 - bounded regular FD rejects directory
+  ---
+  duration_ms: 3.196655
+  ...
+# Subtest: bounded regular FD rejects symlink
+ok 194 - bounded regular FD rejects symlink
+  ---
+  duration_ms: 4.860871
+  ...
+# Subtest: bounded regular FD rejects replaceBeforeOpen
+ok 195 - bounded regular FD rejects replaceBeforeOpen
+  ---
+  duration_ms: 11.830325
+  ...
+# Subtest: bounded regular FD rejects replaceParent
+ok 196 - bounded regular FD rejects replaceParent
+  ---
+  duration_ms: 2.860352
+  ...
+# Subtest: bounded regular FD rejects shortRead
+ok 197 - bounded regular FD rejects shortRead
+  ---
+  duration_ms: 2.374343
+  ...
+# Subtest: bounded regular FD rejects mutateAfterRead
+ok 198 - bounded regular FD rejects mutateAfterRead
+  ---
+  duration_ms: 2.625783
+  ...
+# Subtest: projection/result UTF8 exact and +1, not character count
+ok 199 - projection/result UTF8 exact and +1, not character count
+  ---
+  duration_ms: 6.994246
+  ...
+# Subtest: late async success discarded by monotonic deadline
+ok 200 - late async success discarded by monotonic deadline
+  ---
+  duration_ms: 14.459473
+  ...
+# Subtest: 2409 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+ok 201 - 2409 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+  ---
+  duration_ms: 21.623104
+  ...
+# Subtest: 2383 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+ok 202 - 2383 monthly anchor keeps actual operands, precision, reconciliation and source clocks
+  ---
+  duration_ms: 12.142046
+  ...
+# Subtest: observer measures every fixed root; only absent logs may count as zero
+ok 203 - observer measures every fixed root; only absent logs may count as zero
+  ---
+  duration_ms: 2.550019
+  ...
+# Subtest: resource CLI cannot skip checks through current symlink invocation
+ok 204 - resource CLI cannot skip checks through current symlink invocation
+  ---
+  duration_ms: 39.617562
+  ...
+# Subtest: heavy wrapper blocks the actual command when the research guard fails
+ok 205 - heavy wrapper blocks the actual command when the research guard fails
+  ---
+  duration_ms: 21.027235
+  ...
+# (node:138363) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:138363) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-financial-supplement.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# ERROR:  input_preparation_assert_mismatch
+# CONTEXT:  PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 10 at RAISE
+# ERROR:  input_preparation_assert_mismatch
+# CONTEXT:  PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 10 at RAISE
+# ERROR:  input_preparation_assert_mismatch
+# CONTEXT:  PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 10 at RAISE
+# ERROR:  permission denied for function assert_research_input_preparation_v2
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# Subtest: real PostgreSQL immutable input preparations, original leases and source fences (synthetic)
+    # Subtest: company absent from stocks prepares an immutable incomplete input without claiming or dispatching
+    ok 1 - company absent from stocks prepares an immutable incomplete input without claiming or dispatching
+      ---
+      duration_ms: 34.15019
+      ...
+    # Subtest: read-only assertion rechecks existing preparation without any new charge or seal
+    ok 2 - read-only assertion rechecks existing preparation without any new charge or seal
+      ---
+      duration_ms: 152.140717
+      ...
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 21 at RAISE
+# ERROR:  input_preparation_source_missing
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 60 at RAISE
+# ERROR:  permission denied for table research_input_preparations_v2
+# ERROR:  permission denied for table research_input_preparations_v2
+# ERROR:  permission denied for table research_input_preparations_v2
+# ERROR:  permission denied for table research_input_preparations_v2
+# ERROR:  permission denied for function prepare_research_input_v2
+# ERROR:  new row violates row-level security policy for table "research_deep_jobs_v1"
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  input_preparation_lineage
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 46 at RAISE
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# ERROR:  input_preparation_count_bound
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 58 at RAISE
+# ERROR:  input_preparation_original_lease_lost
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 39 at RAISE
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+# PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+# ERROR:  input_preparation_byte_bound
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 83 at RAISE
+    # Subtest: real PG read-only assertions feed both fixed calculators without formal rows or durable financial state
+    ok 3 - real PG read-only assertions feed both fixed calculators without formal rows or durable financial state
+      ---
+      duration_ms: 268.971441
+      ...
+    # Subtest: exact replay preserves hash/clocks and restart remains identical
+    ok 4 - exact replay preserves hash/clocks and restart remains identical
+      ---
+      duration_ms: 264.469168
+      ...
+    # Subtest: unknown identity/authority/calculator/clock fields and wrong binding fail closed
+    ok 5 - unknown identity/authority/calculator/clock fields and wrong binding fail closed
+      ---
+      duration_ms: 188.318036
+      ...
+    # Subtest: BYPASSRLS direct insert/update/delete/truncate and anonymous RPC forbidden
+    ok 6 - BYPASSRLS direct insert/update/delete/truncate and anonymous RPC forbidden
+      ---
+      duration_ms: 74.883969
+      ...
+    # Subtest: priority immutable-store proof cannot be bypassed by service RPC
+    ok 7 - priority immutable-store proof cannot be bypassed by service RPC
+      ---
+      duration_ms: 44.145707
+      ...
+    # Subtest: completed or expired reservation never becomes fresh and receipts remain immutable
+    ok 8 - completed or expired reservation never becomes fresh and receipts remain immutable
+      ---
+      duration_ms: 82.795277
+      ...
+    # Subtest: four preparations fill one original unit; fifth rejects instead of durable growth
+    ok 9 - four preparations fill one original unit; fifth rejects instead of durable growth
+      ---
+      duration_ms: 294.182763
+      ...
+    # Subtest: full UTF-8 serialized request/payload/new seal charges include exact524288 and +1 bytes
+    ok 10 - full UTF-8 serialized request/payload/new seal charges include exact524288 and +1 bytes
+      ---
+      duration_ms: 92.402407
+      ...
+    # Subtest: cumulative bytes reject below count cap and rollback seal/preparation/budget counts
+    ok 11 - cumulative bytes reject below count cap and rollback seal/preparation/budget counts
+      ---
+      duration_ms: 489.655582
+      ...
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+# PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# SQL statement "SELECT public.assert_research_source_seal_v2(old.source_seal_id)"
+# PL/pgSQL function prepare_research_input_v2(jsonb) line 51 at PERFORM
+# PL/pgSQL function assert_research_input_preparation_v2(jsonb,uuid,text) line 13 at assignment
+# ERROR:  input_preparation_read_committed_required
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 8 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 21 at RAISE
+# ERROR:  input_preparation_shape
+# CONTEXT:  PL/pgSQL function prepare_research_input_v2(jsonb) line 15 at RAISE
+    # Subtest: two actual concurrent clients compete for the last original-unit slot
+    ok 12 - two actual concurrent clients compete for the last original-unit slot
+      ---
+      duration_ms: 156.822238
+      ...
+    # Subtest: source withdrawal rejects replay without replacing old bytes or returning publishable
+    ok 13 - source withdrawal rejects replay without replacing old bytes or returning publishable
+      ---
+      duration_ms: 54.285045
+      ...
+    # Subtest: repeatable read cannot seal stale input; null/oversized/invalid-ID requests reject
+    ok 14 - repeatable read cannot seal stale input; null/oversized/invalid-ID requests reject
+      ---
+      duration_ms: 42.586073
+      ...
+    1..14
+ok 206 - real PostgreSQL immutable input preparations, original leases and source fences (synthetic)
+  ---
+  duration_ms: 3406.109647
+  ...
+# Subtest: existing guarded collector consumes actual TWSE/TPEx professional relays with honest clocks
+ok 207 - existing guarded collector consumes actual TWSE/TPEx professional relays with honest clocks
+  ---
+  duration_ms: 48.240436
+  ...
+# Subtest: symbol scope passes all67 rather than first60
+ok 208 - symbol scope passes all67 rather than first60
+  ---
+  duration_ms: 27.505703
+  ...
+# Subtest: market partial coverage and persisted next page are explicit
+ok 209 - market partial coverage and persisted next page are explicit
+  ---
+  duration_ms: 122.972134
+  ...
+# Subtest: persistence failure never advances cursor
+ok 210 - persistence failure never advances cursor
+  ---
+  duration_ms: 14.932406
+  ...
+# Subtest: CAS conflict rejects collector success after idempotent document writes
+ok 211 - CAS conflict rejects collector success after idempotent document writes
+  ---
+  duration_ms: 12.877967
+  ...
+# Subtest: existing source endpoint still authenticates and enforces production lease
+ok 212 - existing source endpoint still authenticates and enforces production lease
+  ---
+  duration_ms: 0.366193
+  ...
+# Subtest: schema drift cannot complete/advance before symbol filtering null
+ok 213 - schema drift cannot complete/advance before symbol filtering null
+  ---
+  duration_ms: 13.23026
+  ...
+# Subtest: schema drift cannot complete/advance before symbol filtering 2409
+ok 214 - schema drift cannot complete/advance before symbol filtering 2409
+  ---
+  duration_ms: 10.680391
+  ...
+# Subtest: schema drift outside current page refuses advance for the entire snapshot
+ok 215 - schema drift outside current page refuses advance for the entire snapshot
+  ---
+  duration_ms: 31.755732
+  ...
+# Subtest: real existing PostgreSQL cursor DDL retains CAS/replay progress after restart
+ok 216 - real existing PostgreSQL cursor DDL retains CAS/replay progress after restart
+  ---
+  duration_ms: 1358.142455
+  ...
+# Subtest: actual route rejects incomplete zero-new replay 0
+ok 217 - actual route rejects incomplete zero-new replay 0
+  ---
+  duration_ms: 52.456939
+  ...
+# Subtest: actual route rejects incomplete zero-new replay 1501
+ok 218 - actual route rejects incomplete zero-new replay 1501
+  ---
+  duration_ms: 27.670946
+  ...
+# Subtest: actual route rejects partial dataset failure with zero new documents
+ok 219 - actual route rejects partial dataset failure with zero new documents
+  ---
+  duration_ms: 22.742698
+  ...
+# Subtest: actual route keeps completed duplicate and empty results successful
+ok 220 - actual route keeps completed duplicate and empty results successful
+  ---
+  duration_ms: 43.873212
+  ...
+# Subtest: actual route authentication precedes collector and lease
+ok 221 - actual route authentication precedes collector and lease
+  ---
+  duration_ms: 18.820717
+  ...
+# Subtest: cached complete yesterday remains stale502 and cannot renew succeededAt or next cadence
+ok 222 - cached complete yesterday remains stale502 and cannot renew succeededAt or next cadence
+  ---
+  duration_ms: 14.470852
+  ...
+# Subtest: fresh cached completion succeeds as processing without claiming a new live acquisition
+ok 223 - fresh cached completion succeeds as processing without claiming a new live acquisition
+  ---
+  duration_ms: 19.12691
+  ...
+# Subtest: live observation ledger uses original source clock rather than processing completion
+ok 224 - live observation ledger uses original source clock rather than processing completion
+  ---
+  duration_ms: 14.455148
+  ...
+# Subtest: explicit snapshot scope is closed before the write lease or collector
+ok 225 - explicit snapshot scope is closed before the write lease or collector
+  ---
+  duration_ms: 70.18359
+  ...
+# (node:138837) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:138837) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: consumes server membership held-first, accounts expiry, and never renews or adopts a strategy
+ok 226 - consumes server membership held-first, accounts expiry, and never renews or adopts a strategy
+  ---
+  duration_ms: 23.991021
+  ...
+# Subtest: server rechecks latest invalidation and does not receive a stale cutoff or caller eligibility
+ok 227 - server rechecks latest invalidation and does not receive a stale cutoff or caller eligibility
+  ---
+  duration_ms: 8.774153
+  ...
+# Subtest: 32 tasks bound accounts every leftover, including held stocks outside the batch
+ok 228 - 32 tasks bound accounts every leftover, including held stocks outside the batch
+  ---
+  duration_ms: 45.164245
+  ...
+# Subtest: total deadline defers work instead of pretending the monitoring run completed
+ok 229 - total deadline defers work instead of pretending the monitoring run completed
+  ---
+  duration_ms: 24.792241
+  ...
+# Subtest: deadline exhausted while journaling does not dispatch a snapshot with a negative timeout
+ok 230 - deadline exhausted while journaling does not dispatch a snapshot with a negative timeout
+  ---
+  duration_ms: 6.775608
+  ...
+# Subtest: explicit server gaps remain visible and do not stop another held stock from being checked
+ok 231 - explicit server gaps remain visible and do not stop another held stock from being checked
+  ---
+  duration_ms: 7.494973
+  ...
+# Subtest: network ambiguity stops further mutations and preserves original worklist and completed responses
+ok 232 - network ambiguity stops further mutations and preserves original worklist and completed responses
+  ---
+  duration_ms: 5.332028
+  ...
+# Subtest: missing held membership, duplicates, future or stale server clock, invalid renewal fail closed
+ok 233 - missing held membership, duplicates, future or stale server clock, invalid renewal fail closed
+  ---
+  duration_ms: 0.439363
+  ...
+# Subtest: mismatched response, future snapshot and manufactured eligibility become uncertain without retry
+ok 234 - mismatched response, future snapshot and manufactured eligibility become uncertain without retry
+  ---
+  duration_ms: 11.020854
+  ...
+# Subtest: unsafe origin, shared writer key, dirty source, caller stock selection reject before any request
+ok 235 - unsafe origin, shared writer key, dirty source, caller stock selection reject before any request
+  ---
+  duration_ms: 1.33176
+  ...
+# Subtest: existing output blocks all requests, preserving previous receipt
+ok 236 - existing output blocks all requests, preserving previous receipt
+  ---
+  duration_ms: 4.268953
+  ...
+# Subtest: real transport uses finite authenticated routes and rejects redirects without forwarding the bearer
+ok 237 - real transport uses finite authenticated routes and rejects redirects without forwarding the bearer
+  ---
+  duration_ms: 41.775145
+  ...
+# Subtest: GC cannot cancel the strongly held body deadline after response headers
+ok 238 - GC cannot cancel the strongly held body deadline after response headers
+  ---
+  duration_ms: 1187.326244
+  ...
+# (node:138863) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:138863) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: 70 members continue32/32/6 held-first, preserve observation and immutable predecessor
+ok 239 - 70 members continue32/32/6 held-first, preserve observation and immutable predecessor
+  ---
+  duration_ms: 154.505186
+  ...
+# Subtest: fresh membership removes prior dispositions; rejoining, new and flag-changed companies run again
+ok 240 - fresh membership removes prior dispositions; rejoining, new and flag-changed companies run again
+  ---
+  duration_ms: 26.976854
+  ...
+# Subtest: explicit rejection counts as a disposition and never as saved; later batches still progress
+ok 241 - explicit rejection counts as a disposition and never as saved; later batches still progress
+  ---
+  duration_ms: 104.42307
+  ...
+# Subtest: fresh server invalidation is preserved; controller sends no old cutoff or eligibility
+ok 242 - fresh server invalidation is preserved; controller sends no old cutoff or eligibility
+  ---
+  duration_ms: 74.729609
+  ...
+# Subtest: reject date predecessor before network
+ok 243 - reject date predecessor before network
+  ---
+  duration_ms: 39.449969
+  ...
+# Subtest: reject future predecessor before network
+ok 244 - reject future predecessor before network
+  ---
+  duration_ms: 39.38406
+  ...
+# Subtest: reject source predecessor before network
+ok 245 - reject source predecessor before network
+  ---
+  duration_ms: 39.474256
+  ...
+# Subtest: reject origin predecessor before network
+ok 246 - reject origin predecessor before network
+  ---
+  duration_ms: 46.746878
+  ...
+# Subtest: reject hash predecessor before network
+ok 247 - reject hash predecessor before network
+  ---
+  duration_ms: 40.11636
+  ...
+# Subtest: reject truncate predecessor before network
+ok 248 - reject truncate predecessor before network
+  ---
+  duration_ms: 37.957047
+  ...
+# Subtest: reject uncertain predecessor before network
+ok 249 - reject uncertain predecessor before network
+  ---
+  duration_ms: 43.673715
+  ...
+# Subtest: reject extra_phase predecessor before network
+ok 250 - reject extra_phase predecessor before network
+  ---
+  duration_ms: 37.969896
+  ...
+# Subtest: reject duplicate_progress predecessor before network
+ok 251 - reject duplicate_progress predecessor before network
+  ---
+  duration_ms: 33.019344
+  ...
+# Subtest: changed book heads reject after fresh read and before snapshot writes
+ok 252 - changed book heads reject after fresh read and before snapshot writes
+  ---
+  duration_ms: 39.777844
+  ...
+# Subtest: closed trace rejects unearned_first_progress despite recomputed local integrity hashes
+ok 253 - closed trace rejects unearned_first_progress despite recomputed local integrity hashes
+  ---
+  duration_ms: 11.320155
+  ...
+# Subtest: closed trace rejects changed_response_observation despite recomputed local integrity hashes
+ok 254 - closed trace rejects changed_response_observation despite recomputed local integrity hashes
+  ---
+  duration_ms: 6.405157
+  ...
+# Subtest: private predecessor symlink rejects without blocking or transport
+ok 255 - private predecessor symlink rejects without blocking or transport
+  ---
+  duration_ms: 35.308279
+  ...
+# Subtest: private predecessor fifo rejects without blocking or transport
+ok 256 - private predecessor fifo rejects without blocking or transport
+  ---
+  duration_ms: 38.822647
+  ...
+# Subtest: private predecessor permissions rejects without blocking or transport
+ok 257 - private predecessor permissions rejects without blocking or transport
+  ---
+  duration_ms: 33.984831
+  ...
+# Subtest: private predecessor oversize rejects without blocking or transport
+ok 258 - private predecessor oversize rejects without blocking or transport
+  ---
+  duration_ms: 49.999227
+  ...
+# Subtest: paired and distinct paths, normalized aliases, invalid HTTP rejection are rejected
+ok 259 - paired and distinct paths, normalized aliases, invalid HTTP rejection are rejected
+  ---
+  duration_ms: 4.602286
+  ...
+# Subtest: Asia/Taipei date, not UTC date, fences continuation
+ok 260 - Asia/Taipei date, not UTC date, fences continuation
+  ---
+  duration_ms: 0.130807
+  ...
+# Subtest: journal/output sync failure at boundary5 cannot authorize continuation
+ok 261 - journal/output sync failure at boundary5 cannot authorize continuation
+  ---
+  duration_ms: 5.234829
+  ...
+# Subtest: journal/output sync failure at boundary6 cannot authorize continuation
+ok 262 - journal/output sync failure at boundary6 cannot authorize continuation
+  ---
+  duration_ms: 10.473838
+  ...
+# Subtest: journal/output sync failure at boundary7 cannot authorize continuation
+ok 263 - journal/output sync failure at boundary7 cannot authorize continuation
+  ---
+  duration_ms: 8.108963
+  ...
+# Subtest: future current worklist, duplicate membership and midnight boundary never mutate snapshots
+ok 264 - future current worklist, duplicate membership and midnight boundary never mutate snapshots
+  ---
+  duration_ms: 48.114988
+  ...
+# Subtest: clock crosses midnight after response: saved outcomes remain in journal but no resumable success
+ok 265 - clock crosses midnight after response: saved outcomes remain in journal but no resumable success
+  ---
+  duration_ms: 6.83445
+  ...
+# Subtest: continuation worklist request crossing midnight cannot carry yesterday dispositions
+ok 266 - continuation worklist request crossing midnight cannot carry yesterday dispositions
+  ---
+  duration_ms: 8.763436
+  ...
+# Subtest: largest unique four-digit cohort plus monthly reviews and progress fits both file bounds
+ok 267 - largest unique four-digit cohort plus monthly reviews and progress fits both file bounds
+  ---
+  duration_ms: 25.35406
+  ...
+# Subtest: real HTTP multi-batch continuation fetches fresh membership and never forwards progress
+ok 268 - real HTTP multi-batch continuation fetches fresh membership and never forwards progress
+  ---
+  duration_ms: 123.551033
+  ...
+# Subtest: real clocks: request log precedes delayed server worklist cutoff and continuation remains valid
+ok 269 - real clocks: request log precedes delayed server worklist cutoff and continuation remains valid
+  ---
+  duration_ms: 145.681692
+  ...
+# (node:138877) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:138877) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-source-attempt-controller.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: real observed priority accounts1978 and admits an old public company research lead without formal identity
+ok 270 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled
+  ---
+  duration_ms: 0.986058
+  ...
+# (node:138888) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:138888) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart
+ok 271 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled
+  ---
+  duration_ms: 0.583661
+  ...
+# Subtest: an inactive unheld entry cannot block monitoring an existing inactive position
+ok 272 - an inactive unheld entry cannot block monitoring an existing inactive position
+  ---
+  duration_ms: 110.538448
+  ...
+# Subtest: paper session uses verified zero-event anchor rather than any superseded historical event
+ok 273 - paper session uses verified zero-event anchor rather than any superseded historical event
+  ---
+  duration_ms: 36.75344
+  ...
+# Subtest: current verified corporate action still blocks held book and frozen new entry
+ok 274 - current verified corporate action still blocks held book and frozen new entry
+  ---
+  duration_ms: 45.792522
+  ...
+# Subtest: missing or mismatched anchor action context never marks or appends a book
+ok 275 - missing or mismatched anchor action context never marks or appends a book
+  ---
+  duration_ms: 260.367206
+  ...
+# Subtest: paper exact replay returns its original immutable receipt without current authority reads
+ok 276 - paper exact replay returns its original immutable receipt without current authority reads
+  ---
+  duration_ms: 13.189987
+  ...
+# ERROR:  permission denied for table research_source_seals_v2
+# ERROR:  permission denied for table research_source_seals_v2
+# ERROR:  permission denied for function research_source_fence_write_v2
+# ERROR:  permission denied for function seal_research_sources_v2
+# ERROR:  source_seal_shape
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 7 at RAISE
+# ERROR:  source_seal_shape
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 8 at RAISE
+# ERROR:  source_seal_shape
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 13 at RAISE
+# ERROR:  source_seal_shape
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 13 at RAISE
+# ERROR:  source_seal_duplicate
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 9 at RAISE
+# ERROR:  source_seal_hash_changed
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 23 at RAISE
+# ERROR:  source_seal_shape
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 7 at RAISE
+# ERROR:  source_seal_shape
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 7 at RAISE
+# ERROR:  source_seal_unsupported_parent_lineage
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 20 at RAISE
+# ERROR:  source_seal_unsupported_parent_lineage
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 20 at RAISE
+# Subtest: real PostgreSQL shared source fence and immutable dependency seals (synthetic)
+    # Subtest: date-only/unknown publication remains null; exact seal replay retains received clock
+    ok 1 - date-only/unknown publication remains null; exact seal replay retains received clock
+      ---
+      duration_ms: 22.595822
+      ...
+    # Subtest: BYPASSRLS service cannot forge/update receipt or call trigger helpers; anonymous denied
+    ok 2 - BYPASSRLS service cannot forge/update receipt or call trigger helpers; anonymous denied
+      ---
+      duration_ms: 25.82106
+      ...
+    # Subtest: null/unknown members/duplicate IDs/hash tamper/future cutoff fail closed
+    ok 3 - null/unknown members/duplicate IDs/hash tamper/future cutoff fail closed
+      ---
+      duration_ms: 85.490926
+      ...
+    # Subtest: older ancestor denied rights cannot be laundered by newer child public citation
+    ok 4 - older ancestor denied rights cannot be laundered by newer child public citation
+      ---
+      duration_ms: 55.577705
+      ...
+    # Subtest: two-hop child cannot launder a withdrawn original ancestor
+    ok 5 - two-hop child cannot launder a withdrawn original ancestor
+      ---
+      duration_ms: 48.270441
+      ...
+# ERROR:  source_fence_read_committed_required
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 4 at RAISE
+# ERROR:  source_fence_read_committed_required
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 4 at RAISE
+# ERROR:  permission denied for function assert_research_source_seal_v2
+# ERROR:  source_seal_rights_or_withdrawn
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 28 at RAISE
+# ERROR:  source_seal_invalidated_or_missing
+# CONTEXT:  PL/pgSQL function assert_research_source_seal_v2(uuid) line 7 at RAISE
+# ERROR:  immutable_source_receipt
+# CONTEXT:  PL/pgSQL function reject_research_source_receipt_mutation_v2() line 2 at RAISE
+# ERROR:  source_seal_root_changed
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 31 at RAISE
+    # Subtest: actual REPEATABLE READ stale writer cannot miss a newer committed seal
+    ok 6 - actual REPEATABLE READ stale writer cannot miss a newer committed seal
+      ---
+      duration_ms: 569.592302
+      ...
+    # Subtest: source exact INSERT conflict replay and no-op UPDATE do not invalidate seal
+    ok 7 - source exact INSERT conflict replay and no-op UPDATE do not invalidate seal
+      ---
+      duration_ms: 29.994079
+      ...
+    # Subtest: private publication recheck rejects service callers and accepts only intact seal
+    ok 8 - private publication recheck rejects service callers and accepts only intact seal
+      ---
+      duration_ms: 17.122615
+      ...
+    # Subtest: direct legacy rights mutation invalidates immutable seal atomically
+    ok 9 - direct legacy rights mutation invalidates immutable seal atomically
+      ---
+      duration_ms: 54.319158
+      ...
+    # Subtest: new same-root revision invalidates predecessor; retraction cannot be hidden by cutoff
+    ok 10 - new same-root revision invalidates predecessor; retraction cannot be hidden by cutoff
+      ---
+      duration_ms: 61.915167
+      ...
+    # Subtest: source-first concurrent commit forces waiting sealer to recheck changed bytes
+    ok 11 - source-first concurrent commit forces waiting sealer to recheck changed bytes
+      ---
+      duration_ms: 290.692593
+      ...
+# ERROR:  research_source_truncate_fenced
+# CONTEXT:  PL/pgSQL function research_source_fence_write_v2() line 5 at RAISE
+# ERROR:  source_seal_hash_changed
+# CONTEXT:  PL/pgSQL function seal_research_sources_v2(jsonb,timestamp with time zone) line 23 at RAISE
+    # Subtest: seal-first concurrent new revision records invalidation after commit (no phantom)
+    ok 12 - seal-first concurrent new revision records invalidation after commit (no phantom)
+      ---
+      duration_ms: 300.280589
+      ...
+    # Subtest: parent-root repost rights changes invalidate dependency; delete and truncate fenced
+    ok 13 - parent-root repost rights changes invalidate dependency; delete and truncate fenced
+      ---
+      duration_ms: 68.43664
+      ...
+    # Subtest: restart preserves source receipts/invalidation, old hashes never become valid
+    ok 14 - restart preserves source receipts/invalidation, old hashes never become valid
+      ---
+      duration_ms: 253.244987
+      ...
+    1..14
+ok 277 - real PostgreSQL shared source fence and immutable dependency seals (synthetic)
+  ---
+  duration_ms: 2918.891561
+  ...
+# {"rrWriterExit":3,"invalidationCount":"0","stderr":"ERROR:  source_fence_read_committed_required\\nCONTEXT:  PL/pgSQL function research_source_fence_write_v2() line 3 at RAISE\\n","ownerAssertAccepted":null}
+# Subtest: cross-role budget, revision heads and first-discovery gaps survive real PostgreSQL
+ok 278 - cross-role budget, revision heads and first-discovery gaps survive real PostgreSQL
+  ---
+  duration_ms: 1750.64334
+  ...
+# (node:139377) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139377) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-source-attempt-controller.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: SCT01 pins a validated public address, one page, no credentials, and keeps only hashes/metadata
+ok 279 - SCT01 pins a validated public address, one page, no credentials, and keeps only hashes/metadata
+  ---
+  duration_ms: 5.791551
+  ...
+# Subtest: SCT02 private/mixed DNS answers reject before HTTP; no DNS-rebinding fallback
+ok 280 - SCT02 private/mixed DNS answers reject before HTTP; no DNS-rebinding fallback
+  ---
+  duration_ms: 5.766413
+  ...
+# Subtest: SCT03 404, upstream failure, login and redirects stay failed without following links
+ok 281 - SCT03 404, upstream failure, login and redirects stay failed without following links
+  ---
+  duration_ms: 2.074752
+  ...
+# Subtest: SCT04 body bound, total DNS/read deadlines and invalid UTF8 reject
+ok 282 - SCT04 body bound, total DNS/read deadlines and invalid UTF8 reject
+  ---
+  duration_ms: 20.834076
+  ...
+# Subtest: SCT05 no irrelevant inference or summary fabrication; exact scope sourceAttempts retain failures
+ok 283 - SCT05 no irrelevant inference or summary fabrication; exact scope sourceAttempts retain failures
+  ---
+  duration_ms: 14.029145
+  ...
+# Subtest: SCT06 controller consumes authorized local summaries without public HTTP or paid/model dispatch
+ok 284 - SCT06 controller consumes authorized local summaries without public HTTP or paid/model dispatch
+  ---
+  duration_ms: 3.942891
+  ...
+# Subtest: SCT07 CLI bounds files, rejects symlinks/URL injection, writes mode0600 and cannot overwrite
+ok 285 - SCT07 CLI bounds files, rejects symlinks/URL injection, writes mode0600 and cannot overwrite
+  ---
+  duration_ms: 15.246653
+  ...
+# Subtest: SCT08 run deadline does not pretend remaining scopes were attempted
+ok 286 - SCT08 run deadline does not pretend remaining scopes were attempted
+  ---
+  duration_ms: 2.395866
+  ...
+# Subtest: SCT09 response hash binds exact wire bytes, including UTF8 BOM; TLS remains verified
+ok 287 - SCT09 response hash binds exact wire bytes, including UTF8 BOM; TLS remains verified
+  ---
+  duration_ms: 0.537912
+  ...
+# Subtest: SCT-POD01 controller-only publisher RSS cannot follow transcript, chapters or audio
+ok 288 - SCT-POD01 controller-only publisher RSS cannot follow transcript, chapters or audio
+  ---
+  duration_ms: 1.151999
+  ...
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+ok 289 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 2048.181117
+  ...
+# (node:139459) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139459) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/app/api/internal/research-priority-run/route.contract.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: industry-only current head never gains company attention from unioned legacy symbols
+ok 290 - industry-only current head never gains company attention from unioned legacy symbols
+  ---
+  duration_ms: 39.294575
+  ...
+# Subtest: DR01 executable route rejects absent/non-exact bearer before any DB read
+ok 291 - DR01 executable route rejects absent/non-exact bearer before any DB read
+  ---
+  duration_ms: 1.993685
+  ...
+# Subtest: DR02 model/request supplied price contexts or arbitrary verified flags cannot enter server evidence
+ok 292 - DR02 model/request supplied price contexts or arbitrary verified flags cannot enter server evidence
+  ---
+  duration_ms: 6.421832
+  ...
+# Subtest: DR03 route persists and returns every shadow context and hashes it while retaining existing queue
+ok 293 - DR03 route persists and returns every shadow context and hashes it while retaining existing queue
+  ---
+  duration_ms: 3.025777
+  ...
+# Subtest: DR04 price evidence changes immutable input hash without changing score or Top20 queue
+ok 294 - DR04 price evidence changes immutable input hash without changing score or Top20 queue
+  ---
+  duration_ms: 10.459917
+  ...
+# Subtest: DR05 impossible cutoff rejects before any source or price acquisition
+ok 295 - DR05 impossible cutoff rejects before any source or price acquisition
+  ---
+  duration_ms: 1.199721
+  ...
+# Subtest: DR06 actual route keeps weak/missing first immutable beside current verified raw quote
+ok 296 - DR06 actual route keeps weak/missing first immutable beside current verified raw quote
+  ---
+  duration_ms: 6.347911
+  ...
+# Subtest: DR07 actual supplementary evidence changes inputHash while first, scores and queue remain identical
+ok 297 - DR07 actual supplementary evidence changes inputHash while first, scores and queue remain identical
+  ---
+  duration_ms: 7.425782
+  ...
+# Subtest: DR08 actual server-selected Top20 at lexical rear precedes outside candidates in shared32 admission
+ok 298 - DR08 actual server-selected Top20 at lexical rear precedes outside candidates in shared32 admission
+  ---
+  duration_ms: 48.406366
+  ...
+# Subtest: DR09 actual DB predicates exclude later available/published quotes from original cutoff
+ok 299 - DR09 actual DB predicates exclude later available/published quotes from original cutoff
+  ---
+  duration_ms: 5.041489
+  ...
+# Subtest: DR10 active research outside Top20 has server priority; model inProgress cannot promote other candidates
+ok 300 - DR10 active research outside Top20 has server priority; model inProgress cannot promote other candidates
+  ---
+  duration_ms: 22.881524
+  ...
+# Subtest: AR01 actual route rejects malformed/injected association authority before obtaining DB
+ok 301 - AR01 actual route rejects malformed/injected association authority before obtaining DB
+  ---
+  duration_ms: 6.454302
+  ...
+# Subtest: AR02 old source outside discovery window persists a server-hashed supplementary cue with no new priority roots
+ok 302 - AR02 old source outside discovery window persists a server-hashed supplementary cue with no new priority roots
+  ---
+  duration_ms: 8.437223
+  ...
+# Subtest: AR03 one original associated with two issuers never creates company mentions, attention or discovery times
+ok 303 - AR03 one original associated with two issuers never creates company mentions, attention or discovery times
+  ---
+  duration_ms: 3.212048
+  ...
+# Subtest: AR04 denial/retraction/supersession stay as visible invalidated or needs-update receipts
+ok 304 - AR04 denial/retraction/supersession stay as visible invalidated or needs-update receipts
+  ---
+  duration_ms: 12.449649
+  ...
+# Subtest: AR05 source DB failure accounts every association without claiming no news or leaking raw diagnostics
+ok 305 - AR05 source DB failure accounts every association without claiming no news or leaking raw diagnostics
+  ---
+  duration_ms: 3.983692
+  ...
+# Subtest: AR06 association issuer must be an official common-stock roster member
+ok 306 - AR06 association issuer must be an official common-stock roster member
+  ---
+  duration_ms: 1.379472
+  ...
+# Subtest: AR07 persistence/read errors remain bounded stable codes
+ok 307 - AR07 persistence/read errors remain bounded stable codes
+  ---
+  duration_ms: 2.620735
+  ...
+# Subtest: AR08 caller association cannot satisfy factor bindings or add a direct source claim
+ok 308 - AR08 caller association cannot satisfy factor bindings or add a direct source claim
+  ---
+  duration_ms: 1.947719
+  ...
+# (node:139509) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139509) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-priority.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: one original story shared by many reposts gives one attention root
+ok 309 - one original story shared by many reposts gives one attention root
+  ---
+  duration_ms: 7.391185
+  ...
+# Subtest: a retraction removes evidence, and a failed source is not scored as zero attention
+ok 310 - a retraction removes evidence, and a failed source is not scored as zero attention
+  ---
+  duration_ms: 0.429699
+  ...
+# Subtest: in-progress research retains its lane seat, with a bounded emerging lane
+ok 311 - in-progress research retains its lane seat, with a bounded emerging lane
+  ---
+  duration_ms: 0.714789
+  ...
+# Subtest: future evidence, duplicates, and missing reasons fail closed
+ok 312 - future evidence, duplicates, and missing reasons fail closed
+  ---
+  duration_ms: 0.475558
+  ...
+# (node:139520) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139520) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-agent-qualification.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: publishing an article cannot by itself qualify a stock for entry research
+ok 313 - publishing an article cannot by itself qualify a stock for entry research
+  ---
+  duration_ms: 9.030208
+  ...
+# Subtest: technical confirmation does not cross data, thesis, liquidity, or strategy gates
+ok 314 - technical confirmation does not cross data, thesis, liquidity, or strategy gates
+  ---
+  duration_ms: 0.836423
+  ...
+# Subtest: material counterevidence stops new entries but preserves paper-position monitoring
+ok 315 - material counterevidence stops new entries but preserves paper-position monitoring
+  ---
+  duration_ms: 0.747438
+  ...
+# Subtest: a no-change monthly review extends the deadline without changing the article hash
+ok 316 - a no-change monthly review extends the deadline without changing the article hash
+  ---
+  duration_ms: 0.393274
+  ...
+# Subtest: future research or a future market session cannot be used
+ok 317 - future research or a future market session cannot be used
+  ---
+  duration_ms: 0.254514
+  ...
+# Subtest: timestamp aliases cannot generate a new review identity
+ok 318 - timestamp aliases cannot generate a new review identity
+  ---
+  duration_ms: 0.380754
+  ...
+# (node:139531) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139531) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-attention-shadow-v2.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: old public material acquired today is a discovery, not recent discussion or attention
+ok 319 - old public material acquired today is a discovery, not recent discussion or attention
+  ---
+  duration_ms: 8.261549
+  ...
+# Subtest: same canonical publisher keeps different topics/URLs but contributes one reviewed voice
+ok 320 - same canonical publisher keeps different topics/URLs but contributes one reviewed voice
+  ---
+  duration_ms: 0.415106
+  ...
+# Subtest: shared origin across publishers is one confirmation; independent origins and publishers are two
+ok 321 - shared origin across publishers is one confirmation; independent origins and publishers are two
+  ---
+  duration_ms: 1.454736
+  ...
+# Subtest: legacy original flag or absent parent never supplies reviewed independent identity
+ok 322 - legacy original flag or absent parent never supplies reviewed independent identity
+  ---
+  duration_ms: 0.808129
+  ...
+# Subtest: publisher-origin bridge components are conservative and permutation invariant
+ok 323 - publisher-origin bridge components are conservative and permutation invariant
+  ---
+  duration_ms: 1.796111
+  ...
+# Subtest: new repost cannot move an older origin into the recent publication bucket
+ok 324 - new repost cannot move an older origin into the recent publication bucket
+  ---
+  duration_ms: 0.287023
+  ...
+# Subtest: exact seven/fourteen-day boundaries are disjoint and acquisition stays separate
+ok 325 - exact seven/fourteen-day boundaries are disjoint and acquisition stays separate
+  ---
+  duration_ms: 0.395507
+  ...
+# Subtest: distinct prior-week voices reduce attention without deleting current evidence
+ok 326 - distinct prior-week voices reduce attention without deleting current evidence
+  ---
+  duration_ms: 0.245911
+  ...
+# Subtest: stale binding cannot authorize a corrected selected revision
+ok 327 - stale binding cannot authorize a corrected selected revision
+  ---
+  duration_ms: 0.610892
+  ...
+# Subtest: canonical parent root dedup and original withdrawal outrank later repost
+ok 328 - canonical parent root dedup and original withdrawal outrank later repost
+  ---
+  duration_ms: 0.440074
+  ...
+# Subtest: metadata-only and contradicted roots do not become confirmations
+ok 329 - metadata-only and contradicted roots do not become confirmations
+  ---
+  duration_ms: 0.461697
+  ...
+# Subtest: v1 root/revision selection stays equivalent and baseline is echoed separately
+ok 330 - v1 root/revision selection stays equivalent and baseline is echoed separately
+  ---
+  duration_ms: 1.004977
+  ...
+# Subtest: equal-time revision ties match v1; contradictory identities reject
+ok 331 - equal-time revision ties match v1; contradictory identities reject
+  ---
+  duration_ms: 0.728129
+  ...
+# Subtest: future or pre-revision origin reviews, duplicate and contradictory bindings reject
+ok 332 - future or pre-revision origin reviews, duplicate and contradictory bindings reject
+  ---
+  duration_ms: 0.429538
+  ...
+# Subtest: sub-millisecond cutoff and source review clocks retain supplied precision
+ok 333 - sub-millisecond cutoff and source review clocks retain supplied precision
+  ---
+  duration_ms: 0.385992
+  ...
+# Subtest: fractional bucket boundaries and equivalent timezone offsets compare exactly
+ok 334 - fractional bucket boundaries and equivalent timezone offsets compare exactly
+  ---
+  duration_ms: 0.361235
+  ...
+# Subtest: v1-ambiguous fractional revision or Unicode collation ties reject in either permutation
+ok 335 - v1-ambiguous fractional revision or Unicode collation ties reject in either permutation
+  ---
+  duration_ms: 1.098978
+  ...
+# Subtest: newer winning revision cannot hide an older ambiguous pair in any permutation
+ok 336 - newer winning revision cannot hide an older ambiguous pair in any permutation
+  ---
+  duration_ms: 1.766316
+  ...
+# Subtest: URL fallback and explicit revision with the same selection key cannot collide
+ok 337 - URL fallback and explicit revision with the same selection key cannot collide
+  ---
+  duration_ms: 0.928141
+  ...
+# Subtest: missing revision leaves independence unknown; no supplied binding is inferred
+ok 338 - missing revision leaves independence unknown; no supplied binding is inferred
+  ---
+  duration_ms: 0.183978
+  ...
+# Subtest: invalid enum/clock/identifier/field/prototype and credential URL reject
+ok 339 - invalid enum/clock/identifier/field/prototype and credential URL reject
+  ---
+  duration_ms: 0.481426
+  ...
+# Subtest: input count and total byte limits reject while 20,000 rows run with bounded graph traversal
+ok 340 - input count and total byte limits reject while 20,000 rows run with bounded graph traversal
+  ---
+  duration_ms: 1005.423248
+  ...
+# (node:139546) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139546) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-broker-estimate.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: broker EPS keeps annual scope and negative estimates; a year cannot become EPS
+ok 341 - broker EPS keeps annual scope and negative estimates; a year cannot become EPS
+  ---
+  duration_ms: 1.584592
+  ...
+# (node:139557) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139557) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-cloud-work.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# (node:139557) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/scripts/fixtures/research-cloud-article.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/package.json.
+# Subtest: portable Cloud recomputation shares publication math but grants no publication or strategy authority
+ok 342 - portable Cloud recomputation shares publication math but grants no publication or strategy authority
+  ---
+  duration_ms: 16.335674
+  ...
+# Subtest: altered binding, role and input bytes cannot travel between jobs, versions or owners
+ok 343 - altered binding, role and input bytes cannot travel between jobs, versions or owners
+  ---
+  duration_ms: 17.678982
+  ...
+# Subtest: original expiry, Taipei midnight and future evidence are enforced without moving the cutoff
+ok 344 - original expiry, Taipei midnight and future evidence are enforced without moving the cutoff
+  ---
+  duration_ms: 3.56521
+  ...
+# Subtest: secret-like fields, credential URLs, metadata substitution and excessive input are rejected
+ok 345 - secret-like fields, credential URLs, metadata substitution and excessive input are rejected
+  ---
+  duration_ms: 8.917319
+  ...
+# Subtest: withdrawal, private citation and disguised source identifiers cannot pass accounting validation
+ok 346 - withdrawal, private citation and disguised source identifiers cannot pass accounting validation
+  ---
+  duration_ms: 3.561785
+  ...
+# Subtest: recomputed EPS, discounting, negative earnings and fabricated commercialization stay consistent
+ok 347 - recomputed EPS, discounting, negative earnings and fabricated commercialization stay consistent
+  ---
+  duration_ms: 5.217264
+  ...
+# (node:139568) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139568) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-deep-article.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: inbox revisions cannot travel backwards through article cutoff; chapter titles are not claim evidence
+ok 348 - inbox revisions cannot travel backwards through article cutoff; chapter titles are not claim evidence
+  ---
+  duration_ms: 4.656658
+  ...
+# Subtest: conditional scenario computes attribution, diluted EPS and dated present value
+ok 349 - conditional scenario computes attribution, diluted EPS and dated present value
+  ---
+  duration_ms: 7.327278
+  ...
+# Subtest: a different industry can use its actual issuer segments or a disclosed consolidated bridge
+ok 350 - a different industry can use its actual issuer segments or a disclosed consolidated bridge
+  ---
+  duration_ms: 1.316356
+  ...
+# Subtest: rumor citations, retraction, future sources and unsupported text fail closed
+ok 351 - rumor citations, retraction, future sources and unsupported text fail closed
+  ---
+  duration_ms: 0.341766
+  ...
+# Subtest: a non-commercialized baseline and negative EPS do not get a fictitious P/E value
+ok 352 - a non-commercialized baseline and negative EPS do not get a fictitious P/E value
+  ---
+  duration_ms: 2.451555
+  ...
+# Subtest: explicit industry paragraph cites empty-symbol context without promoting company evidence
+ok 353 - explicit industry paragraph cites empty-symbol context without promoting company evidence
+  ---
+  duration_ms: 2.499473
+  ...
+# Subtest: industry sources never satisfy a company paragraph, catalyst or EPS scenario, even with old tags
+ok 354 - industry sources never satisfy a company paragraph, catalyst or EPS scenario, even with old tags
+  ---
+  duration_ms: 0.421436
+  ...
+# Subtest: industry scope cannot be moved into orders or valuation, made verified, mixed or caller-malformed
+ok 355 - industry scope cannot be moved into orders or valuation, made verified, mixed or caller-malformed
+  ---
+  duration_ms: 0.780448
+  ...
+# Subtest: industry citation retains cutoff, content and withdrawal barriers
+ok 356 - industry citation retains cutoff, content and withdrawal barriers
+  ---
+  duration_ms: 0.659776
+  ...
+# Subtest: loader preserves industry scope and only explicit public acquisition can cite a public social permalink
+ok 357 - loader preserves industry scope and only explicit public acquisition can cite a public social permalink
+  ---
+  duration_ms: 1.486093
+  ...
+# (node:139579) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139579) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-deep-claim-context.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: DCC-U1: exact context preserves original distinct microsecond deadlines and has no publication authority
+ok 358 - DCC-U1: exact context preserves original distinct microsecond deadlines and has no publication authority
+  ---
+  duration_ms: 1.83521
+  ...
+# Subtest: DCC-U2: foreign owners, roles, identities, duplicate or extra shape fields cannot become a context
+ok 359 - DCC-U2: foreign owners, roles, identities, duplicate or extra shape fields cannot become a context
+  ---
+  duration_ms: 1.076194
+  ...
+# Subtest: DCC-U3: future observations, expired leases, invalid dates, microsecond extension and Taipei midnight fail closed
+ok 360 - DCC-U3: future observations, expired leases, invalid dates, microsecond extension and Taipei midnight fail closed
+  ---
+  duration_ms: 0.407906
+  ...
+# Subtest: DCC-U4: handoff accounting is visible only with the exact hash, outcome and original completion clock
+ok 361 - DCC-U4: handoff accounting is visible only with the exact hash, outcome and original completion clock
+  ---
+  duration_ms: 1.166841
+  ...
+# (node:139590) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139590) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-deep-source-rights.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: admission/display share explicit scope and public rights; account names do not authorize content
+ok 362 - admission/display share explicit scope and public rights; account names do not authorize content
+  ---
+  duration_ms: 1.980579
+  ...
+# Subtest: member, profile, host spoofing, credential, fragment and non-http URLs cannot use the social exception
+ok 363 - member, profile, host spoofing, credential, fragment and non-http URLs cannot use the social exception
+  ---
+  duration_ms: 0.237107
+  ...
+# Subtest: legacy company sources keep existing conservative member policy; industry scope never inferred from handle
+ok 364 - legacy company sources keep existing conservative member policy; industry scope never inferred from handle
+  ---
+  duration_ms: 0.27823
+  ...
+# (node:139601) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139601) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-discovery-evidence.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: DE01 61 aligned completed sessions count holiday short weeks, with exact 5/20/60 ratios
+ok 365 - DE01 61 aligned completed sessions count holiday short weeks, with exact 5/20/60 ratios
+  ---
+  duration_ms: 4.731301
+  ...
+# Subtest: DE02 incomplete or misaligned benchmark makes all horizons unknown
+ok 366 - DE02 incomplete or misaligned benchmark makes all horizons unknown
+  ---
+  duration_ms: 3.231638
+  ...
+# Subtest: DE03 impossible, timezone-free, 24-hour and malformed date clocks reject
+ok 367 - DE03 impossible, timezone-free, 24-hour and malformed date clocks reject
+  ---
+  duration_ms: 2.0867
+  ...
+# Subtest: DE04 future availability/session and availability before session cannot be silently filtered
+ok 368 - DE04 future availability/session and availability before session cannot be silently filtered
+  ---
+  duration_ms: 0.568188
+  ...
+# Subtest: DE05 RSI ranges, official failure, absent or conflicting trigger metadata stay unknown
+ok 369 - DE05 RSI ranges, official failure, absent or conflicting trigger metadata stay unknown
+  ---
+  duration_ms: 0.238209
+  ...
+# Subtest: DE06 existing overheating predicates outrank breakout and pullback
+ok 370 - DE06 existing overheating predicates outrank breakout and pullback
+  ---
+  duration_ms: 0.084708
+  ...
+# Subtest: DE07 established breakout, pullback and waiting are research phases only
+ok 371 - DE07 established breakout, pullback and waiting are research phases only
+  ---
+  duration_ms: 0.137708
+  ...
+# (node:139612) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139612) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-discovery-price-enrichment.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: DP01 approved synthetic window computes all horizons; breakout does not grant research eligibility
+ok 372 - DP01 approved synthetic window computes all horizons; breakout does not grant research eligibility
+  ---
+  duration_ms: 14.964036
+  ...
+# Subtest: DP19 124+ ordinary historical sessions do not exhaust latest-head admission
+ok 373 - DP19 124+ ordinary historical sessions do not exhaust latest-head admission
+  ---
+  duration_ms: 3.400102
+  ...
+# Subtest: DP20 newest head ties remain bounded and newer cancellation cannot resurrect a completion
+ok 374 - DP20 newest head ties remain bounded and newer cancellation cannot resurrect a completion
+  ---
+  duration_ms: 1.82827
+  ...
+# Subtest: DP21 actual TWSE/TPEx collector month URLs and exact-day quotes are admitted
+ok 375 - DP21 actual TWSE/TPEx collector month URLs and exact-day quotes are admitted
+  ---
+  duration_ms: 293.22099
+  ...
+# Subtest: DP22 endpoint-specific stock/date/host/parameter mismatches reject both exchanges
+ok 376 - DP22 endpoint-specific stock/date/host/parameter mismatches reject both exchanges
+  ---
+  duration_ms: 164.377362
+  ...
+# Subtest: DP23 strict-reader rejected row cannot be upgraded by a later weak immutable registry capture
+ok 377 - DP23 strict-reader rejected row cannot be upgraded by a later weak immutable registry capture
+  ---
+  duration_ms: 4.453748
+  ...
+# Subtest: DP24 a first missing capture remains frozen after admission/date/available-data changes
+ok 378 - DP24 a first missing capture remains frozen after admission/date/available-data changes
+  ---
+  duration_ms: 0.662139
+  ...
+# Subtest: DP02 wrong benchmark, incomplete calendar or stale last session never yields relative returns
+ok 379 - DP02 wrong benchmark, incomplete calendar or stale last session never yields relative returns
+  ---
+  duration_ms: 11.164562
+  ...
+# Subtest: DP03 future available/session and validation clocks fail closed
+ok 380 - DP03 future available/session and validation clocks fail closed
+  ---
+  duration_ms: 9.540149
+  ...
+# Subtest: DP04 missing quotes, corporate actions and failed official verification are explicit unknowns
+ok 381 - DP04 missing quotes, corporate actions and failed official verification are explicit unknowns
+  ---
+  duration_ms: 6.954167
+  ...
+# Subtest: DP05 valid returns do not invent a phase when metadata is absent, future or wrong ruleset
+ok 382 - DP05 valid returns do not invent a phase when metadata is absent, future or wrong ruleset
+  ---
+  duration_ms: 7.626711
+  ...
+# Subtest: DP06 overheating and established pullback preserve existing thresholds
+ok 383 - DP06 overheating and established pullback preserve existing thresholds
+  ---
+  duration_ms: 5.681576
+  ...
+# Subtest: DP07 immutable first quote/gap survives later reads and a changed current firstSeenAt
+ok 384 - DP07 immutable first quote/gap survives later reads and a changed current firstSeenAt
+  ---
+  duration_ms: 0.883563
+  ...
+# Subtest: DP08 missing discovery, admitted success and failed read each account for a full symbol
+ok 385 - DP08 missing discovery, admitted success and failed read each account for a full symbol
+  ---
+  duration_ms: 3.108472
+  ...
+# Subtest: DP09 deterministic sorted admission caps reads at 32 without losing symbols
+ok 386 - DP09 deterministic sorted admission caps reads at 32 without losing symbols
+  ---
+  duration_ms: 67.605192
+  ...
+# Subtest: DP10 registry failure and read deadline do not backfill an unconfirmed first capture
+ok 387 - DP10 registry failure and read deadline do not backfill an unconfirmed first capture
+  ---
+  duration_ms: 0.713096
+  ...
+# Subtest: DS01 weak first quote and verified current raw observation coexist without promotion
+ok 388 - DS01 weak first quote and verified current raw observation coexist without promotion
+  ---
+  duration_ms: 2.430528
+  ...
+# Subtest: DS02 server priority at lexical rear consumes the shared32 budget first and accounts all45
+ok 389 - DS02 server priority at lexical rear consumes the shared32 budget first and accounts all45
+  ---
+  duration_ms: 71.415202
+  ...
+# Subtest: DS03 no future source clock/session or weak provenance enters an earlier current cutoff
+ok 390 - DS03 no future source clock/session or weak provenance enters an earlier current cutoff
+  ---
+  duration_ms: 15.360424
+  ...
+# Subtest: DS04 current priority is independent of missing first evidence or registry read failure
+ok 391 - DS04 current priority is independent of missing first evidence or registry read failure
+  ---
+  duration_ms: 0.819848
+  ...
+# Subtest: DS05 supplemental reads and earlier first reads share32 without leaking current data into first
+ok 392 - DS05 supplemental reads and earlier first reads share32 without leaking current data into first
+  ---
+  duration_ms: 15.560467
+  ...
+# Subtest: DS06 invalid server clock/unknown priority rejects before reads; deadline accounts all candidates
+ok 393 - DS06 invalid server clock/unknown priority rejects before reads; deadline accounts all candidates
+  ---
+  duration_ms: 0.881791
+  ...
+# Subtest: DS07 a late completed read is discarded and cannot enter current or first receipt
+ok 394 - DS07 a late completed read is discarded and cannot enter current or first receipt
+  ---
+  duration_ms: 0.6089
+  ...
+# Subtest: DP11 fixed DB reader obtains only cutoff-visible raw quote; absent adapters remain missing
+ok 395 - DP11 fixed DB reader obtains only cutoff-visible raw quote; absent adapters remain missing
+  ---
+  duration_ms: 0.478563
+  ...
+# Subtest: DP12 cache official conflicts, future availability and invalid price source never verify a quote
+ok 396 - DP12 cache official conflicts, future availability and invalid price source never verify a quote
+  ---
+  duration_ms: 0.455267
+  ...
+# Subtest: DP13 no weekday or holiday guess certifies a stale latest completed session
+ok 397 - DP13 no weekday or holiday guess certifies a stale latest completed session
+  ---
+  duration_ms: 0.319823
+  ...
+# Subtest: DP14 calendar correction conflicts and incomplete clocks cannot become completed authority
+ok 398 - DP14 calendar correction conflicts and incomplete clocks cannot become completed authority
+  ---
+  duration_ms: 0.271219
+  ...
+# Subtest: DP15 exchange/provider conflict and ambiguous integrity flags remain visible failures
+ok 399 - DP15 exchange/provider conflict and ambiguous integrity flags remain visible failures
+  ---
+  duration_ms: 0.386013
+  ...
+# Subtest: DP16 row clock before actual calendar close fails even with a recomputed dataset hash
+ok 400 - DP16 row clock before actual calendar close fails even with a recomputed dataset hash
+  ---
+  duration_ms: 2.268965
+  ...
+# Subtest: DP17 malformed/future immutable registry record cannot be replaced by a current quote
+ok 401 - DP17 malformed/future immutable registry record cannot be replaced by a current quote
+  ---
+  duration_ms: 0.599996
+  ...
+# Subtest: DP18 registry over the fixed row bound accounts all candidates as missing without new reads
+ok 402 - DP18 registry over the fixed row bound accounts all candidates as missing without new reads
+  ---
+  duration_ms: 3.793947
+  ...
+# (node:139630) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139630) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-execution-context.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: official low times shares admits only conservative whole lots and complete windows
+ok 403 - official low times shares admits only conservative whole lots and complete windows
+  ---
+  duration_ms: 0.804214
+  ...
+# (node:139643) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139643) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-inbox.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: research inbox validates bounded point-in-time summaries
+ok 404 - research inbox validates bounded point-in-time summaries
+  ---
+  duration_ms: 2.728358
+  ...
+# Subtest: research inbox produces immutable deterministic revisions
+ok 405 - research inbox produces immutable deterministic revisions
+  ---
+  duration_ms: 0.874079
+  ...
+# Subtest: authenticated content stores only the submitted bounded summary
+ok 406 - authenticated content stores only the submitted bounded summary
+  ---
+  duration_ms: 0.228545
+  ...
+# Subtest: IS01 industry-only source preserves empty direct symbols and bounded metadata
+ok 407 - IS01 industry-only source preserves empty direct symbols and bounded metadata
+  ---
+  duration_ms: 0.964676
+  ...
+# Subtest: IS02 industry-only symbols cannot nominate a company or bypass explicit subject scope
+ok 408 - IS02 industry-only symbols cannot nominate a company or bypass explicit subject scope
+  ---
+  duration_ms: 0.598474
+  ...
+# Subtest: IS03 industry terms require bounded trimmed unique strings and exact source shape
+ok 409 - IS03 industry terms require bounded trimmed unique strings and exact source shape
+  ---
+  duration_ms: 0.500385
+  ...
+# Subtest: IS04 legacy identity stays stable while industry metadata creates immutable revisions
+ok 410 - IS04 legacy identity stays stable while industry metadata creates immutable revisions
+  ---
+  duration_ms: 0.732616
+  ...
+# Subtest: IS05 inbox itself enforces exact clocks and authenticated summary boundaries
+ok 411 - IS05 inbox itself enforces exact clocks and authenticated summary boundaries
+  ---
+  duration_ms: 0.677893
+  ...
+# Subtest: IS06 existing authenticated inbox POST accepts industry rows and rejects invalid input before persistence
+ok 412 - IS06 existing authenticated inbox POST accepts industry rows and rejects invalid input before persistence
+  ---
+  duration_ms: 82.054871
+  ...
+# (node:139655) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139655) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-insider-official.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: actual TWSE selected 2383
+ok 413 - actual TWSE selected 2383
+  ---
+  duration_ms: 1.701217
+  ...
+# Subtest: actual TWSE selected 2409
+ok 414 - actual TWSE selected 2409
+  ---
+  duration_ms: 0.21867
+  ...
+# Subtest: actual TPEx26 selected and correct endpoint
+ok 415 - actual TPEx26 selected and correct endpoint
+  ---
+  duration_ms: 0.287975
+  ...
+# Subtest: actual transfer blank is null own/trust separated
+ok 416 - actual transfer blank is null own/trust separated
+  ---
+  duration_ms: 0.11905
+  ...
+# Subtest: populated true transfer key, not obsolete key
+ok 417 - populated true transfer key, not obsolete key
+  ---
+  duration_ms: 0.206912
+  ...
+# Subtest: TPEx placeholder is not event
+ok 418 - TPEx placeholder is not event
+  ---
+  duration_ms: 0.157428
+  ...
+# Subtest: TPEx populated transfer uses distinct identity schema
+ok 419 - TPEx populated transfer uses distinct identity schema
+  ---
+  duration_ms: 0.175856
+  ...
+# Subtest: unknown holding schema rejected
+ok 420 - unknown holding schema rejected
+  ---
+  duration_ms: 0.328716
+  ...
+# Subtest: invalid dates and unsafe numbers rejected
+ok 421 - invalid dates and unsafe numbers rejected
+  ---
+  duration_ms: 1.055383
+  ...
+# Subtest: bounded pages resume past old500 prefix without loss
+ok 422 - bounded pages resume past old500 prefix without loss
+  ---
+  duration_ms: 2.536398
+  ...
+# Subtest: symbol scope does not truncate60 and never mutates market cursor
+ok 423 - symbol scope does not truncate60 and never mutates market cursor
+  ---
+  duration_ms: 0.196256
+  ...
+# Subtest: snapshot reset explicit and malformed cursor rejected
+ok 424 - snapshot reset explicit and malformed cursor rejected
+  ---
+  duration_ms: 0.367996
+  ...
+# Subtest: bounded fetch checks redirects/status/schema/size and preserves bytes hash
+ok 425 - bounded fetch checks redirects/status/schema/size and preserves bytes hash
+  ---
+  duration_ms: 18.818014
+  ...
+# Subtest: four-digit invalid identity excluded, not a transfer
+ok 426 - four-digit invalid identity excluded, not a transfer
+  ---
+  duration_ms: 0.116636
+  ...
+# Subtest: zero holdings remain zero, no prior snapshot trade inferred
+ok 427 - zero holdings remain zero, no prior snapshot trade inferred
+  ---
+  duration_ms: 0.090006
+  ...
+# Subtest: empty or wrong primitive quantity is not fabricated zero
+ok 428 - empty or wrong primitive quantity is not fabricated zero
+  ---
+  duration_ms: 0.116817
+  ...
+# Subtest: ungranted URLs rejected before transport
+ok 429 - ungranted URLs rejected before transport
+  ---
+  duration_ms: 0.128374
+  ...
+# Subtest: redirected response cannot qualify
+ok 430 - redirected response cannot qualify
+  ---
+  duration_ms: 0.259181
+  ...
+# Subtest: actual streamed oversized body rejected without trusting headers
+ok 431 - actual streamed oversized body rejected without trusting headers
+  ---
+  duration_ms: 0.617592
+  ...
+# Subtest: row and cursor upper bounds refuse silent truncation
+ok 432 - row and cursor upper bounds refuse silent truncation
+  ---
+  duration_ms: 0.35732
+  ...
+# Subtest: required holding key/type 職稱 fails closed
+ok 433 - required holding key/type 職稱 fails closed
+  ---
+  duration_ms: 0.168655
+  ...
+# Subtest: required holding key/type 姓名 fails closed
+ok 434 - required holding key/type 姓名 fails closed
+  ---
+  duration_ms: 0.081853
+  ...
+# Subtest: required holding key/type 公司名稱 fails closed
+ok 435 - required holding key/type 公司名稱 fails closed
+  ---
+  duration_ms: 0.065749
+  ...
+# Subtest: required holding key/type 公司代號 fails closed
+ok 436 - required holding key/type 公司代號 fails closed
+  ---
+  duration_ms: 0.062254
+  ...
+# Subtest: required holding key/type 出表日期 fails closed
+ok 437 - required holding key/type 出表日期 fails closed
+  ---
+  duration_ms: 0.05985
+  ...
+# Subtest: required holding key/type 資料年月 fails closed
+ok 438 - required holding key/type 資料年月 fails closed
+  ---
+  duration_ms: 0.05972
+  ...
+# Subtest: required holding key/type 目前持股 fails closed
+ok 439 - required holding key/type 目前持股 fails closed
+  ---
+  duration_ms: 0.063466
+  ...
+# Subtest: endpoint required string schema TWSE/holding
+ok 440 - endpoint required string schema TWSE/holding
+  ---
+  duration_ms: 0.32447
+  ...
+# Subtest: endpoint required string schema PUBLIC/holding
+ok 441 - endpoint required string schema PUBLIC/holding
+  ---
+  duration_ms: 0.238139
+  ...
+# Subtest: endpoint required string schema TWSE/transfer
+ok 442 - endpoint required string schema TWSE/transfer
+  ---
+  duration_ms: 0.422268
+  ...
+# Subtest: endpoint required string schema TPEX/holding
+ok 443 - endpoint required string schema TPEX/holding
+  ---
+  duration_ms: 0.234183
+  ...
+# Subtest: endpoint required string schema TPEX/transfer
+ok 444 - endpoint required string schema TPEX/transfer
+  ---
+  duration_ms: 0.321255
+  ...
+# (node:139666) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139666) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-monitor-benchmark-context.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# (node:139666) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: TWSE: official aligned61 context returns explicit wealth-ratio fractions
+ok 445 - TWSE: official aligned61 context returns explicit wealth-ratio fractions
+  ---
+  duration_ms: 28.401232
+  ...
+# Subtest: TPEX: official aligned61 context returns explicit wealth-ratio fractions
+ok 446 - TPEX: official aligned61 context returns explicit wealth-ratio fractions
+  ---
+  duration_ms: 12.531645
+  ...
+# Subtest: missing session, insufficient authority and cancelled latest calendar never become zero strength
+ok 447 - missing session, insufficient authority and cancelled latest calendar never become zero strength
+  ---
+  duration_ms: 8.088809
+  ...
+# Subtest: latest calendar correction requires a matching latest official index observation
+ok 448 - latest calendar correction requires a matching latest official index observation
+  ---
+  duration_ms: 19.495166
+  ...
+# Subtest: wrong authority/unit/provider, invalid clocks and conflicts are unavailable
+ok 449 - wrong authority/unit/provider, invalid clocks and conflicts are unavailable
+  ---
+  duration_ms: 47.401347
+  ...
+# Subtest: corporate action price basis and source revision are bound without changing authority
+ok 450 - corporate action price basis and source revision are bound without changing authority
+  ---
+  duration_ms: 9.926883
+  ...
+# Subtest: actual adapter requests official relations, unique order, exact count and abort signal
+ok 451 - actual adapter requests official relations, unique order, exact count and abort signal
+  ---
+  duration_ms: 12.627469
+  ...
+# Subtest: short server page and absent exact count refuse successful-partial reads
+ok 452 - short server page and absent exact count refuse successful-partial reads
+  ---
+  duration_ms: 2.389726
+  ...
+# Subtest: future revision is excluded by the same frozen server cutoff
+ok 453 - future revision is excluded by the same frozen server cutoff
+  ---
+  duration_ms: 14.062216
+  ...
+# Subtest: equal-time conflict across500-row pages is never hidden
+ok 454 - equal-time conflict across500-row pages is never hidden
+  ---
+  duration_ms: 28.94637
+  ...
+# Subtest: shared deadline aborts stalled read and never starts another page
+ok 455 - shared deadline aborts stalled read and never starts another page
+  ---
+  duration_ms: 1.783993
+  ...
+# Subtest: successful response delivered after the monotonic deadline is discarded
+ok 456 - successful response delivered after the monotonic deadline is discarded
+  ---
+  duration_ms: 2.057195
+  ...
+# Subtest: row bound exact and+1 remain finite
+ok 457 - row bound exact and+1 remain finite
+  ---
+  duration_ms: 68.463998
+  ...
+# Subtest: all-read serialized byte exact and+1 include discarded revisions
+ok 458 - all-read serialized byte exact and+1 include discarded revisions
+  ---
+  duration_ms: 291.054765
+  ...
+# (node:139679) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139679) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-observed-deep.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: observed context is explicit, closed and cannot be downgraded to v1
+ok 459 - observed context is explicit, closed and cannot be downgraded to v1
+  ---
+  duration_ms: 9.066695
+  ...
+# Subtest: receipt future microsecond and scope hash mismatch reject
+ok 460 - receipt future microsecond and scope hash mismatch reject
+  ---
+  duration_ms: 0.358321
+  ...
+# Subtest: author input retains scoped hash and missing financial gap
+ok 461 - author input retains scoped hash and missing financial gap
+  ---
+  duration_ms: 1.028813
+  ...
+# Subtest: rehashed scope/mapping/discovery tampering cannot bind original context
+ok 462 - rehashed scope/mapping/discovery tampering cannot bind original context
+  ---
+  duration_ms: 0.785997
+  ...
+# Subtest: private incomplete v2 draft at19minutes preserves preparation time and original deadlines
+ok 463 - private incomplete v2 draft at19minutes preserves preparation time and original deadlines
+  ---
+  duration_ms: 8.053476
+  ...
+# (node:139690) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139690) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-observed-priority.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: omitted scope stays formal, observed is explicit hash-bound
+ok 464 - omitted scope stays formal, observed is explicit hash-bound
+  ---
+  duration_ms: 1.391751
+  ...
+# Subtest: no implicit fallback for {"snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+ok 465 - no implicit fallback for {"snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+  ---
+  duration_ms: 0.396068
+  ...
+# Subtest: no implicit fallback for {"scope":"formal_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+ok 466 - no implicit fallback for {"scope":"formal_v1","snapshotHash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+  ---
+  duration_ms: 0.086551
+  ...
+# Subtest: no implicit fallback for {"scope":"research_observed_v1"}
+ok 467 - no implicit fallback for {"scope":"research_observed_v1"}
+  ---
+  duration_ms: 0.07943
+  ...
+# Subtest: no implicit fallback for {"scope":"automatic"}
+ok 468 - no implicit fallback for {"scope":"automatic"}
+  ---
+  duration_ms: 0.128173
+  ...
+# Subtest: no implicit fallback for {"scope":"research_observed_v1","snapshotHash":"not-a-hash"}
+ok 469 - no implicit fallback for {"scope":"research_observed_v1","snapshotHash":"not-a-hash"}
+  ---
+  duration_ms: 0.092449
+  ...
+# Subtest: bounded receipt reader retains research identity, not a formal stock grant
+ok 470 - bounded receipt reader retains research identity, not a formal stock grant
+  ---
+  duration_ms: 1.208524
+  ...
+# Subtest: microsecond-future receipt and observed member reject without truncation
+ok 471 - microsecond-future receipt and observed member reject without truncation
+  ---
+  duration_ms: 0.671073
+  ...
+# Subtest: missing count, duplicate and extra authority fields fail closed
+ok 472 - missing count, duplicate and extra authority fields fail closed
+  ---
+  duration_ms: 0.944566
+  ...
+# Subtest: unknown classifier hash, UUID and invalid exchange fail closed
+ok 473 - unknown classifier hash, UUID and invalid exchange fail closed
+  ---
+  duration_ms: 0.809051
+  ...
+# (node:139701) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139701) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-observed-roster.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: actual1978 ordinary scope includesinnovation/restrictedCFI and preserves10TDRexclusions
+ok 474 - actual1978 ordinary scope includesinnovation/restrictedCFI and preserves10TDRexclusions
+  ---
+  duration_ms: 111.815492
+  ...
+# Subtest: old1946packet remains byte-identical and observation clocks stay distinct
+ok 475 - old1946packet remains byte-identical and observation clocks stay distinct
+  ---
+  duration_ms: 79.065609
+  ...
+# Subtest: canonical replay independent from object insertion order
+ok 476 - canonical replay independent from object insertion order
+  ---
+  duration_ms: 117.019126
+  ...
+# Subtest: reject secret
+ok 477 - reject secret
+  ---
+  duration_ms: 12.206003
+  ...
+# Subtest: reject unknown
+ok 478 - reject unknown
+  ---
+  duration_ms: 14.765086
+  ...
+# Subtest: reject memberduplicate
+ok 479 - reject memberduplicate
+  ---
+  duration_ms: 13.798607
+  ...
+# Subtest: reject sourcecount
+ok 480 - reject sourcecount
+  ---
+  duration_ms: 12.60062
+  ...
+# Subtest: reject future
+ok 481 - reject future
+  ---
+  duration_ms: 17.354845
+  ...
+# Subtest: reject formalflag
+ok 482 - reject formalflag
+  ---
+  duration_ms: 12.297271
+  ...
+# Subtest: reject sourceURL
+ok 483 - reject sourceURL
+  ---
+  duration_ms: 12.892389
+  ...
+# (node:139714) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139714) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-paper-books.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: fills cannot exceed the entire official session volume and predecessor exits stay frozen
+ok 484 - fills cannot exceed the entire official session volume and predecessor exits stay frozen
+  ---
+  duration_ms: 2.475657
+  ...
+# Subtest: two separately funded books enforce their risk and exposure caps
+ok 485 - two separately funded books enforce their risk and exposure caps
+  ---
+  duration_ms: 0.259101
+  ...
+# Subtest: unapproved strategy, missing qualification and missing liquidity never fill
+ok 486 - unapproved strategy, missing qualification and missing liquidity never fill
+  ---
+  duration_ms: 0.140282
+  ...
+# Subtest: a final next-session bar can fill, but a gap above the entry zone cannot
+ok 487 - a final next-session bar can fill, but a gap above the entry zone cannot
+  ---
+  duration_ms: 0.667127
+  ...
+# Subtest: same-bar stop is conservatively resolved as a loss, not a winning trade
+ok 488 - same-bar stop is conservatively resolved as a loss, not a winning trade
+  ---
+  duration_ms: 0.360904
+  ...
+# Subtest: existing positions keep their original strategy and are monitored after thesis invalidation
+ok 489 - existing positions keep their original strategy and are monitored after thesis invalidation
+  ---
+  duration_ms: 0.281225
+  ...
+# Subtest: same session processes old-position risk, multiple distinct orders and rejects replay
+ok 490 - same session processes old-position risk, multiple distinct orders and rejects replay
+  ---
+  duration_ms: 0.625895
+  ...
+# Subtest: the final close records new-position peak exactly once after same-day orders
+ok 491 - the final close records new-position peak exactly once after same-day orders
+  ---
+  duration_ms: 2.856441
+  ...
+# Subtest: an unfilled order does not consume the other symbol's same-day opportunity
+ok 492 - an unfilled order does not consume the other symbol's same-day opportunity
+  ---
+  duration_ms: 0.489409
+  ...
+# Subtest: zero-share orders cannot advance past an unsettled session or reopen a settled session
+ok 493 - zero-share orders cannot advance past an unsettled session or reopen a settled session
+  ---
+  duration_ms: 0.682961
+  ...
+# Subtest: unofficial data and same-session execution are rejected
+ok 494 - unofficial data and same-session execution are rejected
+  ---
+  duration_ms: 0.306262
+  ...
+# Subtest: intraday exits and same-day marks cannot finance or enlarge opening orders
+ok 495 - intraday exits and same-day marks cannot finance or enlarge opening orders
+  ---
+  duration_ms: 0.7682
+  ...
+# Subtest: paper adoption binds parameters, risk policy, effective time and receipt version
+ok 496 - paper adoption binds parameters, risk policy, effective time and receipt version
+  ---
+  duration_ms: 0.250669
+  ...
+# Subtest: flat and zero-volume bars cannot fabricate a fill or stopped-position cash
+ok 497 - flat and zero-volume bars cannot fabricate a fill or stopped-position cash
+  ---
+  duration_ms: 0.275586
+  ...
+# Subtest: MA20 and time exits wait for the next tradable session and reject invalid volume
+ok 498 - MA20 and time exits wait for the next tradable session and reject invalid volume
+  ---
+  duration_ms: 0.537382
+  ...
+# (node:139725) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139725) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-review-auth.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: research qualification requires a separate bearer identity
+ok 499 - research qualification requires a separate bearer identity
+  ---
+  duration_ms: 15.839408
+  ...
+# Subtest: independent testing and human approval cannot share writer or each other identity
+ok 500 - independent testing and human approval cannot share writer or each other identity
+  ---
+  duration_ms: 0.836262
+  ...
+# (node:139736) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139736) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-source-association.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: IA01 an old industry-only source creates a current supplementary hypothesis with missing company basis
+ok 501 - IA01 an old industry-only source creates a current supplementary hypothesis with missing company basis
+  ---
+  duration_ms: 17.050245
+  ...
+# Subtest: IA02 company direct evidence still requires independent review and never means supported or an order
+ok 502 - IA02 company direct evidence still requires independent review and never means supported or an order
+  ---
+  duration_ms: 2.328855
+  ...
+# Subtest: IA03 no associations is legacy compatible and performs no DB queries
+ok 503 - IA03 no associations is legacy compatible and performs no DB queries
+  ---
+  duration_ms: 0.445011
+  ...
+# Subtest: IA04 bounds enforce 3/company, 50/run, 100 distinct documents and exact keys before reads
+ok 504 - IA04 bounds enforce 3/company, 50/run, 100 distinct documents and exact keys before reads
+  ---
+  duration_ms: 6.882288
+  ...
+# Subtest: IA05 canonical input deduplicates one company hypothesis but never merges different companies
+ok 505 - IA05 canonical input deduplicates one company hypothesis but never merges different companies
+  ---
+  duration_ms: 1.630011
+  ...
+# Subtest: IA06 server observation time is hash-bound and cannot be backfilled with writer associatedAt
+ok 506 - IA06 server observation time is hash-bound and cannot be backfilled with writer associatedAt
+  ---
+  duration_ms: 2.326762
+  ...
+# Subtest: IA07 caller cannot bind a different root/hash or inject a direct symbol into industry evidence
+ok 507 - IA07 caller cannot bind a different root/hash or inject a direct symbol into industry evidence
+  ---
+  duration_ms: 2.69633
+  ...
+# Subtest: IA08 same-row denied source invalidates even when the SQL RPC booleans are false
+ok 508 - IA08 same-row denied source invalidates even when the SQL RPC booleans are false
+  ---
+  duration_ms: 1.612033
+  ...
+# Subtest: IA09 direct or RPC retraction invalidates the hypothesis without dropping its input record
+ok 509 - IA09 direct or RPC retraction invalidates the hypothesis without dropping its input record
+  ---
+  duration_ms: 1.716021
+  ...
+# Subtest: IA10 another head ID is rejected even if SQL reports superseded false
+ok 510 - IA10 another head ID is rejected even if SQL reports superseded false
+  ---
+  duration_ms: 1.024336
+  ...
+# Subtest: IA11 missing and future source records remain explicit gaps, not evidence
+ok 511 - IA11 missing and future source records remain explicit gaps, not evidence
+  ---
+  duration_ms: 1.501096
+  ...
+# Subtest: IA12 all four source clocks must be valid and ordered
+ok 512 - IA12 all four source clocks must be valid and ordered
+  ---
+  duration_ms: 2.089784
+  ...
+# Subtest: IA13 nonself parent provenance is unresolved; self-parent is accepted as the same root
+ok 513 - IA13 nonself parent provenance is unresolved; self-parent is accepted as the same root
+  ---
+  duration_ms: 1.148834
+  ...
+# Subtest: IA14 contradictory latest same-clock variants fail closed across platform and scope
+ok 514 - IA14 contradictory latest same-clock variants fail closed across platform and scope
+  ---
+  duration_ms: 1.03988
+  ...
+# Subtest: IA15 legacy fallback variants join the conflict audit while later revisions remain outside cutoff
+ok 515 - IA15 legacy fallback variants join the conflict audit while later revisions remain outside cutoff
+  ---
+  duration_ms: 2.699024
+  ...
+# Subtest: IA16 saturated version history is visibly incomplete rather than declaring a single trusted head
+ok 516 - IA16 saturated version history is visibly incomplete rather than declaring a single trusted head
+  ---
+  duration_ms: 1.68927
+  ...
+# Subtest: IA17 basis must be direct company-specific evidence, current, not denied or withdrawn
+ok 517 - IA17 basis must be direct company-specific evidence, current, not denied or withdrawn
+  ---
+  duration_ms: 3.023713
+  ...
+# Subtest: IA18 authenticated summaries retain rights proof without content or timed transcript export
+ok 518 - IA18 authenticated summaries retain rights proof without content or timed transcript export
+  ---
+  duration_ms: 0.804314
+  ...
+# Subtest: IA19 metadata-only, chapter titles and contradictory rights cannot become a research cue
+ok 519 - IA19 metadata-only, chapter titles and contradictory rights cannot become a research cue
+  ---
+  duration_ms: 1.054071
+  ...
+# Subtest: IA20 query failure or malicious returned IDs produce bounded unavailable receipts without raw errors
+ok 520 - IA20 query failure or malicious returned IDs produce bounded unavailable receipts without raw errors
+  ---
+  duration_ms: 1.078168
+  ...
+# Subtest: IA25 malformed SQL-group members cannot vanish from same-root revision audit
+ok 521 - IA25 malformed SQL-group members cannot vanish from same-root revision audit
+  ---
+  duration_ms: 1.163887
+  ...
+# Subtest: IA26 non-array transcript metadata is not an authenticated bounded summary
+ok 522 - IA26 non-array transcript metadata is not an authenticated bounded summary
+  ---
+  duration_ms: 0.740678
+  ...
+# Subtest: IA21 deadline returns an accounted gap and aborts the bounded database read
+ok 523 - IA21 deadline returns an accounted gap and aborts the bounded database read
+  ---
+  duration_ms: 10.298234
+  ...
+# Subtest: IA22 body/metadata size bound prevents unbounded receipt propagation
+ok 524 - IA22 body/metadata size bound prevents unbounded receipt propagation
+  ---
+  duration_ms: 1.551672
+  ...
+# Subtest: IA23 large allowed document sets split direct and RPC reads at 50
+ok 525 - IA23 large allowed document sets split direct and RPC reads at 50
+  ---
+  duration_ms: 29.353275
+  ...
+# Subtest: IA24 escaped canonical URLs cannot broaden the PostgREST conflict query
+ok 526 - IA24 escaped canonical URLs cannot broaden the PostgREST conflict query
+  ---
+  duration_ms: 1.53008
+  ...
+# Subtest: IA27 requesting an old revision does not erase the valid current receipt for the same root
+ok 527 - IA27 requesting an old revision does not erase the valid current receipt for the same root
+  ---
+  duration_ms: 1.025919
+  ...
+# Subtest: IA28 the healthy UUID009 winner cannot hide UUID008 with nonempty authenticated excerpts
+ok 528 - IA28 the healthy UUID009 winner cannot hide UUID008 with nonempty authenticated excerpts
+  ---
+  duration_ms: 0.5961
+  ...
+# Subtest: IA29 the healthy UUID009 winner cannot hide UUID008 with string authenticated excerpts
+ok 529 - IA29 the healthy UUID009 winner cannot hide UUID008 with string authenticated excerpts
+  ---
+  duration_ms: 0.431532
+  ...
+# Subtest: IA30 the healthy UUID009 winner cannot hide UUID008 with mismatched metadata content hash
+ok 530 - IA30 the healthy UUID009 winner cannot hide UUID008 with mismatched metadata content hash
+  ---
+  duration_ms: 0.364711
+  ...
+# Subtest: IA31 every maximum-clock sibling must pass identity and clock invariants beyond signature fields
+ok 531 - IA31 every maximum-clock sibling must pass identity and clock invariants beyond signature fields
+  ---
+  duration_ms: 1.159089
+  ...
+# Subtest: IA32 null/unknown company-basis sibling scope cannot normalize into a valid legacy mention
+ok 532 - IA32 null/unknown company-basis sibling scope cannot normalize into a valid legacy mention
+  ---
+  duration_ms: 1.519664
+  ...
+# Subtest: IA33 a genuinely omitted legacy company scope remains compatible with explicit company_mentions
+ok 533 - IA33 a genuinely omitted legacy company scope remains compatible with explicit company_mentions
+  ---
+  duration_ms: 0.619195
+  ...
+# (node:139747) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139747) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-source-attempt-controller.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: SC01 single authorized rumor survives; output matches existing inbox and priority contracts
+ok 534 - SC01 single authorized rumor survives; output matches existing inbox and priority contracts
+  ---
+  duration_ms: 12.735682
+  ...
+# Subtest: IS07 authorized industry-only content follows existing controller and inbox contracts
+ok 535 - IS07 authorized industry-only content follows existing controller and inbox contracts
+  ---
+  duration_ms: 2.335124
+  ...
+# Subtest: IS08 industry replay, repost and withdrawal preserve source roots without company labels
+ok 536 - IS08 industry replay, repost and withdrawal preserve source roots without company labels
+  ---
+  duration_ms: 4.360141
+  ...
+# Subtest: IS09 industry scope cannot bypass metadata, rights, private content or cutoff failures
+ok 537 - IS09 industry scope cannot bypass metadata, rights, private content or cutoff failures
+  ---
+  duration_ms: 1.403668
+  ...
+# Subtest: SC02 failures, auth, metadata and missing transcript never become no_relevant
+ok 538 - SC02 failures, auth, metadata and missing transcript never become no_relevant
+  ---
+  duration_ms: 1.555087
+  ...
+# Subtest: SC03 actual public body without summary adapter remains awaiting_summary
+ok 539 - SC03 actual public body without summary adapter remains awaiting_summary
+  ---
+  duration_ms: 1.581657
+  ...
+# Subtest: SC04 podcast index and YouTube watch metadata do not prove transcript content
+ok 540 - SC04 podcast index and YouTube watch metadata do not prove transcript content
+  ---
+  duration_ms: 0.942612
+  ...
+# Subtest: SC05 HTML code is discarded, login stays visible, unrecognized body is not inferred
+ok 541 - SC05 HTML code is discarded, login stays visible, unrecognized body is not inferred
+  ---
+  duration_ms: 2.243426
+  ...
+# Subtest: SC06 SSRF, credential URLs, injected query destinations and unreviewed hosts reject
+ok 542 - SC06 SSRF, credential URLs, injected query destinations and unreviewed hosts reject
+  ---
+  duration_ms: 1.047912
+  ...
+# Subtest: SC07 unknown/secret fields and unbounded authenticated/full text cannot enter packet
+ok 543 - SC07 unknown/secret fields and unbounded authenticated/full text cannot enter packet
+  ---
+  duration_ms: 0.797534
+  ...
+# Subtest: SC08 future publication/observation, rights and stale local terminals reject
+ok 544 - SC08 future publication/observation, rights and stale local terminals reject
+  ---
+  duration_ms: 1.170907
+  ...
+# Subtest: SC09 replay suppresses same content but correction retains original first observation
+ok 545 - SC09 replay suppresses same content but correction retains original first observation
+  ---
+  duration_ms: 1.993809
+  ...
+# Subtest: SC10 repost chain shares root; original withdrawal is not resurrected by repost
+ok 546 - SC10 repost chain shares root; original withdrawal is not resurrected by repost
+  ---
+  duration_ms: 2.727888
+  ...
+# Subtest: SC11 public item requires exact response hash and reviewed content scope
+ok 547 - SC11 public item requires exact response hash and reviewed content scope
+  ---
+  duration_ms: 1.013359
+  ...
+# Subtest: SC12 bounds, parent cycles, forged observations and unknown scope keys reject
+ok 548 - SC12 bounds, parent cycles, forged observations and unknown scope keys reject
+  ---
+  duration_ms: 1.373984
+  ...
+# Subtest: SC13 skipped deadline scopes are not_attempted, never claimed as a real read
+ok 549 - SC13 skipped deadline scopes are not_attempted, never claimed as a real read
+  ---
+  duration_ms: 0.241014
+  ...
+# Subtest: SC14 a parent discovery cannot backdate a newly observed repost document
+ok 550 - SC14 a parent discovery cannot backdate a newly observed repost document
+  ---
+  duration_ms: 0.786818
+  ...
+# Subtest: SC15 JSON primitive types and actual local terminal cannot be substituted
+ok 551 - SC15 JSON primitive types and actual local terminal cannot be substituted
+  ---
+  duration_ms: 0.806677
+  ...
+# Subtest: SC16 actual AUO detail markers establish body, but index/template drift do not
+ok 552 - SC16 actual AUO detail markers establish body, but index/template drift do not
+  ---
+  duration_ms: 0.566054
+  ...
+# Subtest: SC17 public RSS/JSON login wording is content, not authentication failure
+ok 553 - SC17 public RSS/JSON login wording is content, not authentication failure
+  ---
+  duration_ms: 0.498192
+  ...
+# Subtest: SC18 known public publication clock cannot be backdated by an exact-byte summary
+ok 554 - SC18 known public publication clock cannot be backdated by an exact-byte summary
+  ---
+  duration_ms: 1.4182
+  ...
+# Subtest: SC19 corrected ancestors use the latest accepted revision regardless of input order
+ok 555 - SC19 corrected ancestors use the latest accepted revision regardless of input order
+  ---
+  duration_ms: 4.975148
+  ...
+# Subtest: SC20 all acquired scopes resolve before roots, so reversed repost order cannot revive a withdrawn root
+ok 556 - SC20 all acquired scopes resolve before roots, so reversed repost order cannot revive a withdrawn root
+  ---
+  duration_ms: 4.185427
+  ...
+# Subtest: Apple numeric episode query granted only on exact public podcast-show path, never general query keys
+ok 557 - Apple numeric episode query granted only on exact public podcast-show path, never general query keys
+  ---
+  duration_ms: 0.621027
+  ...
+# Subtest: SC-POD01 creator RSS with same-origin transcript and chapters stays metadata only
+ok 558 - SC-POD01 creator RSS with same-origin transcript and chapters stays metadata only
+  ---
+  duration_ms: 0.697393
+  ...
+# (node:139759) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139759) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-source-extensions.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: a factor binds the matching root and cannot predate a withdrawal or revision
+ok 559 - a factor binds the matching root and cannot predate a withdrawal or revision
+  ---
+  duration_ms: 1.522828
+  ...
+# Subtest: new platforms retain timecodes and reject impossible/private transcript excerpts
+ok 560 - new platforms retain timecodes and reject impossible/private transcript excerpts
+  ---
+  duration_ms: 3.734356
+  ...
+# Subtest: prefixed social summaries and unreviewed issuer domains cannot become official roots
+ok 561 - prefixed social summaries and unreviewed issuer domains cannot become official roots
+  ---
+  duration_ms: 0.382417
+  ...
+# Subtest: a correction observed tomorrow is excluded from a historical cutoff
+ok 562 - a correction observed tomorrow is excluded from a historical cutoff
+  ---
+  duration_ms: 0.202796
+  ...
+# Subtest: same-time retraction wins regardless of input order without creating new attention
+ok 563 - same-time retraction wins regardless of input order without creating new attention
+  ---
+  duration_ms: 1.179711
+  ...
+# Subtest: insider dataset entries remain distinct and intended transfers do not imply actual selling
+ok 564 - insider dataset entries remain distinct and intended transfers do not imply actual selling
+  ---
+  duration_ms: 0.648048
+  ...
+# Subtest: missing prices never qualify as early discovery; relative returns require aligned sessions
+ok 565 - missing prices never qualify as early discovery; relative returns require aligned sessions
+  ---
+  duration_ms: 0.721288
+  ...
+# Subtest: a successful scope cannot erase another failed scope; chapter indexes contribute no attention
+ok 566 - a successful scope cannot erase another failed scope; chapter indexes contribute no attention
+  ---
+  duration_ms: 0.668579
+  ...
+# Subtest: later reposts cannot revive an original source withdrawal
+ok 567 - later reposts cannot revive an original source withdrawal
+  ---
+  duration_ms: 0.405773
+  ...
+# (node:139771) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139771) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-source-roots.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: industry head with inherited stock tags is retained as a source, not direct company evidence
+ok 568 - industry head with inherited stock tags is retained as a source, not direct company evidence
+  ---
+  duration_ms: 1.003134
+  ...
+# Subtest: legacy/direct company sources remain eligible; unknown or malformed scope fails closed
+ok 569 - legacy/direct company sources remain eligible; unknown or malformed scope fails closed
+  ---
+  duration_ms: 0.187293
+  ...
+# (node:139782) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139782) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-strategy-governance.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: one hypothesis, three arms and at most three pre-registered variants
+ok 570 - one hypothesis, three arms and at most three pre-registered variants
+  ---
+  duration_ms: 8.319366
+  ...
+# Subtest: historically unavailable research and KOL claims cannot be backfilled
+ok 571 - historically unavailable research and KOL claims cannot be backfilled
+  ---
+  duration_ms: 1.027952
+  ...
+# Subtest: low sample and weak cost-adjusted expectancy stay research-only
+ok 572 - low sample and weak cost-adjusted expectancy stay research-only
+  ---
+  duration_ms: 0.45047
+  ...
+# Subtest: a promising backtest cannot approve itself or omit independent holdout validation
+ok 573 - a promising backtest cannot approve itself or omit independent holdout validation
+  ---
+  duration_ms: 3.609919
+  ...
+# Subtest: duplicated daily signals cannot manufacture thirty independent trades
+ok 574 - duplicated daily signals cannot manufacture thirty independent trades
+  ---
+  duration_ms: 0.368356
+  ...
+# Subtest: equivalent timestamps and different times within one Taiwan session are one daily signal
+ok 575 - equivalent timestamps and different times within one Taiwan session are one daily signal
+  ---
+  duration_ms: 0.373414
+  ...
+# Subtest: an omitted registered variant cannot pass on the first variant alone
+ok 576 - an omitted registered variant cannot pass on the first variant alone
+  ---
+  duration_ms: 0.901951
+  ...
+# (node:139793) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139793) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/research-weekly-bars.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: a short holiday week is one complete Taiwan calendar week
+ok 577 - a short holiday week is one complete Taiwan calendar week
+  ---
+  duration_ms: 1.242245
+  ...
+# Subtest: unfinished or missing sessions never create a completed weekly signal
+ok 578 - unfinished or missing sessions never create a completed weekly signal
+  ---
+  duration_ms: 0.274685
+  ...
+# Subtest: a Friday week is complete after the official next session moves to Monday
+ok 579 - a Friday week is complete after the official next session moves to Monday
+  ---
+  duration_ms: 0.186452
+  ...
+# Subtest: month crossing does not split a calendar week
+ok 580 - month crossing does not split a calendar week
+  ---
+  duration_ms: 0.245741
+  ...
+# (node:139804) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139804) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/source-health.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: active source health alerts immediately for auth and parser failures
+ok 581 - active source health alerts immediately for auth and parser failures
+  ---
+  duration_ms: 0.900759
+  ...
+# Subtest: active source health waits for two ordinary failures
+ok 582 - active source health waits for two ordinary failures
+  ---
+  duration_ms: 0.535458
+  ...
+# Subtest: a successful latest run clears an older failure and missing history is unhealthy
+ok 583 - a successful latest run clears an older failure and missing history is unhealthy
+  ---
+  duration_ms: 0.202916
+  ...
+# Subtest: an active source that misses its next expected run is unhealthy
+ok 584 - an active source that misses its next expected run is unhealthy
+  ---
+  duration_ms: 0.121093
+  ...
+# Subtest: duplicate Telegram documents are not misclassified from their symbol count
+ok 585 - duplicate Telegram documents are not misclassified from their symbol count
+  ---
+  duration_ms: 0.287594
+  ...
+# Subtest: a fully duplicate PTT page is healthy even when candidate-document metadata is unavailable
+ok 586 - a fully duplicate PTT page is healthy even when candidate-document metadata is unavailable
+  ---
+  duration_ms: 0.201314
+  ...
+# Subtest: unwritten candidates remain a parser failure when they are not duplicates
+ok 587 - unwritten candidates remain a parser failure when they are not duplicates
+  ---
+  duration_ms: 0.088343
+  ...
+# Subtest: approved Telegram roster returning zero parsed messages is a parser failure, not an empty success
+ok 588 - approved Telegram roster returning zero parsed messages is a parser failure, not an empty success
+  ---
+  duration_ms: 0.088053
+  ...
+# Subtest: a Threads dry run cannot be reported as a successful provider canary
+ok 589 - a Threads dry run cannot be reported as a successful provider canary
+  ---
+  duration_ms: 0.353283
+  ...
+# Subtest: public matched symbols never invent a records-written placeholder
+ok 590 - public matched symbols never invent a records-written placeholder
+  ---
+  duration_ms: 1.519683
+  ...
+# Subtest: incomplete zero-new replay overrides empty/duplicate 0
+ok 591 - incomplete zero-new replay overrides empty/duplicate 0
+  ---
+  duration_ms: 0.152911
+  ...
+# Subtest: incomplete zero-new replay overrides empty/duplicate 1501
+ok 592 - incomplete zero-new replay overrides empty/duplicate 1501
+  ---
+  duration_ms: 0.053881
+  ...
+# Subtest: failed dataset overrides success of other empty/duplicate datasets
+ok 593 - failed dataset overrides success of other empty/duplicate datasets
+  ---
+  duration_ms: 0.074733
+  ...
+# (node:139815) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:139815) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-research-converged-oct08/web/src/lib/technical-features-v2.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-research-converged-oct08/web/package.json.
+# Subtest: technical research cannot mark a two-bar price fragment complete
+ok 594 - technical research cannot mark a two-bar price fragment complete
+  ---
+  duration_ms: 0.639335
+  ...
+# Subtest: golden fixture keeps MA5/20/60/120/240 identities explicit
+ok 595 - golden fixture keeps MA5/20/60/120/240 identities explicit
+  ---
+  duration_ms: 9.739489
+  ...
+# Subtest: insufficient history remains null and cannot masquerade as long MA
+ok 596 - insufficient history remains null and cannot masquerade as long MA
+  ---
+  duration_ms: 0.260393
+  ...
+# Subtest: institutional 5/20 day flow is normalized by official traded volume and deduped by session
+ok 597 - institutional 5/20 day flow is normalized by official traded volume and deduped by session
+  ---
+  duration_ms: 0.481887
+  ...
+# Subtest: MACD is neutral on a flat full series; partial flows stay explicitly missing
+ok 598 - MACD is neutral on a flat full series; partial flows stay explicitly missing
+  ---
+  duration_ms: 1.230167
+  ...
+1..598
+# tests 626
+# suites 0
+# pass 623
+# fail 1
+# cancelled 0
+# skipped 2
+# todo 0
+# duration_ms 78869.980903

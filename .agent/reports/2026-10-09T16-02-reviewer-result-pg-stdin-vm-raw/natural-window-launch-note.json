@@ -1,0 +1,6 @@
+{
+  "startupOnlyFailure": "The launch helper asserted remaining >= 0, but approval latency crossed 16:00Z before execution. Assertion failed before starting any PG or running SQL/tests. No business attempt occurred.",
+  "startupExitCode": 1,
+  "error": "AssertionError",
+  "nextAction": "Read actual DB clock and execute the single permitted open-window suite."
+}

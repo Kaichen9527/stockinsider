@@ -1,0 +1,3 @@
+# Plan
+
+Cherry-pick only the five reviewed AUO data commits; reuse existing article section ordering and AUO calculation helpers. Build a bounded research calculator beside its data, explicit three-scenario assumptions, independent Decimal verifier and generated prose/table template. Preserve source byte manifests and current-observation clocks. Use the existing cached Node22/dependencies and resource wrapper, one heavy job <=8GiB, 4GB temp and8GB reserve. Deliver AUO on an independent branch; keep interrupted native log repair on its own branch. EMC will use a subsequent different-industry increment without assuming AUO formulas/PE transfer. No new framework, production data plane or publication system.

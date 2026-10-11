@@ -1,0 +1,87 @@
+TAP version 13
+# (node:6172) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:6172) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-author-packet.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# NOTICE:  constraint "candidate_detail_snapshots_revision_hash_check" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  identifier "candidate_detail_snapshots_stock_id_session_date_model_version_key" will be truncated to "candidate_detail_snapshots_stock_id_session_date_model_version_"
+# NOTICE:  constraint "candidate_detail_snapshots_stock_id_session_date_model_version_" of relation "candidate_detail_snapshots" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_input_hash_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_claims_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_source_refs_array_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_paid_content_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  constraint "candidate_research_dossiers_bundle_binding_check" of relation "candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_bundles_append_only_v4" for relation "public.candidate_dossier_bundles" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_research_dossiers_append_only_v4" for relation "public.candidate_research_dossiers" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_dossier_receipts_append_only_v4" for relation "public.candidate_dossier_submission_receipts" does not exist, skipping
+# NOTICE:  trigger "trg_candidate_detail_published_append_only_v4" for relation "public.candidate_detail_snapshots" does not exist, skipping
+# ERROR:  research_publication_content_hash
+# CONTEXT:  PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 38 at RAISE
+# ERROR:  research_publication_binding
+# CONTEXT:  PL/pgSQL function read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text) line 34 at RAISE
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 8 at assignment
+# ERROR:  research_publication_request
+# CONTEXT:  PL/pgSQL function read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text) line 16 at RAISE
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 8 at assignment
+# ERROR:  research_publication_read_committed_required
+# CONTEXT:  PL/pgSQL function read_completed_research_publication_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text) line 8 at RAISE
+# PL/pgSQL function publish_research_article_v2(jsonb,uuid,text,text,text,uuid,text,uuid,text,text) line 8 at assignment
+# ERROR:  permission denied for table research_observed_companies_v1
+# CONTEXT:  SQL statement "SELECT *              FROM public.research_observed_companies_v1 WHERE research_company_id=p_company"
+# PL/pgSQL function read_research_company_publication_v2(uuid) line 12 at SQL statement
+# preserved atomic publication failure: /tmp/si-rresult-hXnzQ8
+# Subtest: atomic publication: original private pipeline, synthetic reports — positive
+    # Subtest: unpublished read, altered hash/result/role and isolation reject without effects
+    ok 1 - unpublished read, altered hash/result/role and isolation reject without effects
+      ---
+      duration_ms: 306.893125
+      ...
+    # Subtest: private company reader is NULL before publication, RC-only and inaccessible to public roles
+    not ok 2 - private company reader is NULL before publication, RC-only and inaccessible to public roles
+      ---
+      duration_ms: 23.599667
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:36:40'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/Cellar/postgresql@17/17.10/bin/psql -X -qAt -v ON_ERROR_STOP=1 -h /tmp/si-rresult-hXnzQ8 -p 56172 -d postgres
+        ERROR:  permission denied for table research_observed_companies_v1
+        CONTEXT:  SQL statement "SELECT *              FROM public.research_observed_companies_v1 WHERE research_company_id=p_company"
+        PL/pgSQL function read_research_company_publication_v2(uuid) line 12 at SQL statement
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        checkExecSyncError (node:child_process:882:11)
+        execFileSync (node:child_process:918:15)
+        run (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:37:38)
+        sql (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:38:20)
+        file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:228:41
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:36:72)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+      ...
+    1..2
+not ok 1 - atomic publication: original private pipeline, synthetic reports — positive
+  ---
+  duration_ms: 2977.140166
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:317:138'
+  failureType: 'testCodeFailure'
+  error: 'dependent_publication_case_stopped'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    check (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:36:148)
+    async publicationFixture (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:227:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 3
+# suites 0
+# pass 1
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3226.066125

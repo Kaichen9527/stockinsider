@@ -1,0 +1,36 @@
+TAP version 13
+# (node:6782) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:6782) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-complete-input.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# preserved atomic publication failure: /tmp/si-rresult-v2tl6P
+# Subtest: atomic publication: original private pipeline, synthetic reports — positive
+not ok 1 - atomic publication: original private pipeline, synthetic reports — positive
+  ---
+  duration_ms: 16123.782
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:320:138'
+  failureType: 'testCodeFailure'
+  error: 'spawnSync /opt/homebrew/Cellar/postgresql@17/17.10/bin/psql ETIMEDOUT'
+  code: 'ETIMEDOUT'
+  stack: |-
+    Object.spawnSync (node:internal/child_process:1120:20)
+    spawnSync (node:child_process:868:24)
+    execFileSync (node:child_process:911:15)
+    run (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:37:38)
+    sql (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:38:20)
+    make (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:115:35)
+    async prepare (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:120:47)
+    async publicationFixture (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-atomic-publication-postgres.test.mjs:124:13)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16327.563125

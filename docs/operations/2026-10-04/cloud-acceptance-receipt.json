@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "stockinsider-linux-cloud-synthetic-acceptance-receipt-v1",
+  "recordedAt": "2026-10-04T15:33:29.229805+00:00",
+  "sourceCommit": "0faebfdd8c077808c6470a0a04895f94ab064914",
+  "reviewSubjectCommit": "960319d7ab5446161dba0e532997c85c17294e11",
+  "reviewSubjectDifference": "review/handoff records only; no code changes",
+  "sourceTrackedClean": true,
+  "dataScope": "synthetic_acceptance",
+  "fixture": "scripts/fixtures/research-cloud-article.ts",
+  "workHash": "9260c8ab4fa20ce970521fee7b4c8ae33c8884ea3391080e0262fc898bb47489",
+  "resultHash": "8b7fa52c6f8e93a357590d6ebd9d37a4c2b8eb11a33040f0a8e555b07ba35dae",
+  "issuedAt": "2026-10-04T15:31:42.975Z",
+  "startedAt": "2026-10-04T15:31:50.970Z",
+  "completedAt": "2026-10-04T15:31:51.085Z",
+  "receivedAt": "2026-10-04T15:32:20.936Z",
+  "versions": {
+    "node": "v22.14.0",
+    "postgres": "17.11 (Debian 17.11-0+deb13u1)",
+    "os": "Debian GNU/Linux 13",
+    "kernel": "6.18.44"
+  },
+  "tests": {
+    "command": "npm run test:research-cloud",
+    "tests": 16,
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0,
+    "initialRun": {
+      "passed": 15,
+      "skipped": 1,
+      "skipReason": "local PostgreSQL tools unavailable; resolved by workspace-local signed Debian packages"
+    }
+  },
+  "workflow": {
+    "prepareExitCode": 0,
+    "runExitCode": 0,
+    "verifyExitCode": 0
+  },
+  "negativeChecks": {
+    "verify": {
+      "exitCode": 0,
+      "expectedError": null,
+      "passed": true
+    },
+    "existing-lock": {
+      "exitCode": 1,
+      "expectedError": "EEXIST",
+      "passed": true,
+      "existingLockPreserved": true,
+      "outputCreated": false
+    },
+    "prepare-wrong-source": {
+      "exitCode": 0,
+      "expectedError": null,
+      "passed": true
+    },
+    "wrong-source": {
+      "exitCode": 1,
+      "expectedError": "cloud_exact_clean_source_required",
+      "passed": true,
+      "outputCreated": false
+    },
+    "overwrite-result": {
+      "exitCode": 1,
+      "expectedError": "EEXIST",
+      "passed": true,
+      "bytesUnchanged": true
+    },
+    "overwrite-task": {
+      "exitCode": 1,
+      "expectedError": "EEXIST",
+      "passed": true,
+      "bytesUnchanged": true
+    },
+    "overwrite-handoff": {
+      "exitCode": 1,
+      "expectedError": "EEXIST",
+      "passed": true,
+      "bytesUnchanged": true
+    }
+  },
+  "capacityAdmission": {
+    "policy": "research-cloud-validation-32gb-v1",
+    "allowed": true,
+    "reasons": [],
+    "effectiveAvailableBytes": 30841794560,
+    "projectQuotaVerified": false,
+    "residentBytes": 2503368704,
+    "additionalTemporaryBytes": 4000000000,
+    "expectedPeakMemoryBytes": 536870912
+  },
+  "resources": {
+    "cpuModel": "AMD EPYC 9V74 80-Core Processor",
+    "nproc": 5,
+    "cpuMax": "400000 100000",
+    "memoryMaxBytes": 34359738368,
+    "memoryCurrentBytesAtReceipt": 1506639872,
+    "hostVisibleMemTotalBytes": 35743784960,
+    "runMaximumRSSKiB": 95272,
+    "runMaximumRSSBytes": 97558528,
+    "runMaximumRSSMethod": "GNU time -v around npm run research:cloud -- run; process RSS, not aggregate sandbox RAM",
+    "wallTimeSeconds": 0.47,
+    "workspaceBytesBeforeRun": 2503364608,
+    "workspaceBytesAfterChecksBeforeReceipt": 2503430144,
+    "filesystemTotalBytes": 33770192896,
+    "filesystemUsedBytes": 1193697280,
+    "filesystemAvailableBytes": 30841733120,
+    "inodesTotal": 2097152,
+    "inodesUsed": 36539,
+    "inodesAvailable": 2060613,
+    "projectDiskQuotaBytes": null,
+    "diskQuotaInterpretation": "df is filesystem scope; per-project quota unknown",
+    "sampledDiskPeakBytes": null,
+    "diskPeakInterpretation": "before/admission/after observations only; no continuous disk peak sampler"
+  },
+  "reservationCreated": false,
+  "reservationNature": "synthetic fixture only; no VPS reservation claimed",
+  "authoritativePublication": false,
+  "strategyApproved": false,
+  "requiresLiveReservationCheck": true,
+  "requiresIndependentReview": true,
+  "notValidated": [
+    "Cloud task continuation/restart",
+    "real VPS reservation and authenticated result POST",
+    "production migration/deployment",
+    "six-role dispatch/scheduling",
+    "rights-aware real issuer research/publication"
+  ],
+  "lockCleanup": "only this run-created lock removed; no pre-existing lock taken over",
+  "artifacts": {
+    "input.json": {
+      "bytes": 10514,
+      "sha256": "2dbc3dd2d89e5eb2c305e38e9588bdcff4a05e1ec0855d4a3c0c0e79990bdfa8"
+    },
+    "task.json": {
+      "bytes": 10641,
+      "sha256": "33d7252bcb8f97c7ed2f6458d95039d203f7905f39d05ee0f7e88440f4420b32"
+    },
+    "result.json": {
+      "bytes": 6479,
+      "sha256": "67c8a22a7d6a592b53dcce1024a8d09b3b632837cfae48235c12bd8a27ab22bd"
+    },
+    "handoff.json": {
+      "bytes": 684,
+      "sha256": "f3ead883a7fe9815c60c31e89b5b4d69db1003f4564c5eb81fda5342bb4be054"
+    },
+    "negative-checks.json": {
+      "bytes": 869,
+      "sha256": "9988d1b3f85eb2b1156175c75d6a7b134a995823aa4a80a9e5ff4bcb20a8b956"
+    },
+    "tests-postgres.log": {
+      "bytes": 7241,
+      "sha256": "71101b5974b409c5b0968daf1d8cf6c71b4376b5572ea7cbcfb64186704d1de5"
+    },
+    "run.log": {
+      "bytes": 1492,
+      "sha256": "e2d61d195df4620d31ac372b1867955fb8e31e680d030072e0234bb23f3d4ab6"
+    },
+    "run-time.txt": {
+      "bytes": 884,
+      "sha256": "3d2f2b8991f35d2db90f37f6da3d4e2d1484c3fa19e8f20dfbb70431ec30b9ad"
+    }
+  }
+}

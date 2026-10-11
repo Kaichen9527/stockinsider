@@ -1,0 +1,1347 @@
+{
+  "schemaVersion": "reviewer-result-compiled-http-vm-v1",
+  "manualIncrement": {
+    "startedAt": "2026-10-09T15:20:29Z",
+    "maximumSeconds": 1800,
+    "notProductRoleBudgetProof": true
+  },
+  "runtimeSubject": "9136a09a75492ced1af9ba27a922c04ad23e0c39",
+  "runtimeTree": "bc3780f0dfa300104042ccadcc5360b730397d20",
+  "buildSubject": "7869d4e8fde8e29b65a56cd432cc6466e499c9ea",
+  "buildTree": "18aac5a1eb505436db850299b44b48700924f08e",
+  "testSubject": "32e04015daccb8c88e278bca21dda9a470166442",
+  "testTree": "f5ce2189ee0b55a6fea5059fab3047fa5d4d8643",
+  "newBuild": true,
+  "buildId": "O-tg2b5oOSwLDS5qNilKd",
+  "compiledServerFiles": 2076,
+  "compiledManifestSha256": "4a56ef01eb875d13e1fb049e11664401dda81557817e5b11329ac30e2fe8469a",
+  "sourceChanges": "Only3 new owned HTTP test/helper files; runtime/SQL/package/shared harness unchanged. No publication2878 SQL.",
+  "requiredSuiteResults": {
+    "unitAndStandalonePg": {
+      "total": 25,
+      "pass": 20,
+      "fail": 5,
+      "skip": 0,
+      "pureUnit": {
+        "total": 10,
+        "pass": 10,
+        "fail": 0
+      },
+      "standalonePg": {
+        "parent": 1,
+        "childCases": 14,
+        "passChildren": 10,
+        "failChildren": 4,
+        "parentFailed": true
+      },
+      "firstFailure": "spawn E2BIG at existing PG test execFile(...psql -c largeSQL...) before SQL executes; two E2BIG children and two subsequent missing expected rejection/exception children, parent failed. Later failures not independently root-caused; not declared all PG green.",
+      "originalTestUnchanged": true,
+      "failureEvidenceOriginalPath": "/tmp/si-rresult-OwkYCk",
+      "minimumRepairProposalForRoot": "Bounded test-only stdin transport instead of single argv for asynchronous psql SQL; retain all original assertions/ACL/deadlines. Not implemented here."
+    },
+    "compiledNative": {
+      "total": 94,
+      "pass": 94,
+      "fail": 0,
+      "skip": 0,
+      "singleBusinessRun": true,
+      "businessGenericRetry": false,
+      "companies": {
+        "2409": {
+          "cohortAccounting": {
+            "total": 1978,
+            "legacySnapshotTotal": 1946,
+            "excludedTdr": 10,
+            "needsEvidence": 2,
+            "notAssessed": 1976,
+            "qualified": 0,
+            "ranked": 0
+          },
+          "readinessAttempts": [
+            {
+              "name": "prepare_research_input_v2",
+              "attempt": 1,
+              "status": 404,
+              "body": {
+                "code": "PGRST202",
+                "details": "Searched for the function public.prepare_research_input_v2 with parameter p_request or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.",
+                "hint": null,
+                "message": "Could not find the function public.prepare_research_input_v2(p_request) in the schema cache"
+              },
+              "elapsedMs": 5.613110999998753
+            },
+            {
+              "name": "prepare_research_input_v2",
+              "attempt": 2,
+              "status": 400,
+              "body": {
+                "code": "P0001",
+                "details": null,
+                "hint": null,
+                "message": "input_preparation_shape"
+              },
+              "elapsedMs": 114.68307199999981
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 1,
+              "status": 503,
+              "body": {
+                "code": "57P01",
+                "details": null,
+                "hint": null,
+                "message": "terminating connection due to administrator command"
+              },
+              "elapsedMs": 3.614745999999286
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 2,
+              "status": 200,
+              "body": [],
+              "elapsedMs": 114.13480499999787
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 1,
+              "status": 503,
+              "body": {
+                "code": "57P01",
+                "details": null,
+                "hint": null,
+                "message": "terminating connection due to administrator command"
+              },
+              "elapsedMs": 5.1720750000022235
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 2,
+              "status": 200,
+              "body": [],
+              "elapsedMs": 115.10230299999967
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 1,
+              "status": 503,
+              "body": {
+                "code": "57P01",
+                "details": null,
+                "hint": null,
+                "message": "terminating connection due to administrator command"
+              },
+              "elapsedMs": 3.9761710000020685
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 2,
+              "status": 200,
+              "body": [],
+              "elapsedMs": 114.47649400000228
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 1,
+              "status": 503,
+              "body": {
+                "code": "57P01",
+                "details": null,
+                "hint": null,
+                "message": "terminating connection due to administrator command"
+              },
+              "elapsedMs": 4.62002300000313
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 2,
+              "status": 200,
+              "body": [],
+              "elapsedMs": 113.05379700000049
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 1,
+              "status": 503,
+              "body": {
+                "code": "57P01",
+                "details": null,
+                "hint": null,
+                "message": "terminating connection due to administrator command"
+              },
+              "elapsedMs": 4.4227350000001024
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 2,
+              "status": 200,
+              "body": [],
+              "elapsedMs": 113.7866240000003
+            }
+          ],
+          "reviewerResult": {
+            "symbol": "2409",
+            "canonicalReviewBytes": 65536,
+            "rawReviewScalars": 37,
+            "trimmedReviewScalars": 37,
+            "resultHash": "9bdb6afd739893232aab2f6bf6d769bc4e5a21906806fe56fa709ab92bea9759",
+            "logicalBytes": 306678,
+            "receivedAt": "2026-10-09T15:29:03.04851+00:00",
+            "completion": {
+              "owner": "synthetic-financial-http-owner",
+              "outcome": "completed",
+              "finished_at": "2026-10-09T15:29:03.081122+00:00",
+              "result_hash": "9bdb6afd739893232aab2f6bf6d769bc4e5a21906806fe56fa709ab92bea9759",
+              "reservation_id": "b551cfea-13c9-41ac-b768-d6cd47746f1e"
+            },
+            "stateAuditBefore": {
+              "stocks": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "logicalCharge": 168988,
+              "modelReservedSeconds": 3600,
+              "source_raw_documents": {
+                "count": 4,
+                "rowHash": "a94fbca1e09b9b722f159a6cd158a76682c42c3fb9f6b44ad6c1d14b51c91475"
+              },
+              "stock_instruments_v3": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "research_deep_jobs_v1": {
+                "count": 1,
+                "rowHash": "45f0825a486afd2fe5c41d3300c26ce24f937d70f49c074c79362edb7181808f"
+              },
+              "research_source_seals_v2": {
+                "count": 1,
+                "rowHash": "09577db33f6cc544ea54d9f95cc3b8423179b55b7287cdb84d032d6e29d79ef2"
+              },
+              "research_author_results_v2": {
+                "count": 1,
+                "rowHash": "71f4665491190dc6fee439b10ea262888ed159a6095b274d7acbe12ac6ee1feb"
+              },
+              "research_reviewer_results_v2": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "research_deep_job_attempts_v1": {
+                "count": 1,
+                "rowHash": "642317824d4e2c3220a0eb870afafd90254355c0f270264f4f116f0894a3cd97"
+              },
+              "research_model_completions_v1": {
+                "count": 1,
+                "rowHash": "b44486bff45a957e073b2b322605cbbc43c421c042c0e6f67e74a0b842c90cf2"
+              },
+              "research_author_assignments_v2": {
+                "count": 1,
+                "rowHash": "9a4a751d140906402010c680b32c990cd23abe95429bf70a884fc5b388cad6e3"
+              },
+              "research_input_preparations_v2": {
+                "count": 1,
+                "rowHash": "36cd512f30a334e4db7e0e60fafed3b8d092e21d9ea292a342f4f72be3c8d62e"
+              },
+              "research_model_reservations_v1": {
+                "count": 2,
+                "rowHash": "f0ed1475ca38ab24153ab800789a99a11dfad3b561630876343989433a717a55"
+              },
+              "research_reviewer_assignments_v2": {
+                "count": 1,
+                "rowHash": "eaf667518105b724dc0b30b24ebe2c7aae22e13639205c623fe8e16ed68e29e3"
+              },
+              "research_execution_invocations_v2": {
+                "count": 1,
+                "rowHash": "fe8ae4733953d4d35bbead6ca774914b539f19cbfd453aa3f2de45448dd7307a"
+              },
+              "research_article_input_revisions_v2": {
+                "count": 1,
+                "rowHash": "d48e44221482bfaf22b102d93643a9313a660c3f4333c6a644626bcbb4666e7e"
+              },
+              "research_source_seal_invalidations_v2": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              }
+            },
+            "stateAuditAfter": {
+              "stocks": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "logicalCharge": 168988,
+              "modelReservedSeconds": 3600,
+              "source_raw_documents": {
+                "count": 4,
+                "rowHash": "a94fbca1e09b9b722f159a6cd158a76682c42c3fb9f6b44ad6c1d14b51c91475"
+              },
+              "stock_instruments_v3": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "research_deep_jobs_v1": {
+                "count": 1,
+                "rowHash": "45f0825a486afd2fe5c41d3300c26ce24f937d70f49c074c79362edb7181808f"
+              },
+              "research_source_seals_v2": {
+                "count": 1,
+                "rowHash": "09577db33f6cc544ea54d9f95cc3b8423179b55b7287cdb84d032d6e29d79ef2"
+              },
+              "research_author_results_v2": {
+                "count": 1,
+                "rowHash": "71f4665491190dc6fee439b10ea262888ed159a6095b274d7acbe12ac6ee1feb"
+              },
+              "research_reviewer_results_v2": {
+                "count": 1,
+                "rowHash": "59dbff51f091b710cb711131e43d18e8294c6ba5b4b9be9036db871ebb78e028"
+              },
+              "research_deep_job_attempts_v1": {
+                "count": 1,
+                "rowHash": "642317824d4e2c3220a0eb870afafd90254355c0f270264f4f116f0894a3cd97"
+              },
+              "research_model_completions_v1": {
+                "count": 2,
+                "rowHash": "d1ace99904bf9c9f3e7224339e07b1d6ce1ce5e98da92eafe70ba0564095057c"
+              },
+              "research_author_assignments_v2": {
+                "count": 1,
+                "rowHash": "9a4a751d140906402010c680b32c990cd23abe95429bf70a884fc5b388cad6e3"
+              },
+              "research_input_preparations_v2": {
+                "count": 1,
+                "rowHash": "36cd512f30a334e4db7e0e60fafed3b8d092e21d9ea292a342f4f72be3c8d62e"
+              },
+              "research_model_reservations_v1": {
+                "count": 2,
+                "rowHash": "f0ed1475ca38ab24153ab800789a99a11dfad3b561630876343989433a717a55"
+              },
+              "research_reviewer_assignments_v2": {
+                "count": 1,
+                "rowHash": "eaf667518105b724dc0b30b24ebe2c7aae22e13639205c623fe8e16ed68e29e3"
+              },
+              "research_execution_invocations_v2": {
+                "count": 2,
+                "rowHash": "d800d1f8ec325b25bd4005d31ee8bc05674b5e66a67e2f966a2bfa30fe1e3986"
+              },
+              "research_article_input_revisions_v2": {
+                "count": 1,
+                "rowHash": "d48e44221482bfaf22b102d93643a9313a660c3f4333c6a644626bcbb4666e7e"
+              },
+              "research_source_seal_invalidations_v2": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              }
+            },
+            "syntheticControllerAndReview": true,
+            "actualReviewerModelExecuted": false,
+            "restartPreserved": true,
+            "withdrawalRejected": true,
+            "afterWithdrawalAudit": {
+              "stocks": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "logicalCharge": 168988,
+              "modelReservedSeconds": 3600,
+              "source_raw_documents": {
+                "count": 5,
+                "rowHash": "2c5f9df31fe4a100d0a3eed49d9afd5291ad4bfec85c073935de2a157b52be9d"
+              },
+              "stock_instruments_v3": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "research_deep_jobs_v1": {
+                "count": 1,
+                "rowHash": "45f0825a486afd2fe5c41d3300c26ce24f937d70f49c074c79362edb7181808f"
+              },
+              "research_source_seals_v2": {
+                "count": 1,
+                "rowHash": "09577db33f6cc544ea54d9f95cc3b8423179b55b7287cdb84d032d6e29d79ef2"
+              },
+              "research_author_results_v2": {
+                "count": 1,
+                "rowHash": "71f4665491190dc6fee439b10ea262888ed159a6095b274d7acbe12ac6ee1feb"
+              },
+              "research_reviewer_results_v2": {
+                "count": 1,
+                "rowHash": "59dbff51f091b710cb711131e43d18e8294c6ba5b4b9be9036db871ebb78e028"
+              },
+              "research_deep_job_attempts_v1": {
+                "count": 1,
+                "rowHash": "642317824d4e2c3220a0eb870afafd90254355c0f270264f4f116f0894a3cd97"
+              },
+              "research_model_completions_v1": {
+                "count": 2,
+                "rowHash": "d1ace99904bf9c9f3e7224339e07b1d6ce1ce5e98da92eafe70ba0564095057c"
+              },
+              "research_author_assignments_v2": {
+                "count": 1,
+                "rowHash": "9a4a751d140906402010c680b32c990cd23abe95429bf70a884fc5b388cad6e3"
+              },
+              "research_input_preparations_v2": {
+                "count": 1,
+                "rowHash": "36cd512f30a334e4db7e0e60fafed3b8d092e21d9ea292a342f4f72be3c8d62e"
+              },
+              "research_model_reservations_v1": {
+                "count": 2,
+                "rowHash": "f0ed1475ca38ab24153ab800789a99a11dfad3b561630876343989433a717a55"
+              },
+              "research_reviewer_assignments_v2": {
+                "count": 1,
+                "rowHash": "eaf667518105b724dc0b30b24ebe2c7aae22e13639205c623fe8e16ed68e29e3"
+              },
+              "research_execution_invocations_v2": {
+                "count": 2,
+                "rowHash": "d800d1f8ec325b25bd4005d31ee8bc05674b5e66a67e2f966a2bfa30fe1e3986"
+              },
+              "research_article_input_revisions_v2": {
+                "count": 1,
+                "rowHash": "d48e44221482bfaf22b102d93643a9313a660c3f4333c6a644626bcbb4666e7e"
+              },
+              "research_source_seal_invalidations_v2": {
+                "count": 1,
+                "rowHash": "23be95547a291a30603645418544a81582bd57108700592c92b8e754a3c818e1"
+              }
+            }
+          },
+          "reviewerAssignment": {
+            "assignmentHash": "39b48924b12d39fa645e9216adbb78fa88d073d96c3b5ed00939be8ccfa83706",
+            "reservedSeconds": 3600,
+            "additionalSeconds": 1800,
+            "syntheticControllerOnly": true,
+            "actualReviewerDispatched": false,
+            "globalSlotBlocked": true,
+            "restartPreserved": true,
+            "withdrawalRejected": true
+          },
+          "coreFingerprintBinding": {
+            "sourceCoreHash": "284921a74e8b58d75352f13608c02ff84bfce60d0c0a6c64ad14e8a97512431c",
+            "serverObservedCoreHash": "a9d36cfbab603802756fc49fe1d8c419353aa94eb650315b7a2502b7cf508dac",
+            "sourceArticleHash": "17aeb24c1b27a3db1ae9daba1ce2f8adf944902a8bd6aa7d8f85f52df0b04ca6",
+            "expectedReceiverArticleHash": "f19e8d5729a942b51321e28e80260a21cb692b01b8b83c98d5c8ef3788c28093",
+            "sourceRequestHash": "1582865ba88f200832bd949e6b37f4166af087cf5fba6a8486efe21cb66d2286",
+            "receiverRequestHash": "866d218c18b7de4767d9aa55ed7ed028763106db2e8939db756459b7fa9a235b",
+            "changedField": "calculatorExecutionHash",
+            "requestDiff": [
+              "observation.articleHash"
+            ]
+          },
+          "canonicalAndUnicodeBoundaries": {
+            "canonicalExactBytes": 65536,
+            "canonicalOverBytes": 65537,
+            "canonicalDiffersFromWire": true
+          },
+          "reviewerResultRequestCount": 49,
+          "inheritedModelReservedFlagCorrection": "Harness modelReserved:false is stale; actual synthetic rows: author + counter_review reservations2, reservedSeconds3600, completions2. No model dispatched."
+        },
+        "2383": {
+          "cohortAccounting": {
+            "total": 1978,
+            "legacySnapshotTotal": 1946,
+            "excludedTdr": 10,
+            "needsEvidence": 2,
+            "notAssessed": 1976,
+            "qualified": 0,
+            "ranked": 0
+          },
+          "readinessAttempts": [
+            {
+              "name": "prepare_research_input_v2",
+              "attempt": 1,
+              "status": 404,
+              "body": {
+                "code": "PGRST202",
+                "details": "Searched for the function public.prepare_research_input_v2 with parameter p_request or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.",
+                "hint": null,
+                "message": "Could not find the function public.prepare_research_input_v2(p_request) in the schema cache"
+              },
+              "elapsedMs": 5.868666999987909
+            },
+            {
+              "name": "prepare_research_input_v2",
+              "attempt": 2,
+              "status": 400,
+              "body": {
+                "code": "P0001",
+                "details": null,
+                "hint": null,
+                "message": "input_preparation_shape"
+              },
+              "elapsedMs": 115.14640899999358
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 1,
+              "status": 503,
+              "body": {
+                "code": "57P01",
+                "details": null,
+                "hint": null,
+                "message": "terminating connection due to administrator command"
+              },
+              "elapsedMs": 10.14265300000261
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 2,
+              "status": 200,
+              "body": [],
+              "elapsedMs": 120.68811899999855
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 1,
+              "status": 503,
+              "body": {
+                "code": "57P01",
+                "details": null,
+                "hint": null,
+                "message": "terminating connection due to administrator command"
+              },
+              "elapsedMs": 5.1225199999898905
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 2,
+              "status": 200,
+              "body": [],
+              "elapsedMs": 115.64072899999155
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 1,
+              "status": 503,
+              "body": {
+                "code": "57P01",
+                "details": null,
+                "hint": null,
+                "message": "terminating connection due to administrator command"
+              },
+              "elapsedMs": 3.896901000000071
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 2,
+              "status": 200,
+              "body": [],
+              "elapsedMs": 114.11485199999879
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 1,
+              "status": 503,
+              "body": {
+                "code": "57P01",
+                "details": null,
+                "hint": null,
+                "message": "terminating connection due to administrator command"
+              },
+              "elapsedMs": 3.9683379999914905
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 2,
+              "status": 200,
+              "body": [],
+              "elapsedMs": 116.04288799999631
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 1,
+              "status": 503,
+              "body": {
+                "code": "57P01",
+                "details": null,
+                "hint": null,
+                "message": "terminating connection due to administrator command"
+              },
+              "elapsedMs": 7.272775999997975
+            },
+            {
+              "name": "candidate_research_stock_authority_page",
+              "attempt": 2,
+              "status": 200,
+              "body": [],
+              "elapsedMs": 122.12136399999144
+            }
+          ],
+          "reviewerResult": {
+            "symbol": "2383",
+            "canonicalReviewBytes": 2368,
+            "rawReviewScalars": 22,
+            "trimmedReviewScalars": 20,
+            "resultHash": "5e291fb8b570ad5878383b585c137d764f02f1f79070e3edfe6ef1c9171109c6",
+            "logicalBytes": 113445,
+            "receivedAt": "2026-10-09T15:30:15.103352+00:00",
+            "completion": {
+              "owner": "synthetic-financial-http-owner",
+              "outcome": "completed",
+              "finished_at": "2026-10-09T15:30:15.12523+00:00",
+              "result_hash": "5e291fb8b570ad5878383b585c137d764f02f1f79070e3edfe6ef1c9171109c6",
+              "reservation_id": "00d16dd8-17b1-41ee-8e1a-246bbb54b687"
+            },
+            "stateAuditBefore": {
+              "stocks": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "logicalCharge": 101679,
+              "modelReservedSeconds": 3600,
+              "source_raw_documents": {
+                "count": 4,
+                "rowHash": "633b798f38546e61e7d200fe6937fcd0f66c655604575ae4a099cdbf567d037f"
+              },
+              "stock_instruments_v3": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "research_deep_jobs_v1": {
+                "count": 1,
+                "rowHash": "2df4abf4aea16f5c60cbf7fc1940eccd2e60c06bbb835a3416cc78615f523ec5"
+              },
+              "research_source_seals_v2": {
+                "count": 1,
+                "rowHash": "e9d927b9a4c2de43c82a77b1a73b5677cfc7e6743f101000968adb7a152b67ac"
+              },
+              "research_author_results_v2": {
+                "count": 1,
+                "rowHash": "87097356a5077ef1aa38ec1d913779a22004cf0ab5d9ca58bca8650474c2f976"
+              },
+              "research_reviewer_results_v2": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "research_deep_job_attempts_v1": {
+                "count": 1,
+                "rowHash": "48384c160729bbaf0a7a9c4912bfba50ecc166bf692fb225d799eadd06770a0f"
+              },
+              "research_model_completions_v1": {
+                "count": 1,
+                "rowHash": "987a3d86c0bd0de7350c69e67b6cd0d490dd6385d1393fb9b2772e6436adcf20"
+              },
+              "research_author_assignments_v2": {
+                "count": 1,
+                "rowHash": "fea006d05fe2d22df9307f7ccf73fec07322eeff121367288d63d1a75197b259"
+              },
+              "research_input_preparations_v2": {
+                "count": 1,
+                "rowHash": "b36b204b7b553568e4379bde9ab2bc929be175ec850c51a53bb17fc3c03cc59e"
+              },
+              "research_model_reservations_v1": {
+                "count": 2,
+                "rowHash": "69806d6f448d2c77ade5efb4c200e3a60cd777caf5db745332b2d37bcf74160f"
+              },
+              "research_reviewer_assignments_v2": {
+                "count": 1,
+                "rowHash": "5363b32bbfe13832613158ea94b0eda21e6c4df64dd1dc71c8eea338320d511f"
+              },
+              "research_execution_invocations_v2": {
+                "count": 1,
+                "rowHash": "ba8947430264814477ceca84093858cf0e34d6b176aaac4253e3060e37216a6b"
+              },
+              "research_article_input_revisions_v2": {
+                "count": 1,
+                "rowHash": "2f9aadda69fb2b5e67a4162ca7d9b2b9af6de631d706dbd6ce8c3feb9eddd12f"
+              },
+              "research_source_seal_invalidations_v2": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              }
+            },
+            "stateAuditAfter": {
+              "stocks": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "logicalCharge": 101679,
+              "modelReservedSeconds": 3600,
+              "source_raw_documents": {
+                "count": 4,
+                "rowHash": "633b798f38546e61e7d200fe6937fcd0f66c655604575ae4a099cdbf567d037f"
+              },
+              "stock_instruments_v3": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "research_deep_jobs_v1": {
+                "count": 1,
+                "rowHash": "2df4abf4aea16f5c60cbf7fc1940eccd2e60c06bbb835a3416cc78615f523ec5"
+              },
+              "research_source_seals_v2": {
+                "count": 1,
+                "rowHash": "e9d927b9a4c2de43c82a77b1a73b5677cfc7e6743f101000968adb7a152b67ac"
+              },
+              "research_author_results_v2": {
+                "count": 1,
+                "rowHash": "87097356a5077ef1aa38ec1d913779a22004cf0ab5d9ca58bca8650474c2f976"
+              },
+              "research_reviewer_results_v2": {
+                "count": 1,
+                "rowHash": "4777c78e882e2f837715ec0a9dcbd3daf9a20cd0951324fcd7ec807d5ae7dd7b"
+              },
+              "research_deep_job_attempts_v1": {
+                "count": 1,
+                "rowHash": "48384c160729bbaf0a7a9c4912bfba50ecc166bf692fb225d799eadd06770a0f"
+              },
+              "research_model_completions_v1": {
+                "count": 2,
+                "rowHash": "bda4c285952e72de8300e3fc07f118de0a49e91210e897300e6630cc6a7255c8"
+              },
+              "research_author_assignments_v2": {
+                "count": 1,
+                "rowHash": "fea006d05fe2d22df9307f7ccf73fec07322eeff121367288d63d1a75197b259"
+              },
+              "research_input_preparations_v2": {
+                "count": 1,
+                "rowHash": "b36b204b7b553568e4379bde9ab2bc929be175ec850c51a53bb17fc3c03cc59e"
+              },
+              "research_model_reservations_v1": {
+                "count": 2,
+                "rowHash": "69806d6f448d2c77ade5efb4c200e3a60cd777caf5db745332b2d37bcf74160f"
+              },
+              "research_reviewer_assignments_v2": {
+                "count": 1,
+                "rowHash": "5363b32bbfe13832613158ea94b0eda21e6c4df64dd1dc71c8eea338320d511f"
+              },
+              "research_execution_invocations_v2": {
+                "count": 2,
+                "rowHash": "707a6112b076edc83108449666936c6e5ccc2a043df41037f9544f79d1a1c852"
+              },
+              "research_article_input_revisions_v2": {
+                "count": 1,
+                "rowHash": "2f9aadda69fb2b5e67a4162ca7d9b2b9af6de631d706dbd6ce8c3feb9eddd12f"
+              },
+              "research_source_seal_invalidations_v2": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              }
+            },
+            "syntheticControllerAndReview": true,
+            "actualReviewerModelExecuted": false,
+            "restartPreserved": true,
+            "withdrawalRejected": true,
+            "afterWithdrawalAudit": {
+              "stocks": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "logicalCharge": 101679,
+              "modelReservedSeconds": 3600,
+              "source_raw_documents": {
+                "count": 5,
+                "rowHash": "597044ed232566e5fabacaf6d901b4b138e6a9846603f75fc41b7fe199f5b673"
+              },
+              "stock_instruments_v3": {
+                "count": 0,
+                "rowHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              },
+              "research_deep_jobs_v1": {
+                "count": 1,
+                "rowHash": "2df4abf4aea16f5c60cbf7fc1940eccd2e60c06bbb835a3416cc78615f523ec5"
+              },
+              "research_source_seals_v2": {
+                "count": 1,
+                "rowHash": "e9d927b9a4c2de43c82a77b1a73b5677cfc7e6743f101000968adb7a152b67ac"
+              },
+              "research_author_results_v2": {
+                "count": 1,
+                "rowHash": "87097356a5077ef1aa38ec1d913779a22004cf0ab5d9ca58bca8650474c2f976"
+              },
+              "research_reviewer_results_v2": {
+                "count": 1,
+                "rowHash": "4777c78e882e2f837715ec0a9dcbd3daf9a20cd0951324fcd7ec807d5ae7dd7b"
+              },
+              "research_deep_job_attempts_v1": {
+                "count": 1,
+                "rowHash": "48384c160729bbaf0a7a9c4912bfba50ecc166bf692fb225d799eadd06770a0f"
+              },
+              "research_model_completions_v1": {
+                "count": 2,
+                "rowHash": "bda4c285952e72de8300e3fc07f118de0a49e91210e897300e6630cc6a7255c8"
+              },
+              "research_author_assignments_v2": {
+                "count": 1,
+                "rowHash": "fea006d05fe2d22df9307f7ccf73fec07322eeff121367288d63d1a75197b259"
+              },
+              "research_input_preparations_v2": {
+                "count": 1,
+                "rowHash": "b36b204b7b553568e4379bde9ab2bc929be175ec850c51a53bb17fc3c03cc59e"
+              },
+              "research_model_reservations_v1": {
+                "count": 2,
+                "rowHash": "69806d6f448d2c77ade5efb4c200e3a60cd777caf5db745332b2d37bcf74160f"
+              },
+              "research_reviewer_assignments_v2": {
+                "count": 1,
+                "rowHash": "5363b32bbfe13832613158ea94b0eda21e6c4df64dd1dc71c8eea338320d511f"
+              },
+              "research_execution_invocations_v2": {
+                "count": 2,
+                "rowHash": "707a6112b076edc83108449666936c6e5ccc2a043df41037f9544f79d1a1c852"
+              },
+              "research_article_input_revisions_v2": {
+                "count": 1,
+                "rowHash": "2f9aadda69fb2b5e67a4162ca7d9b2b9af6de631d706dbd6ce8c3feb9eddd12f"
+              },
+              "research_source_seal_invalidations_v2": {
+                "count": 1,
+                "rowHash": "fd95eb176522dd97ac155f24bb79eff15d78121e722834397e917d0646d085cf"
+              }
+            }
+          },
+          "reviewerAssignment": {
+            "assignmentHash": "bb2a5155313d31d5be42f671e8191223555d3bdf49913581f5f0a01bcd111ee4",
+            "reservedSeconds": 3600,
+            "additionalSeconds": 1800,
+            "syntheticControllerOnly": true,
+            "actualReviewerDispatched": false,
+            "globalSlotBlocked": true,
+            "restartPreserved": true,
+            "withdrawalRejected": true
+          },
+          "coreFingerprintBinding": {
+            "sourceCoreHash": "284921a74e8b58d75352f13608c02ff84bfce60d0c0a6c64ad14e8a97512431c",
+            "serverObservedCoreHash": "a9d36cfbab603802756fc49fe1d8c419353aa94eb650315b7a2502b7cf508dac",
+            "sourceArticleHash": "16b7edd7b09e3c05a194ed75f79b135b94ba0739ad2d2a0aadc8f248606e6b80",
+            "expectedReceiverArticleHash": "ac58fe729b421b80b20e09b25d4028a9715310dd9ed3539946ba8c4e276c99c5",
+            "sourceRequestHash": "14853853d91e9d5ae6a605363b51fbf252fc6095c02cd390d1d2a361d487711d",
+            "receiverRequestHash": "cc7dd9fe5a1b6fc5628411c052c989febcc585af9838d2153f1d459495d4e415",
+            "changedField": "calculatorExecutionHash",
+            "requestDiff": [
+              "observation.articleHash"
+            ]
+          },
+          "canonicalAndUnicodeBoundaries": {
+            "canonicalExactBytes": 65536,
+            "canonicalOverBytes": 65537,
+            "canonicalDiffersFromWire": true
+          },
+          "reviewerResultRequestCount": 49,
+          "inheritedModelReservedFlagCorrection": "Harness modelReserved:false is stale; actual synthetic rows: author + counter_review reservations2, reservedSeconds3600, completions2. No model dispatched."
+        }
+      }
+    },
+    "typecheck": {
+      "exitCode": 0
+    },
+    "lint": {
+      "exitCode": 0,
+      "errors": 0,
+      "existingWarnings": 33
+    },
+    "normalBuild": {
+      "exitCode": 0
+    }
+  },
+  "measurements": {
+    "unit-pg": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "unit-pg",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-reviewer-result.test.mjs",
+        "scripts/research-reviewer-result-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:25:53.375Z",
+      "completedAt": "2026-10-09T15:26:12.249Z",
+      "elapsedSeconds": 18.87396489799721,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 183431168,
+      "observedTaskDiskPeakBytes": 957435904,
+      "availableBeforeBytes": 11454111744,
+      "availableAfterBytes": 11454078976,
+      "guardTermination": null
+    },
+    "normal-build": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T15:26:32.467Z",
+      "completedAt": "2026-10-09T15:27:11.303Z",
+      "elapsedSeconds": 38.836269713996444,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 2042396672,
+      "observedTaskDiskPeakBytes": 1270456320,
+      "availableBeforeBytes": 11454074880,
+      "availableAfterBytes": 11123154944,
+      "guardTermination": null
+    },
+    "native": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "native",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-reviewer-result-http.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:27:51.638Z",
+      "completedAt": "2026-10-09T15:30:22.763Z",
+      "elapsedSeconds": 151.12407606298802,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 658415616,
+      "observedTaskDiskPeakBytes": 1433960448,
+      "availableBeforeBytes": 11122692096,
+      "availableAfterBytes": 10985533440,
+      "guardTermination": null
+    },
+    "types": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T15:31:25.445Z",
+      "completedAt": "2026-10-09T15:31:42.597Z",
+      "elapsedSeconds": 17.152408382011345,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1379569664,
+      "observedTaskDiskPeakBytes": 1425956864,
+      "availableBeforeBytes": 10985529344,
+      "availableAfterBytes": 10985222144,
+      "guardTermination": null
+    },
+    "lint": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T15:31:42.625Z",
+      "completedAt": "2026-10-09T15:32:08.969Z",
+      "elapsedSeconds": 26.344107357988833,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 2084225024,
+      "observedTaskDiskPeakBytes": 1426268160,
+      "availableBeforeBytes": 10985218048,
+      "availableAfterBytes": 10969042944,
+      "guardTermination": null
+    }
+  },
+  "postRunIdentity": {
+    "compiledFileHashesVerified": 2076,
+    "compiledManifestSha256": "4a56ef01eb875d13e1fb049e11664401dda81557817e5b11329ac30e2fe8469a",
+    "buildId": "O-tg2b5oOSwLDS5qNilKd",
+    "liveOwnedServiceProcesses": [],
+    "runtimeSqlPackageHarnessDiffEmpty": true,
+    "sourceSubject": "9136a09a75492ced1af9ba27a922c04ad23e0c39",
+    "testSubject": "32e04015daccb8c88e278bca21dda9a470166442",
+    "testTree": "f5ce2189ee0b55a6fea5059fab3047fa5d4d8643",
+    "pgSuiteTransportDefect": {
+      "testFile": "scripts/research-reviewer-result-postgres.test.mjs",
+      "lines": "39–40",
+      "mechanism": "Large JSON SQL passed as a single execFile psql -c argv; actual Linux spawn E2BIG before query executes. No existing test modified.",
+      "firstActualError": "spawn E2BIG",
+      "laterDependentFailuresNotIndependentlyRootCaused": true,
+      "linuxPageBytes": 4096,
+      "actualHttpEnvelopeJsonBytes_notOriginalFailedArgMeasurement": 268615
+    },
+    "namespaceObserverUsed": false
+  },
+  "sourceHashes": [
+    {
+      "file": "scripts/research-reviewer-result-http.test.mjs",
+      "bytes": 53490,
+      "sha256": "f21b54d2fcd625121c0948adcc506b216d43e9952ca0338ddb5f59ad4fd931e6"
+    },
+    {
+      "file": "scripts/research-reviewer-result-http-readiness.mjs",
+      "bytes": 1462,
+      "sha256": "3952a65fd5c9e918f3873a03974c6f85e95f9321f7f9ec72affaf86178a28014"
+    },
+    {
+      "file": "scripts/research-reviewer-result-http-fixture.mjs",
+      "bytes": 235,
+      "sha256": "a06bebd4eb4a21e25270fa32131ec20ef0e6c7534501dbfaf4b6bb0c75b53be1"
+    },
+    {
+      "file": "scripts/research-reviewer-result-fixture.mjs",
+      "bytes": 5961,
+      "sha256": "3b3141e3dbecd191d9f07a3777f50c970b5c6eccdc9429d0f07a05305f93dc3d"
+    },
+    {
+      "file": "scripts/research-reviewer-result-postgres.test.mjs",
+      "bytes": 26408,
+      "sha256": "8ac9ba419accdddb8c20f3e9531daf2b7a678b2d64569c62e6a7f0cb770fc06c"
+    },
+    {
+      "file": "scripts/research-local-inbox-dataplane.mjs",
+      "bytes": 33278,
+      "sha256": "84e28ba845c852dcc50d692fd48c701c3676ee771cfc980af0680a91e909f5c5"
+    },
+    {
+      "file": "web/src/lib/research-reviewer-result.ts",
+      "bytes": 11291,
+      "sha256": "96befdc6902834b7b7c62559cea6ac7b40bc0b4ddbcaca829c1f7eff0c1a8abd"
+    },
+    {
+      "file": "web/src/lib/research-editorial-review.ts",
+      "bytes": 4124,
+      "sha256": "3e04cc1f90c58a8d5514308538b051e1f34481290d1ac6882e59bfbd2ab7a5f2"
+    },
+    {
+      "file": "migrations/20261009_research_reviewer_results_v2.sql",
+      "bytes": 28946,
+      "sha256": "af72171444c6c67a754f33099da704e78bb2d2bb7454ef356c4c8753ea26f934"
+    }
+  ],
+  "rawInventory": [
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/original-pg-red/pg.log",
+      "sourcePath": "/tmp/si-rresult-OwkYCk/pg.log",
+      "bytes": 9993918,
+      "sha256": "6263da717ba437754f1eb6c92a0206960cb314820bbac0d770bc97fafb62e85a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/compiled-server-file-manifest.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/compiled-server-file-manifest.json",
+      "bytes": 406364,
+      "sha256": "4a56ef01eb875d13e1fb049e11664401dda81557817e5b11329ac30e2fe8469a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/lint.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/lint.json",
+      "bytes": 526,
+      "sha256": "12437b4b86d174b8d732fe53f4f56015aad5c0f22b3f792485ca7c9031331ae1"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/lint.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/lint.log",
+      "bytes": 4753,
+      "sha256": "ad8c63f78b6e2415f7dedda610898a7df0a19c332b97e3a55d24f890724dac94"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/lint.time",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/lint.time",
+      "bytes": 744,
+      "sha256": "884f2ebb64d8a28b738c0742fdb6e269b9a5bb5e1e4d0195bb3c5ac8baecd265"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/acceptance-receipt.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/acceptance-receipt.json",
+      "bytes": 1751552,
+      "sha256": "027de4731deb5e61a14e5817aea1fd386aeb3ca28a319042beeb2c2fedcad3bc"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/assessments.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/assessments.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/author-packet-response.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/author-packet-response.json",
+      "bytes": 78822,
+      "sha256": "01f0d7368865659f635399ec36cbfa235ca64e8d6848d0fd4aed7f6e8726739a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/author-result-response.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/author-result-response.json",
+      "bytes": 40621,
+      "sha256": "cf1254143b42c5b163dada2871c36ae36e290e7b847f35b533085b0f169642b4"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/controller.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/controller.json",
+      "bytes": 33209,
+      "sha256": "e319080b3213a48150838526c6cce18f9c7100724ec838aca5ba239c1f7d91f9"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/financial-supplement-diagnostic.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/financial-supplement-diagnostic.json",
+      "bytes": 76944,
+      "sha256": "526001e657e092e0eae013ba5e9f555278545fc6d8f1d64299a3154ff288567c"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/journal/attempt.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/journal/attempt.json",
+      "bytes": 247,
+      "sha256": "ff3555d71a8e91748bc7c45230d74472df46f5ce2ddbbc405eb411e864936e09"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/next.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/next.log",
+      "bytes": 590,
+      "sha256": "873e908373ddb0c11fe4dc8e3f94c7f6a56f508060cf03278170fcbecc4fc273"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/observed-classification-status.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/observed-classification-status.json",
+      "bytes": 616215,
+      "sha256": "a3249fb40562540b60fb28865902ed4fe57d3efde6555602d885332374588ecc"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/pg-test-clock.rc",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/pg-test-clock.rc",
+      "bytes": 3,
+      "sha256": "bfccdd6c5c2faa710a992013eb60ebc3159d693e638b8215aaf74602a09fd058"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/postgres.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/postgres.log",
+      "bytes": 48945,
+      "sha256": "799b79c15068b90e0a5c66089fbb9bf15096043d0cde45555211fa7a33548c2f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/postgrest.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/postgrest.log",
+      "bytes": 20970,
+      "sha256": "0fcf948ecab3b217ac4179fdff49217148b37d968271b74814e799d4f2003b7a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/reviewer-result-response.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/reviewer-result-response.json",
+      "bytes": 92772,
+      "sha256": "83cc2498b37ad230831c5a4a5b65e7b69187ffd7a57e83cc749278b5867f035a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/single-core-identity-binding.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/single-core-identity-binding.json",
+      "bytes": 69272,
+      "sha256": "34a88b069b08b8162be459d06af2f1aa555d8e4afec89d5814d096f6c2aa571f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2383/source-core-counterfactual.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2383/source-core-counterfactual.json",
+      "bytes": 11003,
+      "sha256": "db8b4aafb750c4a99c66b3e9bb2115787939e72b6ef8ab6cb4b90fc51e95251a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/acceptance-receipt.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/acceptance-receipt.json",
+      "bytes": 3528613,
+      "sha256": "b901af7d4d3a319eb7fec2583eb67e640776ff013d4ae70f0b891d4ef7e53d13"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/assessments.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/assessments.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/author-packet-response.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/author-packet-response.json",
+      "bytes": 130805,
+      "sha256": "fd358be12bf0403e19b09bac1b93f9a6fa1a48286749c85d0a410ea1ffe10457"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/author-result-response.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/author-result-response.json",
+      "bytes": 60904,
+      "sha256": "fee21209a31d21e34dfc0d41e9a5a18104d507b0a0ebed128b35b1aba549ac6e"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/controller.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/controller.json",
+      "bytes": 33209,
+      "sha256": "22171a4447ce1a04062597eecca9f1304e336a5dd5138d2711d980f38e1277ed"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/financial-supplement-diagnostic.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/financial-supplement-diagnostic.json",
+      "bytes": 128920,
+      "sha256": "56e796a66487944e3692afd466de950da4eb572eec7d7e9818c42f8c3f0d1126"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/journal/attempt.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/journal/attempt.json",
+      "bytes": 247,
+      "sha256": "1df7f07b3d6c88e08edf8d1fd5eaed050cfa9e49d41030f89ebb4d553360351b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/next.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/next.log",
+      "bytes": 590,
+      "sha256": "767923917905a8e71980a5c0939be4c678c7b9835d9dd7021b4b1aaa02383c44"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/observed-classification-status.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/observed-classification-status.json",
+      "bytes": 616215,
+      "sha256": "a3249fb40562540b60fb28865902ed4fe57d3efde6555602d885332374588ecc"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/pg-test-clock.rc",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/pg-test-clock.rc",
+      "bytes": 3,
+      "sha256": "bfccdd6c5c2faa710a992013eb60ebc3159d693e638b8215aaf74602a09fd058"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/postgres.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/postgres.log",
+      "bytes": 48947,
+      "sha256": "875de1f4c074c43ef1505616a06ddb6c0cc5deaab8017cd0061ba5dff9cd0e6a"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/postgrest.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/postgrest.log",
+      "bytes": 20970,
+      "sha256": "46d81610d6f3809eb71b9d8c128477ff106ca995af0b964edddd0ac98224f180"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/reviewer-result-response.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/reviewer-result-response.json",
+      "bytes": 269086,
+      "sha256": "ecfd7583e440fb27412ca320abeb569c97a896c45f229c12d59672f7ef2b37d1"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/single-core-identity-binding.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/single-core-identity-binding.json",
+      "bytes": 109838,
+      "sha256": "9f7a28f2fba2aec4d7270764abd75da7a885c7b38c2380259205dc595f0e41d4"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native/http-2409/source-core-counterfactual.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native/http-2409/source-core-counterfactual.json",
+      "bytes": 11003,
+      "sha256": "d78945c94748bc7f039ef23516bacda39dd5c5555416ea92f8c402f7b0322118"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native.json",
+      "bytes": 705,
+      "sha256": "cc0dc1a7935af4bcc64149c675bef3f5bf351f9954244fba4a20f17535c8599d"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native.log",
+      "bytes": 24393,
+      "sha256": "01c7a609422a7c147560475da7d8291ff355888c72829f1572f09407ceb97107"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/native.time",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/native.time",
+      "bytes": 901,
+      "sha256": "989f524610778050f1f7c24bc916ba84d0d5c1c2c5b8070a7d0e6e4221535fc0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/normal-build.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/normal-build.json",
+      "bytes": 535,
+      "sha256": "e24dde1e184a3c07a7af8c4505c164c123050a8952b426dd8673b83ff2738637"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/normal-build.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/normal-build.log",
+      "bytes": 6500,
+      "sha256": "2c6f69d93fc031a292beab4588e7acdf974cb101ddbd9bd59e1e9178347f29f8"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/normal-build.time",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/normal-build.time",
+      "bytes": 749,
+      "sha256": "467cce346039548f6ac8d6f5c2e1b77a129319e0630afeafc4e97010603a9a75"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/post-run-identity.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/post-run-identity.json",
+      "bytes": 958,
+      "sha256": "f913192a681fe08abc545979b357e136df34805887e8196c2f57b696389fc0ae"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/review-result-cases.txt",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/review-result-cases.txt",
+      "bytes": 8970,
+      "sha256": "eb53b918c6005702743673ec6e68a4c45e149a91d837069e39bf39d8d387c2c8"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/run-check.py",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/run-check.py",
+      "bytes": 4847,
+      "sha256": "964161f6c2c7c9992b947d9b9d24b216f31a0538d1c8141615075bddaaa13d22"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/types.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/types.json",
+      "bytes": 532,
+      "sha256": "6227157209b32c4af136359f215db23b828cc49c401b37e55156149e1aadbee8"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/types.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/types.time",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/types.time",
+      "bytes": 746,
+      "sha256": "11c765b968b6349a63c98bccdd0571aa82be2dfabd14e4883e1bc40603fc64a5"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/unit-pg.json",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/unit-pg.json",
+      "bytes": 757,
+      "sha256": "38b4995111528d4178858e8e59fa31eeb8ae519adaa44473590503d40b5e1b91"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/unit-pg.log",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/unit-pg.log",
+      "bytes": 26958,
+      "sha256": "7b33aa031bbc258863a8c045365e0d2bc02aaa5a4b380916fc38e29e7ab3fc04"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T15-34-reviewer-result-http-vm-raw/unit-pg.time",
+      "sourcePath": "/workspace/cloud-author-packet-artifacts-oct09/rr9136/unit-pg.time",
+      "bytes": 978,
+      "sha256": "4b8c50f46b87d8c15b7190207c67c831cd45a95f7a4ded1a6222ea40211090f2"
+    }
+  ],
+  "rawTotalBytes": 18285543,
+  "credentialPatternCheck": {
+    "unredactedMatches": 0,
+    "notGeneralSecretCertification": true
+  },
+  "environment": {
+    "node": "22.14.0",
+    "pg": "17.11",
+    "postgrest": "16.3",
+    "pgClock": "Pinned official libfaketime0.9.10 -UFAKE_SLEEP, +0 PG-only; Node/psql not preloaded",
+    "guardWindow": "Both original author and counter_review reservations admitted before actual Taipei23:30; no policy/time/lease changes. Reviewer completion/read occurred later inside original deadlines.",
+    "initialFreeBytes": 12412243968,
+    "currentFreeBytes": 10950578176,
+    "diskReserveBytes": 8589934592,
+    "memoryCgroupMaxBytes": 34359738368,
+    "singleHeavyJob": true,
+    "noInstallDownloadAsrOrPaidApi": true,
+    "proxyCaPreserved": true,
+    "runtimeNetworkPolicyState": "unknown, not claimed enforced",
+    "namespaceObserverUsed": false
+  },
+  "cleanup": {
+    "ownedServicesStopped": true,
+    "clustersRetainedUntilSourceRawReceiptRemoteVerified": true,
+    "rawResearchEvidenceNotDeleted": true
+  },
+  "boundaries": {
+    "syntheticJobsSourcesCredentialsProseObservations": true,
+    "actualFixedFinancialRecalculation": true,
+    "actualAuthorModelExecuted": false,
+    "actualReviewerModelExecuted": false,
+    "publication": false,
+    "productionImported": false,
+    "protectedAttestation": false,
+    "researchQualified": false,
+    "strategyApproved": false,
+    "entryEligible": false
+  },
+  "remaining": [
+    "Independent scoped review of new owned HTTP test and actual native receipt.",
+    "Existing standalone PG test Linux E2BIG transport defect and consequent failures still RED; root-owned repair needed.",
+    "Native review-result concurrent receive is not this HTTP suite; original standalone PG concurrency failed pre-SQL E2BIG.",
+    "Actual trusted reviewer/author dispatch and publication remain unperformed.",
+    "843 diagnostic-only observer bound P2 is root-owned separate work, observer unused here."
+  ]
+}

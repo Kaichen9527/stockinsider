@@ -1,0 +1,19 @@
+# Shared read-only publication view v2
+
+Prerequisite runtime18d6, test-only successor77a84448. Implement existing spec Shared read-only display without promoting formal catalogs, research qualification, strategies or trading. The legacy AUO/EMC demonstration artifacts remain unchanged.
+
+## Controlled read
+
+Add only a service-role private bounded SELECT RPC, `read_research_company_publication_v2(uuid)`, owned by the existing observed owner. It uses a research-company identity, selects the latest accepted v2 dossier by published_at/id (including withdrawn; never silently falls back to an older positive article), binds original receipt/input/job and calls the immutable completed-publication reader using original stored role assignments. This is historical read authority, not impersonation of an HTTP request or new publish authority. The reader exposes no original canonical request, principal, work owner, observation, raw source text or credentials. No new tables, public API, queue, write/claim/reserve/finish or model work. REVOKE PUBLIC/anon/authenticated; EXEC service_role only. Existing RC/source→global locks and current invalidation state remain. Add an index on company/published_at/id for this bounded read.
+
+Projection includes only version, company/symbol, contentHash/articleHash, publishedAt, original immutable receipt IDs, state, same writer's public content/source descriptors and explicit false eligibility. No recalculated numbers separate from the published calculation. The SQL read verifies completed lineage through the existing immutable reader; the TS adapter checks closed shape, content hash, public URL safety, scalar bounds and safe structural article/tables/valuation shape. It does not claim reexecution without the private financial input. Unknown or inconsistent content fails closed.
+
+## Existing preview and shared component
+
+Extend DeepResearchView with an exclusive published-v2 prop, preserving original v1 and working-draft branches. One new reusable view renders paragraph citations, original seven-section order, conditional catalyst/order stages, same computed EPS/valuation/table numbers and folded company/financial details. Labels: 已發布研究・未取得投資資格 or 來源已撤回・需要重新審查. A negative EPS never displays an applicable P/E; uncalibrated sensitivity never becomes a target or fair price. No synthetic current quote or buy/hold decision. Show article, model and source-cutoff dates separately; missing quote snapshot is explicit. Do not display private UUIDs/hashes/controller implementation details as primary prose.
+
+Use only the EXISTING `/preview/research-working/[symbol]` route, existing demo+preview enablement, fixed AUO/EMC symbols and a closed optional researchCompanyId UUID query. With a company ID, read the controlled publication and verify returned symbol; absent/mismatched data is unavailable, never silently replaced by the working draft. Without this query retain the original artifact-only draft path. No public production stock-page integration/deploy in this slice. React escapes prose; source links use existing public URL sanitizer, no raw HTML.
+
+## Acceptance
+
+Actual PG reader NULL before publication, accepted then withdrawn state, private ACL, no writes, latest selection/fail-closed and unchanged original bytes. Unit boundary/adversarial cases for extra/private fields, hash tampering, mixed identity, unsafe URL, negative EPS/period display and exclusive view states. Existing original v1/draft render regression. SSR desktop/mobile readable tables, keyboard details and citations verified with actual compiled page and isolated native data when available; synthetic fixtures explicitly remain synthetic. Types/lint/build and independent exact review. Loopback proof is not an external Internal Browser or production deployment. Genuine author/source/review and protected main release remain separate unfinished work.

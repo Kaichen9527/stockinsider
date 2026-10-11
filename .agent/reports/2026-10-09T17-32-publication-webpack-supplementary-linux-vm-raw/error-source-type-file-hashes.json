@@ -1,0 +1,22 @@
+[
+  {
+    "file": "web/src/app/layout.tsx",
+    "bytes": 610,
+    "sha256": "429d4b4f5417fd3a4ff2f544aa5183cf6941bd556b67f06d6020f5a876afc1d7"
+  },
+  {
+    "file": "web/src/app/opportunity-v3/page.tsx",
+    "bytes": 8377,
+    "sha256": "8e409baa0434c98f4dbb37890d78a691b1a6ca36d6c697056795d763c7950026"
+  },
+  {
+    "file": "web/.next/types/app/layout.ts",
+    "bytes": 4016,
+    "sha256": "a21d13d2f96ff56cc6ddf88fb53d4bd2d96fa938ff5e7f5d73f92f05da9497fb"
+  },
+  {
+    "file": "web/.next/types/app/opportunity-v3/page.ts",
+    "bytes": 4055,
+    "sha256": "2c9db43a5aec3c90b55a2df1c6d8111dc9ea22d12134af0bf45b8d3701ab5846"
+  }
+]

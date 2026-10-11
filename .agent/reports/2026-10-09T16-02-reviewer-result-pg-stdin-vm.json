@@ -1,0 +1,637 @@
+{
+  "task": "reviewer-result standalone asynchronous psql stdin TEST-only repair",
+  "manualStartedAt": "2026-10-09T15:45:22Z",
+  "sealedAt": "2026-10-09T16:03:10.220418+00:00",
+  "manualDeadline": "2026-10-09T16:15:22Z",
+  "branch": "codex/reviewer-result-pg-stdin-oct09",
+  "testSourceHead": "68090b55f9abba9138e2238d68f3d956a21253b3",
+  "testSourceTree": "f11590e9b28ba779343d9eb320569deeec1a2355",
+  "runtimeSubject": "9136a09a75492ced1af9ba27a922c04ad23e0c39",
+  "base": "7f82f1d8adde04507744e92a0b8f1fa31b99c2ea",
+  "changedSourceFiles": [
+    {
+      "file": "scripts/research-reviewer-result-postgres.test.mjs",
+      "bytes": 26439,
+      "sha256": "bbcab988d993876131fdc0377bc95be5f6194e86e32faf44715a81bd02c7798f"
+    },
+    {
+      "file": "scripts/research-reviewer-result-psql-child-fixture.py",
+      "bytes": 708,
+      "sha256": "4b29e2a15cb9741e4cc27ebd575463520e97e33693e20ffbeb2504f97181ea98"
+    },
+    {
+      "file": "scripts/research-reviewer-result-psql-transport.mjs",
+      "bytes": 1580,
+      "sha256": "c6ffd871f7086d360ee37dfbafca694a39a3508fe532b7361bae65981ee3e6c0"
+    },
+    {
+      "file": "scripts/research-reviewer-result-psql-transport.test.mjs",
+      "bytes": 3298,
+      "sha256": "e8e422cd3352b6750745555159c6917373784fd94387027d6b0ecfba0fbad4b0"
+    }
+  ],
+  "runtimeSqlGuardSharedHarnessPackageDelta": [],
+  "assertionFixtureIntegrity": {
+    "sourceHead": "737dc39ef64eab7e5dd192a3e9258b46362e7e78",
+    "sourceTree": "62643f8b4814709077bfe19d5fd27e243b201538",
+    "base": "7f82f1d8adde04507744e92a0b8f1fa31b99c2ea",
+    "runtimeSubject": "9136a09a75492ced1af9ba27a922c04ad23e0c39",
+    "originalPgTestSha256": "8ac9ba419accdddb8c20f3e9531daf2b7a678b2d64569c62e6a7f0cb770fc06c",
+    "fixedPgTestSha256": "bbcab988d993876131fdc0377bc95be5f6194e86e32faf44715a81bd02c7798f",
+    "inverseTransportOnlyEditsReconstructOriginalExactBytes": true,
+    "protectedDiff": [],
+    "buildId": "VgxsCUs6U5PiUQWYXeZia",
+    "compiledManifestEntries": 2076,
+    "validationTestHead": "68090b55f9abba9138e2238d68f3d956a21253b3",
+    "validationTestTree": "f11590e9b28ba779343d9eb320569deeec1a2355",
+    "buildSourceHead": "737dc39ef64eab7e5dd192a3e9258b46362e7e78",
+    "buildSourceTree": "62643f8b4814709077bfe19d5fd27e243b201538",
+    "buildRuntimeChangedByFinalExtraTest": false
+  },
+  "limits": {
+    "sqlUtf8InputBytes": 4194304,
+    "originalChildTimeoutMs": 6000,
+    "originalEachOutputCapBytes": 1048576,
+    "transport": "stdin; no SQL argv member; error/exit/pipe failures reject; exact RPC SQL construction unchanged"
+  },
+  "originalRed": {
+    "tests": 25,
+    "pass": 20,
+    "fail": 5,
+    "skip": 0,
+    "firstFailures": "spawn E2BIG in concurrent receive and role read/replay; later invocation/read negatives depended on missing accepted review state",
+    "sourceFileSha256": "8ac9ba419accdddb8c20f3e9531daf2b7a678b2d64569c62e6a7f0cb770fc06c"
+  },
+  "newRed": {
+    "transportSyntheticChildInitial": {
+      "nodeChildFixture": "5 failures under sandbox; stdout unavailable/pipe errors; historical mechanism not proven; preserved raw; replaced own synthetic transport child with explicit Python file, no product/test fixture semantic changes"
+    },
+    "sandboxRun": {
+      "tests": 11,
+      "pass": 10,
+      "fail": 1,
+      "error": "initdb EPERM before PG fixture/assertions",
+      "runner": "experimental-test-isolation=none; preserved raw; authorized original isolation command used subsequently"
+    },
+    "closedWindowRun": {
+      "tests": 11,
+      "pass": 10,
+      "fail": 1,
+      "error": "assert.ok(assignment) before 14 PG child cases; actual DB fits30MinuteLease=false",
+      "counterfactual": "Not E2BIG; no clocks/guard/leases changed"
+    },
+    "startupOnly": {
+      "startupOnlyFailure": "The launch helper asserted remaining >= 0, but approval latency crossed 16:00Z before execution. Assertion failed before starting any PG or running SQL/tests. No business attempt occurred.",
+      "startupExitCode": 1,
+      "error": "AssertionError",
+      "nextAction": "Read actual DB clock and execute the single permitted open-window suite."
+    }
+  },
+  "green": {
+    "transportUnit": {
+      "tests": 10,
+      "pass": 10,
+      "fail": 0,
+      "skip": 0
+    },
+    "originalStandalone": {
+      "tests": 25,
+      "pass": 25,
+      "fail": 0,
+      "skip": 0,
+      "composition": "10 pure unit cases + real PG parent and 14 PG child cases",
+      "actualSameOriginalCommand": true,
+      "singleOpenWindowAttempt": true
+    }
+  },
+  "naturalClockAudit": {
+    "closed": {
+      "dbClock": "2026-10-09T15:55:18.888192+00:00",
+      "assignments": 0,
+      "completions": 2,
+      "taipeiClock": "2026-10-09T23:55:18.888192",
+      "reservations": 2,
+      "reservedSeconds": 3600,
+      "fits30MinuteLease": false,
+      "completionRowsHash": "f67bc2813b7985a7e2bf61cc46b6c9dc",
+      "reservationRowsHash": "fb17f5dfab10a336db9e05ff5607113d"
+    },
+    "open": {
+      "dbClock": "2026-10-09T16:00:31.679811+00:00",
+      "assignments": 0,
+      "completions": 2,
+      "taipeiClock": "2026-10-10T00:00:31.679811",
+      "reservations": 2,
+      "reservedSeconds": 3600,
+      "fits30MinuteLease": true,
+      "completionRowsHash": "f67bc2813b7985a7e2bf61cc46b6c9dc",
+      "reservationRowsHash": "fb17f5dfab10a336db9e05ff5607113d"
+    },
+    "reservationCompletionBytesHashesUnchanged": true,
+    "clockModification": false,
+    "preload": false,
+    "waitingIsNotCiFix": true
+  },
+  "build": {
+    "normalCommand": "npm run build",
+    "sourceHead": "737dc39ef64eab7e5dd192a3e9258b46362e7e78",
+    "buildId": "VgxsCUs6U5PiUQWYXeZia",
+    "serverManifestFile": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/compiled-server-file-manifest.json",
+    "serverManifestEntries": 2076,
+    "verifiedAfterPgSuite": true,
+    "final680DiffOnlyAddsTestCase": true,
+    "businessHttpRerun": false,
+    "typesLint": "No separate full types/lint suites repeated; normal build ran TypeScript; new JS syntax checks passed."
+  },
+  "stages": {
+    "transport-unit-python": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "transport-unit-python",
+      "command": [
+        "node",
+        "--test",
+        "--experimental-test-isolation=none",
+        "--test-reporter=tap",
+        "scripts/research-reviewer-result-psql-transport.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:52:24.735Z",
+      "completedAt": "2026-10-09T15:52:25.206Z",
+      "elapsedSeconds": 0.47012587799690664,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 52228096,
+      "observedTaskDiskPeakBytes": 1305325568,
+      "availableBeforeBytes": 11077758976,
+      "availableAfterBytes": 11077750784,
+      "guardTermination": null
+    },
+    "original-unit-pg": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "original-unit-pg",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--experimental-test-isolation=none",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-reviewer-result.test.mjs",
+        "scripts/research-reviewer-result-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:52:34.727Z",
+      "completedAt": "2026-10-09T15:52:40.539Z",
+      "elapsedSeconds": 5.811293584003579,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 157937664,
+      "observedTaskDiskPeakBytes": 1305341952,
+      "availableBeforeBytes": 11077701632,
+      "availableAfterBytes": 11077689344,
+      "guardTermination": null
+    },
+    "transport-unit-authorized": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "transport-unit-authorized",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "scripts/research-reviewer-result-psql-transport.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:54:24.667Z",
+      "completedAt": "2026-10-09T15:54:25.133Z",
+      "elapsedSeconds": 0.4664141650137026,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 75419648,
+      "observedTaskDiskPeakBytes": 1305370624,
+      "availableBeforeBytes": 11077685248,
+      "availableAfterBytes": 11077677056,
+      "guardTermination": null
+    },
+    "normal-build": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T15:54:25.160Z",
+      "completedAt": "2026-10-09T15:54:31.984Z",
+      "elapsedSeconds": 6.823931035003625,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 906309632,
+      "observedTaskDiskPeakBytes": 1305382912,
+      "availableBeforeBytes": 11077672960,
+      "availableAfterBytes": 11074772992,
+      "guardTermination": null
+    },
+    "transport-unit-final": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "transport-unit-final",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "scripts/research-reviewer-result-psql-transport.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:57:27.957Z",
+      "completedAt": "2026-10-09T15:57:28.571Z",
+      "elapsedSeconds": 0.6134525919915177,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 78151680,
+      "observedTaskDiskPeakBytes": 1308708864,
+      "availableBeforeBytes": 11074322432,
+      "availableAfterBytes": 11074314240,
+      "guardTermination": null
+    },
+    "transport-unit": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "transport-unit",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "scripts/research-reviewer-result-psql-transport.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:49:56.885Z",
+      "completedAt": "2026-10-09T15:49:57.498Z",
+      "elapsedSeconds": 0.6130689469864592,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 94961664,
+      "observedTaskDiskPeakBytes": 1305264128,
+      "availableBeforeBytes": 11077820416,
+      "availableAfterBytes": 11077812224,
+      "guardTermination": null
+    },
+    "transport-file-diagnostic": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "transport-file-diagnostic",
+      "command": [
+        "node",
+        "scripts/research-reviewer-result-psql-transport.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:51:24.575Z",
+      "completedAt": "2026-10-09T15:51:25.180Z",
+      "elapsedSeconds": 0.6049690639774781,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 43839488,
+      "observedTaskDiskPeakBytes": 1305309184,
+      "availableBeforeBytes": 11077775360,
+      "availableAfterBytes": 11077763072,
+      "guardTermination": null
+    },
+    "original-unit-pg-authorized": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "original-unit-pg-authorized",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-reviewer-result.test.mjs",
+        "scripts/research-reviewer-result-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:53:08.932Z",
+      "completedAt": "2026-10-09T15:53:16.663Z",
+      "elapsedSeconds": 7.731275703001302,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 173846528,
+      "observedTaskDiskPeakBytes": 1305358336,
+      "availableBeforeBytes": 11077701632,
+      "availableAfterBytes": 11077689344,
+      "guardTermination": null
+    },
+    "original-unit-pg-open-window": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "original-unit-pg-open-window",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "scripts/research-reviewer-result.test.mjs",
+        "scripts/research-reviewer-result-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T16:00:31.809Z",
+      "completedAt": "2026-10-09T16:00:53.356Z",
+      "elapsedSeconds": 21.546409759001108,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 206356480,
+      "observedTaskDiskPeakBytes": 1308762112,
+      "availableBeforeBytes": 11074293760,
+      "availableAfterBytes": 11074265088,
+      "guardTermination": null
+    },
+    "transport-diagnostic": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "transport-diagnostic",
+      "command": [
+        "node",
+        "scripts/research-reviewer-result-psql-transport.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:50:03.029Z",
+      "completedAt": "2026-10-09T15:50:03.497Z",
+      "elapsedSeconds": 0.4685534840100445,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 67149824,
+      "observedTaskDiskPeakBytes": 1305276416,
+      "availableBeforeBytes": 11077808128,
+      "availableAfterBytes": 11077795840,
+      "guardTermination": null
+    },
+    "transport-unit-file": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "transport-unit-file",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "scripts/research-reviewer-result-psql-transport.test.mjs"
+      ],
+      "startedAt": "2026-10-09T15:51:18.141Z",
+      "completedAt": "2026-10-09T15:51:18.755Z",
+      "elapsedSeconds": 0.6137889940000605,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 100438016,
+      "observedTaskDiskPeakBytes": 1305296896,
+      "availableBeforeBytes": 11077787648,
+      "availableAfterBytes": 11077779456,
+      "guardTermination": null
+    }
+  },
+  "resources": {
+    "initialAvailableBytes": 11077849088,
+    "finalAvailableBytes": 11073585152,
+    "minimumDiskReserveBytes": 8589934592,
+    "sampledPeakAggregateRssBytes": 906309632,
+    "rssLimitBytes": 8589934592,
+    "samplingLimit": "100ms process group plus recursive live descendants may miss short/reparented processes; not a complete cgroup peak",
+    "singleHeavyWork": true
+  },
+  "cleanup": {
+    "observedAt": "2026-10-09T16:03:10.217864+00:00",
+    "ownedPgProcesses": [],
+    "preservedRedClusters": [
+      {
+        "path": "/tmp/si-rresult-OwkYCk/pg",
+        "postmasterPidExists": false
+      },
+      {
+        "path": "/tmp/si-rresult-H4RTT0/pg",
+        "postmasterPidExists": false
+      }
+    ],
+    "greenCleanup": "Original unchanged finally stops owned cluster and removes it when all child cases pass. Successful random leaf name is not logged; no active owned PG process remains.",
+    "deletedByThisTaskOutsideOriginalGreenCleanup": [],
+    "availableBytes": 11073585152
+  },
+  "raw": [
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/cleanup.json",
+      "bytes": 571,
+      "sha256": "f1cd77d0f53f05e1bd54c93b6f52cfbdbd6f714cb00bf39956691716cda1a918"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/closed-window-original-pg.log",
+      "bytes": 617,
+      "sha256": "62e4bb3844e805794b4e48b50590aceb105491fea584394d7f6ae07b25e568af"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/closed-window-read-pg.log",
+      "bytes": 1451,
+      "sha256": "4c4821fc88af091417df3080250ba14e38455ede5f6d11e8320fe81f8e9d7321"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/closed-window-read-sql.txt",
+      "bytes": 878,
+      "sha256": "f713f8e31509db1a594bdf3909944a5a6a91f7852f61882c701d33ba5ac469b7"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/closed-window-read.log",
+      "bytes": 617,
+      "sha256": "abe1c4159f3525611fbd8809a7597a03e1f4a499cfc86c6be89cfea85b24ddf2"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/compiled-server-file-manifest.json",
+      "bytes": 397640,
+      "sha256": "e20cf7fc88324467adfad8fc9b925750ec57f57a69af4f98a21e407447d98899"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/natural-window-launch-note.json",
+      "bytes": 364,
+      "sha256": "29c869fe014bd5058ba97f56cbf90e69fef08206e1e84d838041da6e49f48305"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/normal-build.json",
+      "bytes": 533,
+      "sha256": "0866ce9a878ea9e982b8c716adea3122468fe49e0bdce97cf26e184e0545e97b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/normal-build.log",
+      "bytes": 6499,
+      "sha256": "b8eb2044ae80e47093f2d491dc46c86603716c259591aebfd4f8e75cd16cd51d"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/normal-build.time",
+      "bytes": 746,
+      "sha256": "825f821b071540a5cf4d47fbe04e7a3d2fd00ae7acb39fc09e02db43adcd97fc"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/open-window-read-pg.log",
+      "bytes": 1306,
+      "sha256": "fca3cd2be68c7f5d84d11b9df4878b84370949f1b56a48ace08dbc53a1e46043"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/open-window-read.log",
+      "bytes": 616,
+      "sha256": "ad260db6542cc4a4a8d281a43f9f75efee4a85bde8fe93cbf8602fe4aef3278d"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/open-window-read.py",
+      "bytes": 1083,
+      "sha256": "43532a2cb9636e4064ac1de709d8c411630dc715d1f60e929f7baa7dc7477297"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-E2BIG-unit-pg.json",
+      "bytes": 757,
+      "sha256": "38b4995111528d4178858e8e59fa31eeb8ae519adaa44473590503d40b5e1b91"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-E2BIG-unit-pg.log",
+      "bytes": 26958,
+      "sha256": "7b33aa031bbc258863a8c045365e0d2bc02aaa5a4b380916fc38e29e7ab3fc04"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-unit-pg-authorized.json",
+      "bytes": 735,
+      "sha256": "c7047c322feab480227fb9046883224f3c83f9e5840bfcfc473bacf3757d0593"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-unit-pg-authorized.log",
+      "bytes": 4568,
+      "sha256": "b4f038929e3e71a4f787c12f242b6d8b379370609cb5f54743b16726f02e0aee"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-unit-pg-authorized.time",
+      "bytes": 934,
+      "sha256": "f7a8427d69be5c7e607a83bab3265c81762fee63ce5c96b3fcb79efbe22fcc62"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-unit-pg-open-window.json",
+      "bytes": 737,
+      "sha256": "de2567eb8c7e711ae2220807d0dc329b7f71aefb6fc6162037cbbc5ce2004a97"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-unit-pg-open-window.log",
+      "bytes": 22567,
+      "sha256": "b8931fb5c38ca3cbbd7fcff6fcb3aec82a36ce85e2dd5e990e85b63a51ef940b"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-unit-pg-open-window.time",
+      "bytes": 897,
+      "sha256": "d59a3fc5c06bf7fe835f15b7fdb1aac6c63b0de2b02694cbef8fdca8b16b3036"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-unit-pg.json",
+      "bytes": 766,
+      "sha256": "797dd1958bcc4ef5ab4d86a93c7c9a1f1c0621660b62a02a24610259cd3c86f5"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-unit-pg.log",
+      "bytes": 4240,
+      "sha256": "933fe25f366d7e305df4682457ad94208cb833355d1cea753835c09ed5e09ed9"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/original-unit-pg.time",
+      "bytes": 970,
+      "sha256": "0ccc9747a29a0005681eb472c3ddade408aed72203a6b0c62d2f838c6545d504"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/run-check.py",
+      "bytes": 4849,
+      "sha256": "76c3787e3f8f34a47a76c7b003c4fa24ffd5fca1c4978c168300f69da4c87ac0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/scope-proof.json",
+      "bytes": 902,
+      "sha256": "a49b129965a29ce60e74144fcb91489799c6a4a46aecad0b72d19bc51e13fd2f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-diagnostic.json",
+      "bytes": 582,
+      "sha256": "a1d0375c572220085c0c5f712b87137b49f4ec4f312519c203329709105acaa9"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-diagnostic.log",
+      "bytes": 4736,
+      "sha256": "4019e3783cc63764fc4c9e788424dd2cf49d02266365151db294a338c0a8daef"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-diagnostic.time",
+      "bytes": 819,
+      "sha256": "2f847bf9c73d0f91a8258c4f3a3092d7f861d4b25a8328df3b94b42a68cf7f7c"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-file-diagnostic.json",
+      "bytes": 587,
+      "sha256": "b9365880a8d6e53c2a4fa9a6165f37e550a595db7b433d2406e40356567c3cb7"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-file-diagnostic.log",
+      "bytes": 4736,
+      "sha256": "0dd035f9369303948bb0440168e6fe802063f4b4d81fab9cce5aeb387e628576"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-file-diagnostic.time",
+      "bytes": 819,
+      "sha256": "502b3523e2493fef3f03d7b4352bde505b2bb846309884c9405cffc75829b39f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-authorized.json",
+      "bytes": 628,
+      "sha256": "1dd920c0b4da88f23c30f4000539fd3b8fac5d2cf3ec47ee1d1d5d48429b3a16"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-authorized.log",
+      "bytes": 1737,
+      "sha256": "38954955db9ac8f592dea0a66c05a37905601f0bdec7c1bb74a4cfb4d7c04a18"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-authorized.time",
+      "bytes": 807,
+      "sha256": "402e46085851b1604a3f93b4438bc521eba1d9c76f83199d56a5ff9c474978c1"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-file.json",
+      "bytes": 623,
+      "sha256": "687d8d674b69327b39dce10b6b8786667665c0cdb6e7c03703c2f821eeaa54a6"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-file.log",
+      "bytes": 524,
+      "sha256": "3eac8a7e8271d8e2ec2ff12770291a525dc7a6d70231f4489ea8f578bc6ec508"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-file.time",
+      "bytes": 845,
+      "sha256": "19e6bdd1c62f26f1307c961313ffcc100aab73801136bbe2e967add540ddf782"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-final.json",
+      "bytes": 623,
+      "sha256": "9b3fee6f2d06b829884631ec18bcec9cfe3f56f320429d1190576dc1d4e300ff"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-final.log",
+      "bytes": 1929,
+      "sha256": "3984e0ad8e7011f536f4adf2cf34496dab7b4914b7c4832c918f58758c9f12c0"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-final.time",
+      "bytes": 807,
+      "sha256": "f9ae0dccf1784f4fddc91d07db5e185a6d851797189fa822f7243b7f1bee82bc"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-python.json",
+      "bytes": 667,
+      "sha256": "eb1fb4f01d6fbb15deca7672ae9faef6f8e181f862ec5c40d1086af459f09c73"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-python.log",
+      "bytes": 1736,
+      "sha256": "75541721becdd57cab5fcafd5ce645b1a9ef8d6cdd14f68c420098fe657f22d9"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit-python.time",
+      "bytes": 842,
+      "sha256": "3f92148241dd7544fb4ae1847e3b159514bcc87acdc42ea92fe11c6fb74dea95"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit.json",
+      "bytes": 617,
+      "sha256": "3eeb363e3ee03df470c5214fd9342db43b14ecbd75c1ce0774eb13ee6c047793"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit.log",
+      "bytes": 523,
+      "sha256": "feb9b4543fed01135127e89e28384aa59dd601baac15875900da887d83f70a5f"
+    },
+    {
+      "file": ".agent/reports/2026-10-09T16-02-reviewer-result-pg-stdin-vm-raw/transport-unit.time",
+      "bytes": 845,
+      "sha256": "bcbd315a810864065f99e74f8430aa9607aae540c9427b9654e5af0791225a6b"
+    }
+  ],
+  "rawTotalBytes": 508833,
+  "claims": {
+    "syntheticFixture": true,
+    "actualFixedFinancialComputation": true,
+    "actualModelExecution": false,
+    "publication": false,
+    "deployment": false,
+    "productionDb": false,
+    "independentReview": "pending root review",
+    "manualTimeIsModelBudgetEvidence": false
+  }
+}

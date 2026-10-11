@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-11T04:41:39.343334+00:00",
+  "activeRelevantProcesses": [],
+  "historicalDefunctProcessCountsExcludedFromActive": {
+    "postgres": 683,
+    "node": 86
+  },
+  "stageObservedChildrenRemaining": [],
+  "stoppedOwnedClusters": true,
+  "cleanupBasis": "Both stage wrappers observed no remaining descendants; /proc final inventory has no live Node/PostgreSQL/PostgREST/npm/compiler processes. Tests execute original teardown. No additional removal or global prune.",
+  "retainedUniqueEvidence": true,
+  "credentialFixtureDirectoriesNotExported": true,
+  "diskAvailableBytes": 10081730560
+}

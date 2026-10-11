@@ -1,0 +1,6 @@
+{
+  "recordedAt": "2026-10-09T17:59:25.704919+00:00",
+  "path": "/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-research-release-q2mTjA",
+  "removed": true,
+  "reason": "Mac-only rebuildable smoke package; full release manifest and compiler/source identities retained; no open files after owned server stop"
+}

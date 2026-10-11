@@ -1,0 +1,6 @@
+{
+  "schema": "stockinsider-continuation-acquisition-v1",
+  "request_id": "20260925-chat-continuation-exact-input-recovery-01",
+  "expires_at": "2026-09-26T12:00:00Z",
+  "scope": "frozen_2018_2023_inputs_and_supplied_company_identities_only"
+}

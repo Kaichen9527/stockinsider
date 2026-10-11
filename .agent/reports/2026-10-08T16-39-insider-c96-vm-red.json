@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "insider-snapshot-c96-vm-acceptance-v1",
+  "recordedAt": "2026-10-08T16:41:20.904555+00:00",
+  "subject": "c96f29119c9019348688d5240f35943c3ec61b10",
+  "subjectTreeModified": false,
+  "runtime": {
+    "node": "22.14.0",
+    "postgres": "17.11",
+    "platform": "Linux",
+    "modelCalls": 0,
+    "credentialsRead": false
+  },
+  "nativePostgres": {
+    "tests": 16,
+    "pass": 7,
+    "fail": 9,
+    "skip": 0,
+    "rootError": "missing FROM-clause entry for table admit_insider_snapshot_v1",
+    "statement": "UPDATE public.insider_acquisitions_v1 SET snapshot_id=admit_insider_snapshot_v1.snapshot_id,resolved_at=clock_timestamp() WHERE id=p_token"
+  },
+  "linuxJournal": {
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "skip": 0,
+    "transport": "test-injected local response, not actual guarded Next/PostgREST"
+  },
+  "measurements": {
+    "pg-native": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-native",
+      "command": [
+        "node",
+        "--test",
+        "scripts/research-insider-snapshot-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-08T16:38:11.046Z",
+      "completedAt": "2026-10-08T16:38:15.799Z",
+      "elapsedSeconds": 4.75370966400078,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 151539712,
+      "observedTaskDiskPeakBytes": 82403328,
+      "availableBeforeBytes": 21019271168,
+      "availableAfterBytes": 21012656128,
+      "guardTermination": null
+    },
+    "linux-journal": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "linux-journal",
+      "command": [
+        "node",
+        "--test",
+        "scripts/research-insider-journal-linux.test.mjs"
+      ],
+      "startedAt": "2026-10-08T16:39:29.415Z",
+      "completedAt": "2026-10-08T16:39:29.653Z",
+      "elapsedSeconds": 0.2378623529948527,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 59183104,
+      "observedTaskDiskPeakBytes": 40349696,
+      "availableBeforeBytes": 21012590592,
+      "availableAfterBytes": 21012582400,
+      "guardTermination": null
+    }
+  },
+  "evidenceHashes": {
+    "pg-native.json": {
+      "bytes": 577,
+      "sha256": "66944e3a6d53c9b765576ad788db5ab875cd1572a1f1c7c208d3ae0613d07950"
+    },
+    "pg-native.log": {
+      "bytes": 15274,
+      "sha256": "adb0b39ca7f366da2fa9bb391c0a395d4c198588a648e584cec792991b6802d6"
+    },
+    "pg-native.time": {
+      "bytes": 827,
+      "sha256": "7958711710d8ded591cd70cdaebf85f3660bbd6bbddb8c8d9a0a5506e50fed61"
+    },
+    "linux-journal.json": {
+      "bytes": 578,
+      "sha256": "26f7f7f98d7f828d5a4c791244dbf30339fb058b0c50e665eb223d32b59463c1"
+    },
+    "linux-journal.log": {
+      "bytes": 389,
+      "sha256": "79883f908cd5c8635d106e83723a76cdebed10bc3d9ecd9972e7dcf43bc4f386"
+    },
+    "linux-journal.time": {
+      "bytes": 780,
+      "sha256": "9c8750558c1e0823cbd2c0ec6028b0fd298e51e61e7b2b1e16d655e1f5fcbf85"
+    }
+  },
+  "sourceHashes": {
+    "migrations/20261008_insider_snapshots_v1.sql": "02347e0b0c2bd0f2ded14b7f2a2a708b3490f020c682b04c9f800ca6b1c35265",
+    "scripts/research-insider-snapshot-postgres.test.mjs": "f19e17d0c25d48b0b09d6d6f9671555a9a4610380c5e55207131f8e5f5bd75e0",
+    "scripts/research-insider-journal-linux.test.mjs": "d58b6c7532c3687383db1bd3a1eec249494a2eee9f15fc5d7504e22bdea25142"
+  },
+  "limits": [
+    "Fresh narrow disposable fixture, not full production ACL or guarded HTTP",
+    "Owned cluster stopped and removed; PG log preserved",
+    "Worker retains code ownership; no fix or activation made",
+    "Prior light approval is not actual PG acceptance",
+    "Maximum raw/base64 transport acceptance remains pending worker"
+  ]
+}

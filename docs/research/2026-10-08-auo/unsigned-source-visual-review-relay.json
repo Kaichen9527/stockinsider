@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "unsigned-source-visual-review-relay-v1",
+  "recordedAt": "2026-10-08T07:14:24.519962+00:00",
+  "reportedBy": "source thread delegation",
+  "reviewer": "independent Astra reviewer",
+  "scope": "Visually inspect four official PDF P1s and confirm eight-quarter root-relayed figures, repeated comparative columns and signs. Retain printed1million differences.",
+  "result": "origin source values confirmed as relayed",
+  "exactDatasetCommitReviewed": false,
+  "datasetCommitAwaitingComparison": "debed842cbc432ef62f8915eea085d6d9f1b66fe",
+  "investmentThesisApproval": false,
+  "protectedAttestation": false,
+  "sourcePdfLocations": "Mac research evidence directory; not transferred to VM",
+  "reportedPdfTotalBytes": 3320065,
+  "sumOfRelayedByteCounts": 3320065,
+  "sourceByteHashesVerifiedByVm": false,
+  "note": "Separate source-value review only; not unsigned code review of PR304, research qualification or publication approval."
+}

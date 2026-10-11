@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "stockinsider-social-surface-observation-v1",
+  "recordedAt": "2026-10-08T09:12:47.924524+00:00",
+  "platform": "threads",
+  "method": "existing_logged_in_browser_public_content_only",
+  "credentialsExported": false,
+  "privateContentRead": false,
+  "scope": "InvestAnchors profile, two observed post permalinks, one publicly displayed reply; no full platform search",
+  "timedRead": {
+    "attemptedAt": "2026-10-08T09:10:50.843Z",
+    "observedAt": "2026-10-08T09:10:50.932Z",
+    "readSurface": "https://www.threads.com/@gooptions/post/DdngHBpkoGb",
+    "parentCanonicalUrl": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+    "parentAuthor": "investanchors",
+    "parentPublishedAtDom": "2026-09-18T05:52:39.000Z",
+    "parentVisibleDate": "09/18/26",
+    "parentSummary": "定錨指出CPO光引擎良率需要檢測；測試流程與供應鏈尚在定義，掌握規格可能形成機會。",
+    "subjectScope": "industry_context",
+    "symbols": [],
+    "industryTerms": [
+      "CPO",
+      "光引擎",
+      "測試流程"
+    ],
+    "ownReplyStatus": "post_not_available",
+    "ownReplyCanonicalUrl": "https://www.threads.com/@gooptions/post/DdngHBpkoGb"
+  },
+  "earlierObservedSurfaceNotes": [
+    {
+      "url": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+      "status": "initial_public_body_visible_then_post_not_available",
+      "exactReadClockNotCaptured": true,
+      "replyScope": "one public reply visible; some additional replies unavailable",
+      "replyPublishedAtDom": "2026-09-23T04:56:05.000Z",
+      "replySummary": "公開回覆提出翹曲、共面精度及光纖對位可能影響CPO封裝良率。"
+    },
+    {
+      "url": "https://www.threads.com/@investanchors/post/DdRGpqRGHyS",
+      "status": "initial_public_body_visible_then_post_not_available",
+      "exactReadClockNotCaptured": true,
+      "summary": "定錨討論AI探針數、大電流、MEMS與維修耗材需求；未確認直接受惠公司。",
+      "publishedAt": null
+    }
+  ],
+  "availabilityConclusion": "partial_and_surface_conflicting; not proof of publisher withdrawal and not no-news",
+  "publicationUsable": false,
+  "historicalPITEligible": false,
+  "allRepliesRead": false,
+  "platformFullyEnabled": false,
+  "independentCompanyOrderConfirmations": 0,
+  "notes": [
+    "Only necessary public paraphrases and source URLs; no member links opened, private messages read, viewer identity or session credentials exported.",
+    "Visible local date may differ by UI timezone; retain literal DOM UTC instant without inferring local timezone.",
+    "Retain initial observation and later access gaps separately; do not falsely mark a confirmed withdrawal."
+  ]
+}

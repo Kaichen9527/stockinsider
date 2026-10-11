@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "source-fence-review-repair-v1",
+  "recordedAt": "2026-10-09T04:22:08.692011+00:00",
+  "reviewSubject": "6b49b8a1bb1adb6b2bde7b9804b283b135ba6d7e",
+  "reviewKind": "root-relayed independent actual isolated PG REQUEST_CHANGES, not protected evidence",
+  "repairs": [
+    "BEFORE shared lock / AFTER actual mutation record, preserve conflict/no-op replay",
+    "original-only source seals; any non-self parent chain fails closed until full immutable ancestor closure exists",
+    "write, after-record, seal and private assertion require READ COMMITTED; RR/serializable rejected before source lock"
+  ],
+  "files": [
+    {
+      "path": "migrations/20261009_research_publication_source_fence_v2.sql",
+      "bytes": 12454,
+      "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621"
+    },
+    {
+      "path": "scripts/research-publication-source-fence-postgres.test.mjs",
+      "bytes": 12098,
+      "sha256": "9339af99f3c0f1b1029b3b9aea6e9c8447aa8819a8cf1c5abe7a520eec4b7e47"
+    }
+  ],
+  "red": {
+    "stage": "source-fence-review-red-final",
+    "sqlSubject": "6b49b8a1",
+    "pass": 8,
+    "fail": 7,
+    "skip": 0,
+    "actualRR": {
+      "writerExit": 0,
+      "invalidationCount": 0,
+      "ownerAssertAccepted": true
+    },
+    "failureCountMeaning": "six failed subtests plus aggregate parent; includes exact replay and downstream affected assertions, not seven independently discovered defects"
+  },
+  "green": {
+    "stage": "source-fence-review-green-final",
+    "pass": 15,
+    "fail": 0,
+    "skip": 0,
+    "actualRRWriterExit": 3,
+    "error": "source_fence_read_committed_required"
+  },
+  "preservedOtherRuns": [
+    "source-fence-replay-red",
+    "source-fence-replay-green",
+    "source-fence-review-red",
+    "source-fence-review-red-exact"
+  ],
+  "measurementLabelCorrection": "source-fence-review-red-exact actually used repaired default SQL because wrapper only selected old subject for exact label source-fence-review-red; it is a green run. Final red-final explicitly used old Git SQL and final green used current SQL. All logs retained. Earlier red restart literal row count was incidental and replaced by before/after preservation.",
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "source-fence-replay-red",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/research-publication-source-fence-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:15:32.821Z",
+      "completedAt": "2026-10-09T04:15:35.086Z",
+      "elapsedSeconds": 2.2649774349993095,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 122630144,
+      "observedTaskDiskPeakBytes": 2024828928,
+      "availableBeforeBytes": 19957202944,
+      "availableAfterBytes": 19957186560,
+      "guardTermination": null,
+      "logSha256": "2163dec95333cc5bca44821bc3cfdbf72f04ce115134ff8cba2ca60c8f7d0d71"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "source-fence-replay-green",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/research-publication-source-fence-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:16:13.470Z",
+      "completedAt": "2026-10-09T04:16:15.938Z",
+      "elapsedSeconds": 2.468447423016187,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 114262016,
+      "observedTaskDiskPeakBytes": 2024841216,
+      "availableBeforeBytes": 19957182464,
+      "availableAfterBytes": 19957161984,
+      "guardTermination": null,
+      "logSha256": "5242731b68d87081b81313c52205c62116ff53dcf683fe03a55f0d68112fd016"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "source-fence-review-red-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/research-publication-source-fence-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:19:57.071Z",
+      "completedAt": "2026-10-09T04:20:00.113Z",
+      "elapsedSeconds": 3.0421584300056566,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 124092416,
+      "observedTaskDiskPeakBytes": 2024939520,
+      "availableBeforeBytes": 19938635776,
+      "availableAfterBytes": 19938615296,
+      "guardTermination": null,
+      "logSha256": "3938f218e682fc274d38f9fd272ad474037623822fc9e2cc3340363f0ab54c6b"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "source-fence-review-green-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/research-publication-source-fence-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:20:14.330Z",
+      "completedAt": "2026-10-09T04:20:17.637Z",
+      "elapsedSeconds": 3.3068911700102035,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 123039744,
+      "observedTaskDiskPeakBytes": 2024968192,
+      "availableBeforeBytes": 19938611200,
+      "availableAfterBytes": 19938598912,
+      "guardTermination": null,
+      "logSha256": "7747f785a2e2126fa2aef0d9fee1d988398c30d7523c1545841279aaf064d329"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "source-fence-repair-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T04:20:40.420Z",
+      "completedAt": "2026-10-09T04:20:46.301Z",
+      "elapsedSeconds": 5.880982724978821,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1222598656,
+      "observedTaskDiskPeakBytes": 1984090112,
+      "availableBeforeBytes": 19938594816,
+      "availableAfterBytes": 19937783808,
+      "guardTermination": null,
+      "logSha256": "ef41b520450db096b7d52066053c76d48b115ab7562341f16ebe82bbee1da6a8"
+    }
+  ],
+  "typeLintScope": {
+    "webTree": "79be8582ab56dd2c006856068d241a33d2aba64c",
+    "unchangedSince6b49": true,
+    "typesStage": "source-fence-types",
+    "lintStage": "source-fence-lint",
+    "lintWarnings": 33,
+    "newSQLValidation": "actual native PG; TypeScript check does not verify SQL"
+  },
+  "remaining": [
+    "independent exact successor review",
+    "full installed legacy writer/ACL audit before installation",
+    "ancestor closure/regrant workflow unsupported and therefore rejected",
+    "immutable v2 input / trusted role dispatch / original outbox publication still pending"
+  ],
+  "notProduction": true,
+  "genuineRoleExecution": false
+}

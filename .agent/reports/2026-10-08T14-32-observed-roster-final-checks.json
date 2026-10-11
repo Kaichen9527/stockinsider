@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "observed-roster-slice1-final-checks-v1",
+  "recordedAt": "2026-10-08T14:33:13.999976+00:00",
+  "codeSubject": "25ce3a5c62d92b4292146bf9a0b244667218ce83",
+  "checks": {
+    "types": "pass",
+    "lint": "pass, 0 errors/33 existing warnings",
+    "normalWebBuild": "pass"
+  },
+  "originalWindow": {
+    "start": "2026-10-08T14:00:18Z",
+    "deadline": "2026-10-08T14:30:18Z",
+    "checkpointRecordedAt": "2026-10-08T14:30:36.162093+00:00",
+    "checkpointOverrunSeconds": 18.162093,
+    "note": "original checkpoint filename/heading14:29 is an artifact label; actual recordedAt above; no automated-role lease extension"
+  },
+  "newManualWindow": {
+    "start": "2026-10-08T14:31:36.269Z",
+    "deadline": "2026-10-08T15:01:36.269Z",
+    "automatedModelBudgetOrLeaseAcceptance": false
+  },
+  "stageFacts": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "slice1-final-types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "exec",
+        "--",
+        "tsc",
+        "--noEmit",
+        "-p",
+        "web/tsconfig.json"
+      ],
+      "startedAt": "2026-10-08T14:31:36.269Z",
+      "completedAt": "2026-10-08T14:31:54.665Z",
+      "elapsedSeconds": 18.395092377002584,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1348857856,
+      "observedTaskDiskPeakBytes": 1551187968,
+      "availableBeforeBytes": 24197414912,
+      "availableAfterBytes": 24197414912,
+      "guardTermination": null,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "measurementSha256": "fea0faf1679a844664816caeda4a44d5aee0d82e719479b441889704af43e813"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "slice1-final-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T14:31:54.696Z",
+      "completedAt": "2026-10-08T14:32:19.038Z",
+      "elapsedSeconds": 24.341628217996913,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1028046848,
+      "observedTaskDiskPeakBytes": 1551196160,
+      "availableBeforeBytes": 24197410816,
+      "availableAfterBytes": 24181252096,
+      "guardTermination": null,
+      "logSha256": "ea8f22726fdcefb7daf0c86cc841e20d14f0cc277d8a428e9869ed0a86f853c3",
+      "measurementSha256": "ef9a0c41be62b305df5e1b8e5bc30032d1ddd160f0b8379ed76eefe8a616af09"
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "slice1-final-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T14:32:19.066Z",
+      "completedAt": "2026-10-08T14:32:26.061Z",
+      "elapsedSeconds": 6.9949721449957,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1213652992,
+      "observedTaskDiskPeakBytes": 1567354880,
+      "availableBeforeBytes": 24181248000,
+      "availableAfterBytes": 24180133888,
+      "guardTermination": null,
+      "logSha256": "bf8da697903a73de4f1b3047a46d9d6aa9232ae45b4b024d7d4a367483193c57",
+      "measurementSha256": "4de4ef3f9e263005f58a70b344d1e4189d6ac4940d9e3d09a78abddd5dd5c30f"
+    }
+  ],
+  "nativeReceipt": {
+    "path": ".agent/reports/2026-10-08T14-29-observed-roster-slice1-checkpoint.json",
+    "sha256": "c4f62c3e9ff14160b53aef456fd5bfe74cee071d31125f479a04eaaf28f3a095"
+  },
+  "pending": [
+    "independent exact Slice1 code review",
+    "Slice2 typed scoped priority/atomic enqueue/DB admission clock quota",
+    "Slice3 claim/context/input",
+    "approved64f7 first-publication v2",
+    "native0825 verification, monitor successor waiting fixes"
+  ],
+  "resource": {
+    "sampledRssPeakBytes": 1348857856,
+    "observedTaskDiskPeakBytes": 1567354880,
+    "fsAvailableAfterBytes": 24180133888,
+    "actualDiskQuota": "unknown; fs availability not quota"
+  }
+}

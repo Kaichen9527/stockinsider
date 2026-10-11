@@ -1,0 +1,233 @@
+{
+  "schemaVersion": "pg-faketime-signal-diagnostic-v1",
+  "startedAt": "2026-10-08T16:34:35.593621+00:00",
+  "scope": "isolated VM diagnostic; no production policy/SQL/canary changed",
+  "postgresVersion": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+  "library": {
+    "path": "/workspace/cloud-observed-context-artifacts-oct08/clock-tool/root/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1",
+    "bytes": 55824,
+    "sha256": "45c4822a7516e9c41ec1b5498b0f08665ba4877330e9e9573c1213d16d6629a0"
+  },
+  "tests": [
+    {
+      "offset": null,
+      "form": "single-c",
+      "exitCode": 1,
+      "elapsedMs": 109.15170698717702,
+      "stdout": "SET\n",
+      "stderr": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3406\n",
+      "timedOut": false,
+      "sqlstate57014": true
+    },
+    {
+      "offset": null,
+      "form": "two-c",
+      "exitCode": 1,
+      "elapsedMs": 107.68403099791612,
+      "stdout": "SET\n",
+      "stderr": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3406\n",
+      "timedOut": false,
+      "sqlstate57014": true
+    },
+    {
+      "offset": null,
+      "form": "PGOPTIONS",
+      "exitCode": 1,
+      "elapsedMs": 107.03291901154444,
+      "stdout": "",
+      "stderr": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3406\n",
+      "timedOut": false,
+      "sqlstate57014": true
+    },
+    {
+      "offset": "+0",
+      "form": "single-c",
+      "exitCode": 1,
+      "elapsedMs": 110.40554699138738,
+      "stdout": "SET\n",
+      "stderr": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3406\n",
+      "timedOut": false,
+      "sqlstate57014": true
+    },
+    {
+      "offset": "+0",
+      "form": "two-c",
+      "exitCode": 1,
+      "elapsedMs": 108.23711799457669,
+      "stdout": "SET\n",
+      "stderr": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3406\n",
+      "timedOut": false,
+      "sqlstate57014": true
+    },
+    {
+      "offset": "+0",
+      "form": "PGOPTIONS",
+      "exitCode": 1,
+      "elapsedMs": 107.11629400611855,
+      "stdout": "",
+      "stderr": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3406\n",
+      "timedOut": false,
+      "sqlstate57014": true
+    },
+    {
+      "offset": "+3600",
+      "form": "single-c",
+      "exitCode": null,
+      "elapsedMs": 2003.2178909896174,
+      "stdout": "",
+      "stderr": "",
+      "timedOut": true,
+      "sqlstate57014": false,
+      "cleanupCancel": {
+        "exitCode": 0,
+        "elapsedMs": 9.367393999127671,
+        "stdout": "t\n",
+        "stderr": "",
+        "timedOut": false
+      }
+    },
+    {
+      "offset": "+3600",
+      "form": "two-c",
+      "exitCode": null,
+      "elapsedMs": 2003.6426330043469,
+      "stdout": "SET\n",
+      "stderr": "",
+      "timedOut": true,
+      "sqlstate57014": false,
+      "cleanupCancel": {
+        "exitCode": 0,
+        "elapsedMs": 10.86503300757613,
+        "stdout": "t\n",
+        "stderr": "",
+        "timedOut": false
+      }
+    },
+    {
+      "offset": "+3600",
+      "form": "PGOPTIONS",
+      "exitCode": null,
+      "elapsedMs": 2003.035108995391,
+      "stdout": "",
+      "stderr": "",
+      "timedOut": true,
+      "sqlstate57014": false,
+      "cleanupCancel": {
+        "exitCode": 0,
+        "elapsedMs": 9.840307000558823,
+        "stdout": "t\n",
+        "stderr": "",
+        "timedOut": false
+      }
+    },
+    {
+      "offset": "-3600",
+      "form": "single-c",
+      "exitCode": 1,
+      "elapsedMs": 111.50544199335855,
+      "stdout": "SET\n",
+      "stderr": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3406\n",
+      "timedOut": false,
+      "sqlstate57014": true
+    },
+    {
+      "offset": "-3600",
+      "form": "two-c",
+      "exitCode": 1,
+      "elapsedMs": 108.59310800151434,
+      "stdout": "SET\n",
+      "stderr": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3406\n",
+      "timedOut": false,
+      "sqlstate57014": true
+    },
+    {
+      "offset": "-3600",
+      "form": "PGOPTIONS",
+      "exitCode": 1,
+      "elapsedMs": 107.37580699787941,
+      "stdout": "",
+      "stderr": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3406\n",
+      "timedOut": false,
+      "sqlstate57014": true
+    }
+  ],
+  "signalProbes": [
+    {
+      "offset": null,
+      "exitCode": 0,
+      "elapsedMs": 101.83853999478742,
+      "stdout": "{\"startDeltaSeconds\":0,\"handlerDeltaSeconds\":0,\"endDeltaSeconds\":0,\"caught\":1,\"epollReturn\":-1}\n",
+      "stderr": "",
+      "timedOut": false
+    },
+    {
+      "offset": "+0",
+      "exitCode": 0,
+      "elapsedMs": 101.7212959995959,
+      "stdout": "{\"startDeltaSeconds\":0,\"handlerDeltaSeconds\":0,\"endDeltaSeconds\":0,\"caught\":1,\"epollReturn\":-1}\n",
+      "stderr": "",
+      "timedOut": false
+    },
+    {
+      "offset": "+3600",
+      "exitCode": 0,
+      "elapsedMs": 101.95480300171766,
+      "stdout": "{\"startDeltaSeconds\":3600,\"handlerDeltaSeconds\":0,\"endDeltaSeconds\":3600,\"caught\":1,\"epollReturn\":-1}\n",
+      "stderr": "",
+      "timedOut": false
+    },
+    {
+      "offset": "-3600",
+      "exitCode": 0,
+      "elapsedMs": 101.72845999477431,
+      "stdout": "{\"startDeltaSeconds\":-3600,\"handlerDeltaSeconds\":0,\"endDeltaSeconds\":-3600,\"caught\":1,\"epollReturn\":-1}\n",
+      "stderr": "",
+      "timedOut": false
+    }
+  ],
+  "limitations": [
+    "PG17.11 only; PG16 unavailable in known installed tool profile",
+    "Library differs from CI byte hash; same package version 0.9.10-2.1",
+    "No upstream rebuilt library or workaround applied"
+  ],
+  "clusterCleanup": [
+    {
+      "offset": null,
+      "exitCode": 0,
+      "elapsedMs": 101.73342800408136,
+      "stdout": "waiting for server to shut down.... done\nserver stopped\n",
+      "stderr": "",
+      "timedOut": false
+    },
+    {
+      "offset": "+0",
+      "exitCode": 0,
+      "elapsedMs": 101.5722040028777,
+      "stdout": "waiting for server to shut down.... done\nserver stopped\n",
+      "stderr": "",
+      "timedOut": false
+    },
+    {
+      "offset": "+3600",
+      "exitCode": 0,
+      "elapsedMs": 101.86782099481206,
+      "stdout": "waiting for server to shut down.... done\nserver stopped\n",
+      "stderr": "",
+      "timedOut": false
+    },
+    {
+      "offset": "-3600",
+      "exitCode": 0,
+      "elapsedMs": 101.70042699610349,
+      "stdout": "waiting for server to shut down.... done\nserver stopped\n",
+      "stderr": "",
+      "timedOut": false
+    }
+  ],
+  "completedAt": "2026-10-08T16:34:47.896750+00:00",
+  "sourceHashes": {
+    "signal.c": "c8e8c2b09dbc843d1fafe5925910c8e10f7e785450d1ebc12def6772b0d2e37a",
+    "diagnose.py": "066b991cafcd1cb84528efaa17e9a079f006549fdef63d071254dd7fec652549",
+    "signal": "db2b9793a07cc2cf86a9cce44a7d7f15c5464b321693add6ee6b7cd14b7f9d79"
+  }
+}

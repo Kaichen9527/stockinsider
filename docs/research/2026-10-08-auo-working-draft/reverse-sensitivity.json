@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "auo-current-price-reverse-sensitivity-v1",
+  "currentRawClose": 36.6,
+  "priceSession": "2026-10-08",
+  "formula": "required per-share earnings = current raw close / test PE; existing impliedPriceFromMultiple checks round trip",
+  "existingFunctionRuleset": "valuation-engine-v2.0.0",
+  "rows": [
+    {
+      "peTestParameter": 10,
+      "requiredEpsAtCurrentPrice": 3.66,
+      "roundtripPrice": 36.6
+    },
+    {
+      "peTestParameter": 15,
+      "requiredEpsAtCurrentPrice": 2.44,
+      "roundtripPrice": 36.6
+    },
+    {
+      "peTestParameter": 20,
+      "requiredEpsAtCurrentPrice": 1.83,
+      "roundtripPrice": 36.6
+    },
+    {
+      "peTestParameter": 30,
+      "requiredEpsAtCurrentPrice": 1.22,
+      "roundtripPrice": 36.6
+    }
+  ],
+  "checksPassed": 4,
+  "earningsBasis": "unspecified future earnings per-share threshold, not adopted annual/NTM/diluted forecast",
+  "multiplesCalibrated": false,
+  "targetPrice": null,
+  "dilutedSharesAdopted": null,
+  "valuationApproved": false
+}

@@ -1,0 +1,223 @@
+{
+  "schemaVersion": "research-publication-source-fence-vm-receipt-v1",
+  "synthetic": true,
+  "productionImported": false,
+  "incrementStartedAt": "2026-10-09T03:56:08Z",
+  "incrementDeadlineAt": "2026-10-09T04:26:08Z",
+  "recordedAt": "2026-10-09T04:11:21.763444+00:00",
+  "base": "10b19aea04ff47293c2e0c8a3b396342e18d6ea1",
+  "observedRepair": "43d19d6e3daf609a904335eb7c8d963bdd45fa7f",
+  "approvedContractSubject": "64f7f077352cbef216e9fd175c9f93a2c94a9d5e",
+  "approvalKind": "root-relayed unsigned requirements/architecture; not code or protected approval",
+  "files": [
+    {
+      "path": "migrations/20261009_research_publication_source_fence_v2.sql",
+      "bytes": 10514,
+      "sha256": "213c5f2f8c409f5a22ae97dbe23799c5e55667fec300c8547e01106dd354cb47"
+    },
+    {
+      "path": "scripts/research-publication-source-fence-postgres.test.mjs",
+      "bytes": 8603,
+      "sha256": "a1714c74b0b337ae03232e9f081eb783c3ee6432f78c0f2238faedd60be8dd70"
+    },
+    {
+      "path": "package.json",
+      "bytes": 28766,
+      "sha256": "e78fe6ec721f6f1817832d01c49eb70816102527e82ff1c19dfcc6d7805f5803"
+    }
+  ],
+  "tests": {
+    "first": {
+      "pass": 10,
+      "fail": 0,
+      "skip": 0
+    },
+    "final": {
+      "pass": 11,
+      "fail": 0,
+      "skip": 0
+    },
+    "nativeProfile": "real PostgreSQL17 narrow source_raw_documents dependency fixture, BYPASSRLS service; not full production predecessor/ACL profile",
+    "coverage": [
+      "date-only null preserved",
+      "private immutable receipt and exact replay",
+      "service/anonymous helper denial",
+      "hash/shape/future rejection",
+      "rights revocation and retraction",
+      "source-first and seal-first real concurrent transactions",
+      "new revision phantom",
+      "parent root, delete, truncate",
+      "restart durability"
+    ],
+    "notCovered": [
+      "actual publication transaction",
+      "real author/reviewer dispatch",
+      "production installation/ACL attestation"
+    ]
+  },
+  "stages": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "source-fence-first",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/research-publication-source-fence-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:06:45.304Z",
+      "completedAt": "2026-10-09T04:06:48.061Z",
+      "elapsedSeconds": 2.757233347016154,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 111927296,
+      "observedTaskDiskPeakBytes": 2023874560,
+      "availableBeforeBytes": 20951719936,
+      "availableAfterBytes": 20951707648,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "source-fence-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/research-publication-source-fence-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:08:02.060Z",
+      "completedAt": "2026-10-09T04:08:04.398Z",
+      "elapsedSeconds": 2.3382491749944165,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 110219264,
+      "observedTaskDiskPeakBytes": 2023895040,
+      "availableBeforeBytes": 20951699456,
+      "availableAfterBytes": 20951687168,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "source-fence-types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-09T04:08:22.291Z",
+      "completedAt": "2026-10-09T04:08:25.445Z",
+      "elapsedSeconds": 3.153935120004462,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 552194048,
+      "observedTaskDiskPeakBytes": 1983033344,
+      "availableBeforeBytes": 20951683072,
+      "availableAfterBytes": 20951674880,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "source-fence-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T04:08:58.344Z",
+      "completedAt": "2026-10-09T04:09:22.691Z",
+      "elapsedSeconds": 24.34699746000115,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1429778432,
+      "observedTaskDiskPeakBytes": 1983049728,
+      "availableBeforeBytes": 20951670784,
+      "availableAfterBytes": 20951658496,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "source-fence-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T04:09:25.305Z",
+      "completedAt": "2026-10-09T04:09:31.773Z",
+      "elapsedSeconds": 6.468349439994199,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 899989504,
+      "observedTaskDiskPeakBytes": 1983057920,
+      "availableBeforeBytes": 20951654400,
+      "availableAfterBytes": 20950790144,
+      "guardTermination": null
+    }
+  ],
+  "runtime": {
+    "node": "v22.14.0",
+    "postgres": "17.11",
+    "cgroupMemoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "nproc": 5,
+    "diskQuotaKnown": false,
+    "dfIsProjectQuota": false,
+    "webDotenvFilenameInventory": []
+  },
+  "runtimeCapability": {
+    "platformConfiguredCapabilities": [],
+    "configuredSecretNames": [],
+    "modelAdapterAvailable": false,
+    "roleIdentityAuthorityAvailable": false,
+    "genuineRoleExecution": false,
+    "publicationAuthorized": false
+  },
+  "observedReceipt": {
+    "path": ".agent/reports/2026-10-08T16-32-observed-priority-fences-vm.json",
+    "bytes": 11655,
+    "sha256": "1d6805e775c3d07e0a11dd430582f714933387c832fb2a20fbd83e76dee04bd1"
+  },
+  "snapshotRetest": {
+    "source": "6fd23c04d4feb75087b069aae738631deefda428",
+    "pass": 12,
+    "fail": 4,
+    "skip": 0,
+    "earlierSource": "c96f29119c9019348688d5240f35943c3ec61b10",
+    "earlierPass": 7,
+    "earlierFail": 9,
+    "firstError": "operator does not exist: boolean -> unknown",
+    "context": "commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer) line15 at IF",
+    "query": "doc IS NOT NULL AND NOT EXISTS(SELECT 1 FROM public.source_raw_documents d WHERE d.platform='twse_insider' AND d.document_url=doc->>'documentUrl' AND d.title=doc->>'title' AND d.summary=doc->>'summary' AND d.content_text=doc->>'contentText' AND d.published_at IS NULL AND d.sentiment_label='neutral' AND d.content_semantics='official_chip_evidence' AND d.stance_semantics='neutral' AND d.canonical_content_hash=encode(extensions.digest(convert_to(lower(doc->>'contentText'),'UTF8'),'sha256'),'hex') AND d.symbols=doc->'symbols' AND d.metadata @> doc->'metadata' AND d.collected_at>=s.observed_at)",
+    "measurement": {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "pg-native-6fd",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/research-insider-snapshot-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:04:10.675Z",
+      "completedAt": "2026-10-09T04:04:21.607Z",
+      "elapsedSeconds": 10.93242963499506,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 141934592,
+      "observedTaskDiskPeakBytes": 82874368,
+      "availableBeforeBytes": 20958138368,
+      "availableAfterBytes": 20951748608,
+      "guardTermination": null
+    },
+    "log": {
+      "path": "/workspace/cloud-insider-snapshot-6fd-artifacts-oct09/pg-native-6fd.log",
+      "bytes": 11082,
+      "sha256": "375ba0586627e4094b9b92c3ab25f3bba4106510e827475729e2bb3219961b7f"
+    },
+    "status": "failed; worker-owned fix d274 queued, no local mutation"
+  },
+  "remaining": [
+    "immutable input v2 and existing-table mutually exclusive lineage",
+    "trusted authenticated assignment/result adapters; current environment fails closed",
+    "original lease budget-bound author handoff and independent review",
+    "same existing outbox/submission/receipt transaction and page",
+    "snapshot d274 fresh PG then guarded actual stack",
+    "approved official clock builder diagnosis and canaries"
+  ]
+}

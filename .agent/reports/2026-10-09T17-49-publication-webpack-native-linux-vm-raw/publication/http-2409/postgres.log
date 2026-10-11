@@ -1,0 +1,5 @@
+2026-10-09 17:43:53.044 UTC [240972] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-09 17:43:53.044 UTC [240972] LOG:  Unix-domain socket path "/workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native/http-2409/socket/.s.PGSQL.35679" is too long (maximum 107 bytes)
+2026-10-09 17:43:53.044 UTC [240972] WARNING:  could not create Unix-domain socket in directory "/workspace/cloud-author-packet-artifacts-oct09/webpack149/publication/native/http-2409/socket"
+2026-10-09 17:43:53.044 UTC [240972] FATAL:  could not create any Unix-domain sockets
+2026-10-09 17:43:53.045 UTC [240972] LOG:  database system is shut down

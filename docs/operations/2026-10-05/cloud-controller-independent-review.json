@@ -1,0 +1,21 @@
+{
+  "schema": "stockinsider-independent-code-review-record-v1",
+  "reviewedCommit": "72e54dcf1e1df78b48401d574e76d3a31709c629",
+  "baseCommit": "ba11c326555314fbe69f19116e2970cf244e0ff5",
+  "reviewer": "astra_publication_review",
+  "result": "approve",
+  "scope": "deterministic independent_test client bridge; existing guarded reservation and result endpoints only",
+  "independentNamedTestsPassed": 24,
+  "skipped": 0,
+  "additionalIsolatedChecks": [
+    "stalled HTTP response body aborted at 15018 ms with one request",
+    "failed final output write retained fsynced response_verified packet in journal"
+  ],
+  "signed": false,
+  "protectedGateEvidence": false,
+  "liveVpsCloudAcceptance": false,
+  "sixRoleConsumerAcceptance": false,
+  "productionAcceptance": false,
+  "authoritativePublication": false,
+  "strategyApproved": false
+}

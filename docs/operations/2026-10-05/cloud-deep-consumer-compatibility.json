@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "unsigned-cross-chat-execution-summary-v1",
+  "threadTitle": "Set up stockinsider",
+  "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+  "turnId": "01a10af5-aea3-724a-a27c-d114de836f76",
+  "reportedSourceCommit": "139f6efe5e564db609115aba2e3a81dec51dbbc7",
+  "reportedNodeVersion": "v22.14.0",
+  "reportedTests": {"passed": 37, "failed": 0, "skipped": 0},
+  "reportedTestStartedAt": "2026-10-05T07:33:22.502Z",
+  "reportedTestCompletedAt": "2026-10-05T07:33:24.969Z",
+  "reportedHardware": {"cgroupMemoryGiB": 32, "cpuCoreEquivalent": 4, "sampledProcessGroupPeakRssMiB": 335},
+  "reportedDisk": {"availableDecimalGBApproximately": 30.07, "isolatedWorktreeBytes": 29003776, "privateAcceptanceDirectoryBytes": 28672},
+  "reportedPrivateReceipt": {"bytes": 3481, "sha256": "2b960378b46664cefde1538e0dfaa1765a755dcdf4ebda7d342d7cde56c37b50", "fullArtifactImported": false},
+  "originalCloudCheckoutPreserved": true,
+  "dependencyInstallationPerformed": false,
+  "productionWritePerformed": false,
+  "dataScope": "local_synthetic_contract_tests",
+  "protectedGatePassed": false,
+  "liveModelBudgetCompleted": false,
+  "actualVpsCloudRoundtripVerified": false,
+  "projectQuotaGuaranteed": false,
+  "signedAttestation": false
+}

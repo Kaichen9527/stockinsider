@@ -1,0 +1,17 @@
+{
+  "observedAt": "2026-10-09T16:03:10.217864+00:00",
+  "ownedPgProcesses": [],
+  "preservedRedClusters": [
+    {
+      "path": "/tmp/si-rresult-OwkYCk/pg",
+      "postmasterPidExists": false
+    },
+    {
+      "path": "/tmp/si-rresult-H4RTT0/pg",
+      "postmasterPidExists": false
+    }
+  ],
+  "greenCleanup": "Original unchanged finally stops owned cluster and removes it when all child cases pass. Successful random leaf name is not logged; no active owned PG process remains.",
+  "deletedByThisTaskOutsideOriginalGreenCleanup": [],
+  "availableBytes": 11073585152
+}

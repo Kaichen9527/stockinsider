@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-11T05:28:07.216285+00:00",
+  "activeRelevantProcesses": [],
+  "historicalDefunctProcessesExcluded": {
+    "postgres": 687,
+    "node": 86
+  },
+  "remainingObservedChildren": [],
+  "ownedClustersStopped": true,
+  "originalTestsRemovedDisposableClusters": true,
+  "extraDeletionOrPrunePerformed": false,
+  "originalREDAndUniqueEvidencePreserved": true,
+  "diskAvailableBytes": 10080989184
+}

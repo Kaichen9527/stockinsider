@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "unsigned-exact-dataset-review-relay-v1",
+  "recordedAt": "2026-10-08T07:21:50.947545+00:00",
+  "reportedBy": "source thread delegation",
+  "reviewer": "independent Astra reviewer",
+  "reviewedHead": "7678cc91e1da8a60055ce5be189b5b603f5fe944",
+  "reviewedDataCommit": "debed842cbc432ef62f8915eea085d6d9f1b66fe",
+  "result": "unsigned_scoped_data_approval",
+  "actionableFindings": 0,
+  "pullRequest": "https://github.com/Kaichen9527/stockinsider/pull/305",
+  "checks": {
+    "independentVisualQuarterValues": 104,
+    "datasetCsvDifferences": 0,
+    "macPdfCount": 4,
+    "macPdfBytesAndShaMatch": true,
+    "retainedPrinted1MillionDifferences": 9,
+    "monthlySumsYoyReadmeConsistent": true,
+    "fileByteHashChecks": 3,
+    "canonicalHashChecks": 35
+  },
+  "excluded": [
+    "monthly-revenue original-table visual review",
+    "P3 balance visual review",
+    "full notes",
+    "normalized earnings",
+    "investment thesis",
+    "publication approval"
+  ],
+  "macHeavyTestsRun": false,
+  "protectedAttestation": false,
+  "strategyApproved": false,
+  "datasetModifiedForReview": false,
+  "datasetSha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a",
+  "datasetCanonicalHash": "e6f9788a24be8a293e9727b5c60a01d0dae4d0b68ffee0aa873b17d041afc665"
+}

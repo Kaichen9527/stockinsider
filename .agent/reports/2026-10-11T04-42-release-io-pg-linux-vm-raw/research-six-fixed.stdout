@@ -1,0 +1,443 @@
+TAP version 13
+# Subtest: bounded regular bytes preserve exact boundary, reject oversized/directory/symlink/private mode
+ok 1 - bounded regular bytes preserve exact boundary, reject oversized/directory/symlink/private mode
+  ---
+  duration_ms: 10.630496
+  ...
+# Subtest: actual grow between fstat and read rejects; allocation and reads stay size plus one
+ok 2 - actual grow between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 2.637631
+  ...
+# Subtest: actual shrink between fstat and read rejects; allocation and reads stay size plus one
+ok 3 - actual shrink between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 2.615488
+  ...
+# Subtest: actual replace between fstat and read rejects; allocation and reads stay size plus one
+ok 4 - actual replace between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 2.343297
+  ...
+# Subtest: actual replace-with-symlink between fstat and read rejects; allocation and reads stay size plus one
+ok 5 - actual replace-with-symlink between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 1.439473
+  ...
+# Subtest: actual rewrite between fstat and read rejects; allocation and reads stay size plus one
+ok 6 - actual rewrite between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 1.401786
+  ...
+# Subtest: source actual FIFO rejects before HTTP, output or journal; no FIFO writer
+ok 7 - source actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 378.986989
+  ...
+# Subtest: cloud actual FIFO rejects before HTTP, output or journal; no FIFO writer
+ok 8 - cloud actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 258.725373
+  ...
+# Subtest: priority actual FIFO rejects before HTTP, output or journal; no FIFO writer
+ok 9 - priority actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 232.906877
+  ...
+# Subtest: deep-recovery actual FIFO rejects before HTTP, output or journal; no FIFO writer
+ok 10 - deep-recovery actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 193.595411
+  ...
+# Subtest: discovery CLI actual FIFO rejects before network or output; security-scope uses same reader
+ok 11 - discovery CLI actual FIFO rejects before network or output; security-scope uses same reader
+  ---
+  duration_ms: 438.231837
+  ...
+# (node:316779) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:316779) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/scripts/fixtures/research-cloud-article.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/package.json.
+# (node:316779) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-cloud-work.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: reserve binds server lease and persists original credential-free packet before Cloud dispatch
+ok 12 - reserve binds server lease and persists original credential-free packet before Cloud dispatch
+  ---
+  duration_ms: 81.49256
+  ...
+# Subtest: offline/ambiguous reserve is attempted once, durably marked, and cannot reuse journal or output
+ok 13 - offline/ambiguous reserve is attempted once, durably marked, and cannot reuse journal or output
+  ---
+  duration_ms: 13.239694
+  ...
+# Subtest: existing output blocks mutation and records not_sent
+ok 14 - existing output blocks mutation and records not_sent
+  ---
+  duration_ms: 19.165538
+  ...
+# Subtest: global budget/lease denial is explicit without invented reservation or retry
+ok 15 - global budget/lease denial is explicit without invented reservation or retry
+  ---
+  duration_ms: 9.547742
+  ...
+# Subtest: mismatched reservation owner cannot produce a dispatchable packet
+ok 16 - mismatched reservation owner cannot produce a dispatchable packet
+  ---
+  duration_ms: 4.119478
+  ...
+# Subtest: untrusted transport, duplicate keys, shared credentials and dirty source reject before request
+ok 17 - untrusted transport, duplicate keys, shared credentials and dirty source reject before request
+  ---
+  duration_ms: 19.15985
+  ...
+# Subtest: Taipei day overflow and synthetic scope cannot claim live budget
+ok 18 - Taipei day overflow and synthetic scope cannot claim live budget
+  ---
+  duration_ms: 10.922867
+  ...
+# Subtest: tampered result is rejected locally before send, late identical replay requires server confirmation
+ok 19 - tampered result is rejected locally before send, late identical replay requires server confirmation
+  ---
+  duration_ms: 44.144657
+  ...
+# Subtest: real loopback transport posts only to existing guarded route and refuses redirect
+ok 20 - real loopback transport posts only to existing guarded route and refuses redirect
+  ---
+  duration_ms: 55.610737
+  ...
+# Subtest: real transport bounds oversized response and preserves uncertain receipt without retry
+ok 21 - real transport bounds oversized response and preserves uncertain receipt without retry
+  ---
+  duration_ms: 45.29983
+  ...
+# Subtest: receiver cannot substitute role or strategy authority while reusing hashes
+ok 22 - receiver cannot substitute role or strategy authority while reusing hashes
+  ---
+  duration_ms: 16.365782
+  ...
+# Subtest: GC after headers cannot defeat the fifteen-second Cloud response-body deadline
+ok 23 - GC after headers cannot defeat the fifteen-second Cloud response-body deadline
+  ---
+  duration_ms: 15198.499359
+  ...
+# (node:316785) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:316785) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: claim journals before one guarded request and saves real reservation without dispatch/publication
+ok 24 - claim journals before one guarded request and saves real reservation without dispatch/publication
+  ---
+  duration_ms: 91.112525
+  ...
+# Subtest: lost claim response recovers owner status once instead of claiming a second slot
+ok 25 - lost claim response recovers owner status once instead of claiming a second slot
+  ---
+  duration_ms: 17.833418
+  ...
+# Subtest: completed accounting remains a handoff, and exact known attempt fences status recovery
+ok 26 - completed accounting remains a handoff, and exact known attempt fences status recovery
+  ---
+  duration_ms: 16.413094
+  ...
+# Subtest: old lost response cannot recover a later claim reusing the same worker label
+ok 27 - old lost response cannot recover a later claim reusing the same worker label
+  ---
+  duration_ms: 3.030494
+  ...
+# Subtest: empty claim and expired/lost owned job have different explicit gaps
+ok 28 - empty claim and expired/lost owned job have different explicit gaps
+  ---
+  duration_ms: 5.79001
+  ...
+# Subtest: claim server rejection remains uncertain because RPC may already have committed
+ok 29 - claim server rejection remains uncertain because RPC may already have committed
+  ---
+  duration_ms: 3.812614
+  ...
+# Subtest: foreign owner, wrong role, extended deadline, changed attempt, stale clock and extra secrets fail closed
+ok 30 - foreign owner, wrong role, extended deadline, changed attempt, stale clock and extra secrets fail closed
+  ---
+  duration_ms: 30.295849
+  ...
+# Subtest: recovery binds original owner, origin, source and saved receipt before requests
+ok 31 - recovery binds original owner, origin, source and saved receipt before requests
+  ---
+  duration_ms: 31.090207
+  ...
+# Subtest: recovery rejects symlinks, public permissions and truncated journals
+ok 32 - recovery rejects symlinks, public permissions and truncated journals
+  ---
+  duration_ms: 14.60231
+  ...
+# Subtest: unsafe origins, dirty source, shared key, caller stock selection and invalid owner send nothing
+ok 33 - unsafe origins, dirty source, shared key, caller stock selection and invalid owner send nothing
+  ---
+  duration_ms: 1.556189
+  ...
+# Subtest: existing destination preserves prior receipt and prevents mutation
+ok 34 - existing destination preserves prior receipt and prevents mutation
+  ---
+  duration_ms: 7.212297
+  ...
+# Subtest: actual local HTTP lost response recovers identical reservation without a second claim
+ok 35 - actual local HTTP lost response recovers identical reservation without a second claim
+  ---
+  duration_ms: 39.690749
+  ...
+# Subtest: prepare consumes original claim journal, observes status and fetches input without another claim
+ok 36 - prepare consumes original claim journal, observes status and fetches input without another claim
+  ---
+  duration_ms: 31.789683
+  ...
+# Subtest: prepare lost response uses only status and input, never a new claim or reservation
+ok 37 - prepare lost response uses only status and input, never a new claim or reservation
+  ---
+  duration_ms: 24.815697
+  ...
+# Subtest: prepare refuses completed work before fetching any input
+ok 38 - prepare refuses completed work before fetching any input
+  ---
+  duration_ms: 9.353218
+  ...
+# Subtest: prepare rejects packet hash/owner/deadline/rights/extra fields and missing selection accounting
+ok 39 - prepare rejects packet hash/owner/deadline/rights/extra fields and missing selection accounting
+  ---
+  duration_ms: 57.228174
+  ...
+# Subtest: explicit observed claim journal recovers scoped context, prepares v2 and privately saves incomplete draft
+ok 40 - explicit observed claim journal recovers scoped context, prepares v2 and privately saves incomplete draft
+  ---
+  duration_ms: 81.183864
+  ...
+# (node:316858) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:316858) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/pinned-https-fetch.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: RB01 original social relay cannot export nested authorization
+ok 41 - RB01 original social relay cannot export nested authorization
+  ---
+  duration_ms: 8.602464
+  ...
+# Subtest: RB02 timed public summaries require raw SHA/bytes and exact matching acquisition
+ok 42 - RB02 timed public summaries require raw SHA/bytes and exact matching acquisition
+  ---
+  duration_ms: 29.944417
+  ...
+# Subtest: RB03 acquisition chain rejects inverted microseconds in the same millisecond
+ok 43 - RB03 acquisition chain rejects inverted microseconds in the same millisecond
+  ---
+  duration_ms: 9.590537
+  ...
+# Subtest: RB04 exact corrected real relay retains three industry items, no 3037 candidate
+ok 44 - RB04 exact corrected real relay retains three industry items, no 3037 candidate
+  ---
+  duration_ms: 37.602076
+  ...
+# Subtest: RB05 every input plane rejects hidden credential fields and arbitrary metadata
+ok 45 - RB05 every input plane rejects hidden credential fields and arbitrary metadata
+  ---
+  duration_ms: 62.370242
+  ...
+# Subtest: RB06 independently valid hashes/bytes cannot be rebound to a different acquisition receipt
+ok 46 - RB06 independently valid hashes/bytes cannot be rebound to a different acquisition receipt
+  ---
+  duration_ms: 45.751637
+  ...
+# Subtest: RB07 sub-millisecond completed/future clocks, invalid calendar dates and excessive precision reject
+ok 47 - RB07 sub-millisecond completed/future clocks, invalid calendar dates and excessive precision reject
+  ---
+  duration_ms: 22.703419
+  ...
+# Subtest: RB08 output receipt projects required fields and retains original acquisition attribution
+ok 48 - RB08 output receipt projects required fields and retains original acquisition attribution
+  ---
+  duration_ms: 22.031344
+  ...
+# Subtest: RC01 observed1978 keeps old1946 immutable; innovation31 and restricted-CFI3673 are research observations only
+ok 49 - RC01 observed1978 keeps old1946 immutable; innovation31 and restricted-CFI3673 are research observations only
+  ---
+  duration_ms: 63.619586
+  ...
+# Subtest: RC02 four-digit TDR9136 excluded, never infer ordinary scope by code/name suffix
+ok 50 - RC02 four-digit TDR9136 excluded, never infer ordinary scope by code/name suffix
+  ---
+  duration_ms: 53.257397
+  ...
+# Subtest: RC03 preferred/warrant and forged ES outside stock/innovation section rejected
+ok 51 - RC03 preferred/warrant and forged ES outside stock/innovation section rejected
+  ---
+  duration_ms: 75.062809
+  ...
+# Subtest: RC04 exact original TWSE/TPEX clock split and large raw reference preserved without VM raw hash claim
+ok 52 - RC04 exact original TWSE/TPEX clock split and large raw reference preserved without VM raw hash claim
+  ---
+  duration_ms: 27.290622
+  ...
+# Subtest: RC05 only fixed CFI raw reference can exceed4MB, selected input/bounds/secret validation unchanged
+ok 53 - RC05 only fixed CFI raw reference can exceed4MB, selected input/bounds/secret validation unchanged
+  ---
+  duration_ms: 54.758061
+  ...
+# Subtest: RC06 duplicate/count/future-nanosecond/legacy-binding mutations fail closed
+ok 54 - RC06 duplicate/count/future-nanosecond/legacy-binding mutations fail closed
+  ---
+  duration_ms: 84.032608
+  ...
+# Subtest: RC07 actual expanded cohort controller consumes3same-root industry summaries, restart dedup zero new
+ok 55 - RC07 actual expanded cohort controller consumes3same-root industry summaries, restart dedup zero new
+  ---
+  duration_ms: 36.413322
+  ...
+# Subtest: RC08 configured Gooaye provider IDs match the actual publisher relay, without enabling platforms
+ok 56 - RC08 configured Gooaye provider IDs match the actual publisher relay, without enabling platforms
+  ---
+  duration_ms: 6.377827
+  ...
+# (node:316904) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:316904) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-source-attempt-controller.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: SCT01 pins a validated public address, one page, no credentials, and keeps only hashes/metadata
+ok 57 - SCT01 pins a validated public address, one page, no credentials, and keeps only hashes/metadata
+  ---
+  duration_ms: 13.058911
+  ...
+# Subtest: SCT02 private/mixed DNS answers reject before HTTP; no DNS-rebinding fallback
+ok 58 - SCT02 private/mixed DNS answers reject before HTTP; no DNS-rebinding fallback
+  ---
+  duration_ms: 13.827781
+  ...
+# Subtest: SCT03 404, upstream failure, login and redirects stay failed without following links
+ok 59 - SCT03 404, upstream failure, login and redirects stay failed without following links
+  ---
+  duration_ms: 4.501404
+  ...
+# Subtest: SCT04 body bound, total DNS/read deadlines and invalid UTF8 reject
+ok 60 - SCT04 body bound, total DNS/read deadlines and invalid UTF8 reject
+  ---
+  duration_ms: 21.11409
+  ...
+# Subtest: SCT05 no irrelevant inference or summary fabrication; exact scope sourceAttempts retain failures
+ok 61 - SCT05 no irrelevant inference or summary fabrication; exact scope sourceAttempts retain failures
+  ---
+  duration_ms: 11.388779
+  ...
+# Subtest: SCT06 controller consumes authorized local summaries without public HTTP or paid/model dispatch
+ok 62 - SCT06 controller consumes authorized local summaries without public HTTP or paid/model dispatch
+  ---
+  duration_ms: 3.325319
+  ...
+# Subtest: SCT07 CLI bounds files, rejects symlinks/URL injection, writes mode0600 and cannot overwrite
+ok 63 - SCT07 CLI bounds files, rejects symlinks/URL injection, writes mode0600 and cannot overwrite
+  ---
+  duration_ms: 21.737049
+  ...
+# Subtest: SCT08 run deadline does not pretend remaining scopes were attempted
+ok 64 - SCT08 run deadline does not pretend remaining scopes were attempted
+  ---
+  duration_ms: 1.436478
+  ...
+# Subtest: SCT09 response hash binds exact wire bytes, including UTF8 BOM; TLS remains verified
+ok 65 - SCT09 response hash binds exact wire bytes, including UTF8 BOM; TLS remains verified
+  ---
+  duration_ms: 0.426013
+  ...
+# Subtest: SCT-POD01 controller-only publisher RSS cannot follow transcript, chapters or audio
+ok 66 - SCT-POD01 controller-only publisher RSS cannot follow transcript, chapters or audio
+  ---
+  duration_ms: 1.021592
+  ...
+# (node:316910) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:316910) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: PC01 actual loopback HTTP POST and completed journal replay issue no second request
+ok 67 - PC01 actual loopback HTTP POST and completed journal replay issue no second request
+  ---
+  duration_ms: 59.99437
+  ...
+# Subtest: PC02 uncertain POST is fenced on restart rather than repeated
+ok 68 - PC02 uncertain POST is fenced on restart rather than repeated
+  ---
+  duration_ms: 16.410719
+  ...
+# Subtest: PC03 remote origin rejected before transport or journal creation
+ok 69 - PC03 remote origin rejected before transport or journal creation
+  ---
+  duration_ms: 1.058137
+  ...
+# Subtest: PC04 tampered controller or shared principal rejected
+ok 70 - PC04 tampered controller or shared principal rejected
+  ---
+  duration_ms: 3.954879
+  ...
+# Subtest: PC05 incomplete journal never becomes successful empty receipt
+ok 71 - PC05 incomplete journal never becomes successful empty receipt
+  ---
+  duration_ms: 4.056182
+  ...
+# Subtest: PC06 explicit observed roster reaches actual HTTP endpoint and replays once
+ok 72 - PC06 explicit observed roster reaches actual HTTP endpoint and replays once
+  ---
+  duration_ms: 22.367521
+  ...
+# Subtest: PC07 rejects silent formal fallback and fences uncertain submission
+ok 73 - PC07 rejects silent formal fallback and fences uncertain submission
+  ---
+  duration_ms: 4.600914
+  ...
+# Subtest: PC07 rejects wrong roster and fences uncertain submission
+ok 74 - PC07 rejects wrong roster and fences uncertain submission
+  ---
+  duration_ms: 4.78391
+  ...
+# Subtest: PC07 rejects wrong roster receipt and fences uncertain submission
+ok 75 - PC07 rejects wrong roster receipt and fences uncertain submission
+  ---
+  duration_ms: 7.239998
+  ...
+# Subtest: PC07 rejects manufactured entry eligibility and fences uncertain submission
+ok 76 - PC07 rejects manufactured entry eligibility and fences uncertain submission
+  ---
+  duration_ms: 6.679262
+  ...
+# Subtest: PC08 formal response cannot silently switch to an observed roster
+ok 77 - PC08 formal response cannot silently switch to an observed roster
+  ---
+  duration_ms: 3.925555
+  ...
+# Subtest: PC09 controller cannot smuggle a different roster or cutoff
+ok 78 - PC09 controller cannot smuggle a different roster or cutoff
+  ---
+  duration_ms: 2.747067
+  ...
+# Subtest: PCscope default is formal; observed scope requires a valid explicit snapshot
+ok 79 - PCscope default is formal; observed scope requires a valid explicit snapshot
+  ---
+  duration_ms: 0.586165
+  ...
+# Subtest: PCsize actual scoring/enrichment modules produce a cohort larger than the old four-MB transport budget
+ok 80 - PCsize actual scoring/enrichment modules produce a cohort larger than the old four-MB transport budget
+  ---
+  duration_ms: 99.290242
+  ...
+# Subtest: PC10 full1978 HTTP response persists compactly and replays all candidate and price rows
+ok 81 - PC10 full1978 HTTP response persists compactly and replays all candidate and price rows
+  ---
+  duration_ms: 417.516275
+  ...
+1..81
+# tests 81
+# suites 0
+# pass 81
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 15686.026267

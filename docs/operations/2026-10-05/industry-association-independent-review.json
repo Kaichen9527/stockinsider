@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "unsigned-independent-code-review-record-v1",
+  "reviewedCommit": "970b05215c84166c2fb394f37e88dad46cd395f2",
+  "baseCommit": "62d9d9aaa7c45a802dee3270a6e60ccfe84e67f9",
+  "integratedCommit": "5110b4a552bc8a8527b9bc50bd095528847c83e6",
+  "reviewer": "/root/astra_publication_review",
+  "decision": "approve_limited_code_scope",
+  "initialReviewCommit": "9a31f19f5c8a5eb9c6ea9452182d6dfdb874cf52",
+  "initialFinding": "P2 same-clock sibling rights/hash invariant omission",
+  "tests": {
+    "passed": 128,
+    "failed": 0,
+    "skipped": 0
+  },
+  "actualPostgresRepairProbes": 3,
+  "actualPostgresValidDuplicateControl": 1,
+  "identicalIntegratedFiles": [
+    {
+      "path": "docs/operations/2026-10-05/industry-association-receipts.md",
+      "sha256": "c72ea2aa0d70927f943bbdbe3719d6325c360cad0af9d8f51ead7f5b0f36dbfd"
+    },
+    {
+      "path": "openspec/changes/industry-association-receipts-v1/spec.md",
+      "sha256": "aee468b474bba7e11ee1fce4853de220e21a8f97b9028780c2fe89dd2a249629"
+    },
+    {
+      "path": "openspec/changes/industry-association-receipts-v1/tasks.md",
+      "sha256": "2abd698e6eccea0cb20841fc496ed121cfbb4c1e090a3c82d43266e15fbd125f"
+    },
+    {
+      "path": "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+      "sha256": "52ac9785a4faace114e50ef87b0a3759e4d364466d6ccad8fcdc0aa3a883c0ee"
+    },
+    {
+      "path": "web/src/app/api/internal/research-priority-run/route.ts",
+      "sha256": "d8c0ab53ff4973d9104e72ded38beb31cf32f8dc603889ce8d686d2e362ffbc7"
+    },
+    {
+      "path": "web/src/lib/research-source-association.test.ts",
+      "sha256": "2a43a690baeed5e2af57ca8fcbaaffebab711dff49c5675c581ed5bd28770be2"
+    },
+    {
+      "path": "web/src/lib/research-source-association.ts",
+      "sha256": "c4a6146a20130b60eb8b25ee2ad506c3465bd880277fdbe7a6e5472cdfad08ab"
+    }
+  ],
+  "scope": "Supplementary industry/company hypotheses; not direct mention, ranking, qualification or commercial evidence",
+  "combinedIntegrationIndependentlyApproved": false,
+  "signedAttestation": false,
+  "protectedGatePassed": false,
+  "productionApproved": false,
+  "strategyAdopted": false
+}

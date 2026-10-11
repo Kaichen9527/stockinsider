@@ -1,0 +1,55 @@
+TAP version 13
+# Subtest: SQL larger than Linux single-argv limit travels entirely through stdin
+ok 1 - SQL larger than Linux single-argv limit travels entirely through stdin
+  ---
+  duration_ms: 24.232525
+  ...
+# Subtest: exact four-MiB input accepted; +1 UTF-8 byte rejected before spawn
+ok 2 - exact four-MiB input accepted; +1 UTF-8 byte rejected before spawn
+  ---
+  duration_ms: 31.257848
+  ...
+# Subtest: nonzero child exit preserves native code, stdout and stderr
+ok 3 - nonzero child exit preserves native code, stdout and stderr
+  ---
+  duration_ms: 19.924513
+  ...
+# Subtest: failed spawn propagates ENOENT without unhandled stdin errors
+ok 4 - failed spawn propagates ENOENT without unhandled stdin errors
+  ---
+  duration_ms: 2.332576
+  ...
+# Subtest: closed stdin propagates pipe failure even when child exits successfully
+ok 5 - closed stdin propagates pipe failure even when child exits successfully
+  ---
+  duration_ms: 121.022121
+  ...
+# Subtest: stdout buffer cap rejects rather than truncating success
+ok 6 - stdout buffer cap rejects rather than truncating success
+  ---
+  duration_ms: 25.309515
+  ...
+# Subtest: stderr buffer cap rejects rather than truncating success
+ok 7 - stderr buffer cap rejects rather than truncating success
+  ---
+  duration_ms: 19.801853
+  ...
+# Subtest: stalled child retains bounded timeout and killed exit
+ok 8 - stalled child retains bounded timeout and killed exit
+  ---
+  duration_ms: 54.314714
+  ...
+# Subtest: transport callers cannot widen original timeout or output cap
+ok 9 - transport callers cannot widen original timeout or output cap
+  ---
+  duration_ms: 0.741029
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 360.366475

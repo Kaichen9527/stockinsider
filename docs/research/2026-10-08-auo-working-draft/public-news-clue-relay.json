@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "public-news-clue-relay-v1",
+  "observer": "root-hosted-web-reader",
+  "observedAt": "2026-10-08 07:25:29 UTC",
+  "observedAtNormalized": "2026-10-08T07:25:29Z",
+  "recordedByVmAt": "2026-10-08T08:03:49.885253+00:00",
+  "productionImported": false,
+  "vmFetchSucceeded": false,
+  "entries": [
+    {
+      "url": "https://money.udn.com/money/story/5612/9766943",
+      "publishedAtAsDisplayed": "2026/09/20 23:34:22",
+      "timezoneInferred": "Asia/Taipei publisher location; page exact timezone not verified",
+      "exactPublishedAt": null,
+      "authors": [
+        "鐘惠玲",
+        "李珣瑛"
+      ],
+      "access": "public_body_read",
+      "summary": "頁面顯示比已記錄9/21報導更早的同一記者組合英特爾合作傳聞。文中英特爾不評論；友達先前表示有未具名夥伴共同開發與試產線準備。不是已證實訂單。",
+      "rootRelationship": "same_publisher_same_authors_related_report_as_9766808; independence not established",
+      "earliestOnInternetProven": false
+    },
+    {
+      "url": "https://www.ledinside.com.tw/news/20260929-40811.html",
+      "publishedAtAsDisplayed": "2026-09-29 23:15",
+      "exactPublishedAt": null,
+      "access": "public_body_read",
+      "summary": "以9/21媒體報導為起點整理Intel/AUO合作傳聞，附加光互連技術與試產線說法；沒有新客戶確認或訂單證據。",
+      "rootRelationship": "attributed_prior_media_not_independent_cooperation_confirmation",
+      "claimsNeedingPrimaryVerification": [
+        "86.41億元董事會資本支出是否全屬TGV/RDL/GCS，而非總資本預算",
+        "Intel OCI與800Gbps性能說法回原廠/論文，不據此推定AUO產品已達標"
+      ]
+    }
+  ],
+  "searchScope": [
+    "友達 英特爾 Micro LED 2026 10月 合作 訂單",
+    "site.auo.com 2026 10 MicroLED glass",
+    "site.intel.com AUO MicroLED 2026"
+  ],
+  "coverageCaveat": "有限公開查詢，不證明全網/社群已完整搜尋或目前無新消息；搜尋摘要不作訂單確認"
+}

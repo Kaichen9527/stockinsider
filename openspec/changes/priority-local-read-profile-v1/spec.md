@@ -1,0 +1,7 @@
+# Minimal native priority read profile
+
+Within the existing isolated development harness, install verbatim CREATE TABLE definitions required by the unchanged priority endpoint's issuer-domain and active-job readers. Preserve real foreign keys by installing their empty dependency tables in order. Select existing state-v1 priority-run, issuer-domain-v6 and deep-jobs-v1 definitions, not invented RPCs or substitute schema returns.
+
+A local read-only RLS policy gives service_role SELECT on nine ancillary tables; PUBLIC/anon/authenticated and service writes are revoked. Verify actual catalog ACL/RLS and HTTP401/403, not just SQL text. Only the existing guarded inbox can create the three real attributed industry documents. No stock/catalog, sector, instrument, authority, principal, release, job, publication or strategy rows are seeded. This selected profile is not the full installed production migration policy.
+
+The real unchanged priority endpoint must refuse unauthorized POST with401, and authenticated empty formal authority with409 research_priority_official_roster_missing before and after PG restart. Source-head/authority RPCs remain exact existing routines. Replay of the three inbox documents accepts zero; an uncertain consumer submission remains fenced. All protected dependency/catalog tables remain zero rows. This is not a successful research-only roster admission or Top20 completion.

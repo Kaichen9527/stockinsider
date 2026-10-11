@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "manual-source-attempt-summary-v1",
+  "recordedAt": "2026-10-05T08:06:45Z",
+  "sourcePlatform": "official",
+  "scope": "AUO2409 October2026 TWSE STOCK_DAY latest available month",
+  "sourceUrl": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=2409",
+  "attempts": [
+    {"method": "web_tool", "outcome": "read_failed", "errorCode": "source_not_accessible_via_tool"},
+    {"method": "existing_in_app_browser", "outcome": "read_failed", "errorCode": "browser_blocked_by_client"}
+  ],
+  "relevantResultCount": null,
+  "httpStatus": null,
+  "responseBodyHash": null,
+  "latestClosingPriceObtained": false,
+  "noRelevantResultsClaimed": false,
+  "providerOutageProven": false,
+  "blockedClientRestrictionBypassed": false,
+  "databaseWritten": false,
+  "temporaryBrowserTabClosed": true,
+  "technicalSignalRefreshed": false
+}

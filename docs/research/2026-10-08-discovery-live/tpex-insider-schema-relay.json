@@ -1,0 +1,524 @@
+{
+  "schemaVersion": "stockinsider-official-tpex-insider-relay-v1",
+  "recordedAt": "2026-10-08T13:03:24.557030+00:00",
+  "acquisition": "Root Mac public official HTTP after inspecting actual Swagger link/path definitions; VM did not acquire raw bytes",
+  "specification": {
+    "homepageReceipt": {
+      "url": "https://www.tpex.org.tw/openapi/",
+      "attemptedAt": "2026-10-08T13:00:21.521856+00:00",
+      "status": 200,
+      "resolvedUrl": "https://www.tpex.org.tw/openapi/",
+      "bytes": 1747,
+      "sha256": "695e584d2e3b8dbdf101a9c7142d7db7d0dc9e2208b140bf1b681dbba79617a4",
+      "observedAt": "2026-10-08T13:00:23.832441+00:00"
+    },
+    "swaggerReceipt": {
+      "priorAttempt": {
+        "attemptedAt": null,
+        "clockPrecision": "Prior bounded tool sequence, exact time not retained",
+        "outcome": "read_failed",
+        "errorType": "ConnectionResetError",
+        "error": "[Errno 54] Connection reset by peer"
+      },
+      "retry": {
+        "url": "https://www.tpex.org.tw/openapi/swagger.json",
+        "attemptedAt": "2026-10-08T13:01:24.425719+00:00",
+        "status": 200,
+        "bytes": 476923,
+        "sha256": "05af7755d0d528626c104f7a8ccd7b00c6a0cf228d30bcb4669020e514eb0c7e",
+        "outcome": "read_success",
+        "observedAt": "2026-10-08T13:01:28.443138+00:00"
+      }
+    },
+    "observedPaths": {
+      "/mopsfin_t187ap11_O": "上櫃公司董監事持股餘額明細資料",
+      "/mopsfin_t187ap12_O": "上櫃公司每日內部人持股轉讓事前申報表-持股轉讓日報表",
+      "/mopsfin_t187ap13_O": "上櫃公司每日內部人持股轉讓事前申報表-持股未轉讓日報表"
+    }
+  },
+  "sources": [
+    {
+      "url": "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap11_O",
+      "attemptedAt": "2026-10-08T13:02:02.059807+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap11_O",
+      "bytes": 6616900,
+      "sha256": "3a5891fb6ecad66f9f6aece9d0c4c438b3321f3212e76ee90d3c64c77f656854",
+      "outcome": "read_success",
+      "recordCount": 17568,
+      "firstRecordKeys": [
+        "出表日期",
+        "資料年月",
+        "公司代號",
+        "公司名稱",
+        "職稱",
+        "姓名",
+        "選任時持股",
+        "目前持股",
+        "設質股數",
+        "設質股數佔持股比例",
+        "內部人關係人目前持股合計",
+        "內部人關係人設質股數",
+        "內部人關係人設質比例"
+      ],
+      "selectedCompanyCounts": {
+        "5347": 26,
+        "6531": 0
+      },
+      "observedAt": "2026-10-08T13:02:04.380025+00:00"
+    },
+    {
+      "url": "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap12_O",
+      "attemptedAt": "2026-10-08T13:02:02.060819+00:00",
+      "httpStatus": 200,
+      "resolvedUrl": "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap12_O",
+      "bytes": 575,
+      "sha256": "595f9ace95757c66f1fec4ff7f2b01196107dc0e358dcf9071a074ed5639c116",
+      "outcome": "read_success",
+      "recordCount": 1,
+      "firstRecordKeys": [
+        "Date",
+        "SecuritiesCompanyCode",
+        "CompanyName",
+        "申請人身分",
+        "姓名",
+        "預定轉讓方式及股數-轉讓方式",
+        "預定轉讓方式及股數-轉讓股數",
+        "每日於盤中交易最大得轉讓股數",
+        "受讓人",
+        "目前持有股數-自有持股",
+        "目前持有股數-保留運用決定權信託股數",
+        "預定轉讓總股數-自有持股",
+        "預定轉讓總股數-保留運用決定權信託股數",
+        "預定轉讓後持股-自有持股",
+        "預定轉讓後持股-保留運用決定權信託股數",
+        "有效轉讓期間"
+      ],
+      "selectedCompanyCounts": {
+        "5347": 0,
+        "6531": 0
+      },
+      "observedAt": "2026-10-08T13:02:02.170263+00:00"
+    }
+  ],
+  "selectedHoldings5347": [
+    {
+      "sourceRowIndex": 7854,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "董事長本人",
+        "姓名": "方略",
+        "目前持股": "6572571",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7855,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "副董事長本人",
+        "姓名": "曾繁城",
+        "目前持股": "2000000",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7856,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "董事本人",
+        "姓名": "行政院國家發展基金管理會",
+        "目前持股": "298644837",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7857,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "董事之法人代表人",
+        "姓名": "黃&#21843;瑞",
+        "目前持股": "0",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7858,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "董事本人",
+        "姓名": "沈榮津",
+        "目前持股": "0",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7859,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "獨立董事本人",
+        "姓名": "史欽泰",
+        "目前持股": "0",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7860,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "獨立董事本人",
+        "姓名": "金聯舫",
+        "目前持股": "0",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7861,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "獨立董事本人",
+        "姓名": "陳良基",
+        "目前持股": "0",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7862,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "獨立董事本人",
+        "姓名": "徐中時",
+        "目前持股": "0",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7863,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "獨立董事本人",
+        "姓名": "林嬋娟",
+        "目前持股": "0",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7864,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "總經理本人",
+        "姓名": "尉濟時",
+        "目前持股": "1217734",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7865,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "副總經理本人",
+        "姓名": "陳姿鈞",
+        "目前持股": "510059",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7866,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "副總經理本人",
+        "姓名": "葉慶煌",
+        "目前持股": "136778",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7867,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "副總經理本人",
+        "姓名": "黃惠蘭",
+        "目前持股": "546831",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7868,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "經理本人",
+        "姓名": "林慧蓉",
+        "目前持股": "243089",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7869,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "協理本人",
+        "姓名": "林生元",
+        "目前持股": "30000",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7870,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "協理本人",
+        "姓名": "張永政",
+        "目前持股": "303320",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7871,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "協理本人",
+        "姓名": "廖志成",
+        "目前持股": "392401",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7872,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "協理本人",
+        "姓名": "高仁瑞",
+        "目前持股": "622109",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7873,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "協理本人",
+        "姓名": "李慶穎",
+        "目前持股": "293184",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7874,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "協理本人",
+        "姓名": "劉醇明",
+        "目前持股": "190267",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7875,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "協理本人",
+        "姓名": "王子豪",
+        "目前持股": "123089",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7876,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "大股東本人",
+        "姓名": "行政院國家發展基金管理會",
+        "目前持股": "298644837",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7877,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "大股東本人",
+        "姓名": "台灣積體電路製造股份有限公司",
+        "目前持股": "354709324",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7878,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "財務部門主管本人",
+        "姓名": "黃惠蘭",
+        "目前持股": "546831",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    },
+    {
+      "sourceRowIndex": 7879,
+      "values": {
+        "出表日期": "1150918",
+        "資料年月": "11508",
+        "公司代號": "5347",
+        "公司名稱": "世界",
+        "職稱": "會計部門主管本人",
+        "姓名": "黃惠蘭",
+        "目前持股": "546831",
+        "設質股數": "0",
+        "設質股數佔持股比例": "0.00%"
+      }
+    }
+  ],
+  "holdingMonths": [
+    "11508"
+  ],
+  "holdingOutputDates": [
+    "1150918"
+  ],
+  "transferPlaceholder": {
+    "sourceRowIndex": 0,
+    "date": "1151007",
+    "SecuritiesCompanyCode": "",
+    "CompanyName": "",
+    "申請人身分": "",
+    "姓名": "",
+    "recognizedEventCount": 0,
+    "scope": "One current response placeholder, not a transfer event or proof that historical transfers do not exist"
+  },
+  "schemaDifferences": {
+    "holding": "Chinese field names as listed in source receipt",
+    "transfer": {
+      "symbol": "SecuritiesCompanyCode",
+      "company": "CompanyName",
+      "issueDate": "Date",
+      "role": "申請人身分",
+      "currentOwnShares": "目前持有股數-自有持股",
+      "declaredShares": "預定轉讓方式及股數-轉讓股數"
+    }
+  },
+  "coverageGap": {
+    "codeSubject": "12e29b7df7740306caf5eb75e400cdc3b168166e",
+    "file": "web/src/lib/research-v2.ts",
+    "currentDatasets": [
+      "t187ap11_L",
+      "t187ap11_P",
+      "t187ap12_L"
+    ],
+    "missingTpex": true,
+    "publicCompanyPIsNotTpex": true
+  },
+  "publishedAtExact": null,
+  "firstObservedAt": "2026-10-08T13:02:04.380025+00:00",
+  "visibility": "public",
+  "rightsScope": "Only necessary public professional role/holding fields for one company and source schema metadata retained; no personal identifiers, contact details or transferees exported",
+  "independentConfirmationsAdded": 0,
+  "formalQualification": false,
+  "historicalAvailabilityProven": false,
+  "activeCollectorIntegration": false,
+  "limits": [
+    "Holding snapshot is August2026, output September18, observed October8; not current completed trades.",
+    "Do not sum corporation/representative/related holdings without overlap treatment.",
+    "Transfer placeholder must not create an unnamed or zero-share event.",
+    "The untransferred13_O endpoint was discovered in Swagger but not fetched; no claim of coverage.",
+    "Official raw-reference datasets exceed general article-body4MB; preserve true byte sizes and separate bounded contracts."
+  ],
+  "privateRawDirectory": "/Users/kaerchen/.cache/stockinsider-workspaces/research-evidence/2026-10-08/tpex-openapi-discovery-oct08"
+}

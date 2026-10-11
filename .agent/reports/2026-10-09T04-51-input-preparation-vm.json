@@ -1,0 +1,707 @@
+{
+  "schemaVersion": "research-input-preparation-vm-acceptance-v1",
+  "recordedAt": "2026-10-09T04:51:47.526460Z",
+  "engineeringWindow": {
+    "startedAt": "2026-10-09T04:32:20Z",
+    "deadline": "2026-10-09T05:02:20Z",
+    "manualEngineering": true,
+    "automatedRoleBudgetAcceptance": false
+  },
+  "codeSubject": "a4f08b3afc82304ac65b926df84c393b20b88555",
+  "branch": "codex/research-immutable-input-oct09",
+  "base": "c6e5b753b775931f553ade05b7078cd4cc10115c",
+  "files": [
+    {
+      "path": "/workspace/cloud-research-converged-oct08/migrations/20261009_research_input_preparations_v2.sql",
+      "bytes": 11852,
+      "sha256": "48c18f5a77cd4c811b2f361b4607149d34df4fcd0e508933ef6ed38d78b76340"
+    },
+    {
+      "path": "/workspace/cloud-research-converged-oct08/scripts/research-input-preparation-postgres.test.mjs",
+      "bytes": 10005,
+      "sha256": "d59e3ae2d3b057d59d95f1ba75102d50bbe4517a1f7a34137bb333ba07764f65"
+    },
+    {
+      "path": "/workspace/cloud-research-converged-oct08/scripts/research-deep-job-context-route.test.mjs",
+      "bytes": 39321,
+      "sha256": "8a48a06cdc4ea85e54f8b55dd8e02e8dceebd0b309591eba0b722fe6a2489489"
+    },
+    {
+      "path": "/workspace/cloud-research-converged-oct08/scripts/research-observed-priority-native.test.mjs",
+      "bytes": 35655,
+      "sha256": "dc2e2ee58d8fe9450b9f5dd7dfeb3d1b9e34984418aa0f8909cea68465fa25e0"
+    },
+    {
+      "path": "/workspace/cloud-research-converged-oct08/web/src/app/api/internal/research-deep-job/route.ts",
+      "bytes": 10412,
+      "sha256": "5659b7a6811e9c403f4fab8a3062cc79e8313d7022b2cad505137aacce968cf2"
+    },
+    {
+      "path": "/workspace/cloud-research-converged-oct08/package.json",
+      "bytes": 29024,
+      "sha256": "294d0066dcd2e1f0d3b7bf967153d14f076d98ab21490956ccfd61d8ff65f5a1"
+    }
+  ],
+  "runtime": {
+    "node": "22.14.0",
+    "postgres": "17.11",
+    "postgrest": "16.3",
+    "memoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "filesystemAvailableBytes": 19301273600,
+    "dfIsProjectQuota": false,
+    "configuredTrustedCapabilities": []
+  },
+  "finalResults": {
+    "focused": {
+      "pass": 46,
+      "fail": 0,
+      "skip": 0,
+      "command": "node scripts/run-node22.js --experimental-strip-types --test scripts/research-deep-job-context-route.test.mjs scripts/research-input-preparation-postgres.test.mjs"
+    },
+    "native": {
+      "pass": 32,
+      "fail": 0,
+      "skip": 0,
+      "actualNextPostgrestPostgresql": true,
+      "originalNativeCasesRetained": true,
+      "newInputPreparationSubtests": 3,
+      "scope": "isolated development credentials and assessment; actual attributed old EP8 summary, not new market catalyst or model execution"
+    },
+    "types": true,
+    "lint": {
+      "errors": 0,
+      "warnings": 33
+    },
+    "cleanNormalBuild": {
+      "pass": true,
+      "sourceSubject": "a4f08b3afc82304ac65b926df84c393b20b88555",
+      "webTree": "2482e96b535269746143b2085854defec5706c1d",
+      "buildId": "btP98u4RIUPCppYuc1TEC",
+      "envFilenameInventory": []
+    }
+  },
+  "nativeReceipt": {
+    "inputPreparation": {
+      "preparationId": "87eafd8c-7744-441a-810d-a0aa80eede77",
+      "inputHash": "d535b5d0784bf1bd601ef8d39b29a141fa9004315111facbbccb3848c5feece0",
+      "admittedAt": "2026-10-09T04:50:59.641827+00:00",
+      "sourceSealId": "098ee009-6a43-4c25-b142-98660ff42178",
+      "dispatchReady": false,
+      "actualModelExecution": false,
+      "formalProducts": 0
+    },
+    "observedClaim": {
+      "jobId": "44d99323-ca3d-4e3b-b3ba-1838866c11b4",
+      "reservationId": "e961a0e9-dcad-4157-b937-1187674a8933",
+      "attempt": 1,
+      "deadline": "2026-10-09T05:20:57.807777+00:00",
+      "inputHash": "3fb107f7751035a99131d81da25e9a4e1ef00307797cbb1ab451ebb1432f23b0",
+      "schemaVersion": "research-deep-author-input-v2",
+      "modelBudgetSeconds": 1800,
+      "modelActuallyExecuted": false,
+      "publicationEligible": false
+    },
+    "ep8": {
+      "documentId": "2f75452f-f218-4afa-9223-0e81ed5c3a5b",
+      "sourceUrl": "https://podcasts.apple.com/tw/podcast/ep8-%E8%BD%89%E5%96%AE-%E6%BC%B2%E5%83%B9-%E6%BB%BF%E8%BC%89-%E6%88%90%E7%86%9F%E8%A3%BD%E7%A8%8B%E4%BE%9B%E9%9C%80%E6%8B%90%E9%BB%9E%E4%B8%80%E6%AC%A1%E8%AC%9B%E6%B8%85%E6%A5%9A-ft-eric/id1872298769?i=1000755659999",
+      "publishedAt": "2026-03-16T22:30:00Z",
+      "firstObservedAt": "2026-10-08T12:31:55.622917+00:00",
+      "acquisition": "attributed Mac relay, not VM HTTP",
+      "scope": "public publisher description only; not episode audio/transcript",
+      "controllerRunHash": "51f5c1fff8035c89612a71a506d9abd8471711532fcb42d51764f59d704279ea"
+    },
+    "scopeBoundary": {
+      "formalIdentityRows": 0,
+      "formalProducts": 0,
+      "modelReserved": true,
+      "liveRolesExecuted": false,
+      "legacyAuthorityActivated": false
+    }
+  },
+  "failuresRetained": [
+    {
+      "stage": "input-preparation-pg-v2",
+      "outcome": "sandbox execution failed without usable SQL diagnostic; no pass claimed"
+    },
+    {
+      "stage": "input-preparation-pg-v2-diagnostic",
+      "pass": 3,
+      "fail": 6,
+      "cause": "FOR SHARE lacked scoped identity-column UPDATE grant"
+    },
+    {
+      "stage": "input-preparation-native-v2",
+      "pass": 26,
+      "fail": 4,
+      "cause": "real RLS lacked lock-only UPDATE USING policy; WITH CHECK(false) now blocks actual changes"
+    },
+    {
+      "stage": "input-preparation-native-v2-rls-green",
+      "pass": 0,
+      "fail": 1,
+      "cause": "private Unix socket path exceeded existing bound; shortened directory, no guard weakening"
+    },
+    {
+      "stage": "input-v2-live-green",
+      "pass": 26,
+      "fail": 4,
+      "cause": "source-sealer private role lacked source_raw_documents SELECT RLS policy"
+    },
+    {
+      "stage": "input-preparation-types-v2",
+      "cause": "tool session vanished; initial log retained, no successful result claimed; create-only recovery typecheck passed"
+    }
+  ],
+  "reviewAttribution": {
+    "sourceFenceSubject": "05aebcb8e749a3cd32b5050de65331cf4424d452",
+    "unsignedScopedCodePass": true,
+    "reviewerActualPg": {
+      "pass": 15,
+      "fail": 0,
+      "skip": 0
+    },
+    "sourceFenceCodeUnchanged": true,
+    "completeAncestorClosureSupported": false,
+    "thisInputCodeIndependentReview": "pending"
+  },
+  "measurements": [
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-preparation-pg-v2",
+      "command": [
+        "node",
+        "--test",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:36:24.171Z",
+      "completedAt": "2026-10-09T04:36:25.626Z",
+      "elapsedSeconds": 1.4550257499795407,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 113979392,
+      "observedTaskDiskPeakBytes": 2025402368,
+      "availableBeforeBytes": 19569319936,
+      "availableAfterBytes": 19569311744,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-preparation-pg-v2-diagnostic",
+      "command": [
+        "node",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:36:48.538Z",
+      "completedAt": "2026-10-09T04:36:50.166Z",
+      "elapsedSeconds": 1.62786461901851,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 86691840,
+      "observedTaskDiskPeakBytes": 2026184704,
+      "availableBeforeBytes": 19569324032,
+      "availableAfterBytes": 19569295360,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-preparation-pg-v2-green",
+      "command": [
+        "node",
+        "--test",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:37:31.480Z",
+      "completedAt": "2026-10-09T04:37:33.575Z",
+      "elapsedSeconds": 2.095275108003989,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 114348032,
+      "observedTaskDiskPeakBytes": 2026102784,
+      "availableBeforeBytes": 19569291264,
+      "availableAfterBytes": 19569278976,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-preparation-focused-v2",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-deep-job-context-route.test.mjs",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:39:08.381Z",
+      "completedAt": "2026-10-09T04:39:20.886Z",
+      "elapsedSeconds": 12.505278127995552,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 644235264,
+      "observedTaskDiskPeakBytes": 2026299392,
+      "availableBeforeBytes": 19569270784,
+      "availableAfterBytes": 19569250304,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-preparation-types-v2-recovery",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "exec",
+        "tsc",
+        "--",
+        "--noEmit",
+        "-p",
+        "web/tsconfig.json"
+      ],
+      "startedAt": "2026-10-09T04:41:14.350Z",
+      "completedAt": "2026-10-09T04:41:17.336Z",
+      "elapsedSeconds": 2.9865041200246196,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 559943680,
+      "observedTaskDiskPeakBytes": 1985052672,
+      "availableBeforeBytes": 19569242112,
+      "availableAfterBytes": 19569238016,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-preparation-lint-v2",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-09T04:41:53.983Z",
+      "completedAt": "2026-10-09T04:42:16.010Z",
+      "elapsedSeconds": 22.026591930014547,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1141760000,
+      "observedTaskDiskPeakBytes": 1985064960,
+      "availableBeforeBytes": 19569233920,
+      "availableAfterBytes": 19569221632,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-preparation-build-v2",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T04:42:30.746Z",
+      "completedAt": "2026-10-09T04:42:39.494Z",
+      "elapsedSeconds": 8.748095009010285,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1015611392,
+      "observedTaskDiskPeakBytes": 1985077248,
+      "availableBeforeBytes": 19569217536,
+      "availableAfterBytes": 19567714304,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-preparation-native-v2",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:42:56.914Z",
+      "completedAt": "2026-10-09T04:43:35.527Z",
+      "elapsedSeconds": 38.61318277101964,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 1040809984,
+      "observedTaskDiskPeakBytes": 2052894720,
+      "availableBeforeBytes": 19567706112,
+      "availableAfterBytes": 19501395968,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-preparation-rls-v2",
+      "command": [
+        "node",
+        "--test",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:44:15.888Z",
+      "completedAt": "2026-10-09T04:44:17.768Z",
+      "elapsedSeconds": 1.8800405070069246,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 114085888,
+      "observedTaskDiskPeakBytes": 2094174208,
+      "availableBeforeBytes": 19501391872,
+      "availableAfterBytes": 19501379584,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-preparation-native-v2-rls-green",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:44:45.899Z",
+      "completedAt": "2026-10-09T04:44:46.589Z",
+      "elapsedSeconds": 0.6902180909819435,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 159989760,
+      "observedTaskDiskPeakBytes": 2052919296,
+      "availableBeforeBytes": 19501375488,
+      "availableAfterBytes": 19501359104,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-v2-live-green",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:45:03.783Z",
+      "completedAt": "2026-10-09T04:45:46.366Z",
+      "elapsedSeconds": 42.58294333299273,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 974118912,
+      "observedTaskDiskPeakBytes": 2129838080,
+      "availableBeforeBytes": 19501355008,
+      "availableAfterBytes": 19435024384,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-v2-live-final",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:46:32.117Z",
+      "completedAt": "2026-10-09T04:47:06.261Z",
+      "elapsedSeconds": 34.14343920402462,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 981684224,
+      "observedTaskDiskPeakBytes": 2185641984,
+      "availableBeforeBytes": 19435020288,
+      "availableAfterBytes": 19368648704,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-v2-focused-final",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-deep-job-context-route.test.mjs",
+        "scripts/research-input-preparation-postgres.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:48:12.775Z",
+      "completedAt": "2026-10-09T04:48:22.986Z",
+      "elapsedSeconds": 10.2115708909987,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 557101056,
+      "observedTaskDiskPeakBytes": 2226044928,
+      "availableBeforeBytes": 19368636416,
+      "availableAfterBytes": 19368615936,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-v2-build-clean",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-09T04:49:55.147Z",
+      "completedAt": "2026-10-09T04:50:01.305Z",
+      "elapsedSeconds": 6.15803012100514,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1224364032,
+      "observedTaskDiskPeakBytes": 2185682944,
+      "availableBeforeBytes": 19368480768,
+      "availableAfterBytes": 19367669760,
+      "guardTermination": null
+    },
+    {
+      "rssMethod": "100ms process-group plus live recursive descendants; short/reparented processes may be missed",
+      "stage": "input-v2-clean",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-observed-priority-native.test.mjs"
+      ],
+      "startedAt": "2026-10-09T04:50:28.441Z",
+      "completedAt": "2026-10-09T04:51:03.549Z",
+      "elapsedSeconds": 35.1076031519915,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 811380736,
+      "observedTaskDiskPeakBytes": 2252865536,
+      "availableBeforeBytes": 19367665664,
+      "availableAfterBytes": 19301294080,
+      "guardTermination": null
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-pg-v2.log",
+      "bytes": 509,
+      "sha256": "77d0b55eb136a07a0bf3ecddbdf181cb7de9b35f09d9134dcfb158c84a485293"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-pg-v2.json",
+      "bytes": 596,
+      "sha256": "fa281155f9c3b091abf443c9dfcf54f0dfc44823b378e5d496bc56f299d94e63"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-pg-v2.time",
+      "bytes": 826,
+      "sha256": "3385503fcff28c9370bdc1a9c631ecbecd9e5baa49fe02ba4f9618cb0e515795"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-pg-v2-diagnostic.log",
+      "bytes": 21795,
+      "sha256": "8887bbe0e7a17e1c01e8132aacb38c94c1d2fe48d19777a96c80b1c6c59150ac"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-pg-v2-diagnostic.json",
+      "bytes": 590,
+      "sha256": "937b229e4e68322f9a7afb5f4e4e923d6551a4a1094fd6373748d745b1de29bd"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-pg-v2-diagnostic.time",
+      "bytes": 820,
+      "sha256": "df3e5eedd6164af62d84173caab4a9dea83cbc99fafd33bcb9d450c8ab15cf89"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-pg-v2-green.log",
+      "bytes": 5857,
+      "sha256": "5f5eea4119350225f979efa91f87e17f694c219ca7bc2d3817a98b52b279e8f5"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-pg-v2-green.json",
+      "bytes": 601,
+      "sha256": "77df8c84e7b9b976777d250057b0404472bf9adc8a3d30c265b8480fa26a0920"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-pg-v2-green.time",
+      "bytes": 790,
+      "sha256": "7eb7f6328ab4737f6e51137cc515adcb48799a9190e2582268258e16ce67d65b"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-focused-v2.log",
+      "bytes": 14687,
+      "sha256": "f0ce6c3ec5b06480717ea7545ed37179b69adb4cf507663b14d8b2f210a710d0"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-focused-v2.json",
+      "bytes": 720,
+      "sha256": "213ba57fa0b8f555e1911ecfc8474b417d8c288202897945bb02bbef14a5ba76"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-focused-v2.time",
+      "bytes": 892,
+      "sha256": "6ea064da7677b2ea8c5e5d86dc0ffe2cf83b8685eafa392c57d6b44a6d70c647"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-types-v2-recovery.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-types-v2-recovery.json",
+      "bytes": 644,
+      "sha256": "b1b01caa41845d2aceb327f6fdfce8b143d1fced546c1abdac513a15c53c1eb9"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-types-v2-recovery.time",
+      "bytes": 783,
+      "sha256": "ac7cd8d9f7418ff17e44f8e176a4fbcd57b68ea73b9623fa85a1b2916ce5bdb2"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-lint-v2.log",
+      "bytes": 4718,
+      "sha256": "08dc636eb541cc8b68c21f4149b523ab347ff6e4a474fa6a378f006e124571ff"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-lint-v2.json",
+      "bytes": 574,
+      "sha256": "9e6516ded97e866259dba0026f1c80e0a73e8415a02cb918ac438e6e414f656a"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-lint-v2.time",
+      "bytes": 754,
+      "sha256": "ad635bdfd8deb77e4e11ec926c0464cc1bcce373a3691b6168a28abaa18c691b"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-build-v2.log",
+      "bytes": 6499,
+      "sha256": "fa304e687db2dd6c1dc36963e33b9c33684a2ffbb228877405520fb059bab8dd"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-build-v2.json",
+      "bytes": 575,
+      "sha256": "63b9ecde8f512d02a6b9274ceb22646cbe1cd0690863aec749e4442a0c63f675"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-build-v2.time",
+      "bytes": 758,
+      "sha256": "ccdf175f4804639609443337e212b876ade7be8fc8c8fb4ce11a080e6754fad6"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-native-v2.log",
+      "bytes": 12759,
+      "sha256": "513a9a0a05f73b1ded1d678d5366208566f541839decdc7aa8463f55b9dace17"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-native-v2.json",
+      "bytes": 661,
+      "sha256": "054953b30e9025baf11b2b08a82195f8a112c002642a3ef11b7d9c68e58ab3ad"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-native-v2.time",
+      "bytes": 878,
+      "sha256": "6ff839f46c44c2a3bdeb3cecfef6a1fc52ee589bebf04a10acb2caef6c0b8ba0"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-rls-v2.log",
+      "bytes": 5945,
+      "sha256": "cb6988ed38f4a6cbd2d092a9f96e988c379f0669d5424c4ce9c15b4962513c5b"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-rls-v2.json",
+      "bytes": 597,
+      "sha256": "9c02d0e826773026f1db0c00ffcabbb695001d270a6218bd15d5ae4c9344d72f"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-rls-v2.time",
+      "bytes": 790,
+      "sha256": "aa076d355d0099d75a7b8b7323049919d9212622f1c45a3a76da8bb7068102cf"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-native-v2-rls-green.log",
+      "bytes": 1707,
+      "sha256": "81982ec3dea586989ac74ff1231f42bcd08b8d6518a0d0f9897bd76b6babf52f"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-native-v2-rls-green.json",
+      "bytes": 671,
+      "sha256": "70ea986c6c33718eaf36863bc627c8c053b817a59ccbb9c7bb9a3768fdd9d0a2"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-preparation-native-v2-rls-green.time",
+      "bytes": 873,
+      "sha256": "a34fbf6b4e411a0b7f880598a84eefb628e987ad727ff305fc14dffb53bfdb2f"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-live-green.log",
+      "bytes": 12767,
+      "sha256": "c8053f074a869c6c5b27316d48533491700ec5ce52f6bb5d70beb1fd3cd37ba3"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-live-green.json",
+      "bytes": 652,
+      "sha256": "be89a22d1b795672267c832cbdd5274c5e6a8d52fb55f45de1bf8d9d9ef1d9d2"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-live-green.time",
+      "bytes": 878,
+      "sha256": "26595392a55be35e206b05b398b5ac8e6a8e593452411b1579a2e34a0add8f70"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-live-final.log",
+      "bytes": 8585,
+      "sha256": "9fd5f3bd9073fb512253645dfd8512d72aa9a91865a8ccd218b5b39ed0d40ffa"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-live-final.json",
+      "bytes": 652,
+      "sha256": "421481b2234a307019f23fc3ba747ad01eaa8f78955fe48ebc77df6e1dbbcaf8"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-live-final.time",
+      "bytes": 840,
+      "sha256": "2786ef95bb9f0e933d46c568b4eff8cf4ddd5f3f22d3ab74b1eaeb625a7e0d26"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-focused-final.log",
+      "bytes": 14766,
+      "sha256": "4725d958e759b4ab28d172fc8cc97869e537effba34a308f27e2b5f08886ee29"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-focused-final.json",
+      "bytes": 712,
+      "sha256": "1ecf72f792c45baf4a9f9e4ddeb5886e5aaa2f2ef57c0f534ae348336c14cf6c"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-focused-final.time",
+      "bytes": 892,
+      "sha256": "79e8bf7d7f552471487912de286553005cb2c7a4ccfd715b523a411733f1025b"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-build-clean.log",
+      "bytes": 6499,
+      "sha256": "701bcc914c6e753d987ec3703a5f29751722e3aa41f93ef8d4697131078fe001"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-build-clean.json",
+      "bytes": 568,
+      "sha256": "cbcdb66493ad2f0bea68d39c1385339dc6cdf0ca62ac2c1a7dc297f1ce84807f"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-build-clean.time",
+      "bytes": 758,
+      "sha256": "578dedd5f52cfdc8790a625c1a37362598e9ff92a8dc31f9a0065ce1803a1572"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-clean.log",
+      "bytes": 8584,
+      "sha256": "8ea69e1c337316122bd1defeb7b41907aedd8b8c45e4aa129fd4d76992e3fae9"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-clean.json",
+      "bytes": 646,
+      "sha256": "d77bfa0eb364691a47747e675f245c83b81cd01dad2fa04257c0809ec96aa997"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-clean.time",
+      "bytes": 840,
+      "sha256": "36a60ab107220682222963481b2a0d4c48a23938a190d40df0d3179ed0772f11"
+    },
+    {
+      "path": "/workspace/cloud-observed-context-artifacts-oct08/input-v2-clean-run/acceptance-receipt.json",
+      "bytes": 25531,
+      "sha256": "b90d8b2d8936448dd8797b8a75dbc4b820569c14eba37452fc38705fe2ee88be"
+    }
+  ],
+  "limitations": [
+    "This is an immutable incomplete preparation, not research_article_input_revisions_v2 or a publication receipt.",
+    "Full financial manifest/calculator/revision union/outbox publication and actual trusted author/reviewer execution remain pending.",
+    "No provider/model principal is inferred from caller owner or cross-chat observations.",
+    "No original model cutoff selected; discoveryCutoff is distinct and originalModelCutoff is null.",
+    "No model call, extra reservation, lease extension, official authority, formal stocks, strategy approval, production migration or deployment.",
+    "Lifetime snapshot raw storage is finite; d27417+6 does not prove unlimited daily scheduling."
+  ]
+}

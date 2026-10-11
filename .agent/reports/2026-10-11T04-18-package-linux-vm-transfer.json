@@ -1,0 +1,17 @@
+{
+  "recordedAt": "2026-10-11T04:18:44.029129+00:00",
+  "localEvidenceHeadBeforeTransferNote": "f13abed7f1e5a4203dfa3a9aeab8e1f50245b179",
+  "originalPush": {
+    "command": "git push -u origin codex/research-package-linux-evidence-oct11",
+    "exitCode": 128,
+    "stderr": "fatal: could not read Username for 'https://github.com': No such device or address"
+  },
+  "subsequentReadonlyProbe": {
+    "command": "git ls-remote --heads origin codex/research-release-io-linux-evidence-oct11 codex/research-package-linux-evidence-oct11",
+    "exitCode": 0,
+    "firstEvidenceRemoteHead": "caa013cdb7b6a933acc7734ce90021cb2c527cab",
+    "secondEvidenceRemoteNotYetPresent": true
+  },
+  "noCredentialFilesReadOrCopied": true,
+  "noTestsOrSourceRerunOrChanged": true
+}

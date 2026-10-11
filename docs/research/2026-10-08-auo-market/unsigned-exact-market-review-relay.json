@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "unsigned-exact-market-review-relay-v1",
+  "recordedAt": "2026-10-08T15:58:00.441919+08:00",
+  "reportedBy": "source thread delegation",
+  "reviewer": "existing independent GPT-6 Astra reviewer",
+  "subjectCommit": "c16bc52271eaf733b7ca69d0cc747d123a5d2ad6",
+  "decision": "unsigned_scoped_approval",
+  "originalRawAcquisitionHost": "root Mac public reader; original raw files not transferred to VM",
+  "reviewChecksReported": {
+    "originalJsonFiles": 28,
+    "rawByteCountsAndSha256": "all match",
+    "selectedStringsCompared": 3216,
+    "selectedStringDifferences": 0,
+    "combinedStockAndIndexBars": 536,
+    "sourceLedgerEntries": 28,
+    "rowProvenanceEntries": 536,
+    "localFileHashes": 7,
+    "canonicalHashes": 30,
+    "independentRecomputationFromRaw": [
+      "SMA",
+      "MA slope",
+      "20-session median volume ratio",
+      "Wilder ATR",
+      "RSI14 initial-zero seed",
+      "OBV",
+      "MACD",
+      "aligned relative returns"
+    ],
+    "independentRecomputationOutcome": "matches",
+    "nonstandardXAndCorporateActionRawLimitations": "preserved",
+    "qualificationNulls": "preserved",
+    "topLevelNotesSupplement": "nonblocking"
+  },
+  "scopeLimits": {
+    "certifiesMakerTestExecution": false,
+    "vmRawFetchSuccess": false,
+    "protectedAttestation": false,
+    "researchContentApproved": false,
+    "strategyApproved": false,
+    "deploymentApproved": false,
+    "liveHandoffVerified": false,
+    "appliesToFutureCodeOrDatasetChanges": false
+  },
+  "notes": "This is an attributed review-result relay, not a new VM verification of raw bytes, a signed evidence ref or a formal business/strategy decision."
+}
