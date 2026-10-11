@@ -1,0 +1,43 @@
+[
+  {
+    "command": [
+      "/usr/bin/gh",
+      "--version"
+    ],
+    "start": "2026-10-11T09:59:40.651196+00:00",
+    "wallSeconds": 0.09816963202320039,
+    "exit": 0,
+    "stdout": "gh version 2.46.0 (2025-01-13 Debian 2.46.0-3)\nhttps://github.com/cli/cli/releases/tag/v2.46.0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/usr/bin/gh",
+      "auth",
+      "status",
+      "--hostname",
+      "github.com"
+    ],
+    "start": "2026-10-11T09:59:40.749719+00:00",
+    "wallSeconds": 0.056435394973959774,
+    "exit": 0,
+    "stdout": "github.com\n  X Failed to log in to github.com using token (GH_TOKEN)\n  - Active account: true\n  - The token in GH_TOKEN is invalid.\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/usr/bin/gh",
+      "api",
+      "--method",
+      "GET",
+      "repos/Kaichen9527/stockinsider",
+      "--jq",
+      "{full_name,private,permissions,default_branch}"
+    ],
+    "start": "2026-10-11T09:59:40.806217+00:00",
+    "wallSeconds": 0.0580699120182544,
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Get \"https://api.github.com/repos/Kaichen9527/stockinsider\": Forbidden\n"
+  }
+]

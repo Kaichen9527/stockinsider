@@ -1,0 +1,126 @@
+{
+  "schema": "deployment_transfer_capability_read_only_v1",
+  "startedAt": "2026-10-11T09:56:59.184638Z",
+  "completedAt": "2026-10-11T10:00:20.906720+00:00",
+  "deadline": "2026-10-11T10:01:59.184638Z",
+  "artifact": {
+    "sourceCommit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "tree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+    "path": "/tmp/si-2e-m35wlxg5/stockinsider-2e078dfd-linux-standalone.tar.gz",
+    "bytes": 28211002,
+    "sha256": "1c4c6d9c128be8c18e9d7bc3bada871d2a5b3c99dd509566ba6a0e4c3e33a5cd",
+    "verifiedAtAdmission": true,
+    "binaryInGit": false
+  },
+  "evidenceParent": "7ee8a294fec701ba02aa4f868aeb8078a35f69b8",
+  "clis": {
+    "gh": "/usr/bin/gh",
+    "git": "/usr/local/bin/git",
+    "curl": "/usr/bin/curl"
+  },
+  "authenticationVariablePresenceOnly": {
+    "GH_TOKEN": true,
+    "GITHUB_TOKEN": false,
+    "GH_ENTERPRISE_TOKEN": false,
+    "GITHUB_ENTERPRISE_TOKEN": false
+  },
+  "policy": {
+    "type": "restricted",
+    "vpnConfigured": false,
+    "githubExplicit": true,
+    "apiGithubExplicit": false,
+    "uploadsGithubExplicit": false,
+    "proxyAndCAPreserved": true
+  },
+  "availableTools": {
+    "githubConnectorOrBinaryUploadToolFound": false,
+    "sedimentDownloadToolIsIncomingOnly": true
+  },
+  "runtimeStatusAtAdmission": {
+    "connected": true,
+    "running": true,
+    "observationsCurrent": true,
+    "networkState": "unknown",
+    "configuredCapabilities": []
+  },
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/gh",
+        "--version"
+      ],
+      "start": "2026-10-11T09:59:40.651196+00:00",
+      "wallSeconds": 0.09816963202320039,
+      "exit": 0,
+      "stdout": "gh version 2.46.0 (2025-01-13 Debian 2.46.0-3)\nhttps://github.com/cli/cli/releases/tag/v2.46.0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/gh",
+        "auth",
+        "status",
+        "--hostname",
+        "github.com"
+      ],
+      "start": "2026-10-11T09:59:40.749719+00:00",
+      "wallSeconds": 0.056435394973959774,
+      "exit": 0,
+      "stdout": "github.com\n  X Failed to log in to github.com using token (GH_TOKEN)\n  - Active account: true\n  - The token in GH_TOKEN is invalid.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/gh",
+        "api",
+        "--method",
+        "GET",
+        "repos/Kaichen9527/stockinsider",
+        "--jq",
+        "{full_name,private,permissions,default_branch}"
+      ],
+      "start": "2026-10-11T09:59:40.806217+00:00",
+      "wallSeconds": 0.0580699120182544,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Get \"https://api.github.com/repos/Kaichen9527/stockinsider\": Forbidden\n"
+    }
+  ],
+  "conclusion": {
+    "draftReleaseAssetUploadVerified": false,
+    "missingCapability": "Existing authenticated GitHub API access was not usable in this instance: metadata GET returned Forbidden. Upload authentication/endpoint and repository write permissions remain unverified.",
+    "authStatusExitZeroIsNotSuccess": true,
+    "authStatusReported": "Failed to log in; token invalid",
+    "tokenInvalidityRootCauseProven": false,
+    "note": "Proxy placeholders and policy can affect CLI authentication; no credential contents inspected. API/upload hosts are absent from the startup explicit allowlist; live GET denied without detailed cause. No workaround attempted.",
+    "futureRoute": "Root may use its existing authorized VPS transfer route or separately configure supported API/upload access; no transfer claimed."
+  },
+  "operationsNotPerformed": [
+    "release create",
+    "tag create",
+    "asset upload",
+    "SSH",
+    "production access",
+    "deployment",
+    "source changes",
+    "heavy tests/build"
+  ],
+  "sanitizedRaw": {
+    "path": ".agent/reports/2026-10-11T09-56-deployment-transfer-capability-linux/sanitized-cli-probe.json",
+    "bytes": 1129,
+    "sha256": "b2c1775c2e0967cdac0d02210d3bf05257b311ed15afc83a911a0c28d7fb06fe",
+    "credentialLinesOmitted": true
+  },
+  "limitations": [
+    "No upload performed or simulated",
+    "GET metadata failure does not establish repository upload permission",
+    "No draft release created or inspected",
+    "No new authentication installed/exported",
+    "No services started, so no process cleanup required"
+  ],
+  "resources": {
+    "workspaceFreeBytes": 10036436992,
+    "tmpFreeBytes": 17087782912,
+    "heavyWork": false
+  }
+}
