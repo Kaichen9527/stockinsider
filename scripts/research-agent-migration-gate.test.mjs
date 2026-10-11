@@ -25,6 +25,24 @@ test('research schema extends the same attested operator plan and cannot use a s
     'migrations/20261004_research_technical_identity_v2.sql',
     'migrations/20261004_research_cloud_receipts_v1.sql',
     'migrations/20261005_financial_history_admission_v1.sql',
+    'migrations/20261008_insider_snapshots_v1.sql',
+    'migrations/20261008_research_observed_roster_v1.sql',
+    'migrations/20261008_research_observed_priority_v1.sql',
+    'migrations/20261008_research_observed_claim_v2.sql',
+    'migrations/20261009_research_publication_source_fence_v2.sql',
+    'migrations/20261009_research_input_preparations_v2.sql',
+    'migrations/20261009_research_input_preparation_assert_v2.sql',
+    'migrations/20261009_research_complete_input_v2.sql',
+    'migrations/20261009_research_author_assignments_v2.sql',
+    'migrations/20261009_research_author_packet_v2.sql',
+    'migrations/20261009_research_author_results_v2.sql',
+    'migrations/20261009_research_author_handoffs_v2.sql',
+    'migrations/20261009_research_reviewer_assignments_v2.sql',
+    'migrations/20261009_research_reviewer_results_v2.sql',
+    'migrations/20261009_research_publication_lineage_v2.sql',
+    'migrations/20261010_research_atomic_publication_v2.sql',
+    'migrations/20261010_research_publication_view_v2.sql',
+    'migrations/20261011_research_admission_isolation_v1.sql',
   ]);
   assert.equal(fs.existsSync(path.join(root, 'scripts/apply-research-agent-migrations.mjs')), false);
   assert.match(reviewed, /resolveReviewedRuntimeRelease/u);
@@ -60,6 +78,8 @@ test('base chain stays fixed and explicit extension authority never replaces rev
   fs.mkdirSync(path.join(isolated, 'scripts/opportunity-v3'), { recursive: true });
   fs.copyFileSync(path.join(root, 'scripts/opportunity-v3/migration-plan.mjs'),
     path.join(isolated, 'scripts/opportunity-v3/migration-plan.mjs'));
+  fs.copyFileSync(path.join(root, 'scripts/opportunity-v3/migration-sql-policy.mjs'),
+    path.join(isolated, 'scripts/opportunity-v3/migration-sql-policy.mjs'));
   fs.cpSync(path.join(root, 'migrations'), path.join(isolated, 'migrations'), { recursive: true });
   for (const authority of [{ v314: { productionDatabaseMigrationAuthorized: true } },
     { v314: { productionDatabaseMigrationAuthorized: true }, researchAgent: { productionDatabaseMigrationAuthorized: false } }]) {

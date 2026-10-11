@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { classifyReviewedMigrationSql } from './migration-sql-policy.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const authorityArtifact = path.join(root,
@@ -66,6 +67,24 @@ const researchAgentMigrationPaths = [
   'migrations/20261004_research_technical_identity_v2.sql',
   'migrations/20261004_research_cloud_receipts_v1.sql',
   'migrations/20261005_financial_history_admission_v1.sql',
+  'migrations/20261008_insider_snapshots_v1.sql',
+  'migrations/20261008_research_observed_roster_v1.sql',
+  'migrations/20261008_research_observed_priority_v1.sql',
+  'migrations/20261008_research_observed_claim_v2.sql',
+  'migrations/20261009_research_publication_source_fence_v2.sql',
+  'migrations/20261009_research_input_preparations_v2.sql',
+  'migrations/20261009_research_input_preparation_assert_v2.sql',
+  'migrations/20261009_research_complete_input_v2.sql',
+  'migrations/20261009_research_author_assignments_v2.sql',
+  'migrations/20261009_research_author_packet_v2.sql',
+  'migrations/20261009_research_author_results_v2.sql',
+  'migrations/20261009_research_author_handoffs_v2.sql',
+  'migrations/20261009_research_reviewer_assignments_v2.sql',
+  'migrations/20261009_research_reviewer_results_v2.sql',
+  'migrations/20261009_research_publication_lineage_v2.sql',
+  'migrations/20261010_research_atomic_publication_v2.sql',
+  'migrations/20261010_research_publication_view_v2.sql',
+  'migrations/20261011_research_admission_isolation_v1.sql',
 ];
 const researchAgentPreludePaths = ['migrations/20261005_release_function_ownership_bridge_v1.sql'];
 const describeMigration = (relativePath) => {
@@ -73,8 +92,7 @@ const describeMigration = (relativePath) => {
   return {
     migration: relativePath,
     bytes: bytes.length,
-    sha256: createHash('sha256').update(bytes).digest('hex'),
-    additiveOnly: !/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')),
+    ...classifyReviewedMigrationSql(relativePath, bytes),
   };
 };
 const migrations = migrationPaths.map(describeMigration);

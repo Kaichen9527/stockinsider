@@ -8,6 +8,10 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { assertInstalledResearchSuccessorPlan } from './migration-successor-guard.mjs';
 import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
+import { assertReviewedMigrationSql } from './migration-sql-policy.mjs';
+import { assertResearchPublicationFirstInstall } from './research-publication-install-guard.mjs';
+import { assertResearchPublicationCatalog } from './research-publication-catalog.mjs';
+import { vpsPeerMigrationConnection, assertVpsPeerMigrationDatabase, bootstrapVpsRuntimeRole } from './vps-migration-peer.mjs';
 
 const require = createRequire(import.meta.url);
 const { Client } = require('pg');
@@ -76,6 +80,24 @@ const RESEARCH_AGENT_MIGRATIONS = Object.freeze([
   'migrations/20261004_research_technical_identity_v2.sql',
   'migrations/20261004_research_cloud_receipts_v1.sql',
   'migrations/20261005_financial_history_admission_v1.sql',
+  'migrations/20261008_insider_snapshots_v1.sql',
+  'migrations/20261008_research_observed_roster_v1.sql',
+  'migrations/20261008_research_observed_priority_v1.sql',
+  'migrations/20261008_research_observed_claim_v2.sql',
+  'migrations/20261009_research_publication_source_fence_v2.sql',
+  'migrations/20261009_research_input_preparations_v2.sql',
+  'migrations/20261009_research_input_preparation_assert_v2.sql',
+  'migrations/20261009_research_complete_input_v2.sql',
+  'migrations/20261009_research_author_assignments_v2.sql',
+  'migrations/20261009_research_author_packet_v2.sql',
+  'migrations/20261009_research_author_results_v2.sql',
+  'migrations/20261009_research_author_handoffs_v2.sql',
+  'migrations/20261009_research_reviewer_assignments_v2.sql',
+  'migrations/20261009_research_reviewer_results_v2.sql',
+  'migrations/20261009_research_publication_lineage_v2.sql',
+  'migrations/20261010_research_atomic_publication_v2.sql',
+  'migrations/20261010_research_publication_view_v2.sql',
+  'migrations/20261011_research_admission_isolation_v1.sql',
 ]);
 const RESEARCH_AGENT_PRELUDE_MIGRATIONS = Object.freeze([
   'migrations/20261005_release_function_ownership_bridge_v1.sql',
@@ -111,16 +133,19 @@ async function assertExistingRuntimeRoleContract(client) {
 }
 
 function parseArguments(argv) {
-  const result = { apply:false,researchAgentExtension:false,sourceCommit:null,attestationCommit:null };
+  const result = { apply:false,researchAgentExtension:false,sourceCommit:null,attestationCommit:null,vpsPeer:false,bootstrapVpsRuntimeRole:false };
   for (let index=0; index<argv.length; index+=1) {
     const value=argv[index];
     if(value==='--apply')result.apply=true;
+    else if(value==='--vps-peer')result.vpsPeer=true;
+    else if(value==='--bootstrap-vps-runtime-role')result.bootstrapVpsRuntimeRole=true;
     else if(value==='--research-agent-extension')result.researchAgentExtension=true;
     else if(value==='--source-commit'&&SHA40.test(argv[index+1]??''))result.sourceCommit=argv[++index];
     else if(value==='--attestation-commit'&&SHA40.test(argv[index+1]??''))result.attestationCommit=argv[++index];
     else throw new Error('invalid_arguments');
   }
   if(!result.apply||!result.sourceCommit||!result.attestationCommit)throw new Error('invalid_arguments');
+  if(result.bootstrapVpsRuntimeRole&&(!result.vpsPeer||!result.researchAgentExtension))throw new Error('invalid_arguments');
   return Object.freeze(result);
 }
 
@@ -142,9 +167,8 @@ function reviewedMigrationPlan(options) {
     ? [...RESEARCH_AGENT_PRELUDE_MIGRATIONS,...MIGRATIONS,...RESEARCH_AGENT_MIGRATIONS] : MIGRATIONS;
   const migrations=migrationPaths.map((relativePath)=>{
     const bytes=fs.readFileSync(path.join(root,relativePath));
-    if(/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')))
-      throw new Error('non_additive_migration_rejected');
-    return Object.freeze({relativePath,bytes,sha256:createHash('sha256').update(bytes).digest('hex')});
+    const { sha256 } = assertReviewedMigrationSql(relativePath, bytes);
+    return Object.freeze({relativePath,bytes,sha256});
   });
   const chainSha256=createHash('sha256').update(JSON.stringify(migrations
     .map(({relativePath,sha256})=>[relativePath,sha256]))).digest('hex');
@@ -153,7 +177,8 @@ function reviewedMigrationPlan(options) {
 
 async function applyReviewedMigrations(options) {
   const plan=reviewedMigrationPlan(options);
-  const client=new Client({connectionString:resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url'),
+  const connection=options.vpsPeer?vpsPeerMigrationConnection():{connectionString:resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url')};
+  const client=new Client({...connection,
     application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
   await client.connect();
   let locked=false;
@@ -164,11 +189,20 @@ async function applyReviewedMigrations(options) {
     locked=true;
     await client.query('BEGIN');
     transactionOpen=true;
+    if(options.vpsPeer)await assertVpsPeerMigrationDatabase(client);
+    await assertResearchPublicationFirstInstall(client);
+    if(options.bootstrapVpsRuntimeRole) {
+      const bootstrap=await bootstrapVpsRuntimeRole(client);
+      await client.query('COMMIT');transactionOpen=false;
+      return {protocol:'stockinsider-vps-runtime-role-bootstrap-v1',sourceCommit:options.sourceCommit,
+        attestationCommit:options.attestationCommit,bootstrap,migrationsApplied:false};
+    }
     // Older chain replay overwrites the append/prepare bodies. Detect installed
     // successors before the first mutation; a base-only replay must fail closed.
     await assertInstalledResearchSuccessorPlan(client, { researchAgentExtension: options.researchAgentExtension,
       migrations: plan.migrations });
     await assertExistingRuntimeRoleContract(client);
+    if(options.researchAgentExtension) await assertResearchPublicationCatalog(client, 'beforeBase');
     if(options.researchAgentExtension) {
       const researchPrerequisite=(await client.query(`SELECT
       to_regclass('public.candidate_dossier_outbox_v5') IS NOT NULL AS outbox,
@@ -185,12 +219,33 @@ async function applyReviewedMigrations(options) {
     const v3192Superseded=await reviewedMigrationIsSuperseded(
       client,V3192_PROJECTION_DOSSIER_MIGRATION);
     for(const migration of plan.migrations) {
+      if(options.researchAgentExtension && migration.relativePath === 'migrations/20261008_insider_snapshots_v1.sql')
+        await assertResearchPublicationCatalog(client, 'beforePublication');
       if(v3192Superseded && migration.relativePath===V3192_PROJECTION_DOSSIER_MIGRATION) {
         supersededMigrations.push(migration.relativePath);
         continue;
       }
       await client.query(migrationBodyInAtomicTransaction(migration.bytes.toString('utf8')));
     }
+    const { verified, researchVerified } = await verifyReviewedMigrationPostconditions(client, options);
+    // Postconditions participate in the SAME transaction as every migration.
+    // A failed extension or disconnected client cannot leave an old predecessor
+    // body installed without its financial/Cloud successor.
+    await client.query('COMMIT');
+    transactionOpen=false;
+    return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
+      sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
+      orderedChainSha256:plan.chainSha256,migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
+      supersededMigrations:Object.freeze(supersededMigrations),verified,researchVerified});
+  } finally {
+    if(transactionOpen)try{await client.query('ROLLBACK');}catch{/* disconnect rolls back server-side */}
+    if(locked)try{await client.query("SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");}
+      catch{/* session close releases the lock */}
+    await client.end();
+  }
+}
+
+async function verifyReviewedMigrationPostconditions(client, options) {
     const verified=(await client.query(`SELECT jsonb_build_object(
       'v314Diagnostics',to_regclass('public.legacy_runtime_failure_diagnostics_v3_14') IS NOT NULL,
       'v314Chunks',to_regclass('public.legacy_official_ingestion_chunks_v3_14') IS NOT NULL,
@@ -207,7 +262,7 @@ async function applyReviewedMigrations(options) {
       ,'claimHandoff',to_regprocedure('public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
       ,'finalClaimHandoff',to_regprocedure('public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)') IS NOT NULL
         AND (SELECT position('v_claim.lease_expires_at:=v_now+interval ''120 seconds''' IN pg_get_functiondef(oid))>0
-          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer)'::regprocedure)
       ,'partialResume',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
       ,'transactionTimeDependency',to_regprocedure('public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)') IS NOT NULL
       ,'sameTransactionVisibility',(SELECT provolatile='v' FROM pg_proc
@@ -427,7 +482,7 @@ async function applyReviewedMigrations(options) {
             'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
           ))-length(replace(pg_get_functiondef(
             'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
-          ),'legacyRadarCompatibility','')))/length('legacyRadarCompatibility'))=2
+          ),'legacyRadarCompatibility','')))/length('legacyRadarCompatibility')=2
           AND position('v_source_result.result_json->''legacyRadarCompatibility''' IN pg_get_functiondef(
             'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
           ))>0)
@@ -438,7 +493,7 @@ async function applyReviewedMigrations(options) {
         AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
           AND pg_get_functiondef(oid) LIKE '%read_v320_revalidated_kol_retention_internal%'
           AND pg_get_functiondef(oid) LIKE '%kolRetentionAuthorityContract%'
-          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_source_terminal_projection_v3_20_2(uuid,uuid,uuid,integer)'::regprocedure)
         AND NOT has_function_privilege('service_role',
           'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
         AND NOT has_function_privilege('service_role',
@@ -453,7 +508,7 @@ async function applyReviewedMigrations(options) {
       ,'v320KolClaimPayloadCompaction',to_regprocedure(
           'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
         AND public.verify_legacy_claim_delegation_chain_v3_20()
-        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
           AND pg_get_functiondef(oid) LIKE '%sourceCutoff%'
           AND pg_get_functiondef(oid) NOT LIKE '%coarseUniverseRows%'
           FROM pg_proc WHERE oid=
@@ -485,7 +540,7 @@ async function applyReviewedMigrations(options) {
         AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
-    if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
+    if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed', { cause: Object.keys(verified ?? {}).filter(key => verified[key] !== true) });
     const researchVerified=options.researchAgentExtension ? (await client.query(`SELECT
       to_regclass('public.research_priority_runs_v1') IS NOT NULL AS priority,
       to_regclass('public.candidate_deep_article_reviews_v1') IS NOT NULL AS reviews,
@@ -518,21 +573,9 @@ async function applyReviewedMigrations(options) {
       if(installed.rows[0]?.valid!==true) throw new Error('research_agent_installed_policy_mismatch');
       researchVerified.installedPolicyMatches = true;
     }
-    // Postconditions participate in the SAME transaction as every migration.
-    // A failed extension or disconnected client cannot leave an old predecessor
-    // body installed without its financial/Cloud successor.
-    await client.query('COMMIT');
-    transactionOpen=false;
-    return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
-      sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
-      orderedChainSha256:plan.chainSha256,migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
-      supersededMigrations:Object.freeze(supersededMigrations),verified,researchVerified});
-  } finally {
-    if(transactionOpen)try{await client.query('ROLLBACK');}catch{/* disconnect rolls back server-side */}
-    if(locked)try{await client.query("SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");}
-      catch{/* session close releases the lock */}
-    await client.end();
-  }
+    if(options.researchAgentExtension)
+      researchVerified.publicationCatalog = await assertResearchPublicationCatalog(client, 'installed');
+    return { verified, researchVerified };
 }
 
 if(import.meta.url===`file://${process.argv[1]}`) {
@@ -542,4 +585,4 @@ if(import.meta.url===`file://${process.argv[1]}`) {
 }
 
 export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationIsSuperseded, assertExistingRuntimeRoleContract,
-  reviewedMigrationPlan };
+  reviewedMigrationPlan, verifyReviewedMigrationPostconditions };
