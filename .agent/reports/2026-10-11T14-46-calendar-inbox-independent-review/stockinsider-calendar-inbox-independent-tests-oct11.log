@@ -1,0 +1,144 @@
+TAP version 13
+# (node:66043) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:66043) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/research-inbox.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/package.json.
+# Subtest: inbox invalid JSON cannot acquire or write
+ok 1 - inbox invalid JSON cannot acquire or write
+  ---
+  duration_ms: 87.321916
+  ...
+# Subtest: inbox missing items cannot acquire or write
+ok 2 - inbox missing items cannot acquire or write
+  ---
+  duration_ms: 2.668167
+  ...
+# Subtest: inbox empty items cannot acquire or write
+ok 3 - inbox empty items cannot acquire or write
+  ---
+  duration_ms: 16.13175
+  ...
+# Subtest: inbox over limit cannot acquire or write
+ok 4 - inbox over limit cannot acquire or write
+  ---
+  duration_ms: 7.391875
+  ...
+# Subtest: inbox invalid item cannot acquire or write
+ok 5 - inbox invalid item cannot acquire or write
+  ---
+  duration_ms: 2.799125
+  ...
+# Subtest: unauthorized inbox cannot acquire or write
+ok 6 - unauthorized inbox cannot acquire or write
+  ---
+  duration_ms: 1.801417
+  ...
+# Subtest: busy owner rejects without upsert or foreign release
+ok 7 - busy owner rejects without upsert or foreign release
+  ---
+  duration_ms: 4.590667
+  ...
+# Subtest: lease acquisition failure rejects without writes or release
+ok 8 - lease acquisition failure rejects without writes or release
+  ---
+  duration_ms: 1.710083
+  ...
+# Subtest: success and dedup preserve revision rows and release own lease (false)
+ok 9 - success and dedup preserve revision rows and release own lease (false)
+  ---
+  duration_ms: 5.936916
+  ...
+# Subtest: success and dedup preserve revision rows and release own lease (true)
+ok 10 - success and dedup preserve revision rows and release own lease (true)
+  ---
+  duration_ms: 59.597208
+  ...
+# Subtest: existing 100 item boundary remains valid under one lease
+ok 11 - existing 100 item boundary remains valid under one lease
+  ---
+  duration_ms: 6.174208
+  ...
+# Subtest: database failures release own lease (dbError)
+ok 12 - database failures release own lease (dbError)
+  ---
+  duration_ms: 1.325583
+  ...
+# Subtest: database failures release own lease (clientError)
+ok 13 - database failures release own lease (clientError)
+  ---
+  duration_ms: 1.337375
+  ...
+# Subtest: database failures release own lease (writeThrow)
+ok 14 - database failures release own lease (writeThrow)
+  ---
+  duration_ms: 1.754083
+  ...
+# Subtest: release failure after write cannot report complete success
+ok 15 - release failure after write cannot report complete success
+  ---
+  duration_ms: 1.741958
+  ...
+# Subtest: write plus release failure preserves primary error and exposes cleanup gap
+ok 16 - write plus release failure preserves primary error and exposes cleanup gap
+  ---
+  duration_ms: 1.599042
+  ...
+# (node:66044) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/generated/official-authority/official-twse-valuation.js' imported from /Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/entry-plan-authority-backfill.test.ts
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:860:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:984:11)
+#     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/generated/official-authority/official-twse-valuation.js'
+# }
+# Node.js v22.14.0
+# Subtest: web/src/lib/entry-plan-authority-backfill.test.ts
+not ok 2 - web/src/lib/entry-plan-authority-backfill.test.ts
+  ---
+  duration_ms: 507.707833
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/entry-plan-authority-backfill.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# (node:66046) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:66046) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/research-inbox.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/package.json.
+# Subtest: research inbox validates bounded point-in-time summaries
+ok 18 - research inbox validates bounded point-in-time summaries
+  ---
+  duration_ms: 11.323333
+  ...
+# Subtest: research inbox produces immutable deterministic revisions
+ok 19 - research inbox produces immutable deterministic revisions
+  ---
+  duration_ms: 4.164417
+  ...
+# Subtest: authenticated content stores only the submitted bounded summary
+ok 20 - authenticated content stores only the submitted bounded summary
+  ---
+  duration_ms: 0.540459
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 19
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1906.502209

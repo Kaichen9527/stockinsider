@@ -1,0 +1,26 @@
+{
+  "scope": "read-only production rows replay; in-memory paging adapter; no database writes or HTTP acquisition",
+  "cutoff": "2026-10-11T14:39:10.496655+00:00",
+  "result": [
+    {
+      "market": "TWSE",
+      "rawRows": 14277,
+      "oldPrefixDistinctDays": 125,
+      "oldPrefixCompleted": 120,
+      "newCompletedDays": 240,
+      "first": "2025-10-15",
+      "last": "2026-10-08",
+      "pages": 15
+    },
+    {
+      "market": "TPEX",
+      "rawRows": 14277,
+      "oldPrefixDistinctDays": 125,
+      "oldPrefixCompleted": 120,
+      "newCompletedDays": 240,
+      "first": "2025-10-15",
+      "last": "2026-10-08",
+      "pages": 15
+    }
+  ]
+}

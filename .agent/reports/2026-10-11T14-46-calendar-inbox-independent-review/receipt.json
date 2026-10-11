@@ -1,0 +1,80 @@
+{
+  "schema": "stockinsider-pr370-root-independent-review-progress-v1",
+  "observedAt": "2026-10-11T14:48:06.457712+00:00",
+  "subject": "b43c041448a19eb7f5cb025b4fab8e7ab9cefd75",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "pr": "https://github.com/Kaichen9527/stockinsider/pull/370",
+  "rootTests": {
+    "specific": {
+      "pass": 33,
+      "fail": 0,
+      "skip": 0
+    },
+    "product": {
+      "pass": 155,
+      "fail": 0,
+      "skip": 0,
+      "scope": "actual canonical command after local dependency copy; reused Next16.3.8 differed from lock16.3.4; pinned reinstall succeeded and build pending"
+    }
+  },
+  "preservedFailures": [
+    "first TS run lacked generated canonical modules",
+    "initial product suite139pass7fail: root pg dependency absent, out-of-root web dependency symlink rejected, lease timing failure",
+    "independent build collided with product suite-owned build",
+    "combined source diagnostic SELECT hit10sec readonly statement timeout; no result asserted"
+  ],
+  "productionReplay": {
+    "scope": "readonly actual calendar rows through paged in-memory adapter; no HTTP/DB writes",
+    "rawRowsSha256": "e965ac3282a99af944c51ed6c0333b76e8437ca4b7ea8dbf8213d65cdadd4b16",
+    "rawRowsBytes": 9450325,
+    "rawDurability": "authoritative append-only rows remain in production DB; local raw export /tmp not committed"
+  },
+  "vmRawHashesVerified": 75,
+  "sourceAndLockHashesVerified": 10,
+  "protectedRun": "38147470839",
+  "protectedFailure": "missing exact subject evidence ref; no model or product track ran",
+  "merge": false,
+  "deployedRepair": false,
+  "files": [
+    {
+      "path": "stockinsider-pr370-pcr-oct11.log",
+      "bytes": 64974,
+      "sha256": "7bb69d8d08125305c9d3e55f5b8bcb9d2f57e0aff4768a4a7cb67b5769439f58"
+    },
+    {
+      "path": "stockinsider-pr370-pcr-localdeps-oct11.log",
+      "bytes": 40306,
+      "sha256": "69d1ff68a49c21ac21de566b929c1d1d0939d8791836b0612a2db913a8ef4ea5"
+    },
+    {
+      "path": "stockinsider-calendar-inbox-independent-tests-oct11.log",
+      "bytes": 6421,
+      "sha256": "fe03bd0cfd07a9b8c6fdc10b1782034bd6dc2dba7cdbc135c240f9012041e73d"
+    },
+    {
+      "path": "stockinsider-calendar-inbox-independent-tests-oct11-synced.log",
+      "bytes": 8399,
+      "sha256": "51259728b1355446bf8f9ed1dc7f843efd96f4503aa2fb7552a9c97935b44292"
+    },
+    {
+      "path": "stockinsider-pr370-independent-build-oct11.log",
+      "bytes": 483,
+      "sha256": "2be3e044041bf4d327fd0d2c1dd02360b90ce04a02e5078ef25c2ccfd0485f01"
+    },
+    {
+      "path": "stockinsider-pr370-production-calendar-replay-oct11.json",
+      "bytes": 654,
+      "sha256": "41af40820a313feec70e732ab807cf3189c7ed6e3e40b1753b49b58f1bef377e"
+    },
+    {
+      "path": "stockinsider-pr370-calendar-replay.mts",
+      "bytes": 1515,
+      "sha256": "d24de25637007f6e90e98164a61c5f7011e8c66249a03b63fa979a73ecdfa147"
+    },
+    {
+      "path": "stockinsider-pr370-pinned-web-ci-oct11.log",
+      "bytes": 479,
+      "sha256": "cb20e87392d9946ac6e5ec6c6f7e577d491d0a163f9eb50de3b8579402c2113f"
+    }
+  ]
+}

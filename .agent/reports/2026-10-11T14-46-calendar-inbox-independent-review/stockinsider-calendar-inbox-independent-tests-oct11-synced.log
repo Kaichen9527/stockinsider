@@ -1,0 +1,190 @@
+TAP version 13
+# (node:66602) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:66602) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/research-inbox.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/package.json.
+# Subtest: inbox invalid JSON cannot acquire or write
+ok 1 - inbox invalid JSON cannot acquire or write
+  ---
+  duration_ms: 90.316666
+  ...
+# Subtest: inbox missing items cannot acquire or write
+ok 2 - inbox missing items cannot acquire or write
+  ---
+  duration_ms: 1.65325
+  ...
+# Subtest: inbox empty items cannot acquire or write
+ok 3 - inbox empty items cannot acquire or write
+  ---
+  duration_ms: 13.810208
+  ...
+# Subtest: inbox over limit cannot acquire or write
+ok 4 - inbox over limit cannot acquire or write
+  ---
+  duration_ms: 8.3705
+  ...
+# Subtest: inbox invalid item cannot acquire or write
+ok 5 - inbox invalid item cannot acquire or write
+  ---
+  duration_ms: 9.768375
+  ...
+# Subtest: unauthorized inbox cannot acquire or write
+ok 6 - unauthorized inbox cannot acquire or write
+  ---
+  duration_ms: 4.727708
+  ...
+# Subtest: busy owner rejects without upsert or foreign release
+ok 7 - busy owner rejects without upsert or foreign release
+  ---
+  duration_ms: 11.369042
+  ...
+# Subtest: lease acquisition failure rejects without writes or release
+ok 8 - lease acquisition failure rejects without writes or release
+  ---
+  duration_ms: 1.565334
+  ...
+# Subtest: success and dedup preserve revision rows and release own lease (false)
+ok 9 - success and dedup preserve revision rows and release own lease (false)
+  ---
+  duration_ms: 3.74775
+  ...
+# Subtest: success and dedup preserve revision rows and release own lease (true)
+ok 10 - success and dedup preserve revision rows and release own lease (true)
+  ---
+  duration_ms: 2.989167
+  ...
+# Subtest: existing 100 item boundary remains valid under one lease
+ok 11 - existing 100 item boundary remains valid under one lease
+  ---
+  duration_ms: 5.4415
+  ...
+# Subtest: database failures release own lease (dbError)
+ok 12 - database failures release own lease (dbError)
+  ---
+  duration_ms: 1.698334
+  ...
+# Subtest: database failures release own lease (clientError)
+ok 13 - database failures release own lease (clientError)
+  ---
+  duration_ms: 2.26825
+  ...
+# Subtest: database failures release own lease (writeThrow)
+ok 14 - database failures release own lease (writeThrow)
+  ---
+  duration_ms: 3.065958
+  ...
+# Subtest: release failure after write cannot report complete success
+ok 15 - release failure after write cannot report complete success
+  ---
+  duration_ms: 1.179542
+  ...
+# Subtest: write plus release failure preserves primary error and exposes cleanup gap
+ok 16 - write plus release failure preserves primary error and exposes cleanup gap
+  ---
+  duration_ms: 1.335542
+  ...
+# (node:66603) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:66603) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/entry-plan-authority-backfill.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/package.json.
+# Subtest: authority completion summary includes every page and fails on invalid status
+ok 17 - authority completion summary includes every page and fails on invalid status
+  ---
+  duration_ms: 12.552708
+  ...
+# Subtest: authority-only request accepts no caller-supplied prices, roster or fabricated sessions
+ok 18 - authority-only request accepts no caller-supplied prices, roster or fabricated sessions
+  ---
+  duration_ms: 0.547625
+  ...
+# Subtest: frozen common-stock roster generates per-stock-month and exchange-range jobs with no candidate omissions
+ok 19 - frozen common-stock roster generates per-stock-month and exchange-range jobs with no candidate omissions
+  ---
+  duration_ms: 66.82625
+  ...
+# Subtest: official monthly price acquisition records the real source and retains OHLCV and turnover
+ok 20 - official monthly price acquisition records the real source and retains OHLCV and turnover
+  ---
+  duration_ms: 29.05325
+  ...
+# Subtest: official monthly source distinguishes a confirmed empty report from a failed or changed schema
+ok 21 - official monthly source distinguishes a confirmed empty report from a failed or changed schema
+  ---
+  duration_ms: 1.047708
+  ...
+# Subtest: calendar selects240 date heads beyond3000 revisions for both complete paginated dependencies
+ok 22 - calendar selects240 date heads beyond3000 revisions for both complete paginated dependencies
+  ---
+  duration_ms: 1447.699375
+  ...
+# Subtest: cancelled latest date head never revives an older completed revision
+ok 23 - cancelled latest date head never revives an older completed revision
+  ---
+  duration_ms: 282.022042
+  ...
+# Subtest: boundary date is fully resolved across two full pages before returning240 heads
+ok 24 - boundary date is fully resolved across two full pages before returning240 heads
+  ---
+  duration_ms: 26.4775
+  ...
+# Subtest: late/future revisions are excluded at all three original cutoffs; future close and wrong provider do not revive dates
+ok 25 - late/future revisions are excluded at all three original cutoffs; future close and wrong provider do not revive dates
+  ---
+  duration_ms: 12.730541
+  ...
+# Subtest: calendar clocks and same-head conflicts retain microsecond precision
+ok 26 - calendar clocks and same-head conflicts retain microsecond precision
+  ---
+  duration_ms: 5.399958
+  ...
+# Subtest: short history rejects instead of accepting a prefix as240 sessions
+ok 27 - short history rejects instead of accepting a prefix as240 sessions
+  ---
+  duration_ms: 334.684917
+  ...
+# Subtest: row cap exhaustion and exactly-full final boundary require proof of end, never truncate success
+ok 28 - row cap exhaustion and exactly-full final boundary require proof of end, never truncate success
+  ---
+  duration_ms: 8911.086208
+  ...
+# Subtest: oversized page and UTF8 page/aggregate budgets fail closed
+ok 29 - oversized page and UTF8 page/aggregate budgets fail closed
+  ---
+  duration_ms: 1866.629541
+  ...
+# Subtest: a stalled calendar query aborts within the fixed shared30-second deadline
+ok 30 - a stalled calendar query aborts within the fixed shared30-second deadline
+  ---
+  duration_ms: 30001.457875
+  ...
+# (node:66605) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:66605) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/src/lib/research-inbox.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/package.json.
+# Subtest: research inbox validates bounded point-in-time summaries
+ok 31 - research inbox validates bounded point-in-time summaries
+  ---
+  duration_ms: 2.973667
+  ...
+# Subtest: research inbox produces immutable deterministic revisions
+ok 32 - research inbox produces immutable deterministic revisions
+  ---
+  duration_ms: 12.403833
+  ...
+# Subtest: authenticated content stores only the submitted bounded summary
+ok 33 - authenticated content stores only the submitted bounded summary
+  ---
+  duration_ms: 0.496125
+  ...
+1..33
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 43741.081834
