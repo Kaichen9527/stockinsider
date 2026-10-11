@@ -1,7 +1,7 @@
-import { canonicalSourceEvidenceClock } from './research-source-clock.ts';
+import { canonicalSourceEvidenceClock, sourceEvidenceClockValid } from './research-source-clock.ts';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { researchCanonicalHash } from './research-agent-qualification.ts';
-import { discoveryClockOrder, discoveryInstant, discoverySession, discoveryTaipeiDate, discoveryRelativeReturns,
+import { discoveryClockOrder, discoverySession, discoveryTaipeiDate, discoveryRelativeReturns,
   discoveryPricePhase, type DiscoveryPriceBar } from './research-discovery-evidence.ts';
 import { isOfficialCandidatePriceSource } from './candidate-price-history.ts';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
@@ -37,7 +37,7 @@ export type DiscoveryPriceRead = { quote: DiscoveryQuote | null; window: Discove
 const HASH = /^[a-f0-9]{64}$/u;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu;
 const positive = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value) && value > 0;
-const known = (value: unknown, cutoff: string): value is string => discoveryInstant(value) && discoveryClockOrder(value, cutoff) <= 0;
+const known = (value: unknown, cutoff: string): value is string => sourceEvidenceClockValid(value) && discoveryClockOrder(value, cutoff) <= 0;
 const unique = (values: string[]) => [...new Set(values)].sort();
 function officialUrl(value: unknown): value is string {
   if (typeof value !== 'string' || value.length > 800 || !isOfficialCandidatePriceSource(value)
@@ -90,7 +90,7 @@ export function discoveryWindowDatasetHash(window: Pick<DiscoveryOfficialWindow,
 /** The pure shadow evaluator requires complete verified source/clock context.
  * No score/queue/entry eligibility is returned or changed. */
 export function evaluateDiscoveryPrice(read: DiscoveryPriceRead, cutoff: string) {
-  if (!discoveryInstant(cutoff)) throw new Error('discovery_cutoff_invalid');
+  if (!sourceEvidenceClockValid(cutoff)) throw new Error('discovery_cutoff_invalid');
   const missing = [...read.missing];
   let quote = read.quote;
   if (quote && !validQuote(quote, cutoff)) { quote = null; missing.push('quote_invalid_or_unavailable_at_discovery'); }
@@ -298,13 +298,13 @@ function supplementaryObservation(read: DiscoveryPriceRead, candidate: Discovery
 export async function loadDiscoveryPriceEnrichment(client: Client, candidates: DiscoveryPriceCandidate[], asOf: string,
   options: { reader?: typeof readDiscoveryRawQuote; monotonicNow?: () => number; firstDiscoveryTable?:'research_first_discoveries_v1'|'research_observed_first_discoveries_v1';
     currentRun?: { serverClock: string; prioritySymbols: string[] } } = {}) {
-  if (!discoveryInstant(asOf) || candidates.length > DISCOVERY_PRICE_BOUNDS.candidates
+  if (!sourceEvidenceClockValid(asOf) || candidates.length > DISCOVERY_PRICE_BOUNDS.candidates
     || new Set(candidates.map((row)=>row.symbol)).size !== candidates.length
     || candidates.some((row)=>!/^\d{4}$/u.test(row.symbol) || row.firstSeenAt !== null && !known(row.firstSeenAt,asOf)))
     throw new Error('discovery_price_candidates_invalid');
   const current=options.currentRun;
   const symbols=new Set(candidates.map((row)=>row.symbol));
-  if(current && (!known(asOf,current.serverClock) || !discoveryInstant(current.serverClock)
+  if(current && (!known(asOf,current.serverClock) || !sourceEvidenceClockValid(current.serverClock)
     || current.prioritySymbols.length>candidates.length || new Set(current.prioritySymbols).size!==current.prioritySymbols.length
     || current.prioritySymbols.some((symbol)=>!symbols.has(symbol)))) throw new Error('discovery_current_run_invalid');
   const abort = new AbortController();
