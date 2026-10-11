@@ -1,0 +1,23 @@
+{
+  "stage": "admission-three",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "scripts/research-admission-isolation-postgres.test.mjs",
+    "scripts/research-source-budget-postgres.test.mjs",
+    "scripts/research-strategy-release.test.mjs"
+  ],
+  "startedAt": "2026-10-11T05:12:53.460130+00:00",
+  "endedAt": "2026-10-11T05:12:55.866280+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 2.4061597499530762,
+  "sampledAggregatePeakRssBytes": 300421120,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10081116160,
+  "diskAvailableAfterBytes": 10081116160,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

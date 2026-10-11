@@ -1,0 +1,411 @@
+{
+  "schemaVersion": "bounded-linux-evidence-v1",
+  "sourceHead": "887355ca0479d957d9b0472bba70ea4f8f9d5961",
+  "sourceTree": "eb0a4ada8ede4b791d10129f8151938e7ee586a2",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "evidenceBranch": "codex/research-admission-linux-evidence-oct11",
+  "scope": "Single exact-source Linux invocation of the three specified tests; no retry, build or browser work",
+  "manualEngineering": {
+    "conservativeStartAt": "2026-10-11T05:11:00Z",
+    "firstInventoryClockObservedAt": "2026-10-11T05:11:13Z",
+    "deadlineAt": "2026-10-11T05:41:00Z",
+    "sealedAt": "2026-10-11T05:14:42.968324+00:00",
+    "elapsedFromConservativeStartSeconds": 222.968324,
+    "notProductRoleBudgetEvidence": true
+  },
+  "preflight": {
+    "manualStart": "2026-10-11T05:11:00Z",
+    "manualDeadline": "2026-10-11T05:41:00Z",
+    "admittedAt": "2026-10-11T05:12:23.877851+00:00",
+    "sourceHead": "887355ca0479d957d9b0472bba70ea4f8f9d5961",
+    "sourceTree": "eb0a4ada8ede4b791d10129f8151938e7ee586a2",
+    "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+    "diskAvailableBytes": 10081116160,
+    "memoryGoalBytes": 8589934592,
+    "PATH": "/workspace/.tools/node22/node_modules/.bin:/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/usr/bin:/bin",
+    "preflightCommands": [
+      {
+        "command": [
+          "/workspace/.tools/node22/node_modules/.bin/node",
+          "--version"
+        ],
+        "exitCode": 0,
+        "stdout": "v22.14.0\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "npm",
+          "--version"
+        ],
+        "exitCode": 0,
+        "stdout": "11.9.0\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "pg_config",
+          "--bindir"
+        ],
+        "exitCode": 0,
+        "stdout": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb",
+          "--version"
+        ],
+        "exitCode": 0,
+        "stdout": "initdb (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+          "--version"
+        ],
+        "exitCode": 0,
+        "stdout": "pg_ctl (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+          "--version"
+        ],
+        "exitCode": 0,
+        "stdout": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/postgres",
+          "--version"
+        ],
+        "exitCode": 0,
+        "stdout": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+        "stderr": ""
+      }
+    ],
+    "pgDependency": {
+      "version": "8.18.0",
+      "client": "function"
+    },
+    "rootLockBytes": 31809,
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "dependencyInstalled": false,
+    "libraryNotFound": false,
+    "proxyCAValuesExported": false,
+    "noActiveHeavyBeforeAdmission": true
+  },
+  "testStage": {
+    "stage": "admission-three",
+    "command": [
+      "/workspace/.tools/node22/node_modules/.bin/node",
+      "--experimental-strip-types",
+      "--test",
+      "scripts/research-admission-isolation-postgres.test.mjs",
+      "scripts/research-source-budget-postgres.test.mjs",
+      "scripts/research-strategy-release.test.mjs"
+    ],
+    "startedAt": "2026-10-11T05:12:53.460130+00:00",
+    "endedAt": "2026-10-11T05:12:55.866280+00:00",
+    "exitCode": 1,
+    "elapsedSeconds": 2.4061597499530762,
+    "sampledAggregatePeakRssBytes": 300421120,
+    "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "diskAvailableBeforeBytes": 10081116160,
+    "diskAvailableAfterBytes": 10081116160,
+    "guardTermination": null,
+    "remainingObservedChildren": [],
+    "inheritedProxyAndCA": true,
+    "credentialValuesCopied": false,
+    "counts": {
+      "executed": 5,
+      "pass": 4,
+      "fail": 1,
+      "skip": 0
+    },
+    "parents": {
+      "admissionIsolation": "FAIL after two passing subtests",
+      "sourceBudget": "PASS actual PG",
+      "strategyRelease": "PASS"
+    },
+    "passingAdmissionSubtests": [
+      "missing predecessor rejects atomically instead of manufacturing functions",
+      "nine installed bodies change only by first-statement guard; owner ACL and attributes survive retry"
+    ],
+    "intendedFullCaseCountFromMaker": 21,
+    "intendedRemainingAdmissionCasesReached": false
+  },
+  "failure": {
+    "code": "28000",
+    "message": "no PostgreSQL user name specified in startup packet",
+    "diagnosis": {
+      "rootCause": "External evidence runner omitted non-secret USER; pg8.18 defaults rely on process.env.USER on Linux. psql used OS username and succeeded, while new JS pg Client sent empty startup user. This is VM test-environment omission, not a demonstrated RC guard defect.",
+      "actualLibrary": "/workspace/stockinsider/node_modules/pg/lib/defaults.js",
+      "actualLibraryBytes": 2506,
+      "actualLibrarySha256": "a1f91cc76d2f045a6a44297373249acc1d6afd734020073b8a147fe1a1446d9a",
+      "actualLibraryRelevantLines": [
+        {
+          "line": 5,
+          "text": "  user = process.platform === 'win32' ? process.env.USERNAME : process.env.USER"
+        }
+      ],
+      "noConnectionDiagnostic": [
+        {
+          "label": "executed-environment",
+          "command": [
+            "/workspace/.tools/node22/node_modules/.bin/node",
+            "-e",
+            "const {Client}=require('pg'); const p=new Client({host:'/tmp/unused-diagnostic-socket',port:55000,database:'postgres',options:'-c statement_timeout=5000'}).connectionParameters; console.log(JSON.stringify({platform:process.platform,userEnvPresent:typeof process.env.USER==='string',pgUser:p.user===undefined?null:p.user,database:p.database}));"
+          ],
+          "exitCode": 0,
+          "observation": {
+            "platform": "linux",
+            "userEnvPresent": false,
+            "pgUser": null,
+            "database": "postgres"
+          },
+          "databaseConnectionMade": false,
+          "suiteRerun": false
+        },
+        {
+          "label": "diagnostic-only-os-username",
+          "command": [
+            "/workspace/.tools/node22/node_modules/.bin/node",
+            "-e",
+            "const {Client}=require('pg'); const p=new Client({host:'/tmp/unused-diagnostic-socket',port:55000,database:'postgres',options:'-c statement_timeout=5000'}).connectionParameters; console.log(JSON.stringify({platform:process.platform,userEnvPresent:typeof process.env.USER==='string',pgUser:p.user===undefined?null:p.user,database:p.database}));"
+          ],
+          "exitCode": 0,
+          "observation": {
+            "platform": "linux",
+            "userEnvPresent": true,
+            "pgUser": "agent",
+            "database": "postgres"
+          },
+          "databaseConnectionMade": false,
+          "suiteRerun": false
+        }
+      ],
+      "correctedSuiteExecuted": false,
+      "minimalNextEnvironmentCorrection": "Preserve the non-secret OS-derived USER for Node pg Client before a separately authorized run; no test/source/security changes required."
+    },
+    "classification": "Isolated evidence runner environment omission, not demonstrated runtime/migration defect",
+    "originalRedPreserved": true,
+    "sameSuiteRetried": false
+  },
+  "profileScope": "Synthetic partial prerequisite fixture, seven complete predecessor SQL files, exact successor migration. Not full production bootstrap/install acceptance. Tests apply original unmodified SQL/ACL to disposable PG only.",
+  "environment": {
+    "existingPG": "17.11",
+    "existingPgModule": "8.18.0",
+    "proxyAndCAInherited": true,
+    "secretValuesExported": false,
+    "testSyntheticRolesOnly": true,
+    "dependenciesInstalled": false,
+    "umask": "0077",
+    "USEROmittedInExecutedRunner": true,
+    "diagnosticOnlyCorrectedUsername": "agent",
+    "clockPreload": false,
+    "sourceChanged": false
+  },
+  "resources": {
+    "sampledAggregatePeakRssBytes": 300421120,
+    "samplePeriodMs": 100,
+    "samplingLimitation": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "rssGoalBytes": 8589934592,
+    "diskReserveBytes": 8589934592,
+    "minimumObservedDiskAvailableBytes": 10081116160,
+    "singleHeavyWork": true
+  },
+  "cleanup": {
+    "checkedAt": "2026-10-11T05:14:42.965094+00:00",
+    "activeRelevantProcesses": [],
+    "historicalDefunctExcluded": {
+      "postgres": 685,
+      "node": 86
+    },
+    "remainingObservedStageChildren": [],
+    "ownedClustersStopped": true,
+    "clusterArtifactsRemovedByOriginalFinally": true,
+    "extraDeletionOrPrunePerformed": false,
+    "rawAndOriginalEvidencePreserved": true,
+    "diskAvailableBytes": 10081116160
+  },
+  "sourceInventory": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/source-inventory.json",
+  "rawFiles": [
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/admission-three.json",
+      "bytes": 858,
+      "sha256": "6329cd1a9f0132e24cce9677ec9386a8eb0cd0250a160d4be0a86ec33f0b2b51"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/admission-three.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/admission-three.stdout",
+      "bytes": 2253,
+      "sha256": "ea20924a489900b3c20f8ea91ce4774d243d687d01f300b2976fc0dd3b65acbc"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/admission-three.time",
+      "bytes": 991,
+      "sha256": "6469c5ad7d1ccbed5015c95e37ef9fdd1c563a5326690668529f56c91d0a7cdf"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/admission.json",
+      "bytes": 2551,
+      "sha256": "3440b96532f7f8f00b139a846209831d5af2d88a0a8932814b60def95f03397c"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/cleanup.json",
+      "bytes": 407,
+      "sha256": "d7e6ccadc7a4baf364795d34dc73db6ef91be1c94984671c841699a0f9a6332a"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/diagnostic-only-os-username.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/diagnostic-only-os-username.stdout",
+      "bytes": 82,
+      "sha256": "78a0f089d2995334932df4884171e6648433f6077ee82afc33feec1ed76496fe"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/executed-environment.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/executed-environment.stdout",
+      "bytes": 80,
+      "sha256": "7fb1826db31c2f4b0f13fd6147c0c6d9bc87350cd6b1d4483973e933ca8788e7"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/failure-diagnosis.json",
+      "bytes": 2386,
+      "sha256": "a1f2640cb03c3e189f1435087bba7983d94beef4ee6ab4509392f3dc1300fc5e"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/initdb-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/initdb-version.stdout",
+      "bytes": 51,
+      "sha256": "51779e145da8348b2028d168975667bc5f4b4a8a40dde0e6b8c26b5a86e268e6"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/pg-dependency.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/pg-dependency.stdout",
+      "bytes": 41,
+      "sha256": "74381d98b2e07e5695ad2d903a0fd773349fff71fd926a486af6556681a97615"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/pg_ctl-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/pg_ctl-version.stdout",
+      "bytes": 51,
+      "sha256": "b6209ad4720d5d4b446e3fa57935e7b94e466c3221d7e42ca040403351077024"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/postgres-ldd.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/postgres-ldd.stdout",
+      "bytes": 2354,
+      "sha256": "f23cae600c45b1a76439a417c78c644b419b8e858401ccf25ac2d5fcdb5bfd6a"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/postgres-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/postgres-version.stdout",
+      "bytes": 53,
+      "sha256": "bff7373d2309d3b3cdff08f03dfe8fed4fe20c3039a5e11d14526964b2fcca39"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/preflight-0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/preflight-0.stdout",
+      "bytes": 9,
+      "sha256": "7703fd79909af9b17df6395137bee2b07c3f3b27b6e96e18c909f433cce84f19"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/preflight-1.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/preflight-1.stdout",
+      "bytes": 7,
+      "sha256": "d9f29f5aab43c8c1a8d6acc856e258b89735f541aa5e1f07b39a62f28bfa8d06"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/preflight-2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/preflight-2.stdout",
+      "bytes": 73,
+      "sha256": "7cc2ed3cc3aa9fc1547d26d7cdb1c0e6994d46428f99651a295fa2c5b4fc2911"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/psql-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/psql-version.stdout",
+      "bytes": 49,
+      "sha256": "a1ad26e44606f578fd8cf8960aa9ce0a5c914ed078208d3466b06ed330730a8f"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/run.py",
+      "bytes": 3328,
+      "sha256": "43887492e2d27febfbf6ea11810f0a490e9ea777870e263c87bb373dd0213e78"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-15-admission-isolation-linux-vm-raw/source-inventory.json",
+      "bytes": 2679,
+      "sha256": "c65f66177e3465441890afa8c928b4d6af8ef8e8d8e7c18b3a3a5315ee9fb74a"
+    }
+  ],
+  "rawFileCount": 31,
+  "rawTotalBytes": 18303,
+  "remaining": [
+    "Full Linux 21-case admission-isolation acceptance incomplete: actual RC concurrency/global1/weekly5 and RR/SERIALIZABLE rejection probes after JS connection were not reached.",
+    "Next isolated environment must include non-secret OS-derived USER; the no-connection diagnostic verifies this supplies pg.Client user, but corrected suite has not run."
+  ],
+  "flags": {
+    "linuxAcceptancePass": false,
+    "buildRun": false,
+    "browserRun": false,
+    "actualModelDispatched": false,
+    "productionWrites": false,
+    "strategyAdopted": false,
+    "deployed": false,
+    "mergedMain": false,
+    "protectedPass": false
+  }
+}
