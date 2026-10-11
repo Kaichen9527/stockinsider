@@ -45,7 +45,7 @@ jobs:
           test -z "$(git status --porcelain --untracked-files=no)"
           destination="$RUNNER_TEMP/reviewed-standalone"
           export_dir="$RUNNER_TEMP/standalone-export"
-          mkdir -p "$export_dir"
+          mkdir -p "$destination" "$export_dir"
           node scripts/package-standalone-release.mjs "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE" "$destination" "$REVIEWED_SOURCE" "$REVIEWED_SOURCE" > "$export_dir/package.json"
           node scripts/verify-standalone-release.mjs "$destination/$REVIEWED_SOURCE" > "$export_dir/verification.json"
           cp "$destination/$REVIEWED_SOURCE/release-manifest.json" "$export_dir/release-manifest.json"
