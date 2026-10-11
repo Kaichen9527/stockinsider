@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto';
+import { performance } from 'node:perf_hooks';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { canonicalJson } from './opportunity-v3/canonical.ts';
@@ -32,25 +33,85 @@ export function parseAuthorityBackfillRequest(value: unknown): AuthorityBackfill
   return { purpose: 'entry_plan_authority', runId, requestBudget: Number(budget) };
 }
 
-async function calendarFor(client: SupabaseClient, exchange: Exchange, cutoff: string) {
-  const rows: Row[] = [];
-  for (let offset = 0; offset < 3000; offset += 500) {
-    const result = await client.from('tw_trading_sessions_v3')
+export const AUTHORITY_CALENDAR_LIMITS = Object.freeze({ rows: 20_000, page: 500,
+  bytes: 8 * 1024 * 1024, pageBytes: 512 * 1024, milliseconds: 30_000 });
+
+function calendarInstant(value: unknown): bigint {
+  if (typeof value !== 'string') fail('entry_plan_calendar_clock_invalid');
+  const match = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,9}))?(Z|[+-]\d{2}:\d{2})$/u.exec(value);
+  if (!match) fail('entry_plan_calendar_clock_invalid');
+  const base = Date.parse(match[1] + match[3]);
+  if (!Number.isFinite(base)) fail('entry_plan_calendar_clock_invalid');
+  return BigInt(base) * BigInt(1_000_000) + BigInt((match[2] || '').padEnd(9, '0'));
+}
+
+/** Freeze date heads, not a prefix of raw revisions. Finish the boundary date
+ * before accepting its head, including ties that cross a page boundary. */
+export async function calendarFor(client: SupabaseClient, exchange: Exchange, cutoff: string) {
+  const cutoffInstant = calendarInstant(cutoff), end = performance.now() + AUTHORITY_CALENDAR_LIMITS.milliseconds;
+  const controller = new AbortController();
+  const selected: FrozenSession[] = [];
+  let bytes = 0, rows = 0, head: Row | undefined, previous: Row | undefined;
+  const checkTime = () => { if (performance.now() >= end) { controller.abort(); fail('entry_plan_calendar_time_limit'); } };
+  const closeDate = () => {
+    if (head?.status === 'completed' && head.provider === exchange.toLowerCase()
+      && calendarInstant(head.close_at) <= cutoffInstant) selected.push({ session: String(head.session_id),
+      sessionAuthorityId: String(head.session_authority_id), market: exchange, status: 'completed' });
+    return selected.length === 240;
+  };
+  for (let offset = 0; offset <= AUTHORITY_CALENDAR_LIMITS.rows; offset += AUTHORITY_CALENDAR_LIMITS.page) {
+    checkTime();
+    // One overflow sentinel distinguishes exactly-full history from truncation.
+    const count = Math.min(AUTHORITY_CALENDAR_LIMITS.page, AUTHORITY_CALENDAR_LIMITS.rows + 1 - offset);
+    const query = client.from('tw_trading_sessions_v3')
       .select('session_authority_id,session_id,market,status,provider,source_timestamp,collected_at,recorded_at,close_at')
       .eq('market', exchange).lte('session_id', cutoff.slice(0, 10))
       .lte('source_timestamp', cutoff).lte('collected_at', cutoff).lte('recorded_at', cutoff)
-      .order('session_id', { ascending: false }).order('recorded_at', { ascending: false }).range(offset, offset + 499);
+      .order('session_id', { ascending: false }).order('recorded_at', { ascending: false })
+      .order('session_authority_id').range(offset, offset + count - 1).abortSignal(controller.signal);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const result = await Promise.race([Promise.resolve(query), new Promise<never>((_, reject) => {
+      timer = setTimeout(() => { controller.abort(); reject(new Error('entry_plan_calendar_time_limit')); }, Math.max(1, end - performance.now()));
+    })]).finally(() => clearTimeout(timer));
+    checkTime();
     if (result.error || !Array.isArray(result.data)) fail('entry_plan_calendar_read_failed');
-    rows.push(...result.data as Row[]);
-    if (result.data.length < 500) break;
+    if (result.data.length > count) fail('entry_plan_calendar_page_oversized');
+    rows += result.data.length;
+    if (rows > AUTHORITY_CALENDAR_LIMITS.rows) fail(`entry_plan_calendar_row_limit:${exchange}`);
+    const pageBytes = Buffer.byteLength(JSON.stringify(result.data), 'utf8'); bytes += pageBytes;
+    if (pageBytes > AUTHORITY_CALENDAR_LIMITS.pageBytes || bytes > AUTHORITY_CALENDAR_LIMITS.bytes)
+      fail(`entry_plan_calendar_byte_limit:${exchange}`);
+    for (const value of result.data) {
+      checkTime();
+      if (!value || typeof value !== 'object' || Array.isArray(value)) fail('entry_plan_calendar_row_invalid');
+      const row = value as Row;
+      if (!day(row.session_id) || !UUID.test(String(row.session_authority_id)) || row.market !== exchange
+        || !['completed', 'cancelled'].includes(String(row.status))) fail('entry_plan_calendar_row_invalid');
+      const source = calendarInstant(row.source_timestamp), collected = calendarInstant(row.collected_at), recorded = calendarInstant(row.recorded_at);
+      if (source > collected || collected > recorded || recorded > cutoffInstant
+        || String(row.session_id) > cutoff.slice(0, 10)) fail('entry_plan_calendar_clock_invalid');
+      calendarInstant(row.close_at);
+      if (previous && (String(row.session_id) > String(previous.session_id)
+        || (row.session_id === previous.session_id && (recorded > calendarInstant(previous.recorded_at)
+          || (recorded === calendarInstant(previous.recorded_at) && String(row.session_authority_id) < String(previous.session_authority_id))))))
+        fail('entry_plan_calendar_order_invalid');
+      previous = row;
+      if (head && row.session_id !== head.session_id) {
+        if (closeDate()) { checkTime(); return selected.reverse(); }
+        head = undefined;
+      }
+      if (!head) head = row;
+      else if (recorded === calendarInstant(head.recorded_at)
+        && (row.status !== head.status || row.provider !== head.provider
+          || ['source_timestamp', 'collected_at', 'close_at'].some(key => calendarInstant(row[key]) !== calendarInstant(head![key]))))
+        fail('entry_plan_calendar_head_conflict');
+    }
+    if (result.data.length < count) {
+      if (head && closeDate()) { checkTime(); return selected.reverse(); }
+      fail(`entry_plan_calendar_240_missing:${exchange}`);
+    }
   }
-  const heads = new Map<string, Row>();
-  for (const row of rows) if (day(row.session_id) && !heads.has(String(row.session_id))) heads.set(String(row.session_id), row);
-  const selected = [...heads.values()].filter((row) => row.status === 'completed' && row.provider === exchange.toLowerCase()
-    && Date.parse(String(row.close_at)) <= Date.parse(cutoff)).slice(0, 240).reverse();
-  if (selected.length !== 240) fail(`entry_plan_calendar_240_missing:${exchange}`);
-  return selected.map((row): FrozenSession => ({ session: String(row.session_id),
-    sessionAuthorityId: String(row.session_authority_id), market: exchange, status: 'completed' }));
+  fail(`entry_plan_calendar_row_limit:${exchange}`);
 }
 
 export function planAuthorityJobs(run: Pick<RunRow, 'run_id' | 'roster' | 'calendar'>) {
