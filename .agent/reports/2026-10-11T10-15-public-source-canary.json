@@ -1,0 +1,85 @@
+{
+  "schema": "stockinsider-public-source-canary-progress-v1",
+  "observedAt": "2026-10-11T10:16:12.372801+00:00",
+  "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "runId": "155131ac-aa7b-4c19-a080-4da3b506e13b",
+  "runHash": "075bf9a44a1873ea50c6bb7a9103e98965d4ca1a02c823b3a49b175c33348052",
+  "readOnly": true,
+  "actualScopes": [
+    {
+      "scopeId": "podcast-index",
+      "url": "https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+      "httpStatus": 200,
+      "readOutcome": "metadata_only",
+      "controllerOutcome": "metadata_only",
+      "bytes": 77983,
+      "responseHash": "1ec44c8d592f0556a4452b1fe6d6ef31eda7b9eba36be442eb2598702fc8d66e"
+    },
+    {
+      "scopeId": "auo-official-index",
+      "url": "https://www.auo.com/zh-TW/News_Archive",
+      "httpStatus": 200,
+      "readOutcome": "metadata_only",
+      "controllerOutcome": "metadata_only",
+      "bytes": 59545,
+      "responseHash": "67a7c8bc6119b4a8c93581d2a39473a57d62e1125bf0000b12f45fe90eb2c818"
+    },
+    {
+      "scopeId": "twse-issuer-universe",
+      "url": "https://openapi.twse.com.tw/v1/opendata/t187ap03_L",
+      "httpStatus": 200,
+      "readOutcome": "read_success",
+      "controllerOutcome": "awaiting_summary",
+      "bytes": 1327578,
+      "responseHash": "97fe4e558c5e6dd7dbc4d4f6e9ec9c49d86b8051dcf8878e944d4fa83e18bd81"
+    }
+  ],
+  "itemsCreated": 0,
+  "submitted": false,
+  "platformsEnabled": false,
+  "limitations": [
+    "Podcast RSS and AUO index are metadata, not transcripts/article coverage",
+    "Issuer dataset read succeeded, no summary inferred",
+    "No audio/member content/credentials retained; no DB or production write",
+    "Protected model native recovery and actual author/reviewer/scheduled execution remain unfinished"
+  ],
+  "exactSourceProof": [
+    {
+      "path": "scripts/research-source-controller.mjs",
+      "sha256": "7976b84ef4c7ac071832127b6f75167542fe31610e1ccc517616bb70d74dc921",
+      "exactCandidateBlob": true
+    },
+    {
+      "path": "web/src/lib/research-source-attempt-controller.ts",
+      "sha256": "f58f418cabe11d727b4b60e458ebc7b849c09d9b649d9f5ba2ebf1c4ea92e388",
+      "exactCandidateBlob": true
+    },
+    {
+      "path": "web/src/lib/source-policy.ts",
+      "sha256": "b108f146eec4c8b33e411d1af4db1d360ceebce0a984587c2839a905f2a9b498",
+      "exactCandidateBlob": true
+    }
+  ],
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T10-15-public-source-canary/input.json",
+      "bytes": 1599,
+      "sha256": "5cbb8052e174c1bd72deec6cb693a1ef8826d57b14ac000a9d6a76010e45decb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T10-15-public-source-canary/output.json",
+      "bytes": 8488,
+      "sha256": "7b42f666d47090d928f4cbd762358c9e052f80047fd48a4df04b0e2a063a8066"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T10-15-public-source-canary/stdout",
+      "bytes": 192,
+      "sha256": "48e66ca871677e5a3867fb6d362e81339db76aa2a7289d36867761eefadb419f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T10-15-public-source-canary/stderr",
+      "bytes": 651,
+      "sha256": "f3804132912ff1669339555b0632691ba3d7633bf3a1b01313cb179d7236b66b"
+    }
+  ]
+}

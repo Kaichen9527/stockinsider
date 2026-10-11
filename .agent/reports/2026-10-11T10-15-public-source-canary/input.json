@@ -1,0 +1,44 @@
+{
+  "runId": "155131ac-aa7b-4c19-a080-4da3b506e13b",
+  "scopes": [
+    {
+      "id": "podcast-index",
+      "platform": "podcast",
+      "url": "https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+      "scope": "One publisher RSS GET; metadata only, no audio download or inferred transcript",
+      "method": "public_read",
+      "contentScope": "metadata_index",
+      "rights": {
+        "basis": "creator_published_index",
+        "checkedAt": "2026-10-11T10:15:08.335634+00:00",
+        "checkedBy": "existing reviewed source-policy public allowlist"
+      }
+    },
+    {
+      "id": "auo-official-index",
+      "platform": "official",
+      "url": "https://www.auo.com/zh-TW/News_Archive",
+      "scope": "One AUO public news index GET; not complete article coverage",
+      "method": "public_read",
+      "contentScope": "metadata_index",
+      "rights": {
+        "basis": "official_public_document",
+        "checkedAt": "2026-10-11T10:15:08.335634+00:00",
+        "checkedBy": "existing reviewed source-policy public allowlist"
+      }
+    },
+    {
+      "id": "twse-issuer-universe",
+      "platform": "official",
+      "url": "https://openapi.twse.com.tw/v1/opendata/t187ap03_L",
+      "scope": "One TWSE official issuer dataset GET; no database writes or candidate ranking",
+      "method": "public_read",
+      "contentScope": "official_document",
+      "rights": {
+        "basis": "official_public_document",
+        "checkedAt": "2026-10-11T10:15:08.335634+00:00",
+        "checkedBy": "existing reviewed source-policy public allowlist"
+      }
+    }
+  ]
+}

@@ -272,3 +272,11 @@ Evidence: `.agent/reports/2026-10-11T07-48-release-review-repairs.json`; current
 - 31項 caller audit：原 d6 20項加已審6項補證，剩 PCR005／006／007／011／023。尚未製作完整31項PASS，不能把原155測試綠燈當完整履約。下一件補真 CLI main 的 config→acquire／worker→序列化邊界，再補真 PG adapter 及 aggregate main。
 - Cloud既有聊天仍 idle/cursor21，沒有重複派工。ordinary CI38124241862在本收據快照仍執行；protected38124240138缺7073 exact-review ref，沒有同輸入重跑。main未合併、未部署、未改正式資料／排程。d6完整安裝及Linux成果仍保留但未改標為7073執行。
 - 來源、真實兩篇文章、策略與五交易日驗收仍未完成；友達維持示範方向。詳見 `.agent/reports/2026-10-11T08-19-installation-caller-progress.json`。
+
+## October11 final release and bounded public-source continuation
+
+- [x] Exact final2e full source review/PCR evidence and four actual protected checks: requirements, architecture, exact-review and product272/272zero-fail/skip/todo. See final10:16 receipt; historical blockers above remain timestamped history.
+- [x] Downloadable Linux artifact prepared independently (PR367 run38130717511); all2819 files audited. This is not release approval.
+- [x] Existing bounded controller actual three-scope public read: SoundOnRSS77,983B metadata, AUOnewsindex59,545B metadata, TWSEissuers1,327,578B body. AllHTTP200; precise terminal metadata_only/awaiting_summary retained, no inferred candidate/summary or publication. Source2e blob proof and raw receipts saved.
+- [ ] Transcript/article extraction, verified claim summary and authenticated inbox submission, full candidate processing, live author/reviewer publication and strategy forward validation remain open. Index access is not platform content acceptance.
+- [ ] Protected model runner still oldnativeENOENT; real trusted recovery ingress missing. No unchanged retry, merge/deploy or schedule activation. VM unchanged idle; no duplicate work dispatched.

@@ -1,0 +1,212 @@
+{
+  "policyVersion": "research-source-attempt-controller-v1",
+  "runId": "155131ac-aa7b-4c19-a080-4da3b506e13b",
+  "asOf": "2026-10-11T10:15:10.616Z",
+  "limits": {
+    "scopes": 20,
+    "pagesPerScope": 1,
+    "bodyBytes": 4000000,
+    "timeoutMs": 12000,
+    "runMs": 60000,
+    "inputBytes": 2000000,
+    "priorItems": 1000
+  },
+  "receipts": [
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "155131ac-aa7b-4c19-a080-4da3b506e13b",
+      "scopeId": "podcast-index",
+      "platform": "podcast",
+      "sourceUrl": "https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+      "scope": "One publisher RSS GET; metadata only, no audio download or inferred transcript",
+      "method": "public_read",
+      "contentScope": "metadata_index",
+      "rights": {
+        "basis": "creator_published_index",
+        "checkedAt": "2026-10-11T10:15:08.335634+00:00",
+        "checkedBy": "existing reviewed source-policy public allowlist"
+      },
+      "attemptedAt": "2026-10-11T10:15:08.514Z",
+      "completedAt": "2026-10-11T10:15:08.913Z",
+      "readOutcome": "metadata_only",
+      "outcome": "metadata_only",
+      "httpStatus": 200,
+      "bytes": 77983,
+      "readAttempted": true,
+      "bodyPresent": false,
+      "responseHash": "1ec44c8d592f0556a4452b1fe6d6ef31eda7b9eba36be442eb2598702fc8d66e",
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_metadata_only",
+      "legacyConnectorDisposition": "active",
+      "platformEnabled": false,
+      "receiptHash": "6a87cc60490362331027d94979623bc4e8d5bd00dda181ac48cf53cea45c8c89",
+      "attempt": {
+        "platform": "podcast",
+        "status": "failed",
+        "attemptedAt": "2026-10-11T10:15:08.514Z",
+        "scope": "podcast-index: One publisher RSS GET; metadata only, no audio download or inferred transcript | https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+        "resultCount": null,
+        "errorCode": "source_metadata_only",
+        "receiptHash": "6a87cc60490362331027d94979623bc4e8d5bd00dda181ac48cf53cea45c8c89"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "155131ac-aa7b-4c19-a080-4da3b506e13b",
+      "scopeId": "auo-official-index",
+      "platform": "official",
+      "sourceUrl": "https://www.auo.com/zh-TW/News_Archive",
+      "scope": "One AUO public news index GET; not complete article coverage",
+      "method": "public_read",
+      "contentScope": "metadata_index",
+      "rights": {
+        "basis": "official_public_document",
+        "checkedAt": "2026-10-11T10:15:08.335634+00:00",
+        "checkedBy": "existing reviewed source-policy public allowlist"
+      },
+      "attemptedAt": "2026-10-11T10:15:08.913Z",
+      "completedAt": "2026-10-11T10:15:09.386Z",
+      "readOutcome": "metadata_only",
+      "outcome": "metadata_only",
+      "httpStatus": 200,
+      "bytes": 59545,
+      "readAttempted": true,
+      "bodyPresent": false,
+      "responseHash": "67a7c8bc6119b4a8c93581d2a39473a57d62e1125bf0000b12f45fe90eb2c818",
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_metadata_only",
+      "legacyConnectorDisposition": null,
+      "platformEnabled": false,
+      "receiptHash": "c08c46ff2c5a7ebca082f42e728c004177f52201cc4e43843ab78b5505404e3e",
+      "attempt": {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-11T10:15:08.913Z",
+        "scope": "auo-official-index: One AUO public news index GET; not complete article coverage | https://www.auo.com/zh-TW/News_Archive",
+        "resultCount": null,
+        "errorCode": "source_metadata_only",
+        "receiptHash": "c08c46ff2c5a7ebca082f42e728c004177f52201cc4e43843ab78b5505404e3e"
+      }
+    },
+    {
+      "policyVersion": "research-source-attempt-controller-v1",
+      "runId": "155131ac-aa7b-4c19-a080-4da3b506e13b",
+      "scopeId": "twse-issuer-universe",
+      "platform": "official",
+      "sourceUrl": "https://openapi.twse.com.tw/v1/opendata/t187ap03_L",
+      "scope": "One TWSE official issuer dataset GET; no database writes or candidate ranking",
+      "method": "public_read",
+      "contentScope": "official_document",
+      "rights": {
+        "basis": "official_public_document",
+        "checkedAt": "2026-10-11T10:15:08.335634+00:00",
+        "checkedBy": "existing reviewed source-policy public allowlist"
+      },
+      "attemptedAt": "2026-10-11T10:15:09.386Z",
+      "completedAt": "2026-10-11T10:15:10.616Z",
+      "readOutcome": "read_success",
+      "outcome": "awaiting_summary",
+      "httpStatus": 200,
+      "bytes": 1327578,
+      "readAttempted": true,
+      "bodyPresent": true,
+      "responseHash": "97fe4e558c5e6dd7dbc4d4f6e9ec9c49d86b8051dcf8878e944d4fa83e18bd81",
+      "publishedAt": null,
+      "sourcePublishedAt": null,
+      "summaryPublishedAt": null,
+      "firstObservedAt": null,
+      "revisionObservedAt": null,
+      "rootUrl": null,
+      "contentHash": null,
+      "retracted": false,
+      "errorCode": "source_awaiting_summary",
+      "legacyConnectorDisposition": null,
+      "platformEnabled": false,
+      "receiptHash": "68459c263e4b1d8c77a66c322fd781038fc9afd0b7cde8e4b7aab7e509086028",
+      "attempt": {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-11T10:15:09.386Z",
+        "scope": "twse-issuer-universe: One TWSE official issuer dataset GET; no database writes or candidate ranking | https://openapi.twse.com.tw/v1/opendata/t187ap03_L",
+        "resultCount": null,
+        "errorCode": "source_awaiting_summary",
+        "receiptHash": "68459c263e4b1d8c77a66c322fd781038fc9afd0b7cde8e4b7aab7e509086028"
+      }
+    }
+  ],
+  "unattemptedPlatforms": [
+    "news",
+    "broker",
+    "ptt",
+    "investanchors",
+    "threads",
+    "instagram",
+    "facebook",
+    "youtube",
+    "telegram",
+    "bulltalk",
+    "twse_insider"
+  ],
+  "priorityRequest": {
+    "asOf": "2026-10-11T10:15:10.616Z",
+    "sourceAttempts": [
+      {
+        "platform": "podcast",
+        "status": "failed",
+        "attemptedAt": "2026-10-11T10:15:08.514Z",
+        "scope": "podcast-index: One publisher RSS GET; metadata only, no audio download or inferred transcript | https://feeds.soundon.fm/podcasts/06e16cf5-5b45-4863-bcdf-9343aa584f73.xml",
+        "resultCount": null,
+        "errorCode": "source_metadata_only",
+        "receiptHash": "6a87cc60490362331027d94979623bc4e8d5bd00dda181ac48cf53cea45c8c89"
+      },
+      {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-11T10:15:08.913Z",
+        "scope": "auo-official-index: One AUO public news index GET; not complete article coverage | https://www.auo.com/zh-TW/News_Archive",
+        "resultCount": null,
+        "errorCode": "source_metadata_only",
+        "receiptHash": "c08c46ff2c5a7ebca082f42e728c004177f52201cc4e43843ab78b5505404e3e"
+      },
+      {
+        "platform": "official",
+        "status": "failed",
+        "attemptedAt": "2026-10-11T10:15:09.386Z",
+        "scope": "twse-issuer-universe: One TWSE official issuer dataset GET; no database writes or candidate ranking | https://openapi.twse.com.tw/v1/opendata/t187ap03_L",
+        "resultCount": null,
+        "errorCode": "source_awaiting_summary",
+        "receiptHash": "68459c263e4b1d8c77a66c322fd781038fc9afd0b7cde8e4b7aab7e509086028"
+      }
+    ]
+  },
+  "inboxRequest": {
+    "items": []
+  },
+  "roots": [],
+  "priorItemsUnchanged": true,
+  "limitations": [
+    "Exact supplied scopes only; no exhaustive search or platform activation.",
+    "No summary/model adapter, authenticated browser dispatcher, submission, publication or strategy approval.",
+    "Prior items are controller-retained context; authoritative heads remain in VPS."
+  ],
+  "authoritativePublication": false,
+  "strategyApproved": false,
+  "startedAt": "2026-10-11T10:15:08.514Z",
+  "explicitRunOnly": true,
+  "inputHash": "105dc1e0ffed1b71fdbf8a8ebbe2e689c832edf9bddaa112a9bbc002dc2b23a8",
+  "runHash": "075bf9a44a1873ea50c6bb7a9103e98965d4ca1a02c823b3a49b175c33348052"
+}
