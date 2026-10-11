@@ -1,0 +1,127 @@
+[
+  {
+    "label": "initdb",
+    "command": [
+      "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb",
+      "-D",
+      "/tmp/si-bc01-gecr1z_y/disposable-pg",
+      "-A",
+      "trust",
+      "--no-locale",
+      "--encoding=UTF8",
+      "-U",
+      "agent",
+      "--no-instructions"
+    ],
+    "exitCode": 0,
+    "startedAt": "2026-10-11T05:50:51.935552+00:00",
+    "endedAt": "2026-10-11T05:50:52.356533+00:00"
+  },
+  {
+    "label": "start",
+    "command": [
+      "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+      "-D",
+      "/tmp/si-bc01-gecr1z_y/disposable-pg",
+      "-l",
+      "/tmp/si-bc01-gecr1z_y/postgres.log",
+      "-o",
+      "-h '' -k /tmp/si-bc01-gecr1z_y -p 55432",
+      "-w",
+      "start"
+    ],
+    "exitCode": 0,
+    "startedAt": "2026-10-11T05:50:52.356635+00:00",
+    "endedAt": "2026-10-11T05:50:52.471810+00:00"
+  },
+  {
+    "label": "original-bootstrap",
+    "command": [
+      "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+      "-X",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-v",
+      "VERBOSITY=verbose",
+      "-h",
+      "/tmp/si-bc01-gecr1z_y",
+      "-p",
+      "55432",
+      "-U",
+      "agent",
+      "-d",
+      "postgres",
+      "--single-transaction",
+      "-f",
+      "/workspace/cloud-reviewer-result-http-vm-oct09/deployment/vps/bootstrap-stockinsider-postgres.sql"
+    ],
+    "exitCode": 0,
+    "startedAt": "2026-10-11T05:50:52.471912+00:00",
+    "endedAt": "2026-10-11T05:50:52.487924+00:00"
+  },
+  {
+    "label": "original-full-schema",
+    "command": [
+      "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+      "-X",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-v",
+      "VERBOSITY=verbose",
+      "-h",
+      "/tmp/si-bc01-gecr1z_y",
+      "-p",
+      "55432",
+      "-U",
+      "agent",
+      "-d",
+      "postgres",
+      "--single-transaction",
+      "-f",
+      "/workspace/cloud-reviewer-result-http-vm-oct09/supabase_schema.sql"
+    ],
+    "exitCode": 3,
+    "startedAt": "2026-10-11T05:50:52.488000+00:00",
+    "endedAt": "2026-10-11T05:50:52.504899+00:00"
+  },
+  {
+    "label": "readonly-catalog-after-schema",
+    "command": [
+      "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+      "-X",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-v",
+      "VERBOSITY=verbose",
+      "-h",
+      "/tmp/si-bc01-gecr1z_y",
+      "-p",
+      "55432",
+      "-U",
+      "agent",
+      "-d",
+      "postgres",
+      "-At",
+      "-c",
+      "SELECT jsonb_build_object('authSchema',to_regnamespace('auth'),'authUsers',to_regclass('auth.users'),'publicStocks',to_regclass('public.stocks'),'pgcryptoSchema',(SELECT n.nspname FROM pg_extension e JOIN pg_namespace n ON n.oid=e.extnamespace WHERE e.extname='pgcrypto'));"
+    ],
+    "exitCode": 0,
+    "startedAt": "2026-10-11T05:50:52.504941+00:00",
+    "endedAt": "2026-10-11T05:50:52.512574+00:00"
+  },
+  {
+    "label": "stop",
+    "command": [
+      "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+      "-D",
+      "/tmp/si-bc01-gecr1z_y/disposable-pg",
+      "-m",
+      "immediate",
+      "-w",
+      "stop"
+    ],
+    "exitCode": 0,
+    "startedAt": "2026-10-11T05:50:52.512757+00:00",
+    "endedAt": "2026-10-11T05:50:52.626798+00:00"
+  }
+]

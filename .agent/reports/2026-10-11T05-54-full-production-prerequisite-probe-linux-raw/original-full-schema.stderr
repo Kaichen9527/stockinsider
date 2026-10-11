@@ -1,0 +1,2 @@
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/supabase_schema.sql:19: ERROR:  3F000: schema "auth" does not exist
+LOCATION:  get_namespace_oid, namespace.c:3545

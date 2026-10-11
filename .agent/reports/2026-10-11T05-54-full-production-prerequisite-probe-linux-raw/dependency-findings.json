@@ -1,0 +1,270 @@
+{
+  "dependencyOriginalDefinitions": [
+    {
+      "object": "source_entities",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "line": 32,
+          "text": "CREATE TABLE IF NOT EXISTS source_entities ("
+        }
+      ]
+    },
+    {
+      "object": "source_raw_documents",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260315_research_system_v2.sql",
+          "line": 71,
+          "text": "CREATE TABLE IF NOT EXISTS source_raw_documents ("
+        }
+      ]
+    },
+    {
+      "object": "candidate_source_mentions",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260830_source_ranking_v2.sql",
+          "line": 70,
+          "text": "CREATE TABLE IF NOT EXISTS public.candidate_source_mentions ("
+        }
+      ]
+    },
+    {
+      "object": "official_price_history",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "line": 117,
+          "text": "CREATE TABLE IF NOT EXISTS public.official_price_history ("
+        }
+      ]
+    },
+    {
+      "object": "candidate_detail_snapshots",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "line": 197,
+          "text": "CREATE TABLE IF NOT EXISTS public.candidate_detail_snapshots ("
+        }
+      ]
+    },
+    {
+      "object": "candidate_research_dossiers",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260901_source_research_shadow_v2.sql",
+          "line": 223,
+          "text": "CREATE TABLE IF NOT EXISTS public.candidate_research_dossiers ("
+        }
+      ]
+    },
+    {
+      "object": "candidate_dossier_bundles",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "line": 23,
+          "text": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_bundles ("
+        }
+      ]
+    },
+    {
+      "object": "candidate_dossier_submission_receipts",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "line": 76,
+          "text": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_submission_receipts ("
+        }
+      ]
+    },
+    {
+      "object": "candidate_dossier_outbox_v5",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260907_candidate_dossier_outbox_v5.sql",
+          "line": 6,
+          "text": "CREATE TABLE IF NOT EXISTS public.candidate_dossier_outbox_v5 ("
+        }
+      ]
+    },
+    {
+      "object": "record_candidate_dossier_submission_v4",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "line": 95,
+          "text": "CREATE OR REPLACE FUNCTION public.record_candidate_dossier_submission_v4("
+        }
+      ]
+    },
+    {
+      "object": "reject_candidate_dossier_revision_mutation_v4",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260906_candidate_dossier_v4.sql",
+          "line": 161,
+          "text": "CREATE OR REPLACE FUNCTION public.reject_candidate_dossier_revision_mutation_v4()"
+        }
+      ]
+    },
+    {
+      "object": "candidate_financial_acquisition_jobs_v4",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260906_financial_acquisition_v4.sql",
+          "line": 19,
+          "text": "CREATE TABLE IF NOT EXISTS public.candidate_financial_acquisition_jobs_v4 ("
+        }
+      ]
+    },
+    {
+      "object": "candidate_financial_document_receipts_v6",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+          "line": 34,
+          "text": "CREATE TABLE IF NOT EXISTS public.candidate_financial_document_receipts_v6 ("
+        }
+      ]
+    },
+    {
+      "object": "candidate_financial_fact_provenance_v4",
+      "originalDefinitions": [
+        {
+          "file": "migrations/20260906_financial_acquisition_v4.sql",
+          "line": 83,
+          "text": "CREATE TABLE IF NOT EXISTS public.candidate_financial_fact_provenance_v4 ("
+        }
+      ]
+    }
+  ],
+  "providerAuthCreateDefinitionsInExaminedOriginalSQL": [],
+  "providerAuthMissingOriginalSource": true,
+  "candidateDependencyOrderNotReviewApprovedInstaller": true,
+  "emptyDatabaseFirstBlocker": "auth schema/auth.users required by supabase_schema.sql profiles FK at line14 (psql reports statement completion line19)",
+  "fullSchemaSourceReference": "supabase_schema.sql:14",
+  "noStubsInstalled": true,
+  "staticOrderingEdges": [
+    {
+      "before": "provider-owned auth schema and auth.users(id)",
+      "after": "supabase_schema.sql",
+      "reason": "profiles.id FK at line14; actual empty-PG3F000 at line19"
+    },
+    {
+      "before": "supabase_schema.sql stocks",
+      "after": "migrations/20260315_research_system_v2.sql",
+      "reason": "source and research stock foreign keys require the actual base catalog"
+    },
+    {
+      "before": "migrations/20260315_research_system_v2.sql source tables + migrations/20260830_source_ranking_v2.sql candidate mentions",
+      "after": "migrations/20260901_source_research_shadow_v2.sql",
+      "reason": "ALTER source_raw_documents/candidate_source_mentions; detail/dossier FK baseline"
+    },
+    {
+      "before": "migrations/20260901_source_research_shadow_v2.sql detail and dossier tables",
+      "after": "migrations/20260906_candidate_dossier_v4.sql",
+      "reason": "ALTER detail/dossier; creates bundles, receipts and submission-v4 writer"
+    },
+    {
+      "before": "migrations/20260906_candidate_dossier_v4.sql",
+      "after": "migrations/20260907_candidate_dossier_outbox_v5.sql",
+      "reason": "outbox FKs bundle_id/revision_id/receipt_id"
+    },
+    {
+      "before": "migrations/20260907_candidate_dossier_outbox_v5.sql",
+      "after": "migrations/20260929_candidate_dossier_outbox_v6.sql",
+      "reason": "v6 starts with ALTER original v5 table"
+    },
+    {
+      "before": "migrations/20260724_source_led_opportunity_engine_v3.sql financial_fact_key_v3/opportunity_financial_facts_v3",
+      "after": "migrations/20260906_financial_acquisition_v4.sql",
+      "reason": "ALTER financial enum; provenance references V3 financial fact baseline"
+    },
+    {
+      "before": "15-file funnel financial acquisition, truth contract, document receipt/parser definitions",
+      "after": "migrations/20260909_official_financial_validation_receipts.sql (48-base position40)",
+      "reason": "row types/FKs depend on candidate_financial_document_receipts_v6 and provenance fields"
+    },
+    {
+      "before": "6 research migration tail after actual v4/v5 baseline",
+      "after": "observed roster -> observed priority -> observed claim -> source fence -> preparations -> assert -> complete -> author/reviewer -> publication lineage -> atomic publication -> view",
+      "reason": "static FK/function dependencies; dependency-oriented candidate order only"
+    },
+    {
+      "before": "original seven admission predecessor files unchanged",
+      "after": "migrations/20261011_research_admission_isolation_v1.sql",
+      "reason": "successor validates exact nine body/16-attribute predecessors; do not manufacture bodies"
+    }
+  ],
+  "requiredBaselineColumnsAndSignatures": [
+    {
+      "object": "auth.users",
+      "requiredField": "id compatible with UUID FK",
+      "originalFullCreateSourceFound": false
+    },
+    {
+      "object": "candidate_detail_snapshots",
+      "fields": [
+        "id",
+        "stock_id",
+        "session_date",
+        "model_version",
+        "market_evidence_snapshot_id",
+        "research_run_id"
+      ],
+      "source": "migrations/20260901_source_research_shadow_v2.sql:197"
+    },
+    {
+      "object": "record_candidate_dossier_submission_v4",
+      "signature": "(uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)",
+      "source": "migrations/20260906_candidate_dossier_v4.sql:95"
+    },
+    {
+      "object": "candidate_dossier_outbox_v5",
+      "fields": [
+        "job_id",
+        "bundle_id",
+        "revision_id",
+        "input_hash",
+        "status",
+        "attempts",
+        "lease_owner",
+        "lease_expires_at",
+        "receipt_id"
+      ],
+      "source": "migrations/20260907_candidate_dossier_outbox_v5.sql:6"
+    },
+    {
+      "object": "candidate_financial_document_receipts_v6",
+      "requiredUse": "FK receipt_id and %ROWTYPE in original financial validation SQL",
+      "source": "migrations/20260907_02_candidate_financial_documents_v6.sql:34"
+    },
+    {
+      "object": "candidate_financial_fact_provenance_v4",
+      "fields": [
+        "fact_id",
+        "source_sha256",
+        "source_url"
+      ],
+      "source": "migrations/20260906_financial_acquisition_v4.sql:83"
+    }
+  ],
+  "additionalStaticBootstrapMismatch": {
+    "role": "stockinsider_runtime_v319",
+    "trackedCompatibilityBootstrap": "NOLOGIN NOINHERIT (restoration compatibility owner only)",
+    "installerRequired": "LOGIN NOINHERIT, connlimit6, no superuser/CREATEDB/CREATEROLE/replication/BYPASSRLS",
+    "source": "scripts/opportunity-v3/apply-reviewed-migrations.mjs:101",
+    "executedInstallerPreflight": false,
+    "silentRoleRepairPerformed": false
+  },
+  "existingRehearsalEvidenceNeedsOriginalPrivateSchema": {
+    "source": "docs/operations/2026-10-05/schema-rehearsal.md",
+    "ownerSchemaSHA256": "8f7b7404958c53e7e8fa7b632e05341a874afd4e97dfa1552cd3d3a23f102e86",
+    "aclSchemaSHA256": "2cb8fb3dc3970ed4786f1238b50ca22ea1a067130d0e331c6ea3ddd991a2758f",
+    "rawFilesNotInGit": true,
+    "notReadOrRestoredThisTask": true
+  }
+}

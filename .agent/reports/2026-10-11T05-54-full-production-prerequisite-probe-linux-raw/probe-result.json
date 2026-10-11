@@ -1,0 +1,13 @@
+{
+  "sourceHead": "bc01c006cba307735ccd50c78841b94242e1c014",
+  "probeScope": "Original bootstrap plus original complete schema only; stop at first error",
+  "schemaExitCode": 3,
+  "completeChainAttempted": false,
+  "syntheticPrerequisitesCreated": false,
+  "modifiedSourceSQL": false,
+  "production": false,
+  "clusterUser": "agent",
+  "bootstrapIsTrackedCompatibilityFileNotProductionSchemaDump": true,
+  "schemaTransactionRolledBackOnFailure": true,
+  "elapsedSeconds": 0.5772730329772457
+}

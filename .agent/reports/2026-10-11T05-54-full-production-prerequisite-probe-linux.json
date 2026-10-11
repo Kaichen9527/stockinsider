@@ -1,0 +1,422 @@
+{
+  "schemaVersion": "bounded-prerequisite-investigation-v1",
+  "sourceHead": "bc01c006cba307735ccd50c78841b94242e1c014",
+  "sourceTree": "deb7d94524533b1318f0a0237cc7bd09e2269322",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "evidenceBranch": "codex/research-full-schema-probe-linux-oct11",
+  "ownedProbe": {
+    "file": "scripts/research-full-prerequisite-probe-linux-oct11.py",
+    "bytes": 4054,
+    "sha256": "c56c1373cec416e8232a0808aa7742b4c4faca7caaf9020821df8d665e4985c4"
+  },
+  "scope": "Read original schema, existing reviewed migration lists and explicit partial native fixtures; one empty-PG full-file prerequisite probe, no stubs or production installer",
+  "manualEngineering": {
+    "observedStartAt": "2026-10-11T05:47:45.551804+00:00",
+    "deadlineAt": "2026-10-11T06:17:35Z",
+    "sealedAt": "2026-10-11T05:55:05.676095+00:00",
+    "elapsedSeconds": 440.124291,
+    "notProductRoleBudgetEvidence": true,
+    "finalDocsAmendedAt": "2026-10-11T05:55:52.766343+00:00"
+  },
+  "preflight": {
+    "observedStartAt": "2026-10-11T05:47:45.551804+00:00",
+    "deadlineAt": "2026-10-11T06:17:35Z",
+    "admittedAt": "2026-10-11T05:50:00.668498+00:00",
+    "sourceHead": "bc01c006cba307735ccd50c78841b94242e1c014",
+    "sourceTree": "deb7d94524533b1318f0a0237cc7bd09e2269322",
+    "diskAvailableBytes": 10080362496,
+    "USER": "agent",
+    "USERDerivedFromOS": true,
+    "proxyCAPreserved": true,
+    "secretValuesExported": false,
+    "dependenciesInstalled": false,
+    "noOtherHeavyWork": true
+  },
+  "probeStage": {
+    "stage": "full-original-prerequisite",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/research-full-prerequisite-probe-linux-oct11.py",
+      "/tmp/si-bc01-gecr1z_y"
+    ],
+    "startedAt": "2026-10-11T05:50:51.892798+00:00",
+    "endedAt": "2026-10-11T05:50:52.793225+00:00",
+    "exitCode": 3,
+    "elapsedSeconds": 0.9004336619982496,
+    "sampledAggregatePeakRssBytes": 65323008,
+    "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "diskAvailableBeforeBytes": 10080358400,
+    "diskAvailableAfterBytes": 10080358400,
+    "guardTermination": null,
+    "remainingObservedChildren": [],
+    "inheritedProxyAndCA": true,
+    "credentialValuesCopied": false
+  },
+  "actualCommandResults": [
+    {
+      "label": "initdb",
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb",
+        "-D",
+        "/tmp/si-bc01-gecr1z_y/disposable-pg",
+        "-A",
+        "trust",
+        "--no-locale",
+        "--encoding=UTF8",
+        "-U",
+        "agent",
+        "--no-instructions"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-10-11T05:50:51.935552+00:00",
+      "endedAt": "2026-10-11T05:50:52.356533+00:00"
+    },
+    {
+      "label": "start",
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+        "-D",
+        "/tmp/si-bc01-gecr1z_y/disposable-pg",
+        "-l",
+        "/tmp/si-bc01-gecr1z_y/postgres.log",
+        "-o",
+        "-h '' -k /tmp/si-bc01-gecr1z_y -p 55432",
+        "-w",
+        "start"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-10-11T05:50:52.356635+00:00",
+      "endedAt": "2026-10-11T05:50:52.471810+00:00"
+    },
+    {
+      "label": "original-bootstrap",
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+        "-X",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-v",
+        "VERBOSITY=verbose",
+        "-h",
+        "/tmp/si-bc01-gecr1z_y",
+        "-p",
+        "55432",
+        "-U",
+        "agent",
+        "-d",
+        "postgres",
+        "--single-transaction",
+        "-f",
+        "/workspace/cloud-reviewer-result-http-vm-oct09/deployment/vps/bootstrap-stockinsider-postgres.sql"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-10-11T05:50:52.471912+00:00",
+      "endedAt": "2026-10-11T05:50:52.487924+00:00"
+    },
+    {
+      "label": "original-full-schema",
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+        "-X",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-v",
+        "VERBOSITY=verbose",
+        "-h",
+        "/tmp/si-bc01-gecr1z_y",
+        "-p",
+        "55432",
+        "-U",
+        "agent",
+        "-d",
+        "postgres",
+        "--single-transaction",
+        "-f",
+        "/workspace/cloud-reviewer-result-http-vm-oct09/supabase_schema.sql"
+      ],
+      "exitCode": 3,
+      "startedAt": "2026-10-11T05:50:52.488000+00:00",
+      "endedAt": "2026-10-11T05:50:52.504899+00:00"
+    },
+    {
+      "label": "readonly-catalog-after-schema",
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+        "-X",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-v",
+        "VERBOSITY=verbose",
+        "-h",
+        "/tmp/si-bc01-gecr1z_y",
+        "-p",
+        "55432",
+        "-U",
+        "agent",
+        "-d",
+        "postgres",
+        "-At",
+        "-c",
+        "SELECT jsonb_build_object('authSchema',to_regnamespace('auth'),'authUsers',to_regclass('auth.users'),'publicStocks',to_regclass('public.stocks'),'pgcryptoSchema',(SELECT n.nspname FROM pg_extension e JOIN pg_namespace n ON n.oid=e.extnamespace WHERE e.extname='pgcrypto'));"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-10-11T05:50:52.504941+00:00",
+      "endedAt": "2026-10-11T05:50:52.512574+00:00"
+    },
+    {
+      "label": "stop",
+      "command": [
+        "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+        "-D",
+        "/tmp/si-bc01-gecr1z_y/disposable-pg",
+        "-m",
+        "immediate",
+        "-w",
+        "stop"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-10-11T05:50:52.512757+00:00",
+      "endedAt": "2026-10-11T05:50:52.626798+00:00"
+    }
+  ],
+  "testCounts": null,
+  "countInterpretation": "Not a test suite. Six subprocess commands: initdb/start/bootstrap/catalog/stop exit0; complete-schema exit3. Full48+6+publication+isolation installation not attempted.",
+  "firstActualMissingPrerequisite": {
+    "sqlstate": "3F000",
+    "message": "schema \"auth\" does not exist",
+    "file": "supabase_schema.sql",
+    "psqlLine": 19,
+    "actualFKLine": 14,
+    "requiredObject": "auth.users(id), full provider-owned auth definition not present in examined original repo SQL",
+    "schemaTransactionRolledBack": true,
+    "catalogAfterFailure": {
+      "authUsers": null,
+      "authSchema": null,
+      "publicStocks": null,
+      "pgcryptoSchema": "extensions"
+    }
+  },
+  "dependencyEvidence": {
+    "inventory": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/migration-inventory.json",
+    "findings": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/dependency-findings.json",
+    "originalInstallerBaseCount": 48,
+    "originalInstallerResearchCount": 6,
+    "originalOwnershipPreludeCount": 1,
+    "separateSanctionedFunnelCount": 15,
+    "finiteObservedPublicationModuleCount": 16,
+    "additionalDatedSuccessors": [
+      "insider snapshots",
+      "admission isolation"
+    ],
+    "completeSuccessorOrderingNotPromotedToReviewedPlan": true,
+    "staticEdgesAreNotActualInstallPass": true
+  },
+  "missingPrerequisiteConclusion": "The tracked compatibility-role/pgcrypto bootstrap is a before-pg_restore helper, not a full restored Supabase schema. Original repository full schema requires provider auth baseline. Existing schema-rehearsal docs reference private owner+ACL schema exports, not available in Git and not read/restored here. Obtain exact reviewed full baseline/export and provider definitions before claiming a full chain; do not replace them with partial test stubs.",
+  "resources": {
+    "sampledAggregatePeakRssBytes": 65323008,
+    "rssGoalBytes": 8589934592,
+    "samplingMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "minimumObservedFreeBytes": 10080358400,
+    "diskReserveBytes": 8589934592,
+    "singleHeavyInvocation": true
+  },
+  "cleanup": {
+    "checkedAt": "2026-10-11T05:55:05.672565+00:00",
+    "activeRelevantProcesses": [],
+    "historicalDefunctExcluded": {
+      "postgres": 688,
+      "node": 86
+    },
+    "ownedClusterStopped": true,
+    "ownedDisposablePGRemovedAfterStop": true,
+    "rawPostgresLogRetained": true,
+    "probeStageRemainingChildren": [],
+    "noOtherCleanupOrPrune": true,
+    "originalEvidenceRetained": true,
+    "diskAvailableBytes": 10080358400
+  },
+  "rawFiles": [
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/admission.json",
+      "bytes": 480,
+      "sha256": "b0ba7fe7c20c43541ac048b6f6cc1f65701f90502f1119089f1e164d2bc77a9a"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/cleanup.json",
+      "bytes": 414,
+      "sha256": "51c6fef59aedf0619e8034f7fb7c86cb2874208a32f6995dad5b9b8b23789eb8"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/dependency-findings.json",
+      "bytes": 9713,
+      "sha256": "5ae0f3dc9822980355988efac49124c96018825a7341dc25ae7b75ce15e1d80f"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/full-original-prerequisite.json",
+      "bytes": 713,
+      "sha256": "aff6dfc63c447ef1b1362bcd736e1eba6013e21c5c94db8dd33671779b741fe7"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/full-original-prerequisite.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/full-original-prerequisite.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/full-original-prerequisite.time",
+      "bytes": 852,
+      "sha256": "85ffd1cd1cb1d449dc885522c3063f0d634bf89740a9151c318ffd0bd30a8ebf"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/initdb.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/initdb.stdout",
+      "bytes": 697,
+      "sha256": "652e87149e5ac9e08e39ea95cf0b943cf40c509291f3602669a34833dd5ef50e"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/migration-inventory.json",
+      "bytes": 22149,
+      "sha256": "37d1185a0baeddfaf5304de5d803d4c408dd10af047d4fbb6e2764f96c049066"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/original-bootstrap.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/original-bootstrap.stdout",
+      "bytes": 70,
+      "sha256": "bfa41fd3b2ba4d84d2e4d59f4d933e3286db1eefbcc2c37dd8f4a8288eeee17b"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/original-full-schema.stderr",
+      "bytes": 167,
+      "sha256": "a80850eb3904fa8c3f9b589c6bd1b915621fc1fe990d41b255e17a274c62c5ac"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/original-full-schema.stdout",
+      "bytes": 13,
+      "sha256": "66541d51c1f7165aff7661955fa1c3a29fad69ac4c07515e27e18ac1fb4f7e76"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/pg-config.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/pg-config.stdout",
+      "bytes": 73,
+      "sha256": "7cc2ed3cc3aa9fc1547d26d7cdb1c0e6994d46428f99651a295fa2c5b4fc2911"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/postgres.log",
+      "bytes": 1019,
+      "sha256": "7049f1878efb62913482542725a479399a6e1d38240ce88b62e9769ebc8d3a73"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/probe-result.json",
+      "bytes": 494,
+      "sha256": "dcec9619502fd6eb770bb2201a85212a898c25505e92164c489ade97067b64d0"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/probe-steps.json",
+      "bytes": 3358,
+      "sha256": "55fc13f138d013981eb5f9af972de743f5290f6b686c4f85995f5e03c4580b92"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/readonly-catalog-after-schema.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/readonly-catalog-after-schema.stdout",
+      "bytes": 94,
+      "sha256": "93430223fdeae201def886dd927167b83af50ec382ede536c65bb1f7535a5a4c"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/run.py",
+      "bytes": 3379,
+      "sha256": "8117bec841094c24c7aae0c091940b2978fd94e5736f521a0a6ec2a22d8ee847"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/start.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/start.stdout",
+      "bytes": 52,
+      "sha256": "66afd0411ccc09366e99fdd99b85f21899c8d2d064f5835126859618802153ad"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/stop.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/stop.stdout",
+      "bytes": 56,
+      "sha256": "ca19178a35ab4153b75b494963b66ce8243e1b94c173107c87b44d09db23652d"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T05-54-full-production-prerequisite-probe-linux-raw/root-readonly-vps-observation.json",
+      "bytes": 1082,
+      "sha256": "a9c54f5f487c26708f5fdb3de3b75b7aed787fbd9e13e6d72666f304bcbdca49"
+    }
+  ],
+  "rawFileCount": 27,
+  "rawTotalBytes": 44875,
+  "limitations": [
+    "No full production-schema baseline installation or48+6+17+isolation PASS.",
+    "Static dependency ordering and role mismatch are not additional executed SQL failure claims.",
+    "Explicit partial native/migration fixtures were read only, never installed as a production baseline.",
+    "New standalone probe is the only code added, allowed by user; no application/installer/test/SQL edits and no build per explicit scope."
+  ],
+  "flags": {
+    "fullChainInstalled": false,
+    "productionInstallationAuthorized": false,
+    "originalSQLChanged": false,
+    "stubCreated": false,
+    "production": false,
+    "credentialsExported": false,
+    "modelRun": false,
+    "roleAttestation": false,
+    "buildRun": false,
+    "browserRun": false,
+    "deployed": false,
+    "mergedMain": false
+  },
+  "rootAttributedVPSObservation": {
+    "observer": "external root thread 01a0b7b4-8534-7741-9de6-177edf929f58",
+    "receivedAndRecordedAt": "2026-10-11T05:55:52.766019+00:00",
+    "mode": "attributed read-only production observation; not independently queried by VM",
+    "postgresVersion": "17.11",
+    "database": "stockinsider",
+    "existingPublicRelations": [
+      "source_entities",
+      "source_raw_documents",
+      "candidate_dossier_bundles",
+      "candidate_dossier_outbox_v5",
+      "candidate_detail_snapshots",
+      "candidate_daily_stage_snapshots",
+      "candidate_dossier_submission_receipts",
+      "candidate_research_dossiers"
+    ],
+    "newResearchTables": "root reports none of research new-version relations present",
+    "oldResearchRelations": [
+      "research_memos",
+      "research_reports"
+    ],
+    "rootInstallerWork": "root reports18-file list, exact ten SQL protection-word pins and first-install residue guard added; profile incomplete and no deployment",
+    "limits": "Does not provide full provider auth schema dump, all field/function/owner/ACL preconditions or proof of full production-profile installation."
+  },
+  "interpretationBoundary": "Actual schema3F000 RED is only an empty-database repo-only baseline reproducibility blocker. Root reports real VPS source/dossier/outbox predecessors present; this probe does not imply live production is missing those relations. New18 installer guards/profile are root-owned newer work and not tested at exactbc01."
+}

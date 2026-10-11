@@ -1,0 +1,14 @@
+2026-10-11 05:50:52.378 UTC [322102] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-11 05:50:52.378 UTC [322102] LOG:  listening on Unix socket "/tmp/si-bc01-gecr1z_y/.s.PGSQL.55432"
+2026-10-11 05:50:52.379 UTC [322105] LOG:  database system was shut down at 2026-10-11 05:50:52 UTC
+2026-10-11 05:50:52.381 UTC [322102] LOG:  database system is ready to accept connections
+2026-10-11 05:50:52.497 UTC [322112] ERROR:  schema "auth" does not exist
+2026-10-11 05:50:52.497 UTC [322112] STATEMENT:  CREATE TABLE IF NOT EXISTS profiles (
+	    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+	    line_user_id VARCHAR(255) UNIQUE,
+	    preferences JSONB DEFAULT '{}'::jsonb,
+	    created_at TIMESTAMPTZ DEFAULT NOW(),
+	    updated_at TIMESTAMPTZ DEFAULT NOW()
+	);
+2026-10-11 05:50:52.513 UTC [322102] LOG:  received immediate shutdown request
+2026-10-11 05:50:52.515 UTC [322102] LOG:  database system is shut down

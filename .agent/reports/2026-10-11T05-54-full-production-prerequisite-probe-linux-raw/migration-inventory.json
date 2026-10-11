@@ -1,0 +1,570 @@
+{
+  "sourceHead": "bc01c006cba307735ccd50c78841b94242e1c014",
+  "installerDeclared": {
+    "prelude": [
+      {
+        "file": "migrations/20261005_release_function_ownership_bridge_v1.sql",
+        "bytes": 5282,
+        "sha256": "d86fb28d4b23b95b1b1c97d9eedf418f8162610171e72dccc9b5a88f1fada747"
+      }
+    ],
+    "base48": [
+      {
+        "file": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "bytes": 1023746,
+        "sha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7"
+      },
+      {
+        "file": "migrations/20260809_product_value_recovery_v3_12.sql",
+        "bytes": 15307,
+        "sha256": "9f2943db6353ef131d45f174556b8a40cd732101ae7bde825f6f187362ff3be6"
+      },
+      {
+        "file": "migrations/20260809_decision_integrity_v3_13.sql",
+        "bytes": 179700,
+        "sha256": "5e843da1049bc2f075d5f8bf901095b3047c42215fc87ada01a1a984d240f95b"
+      },
+      {
+        "file": "migrations/20260811_actionability_recovery_v3_14.sql",
+        "bytes": 56751,
+        "sha256": "43771e50c0e59d2c1e7ed310a6a204283fc782cbd7e0f10f1de87d36389874af"
+      },
+      {
+        "file": "migrations/20260813_opportunity_recovery_v3_15.sql",
+        "bytes": 24692,
+        "sha256": "3e4cb338f8773689f5c760e40a9474266ad24e841f7b0e0b2646a5a1467aabb8"
+      },
+      {
+        "file": "migrations/20260814_official_ingestion_chunk_apply_v3_15.sql",
+        "bytes": 8404,
+        "sha256": "de514842565f02bdcc6408ea3c5b3deac56b88b8b10f7358ba302e74070279fd"
+      },
+      {
+        "file": "migrations/20260816_claim_handoff_lease_v3_16.sql",
+        "bytes": 3464,
+        "sha256": "7036c7ce513460c4cef7fa6df08d5bdf2cfefcddfda05c0b8ac84f75b38bc11c"
+      },
+      {
+        "file": "migrations/20260816_official_ingestion_partial_resume_v3_16.sql",
+        "bytes": 5827,
+        "sha256": "3a57f4671e15c35ee2300ff780de61a0836ac50fed510291a31b21dd8eec8487"
+      },
+      {
+        "file": "migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql",
+        "bytes": 21545,
+        "sha256": "7f3901bdba9d8c330cfe7131889deb4746dfefedf6e7d31b6cde0feaa94fcc51"
+      },
+      {
+        "file": "migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql",
+        "bytes": 910,
+        "sha256": "9a9cc863060072a99d69da7c479cc8a4a8b4b2a009933d0e23b264d37ef9406a"
+      },
+      {
+        "file": "migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql",
+        "bytes": 8267,
+        "sha256": "fff333808d5633c760de56e5e38ef73d14c600185202438c3745c7fe44b078b9"
+      },
+      {
+        "file": "migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql",
+        "bytes": 4418,
+        "sha256": "c3ac5bbe4e09d1ab08c827e01c773673be9aee95d9b512dab32e2781b21c7dc5"
+      },
+      {
+        "file": "migrations/20260816_analysis_payload_reuse_v3_16_15.sql",
+        "bytes": 4030,
+        "sha256": "be158f24dfb860c22b4436a406be926cf417f1badedae233587fdbead110059b"
+      },
+      {
+        "file": "migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql",
+        "bytes": 4941,
+        "sha256": "81d6bd393bee34985e7386aee309ec9eec33e87e280b64af3428719a2a280441"
+      },
+      {
+        "file": "migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql",
+        "bytes": 5321,
+        "sha256": "34bf9a61b0b736b0f4c4d63a590ae10a64638ab75b16dd4e22be45ee8c50ec63"
+      },
+      {
+        "file": "migrations/20260817_runtime_health_bootstrap_v3_16_19.sql",
+        "bytes": 956,
+        "sha256": "c6d2817a33352e58c9d1dc5ba8d14b26c5633dd01d7f35af76a53879e7493b2c"
+      },
+      {
+        "file": "migrations/20260817_evaluation_clock_v3_16_20.sql",
+        "bytes": 2414,
+        "sha256": "118314e0b0f3f7b7ea516a40ec81c5a8f148414fce3d9a0cafd635dc2d07c3a3"
+      },
+      {
+        "file": "migrations/20260817_provider_acquisition_v3_16_21.sql",
+        "bytes": 14512,
+        "sha256": "b5b0f8e59872c1142f6ed05f19b12689b6c1ee583878a5b49daf6dcecbe8dd8a"
+      },
+      {
+        "file": "migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql",
+        "bytes": 3953,
+        "sha256": "8fc00799dfeeb5ab063320cb0294f27a4b861fa1652634bf45d02bdb4b1080de"
+      },
+      {
+        "file": "migrations/20260817_projection_evaluation_supersession_v3_16_21.sql",
+        "bytes": 5252,
+        "sha256": "829c0b5733edbc38834591bcd1b25dd07f07042ed68d6e4b4f3115325a95b62b"
+      },
+      {
+        "file": "migrations/20260822_candidate_ledger_retention_v3_18.sql",
+        "bytes": 6051,
+        "sha256": "f04e48280e348c2fcc91d5d7d874ede832a77706c42e9562829503ee177bb996"
+      },
+      {
+        "file": "migrations/20260823_release_reconciliation_v3_19.sql",
+        "bytes": 21140,
+        "sha256": "bad89a7804139b90c1c214c798020273cbfe0e9e7f3465602ba88313758e616c"
+      },
+      {
+        "file": "migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql",
+        "bytes": 825,
+        "sha256": "c5d6f4f5bbd3705c26803adba27de62ed15130096c01f57ed849991bcab42af2"
+      },
+      {
+        "file": "migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql",
+        "bytes": 2776,
+        "sha256": "73da7bfd01f3a76fa8a74366c230da301db5f01b61ec1f58cc70060aa5f3a209"
+      },
+      {
+        "file": "migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql",
+        "bytes": 3030,
+        "sha256": "f05edd50e6f9e799853c117603bf8b29f4573b979441c95a8a5c911a0f568334"
+      },
+      {
+        "file": "migrations/20260828_legacy_evaluation_schema_v3_19_6.sql",
+        "bytes": 1847,
+        "sha256": "7eaa03624dfed1548313ea745e5446248ca303cceb4762278708267b429d7093"
+      },
+      {
+        "file": "migrations/20260828_reused_acquisition_lineage_v3_19_7.sql",
+        "bytes": 6191,
+        "sha256": "b5c60ac5d4a3a81b4313224a39bfc3e3ef0a155e68aa23a01d9d45e946d5b54d"
+      },
+      {
+        "file": "migrations/20260828_candidate_retention_authority_v3_19_10.sql",
+        "bytes": 9549,
+        "sha256": "d4faa743a166917c203f31dc6733784ea22058bf759881be4905348c1eb2148e"
+      },
+      {
+        "file": "migrations/20260828_full_candidate_retention_authority_v3_19_11.sql",
+        "bytes": 11665,
+        "sha256": "1a9e1a6dbe59ebe72a950a9af2ae795bc8b5c04b07002c49519da91e1924e0f4"
+      },
+      {
+        "file": "migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql",
+        "bytes": 8357,
+        "sha256": "5a8fb46c8e5370d0d78494356cee6bfeff53de9c3286c070dad66c7e62a65d74"
+      },
+      {
+        "file": "migrations/20260828_final_claim_handoff_lease_v3_19_16.sql",
+        "bytes": 5416,
+        "sha256": "f27aa2757d47aeb7c2328569dbd364c1ef93978f746ed3cae83e35233356bebf"
+      },
+      {
+        "file": "migrations/20260828_kol_first_runtime_recovery_v3_20.sql",
+        "bytes": 24653,
+        "sha256": "987eafaa934c375437ca5495891148d3619f101fa538d379b221c37921edfbc2"
+      },
+      {
+        "file": "migrations/20260829_v320_source_completion_cardinality_repair.sql",
+        "bytes": 3786,
+        "sha256": "0b2021a25fe9008e75fa32fce82236f43742aeec0bcb6a28f2a055aa8dd4f77e"
+      },
+      {
+        "file": "migrations/20260829_v320_kol_source_authority_seed.sql",
+        "bytes": 8325,
+        "sha256": "e386cb8239115083be8c4c282b7bae43a2f2caa13e7e9e8bb2e6bf8d81164207"
+      },
+      {
+        "file": "migrations/20260829_v320_kol_projection_marker.sql",
+        "bytes": 6508,
+        "sha256": "f24e6f3ad03ef3dac263a42b35b3713c98a95a7571ed8ce52652b0a2d8c9abd2"
+      },
+      {
+        "file": "migrations/20260830_v320_kol_retention_bridge.sql",
+        "bytes": 13772,
+        "sha256": "9e8bd294444f16ce8ab0e1b094e47d701ad56c253ff7b9991c0b38248a6d5040"
+      },
+      {
+        "file": "migrations/20260830_v320_expired_unclaimed_run_reaper.sql",
+        "bytes": 4688,
+        "sha256": "638c2933f2b2bc7a94967baf4d9791db12b48917a396109100e86b558874e317"
+      },
+      {
+        "file": "migrations/20260830_v320_kol_claim_payload_compaction.sql",
+        "bytes": 7691,
+        "sha256": "25adad2dd860b71bf0833f2634a5a8795c5ba0b32348db709251451a9004cb75"
+      },
+      {
+        "file": "migrations/20260830_v320_kol_retention_owner_boundary.sql",
+        "bytes": 8286,
+        "sha256": "550efd5ce9666730b22a1e786ba69fbc35d41374094c3b38ea96df6871bac848"
+      },
+      {
+        "file": "migrations/20260909_official_financial_validation_receipts.sql",
+        "bytes": 14359,
+        "sha256": "8fa6a6208c7cb32faafd92b247dc8403d48751481a2f02f746aa95986c001c89"
+      },
+      {
+        "file": "migrations/20260911_v320_source_terminal_projection_authority.sql",
+        "bytes": 6471,
+        "sha256": "d4638c3d322fc3df0511803c75e28250adc96a1032d1aed219e68b4461579728"
+      },
+      {
+        "file": "migrations/20260911_candidate_financial_fact_manifest_v8.sql",
+        "bytes": 25437,
+        "sha256": "1f148c0662e19af1d80871db11c43956b52d16325b8b09c2634e21e74cc4f3fc"
+      },
+      {
+        "file": "migrations/20260911_02_financial_field_work_fairness.sql",
+        "bytes": 4769,
+        "sha256": "84b14e32489d060de94c6ab1c3d604687962b0065b2b357c3deb35348b3b5030"
+      },
+      {
+        "file": "migrations/20260911_03_financial_document_job_links.sql",
+        "bytes": 19729,
+        "sha256": "bbb766fcba98671bd31541874ffaf0419e82b437044ae773c6c876fb8b006701"
+      },
+      {
+        "file": "migrations/20260911_04_taiwan_candidate_refresh_queue.sql",
+        "bytes": 17557,
+        "sha256": "85bb399d63a96e58d84282b1d2edd2338d86c9343ce8c15a0672a6b53db1d4ff"
+      },
+      {
+        "file": "migrations/20260911_candidate_history_backfill_v1.sql",
+        "bytes": 12642,
+        "sha256": "b95d8af87eb437824d7ffb3d495222651d593c89a9214c25883f1cad3df9bd59"
+      },
+      {
+        "file": "migrations/20260911_05_financial_fact_isolation_v10.sql",
+        "bytes": 48427,
+        "sha256": "819af34785d57379c2f2c39168d50d1fb29d317b0d33ece60bcb1c6370fa03f5"
+      },
+      {
+        "file": "migrations/20260924_entry_plan_official_action_symbols.sql",
+        "bytes": 3738,
+        "sha256": "cc82ac701bb1ac4db4e2fa8880ac77fa9d90e71ca5925e02ca088dd3d3070968"
+      }
+    ],
+    "research6": [
+      {
+        "file": "migrations/20260929_candidate_dossier_outbox_v6.sql",
+        "bytes": 7567,
+        "sha256": "7dd49c2b056821761f1ee0098125ee14727b155894091e980c59f61a9eb061fb"
+      },
+      {
+        "file": "migrations/20260929_research_agent_state_v1.sql",
+        "bytes": 35269,
+        "sha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a"
+      },
+      {
+        "file": "migrations/20260929_research_deep_jobs_v1.sql",
+        "bytes": 26662,
+        "sha256": "14d2ee9c336ec79d3df0f25635be6e0290fa62ba983e8b94a111f0ba8e6d155d"
+      },
+      {
+        "file": "migrations/20261004_research_technical_identity_v2.sql",
+        "bytes": 2479,
+        "sha256": "fd029de904e24b6dae16f51a73383acd5fafccd174871799697a87e34400939e"
+      },
+      {
+        "file": "migrations/20261004_research_cloud_receipts_v1.sql",
+        "bytes": 4010,
+        "sha256": "243c41bd5ac59af453c9460749bc92021aab086947d3a0b389bb431d5675acee"
+      },
+      {
+        "file": "migrations/20261005_financial_history_admission_v1.sql",
+        "bytes": 11994,
+        "sha256": "5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27"
+      }
+    ]
+  },
+  "candidateSuccessorDependencyOrderNotDeclaredByInstaller": [
+    {
+      "file": "migrations/20261008_research_observed_roster_v1.sql",
+      "bytes": 29314,
+      "sha256": "082641ec74a06e67162d3575a5d3d0f1324d7fa95e62316421a599478069221b"
+    },
+    {
+      "file": "migrations/20261008_research_observed_priority_v1.sql",
+      "bytes": 28579,
+      "sha256": "bf60712c5199592c06cf052e265f2b7496a3b28661d2182d8d915207f5c610a3"
+    },
+    {
+      "file": "migrations/20261008_research_observed_claim_v2.sql",
+      "bytes": 26148,
+      "sha256": "ecb7667ef57aee404ca68ded0715c8ea3f17745cc2f657a86b087be7ad3ab7b2"
+    },
+    {
+      "file": "migrations/20261009_research_publication_source_fence_v2.sql",
+      "bytes": 12454,
+      "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621"
+    },
+    {
+      "file": "migrations/20261009_research_input_preparations_v2.sql",
+      "bytes": 14713,
+      "sha256": "af08bdafd1ea13ad9351e7aa66bb3abaa605c3d0c123cf582793f2684fbfc41e"
+    },
+    {
+      "file": "migrations/20261009_research_input_preparation_assert_v2.sql",
+      "bytes": 2086,
+      "sha256": "c63a923be36e5f7ba06001a6d8be57287d80f5e6524dc866bad93b80666a9cbc"
+    },
+    {
+      "file": "migrations/20261009_research_complete_input_v2.sql",
+      "bytes": 446691,
+      "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c"
+    },
+    {
+      "file": "migrations/20261009_research_author_assignments_v2.sql",
+      "bytes": 10433,
+      "sha256": "91629781ad52191ae4ef096d2f56af020066973556988713305bc7c10a80b99c"
+    },
+    {
+      "file": "migrations/20261009_research_author_packet_v2.sql",
+      "bytes": 6376,
+      "sha256": "1a84dddb85afefe6de4458d781117f9bb50ff43db6fd1986a1c43e1608ed9528"
+    },
+    {
+      "file": "migrations/20261009_research_author_results_v2.sql",
+      "bytes": 10099,
+      "sha256": "894cd214aa60678c2c4475abbf194ea59e4a7a23677b296eda61b52fab6ce3e5"
+    },
+    {
+      "file": "migrations/20261009_research_author_handoffs_v2.sql",
+      "bytes": 9579,
+      "sha256": "96f79786802317175dc662f1c0476e8ad9afcaf675f85b1ad1909d2bcd65a757"
+    },
+    {
+      "file": "migrations/20261009_research_reviewer_assignments_v2.sql",
+      "bytes": 14900,
+      "sha256": "43c0a0525c38c73cf5277c23031bae2acb88ace1b5db25cd440c01932f14bc86"
+    },
+    {
+      "file": "migrations/20261009_research_reviewer_results_v2.sql",
+      "bytes": 28946,
+      "sha256": "af72171444c6c67a754f33099da704e78bb2d2bb7454ef356c4c8753ea26f934"
+    },
+    {
+      "file": "migrations/20261009_research_publication_lineage_v2.sql",
+      "bytes": 9652,
+      "sha256": "37a885ac77ef1c97196c197d6804300fd18843eebb31629da19f9d10f6d6449d"
+    },
+    {
+      "file": "migrations/20261010_research_atomic_publication_v2.sql",
+      "bytes": 43051,
+      "sha256": "ed2334dc46cf73fd33f61bd00d1034b50924d5e2213474372da5b121c4f3128a"
+    },
+    {
+      "file": "migrations/20261010_research_publication_view_v2.sql",
+      "bytes": 3783,
+      "sha256": "82a158eb59e74181fe5546c255d6afa4c51184d2639cfb52a900b22eef88dd75"
+    }
+  ],
+  "extraSuccessors": [
+    {
+      "file": "migrations/20261008_insider_snapshots_v1.sql",
+      "bytes": 27221,
+      "sha256": "b79886f1da20c646fb0fd96d9e01e1c90c904f41e1acc977bd0d6ea7548c323d"
+    },
+    {
+      "file": "migrations/20261011_research_admission_isolation_v1.sql",
+      "bytes": 26345,
+      "sha256": "1ff8bc16e445db198747471fe126ec27e142b729779eb72a7bf3452072d9a581"
+    }
+  ],
+  "countReconciliation": "Current installer arrays declare 48 base +1 ownership prelude +6 research. The dated observed/publication files provide16 modules, plus insider snapshots and admission isolation =18 Oct8-11 files. Outbox v5 is a separate prerequisite from the15-file funnel. This probe does not invent which17 modules root will select as publication chain or imply the in-progress installer has already declared that chain.",
+  "prerequisiteOriginalFiles": [
+    {
+      "file": "supabase_schema.sql",
+      "bytes": 22048,
+      "sha256": "fb5e6cc50650dbf289361523b9004a478fbfef63f390520daac1b1e03f6485b3"
+    },
+    {
+      "file": "deployment/vps/bootstrap-stockinsider-postgres.sql",
+      "bytes": 1979,
+      "sha256": "6d08fbb7545b4a76aa740927a6519cd8eda1e90d6003d920b4ec3c08d5f4768a"
+    },
+    {
+      "file": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+      "bytes": 41101,
+      "sha256": "924d233409d36d054c9f303591dd8aa950a527e1ebb04e6ea99d256642380927"
+    },
+    {
+      "file": "scripts/opportunity-v3/migration-plan.mjs",
+      "bytes": 6463,
+      "sha256": "ba426c702c2f65831281f0fd481f34816a6699b061adc88ac39409a0e9f41755"
+    },
+    {
+      "file": "scripts/opportunity-v3/migration-contract.test.mjs",
+      "bytes": 513796,
+      "sha256": "477fa4ae840bdaac2ca8b34d033ffe0fd3fa9a83b59db5556bfb24232fdae474"
+    },
+    {
+      "file": "scripts/research-local-inbox-dataplane.mjs",
+      "bytes": 33643,
+      "sha256": "a45102c1c953cf359af6a2b7c2653203b4fadde9441a7a4183737a2b872c8c9d"
+    },
+    {
+      "file": "scripts/research-publication-http.test.mjs",
+      "bytes": 61366,
+      "sha256": "5c843a39810fc31b6173c3a70a2c76699033c2825fa75cf744c3bacfa43d3906"
+    },
+    {
+      "file": "scripts/research-atomic-publication-postgres.test.mjs",
+      "bytes": 39276,
+      "sha256": "3576a06546b2394dbbd0ade47a20c226724c3d24bc5bf5ae16afb6fd2972adb8"
+    },
+    {
+      "file": "scripts/generic-migration-policy.js",
+      "bytes": 4683,
+      "sha256": "674c2cddfa528f74e2b734e3b58d12f47015acc759a6a483804da988a48031fa"
+    },
+    {
+      "file": "docs/operations/2026-10-05/schema-rehearsal.md",
+      "bytes": 2902,
+      "sha256": "ad547cb8781dc0a3e4e821b0d728adc1e54f5e29d7029571241960fc38f8eb72"
+    },
+    {
+      "file": "migrations/20260228_opportunity_engine.sql",
+      "bytes": 8816,
+      "sha256": "61e72af43fdddaf70cd6fc2dca581840fdcd76062ce72d1ea8d90d723abf6574"
+    },
+    {
+      "file": "migrations/20260315_research_system_v2.sql",
+      "bytes": 7713,
+      "sha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607"
+    },
+    {
+      "file": "migrations/20260830_source_ranking_v2.sql",
+      "bytes": 17381,
+      "sha256": "8bff800465680306da4aa2bf84321af564132adf021d4ff53fd001759d11f9ae"
+    },
+    {
+      "file": "migrations/20260901_source_research_shadow_v2.sql",
+      "bytes": 16015,
+      "sha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795"
+    },
+    {
+      "file": "migrations/20260906_candidate_dossier_v4.sql",
+      "bytes": 11523,
+      "sha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016"
+    },
+    {
+      "file": "migrations/20260907_candidate_dossier_outbox_v5.sql",
+      "bytes": 2876,
+      "sha256": "48e3749f43d2eea1c2c2a4546bac9a001cdebd4b87d257f021e8260ae8f298f5"
+    },
+    {
+      "file": "migrations/20260906_financial_acquisition_v4.sql",
+      "bytes": 12439,
+      "sha256": "1b7ce6cda7e52a110386b20cccb5c8c70bf4552edc9d705469c7928599beccb6"
+    },
+    {
+      "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+      "bytes": 28028,
+      "sha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21"
+    },
+    {
+      "file": "migrations/20260907_03_candidate_financial_document_parser_v6.sql",
+      "bytes": 7191,
+      "sha256": "a1ace3767f81086e4d4d3c32304944e25fb70f283aef1bcefdabd5c8989d07c2"
+    },
+    {
+      "file": "scripts/apply-research-funnel-v4-migrations.mjs",
+      "bytes": 7428,
+      "sha256": "23b14761ba31907feb1bcf50255cfadd5ee5198f3186855a4b013a827353436e"
+    },
+    {
+      "file": "openspec/changes/release-schema-rehearsal-v1/spec.md",
+      "bytes": 2834,
+      "sha256": "595ead97a6548de753b676d76cedd86abc513522ed90211daca5998053e920e3"
+    },
+    {
+      "file": "migrations/20260907_evidence_valuation_contract_v6.sql",
+      "bytes": 6792,
+      "sha256": "48357e2d7a036c8d484e454920059a749db3df2ba9678eae2766618f85ec7571"
+    }
+  ],
+  "separateExistingSanctionedFunnel15": [
+    {
+      "file": "migrations/20260906_financial_acquisition_v4.sql",
+      "bytes": 12439,
+      "sha256": "1b7ce6cda7e52a110386b20cccb5c8c70bf4552edc9d705469c7928599beccb6"
+    },
+    {
+      "file": "migrations/20260906_source_identity_v4.sql",
+      "bytes": 4155,
+      "sha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922"
+    },
+    {
+      "file": "migrations/20260906_shadow_signal_v4.sql",
+      "bytes": 7270,
+      "sha256": "1369698017f4381ceeea32c69b70a25b7061976bbe3fdd94795a7948f7e0d587"
+    },
+    {
+      "file": "migrations/20260906_candidate_dossier_v4.sql",
+      "bytes": 11523,
+      "sha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016"
+    },
+    {
+      "file": "migrations/20260906_taiwan_data_provider_v5.sql",
+      "bytes": 35364,
+      "sha256": "7c802310ca0ec68dd60e1b072cc531d1b0f9005fd6598d5d9f3145f50d3d5553"
+    },
+    {
+      "file": "migrations/20260906_finmind_financial_fallback_v5.sql",
+      "bytes": 11471,
+      "sha256": "4b5434b8b297b3858dd30caacb664d85dd7a4cefef1b7b60382f8a4d6865f50f"
+    },
+    {
+      "file": "migrations/20260906_truth_research_v3.sql",
+      "bytes": 10103,
+      "sha256": "4120225ac601dfb8cce49ace8f865f400c71112dce423c53bdf68b9892861dbb"
+    },
+    {
+      "file": "migrations/20260907_evidence_valuation_contract_v6.sql",
+      "bytes": 6792,
+      "sha256": "48357e2d7a036c8d484e454920059a749db3df2ba9678eae2766618f85ec7571"
+    },
+    {
+      "file": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+      "bytes": 28028,
+      "sha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21"
+    },
+    {
+      "file": "migrations/20260907_03_candidate_financial_document_parser_v6.sql",
+      "bytes": 7191,
+      "sha256": "a1ace3767f81086e4d4d3c32304944e25fb70f283aef1bcefdabd5c8989d07c2"
+    },
+    {
+      "file": "migrations/20260907_04_enterprise_multiple_history_v6.sql",
+      "bytes": 6136,
+      "sha256": "8500569d0b127dbfb976f9b6f3ede7b3adef8faaa929accdddf95ff035b51ed2"
+    },
+    {
+      "file": "migrations/20260907_candidate_dossier_outbox_v5.sql",
+      "bytes": 2876,
+      "sha256": "48e3749f43d2eea1c2c2a4546bac9a001cdebd4b87d257f021e8260ae8f298f5"
+    },
+    {
+      "file": "migrations/20260907_shadow_replay_payload_v5.sql",
+      "bytes": 3836,
+      "sha256": "db705194fc8f96b681ff1a4e937b94c1408fc864cefb362981fb8f44674fa03f"
+    },
+    {
+      "file": "migrations/20260908_01_financial_failure_rpc_hotfix_v6.sql",
+      "bytes": 4163,
+      "sha256": "d9fcb1db86beb1b9918d1a8f493a4687543ef38d56c05ed79fcfe2be32c78805"
+    },
+    {
+      "file": "migrations/20260908_threads_oauth_lifecycle_v7.sql",
+      "bytes": 7425,
+      "sha256": "9918cb5e3211fdf1029343113a3d2c383a7c74d5c068466ba76309fad4f4fe89"
+    }
+  ]
+}

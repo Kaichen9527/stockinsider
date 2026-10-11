@@ -1,0 +1,14 @@
+{
+  "observedStartAt": "2026-10-11T05:47:45.551804+00:00",
+  "deadlineAt": "2026-10-11T06:17:35Z",
+  "admittedAt": "2026-10-11T05:50:00.668498+00:00",
+  "sourceHead": "bc01c006cba307735ccd50c78841b94242e1c014",
+  "sourceTree": "deb7d94524533b1318f0a0237cc7bd09e2269322",
+  "diskAvailableBytes": 10080362496,
+  "USER": "agent",
+  "USERDerivedFromOS": true,
+  "proxyCAPreserved": true,
+  "secretValuesExported": false,
+  "dependenciesInstalled": false,
+  "noOtherHeavyWork": true
+}

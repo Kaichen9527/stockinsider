@@ -1,0 +1,20 @@
+{
+  "stage": "full-original-prerequisite",
+  "command": [
+    "/usr/bin/python3",
+    "scripts/research-full-prerequisite-probe-linux-oct11.py",
+    "/tmp/si-bc01-gecr1z_y"
+  ],
+  "startedAt": "2026-10-11T05:50:51.892798+00:00",
+  "endedAt": "2026-10-11T05:50:52.793225+00:00",
+  "exitCode": 3,
+  "elapsedSeconds": 0.9004336619982496,
+  "sampledAggregatePeakRssBytes": 65323008,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10080358400,
+  "diskAvailableAfterBytes": 10080358400,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
