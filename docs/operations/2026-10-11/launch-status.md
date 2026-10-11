@@ -1,5 +1,16 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 15:40Z：候選 CI 已真正註冊；部署仍需發布工具復原
+
+PR371 final5b8a5c57加入一個普通PR workflow，GitHub run38151644908的既有28項候選/UI檢查已成功。root逐項核對20raw/manifest及14source條目；最終版本另重跑28項成功。第一輪canonical為153PASS/2FAIL：系統Python父程序讓universal Node以x64執行，與已安裝arm64 LightningCSS不符；保留RED。顯式arm64啟動不改指令或測試，完整155PASS/0FAIL/0SKIP/0TODO、31PCR全過。新的三檔direct-child exact evidence606f5fab已推，不重用715的head簽述；相同web/lock的正常build/type/lint僅如實重用前證據。普通CI不能代替protected批准。
+
+892/c012的獨立unsigned補查沒有新P0/P1/P2。真實host validator用process.arch而非uname；universal Node受啟動父程序影響，顯式arm64符合架構條件，但尚未完成實際runner啟動鏈及最終trusted fixture的完整preflight。新host身分、fixture/consumer/doctor/map及有限contract仍需一起審查。發布工具單次首次信任遷移決策已向人類提出，尚未答覆；沒有改保護、假造批准、啟用inactive fences、合併或新部署。PR370產品四項PASS但native ENOENT仍FAIL，不能宣稱「只等一般CI」或全部發布條件已完備。
+
+另唯讀盤點最近7日保留PTT逐則股票留言：47article-symbol pairs，單篇最多僅2位明示代號的保留作者，20作者例外0件。這是目前留存範圍，不能推論原討論區沒有熱度；也顯示現在只有policy測試、沒有完整准入接線，不能將每頁20筆稱為20檔合格研究。後續必須保留可驗證的回覆主題歸屬與根源，再接研究排程；不得用總推文數或108個多publisher_key當獨立確認。
+
+既有Cloud cursor50已完成此項且idle；沒有重複派工。其他App cursor26仍執行自己的CI/部署，快取成因答覆待確認；一個月內快取未刪。343全量終態不重跑，AUO來源摘要尚未入庫，正式main169保持運作。原始輸出與hash見`.agent/reports/2026-10-11T15-40-candidate-ci-and-native-review/receipt.json`。
+
+
 ## 候選顯示 PR371 與正式資料唯讀量測
 
 PR371 exact7150164已推，root獨立28特定／155 canonical全部通過且零skip；正常Next16.3.4 build/type/lint成功。87份VM raw及428份source manifest hash核對完成，真正三檔direct-child exact evidence54f9644e已推。早於evidence的首次protected缺件失敗保留，不為已知舊native ENOENT反覆重跑。尚未合併部署，完整准入adapter、官方最新交易日投影及排程仍未接線。
