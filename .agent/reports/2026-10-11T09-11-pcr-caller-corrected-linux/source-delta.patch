@@ -1,0 +1,198 @@
+diff --git a/scripts/opportunity-v3/migration-contract.test.mjs b/scripts/opportunity-v3/migration-contract.test.mjs
+index ff1d16fd..b28abb86 100644
+--- a/scripts/opportunity-v3/migration-contract.test.mjs
++++ b/scripts/opportunity-v3/migration-contract.test.mjs
+@@ -1031,21 +1031,13 @@ test('PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persis
+   const connectionString = `postgresql://${encodeURIComponent(cluster.user)}@localhost:${cluster.port}/postgres?host=${encodeURIComponent(cluster.socket)}`;
+   const adapter = runtime('postgres-legacy-producer-adapter.js').createPostgresLegacyProducerAdapter({ connectionString });
+   const observed = [];
++  let intentionalStopReached = false;
+   const stageHandlers = Object.fromEntries(runtime('source-run-config.js').LEGACY_STAGES.map((stage) => [stage, async (claim) => {
+     observed.push(claim);
+-    assert.equal(codec.sha256(claim.payloadCanonical), claim.payloadHash);
+-    assert.equal(codec.canonicalJson(JSON.parse(Buffer.from(claim.payloadCanonical).toString())), codec.canonicalJson(claim.payloadJson));
+-    if (claim.readKind !== null) {
+-      assert.equal(codec.sha256(claim.readCanonical), claim.readHash);
+-      assert.equal(codec.canonicalJson(JSON.parse(Buffer.from(claim.readCanonical).toString())), codec.canonicalJson(claim.readJson));
+-    } else {
+-      assert.equal(claim.readCanonical, null);
+-      assert.equal(claim.readJson, null);
+-      assert.equal(claim.readHash, null);
+-    }
+     if (stage === 'source_sync') return sourceResult;
+     // Stop after observing the genuine SQL-scheduled successor. This intentional
+     // failure proves the bounded probe cannot masquerade as a full successful run.
++    intentionalStopReached = true;
+     throw new Error('test-only stop after persisted source completion');
+   }]));
+   try {
+@@ -1054,6 +1046,21 @@ test('PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persis
+     });
+     assert.equal(observed.length, 2, JSON.stringify({ result, claims: observed.map(({ stage, jobKind, readKind, readHash, readCanonical }) =>
+       ({ stage, jobKind, readKind, readHash, readCanonical: readCanonical?.toString() })) }));
++    assert.equal(intentionalStopReached, true);
++    // These assertions must remain outside worker handlers: its expected
++    // failure terminalization must never swallow a test AssertionError.
++    for (const claim of observed) {
++      assert.equal(codec.sha256(claim.payloadCanonical), claim.payloadHash);
++      assert.equal(codec.canonicalJson(JSON.parse(Buffer.from(claim.payloadCanonical).toString())), codec.canonicalJson(claim.payloadJson));
++      if (claim.readKind !== null) {
++        assert.equal(codec.sha256(claim.readCanonical), claim.readHash);
++        assert.equal(codec.canonicalJson(JSON.parse(Buffer.from(claim.readCanonical).toString())), codec.canonicalJson(claim.readJson));
++      } else {
++        assert.equal(claim.readCanonical, null);
++        assert.equal(claim.readJson, null);
++        assert.equal(claim.readHash, null);
++      }
++    }
+     assert.equal(observed[0].stage, 'source_sync');
+     assert.notEqual(observed[1].stage, 'source_sync');
+     assert.equal(observed[0].runId, observed[1].runId);
+diff --git a/scripts/opportunity-v3/pcr-aggregate-caller.test.mjs b/scripts/opportunity-v3/pcr-aggregate-caller.test.mjs
+new file mode 100644
+index 00000000..d36c6f0b
+--- /dev/null
++++ b/scripts/opportunity-v3/pcr-aggregate-caller.test.mjs
+@@ -0,0 +1,142 @@
++import assert from 'node:assert/strict';
++import { execFileSync, spawnSync } from 'node:child_process';
++import { createRequire } from 'node:module';
++import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
++import os from 'node:os';
++import path from 'node:path';
++import { fileURLToPath } from 'node:url';
++import test from 'node:test';
++import { treeIdentity } from './protected-external-gate-worker.mjs';
++
++const require = createRequire(import.meta.url);
++const { canonicalJson, sha256 } = require('../runtime/codec.js');
++const root = fileURLToPath(new URL('../../', import.meta.url));
++const change = '.loop-engineering/state/changes/source-led-opportunity-engine-v3';
++const worker = 'scripts/opportunity-v3/protected-external-gate-worker.mjs';
++const aggregate = 'scripts/opportunity-v3/protected-code-gate-aggregate.mjs';
++const checks = ['requirements', 'architecture', 'product-runtime-code-gate', 'model-runner-code-gate', 'exact-review'];
++
++test('PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing', () => {
++  const temporary = realpathSync(mkdtempSync(path.join(os.tmpdir(), 'stockinsider-pcr023-test-only-')));
++  const fixture = path.join(temporary, 'base'); const subject = path.join(temporary, 'subject');
++  mkdirSync(fixture);
++  const environment = { PATH: '/usr/bin:/bin', HOME: temporary, TZ: 'Asia/Taipei',
++    GIT_CONFIG_NOSYSTEM: '1', GIT_CONFIG_GLOBAL: '/dev/null' };
++  const git = (...args) => execFileSync('/usr/bin/git', args, { cwd: fixture, encoding: 'utf8', env: environment }).trim();
++  const save = (filename, bytes) => {
++    const target = path.join(fixture, filename); mkdirSync(path.dirname(target), { recursive: true });
++    writeFileSync(target, bytes, { mode: 0o644 });
++  };
++  const commit = (message) => {
++    git('add', '.'); git('-c', 'commit.gpgsign=false', 'commit', '-m', message);
++    return git('rev-parse', 'HEAD');
++  };
++  const canonicalFile = (filename, value) => writeFileSync(filename, `${canonicalJson(value)}\n`);
++  try {
++    git('init', '--quiet'); git('config', 'user.name', 'Isolated aggregate test');
++    git('config', 'user.email', 'aggregate-fixture@example.invalid');
++    // Preserve the real active graph bytes so the unchanged worker's fixed
++    // graph-to-review-source selector is exercised, rather than overridden.
++    const catalog = JSON.parse(readFileSync(path.join(root, change, 'active-artifact-catalog-v3.json')));
++    const paths = [worker, aggregate, `${change}/active-artifact-catalog-v3.json`, `${change}/acceptance-tests.json`,
++      ...catalog.activeFiles.map((file) => `${change}/${file}`), ...catalog.incorporatedFiles, ...catalog.historicalAuditFiles];
++    for (const filename of new Set(paths)) save(filename, readFileSync(path.join(root, filename)));
++    const registryPath = `${change}/external-gate-release-registry-v1.json`;
++    const registryBytes = readFileSync(path.join(root, registryPath));
++    const registry = JSON.parse(registryBytes); const release = registry.releases[0];
++    // Registry is itself in the active graph. Preserve its real bytes and copy
++    // the selected bootstrap as inert data; never execute or alter that script.
++    const bootstrap = readFileSync(path.join(root, release.bootstrapPath));
++    save(registryPath, registryBytes); save(release.bootstrapPath, bootstrap);
++    const baseSha = commit('test-only protected base'); const baseTree = git('rev-parse', 'HEAD^{tree}');
++    const identity = treeIdentity(fixture, baseTree);
++    assert.equal(identity.activeGraphSha256, '722095adecd208b54cc794f72e262dd5b77ed970da80f0ab5771a55259651625');
++    const reviewText = (head, tree, finalLine, rangeLine) => [
++      '# TEST-ONLY synthetic protocol review; no real approval', 'Result: `PASS`', 'P0=0 P1=0',
++      `- Active graph: \`${identity.activeGraphSha256}\``, `- ${finalLine}: \`${head}\` / \`${tree}\``,
++      `- ${rangeLine}: \`${baseSha}..${head}\``, '',
++    ].join('\n');
++    save(`${change}/requirements-review-v318-digest.md`, reviewText(baseSha, baseTree,
++      'Final reviewed implementation commit/tree', 'Full reviewed range'));
++    const requirementsCommit = commit('test-only requirements evidence');
++    git('update-ref', 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v318-digest', requirementsCommit);
++    save(`${change}/architecture-review-v318-digest.md`, reviewText(requirementsCommit, git('rev-parse', 'HEAD^{tree}'),
++      'Final reviewed implementation commit/tree', 'Full reviewed implementation range'));
++    const subjectSha = commit('test-only architecture evidence and subject'); const subjectTree = git('rev-parse', 'HEAD^{tree}');
++    git('update-ref', 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v318-digest', subjectSha);
++    const exactReview = reviewText(subjectSha, subjectTree, 'Final reviewed repair/tree', 'Full final range');
++    save(`${change}/exact-commit-review-final.md`, exactReview);
++    save(`${change}/pcr-fulfillment-record-v1.json`, `${canonicalJson({ fixtureOnly: true })}\n`);
++    save(`${change}/runtime-review-attestation.json`, `${canonicalJson({
++      schema: 'stockinsider-exact-review-attestation-v1', baseSha, headSha: subjectSha, treeSha: subjectTree,
++      range: `${baseSha}..${subjectSha}`, verdict: 'PASS', p0: 0, p1: 0,
++      evidenceSha256: sha256(exactReview), reviewedAt: '2026-10-11T08:00:00Z',
++    })}\n`);
++    const exactCommit = commit('test-only exact evidence');
++    git('update-ref', `refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-${subjectSha}`, exactCommit);
++    git('checkout', '--detach', baseSha); git('worktree', 'add', '--detach', subject, subjectSha);
++    const attestation = { baseCommitSha: baseSha, checkRun: 'stockinsider-v3-gate-root', registryCommitSha: baseSha,
++      registryPath, registrySha256: sha256(registryBytes), registryTreeSha: baseTree,
++      releaseId: release.id, releaseSha256: sha256(bootstrap), repository: 'Kaichen9527/stockinsider',
++      schema: 'stockinsider-external-gate-attestation-v1', subjectCommitSha: subjectSha, subjectTreeSha: subjectTree,
++      workflowPath: '.github/workflows/source-led-opportunity-external-gate.yml' };
++    const attestationPath = path.join(temporary, 'attestation.json'); canonicalFile(attestationPath, attestation);
++    const invoke = (verb, output, more = []) => spawnSync(process.execPath, [path.join(fixture, worker), verb,
++      '--attestation', attestationPath, '--subject-root', subject, '--output', output, ...more],
++    { encoding: 'utf8', env: environment, timeout: 30000 });
++    const inputs = new Map();
++    // Real review verbs produce bound envelopes from this disposable Git. These
++    // synthetic reviews are NOT evidence for any actual repository release.
++    for (const check of ['requirements', 'architecture', 'exact-review']) {
++      const output = path.join(temporary, `${check}.json`); const run = invoke('review', output, ['--check', check]);
++      assert.equal(run.status, 0, run.stderr); assert.equal(existsSync(output), true, run.stdout); inputs.set(check, output);
++    }
++    for (const [check, partition, count, name] of [
++      ['product-runtime-code-gate', 'product_runtime', 272, 'product-runtime-track'],
++      ['model-runner-code-gate', 'model_runner', 28, 'model-runner-track'],
++    ]) {
++      // Explicit synthetic protocol inputs ONLY. No executable track is run or
++      // claimed passed; this test verifies main's aggregate consumption boundary.
++      const result = { acceptanceVersion: identity.inventory.version, activeGraphSha256: identity.activeGraphSha256,
++        blockedReason: null, check, commandCatalogSha256: null, commands: [{
++          command: `protected://stockinsider-v3-gate-root/execute-track --track ${partition}`,
++          exitCode: 0, failed: 0, name, passed: count, skipped: 0, stderrSha256: sha256(''), stdoutSha256: sha256('test-only'), todo: 0,
++        }], commitSha: subjectSha, completedAt: '2026-10-11T08:00:00Z', cwdMode: null,
++        executedCount: count, inputs: [], partition, registeredCount: count, review: null,
++        schema: 'opportunity-gate-result-v1', scriptValueRowsSha256: identity.inventory.scriptValueRowsSha256,
++        status: 'pass', treeSha: subjectTree };
++      result.evidenceSha256 = sha256(canonicalJson(result));
++      const envelope = { attestation, harnessReleaseSha256: attestation.releaseSha256,
++        issuedAt: '2026-10-11T08:00:00Z', issuer: 'stockinsider-v3-gate-root', result,
++        resultSha256: sha256(canonicalJson(result)), schema: 'stockinsider-external-gate-envelope-v1',
++        subjectCommitSha: subjectSha, subjectTreeSha: subjectTree };
++      const output = path.join(temporary, `${check}.json`); canonicalFile(output, envelope); inputs.set(check, output);
++    }
++    const files = checks.map((check) => inputs.get(check));
++    const output = path.join(temporary, 'aggregate.json');
++    const run = invoke('aggregate', output, files.flatMap((file) => ['--input', file]));
++    assert.equal(run.status, 0, run.stderr);
++    const envelope = JSON.parse(readFileSync(output, 'utf8'));
++    assert.deepEqual(envelope.result.inputs, files.map((file) => {
++      const input = JSON.parse(readFileSync(file, 'utf8'));
++      return { check: input.result.check, evidenceSha256: input.result.evidenceSha256 };
++    }));
++    assert.equal(envelope.resultSha256, sha256(canonicalJson(envelope.result)));
++    assert.equal(JSON.parse(run.stdout).check, 'code-gate-aggregate');
++    const bad = (label, selected) => {
++      const target = path.join(temporary, `${label}.json`);
++      const rejected = invoke('aggregate', target, selected.flatMap((file) => ['--input', file]));
++      assert.notEqual(rejected.status, 0, label); assert.equal(existsSync(target), false, label);
++      assert.equal(rejected.stdout, '', label); return rejected.stderr;
++    };
++    bad('missing', files.slice(1));
++    bad('reordered', [files[1], files[0], ...files.slice(2)]);
++    const invalid = JSON.parse(readFileSync(files[0], 'utf8')); invalid.result.status = 'failed';
++    const invalidPath = path.join(temporary, 'invalid-input.json'); canonicalFile(invalidPath, invalid);
++    assert.match(bad('failed', [invalidPath, ...files.slice(1)]), /envelope pass/u);
++    const unbound = JSON.parse(readFileSync(files[4], 'utf8')); unbound.result.review.pcrFulfillmentSha256 = '0'.repeat(64);
++    delete unbound.result.evidenceSha256; unbound.result.evidenceSha256 = sha256(canonicalJson(unbound.result));
++    unbound.resultSha256 = sha256(canonicalJson(unbound.result)); canonicalFile(invalidPath, unbound);
++    assert.match(bad('unbound-review', [...files.slice(0, 4), invalidPath]), /aggregate Git\/evidence binding/u);
++  } finally { rmSync(temporary, { recursive: true, force: true }); }
++});

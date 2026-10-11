@@ -1,0 +1,335 @@
+{
+  "schemaVersion": "pcr-caller-corrected-native-linux-evidence-v1",
+  "sourceIdentity": {
+    "source": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+    "tree": "d3a623aff477b74fb0e217234958630742585250",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "status": "",
+    "admissionAt": "2026-10-11T09:11:45.638698Z",
+    "deadlineAt": "2026-10-11T09:41:45+00:00",
+    "diskAvailableBytes": 10043609088,
+    "osUser": "agent",
+    "node": "v22.14.0",
+    "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "pgBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "nativeExecutables": {
+      "initdb": true,
+      "pg_ctl": true,
+      "psql": true,
+      "postgres": true
+    },
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "pgClient": {
+      "version": "8.18.0",
+      "user": "agent"
+    },
+    "priorEvidenceHead": "2ada86cea70461e52f735a8b87644b909f712c53",
+    "priorBuildId": "NXhBxkRAcjb3LvAgClFtj",
+    "networkPolicyMode": "restricted",
+    "networkPolicyObservedState": "unknown",
+    "noNewDependencies": true,
+    "activeRelevantAtAdmission": [],
+    "memAvailableKiB": 33190308
+  },
+  "executionCheckoutDetachedExact399": true,
+  "evidenceCommitParent": "2ada86cea70461e52f735a8b87644b909f712c53",
+  "evidenceBranchContainsOnlyNewEvidenceNoSourceMerge": true,
+  "testResults": {
+    "pcr-native-adapter": {
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "testNames": [
+        "PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker"
+      ]
+    },
+    "pcr-callers-four": {
+      "counts": {
+        "tests": 9,
+        "pass": 9,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "testNames": [
+        "PCR-023 actual protected worker main serializes aggregate inputs and rejects invalid artifacts before writing",
+        "PCR-018 entry-state caller calculates and consumes the actual adjusted price plane",
+        "PCR-025 caller returns bounded history or the actual unavailable reason",
+        "PCR-026 caller retains the roster manifest and rejects invalid universe inputs",
+        "PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted",
+        "PCR-031 caller preserves shadow rows and changes identity when the factor contract changes",
+        "PCR-005 actual CLI main passes validated canonical configuration to real worker acquisition",
+        "PCR-006 actual CLI serializes real durable worker returns and closes adapter on acquisition failure",
+        "PCR-001 actual installation caller resolves real Git lineage before preparing owned files"
+      ]
+    }
+  },
+  "stages": [
+    {
+      "stage": "pcr-native-adapter",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-name-pattern=^PCR-007 and PCR-011 actual PostgreSQL adapter",
+        "scripts/opportunity-v3/migration-contract.test.mjs"
+      ],
+      "startedAt": "2026-10-11T09:13:16.718516+00:00",
+      "endedAt": "2026-10-11T09:13:19.520314+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.801804701972287,
+      "sampledAggregatePeakRssBytes": 180596736,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10043609088,
+      "diskAvailableAfterBytes": 10043609088,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "pcr-callers-four",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+        "scripts/opportunity-v3/pcr-installation-caller.test.mjs",
+        "scripts/opportunity-v3/pcr-cli-callers.test.mjs",
+        "scripts/opportunity-v3/pcr-aggregate-caller.test.mjs"
+      ],
+      "startedAt": "2026-10-11T09:13:33.931421+00:00",
+      "endedAt": "2026-10-11T09:13:40.464669+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 6.533257351955399,
+      "sampledAggregatePeakRssBytes": 108875776,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10043609088,
+      "diskAvailableAfterBytes": 10043609088,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T09:13:52.423487+00:00",
+      "endedAt": "2026-10-11T09:13:58.947757+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 6.524278962984681,
+      "sampledAggregatePeakRssBytes": 897126400,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10043609088,
+      "diskAvailableAfterBytes": 10042789888,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    }
+  ],
+  "build": {
+    "source": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+    "tree": "d3a623aff477b74fb0e217234958630742585250",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "buildId": "Nj3J_1HFHcxV4EErafx07",
+    "node": "v22.14.0",
+    "next": "16.3.8",
+    "compiler": "normal npm build / Turbopack",
+    "serverFileCount": 2088,
+    "serverLogicalBytes": 67439593,
+    "serverManifestSha256": "c555e210cde700297e2e39f10376de7840b4629cab9dc137a98d14e603eedb50",
+    "prebuildExecuted": true,
+    "newBuildNotReused": true,
+    "priorBuildId": "NXhBxkRAcjb3LvAgClFtj"
+  },
+  "verifiedTestContract": {
+    "testFileSha256": "955f24190af97322bcdbc9295a298ef2e339f5166aff19c3517da66f5d0ba0e9",
+    "handlerAssertionsNowOutsideWorker": true,
+    "intentionalStopReachedTrueVerified": true,
+    "verifiedOriginalAssertions": [
+      "Exactly2 SQL claims of same run; source_sync then different successor.",
+      "All observed claim payload hash/JSON and conditional read hash/JSON verified outside expected-failure handling.",
+      "Explicit intentionalStopReached=true and completedJobs=1;worker disposition=failed.",
+      "Persisted firstStatus=succeeded,successorStatus=failed,predecessor exact,resultHash/resultJson exact,17 terminals,runStatus=failed.",
+      "Actual v3_14 completion delegates to v3_11 owner."
+    ],
+    "nativeDbAdapter": "real original PostgreSQL17 socket/pg8.18/client/worker; no injected DB/HTTP adapters",
+    "nativeProfile": "Original focused legacy prerequisites plus unchanged real migration before/after chain; not full production profile.",
+    "sourceAcquisition": "Synthetic fetch404 outcomes17/documents0, credentials{}, test-only sourcecommit and worker bytes; no real acquisition/model",
+    "callerScopes": {
+      "boundaries": "Synthetic histories/roster exercised actual factor/entry/evaluation callers.",
+      "installation": "Disposable synthetic Git and review/manifest fixtures exercised actual installation resolver; no real installation/review authority.",
+      "cli": "Actual CLI main/worker code with isolated synthetic credential lookup and external adapter.",
+      "aggregate": "Actual protected worker aggregate caller with disposable synthetic protocol artifacts; no executable release track, live attestation, real review or protected approval."
+    }
+  },
+  "sourceManifestFiles": 313,
+  "sourceManifestSha256": "5dde7cb98c6b8018646a532fab42bc4e85161e7c6e5dbf4ab5d834265b145c43",
+  "resources": {
+    "sampledAggregatePeakRssBytes": 897126400,
+    "minimumStageBoundaryDiskBytes": 10042789888,
+    "samplingMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "diskReserveBytes": 8589934592,
+    "rssGuardBytes": 8589934592,
+    "maximumManualMinutes": 30
+  },
+  "cleanup": {
+    "at": "2026-10-11T09:15:30.874675+00:00",
+    "liveRelevantProcesses": [],
+    "ownedDisposableClusterOrGitDirectoriesRemaining": [],
+    "zombieCountNow": 855,
+    "zombiesNotActiveNoGlobalKill": true,
+    "stageRemainingChildren": [
+      [],
+      [],
+      []
+    ],
+    "originalAfterHooksStoppedPGAndRemovedOwnedRebuildableClustersAndFixtures": true,
+    "privateCompileCacheRetained": true,
+    "uniqueRawEvidenceDeleted": false,
+    "noGlobalPrune": true,
+    "diskAvailableBytes": 10042789888
+  },
+  "priorE67Evidence": {
+    "commit": "2ada86cea70461e52f735a8b87644b909f712c53",
+    "receiptSha256": "d095b5ffb6218dd181c7ae21e067601337b34fe60871f89eb0fffef54ebfd5ed",
+    "preservedUnmodified": true,
+    "limitationDiscoveredAfterThatRun": "Handler assertions could be swallowed by expected worker failure; old1PASS does not prove corrected external assertions. New399 case measured separately."
+  },
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/assertion-contract.json",
+      "bytes": 1675,
+      "sha256": "8309708d6a6303c2e7a37a7947dde8d8a9e39e1afd98d03c28aea8d63aa4b67d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/build-identity.json",
+      "bytes": 551,
+      "sha256": "5c3ed5b6018d788253ae9d132bbb2a022f1491ded7d8fd437ce7f4622a3e349a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/cleanup.json",
+      "bytes": 480,
+      "sha256": "57924fb4988a039525dd8802d886777fdb2de3f7be8d7c50cabbc891a5a59cbe"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/compiled-server-manifest.json",
+      "bytes": 387190,
+      "sha256": "c555e210cde700297e2e39f10376de7840b4629cab9dc137a98d14e603eedb50"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/normal-build.json",
+      "bytes": 645,
+      "sha256": "4353d4b7c1ce2667f1b3c4f1804310e2d6c9b22ac63ba062998ce9d528ff71bb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/normal-build.stdout",
+      "bytes": 6499,
+      "sha256": "84d835d33324f3ffb72f91eb7d12f427c54df4c17a9afc387f5b68ddcbbc7807"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/normal-build.time",
+      "bytes": 758,
+      "sha256": "8747c29550c07229c6839c0cfcdf59f7fe9bfd1750fce8c44737bc1f2cda4469"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.json",
+      "bytes": 914,
+      "sha256": "d11f9ff99767f8549f8eff34af39df4240eca672dfe7cbbe15e90a6bc3dbe766"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.stdout",
+      "bytes": 2378,
+      "sha256": "cf8e33683d683b543c0f67efe8e26403bc0b124bfe06baf943e048c695810bef"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-callers-four.time",
+      "bytes": 997,
+      "sha256": "f2a046d5ceae989b695040593645045fac4b8d040cbaf2be17ddddc08e3b8730"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-native-adapter.json",
+      "bytes": 781,
+      "sha256": "8e68f1d1f685a67ec0de7713dac55d88e650126d473b0d0a3b0cd711308512ec"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-native-adapter.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-native-adapter.stdout",
+      "bytes": 997,
+      "sha256": "8fe1f67368f41963c171d92dd58b2f263a84236e8be59e8e751469dd14bb293f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/pcr-native-adapter.time",
+      "bytes": 879,
+      "sha256": "0f7c01a986d9e5aa3dd21d19f0baa89d474eef99895ade21d1b74b355b63fbc1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/preflight.json",
+      "bytes": 1144,
+      "sha256": "7ceb9ea06341359ffff8f37773854ddc48225fdbb767db96984c12381566009e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/run.py",
+      "bytes": 3427,
+      "sha256": "b68a7b76865901ec5c6afb7c414d4b658aa342e08fd5e23bec5c454ed216a521"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/runtime-comparison.json",
+      "bytes": 293,
+      "sha256": "3e415b0d52f09b15c06ee9aac216b6b8cb6a30371e16a6f6a261f4e980c1f884"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/source-delta.patch",
+      "bytes": 14424,
+      "sha256": "4f58f9ecf2a19f236d2ab05876fed60769a7773e916c81cf47e254e467495df9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/source-manifest.json",
+      "bytes": 54325,
+      "sha256": "5dde7cb98c6b8018646a532fab42bc4e85161e7c6e5dbf4ab5d834265b145c43"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-11-pcr-caller-corrected-linux/test-inventory.json",
+      "bytes": 1381,
+      "sha256": "3085ad31640c58005e6ec43615d5d3179d21c7848797b5d7982bde4268e600be"
+    }
+  ],
+  "rawFileCount": 22,
+  "rawTotalBytes": 479738,
+  "limits": [
+    "Requested native1 and callers9 only; neither818 nor full155 rerun.",
+    "Normal build completed newly on399; no extra type/lint command requested.",
+    "Synthetic caller artifacts never assert real review/model/strategy/production/attestation/protected approval.",
+    "No browser/download/dependency/source/SQL/proxy/CA/production changes, no deployment."
+  ],
+  "recordedAt": "2026-10-11T09:15:30.921479+00:00"
+}

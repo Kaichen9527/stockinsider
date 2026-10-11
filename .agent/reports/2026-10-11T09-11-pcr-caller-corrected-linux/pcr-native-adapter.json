@@ -1,0 +1,22 @@
+{
+  "stage": "pcr-native-adapter",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-name-pattern=^PCR-007 and PCR-011 actual PostgreSQL adapter",
+    "scripts/opportunity-v3/migration-contract.test.mjs"
+  ],
+  "startedAt": "2026-10-11T09:13:16.718516+00:00",
+  "endedAt": "2026-10-11T09:13:19.520314+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 2.801804701972287,
+  "sampledAggregatePeakRssBytes": 180596736,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10043609088,
+  "diskAvailableAfterBytes": 10043609088,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

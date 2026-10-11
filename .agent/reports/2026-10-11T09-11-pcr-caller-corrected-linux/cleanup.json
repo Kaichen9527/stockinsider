@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-11T09:15:30.874675+00:00",
+  "liveRelevantProcesses": [],
+  "ownedDisposableClusterOrGitDirectoriesRemaining": [],
+  "zombieCountNow": 855,
+  "zombiesNotActiveNoGlobalKill": true,
+  "stageRemainingChildren": [
+    [],
+    [],
+    []
+  ],
+  "originalAfterHooksStoppedPGAndRemovedOwnedRebuildableClustersAndFixtures": true,
+  "privateCompileCacheRetained": true,
+  "uniqueRawEvidenceDeleted": false,
+  "noGlobalPrune": true,
+  "diskAvailableBytes": 10042789888
+}
