@@ -1,5 +1,14 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 08:02台灣時間：工具136測試與獨立closure完成，真live擋在新版本host環境限制
+
+工具f6e45b33/tree9d5d7c20的expired reuse／durable fence與unknown process-risk修復，maker及root各自136PASS零fail/skip；獨立reviewer實讀runtime delta、8個recovery tests與5個executeModel注入probe後給scoped CODE PASS。不是protected或provider PASS。舊f30兩P2 REQUEST_CHANGES與0ae過早PASS refs均保留為失效，未推remote consumer。
+
+Root實際執行既有live entry，0PASS／2FAIL：current Codex在host helper的CODEX_HOME==TMPDIR時拒絕helper aliases，strict validatedVersionOutput正確阻擋。更換account private root仍相同；把policy/tmp分成同私有根下siblings，公共--version真status0/stderr空，已定位環境來源而不放寬warning。第二worker durable recovery_required保留，只有make已prepare的transport/view，scratch完全空，正獨立核對程序終止後才能人工清理自有attempt。沒有成功模型呼叫或新信任啟用。
+
+Maker接最小host scratch sibling修復／測試，reviewer續審delta；不重跑未改輸入、不刪月內Docker、不跑候選全量。工具例外已批准但尚未改保護、建立PR或merge；網站仍全正常檢查後部署。原始證據位於.agent/reports/2026-10-12T08-02-real-host-preflight-red/。
+
+
 ## 07:42台灣時間補充：產品完整驗證成功；工具獨立審查兩項待修
 
 GitHub普通run38184227555的product-runtime與diagnostic-product已真SUCCESS，exact7af8 canonical155PASS／0FAIL／0SKIP／0TODO、31PCR全部成功，types/lint/build/browser亦通過。Root保存完整原始joblog及具體canonical區段/hash；不把Cloud的152/153 RED改標PASS。整個workflow仍FAIL：獨立evaluation-governance job漏裝web依賴，ERR_MODULE_NOT_FOUND @supabase/supabase-js；不是測出策略有效或無效，亦未稱整體CI成功。該測試工具單點依賴修復已納入工具patch，原閾值及斷言不改。
