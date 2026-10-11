@@ -1,0 +1,73 @@
+{
+  "schema": "stockinsider-live-refresh-readonly-observation-v1",
+  "observedAt": "2026-10-11T13:20:24.411541+00:00",
+  "deployedSource": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "source": [
+    {
+      "path": "web/src/app/api/internal/pipeline-run/route.ts",
+      "gitBlob": "b3359cdf96afb143fe7a16b0c90b7e2fcb442f98",
+      "sha256": "d0eb03afe79b2a0c0ba97aa105c13b18a3967697eda0defc8740d61fb889556f"
+    },
+    {
+      "path": "web/src/lib/production-write-lease.ts",
+      "gitBlob": "374ace53b50a2fee1c9ea689918281e1d7109c1c",
+      "sha256": "5ad25b0fa08a4e340760d653e8572fabadc639aded0e7767cdcba2c491d81f6f"
+    },
+    {
+      "path": "web/src/lib/candidate-research.ts",
+      "gitBlob": "03538cec947c4390906a96493b23b38cbf491128",
+      "sha256": "8057b60998f8058971095effe537970fa1de49f7c97157706381503ce3cbca20"
+    },
+    {
+      "path": "web/src/lib/candidate-official-financials.ts",
+      "gitBlob": "edfbe72f46c196fdd2264eee79eb42a53a7778bc",
+      "sha256": "52f21d1b138132b053f5b45fcb36e91410d21ac1279759a6eb45d7afc004fe6a"
+    }
+  ],
+  "readonlyProbeExit": 0,
+  "observations": [
+    {
+      "kind": "writeLease",
+      "key": "production-data-plane",
+      "acquiredAt": "2026-10-11T14:42:31.323144+02:00",
+      "expiresAt": "2026-10-11T15:07:31.323144+02:00",
+      "notExpired": false
+    },
+    {
+      "kind": "financialCursorProgress",
+      "total": 1406,
+      "latestAttempt": "2026-10-11T14:53:22.875+02:00",
+      "attemptsSinceRunStart": 6
+    },
+    {
+      "kind": "run",
+      "pipelineStatus": "running",
+      "researchStatus": "running",
+      "items": 0
+    }
+  ],
+  "interpretation": {
+    "runRemainsPending": true,
+    "noApiRetryOrRestart": true,
+    "noPublicationClaim": true,
+    "activeOsLocks": "bounded watcher holds heavy and production-write; no new heavy work",
+    "expiredDbLease": "expiresAt2026-10-11T13:07:31Z, notExpired false in live probe; do not claim continued DB exclusivity after expiration",
+    "codeRisk": "main route lease TTL derives HTTP syncTimeout +300 seconds, capped7200; finally delays release until flow settles but does not renew. Actual SQL acquire permits takeover after expires_at. A long flow can outlive exclusivity. No takeover was invoked or synthetic test executed on production.",
+    "preAcquisition": "candidate_count stays0 until official acquisition/validation/history prerequisites complete. Six financial cursors attempted since start; last12:53:22Z. Does not identify exact current await or prove hung; worker has external TLS sockets and no blocked PG query in sampled pg_stat_activity.",
+    "nextBoundedRepair": "isolated branch contract test for HTTP timeout while flow continues: owner-bound lease renewal/expiration and old-owner release; no production mutation, recovery or timer change while current run exists."
+  },
+  "vm": "existing authorized VM idle at cursor fb0ce0df-ca49-43e0-99fc-e874b21fb53d:36; no duplicate task assigned",
+  "gitHub": "PR369 ordinary CI success, protected checks fail; PR364 open BLOCKED, no same-input retry",
+  "files": [
+    {
+      "path": "readonly-probe.sql",
+      "bytes": 846,
+      "sha256": "94d0a15a7ab36747fba967de4620bc3cb30419949aabee4f4cb1f94b6e11156e"
+    },
+    {
+      "path": "readonly-probe.stdout",
+      "bytes": 403,
+      "sha256": "74807a04de25f54fdbad4b77523a84bea18236be4823df8acffc9856c5a812b6"
+    }
+  ]
+}
