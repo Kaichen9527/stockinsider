@@ -1,0 +1,42 @@
+{
+  "subjectSha256": "2c34e946594385a1b914569ad3d28f2d98f1d2269ab8c64d7ea79012552bb953",
+  "method": "Execute original watcher with mocked clock, pathlib, os/flock and subprocess; no filesystem lock, DB or production operations.",
+  "result": {
+    "now": 5444,
+    "calls": 3,
+    "writes": [
+      {
+        "path": "/run/stockinsider-main169-refresh-watch-oct11/latest.json.tmp",
+        "data": {
+          "observedAt": "2026-10-11T13:07:32.908372+00:00",
+          "state": "observing",
+          "result": {
+            "pipelineStatus": "running",
+            "researchStatus": "running"
+          },
+          "readOnly": true,
+          "noRetryOrPublication": true
+        }
+      },
+      {
+        "path": "/run/stockinsider-main169-refresh-watch-oct11/latest.json",
+        "data": {
+          "observedAt": "2026-10-11T13:07:32.909276+00:00",
+          "state": "observation_deadline",
+          "result": {
+            "pipelineStatus": "running",
+            "researchStatus": "running"
+          },
+          "readOnly": true,
+          "noRetryOrPublication": true
+        }
+      }
+    ],
+    "locks": [
+      10,
+      11
+    ],
+    "exit": 2
+  },
+  "finding": "P2:90minute bound can exceed by44seconds in reproducible final iteration;15second query and30second sleep not clamped."
+}

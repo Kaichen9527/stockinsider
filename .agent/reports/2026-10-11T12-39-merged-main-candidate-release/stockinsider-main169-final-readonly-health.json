@@ -1,0 +1,6 @@
+{
+  "observedAt": "2026-10-11T13:13:01.201818+00:00",
+  "exitCode": 0,
+  "stdout": "Sun Oct 11 13:13:00 UTC 2026\nactive\nactive\nactive\nactive\n/opt/stockinsider-standalone/releases/169aad1b6cfa747f78ae3464b614f43c0749d806\nFilesystem        1B-blocks         Used   Available Use% Mounted on\n/dev/sda1      154894188544 137860026368 17017384960  90% /\n{\n  \"observedAt\": \"2026-10-11T13:12:57.888299+00:00\",\n  \"state\": \"observing\",\n  \"result\": {\n    \"pipelineId\": \"918db413-a56c-4cd6-86f8-617b4a6b1239\",\n    \"pipelineStatus\": \"running\",\n    \"pipelineFinishedAt\": null,\n    \"researchId\": \"d500fa84-e57b-4c3d-bafd-deac37ebf249\",\n    \"researchStatus\": \"running\",\n    \"candidateCount\": 0,\n    \"finishedAt\": null,\n    \"terminalReason\": null,\n    \"coverage\": null,\n    \"itemCount\": 0\n  },\n  \"readOnly\": true,\n  \"noRetryOrPublication\": true\n}\nhomepage_http=200 seconds=0.246201\n",
+  "stderr": ""
+}

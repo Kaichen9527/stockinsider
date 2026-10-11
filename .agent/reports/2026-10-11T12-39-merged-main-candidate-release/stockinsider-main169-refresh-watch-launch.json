@@ -1,0 +1,7 @@
+{
+  "at": "2026-10-11T13:11:27.111017+00:00",
+  "returncode": 0,
+  "stdout": "{\"unit\": \"stockinsider-main169-refresh-watch-oct11\", \"sourceSha256\": \"a999310918978e63b408fdd765d87b3630a0ede90d920300cb0f4b575a7075f4\", \"rootMode\": \"0o700\", \"returncode\": 0, \"stdout\": \"\", \"stderr\": \"Running as unit: stockinsider-main169-refresh-watch-oct11.service; invocation ID: 08558e5830c043e8acc4a62eddd4c107\\n\"}\n",
+  "stderr": "",
+  "scriptSha256": "a999310918978e63b408fdd765d87b3630a0ede90d920300cb0f4b575a7075f4"
+}

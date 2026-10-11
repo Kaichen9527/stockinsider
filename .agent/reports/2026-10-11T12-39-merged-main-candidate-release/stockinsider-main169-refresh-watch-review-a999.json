@@ -1,0 +1,218 @@
+{
+  "subjectSha256": "a999310918978e63b408fdd765d87b3630a0ede90d920300cb0f4b575a7075f4",
+  "verdict": "UNSIGNED_SCOPED_REPAIR_CODE_PASS",
+  "findingClosure": "original90minute-overrun P2 closed: query/sleep clamped and post-query/post-write checks reject late terminal",
+  "tests": [
+    {
+      "case": "last_second_timeout",
+      "passed": true,
+      "now": 5400,
+      "clockCalls": 4,
+      "timeouts": [
+        1
+      ],
+      "sleeps": [],
+      "writes": [
+        {
+          "path": "/run/stockinsider-main169-refresh-watch-oct11/latest.json.tmp",
+          "data": {
+            "observedAt": "2026-10-11T13:10:24.292038+00:00",
+            "state": "probe_failed",
+            "errorType": "TimeoutExpired",
+            "readOnly": true,
+            "noRetryOrPublication": true
+          }
+        },
+        {
+          "path": "/run/stockinsider-main169-refresh-watch-oct11/latest.json",
+          "data": {
+            "observedAt": "2026-10-11T13:10:24.293139+00:00",
+            "state": "observation_deadline",
+            "result": null,
+            "readOnly": true,
+            "noRetryOrPublication": true
+          }
+        }
+      ],
+      "locks": [
+        10,
+        11
+      ],
+      "queryCalls": 1,
+      "exit": 2,
+      "stdout": "{\"observedAt\": \"2026-10-11T13:10:24.293139+00:00\", \"state\": \"observation_deadline\", \"result\": null, \"readOnly\": true, \"noRetryOrPublication\": true}\n"
+    },
+    {
+      "case": "late_terminal_discarded",
+      "passed": true,
+      "now": 5400,
+      "clockCalls": 4,
+      "timeouts": [
+        1
+      ],
+      "sleeps": [],
+      "writes": [
+        {
+          "path": "/run/stockinsider-main169-refresh-watch-oct11/latest.json",
+          "data": {
+            "observedAt": "2026-10-11T13:10:24.295246+00:00",
+            "state": "observation_deadline",
+            "result": null,
+            "readOnly": true,
+            "noRetryOrPublication": true
+          }
+        }
+      ],
+      "locks": [
+        10,
+        11
+      ],
+      "queryCalls": 1,
+      "exit": 2,
+      "stdout": "{\"observedAt\": \"2026-10-11T13:10:24.295246+00:00\", \"state\": \"observation_deadline\", \"result\": null, \"readOnly\": true, \"noRetryOrPublication\": true}\n"
+    },
+    {
+      "case": "remaining_sleep_clamped",
+      "passed": true,
+      "now": 5400.0,
+      "clockCalls": 8,
+      "timeouts": [
+        10
+      ],
+      "sleeps": [
+        9.75
+      ],
+      "writes": [
+        {
+          "path": "/run/stockinsider-main169-refresh-watch-oct11/latest.json.tmp",
+          "data": {
+            "observedAt": "2026-10-11T13:10:24.297039+00:00",
+            "state": "observing",
+            "result": {
+              "pipelineStatus": "running",
+              "researchStatus": "partial",
+              "coverage": {
+                "complete": false
+              }
+            },
+            "readOnly": true,
+            "noRetryOrPublication": true
+          }
+        },
+        {
+          "path": "/run/stockinsider-main169-refresh-watch-oct11/latest.json",
+          "data": {
+            "observedAt": "2026-10-11T13:10:24.297167+00:00",
+            "state": "observation_deadline",
+            "result": {
+              "pipelineStatus": "running",
+              "researchStatus": "partial",
+              "coverage": {
+                "complete": false
+              }
+            },
+            "readOnly": true,
+            "noRetryOrPublication": true
+          }
+        }
+      ],
+      "locks": [
+        10,
+        11
+      ],
+      "queryCalls": 1,
+      "exit": 2,
+      "stdout": "{\"observedAt\": \"2026-10-11T13:10:24.297167+00:00\", \"state\": \"observation_deadline\", \"result\": {\"pipelineStatus\": \"running\", \"researchStatus\": \"partial\", \"coverage\": {\"complete\": false}}, \"readOnly\": true, \"noRetryOrPublication\": true}\n"
+    },
+    {
+      "case": "write_crosses_deadline",
+      "passed": true,
+      "now": 5400,
+      "clockCalls": 6,
+      "timeouts": [
+        1
+      ],
+      "sleeps": [],
+      "writes": [
+        {
+          "path": "/run/stockinsider-main169-refresh-watch-oct11/latest.json.tmp",
+          "data": {
+            "observedAt": "2026-10-11T13:10:24.298384+00:00",
+            "state": "terminal",
+            "result": {
+              "pipelineStatus": "success",
+              "researchStatus": "partial",
+              "coverage": {
+                "complete": false
+              }
+            },
+            "readOnly": true,
+            "noRetryOrPublication": true
+          }
+        },
+        {
+          "path": "/run/stockinsider-main169-refresh-watch-oct11/latest.json",
+          "data": {
+            "observedAt": "2026-10-11T13:10:24.298468+00:00",
+            "state": "observation_deadline",
+            "result": {
+              "pipelineStatus": "success",
+              "researchStatus": "partial",
+              "coverage": {
+                "complete": false
+              }
+            },
+            "readOnly": true,
+            "noRetryOrPublication": true
+          }
+        }
+      ],
+      "locks": [
+        10,
+        11
+      ],
+      "queryCalls": 1,
+      "exit": 2,
+      "stdout": "{\"observedAt\": \"2026-10-11T13:10:24.298468+00:00\", \"state\": \"observation_deadline\", \"result\": {\"pipelineStatus\": \"success\", \"researchStatus\": \"partial\", \"coverage\": {\"complete\": false}}, \"readOnly\": true, \"noRetryOrPublication\": true}\n"
+    },
+    {
+      "case": "terminal_before_deadline",
+      "passed": true,
+      "now": 5399.25,
+      "clockCalls": 6,
+      "timeouts": [
+        1
+      ],
+      "sleeps": [],
+      "writes": [
+        {
+          "path": "/run/stockinsider-main169-refresh-watch-oct11/latest.json.tmp",
+          "data": {
+            "observedAt": "2026-10-11T13:10:24.299754+00:00",
+            "state": "terminal",
+            "result": {
+              "pipelineStatus": "success",
+              "researchStatus": "partial",
+              "coverage": {
+                "complete": false
+              }
+            },
+            "readOnly": true,
+            "noRetryOrPublication": true
+          }
+        }
+      ],
+      "locks": [
+        10,
+        11
+      ],
+      "queryCalls": 1,
+      "exit": 0,
+      "stdout": "{\"observedAt\": \"2026-10-11T13:10:24.299754+00:00\", \"state\": \"terminal\", \"result\": {\"pipelineStatus\": \"success\", \"researchStatus\": \"partial\", \"coverage\": {\"complete\": false}}, \"readOnly\": true, \"noRetryOrPublication\": true}\n"
+    }
+  ],
+  "originalRedPreserved": "/tmp/stockinsider-main169-refresh-watch-review-original-probe.json",
+  "method": "Exact source with mocked clock/subprocess/pathlib/os/flock only. No VPS/DB/process/real-lock operation.",
+  "launcherPrecondition": "Parent commits to unique nonexisting output directory created root0700; not independently executed.",
+  "protectedApproval": false
+}

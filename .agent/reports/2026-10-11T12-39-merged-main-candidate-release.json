@@ -46,10 +46,12 @@
     "allowed": false
   },
   "latestReadOnly": {
-    "at": "2026-10-11T12:36:17Z",
-    "availableBytes": 15004835840,
-    "filesystemBlockBytes": 4096,
-    "serviceRoleBypassRls": true
+    "at": "2026-10-11T13:13:00Z",
+    "availableBytes": 17017384960,
+    "filesystemTotalBytes": 154894188544,
+    "webWorkerPreviewActive": true,
+    "homepageHttp": 200,
+    "homepageSeconds": 0.246201
   },
   "cleanupPerformed": false,
   "sharedDockerCleanupAuthority": "No root shared Docker cleanup. Other-app owner reported cleaning their own eight obsolete images and eight project cache entries; deployment independently measured capacity under locks.",
@@ -61,7 +63,9 @@
     "passed": 818,
     "failed": 0,
     "explicitNativeSkips": 2,
-    "protectedApproval": false
+    "protectedApproval": false,
+    "ordinaryCi": 38139887387,
+    "ordinaryCiStatus": "success"
   },
   "runnerRecovery": {
     "head": "892c93e2d4d44e863be9b6aed7407cf975e905b4",
@@ -72,6 +76,51 @@
   },
   "files": [
     {
+      "path": "SHA256SUMS",
+      "bytes": 429,
+      "sha256": "c41192781026bdad5abfa0dffab7d8061284512d7ae429d02d6d92495ea87f03"
+    },
+    {
+      "path": "approved-source-checks.json",
+      "bytes": 2164,
+      "sha256": "8c1122f52f608e4fc10f04a7b90a1744e5badd220a6a9702f2c87e4b469e27ed"
+    },
+    {
+      "path": "auo-desktop.png",
+      "bytes": 55710,
+      "sha256": "3a5e32431fbb513187ee6465d00d18e9d8978e89d6e8e980e50910aac2aff694"
+    },
+    {
+      "path": "auo-mobile.png",
+      "bytes": 41596,
+      "sha256": "e798afe9920bc66d7c8af2248c51fd2fee3ddc9d516951854310272832d16a98"
+    },
+    {
+      "path": "home-isolation-ordinary-ci.json",
+      "bytes": 7374,
+      "sha256": "af9c2156fcd13c2408f1b1762a0b0320d694502081060035a92eed7f92c2a70f"
+    },
+    {
+      "path": "homepage-deployed.png",
+      "bytes": 58948,
+      "sha256": "27db9b0d638713684f21a046589b6b87f2561420d2eef70d47c99783c6fcfa20"
+    },
+    {
+      "path": "source-identity.txt",
+      "bytes": 123,
+      "sha256": "4250ef261f59c8a22de2fad16544b15682b1b6bde69829f67e5b97f1512e9d52"
+    },
+    {
+      "path": "stockinsider-home-isolation-independent-oct11-review.json",
+      "bytes": 3024,
+      "sha256": "b03a7171d2dbdfe76dd405783be270929c29c10a2104a4541081746113894a00"
+    },
+    {
+      "path": "stockinsider-main169-budget-a3a698-review.json",
+      "bytes": 1910,
+      "sha256": "6b6a90ae64eaa4d14f2db179b2e225eee2c1a9243bd4595205278c4ecc5c7c1a"
+    },
+    {
       "path": "stockinsider-main169-deploy.sh",
       "bytes": 12522,
       "sha256": "a3a6981ad372ee62a1a288e74e6d3c49a38304f4291321bc1ae3977a35df0a98"
@@ -80,6 +129,51 @@
       "path": "stockinsider-main169-deployment-budget.json",
       "bytes": 769,
       "sha256": "f17b782bb77e6483d58e2ae8d738f4217cc9d5b1e46373002faed99682035e43"
+    },
+    {
+      "path": "stockinsider-main169-deployment-oct11.json",
+      "bytes": 261,
+      "sha256": "7ff97892ae77d1f1ae6449e9f89ca6a205ab7ed806ebd55b6f58c058a778c1f8"
+    },
+    {
+      "path": "stockinsider-main169-deployment-oct11.stderr",
+      "bytes": 90,
+      "sha256": "bd396b394c982234c0d51b1dfbe898e891dcda0feeb3ebf201efb998a220a0fa"
+    },
+    {
+      "path": "stockinsider-main169-deployment-oct11.stdout",
+      "bytes": 2647,
+      "sha256": "b53176cacf026fa4e3038fc07b537a410aa095944bbce5f850c7068b315ac99d"
+    },
+    {
+      "path": "stockinsider-main169-final-readonly-health.json",
+      "bytes": 955,
+      "sha256": "e946eed9cc89b30078e7c744fb6bed229a4500b9d186d29587092fdedb0c8c6d"
+    },
+    {
+      "path": "stockinsider-main169-first-current-core.json",
+      "bytes": 119,
+      "sha256": "76c92dbcf9ba680ace8bcd7b502d8e009efa792ae9ced891db63a409d201a148"
+    },
+    {
+      "path": "stockinsider-main169-first-current-core.sh",
+      "bytes": 703,
+      "sha256": "55025c9b6c79b388295b13cc9ce2ddc6be9c6d698c1d7587c4957162659d5910"
+    },
+    {
+      "path": "stockinsider-main169-first-current-core.stderr",
+      "bytes": 129,
+      "sha256": "8e26fbef5da9c4dcc8b47783ddae52df3cc4eca5aaf416ad1db83612899718ed"
+    },
+    {
+      "path": "stockinsider-main169-first-current-core.stdout",
+      "bytes": 774,
+      "sha256": "da41f960b64aec252f89255ab4b771bed53c04377471a4c8e74f18edf5d2b698"
+    },
+    {
+      "path": "stockinsider-main169-operator-review-f224-probes.json",
+      "bytes": 2308,
+      "sha256": "8b57a5449be936d9e3455862f7fe91f12652c8a832eda5ccb82ade58486e364f"
     },
     {
       "path": "stockinsider-main169-operator-review-f224.json",
@@ -92,24 +186,49 @@
       "sha256": "fac5d8799cbcd926a45283bec712123b5701c345de1c8b19bfeabb87756f2115"
     },
     {
-      "path": "stockinsider-main169-operator-review-f224-probes.json",
-      "bytes": 2308,
-      "sha256": "8b57a5449be936d9e3455862f7fe91f12652c8a832eda5ccb82ade58486e364f"
+      "path": "stockinsider-main169-preflight-readonly.sql",
+      "bytes": 999,
+      "sha256": "2ff7967c881d9fff4e87bfba5ac5ed223a76dd68f8e54c733f12a162d38c5748"
     },
     {
-      "path": "stockinsider-main169-budget-a3a698-review.json",
-      "bytes": 1910,
-      "sha256": "6b6a90ae64eaa4d14f2db179b2e225eee2c1a9243bd4595205278c4ecc5c7c1a"
+      "path": "stockinsider-main169-preflight-readonly.stdout",
+      "bytes": 2777,
+      "sha256": "d9edf48192c5cf2833a7d9d576554ca43e11fc1d98c4c606210050f6779631d2"
     },
     {
-      "path": "stockinsider-home-isolation-independent-oct11-review.json",
-      "bytes": 3024,
-      "sha256": "b03a7171d2dbdfe76dd405783be270929c29c10a2104a4541081746113894a00"
+      "path": "stockinsider-main169-refresh-watch-launch.json",
+      "bytes": 527,
+      "sha256": "a39f40d936d54f294db2b3c105a2465e47fd7991df22a805b62bf27ac7a5244c"
     },
     {
-      "path": "stockinsider-main169-resource-admission-oct11.stdout",
-      "bytes": 572,
-      "sha256": "310ad0d129a788ebe44fe5fd57d01c7729687294e22eec62025eb41837402029"
+      "path": "stockinsider-main169-refresh-watch-oct11.py",
+      "bytes": 2977,
+      "sha256": "a999310918978e63b408fdd765d87b3630a0ede90d920300cb0f4b575a7075f4"
+    },
+    {
+      "path": "stockinsider-main169-refresh-watch-review-a999.json",
+      "bytes": 6907,
+      "sha256": "07d4e9cf42c44423b4f1e436d7d19b97226db6092cba48a9d4a929bf269f2c92"
+    },
+    {
+      "path": "stockinsider-main169-refresh-watch-review-a999.md",
+      "bytes": 1511,
+      "sha256": "60bae33252d36f92d8f44898f741d1bc825e6b3ecae0a0f47d941247923e9e2d"
+    },
+    {
+      "path": "stockinsider-main169-refresh-watch-review-original-probe.json",
+      "bytes": 1305,
+      "sha256": "96168cae45820ffbcc5331f0786671ae1aac534ec5846a25cfeb9cc65c2a645f"
+    },
+    {
+      "path": "stockinsider-main169-refresh-watch-review.json",
+      "bytes": 895,
+      "sha256": "a1137dd950b2ba288bcb574528fbf6826a7e80ccde87f2134dfe98bd6ed7eea1"
+    },
+    {
+      "path": "stockinsider-main169-refresh-watch-review.md",
+      "bytes": 2417,
+      "sha256": "b953df8ae7f93985c34c39e9536ace488a45e12d9bcf47103f98736268962fb1"
     },
     {
       "path": "stockinsider-main169-resource-admission-oct11.stderr",
@@ -117,19 +236,14 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "verification.json",
-      "bytes": 328,
-      "sha256": "0ce69c32b62381bf580569c9ee2509dd837048837b6e83baaae361e074da52f1"
+      "path": "stockinsider-main169-resource-admission-oct11.stdout",
+      "bytes": 572,
+      "sha256": "310ad0d129a788ebe44fe5fd57d01c7729687294e22eec62025eb41837402029"
     },
     {
-      "path": "source-identity.txt",
-      "bytes": 123,
-      "sha256": "4250ef261f59c8a22de2fad16544b15682b1b6bde69829f67e5b97f1512e9d52"
-    },
-    {
-      "path": "SHA256SUMS",
-      "bytes": 429,
-      "sha256": "c41192781026bdad5abfa0dffab7d8061284512d7ae429d02d6d92495ea87f03"
+      "path": "stockinsider-main169-scheduled-overlap-oct11.log",
+      "bytes": 1224,
+      "sha256": "39184bcfedd70e9a8744f64e25386701624ffa0742fa44e5209047f30c98679e"
     },
     {
       "path": "stockinsider-runner-recovery-892-independent-review.json",
@@ -142,29 +256,9 @@
       "sha256": "29d9826b4cb179e0b1587dff4210117887c5502cb7136814d1c35806d43305fd"
     },
     {
-      "path": "stockinsider-main169-deployment-oct11.json",
-      "bytes": 261,
-      "sha256": "7ff97892ae77d1f1ae6449e9f89ca6a205ab7ed806ebd55b6f58c058a778c1f8"
-    },
-    {
-      "path": "stockinsider-main169-deployment-oct11.stdout",
-      "bytes": 2647,
-      "sha256": "b53176cacf026fa4e3038fc07b537a410aa095944bbce5f850c7068b315ac99d"
-    },
-    {
-      "path": "stockinsider-main169-deployment-oct11.stderr",
-      "bytes": 90,
-      "sha256": "bd396b394c982234c0d51b1dfbe898e891dcda0feeb3ebf201efb998a220a0fa"
-    },
-    {
-      "path": "stockinsider-main169-preflight-readonly.sql",
-      "bytes": 999,
-      "sha256": "2ff7967c881d9fff4e87bfba5ac5ed223a76dd68f8e54c733f12a162d38c5748"
-    },
-    {
-      "path": "stockinsider-main169-preflight-readonly.stdout",
-      "bytes": 2777,
-      "sha256": "d9edf48192c5cf2833a7d9d576554ca43e11fc1d98c4c606210050f6779631d2"
+      "path": "verification.json",
+      "bytes": 328,
+      "sha256": "0ce69c32b62381bf580569c9ee2509dd837048837b6e83baaae361e074da52f1"
     }
   ],
   "productionAfter": "169aad1b6cfa747f78ae3464b614f43c0749d806",
@@ -181,6 +275,56 @@
     "researchRunId": "d500fa84-e57b-4c3d-bafd-deac37ebf249",
     "model": "candidate-research-v4.4.2",
     "state": "running",
-    "noSymbolsOrDryRunOrCompletionSkip": true
+    "noSymbolsOrDryRunOrCompletionSkip": true,
+    "httpState": "20-minute response deadline, HTTP500; underlying flow remains running, no retry",
+    "lastObservedAt": "2026-10-11T13:12:57Z",
+    "publicationConfirmed": false
+  },
+  "scheduledOverlap": {
+    "at": "2026-10-11T13:02Z",
+    "error": "production_write_cycle_already_running",
+    "status": 409,
+    "secondResearchRun": false,
+    "timerChanged": false,
+    "queuedCancellation": "not executed: exact waiting-state predicate no longer held; preserved actual running service"
+  },
+  "readOnlyBrowserChecks": {
+    "homepageHttp": 200,
+    "previewHttpAfterCanonicalRedirect": 200,
+    "homeSeconds": 1.285836,
+    "previewSeconds": 1.78422,
+    "oldAuoRevisionReadable": true,
+    "oldRevisionNotBackfilled": true,
+    "mobileViewport": {
+      "width": 390,
+      "height": 844
+    },
+    "mobileHorizontalOverflow": false,
+    "browserErrors": 0,
+    "newSnapshotVerified": false,
+    "homepageScreenshot": "homepage-deployed.png",
+    "laterDomProbe": "one CDP Runtime.evaluate timeout; screenshot succeeded, fresh HTTP200/services active; no website failure inferred"
+  },
+  "observationWatcher": {
+    "unit": "stockinsider-main169-refresh-watch-oct11.service",
+    "sourceSha256": "a999310918978e63b408fdd765d87b3630a0ede90d920300cb0f4b575a7075f4",
+    "startedAt": "2026-10-11T13:11:27Z",
+    "state": "observing",
+    "readOnly": true,
+    "deadlineSeconds": 5400,
+    "locksHeld": [
+      "vps-heavy-operation.lock",
+      "stockinsider-production-write.lock"
+    ],
+    "noPipelineRetry": true,
+    "timerChanged": false,
+    "review": "unsigned scoped repair CODE PASS, five pure mock probes, original deadline RED preserved"
+  },
+  "engineeringAutomation": {
+    "id": "stockinsider",
+    "state": "ACTIVE",
+    "frequency": "hourly",
+    "duplicatePipelineWarningIncluded": true,
+    "formalResearchScheduleAccepted": false
   }
 }

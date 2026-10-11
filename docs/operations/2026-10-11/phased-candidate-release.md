@@ -2,7 +2,7 @@
 
 2026-10-11 使用者要求縮短首次可用時間：已具資料的候選先展示，尚在驗證的來源、文章及策略繼續由 Codex 工程接續處理。本方向取代「等全部研究工作完成才交付」的安排，不變更投資資格或既有保護規則。
 
-## 已存在的可用入口
+## 切換前盤點（11:54Z歷史快照，後文已部署）
 
 本次實際讀取正式首頁、公開 radar API 與唯讀 PostgreSQL，並以 Internal Browser 搜尋2409：
 
@@ -48,6 +48,18 @@
 Internal Browser 已驗證新版首頁候選搜尋、友達既有immutable revision及新增進出場計畫區塊；該舊revision如實顯示尚無可驗證計畫，不用新行情改寫。桌面與390×844手機可讀，手機未見橫向溢出，當次瀏覽器error紀錄為空。新run產生後仍須驗證新計畫與快照。缺資料可明列，不能偽造可交易結果。
 
 精確量測、腳本、unsigned審查與版本清單保存在 `.agent/reports/2026-10-11T12-39-merged-main-candidate-release.json` 及同名目錄。
+
+## 切換後持續更新與現有限制（13:13Z）
+
+新版程式已上線；完整候選資料更新仍待本輪結束，兩者不混為一談。手動HTTP等待20分鐘在13:02Z回傳500 timeout，但底層flow／DB lease仍running；沒有重送。21:00既有排程在OS鎖釋放後被DB lease以409拒絕，沒有第二個research run；原failed紀錄保留、timer未改。預定僅取消等待中的service因精確waiting predicate不再成立而沒有執行，不假稱已取消。
+
+13:11Z啟動單次最多90分鐘的唯讀觀察器，固定追蹤pipeline918db413／researchd500fa84並持有既有重型／production-write鎖；只讀狀態、保存收據，不能重試或發布。原deadline超時P2已用5個純mock閉合；原RED保留。服務與root0700輸出目錄已實際驗證，收據在 `/run/stockinsider-main169-refresh-watch-oct11/latest.json`。如先終態即退出；若觀察到期而工作未完成，工程heartbeat繼續核對底層工作，不據此重送。0 candidateCount／0items發生於前置取得階段，不能宣稱全市場為零或已完整覆蓋。
+
+PR369真正普通GitHub CI38139887387成功，原金融讀取器及斷言未削弱；protected仍沒有批准。runner892c93e獨立103項局部測試通過但保持inactive，不是完整信任復原。首次信任遷移例外未批准，PR364完整Agent功能未部署。
+
+VPS已擴容，實體154.894GB；同機其他App建置令可用空間再次波動，13:09Z讀到14.826GB低於15GiB保留，13:10Z15.989GB仍偏低，13:13Z恢復17.017GB，但尚不足新重型工作准入。已請該App既有聊天在自己的授權範圍處理；root未清共享Docker，也沒有新增重型工作。這不撤銷已成功部署，但後續重型工作仍須重新通過原容量准入。
+
+桌面／手機先前檢查通過；13:11Z再讀首頁HTTP200、web／worker／preview active，已保存首頁截圖。一次DOM helper逾時單獨記錄，後續截圖成功，不將工具逾時當網站故障。公開候選仍272／1／0，價格日期10/08及資料缺口明示；新run快照、完整度文字範圍與母體差異仍待驗證。
 
 ## 後續逐批增加
 

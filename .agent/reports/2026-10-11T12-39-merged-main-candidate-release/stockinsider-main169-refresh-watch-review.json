@@ -1,0 +1,26 @@
+{
+  "subjectSha256": "2c34e946594385a1b914569ad3d28f2d98f1d2269ab8c64d7ea79012552bb953",
+  "verdict": "REQUEST_CHANGES",
+  "findings": [
+    {
+      "severity": "P2",
+      "lines": [
+        19,
+        21,
+        35
+      ],
+      "trigger": "last iteration begins at5399s; probe15s then sleep30s",
+      "actualElapsedSeconds": 5444,
+      "requiredMaximumSeconds": 5400,
+      "fix": "clamp query timeout and sleep to remaining budget and recheck after query"
+    }
+  ],
+  "prerequisites": [
+    "launcher safely creates and validates owned private output directory"
+  ],
+  "probePath": "/tmp/stockinsider-main169-refresh-watch-review-original-probe.json",
+  "probeSha256": "96168cae45820ffbcc5331f0786671ae1aac534ec5846a25cfeb9cc65c2a645f",
+  "productionExecuted": false,
+  "protectedApproval": false,
+  "reportSha256": "b953df8ae7f93985c34c39e9536ace488a45e12d9bcf47103f98736268962fb1"
+}

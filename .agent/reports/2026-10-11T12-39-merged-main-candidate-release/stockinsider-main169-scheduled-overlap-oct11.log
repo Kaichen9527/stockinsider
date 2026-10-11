@@ -1,0 +1,8 @@
+Starting stockinsider-research-cycle.service - StockInsider official market candidate research and publication...
+{"ok":true,"result":{"claimed":0,"completed":0,"batches":0,"budgetExhausted":false,"status":"partial_candidate_data","scopeComplete":false,"dataComplete":false,"researchReady":true,"progress":{"ready":false,"failed":4,"queued":0,"missing":0,"running":0,"settled":true,"cutoffAt":"2026-10-11T14:40:05.769+02:00","expected":325,"retrying":0,"completed":321,"scopeSource":"registered_scope","researchReady":true,"failedCritical":0,"contractVersion":"taiwan-data-provider-v12","failedCandidate":4},"phase":"final","sessionDate":"2026-10-08","terminalCounts":{},"publication":[],"errors":[],"releaseId":"169aad1b6cfa747f78ae3464b614f43c0749d806"}}
+{"ok":false,"error":"production_write_cycle_already_running"}
+{"endpoint":"/api/internal/pipeline-run","status":409,"error":"production_write_cycle_already_running"}
+internal endpoint failed
+stockinsider-research-cycle.service: Main process exited, code=exited, status=1/FAILURE
+stockinsider-research-cycle.service: Failed with result 'exit-code'.
+Failed to start stockinsider-research-cycle.service - StockInsider official market candidate research and publication.
