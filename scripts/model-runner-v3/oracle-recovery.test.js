@@ -66,3 +66,11 @@ test('actual controller exit leaves in-progress fence that a new process cannot 
  assert.equal(child.status,0);const record=JSON.parse(fs.readFileSync(path.join(root,'active.json')));assert.equal(record.state,'in_progress');
  await assert.rejects(withOracleAttempt(root,()=>assert.fail('crashed attempt retry')),e=>e.exit===11);assert.equal(fs.readFileSync(path.join(record.directory,'retained.txt'),'utf8'),'synthetic');
 });
+test('unbranded uncertain probe failure retains fence, explicitly quiescent failure releases it',async t=>{
+ const root=fixture(t),error=new Error('synthetic post-spawn probe failure');
+ await assert.rejects(withOracleAttempt(root,async(d,safety)=>{safety.processStarting();throw error;}),e=>e.exit===11);
+ assert.equal(JSON.parse(fs.readFileSync(path.join(root,'active.json'))).state,'recovery_required');
+ const safeRoot=path.join(path.dirname(root),'safe-ledger');
+ await assert.rejects(withOracleAttempt(safeRoot,async(d,safety)=>{safety.processStarting();safety.quiescent();throw error;}),e=>e===error);
+ assert.equal(fs.existsSync(path.join(safeRoot,'active.json')),false);
+});

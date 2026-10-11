@@ -1,0 +1,7 @@
+# Conservative cleanup-proof follow-up
+
+The initial durable-fence successor still treated every unbranded exception as cleanup proof. The permission probe can reject after spawning without a lifecycle ownership-loss brand. This follow-up makes the oracle enter a process-risk phase before executeModel. Permission-probe failures remain uncertain and retain the durable fence. The actual model process lifecycle alone reports quiescence before terminal parsing, or when its rejected result is known not to have lost ownership. Pre-process failures and explicitly quiescent failures clean their own resources; unknown failure does not.
+
+The ordinary runner receives a no-op default quiescence callback, preserving its existing state/budget logic. There is no candidate reset switch or automatic owner recovery. The new controlled regression proves unbranded post-start failure retains the fence and explicit quiescence permits safe cleanup. All prior ownership-loss, restart, controller-exit, concurrent, safe-failure and closed diagnostic tests remain. Full no-credential suite: 135 pass, zero fail/skip, raw `oracle-risk-focused.tap`; this does not certify live provider behavior or protected acceptance.
+
+Earlier f30 and 0ae source facts/RED evidence remain immutable historical records. `oracle-risk-source.json` is the latest graph/listing input for independent review. No actual account refusal ledger, auth read, provider call, host activation, ruleset mutation or deployment occurred.

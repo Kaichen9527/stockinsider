@@ -11,7 +11,7 @@ const { oracleRecoveryRoot, withOracleAttempt } = require('./oracleRecovery');
 async function runRealModelAttempt() {
   const fixture = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json');
   const pins = loadHostPins(fixture);
-  return withOracleAttempt(oracleRecoveryRoot(), async (attemptRoot) => {
+  return withOracleAttempt(oracleRecoveryRoot(), async (attemptRoot, safety) => {
   const completedRoutes = [];
   for (const operation of ['make', 'review', 'verify']) {
     // Separate transports/views prevent one successful operation from standing
@@ -29,7 +29,9 @@ async function runRealModelAttempt() {
       prepareTransport({ source, scratch, transport });
       const route = routeOperation(operation, 'sol61-make-astra-review');
       const terminal = { modelAttempt: 'completed', operation };
+      safety.processStarting();
       const result = await executeModel({
+        onQuiescent: safety.quiescent,
         pins,
         source,
         scratch,

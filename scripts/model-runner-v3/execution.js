@@ -577,6 +577,7 @@ async function executeModel({
   timeout,
   onStart = () => {},
   onExit = () => {},
+  onQuiescent = () => {},
   verifyHostFn = verifyCurrentNode,
   spawnFn = spawn,
   terminalProtocol = 'loop-model-result-v3.5',
@@ -596,12 +597,17 @@ async function executeModel({
   const codex = pins.executables.find((entry) => entry.name === 'codex');
   assert(codex, 5);
   await probePermissions({ pins, source, scratch, transport, verifyHostFn, spawnFn });
-  const stdout = await runModelProcess({
+  let stdout;
+  try { stdout = await runModelProcess({
     executable: codex.path, args, cwd: source.view,
     env: sanitizedEnvironment({ scratchPath: scratch, transportPath: transport }),
     input: sealedPrompt, timeout, onStart, onExit, spawnFn,
     verifyHost: () => verifyHostFn(pins),
-  });
+  }); } catch (error) {
+    if (!isOwnershipLost(error)) onQuiescent();
+    throw error;
+  }
+  onQuiescent();
   return terminalResultFromJsonl(stdout, { terminalProtocol, operation: request.operation });
 }
 

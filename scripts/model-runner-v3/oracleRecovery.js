@@ -32,9 +32,10 @@ async function withOracleAttempt(root, run) {
   try {
     fs.mkdirSync(directory, { mode: 0o700 }); fsyncDirectory(root);
     owned = fs.lstatSync(directory, { bigint: true });
-    let value, primary;
-    try { value = await run(directory); } catch (error) { primary = error; }
-    if (isOwnershipLost(primary)) { retain(); throw new RunnerError(11); }
+    let value, primary, processRisk = false;
+    const safety = Object.freeze({ processStarting: () => { processRisk = true; }, quiescent: () => { processRisk = false; } });
+    try { value = await run(directory, safety); } catch (error) { primary = error; }
+    if (isOwnershipLost(primary) || processRisk) { retain(); throw new RunnerError(11); }
     verify();
     const current = fs.lstatSync(directory, { bigint: true });
     assert(current.isDirectory() && !current.isSymbolicLink() && current.dev === owned.dev && current.ino === owned.ino, 11);
