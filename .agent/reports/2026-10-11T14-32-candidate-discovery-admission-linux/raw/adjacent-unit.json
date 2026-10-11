@@ -1,0 +1,23 @@
+{
+  "stage": "adjacent-unit",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "web/src/lib/radar-stage-pagination.test.ts",
+    "web/src/lib/candidate-trade-plan-transport.test.ts",
+    "web/src/lib/candidate-detail-view-contract.test.ts"
+  ],
+  "startedAt": "2026-10-11T14:47:37.186467+00:00",
+  "endedAt": "2026-10-11T14:47:37.549247+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.3627844280563295,
+  "sampledAggregatePeakRssBytes": 113029120,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10096689152,
+  "diskAvailableAfterBytes": 10096689152,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

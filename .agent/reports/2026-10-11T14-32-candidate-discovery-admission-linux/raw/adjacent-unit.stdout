@@ -1,0 +1,71 @@
+TAP version 13
+# (node:370567) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:370567) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-detail-view-contract.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: candidate detail keeps publication state separate from issuer research completeness
+ok 1 - candidate detail keeps publication state separate from issuer research completeness
+  ---
+  duration_ms: 3.04066
+  ...
+# Subtest: raw facts and source links are collapsed below decision content
+ok 2 - raw facts and source links are collapsed below decision content
+  ---
+  duration_ms: 9.72126
+  ...
+# Subtest: enriched public prose requires an accepted receipt for the same dossier, revision and input hash
+ok 3 - enriched public prose requires an accepted receipt for the same dossier, revision and input hash
+  ---
+  duration_ms: 4.290447
+  ...
+# (node:370568) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:370568) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-trade-plan-transport.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# {"fixtureRadarCardBytes":110431,"fixtureHomeCardBytes":182822}
+# Subtest: P1-06/P1-10: summary preserves the saved revision through compact pagination without embedded OHLCV
+ok 4 - P1-06/P1-10: summary preserves the saved revision through compact pagination without embedded OHLCV
+  ---
+  duration_ms: 12.711319
+  ...
+# Subtest: P1-10: representative 40-card Radar and 24-per-stage home transports retain existing budgets
+ok 5 - P1-10: representative 40-card Radar and 24-per-stage home transports retain existing budgets
+  ---
+  duration_ms: 26.128472
+  ...
+# Subtest: P1-06: detail reader and public summary transport cannot recalculate or write a plan
+ok 6 - P1-06: detail reader and public summary transport cannot recalculate or write a plan
+  ---
+  duration_ms: 0.846869
+  ...
+# (node:370570) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:370570) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/radar-stage-pagination.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: compaction preserves candidate revision and stale authority for found and actionable
+ok 7 - compaction preserves candidate revision and stale authority for found and actionable
+  ---
+  duration_ms: 3.566484
+  ...
+# Subtest: stage pagination exposes every card from one immutable snapshot without exceeding page size
+ok 8 - stage pagination exposes every card from one immutable snapshot without exceeding page size
+  ---
+  duration_ms: 1.088173
+  ...
+# Subtest: stage pagination clamps invalid offsets and oversized pages
+ok 9 - stage pagination clamps invalid offsets and oversized pages
+  ---
+  duration_ms: 0.143557
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 215.38981

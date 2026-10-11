@@ -1,0 +1,185 @@
+TAP version 13
+# (node:370645) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:370645) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-discovery-admission.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: actual main card displays technical dated close and reference method, hides old price and upside
+ok 1 - actual main card displays technical dated close and reference method, hides old price and upside
+  ---
+  duration_ms: 10.252747
+  ...
+# Subtest: actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+ok 2 - actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+  ---
+  duration_ms: 1.641508
+  ...
+# Subtest: missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+ok 3 - missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+  ---
+  duration_ms: 1.185029
+  ...
+# Subtest: actual main funnel defaults to research scope and clearly preserves all clues plus unsupported reason
+ok 4 - actual main funnel defaults to research scope and clearly preserves all clues plus unsupported reason
+  ---
+  duration_ms: 9.528214
+  ...
+# Subtest: existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+ok 5 - existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+  ---
+  duration_ms: 1.548067
+  ...
+# (node:370646) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:370646) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-discovery-admission.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: only a pair with different canonical publishers and roots enters general research
+ok 6 - only a pair with different canonical publishers and roots enters general research
+  ---
+  duration_ms: 1.713977
+  ...
+# Subtest: same author across platforms
+ok 7 - same author across platforms
+  ---
+  duration_ms: 0.217869
+  ...
+# Subtest: syndicated original root
+ok 8 - syndicated original root
+  ---
+  duration_ms: 1.493405
+  ...
+# Subtest: same-platform original authors with independent roots qualify; platform diversity is display-only
+ok 9 - same-platform original authors with independent roots qualify; platform diversity is display-only
+  ---
+  duration_ms: 0.319132
+  ...
+# Subtest: retracted root cannot be laundered by a current repost
+ok 10 - retracted root cannot be laundered by a current repost
+  ---
+  duration_ms: 0.412763
+  ...
+# Subtest: industry-only and unresolved aliases cannot count as direct company confirmation
+ok 11 - industry-only and unresolved aliases cannot count as direct company confirmation
+  ---
+  duration_ms: 0.237559
+  ...
+# Subtest: bounded legacy links, counters and missing PTT detail are unsupported
+ok 12 - bounded legacy links, counters and missing PTT detail are unsupported
+  ---
+  duration_ms: 0.339973
+  ...
+# Subtest: PTT 19/20 actual different stock-mention authors boundary
+ok 13 - PTT 19/20 actual different stock-mention authors boundary
+  ---
+  duration_ms: 0.776042
+  ...
+# Subtest: PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+ok 14 - PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+  ---
+  duration_ms: 0.673616
+  ...
+# Subtest: PTT requires stock in body, current article, and one post, not pooled reply totals
+ok 15 - PTT requires stock in body, current article, and one post, not pooled reply totals
+  ---
+  duration_ms: 0.597172
+  ...
+# Subtest: reasoned new official event can enter low-volume lane, never multi-source confirmation
+ok 16 - reasoned new official event can enter low-volume lane, never multi-source confirmation
+  ---
+  duration_ms: 0.337319
+  ...
+# Subtest: high-impact new lead requires explained known direct source; ordinary news is not official
+ok 17 - high-impact new lead requires explained known direct source; ordinary news is not official
+  ---
+  duration_ms: 0.176637
+  ...
+# Subtest: existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+ok 18 - existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+  ---
+  duration_ms: 0.919658
+  ...
+# Subtest: bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+ok 19 - bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+  ---
+  duration_ms: 0.797914
+  ...
+# Subtest: technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+ok 20 - technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+  ---
+  duration_ms: 0.819337
+  ...
+# Subtest: PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+ok 21 - PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+  ---
+  duration_ms: 0.347584
+  ...
+# Subtest: missing, future, malformed dates never manufacture a displayed current close
+ok 22 - missing, future, malformed dates never manufacture a displayed current close
+  ---
+  duration_ms: 0.17848
+  ...
+# (node:370652) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:370652) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/radar-stage-view.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: filters the complete stage snapshot by query, sector, source, signal and local watchlist
+ok 23 - filters the complete stage snapshot by query, sector, source, signal and local watchlist
+  ---
+  duration_ms: 12.138183
+  ...
+# Subtest: sorts by valuation upside without treating missing values as zero
+ok 24 - sorts by valuation upside without treating missing values as zero
+  ---
+  duration_ms: 0.474997
+  ...
+# Subtest: only substitutes closest waiting candidates when the actionable stage is truly empty
+ok 25 - only substitutes closest waiting candidates when the actionable stage is truly empty
+  ---
+  duration_ms: 0.219281
+  ...
+# (node:370678) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:370678) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/source-content-semantics.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: invalidated source mentions remain auditable but leave discovery
+ok 26 - invalidated source mentions remain auditable but leave discovery
+  ---
+  duration_ms: 0.96055
+  ...
+# Subtest: legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+ok 27 - legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+  ---
+  duration_ms: 0.119931
+  ...
+# Subtest: PTT institutional ranking is chip evidence instead of discovery
+ok 28 - PTT institutional ranking is chip evidence instead of discovery
+  ---
+  duration_ms: 1.068072
+  ...
+# Subtest: publisher and content identities are canonical and stance is three-valued
+ok 29 - publisher and content identities are canonical and stance is three-valued
+  ---
+  duration_ms: 2.502608
+  ...
+# Subtest: source concentration dedupes content and caps thin platform coverage
+ok 30 - source concentration dedupes content and caps thin platform coverage
+  ---
+  duration_ms: 0.685695
+  ...
+# Subtest: source links rotate platforms and limit one platform
+ok 31 - source links rotate platforms and limit one platform
+  ---
+  duration_ms: 0.18594
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 566.450054

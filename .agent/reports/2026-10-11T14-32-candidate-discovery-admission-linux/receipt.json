@@ -1,0 +1,709 @@
+{
+  "schema": "bounded-manual-engineering-receipt-v1",
+  "createdAt": "2026-10-11T14:51:13.606212+00:00",
+  "branch": "codex/candidate-discovery-admission-oct11",
+  "source": {
+    "head": "92082ce672676165dff4bb4c7bfaf864f7b5dbb0",
+    "tree": "a80187901a91a3d4cd2601b0ff29e05342cf55f7",
+    "webTree": "33cc8842aa91d5eeb9132036053340c95612ae4c",
+    "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "changedPaths": [
+      "docs/operations/2026-10-11/candidate-discovery-admission-handoff.md",
+      "scripts/candidate-discovery-admission-ui.test.mjs",
+      "web/src/app/components/RadarTabs.tsx",
+      "web/src/lib/candidate-discovery-admission.test.ts",
+      "web/src/lib/candidate-discovery-admission.ts"
+    ],
+    "manifest": {
+      "path": "source-manifest.json",
+      "bytes": 71712,
+      "sha256": "ba81b654d1a6d6bf461fbdf4198b907f99a0ea9ea6ca2d349948d52adc6f628d"
+    },
+    "manifestFiles": 426
+  },
+  "policy": {
+    "id": "candidate-discovery-admission-v1",
+    "differentPublishers": 2,
+    "differentIndependentRoots": 2,
+    "requiredPlatformCount": null,
+    "platformDiversity": "display-only",
+    "pttDistinctActualStockMentionReplyAuthorsInOneArticle": 20,
+    "generalSlots": 15,
+    "lowVolumeSlots": 5,
+    "weeklyNewDeepResearchLimit": 5,
+    "schedulingIntegrated": false,
+    "qualificationGranted": false
+  },
+  "implementationScope": {
+    "pureAdmission": true,
+    "actualMainStageSSRAndUI": true,
+    "legacyCardFullLineageAvailable": false,
+    "allLegacyCardsAdmission": "unsupported with explicit reason; all clues retained",
+    "sourceAcquisitionEnabled": false,
+    "liveResearchQueueIntegrated": false,
+    "latestCompleteSessionOnCardAvailable": false,
+    "quoteLabel": "technical session close only; latest-session verification pending",
+    "valuation": "PB/TTM historical reference or pending; no forward target/upside",
+    "untouched": [
+      {
+        "path": "web/src/lib/entry-plan-authority-backfill.ts",
+        "bytes": 18589,
+        "sha256": "ae12d825b1141dfd254cbb678ee0d4b396c7898db618a01088c253bf006676d6",
+        "unchangedAgainstBase": true
+      },
+      {
+        "path": "web/src/app/api/internal/research-inbox/route.ts",
+        "bytes": 1507,
+        "sha256": "36149f8a25cce10f51410a2b6afd973113e0cfb636e84f2258eceb8bf88fcbab",
+        "unchangedAgainstBase": true
+      },
+      {
+        "path": "package.json",
+        "bytes": 24733,
+        "sha256": "6dae2b07a0d6ac9e653cc06aba741060a0cb50a0730ab3874e09a3919f0986cc",
+        "unchangedAgainstBase": true
+      },
+      {
+        "path": "package-lock.json",
+        "bytes": 31809,
+        "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+        "unchangedAgainstBase": true
+      },
+      {
+        "path": "web/package.json",
+        "bytes": 1943,
+        "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+        "unchangedAgainstBase": true
+      },
+      {
+        "path": "web/package-lock.json",
+        "bytes": 274088,
+        "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+        "unchangedAgainstBase": true
+      }
+    ]
+  },
+  "build": {
+    "subject": "92082ce672676165dff4bb4c7bfaf864f7b5dbb0",
+    "kind": "normal npm --prefix web run build",
+    "buildId": "oRC09wEMZoS3F6hVEoDrM",
+    "serverManifest": {
+      "path": "compiled-server-manifest.json",
+      "bytes": 334683,
+      "sha256": "f4717fc4c4db71fc7129d467bcae02adf3f94a52163f3ebd4fa1a1c6fa80df30"
+    },
+    "serverFiles": 1804,
+    "serverUncompressedBytes": 59432868
+  },
+  "environment": {
+    "node": "v22.14.0",
+    "next": "16.3.8",
+    "os": "Linux",
+    "proxyCAInherited": true,
+    "dependenciesChanged": false,
+    "secretsReadOrCopied": false,
+    "sqlOrProductionWrites": false
+  },
+  "manualBudget": {
+    "startedAt": "2026-10-11T14:32:00Z",
+    "deadline": "2026-10-11T15:02:00Z",
+    "productModelBudgetEvidence": false,
+    "singleHeavy": true,
+    "diskReserveBytes": 8589934592,
+    "rssLimitBytes": 8589934592
+  },
+  "stages": [
+    {
+      "stage": "actual-ui-green",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/candidate-discovery-admission-ui.test.mjs"
+      ],
+      "startedAt": "2026-10-11T14:43:50.635221+00:00",
+      "endedAt": "2026-10-11T14:43:51.316375+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.6811799140414223,
+      "sampledAggregatePeakRssBytes": 156954624,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10096689152,
+      "diskAvailableAfterBytes": 10096689152,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "2347e381f184ae8cfc5959c2cb3c37ea820b5e3ccdee2eaaa9c3457307f3d6c5",
+      "counts": {
+        "tests": 5,
+        "pass": 5,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "scope": "pre-freeze working tree result, superseded by labelled frozen checks"
+    },
+    {
+      "stage": "adjacent-unit",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/radar-stage-pagination.test.ts",
+        "web/src/lib/candidate-trade-plan-transport.test.ts",
+        "web/src/lib/candidate-detail-view-contract.test.ts"
+      ],
+      "startedAt": "2026-10-11T14:47:37.186467+00:00",
+      "endedAt": "2026-10-11T14:47:37.549247+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.3627844280563295,
+      "sampledAggregatePeakRssBytes": 113029120,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10096689152,
+      "diskAvailableAfterBytes": 10096689152,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "1b12d978b779e07bd039546cc7c088b58a38ad131b64ad971ae0ea86400c850f",
+      "counts": {
+        "tests": 9,
+        "pass": 9,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "scope": "unchanged adjacent pagination/detail/transport regressions; before phrase-only UI freeze"
+    },
+    {
+      "stage": "admission-unit",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/radar-stage-view.test.ts",
+        "web/src/lib/source-content-semantics.test.ts"
+      ],
+      "startedAt": "2026-10-11T14:41:55.446670+00:00",
+      "endedAt": "2026-10-11T14:41:55.838551+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.39188628003466874,
+      "sampledAggregatePeakRssBytes": 28741632,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10096697344,
+      "diskAvailableAfterBytes": 10096697344,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "350a5d1b4309115ae34dcd287a5ae09c81ac4cbebf1eeb443b61edc46dcd3f24",
+      "counts": {
+        "tests": 27,
+        "pass": 27,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "scope": "historical 27-case result before removal of cross-platform hard condition; not final policy"
+    },
+    {
+      "stage": "corrected-admission-unit",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/radar-stage-view.test.ts",
+        "web/src/lib/source-content-semantics.test.ts",
+        "scripts/candidate-discovery-admission-ui.test.mjs"
+      ],
+      "startedAt": "2026-10-11T14:44:24.577480+00:00",
+      "endedAt": "2026-10-11T14:44:25.387108+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.80963667598553,
+      "sampledAggregatePeakRssBytes": 161341440,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10096689152,
+      "diskAvailableAfterBytes": 10096689152,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "c40c48e21e88cc825d93caa257bbf9050d4ec119d2115eff409b69ec1f63d07c",
+      "counts": {
+        "tests": 31,
+        "pass": 31,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "scope": "pre-freeze working tree result, superseded by labelled frozen checks"
+    },
+    {
+      "stage": "frozen-admission-unit",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/radar-stage-view.test.ts",
+        "web/src/lib/source-content-semantics.test.ts",
+        "scripts/candidate-discovery-admission-ui.test.mjs"
+      ],
+      "startedAt": "2026-10-11T14:48:48.804425+00:00",
+      "endedAt": "2026-10-11T14:48:49.468636+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.6642199780326337,
+      "sampledAggregatePeakRssBytes": 156979200,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10096570368,
+      "diskAvailableAfterBytes": 10096570368,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "c40c48e21e88cc825d93caa257bbf9050d4ec119d2115eff409b69ec1f63d07c",
+      "counts": {
+        "tests": 31,
+        "pass": 31,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "scope": "frozen exact code subject"
+    },
+    {
+      "stage": "frozen-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T14:49:37.131784+00:00",
+      "endedAt": "2026-10-11T14:49:57.454422+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 20.32264569896506,
+      "sampledAggregatePeakRssBytes": 1103618048,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10083971072,
+      "diskAvailableAfterBytes": 10083971072,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "1ded22d1a648d19d7e494b6cf545f81772d40d2512b2d33c34e58eeb8c47fde0",
+      "counts": {},
+      "scope": "frozen exact code subject"
+    },
+    {
+      "stage": "frozen-typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T14:49:33.178124+00:00",
+      "endedAt": "2026-10-11T14:49:37.103342+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 3.925227211031597,
+      "sampledAggregatePeakRssBytes": 544960512,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10083971072,
+      "diskAvailableAfterBytes": 10083971072,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "8ac999e55fa5ea36d85b28b65866851498beb4c9609f7f1c0f741dae1ee223a2",
+      "counts": {},
+      "scope": "frozen exact code subject"
+    },
+    {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T14:44:31.737744+00:00",
+      "endedAt": "2026-10-11T14:44:53.917441+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 22.17970159900142,
+      "sampledAggregatePeakRssBytes": 1586626560,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10096689152,
+      "diskAvailableAfterBytes": 10096689152,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "1ded22d1a648d19d7e494b6cf545f81772d40d2512b2d33c34e58eeb8c47fde0",
+      "counts": {},
+      "scope": "pre-freeze working tree result, superseded by labelled frozen checks"
+    },
+    {
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T14:48:49.497859+00:00",
+      "endedAt": "2026-10-11T14:48:58.392328+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 8.894476487010252,
+      "sampledAggregatePeakRssBytes": 1435668480,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10096570368,
+      "diskAvailableAfterBytes": 10083971072,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "30afddbd6164a1c9a1745d7a4eeba53e9fb618211d6ee0b8caf850215486d5ce",
+      "counts": {},
+      "scope": "frozen exact code subject"
+    },
+    {
+      "stage": "original-ui-red",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/tmp/si-admission-msky7769/original-ui-contract.test.mjs"
+      ],
+      "startedAt": "2026-10-11T14:43:49.982878+00:00",
+      "endedAt": "2026-10-11T14:43:50.606567+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 0.6236983629642054,
+      "sampledAggregatePeakRssBytes": 155258880,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10096689152,
+      "diskAvailableAfterBytes": 10096689152,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "a627351c4ddff9ceba004776a9a1f7b564a0dfbd8fae86eec176e34054de03f7",
+      "counts": {
+        "tests": 5,
+        "pass": 0,
+        "fail": 5,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "scope": "new SSR assertions against original main component; expected 0/5 RED preserved"
+    },
+    {
+      "stage": "typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T14:44:25.418146+00:00",
+      "endedAt": "2026-10-11T14:44:31.705321+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 6.287181423977017,
+      "sampledAggregatePeakRssBytes": 691417088,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10096689152,
+      "diskAvailableAfterBytes": 10096689152,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "8ac999e55fa5ea36d85b28b65866851498beb4c9609f7f1c0f741dae1ee223a2",
+      "counts": {},
+      "scope": "pre-freeze working tree result, superseded by labelled frozen checks"
+    }
+  ],
+  "resources": {
+    "sampledPeakBytes": 1586626560,
+    "minimumRecordedFreeBytes": 10083971072,
+    "diskAvailableAtSealBytes": 10083078144,
+    "samplingLimitation": "100ms aggregate process-group and live recursive descendants; may miss short/reparented processes"
+  },
+  "raw": [
+    {
+      "path": "raw/actual-ui-green.json",
+      "bytes": 704,
+      "sha256": "7d9b70a1f4dd524de28588307b72701125d174e515c3772b55432da974a9971b"
+    },
+    {
+      "path": "raw/actual-ui-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/actual-ui-green.stdout",
+      "bytes": 2005,
+      "sha256": "e65bd664aa2a79dd245134e86b36b464b6f579cce74a0dfc179215ed1ae9d52d"
+    },
+    {
+      "path": "raw/actual-ui-green.time",
+      "bytes": 809,
+      "sha256": "ec74ab4b690dd86083a20d6157911116e1f0bb278d8135ccd1c5e7a93998f48a"
+    },
+    {
+      "path": "raw/adjacent-unit.json",
+      "bytes": 811,
+      "sha256": "65bbaef0902f4e750fed5d87401a6f85b011c77352e52427ba04827511ea11fd"
+    },
+    {
+      "path": "raw/adjacent-unit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/adjacent-unit.stdout",
+      "bytes": 4053,
+      "sha256": "b11b85bef09ad2e023b369448351f27b4964c1e5936fd84ef9dc766467e062cd"
+    },
+    {
+      "path": "raw/adjacent-unit.time",
+      "bytes": 904,
+      "sha256": "e0ab5b19aa5452559991197a735ebef9c0a2a396f071996d4d42a7768a3f28d9"
+    },
+    {
+      "path": "raw/admission-unit.json",
+      "bytes": 799,
+      "sha256": "80206db152432148f60498c3c7d0f94298c78711ff9448c1b9dfd963faf30264"
+    },
+    {
+      "path": "raw/admission-unit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/admission-unit.stdout",
+      "bytes": 7346,
+      "sha256": "8f08c2c768baa2b6b64fe3fd6e5e1bd8d6ea2d4e9178fac3a4748722a36a405a"
+    },
+    {
+      "path": "raw/admission-unit.time",
+      "bytes": 891,
+      "sha256": "48a83d14e17e47eb1951b4b422067925d141c6d89f020b55561482708b9f85b2"
+    },
+    {
+      "path": "raw/admission.json",
+      "bytes": 190,
+      "sha256": "302c5c962b2109e02c1503ebee886b50b00fc3fb75a6e17b7b2868f78b792193"
+    },
+    {
+      "path": "raw/corrected-admission-unit.json",
+      "bytes": 864,
+      "sha256": "fe67dbe0dece33cc54ab0815439bc3a948eb14f93e2329778a67f18936695a3c"
+    },
+    {
+      "path": "raw/corrected-admission-unit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/corrected-admission-unit.stdout",
+      "bytes": 9241,
+      "sha256": "3a52c60683e6c14e89732a9fb347be8882b6129782afdae451e1946337d83d67"
+    },
+    {
+      "path": "raw/corrected-admission-unit.time",
+      "bytes": 943,
+      "sha256": "e662ea3c3a491f3cee31d8dc85e0bb45e3c05d77cf5347c755d6f0938fba2330"
+    },
+    {
+      "path": "raw/frozen-admission-unit.json",
+      "bytes": 863,
+      "sha256": "edac2918ce83c229c34740c7b28cef656de53ed5867c1f1d04fc013cce73bc7f"
+    },
+    {
+      "path": "raw/frozen-admission-unit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/frozen-admission-unit.stdout",
+      "bytes": 9238,
+      "sha256": "05e2508d854b481bc894a11e6dcfe0c401a723da97f748eeac8852575b384e10"
+    },
+    {
+      "path": "raw/frozen-admission-unit.time",
+      "bytes": 943,
+      "sha256": "012a8cf5bf1b2f0792356a22d1f84ce753a052d9ab66692f5aa0059fd438f0f1"
+    },
+    {
+      "path": "raw/frozen-lint.json",
+      "bytes": 644,
+      "sha256": "f663e282094ab319374225749b223c9d9dc503ddc90d9fff64a8fe85fa0ddd02"
+    },
+    {
+      "path": "raw/frozen-lint.stderr",
+      "bytes": 165,
+      "sha256": "53ff59b476fd010d11fef53ad7aa4ce767f0d66ecdf81f0beb2574e64d3cf653"
+    },
+    {
+      "path": "raw/frozen-lint.stdout",
+      "bytes": 4588,
+      "sha256": "3aad1e86562f9cdb91e57c1d50e49ec18c2f340fa00b213ed29854691b4375db"
+    },
+    {
+      "path": "raw/frozen-lint.time",
+      "bytes": 754,
+      "sha256": "6db66a87cef5fb033cd01bae14da3791f53fcde471e059b2662a3a480e662f89"
+    },
+    {
+      "path": "raw/frozen-typecheck.json",
+      "bytes": 653,
+      "sha256": "48bc06329d936d59d4ed184f7cb1386a16aea2495e692bafdce95419774775d1"
+    },
+    {
+      "path": "raw/frozen-typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/frozen-typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "raw/frozen-typecheck.time",
+      "bytes": 756,
+      "sha256": "3457b322e0db34187ee393a92388ea6abd2e87f9bf29cdab35902aaaa467e2f0"
+    },
+    {
+      "path": "raw/lint.json",
+      "bytes": 637,
+      "sha256": "175772234c76158201e4335b68940fe99da2222e2be516963123336094a4876c"
+    },
+    {
+      "path": "raw/lint.stderr",
+      "bytes": 165,
+      "sha256": "53ff59b476fd010d11fef53ad7aa4ce767f0d66ecdf81f0beb2574e64d3cf653"
+    },
+    {
+      "path": "raw/lint.stdout",
+      "bytes": 4588,
+      "sha256": "3aad1e86562f9cdb91e57c1d50e49ec18c2f340fa00b213ed29854691b4375db"
+    },
+    {
+      "path": "raw/lint.time",
+      "bytes": 754,
+      "sha256": "fa57205f31cd18450a021777b8bcb4afbff0dfbb0ff9e46ac4cbd55b20a9b625"
+    },
+    {
+      "path": "raw/normal-build.json",
+      "bytes": 646,
+      "sha256": "2ec8bc565a9c143f6ab1e7d9b3ac71f76d572b316b2187aef8e0b14f00293f5f"
+    },
+    {
+      "path": "raw/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/normal-build.stdout",
+      "bytes": 5556,
+      "sha256": "7ba950082a03bb8d82a65720ac3aaf339b52aa9411c397b2f493fa9f844c1e2f"
+    },
+    {
+      "path": "raw/normal-build.time",
+      "bytes": 758,
+      "sha256": "78c253c05ca9285de11946047ae123744c42a202697151ee6ac33909f19b1e54"
+    },
+    {
+      "path": "raw/original-RadarTabs.tsx",
+      "bytes": 108347,
+      "sha256": "6a256cfd90a41ea67ad1a4cf92e563b69d83f29917f0074a8c2029da2d6bbf9e"
+    },
+    {
+      "path": "raw/original-main-display-red.json",
+      "bytes": 507,
+      "sha256": "9c06f7c881742053e94c0b02fb772934ce846c212fd82eacecca110cd69dc2bb"
+    },
+    {
+      "path": "raw/original-ui-contract.test.mjs",
+      "bytes": 5381,
+      "sha256": "c28f9d36c2cb72ccc76bc1e7154b5ceee4c2bc98f9c28a30fe9ac1fcd3f3bdaf"
+    },
+    {
+      "path": "raw/original-ui-red.json",
+      "bytes": 711,
+      "sha256": "ab950df79d7d22fd8a91e2fd4d88fdd7d9e82a720ed16b5ce127afd63214df57"
+    },
+    {
+      "path": "raw/original-ui-red.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/original-ui-red.stdout",
+      "bytes": 165580,
+      "sha256": "a0e5f3a915a44e34555e590d7c6eb820af6c9cec9f45a949777924c631cb982a"
+    },
+    {
+      "path": "raw/original-ui-red.time",
+      "bytes": 854,
+      "sha256": "1270a7c5e4d1a77e619d44dac1883e8e16931aebf82af064f00ce0b8cd20f818"
+    },
+    {
+      "path": "raw/run.py",
+      "bytes": 3433,
+      "sha256": "13bca73c34486de7719b0477ad54cf57207bf5f9fd3d3271dd7aabc193358286"
+    },
+    {
+      "path": "raw/scope-boundary.json",
+      "bytes": 1120,
+      "sha256": "42595676e6751c2bbf31c5569bb33297fb8052ecd2e6c80d1b41bb60aa2a6cb3"
+    },
+    {
+      "path": "raw/typecheck.json",
+      "bytes": 646,
+      "sha256": "bc955c7da24d95057d525eec90c178e6ca4bf5046f2f3410ee16d1b15919ecae"
+    },
+    {
+      "path": "raw/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "raw/typecheck.time",
+      "bytes": 757,
+      "sha256": "3c0df28d0038ad52dd545525319d27765adfb7e5f700af9990e4b2676d36ff66"
+    }
+  ],
+  "rawFiles": 50,
+  "rawBytes": 348980,
+  "cleanup": {
+    "ownedProcessGroupsStopped": true,
+    "remainingObservedChildren": [],
+    "pgOrHttpServicesStarted": false,
+    "deletedPaths": [],
+    "originalRedAndInputsRetained": true,
+    "buildAndPrivateRawRetained": true
+  },
+  "limitations": [
+    "Independent code review pending; maker tests do not grant protected authority.",
+    "Existing legacy card truncation prevents full live admission, no canonical roots inferred.",
+    "PTT direct-ticker lower-bound only, company-name-only replies need verified upstream input.",
+    "Official latest session and valuation-source date remain missing at current caller.",
+    "SSR does not claim browser interactions or actual source ingestion.",
+    "Existing fallback stock/source-signal cards outside stage-contract path remain outside scope.",
+    "No production writes, strategy approval, model role execution, merge or deployment."
+  ]
+}

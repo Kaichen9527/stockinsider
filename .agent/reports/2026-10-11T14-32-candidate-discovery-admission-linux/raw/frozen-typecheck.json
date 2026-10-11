@@ -1,0 +1,22 @@
+{
+  "stage": "frozen-typecheck",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "typecheck"
+  ],
+  "startedAt": "2026-10-11T14:49:33.178124+00:00",
+  "endedAt": "2026-10-11T14:49:37.103342+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 3.925227211031597,
+  "sampledAggregatePeakRssBytes": 544960512,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10083971072,
+  "diskAvailableAfterBytes": 10083971072,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
