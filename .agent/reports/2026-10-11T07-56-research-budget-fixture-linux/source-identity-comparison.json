@@ -1,0 +1,16 @@
+{
+  "previousSource": "e0885815b39f86df34763279dc5fc22e54037a40",
+  "currentSource": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+  "previousManifestFiles": 182,
+  "currentManifestFiles": 182,
+  "changedFiles": [
+    {
+      "path": "scripts/research-source-budget-postgres.test.mjs",
+      "previousSha256": "13738358314171c0f1a64b62da2fd7b5c6ec8001c106084e81046a86c75dc157",
+      "currentSha256": "662194ad0c34e55c10afd840255cf6375724900a93f3c119da6944475ad2376c"
+    }
+  ],
+  "sameWebTree": true,
+  "sameLocks": true,
+  "previousReceiptUnchanged": true
+}

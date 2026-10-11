@@ -1,0 +1,22 @@
+{
+  "stage": "lint",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "lint"
+  ],
+  "startedAt": "2026-10-11T08:01:00.804436+00:00",
+  "endedAt": "2026-10-11T08:01:24.814386+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 24.00997695699334,
+  "sampledAggregatePeakRssBytes": 1472049152,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10046193664,
+  "diskAvailableAfterBytes": 10046193664,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
