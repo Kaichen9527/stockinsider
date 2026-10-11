@@ -1,0 +1,33 @@
+{
+  "originalManualStartedAt": "2026-10-11T04:08:07Z",
+  "manualDeadline": "2026-10-11T04:38:07Z",
+  "admittedAt": "2026-10-11T04:09:28.249346+00:00",
+  "source": "4ff224baa6e00e73198d9f2cc8b29b2045374744",
+  "sourceTree": "93ce27fb87b79f537626bcc71d6e8d5199515a2a",
+  "webTree": "a2116b787cc6d227b9581c28b077aa3257aecb27",
+  "node": "22.14.0",
+  "dependencyReuse": {
+    "pg": {
+      "installed": "8.18.0",
+      "lock": "8.18.0"
+    },
+    "tailwindcss": {
+      "installed": "4.2.1",
+      "lock": "4.2.1"
+    },
+    "@tailwindcss/postcss": {
+      "installed": "4.2.1",
+      "lock": "4.2.1"
+    }
+  },
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "rootLockBytes": 31809,
+  "preflightDiagnosticError": "require(@tailwindcss/postcss/package.json) ERR_PACKAGE_PATH_NOT_EXPORTED; filesystem package version then checked against lock, no dependency install",
+  "availableDiskBytes": 10311954432,
+  "noLiveNodeOrPostgres": true,
+  "previousZombieProcesses": {
+    "postgres": 680,
+    "node": 86
+  },
+  "artifactRoot": "/tmp/si-io-4ff-5pgx05n4"
+}
