@@ -55,3 +55,10 @@ test('DE07 established breakout, pullback and waiting are research phases only',
   assert.equal(discoveryPricePhase({...phase,breakoutConfirmed:false,pullbackConfirmed:true}),'trend_pullback');
   assert.equal(discoveryPricePhase({...phase,breakoutConfirmed:false}),'research_before_trigger');
 });
+
+
+test('relative return evidence rejects a price one microsecond after the cutoff',()=>{
+  const asOf='2026-10-02T06:00:00.000001Z';
+  const stock=[{session:'2026-10-02',close:10,availableAt:'2026-10-02T06:00:00.000002Z'}];
+  assert.throws(()=>discoveryRelativeReturns(stock,stock,asOf),/discovery_price_invalid/);
+});
