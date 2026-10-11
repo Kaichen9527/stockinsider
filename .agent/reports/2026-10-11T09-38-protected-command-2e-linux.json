@@ -1,0 +1,618 @@
+{
+  "schemaVersion": "protected-command-2e-linux-evidence-v1",
+  "sourceIdentity": {
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "tree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "status": "",
+    "admissionAt": "2026-10-11T09:38:20.143954Z",
+    "deadlineAt": "2026-10-11T10:08:20+00:00",
+    "node": "v22.14.0",
+    "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "pgBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "osUser": "agent",
+    "pgClient": {
+      "version": "8.18.0",
+      "user": "agent"
+    },
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "prior399Archive": {
+      "path": "/tmp/si-artifact-399-gwlxuq40/stockinsider-399e9bde-linux-standalone.tar.gz",
+      "bytes": 28209315,
+      "sha256": "415fe579ecc8545ec294d69744f114b3a068ce979e9d81a528e8b81ccf4bc69e",
+      "preservedNotRelabeled": true
+    },
+    "priorBuildId": "Nj3J_1HFHcxV4EErafx07",
+    "changedFiles": [
+      "package.json",
+      "scripts/opportunity-v3/migration-contract.test.mjs"
+    ],
+    "runtimeSqlWebInventoryUnchangedFrom399": true,
+    "workspaceDiskAvailableBytes": 10042155008,
+    "tmpDiskAvailableBytes": 17211805696,
+    "evidenceBranchParent": "83c93713ca39d9509a94ed65b88eea8d5fb04f8b",
+    "networkPolicyObservedState": "unknown",
+    "activeRelevantAtAdmission": []
+  },
+  "executionExactClean2e": true,
+  "onlyEvidenceCommittedNoSourceMerge": true,
+  "evidenceParent": "83c93713ca39d9509a94ed65b88eea8d5fb04f8b",
+  "approvedCommandContract": {
+    "all14RowsExact": true,
+    "scriptValueRowsSha256": "b3ef11c01c20ee7f9308ac8aff297316cd2e761252ef16326a76f550ee9277ab",
+    "comparisonRaw": "approved-command-comparison.json",
+    "localComparisonNotProtectedExecution": true
+  },
+  "canonicalTest": {
+    "counts": {
+      "tests": 87,
+      "pass": 87,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "names": [
+      "installed successors reject base replay and omitted extensions before any mutation",
+      "an unextended base remains installable but unknown detection cannot authorize replay",
+      "transaction normalization preserves quoted PL/pgSQL and rejects embedded control",
+      "every explicitly reviewed migration is compatible with one atomic transaction",
+      "V3.20 widens only the KOL connector matrix and installs an exact-identity expired-lease reaper",
+      "V3.20.2 terminalizes one exact expired run even before its first job claim",
+      "V3.20.1 bridges only a revalidated InvestAnchors structured claim across empty runs",
+      "V3.20.2 compacts the candidate claim transport before a worker lease can expire",
+      "V3.20.3 keeps KOL retention source authority behind its owning RPC boundary",
+      "V3.19.7 reconstructs current-run lineage only from immutable, hash-bound acquisition references",
+      "V3.16.12 bounds deep fact authority while preserving the complete candidate ledger",
+      "V3.18 retains the immutable prior candidate ledger without widening the source claim",
+      "V3.19.10 restores retained candidate authority only from the exact prior immutable ledger",
+      "V3.19.11 restores complete retained objects before exact-ledger authority enrichment",
+      "V3.20.2 compact claims carry the exact persisted source terminal plane",
+      "V3.19.12 selects the sole retained JSONB candidate result without an unsupported aggregate",
+      "V3.19.16 refreshes the lease after the complete successor claim chain",
+      "V3.16.15 restores immutable analysis payload reuse outside the lease handoff",
+      "V3.16.16 preserves true recollection time without consuming a financial fact revision",
+      "V3.16.18 resolves same-cutoff immutable payloads and skips payload-less legacy metadata",
+      "every legacy mutating RPC and terminal failure requires live run/job lease authority",
+      "PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker",
+      "entry-plan authority migration accepts full market action symbols and keeps ledgers private",
+      "V3.14 acceptance upgrade accepts the deployed V3.11 predecessor identity",
+      "migration declares the complete closed V3 catalog",
+      "release reconciliation scopes transient owner CREATE rights and restores the executor role",
+      "runtime diagnostic persistence accepts every closed runtime invariant",
+      "V3.19.2 installs the compact projection comparison without weakening detail revisions",
+      "migration includes the exact three view security modes",
+      "candidate financial selection bounds analyst and broker families independently",
+      "allocation and projection persist only hash-valid authoritative decision geometry",
+      "migration applies twice and exposes the exact granted/private function boundary",
+      "V3.16.21 freezes one provider revision, reuses it, and quarantines conflicting bytes",
+      "V3.16.21 validates one roster snapshot per bounded official ingestion chunk",
+      "V3.16.21 appends a newer reviewed evaluation at one content cutoff and rejects ambiguity",
+      "V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread",
+      "V3.15 production-sized authority lookup and staged resume are installed",
+      "V3.16.9 resolves same-run calendar dependencies by knowledge and transaction time without weakening point-in-time reads",
+      "V3.14 completion persists a non-empty exact decision revision and heartbeat",
+      "V3.14 SQL envelope validator preserves diagnostics for unavailable cards",
+      "V3.13 source acquisition persists seventeen terminals, citation, and typed claim/entity conservation",
+      "V3.13 source completion rejects unsupported empty terminals and unconserved item multisets atomically",
+      "V3.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts",
+      "every principal-bound RPC rejects conflicting active role bindings",
+      "legacy producer resolves one scheduled occurrence and resumes the same deterministic SQL graph",
+      "legacy analysis completion persists a typed material-revision evaluation",
+      "V3.13 invalid completion is zero-write and analysis claims replay the exact immutable fact payload",
+      "legacy producer advances exactly once for newly recorded material authority outside the scheduled cutoff",
+      "legacy fact-plane benchmark reads the market observation timestamp contract",
+      "legacy producer claim plane carries prior discovery and analysis lineage across successful runs",
+      "applied blinded assignment preserves reviewer isolation and audits every success",
+      "applied blinded assignment executes all eight dispositions without cross-principal leakage",
+      "applied catalog has the closed section enum, RLS and security-barrier view options",
+      "applied catalog exposes exact composite arities, named indexes and primary-key coverage",
+      "manifest v3.14 persistence and Taiwan calendar expose their exact durable catalog",
+      "Taiwan calendar v3.4 resolves two completed equal schedules and begin re-resolves the exact cutoff",
+      "authority append RPCs recompute source hashes and converge roster sector calendar and market streams",
+      "authority registries enforce exact 64/65 family bounds and serialized boundary races",
+      "applied checks, privileges, RLS boundary and immutable relations reject negative writes",
+      "applied begin creates one deterministic canonical v3.3 bootstrap job and payload",
+      "applied empty-run lifecycle commits each predecessor and deterministic successor atomically",
+      "nonempty source-identity manifest executes header, bounded page, root and durable row",
+      "source-identity manifest advances a hash-bound 2,001-row sentinel into two cursor pages",
+      "all four mode graphs use closed reads; enrich executes nonempty normalized stages and converges",
+      "V3.13 PB authority is typed and audited while NAV history is point-in-time per distinct session",
+      "V3.13 official valuation append requires elapsed same-exchange completed session authority",
+      "V3.13 equal-head reported or EV authority remains a typed candidate conflict without winner lineage",
+      "V3.13 candidate fact plane ranks complete identities before applying per-series bounds",
+      "V3.13 requested calendar windows fail on the 513th distinct stream instead of truncating",
+      "V3.13 valuation history binds distinct sessions before revision-heavy observation heads",
+      "V3.13 conditional valuation completion binds scalars and counts to the cutoff official evidence root",
+      "V3.13 latest-recorded instrument, sector and calendar heads cannot be revived by newer business timestamps",
+      "V3.13 official shares normalizes units and propagates differing equal-head authority",
+      "V3.13 completion binds exact decision payload set and classifies only after latest authority selection",
+      "V3.19.3 reconstructs decision identity from the worker non-cyclic dossier material",
+      "V3.20 keeps compact evaluation schema persistence closed and V3.20-compatible",
+      "V3.13 service role completes compact persistence and equal-time heartbeat disagreement fails closed",
+      "V3.13 SQL decision envelope enforces the exact 15 percent and 2.0 authority boundaries",
+      "V3.13 SQL decision canonicalizer is byte-equal to the tracked worker for disclosure values",
+      "V3.13 projection guard serializes every writer, rejects non-monotonic time, and retains exactly 1500 rows",
+      "V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row",
+      "DI-008 parser output crosses job completion and persistence before an adjusted read",
+      "real TypeScript evaluation executor output stages and commits through PostgreSQL",
+      "public selector is one point-in-time statement across cold, active, failed, success and tie branches",
+      "V3.19.12 executes the production-shaped JSONB cardinality read and reconciles exactly nine runtime RPCs",
+      "financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain",
+      "financial atomic replay rollback retains installed successor after predecessor replacement and forced failure"
+    ],
+    "originalDeclaredCases": 83,
+    "importedDeclaredCases": 4,
+    "eachImportedCaseActualOccurrences": {
+      "installed successors reject base replay and omitted extensions before any mutation": 1,
+      "an unextended base remains installable but unknown detection cannot authorize replay": 1,
+      "transaction normalization preserves quoted PL/pgSQL and rejects embedded control": 1,
+      "every explicitly reviewed migration is compatible with one atomic transaction": 1
+    },
+    "noFilteringSkippingOrSeparateExtraRerun": true
+  },
+  "importedCoverage": {
+    "cases": [
+      {
+        "path": "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+        "name": "installed successors reject base replay and omitted extensions before any mutation",
+        "sha256": "20c4c6ae74794bfa31141658662dc79a468b11cc0642ec111945dfed2a39b5f8"
+      },
+      {
+        "path": "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+        "name": "an unextended base remains installable but unknown detection cannot authorize replay",
+        "sha256": "20c4c6ae74794bfa31141658662dc79a468b11cc0642ec111945dfed2a39b5f8"
+      },
+      {
+        "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+        "name": "transaction normalization preserves quoted PL/pgSQL and rejects embedded control",
+        "sha256": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466"
+      },
+      {
+        "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+        "name": "every explicitly reviewed migration is compatible with one atomic transaction",
+        "sha256": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466"
+      }
+    ],
+    "count": 4,
+    "all4BlobsIdenticalTo399": true,
+    "unconditionalImports": true,
+    "originalNativeAssertionsUnchanged": true
+  },
+  "nativeScope": "Original unchanged canonical legacy fixture/real PG17 before-after migrations and assertions; mixed native+static/pure cases; not full production-profile installation.",
+  "build": {
+    "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "tree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "buildId": "YN7dtDWB1rU0c7CJ1ogS9",
+    "node": "v22.14.0",
+    "next": "16.3.8",
+    "compiler": "normal npm build / Turbopack",
+    "serverFileCount": 2088,
+    "serverLogicalBytes": 67439593,
+    "serverManifestSha256": "9acfaebba9d09241fd7043dfed2be260f448942f03370d23239bd2b52297d73f",
+    "newBuildExecuted": true,
+    "prebuildExecuted": true,
+    "prior399BuildId": "Nj3J_1HFHcxV4EErafx07",
+    "prior399ArtifactNotRelabeled": true
+  },
+  "package": {
+    "releaseDirectory": "/tmp/si-2e-m35wlxg5/packages/2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "sourceCommit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "packagerCommit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "entrypoint": "app/server.js",
+    "manifestSha256": "388c8cadf5fda246d80f838aeb382c578d144bdb8553acbd04fcd5c9c1a25d9a",
+    "releaseManifestFileSha256": "4f975d4ea888fd7b5c12e378c156f398681cd30efc9c7bab082b1d3c702e220a",
+    "fileCountExcludingManifest": 2819,
+    "uncompressedPayloadBytesExcludingManifest": 82956025
+  },
+  "archive": {
+    "archivePath": "/tmp/si-2e-m35wlxg5/stockinsider-2e078dfd-linux-standalone.tar.gz",
+    "archiveSha256": "1c4c6d9c128be8c18e9d7bc3bada871d2a5b3c99dd509566ba6a0e4c3e33a5cd",
+    "archiveBytes": 28211002,
+    "fileCountIncludingReleaseManifest": 2820,
+    "releaseManifestFileCount": 2819,
+    "directoryCount": 560,
+    "totalRegularFileBytesIncludingReleaseManifest": 83612029,
+    "releaseManifestJsonFileBytes": 656004,
+    "releaseManifestJsonFileSha256": "4f975d4ea888fd7b5c12e378c156f398681cd30efc9c7bab082b1d3c702e220a",
+    "manifestSha256": "388c8cadf5fda246d80f838aeb382c578d144bdb8553acbd04fcd5c9c1a25d9a",
+    "allArchiveRegularMembersComparedToReleaseHashes": true,
+    "absoluteTraversalDuplicateUnexpectedPaths": 0,
+    "symlinksHardlinksSpecialFiles": 0,
+    "dotenvOrKnownCredentialStorePrivateKeyPaths": 0,
+    "pathAuditNotGenericSecretContentScan": true
+  },
+  "stages": [
+    {
+      "stage": "canonical-migration",
+      "command": [
+        "npm",
+        "run",
+        "test:source-led-opportunity-v3:migration"
+      ],
+      "startedAt": "2026-10-11T09:40:14.045900+00:00",
+      "endedAt": "2026-10-11T09:41:40.540013+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 86.4941220380133,
+      "sampledAggregatePeakRssBytes": 247156736,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10042155008,
+      "diskAvailableAfterBytes": 10042155008,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T09:41:53.523981+00:00",
+      "endedAt": "2026-10-11T09:41:59.796279+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 6.272307938023005,
+      "sampledAggregatePeakRssBytes": 1244209152,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10042155008,
+      "diskAvailableAfterBytes": 10041339904,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "package-standalone",
+      "command": [
+        "node",
+        "scripts/package-standalone-release.mjs",
+        "/workspace/cloud-reviewer-result-http-vm-oct09",
+        "/workspace/cloud-reviewer-result-http-vm-oct09",
+        "/tmp/si-2e-m35wlxg5/packages",
+        "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+        "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+      ],
+      "startedAt": "2026-10-11T09:43:01.640276+00:00",
+      "endedAt": "2026-10-11T09:43:02.888462+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.2481942169833928,
+      "sampledAggregatePeakRssBytes": 56639488,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10041339904,
+      "diskAvailableAfterBytes": 10041339904,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "verify-standalone",
+      "command": [
+        "node",
+        "scripts/verify-standalone-release.mjs",
+        "/tmp/si-2e-m35wlxg5/packages/2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+      ],
+      "startedAt": "2026-10-11T09:43:22.985796+00:00",
+      "endedAt": "2026-10-11T09:43:23.767990+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.7821995530393906,
+      "sampledAggregatePeakRssBytes": 68812800,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10041339904,
+      "diskAvailableAfterBytes": 10041339904,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "archive-create",
+      "command": [
+        "tar",
+        "-czf",
+        "/tmp/si-2e-m35wlxg5/stockinsider-2e078dfd-linux-standalone.tar.gz",
+        "-C",
+        "/tmp/si-2e-m35wlxg5/packages",
+        "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+      ],
+      "startedAt": "2026-10-11T09:43:45.831299+00:00",
+      "endedAt": "2026-10-11T09:43:49.004604+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 3.1733125040191226,
+      "sampledAggregatePeakRssBytes": 4145152,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10041339904,
+      "diskAvailableAfterBytes": 10041339904,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "archive-audit",
+      "command": [
+        "python3",
+        "/tmp/si-2e-m35wlxg5/archive-audit.py"
+      ],
+      "startedAt": "2026-10-11T09:44:04.124734+00:00",
+      "endedAt": "2026-10-11T09:44:04.885106+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.7603789429995231,
+      "sampledAggregatePeakRssBytes": 21471232,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10041339904,
+      "diskAvailableAfterBytes": 10041339904,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    }
+  ],
+  "sourceManifestFiles": 668,
+  "sourceManifestSha256": "03c71c433c5bbb443019a1ed17b85f2a3c256852bd13dacbbbf01a35f1ef8e1f",
+  "resources": {
+    "maxManualMinutes": 30,
+    "sampledAggregatePeakRssBytes": 1244209152,
+    "workspaceMinStageBoundaryDiskBytes": 10041339904,
+    "artifactTmpfsAvailableAtEndBytes": 17087827968,
+    "samplingCaveat": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "tmpfsArtifactMemoryNotIncludedInProcessRss": true,
+    "diskReserveBytes": 8589934592,
+    "rssGuardBytes": 8589934592
+  },
+  "cleanup": {
+    "checkedAt": "2026-10-11T09:45:35.258728+00:00",
+    "liveRelevantProcesses": [],
+    "stageRemainingChildren": [
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    "ownedNativeClusterOrFixtureDirectoriesRemaining": [],
+    "originalAfterHookStoppedAndRemovedOwnedIsolatedPG": true,
+    "newAndHistoricalReleaseArchivesRetained": true,
+    "uniqueEvidenceDeleted": false,
+    "noGlobalPrune": true,
+    "workspaceDiskAvailableBytes": 10041339904,
+    "artifactTmpfsAvailableBytes": 17087827968,
+    "memAvailableKiB": 32923780
+  },
+  "transfer": {
+    "metadataRoute": "Existing authenticated Git HTTPS evidence branch",
+    "binaryCrossVmTransferVerified": false,
+    "binaryServedUploadedOrCommitted": false,
+    "availableVerifiedUploadApi": null,
+    "binaryLocalAccess": "Private VM filesystem, parent0700/archive0600, owned by agent.",
+    "durability": "/tmp is temporary tmpfs; no access from another host or durable binary retention proven.",
+    "newApiOrPaidService": false
+  },
+  "history": {
+    "prior399ArtifactUnchanged": {
+      "path": "/tmp/si-artifact-399-gwlxuq40/stockinsider-399e9bde-linux-standalone.tar.gz",
+      "bytes": 28209315,
+      "sha256": "415fe579ecc8545ec294d69744f114b3a068ce979e9d81a528e8b81ccf4bc69e",
+      "preservedNotRelabeled": true
+    },
+    "rootReportedProtected399Trace": {
+      "total": 272,
+      "pass": 271,
+      "fail": 1,
+      "skip": 0,
+      "failure": "GOV001 command mismatch",
+      "attribution": "User/root report, not locally rerun protected trace"
+    },
+    "separateMacModelENOENTUnresolvedByThisTask": true
+  },
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/approved-command-comparison.json",
+      "bytes": 7436,
+      "sha256": "fb008b3b685611a2f576cf7c8881c4ba532c88599a5efd18ff2d6f0185ee8d18"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/archive-audit-result.json",
+      "bytes": 684765,
+      "sha256": "7316cf9b18cd799fa251430a655a5074e7afa707deb5e0b3f0d7c37155988f8a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/archive-audit.json",
+      "bytes": 643,
+      "sha256": "299435ad1cb9583c8ff7e07829e28f56cddf287339f0ee1a1bdc9d9f9cae69bb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/archive-audit.py",
+      "bytes": 2579,
+      "sha256": "81549eeb318060d8ef2ba3d9430083f80a34c36dfa30647e8e0f0042e672f671"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/archive-audit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/archive-audit.stdout",
+      "bytes": 819,
+      "sha256": "d0e99da272cdf79abe640cc7167058b7c9995b7ffe461c0a0110224af44edd68"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/archive-audit.time",
+      "bytes": 761,
+      "sha256": "637c6fa47b0705f754cf3d5132b31f732a0b624b597eedad75eaf48321449887"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/archive-create.json",
+      "bytes": 774,
+      "sha256": "3f99deb67749e7c1e57b522ca50339868adc0a198cad4bab847eef0f94caae8f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/archive-create.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/archive-create.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/archive-create.time",
+      "bytes": 866,
+      "sha256": "aaca66f291523b03887e3ef8c48fcd0ab55404d84f1ca378074358e326dac4b4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/build-identity.json",
+      "bytes": 593,
+      "sha256": "c888af7b5596dc8dcb7b7e7ed5f79114e0bc5b6581b287afec0ca4d143c9f53b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/canonical-migration.json",
+      "bytes": 659,
+      "sha256": "db4030e5afbd315ba81903c15b6e5bcb69d48314cad171957014a184cf0d4390"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/canonical-migration.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/canonical-migration.stdout",
+      "bytes": 21075,
+      "sha256": "3b4ba0204b3267dd93fef06fb6b2aef334ffdffc889f0841ba9d05713a0ffb3f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/canonical-migration.time",
+      "bytes": 771,
+      "sha256": "d692066f22ed4c7f949258c9ffb89fe0ad55964436ca432b10a761859623764d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/cleanup.json",
+      "bytes": 518,
+      "sha256": "401e89169ac3a207686590e006ef21f9d4f7319ae3b215ae6aff3daf85face00"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/compiled-server-manifest.json",
+      "bytes": 387190,
+      "sha256": "9acfaebba9d09241fd7043dfed2be260f448942f03370d23239bd2b52297d73f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/imported-test-inventory.json",
+      "bytes": 1219,
+      "sha256": "d499589e07617dabd7e09f611225cae25e12b0e19d184d7362ca38d2c93bbec8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/normal-build.json",
+      "bytes": 646,
+      "sha256": "60ce189bbc670d990666ccecc3a588c53a50f304a514490036f4dbd216017479"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/normal-build.stdout",
+      "bytes": 6499,
+      "sha256": "b6471a140d842d31b40e2b1e129dbb60b4fd2a9d0705055ff3cb747c7f42e330"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/normal-build.time",
+      "bytes": 758,
+      "sha256": "0dee8271f038448a72791edd6546924691d525f3405828000984eb284ba1596c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/package-standalone.json",
+      "bytes": 887,
+      "sha256": "a2e404a4b4f6868ed7455257c9a7bafa3e8279432c27f44f40dc8ed5a6a25d0c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/package-standalone.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/package-standalone.stdout",
+      "bytes": 240,
+      "sha256": "d723c4e81b4908117465251e11d820cfeff9700cca5ad2badaea43f0dede8998"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/package-standalone.time",
+      "bytes": 972,
+      "sha256": "c1bc5d5e3ddae74116c6239a4feaae93f355bb2d1816343ff96aa3269f72f103"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/preflight.json",
+      "bytes": 1400,
+      "sha256": "e881837def221c4deda71ebbc768b7401041b18b9c447c39461ff256a8b9df3f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/release-manifest.json",
+      "bytes": 656004,
+      "sha256": "4f975d4ea888fd7b5c12e378c156f398681cd30efc9c7bab082b1d3c702e220a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/run.py",
+      "bytes": 3426,
+      "sha256": "c9a57fdbf577d245adb8bddfdd19f006813f1571ceb3f273c22dc80e494dc1aa"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/source-delta.patch",
+      "bytes": 3661,
+      "sha256": "0a6a36ad5568ed0740d55b3e5118a68608bd554edd4fdacf8111a6ee19c870a1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/source-manifest.json",
+      "bytes": 130736,
+      "sha256": "03c71c433c5bbb443019a1ed17b85f2a3c256852bd13dacbbbf01a35f1ef8e1f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/test-inventory.json",
+      "bytes": 8934,
+      "sha256": "56f001683b53d1d086b49633f6a77d87b1b22acf8fa43a69b4573b601324443b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/transfer-status.json",
+      "bytes": 427,
+      "sha256": "6afe188b050b7306eee0e8ca35e25f46a3005fada946748fe162a12ef5862782"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/verify-standalone.json",
+      "bytes": 722,
+      "sha256": "cbcb5368d1910a3e805faa60b7ea6809966d205e09aee156ad1d8f6efb0242d9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/verify-standalone.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/verify-standalone.stdout",
+      "bytes": 328,
+      "sha256": "b8dde6ae8a9c19fbdf9bd4367fa102d0063dd6131ab19b6f5b54d900e86fb089"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-38-protected-command-2e-linux/verify-standalone.time",
+      "bytes": 835,
+      "sha256": "328268b7539d712d98450569139ccdefbf0a62e1b02d4a0edbc2d3b77473869d"
+    }
+  ],
+  "rawFileCount": 38,
+  "rawTotalBytes": 1927143,
+  "limits": [
+    "No synthetic protected markers or actual protected worker/gate execution.",
+    "No full818/155/browser/cron/newAPI/dependency/provider/login/production DB/secret/model/strategy/merge/deploy operations.",
+    "Imported4 tests run exactly once within actual original npm migration command; no separate rerun.",
+    "New build and tar belong2e; old399 tar is historical and not relabeled.",
+    "Known path/link audit is not universal secret-content scan.",
+    "Binary crossVM transfer remains unverified; Git contains metadata/raw only."
+  ],
+  "recordedAt": "2026-10-11T09:45:35.313427+00:00"
+}

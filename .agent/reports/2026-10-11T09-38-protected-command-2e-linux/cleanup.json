@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-11T09:45:35.258728+00:00",
+  "liveRelevantProcesses": [],
+  "stageRemainingChildren": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "ownedNativeClusterOrFixtureDirectoriesRemaining": [],
+  "originalAfterHookStoppedAndRemovedOwnedIsolatedPG": true,
+  "newAndHistoricalReleaseArchivesRetained": true,
+  "uniqueEvidenceDeleted": false,
+  "noGlobalPrune": true,
+  "workspaceDiskAvailableBytes": 10041339904,
+  "artifactTmpfsAvailableBytes": 17087827968,
+  "memAvailableKiB": 32923780
+}

@@ -1,0 +1,24 @@
+{
+  "stage": "package-standalone",
+  "command": [
+    "node",
+    "scripts/package-standalone-release.mjs",
+    "/workspace/cloud-reviewer-result-http-vm-oct09",
+    "/workspace/cloud-reviewer-result-http-vm-oct09",
+    "/tmp/si-2e-m35wlxg5/packages",
+    "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "2e078dfdd74272d3d50dffdd4cc6c14df3152c78"
+  ],
+  "startedAt": "2026-10-11T09:43:01.640276+00:00",
+  "endedAt": "2026-10-11T09:43:02.888462+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 1.2481942169833928,
+  "sampledAggregatePeakRssBytes": 56639488,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10041339904,
+  "diskAvailableAfterBytes": 10041339904,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

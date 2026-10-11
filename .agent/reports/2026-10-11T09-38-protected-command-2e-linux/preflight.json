@@ -1,0 +1,35 @@
+{
+  "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "tree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+  "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+  "status": "",
+  "admissionAt": "2026-10-11T09:38:20.143954Z",
+  "deadlineAt": "2026-10-11T10:08:20+00:00",
+  "node": "v22.14.0",
+  "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+  "pgBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+  "osUser": "agent",
+  "pgClient": {
+    "version": "8.18.0",
+    "user": "agent"
+  },
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+  "prior399Archive": {
+    "path": "/tmp/si-artifact-399-gwlxuq40/stockinsider-399e9bde-linux-standalone.tar.gz",
+    "bytes": 28209315,
+    "sha256": "415fe579ecc8545ec294d69744f114b3a068ce979e9d81a528e8b81ccf4bc69e",
+    "preservedNotRelabeled": true
+  },
+  "priorBuildId": "Nj3J_1HFHcxV4EErafx07",
+  "changedFiles": [
+    "package.json",
+    "scripts/opportunity-v3/migration-contract.test.mjs"
+  ],
+  "runtimeSqlWebInventoryUnchangedFrom399": true,
+  "workspaceDiskAvailableBytes": 10042155008,
+  "tmpDiskAvailableBytes": 17211805696,
+  "evidenceBranchParent": "83c93713ca39d9509a94ed65b88eea8d5fb04f8b",
+  "networkPolicyObservedState": "unknown",
+  "activeRelevantAtAdmission": []
+}
