@@ -1,0 +1,1 @@
+{"source":"e8c942e7239dc11e700452cd8d6257eb69c85743","probe":"two actual connections, second RR snapshot before first committed reservation","snapshot":0,"firstReservations":1,"secondReservations":1,"durableActiveReservations":2,"globalSingleLeaseRespected":false,"syntheticOwners":true,"fullProductionSchema":false}

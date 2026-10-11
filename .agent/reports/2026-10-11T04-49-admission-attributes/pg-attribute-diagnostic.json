@@ -1,0 +1,1 @@
+{"cost": 100, "kind": "f", "rows": 1000, "binary": null, "strict": false, "support": "0", "defaults": 0, "language": "plpgsql", "parallel": "u", "variadic": "0", "leakproof": false, "returnsSet": true, "transforms": null, "volatility": "v", "configuration": ["search_path=public,pg_temp"], "securityDefiner": true}

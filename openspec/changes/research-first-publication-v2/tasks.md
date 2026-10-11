@@ -99,3 +99,31 @@ Frozen development integration51a remains unmodified during full-review attempts
 Successor4ff fixes five bounded research file-read entries (real FIFO, growth, replacement, descriptor cleanup) and synchronizes the synthetic PCR006 Worker fixture readiness without changing75ms blocking or10ms heartbeat. Existing independent scoped CODE PASS covers exactly nine files;11 new cases and9 separate error probes were independently reported. Root canonical product correctness155/155,zero skip and normal Mac build PASS are sealed in2026-10-11T04-10-research-release-io-repair. Earlier local146/142/4 and81/70/11 results are transcript-observed only: their old/tmp raws were no longer present when evidence was sealed; they are not reconstructed or counted as reproducible PASS.
 
 Original GitHub37970639183 Linux packaging financial_parent_invalid RED is retained. Test-only2f74c1ee uses private OS-account-owned fixture roots; real chmod0777 ancestor rejection remains required and production reader bytes are unchanged. Root13/13 and independent13/13 scoped TEST CODE PASS are distinct overlapping runs, not26cases. Linux exact-commit verification is running only in the existing authorized VM. New checks do not imply genuine company research, complete production schema installation, strategy adoption, main merge or deployment.
+
+
+## 2026-10-11 actual admission isolation repair checkpoint
+
+- [x] Preserve actual two-connection stale RR counterexample on e8c: two active reservations despite global1. New expected-rejection test initially RED; original probe, test bytes and raw preserved.
+- [x] Add successor c15d113c rather than changing previously applicable SQL. Nine entry guards reject non-READ-COMMITTED before any admission read/write/replay. Full nine-signature/body precondition rejects missing or independently changed routines before replacement; CREATE OR REPLACE retains actual owner/ACL/attributes and reinstall is exact.
+- [x] Actual PG17 maker13/13 zero skip: nine body/definition comparisons, RR/SERIALIZABLE seven RPCs and independent BEFORE/AFTER job triggers, RC competing global lease and fifth weekly company, unchanged1800/7200 and replay. Separate predecessor-only legacy4/4 and normal Mac build passed; these do not prove complete production installation.
+- [x] Verify27 Linux VM raw blobs by bytes/SHA. Package13/13 covers two existing files; missing third pattern was not executed. Preserve original six-file80/1 and PCR147/8 RED, without recasting environment failures as PASS.
+- [x] Fix inherited umask negative fixture in5e3ee67 with explicit chmod0644; production reader unchanged, root umask077 bounded11/11. Existing VM is performing a newly scoped Linux check with proper proven PG PATH and original browser-error diagnosis.
+- [ ] Independent exact CODE approval for c15 and5e, then integrate the reviewed slices; no protected exact review yet.
+- [ ] Production installer must cover the original17 missing publication prerequisites plus the isolation successor (18 in total), with real first-install/ACL/trigger/rollback checks and precise destructive-SQL exceptions. New successor alone is not an install path.
+- [ ] Full protected review/external runner recovery, genuine AUO+EMC author/reviewer flow, positive published-v2 visual acceptance, main merge/deploy and schedule/five actual trading days remain unfinished.
+
+Evidence: `.agent/reports/2026-10-11T04-37-admission-isolation/receipt.json`. Strategy identity regeneration remains a536... because model-admission routines are outside current signal-execution roots; this is not approval of the new release. All new release authorization still binds exact Git code and genuine independent evidence. Frozen integration51a and production are unchanged.
+
+
+### Same-day independent repair follow-up
+
+Original c15 scoped CODE review requested changes: body-only precondition allowed an attribute-only SECURITY INVOKER installation to silently restore SECURITY DEFINER. Successor887355ca checks all replace-sensitive semantic attributes before any9-function replacement. Eight attribute-only regressions preserve the original RED; final maker21/21zero skip, independent21/21scoped CODE PASS and normal Mac build PASS. Intermediate PostgreSQL metadata encoding failures and timeout cancellation remain visible in `.agent/reports/2026-10-11T04-49-admission-attributes/receipt.json`; old13-case receipt is not rewritten. This completes the bounded admission repair, not full production migration approval.
+
+Exact5e Linux VM now passes six script files81/81 and the6 previously PG-path-failed PCR parents6/6, allzero skip. Root verifies19raw/43142bytes. Full Linux PCR remains incomplete: current Playwright binary missing and original2browser-error root cause unproved. Existing VM is idle; no duplicate job started. PR359 product-runtime/diagnostic are SUCCESS on5e; requirements/architecture/exact-review/root remain FAILURE for genuine evidence gaps.
+
+### Linux admission isolation acceptance (2026-10-11T05:28Z)
+
+- [x] Preserve first actual Linux run1e0c:4PASS/1FAIL/zero skip. Seven whole predecessors and successor installed on a synthetic partial profile, but pg8.18 client could not connect because the external runner omitted USER. Root verified31raw/18303bytes; no claim of concurrency PASS from that run.
+- [x] Correct only external runner USER from the effective OS account; no source, SQL, guard, budget, test or dependency changes. Actual no-connection preflight confirms OS username and pg startup user match. One new exact887 invocation passes21/21zero skip (18 nested cases plus3 parents), including real two-client isolation/serialization and altered-function preconditions.
+- [x] Root verifies evidence345a284cc7a12a923bc83f98aecc8188ea87138c against exact887tree, all26raw/17815bytes and originalRED receipt hash. VM idle, owned processes stopped. Sampled RSS295MB/free10.08GB within engineering limits; no build, model dispatch or production writes in this run.
+- [ ] Complete production installer/profile and full protected release acceptance. This bounded Linux PASS does not satisfy full Linux PCR, real author/reviewer research, production installation, merge, deploy, strategy effectiveness or schedule acceptance.

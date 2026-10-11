@@ -1,0 +1,246 @@
+TAP version 13
+# Subtest: successor installs exact RC admission guards; real PG connections conserve global and weekly quotas
+    # Subtest: missing predecessor rejects atomically instead of manufacturing functions
+    ok 1 - missing predecessor rejects atomically instead of manufacturing functions
+      ---
+      duration_ms: 28.7165
+      ...
+    # Subtest: nine installed bodies change only by first-statement guard; owner ACL and attributes survive retry
+    ok 2 - nine installed bodies change only by first-statement guard; owner ACL and attributes survive retry
+      ---
+      duration_ms: 54.390458
+      ...
+    # Subtest: actual stale RR snapshot cannot add a second lease; RC replay, exclusion and release remain
+    ok 3 - actual stale RR snapshot cannot add a second lease; RC replay, exclusion and release remain
+      ---
+      duration_ms: 6.198667
+      ...
+    # Subtest: concurrent RC callers serialize before counting and retain 1800/7200 shared budget
+    ok 4 - concurrent RC callers serialize before counting and retain 1800/7200 shared budget
+      ---
+      duration_ms: 35.921583
+      ...
+    # Subtest: REPEATABLE READ rejects every admission RPC including replay and empty queues without writes
+    ok 5 - REPEATABLE READ rejects every admission RPC including replay and empty queues without writes
+      ---
+      duration_ms: 21.610375
+      ...
+    # Subtest: SERIALIZABLE rejects every admission RPC including replay and empty queues without writes
+    ok 6 - SERIALIZABLE rejects every admission RPC including replay and empty queues without writes
+      ---
+      duration_ms: 22.291875
+      ...
+    # Subtest: REPEATABLE READ actual job INSERT rejects in both independent triggers
+    ok 7 - REPEATABLE READ actual job INSERT rejects in both independent triggers
+      ---
+      duration_ms: 53.9535
+      ...
+    # Subtest: SERIALIZABLE actual job INSERT rejects in both independent triggers
+    ok 8 - SERIALIZABLE actual job INSERT rejects in both independent triggers
+      ---
+      duration_ms: 58.2085
+      ...
+    # Subtest: two RC connections competing for fifth weekly slot cannot charge a sixth issuer
+    ok 9 - two RC connections competing for fifth weekly slot cannot charge a sixth issuer
+      ---
+      duration_ms: 36.629417
+      ...
+    # Subtest: attribute-only SECURITY INVOKER alteration rejects before any replacement
+    not ok 10 - attribute-only SECURITY INVOKER alteration rejects before any replacement
+      ---
+      duration_ms: 126.289166
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+      failureType: 'testCodeFailure'
+      error: 'Missing expected exception.'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      operator: 'throws'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:172:18)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: attribute-only search_path alteration rejects before any replacement
+    not ok 11 - attribute-only search_path alteration rejects before any replacement
+      ---
+      duration_ms: 128.100041
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+      failureType: 'testCodeFailure'
+      error: 'Missing expected exception.'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      operator: 'throws'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:172:18)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: attribute-only volatility alteration rejects before any replacement
+    not ok 12 - attribute-only volatility alteration rejects before any replacement
+      ---
+      duration_ms: 122.955
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+      failureType: 'testCodeFailure'
+      error: 'Missing expected exception.'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      operator: 'throws'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:172:18)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: attribute-only strict alteration rejects before any replacement
+    not ok 13 - attribute-only strict alteration rejects before any replacement
+      ---
+      duration_ms: 127.248334
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+      failureType: 'testCodeFailure'
+      error: 'Missing expected exception.'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      operator: 'throws'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:172:18)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: attribute-only leakproof alteration rejects before any replacement
+    not ok 14 - attribute-only leakproof alteration rejects before any replacement
+      ---
+      duration_ms: 130.696292
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+      failureType: 'testCodeFailure'
+      error: 'Missing expected exception.'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      operator: 'throws'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:172:18)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: attribute-only parallel alteration rejects before any replacement
+    not ok 15 - attribute-only parallel alteration rejects before any replacement
+      ---
+      duration_ms: 125.925166
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+      failureType: 'testCodeFailure'
+      error: 'Missing expected exception.'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      operator: 'throws'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:172:18)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: attribute-only cost alteration rejects before any replacement
+    not ok 16 - attribute-only cost alteration rejects before any replacement
+      ---
+      duration_ms: 126.103
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+      failureType: 'testCodeFailure'
+      error: 'Missing expected exception.'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      operator: 'throws'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:172:18)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: attribute-only rows alteration rejects before any replacement
+    not ok 17 - attribute-only rows alteration rejects before any replacement
+      ---
+      duration_ms: 127.780208
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+      failureType: 'testCodeFailure'
+      error: 'Missing expected exception.'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      operator: 'throws'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:172:18)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: changed predecessor rejects before replacing any of the other eight routines
+    ok 18 - changed predecessor rejects before replacing any of the other eight routines
+      ---
+      duration_ms: 82.212125
+      ...
+    1..18
+not ok 1 - successor installs exact RC admission guards; real PG connections conserve global and weekly quotas
+  ---
+  duration_ms: 2324.152125
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:16:1'
+  failureType: 'subtestsFailed'
+  error: '8 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 19
+# suites 0
+# pass 10
+# fail 9
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2403.825333

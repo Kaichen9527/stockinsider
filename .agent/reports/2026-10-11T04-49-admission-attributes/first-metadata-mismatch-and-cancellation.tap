@@ -1,0 +1,302 @@
+TAP version 13
+# Subtest: successor installs exact RC admission guards; real PG connections conserve global and weekly quotas
+    # Subtest: missing predecessor rejects atomically instead of manufacturing functions
+    not ok 1 - missing predecessor rejects atomically instead of manufacturing functions
+      ---
+      duration_ms: 22.877334
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:36:15'
+      failureType: 'testCodeFailure'
+      error: |-
+        The input did not match the regular expression /research_admission_predecessor_missing/. Input:
+        
+        'Error: Command failed: /opt/homebrew/Cellar/postgresql@17/17.10/bin/psql -X -v ON_ERROR_STOP=1 -h /var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-admission-u4jFVp -p 55899 -d postgres -f /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/migrations/20261011_research_admission_isolation_v1.sql\n' +
+          'psql:/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/migrations/20261011_research_admission_isolation_v1.sql:40: ERROR:  research_admission_predecessor_changed: public.reserve_research_model_v1(text,text,text)\n' +
+          'CONTEXT:  PL/pgSQL function inline_code_block line 33 at RAISE\n'
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      actual:
+      error: |-
+        Command failed: /opt/homebrew/Cellar/postgresql@17/17.10/bin/psql -X -v ON_ERROR_STOP=1 -h /var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-admission-u4jFVp -p 55899 -d postgres -f /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/migrations/20261011_research_admission_isolation_v1.sql
+        psql:/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/migrations/20261011_research_admission_isolation_v1.sql:40: ERROR:  research_admission_predecessor_changed: public.reserve_research_model_v1(text,text,text)
+        CONTEXT:  PL/pgSQL function inline_code_block line 33 at RAISE
+        
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        checkExecSyncError (node:child_process:882:11)
+        execFileSync (node:child_process:918:15)
+        run (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:20:33)
+        install (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:35:31)
+        file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:38:29
+        getActual (node:assert:840:5)
+        Function.throws (node:assert:986:24)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:38:16)
+      operator: 'throws'
+      stack: |-
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:38:16)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        TestContext.test (node:internal/test_runner/test:307:20)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:36:15)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+        startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+      ...
+    # Subtest: nine installed bodies change only by first-statement guard; owner ACL and attributes survive retry
+    not ok 2 - nine installed bodies change only by first-statement guard; owner ACL and attributes survive retry
+      ---
+      duration_ms: 24.544917
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:52:15'
+      failureType: 'testCodeFailure'
+      error: |-
+        Command failed: /opt/homebrew/Cellar/postgresql@17/17.10/bin/psql -X -v ON_ERROR_STOP=1 -h /var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-admission-u4jFVp -p 55899 -d postgres -f /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/migrations/20261011_research_admission_isolation_v1.sql
+        psql:/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/migrations/20261011_research_admission_isolation_v1.sql:40: ERROR:  research_admission_predecessor_changed: public.reserve_research_model_v1(text,text,text)
+        CONTEXT:  PL/pgSQL function inline_code_block line 33 at RAISE
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        genericNodeError (node:internal/errors:983:15)
+        wrappedFn (node:internal/errors:537:14)
+        checkExecSyncError (node:child_process:882:11)
+        execFileSync (node:child_process:918:15)
+        run (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:20:33)
+        install (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:35:31)
+        TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:53:71)
+        Test.runInAsyncScope (node:async_hooks:211:14)
+        Test.run (node:internal/test_runner/test:979:25)
+        Test.start (node:internal/test_runner/test:877:17)
+      ...
+    # Subtest: actual stale RR snapshot cannot add a second lease; RC replay, exclusion and release remain
+    not ok 3 - actual stale RR snapshot cannot add a second lease; RC replay, exclusion and release remain
+      ---
+      duration_ms: 10.879542
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:64:15'
+      failureType: 'testCodeFailure'
+      error: 'Missing expected rejection.'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+        message: 'research_admission_read_committed_required'
+      operator: 'rejects'
+      stack: |-
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:68:9)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:64:7)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: concurrent RC callers serialize before counting and retain 1800/7200 shared budget
+    not ok 4 - concurrent RC callers serialize before counting and retain 1800/7200 shared budget
+      ---
+      duration_ms: 44125.680875
+      location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:77:15'
+      failureType: 'cancelledByParent'
+      error: 'test did not finish before its parent and was cancelled'
+      code: 'ERR_TEST_FAILURE'
+      ...
+    1..4
+not ok 1 - successor installs exact RC admission guards; real PG connections conserve global and weekly quotas
+  ---
+  duration_ms: 45000.952458
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:16:1'
+  failureType: 'testTimeoutFailure'
+  error: 'test timed out after 45000ms'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: REPEATABLE READ rejects every admission RPC including replay and empty queues without writes
+not ok 2 - REPEATABLE READ rejects every admission RPC including replay and empty queues without writes
+  ---
+  duration_ms: 22.64675
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:105:76'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:105:76)
+  ...
+# Subtest: SERIALIZABLE rejects every admission RPC including replay and empty queues without writes
+not ok 3 - SERIALIZABLE rejects every admission RPC including replay and empty queues without writes
+  ---
+  duration_ms: 10.391458
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:105:76'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:105:76)
+  ...
+# Subtest: REPEATABLE READ actual job INSERT rejects in both independent triggers
+not ok 4 - REPEATABLE READ actual job INSERT rejects in both independent triggers
+  ---
+  duration_ms: 0.592584
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:126:74'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:126:74)
+  ...
+# Subtest: SERIALIZABLE actual job INSERT rejects in both independent triggers
+not ok 5 - SERIALIZABLE actual job INSERT rejects in both independent triggers
+  ---
+  duration_ms: 0.753916
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:126:74'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:126:74)
+  ...
+# Subtest: two RC connections competing for fifth weekly slot cannot charge a sixth issuer
+not ok 6 - two RC connections competing for fifth weekly slot cannot charge a sixth issuer
+  ---
+  duration_ms: 12.398459
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:139:15'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:139:15)
+  ...
+# Subtest: attribute-only SECURITY INVOKER alteration rejects before any replacement
+not ok 7 - attribute-only SECURITY INVOKER alteration rejects before any replacement
+  ---
+  duration_ms: 155.271334
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+  ...
+# Subtest: attribute-only search_path alteration rejects before any replacement
+not ok 8 - attribute-only search_path alteration rejects before any replacement
+  ---
+  duration_ms: 154.267583
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+  ...
+# Subtest: attribute-only volatility alteration rejects before any replacement
+not ok 9 - attribute-only volatility alteration rejects before any replacement
+  ---
+  duration_ms: 153.698625
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+  ...
+# Subtest: attribute-only strict alteration rejects before any replacement
+not ok 10 - attribute-only strict alteration rejects before any replacement
+  ---
+  duration_ms: 141.238959
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+  ...
+# Subtest: attribute-only leakproof alteration rejects before any replacement
+not ok 11 - attribute-only leakproof alteration rejects before any replacement
+  ---
+  duration_ms: 141.676416
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+  ...
+# Subtest: attribute-only parallel alteration rejects before any replacement
+not ok 12 - attribute-only parallel alteration rejects before any replacement
+  ---
+  duration_ms: 160.412916
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+  ...
+# Subtest: attribute-only cost alteration rejects before any replacement
+not ok 13 - attribute-only cost alteration rejects before any replacement
+  ---
+  duration_ms: 148.434083
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+  ...
+# Subtest: attribute-only rows alteration rejects before any replacement
+not ok 14 - attribute-only rows alteration rejects before any replacement
+  ---
+  duration_ms: 139.75425
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:166:18)
+  ...
+# Subtest: changed predecessor rejects before replacing any of the other eight routines
+not ok 15 - changed predecessor rejects before replacing any of the other eight routines
+  ---
+  duration_ms: 71.753875
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:179:15'
+  failureType: 'parentAlreadyFinished'
+  error: 'test could not be started because its parent finished'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-admission-isolation-postgres.test.mjs:179:15)
+  ...
+# Subtest: cross-role budget, revision heads and first-discovery gaps survive real PostgreSQL
+not ok 16 - cross-role budget, revision heads and first-discovery gaps survive real PostgreSQL
+  ---
+  duration_ms: 1033.69625
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-source-budget-postgres.test.mjs:16:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: /opt/homebrew/Cellar/postgresql@17/17.10/bin/psql -X -v ON_ERROR_STOP=1 -h /var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/stockinsider-source-budget-ADmBRT -p 56900 -d postgres -f /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/migrations/20261011_research_admission_isolation_v1.sql
+    psql:/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/migrations/20261011_research_admission_isolation_v1.sql:40: ERROR:  research_admission_predecessor_changed: public.reserve_research_model_v1(text,text,text)
+    CONTEXT:  PL/pgSQL function inline_code_block line 33 at RAISE
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    genericNodeError (node:internal/errors:983:15)
+    wrappedFn (node:internal/errors:537:14)
+    checkExecSyncError (node:child_process:882:11)
+    execFileSync (node:child_process:918:15)
+    run (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-source-budget-postgres.test.mjs:20:35)
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/scripts/research-source-budget-postgres.test.mjs:47:9)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+ok 17 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 1417.134375
+  ...
+1..17
+# tests 21
+# suites 0
+# pass 1
+# fail 18
+# cancelled 2
+# skipped 0
+# todo 0
+# duration_ms 46561.323166

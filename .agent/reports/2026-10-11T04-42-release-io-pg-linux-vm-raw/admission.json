@@ -1,0 +1,41 @@
+{
+  "manualStart": "2026-10-11T04:32:38Z",
+  "manualDeadline": "2026-10-11T05:02:38Z",
+  "admittedAt": "2026-10-11T04:35:25.854070+00:00",
+  "sourceHead": "5e3ee67bc2afe07ac7653743d227318aed77f6d8",
+  "sourceTree": "ab842cf0346780dd9a6224b515af65edf1e52286",
+  "node": "22.14.0",
+  "npm": "11.9.0",
+  "umask": "0077",
+  "PG": {
+    "initdb": {
+      "exit": 0,
+      "stdout": "initdb (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": ""
+    },
+    "pg_ctl": {
+      "exit": 0,
+      "stdout": "pg_ctl (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": ""
+    },
+    "psql": {
+      "exit": 0,
+      "stdout": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": ""
+    },
+    "postgres": {
+      "exit": 0,
+      "stdout": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+      "stderr": ""
+    }
+  },
+  "libraryNotFound": false,
+  "libraryPaths": "existing /lib/x86_64-linux-gnu and system loader, no LD_LIBRARY_PATH override needed",
+  "PATHAddedPG": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "dependencyInstall": false,
+  "diskAvailableBytes": 10081718272,
+  "fullPCRNotAdmitted": true,
+  "browserDefaultExecutableMissing": "/home/agent/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome",
+  "oldBrowserDetailsUnrecoverableFromRetainedLastRunIDs": true
+}

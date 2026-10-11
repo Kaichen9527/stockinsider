@@ -1,0 +1,50 @@
+{
+  "rootCause": "External evidence runner omitted non-secret USER; pg8.18 defaults rely on process.env.USER on Linux. psql used OS username and succeeded, while new JS pg Client sent empty startup user. This is VM test-environment omission, not a demonstrated RC guard defect.",
+  "actualLibrary": "/workspace/stockinsider/node_modules/pg/lib/defaults.js",
+  "actualLibraryBytes": 2506,
+  "actualLibrarySha256": "a1f91cc76d2f045a6a44297373249acc1d6afd734020073b8a147fe1a1446d9a",
+  "actualLibraryRelevantLines": [
+    {
+      "line": 5,
+      "text": "  user = process.platform === 'win32' ? process.env.USERNAME : process.env.USER"
+    }
+  ],
+  "noConnectionDiagnostic": [
+    {
+      "label": "executed-environment",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "-e",
+        "const {Client}=require('pg'); const p=new Client({host:'/tmp/unused-diagnostic-socket',port:55000,database:'postgres',options:'-c statement_timeout=5000'}).connectionParameters; console.log(JSON.stringify({platform:process.platform,userEnvPresent:typeof process.env.USER==='string',pgUser:p.user===undefined?null:p.user,database:p.database}));"
+      ],
+      "exitCode": 0,
+      "observation": {
+        "platform": "linux",
+        "userEnvPresent": false,
+        "pgUser": null,
+        "database": "postgres"
+      },
+      "databaseConnectionMade": false,
+      "suiteRerun": false
+    },
+    {
+      "label": "diagnostic-only-os-username",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "-e",
+        "const {Client}=require('pg'); const p=new Client({host:'/tmp/unused-diagnostic-socket',port:55000,database:'postgres',options:'-c statement_timeout=5000'}).connectionParameters; console.log(JSON.stringify({platform:process.platform,userEnvPresent:typeof process.env.USER==='string',pgUser:p.user===undefined?null:p.user,database:p.database}));"
+      ],
+      "exitCode": 0,
+      "observation": {
+        "platform": "linux",
+        "userEnvPresent": true,
+        "pgUser": "agent",
+        "database": "postgres"
+      },
+      "databaseConnectionMade": false,
+      "suiteRerun": false
+    }
+  ],
+  "correctedSuiteExecuted": false,
+  "minimalNextEnvironmentCorrection": "Preserve the non-secret OS-derived USER for Node pg Client before a separately authorized run; no test/source/security changes required."
+}
