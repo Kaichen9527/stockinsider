@@ -1,0 +1,349 @@
+{
+  "schemaVersion": "bounded-linux-engineering-receipt-v1",
+  "recordedAt": "2026-10-11T06:53:01.753543+00:00",
+  "task": "Reviewed existing VPS schema-only full migration chain Linux acceptance",
+  "source": {
+    "artifactRoot": "/tmp/si-1a0043-xnjz9wc1",
+    "user": "agent",
+    "node": "v22.14.0",
+    "pgConfigBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "nativeExecutable": {
+      "initdb": true,
+      "pg_ctl": true,
+      "psql": true,
+      "postgres": true
+    },
+    "head": "1a0043f2656b63d54062224d1befeab761f554a3",
+    "tree": "548ec17b1d8801ecb7f2e4c5635199aacd9989b2",
+    "webtree": "09248604b3efc6e30e029bad864915268067827b",
+    "lockSha": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "pgDependency": "{\"version\":\"8.18.0\",\"user\":\"agent\"}",
+    "diskAvailable": 10078404608
+  },
+  "branch": "codex/research-installer-linux-evidence-oct11",
+  "manualWindow": {
+    "startedAt": "2026-10-11T06:47:45.500281Z",
+    "hardStopAt": "2026-10-11T07:17:30Z",
+    "commandGuardStopAt": "2026-10-11T07:17:10Z",
+    "note": "One human-authorized manual engineering increment, not application reservation/lease or model role budget proof."
+  },
+  "admission": {
+    "noActiveHeavyAtStart": true,
+    "startObservationAt": "2026-10-11T06:47:45.500281Z",
+    "diskAvailableBeforeBytes": 10080079872,
+    "memAvailableKiB": 33294132,
+    "minimumDiskReserveBytes": 8589934592,
+    "aggregateRssLimitBytes": 8589934592
+  },
+  "counts": {
+    "tests": 22,
+    "pass": 22,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0
+  },
+  "testSelection": "Eight original files; 15 top-level TAP cases plus 7 nested cases =22, all selected cases ran, zero skip. Includes actual native PG17 full chain and HBA loaded-rule probes; not 22 separate PostgreSQL scenarios.",
+  "installation": {
+    "baseline": "Captured real existing VPS schema-only fixture, zero production data rows, no synthetic prerequisite table/RPC stubs",
+    "selectedMigrations": 73,
+    "appliedMigrations": 72,
+    "supersededMigrations": 1,
+    "catalogStages": [
+      "beforeBase",
+      "beforePublication",
+      "installed"
+    ],
+    "threeFixedCatalogStagesVerified": true,
+    "nativePeerProbe": "Own local cluster disk HBA vs actual loaded rule rejection only; no real VPS connection or production peer acceptance",
+    "operatorRoleAmendment": "Test-only original explicit amendment, rollback/repeat checks in disposable cluster; no production role change"
+  },
+  "stages": [
+    {
+      "stage": "installer-eight",
+      "command": [
+        "node",
+        "--test",
+        "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+        "scripts/research-agent-migration-gate.test.mjs",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+        "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+        "scripts/opportunity-v3/research-publication-install-guard.test.mjs",
+        "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+        "scripts/opportunity-v3/vps-migration-peer.test.mjs",
+        "scripts/research-strategy-release.test.mjs"
+      ],
+      "startedAt": "2026-10-11T06:50:14.806282+00:00",
+      "endedAt": "2026-10-11T06:50:22.690015+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 7.883742684964091,
+      "sampledAggregatePeakRssBytes": 304812032,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10078420992,
+      "diskAvailableAfterBytes": 10078420992,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T06:50:34.346342+00:00",
+      "endedAt": "2026-10-11T06:50:52.578574+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 18.23224137001671,
+      "sampledAggregatePeakRssBytes": 1416351744,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10078420992,
+      "diskAvailableAfterBytes": 10078420992,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T06:51:04.439884+00:00",
+      "endedAt": "2026-10-11T06:51:29.413327+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 24.97345247399062,
+      "sampledAggregatePeakRssBytes": 1152368640,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10078420992,
+      "diskAvailableAfterBytes": 10078420992,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T06:51:40.390107+00:00",
+      "endedAt": "2026-10-11T06:51:57.070241+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 16.680140179989394,
+      "sampledAggregatePeakRssBytes": 1407242240,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10078420992,
+      "diskAvailableAfterBytes": 10073673728,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    }
+  ],
+  "build": {
+    "source": "1a0043f2656b63d54062224d1befeab761f554a3",
+    "tree": "548ec17b1d8801ecb7f2e4c5635199aacd9989b2",
+    "webTree": "09248604b3efc6e30e029bad864915268067827b",
+    "compiler": "normal npm --prefix web run build (Turbopack)",
+    "buildId": "fJ0R7tfMtL8-Zi-2S8R9c",
+    "compiledServerFiles": 2092,
+    "compiledServerLogicalBytes": 67529160,
+    "manifestSha256": "92c8baebe00c2840f42a758f97e4956b191eaae8812a71c7f458fc6d85ca3e42",
+    "node": "v22.14.0",
+    "nextVersion": "16.3.8",
+    "npmVersion": "11.9.0",
+    "prebuildScriptExecuted": true
+  },
+  "environment": {
+    "osDerivedUser": "agent",
+    "pgVersion": "17.11 (Debian 17.11-0+deb13u1)",
+    "pgDependencyVersion": "8.18.0",
+    "rootLockMatchesRequestedPin": true,
+    "privateTempRoot": "/tmp/si-1a0043-xnjz9wc1",
+    "processUmask": "0077",
+    "networkPolicy": "Existing configured proxy/CA passed unchanged to children; no proxy/CA values exported",
+    "noNewDependencies": true,
+    "clock": "Original real clock, no LD_PRELOAD/library clock override",
+    "credentials": "No production secret values or .env contents read/exported; no production connection",
+    "notes": [
+      "No HOME change",
+      "No changed source, migration, profile, manifest, assertions, timeouts or guards"
+    ]
+  },
+  "resources": {
+    "sampledAggregatePeakRssBytes": 1416351744,
+    "lowestObservedDiskAvailableBytes": 10073673728,
+    "method": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "limitations": "100ms process group/descendant sampling may miss short-lived or reparented children; GNU time -v also retained per stage. No cgroup peak claim."
+  },
+  "cleanup": {
+    "observedAt": "2026-10-11T06:52:24.464802+00:00",
+    "activeRelevantProcesses": [],
+    "testOwnedClusterDirectoriesRemaining": {
+      "si-full-chain-*": [],
+      "si-hba-probe-*": []
+    },
+    "sourceStatus": {
+      "git rev-parse HEAD": "1a0043f2656b63d54062224d1befeab761f554a3",
+      "git rev-parse HEAD^{tree}": "548ec17b1d8801ecb7f2e4c5635199aacd9989b2",
+      "git rev-parse HEAD:web": "09248604b3efc6e30e029bad864915268067827b",
+      "git status --porcelain": ""
+    },
+    "diskAvailableBytes": 10073657344,
+    "cleanupMethod": "Original native test finally blocks stopped their owned clusters and removed owned temporary directories; observer confirms no live node/postgres/npm and no test-prefix directories. No external deletion or broad prune."
+  },
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/before-build-inventory.json",
+      "bytes": 221,
+      "sha256": "2a7efffee4822b5e97dfec7878505e92e952d7f0bf383d8f1310eac6fa95ecbf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/build-identity.json",
+      "bytes": 541,
+      "sha256": "b850986e74a7bccb99795b21fd9ac2a37f3807a4fe0af8b61e69ea2b034e4cb7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/cleanup.json",
+      "bytes": 746,
+      "sha256": "89fd48336f7f7918225a99dfacc91e3a57faf57b61af7d3b4ebdd0c44a49a67c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/compiled-server-manifest.json",
+      "bytes": 387757,
+      "sha256": "92c8baebe00c2840f42a758f97e4956b191eaae8812a71c7f458fc6d85ca3e42"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/installer-eight.json",
+      "bytes": 1106,
+      "sha256": "3044f7bfe495478b7135ee5b4e7c6afd1afbdd6351714076681c74793bb6603c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/installer-eight.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/installer-eight.stdout",
+      "bytes": 5166,
+      "sha256": "7907fb0c5e288941dd2e63bf4e7755ea82b38081193d5d9f4599474b168b5f2e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/installer-eight.time",
+      "bytes": 1174,
+      "sha256": "0c62849b90bddab467a1f04cca31b1059ef2795760467a4f04d58bdd0d668269"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/lint.json",
+      "bytes": 637,
+      "sha256": "426fdd2a5159507f11167be324c691455f98667924e4b858c86654f29a94b414"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/lint.stderr",
+      "bytes": 165,
+      "sha256": "53ff59b476fd010d11fef53ad7aa4ce767f0d66ecdf81f0beb2574e64d3cf653"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/lint.stdout",
+      "bytes": 4588,
+      "sha256": "f87ea0d0119a73ea1de32052bea45d673cf13f72999e57cd44ae707acb4433cb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/lint.time",
+      "bytes": 756,
+      "sha256": "f994bdf0b90b8c7255d9863a912d9abc5e203dd79274207b020968926e361a04"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/migration-plan.json",
+      "bytes": 17653,
+      "sha256": "08fd5d55e3db6f9d41144f0a09a76eb0a8789c79d34e362d535e49db2d644e1c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/normal-build.json",
+      "bytes": 647,
+      "sha256": "b82b41333809f305471bade6fd56c37a2a65d83d9000b37722946b0df500b595"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/normal-build.stdout",
+      "bytes": 6498,
+      "sha256": "0291217e37e5ff517b34d39e3a0bcd1ff0073f9a5e4663a1fd17fde68d002a79"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/normal-build.time",
+      "bytes": 759,
+      "sha256": "db9ec14c1ed7925583589d69b726f7af40ebe2a9a6ab50e4702526200fcc5c9d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/preflight.json",
+      "bytes": 696,
+      "sha256": "d6dd329095bd0d57335c5dfe65f2af05ed0ef465f2abec94f3668203d464fbad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/run.py",
+      "bytes": 3382,
+      "sha256": "c019039aef23ee56ed20f30cd59a75662a9e167f863961d6b898828a61953068"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/source-manifest.json",
+      "bytes": 19986,
+      "sha256": "6ab03ee138811b38c1e1b8afdc1b7f2574a8b4dc98bd374510a31363ff328d05"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/typecheck.json",
+      "bytes": 647,
+      "sha256": "ded5ec86789d73299476b51adff29934173fe4558e492ed5e35c68b15e3ec72b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-47-research-installer-linux/typecheck.time",
+      "bytes": 759,
+      "sha256": "ef09c87433b37afb7640c5774710c1a2ca76e7b3f9a41a239b909a2c76900c71"
+    }
+  ],
+  "rawTotalBytes": 454072,
+  "remainingScope": [
+    "Independent exact evidence review by root",
+    "Protected full exact-review/attestation authority",
+    "Actual production prerequisite and migration/deployment acceptance",
+    "Real author/reviewer/model roundtrip and product research/strategy/entry acceptance"
+  ],
+  "authority": {
+    "engineeringAcceptanceOnly": true,
+    "protectedPassed": false,
+    "productionInstalled": false,
+    "productionPeerAccepted": false,
+    "modelsDispatched": false,
+    "researchQualified": false,
+    "strategyApproved": false,
+    "entryEligible": false
+  },
+  "priorEvidence": "Earlier empty-PG auth-schema RED and all prior RED remain immutable on their previous evidence branches; not rerun or overwritten."
+}

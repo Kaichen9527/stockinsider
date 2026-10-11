@@ -1,0 +1,23 @@
+	Command being timed: "node --test scripts/opportunity-v3/migration-sql-policy.test.mjs scripts/research-agent-migration-gate.test.mjs scripts/opportunity-v3/atomic-migration-chain.test.mjs scripts/opportunity-v3/migration-successor-guard.test.mjs scripts/opportunity-v3/research-publication-install-guard.test.mjs scripts/opportunity-v3/research-publication-full-chain.test.mjs scripts/opportunity-v3/vps-migration-peer.test.mjs scripts/research-strategy-release.test.mjs"
+	User time (seconds): 8.46
+	System time (seconds): 1.37
+	Percent of CPU this job got: 127%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:07.74
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 167132
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 561937
+	Voluntary context switches: 5700
+	Involuntary context switches: 1755
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
