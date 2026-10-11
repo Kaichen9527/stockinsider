@@ -127,5 +127,11 @@
       "bytes": 2611,
       "sha256": "45e5f83244f701205117d3b67beda30380bb3f5aca477087d175b0253d187e73"
     }
-  ]
+  ],
+  "finalHeadOrdinaryProductCI": {
+    "run": 38151644863,
+    "subject": "5b8a5c57e13079b76614235a762b7894914e7e86",
+    "status": "SUCCESS",
+    "authority": "ordinary diagnostic only; protected gate not approved"
+  }
 }
