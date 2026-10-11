@@ -1,0 +1,371 @@
+{
+  "schemaVersion": "research-budget-fixture-linux-evidence-v1",
+  "sourceIdentity": {
+    "head": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+    "parent": "e0885815b39f86df34763279dc5fc22e54037a40",
+    "tree": "166839f04519463ac9f8b0531c620eedddf9ca8c",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "node": "v22.14.0",
+    "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "pgConfigBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "nativeToolsExecutable": {
+      "initdb": true,
+      "pg_ctl": true,
+      "psql": true,
+      "postgres": true
+    },
+    "pgClient": {
+      "version": "8.18.0",
+      "user": "agent"
+    },
+    "osUser": "agent",
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "diskAvailableBytes": 10046193664,
+    "sourceStatus": "",
+    "admissionAt": "2026-10-11T07:56:27.755589Z",
+    "manualHardStopAt": "2026-10-11T08:16:27Z",
+    "memoryAvailableKiB": 33208964,
+    "activeHeavyAtAdmission": []
+  },
+  "scope": {
+    "evidenceOnly": true,
+    "fixedSourceUnmodified": true,
+    "onlySourceDelta": "source-budget test fixture adds original thesis-isolation migration",
+    "manualEngineeringNotModelBudget": true,
+    "budgetMinutes": 20,
+    "hardStopAt": "2026-10-11T08:16:27Z",
+    "noBrowserPCRCI03OrNewLibrary": true,
+    "noProductionOrModelsOrStrategyApproval": true,
+    "protectedApproval": false
+  },
+  "independentReviewAttribution": {
+    "providedByRoot": true,
+    "codeReceiptSha256": "0bc2c00c376ecd5caba40ede1c4de659938b798ca5a38cbda2614f20c837f6ae",
+    "notVMIndependentReview": true
+  },
+  "testResult": {
+    "counts": {
+      "tests": 818,
+      "pass": 816,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "skips": [
+      "ok 350 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled",
+      "ok 351 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled"
+    ],
+    "originalPackageSelectionFiles": 78,
+    "originalScriptEquivalentInvocation": "bash saved literal package script, only --test-concurrency=1 inserted; no lifecycle hooks present",
+    "noAssertFileGlobOrTestNameChanges": true
+  },
+  "stages": [
+    {
+      "stage": "research-agents-serial",
+      "command": [
+        "bash",
+        "/tmp/si-d6-lpzhalmy/research-agents-serial.sh"
+      ],
+      "startedAt": "2026-10-11T07:57:53.798143+00:00",
+      "endedAt": "2026-10-11T08:00:25.153812+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 151.35567895899294,
+      "sampledAggregatePeakRssBytes": 636829696,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10046193664,
+      "diskAvailableAfterBytes": 10046193664,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T08:00:41.683313+00:00",
+      "endedAt": "2026-10-11T08:00:44.860485+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 3.177180324040819,
+      "sampledAggregatePeakRssBytes": 571416576,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10046193664,
+      "diskAvailableAfterBytes": 10046193664,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T08:01:00.804436+00:00",
+      "endedAt": "2026-10-11T08:01:24.814386+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 24.00997695699334,
+      "sampledAggregatePeakRssBytes": 1472049152,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10046193664,
+      "diskAvailableAfterBytes": 10046193664,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T08:01:35.815142+00:00",
+      "endedAt": "2026-10-11T08:01:41.983587+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 6.168453295947984,
+      "sampledAggregatePeakRssBytes": 1252708352,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10046193664,
+      "diskAvailableAfterBytes": 10045378560,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    }
+  ],
+  "build": {
+    "source": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+    "tree": "166839f04519463ac9f8b0531c620eedddf9ca8c",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "buildId": "OHll1S-fj3VxEuEH6fzQs",
+    "node": "v22.14.0",
+    "nextVersion": "16.3.8",
+    "compiler": "normal npm build / Turbopack",
+    "prebuildVerified": true,
+    "serverManifestSha256": "7de42f2ac3e18242022ecd28603c8b8d31fee42774dde69bbdfd8ae93914a2c0",
+    "serverFileCount": 2088,
+    "serverLogicalBytes": 67439593,
+    "previousE088": {
+      "buildId": "Bv6FW39iE9II6pvbC4qtm",
+      "serverFileCount": 2088,
+      "serverManifestSha256": "e01c8ade6ccd5f075abb5582d2a29ac42b55036d1e6f8f16da2161028b79ad45",
+      "sameWebTree": true,
+      "newBuildExecuted": true,
+      "notReusedBuild": true
+    }
+  },
+  "sourceManifestFiles": 182,
+  "sourceManifestSha256": "5b3c49feed6a5ee80d82e634553aa8e679c7c4242c0e1e21d6b0599d8a14e771",
+  "sourceComparisonSha256": "c0b7db34102bf8e3fd6d5b7c2cc9b1292bbe8c193558586d16846bab54b28fb8",
+  "priorE088Red": {
+    "evidenceHead": "3777e6b6a571c8755952c6f21a81b7abf4369f39",
+    "receiptSha256": "71945a2f78754086a4f0e0964cc91b1092dedbbf8d74eebcd4796ce4b77383c5",
+    "counts": {
+      "tests": 818,
+      "pass": 815,
+      "fail": 1,
+      "skipped": 2
+    },
+    "preservedNotRelabeled": true,
+    "failure": "source-budget fixture missing thesis-isolation successor produced wrong policy body hash"
+  },
+  "resources": {
+    "sampledAggregatePeakRssBytes": 1472049152,
+    "minimumObservedStageBoundaryDiskBytes": 10045378560,
+    "rssSamplingCaveat": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "diskGuardSampleIntervalMilliseconds": 100,
+    "reserveBytes": 8589934592,
+    "rssGuardBytes": 8589934592
+  },
+  "cleanup": {
+    "checkedAt": "2026-10-11T08:02:49.378518+00:00",
+    "allStagesRemainingObservedChildren": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "liveRelevantProcesses": [],
+    "topLevelTestClusterPidFiles": [],
+    "diskAvailableBytes": 10045378560,
+    "rebuildableCacheAndSyntheticJournalScratchRetainedPrivate": true,
+    "uniqueEvidenceDeleted": false,
+    "noGlobalPrune": true
+  },
+  "limits": [
+    "Two explicit isolated native profiles skipped by original package command; not counted as pass.",
+    "No CI03 because exact reviewed clock library absent; no retry/install/shim.",
+    "No Chromium/full Linux PCR; official CDN403 remains separate capability limitation.",
+    "Isolated synthetic engineering fixtures do not establish actual author/reviewer/model/publication/strategy or protected authority."
+  ],
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/build-identity.json",
+      "bytes": 758,
+      "sha256": "0712204eda00bc21916098d5ac5fab00074eea6ac94f5ce576259f04b75a5a80"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/cleanup.json",
+      "bytes": 365,
+      "sha256": "fda0ea949d674c190b601db02cbeed677c65b8789b2636836b480d2531070b3b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/compiled-server-manifest.json",
+      "bytes": 387190,
+      "sha256": "7de42f2ac3e18242022ecd28603c8b8d31fee42774dde69bbdfd8ae93914a2c0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/finalize.py",
+      "bytes": 6629,
+      "sha256": "d6de91c52a017c794541995820564cfbb2c5357f4d8a689d59c54078ac1fce08"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/lint.json",
+      "bytes": 637,
+      "sha256": "170db9028892658a03349e29397b16dbc00c6a1f7ff7952f446fbbcfe7f4e4c3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/lint.stderr",
+      "bytes": 165,
+      "sha256": "53ff59b476fd010d11fef53ad7aa4ce767f0d66ecdf81f0beb2574e64d3cf653"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/lint.stdout",
+      "bytes": 4588,
+      "sha256": "f87ea0d0119a73ea1de32052bea45d673cf13f72999e57cd44ae707acb4433cb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/lint.time",
+      "bytes": 754,
+      "sha256": "bc7a794365a21f9ab33f89e7bdf41b18a529bbb9459bfae5dd67f761b7b3e7b0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/migration-plan.json",
+      "bytes": 18339,
+      "sha256": "4ddbaffaea712c021bf4c73d67991802450a8dbe5862fe8d56b29986445f8f9f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/normal-build.json",
+      "bytes": 646,
+      "sha256": "1aad01cdf47688cc5016b2deb005f21c631969d0ec8ccad51a4785426ccf6f8a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/normal-build.stdout",
+      "bytes": 6499,
+      "sha256": "cb56efbe1c1f8e77848821be4ee776f3f9d7578024c990a8da7455271200fc68"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/normal-build.time",
+      "bytes": 758,
+      "sha256": "8689208925dd6d5a45a043271b81274ba1acddfc97eca83647c4bd0598f93a11"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/pre-build-identity.json",
+      "bytes": 137,
+      "sha256": "9cd121150ba7ce7361e374cf40acecb75a7ee100110d8b8485bc57c9785f472d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/preflight.json",
+      "bytes": 996,
+      "sha256": "9f1ddbf9cabd42c8de0f2eb320a3d23c5d1f49a708fa2b6fc3c84468693cb4f4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/research-agents-selection.json",
+      "bytes": 11573,
+      "sha256": "d347c8070a094cd03d04d298c67599f918c0c8bb423e73f5f01e81fd57bd84ed"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/research-agents-serial.json",
+      "bytes": 659,
+      "sha256": "876e12e9c76ffeedccaa3b62e6eab5e78e1f29c5dd2632db4184aab31d01c390"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/research-agents-serial.sh",
+      "bytes": 3539,
+      "sha256": "01ba5eb68126201080b0afc95270f4ed17e27b26b2671d490a4b7b0997626d61"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/research-agents-serial.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/research-agents-serial.stdout",
+      "bytes": 261435,
+      "sha256": "a611ac41330f95b130336e089cd11e1b3360f3edd7072d3cea79755af0de345e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/research-agents-serial.time",
+      "bytes": 784,
+      "sha256": "785d4d7238b0c17300f016a047584d6232a7025e530c8a7cdf36f38e6507ac1b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/run.py",
+      "bytes": 3492,
+      "sha256": "5cf832b3cd33e36258f92a35a1b99986b471e11dc245ccc1cdf1730d63f8bf1b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/source-delta.patch",
+      "bytes": 1026,
+      "sha256": "162cf10b3b807da40b3642be1fc06f11d823a86217f90eee6c7fa268107c528e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/source-identity-comparison.json",
+      "bytes": 558,
+      "sha256": "c0b7db34102bf8e3fd6d5b7c2cc9b1292bbe8c193558586d16846bab54b28fb8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/source-manifest.json",
+      "bytes": 32233,
+      "sha256": "5b3c49feed6a5ee80d82e634553aa8e679c7c4242c0e1e21d6b0599d8a14e771"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/test-inventory.json",
+      "bytes": 68015,
+      "sha256": "e568b9f22a3d661508c228c32276feed169c0aa38a4817eeb8865e080585076f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/typecheck.json",
+      "bytes": 646,
+      "sha256": "5fc2af498189d41f01e59773b684c9eb6e26f3c0252b97c7bce3fcdd1050fa2b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-56-research-budget-fixture-linux/typecheck.time",
+      "bytes": 755,
+      "sha256": "cd80c52b6e086abe9ff33299a06a2ed04b43337c12d101cd4442cb715d1b3fe5"
+    }
+  ],
+  "rawFileCount": 30,
+  "rawTotalBytes": 813364,
+  "recordedAt": "2026-10-11T08:02:49.384795+00:00"
+}

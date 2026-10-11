@@ -1,0 +1,14 @@
+diff --git a/scripts/research-source-budget-postgres.test.mjs b/scripts/research-source-budget-postgres.test.mjs
+index 17af356a..6711eb93 100644
+--- a/scripts/research-source-budget-postgres.test.mjs
++++ b/scripts/research-source-budget-postgres.test.mjs
+@@ -43,7 +43,8 @@ test('cross-role budget, revision heads and first-discovery gaps survive real Po
+         '20260929_candidate_dossier_outbox_v6.sql',
+         '20260929_research_agent_state_v1.sql', '20260929_research_deep_jobs_v1.sql',
+         '20261008_research_observed_roster_v1.sql', '20261008_research_observed_priority_v1.sql',
+-        '20261008_research_observed_claim_v2.sql', '20261011_research_admission_isolation_v1.sql']) {
++        '20261008_research_observed_claim_v2.sql', '20261011_research_admission_isolation_v1.sql',
++        '20261011_research_thesis_isolation_v1.sql']) {
+         run('psql', ['-X', '-v', 'ON_ERROR_STOP=1', '-h', temporary, '-p', String(port), '-d', 'postgres',
+           '-f', path.join(root, 'migrations', name)]);
+       }

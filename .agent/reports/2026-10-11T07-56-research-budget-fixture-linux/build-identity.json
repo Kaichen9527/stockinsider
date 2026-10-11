@@ -1,0 +1,21 @@
+{
+  "source": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+  "tree": "166839f04519463ac9f8b0531c620eedddf9ca8c",
+  "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+  "buildId": "OHll1S-fj3VxEuEH6fzQs",
+  "node": "v22.14.0",
+  "nextVersion": "16.3.8",
+  "compiler": "normal npm build / Turbopack",
+  "prebuildVerified": true,
+  "serverManifestSha256": "7de42f2ac3e18242022ecd28603c8b8d31fee42774dde69bbdfd8ae93914a2c0",
+  "serverFileCount": 2088,
+  "serverLogicalBytes": 67439593,
+  "previousE088": {
+    "buildId": "Bv6FW39iE9II6pvbC4qtm",
+    "serverFileCount": 2088,
+    "serverManifestSha256": "e01c8ade6ccd5f075abb5582d2a29ac42b55036d1e6f8f16da2161028b79ad45",
+    "sameWebTree": true,
+    "newBuildExecuted": true,
+    "notReusedBuild": true
+  }
+}
