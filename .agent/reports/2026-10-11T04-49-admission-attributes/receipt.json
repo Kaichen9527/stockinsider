@@ -9,7 +9,7 @@
     "actualCounterexample": "SECURITY INVOKER keeps original body hash; old migration silently restored SECURITY DEFINER",
     "reviewer": "/root/author_input_review_oct08"
   },
-  "fix": "before any replacement verify9 original/successor body hashes and18 semantic attribute fields; preserve original9 guarded function bodies, owner and ACL",
+  "fix": "before any replacement verify9 original/successor body hashes and16 semantic attribute fields; preserve original9 guarded function bodies, owner and ACL",
   "maker": {
     "command": "PATH=/usr/local/bin:/opt/homebrew/opt/postgresql@17/bin:/opt/homebrew/bin:/usr/bin:/bin /usr/local/bin/node --experimental-strip-types --test scripts/research-admission-isolation-postgres.test.mjs scripts/research-source-budget-postgres.test.mjs scripts/research-strategy-release.test.mjs",
     "tests": 21,
