@@ -1,0 +1,12 @@
+{
+  "observedAt": "2026-10-11T06:59:47.116797+00:00",
+  "policyType": "restricted",
+  "vpnConfigured": false,
+  "officialAttemptedHost": "cdn.playwright.dev",
+  "attemptedHostInAllowedList": false,
+  "failure": "HTTP403 Domain forbidden",
+  "supportedRemediation": "Cloud environment network configuration must permit official pinned download destination, or an independently verified identical official pinned browser cache must be available; no proxy/TLS/sandbox bypass attempted",
+  "redirectDestinationNotObserved": true,
+  "runtimeStatusNetworkState": "unknown",
+  "policyFileSha256": "e1589d6b2ac0d196c1fa791aa3214989e85ac7fe5bb28a74d7f12ca14c45a305"
+}

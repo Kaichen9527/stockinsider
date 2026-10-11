@@ -1,0 +1,1 @@
+{"osUser":"agent","pgClientUser":"agent","pgDependency":"8.18.0","pgConfigBindir":"/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin","nativeTools":[{"name":"initdb","executable":true},{"name":"pg_ctl","executable":true},{"name":"psql","executable":true},{"name":"postgres","executable":true}],"node":"v22.14.0"}

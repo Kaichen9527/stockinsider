@@ -1,0 +1,21 @@
+{
+  "stage": "browser-install",
+  "command": [
+    "node",
+    "web/node_modules/playwright/cli.js",
+    "install",
+    "chromium"
+  ],
+  "startedAt": "2026-10-11T06:59:05.278865+00:00",
+  "endedAt": "2026-10-11T06:59:06.571520+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 1.2926597539917566,
+  "sampledAggregatePeakRssBytes": 170913792,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10073452544,
+  "diskAvailableAfterBytes": 10073440256,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

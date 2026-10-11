@@ -1,0 +1,20 @@
+{
+  "stage": "dependency-ready",
+  "command": [
+    "node",
+    "-e",
+    "const os=require(\"node:os\"),fs=require(\"node:fs\"),cp=require(\"node:child_process\"),pg=require(\"pg\");const bin=cp.execFileSync(\"pg_config\",[\"--bindir\"],{encoding:\"utf8\"}).trim();const user=os.userInfo().username;const x={osUser:user,pgClientUser:new pg.Client().connectionParameters.user,pgDependency:require(\"pg/package.json\").version,pgConfigBindir:bin,nativeTools:[\"initdb\",\"pg_ctl\",\"psql\",\"postgres\"].map(n=>({name:n,executable:(()=>{try{fs.accessSync(bin+\"/\"+n,fs.constants.X_OK);return true}catch{return false}})()})),node:process.version};console.log(JSON.stringify(x));if(x.pgClientUser!==user||x.pgDependency!==\"8.18.0\"||!x.nativeTools.every(n=>n.executable))process.exit(1)"
+  ],
+  "startedAt": "2026-10-11T07:00:03.763153+00:00",
+  "endedAt": "2026-10-11T07:00:03.961085+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 0.1979403169825673,
+  "sampledAggregatePeakRssBytes": 34664448,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10073423872,
+  "diskAvailableAfterBytes": 10073423872,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

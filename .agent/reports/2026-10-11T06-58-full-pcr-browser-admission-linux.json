@@ -1,0 +1,325 @@
+{
+  "schemaVersion": "bounded-linux-engineering-receipt-v1",
+  "recordedAt": "2026-10-11T07:01:36.238081+00:00",
+  "task": "Full original Linux PCR admission and official pinned browser capability",
+  "source": {
+    "artifactRoot": "/tmp/si-pcr-1a-ih4sq8kz",
+    "head": "1a0043f2656b63d54062224d1befeab761f554a3",
+    "tree": "548ec17b1d8801ecb7f2e4c5635199aacd9989b2",
+    "webTree": "09248604b3efc6e30e029bad864915268067827b",
+    "nodeVersion": "v22.14.0",
+    "user": "agent",
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "playwrightVersion": "1.58.2",
+    "pgVersion": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "diskAvailableBytes": 10073452544
+  },
+  "branch": "codex/research-full-pcr-linux-evidence-oct11",
+  "manualWindow": {
+    "startObservedAt": "2026-10-11T06:58:00.381646Z",
+    "hardStopAt": "2026-10-11T07:28:00Z",
+    "commandGuardStopAt": "2026-10-11T07:27:25Z",
+    "notProductRoleBudget": true
+  },
+  "admission": {
+    "activeHeavyAtStart": [],
+    "diskBeforeBytes": 10072903680,
+    "memoryAvailableKiB": 33270780,
+    "rssTargetBytes": 8589934592,
+    "diskReserveBytes": 8589934592
+  },
+  "result": "BLOCKED_BROWSER_DOWNLOAD_POLICY",
+  "firstRequiredFailure": {
+    "stage": "browser-install",
+    "exitCode": 1,
+    "httpStatus": 403,
+    "body": "Domain forbidden",
+    "url": "https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip",
+    "oneCliInvocation": true,
+    "builtinCliAttempts": 5,
+    "note": "The official CLI internally attempted the same URL five times; no second install invocation, mirror/version replacement or network/TLS bypass."
+  },
+  "pcr": {
+    "status": "not_started",
+    "actualTestsExecuted": 0,
+    "actualPass": 0,
+    "actualFail": 0,
+    "actualSkip": 0,
+    "zeroCountsAreNotPass": true,
+    "expectedRootMacCount": 155,
+    "expectedRootMacNotLinuxEvidence": true,
+    "selectedFiles": 9,
+    "command": [
+      "npm",
+      "run",
+      "test:source-led-opportunity-v3:product-correctness"
+    ],
+    "originalPackageScript": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+    "commandSha256": "e214f770aed665f8c9ca1b0ea4d5c71519b936c93afd495f0f6dcf523fda0e37",
+    "staticNamesCount": 113,
+    "staticNamesLimitation": "113 literal names found by read-only line scan, incomplete static inventory including dynamic/nested cases; none are claimed executed. Original nine-file selection and hashes retained.",
+    "browserLaunch": "not_attempted_missing_executable",
+    "notRun": [
+      "Original complete155-case PCR",
+      "Any browser/PG product correctness cases",
+      "Installer/types/lint/build (not in this task)"
+    ]
+  },
+  "environment": {
+    "node": "v22.14.0",
+    "pg": "17.11 Debian17.11-0+deb13u1",
+    "pgDependency": "8.18.0",
+    "osDerivedUser": "agent",
+    "proxyCaPreserved": true,
+    "credentialValuesExported": false,
+    "clockOverride": false,
+    "depsOrLockChanged": false,
+    "browserCli": "Locked existing web/node_modules/playwright/cli.js 1.58.2",
+    "browserRevision": "1208",
+    "browserVersion": "145.0.7632.6",
+    "downloadDestinationHost": "cdn.playwright.dev",
+    "destinationInSupportedSnapshotAllowlist": false
+  },
+  "additionalDiagnostic": {
+    "defaultPermissionProbe": "spawnSync pg_config EPERM (including original returned bindir); raw retained",
+    "authorizedProfileProbe": "Single corrected execution-profile read-only probe exits0; pg user matches OS account, four PG17 tools executable and pg8.18.0 confirmed",
+    "noSourceOrEnvironmentGuardChanges": true
+  },
+  "stages": [
+    {
+      "stage": "browser-plan",
+      "command": [
+        "node",
+        "web/node_modules/playwright/cli.js",
+        "install",
+        "--dry-run",
+        "chromium"
+      ],
+      "startedAt": "2026-10-11T06:58:47.904018+00:00",
+      "endedAt": "2026-10-11T06:58:48.670387+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.7664351830026135,
+      "sampledAggregatePeakRssBytes": 124362752,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10073436160,
+      "diskAvailableAfterBytes": 10073436160,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandHashEncoding": "compact_utf8_json_array_v1",
+      "commandSha256": "7350099d452151833e276ba77fb2c4451908a077beae055b14b5ab6a93458462"
+    },
+    {
+      "stage": "browser-install",
+      "command": [
+        "node",
+        "web/node_modules/playwright/cli.js",
+        "install",
+        "chromium"
+      ],
+      "startedAt": "2026-10-11T06:59:05.278865+00:00",
+      "endedAt": "2026-10-11T06:59:06.571520+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 1.2926597539917566,
+      "sampledAggregatePeakRssBytes": 170913792,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10073452544,
+      "diskAvailableAfterBytes": 10073440256,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandHashEncoding": "compact_utf8_json_array_v1",
+      "commandSha256": "57622449d3b1ff2d88bc7132cfc201a4da2d8e6f309bd74ce1872571ada62703"
+    },
+    {
+      "stage": "dependency-ready",
+      "command": [
+        "node",
+        "-e",
+        "const os=require(\"node:os\"),fs=require(\"node:fs\"),cp=require(\"node:child_process\"),pg=require(\"pg\");const bin=cp.execFileSync(\"pg_config\",[\"--bindir\"],{encoding:\"utf8\"}).trim();const user=os.userInfo().username;const x={osUser:user,pgClientUser:new pg.Client().connectionParameters.user,pgDependency:require(\"pg/package.json\").version,pgConfigBindir:bin,nativeTools:[\"initdb\",\"pg_ctl\",\"psql\",\"postgres\"].map(n=>({name:n,executable:(()=>{try{fs.accessSync(bin+\"/\"+n,fs.constants.X_OK);return true}catch{return false}})()})),node:process.version};console.log(JSON.stringify(x));if(x.pgClientUser!==user||x.pgDependency!==\"8.18.0\"||!x.nativeTools.every(n=>n.executable))process.exit(1)"
+      ],
+      "startedAt": "2026-10-11T07:00:03.763153+00:00",
+      "endedAt": "2026-10-11T07:00:03.961085+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 0.1979403169825673,
+      "sampledAggregatePeakRssBytes": 34664448,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10073423872,
+      "diskAvailableAfterBytes": 10073423872,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandHashEncoding": "compact_utf8_json_array_v1",
+      "commandSha256": "5895fca7f0de88b50877e75de73344bc483f0dcebec3156a504abbb6c16ab173"
+    },
+    {
+      "stage": "dependency-ready-authorized",
+      "command": [
+        "node",
+        "-e",
+        "const os=require(\"node:os\"),fs=require(\"node:fs\"),cp=require(\"node:child_process\"),pg=require(\"pg\");const bin=cp.execFileSync(\"pg_config\",[\"--bindir\"],{encoding:\"utf8\"}).trim();const user=os.userInfo().username;const x={osUser:user,pgClientUser:new pg.Client().connectionParameters.user,pgDependency:require(\"pg/package.json\").version,pgConfigBindir:bin,nativeTools:[\"initdb\",\"pg_ctl\",\"psql\",\"postgres\"].map(n=>({name:n,executable:(()=>{try{fs.accessSync(bin+\"/\"+n,fs.constants.X_OK);return true}catch{return false}})()})),node:process.version};console.log(JSON.stringify(x));if(x.pgClientUser!==user||x.pgDependency!==\"8.18.0\"||!x.nativeTools.every(n=>n.executable))process.exit(1)"
+      ],
+      "startedAt": "2026-10-11T07:00:26.335096+00:00",
+      "endedAt": "2026-10-11T07:00:26.521356+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.1862645509536378,
+      "sampledAggregatePeakRssBytes": 34762752,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10073440256,
+      "diskAvailableAfterBytes": 10073440256,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandHashEncoding": "compact_utf8_json_array_v1",
+      "commandSha256": "5895fca7f0de88b50877e75de73344bc483f0dcebec3156a504abbb6c16ab173"
+    }
+  ],
+  "resources": {
+    "sampledAggregatePeakRssBytes": 170913792,
+    "minimumObservedFreeBytes": 10072903680,
+    "method": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "gnuTimePerStageRetained": true
+  },
+  "cleanup": {
+    "recordedAt": "2026-10-11T07:01:36.238081+00:00",
+    "activeRelevantProcesses": [],
+    "diskAvailableBytes": 10073309184,
+    "trackedStatus": "",
+    "cleanup": "No PG or browser cluster started. All download/inspection children exited; incomplete standard cache metadata retained as evidence, no broad prune.",
+    "sourceStillExact": "1a0043f2656b63d54062224d1befeab761f554a3"
+  },
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/browser-after.json",
+      "bytes": 326,
+      "sha256": "9b87a5706fb89a312f626b82c93a6707456c5bac3db3ac8e748aad477f1fc6b8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/browser-before.json",
+      "bytes": 531,
+      "sha256": "434c95fe7be0636e95f95bbf8215902ddc54d118257e765c557db7b7ad0a9109"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/browser-install.json",
+      "bytes": 672,
+      "sha256": "6b3cee4f9042f478dcf489b1f2f7cf0479ea66e11fb5e6cf1c509992d820fa4c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/browser-install.stderr",
+      "bytes": 2600,
+      "sha256": "8f9a53836bf0f4be9d2d00e7bc3dc03826c11c070d953a24b993055a72871fdb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/browser-install.stdout",
+      "bytes": 1207,
+      "sha256": "1f58c980d66968ca63720123e109ff12e8cd23d2951e9ad63e36787a632f90ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/browser-install.time",
+      "bytes": 816,
+      "sha256": "97a3e64cc967acbebeffcbca948fc1064322c5ae142c3f2dbc2ecdf876e57d95"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/browser-plan.json",
+      "bytes": 686,
+      "sha256": "d0635c8721a22e5c60ce47a85295f508e6fa1b3a16e57ed7ecacb197dbe056a7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/browser-plan.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/browser-plan.stdout",
+      "bytes": 1384,
+      "sha256": "62aab6b9f3eb3598eb5a8b8984d9bc4e314c7e2c663bc5af10d58a796031b861"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/browser-plan.time",
+      "bytes": 787,
+      "sha256": "0bdd03e9225dd1f741c35aa228f90de36bc3f6a164bda5adf431ccc472cea3d7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/cleanup.json",
+      "bytes": 378,
+      "sha256": "97f91db89833a26891c7e6fe4827ff7b2fd227410f540c7f653ba72e0aabe29b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/dependency-ready-authorized.json",
+      "bytes": 1338,
+      "sha256": "6754139642be3f2a22ae9fef0f46086871ad0f10854970005f92bef027f385d7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/dependency-ready-authorized.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/dependency-ready-authorized.stdout",
+      "bytes": 336,
+      "sha256": "f88024c39436773dfb1c750bef7ab9c3d48ca329a7c2c2d478b32062e9de4263"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/dependency-ready-authorized.time",
+      "bytes": 1407,
+      "sha256": "1b42ebe9dc83e31086c5aaaba3d1e6f1c00b3c60fc259f995d3e8645ab0e6e41"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/dependency-ready.json",
+      "bytes": 1327,
+      "sha256": "62576ff47ea31c0da572c016210751b5b91bcca71f1b800c302fbab4dbefcf17"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/dependency-ready.stderr",
+      "bytes": 1003,
+      "sha256": "74c270d7736d8db5fc5f34fb4375061e510b242772b799186ba2d95c45d818cb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/dependency-ready.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/dependency-ready.time",
+      "bytes": 1445,
+      "sha256": "89430e93139f8721bcd3caf2e9c0bac4e7dbe2b5e1c65e36cf518b48a3e866aa"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/network-gap.json",
+      "bytes": 659,
+      "sha256": "b084c4c4bd4b571d5ef7bc6d54d8fb3b5eafee5ab2f7579d01732cc448d5b82c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/pcr-unexecuted-selection.json",
+      "bytes": 32391,
+      "sha256": "e18d9102ddf06c321e1ca2e95ded2acfbeef020c4a5239e4a8a2a17e4bab9ec9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/preflight.json",
+      "bytes": 573,
+      "sha256": "6e9b1d32a2c5560dbb226babcbbb506d46c97a0252c48e03340be82feaea0281"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T06-58-full-pcr-browser-admission-linux/run.py",
+      "bytes": 3382,
+      "sha256": "b2f7d3b2eb02ec5efc9b33dc237121444a1bfc844fb3e13f72c2cf4c054741ea"
+    }
+  ],
+  "rawTotalBytes": 53248,
+  "requiredNextCapability": "Supported Cloud network policy access to official pinned Playwright browser download, then actual specified browser launch and fresh bounded single full-PCR task. No custom browser/version/sandbox substitution. Redirect destinations not observed.",
+  "authority": {
+    "fullPcrPassed": false,
+    "fullCodeReview": false,
+    "protectedPassed": false,
+    "modelDispatched": false,
+    "productionConnected": false,
+    "strategyAdopted": false,
+    "deployed": false
+  },
+  "historicalEvidence": "Previously reviewed exact1a installer22/types/lint/build and prior browser/PCR REDs remain on their original branches; not rerun or relabelled here."
+}

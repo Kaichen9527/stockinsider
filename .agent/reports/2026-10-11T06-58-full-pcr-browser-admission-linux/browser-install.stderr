@@ -1,0 +1,25 @@
+Error: Download failed: server returned code 403 body 'Domain forbidden'. URL: https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip
+    at IncomingMessage.handleError (/workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules/playwright-core/lib/server/registry/oopDownloadBrowserMain.js:58:23)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+Error: Download failed: server returned code 403 body 'Domain forbidden'. URL: https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip
+    at IncomingMessage.handleError (/workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules/playwright-core/lib/server/registry/oopDownloadBrowserMain.js:58:23)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+Error: Download failed: server returned code 403 body 'Domain forbidden'. URL: https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip
+    at IncomingMessage.handleError (/workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules/playwright-core/lib/server/registry/oopDownloadBrowserMain.js:58:23)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+Error: Download failed: server returned code 403 body 'Domain forbidden'. URL: https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip
+    at IncomingMessage.handleError (/workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules/playwright-core/lib/server/registry/oopDownloadBrowserMain.js:58:23)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+Error: Download failed: server returned code 403 body 'Domain forbidden'. URL: https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip
+    at IncomingMessage.handleError (/workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules/playwright-core/lib/server/registry/oopDownloadBrowserMain.js:58:23)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)

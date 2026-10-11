@@ -1,0 +1,8 @@
+{
+  "recordedAt": "2026-10-11T07:01:36.238081+00:00",
+  "activeRelevantProcesses": [],
+  "diskAvailableBytes": 10073309184,
+  "trackedStatus": "",
+  "cleanup": "No PG or browser cluster started. All download/inspection children exited; incomplete standard cache metadata retained as evidence, no broad prune.",
+  "sourceStillExact": "1a0043f2656b63d54062224d1befeab761f554a3"
+}

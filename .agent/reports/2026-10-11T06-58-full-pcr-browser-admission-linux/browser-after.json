@@ -1,0 +1,13 @@
+{
+  "cachePath": "/home/agent/.cache/ms-playwright",
+  "entries": [
+    {
+      "name": ".links",
+      "directory": true
+    }
+  ],
+  "chromium1208Present": false,
+  "headless1208Present": false,
+  "browserLaunchAttempted": false,
+  "reason": "No executable obtained; missing-browser launch/PCR intentionally not repeated"
+}

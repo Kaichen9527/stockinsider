@@ -1,0 +1,741 @@
+{
+  "originalPackageScript": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+  "packageScriptSha256": "acb6b3726aebe1781d5271473f8f3e1e5aeef0de46ec46bdedf5748c459d578e",
+  "invocation": [
+    "npm",
+    "run",
+    "test:source-led-opportunity-v3:product-correctness"
+  ],
+  "invocationSha256": "e214f770aed665f8c9ca1b0ea4d5c71519b936c93afd495f0f6dcf523fda0e37",
+  "files": [
+    {
+      "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "bytes": 171667,
+      "sha256": "6e498b720b72f121c818bf5de128c09673d7e9592b204244a212dbc1ca1a8592"
+    },
+    {
+      "path": "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+      "bytes": 120796,
+      "sha256": "a04ef8f1933eb70aa1ef60e288376763b714def207677e579df45dede42068af"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "bytes": 74957,
+      "sha256": "9c809a743f0f1aa695dcd13e5c4dffcd016766c58bdbb250ea0e9c60b7357477"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "bytes": 46235,
+      "sha256": "43caa018f438405168d5867af416aaacf5850f3508b131236c4dd29a811e3e05"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "bytes": 15334,
+      "sha256": "5462bb7dae96e75b37353cd8166a704462fc52be7988344dad9f31c429242eb8"
+    },
+    {
+      "path": "scripts/opportunity-v3/v317-source-led-actionability.test.mjs",
+      "bytes": 7189,
+      "sha256": "4cf490fa46df8ec79f2fc2921d0894d6b8402c7fab209d859502ecd2725057fc"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "bytes": 18025,
+      "sha256": "d56ada323203d95438b455fc8a201d9def9e67aae923a844972d6ddae336fb46"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "bytes": 11715,
+      "sha256": "6670b1c590c5ca05ea18054461006dab04232965a072742ec9a96f88fa30cba7"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "bytes": 16039,
+      "sha256": "d7e91177b522c4d6a75d3339ebaa1adfa73d6d9a23227b059d3be8cbb26baf3c"
+    }
+  ],
+  "staticLiteralTestNames": [
+    {
+      "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "line": 1914,
+      "name": "public fundamental provenance remains bounded and fail-closed outside the approved PCR expectation registry",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "line": 1997,
+      "name": "V3.12 product-value recovery ranks partial evidence without fabricating a trade target",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "line": 2038,
+      "name": "V3.12 official valuation parser rejects swapped or non-authoritative values",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "line": 2071,
+      "name": "V3.12 official index history supplies at least 20 sessions without inventing dates",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "line": 2080,
+      "name": "V3.12 official source failure degrades independently instead of erasing valid valuation data",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "line": 2096,
+      "name": "V3.12 evidence snippets are local to the matched stock",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "line": 2106,
+      "name": "V3.12 market analysis suppresses risk budget when components are missing",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+      "line": 563,
+      "name": "V3.14 cumulative reported EPS is reconciled without subtracting EPS across changing share counts",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+      "line": 983,
+      "name": "generic migration discovery is a closed legacy allowlist and the V3.13 plan is authority-bound",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+      "line": 1081,
+      "name": "V3.13 operator docs and positive consumers use tracked authority and exact decision revisions",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 72,
+      "name": "V314-001 calendar authority loss preserves checksum-valid last-good research as readonly",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 118,
+      "name": "V314-002 unchanged discovery outcomes conserve seed membership",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 129,
+      "name": "V314-003 research ranking never improves when an available axis is removed",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 146,
+      "name": "V314-004 discovery and report visibility are backed by payload data",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 163,
+      "name": "V314-004a internal health uses the reviewed release SHA when Vercel git metadata is absent",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 185,
+      "name": "V314-005 one actionable card without a cited brief degrades only that card",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 216,
+      "name": "V314-006 selective market raises thresholds and exposes wait_value or wait_market without score gate",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 240,
+      "name": "V314-006a raw authority metrics cannot round up into an actionable decision",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 258,
+      "name": "V314-006b action overrides clear incompatible V3.14-only fields",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 276,
+      "name": "V314-007 runtime diagnostics never serialize SQL text or connection credentials",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 299,
+      "name": "V314-008 Web and runtime share exact release compatibility authority",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 360,
+      "name": "V314-009 official calendar and backfill coverage remain typed and non-synthetic",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 422,
+      "name": "V314-009a candidate authority metadata remains separate from the peer population",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 432,
+      "name": "V314-010 all ten decision actions are closed and operationally reachable",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 530,
+      "name": "V314-011 every approved profile/provider has one honest terminal outcome",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 561,
+      "name": "V314-012 migration persists redacted diagnostics append-only with recorded time",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 576,
+      "name": "V314-013 official annual calendar is cross-market source material, not index inference",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 586,
+      "name": "V314-014 MOPS inline parser validates units and never derives diluted shares from rounded EPS",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 605,
+      "name": "V314-014ab MOPS debt aliases cover current and non-current liabilities without double counting",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 624,
+      "name": "V314-014a MOPS retains the authoritative year-to-date series and rejects duplicate discrete contexts",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 638,
+      "name": "V314-014aa MOPS rejects dimensional segment and scenario contexts",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 652,
+      "name": "V314-014b MOPS loader binds the requested official URL into parsed provenance",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 671,
+      "name": "V314-014c MOPS fact selection preserves cycle history without crossing the 128-row authority bound",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 690,
+      "name": "V314-015 full-market valuation parsers filter the bounded authority set while parsing",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 698,
+      "name": "V314-015a effective valuation and corporate-action request graphs remain closed after union",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 712,
+      "name": "V314-015b range corporate-action feed counts are scoped to each emitted session",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 731,
+      "name": "market-wide action rows retain alphanumeric instruments in PostgreSQL ordinal order",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 749,
+      "name": "V314-016 official ingestion streams bounded idempotency-addressed chunks and one terminal root",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 764,
+      "name": "V314-016b a staged ingestion resume is replayed without refetching mutable provider state",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 794,
+      "name": "V316-016c an interrupted legacy chunk graph is verified and continued without identity conflicts",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 840,
+      "name": "V314-016a unchanged financial semantics are not appended on every collection heartbeat",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 854,
+      "name": "V314-017 malformed RuntimeHealth enums fail closed identically in Node and Web",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 868,
+      "name": "V314-018 provisional valuation refs require real non-future embedded dates",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "line": 883,
+      "name": "V314-019 exact-review compatibility boundaries accept V3.14 and remain fail-closed",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 12,
+      "name": "V315 analysis transport stays below the durable bound without dropping facts or candidates",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 59,
+      "name": "V315 official TPEX history uses Gregorian query authority and scales lots/thousands to base units",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 93,
+      "name": "V315 TPEX corporate-action range accepts the official compact ROC date form",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 101,
+      "name": "V316 TWSE corporate-action history uses the report-serving wwwc authority alias",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 121,
+      "name": "V315 official monthly revenue carries filing time and a persistable monthly fact period",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 131,
+      "name": "V315 PE bridge derives a bounded diluted-share denominator from official cumulative EPS when MOPS omits the share concept",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 160,
+      "name": "V316 live acquisition collected after the scheduled cutoff keeps point-in-time facts but rejects future source timestamps",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 171,
+      "name": "V316 MOPS retention keeps the prior cumulative anchor needed to derive four consecutive quarters",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 181,
+      "name": "V315 fundamental quality derives ROE directly from official attributable income and equity",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 194,
+      "name": "V315 official coarse research rejects revenue filed after the point-in-time cutoff",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 209,
+      "name": "V315 official factor discovery admits out-of-source undervaluation research without minting an action",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 237,
+      "name": "V320 candidate funnel does not acquire or rank the full official market before KOL nominations",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 263,
+      "name": "V316 shallow official research can reach the near-buy lane without minting a buy action",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 280,
+      "name": "V315 duplicate authority roster heads emit one persistence identity per stock and revision",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 296,
+      "name": "V315 mention barrier consumes the compact candidate-only authoritative transport",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 316,
+      "name": "V315 REST producer adapter maps canonical bytea and never exposes its service credential in failures",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 362,
+      "name": "V315 resumed facts completion retains the run authority identity from lease acquisition",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 393,
+      "name": "V315 official ingestion retries only idempotent transient chunk transport failures",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 418,
+      "name": "V315 REST doctor reads private producer state only through the bounded health RPC",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 434,
+      "name": "V319 activation accepts the bounded run lease before the first heavyweight job claim is visible",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 464,
+      "name": "V315 migration is additive, bounded, upgrade-safe, and binds authority to REST claim and completion",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 504,
+      "name": "V315 production repair pre-applies bounded official chunks and makes terminal completion constant-work",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 540,
+      "name": "V316 direct claim transaction raises only its local statement timeout and always closes the transaction",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 583,
+      "name": "V315 official ingestion keeps valid PB when the exchange PE exceeds the authority range",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "line": 602,
+      "name": "V31613 reported valuations defer rows without an official same-session close dependency",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "line": 18,
+      "name": "V31621 operator migration plan exactly matches the reviewed apply chain",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "line": 37,
+      "name": "V3.18 candidate retention reuses only the preceding immutable terminal ledger",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "line": 47,
+      "name": "V31621 projection repair separates immutable content cutoff from reviewed evaluation order",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "line": 58,
+      "name": "V31621 production-cardinality repair keeps pooler-safe chunks and snapshots roster integrity once",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "line": 94,
+      "name": "V31621 provider acquisition freezes true fetched time and exact response bytes",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "line": 114,
+      "name": "V31621 same request reuses immutable acquisition and produces identical evidence without refetch",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "line": 129,
+      "name": "V31621 partial retry fetches only missing request keys and quarantines a response conflict",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "line": 152,
+      "name": "V31621 provider failure diagnostic cannot echo URI, SQL, payload or secret",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "line": 173,
+      "name": "V31621 action authority commits to the complete provider lineage rather than one fact fetch",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "line": 203,
+      "name": "V31621 effective public and internal health disables actions for every authority mismatch but retains last-good research",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v317-source-led-actionability.test.mjs",
+      "line": 12,
+      "name": "V317 preserves a research-only detail and waiting next step while global action authority is disabled",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v317-source-led-actionability.test.mjs",
+      "line": 54,
+      "name": "V317 evaluates the current frozen official union and emits a real liquidity input",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v317-source-led-actionability.test.mjs",
+      "line": 80,
+      "name": "V317 never acquires paid source text and leaves no black anchor override",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "line": 21,
+      "name": "V3.18 keeps no-new source candidates through twenty completed sessions without re-promoting them",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "line": 50,
+      "name": "V3.18 reserves the full bounded ledger for still-retained cards and types fresh overflow",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "line": 68,
+      "name": "V3.19 dossier stays within one decision revision and keeps the full readiness contract",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "line": 122,
+      "name": "V3.18 uses an explicit contrasting CTA rather than inherited foreground colour",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "line": 132,
+      "name": "V3.18 Threads topic discovery accepts non-tracked public authors without impersonating profile monitoring",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "line": 163,
+      "name": "V3.18 Threads filters invalid rows before its document bound and rejects unsafe cursors",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "line": 183,
+      "name": "source refresh preserves API failure through tee",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "line": 188,
+      "name": "public Threads keyword discovery enters found without impersonating approved KOL authority",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "line": 208,
+      "name": "V3.20 preserves unauthorized paid-source and metadata-only terminals while accepting public Telegram claims",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "line": 249,
+      "name": "V3.18 research dossier code is part of the reviewed runtime bundle identity",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "line": 13,
+      "name": "V3.19 release state advances once per closed checkpoint and cannot skip runtime identity",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "line": 28,
+      "name": "V3.19 disk policy fails closed below the reviewed capacity floor without deleting artifacts",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "line": 48,
+      "name": "V3.19 readiness gives every candidate one visibility lane without treating missing authority as avoid",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "line": 65,
+      "name": "V3.19 release reconciliation migration is additive, private and in the reviewed chain",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "line": 93,
+      "name": "V3.19.4 reviewed replay skips only V3.19.2 after the stronger V3.19.3 contract is installed",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "line": 106,
+      "name": "V3.19.1 runtime diagnostic contract preserves projection conflicts",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "line": 115,
+      "name": "V3.19.2 compares compact landing cards with full detail revisions without dropping dossiers",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "line": 129,
+      "name": "V3.19.3 validates bound dossier identities with the worker cyclic fields removed",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "line": 139,
+      "name": "V3.19.6 admits every supported compact evaluation schema without reopening CREATE",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "line": 154,
+      "name": "V3.19.7 binds reused frozen acquisitions to the current immutable job graph",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 23,
+      "name": "V3.20 admits only KOL-authorized nominations and evicts legacy official-only retention immediately",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 38,
+      "name": "V3.20.1 retains only a DB-revalidated historical InvestAnchors structured claim",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 56,
+      "name": "V3.20 retained legacy candidate uses database-derived historical lineage without minting the current run",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 79,
+      "name": "V3.20 rejects the 2605 new-emerging-market ETF false positive but accepts a public Telegram nomination",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 94,
+      "name": "V3.20 produces a complete five-connector terminal matrix and metadata-only input cannot become a thesis",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 115,
+      "name": "V3.20 records Telegram publication time only when the public message provides one and advertises cursor authority",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 128,
+      "name": "V3.20 projection is a second KOL-first boundary: it strips legacy cards and rejects official-only source signals",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 147,
+      "name": "V3.20 bounds live and reused connector envelopes without refetching or losing item conservation",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 169,
+      "name": "V3.20 authority bootstrap appends only the new public Telegram and structured-claim identities",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 177,
+      "name": "V3.20 turns a lost lease into an authoritative recoverable terminal instead of leaving a stuck run",
+      "status": "static literal, not executed"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "line": 199,
+      "name": "V3.20 recovery CLI accepts only a complete exact reviewed identity",
+      "status": "static literal, not executed"
+    }
+  ],
+  "actualExecutedPcrCases": 0,
+  "reason": "Pinned browser download blocked at proxy HTTP403; no full PCR run was started",
+  "expectedFullCountFromRootMac": 155,
+  "expectedCountNotLinuxResult": true
+}
