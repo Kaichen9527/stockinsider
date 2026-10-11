@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {mkdtemp,mkdir,readFile,writeFile,cp,rm,symlink,readdir} from 'node:fs/promises';
-import {tmpdir} from 'node:os';
+import {mkdtemp,mkdir,readFile,writeFile,cp,rm,symlink,readdir,chmod} from 'node:fs/promises';
+import {userInfo} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {copyResearchRuntimeFiles} from './research-release-artifacts.mjs';
@@ -13,8 +13,10 @@ const repository=fileURLToPath(new URL('../',import.meta.url));
 const manifestRelative='deployment/vps/research-runtime-files-v1.json';
 const manifest=JSON.parse(await readFile(path.join(repository,manifestRelative),'utf8'));
 async function fixture(t,entry='app'){
-  const root=await mkdtemp(path.join(tmpdir(),'stockinsider-research-release-'));
-  // Resolve macOS /var -> /private/var for the strict financial directory reader.
+  // The actual reader intentionally rejects any writable ancestor, including
+  // Linux /tmp (01777). Build a private fixture under the OS account's home;
+  // resolving macOS physical ancestors preserves the same production guard.
+  const root=await mkdtemp(path.join(userInfo().homedir,'.stockinsider-research-release-'));
   const {realpath}=await import('node:fs/promises');const physical=await realpath(root);
   t.after(()=>rm(physical,{recursive:true,force:true}));
   const sourceRoot=path.join(physical,'source'),releaseRoot=path.join(physical,'release');
@@ -67,4 +69,13 @@ test('legacy fixtures skip research; a feature-enabled release cannot omit its m
   await assert.rejects(copyResearchRuntimeFiles(config),{code:'ENOENT'});
   await rm(path.join(config.sourceRoot,'web/src/lib/research-complete-input.ts'));
   assert.deepEqual(await copyResearchRuntimeFiles(config),{included:false,files:[],bytes:0});
+});
+
+test('real financial reader still refuses a writable release ancestor',async t=>{
+  const config=await fixture(t);await copyResearchRuntimeFiles(config);
+  await chmod(config.releaseRoot,0o777);
+  await assert.rejects(readPinnedFinancialFiles(config.releaseRoot,financialInventory.companies['2409'],new FinancialDeadline()),/financial_parent_invalid/);
+  await chmod(config.releaseRoot,0o700);
+  const loaded=await readPinnedFinancialFiles(config.releaseRoot,financialInventory.companies['2409'],new FinancialDeadline());
+  try{assert.equal(loaded.records.size,financialInventory.companies['2409'].length);await loaded.validate();}finally{await loaded.close();}
 });
