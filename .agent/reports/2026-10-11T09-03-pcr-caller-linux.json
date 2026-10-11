@@ -1,0 +1,260 @@
+{
+  "schemaVersion": "pcr-caller-native-linux-evidence-v1",
+  "sourceIdentity": {
+    "source": "e67a17c7a24ddfec5235a8f4a708077a6ba0ddd4",
+    "parent": "622b61102d2204006dc2bb27b96a584de4ca3eeb",
+    "tree": "d2679bfa51b6ee3cbb17aba0fc8a92aca2f9d153",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "status": "",
+    "admissionAt": "2026-10-11T09:03:46.539420+00:00",
+    "deadlineAt": "2026-10-11T09:33:46.539420+00:00",
+    "diskAvailableBytes": 10044801024,
+    "osUser": "agent",
+    "node": "v22.14.0",
+    "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "pgBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "nativeExecutables": {
+      "initdb": true,
+      "pg_ctl": true,
+      "psql": true,
+      "postgres": true
+    },
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "pgClient": {
+      "version": "8.18.0",
+      "user": "agent"
+    },
+    "priorBuildId": "OHll1S-fj3VxEuEH6fzQs",
+    "noNewDependencies": true,
+    "networkPolicyObservedState": "unknown",
+    "networkPolicyMode": "restricted",
+    "skillsRead": [
+      "cloud-environment-onboarding:setup",
+      "cloud-environment:cloud-environment-runtime"
+    ]
+  },
+  "manualWindow": {
+    "firstObservedPreflightAt": "2026-10-11T09:02:16Z",
+    "conservativeDeadlineAt": "2026-10-11T09:32:16Z",
+    "maximumMinutes": 30,
+    "manualEngineeringNotModelBudget": true
+  },
+  "testResult": {
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0
+  },
+  "verifiedTestContract": {
+    "exactTestFileSha256": "9fe377da98c04ab354979cb18c15da3a8c1ae1c1145000183379c0605187fa3d",
+    "originalBeforeAfterHooksExecuted": true,
+    "PGSchemaScope": "Original focused legacy prerequisite profile plus unchanged real original migrations; not a production schema install claim.",
+    "realAdapters": [
+      "postgres-legacy-producer-adapter.js",
+      "auth-source-worker.js"
+    ],
+    "noDbAdapterInjection": true,
+    "syntheticFixture": {
+      "acquisitionFetch": "test-owned fetch returns404 '{}'",
+      "credentials": {},
+      "sourceCommitSha": "test-only c repeated40",
+      "workerBytes": "test-only PCR adapter worker",
+      "noActualSourceAcquisitionOrModelCalls": true
+    },
+    "assertionsVerifiedByUnmodifiedTest": [
+      "Observed exactly2 genuine SQL claims from same run; source_sync first and a scheduled different successor.",
+      "payloadCanonical hash and JSON exact; readKind=null enforces null read bytes/json/hash, otherwise full read canonical hash and JSON exact.",
+      "Worker probe disposition=failed and completedJobs=1 due to explicit test-only stop after source completion.",
+      "First persisted job succeeded, successor failed and predecessor matches first job.",
+      "First result_hash/result_json exact immutable source bundle;17 source acquisition terminal rows;run failed.",
+      "Actual complete_legacy_producer_job_v3_14 delegates to named v3_11 owner."
+    ],
+    "syntheticIntendedFailedProbeIsNotFailedTest": true
+  },
+  "stages": [
+    {
+      "stage": "pcr-native-adapter",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-name-pattern=^PCR-007 and PCR-011 actual PostgreSQL adapter",
+        "scripts/opportunity-v3/migration-contract.test.mjs"
+      ],
+      "startedAt": "2026-10-11T09:03:57.931963+00:00",
+      "endedAt": "2026-10-11T09:04:00.707715+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.775759209005628,
+      "sampledAggregatePeakRssBytes": 175722496,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10044801024,
+      "diskAvailableAfterBytes": 10044801024,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T09:04:17.143324+00:00",
+      "endedAt": "2026-10-11T09:04:23.649673+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 6.506356464989949,
+      "sampledAggregatePeakRssBytes": 1229656064,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10044801024,
+      "diskAvailableAfterBytes": 10043998208,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    }
+  ],
+  "build": {
+    "source": "e67a17c7a24ddfec5235a8f4a708077a6ba0ddd4",
+    "tree": "d2679bfa51b6ee3cbb17aba0fc8a92aca2f9d153",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "buildId": "NXhBxkRAcjb3LvAgClFtj",
+    "node": "v22.14.0",
+    "next": "16.3.8",
+    "compiler": "normal npm build / Turbopack",
+    "serverFileCount": 2088,
+    "serverLogicalBytes": 67439593,
+    "serverManifestSha256": "42104e8de36c7cb5dbc89d714f76d176953e658ce3640c01708ce8dcf65a3676",
+    "prebuildExecuted": true,
+    "newBuildNotPriorReused": true,
+    "priorBuildId": "OHll1S-fj3VxEuEH6fzQs"
+  },
+  "sourceManifestFiles": 312,
+  "sourceManifestSha256": "7db450347654fbf1e6c0fb3dc75e67da350d4b2500f1c036d4e12688f3eafd0b",
+  "sqlManifestEntries": 126,
+  "resources": {
+    "sampledAggregatePeakRssBytes": 1229656064,
+    "minimumStageBoundaryDiskBytes": 10043998208,
+    "samplingMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "diskReserveBytes": 8589934592,
+    "rssGuardBytes": 8589934592
+  },
+  "cleanup": {
+    "at": "2026-10-11T09:05:38.332988+00:00",
+    "liveRelevantProcesses": [],
+    "ownedClusterDirectoriesRemaining": [],
+    "inheritedZombieCountNow": 854,
+    "zombiesNotRunningOrKilledByThisTask": true,
+    "allStageChildren": [
+      [],
+      []
+    ],
+    "originalAfterHookStoppedPGAndRemovedOwnRebuildableCluster": true,
+    "rawUniqueEvidencePreserved": true,
+    "noGlobalPrune": true,
+    "diskAvailableBytes": 10043990016
+  },
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/assertion-contract.json",
+      "bytes": 1439,
+      "sha256": "af62c2d871984a3cc709029b3e397cebe3d2160099cd462f602446e51e65d40d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/build-identity.json",
+      "bytes": 556,
+      "sha256": "0f18b408def2e6dd4aa006bd15bf23c42c16eacda4af302c067c549b377ee516"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/cleanup.json",
+      "bytes": 414,
+      "sha256": "9f7460cd8f87e85e1a8a332f74bb9115e50375d231d5cc5187a5604287e0f84c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/compiled-server-manifest.json",
+      "bytes": 387190,
+      "sha256": "42104e8de36c7cb5dbc89d714f76d176953e658ce3640c01708ce8dcf65a3676"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/normal-build.json",
+      "bytes": 646,
+      "sha256": "80b4d2756ea3b6cb4119a22032c2580d065606b33849b1e274c9454b025536a9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/normal-build.stdout",
+      "bytes": 6499,
+      "sha256": "7fe40e0559be1985e528d4f60ac210964d0c5a6808588c46fb44d50dbe5f5ef3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/normal-build.time",
+      "bytes": 758,
+      "sha256": "825dec9f1243dafb78737b8b1cc0de90e623db0348b7a2a6fd9c1686476c5f65"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/pcr-native-adapter.json",
+      "bytes": 781,
+      "sha256": "8594b171fed591e57c9e1a62922b6edc5ba8089b183806a6b9501a874c2df944"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/pcr-native-adapter.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/pcr-native-adapter.stdout",
+      "bytes": 997,
+      "sha256": "62fc62eec355bdbd1202db40bb24efd499592bf856fc6b51e6bacef22851d6f4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/pcr-native-adapter.time",
+      "bytes": 879,
+      "sha256": "6b52849f2b7ceed3769849b0e3e5b9ce8047e0bfe278323636138533b81be1a8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/preflight.json",
+      "bytes": 1194,
+      "sha256": "68b56608fa41abc94a14e684955557336bc277fed771a668b0f871195176a333"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/run.py",
+      "bytes": 3431,
+      "sha256": "8de5c345d580b0dd21887ad9306002ef57a147b5955cb672be5a9beaec500221"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/source-delta.patch",
+      "bytes": 5528,
+      "sha256": "53a95d99760d216ecd96283a76be2eddc56ec8c7446bbeaf2daf45366207666b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/source-manifest.json",
+      "bytes": 54147,
+      "sha256": "7db450347654fbf1e6c0fb3dc75e67da350d4b2500f1c036d4e12688f3eafd0b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-03-pcr-caller-linux/test-inventory.json",
+      "bytes": 390,
+      "sha256": "ba905533db97950f4b26756db911cf53d9d38055a19386d69bd5126ea6b23c8c"
+    }
+  ],
+  "rawFileCount": 17,
+  "rawTotalBytes": 464849,
+  "limits": [
+    "Only requested name-pattern case1; full818/155 not run.",
+    "No new dependencies/library/browser downloads; no actual source acquisition/model/production data or DB.",
+    "Expected failed worker probe is persisted engineering evidence, not full-run success.",
+    "No protected/attestation/strategy/research publication approval or deployment.",
+    "Root prior Mac initdb disk failure and earlier test REDs not erased or relabeled."
+  ],
+  "recordedAt": "2026-10-11T09:05:38.335292+00:00"
+}

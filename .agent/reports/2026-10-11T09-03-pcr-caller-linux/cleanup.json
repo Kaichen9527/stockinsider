@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-11T09:05:38.332988+00:00",
+  "liveRelevantProcesses": [],
+  "ownedClusterDirectoriesRemaining": [],
+  "inheritedZombieCountNow": 854,
+  "zombiesNotRunningOrKilledByThisTask": true,
+  "allStageChildren": [
+    [],
+    []
+  ],
+  "originalAfterHookStoppedPGAndRemovedOwnRebuildableCluster": true,
+  "rawUniqueEvidencePreserved": true,
+  "noGlobalPrune": true,
+  "diskAvailableBytes": 10043990016
+}

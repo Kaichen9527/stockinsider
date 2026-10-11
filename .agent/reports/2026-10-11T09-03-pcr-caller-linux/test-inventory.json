@@ -1,0 +1,16 @@
+{
+  "counts": {
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0
+  },
+  "names": [
+    "PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker"
+  ],
+  "pattern": "^PCR-007 and PCR-011 actual PostgreSQL adapter",
+  "onlyThisTestExecuted": true,
+  "otherFileCasesUnselectedNotExecuted": true
+}
