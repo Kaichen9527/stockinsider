@@ -12,7 +12,7 @@ import { DEFAULT_CANDIDATE_STAGE_FILTERS, candidateStageFilterOptions, filterAnd
 import { LOCAL_RESEARCH_STORAGE_KEY, decodeLocalResearchState } from '@/lib/local-research-state';
 import CandidateTradePlanSummary from './CandidateTradePlanSummary';
 import CurrentTechnicalResearchLink from './CurrentTechnicalResearchLink';
-import { admissionForLegacyCard, discoveryCardPresentation } from '@/lib/candidate-discovery-admission';
+import { admissionForLegacyCard, discoveryCardPresentation, pageDiscoveryClues, discoveryCoverageNotes } from '@/lib/candidate-discovery-admission';
 
 type Props = {
   radar: RadarDailyPayload;
@@ -511,7 +511,8 @@ export function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
 
 export function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload; stageCounts?: Props['initialStageCounts'] }) {
   const [selected, setSelected] = useState<CandidateStageKey>('found');
-  const [discoveryMode, setDiscoveryMode] = useState<'research' | 'all'>('research');
+  const [discoveryMode, setDiscoveryMode] = useState<'research' | 'all'>('all');
+  const [cluePageIndex, setCluePageIndex] = useState(0);
   const [stages, setStages] = useState(radar.stages!);
   const [loadingStage, setLoadingStage] = useState<CandidateStageKey | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -522,6 +523,7 @@ export function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyP
     waiting: radar.stages!.waiting.length,
     actionable: radar.stages!.actionable.length,
   }, [radar.stageCounts, radar.stages, stageCounts]);
+  useEffect(() => { setCluePageIndex(0); }, [selected, discoveryMode, filters, watchedSymbols, radar.snapshotPublishedAt]);
   const fullSnapshotReady = (['found', 'waiting', 'actionable'] as const).every((stage) => stages[stage].length >= totals[stage]);
 
   useEffect(() => {
@@ -599,7 +601,9 @@ export function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyP
   const actual = filterAndSortCandidateStages(stages[selected], filters, watchedSymbols);
   const showClosestWaiting = shouldShowClosestWaiting(selected, totals.actionable);
   const discoveryEligible = actual.filter(card => admissionForLegacyCard(card).status === 'admitted');
-  const displayed = showClosestWaiting ? closest : selected === 'found' && discoveryMode === 'research' ? discoveryEligible : actual;
+  const cluePage = pageDiscoveryClues(actual, cluePageIndex);
+  const coverage = discoveryCoverageNotes(radar.sourceHealthSummary?.connectorDetails);
+  const displayed = showClosestWaiting ? closest : selected === 'found' && discoveryMode === 'research' ? discoveryEligible : selected === 'found' ? cluePage.items : actual;
   return (
     <div className="min-w-0">
       <header className="mb-5 border-b border-line pb-5">
@@ -616,12 +620,18 @@ export function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyP
       </div>
       {selected === 'found' ? <section className="mb-4 rounded-xl border border-line p-3" aria-label="研究來源准入">
         <div className="flex flex-wrap gap-2">
-          <button type="button" aria-pressed={discoveryMode === 'research'} onClick={() => setDiscoveryMode('research')} className="min-h-11 rounded-lg border border-line px-4">研究候選</button>
+          <button type="button" aria-pressed={discoveryMode === 'research'} onClick={() => setDiscoveryMode('research')} className="min-h-11 rounded-lg border border-line px-4">研究准入（待接線）</button>
           <button type="button" aria-pressed={discoveryMode === 'all'} onClick={() => setDiscoveryMode('all')} className="min-h-11 rounded-lg border border-line px-4">所有線索（{totals.found}）</button>
         </div>
-        <p className="mt-2 text-xs leading-5">目前卡片未提供完整 publisher／根源／PTT 逐則股票回覆，研究准入待接線。所有線索完整保留，不以 links 或總推文量湊確認；不是買點或交易限制。</p>
+        <p className="mt-2 text-xs leading-5">以下為來源線索，尚未通過研究准入；每頁最多20筆，所有命中仍保留。完整發布者／消息根源與PTT逐則股票回覆尚待接線，不以連結數或總推文量湊確認；不是買點。</p>
         <p className="mt-1 text-xs">研究名額最多 15 一般＋5 低聲量，每週最多 5 個新深研；既有 priority／預算契約不變，此篩選尚未接研究排程。</p>
       </section> : null}
+      <details className="mb-4 rounded-xl border border-line p-3">
+        <summary className="cursor-pointer text-sm">伺服器收集器狀態：IG、Threads、定錨</summary>
+        <p className="mt-2 text-xs">以下是已保存的收集器紀錄。本機瀏覽器能讀到公開頁，不等於自動收集已啟用或內容已匯入；單一帳號沒有貼文也不代表全平台沒有資料。</p>
+        <ul className="mt-2 space-y-2 text-xs">{coverage.map(item => <li key={item.connector}>{item.label}：{item.summary}{item.observedAt ? `（紀錄 ${formatTaipeiDateTime(item.observedAt, 'compact')}）` : ''}</li>)}</ul>
+        <p className="mt-2 text-xs">定錨的公開頻道線索可能列於Telegram；同一作者跨平台仍算同一發布者，重複內容不增加確認。<Link href="/sources" className="underline">查看來源清單</Link></p>
+      </details>
       <section aria-label="完整名單篩選" aria-busy={!fullSnapshotReady} className="mb-5 rounded-xl border border-line bg-[var(--surface)] p-3">
         <div className="grid min-w-0 gap-2 sm:grid-cols-2 lg:grid-cols-6">
           <label className="min-w-0 lg:col-span-2"><span className="sr-only">搜尋股票</span><input disabled={!fullSnapshotReady} type="search" value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder={fullSnapshotReady ? '搜尋代碼、公司或產業' : '正在載入完整名單…'} className="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm outline-none focus:border-orange-500 disabled:cursor-wait disabled:opacity-60" /></label>
@@ -639,6 +649,11 @@ export function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyP
       <div className="grid min-w-0 gap-3 xl:grid-cols-2">
         {displayed.map((card) => <CandidateStageCardView key={`${selected}-${card.symbol}`} card={card} />)}
       </div>
+      {selected === 'found' && discoveryMode === 'all' ? <nav aria-label="線索分頁" className="mt-4 flex flex-wrap items-center justify-center gap-3 text-sm">
+        <button type="button" disabled={cluePage.pageIndex === 0} onClick={() => setCluePageIndex(cluePage.pageIndex - 1)} className="min-h-11 rounded-lg border border-line px-4 disabled:opacity-40">上一頁</button>
+        <span>線索 {cluePage.start}–{cluePage.end} / {cluePage.total}（尚未通過研究准入）</span>
+        <button type="button" disabled={cluePage.pageIndex + 1 >= cluePage.pageCount} onClick={() => setCluePageIndex(cluePage.pageIndex + 1)} className="min-h-11 rounded-lg border border-line px-4 disabled:opacity-40">下一頁</button>
+      </nav> : null}
       {actual.length > 0 && actual.length < totals[selected] ? (
         <div className="mt-6 flex flex-col items-center gap-2">
           <button
@@ -647,7 +662,7 @@ export function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyP
             onClick={() => void loadMore(selected)}
             className="min-h-11 rounded-full border border-line px-5 py-2 text-sm font-semibold transition hover:border-accent hover:text-accent disabled:cursor-wait disabled:opacity-60"
           >
-            {loadingStage === selected ? '載入中…' : `載入更多（已顯示 ${actual.length}/${totals[selected]}）`}
+            {loadingStage === selected ? '載入中…' : `載入更多（已載入 ${stages[selected].length}/${totals[selected]}）`}
           </button>
           {loadError ? <p role="alert" className="text-xs text-rose-600 dark:text-rose-300">{loadError}</p> : null}
         </div>

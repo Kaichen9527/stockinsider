@@ -130,3 +130,41 @@ export function discoveryCardPresentation(card: {
     valuationLabel: referenceValue !== null ? `歷史估值參考（${method}）` : '估值待重估', referenceValue,
     valuationDateLabel: '估值來源日期待接線', baseUpsidePct: null, forwardTarget: null };
 }
+
+/** Presentation pagination only. No candidate qualification or queue admission. */
+export const DISCOVERY_CLUE_PAGE_SIZE = 20;
+export function pageDiscoveryClues<T>(rows: readonly T[], requestedPage: number) {
+  if (rows.length > 5000) throw new Error('discovery_clue_cohort_bound');
+  const pageCount = Math.max(1, Math.ceil(rows.length / DISCOVERY_CLUE_PAGE_SIZE));
+  const pageIndex = Math.min(pageCount - 1, Math.max(0, Number.isFinite(requestedPage) ? Math.floor(requestedPage) : 0));
+  const offset = pageIndex * DISCOVERY_CLUE_PAGE_SIZE;
+  const items = rows.slice(offset, offset + DISCOVERY_CLUE_PAGE_SIZE);
+  return { items, pageIndex, pageCount, total: rows.length, start: items.length ? offset + 1 : 0, end: offset + items.length };
+}
+
+type DiscoveryCoverageDetail = {
+  connector: string; status: string; lastTerminalStatus?: string | null; recordsWrittenThisRun?: number;
+  lastAttemptAt?: string | null;
+};
+/** Only reports saved ledger/policy states. Missing rows do not imply enablement. */
+export function discoveryCoverageNotes(details: readonly DiscoveryCoverageDetail[] = []) {
+  if (details.length > 64) throw new Error('discovery_coverage_bound');
+  return [['instagram', 'Instagram'], ['threads', 'Threads'], ['telegram', 'Telegram'], ['investanchors', '定錨授權摘要']].map(([connector, label]) => {
+    const rows = details.filter(row => row.connector === connector);
+    const row = rows.length === 1 ? rows[0] : undefined;
+    const state = row?.status;
+    const terminal = row?.lastTerminalStatus || state;
+    const summary = !row ? '本快照未提供可驗證狀態，不能宣稱已啟用'
+      : state === 'retired' ? '已退役；歷史線索仍保留，不納入自動取得'
+      : state === 'blocked_auth' ? '等待官方授權，目前未啟用取得'
+      : state === 'blocked_license' ? '缺少來源使用授權，目前未啟用取得'
+      : state === 'manual_only' ? '僅限受控授權摘要，並非自動取得全文'
+      : terminal === 'duplicate_only' ? '已讀取，但內容重複，沒有新增獨立消息根源'
+      : terminal === 'metadata_only' ? '只取得公開中繼資料，沒有全文或逐字稿'
+      : ['failed', 'timed_out', 'auth_failed', 'provider_failed', 'degraded', 'partial'].includes(terminal || '') ? '本輪取得失敗或不完整，不能視為完整覆蓋'
+      : terminal === 'successful_empty' ? '本輪沒有新增內容，不代表完整來源覆蓋'
+      : terminal === 'success' && Number(row.recordsWrittenThisRun) > 0 ? '本輪有新增記錄；仍需核對個股提及與根源'
+      : '本輪狀態待核對，不能宣稱完整覆蓋';
+    return { connector, label, summary, observedAt: row?.lastAttemptAt || null };
+  });
+}

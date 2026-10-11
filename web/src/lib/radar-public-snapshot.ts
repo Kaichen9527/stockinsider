@@ -75,11 +75,11 @@ function compactLegacyCard(value: unknown) {
 
 function compactSourceHealth(value: RadarDailyPayload['sourceHealthSummary']) {
   if (!value) return undefined;
-  const homepageSocialConnectors = new Set(['threads', 'investanchors', 'telegram', 'podcast', 'ptt', 'bulltalk']);
+  const homepageSocialConnectors = new Set(['threads', 'instagram', 'investanchors', 'telegram', 'podcast', 'ptt', 'bulltalk']);
   return {
     ...value,
     // The full source registry remains on /sources. The homepage only renders
-    // these six social-source rows, so shipping retired market/news connectors
+    // these seven social-source rows (including explicit Instagram retirement), so shipping retired market/news connectors
     // here is duplicate payload with no visible consumer.
     connectorDetails: value.connectorDetails.filter((item) => homepageSocialConnectors.has(item.connector)).map((item) => ({
       connector: item.connector, label: item.label, status: item.status, recordsWritten: item.recordsWritten,

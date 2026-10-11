@@ -94,3 +94,36 @@ test('missing, future, malformed dates never manufacture a displayed current clo
   assert.equal(discoveryCardPresentation(card, '2026-10-07').close, null);
   assert.equal(discoveryCardPresentation({ ...card, technical: { close: 42, sessionDate: '2026-99-99' } }).close, null);
 });
+
+test('clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation', async () => {
+  const { pageDiscoveryClues } = await import('./candidate-discovery-admission.ts');
+  const rows = Array.from({ length: 272 }, (_, i) => ({ symbol: String(1000 + i) }));
+  const before = JSON.stringify(rows), all = [];
+  for (let page = 0; page < 14; page++) { const result = pageDiscoveryClues(rows, page); assert.ok(result.items.length <= 20); all.push(...result.items); }
+  assert.deepEqual(all, rows); assert.equal(JSON.stringify(rows), before);
+  assert.equal(pageDiscoveryClues(rows, 99).items.length, 12); assert.equal(pageDiscoveryClues(rows, -1).pageIndex, 0);
+  assert.equal(pageDiscoveryClues([], NaN).start, 0); assert.throws(() => pageDiscoveryClues(new Array(5001), 0), /bound/u);
+});
+test('coverage states distinguish retired/blocked/duplicate without inventing source enablement', async () => {
+  const { discoveryCoverageNotes } = await import('./candidate-discovery-admission.ts');
+  const notes = discoveryCoverageNotes([
+    { connector: 'instagram', status: 'retired', lastTerminalStatus: 'success' },
+    { connector: 'threads', status: 'blocked_auth', lastTerminalStatus: 'success' },
+    { connector: 'telegram', status: 'duplicate_only', lastAttemptAt: '2026-10-11T14:00:00Z' },
+    { connector: 'investanchors', status: 'manual_only' },
+  ]);
+  assert.match(notes[0].summary, /退役/u); assert.match(notes[1].summary, /等待官方授權/u);
+  assert.match(notes[2].summary, /重複.*沒有新增獨立/u); assert.equal(notes[2].observedAt, '2026-10-11T14:00:00Z');
+  assert.match(notes[3].summary, /並非自動取得全文/u);
+  assert.ok(discoveryCoverageNotes().every(row => /不能宣稱已啟用/u.test(row.summary)));
+});
+test('coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success', async () => {
+  const { discoveryCoverageNotes } = await import('./candidate-discovery-admission.ts');
+  for (const status of ['partial', 'failed', 'metadata_only', 'successful_empty', 'success', 'unknown']) {
+    const summary = discoveryCoverageNotes([{ connector: 'telegram', status, recordsWrittenThisRun: 0 }])[2].summary;
+    assert.doesNotMatch(summary, /本輪有新增記錄/u);
+  }
+  assert.match(discoveryCoverageNotes([{ connector: 'telegram', status: 'success', recordsWrittenThisRun: 3 }])[2].summary, /仍需核對/u);
+  assert.match(discoveryCoverageNotes([{ connector: 'telegram', status: 'success' }, { connector: 'telegram', status: 'failed' }])[2].summary, /不能宣稱/u);
+  assert.throws(() => discoveryCoverageNotes(new Array(65)), /bound/u);
+});
