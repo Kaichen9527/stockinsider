@@ -36,3 +36,11 @@
 - VPS唯讀探測確認peer及實際拒絕成立，沒有修改runtime角色或正式schema。舊空間不足不是此次阻擋。
 - Cloud244eccba的27raw/44,875bytes逐一核對成功，原始empty-PG schema RED保留；該結果不表示正式VPS缺auth。
 - 受保護發布仍缺真正完整main-to-final審查/PCR及trusted runner復原機制；此批安裝測試不會冒充合併/部署批准。具體交接見database-installation-handoff.md與本次receipt。
+
+
+## 凍結版本與獨立驗證（2026-10-11T06:54Z）
+
+- PR361 source固定1a0043f2656b63d54062224d1befeab761f554a3。後續證據保存至獨立codex/research-installer-verification-oct11分支，避免每份文件紀錄都改動待審程式版本。
+- 獨立installer增量審查重跑22/22PASS、零skip，兩項P2已閉合，unsigned scoped CODE PASS。原產品正確性完整命令在同一source另跑155/155PASS、零skip，包含31個PCR acceptance名稱；沒有冒充完整發布批准。
+- Linux full-chain驗收已交由既有idle VM單次執行，完成前維持pending。最新protected run38119168980仍缺exact1a review ref；下游code gate為SKIPPED，沒有手動重跑。
+- 正在盤點可重用的既有精確審查：443份source blob與已接受PR284版本相同，後續變更需補review及跨模組邊界核對。此盤點本身不是fullreview PASS。

@@ -1,0 +1,42 @@
+{
+  "schema": "unsigned-scoped-independent-code-review-v1",
+  "recordedAt": "2026-10-11T06:48:10.832529+00:00",
+  "subject": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "tree": "548ec17b1d8801ecb7f2e4c5635199aacd9989b2",
+  "base": "bc01c006cba307735ccd50c78841b94242e1c014",
+  "verdict": "PASS within reviewed installer increment; no remaining P1/P2 found",
+  "command": "PATH=/Users/kaerchen/.nvm/versions/node/v22.23.3/bin:/opt/homebrew/opt/postgresql@17/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin node --test scripts/opportunity-v3/atomic-migration-chain.test.mjs scripts/opportunity-v3/migration-sql-policy.test.mjs scripts/opportunity-v3/migration-successor-guard.test.mjs scripts/opportunity-v3/research-publication-full-chain.test.mjs scripts/opportunity-v3/research-publication-install-guard.test.mjs scripts/opportunity-v3/vps-migration-peer.test.mjs scripts/research-agent-migration-gate.test.mjs scripts/research-strategy-release.test.mjs",
+  "independentExecution": {
+    "tests": 22,
+    "pass": 22,
+    "fail": 0,
+    "skip": 0,
+    "node": "v22.23.3",
+    "postgres": "postgres (PostgreSQL) 17.10 (Homebrew)",
+    "platform": "darwin",
+    "log": "/tmp/stockinsider-installer-independent-oct11-1a0043f-regression.tap",
+    "bytes": 5520,
+    "sha256": "baafb10556580629615dacdb7c443a0c5a8bb773ea31f3c42ec8c494686355d8"
+  },
+  "verifiedHashes": {
+    "codeFiles": 20,
+    "makerRawFiles": 6,
+    "makerRawBytes": 18463,
+    "profileMigrations": 73,
+    "historicalMigrationFilesChanged": 0
+  },
+  "closedFindings": [
+    "composite input attributes and type ACL captured",
+    "authenticator and membership closure covered; raw schema ACL captured",
+    "password challenges reject without pgpass or outgoing authentication payload",
+    "effective HBA rejection probe replaces modification-time inference"
+  ],
+  "limitations": [
+    "No production operator command or role/schema/data mutation",
+    "No Linux run of this subject",
+    "No build/type/lint rerun; inspected maker logs and hashes only",
+    "Isolated schema fixture contains no production rows and is not an empty-database installer",
+    "Protected authority/attestation and actual model/research publication are outside scope",
+    "No broad main-to-head release approval"
+  ]
+}
