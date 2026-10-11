@@ -1,0 +1,60 @@
+{
+  "schema": "stockinsider-authorized-bounded-continuation-dispatch-v1",
+  "observedAt": "2026-10-11T16:46:29.319020+00:00",
+  "github": {
+    "pr370": {
+      "subject": "b43c041448a19eb7f5cb025b4fab8e7ab9cefd75",
+      "state": "OPEN/BLOCKED unchanged"
+    },
+    "pr371": {
+      "subject": "5b8a5c57e13079b76614235a762b7894914e7e86",
+      "state": "OPEN/BLOCKED unchanged"
+    }
+  },
+  "humanFirstTrustDecision": "pending; no implicit approval",
+  "sourceWork": {
+    "existingThread": "01a106b8-a883-7185-9962-f7372109a093",
+    "host": "durable",
+    "beforeDispatchCursor": 50,
+    "beforeDispatchState": "idle",
+    "newBranch": "codex/ptt-mention-provenance-oct12",
+    "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "owner": "existing Cloud task",
+    "scope": [
+      "bounded PTT provenance helper/tests",
+      "research-v2 PTT read-completeness metadata",
+      "mention provenance allowlist boundary"
+    ],
+    "explicitLimits": [
+      "do not modify frozen370/371",
+      "verify source_document_id FK before considering raw IDs",
+      "conversation parent not independent news root",
+      "local author not resolved cross-platform identity",
+      "retention title/link and bounded excerpts unchanged",
+      "no schema/API/strategy/qualification/scheduler change",
+      "no live crawl or production DB write",
+      "no core or PTT2409 rerun",
+      "main lock/Node22 tests/types/lint/build",
+      "30-minute bounded engineering work, not formal automatic research schedule"
+    ]
+  },
+  "cacheWork": {
+    "existingThread": "019fbfd2-f671-7f90-858f-683bc2114af4",
+    "host": "local",
+    "beforeDispatchCursor": 28,
+    "beforeDispatchState": "idle after own deployment completed",
+    "afterDispatchCursor": 29,
+    "afterDispatchState": "active readonly cache investigation",
+    "scope": "SOHO Dockerfile + actual layer/cache history; separate shared/unknown and build-deps causes",
+    "authorization": "human requested contacting other App Codex; no new chat created",
+    "noDeletion": true,
+    "noBuild": true,
+    "noConfigurationOrDeploy": true
+  },
+  "rootSourceChanges": false,
+  "productionWrites": false,
+  "trustChanges": false,
+  "dockerDeleted": false,
+  "fullRefreshRepeated": false,
+  "testsRerun": false
+}

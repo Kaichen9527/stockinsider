@@ -1,5 +1,14 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 16:46Z：等待決策期間繼續來源接線與跨 App 查核
+
+PR370/371精確head及BLOCKED未變，人類首次信任遷移決策尚未答覆；不重跑同一失敗、不改保護。既有Cloud cursor50確認idle後，接獨立main169分支`codex/ptt-mention-provenance-oct12`：只補PTT來源讀取完整度與已保留逐則留言關係至mention provenance，有界allowlist與測試。FK先核對，不能拿raw-document ID冒充source_document ID；parent只是討論串、作者只是平台身份，不能偽造獨立消息根源。凍結PR370/371不動，30分鐘工程工作，無實際抓取/寫DB/重算/改策略或排程。Root不重疊修改。
+
+其他App既有聊天cursor28已完成自己的部署且idle，這時才送一次有界唯讀快取成因專項；cursor29已開始對照Dockerfile、映像歷史及cache紀錄，不建置、不刪除、不部署。要求分開核對runtime release ENV/apt父層與位於ENV之前的build-deps/npm ci，不把全機共享量歸於SOHO。這是已派發且運行中，尚無最終成因答案。
+
+這些工作不代表任何新來源、合格候選、受保護審查或正式發布已完成。派發邊界及狀態見`.agent/reports/2026-10-11T16-46-authorized-source-and-cache-continuation.json`。
+
+
 ## 15:49Z：既有 runner 啟動父鏈唯讀確認
 
 GitHub PR370/371仍是原精確head、OPEN/BLOCKED，首次信任遷移決策未答覆；既有VM cursor50 idle，不新增重複派工。其他App cursor27仍執行自己的部署，快取歸屬答覆尚未出現。
