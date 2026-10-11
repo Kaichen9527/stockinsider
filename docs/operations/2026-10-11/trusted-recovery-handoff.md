@@ -1,5 +1,12 @@
 # Trusted recovery handoff — 2026-10-11
 
+> Update2026-10-11: the human owner explicitly confirmed there is no existing
+> recovery procedure. The historical request below is closed; do not ask for an
+> old operator or pre-existing ingress again. First establishment now requires a
+> separate governance decision, recorded in [initial-bootstrap-decision.md](initial-bootstrap-decision.md).
+> Ordinary repair/merge-after-checks authorization persists. No governance
+> exception or trust authority has been approved/installed by that answer.
+
 Classification: unsigned, non-secret, read-only observation summary. This document is not an approval, signed recovery grant, installation authorization, or protected-check result. It records the agent’s actual probes at 2026-10-11T06:03–06:04Z and the immediately preceding GitHub/source inspection. No repeated CI run, provider execution, credential read, installation, main mutation, or ruleset change occurred.
 
 ## Evidence provenance and limits

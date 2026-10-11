@@ -140,3 +140,17 @@ or schedule activation. Reviewed downloadable Linux package is ready.
 Final exact evidence: `.agent/reports/2026-10-11T10-16-protected-final.json`.
 The remaining external requirement is an actual trusted native recovery
 entry/procedure with provenance, as documented in the native blocker audit.
+
+## Initial trust establishment decision — owner answer recorded
+
+Owner explicitly confirms no existing recovery procedure. Do not request one
+again. Read-only native facts:0.162.0-alpha.17.2, strict signaturePASS/hash0d5a;
+not a live model oracle or permission. Independently assessed decision packet
+`initial-bootstrap-decision.md` distinguishes the new one-time infrastructure
+governance exception from ordinary repair authority and preserves the original
+no-exception alternative. No ruleset, pin, main or production mutation.
+
+The same read-only audit found actual ordinary diagnostic38130038830 failed
+`expires-waiting` with financial_parent_replaced. Preserve this new failure for
+root-cause work; prior ordinaryCI38129034362 and protected272PASS are distinct
+real results, not proof this later run succeeded. Receipt:11:40initial-bootstrap.

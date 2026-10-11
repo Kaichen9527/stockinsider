@@ -1,0 +1,181 @@
+{
+  "classification": "unsigned independent architecture audit; no bootstrap approval",
+  "observedAt": "2026-10-11T11:39:09Z",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "productSubject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "productTree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+  "baseModelListingSha256": "fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161",
+  "humanPremise": "Human explicitly confirms there is no existing recovery procedure. Do not request a nonexistent previous recovery operator.",
+  "conclusion": {
+    "canLandInitialBootstrapUnderUnchangedConstraints": false,
+    "reason": "Base-owned missing-native sandbox must succeed before the required aggregate can pass; base has no outgoing approved successor and candidate changes cannot replace the protected executor. New governance cannot self-authorize through this broken check.",
+    "authorityNotCurrentlyGranted": "A one-time initial trust-transfer exception to the existing no-direct-main/no-gate-bypass constraints, or a demonstrably authentic restoration of the entire already-trusted environment. Neither is executed or presumed authorized.",
+    "missingSignatureIsNotGenericBlocker": "The exact product review grammar is unsigned and already works. Candidate recovery planners choose an external signed registry protocol, but no established consumer/root for it exists. Creating keys does not fix that."
+  },
+  "rulesetObservation": {
+    "id": 20177392,
+    "enforcement": "active",
+    "requiredContext": "stockinsider-v3-gate-root",
+    "integrationId": 15368,
+    "bypassActors": [],
+    "currentUserCanBypass": "never",
+    "target": "default branch",
+    "source": "authenticated read-only GitHub ruleset API this audit"
+  },
+  "protectedRun": {
+    "id": 38130037645,
+    "head": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "verifiedFromCheckRunsAPI": {
+      "bootstrap": "success",
+      "requirements": "success",
+      "architecture": "success",
+      "exact-review": "success",
+      "product-runtime-code-gate": "success",
+      "model-runner-code-gate": "failure",
+      "stockinsider-v3-gate-root": "failure"
+    },
+    "modelJob": 114442353398,
+    "modelFailureDetail": "Old Codex path ENOENT per parent actual2e log; no repeat log download in this audit. Independently saved prior399 identical boundary raw is indexed below.",
+    "otherChecks": "The same bounded check-runs query exposed diagnostic workflow38130038830 failure; not investigated or attributed here. Earlier ordinary38129034362 success remains historical, not overwritten."
+  },
+  "sourceChecks": [
+    {
+      "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs",
+      "sha256": "0906ca3c1cbcac003f0708fd753ec0726874e57a5d68282bd051ca6bd2a2b68c",
+      "identicalBetweenMainAnd2e": true
+    },
+    {
+      "path": ".github/workflows/source-led-opportunity-external-gate.yml",
+      "sha256": "a9573672c1e56833e5f59ae98d33eea5755d5cee9eb36231919b4e592be9d286",
+      "identicalBetweenMainAnd2e": true
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/external-gate-release-registry-v1.json",
+      "sha256": "bd1b4d2985de491411f003f591eb1b04d0f2b6af7e9904a42a2f0783e1356983",
+      "identicalBetweenMainAnd2e": true
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json",
+      "sha256": "9d7b0820a22d35b5de125d457c129272fea14be37d0c1ba81ee4531a2b246439",
+      "identicalBetweenMainAnd2e": true
+    }
+  ],
+  "reusablePRs": [
+    {
+      "number": 288,
+      "head": "e94d21f9fe05dc436211a2458ea59adb52195e26",
+      "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "state": "open",
+      "draft": true,
+      "scope": "Recovery packet verifier, finite identity bindings, Sol6.1 maker/Astra reviewer routing. Historical native facts; no authority to install."
+    },
+    {
+      "number": 295,
+      "head": "73e0aed1b6303c0fc4470b85d751717d225d0fa4",
+      "base": "e94d21f9fe05dc436211a2458ea59adb52195e26",
+      "state": "open",
+      "draft": true,
+      "scope": "Nonexecuting installer proposal/negative tests. External adapters and establishment protocol absent."
+    },
+    {
+      "number": 311,
+      "head": "1d92e04e26c393c6d9c32b549854281e3f29f115",
+      "base": "73e0aed1b6303c0fc4470b85d751717d225d0fa4",
+      "state": "open",
+      "draft": true,
+      "scope": "October8 native successor/canary. Not October11 native; old facts cannot be activated."
+    },
+    {
+      "number": 314,
+      "head": "b1d96eb96156d3e1394615bb32c7a2d7ef90b661",
+      "base": "1d92e04e26c393c6d9c32b549854281e3f29f115",
+      "state": "open",
+      "draft": true,
+      "scope": "Exact1d92 plan and registry/CAS identity validator. Explicitly requires preexisting authority; cannot perform first bootstrap."
+    },
+    {
+      "number": 317,
+      "head": "1afdd69bcc3bedbeae4151a56a7b372f64b3a58f",
+      "base": "b1d96eb96156d3e1394615bb32c7a2d7ef90b661",
+      "state": "open",
+      "draft": true,
+      "scope": "Strict JSONL FSM and negative tests; reusable source after final-source compatibility review."
+    },
+    {
+      "number": 318,
+      "head": "0825db4f5cb563d7760f8e4b0e087a9c9d4bf8e7",
+      "base": "1afdd69bcc3bedbeae4151a56a7b372f64b3a58f",
+      "state": "open",
+      "draft": true,
+      "scope": "Process lifecycle bounds/ownership-loss resource fence and tests; reusable source, not host recovery authority."
+    }
+  ],
+  "canPrepare": [
+    "Separate bootstrap-only exact candidate and durable governance amendment with current main/listing precondition.",
+    "Integrate reviewed parser/lifecycle and current native compatibility subject; preserve historical packets.",
+    "Independent requirements/architecture/code review plus real bounded tests, exact graph/listing/host facts and rollback/failure model.",
+    "Design actual installation/CAS permission boundary only after the chosen governance and control-plane mechanism is explicit."
+  ],
+  "canExecuteNow": [
+    "Read-only identity and source checks, isolated ordinary-branch implementation/tests/reviews within authorized scope, nonsecret handoff preparation.",
+    "Preserve existing genuine product reviews; continue independent product/deployment preparation without merge or production writes."
+  ],
+  "requiresNewExplicitHumanDecision": [
+    "Choose whether no-bypass remains absolute; if yes, protected merge stays blocked unless original complete trusted environment can genuinely be restored.",
+    "If first bootstrap must be established despite unrecoverable old executor, explicitly authorize a narrowly bounded initial trust-transfer exception and its exact operator/mechanism; this is a policy change, not a pass under old rules.",
+    "Name the GitHub-authenticated repository owner responsible and independent approving reviewers, exact bootstrap-only commit, permitted mutations, expiry, predecessor CAS and failure retention.",
+    "Select authentication and durable audit mechanism; GitHub identity/review/audit can be the chosen new governance anchor if explicitly adopted. Do not pretend it already satisfies old preexisting-registry requirements.",
+    "Approve only the reviewed bootstrap transition; keep product PR364 and later production deployment subject to fresh genuine required gates."
+  ],
+  "unimplemented": [
+    "First-bootstrap governance contract and explicitly authorized execution entry.",
+    "Compatible freshly reviewed current-native successor and source/graph registration.",
+    "Real durable predecessor state machine, installation/publication adapter and failure/recovery protocol.",
+    "Fresh protected model/live-oracle and aggregate success from the established successor."
+  ],
+  "prohibitedInThisAudit": [
+    "No ruleset/main/pin mutation",
+    "No status fabrication or candidate-generated same-name authoritative check",
+    "No binary alias/substitution or inferred native version",
+    "No key/credential reads or new trust keys",
+    "No model/CI rerun/install/merge/deploy"
+  ],
+  "rawHistory": [
+    {
+      "path": "/tmp/stockinsider-trusted-recovery-oct11.md",
+      "bytes": 10933,
+      "sha256": "d5d47f38df5aae83290a08e382f01d6a74ac7f60c8500c84c933a14b4b64c449"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-protected399-native-blocker.md",
+      "bytes": 8081,
+      "sha256": "a6147aad0361c33e468c696483d2a54a08d000367900c4875a831bbd23641748"
+    },
+    {
+      "path": "/tmp/stockinsider-protected399-model-runner-failure-oct11.log",
+      "bytes": 20033,
+      "sha256": "2b8c7861da63ecc49f27e27302ccde6101b3d8de3d689ef3427d3d176d229cc9"
+    }
+  ],
+  "decisionDraftReview": {
+    "path": "/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/docs/operations/2026-10-11/initial-bootstrap-decision.md",
+    "sha256": "e616b295c8b91d4a2685b610e9110076868aad9b6f62b631a0ca4dc1b6b52a5d",
+    "verdict": "No remaining misleading authority or disguised bypass finding in bounded decision-stage architecture; not execution or implementation approval",
+    "priorDraftReadSha256": "47ba4e23c5f37bc6c5472f1570f18c55279fedcd908b9baa0401c1f4e23ce77c",
+    "confirmed": [
+      "OptionA requires new explicit human governance exception and excludes364",
+      "OptionB retains actual block",
+      "GitHub actor bypass is not falsely claimed SHA-scoped",
+      "Minimal current worker/fixture/registry+harness slice precedes general future recovery service",
+      "PR288 protocol/routing vs317/318 parser/lifecycle attributed correctly",
+      "Candidate-head check is not claimed as base+candidate CAS; missing real primitive blocks execution"
+    ],
+    "remainingImplementationBoundary": [
+      "Select and verify actual predecessor CAS and exact admin mutation scope",
+      "Freeze and independently review real current-native candidate and actual harness results",
+      "Obtain separate human approval for exact landing operation",
+      "Rebind reviews and real protected checks to new base after establishment"
+    ],
+    "nativeEvidence": "Parent-supplied codex-cli0.162.0-alpha.17.2 / SHA0d5ac7aae20c4eda6242428d5e218c55ba96d8763fda2a271088ff37104b9d28 / strict signature pass; no live oracle or independent new probe."
+  }
+}

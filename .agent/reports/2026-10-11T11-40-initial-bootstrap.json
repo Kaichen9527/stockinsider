@@ -1,0 +1,54 @@
+{
+  "schema": "stockinsider-first-bootstrap-decision-preparation-v1",
+  "observedAt": "2026-10-11T11:41:21.956645+00:00",
+  "humanAnswer": "No existing recovery procedure",
+  "previousRoutineRepairAuthorizationRetained": true,
+  "newAuthorityEstablished": false,
+  "settingsChanged": false,
+  "nativePinChanged": false,
+  "mainChanged": false,
+  "applicationCandidate": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "proposal": "docs/operations/2026-10-11/initial-bootstrap-decision.md",
+  "proposalSha256": "e616b295c8b91d4a2685b610e9110076868aad9b6f62b631a0ca4dc1b6b52a5d",
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T11-40-initial-bootstrap/stockinsider-initial-bootstrap-native-oct11.json",
+      "bytes": 3511,
+      "sha256": "b3799f2113e6ef158b4ffd742645751dc60b205e264fa28ba9c2e90d4fc79474"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-40-initial-bootstrap/stockinsider-initial-bootstrap-ruleset-oct11.json",
+      "bytes": 723,
+      "sha256": "fb928e2b334218683614f8a20ed54b612db0342d6188eef5e69630e5f819f33a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-40-initial-bootstrap/stockinsider-initial-bootstrap-runners-oct11.json",
+      "bytes": 154,
+      "sha256": "a3ca1f8123ff54d241beb0adb9b03c6126a9ad6cf401f2993a23c776d581e100"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-40-initial-bootstrap/stockinsider-initial-bootstrap-oct11-independent.md",
+      "bytes": 15030,
+      "sha256": "46b7934b264f5d5e8369458fee19af76ce53c5d11e9d3fad41fd7429ec4f4301"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-40-initial-bootstrap/stockinsider-initial-bootstrap-oct11-independent.json",
+      "bytes": 10284,
+      "sha256": "5cf8b5ed6f31ff1ce5e1aa41d4691cd7e43aea1a7be761f4d2d23f5bdf3df9bf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-40-initial-bootstrap/stockinsider-initial-bootstrap-ordinary-diagnostic-oct11.log",
+      "bytes": 625488,
+      "sha256": "1c177722a6b5b7c00ccb26031cf54261462c5f7cad751ce1ace0a66e751cf141"
+    }
+  ],
+  "independentReview": "Bounded decision-stage architecture assessment completed; no remaining misleading-authority finding; not bootstrap or implementation approval",
+  "diagnosticFollowup": {
+    "run": 38130038830,
+    "head": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "status": "FAIL",
+    "case": "atomic publication expires-waiting",
+    "error": "financial_parent_replaced",
+    "disposition": "New ordinary-CI failure retained; needs bounded root-cause analysis, no same-input rerun; protected product272PASS remains separate evidence"
+  }
+}

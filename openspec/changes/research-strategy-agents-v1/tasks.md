@@ -286,3 +286,16 @@ Evidence: `.agent/reports/2026-10-11T07-48-release-review-repairs.json`; current
 - [x] Two actual AUO detail bodies read with existing bounded controller: technical8/31 and revenue10/8, bothHTTP200/read_success. Reader regression10/10zero-skip. Root source workpaper distinguishes company claims, inference and unavailable order/economics; revenue three rounded growth values recompute.
 - [ ] Both current pages expose no exact published timestamp. Official index supplies date-only; preserve null exact instant, no invented midnight/backdated inbox item. Typed publication-precision treatment remains necessary before these workpapers can enter exact-instant authored input. No new order/customer/EPS inferred.
 - [ ] Workpaper is unsubmitted, not a budgeted author or independent review result. Native recovery, formal publication and prior product acceptance remain open. Evidence `.agent/reports/2026-10-11T11-18-auo-official-body.json`; main/PR364 frozen unchanged.
+
+## Initial bootstrap owner decision update
+
+- [x] Owner answer recorded: no existing recovery procedure. Fresh native
+  version/signature and current GitHub ruleset/runner facts saved; independent
+  bounded architecture review of decision packet completed. No new authority
+  created or policy exception presumed from the answer.
+- [ ] Select an explicit first-establishment governance method. Recovery-only
+  current-native source/harness/actual transition remain unimplemented; app364
+  is excluded from any proposed initial exception and must pass the new gate.
+- [ ] Actual ordinary diagnostic38130038830 expires-waiting failed
+  financial_parent_replaced; preserve and diagnose independently of model
+  recovery. No same-input retry or claim that all current checks pass.
