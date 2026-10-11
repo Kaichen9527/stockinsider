@@ -1,0 +1,17 @@
+{
+  "cachePath": "/home/agent/.cache/ms-playwright",
+  "entries": [],
+  "expectedRevision": "1208",
+  "expectedBrowserVersion": "145.0.7632.6",
+  "playwrightVersion": "1.58.2",
+  "headlessShellPresent": false,
+  "coreBrowsersSha256": "6b6e0538d6e46eef71d3e1a0dcb65f8f5ea7914033c8150529d8e207afb6030c",
+  "networkPolicySha256": "e1589d6b2ac0d196c1fa791aa3214989e85ac7fe5bb28a74d7f12ca14c45a305",
+  "proxyAndCaNamesPresent": [
+    "HTTP_PROXY",
+    "HTTPS_PROXY",
+    "NO_PROXY",
+    "SSL_CERT_FILE",
+    "NODE_EXTRA_CA_CERTS"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "stage": "browser-plan",
+  "command": [
+    "node",
+    "web/node_modules/playwright/cli.js",
+    "install",
+    "--dry-run",
+    "chromium"
+  ],
+  "startedAt": "2026-10-11T06:58:47.904018+00:00",
+  "endedAt": "2026-10-11T06:58:48.670387+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.7664351830026135,
+  "sampledAggregatePeakRssBytes": 124362752,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10073436160,
+  "diskAvailableAfterBytes": 10073436160,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
