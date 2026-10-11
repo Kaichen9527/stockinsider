@@ -9,9 +9,6 @@ const { executeModel, prepareTransport } = require('./execution');
 const { routeOperation } = require('./routing');
 
 async function runRealModelAttempt() {
-  // Candidate preparation must not silently become a credential-bearing oracle.
-  const candidateLiveAuthorized = false; // No environment or caller override.
-  if (!candidateLiveAuthorized) throw new Error('inactive recovery candidate: live oracle not authorized');
   const fixture = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json');
   const pins = loadHostPins(fixture);
   const completedRoutes = [];

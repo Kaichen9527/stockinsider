@@ -1,0 +1,44 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { spawnSync } from 'node:child_process';
+import { chmodSync, copyFileSync, mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { candidateSandboxPolicy } from './protected-external-gate-worker.mjs';
+const require = createRequire(import.meta.url);
+const { loadHostPins, verifyCurrentNode } = require('../model-runner-v3/hostPreflight');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+assert.equal(process.argv.length, 3);
+assert.ok(path.isAbsolute(process.argv[2]));
+assert.equal(process.platform, 'darwin');
+assert.equal(process.arch, 'arm64', 'controller must be the native runner architecture; no translated fallback');
+const pins = loadHostPins(path.join(root, '.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json'));
+const node = pins.executables.find(({ name }) => name === 'node');
+const codex = pins.executables.find(({ name }) => name === 'codex');
+assert.equal(process.execPath, node.path);
+const directory = realpathSync(mkdtempSync(path.join(os.tmpdir(), 'si-installation-host-')));
+try {
+  chmodSync(directory, 0o700);
+  const [view, scratch, policyRoot] = ['view','scratch','policy'].map(name => path.join(directory,name));
+  for (const entry of [view,scratch,policyRoot]) mkdirSync(entry,{mode:0o700});
+  const env = { PATH:'/usr/bin:/bin:/usr/sbin:/sbin', HOME:scratch, CODEX_HOME:policyRoot, TMPDIR:scratch, LANG:'C', LC_ALL:'C' };
+  // This process uses public-only host probes; no user credential home is passed.
+  process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH='1';
+  process.env.OPPORTUNITY_V3_PROTECTED_CANDIDATE_POLICY=policyRoot;
+  process.env.OPPORTUNITY_V3_PROTECTED_CANDIDATE_SCRATCH=scratch;
+  verifyCurrentNode(pins);
+  const developer=spawnSync('/usr/bin/xcode-select',['-p'],{env,encoding:'utf8',timeout:5000});
+  assert.equal(developer.status,0);
+  const profile=candidateSandboxPolicy({subjectRoot:view,scratch,policyRoot,nodeToolchainRoot:'/usr/local',pinnedNodeExecutable:node.path,developerRoot:developer.stdout.trim()});
+  writeFileSync(path.join(policyRoot,'external-gate-candidate.config.toml'),profile,{flag:'wx',mode:0o600});
+  copyFileSync(path.join(root,'scripts/run-node22.js'),path.join(view,'run-node22.js'));
+  const code='console.log(JSON.stringify({arch:process.arch,execPath:process.execPath,version:process.version}))';
+  const argv=['sandbox','--profile','external-gate-candidate','--permission-profile','external-gate-candidate','-C',view,'--',node.path,path.join(view,'run-node22.js'),'-e',code];
+  const result=spawnSync(codex.path,argv,{cwd:view,env,encoding:'utf8',timeout:15000,maxBuffer:65536});
+  assert.equal(result.status,0,result.stderr);
+  const actual=JSON.parse(result.stdout);
+  assert.deepEqual(actual,{arch:'arm64',execPath:node.path,version:node.version});
+  verifyCurrentNode(pins);
+  writeFileSync(process.argv[2],JSON.stringify({schema:'runner-installation-public-host-probe-v1',observedAt:new Date().toISOString(),controller:{arch:process.arch,execPath:process.execPath,version:process.version},nativePath:codex.path,nativeSha256:codex.sha256,chain:'native Node controller -> pinned Codex sandbox -> pinned Node -> unchanged run-node22 -> pinned Node',actual,stdout:result.stdout,stderr:result.stderr,passed:true,credentialsRead:false,modelInvoked:false,protectedPass:false,githubWorkerInvoked:false},null,2)+'\n',{flag:'wx',mode:0o600});
+} finally { rmSync(directory,{recursive:true,force:true}); }

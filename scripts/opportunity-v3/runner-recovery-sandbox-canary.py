@@ -12,8 +12,10 @@ def identity(p):
     s=os.lstat(p)
     return dict(device=str(s.st_dev),inode=str(s.st_ino),size=str(s.st_size),uid=s.st_uid,gid=s.st_gid,mode=format(s.st_mode,'06o'))
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--output',required=True);a=ap.parse_args()
-    pins=json.loads((DOC/'host-pins.candidate.json').read_text());assert pins['approvalAuthority'] is None
+    ap=argparse.ArgumentParser();ap.add_argument('--output',required=True);ap.add_argument('--installation',action='store_true');a=ap.parse_args()
+    fixture=(ROOT/'.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json') if a.installation else (DOC/'host-pins.candidate.json')
+    pins=json.loads(fixture.read_text());assert pins['approvalAuthority'] is None
+    assert pins['fixtureVersion']==('model-runner-host-pins-v3.25' if a.installation else 'model-runner-host-pins-oct11-candidate-v1')
     native=next(x for x in pins['executables'] if x['name']=='codex');node=next(x for x in pins['executables'] if x['name']=='node')
     def verify():
         for x in pins['executables']:
@@ -23,6 +25,7 @@ def main():
         root=pathlib.Path(temporary).resolve();root.chmod(0o700)
         view,scratch,policy,transport=[root/x for x in ['view','scratch','policy','transport']]
         for p in [view,scratch,policy,transport]:p.mkdir(mode=0o700)
+        (view/'run-node22.js').write_bytes((ROOT/'scripts/run-node22.js').read_bytes())
         (view/'source.txt').write_text('synthetic source\n');(root/'private.txt').write_text('synthetic outside\n');(transport/'synthetic-private.json').write_text('{"not_credentials":true}\n')
         env={'PATH':'/usr/bin:/bin:/usr/sbin:/sbin','HOME':str(scratch),'CODEX_HOME':str(policy),'TMPDIR':str(scratch),'LANG':'C','LC_ALL':'C'}
         developer=subprocess.check_output(['/usr/bin/xcode-select','-p'],env=env,text=True).strip()
@@ -56,7 +59,7 @@ def main():
         finally:server.shutdown();server.server_close();thread.join(timeout=3)
         assert (view/'source.txt').read_text()=='synthetic source\n'
         verify()
-        receipt=dict(schema='runner-recovery-no-credential-canary-v1',candidateOnly=True,protectedPass=False,modelInvoked=False,realCredentialsRead=False,fixtureSha256=digest(DOC/'host-pins.candidate.json'),scriptSha256=digest(__file__),policyModuleSha256=digest(ROOT/'scripts/opportunity-v3/protected-external-gate-worker.mjs'),profiles={k:v[1] for k,v in profiles.items()},checks=checks,passed=all(x['passed'] for x in checks))
+        receipt=dict(schema='runner-recovery-no-credential-canary-v1',candidateOnly=True,protectedPass=False,modelInvoked=False,realCredentialsRead=False,fixtureSha256=digest(fixture),installationCandidate=a.installation,runNode22Sha256=digest(ROOT/'scripts/run-node22.js'),scriptSha256=digest(__file__),policyModuleSha256=digest(ROOT/'scripts/opportunity-v3/protected-external-gate-worker.mjs'),profiles={k:v[1] for k,v in profiles.items()},checks=checks,passed=all(x['passed'] for x in checks))
         with open(a.output,'x') as f:json.dump(receipt,f,indent=2);f.write('\n')
         print(json.dumps({'passed':receipt['passed'],'checks':len(checks),'failed':[(x['policy'],x['name']) for x in checks if not x['passed']]}))
         return 0 if receipt['passed'] else 1

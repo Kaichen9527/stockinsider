@@ -1,0 +1,8 @@
+{
+  "schema": "initial-trust-migration-review-input-v1",
+  "activeGraphSha256": "ad4e4d1910b320476c09d50736651d705701902d6c1478f9ee65fa3d5ab798dc",
+  "requirementsEvidence": "not_created",
+  "architectureEvidence": "not_created",
+  "independentCodeReview": "pending",
+  "protectedPass": false
+}

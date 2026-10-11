@@ -14,11 +14,13 @@ const { terminalResultFromJsonl }=require('../model-runner-v3/execution');
 const { canonicalJson,sha256 }=require('../model-runner-v3/canonicalJson');
 const runner=require('../model-runner-v3/runner');
 const base='169aad1b6cfa747f78ae3464b614f43c0749d806';
-test('measured candidate is inactive, separate from unchanged frozen active authority',()=>{
- const pins=loadRecoveryCandidatePins();assert.equal(pins.approvalAuthority,null);
- assert.equal(pins.executables[0].version,'codex-cli 0.162.0-alpha.17.2');
- for(const p of ['.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json','.loop-engineering/state/changes/source-led-opportunity-engine-v3/acceptance-tests.json','.loop-engineering/state/changes/source-led-opportunity-engine-v3/acceptance-tests.md','.github/workflows/source-led-opportunity-external-gate.yml'])assert.deepEqual(readFileSync(p),execFileSync('/usr/bin/git',['show',`${base}:${p}`]));
- const s=readFileSync('scripts/model-runner-v3/runner.js','utf8');assert.match(s,/Inactive recovery candidate:[\s\S]+assert\(false, 5\);[^\n]*\n  const pins = verifyExecutionHost/);
+test('historical candidate stays inactive and installed fixture is exact successor',()=>{
+ assert.equal(loadRecoveryCandidatePins().approvalAuthority,null);
+ const p='.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json';
+ const pins=require('../model-runner-v3/hostPreflight').loadHostPins(p);
+ assert.equal(pins.fixtureVersion,'model-runner-host-pins-v3.25');assert.equal(pins.approvalAuthority,null);
+ assert.deepEqual(readFileSync('.github/workflows/source-led-opportunity-external-gate.yml'),execFileSync('/usr/bin/git',['show',`${base}:.github/workflows/source-led-opportunity-external-gate.yml`]));
+ assert.doesNotMatch(readFileSync('scripts/model-runner-v3/runner.js','utf8'),/assert\(false, 5\)/);
 });
 test('candidate route rejects legacy strategy and operation/model swaps',()=>{
  for(const op of ['make','review','verify']){
@@ -42,7 +44,7 @@ test('worker policy extraction preserves all legacy bytes for ordinary canonical
  assert.throws(()=>candidateSandboxPolicy({...values,network:'true'}));
 });
 
-test('actual candidate CLI validate/route works while all model operations stop at inactive fence',async()=>{
+test('actual CLI routes while missing exact host fixture rejects model operations',async()=>{
  const dir=mkdtempSync(path.join(os.tmpdir(),'inactive-runner-test-'));
  try {
   const manifest={protocol:'loop-model-manifest-v3.7',checkpoint:'model_runner_v3',changeId:'source-led-opportunity-engine-v3',base:'a'.repeat(40),inputHead:'b'.repeat(40),defaultStrategy:'sol61-make-astra-review',tasks:[{id:'candidate',sequence:0,assurance:'critical',dependsOn:[],task:'Synthetic candidate.',acceptanceCriteria:['No model invocation.'],allowedPaths:['scripts/model-runner-v3/**'],inspectionPaths:['scripts/**'],promptFiles:['.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-contract.md'],timeLimits:{makeSeconds:60,reviewSeconds:60,verifySeconds:60}}]};
@@ -52,7 +54,9 @@ test('actual candidate CLI validate/route works while all model operations stop 
  } finally {rmSync(dir,{recursive:true,force:true});}
 });
 
-test('candidate real oracle refuses before authentication transport or provider launch',async()=>{
- const {runRealModelAttempt}=require('../model-runner-v3/real-model-attempt');
- await assert.rejects(runRealModelAttempt(),/inactive recovery candidate: live oracle not authorized/);
+test('live oracle remains operation-bound and uses OS-account authentication path',()=>{
+ const s=readFileSync('scripts/model-runner-v3/real-model-attempt.js','utf8');
+ assert.match(s,/for \(const operation of \['make', 'review', 'verify'\]\)/);
+ assert.doesNotMatch(s,/candidateLiveAuthorized/);
+ assert.equal(require('../model-runner-v3/execution').authenticationSourcePath(),path.join(os.userInfo().homedir,'.codex','auth.json'));
 });

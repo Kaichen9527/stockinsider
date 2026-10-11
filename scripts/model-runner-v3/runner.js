@@ -10,19 +10,19 @@ const { loadHostPins, verifyCurrentNode } = require('./hostPreflight');
 const { executeOperation, readState, statePath, repositoryRoot } = require('./execution');
 
 const MODEL_RUNNER_IDENTITY = [
-  ['approvalPolicy', 'never'], ['codexVersion', '0.162.0-alpha.17.2'], ['contractVersion', 'model-runner-recovery-candidate-v1'],
+  ['approvalPolicy', 'never'], ['codexVersion', '0.162.0-alpha.17.2'], ['contractVersion', 'model-runner-v3.10'],
   ['gitVersion', '2.50.1 (Apple Git-155)'], ['hardIsolationClaims', ['external_user_read', 'authoritative_write', 'command_network']],
-  ['hostPinFixtureSha256', '6dd3bba92ed656b0cd47ef96d0f4b08226bc0e8f9d25ed6b1b9939f50123440c'],
-  ['hostPinVersion', 'model-runner-host-pins-oct11-candidate-v1'], ['journalVersion', 'model-runner-journal-v3.5'],
+  ['hostPinFixtureSha256', 'e10f04c5fff073c6c03109af457d2fe9597db83c6f7f5b719fa6412cbcf151a4'],
+  ['hostPinVersion', 'model-runner-host-pins-v3.25'], ['journalVersion', 'model-runner-journal-v3.5'],
   ['manifestVersion', 'loop-model-manifest-v3.7'], ['nodeVersion', 'v22.14.0'],
   ['permissionProfileVersion', 'model-runner-permissions-v3.6'], ['promptPolicyVersion', 'model-runner-prompt-v3.5'],
   ['requestProtocol', 'loop-model-v3.5'], ['resultProtocol', 'loop-model-result-v3.5'],
   ['routingVersion', 'model-runner-routing-v3.7'], ['sourceViewVersion', 'model-runner-source-view-v3.5'],
-  ['stateNamespace', 'model-runner-v3-oct11-candidate'], ['trustedApplyVersion', 'model-runner-trusted-apply-v3.5'],
+  ['stateNamespace', 'model-runner-v3-trust-migration-v1'], ['trustedApplyVersion', 'model-runner-trusted-apply-v3.5'],
 ];
-const MODEL_RUNNER_IDENTITY_SHA256 = '0945109f816596276ffaaae51fc6b365eb4301bdeae653fb8547e3bda4bb849f';
+const MODEL_RUNNER_IDENTITY_SHA256 = '04e4f083dfabed992e0f9101e7983efe4987d2ce2871a288647a68b5f7afa5f8';
 
-assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 932 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
+assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 906 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
 
 function parseArguments(argv) {
   assert(argv.length >= 1, 2);
@@ -126,9 +126,6 @@ async function execute(argv) {
   }
   const effectiveStrategy = flags['--strategy'] || parsed.manifest.defaultStrategy;
   assert(effectiveStrategy === 'sol61-make-astra-review' && !flags['--waiver'], 5);
-  // Inactive recovery candidate: no initial-establishment authorization exists.
-  // Only validate/route/status are available; review must separately authorize activation.
-  assert(false, 5); // Fixed inactive fence; no CLI/environment activation override.
   const pins = verifyExecutionHost(flags['--manifest']);
   const waiver = null;
   const result = await executeOperation({

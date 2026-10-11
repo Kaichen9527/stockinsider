@@ -870,6 +870,8 @@ const modelOracleSuccessorApprovals = Object.freeze({
 });
 
 const modelOracleHostPinByListingSha256 = Object.freeze({
+  // Initial migration: recognized only once this independently reviewed code is protected base.
+  '80703945942d7823cdcaa34972dc7225b96fad83f82befe00d88d81c2648c86a': 'model-runner-host-pins-v3.25',
   bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3.14',
   cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
   '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': 'model-runner-host-pins-v3.16',
@@ -928,7 +930,17 @@ function publicGithubJson(url, label) {
   return JSON.parse(bytes);
 }
 
-function readModelOracleReuse() {
+export function validateModelOracleReuseTime(value, requireUnexpired = true, now = Date.now()) {
+  for (const key of ['completedAt', 'expiresAt']) {
+    assert.match(value[key], /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/u, `model oracle reuse ${key}`);
+    assert.ok(Number.isFinite(Date.parse(value[key])), `model oracle reuse valid ${key}`);
+  }
+  assert.ok(Date.parse(value.expiresAt) > Date.parse(value.completedAt), 'model oracle reuse ordered time');
+  if (requireUnexpired) assert.ok(Date.parse(value.expiresAt) > now, 'model oracle reuse evidence has not expired');
+  return true;
+}
+
+function readModelOracleReuse(requireUnexpired = true) {
   const bytes = treeBlob(baseRoot, git(baseRoot, ['rev-parse', 'HEAD^{tree}']),
     modelOracleReuseRelative, 'protected model oracle reuse record');
   const value = JSON.parse(bytes);
@@ -944,10 +956,7 @@ function readModelOracleReuse() {
     'model oracle artifact name');
   assert.deepEqual(value.requiredRunnerLabels, ['ARM64', 'macOS', 'self-hosted'],
     'model oracle runner labels');
-  for (const key of ['completedAt', 'expiresAt']) {
-    assert.match(value[key], /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/u, `model oracle reuse ${key}`);
-  }
-  assert.ok(Date.parse(value.expiresAt) > Date.now(), 'model oracle reuse evidence has not expired');
+  validateModelOracleReuseTime(value, requireUnexpired);
   return value;
 }
 
@@ -1015,15 +1024,18 @@ function trustedReusableHostModelOracle(subjectRoot, attestation) {
   };
 }
 
+export function trustedHostAuthenticationPath() {
+  return path.join(absolute(os.userInfo().homedir, 'operating-system account home'), '.codex', 'auth.json');
+}
+
 function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
   const authority = trustedModelOracleAuthority(subjectRoot, attestation.subjectCommitSha);
-  const reuse = readModelOracleReuse();
+  // Expiry prevents reuse, not a fresh independently executed live oracle.
+  const reuse = readModelOracleReuse(false);
   if (modelOracleListing(subjectRoot, attestation.subjectCommitSha) === modelOracleListing(subjectRoot, reuse.subjectCommitSha)) {
     return trustedReusableHostModelOracle(subjectRoot, attestation);
   }
-  const runnerHome = process.env.HOME;
-  assert.equal(typeof runnerHome, 'string', 'runner HOME required for trusted host oracle');
-  const authentication = path.join(absolute(runnerHome, 'runner HOME'), '.codex', 'auth.json');
+  const authentication = trustedHostAuthenticationPath();
   const stat = lstatSync(authentication);
   assert.equal(stat.isFile() && !stat.isSymbolicLink() && stat.uid === process.getuid() && (stat.mode & 0o077) === 0,
     true, 'trusted host oracle authentication boundary');
