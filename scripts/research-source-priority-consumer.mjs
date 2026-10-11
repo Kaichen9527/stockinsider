@@ -2,6 +2,7 @@ import { constants } from 'node:fs';
 import { open, mkdir, lstat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readResearchBoundedFile } from './research-bounded-file.mjs';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
 import { assertSourcePacketBoundary } from '../web/src/lib/research-source-attempt-controller.ts';
 import { validateResearchInboxItemAt } from '../web/src/lib/research-inbox.ts';
@@ -44,17 +45,10 @@ function assertPriorityScope(body, scope) {
   }
 }
 async function readJson(filename, maximum = MAX_BYTES) {
-  if (!path.isAbsolute(filename || '')) throw new Error('source_priority_absolute_path_required');
-  const handle = await open(filename, constants.O_RDONLY | constants.O_NOFOLLOW);
-  try {
-    const before = await handle.stat();
-    if (!before.isFile() || before.size > maximum) throw new Error('source_priority_file_bound');
-    const bytes = await handle.readFile();
-    const after = await handle.stat();
-    if (bytes.length !== before.size || before.ctimeMs !== after.ctimeMs || before.ino !== after.ino)
-      throw new Error('source_priority_input_changed');
-    return JSON.parse(bytes.toString('utf8'));
-  } finally { await handle.close(); }
+  const bytes = await readResearchBoundedFile(filename, { maximum,
+    absoluteError: 'source_priority_absolute_path_required', boundError: 'source_priority_file_bound',
+    changedError: 'source_priority_input_changed' });
+  return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
 }
 async function writeJson(filename, value, maximum = MAX_BYTES, compact = false) {
   const bytes = JSON.stringify(value, null, compact ? 0 : 2) + '\n';

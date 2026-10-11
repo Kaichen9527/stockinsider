@@ -1,0 +1,7 @@
+{
+  "requestedMode": "0644",
+  "actualMode": "0o600",
+  "inheritedUmask": "0o77",
+  "testLine25": "privateMode read should reject public mode, but fixture requested0644 may be masked",
+  "noTestRerun": true
+}

@@ -1,9 +1,9 @@
 import { open } from 'node:fs/promises';
-import { constants } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readResearchBoundedFile } from './research-bounded-file.mjs';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
 import { researchDeepInstant, validateResearchDeepClaimContext } from '../web/src/lib/research-deep-claim-context.ts';
 import { validateResearchDeepAuthorInput } from '../web/src/lib/research-deep-author-input.ts';
@@ -29,50 +29,35 @@ function originUrl(value) {
 async function recoveryRequest(filename, owner, origin, source) {
   // Read a bounded, original journal. Never follow a final-component symlink or
   // reinterpret a model-written packet as a claim request.
-  const handle = await open(filename, constants.O_RDONLY | constants.O_NOFOLLOW);
-  try {
-    const before = await handle.stat();
-    if (!before.isFile() || before.size < 1 || before.size > 131_072 || (before.mode & 0o077))
-      throw new Error('deep_controller_recovery_journal_invalid');
-    const buffer = Buffer.alloc(before.size);
-    let offset = 0;
-    while (offset < buffer.length) {
-      const part = await handle.read(buffer, offset, buffer.length - offset, offset);
-      if (!part.bytesRead) break;
-      offset += part.bytesRead;
-    }
-    const after = await handle.stat();
-    const extra = await handle.read(Buffer.alloc(1), 0, 1, before.size);
-    if (offset !== before.size || extra.bytesRead || before.size !== after.size || before.mtimeMs !== after.mtimeMs
-      || before.ino !== after.ino || before.dev !== after.dev)
-      throw new Error('deep_controller_recovery_journal_changed');
-    const text = buffer.toString('utf8');
-    if (!text.endsWith('\n')) throw new Error('deep_controller_recovery_journal_incomplete');
-    const entries = text.trimEnd().split('\n').map(line => JSON.parse(line));
-    const first = entries[0]; const request = first?.request;
-    if (first?.phase !== 'request_pending' || !request || !['research-deep-request-v1','research-deep-request-v2'].includes(request.schemaVersion)
-      || request.action !== 'claim' || request.workerOwner !== owner || request.origin !== origin
-      || typeof request.claimId !== 'string' || !UUID.test(request.claimId)
-      || request.owner !== `${owner}:${request.claimId}`
-      || request.sourceCommit !== source || first.requestHash !== researchCanonicalHash(request)
-      || Object.keys(request).sort().join(',') !== (request.schemaVersion==='research-deep-request-v2' ? 'action,claimId,observedAt,origin,owner,schemaVersion,scope,snapshotHash,sourceCommit,workerOwner' : 'action,claimId,observedAt,origin,owner,schemaVersion,sourceCommit,workerOwner')
-      || request.schemaVersion==='research-deep-request-v2' && (request.scope!=='research_observed_v1' || !/^[a-f0-9]{64}$/u.test(request.snapshotHash || ''))
-      || !Number.isFinite(Date.parse(request.observedAt))) throw new Error('deep_controller_recovery_binding_invalid');
-    const verified = entries.filter(row => row.phase === 'response_verified');
-    if (verified.length > 1) throw new Error('deep_controller_recovery_journal_invalid');
-    if (verified.length) {
-      const { receiptHash, ...material } = verified[0].saved || {};
-      if (material.requestHash !== first.requestHash || receiptHash !== researchCanonicalHash(material))
-        throw new Error('deep_controller_recovery_receipt_invalid');
-    }
-    const job = verified[0]?.saved?.context?.job;
-    if (job && (typeof job.jobId !== 'string' || !UUID.test(job.jobId)
-      || !Number.isInteger(job.attempt) || job.attempt < 1 || job.attempt > 3))
-      throw new Error('deep_controller_recovery_job_invalid');
-    return { originalRequestHash: first.requestHash, owner: request.owner, claimId: request.claimId,
-      observedAt: request.observedAt, ...(request.schemaVersion==='research-deep-request-v2' ? {scope:request.scope,snapshotHash:request.snapshotHash}:{}), ...(verified[0]?.saved?.context ? {context:verified[0].saved.context} : {}),
-      ...(job ? { jobId: job.jobId, attempt: job.attempt } : {}) };
-  } finally { await handle.close(); }
+  const buffer = await readResearchBoundedFile(filename, { maximum: 131_072, minimum: 1, privateMode: true,
+    absoluteError: 'deep_controller_recovery_journal_invalid', boundError: 'deep_controller_recovery_journal_invalid',
+    changedError: 'deep_controller_recovery_journal_changed' });
+  const text = new TextDecoder('utf-8', { fatal: true }).decode(buffer);
+  if (!text.endsWith('\n')) throw new Error('deep_controller_recovery_journal_incomplete');
+  const entries = text.trimEnd().split('\n').map(line => JSON.parse(line));
+  const first = entries[0]; const request = first?.request;
+  if (first?.phase !== 'request_pending' || !request || !['research-deep-request-v1','research-deep-request-v2'].includes(request.schemaVersion)
+    || request.action !== 'claim' || request.workerOwner !== owner || request.origin !== origin
+    || typeof request.claimId !== 'string' || !UUID.test(request.claimId)
+    || request.owner !== `${owner}:${request.claimId}`
+    || request.sourceCommit !== source || first.requestHash !== researchCanonicalHash(request)
+    || Object.keys(request).sort().join(',') !== (request.schemaVersion==='research-deep-request-v2' ? 'action,claimId,observedAt,origin,owner,schemaVersion,scope,snapshotHash,sourceCommit,workerOwner' : 'action,claimId,observedAt,origin,owner,schemaVersion,sourceCommit,workerOwner')
+    || request.schemaVersion==='research-deep-request-v2' && (request.scope!=='research_observed_v1' || !/^[a-f0-9]{64}$/u.test(request.snapshotHash || ''))
+    || !Number.isFinite(Date.parse(request.observedAt))) throw new Error('deep_controller_recovery_binding_invalid');
+  const verified = entries.filter(row => row.phase === 'response_verified');
+  if (verified.length > 1) throw new Error('deep_controller_recovery_journal_invalid');
+  if (verified.length) {
+    const { receiptHash, ...material } = verified[0].saved || {};
+    if (material.requestHash !== first.requestHash || receiptHash !== researchCanonicalHash(material))
+      throw new Error('deep_controller_recovery_receipt_invalid');
+  }
+  const job = verified[0]?.saved?.context?.job;
+  if (job && (typeof job.jobId !== 'string' || !UUID.test(job.jobId)
+    || !Number.isInteger(job.attempt) || job.attempt < 1 || job.attempt > 3))
+    throw new Error('deep_controller_recovery_job_invalid');
+  return { originalRequestHash: first.requestHash, owner: request.owner, claimId: request.claimId,
+    observedAt: request.observedAt, ...(request.schemaVersion==='research-deep-request-v2' ? {scope:request.scope,snapshotHash:request.snapshotHash}:{}), ...(verified[0]?.saved?.context ? {context:verified[0].saved.context} : {}),
+    ...(job ? { jobId: job.jobId, attempt: job.attempt } : {}) };
 }
 
 /** Claim/recover only. A durable lease context is neither a draft nor a model

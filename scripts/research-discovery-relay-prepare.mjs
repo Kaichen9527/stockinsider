@@ -1,7 +1,8 @@
 import {reconcileObservedResearchCohort} from '../web/src/lib/research-observed-classifier.mjs';
 export {reconcileObservedResearchCohort} from '../web/src/lib/research-observed-classifier.mjs';
 import { randomUUID } from 'node:crypto';
-import { readFile, open } from 'node:fs/promises';
+import { open } from 'node:fs/promises';
+import { readResearchBoundedFile } from './research-bounded-file.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { executeSourceController } from './research-source-controller.mjs';
@@ -194,6 +195,13 @@ export function prepareDiscoveryRelay(relay, social, classification, now = new D
     rawSourceHashesVerifiedByVm:false,platformFullyEnabled:false,productionImported:false};
 }
 
+async function readRelayPacket(filename) {
+  const bytes = await readResearchBoundedFile(filename, { maximum: 2_000_000,
+    absoluteError: 'discovery_relay_absolute_paths_required', boundError: 'discovery_relay_file_bound',
+    changedError: 'discovery_relay_input_changed' });
+  return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+}
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const argv=process.argv.slice(2);let scopeFile=null;
@@ -203,11 +211,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     if(![relayFile,socialFile,classificationFile,output].every(path.isAbsolute)) throw new Error('discovery_relay_absolute_paths_required');
     const values=[];
     for(const name of [relayFile,socialFile,classificationFile,...(timedFile ? [timedFile] : [])]) {
-      const bytes=await readFile(name);
-      if(bytes.length>2_000_000) throw new Error('discovery_relay_file_bound');
-      values.push(JSON.parse(bytes.toString('utf8')));
+      values.push(await readRelayPacket(name));
     }
-    let scope=null;if(scopeFile){const bytes=await readFile(scopeFile);if(bytes.length>2_000_000)throw new Error('discovery_relay_file_bound');scope=JSON.parse(bytes.toString('utf8'));}
+    let scope=null;if(scopeFile)scope=await readRelayPacket(scopeFile);
     const prepared=prepareDiscoveryRelay(values[0],values[1],values[2],new Date().toISOString(),values[3] || null,scope);
     const run=await executeSourceController(prepared.controllerInput);
     const result={prepared,run,recordedAt:new Date().toISOString(),relayHashes:[...values,...(scope?[scope]:[])].map(researchCanonicalHash)};

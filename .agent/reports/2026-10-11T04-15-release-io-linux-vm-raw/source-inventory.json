@@ -1,0 +1,147 @@
+{
+  "source": "4ff224baa6e00e73198d9f2cc8b29b2045374744",
+  "parent": "51a80cbaa1bbe719794ce9ca400532bc48cb1c58",
+  "sixFiles": [
+    "scripts/research-bounded-file.test.mjs",
+    "scripts/research-source-controller.test.mjs",
+    "scripts/research-cloud-controller.test.mjs",
+    "scripts/research-source-priority-consumer.test.mjs",
+    "scripts/research-deep-controller.test.mjs",
+    "scripts/research-discovery-relay-prepare.test.mjs"
+  ],
+  "pcrPackageScript": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+  "pcrFiles": [
+    "scripts/opportunity-v3/product-correctness.test.mjs",
+    "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+    "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+    "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+    "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+    "scripts/opportunity-v3/v317-source-led-actionability.test.mjs",
+    "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+    "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+    "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs"
+  ],
+  "sourceInventory": [
+    {
+      "file": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38"
+    },
+    {
+      "file": "package.json",
+      "bytes": 33055,
+      "sha256": "a86d676de6cd85bd17ae9829285593383fdcbfeb6d86b408742ac1c851b1c3a0"
+    },
+    {
+      "file": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "bytes": 171667,
+      "sha256": "6e498b720b72f121c818bf5de128c09673d7e9592b204244a212dbc1ca1a8592"
+    },
+    {
+      "file": "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+      "bytes": 120796,
+      "sha256": "a04ef8f1933eb70aa1ef60e288376763b714def207677e579df45dede42068af"
+    },
+    {
+      "file": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "bytes": 74957,
+      "sha256": "9c809a743f0f1aa695dcd13e5c4dffcd016766c58bdbb250ea0e9c60b7357477"
+    },
+    {
+      "file": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "bytes": 46235,
+      "sha256": "43caa018f438405168d5867af416aaacf5850f3508b131236c4dd29a811e3e05"
+    },
+    {
+      "file": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "bytes": 15334,
+      "sha256": "5462bb7dae96e75b37353cd8166a704462fc52be7988344dad9f31c429242eb8"
+    },
+    {
+      "file": "scripts/opportunity-v3/v317-source-led-actionability.test.mjs",
+      "bytes": 7189,
+      "sha256": "4cf490fa46df8ec79f2fc2921d0894d6b8402c7fab209d859502ecd2725057fc"
+    },
+    {
+      "file": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "bytes": 18025,
+      "sha256": "d56ada323203d95438b455fc8a201d9def9e67aae923a844972d6ddae336fb46"
+    },
+    {
+      "file": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "bytes": 11715,
+      "sha256": "6670b1c590c5ca05ea18054461006dab04232965a072742ec9a96f88fa30cba7"
+    },
+    {
+      "file": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "bytes": 16039,
+      "sha256": "d7e91177b522c4d6a75d3339ebaa1adfa73d6d9a23227b059d3be8cbb26baf3c"
+    },
+    {
+      "file": "scripts/research-bounded-file.mjs",
+      "bytes": 1787,
+      "sha256": "5524720aa2e614f681050f029a2dd9d89c2964991902dafb15c0b080c34d9871"
+    },
+    {
+      "file": "scripts/research-bounded-file.test.mjs",
+      "bytes": 6845,
+      "sha256": "7c8f85c8184e472d22bc0bc6d36cbd674d65d2d574a81bdd7d0f97d89b4360ed"
+    },
+    {
+      "file": "scripts/research-cloud-controller.mjs",
+      "bytes": 10564,
+      "sha256": "a5b69b8beb4e3fb3ee5b4a0f5d7a72a0ccfc1594b13ba668dabea5ae34bc903c"
+    },
+    {
+      "file": "scripts/research-cloud-controller.test.mjs",
+      "bytes": 14706,
+      "sha256": "1c0765be4bc2b640ab47e1d2662824d7bb8047b3bf60fffe804f45d239723aa1"
+    },
+    {
+      "file": "scripts/research-deep-controller.mjs",
+      "bytes": 16437,
+      "sha256": "74932666c573b079b58db1643f4e908188ba2ed40e8b1d3acf2d14e1655c4cd1"
+    },
+    {
+      "file": "scripts/research-deep-controller.test.mjs",
+      "bytes": 21425,
+      "sha256": "395db95fb22ea146e2f995003320b2e7fa848e2b361dd10af063e341baa183a4"
+    },
+    {
+      "file": "scripts/research-discovery-relay-prepare.mjs",
+      "bytes": 18926,
+      "sha256": "5ab538a92d49f30149581b1713fdb8d0b99d40da17f3308f7ab6468459579ee3"
+    },
+    {
+      "file": "scripts/research-discovery-relay-prepare.test.mjs",
+      "bytes": 7994,
+      "sha256": "29a7bef976694dd813f2ed70c19800c4cbf8ad04f08b9825ce5266692d6b9660"
+    },
+    {
+      "file": "scripts/research-source-controller.mjs",
+      "bytes": 8889,
+      "sha256": "7976b84ef4c7ac071832127b6f75167542fe31610e1ccc517616bb70d74dc921"
+    },
+    {
+      "file": "scripts/research-source-controller.test.mjs",
+      "bytes": 11921,
+      "sha256": "43ec609fe73ca827faa962fc8c9457f1d379ae0b57a9fbcb97af4d3cc2db090d"
+    },
+    {
+      "file": "scripts/research-source-priority-consumer.mjs",
+      "bytes": 10606,
+      "sha256": "2565c4caaf54b43c3f46bca76a27af811b9c264e541eb4b1dcddbf2382c94882"
+    },
+    {
+      "file": "scripts/research-source-priority-consumer.test.mjs",
+      "bytes": 11685,
+      "sha256": "edc4b5830c15d276b3635fb9d4235b77e803e83e16b925c08de942d1e1403807"
+    },
+    {
+      "file": "scripts/run-node22.js",
+      "bytes": 1432,
+      "sha256": "08693f6277f8284b50b93c3a641e438e918ab4ed83fadaa8f861e5959b48ee90"
+    }
+  ],
+  "sourceAndPackageUnchanged": true
+}
