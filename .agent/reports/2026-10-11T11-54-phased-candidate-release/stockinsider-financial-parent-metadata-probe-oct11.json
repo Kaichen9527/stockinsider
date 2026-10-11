@@ -1,0 +1,38 @@
+{
+  "schema": "financial-parent-metadata-isolated-probe-v1",
+  "observedAt": "2026-10-11T11:46:50.449Z",
+  "results": [
+    {
+      "mutation": false,
+      "status": "read_success"
+    },
+    {
+      "mutation": true,
+      "status": "rejected",
+      "error": "financial_parent_replaced",
+      "cleanup": null,
+      "directoryBefore": {
+        "dev": "16777231",
+        "ino": "209405429",
+        "size": "320",
+        "mtimeNs": "1791551867496745468",
+        "ctimeNs": "1791551867496745468"
+      },
+      "directoryAfter": {
+        "dev": "16777231",
+        "ino": "209405429",
+        "size": "352",
+        "mtimeNs": "1791719210436050036",
+        "ctimeNs": "1791719210436050036"
+      }
+    },
+    {
+      "mutation": false,
+      "status": "read_success"
+    }
+  ],
+  "pinnedFileSha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c",
+  "pinnedBytes": 54602,
+  "pinnedFileUnchanged": true,
+  "interpretation": "Existing strict guard also rejects same-directory-identity metadata changes from unrelated sibling creation. This is a deterministic mechanism reproduction, not proof which path changed during GitHub run38130038830. No guard relaxed or production patch made."
+}

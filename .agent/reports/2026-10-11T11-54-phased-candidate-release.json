@@ -1,0 +1,77 @@
+{
+  "schema": "phased-candidate-release-progress-v1",
+  "recordedAt": "2026-10-11T11:56:03.102388+00:00",
+  "sourceCommit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "deployedCommit": "9fd86fe620ccc63c89c4acd208327bf2c4e15332",
+  "currentPublicCandidateStageCounts": {
+    "found": 272,
+    "waiting": 1,
+    "actionable": 0
+  },
+  "snapshotPublishedAt": "2026-10-11T13:42:25.789+02:00",
+  "apiAsOf": "2026-09-12",
+  "datasetCompletenessPct": 98.77,
+  "datasetMissingComponents": [
+    "daily_price:empty"
+  ],
+  "marketFreshnessReason": "市場主軸資料最後更新於 2026-09-12，已超過 3 天 freshness SLA；目前不把舊 risk-on 判讀當成最新結論，請等待 data-collect / theme-scan 刷新。",
+  "readOnlyDbLatestSession": "2026-10-08",
+  "readOnlyDbStages": {
+    "found": 336,
+    "waiting": 1
+  },
+  "scopeDifferenceReconciled": false,
+  "browserValidation": {
+    "tool": "cua_repl",
+    "homeHttp": 200,
+    "search2409": "1 / 272 found rows",
+    "auoSourcesDisplayed": 9,
+    "auoPublishersDisplayed": 6,
+    "sourceRootsIndependentlyConfirmedThisTurn": false
+  },
+  "vpsMeasurement": {
+    "totalBytes": 154894188544,
+    "availableBytes": 16854065152,
+    "at": "2026-10-11T11:50:11Z"
+  },
+  "automation": {
+    "id": "stockinsider",
+    "status": "ACTIVE",
+    "updatedExistingPrompt": true,
+    "formalResearchScheduleEnabled": false
+  },
+  "vmTask": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "hostId": "durable",
+    "preDispatch": "idle revision32",
+    "scope": "isolate ordinary CI filesystem interference without changing runtime reader or expectations"
+  },
+  "authorization": {
+    "candidatesFirst": true,
+    "firstTrustGovernanceException": false
+  },
+  "productionMutations": false,
+  "mergeOrDeployPerformed": false,
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T11-54-phased-candidate-release/stockinsider-phased-live-radar-oct11.json",
+      "bytes": 82743,
+      "sha256": "8eb1384f18f333e36ae0e958aba8dcd29e3dae3c45587aa98fb07762512adf30"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-54-phased-candidate-release/stockinsider-financial-parent-metadata-probe-oct11.json",
+      "bytes": 1214,
+      "sha256": "fe46c006b5415eb7a523653ce81e7a0c538f15fe399f640710e13e4801cec63e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-54-phased-candidate-release/stockinsider-financial-parent-metadata-probe-oct11.mjs",
+      "bytes": 2519,
+      "sha256": "aa1b7c71249bdf3db3317fb0e494bc9924ba4381d2ecdd1f420921d9de5b9e30"
+    }
+  ],
+  "limits": [
+    "Live candidate availability is existing release, not PR364 deployment.",
+    "Filesystem mechanism probe does not prove actual ancestor changed in CI38130038830.",
+    "No strategy efficacy, complete source breadth or genuine deep-article publication claim."
+  ]
+}
