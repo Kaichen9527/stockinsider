@@ -1,0 +1,968 @@
+{
+  "schema": "calendar-inbox-manual-engineering-receipt-v1",
+  "sealedAt": "2026-10-11T14:27:57.963373+00:00",
+  "sourceIdentity": {
+    "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "baseTree": "fb62be71161857affbaa8ea8ed7f4d7921a4b3c9",
+    "source": "5ea9a2f083630460ab37e6a65dfcdfa2403f1211",
+    "tree": "edc209d9818da8e93e8bddc44c212cfce8165f00",
+    "webTree": "62063f7ffade429218d61668ae67864f7e7d33dd",
+    "branch": "codex/entry-plan-calendar-pagination-oct11",
+    "calendarCommit": "9fa0faf4f8c5e60237e1864c85fef630c10d801a",
+    "inboxCommit": "4202b314011064e07f6cfd5786d1da52ed0acf31",
+    "fixtureTypeCorrection": "5ea9a2f083630460ab37e6a65dfcdfa2403f1211",
+    "statusBeforeEvidence": "",
+    "changedFiles": [
+      {
+        "path": "docs/operations/2026-10-11/entry-plan-calendar-pagination.md",
+        "bytes": 2152,
+        "sha256": "1943b5edf4da149c25939ba8b14ed8f8551c785bff4a051e913b283d5eb2e935",
+        "baseSha256": null
+      },
+      {
+        "path": "docs/operations/2026-10-11/research-inbox-write-lease.md",
+        "bytes": 1914,
+        "sha256": "ee4b44c63b4c694b1752c01b3117d97498b94769d36fe4413d7835be690982f7",
+        "baseSha256": null
+      },
+      {
+        "path": "scripts/research-inbox-write-lease.test.mjs",
+        "bytes": 6275,
+        "sha256": "54ef3e6157650afecac2361930c239e9a10bbd453d75dd41c85043a2d9f5f3fa",
+        "baseSha256": null
+      },
+      {
+        "path": "web/src/app/api/internal/research-inbox/route.ts",
+        "bytes": 2698,
+        "sha256": "5aefc48d65eace248903d110812d1b566fcebd4ff0992b4f6dabd9426406cff1",
+        "baseSha256": "36149f8a25cce10f51410a2b6afd973113e0cfb636e84f2258eceb8bf88fcbab"
+      },
+      {
+        "path": "web/src/lib/entry-plan-authority-backfill.test.ts",
+        "bytes": 14697,
+        "sha256": "070d81d190023fb4717475df1277ded854475ae20672fa16e8300c480d65baf9",
+        "baseSha256": "5114227937d788903f415ad9fdb59452567e77ea7af82fc49b7ab1e437a88d68"
+      },
+      {
+        "path": "web/src/lib/entry-plan-authority-backfill.ts",
+        "bytes": 22551,
+        "sha256": "e27b62097c40f785341a0a6fb26a18b9565cc341f21646f58c581848f4ea62b7",
+        "baseSha256": "ae12d825b1141dfd254cbb678ee0d4b396c7898db618a01088c253bf006676d6"
+      }
+    ]
+  },
+  "sourceManifest": {
+    "path": "source-manifest.json",
+    "bytes": 148474,
+    "sha256": "e67f57f7a35f2cf2821051ec6c1e594c0f70fd969977a44fd6984b926e4fe8b8"
+  },
+  "locksUnchanged": [
+    {
+      "path": "package.json",
+      "bytes": 24733,
+      "sha256": "6dae2b07a0d6ac9e653cc06aba741060a0cb50a0730ab3874e09a3919f0986cc"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38"
+    },
+    {
+      "path": "web/package.json",
+      "bytes": 1943,
+      "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e"
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274088,
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+    }
+  ],
+  "approved14ScriptValues": [
+    {
+      "script": "build:source-led-opportunity-v3",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "lint:source-led-opportunity-v3",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "test:legacy-v1-v2-regression",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "test:model-runner-v3",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "test:source-led-opportunity-v3",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "test:source-led-opportunity-v3:migration",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "test:source-led-opportunity-v3:performance",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "test:source-led-opportunity-v3:product-correctness",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "typecheck:source-led-opportunity-v3",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "v3:doctor",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "verify:source-led-opportunity-v3:evaluation-governance",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "verify:source-led-opportunity-v3:model-runner",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "verify:source-led-opportunity-v3:product-runtime",
+      "matchesFrozenValue": true
+    },
+    {
+      "script": "web:test:e2e:v3-correctness",
+      "matchesFrozenValue": true
+    }
+  ],
+  "build": {
+    "command": "npm --prefix web run build",
+    "source": "5ea9a2f083630460ab37e6a65dfcdfa2403f1211",
+    "buildId": "dF0urPxzJ81jbmT5dusTz",
+    "compiledServerFileCount": 1806,
+    "compiledServerBytes": 59421519,
+    "manifest": {
+      "path": "compiled-server-manifest.json",
+      "bytes": 322413,
+      "sha256": "92722a62ee38e61aa7dedc2f42626c04563906b67f0c796b6f87e72ee01b5cbc"
+    },
+    "compiler": "Next.js 16.3.8 normal Turbopack",
+    "priorFailedBuildPreserved": true,
+    "cacheReuse": "normal build used retained valid compiler cache; commands and outputs preserved"
+  },
+  "tests": {
+    "finalEntryPlan": {
+      "pass": 107,
+      "fail": 0,
+      "skip": 0,
+      "stage": "final-related-entry-plan"
+    },
+    "finalInbox": {
+      "pass": 19,
+      "fail": 0,
+      "skip": 0,
+      "stage": "final-inbox-tests"
+    },
+    "initialNewFixture": {
+      "pass": 12,
+      "fail": 2,
+      "skip": 0,
+      "cause": "large synthetic revision histories reversed collected/recorded clocks; fixture fixed, no clock guard weakening"
+    },
+    "originalCalendarProbe": {
+      "expectedFailureObserved": "entry_plan_calendar_240_missing:TWSE",
+      "syntheticRows": 5000,
+      "originalReadRows": 3000,
+      "distinctReadDates": 150,
+      "scope": "exact original calendar function with synthetic paged dependency; initial probe module filename error/Node assertion retained"
+    },
+    "originalInboxProbe": "exact original route/real validators plus synthetic DB lease-required error; no production trigger execution"
+  },
+  "checks": {
+    "typecheck": "PASS after correcting fixture type and current generated routes; original TS2307/TS2339 RED retained",
+    "lint": "PASS 0 errors / 33 existing warnings",
+    "normalBuild": "PASS; original TS2339 build RED retained"
+  },
+  "bounds": {
+    "rowsPerMarket": 20000,
+    "overflowSentinel": 1,
+    "pageRows": 500,
+    "logicalUtf8PageBytes": 524288,
+    "logicalUtf8TotalBytesPerMarket": 8388608,
+    "deadlineMillisecondsPerMarket": 30000,
+    "twoDependencies": "individual bounded concurrent market reads; logical JSON limits do not assert wire-body limit",
+    "diskReserveBytes": 8589934592,
+    "rssTargetBytes": 8589934592,
+    "remainingDiskBytes": 10096259072,
+    "peakSampledRssBytes": 1489379328,
+    "measurement": "100ms aggregate owned process group plus recursive live descendants; may miss short/reparented processes"
+  },
+  "versions": {
+    "node": "v22.14.0",
+    "osUser": "agent",
+    "toolsAndDependencies": "existing pinned tools/dependencies reused; no installation or configuration change"
+  },
+  "operatorProductionReports": {
+    "calendar": "root reported 125 heads / 120 completed from old 3000-row prefix; 14310 raw revisions per market; not independently queried by VM",
+    "inbox": "root reported 2026-10-11T14:11:53Z guarded HTTP500 production_writer_lease_required; actual payload/root originals not exported"
+  },
+  "stages": [
+    {
+      "stage": "build-corrected",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T14:23:23.105992+00:00",
+      "endedAt": "2026-10-11T14:23:28.761784+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 5.655797258019447,
+      "sampledAggregatePeakRssBytes": 967274496,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10180898816,
+      "diskAvailableAfterBytes": 10097119232,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T14:22:09.891282+00:00",
+      "endedAt": "2026-10-11T14:22:41.021944+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 31.13069333799649,
+      "sampledAggregatePeakRssBytes": 1489379328,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10108481536,
+      "diskAvailableAfterBytes": 10180943872,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "calendar-tests-green",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "web/src/lib/entry-plan-authority-backfill.test.ts"
+      ],
+      "startedAt": "2026-10-11T14:18:08.621642+00:00",
+      "endedAt": "2026-10-11T14:18:42.760847+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 34.13921340700472,
+      "sampledAggregatePeakRssBytes": 200617984,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10108596224,
+      "diskAvailableAfterBytes": 10108596224,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "calendar-tests",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-reporter=tap",
+        "web/src/lib/entry-plan-authority-backfill.test.ts"
+      ],
+      "startedAt": "2026-10-11T14:14:33.590841+00:00",
+      "endedAt": "2026-10-11T14:15:05.245074+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 31.65424385998631,
+      "sampledAggregatePeakRssBytes": 189853696,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10108596224,
+      "diskAvailableAfterBytes": 10108596224,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "command": [
+        "gh",
+        "pr",
+        "create",
+        "--repo",
+        "Kaichen9527/stockinsider",
+        "--draft",
+        "--base",
+        "main",
+        "--head",
+        "codex/entry-plan-calendar-pagination-oct11",
+        "--title",
+        "Fix bounded entry-plan calendar pagination and inbox writer lease",
+        "--body-file",
+        "/tmp/si-calendar-ijqf378a/pr-body.md"
+      ],
+      "startedAt": "2026-10-11T14:25:46.846105+00:00",
+      "elapsedSeconds": 0.11449738795636222,
+      "exitCode": 1,
+      "credentialsReadOrCopied": false
+    },
+    {
+      "stage": "final-inbox-tests",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-inbox-write-lease.test.mjs",
+        "web/src/lib/research-inbox.test.ts"
+      ],
+      "startedAt": "2026-10-11T14:24:38.516143+00:00",
+      "endedAt": "2026-10-11T14:24:38.993668+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.477531397016719,
+      "sampledAggregatePeakRssBytes": 130043904,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10097119232,
+      "diskAvailableAfterBytes": 10097119232,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "final-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T14:24:39.021527+00:00",
+      "endedAt": "2026-10-11T14:24:58.761419+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 19.739900543005206,
+      "sampledAggregatePeakRssBytes": 1139638272,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10097119232,
+      "diskAvailableAfterBytes": 10097119232,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "final-related-entry-plan",
+      "command": [
+        "npm",
+        "run",
+        "test:tw-entry-plan"
+      ],
+      "startedAt": "2026-10-11T14:24:03.572140+00:00",
+      "endedAt": "2026-10-11T14:24:38.487158+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 34.9150250100065,
+      "sampledAggregatePeakRssBytes": 392880128,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10097119232,
+      "diskAvailableAfterBytes": 10097119232,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "origin",
+        "HEAD:refs/heads/codex/entry-plan-calendar-pagination-oct11"
+      ],
+      "startedAt": "2026-10-11T14:25:27.902257+00:00",
+      "elapsedSeconds": 1.8207391430041753,
+      "exitCode": 0
+    },
+    {
+      "stage": "inbox-lease-tests",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-inbox-write-lease.test.mjs",
+        "web/src/lib/research-inbox.test.ts"
+      ],
+      "startedAt": "2026-10-11T14:21:05.401950+00:00",
+      "endedAt": "2026-10-11T14:21:05.917563+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.5155802899971604,
+      "sampledAggregatePeakRssBytes": 134803456,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10108522496,
+      "diskAvailableAfterBytes": 10108522496,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T14:21:50.202677+00:00",
+      "endedAt": "2026-10-11T14:22:09.856307+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 19.653638213989325,
+      "sampledAggregatePeakRssBytes": 1339121664,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10108481536,
+      "diskAvailableAfterBytes": 10108481536,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "original-calendar-red-corrected",
+      "command": [
+        "node",
+        "/tmp/si-calendar-ijqf378a/original-probe.cjs"
+      ],
+      "startedAt": "2026-10-11T14:21:04.999822+00:00",
+      "endedAt": "2026-10-11T14:21:05.374148+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.37433149298885837,
+      "sampledAggregatePeakRssBytes": 73129984,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10108522496,
+      "diskAvailableAfterBytes": 10108522496,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "original-calendar-red",
+      "command": [
+        "node",
+        "/tmp/si-calendar-ijqf378a/original-probe.cjs"
+      ],
+      "startedAt": "2026-10-11T14:19:06.031773+00:00",
+      "endedAt": "2026-10-11T14:19:06.467300+00:00",
+      "exitCode": 134,
+      "elapsedSeconds": 0.4355316319852136,
+      "sampledAggregatePeakRssBytes": 74321920,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10108596224,
+      "diskAvailableAfterBytes": 10108596224,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "original-inbox-red",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "/tmp/si-calendar-ijqf378a/original-inbox-probe.mjs"
+      ],
+      "startedAt": "2026-10-11T14:25:27.338669+00:00",
+      "endedAt": "2026-10-11T14:25:27.867254+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.5285918770241551,
+      "sampledAggregatePeakRssBytes": 84545536,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10097119232,
+      "diskAvailableAfterBytes": 10097119232,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "related-entry-plan",
+      "command": [
+        "npm",
+        "run",
+        "test:tw-entry-plan"
+      ],
+      "startedAt": "2026-10-11T14:19:06.499128+00:00",
+      "endedAt": "2026-10-11T14:19:42.361394+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 35.86229053803254,
+      "sampledAggregatePeakRssBytes": 397848576,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10108596224,
+      "diskAvailableAfterBytes": 10108596224,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "typecheck-corrected",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T14:23:08.302892+00:00",
+      "endedAt": "2026-10-11T14:23:23.078007+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 14.77511924202554,
+      "sampledAggregatePeakRssBytes": 1174925312,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10180911104,
+      "diskAvailableAfterBytes": 10180898816,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T14:21:37.449177+00:00",
+      "endedAt": "2026-10-11T14:21:50.172603+00:00",
+      "exitCode": 2,
+      "elapsedSeconds": 12.72343382902909,
+      "sampledAggregatePeakRssBytes": 1086509056,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10108452864,
+      "diskAvailableAfterBytes": 10108481536,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    }
+  ],
+  "rawFiles": [
+    {
+      "path": "admission.json",
+      "bytes": 149,
+      "sha256": "d2394ca9206bfc6d91edc6b0255ee0edd8ceef9d1b57a4679855de1257c6ab23"
+    },
+    {
+      "path": "build-corrected.json",
+      "bytes": 648,
+      "sha256": "75e5a4bac38ce380a2683857f1a71bb2a7449f3f2fe5ab7e086653ac0b8e8069"
+    },
+    {
+      "path": "build-corrected.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build-corrected.stdout",
+      "bytes": 5555,
+      "sha256": "7c6754a993e695ece700127992ba1e23f1bc795b2136cd43f6d15e673ddfce3f"
+    },
+    {
+      "path": "build-corrected.time",
+      "bytes": 757,
+      "sha256": "4b901f85c7bdbfc0037715a3425a2ac03aad27e5056b29f8eb2061af2b667aca"
+    },
+    {
+      "path": "build.json",
+      "bytes": 639,
+      "sha256": "80b01fca6bb0e6d468d7c050fe159f60209d0ee9ec45999b20fe95b0f12ae146"
+    },
+    {
+      "path": "build.stderr",
+      "bytes": 23,
+      "sha256": "e3b7ebfc4486a32f99068a594ef694c8995921fd1611094d8da28efc6e5f4f9c"
+    },
+    {
+      "path": "build.stdout",
+      "bytes": 539,
+      "sha256": "cb8d234dbb9ce6af97b11d01a68c4763852332a9b9ce0e631ca7178b9d901f59"
+    },
+    {
+      "path": "build.time",
+      "bytes": 797,
+      "sha256": "4c70e517b9c5ddec700c7f29871350687d1f753a73bc28f13d13e86559677ef1"
+    },
+    {
+      "path": "calendar-tests-green.json",
+      "bytes": 735,
+      "sha256": "c5efe1c37b417f056ef16b34ceb6f1fb3ba041ce00b4b894b36355078d3db686"
+    },
+    {
+      "path": "calendar-tests-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "calendar-tests-green.stdout",
+      "bytes": 3883,
+      "sha256": "ec18c5955114016e55a354d7f454cd34f8edd394d8a572ea7f61ee1f57fb3f9f"
+    },
+    {
+      "path": "calendar-tests-green.time",
+      "bytes": 829,
+      "sha256": "da0533cb22ae3507906b1bc3d230b8cdb284c14dbfc495ef1f394e64a263d57a"
+    },
+    {
+      "path": "calendar-tests.json",
+      "bytes": 729,
+      "sha256": "d2ee762e262b656a587a8c3116ade2e6337c730b27224766bc379c8db3d04085"
+    },
+    {
+      "path": "calendar-tests.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "calendar-tests.stdout",
+      "bytes": 6631,
+      "sha256": "1d110869985ff7f366df489fc702d07590164a2571a1457d5813b5204e23ca65"
+    },
+    {
+      "path": "calendar-tests.time",
+      "bytes": 865,
+      "sha256": "9bac1861826118a345ebdb2c793b1c40291b4e2729aa94724aedfa88680395f9"
+    },
+    {
+      "path": "cleanup-process-inventory.txt",
+      "bytes": 34625,
+      "sha256": "20c3e116269954ec65f80278cb68536c2d74a82451d2cd571cbb331146dbbb99"
+    },
+    {
+      "path": "draft-pr.json",
+      "bytes": 503,
+      "sha256": "8d6a86afbbeab62a42168e92d72013c1fec084f72552dded70d7242f325b46fc"
+    },
+    {
+      "path": "draft-pr.stderr",
+      "bytes": 49,
+      "sha256": "682deed6ccd21e66582c7f0e0efdffb3363feeac4c8b58f35a46d43dc240c725"
+    },
+    {
+      "path": "draft-pr.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "final-inbox-tests.json",
+      "bytes": 741,
+      "sha256": "6e0de4e1f353f5ede047741f315b27cc45cb7590e990c5a1585ecaa9edb20f1e"
+    },
+    {
+      "path": "final-inbox-tests.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "final-inbox-tests.stdout",
+      "bytes": 4418,
+      "sha256": "b65aa906942636157b7aed8131695b4912685e5c36a5f12c83d59db8da840d0c"
+    },
+    {
+      "path": "final-inbox-tests.time",
+      "bytes": 838,
+      "sha256": "63b5dbad089ec2a4222f584440f49a6a1754fb8461133f0bac06221ae5932508"
+    },
+    {
+      "path": "final-lint.json",
+      "bytes": 644,
+      "sha256": "d70a96e8122a9ceba1e5b7f1d76907c491db58da754c40c87b8f4982d070bfbb"
+    },
+    {
+      "path": "final-lint.stderr",
+      "bytes": 165,
+      "sha256": "53ff59b476fd010d11fef53ad7aa4ce767f0d66ecdf81f0beb2574e64d3cf653"
+    },
+    {
+      "path": "final-lint.stdout",
+      "bytes": 4588,
+      "sha256": "3aad1e86562f9cdb91e57c1d50e49ec18c2f340fa00b213ed29854691b4375db"
+    },
+    {
+      "path": "final-lint.time",
+      "bytes": 754,
+      "sha256": "2a7260598a349afe91160f1a36abc13eaf3579edd0f73537ed2673d6d8cd9155"
+    },
+    {
+      "path": "final-related-entry-plan.json",
+      "bytes": 642,
+      "sha256": "4594192db318c537a82050477c0e377e5eb2eb4c7510e654fac2d105fc594b60"
+    },
+    {
+      "path": "final-related-entry-plan.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "final-related-entry-plan.stdout",
+      "bytes": 33891,
+      "sha256": "2ea4f13e1a9fe282df667401071c46255b4c8827105b4c49428130ddfc57f56a"
+    },
+    {
+      "path": "final-related-entry-plan.time",
+      "bytes": 751,
+      "sha256": "cf16c209d19254f81e2c2e82689ba4c8fe0a86e6765b1e147c9f4f9b57b9ed5e"
+    },
+    {
+      "path": "git-push-code.json",
+      "bytes": 233,
+      "sha256": "03b7e12b3165e5c3d14a72ac8a38b9b4d9806ba365628e1f2ede3487a3338938"
+    },
+    {
+      "path": "git-push-code.stderr",
+      "bytes": 370,
+      "sha256": "43b16af85c9f1d057b008337fb1f6931c01a011c420226db326d4c12251c8e9b"
+    },
+    {
+      "path": "git-push-code.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "inbox-lease-tests.json",
+      "bytes": 742,
+      "sha256": "068af4a6b4a109efd08e25d3585c4bff8401a4679703297dff2f661562978188"
+    },
+    {
+      "path": "inbox-lease-tests.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "inbox-lease-tests.stdout",
+      "bytes": 4418,
+      "sha256": "1a31b2bc6f610d18e5c47c6f3534dd410e6df08c5f31abfff7447117c606d0ad"
+    },
+    {
+      "path": "inbox-lease-tests.time",
+      "bytes": 838,
+      "sha256": "35d8b0b79528b3206d7d1822ce114381d7705e6beea861788baf60874238e543"
+    },
+    {
+      "path": "lint.json",
+      "bytes": 638,
+      "sha256": "28c5d013e83d8bb7fe9a5b6f3b119617b8b47e407dd7a423da5cf5c749a2adef"
+    },
+    {
+      "path": "lint.stderr",
+      "bytes": 165,
+      "sha256": "53ff59b476fd010d11fef53ad7aa4ce767f0d66ecdf81f0beb2574e64d3cf653"
+    },
+    {
+      "path": "lint.stdout",
+      "bytes": 4588,
+      "sha256": "3aad1e86562f9cdb91e57c1d50e49ec18c2f340fa00b213ed29854691b4375db"
+    },
+    {
+      "path": "lint.time",
+      "bytes": 754,
+      "sha256": "4d251620d7d17fea1fc9f703b154f4665039fbeb64098ee95a9669d83e949bee"
+    },
+    {
+      "path": "original-calendar-red-corrected.json",
+      "bytes": 667,
+      "sha256": "eba84686b7d275c64aca611d4a26666870cb975f3d91d060eec29815e4bfe73d"
+    },
+    {
+      "path": "original-calendar-red-corrected.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "original-calendar-red-corrected.stdout",
+      "bytes": 147,
+      "sha256": "39012ba7ca11834a1713e65206a3beba132a76b0c7a11e1d9cfda6d769db2a36"
+    },
+    {
+      "path": "original-calendar-red-corrected.time",
+      "bytes": 767,
+      "sha256": "171261ff6a7526fde9694bb1697577461812c2db181b172b82b3956f664abdc8"
+    },
+    {
+      "path": "original-calendar-red.json",
+      "bytes": 658,
+      "sha256": "48ccd568488e7744be1252f603665a313855aabcccc30d6543897c0ffcffb4a5"
+    },
+    {
+      "path": "original-calendar-red.stderr",
+      "bytes": 866,
+      "sha256": "88891469df16952e40798f0449f0a8074e3abe3ee96c816b1ab2776b69f4cfc7"
+    },
+    {
+      "path": "original-calendar-red.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "original-calendar-red.time",
+      "bytes": 798,
+      "sha256": "0304176ade8fb7c18c6a3f16da740710c08d444af6e3ddefc2a15c7a07cffe75"
+    },
+    {
+      "path": "original-calendar.ts",
+      "bytes": 1725,
+      "sha256": "e351d92cc7dfcdc9b820bd0bcd184d45914160eb781addb1ee6486767df5e305"
+    },
+    {
+      "path": "original-inbox-probe.mjs",
+      "bytes": 2235,
+      "sha256": "81bdde9326cc21b4b23dfb105ff634a0fb38d51d59f878078c18d3ba05223eb8"
+    },
+    {
+      "path": "original-inbox-red.json",
+      "bytes": 693,
+      "sha256": "ad1f911a9e7ecf4c1d6c5ac04ece6e9d8515a10a100c1441233bf80d339df7d6"
+    },
+    {
+      "path": "original-inbox-red.stderr",
+      "bytes": 593,
+      "sha256": "8041eb32caadcd55ffdc03ac5fd32301345e3f6bb22ba59bdf7d9aa6d6ccc925"
+    },
+    {
+      "path": "original-inbox-red.stdout",
+      "bytes": 202,
+      "sha256": "79f2ba4845a14639514fa7d19607f0e9d3890553cc53bb5173a895a197eb4d0c"
+    },
+    {
+      "path": "original-inbox-red.time",
+      "bytes": 803,
+      "sha256": "2e9bdb03ad77b025454c48a5dc040410f3ab77e6c71831d38ec761d787ca3b56"
+    },
+    {
+      "path": "original-probe.cjs",
+      "bytes": 1669,
+      "sha256": "44663f5cca184bee30f72095a94e1ae1d6447bf9748e3426f60575a461cfea1e"
+    },
+    {
+      "path": "pr-body.md",
+      "bytes": 1208,
+      "sha256": "640dcf285b14f0bee9346e782d5e14bf5fa792831754e6dca6d8166b454ee5e6"
+    },
+    {
+      "path": "receipt-assembly-first-red.txt",
+      "bytes": 530,
+      "sha256": "dc78c47bed65f9628966a0986b93c3a97bfcb90c9729937fd12254c728d8c825"
+    },
+    {
+      "path": "related-entry-plan.json",
+      "bytes": 637,
+      "sha256": "58e85ce384335557f7634482371eb709c850196fe82e4d9894c37231a8a46e24"
+    },
+    {
+      "path": "related-entry-plan.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "related-entry-plan.stdout",
+      "bytes": 33906,
+      "sha256": "3f5e0f197c723d556c4b66eb39710881aefd54176af7345d2938cac012170a4a"
+    },
+    {
+      "path": "related-entry-plan.time",
+      "bytes": 752,
+      "sha256": "74f069e5246ec93938d0fb201d1592bb3a968484abd9940168f199fa52873dac"
+    },
+    {
+      "path": "run.py",
+      "bytes": 3438,
+      "sha256": "70d0375a5aab83217b6ff5f87a88a0f58a54a5e7d9bc5a6583c3b154ea60fd53"
+    },
+    {
+      "path": "seal-evidence.py",
+      "bytes": 7415,
+      "sha256": "bca4a41e9a5a8556b3e2dde51ef0a2bd8a06cf869356d70579728887c1bd0981"
+    },
+    {
+      "path": "typecheck-corrected.json",
+      "bytes": 657,
+      "sha256": "eb15207ab10e74e4df60dcfc1aa867182fa229b92ac11fd149dd39f33088f719"
+    },
+    {
+      "path": "typecheck-corrected.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "typecheck-corrected.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "typecheck-corrected.time",
+      "bytes": 758,
+      "sha256": "c3282d7edd39738ed22b50dc2efe6922ee06052d81e65aaef3c0349f699c78c3"
+    },
+    {
+      "path": "typecheck.json",
+      "bytes": 647,
+      "sha256": "7358bc77b6a9d5d66ba83da26394d82c42213f4ff7318b1f388407cfe0a566e0"
+    },
+    {
+      "path": "typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "typecheck.stdout",
+      "bytes": 3017,
+      "sha256": "6e4f7ed6e287b41d258507711052e5e490b3e90701d49f91ac4ab97662059179"
+    },
+    {
+      "path": "typecheck.time",
+      "bytes": 796,
+      "sha256": "17094d22d6b4835c39be3323ad366c002d90c8c3fe4acb62c48dae60c8a6501a"
+    }
+  ],
+  "draftPR": {
+    "created": false,
+    "attemptExit": 1,
+    "error": "Post https://api.github.com/graphql: Forbidden",
+    "codePushSucceeded": true,
+    "headBranch": "codex/entry-plan-calendar-pagination-oct11",
+    "bodyFile": "pr-body.md"
+  },
+  "cleanup": {
+    "ownedTestProcesses": "all wrapper stages report no remaining observed live children",
+    "pgClusterCreated": false,
+    "servicesStarted": false,
+    "retainedPrivateScratch": "/tmp/si-calendar-ijqf378a",
+    "retainedBuild": "web/.next rebuilt from exact final source; no evidence deleted"
+  },
+  "limitations": [
+    "No production writes, API acquisition, candidate backfill rerun, schedule, strategy approval, deploy or merge",
+    "Calendar dependencies and inbox auth/database/lease boundaries synthetic; no formal data verification",
+    "Independent review pending; no self approval or protected/role attestation",
+    "New inbox test invoked explicitly; canonical script catalog unchanged",
+    "Draft PR unavailable through existing GitHub API; root can create from pushed branch"
+  ],
+  "capabilities": {
+    "actualModelExecuted": false,
+    "productionWritten": false,
+    "deployed": false,
+    "independentReviewPassed": false
+  }
+}

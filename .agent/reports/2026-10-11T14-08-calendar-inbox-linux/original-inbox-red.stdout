@@ -1,0 +1,1 @@
+{"status":500,"body":{"ok":false,"error":"production_writer_lease_required"},"calls":["upsert"],"boundary":"synthetic database trigger error; original route and real validators; no production request"}

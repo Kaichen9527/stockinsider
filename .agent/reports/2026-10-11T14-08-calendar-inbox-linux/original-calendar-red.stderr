@@ -1,0 +1,24 @@
+
+  #  node[367969]: void node::contextify::CompileFunctionForCJSLoader(const v8::FunctionCallbackInfo<v8::Value>&) at ../src/node_contextify.cc:1695
+  #  Assertion failed: args[1]->IsString()
+
+----- Native stack trace -----
+
+ 1: 0xf93a17 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0xf7abda  [node]
+ 3: 0x7f619fe0f5e2 
+
+----- JavaScript stack trace -----
+
+1: wrapSafe (node:internal/modules/cjs/loader:1486:18)
+2: node:internal/modules/cjs/loader:1528:20
+3: /tmp/si-calendar-ijqf378a/original-probe.cjs:4:73
+4: node:internal/modules/cjs/loader:1554:14
+5: node:internal/modules/cjs/loader:1706:10
+6: node:internal/modules/cjs/loader:1289:32
+7: node:internal/modules/cjs/loader:1108:12
+8: traceSync (node:diagnostics_channel:322:14)
+9: wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+10: executeUserEntryPoint (node:internal/modules/run_main:170:5)
+
+

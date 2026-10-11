@@ -1,0 +1,19 @@
+{
+  "stage": "original-calendar-red",
+  "command": [
+    "node",
+    "/tmp/si-calendar-ijqf378a/original-probe.cjs"
+  ],
+  "startedAt": "2026-10-11T14:19:06.031773+00:00",
+  "endedAt": "2026-10-11T14:19:06.467300+00:00",
+  "exitCode": 134,
+  "elapsedSeconds": 0.4355316319852136,
+  "sampledAggregatePeakRssBytes": 74321920,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10108596224,
+  "diskAvailableAfterBytes": 10108596224,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

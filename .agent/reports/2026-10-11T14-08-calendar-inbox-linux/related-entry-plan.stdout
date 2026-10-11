@@ -1,0 +1,621 @@
+
+> test:tw-entry-plan
+> node web/scripts/sync-official-authority.mjs && node scripts/run-node22.js --experimental-strip-types --test web/scripts/sync-official-authority.test.mjs web/src/lib/tw-entry-plan.test.ts web/src/lib/tw-entry-plan-authority.test.ts web/src/lib/entry-plan-authority-backfill.test.ts web/src/lib/candidate-trade-plan.test.ts web/src/lib/candidate-trade-plan-transport.test.ts web/src/lib/candidate-detail-revision-store.test.ts web/src/lib/stage-classifier.test.ts web/src/lib/candidate-revision-context.test.ts web/src/lib/candidate-revision-query.test.ts web/src/lib/radar-stage-pagination.test.ts web/src/lib/radar-public-snapshot.test.ts web/src/lib/candidate-screened-universe.test.ts web/src/lib/candidate-trade-plan-coverage.test.ts web/src/lib/candidate-research-completion.test.ts
+
+Official authority build bridge verified (5 canonical modules).
+TAP version 13
+# Subtest: official authority bridge generates exactly the canonical bytes from a clean source checkout
+ok 1 - official authority bridge generates exactly the canonical bytes from a clean source checkout
+  ---
+  duration_ms: 104.147159
+  ...
+# Subtest: official authority retries preserve generated mtimes; a canonical source change updates its exact copy
+ok 2 - official authority retries preserve generated mtimes; a canonical source change updates its exact copy
+  ---
+  duration_ms: 59.087844
+  ...
+# Subtest: official authority generation rejects missing sources and undeclared loader dependencies before writing
+ok 3 - official authority generation rejects missing sources and undeclared loader dependencies before writing
+  ---
+  duration_ms: 19.65359
+  ...
+# Subtest: official authority build inputs cannot redirect generation through a symlink
+ok 4 - official authority build inputs cannot redirect generation through a symlink
+  ---
+  duration_ms: 40.476354
+  ...
+# Subtest: official authority bridge lifecycle hooks retain web-scoped standalone packaging and generated-input ignores
+ok 5 - official authority bridge lifecycle hooks retain web-scoped standalone packaging and generated-input ignores
+  ---
+  duration_ms: 2.955972
+  ...
+# (node:368014) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368014) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-detail-revision-store.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: P1-09: repeated revision reads reuse exact content without another insert
+ok 6 - P1-09: repeated revision reads reuse exact content without another insert
+  ---
+  duration_ms: 1.555879
+  ...
+# Subtest: P1-06: new revision appends with predecessor and never updates saved content
+ok 7 - P1-06: new revision appends with predecessor and never updates saved content
+  ---
+  duration_ms: 0.211279
+  ...
+# Subtest: P1-09: concurrent identical insert reuses winner only after exact hash lookup
+ok 8 - P1-09: concurrent identical insert reuses winner only after exact hash lookup
+  ---
+  duration_ms: 0.300875
+  ...
+# Subtest: P1-09: an identity collision with different content fails and never overwrites
+ok 9 - P1-09: an identity collision with different content fails and never overwrites
+  ---
+  duration_ms: 0.506344
+  ...
+# (node:368015) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368015) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-research-completion.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: research success alone cannot complete a running, failed, or missing pipeline
+ok 10 - research success alone cannot complete a running, failed, or missing pipeline
+  ---
+  duration_ms: 8.241342
+  ...
+# Subtest: matching successful research and successful pipeline complete their session
+ok 11 - matching successful research and successful pipeline complete their session
+  ---
+  duration_ms: 0.233183
+  ...
+# Subtest: unrequested and unrelated successful pipeline IDs cannot lend completion
+ok 12 - unrequested and unrelated successful pipeline IDs cannot lend completion
+  ---
+  duration_ms: 0.23184
+  ...
+# Subtest: research status, failure count, and exact pipeline binding remain mandatory
+ok 13 - research status, failure count, and exact pipeline binding remain mandatory
+  ---
+  duration_ms: 0.130447
+  ...
+# Subtest: pipeline lookup IDs deduplicate and preserve the 100-receipt bound
+ok 14 - pipeline lookup IDs deduplicate and preserve the 100-receipt bound
+  ---
+  duration_ms: 0.636451
+  ...
+# Subtest: an older ready session is historical while the latest ready session remains current
+ok 15 - an older ready session is historical while the latest ready session remains current
+  ---
+  duration_ms: 0.133141
+  ...
+# (node:368046) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368046) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-revision-context.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: same-day revisions keep their own scores and risk after mutable inputs change
+ok 16 - same-day revisions keep their own scores and risk after mutable inputs change
+  ---
+  duration_ms: 1.751073
+  ...
+# Subtest: legacy and malformed contexts explicitly withhold scores and risk
+ok 17 - legacy and malformed contexts explicitly withhold scores and risk
+  ---
+  duration_ms: 0.345702
+  ...
+# Subtest: detail caller reads frozen provenance without mutable stage or tracking joins
+ok 18 - detail caller reads frozen provenance without mutable stage or tracking joins
+  ---
+  duration_ms: 1.59637
+  ...
+# (node:368047) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368047) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-revision-query.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: candidate revision is explicit, non-ambiguous and never accepts an empty selector
+ok 19 - candidate revision is explicit, non-ambiguous and never accepts an empty selector
+  ---
+  duration_ms: 1.667838
+  ...
+# (node:368068) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368068) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-screened-universe.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: a freshly built screen has the same bounded discovery membership before and after publication
+ok 20 - a freshly built screen has the same bounded discovery membership before and after publication
+  ---
+  duration_ms: 23.637194
+  ...
+# Subtest: unions every published window and screened bucket; filters explicit foreign markets and unrelated metadata
+ok 21 - unions every published window and screened bucket; filters explicit foreign markets and unrelated metadata
+  ---
+  duration_ms: 4.072928
+  ...
+# Subtest: selects only the latest valid known row per window, excluding both future publication and insertion
+ok 22 - selects only the latest valid known row per window, excluding both future publication and insertion
+  ---
+  duration_ms: 9.192698
+  ...
+# Subtest: missing tables are optional; denied, missing-column, and transport failures stay visible
+ok 23 - missing tables are optional; denied, missing-column, and transport failures stay visible
+  ---
+  duration_ms: 1.502658
+  ...
+# Subtest: canonical legacy checksum and public receipt/ETag inconsistencies fail closed
+ok 24 - canonical legacy checksum and public receipt/ETag inconsistencies fail closed
+  ---
+  duration_ms: 0.734348
+  ...
+# Subtest: public JSONB key reordering cannot be mistaken for a verifiable canonical digest
+ok 25 - public JSONB key reordering cannot be mistaken for a verifiable canonical digest
+  ---
+  duration_ms: 0.598183
+  ...
+# Subtest: checks every bounded tied head, including a conflict beyond the two-row sentinel
+ok 26 - checks every bounded tied head, including a conflict beyond the two-row sentinel
+  ---
+  duration_ms: 1.148494
+  ...
+# Subtest: payload and unique-symbol bounds throw instead of silently losing screened stocks
+ok 27 - payload and unique-symbol bounds throw instead of silently losing screened stocks
+  ---
+  duration_ms: 55.555869
+  ...
+# Subtest: rejects future payload knowledge and invalid cutoff before returning any seeds
+ok 28 - rejects future payload knowledge and invalid cutoff before returning any seeds
+  ---
+  duration_ms: 1.005367
+  ...
+# Subtest: the actual public publisher civil-date content shape remains readable without backdating knowledge
+ok 29 - the actual public publisher civil-date content shape remains readable without backdating knowledge
+  ---
+  duration_ms: 1.846618
+  ...
+# (node:368069) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368069) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-trade-plan-coverage.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: whole-roster conservation keeps saved data gaps separate from evaluated and usable research zones
+ok 30 - whole-roster conservation keeps saved data gaps separate from evaluated and usable research zones
+  ---
+  duration_ms: 76.127454
+  ...
+# Subtest: waiting, blocked, avoid-chase and expired are complete evaluations without usable zones
+ok 31 - waiting, blocked, avoid-chase and expired are complete evaluations without usable zones
+  ---
+  duration_ms: 79.032686
+  ...
+# Subtest: typed failures account for stocks but cannot complete coverage
+ok 32 - typed failures account for stocks but cannot complete coverage
+  ---
+  duration_ms: 0.460936
+  ...
+# Subtest: saved success flags cannot substitute for exact immutable envelope bindings
+ok 33 - saved success flags cannot substitute for exact immutable envelope bindings
+  ---
+  duration_ms: 12.875627
+  ...
+# Subtest: missing and duplicate outcomes cannot silently disappear or be deduplicated as successful retries
+ok 34 - missing and duplicate outcomes cannot silently disappear or be deduplicated as successful retries
+  ---
+  duration_ms: 28.45773
+  ...
+# Subtest: duplicate expected entries, unexpected outcomes and invalid symbols are reported, never normalized away
+ok 35 - duplicate expected entries, unexpected outcomes and invalid symbols are reported, never normalized away
+  ---
+  duration_ms: 12.767084
+  ...
+# Subtest: input order does not change valid coverage or its deterministic publication bindings
+ok 36 - input order does not change valid coverage or its deterministic publication bindings
+  ---
+  duration_ms: 30.621131
+  ...
+# Subtest: empty work is explicitly empty with zero plans; an unexpected outcome prevents completion
+ok 37 - empty work is explicitly empty with zero plans; an unexpected outcome prevents completion
+  ---
+  duration_ms: 15.383443
+  ...
+# Subtest: aggregate summary is bounded data-only counts; invalid runtime outcomes and oversize rosters fail closed
+ok 38 - aggregate summary is bounded data-only counts; invalid runtime outcomes and oversize rosters fail closed
+  ---
+  duration_ms: 37.138004
+  ...
+# Subtest: publication accepts only current saved summaries and respects existing filters and non-Taiwan cards
+ok 39 - publication accepts only current saved summaries and respects existing filters and non-Taiwan cards
+  ---
+  duration_ms: 20.064099
+  ...
+# Subtest: publication rejects old latest revisions, missing summaries and valid-shaped but changed summaries
+ok 40 - publication rejects old latest revisions, missing summaries and valid-shaped but changed summaries
+  ---
+  duration_ms: 19.419185
+  ...
+# Subtest: found and waiting buckets may display the same saved stock without duplicating research outcomes
+ok 41 - found and waiting buckets may display the same saved stock without duplicating research outcomes
+  ---
+  duration_ms: 17.557075
+  ...
+# Subtest: every cross-bucket copy must match; revision or summary drift cannot hide behind a valid card
+ok 42 - every cross-bucket copy must match; revision or summary drift cannot hide behind a valid card
+  ---
+  duration_ms: 21.932039
+  ...
+# Subtest: outside-roster Taiwan cards still block publication even alongside valid cross-bucket copies
+ok 43 - outside-roster Taiwan cards still block publication even alongside valid cross-bucket copies
+  ---
+  duration_ms: 33.611381
+  ...
+# Subtest: incomplete research prevents publication even with no cards; missing saved binding cannot be supplied by a card
+ok 44 - incomplete research prevents publication even with no cards; missing saved binding cannot be supplied by a card
+  ---
+  duration_ms: 16.089659
+  ...
+# (node:368081) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368081) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-trade-plan-transport.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# {"fixtureRadarCardBytes":110431,"fixtureHomeCardBytes":182822}
+# Subtest: P1-06/P1-10: summary preserves the saved revision through compact pagination without embedded OHLCV
+ok 45 - P1-06/P1-10: summary preserves the saved revision through compact pagination without embedded OHLCV
+  ---
+  duration_ms: 17.155699
+  ...
+# Subtest: P1-10: representative 40-card Radar and 24-per-stage home transports retain existing budgets
+ok 46 - P1-10: representative 40-card Radar and 24-per-stage home transports retain existing budgets
+  ---
+  duration_ms: 51.049825
+  ...
+# Subtest: P1-06: detail reader and public summary transport cannot recalculate or write a plan
+ok 47 - P1-06: detail reader and public summary transport cannot recalculate or write a plan
+  ---
+  duration_ms: 0.904205
+  ...
+# (node:368101) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368101) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-trade-plan.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: P1-06: immutable binding preserves base provenance and seals the exact detail revision
+ok 48 - P1-06: immutable binding preserves base provenance and seals the exact detail revision
+  ---
+  duration_ms: 73.933251
+  ...
+# Subtest: P1-06: hash corruption, wrong revision, stock, session or publication time fails closed
+ok 49 - P1-06: hash corruption, wrong revision, stock, session or publication time fails closed
+  ---
+  duration_ms: 27.681609
+  ...
+# Subtest: P1-06/P1-08: rehashed invalid geometry, authority or research status cannot masquerade as a valid plan
+ok 50 - P1-06/P1-08: rehashed invalid geometry, authority or research status cannot masquerade as a valid plan
+  ---
+  duration_ms: 47.325534
+  ...
+# Subtest: P1-09: identical retries keep revision identity while changed research metadata creates new lineage
+ok 51 - P1-09: identical retries keep revision identity while changed research metadata creates new lineage
+  ---
+  duration_ms: 62.757676
+  ...
+# Subtest: P1-09: old absent attachments and future contract versions stay unsupported
+ok 52 - P1-09: old absent attachments and future contract versions stay unsupported
+  ---
+  duration_ms: 15.00372
+  ...
+# Subtest: P1-06/P1-10: summary is a bounded revision-bound projection with no candles or prices
+ok 53 - P1-06/P1-10: summary is a bounded revision-bound projection with no candles or prices
+  ---
+  duration_ms: 9.720314
+  ...
+# Subtest: P1-05: missing authority can be published as explicit insufficient data without invented candles
+ok 54 - P1-05: missing authority can be published as explicit insufficient data without invented candles
+  ---
+  duration_ms: 15.30192
+  ...
+# Subtest: P1-10: worst-case reasons remain under the 1800-byte summary budget without truncating codes
+ok 55 - P1-10: worst-case reasons remain under the 1800-byte summary budget without truncating codes
+  ---
+  duration_ms: 11.870847
+  ...
+# (node:368108) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368108) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/entry-plan-authority-backfill.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: authority completion summary includes every page and fails on invalid status
+ok 56 - authority completion summary includes every page and fails on invalid status
+  ---
+  duration_ms: 2.877254
+  ...
+# Subtest: authority-only request accepts no caller-supplied prices, roster or fabricated sessions
+ok 57 - authority-only request accepts no caller-supplied prices, roster or fabricated sessions
+  ---
+  duration_ms: 0.44371
+  ...
+# Subtest: frozen common-stock roster generates per-stock-month and exchange-range jobs with no candidate omissions
+ok 58 - frozen common-stock roster generates per-stock-month and exchange-range jobs with no candidate omissions
+  ---
+  duration_ms: 9.129262
+  ...
+# Subtest: official monthly price acquisition records the real source and retains OHLCV and turnover
+ok 59 - official monthly price acquisition records the real source and retains OHLCV and turnover
+  ---
+  duration_ms: 20.639288
+  ...
+# Subtest: official monthly source distinguishes a confirmed empty report from a failed or changed schema
+ok 60 - official monthly source distinguishes a confirmed empty report from a failed or changed schema
+  ---
+  duration_ms: 0.877545
+  ...
+# Subtest: calendar selects240 date heads beyond3000 revisions for both complete paginated dependencies
+ok 61 - calendar selects240 date heads beyond3000 revisions for both complete paginated dependencies
+  ---
+  duration_ms: 623.53336
+  ...
+# Subtest: cancelled latest date head never revives an older completed revision
+ok 62 - cancelled latest date head never revives an older completed revision
+  ---
+  duration_ms: 126.719748
+  ...
+# Subtest: boundary date is fully resolved across two full pages before returning240 heads
+ok 63 - boundary date is fully resolved across two full pages before returning240 heads
+  ---
+  duration_ms: 11.209986
+  ...
+# Subtest: late/future revisions are excluded at all three original cutoffs; future close and wrong provider do not revive dates
+ok 64 - late/future revisions are excluded at all three original cutoffs; future close and wrong provider do not revive dates
+  ---
+  duration_ms: 3.690722
+  ...
+# Subtest: calendar clocks and same-head conflicts retain microsecond precision
+ok 65 - calendar clocks and same-head conflicts retain microsecond precision
+  ---
+  duration_ms: 3.230638
+  ...
+# Subtest: short history rejects instead of accepting a prefix as240 sessions
+ok 66 - short history rejects instead of accepting a prefix as240 sessions
+  ---
+  duration_ms: 107.058352
+  ...
+# Subtest: row cap exhaustion and exactly-full final boundary require proof of end, never truncate success
+ok 67 - row cap exhaustion and exactly-full final boundary require proof of end, never truncate success
+  ---
+  duration_ms: 2973.101248
+  ...
+# Subtest: oversized page and UTF8 page/aggregate budgets fail closed
+ok 68 - oversized page and UTF8 page/aggregate budgets fail closed
+  ---
+  duration_ms: 558.437323
+  ...
+# Subtest: a stalled calendar query aborts within the fixed shared30-second deadline
+ok 69 - a stalled calendar query aborts within the fixed shared30-second deadline
+  ---
+  duration_ms: 30007.358408
+  ...
+# (node:368123) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368123) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/radar-public-snapshot.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: public Radar snapshot persists the complete canonical stock plane for paged delivery
+ok 70 - public Radar snapshot persists the complete canonical stock plane for paged delivery
+  ---
+  duration_ms: 11.396274
+  ...
+# (node:368134) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368134) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/radar-stage-pagination.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: compaction preserves candidate revision and stale authority for found and actionable
+ok 71 - compaction preserves candidate revision and stale authority for found and actionable
+  ---
+  duration_ms: 1.299371
+  ...
+# Subtest: stage pagination exposes every card from one immutable snapshot without exceeding page size
+ok 72 - stage pagination exposes every card from one immutable snapshot without exceeding page size
+  ---
+  duration_ms: 1.083345
+  ...
+# Subtest: stage pagination clamps invalid offsets and oversized pages
+ok 73 - stage pagination clamps invalid offsets and oversized pages
+  ---
+  duration_ms: 0.190398
+  ...
+# (node:368141) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368141) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/stage-classifier.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: score weights match the approved four scorecards
+ok 74 - score weights match the approved four scorecards
+  ---
+  duration_ms: 1.077377
+  ...
+# Subtest: trend and breakout technical gates use explicit MA and overheat rules
+ok 75 - trend and breakout technical gates use explicit MA and overheat rules
+  ---
+  duration_ms: 0.485723
+  ...
+# Subtest: long MA breakouts require their own crossover and may persist one confirmation session
+ok 76 - long MA breakouts require their own crossover and may persist one confirmation session
+  ---
+  duration_ms: 0.867149
+  ...
+# Subtest: candidate reaches actionable only after two qualifying closes
+ok 77 - candidate reaches actionable only after two qualifying closes
+  ---
+  duration_ms: 0.373033
+  ...
+# Subtest: qualifying close streak advances only across distinct consecutive market sessions
+ok 78 - qualifying close streak advances only across distinct consecutive market sessions
+  ---
+  duration_ms: 0.512484
+  ...
+# Subtest: risk-off, breakdown, stale data and peer catch-down block actionable
+ok 79 - risk-off, breakdown, stale data and peer catch-down block actionable
+  ---
+  duration_ms: 1.324589
+  ...
+# Subtest: minimum research and conservative valuation gates distinguish found from waiting
+ok 80 - minimum research and conservative valuation gates distinguish found from waiting
+  ---
+  duration_ms: 0.27846
+  ...
+# (node:368152) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368152) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/tw-entry-plan-authority.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: loads 240 proved observations and an official next session after a holiday and weekend
+ok 81 - loads 240 proved observations and an official next session after a holiday and weekend
+  ---
+  duration_ms: 181.953413
+  ...
+# Subtest: verified event chain rescales prior prices to the unchanged signal-session price
+ok 82 - verified event chain rescales prior prices to the unchanged signal-session price
+  ---
+  duration_ms: 151.434418
+  ...
+# Subtest: market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+ok 83 - market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+  ---
+  duration_ms: 115.697956
+  ...
+# Subtest: absent price/session/action authority and read failure never abort the candidate run
+ok 84 - absent price/session/action authority and read failure never abort the candidate run
+  ---
+  duration_ms: 27.072755
+  ...
+# Subtest: corporate-action hash corruption and changed daily factor fail closed
+ok 85 - corporate-action hash corruption and changed daily factor fail closed
+  ---
+  duration_ms: 35.748785
+  ...
+# Subtest: post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+ok 86 - post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+  ---
+  duration_ms: 135.856484
+  ...
+# Subtest: an absent weekday and conflicting calendar heads cannot be skipped
+ok 87 - an absent weekday and conflicting calendar heads cannot be skipped
+  ---
+  duration_ms: 123.340265
+  ...
+# Subtest: zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+ok 88 - zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+  ---
+  duration_ms: 12.573824
+  ...
+# Subtest: shared market authority is acquired once for the immutable run cutoff
+ok 89 - shared market authority is acquired once for the immutable run cutoff
+  ---
+  duration_ms: 177.336386
+  ...
+# Subtest: an older raw observation remains valid against its own immutable calendar revision
+ok 90 - an older raw observation remains valid against its own immutable calendar revision
+  ---
+  duration_ms: 95.043001
+  ...
+# Subtest: a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+ok 91 - a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+  ---
+  duration_ms: 119.03121
+  ...
+# Subtest: a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+ok 92 - a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+  ---
+  duration_ms: 131.278326
+  ...
+# Subtest: a recent share-changing action does not manufacture a comparable volume ratio
+ok 93 - a recent share-changing action does not manufacture a comparable volume ratio
+  ---
+  duration_ms: 26.341311
+  ...
+# (node:368163) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368163) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/tw-entry-plan.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: P1-01: prior20 excludes the signal high and its exactly 1.5x volume
+ok 94 - P1-01: prior20 excludes the signal high and its exactly 1.5x volume
+  ---
+  duration_ms: 24.092597
+  ...
+# Subtest: P1-02: a confirmed signal retains unchanged formal market/overseas blockers
+ok 95 - P1-02: a confirmed signal retains unchanged formal market/overseas blockers
+  ---
+  duration_ms: 5.76839
+  ...
+# Subtest: P1-03: a touch without stabilization never confirms a pullback
+ok 96 - P1-03: a touch without stabilization never confirms a pullback
+  ---
+  duration_ms: 5.193301
+  ...
+# Subtest: P1-03: a stabilized uptrend pullback produces a bounded current-scale research zone
+ok 97 - P1-03: a stabilized uptrend pullback produces a bounded current-scale research zone
+  ---
+  duration_ms: 5.68268
+  ...
+# Subtest: P1-03: a valid breakout that is too far above resistance keeps the signal without a usable entry zone
+ok 98 - P1-03: a valid breakout that is too far above resistance keeps the signal without a usable entry zone
+  ---
+  duration_ms: 4.553785
+  ...
+# Subtest: P1-03: tick rounding that leaves U below L cannot publish an entry zone
+ok 99 - P1-03: tick rounding that leaves U below L cannot publish an entry zone
+  ---
+  duration_ms: 5.014311
+  ...
+# Subtest: P1-04: Taiwan ticks use the correct tier on both sides of every boundary
+ok 100 - P1-04: Taiwan ticks use the correct tier on both sides of every boundary
+  ---
+  duration_ms: 0.280303
+  ...
+# Subtest: P1-04: only the supplied official next session determines validity across closures
+ok 101 - P1-04: only the supplied official next session determines validity across closures
+  ---
+  duration_ms: 10.951145
+  ...
+# Subtest: P1-04: late knowledge cannot manufacture next-open eligibility; close-time publication is expired
+ok 102 - P1-04: late knowledge cannot manufacture next-open eligibility; close-time publication is expired
+  ---
+  duration_ms: 15.090204
+  ...
+# Subtest: P1-01/P1-05: insufficient, unfinished, missing-adjustment and conflicting inputs fail closed
+ok 103 - P1-01/P1-05: insufficient, unfinished, missing-adjustment and conflicting inputs fail closed
+  ---
+  duration_ms: 31.093947
+  ...
+# Subtest: P1-05: official session gaps, duplicate dates, impossible dates, bad OHLC and future observations fail closed
+ok 104 - P1-05: official session gaps, duplicate dates, impossible dates, bad OHLC and future observations fail closed
+  ---
+  duration_ms: 28.34061
+  ...
+# Subtest: P1-09: rebind/retry preserves semantic plan identity and frozen knowledge time
+ok 105 - P1-09: rebind/retry preserves semantic plan identity and frozen knowledge time
+  ---
+  duration_ms: 18.118957
+  ...
+# Subtest: missing liquidity/formal authority never changes a technical observation into actionable permission
+ok 106 - missing liquidity/formal authority never changes a technical observation into actionable permission
+  ---
+  duration_ms: 10.117026
+  ...
+# Subtest: zero-volume history cannot provide a breakout denominator and input size is bounded
+ok 107 - zero-volume history cannot provide a breakout denominator and input size is bounded
+  ---
+  duration_ms: 6.889662
+  ...
+1..107
+# tests 107
+# suites 0
+# pass 107
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 35521.078891

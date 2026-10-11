@@ -1,0 +1,6 @@
+First local receipt assembly failed before any receipt commit:
+Traceback (most recent call last):
+  File "/tmp/si-calendar-ijqf378a/seal-evidence.py", line 21, in <module>
+    assert scripts[key]==value;catalog.append({'script':key,'matchesFrozenValue':True})
+KeyError: 'web:test:e2e:v3-correctness'
+Cause: assembly initially used root package scripts for all inventory keys; the existing canonical check resolves web: prefix to web/package.json. Corrected only this private assembly helper, not product/package/inventory/source.

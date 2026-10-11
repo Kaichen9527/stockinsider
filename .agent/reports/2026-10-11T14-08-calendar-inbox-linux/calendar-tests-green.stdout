@@ -1,0 +1,85 @@
+TAP version 13
+# (node:367899) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:367899) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/entry-plan-authority-backfill.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: authority completion summary includes every page and fails on invalid status
+ok 1 - authority completion summary includes every page and fails on invalid status
+  ---
+  duration_ms: 2.575859
+  ...
+# Subtest: authority-only request accepts no caller-supplied prices, roster or fabricated sessions
+ok 2 - authority-only request accepts no caller-supplied prices, roster or fabricated sessions
+  ---
+  duration_ms: 0.257248
+  ...
+# Subtest: frozen common-stock roster generates per-stock-month and exchange-range jobs with no candidate omissions
+ok 3 - frozen common-stock roster generates per-stock-month and exchange-range jobs with no candidate omissions
+  ---
+  duration_ms: 7.409586
+  ...
+# Subtest: official monthly price acquisition records the real source and retains OHLCV and turnover
+ok 4 - official monthly price acquisition records the real source and retains OHLCV and turnover
+  ---
+  duration_ms: 17.280519
+  ...
+# Subtest: official monthly source distinguishes a confirmed empty report from a failed or changed schema
+ok 5 - official monthly source distinguishes a confirmed empty report from a failed or changed schema
+  ---
+  duration_ms: 0.805125
+  ...
+# Subtest: calendar selects240 date heads beyond3000 revisions for both complete paginated dependencies
+ok 6 - calendar selects240 date heads beyond3000 revisions for both complete paginated dependencies
+  ---
+  duration_ms: 394.099124
+  ...
+# Subtest: cancelled latest date head never revives an older completed revision
+ok 7 - cancelled latest date head never revives an older completed revision
+  ---
+  duration_ms: 96.081605
+  ...
+# Subtest: boundary date is fully resolved across two full pages before returning240 heads
+ok 8 - boundary date is fully resolved across two full pages before returning240 heads
+  ---
+  duration_ms: 10.65712
+  ...
+# Subtest: late/future revisions are excluded at all three original cutoffs; future close and wrong provider do not revive dates
+ok 9 - late/future revisions are excluded at all three original cutoffs; future close and wrong provider do not revive dates
+  ---
+  duration_ms: 3.469148
+  ...
+# Subtest: calendar clocks and same-head conflicts retain microsecond precision
+ok 10 - calendar clocks and same-head conflicts retain microsecond precision
+  ---
+  duration_ms: 3.275926
+  ...
+# Subtest: short history rejects instead of accepting a prefix as240 sessions
+ok 11 - short history rejects instead of accepting a prefix as240 sessions
+  ---
+  duration_ms: 102.289803
+  ...
+# Subtest: row cap exhaustion and exactly-full final boundary require proof of end, never truncate success
+ok 12 - row cap exhaustion and exactly-full final boundary require proof of end, never truncate success
+  ---
+  duration_ms: 2679.808868
+  ...
+# Subtest: oversized page and UTF8 page/aggregate budgets fail closed
+ok 13 - oversized page and UTF8 page/aggregate budgets fail closed
+  ---
+  duration_ms: 500.431636
+  ...
+# Subtest: a stalled calendar query aborts within the fixed shared30-second deadline
+ok 14 - a stalled calendar query aborts within the fixed shared30-second deadline
+  ---
+  duration_ms: 30008.483738
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 34024.819826

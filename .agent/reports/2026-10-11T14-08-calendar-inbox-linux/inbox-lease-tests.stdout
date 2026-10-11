@@ -1,0 +1,115 @@
+TAP version 13
+# (node:368425) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368425) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-inbox.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: inbox invalid JSON cannot acquire or write
+ok 1 - inbox invalid JSON cannot acquire or write
+  ---
+  duration_ms: 17.832317
+  ...
+# Subtest: inbox missing items cannot acquire or write
+ok 2 - inbox missing items cannot acquire or write
+  ---
+  duration_ms: 1.025969
+  ...
+# Subtest: inbox empty items cannot acquire or write
+ok 3 - inbox empty items cannot acquire or write
+  ---
+  duration_ms: 1.310698
+  ...
+# Subtest: inbox over limit cannot acquire or write
+ok 4 - inbox over limit cannot acquire or write
+  ---
+  duration_ms: 1.354815
+  ...
+# Subtest: inbox invalid item cannot acquire or write
+ok 5 - inbox invalid item cannot acquire or write
+  ---
+  duration_ms: 1.80857
+  ...
+# Subtest: unauthorized inbox cannot acquire or write
+ok 6 - unauthorized inbox cannot acquire or write
+  ---
+  duration_ms: 1.045889
+  ...
+# Subtest: busy owner rejects without upsert or foreign release
+ok 7 - busy owner rejects without upsert or foreign release
+  ---
+  duration_ms: 2.379713
+  ...
+# Subtest: lease acquisition failure rejects without writes or release
+ok 8 - lease acquisition failure rejects without writes or release
+  ---
+  duration_ms: 1.067181
+  ...
+# Subtest: success and dedup preserve revision rows and release own lease (false)
+ok 9 - success and dedup preserve revision rows and release own lease (false)
+  ---
+  duration_ms: 1.879326
+  ...
+# Subtest: success and dedup preserve revision rows and release own lease (true)
+ok 10 - success and dedup preserve revision rows and release own lease (true)
+  ---
+  duration_ms: 1.327523
+  ...
+# Subtest: existing 100 item boundary remains valid under one lease
+ok 11 - existing 100 item boundary remains valid under one lease
+  ---
+  duration_ms: 2.341544
+  ...
+# Subtest: database failures release own lease (dbError)
+ok 12 - database failures release own lease (dbError)
+  ---
+  duration_ms: 0.795561
+  ...
+# Subtest: database failures release own lease (clientError)
+ok 13 - database failures release own lease (clientError)
+  ---
+  duration_ms: 0.842972
+  ...
+# Subtest: database failures release own lease (writeThrow)
+ok 14 - database failures release own lease (writeThrow)
+  ---
+  duration_ms: 0.800969
+  ...
+# Subtest: release failure after write cannot report complete success
+ok 15 - release failure after write cannot report complete success
+  ---
+  duration_ms: 2.356927
+  ...
+# Subtest: write plus release failure preserves primary error and exposes cleanup gap
+ok 16 - write plus release failure preserves primary error and exposes cleanup gap
+  ---
+  duration_ms: 2.582488
+  ...
+# (node:368426) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:368426) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-inbox.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: research inbox validates bounded point-in-time summaries
+ok 17 - research inbox validates bounded point-in-time summaries
+  ---
+  duration_ms: 1.06059
+  ...
+# Subtest: research inbox produces immutable deterministic revisions
+ok 18 - research inbox produces immutable deterministic revisions
+  ---
+  duration_ms: 1.363648
+  ...
+# Subtest: authenticated content stores only the submitted bounded summary
+ok 19 - authenticated content stores only the submitted bounded summary
+  ---
+  duration_ms: 0.318211
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 395.022208
