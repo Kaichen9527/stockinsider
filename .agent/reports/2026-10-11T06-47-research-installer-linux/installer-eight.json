@@ -1,0 +1,27 @@
+{
+  "stage": "installer-eight",
+  "command": [
+    "node",
+    "--test",
+    "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+    "scripts/research-agent-migration-gate.test.mjs",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+    "scripts/opportunity-v3/research-publication-install-guard.test.mjs",
+    "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+    "scripts/opportunity-v3/vps-migration-peer.test.mjs",
+    "scripts/research-strategy-release.test.mjs"
+  ],
+  "startedAt": "2026-10-11T06:50:14.806282+00:00",
+  "endedAt": "2026-10-11T06:50:22.690015+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 7.883742684964091,
+  "sampledAggregatePeakRssBytes": 304812032,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10078420992,
+  "diskAvailableAfterBytes": 10078420992,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

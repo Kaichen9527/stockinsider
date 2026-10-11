@@ -1,0 +1,19 @@
+{
+  "artifactRoot": "/tmp/si-1a0043-xnjz9wc1",
+  "user": "agent",
+  "node": "v22.14.0",
+  "pgConfigBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+  "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+  "nativeExecutable": {
+    "initdb": true,
+    "pg_ctl": true,
+    "psql": true,
+    "postgres": true
+  },
+  "head": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "tree": "548ec17b1d8801ecb7f2e4c5635199aacd9989b2",
+  "webtree": "09248604b3efc6e30e029bad864915268067827b",
+  "lockSha": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "pgDependency": "{\"version\":\"8.18.0\",\"user\":\"agent\"}",
+  "diskAvailable": 10078404608
+}
