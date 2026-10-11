@@ -1,0 +1,55 @@
+{
+  "recordedAt": "2026-10-11T18:45:03.288049+00:00",
+  "evidenceHead": "60b93b763d7eaefe5542404b4808b64d17786e5c",
+  "subject": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3",
+  "receiptSha256": "b59c21fcb4f10ad86dc8166459ff11e024abac87f7ea0d71eb4c8ce74f6328c6",
+  "rawVerified": 17,
+  "sourceVerified": 575,
+  "changedPathsEvidenceOnly": [
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/browser-.last-run.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/browser-browsers.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/browser-capability.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/canonical.stderr",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/canonical.stdout",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/case-results.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/cleanup.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/handoff.md",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/observed-build.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/observed-server-manifest.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/owned-service-rss-summary.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/owned-service-rss.jsonl",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/preflight.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/receipt.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/resources.jsonl",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/result.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/run.py",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/source-manifest.json",
+    ".agent/reports/2026-10-11T18-01-ptt-provenance-canonical-linux/test-selection.json"
+  ],
+  "actualCounts": {
+    "total": 155,
+    "pass": 153,
+    "fail": 2,
+    "skip": 0,
+    "pcrTotal": 31,
+    "pcrPass": 30,
+    "pcrFail": 1,
+    "pcrSkip": 0
+  },
+  "pcr022": "PASS",
+  "remainingFailures": [
+    "PCR-024",
+    "V314-004"
+  ],
+  "capabilityFinding": "Pinned Chromium1208 executable absent; original parent error omits child stdout, complete causality not yet recovered",
+  "claimsNotMade": [
+    "all155 passed",
+    "31PCR passed",
+    "protected gate approved",
+    "native model runner recovered",
+    "production updated"
+  ],
+  "nextAction": "existing idle Cloud single bounded20min exact pinned browser launch capture/install only if confirmed/canonical once after real environment repair; no source/test/lock/VPS changes",
+  "productionMain": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "pr372Frozen": true
+}

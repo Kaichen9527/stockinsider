@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 18:45Z：VM canonical原始結果已核對，單次修復缺失的瀏覽器能力
+
+GitHub main仍169、PR372仍凍結7af8cba0／OPEN BLOCKED；沒有合併部署或重跑全量。Cloud前次20分鐘工作已終態且idle，證據branch `codex/ptt-provenance-canonical-evidence-oct12` head60b93b763d7eaefe5542404b4808b64d17786e5c。Root真正核對17份raw與575份source hash／blob，與精確7af8完全一致，該branch僅新增證據。未修改canonical九檔選擇：153PASS／2FAIL／0SKIP，31PCR為30PASS／1FAIL；PCR022真PASS，PCR024與V314004瀏覽器子命令FAIL。這不是155或31全過。
+
+Cloud已確認locked Playwright1.58.2需要的Chromium1208 executable不存在；原parent test沒有保留完整child stdout，故不能直接宣稱缺browser是唯一失敗原因。既有source/lock／依賴placement已正確，最低workspace9.268GB、tmp16.454GB，原服務皆終止。沒有在同樣缺browser輸入下重試。
+
+原idle Cloud只接一件20分鐘有界環境修復：先保存真實pinned Chromium launch錯誤，確認缺失才用本地locked Playwright CLI安裝相符可重建browser cache，繼承proxy/CA、不apt、不換版本或browser/sandbox、不動VPS/secret/source/test/策略。安裝與launch均成功、每階段8GiB預留/RSS8GiB後，才單次跑原canonical；其他錯誤據實保留，不反覆重試。turn01a12c47-a740-74fd-be47-79461ec47b53目前active、cursor4b5b5e24-a000-4c65-b012-1e9514020d4f:6。Root不重複派工。完整31PCR／final exact-review handoff及protected/native trust依然未通過，不以這次環境修復冒稱發布批准。
+
+核對收據`.agent/reports/2026-10-11T18-43-canonical-linux-review/review.json`；原VM receipt SHA b59c21fcb4f10ad86dc8166459ff11e024abac87f7ea0d71eb4c8ce74f6328c6。快取月內禁止刪、其他App原查核結果及首次信任遷移決策未變。
+
 ## 18:02Z補充：workflow獨立核對完成；canonical placement RED據實保留
 
 Cloud對root所寫workflow完成真正唯讀獨立核對，blob46e753f9／SHA c66af5cc、1433bytes與root實檔一致；沒有新blocker，僅workflow範圍、不是它自己maker程式的批准，也不是protected簽章。原輔助解析EPERM及改用唯讀管線結果均留在收據。

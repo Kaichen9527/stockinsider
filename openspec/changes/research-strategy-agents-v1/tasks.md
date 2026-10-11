@@ -5,7 +5,7 @@
 - [x] PTT new-document mention lineage/read-completeness helper and actual source-function synthetic boundary tests; root30/30, maker40raw/16source hashes verified. No historical backfill or live crawl.
 - [x] PR372 ordinary diagnostic workflow registered and actually passed30/30 at7af8cba0.
 - [x] Root-authored workflow independently read by original Cloud task; exact blob/hash match, no new scoped blocker, unsigned only.
-- [ ] Canonical/full exact protected handoff and release gates: root152PASS/3symlink-placementFAIL retained; bounded Cloud corrected-placement validation pending. First protected run38161353435 failed missing exact evidence ref, not a native model execution.
+- [ ] Canonical/full exact protected handoff and release gates: root152PASS/3symlink-placementFAIL retained; Cloud corrected-placement153PASS/2browserFAIL,17raw575source verified; one bounded pinned Chromium capability repair is active,31PCR not yet complete. First protected run38161353435 failed missing exact evidence ref, not a native model execution.
 - [ ] PTT admission adapter, independent root/creator resolution, official latest-session projection, research scheduler and complete author/reviewer publication.
 - [x] Other-App owner cache-cause audit received: avoidable runtime ENV/apt rebuild confirmed, npm same-SHA cache misses only partially explained; zero cache entries older than30days, no deletion.
 

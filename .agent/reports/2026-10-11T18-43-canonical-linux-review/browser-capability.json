@@ -1,0 +1,18 @@
+{
+  "web/node_modules/playwright-core/browsers.json": {
+    "bytes": 1883,
+    "sha256": "6b6e0538d6e46eef71d3e1a0dcb65f8f5ea7914033c8150529d8e207afb6030c"
+  },
+  "web/test-results/.last-run.json": {
+    "bytes": 145,
+    "sha256": "71af0df90850532e9b4f40b692cb47beece9c312523d9c9989ecde69807c5d78"
+  },
+  "headlessShellExpectedRevision": "1208",
+  "defaultCacheDirectory": "/home/agent/.cache/ms-playwright",
+  "defaultCacheEntries": [
+    ".links"
+  ],
+  "projectLocalCacheExists": false,
+  "downloadAttempted": false,
+  "directFailureProvenance": "Parent unmodified tests preserve child command/stderr but omit captured child stdout; cache capability absence confirmed separately. Do not assert full child root cause recovered."
+}

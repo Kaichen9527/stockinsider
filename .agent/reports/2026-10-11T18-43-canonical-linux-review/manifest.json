@@ -1,0 +1,32 @@
+[
+  {
+    "path": "browser-capability.json",
+    "bytes": 734,
+    "sha256": "3889fb223d78920a2ac98acfb22e0cf791aa934370db884b6eda98554a4e0f0f"
+  },
+  {
+    "path": "cleanup.json",
+    "bytes": 559,
+    "sha256": "23fd1eda554e4e89658de8135e70da1f885950d2bf06bcd7690ac56c49bd21b2"
+  },
+  {
+    "path": "handoff.md",
+    "bytes": 1925,
+    "sha256": "0e459b81f02c6b0a3c834adb0b7b5bdb5796a7fa6bdb8c31860b7875092b1615"
+  },
+  {
+    "path": "receipt.json",
+    "bytes": 9249,
+    "sha256": "b59c21fcb4f10ad86dc8166459ff11e024abac87f7ea0d71eb4c8ce74f6328c6"
+  },
+  {
+    "path": "result.json",
+    "bytes": 522,
+    "sha256": "a4087ba7e2b74bbf263c0994081e8155fec53015ac3c5bbf2537320eadc61a48"
+  },
+  {
+    "path": "review.json",
+    "bytes": 2861,
+    "sha256": "178771eab4f0acdbbdcc197f24261025f17cddd3ac9d2e56842c3795dc6dbf81"
+  }
+]
