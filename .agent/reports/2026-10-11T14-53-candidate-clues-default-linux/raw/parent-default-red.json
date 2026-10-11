@@ -1,0 +1,21 @@
+{
+  "stage": "parent-default-red",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "/tmp/si-admission-default-2gqqfx9m/parent-default-red.test.mjs"
+  ],
+  "startedAt": "2026-10-11T15:01:00.638388+00:00",
+  "endedAt": "2026-10-11T15:01:01.432234+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 0.7938212550361641,
+  "sampledAggregatePeakRssBytes": 152797184,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9829462016,
+  "diskAvailableAfterBytes": 9829462016,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

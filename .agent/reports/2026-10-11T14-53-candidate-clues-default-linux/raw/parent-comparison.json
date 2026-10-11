@@ -1,0 +1,24 @@
+{
+  "subject": "315a59f664187f7702e68f991ad94701012fb6c6",
+  "purpose": "Current SSR assertions against original315 component/home/compactor, using current pure helper and locked16.3.4 rendering dependencies; not a full parent build",
+  "files": [
+    {
+      "source": "315a59f664187f7702e68f991ad94701012fb6c6:web/src/app/components/RadarTabs.tsx",
+      "local": "/tmp/si-admission-default-2gqqfx9m/parent-RadarTabs.tsx",
+      "bytes": 110288,
+      "sha256": "7a27ed108eaa4512b5decaecbbea7655c0eb86dcfdafa631a3213dfdbb5938dd"
+    },
+    {
+      "source": "315a59f664187f7702e68f991ad94701012fb6c6:web/src/app/page.tsx",
+      "local": "/tmp/si-admission-default-2gqqfx9m/parent-page.tsx",
+      "bytes": 32654,
+      "sha256": "cdccf35099f982f69be9635ff61fa83f9a0208b180c9f8d7634bafb98d01d157"
+    },
+    {
+      "source": "315a59f664187f7702e68f991ad94701012fb6c6:web/src/lib/radar-public-snapshot.ts",
+      "local": "/tmp/si-admission-default-2gqqfx9m/parent-radar-public-snapshot.ts",
+      "bytes": 18427,
+      "sha256": "1e648a9f8bbb75d2600b1d8388bd1ebc15ff02c7b203b025d40e4d064ab722f7"
+    }
+  ]
+}

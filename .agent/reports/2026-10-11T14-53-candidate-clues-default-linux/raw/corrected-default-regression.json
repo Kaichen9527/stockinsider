@@ -1,0 +1,28 @@
+{
+  "stage": "corrected-default-regression",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "web/src/lib/candidate-discovery-admission.test.ts",
+    "web/src/lib/radar-stage-view.test.ts",
+    "web/src/lib/source-content-semantics.test.ts",
+    "scripts/candidate-discovery-admission-ui.test.mjs",
+    "web/src/lib/radar-stage-pagination.test.ts",
+    "web/src/lib/radar-public-snapshot.test.ts",
+    "web/src/lib/candidate-trade-plan-transport.test.ts",
+    "web/src/lib/candidate-detail-view-contract.test.ts"
+  ],
+  "startedAt": "2026-10-11T14:59:43.544437+00:00",
+  "endedAt": "2026-10-11T14:59:44.506970+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.962539147993084,
+  "sampledAggregatePeakRssBytes": 218361856,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9829421056,
+  "diskAvailableAfterBytes": 9829421056,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

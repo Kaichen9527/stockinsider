@@ -1,0 +1,286 @@
+TAP version 13
+# (node:371772) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:371772) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-discovery-admission.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: actual main card displays technical dated close and reference method, hides old price and upside
+ok 1 - actual main card displays technical dated close and reference method, hides old price and upside
+  ---
+  duration_ms: 9.888725
+  ...
+# Subtest: actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+ok 2 - actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+  ---
+  duration_ms: 1.268624
+  ...
+# Subtest: missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+ok 3 - missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+  ---
+  duration_ms: 1.105037
+  ...
+# Subtest: actual main defaults to existing clues while research admission remains explicitly pending
+ok 4 - actual main defaults to existing clues while research admission remains explicitly pending
+  ---
+  duration_ms: 10.980783
+  ...
+# Subtest: existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+ok 5 - existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+  ---
+  duration_ms: 1.352622
+  ...
+# Subtest: actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+ok 6 - actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+  ---
+  duration_ms: 22.772529
+  ...
+# Subtest: actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+ok 7 - actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+  ---
+  duration_ms: 4.244545
+  ...
+# Subtest: saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+ok 8 - saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+  ---
+  duration_ms: 8.682454
+  ...
+# (node:371773) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:371773) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-detail-view-contract.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: candidate detail keeps publication state separate from issuer research completeness
+ok 9 - candidate detail keeps publication state separate from issuer research completeness
+  ---
+  duration_ms: 14.608177
+  ...
+# Subtest: raw facts and source links are collapsed below decision content
+ok 10 - raw facts and source links are collapsed below decision content
+  ---
+  duration_ms: 15.831734
+  ...
+# Subtest: enriched public prose requires an accepted receipt for the same dossier, revision and input hash
+ok 11 - enriched public prose requires an accepted receipt for the same dossier, revision and input hash
+  ---
+  duration_ms: 1.129915
+  ...
+# (node:371774) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:371774) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-discovery-admission.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: only a pair with different canonical publishers and roots enters general research
+ok 12 - only a pair with different canonical publishers and roots enters general research
+  ---
+  duration_ms: 3.271889
+  ...
+# Subtest: same author across platforms
+ok 13 - same author across platforms
+  ---
+  duration_ms: 0.288595
+  ...
+# Subtest: syndicated original root
+ok 14 - syndicated original root
+  ---
+  duration_ms: 0.135394
+  ...
+# Subtest: same-platform original authors with independent roots qualify; platform diversity is display-only
+ok 15 - same-platform original authors with independent roots qualify; platform diversity is display-only
+  ---
+  duration_ms: 0.269297
+  ...
+# Subtest: retracted root cannot be laundered by a current repost
+ok 16 - retracted root cannot be laundered by a current repost
+  ---
+  duration_ms: 0.455147
+  ...
+# Subtest: industry-only and unresolved aliases cannot count as direct company confirmation
+ok 17 - industry-only and unresolved aliases cannot count as direct company confirmation
+  ---
+  duration_ms: 0.218339
+  ...
+# Subtest: bounded legacy links, counters and missing PTT detail are unsupported
+ok 18 - bounded legacy links, counters and missing PTT detail are unsupported
+  ---
+  duration_ms: 0.264519
+  ...
+# Subtest: PTT 19/20 actual different stock-mention authors boundary
+ok 19 - PTT 19/20 actual different stock-mention authors boundary
+  ---
+  duration_ms: 0.689872
+  ...
+# Subtest: PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+ok 20 - PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+  ---
+  duration_ms: 0.586996
+  ...
+# Subtest: PTT requires stock in body, current article, and one post, not pooled reply totals
+ok 21 - PTT requires stock in body, current article, and one post, not pooled reply totals
+  ---
+  duration_ms: 0.555709
+  ...
+# Subtest: reasoned new official event can enter low-volume lane, never multi-source confirmation
+ok 22 - reasoned new official event can enter low-volume lane, never multi-source confirmation
+  ---
+  duration_ms: 0.359523
+  ...
+# Subtest: high-impact new lead requires explained known direct source; ordinary news is not official
+ok 23 - high-impact new lead requires explained known direct source; ordinary news is not official
+  ---
+  duration_ms: 0.196867
+  ...
+# Subtest: existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+ok 24 - existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+  ---
+  duration_ms: 0.990815
+  ...
+# Subtest: bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+ok 25 - bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+  ---
+  duration_ms: 0.759797
+  ...
+# Subtest: technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+ok 26 - technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+  ---
+  duration_ms: 0.87481
+  ...
+# Subtest: PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+ok 27 - PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+  ---
+  duration_ms: 1.358451
+  ...
+# Subtest: missing, future, malformed dates never manufacture a displayed current close
+ok 28 - missing, future, malformed dates never manufacture a displayed current close
+  ---
+  duration_ms: 0.186541
+  ...
+# Subtest: clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+ok 29 - clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+  ---
+  duration_ms: 1.417539
+  ...
+# Subtest: coverage states distinguish retired/blocked/duplicate without inventing source enablement
+ok 30 - coverage states distinguish retired/blocked/duplicate without inventing source enablement
+  ---
+  duration_ms: 0.584922
+  ...
+# Subtest: coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+ok 31 - coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+  ---
+  duration_ms: 0.481867
+  ...
+# (node:371805) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:371805) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-trade-plan-transport.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# {"fixtureRadarCardBytes":110431,"fixtureHomeCardBytes":182822}
+# Subtest: P1-06/P1-10: summary preserves the saved revision through compact pagination without embedded OHLCV
+ok 32 - P1-06/P1-10: summary preserves the saved revision through compact pagination without embedded OHLCV
+  ---
+  duration_ms: 16.542221
+  ...
+# Subtest: P1-10: representative 40-card Radar and 24-per-stage home transports retain existing budgets
+ok 33 - P1-10: representative 40-card Radar and 24-per-stage home transports retain existing budgets
+  ---
+  duration_ms: 46.365536
+  ...
+# Subtest: P1-06: detail reader and public summary transport cannot recalculate or write a plan
+ok 34 - P1-06: detail reader and public summary transport cannot recalculate or write a plan
+  ---
+  duration_ms: 0.957806
+  ...
+# (node:371812) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:371812) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/radar-public-snapshot.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: public Radar snapshot persists the complete canonical stock plane for paged delivery
+ok 35 - public Radar snapshot persists the complete canonical stock plane for paged delivery
+  ---
+  duration_ms: 14.032618
+  ...
+# (node:371827) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:371827) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/radar-stage-pagination.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: compaction preserves candidate revision and stale authority for found and actionable
+ok 36 - compaction preserves candidate revision and stale authority for found and actionable
+  ---
+  duration_ms: 1.409547
+  ...
+# Subtest: stage pagination exposes every card from one immutable snapshot without exceeding page size
+ok 37 - stage pagination exposes every card from one immutable snapshot without exceeding page size
+  ---
+  duration_ms: 1.124377
+  ...
+# Subtest: stage pagination clamps invalid offsets and oversized pages
+ok 38 - stage pagination clamps invalid offsets and oversized pages
+  ---
+  duration_ms: 0.18546
+  ...
+# (node:371838) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:371838) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/radar-stage-view.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: filters the complete stage snapshot by query, sector, source, signal and local watchlist
+ok 39 - filters the complete stage snapshot by query, sector, source, signal and local watchlist
+  ---
+  duration_ms: 11.173373
+  ...
+# Subtest: sorts by valuation upside without treating missing values as zero
+ok 40 - sorts by valuation upside without treating missing values as zero
+  ---
+  duration_ms: 0.551923
+  ...
+# Subtest: only substitutes closest waiting candidates when the actionable stage is truly empty
+ok 41 - only substitutes closest waiting candidates when the actionable stage is truly empty
+  ---
+  duration_ms: 0.199501
+  ...
+# (node:371845) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:371845) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/source-content-semantics.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: invalidated source mentions remain auditable but leave discovery
+ok 42 - invalidated source mentions remain auditable but leave discovery
+  ---
+  duration_ms: 0.72214
+  ...
+# Subtest: legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+ok 43 - legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+  ---
+  duration_ms: 0.137448
+  ...
+# Subtest: PTT institutional ranking is chip evidence instead of discovery
+ok 44 - PTT institutional ranking is chip evidence instead of discovery
+  ---
+  duration_ms: 1.180252
+  ...
+# Subtest: publisher and content identities are canonical and stance is three-valued
+ok 45 - publisher and content identities are canonical and stance is three-valued
+  ---
+  duration_ms: 1.458431
+  ...
+# Subtest: source concentration dedupes content and caps thin platform coverage
+ok 46 - source concentration dedupes content and caps thin platform coverage
+  ---
+  duration_ms: 2.228814
+  ...
+# Subtest: source links rotate platforms and limit one platform
+ok 47 - source links rotate platforms and limit one platform
+  ---
+  duration_ms: 0.207813
+  ...
+1..47
+# tests 47
+# suites 0
+# pass 47
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 728.357004

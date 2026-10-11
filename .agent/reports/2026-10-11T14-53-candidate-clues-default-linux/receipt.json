@@ -1,0 +1,719 @@
+{
+  "schema": "bounded-manual-engineering-receipt-v1",
+  "createdAt": "2026-10-11T15:03:56.242155+00:00",
+  "source": {
+    "head": "9154d59b1b2af638f7a84e98498c3b1a4546c4b7",
+    "tree": "8c8d21742b10bb1b8e971e0dd1e75ecc3beada0a",
+    "webTree": "49bcc4b72b81201ba6728845dec76759a7cf177a",
+    "branch": "codex/candidate-discovery-admission-oct11",
+    "parentEvidence": "315a59f664187f7702e68f991ad94701012fb6c6",
+    "mainBase": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "deltaFiles": [
+      "docs/operations/2026-10-11/candidate-discovery-admission-handoff.md",
+      "scripts/candidate-discovery-admission-ui.test.mjs",
+      "web/src/app/components/RadarTabs.tsx",
+      "web/src/app/page.tsx",
+      "web/src/lib/candidate-discovery-admission.test.ts",
+      "web/src/lib/candidate-discovery-admission.ts",
+      "web/src/lib/radar-public-snapshot.ts"
+    ],
+    "sourceManifest": {
+      "path": "source-manifest.json",
+      "bytes": 72071,
+      "sha256": "2b383c8c7a7af78d71d52cd046f0dcfee478cdf4f3fa778e844eddc09cff54af"
+    },
+    "sourceFiles": 428
+  },
+  "behavior": {
+    "default": "all existing clues, clearly unqualified",
+    "cluePageSize": 20,
+    "homeFoundFirstBatch": 20,
+    "all272SyntheticCluesAccountedAcrossPages": true,
+    "generalAdmissionUnchanged": "different canonical publishers AND independent roots, platform diversity display-only",
+    "researchAdmissionStillPending": true,
+    "queueOrTop20ResearchSchedulingImplemented": false,
+    "canonicalRootInferredFromLinksOrContentHashes": false,
+    "retiredBlockedDuplicateCoverage": "saved sourceHealthSummary states only; compactor retains an existing Instagram status row, no empty enabled row",
+    "manualBrowserIsCollectorEnablement": false,
+    "manualBrowserNewSourceFactsImported": false
+  },
+  "dataAdapterInventory": {
+    "fullMentions": {
+      "pageSize": 750,
+      "maxRows": 100000,
+      "requireComplete": true,
+      "beforeEightDisplayLinkTruncation": true,
+      "canonicalPublisherAcrossPlatformsVerified": false,
+      "independentNewsRootColumnAvailable": false,
+      "actualReplyFieldsCopiedIntoMentions": false
+    },
+    "pttRawMetadataFields": [
+      "author_name",
+      "parent_article_author",
+      "parent_document_url",
+      "comment_index",
+      "comment_tag",
+      "evidence_excerpt",
+      "matched_symbols",
+      "matched_symbol_reason"
+    ],
+    "pttJoinImplemented": false,
+    "officialCalendarRpc": "candidate_research_official_sessions_page",
+    "calendarMarketScope": "TWSE only",
+    "threeClocksAndCompletedUniqueHeads": true,
+    "latestSessionPublishedOnStageCard": false,
+    "latestSessionAdapterImplemented": false,
+    "reason": "A bounded join cannot manufacture missing root/creator/complete body/reply identity; old immutable projections lack latest-session provenance."
+  },
+  "dependencyCorrection": {
+    "priorReceiptNext": "16.3.8",
+    "unchangedMainLockNext": "16.3.4",
+    "prior31Plus9AndBuildRetainedNotRelabelled": true,
+    "installCommand": [
+      "npm",
+      "--prefix",
+      "web",
+      "ci",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "currentVerifiedVersions": {
+      "nextInstalled": "16.3.4",
+      "nextLocked": "16.3.4",
+      "typescript": "5.9.3",
+      "react": "19.2.3",
+      "node": "v22.14.0",
+      "npm": "11.9.0"
+    },
+    "locksChanged": false,
+    "inheritedProxyCA": true,
+    "tlsBypassed": false
+  },
+  "validation": {
+    "parentSsrRed": {
+      "tests": 8,
+      "pass": 4,
+      "fail": 4,
+      "skip": 0,
+      "purpose": "reproduces315 default hiding clues and absent coverage while preserving original source"
+    },
+    "newCombinedRegression": {
+      "tests": 47,
+      "pass": 47,
+      "fail": 0,
+      "skip": 0,
+      "fixtures": "synthetic card/health data; actual component/compactor SSR plus pure libraries and unchanged adjacent transports",
+      "scope": "includes prior related behavior; do not add repeated47 runs or previous31+9 as distinct totals"
+    },
+    "typecheck": 0,
+    "lint": {
+      "exitCode": 0,
+      "errors": 0,
+      "existingWarnings": 33
+    },
+    "normalBuildExitCode": 0,
+    "realBrowserOrProductionRead": false,
+    "independentReview": "pending"
+  },
+  "build": {
+    "subject": "9154d59b1b2af638f7a84e98498c3b1a4546c4b7",
+    "compiler": "normal Next16.3.4 build",
+    "buildId": "vyeCuvx-MT3C_NdJiWocN",
+    "serverFiles": 1794,
+    "serverBytes": 59768155,
+    "manifest": {
+      "path": "compiled-server-manifest.json",
+      "bytes": 332873,
+      "sha256": "cb2d17a46c18be08f9d5892621e1b7ee12715dec5c7662ca58d78c9b107228a4"
+    }
+  },
+  "manualBudget": {
+    "startedAt": "2026-10-11T14:53:41Z",
+    "deadline": "2026-10-11T15:23:41Z",
+    "singleHeavy": true,
+    "diskReserveBytes": 8589934592,
+    "rssLimitBytes": 8589934592,
+    "productRoleBudgetEvidence": false
+  },
+  "stages": [
+    {
+      "stage": "corrected-default-regression",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/radar-stage-view.test.ts",
+        "web/src/lib/source-content-semantics.test.ts",
+        "scripts/candidate-discovery-admission-ui.test.mjs",
+        "web/src/lib/radar-stage-pagination.test.ts",
+        "web/src/lib/radar-public-snapshot.test.ts",
+        "web/src/lib/candidate-trade-plan-transport.test.ts",
+        "web/src/lib/candidate-detail-view-contract.test.ts"
+      ],
+      "startedAt": "2026-10-11T14:59:43.544437+00:00",
+      "endedAt": "2026-10-11T14:59:44.506970+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.962539147993084,
+      "sampledAggregatePeakRssBytes": 218361856,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9829421056,
+      "diskAvailableAfterBytes": 9829421056,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "550b417680cbe23717210e5113ffe86739ce3c8af86eca71d61cd79742667fed",
+      "counts": {
+        "tests": 47,
+        "pass": 47,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "testInventory": [
+        "actual main card displays technical dated close and reference method, hides old price and upside",
+        "actual card exposes every bounded source link including Threads, IG and InvestAnchors when present",
+        "missing technical close cannot fall back to valuation currentPrice; stale reference not a target",
+        "actual main defaults to existing clues while research admission remains explicitly pending",
+        "existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions",
+        "actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input",
+        "actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards",
+        "saved source-health compactor actually preserves existing Instagram retirement without fabricating rows",
+        "candidate detail keeps publication state separate from issuer research completeness",
+        "raw facts and source links are collapsed below decision content",
+        "enriched public prose requires an accepted receipt for the same dossier, revision and input hash",
+        "only a pair with different canonical publishers and roots enters general research",
+        "same author across platforms",
+        "syndicated original root",
+        "same-platform original authors with independent roots qualify; platform diversity is display-only",
+        "retracted root cannot be laundered by a current repost",
+        "industry-only and unresolved aliases cannot count as direct company confirmation",
+        "bounded legacy links, counters and missing PTT detail are unsupported",
+        "PTT 19/20 actual different stock-mention authors boundary",
+        "PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20",
+        "PTT requires stock in body, current article, and one post, not pooled reply totals",
+        "reasoned new official event can enter low-volume lane, never multi-source confirmation",
+        "high-impact new lead requires explained known direct source; ordinary news is not official",
+        "existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler",
+        "bounds fail closed without truncate-success; invalid platform and duplicate symbols reject",
+        "technical.close and exact completed session govern freshness, not availableAt or seven-day TTL",
+        "PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside",
+        "missing, future, malformed dates never manufacture a displayed current close",
+        "clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation",
+        "coverage states distinguish retired/blocked/duplicate without inventing source enablement",
+        "coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success",
+        "P1-06/P1-10: summary preserves the saved revision through compact pagination without embedded OHLCV",
+        "P1-10: representative 40-card Radar and 24-per-stage home transports retain existing budgets",
+        "P1-06: detail reader and public summary transport cannot recalculate or write a plan",
+        "public Radar snapshot persists the complete canonical stock plane for paged delivery",
+        "compaction preserves candidate revision and stale authority for found and actionable",
+        "stage pagination exposes every card from one immutable snapshot without exceeding page size",
+        "stage pagination clamps invalid offsets and oversized pages",
+        "filters the complete stage snapshot by query, sector, source, signal and local watchlist",
+        "sorts by valuation upside without treating missing values as zero",
+        "only substitutes closest waiting candidates when the actionable stage is truly empty",
+        "invalidated source mentions remain auditable but leave discovery",
+        "legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery",
+        "PTT institutional ranking is chip evidence instead of discovery",
+        "publisher and content identities are canonical and stance is three-valued",
+        "source concentration dedupes content and caps thin platform coverage",
+        "source links rotate platforms and limit one platform"
+      ],
+      "provenance": "precommit working files identical to915 code; exact commands/times preserved, no postcommit execution claim"
+    },
+    {
+      "stage": "default-clues-regression",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/radar-stage-view.test.ts",
+        "web/src/lib/source-content-semantics.test.ts",
+        "scripts/candidate-discovery-admission-ui.test.mjs",
+        "web/src/lib/radar-stage-pagination.test.ts",
+        "web/src/lib/radar-public-snapshot.test.ts",
+        "web/src/lib/candidate-trade-plan-transport.test.ts",
+        "web/src/lib/candidate-detail-view-contract.test.ts"
+      ],
+      "startedAt": "2026-10-11T14:58:40.732550+00:00",
+      "endedAt": "2026-10-11T14:58:41.463369+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.7308262249571271,
+      "sampledAggregatePeakRssBytes": 227323904,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9829425152,
+      "diskAvailableAfterBytes": 9829425152,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "550b417680cbe23717210e5113ffe86739ce3c8af86eca71d61cd79742667fed",
+      "counts": {
+        "tests": 47,
+        "pass": 47,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "testInventory": [
+        "actual main card displays technical dated close and reference method, hides old price and upside",
+        "actual card exposes every bounded source link including Threads, IG and InvestAnchors when present",
+        "missing technical close cannot fall back to valuation currentPrice; stale reference not a target",
+        "actual main defaults to existing clues while research admission remains explicitly pending",
+        "existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions",
+        "actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input",
+        "actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards",
+        "saved source-health compactor actually preserves existing Instagram retirement without fabricating rows",
+        "candidate detail keeps publication state separate from issuer research completeness",
+        "raw facts and source links are collapsed below decision content",
+        "enriched public prose requires an accepted receipt for the same dossier, revision and input hash",
+        "only a pair with different canonical publishers and roots enters general research",
+        "same author across platforms",
+        "syndicated original root",
+        "same-platform original authors with independent roots qualify; platform diversity is display-only",
+        "retracted root cannot be laundered by a current repost",
+        "industry-only and unresolved aliases cannot count as direct company confirmation",
+        "bounded legacy links, counters and missing PTT detail are unsupported",
+        "PTT 19/20 actual different stock-mention authors boundary",
+        "PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20",
+        "PTT requires stock in body, current article, and one post, not pooled reply totals",
+        "reasoned new official event can enter low-volume lane, never multi-source confirmation",
+        "high-impact new lead requires explained known direct source; ordinary news is not official",
+        "existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler",
+        "bounds fail closed without truncate-success; invalid platform and duplicate symbols reject",
+        "technical.close and exact completed session govern freshness, not availableAt or seven-day TTL",
+        "PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside",
+        "missing, future, malformed dates never manufacture a displayed current close",
+        "clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation",
+        "coverage states distinguish retired/blocked/duplicate without inventing source enablement",
+        "coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success",
+        "P1-06/P1-10: summary preserves the saved revision through compact pagination without embedded OHLCV",
+        "P1-10: representative 40-card Radar and 24-per-stage home transports retain existing budgets",
+        "P1-06: detail reader and public summary transport cannot recalculate or write a plan",
+        "public Radar snapshot persists the complete canonical stock plane for paged delivery",
+        "compaction preserves candidate revision and stale authority for found and actionable",
+        "stage pagination exposes every card from one immutable snapshot without exceeding page size",
+        "stage pagination clamps invalid offsets and oversized pages",
+        "filters the complete stage snapshot by query, sector, source, signal and local watchlist",
+        "sorts by valuation upside without treating missing values as zero",
+        "only substitutes closest waiting candidates when the actionable stage is truly empty",
+        "invalidated source mentions remain auditable but leave discovery",
+        "legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery",
+        "PTT institutional ranking is chip evidence instead of discovery",
+        "publisher and content identities are canonical and stance is three-valued",
+        "source concentration dedupes content and caps thin platform coverage",
+        "source links rotate platforms and limit one platform"
+      ],
+      "provenance": "precommit working files identical to915 code; exact commands/times preserved, no postcommit execution claim"
+    },
+    {
+      "stage": "locked-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T15:00:00.505028+00:00",
+      "endedAt": "2026-10-11T15:00:21.626972+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 21.121952682966366,
+      "sampledAggregatePeakRssBytes": 1555816448,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9829462016,
+      "diskAvailableAfterBytes": 9829462016,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "1ded22d1a648d19d7e494b6cf545f81772d40d2512b2d33c34e58eeb8c47fde0",
+      "counts": {},
+      "testInventory": [],
+      "provenance": "precommit working files identical to915 code; exact commands/times preserved, no postcommit execution claim"
+    },
+    {
+      "stage": "locked-normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T15:01:34.095759+00:00",
+      "endedAt": "2026-10-11T15:02:08.225462+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 34.12970946304267,
+      "sampledAggregatePeakRssBytes": 2047893504,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9829322752,
+      "diskAvailableAfterBytes": 9676984320,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "30afddbd6164a1c9a1745d7a4eeba53e9fb618211d6ee0b8caf850215486d5ce",
+      "counts": {},
+      "testInventory": [],
+      "provenance": "Frozen build subject"
+    },
+    {
+      "stage": "locked-typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T14:59:44.536880+00:00",
+      "endedAt": "2026-10-11T15:00:00.476079+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 15.939206167007796,
+      "sampledAggregatePeakRssBytes": 1195069440,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9829421056,
+      "diskAvailableAfterBytes": 9829462016,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "8ac999e55fa5ea36d85b28b65866851498beb4c9609f7f1c0f741dae1ee223a2",
+      "counts": {},
+      "testInventory": [],
+      "provenance": "precommit working files identical to915 code; exact commands/times preserved, no postcommit execution claim"
+    },
+    {
+      "stage": "locked-web-install",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "ci",
+        "--ignore-scripts",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "startedAt": "2026-10-11T14:54:26.871318+00:00",
+      "endedAt": "2026-10-11T14:54:40.682874+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 13.81156041403301,
+      "sampledAggregatePeakRssBytes": 446328832,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10082725888,
+      "diskAvailableAfterBytes": 9829449728,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "2f8ebaca09ccbb23f32b0c9a56a7b20c80909970b7c75b4cc6a1aaa86eac1673",
+      "counts": {},
+      "testInventory": [],
+      "provenance": "precommit working files identical to915 code; exact commands/times preserved, no postcommit execution claim"
+    },
+    {
+      "stage": "parent-default-red",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/tmp/si-admission-default-2gqqfx9m/parent-default-red.test.mjs"
+      ],
+      "startedAt": "2026-10-11T15:01:00.638388+00:00",
+      "endedAt": "2026-10-11T15:01:01.432234+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 0.7938212550361641,
+      "sampledAggregatePeakRssBytes": 152797184,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9829462016,
+      "diskAvailableAfterBytes": 9829462016,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "4e230bb70969a8fa270d4d1de12571c223eb1b265c632b43428dadaf81149c13",
+      "counts": {
+        "tests": 8,
+        "pass": 4,
+        "fail": 4,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "testInventory": [
+        "actual main card displays technical dated close and reference method, hides old price and upside",
+        "actual card exposes every bounded source link including Threads, IG and InvestAnchors when present",
+        "missing technical close cannot fall back to valuation currentPrice; stale reference not a target",
+        "actual main defaults to existing clues while research admission remains explicitly pending",
+        "existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions",
+        "actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input",
+        "actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards",
+        "saved source-health compactor actually preserves existing Instagram retirement without fabricating rows"
+      ],
+      "provenance": "315 parent source copy with new SSR assertions and locked rendering dependencies"
+    }
+  ],
+  "resources": {
+    "sampledPeakBytes": 2047893504,
+    "minRecordedFreeBytes": 9676984320,
+    "freeAtSealBytes": 9676218368,
+    "method": "100ms aggregate process group and descendants, may miss short-lived/reparented tasks"
+  },
+  "unchangedGuardedBoundaries": [
+    {
+      "path": "package.json",
+      "bytes": 24733,
+      "sha256": "6dae2b07a0d6ac9e653cc06aba741060a0cb50a0730ab3874e09a3919f0986cc",
+      "unchangedAgainstParent": true
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "unchangedAgainstParent": true
+    },
+    {
+      "path": "web/package.json",
+      "bytes": 1943,
+      "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+      "unchangedAgainstParent": true
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274088,
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+      "unchangedAgainstParent": true
+    },
+    {
+      "path": "web/src/lib/entry-plan-authority-backfill.ts",
+      "bytes": 18589,
+      "sha256": "ae12d825b1141dfd254cbb678ee0d4b396c7898db618a01088c253bf006676d6",
+      "unchangedAgainstParent": true
+    },
+    {
+      "path": "web/src/app/api/internal/research-inbox/route.ts",
+      "bytes": 1507,
+      "sha256": "36149f8a25cce10f51410a2b6afd973113e0cfb636e84f2258eceb8bf88fcbab",
+      "unchangedAgainstParent": true
+    },
+    {
+      "path": "web/src/lib/candidate-research.ts",
+      "bytes": 183284,
+      "sha256": "8057b60998f8058971095effe537970fa1de49f7c97157706381503ce3cbca20",
+      "unchangedAgainstParent": true
+    },
+    {
+      "path": "web/src/lib/source-policy.ts",
+      "bytes": 7218,
+      "sha256": "f773af096c0470765bb9eaf67adf2d3591d8289831b1df41ec7e5990f746c630",
+      "unchangedAgainstParent": true
+    }
+  ],
+  "raw": [
+    {
+      "path": "raw/admission.json",
+      "bytes": 195,
+      "sha256": "d1a6cb9fd2355975961fd44034e65f8bc5e0cf151bdebe53020de11a25792f1e"
+    },
+    {
+      "path": "raw/corrected-default-regression.json",
+      "bytes": 1082,
+      "sha256": "6e3bb838c473ccd32958d2481d4c33671a9fbde7437d3eb73985445d9e686f72"
+    },
+    {
+      "path": "raw/corrected-default-regression.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/corrected-default-regression.stdout",
+      "bytes": 15538,
+      "sha256": "fad93a57c8d5e6e262826eec1c2f08cc84399df1d99bccbf36b896b34b52764a"
+    },
+    {
+      "path": "raw/corrected-default-regression.time",
+      "bytes": 1131,
+      "sha256": "e66911f9b454f3e3a382b25d8ce52dd4747dd17818b05d96d8e4e256a58ee68d"
+    },
+    {
+      "path": "raw/default-clues-regression.json",
+      "bytes": 1079,
+      "sha256": "6b61cdb195059ed9a9f708f83c327775259e6a0b8d74b1a36f25df8fffa1807a"
+    },
+    {
+      "path": "raw/default-clues-regression.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/default-clues-regression.stdout",
+      "bytes": 15531,
+      "sha256": "09d3cbbea8e6f991bbdb27fba11fe99426bebcb4b18d8cb00ce6292f12195557"
+    },
+    {
+      "path": "raw/default-clues-regression.time",
+      "bytes": 1133,
+      "sha256": "393085e95c9e3c72ab06d02ee7bbe72d955bc59ee370e63f75a9ff317c042633"
+    },
+    {
+      "path": "raw/installed-locked-versions.json",
+      "bytes": 145,
+      "sha256": "2f3917ed215419097afd85554bc8d21a651dc0e235547e25163381dbeea5290c"
+    },
+    {
+      "path": "raw/locked-lint.json",
+      "bytes": 643,
+      "sha256": "0968ceccfb316983b3681cb977efd44a7c156063ae8c1549e84048fede705f19"
+    },
+    {
+      "path": "raw/locked-lint.stderr",
+      "bytes": 165,
+      "sha256": "53ff59b476fd010d11fef53ad7aa4ce767f0d66ecdf81f0beb2574e64d3cf653"
+    },
+    {
+      "path": "raw/locked-lint.stdout",
+      "bytes": 4588,
+      "sha256": "3aad1e86562f9cdb91e57c1d50e49ec18c2f340fa00b213ed29854691b4375db"
+    },
+    {
+      "path": "raw/locked-lint.time",
+      "bytes": 756,
+      "sha256": "e4833f4f1f304ec22b6a07290637a108c05672eb680f4f16420e2a73c1dcbf62"
+    },
+    {
+      "path": "raw/locked-normal-build.json",
+      "bytes": 651,
+      "sha256": "1f91bf9d4d5e9b340feb28f50cd8b103e31c1f5a379877c37b22756da82b0952"
+    },
+    {
+      "path": "raw/locked-normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/locked-normal-build.stdout",
+      "bytes": 5556,
+      "sha256": "d35d53f64e11026b2d581910b7de52bd725cb2a1401383ae5961335b0d4df38e"
+    },
+    {
+      "path": "raw/locked-normal-build.time",
+      "bytes": 760,
+      "sha256": "e0d57203b32ecb2a1c60bff6a1d9e4828a714101d4f4deb4488a53e11106e307"
+    },
+    {
+      "path": "raw/locked-typecheck.json",
+      "bytes": 653,
+      "sha256": "d39abebf000601c11304d2a17b540e75bddef6a9a88fac7580b65242f68f96cf"
+    },
+    {
+      "path": "raw/locked-typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/locked-typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "raw/locked-typecheck.time",
+      "bytes": 759,
+      "sha256": "8ba40be91412a8859bcb7f2558f04d2888cea619183662cc1241cddf1d277408"
+    },
+    {
+      "path": "raw/locked-web-install.json",
+      "bytes": 695,
+      "sha256": "78b16066d4e1dca4abf89c618d1bf55bab34d7948018a80a3377a4886b79740f"
+    },
+    {
+      "path": "raw/locked-web-install.stderr",
+      "bytes": 122,
+      "sha256": "67389c0b6efbe86c5fc51293d278be25159d27ace6d73ae2da626b49a0143470"
+    },
+    {
+      "path": "raw/locked-web-install.stdout",
+      "bytes": 27,
+      "sha256": "08a47b2f638aa8f8bd773709ad52b4830d3ee0c89d4fa1dedc6fdd9b23d88cc4"
+    },
+    {
+      "path": "raw/locked-web-install.time",
+      "bytes": 793,
+      "sha256": "63cc75c452e0985494c5e91fa31bcd5fba1466ee0a629ad307c640e74e4aee57"
+    },
+    {
+      "path": "raw/parent-RadarTabs.tsx",
+      "bytes": 110288,
+      "sha256": "7a27ed108eaa4512b5decaecbbea7655c0eb86dcfdafa631a3213dfdbb5938dd"
+    },
+    {
+      "path": "raw/parent-comparison.json",
+      "bytes": 1111,
+      "sha256": "eb114b7d2b750890c4f83235ba522907a6bd86397433f70d996945409030aaab"
+    },
+    {
+      "path": "raw/parent-default-red.json",
+      "bytes": 718,
+      "sha256": "756128130b1349af2f606540a3a45c8e121466193eda901efab225cb1df4b34b"
+    },
+    {
+      "path": "raw/parent-default-red.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/parent-default-red.stdout",
+      "bytes": 26299,
+      "sha256": "f723b2c9f0aad37b132c98003fc492e1fc3507af9127d743a932e7b48e9f81a8"
+    },
+    {
+      "path": "raw/parent-default-red.test.mjs",
+      "bytes": 8713,
+      "sha256": "8621f5162b61d9457cf3bf88a9137a79ed45204e49367ddc8f2085ff89f2ec78"
+    },
+    {
+      "path": "raw/parent-default-red.time",
+      "bytes": 860,
+      "sha256": "53366550cfcf5a6b5e8424bf4972b004fc5e83d5c79a03ce8e8c465ea0255d8d"
+    },
+    {
+      "path": "raw/parent-page.tsx",
+      "bytes": 32654,
+      "sha256": "cdccf35099f982f69be9635ff61fa83f9a0208b180c9f8d7634bafb98d01d157"
+    },
+    {
+      "path": "raw/parent-radar-public-snapshot.ts",
+      "bytes": 18427,
+      "sha256": "1e648a9f8bbb75d2600b1d8388bd1ebc15ff02c7b203b025d40e4d064ab722f7"
+    },
+    {
+      "path": "raw/run.py",
+      "bytes": 3441,
+      "sha256": "ff4efe33fbb80faa5e89d6d2871f6ee2de6700ea7c1830f3aae3ae1b08b70a38"
+    },
+    {
+      "path": "raw/unchanged-boundaries.json",
+      "bytes": 1517,
+      "sha256": "8443db3e88e96a5fbd4719e9f4479d3536f87bd23faa09680a341ff507931431"
+    }
+  ],
+  "rawFiles": 37,
+  "rawBytes": 256218,
+  "cleanup": {
+    "remainingObservedChildren": [],
+    "ownedPgOrHttpServicesStarted": false,
+    "deletedUniqueEvidence": false,
+    "old31Plus9AndAllRedsRetained": true,
+    "ciReplacedOnlyOwnedRebuildableWebDependencies": true,
+    "buildAndRawRetained": true
+  },
+  "limits": [
+    "No formal SQL/calendar/inbox/strategy/trust change, no production or ingestion/model dispatch.",
+    "SSR verifies rendering, not actual browser clicks or live collected source data.",
+    "No fake canonical roots, latest session, complete PTT author count or research qualification.",
+    "Historical saved snapshots missing Instagram status remain explicitly unknown.",
+    "Local browser observations are separate root-attributed evidence, not imported here."
+  ]
+}

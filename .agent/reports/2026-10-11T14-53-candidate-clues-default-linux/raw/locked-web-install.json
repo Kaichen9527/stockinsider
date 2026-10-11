@@ -1,0 +1,24 @@
+{
+  "stage": "locked-web-install",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "ci",
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund"
+  ],
+  "startedAt": "2026-10-11T14:54:26.871318+00:00",
+  "endedAt": "2026-10-11T14:54:40.682874+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 13.81156041403301,
+  "sampledAggregatePeakRssBytes": 446328832,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10082725888,
+  "diskAvailableAfterBytes": 9829449728,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
