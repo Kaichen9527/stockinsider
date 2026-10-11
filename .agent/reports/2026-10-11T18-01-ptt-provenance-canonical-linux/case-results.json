@@ -1,0 +1,1127 @@
+{
+  "total": 155,
+  "pass": 153,
+  "fail": 2,
+  "skip": 0,
+  "pcrTotal": 31,
+  "pcrCases": [
+    {
+      "ordinal": 2,
+      "name": "acceptance PCR-001",
+      "status": "PASS",
+      "tapLine": 17
+    },
+    {
+      "ordinal": 3,
+      "name": "acceptance PCR-002",
+      "status": "PASS",
+      "tapLine": 22
+    },
+    {
+      "ordinal": 4,
+      "name": "acceptance PCR-003",
+      "status": "PASS",
+      "tapLine": 27
+    },
+    {
+      "ordinal": 5,
+      "name": "acceptance PCR-004",
+      "status": "PASS",
+      "tapLine": 32
+    },
+    {
+      "ordinal": 6,
+      "name": "acceptance PCR-005",
+      "status": "PASS",
+      "tapLine": 37
+    },
+    {
+      "ordinal": 7,
+      "name": "acceptance PCR-006",
+      "status": "PASS",
+      "tapLine": 42
+    },
+    {
+      "ordinal": 8,
+      "name": "acceptance PCR-007",
+      "status": "PASS",
+      "tapLine": 47
+    },
+    {
+      "ordinal": 9,
+      "name": "acceptance PCR-008",
+      "status": "PASS",
+      "tapLine": 52
+    },
+    {
+      "ordinal": 10,
+      "name": "acceptance PCR-009",
+      "status": "PASS",
+      "tapLine": 57
+    },
+    {
+      "ordinal": 11,
+      "name": "acceptance PCR-010",
+      "status": "PASS",
+      "tapLine": 62
+    },
+    {
+      "ordinal": 12,
+      "name": "acceptance PCR-011",
+      "status": "PASS",
+      "tapLine": 67
+    },
+    {
+      "ordinal": 13,
+      "name": "acceptance PCR-012",
+      "status": "PASS",
+      "tapLine": 72
+    },
+    {
+      "ordinal": 14,
+      "name": "acceptance PCR-013",
+      "status": "PASS",
+      "tapLine": 77
+    },
+    {
+      "ordinal": 15,
+      "name": "acceptance PCR-014",
+      "status": "PASS",
+      "tapLine": 82
+    },
+    {
+      "ordinal": 16,
+      "name": "acceptance PCR-015",
+      "status": "PASS",
+      "tapLine": 87
+    },
+    {
+      "ordinal": 17,
+      "name": "acceptance PCR-016",
+      "status": "PASS",
+      "tapLine": 92
+    },
+    {
+      "ordinal": 18,
+      "name": "acceptance PCR-017",
+      "status": "PASS",
+      "tapLine": 97
+    },
+    {
+      "ordinal": 19,
+      "name": "acceptance PCR-018",
+      "status": "PASS",
+      "tapLine": 102
+    },
+    {
+      "ordinal": 20,
+      "name": "acceptance PCR-019",
+      "status": "PASS",
+      "tapLine": 107
+    },
+    {
+      "ordinal": 21,
+      "name": "acceptance PCR-020",
+      "status": "PASS",
+      "tapLine": 112
+    },
+    {
+      "ordinal": 22,
+      "name": "acceptance PCR-021",
+      "status": "PASS",
+      "tapLine": 117
+    },
+    {
+      "ordinal": 23,
+      "name": "acceptance PCR-022",
+      "status": "PASS",
+      "tapLine": 150
+    },
+    {
+      "ordinal": 24,
+      "name": "acceptance PCR-023",
+      "status": "PASS",
+      "tapLine": 155
+    },
+    {
+      "ordinal": 25,
+      "name": "acceptance PCR-024",
+      "status": "FAIL",
+      "tapLine": 160
+    },
+    {
+      "ordinal": 26,
+      "name": "acceptance PCR-025",
+      "status": "PASS",
+      "tapLine": 210
+    },
+    {
+      "ordinal": 27,
+      "name": "acceptance PCR-026",
+      "status": "PASS",
+      "tapLine": 215
+    },
+    {
+      "ordinal": 28,
+      "name": "acceptance PCR-027",
+      "status": "PASS",
+      "tapLine": 220
+    },
+    {
+      "ordinal": 29,
+      "name": "acceptance PCR-028",
+      "status": "PASS",
+      "tapLine": 225
+    },
+    {
+      "ordinal": 30,
+      "name": "acceptance PCR-029",
+      "status": "PASS",
+      "tapLine": 230
+    },
+    {
+      "ordinal": 31,
+      "name": "acceptance PCR-030",
+      "status": "PASS",
+      "tapLine": 235
+    },
+    {
+      "ordinal": 32,
+      "name": "acceptance PCR-031",
+      "status": "PASS",
+      "tapLine": 240
+    }
+  ],
+  "allCases": [
+    {
+      "ordinal": 1,
+      "name": "public fundamental provenance remains bounded and fail-closed outside the approved PCR expectation registry",
+      "status": "PASS",
+      "tapLine": 12
+    },
+    {
+      "ordinal": 2,
+      "name": "acceptance PCR-001",
+      "status": "PASS",
+      "tapLine": 17
+    },
+    {
+      "ordinal": 3,
+      "name": "acceptance PCR-002",
+      "status": "PASS",
+      "tapLine": 22
+    },
+    {
+      "ordinal": 4,
+      "name": "acceptance PCR-003",
+      "status": "PASS",
+      "tapLine": 27
+    },
+    {
+      "ordinal": 5,
+      "name": "acceptance PCR-004",
+      "status": "PASS",
+      "tapLine": 32
+    },
+    {
+      "ordinal": 6,
+      "name": "acceptance PCR-005",
+      "status": "PASS",
+      "tapLine": 37
+    },
+    {
+      "ordinal": 7,
+      "name": "acceptance PCR-006",
+      "status": "PASS",
+      "tapLine": 42
+    },
+    {
+      "ordinal": 8,
+      "name": "acceptance PCR-007",
+      "status": "PASS",
+      "tapLine": 47
+    },
+    {
+      "ordinal": 9,
+      "name": "acceptance PCR-008",
+      "status": "PASS",
+      "tapLine": 52
+    },
+    {
+      "ordinal": 10,
+      "name": "acceptance PCR-009",
+      "status": "PASS",
+      "tapLine": 57
+    },
+    {
+      "ordinal": 11,
+      "name": "acceptance PCR-010",
+      "status": "PASS",
+      "tapLine": 62
+    },
+    {
+      "ordinal": 12,
+      "name": "acceptance PCR-011",
+      "status": "PASS",
+      "tapLine": 67
+    },
+    {
+      "ordinal": 13,
+      "name": "acceptance PCR-012",
+      "status": "PASS",
+      "tapLine": 72
+    },
+    {
+      "ordinal": 14,
+      "name": "acceptance PCR-013",
+      "status": "PASS",
+      "tapLine": 77
+    },
+    {
+      "ordinal": 15,
+      "name": "acceptance PCR-014",
+      "status": "PASS",
+      "tapLine": 82
+    },
+    {
+      "ordinal": 16,
+      "name": "acceptance PCR-015",
+      "status": "PASS",
+      "tapLine": 87
+    },
+    {
+      "ordinal": 17,
+      "name": "acceptance PCR-016",
+      "status": "PASS",
+      "tapLine": 92
+    },
+    {
+      "ordinal": 18,
+      "name": "acceptance PCR-017",
+      "status": "PASS",
+      "tapLine": 97
+    },
+    {
+      "ordinal": 19,
+      "name": "acceptance PCR-018",
+      "status": "PASS",
+      "tapLine": 102
+    },
+    {
+      "ordinal": 20,
+      "name": "acceptance PCR-019",
+      "status": "PASS",
+      "tapLine": 107
+    },
+    {
+      "ordinal": 21,
+      "name": "acceptance PCR-020",
+      "status": "PASS",
+      "tapLine": 112
+    },
+    {
+      "ordinal": 22,
+      "name": "acceptance PCR-021",
+      "status": "PASS",
+      "tapLine": 117
+    },
+    {
+      "ordinal": 23,
+      "name": "acceptance PCR-022",
+      "status": "PASS",
+      "tapLine": 150
+    },
+    {
+      "ordinal": 24,
+      "name": "acceptance PCR-023",
+      "status": "PASS",
+      "tapLine": 155
+    },
+    {
+      "ordinal": 25,
+      "name": "acceptance PCR-024",
+      "status": "FAIL",
+      "tapLine": 160
+    },
+    {
+      "ordinal": 26,
+      "name": "acceptance PCR-025",
+      "status": "PASS",
+      "tapLine": 210
+    },
+    {
+      "ordinal": 27,
+      "name": "acceptance PCR-026",
+      "status": "PASS",
+      "tapLine": 215
+    },
+    {
+      "ordinal": 28,
+      "name": "acceptance PCR-027",
+      "status": "PASS",
+      "tapLine": 220
+    },
+    {
+      "ordinal": 29,
+      "name": "acceptance PCR-028",
+      "status": "PASS",
+      "tapLine": 225
+    },
+    {
+      "ordinal": 30,
+      "name": "acceptance PCR-029",
+      "status": "PASS",
+      "tapLine": 230
+    },
+    {
+      "ordinal": 31,
+      "name": "acceptance PCR-030",
+      "status": "PASS",
+      "tapLine": 235
+    },
+    {
+      "ordinal": 32,
+      "name": "acceptance PCR-031",
+      "status": "PASS",
+      "tapLine": 240
+    },
+    {
+      "ordinal": 33,
+      "name": "V3.12 product-value recovery ranks partial evidence without fabricating a trade target",
+      "status": "PASS",
+      "tapLine": 245
+    },
+    {
+      "ordinal": 34,
+      "name": "V3.12 official valuation parser rejects swapped or non-authoritative values",
+      "status": "PASS",
+      "tapLine": 250
+    },
+    {
+      "ordinal": 35,
+      "name": "V3.12 official index history supplies at least 20 sessions without inventing dates",
+      "status": "PASS",
+      "tapLine": 255
+    },
+    {
+      "ordinal": 36,
+      "name": "V3.12 official source failure degrades independently instead of erasing valid valuation data",
+      "status": "PASS",
+      "tapLine": 260
+    },
+    {
+      "ordinal": 37,
+      "name": "V3.12 evidence snippets are local to the matched stock",
+      "status": "PASS",
+      "tapLine": 265
+    },
+    {
+      "ordinal": 38,
+      "name": "V3.12 market analysis suppresses risk budget when components are missing",
+      "status": "PASS",
+      "tapLine": 270
+    },
+    {
+      "ordinal": 39,
+      "name": "V3.13 decision envelope closes all eight user actions without an action quota",
+      "status": "PASS",
+      "tapLine": 280
+    },
+    {
+      "ordinal": 40,
+      "name": "V3.13 formal valuation requires four consecutive quarters and rejects the 2337 one-quarter shortcut",
+      "status": "PASS",
+      "tapLine": 285
+    },
+    {
+      "ordinal": 41,
+      "name": "V3.14 cumulative reported EPS is reconciled without subtracting EPS across changing share counts",
+      "status": "PASS",
+      "tapLine": 290
+    },
+    {
+      "ordinal": 42,
+      "name": "V3.13 official facts and 252-session peer authority reach a formal valuation without hidden inputs",
+      "status": "PASS",
+      "tapLine": 295
+    },
+    {
+      "ordinal": 43,
+      "name": "V3.13 FULL detail remains authoritative while LIGHT fills only genuinely missing leaves",
+      "status": "PASS",
+      "tapLine": 300
+    },
+    {
+      "ordinal": 44,
+      "name": "V3.13 projection freshness uses scheduled trading runs, not a 24-hour wall clock",
+      "status": "PASS",
+      "tapLine": 305
+    },
+    {
+      "ordinal": 45,
+      "name": "generic migration discovery is a closed legacy allowlist and the V3.13 plan is authority-bound",
+      "status": "PASS",
+      "tapLine": 310
+    },
+    {
+      "ordinal": 46,
+      "name": "V3.13 operator docs and positive consumers use tracked authority and exact decision revisions",
+      "status": "PASS",
+      "tapLine": 315
+    },
+    {
+      "ordinal": 47,
+      "name": "V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material",
+      "status": "PASS",
+      "tapLine": 320
+    },
+    {
+      "ordinal": 48,
+      "name": "V3.13 official statement parser requires reported diluted shares and never derives the 30.04 shortcut",
+      "status": "PASS",
+      "tapLine": 325
+    },
+    {
+      "ordinal": 49,
+      "name": "V3.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry",
+      "status": "PASS",
+      "tapLine": 330
+    },
+    {
+      "ordinal": 50,
+      "name": "V3.13 entity linking rejects naked calendar years even when they are listed symbols",
+      "status": "PASS",
+      "tapLine": 335
+    },
+    {
+      "ordinal": 51,
+      "name": "V3.13 official corporate-action adapter distinguishes complete empty snapshots from transport failure",
+      "status": "PASS",
+      "tapLine": 340
+    },
+    {
+      "ordinal": 52,
+      "name": "V3.13 stale-readonly projection disables compatibility actions without mutating immutable decision identity",
+      "status": "PASS",
+      "tapLine": 345
+    },
+    {
+      "ordinal": 53,
+      "name": "V314-001 calendar authority loss preserves checksum-valid last-good research as readonly",
+      "status": "PASS",
+      "tapLine": 379
+    },
+    {
+      "ordinal": 54,
+      "name": "V314-002 unchanged discovery outcomes conserve seed membership",
+      "status": "PASS",
+      "tapLine": 384
+    },
+    {
+      "ordinal": 55,
+      "name": "V314-003 research ranking never improves when an available axis is removed",
+      "status": "PASS",
+      "tapLine": 389
+    },
+    {
+      "ordinal": 56,
+      "name": "V314-004 discovery and report visibility are backed by payload data",
+      "status": "FAIL",
+      "tapLine": 394
+    },
+    {
+      "ordinal": 57,
+      "name": "V314-004a internal health uses the reviewed release SHA when Vercel git metadata is absent",
+      "status": "PASS",
+      "tapLine": 440
+    },
+    {
+      "ordinal": 58,
+      "name": "V314-005 one actionable card without a cited brief degrades only that card",
+      "status": "PASS",
+      "tapLine": 445
+    },
+    {
+      "ordinal": 59,
+      "name": "V314-006 selective market raises thresholds and exposes wait_value or wait_market without score gate",
+      "status": "PASS",
+      "tapLine": 450
+    },
+    {
+      "ordinal": 60,
+      "name": "V314-006a raw authority metrics cannot round up into an actionable decision",
+      "status": "PASS",
+      "tapLine": 455
+    },
+    {
+      "ordinal": 61,
+      "name": "V314-006b action overrides clear incompatible V3.14-only fields",
+      "status": "PASS",
+      "tapLine": 460
+    },
+    {
+      "ordinal": 62,
+      "name": "V314-007 runtime diagnostics never serialize SQL text or connection credentials",
+      "status": "PASS",
+      "tapLine": 465
+    },
+    {
+      "ordinal": 63,
+      "name": "V314-008 Web and runtime share exact release compatibility authority",
+      "status": "PASS",
+      "tapLine": 470
+    },
+    {
+      "ordinal": 64,
+      "name": "V314-009 official calendar and backfill coverage remain typed and non-synthetic",
+      "status": "PASS",
+      "tapLine": 475
+    },
+    {
+      "ordinal": 65,
+      "name": "V314-009a candidate authority metadata remains separate from the peer population",
+      "status": "PASS",
+      "tapLine": 480
+    },
+    {
+      "ordinal": 66,
+      "name": "V314-010 all ten decision actions are closed and operationally reachable",
+      "status": "PASS",
+      "tapLine": 485
+    },
+    {
+      "ordinal": 67,
+      "name": "V314-011 every approved profile/provider has one honest terminal outcome",
+      "status": "PASS",
+      "tapLine": 490
+    },
+    {
+      "ordinal": 68,
+      "name": "V314-012 migration persists redacted diagnostics append-only with recorded time",
+      "status": "PASS",
+      "tapLine": 495
+    },
+    {
+      "ordinal": 69,
+      "name": "V314-013 official annual calendar is cross-market source material, not index inference",
+      "status": "PASS",
+      "tapLine": 500
+    },
+    {
+      "ordinal": 70,
+      "name": "V314-014 MOPS inline parser validates units and never derives diluted shares from rounded EPS",
+      "status": "PASS",
+      "tapLine": 505
+    },
+    {
+      "ordinal": 71,
+      "name": "V314-014ab MOPS debt aliases cover current and non-current liabilities without double counting",
+      "status": "PASS",
+      "tapLine": 510
+    },
+    {
+      "ordinal": 72,
+      "name": "V314-014a MOPS retains the authoritative year-to-date series and rejects duplicate discrete contexts",
+      "status": "PASS",
+      "tapLine": 515
+    },
+    {
+      "ordinal": 73,
+      "name": "V314-014aa MOPS rejects dimensional segment and scenario contexts",
+      "status": "PASS",
+      "tapLine": 520
+    },
+    {
+      "ordinal": 74,
+      "name": "V314-014b MOPS loader binds the requested official URL into parsed provenance",
+      "status": "PASS",
+      "tapLine": 525
+    },
+    {
+      "ordinal": 75,
+      "name": "V314-014c MOPS fact selection preserves cycle history without crossing the 128-row authority bound",
+      "status": "PASS",
+      "tapLine": 530
+    },
+    {
+      "ordinal": 76,
+      "name": "V314-015 full-market valuation parsers filter the bounded authority set while parsing",
+      "status": "PASS",
+      "tapLine": 535
+    },
+    {
+      "ordinal": 77,
+      "name": "V314-015a effective valuation and corporate-action request graphs remain closed after union",
+      "status": "PASS",
+      "tapLine": 540
+    },
+    {
+      "ordinal": 78,
+      "name": "V314-015b range corporate-action feed counts are scoped to each emitted session",
+      "status": "PASS",
+      "tapLine": 545
+    },
+    {
+      "ordinal": 79,
+      "name": "market-wide action rows retain alphanumeric instruments in PostgreSQL ordinal order",
+      "status": "PASS",
+      "tapLine": 550
+    },
+    {
+      "ordinal": 80,
+      "name": "V314-016 official ingestion streams bounded idempotency-addressed chunks and one terminal root",
+      "status": "PASS",
+      "tapLine": 555
+    },
+    {
+      "ordinal": 81,
+      "name": "V314-016b a staged ingestion resume is replayed without refetching mutable provider state",
+      "status": "PASS",
+      "tapLine": 560
+    },
+    {
+      "ordinal": 82,
+      "name": "V316-016c an interrupted legacy chunk graph is verified and continued without identity conflicts",
+      "status": "PASS",
+      "tapLine": 565
+    },
+    {
+      "ordinal": 83,
+      "name": "V314-016a unchanged financial semantics are not appended on every collection heartbeat",
+      "status": "PASS",
+      "tapLine": 570
+    },
+    {
+      "ordinal": 84,
+      "name": "V314-017 malformed RuntimeHealth enums fail closed identically in Node and Web",
+      "status": "PASS",
+      "tapLine": 575
+    },
+    {
+      "ordinal": 85,
+      "name": "V314-018 provisional valuation refs require real non-future embedded dates",
+      "status": "PASS",
+      "tapLine": 580
+    },
+    {
+      "ordinal": 86,
+      "name": "V314-019 exact-review compatibility boundaries accept V3.14 and remain fail-closed",
+      "status": "PASS",
+      "tapLine": 585
+    },
+    {
+      "ordinal": 87,
+      "name": "V315 analysis transport stays below the durable bound without dropping facts or candidates",
+      "status": "PASS",
+      "tapLine": 590
+    },
+    {
+      "ordinal": 88,
+      "name": "V315 official TPEX history uses Gregorian query authority and scales lots/thousands to base units",
+      "status": "PASS",
+      "tapLine": 595
+    },
+    {
+      "ordinal": 89,
+      "name": "V315 TPEX corporate-action range accepts the official compact ROC date form",
+      "status": "PASS",
+      "tapLine": 600
+    },
+    {
+      "ordinal": 90,
+      "name": "V316 TWSE corporate-action history uses the report-serving wwwc authority alias",
+      "status": "PASS",
+      "tapLine": 605
+    },
+    {
+      "ordinal": 91,
+      "name": "V315 official monthly revenue carries filing time and a persistable monthly fact period",
+      "status": "PASS",
+      "tapLine": 610
+    },
+    {
+      "ordinal": 92,
+      "name": "V315 PE bridge derives a bounded diluted-share denominator from official cumulative EPS when MOPS omits the share concept",
+      "status": "PASS",
+      "tapLine": 615
+    },
+    {
+      "ordinal": 93,
+      "name": "V316 live acquisition collected after the scheduled cutoff keeps point-in-time facts but rejects future source timestamps",
+      "status": "PASS",
+      "tapLine": 620
+    },
+    {
+      "ordinal": 94,
+      "name": "V316 MOPS retention keeps the prior cumulative anchor needed to derive four consecutive quarters",
+      "status": "PASS",
+      "tapLine": 625
+    },
+    {
+      "ordinal": 95,
+      "name": "V315 fundamental quality derives ROE directly from official attributable income and equity",
+      "status": "PASS",
+      "tapLine": 630
+    },
+    {
+      "ordinal": 96,
+      "name": "V315 official coarse research rejects revenue filed after the point-in-time cutoff",
+      "status": "PASS",
+      "tapLine": 635
+    },
+    {
+      "ordinal": 97,
+      "name": "V315 official factor discovery admits out-of-source undervaluation research without minting an action",
+      "status": "PASS",
+      "tapLine": 640
+    },
+    {
+      "ordinal": 98,
+      "name": "V320 candidate funnel does not acquire or rank the full official market before KOL nominations",
+      "status": "PASS",
+      "tapLine": 645
+    },
+    {
+      "ordinal": 99,
+      "name": "V316 shallow official research can reach the near-buy lane without minting a buy action",
+      "status": "PASS",
+      "tapLine": 650
+    },
+    {
+      "ordinal": 100,
+      "name": "V315 duplicate authority roster heads emit one persistence identity per stock and revision",
+      "status": "PASS",
+      "tapLine": 655
+    },
+    {
+      "ordinal": 101,
+      "name": "V315 mention barrier consumes the compact candidate-only authoritative transport",
+      "status": "PASS",
+      "tapLine": 660
+    },
+    {
+      "ordinal": 102,
+      "name": "V315 REST producer adapter maps canonical bytea and never exposes its service credential in failures",
+      "status": "PASS",
+      "tapLine": 665
+    },
+    {
+      "ordinal": 103,
+      "name": "V315 resumed facts completion retains the run authority identity from lease acquisition",
+      "status": "PASS",
+      "tapLine": 670
+    },
+    {
+      "ordinal": 104,
+      "name": "V315 official ingestion retries only idempotent transient chunk transport failures",
+      "status": "PASS",
+      "tapLine": 675
+    },
+    {
+      "ordinal": 105,
+      "name": "V315 REST doctor reads private producer state only through the bounded health RPC",
+      "status": "PASS",
+      "tapLine": 680
+    },
+    {
+      "ordinal": 106,
+      "name": "V319 activation accepts the bounded run lease before the first heavyweight job claim is visible",
+      "status": "PASS",
+      "tapLine": 685
+    },
+    {
+      "ordinal": 107,
+      "name": "V315 migration is additive, bounded, upgrade-safe, and binds authority to REST claim and completion",
+      "status": "PASS",
+      "tapLine": 690
+    },
+    {
+      "ordinal": 108,
+      "name": "V315 production repair pre-applies bounded official chunks and makes terminal completion constant-work",
+      "status": "PASS",
+      "tapLine": 695
+    },
+    {
+      "ordinal": 109,
+      "name": "V316 direct claim transaction raises only its local statement timeout and always closes the transaction",
+      "status": "PASS",
+      "tapLine": 700
+    },
+    {
+      "ordinal": 110,
+      "name": "V315 official ingestion keeps valid PB when the exchange PE exceeds the authority range",
+      "status": "PASS",
+      "tapLine": 705
+    },
+    {
+      "ordinal": 111,
+      "name": "V31613 reported valuations defer rows without an official same-session close dependency",
+      "status": "PASS",
+      "tapLine": 710
+    },
+    {
+      "ordinal": 112,
+      "name": "V31621 operator migration plan exactly matches the reviewed apply chain",
+      "status": "PASS",
+      "tapLine": 715
+    },
+    {
+      "ordinal": 113,
+      "name": "V3.18 candidate retention reuses only the preceding immutable terminal ledger",
+      "status": "PASS",
+      "tapLine": 720
+    },
+    {
+      "ordinal": 114,
+      "name": "V31621 projection repair separates immutable content cutoff from reviewed evaluation order",
+      "status": "PASS",
+      "tapLine": 725
+    },
+    {
+      "ordinal": 115,
+      "name": "V31621 production-cardinality repair keeps pooler-safe chunks and snapshots roster integrity once",
+      "status": "PASS",
+      "tapLine": 730
+    },
+    {
+      "ordinal": 116,
+      "name": "V31621 provider acquisition freezes true fetched time and exact response bytes",
+      "status": "PASS",
+      "tapLine": 735
+    },
+    {
+      "ordinal": 117,
+      "name": "V31621 same request reuses immutable acquisition and produces identical evidence without refetch",
+      "status": "PASS",
+      "tapLine": 740
+    },
+    {
+      "ordinal": 118,
+      "name": "V31621 partial retry fetches only missing request keys and quarantines a response conflict",
+      "status": "PASS",
+      "tapLine": 745
+    },
+    {
+      "ordinal": 119,
+      "name": "V31621 provider failure diagnostic cannot echo URI, SQL, payload or secret",
+      "status": "PASS",
+      "tapLine": 750
+    },
+    {
+      "ordinal": 120,
+      "name": "V31621 action authority commits to the complete provider lineage rather than one fact fetch",
+      "status": "PASS",
+      "tapLine": 755
+    },
+    {
+      "ordinal": 121,
+      "name": "V31621 effective public and internal health disables actions for every authority mismatch but retains last-good research",
+      "status": "PASS",
+      "tapLine": 765
+    },
+    {
+      "ordinal": 122,
+      "name": "V317 preserves a research-only detail and waiting next step while global action authority is disabled",
+      "status": "PASS",
+      "tapLine": 775
+    },
+    {
+      "ordinal": 123,
+      "name": "V317 evaluates the current frozen official union and emits a real liquidity input",
+      "status": "PASS",
+      "tapLine": 780
+    },
+    {
+      "ordinal": 124,
+      "name": "V317 never acquires paid source text and leaves no black anchor override",
+      "status": "PASS",
+      "tapLine": 785
+    },
+    {
+      "ordinal": 125,
+      "name": "V3.18 keeps no-new source candidates through twenty completed sessions without re-promoting them",
+      "status": "PASS",
+      "tapLine": 790
+    },
+    {
+      "ordinal": 126,
+      "name": "V3.18 reserves the full bounded ledger for still-retained cards and types fresh overflow",
+      "status": "PASS",
+      "tapLine": 795
+    },
+    {
+      "ordinal": 127,
+      "name": "V3.19 dossier stays within one decision revision and keeps the full readiness contract",
+      "status": "PASS",
+      "tapLine": 805
+    },
+    {
+      "ordinal": 128,
+      "name": "V3.18 uses an explicit contrasting CTA rather than inherited foreground colour",
+      "status": "PASS",
+      "tapLine": 810
+    },
+    {
+      "ordinal": 129,
+      "name": "V3.18 Threads topic discovery accepts non-tracked public authors without impersonating profile monitoring",
+      "status": "PASS",
+      "tapLine": 815
+    },
+    {
+      "ordinal": 130,
+      "name": "V3.18 Threads filters invalid rows before its document bound and rejects unsafe cursors",
+      "status": "PASS",
+      "tapLine": 820
+    },
+    {
+      "ordinal": 131,
+      "name": "source refresh preserves API failure through tee",
+      "status": "PASS",
+      "tapLine": 825
+    },
+    {
+      "ordinal": 132,
+      "name": "public Threads keyword discovery enters found without impersonating approved KOL authority",
+      "status": "PASS",
+      "tapLine": 830
+    },
+    {
+      "ordinal": 133,
+      "name": "V3.20 preserves unauthorized paid-source and metadata-only terminals while accepting public Telegram claims",
+      "status": "PASS",
+      "tapLine": 835
+    },
+    {
+      "ordinal": 134,
+      "name": "V3.18 research dossier code is part of the reviewed runtime bundle identity",
+      "status": "PASS",
+      "tapLine": 840
+    },
+    {
+      "ordinal": 135,
+      "name": "V3.19 release state advances once per closed checkpoint and cannot skip runtime identity",
+      "status": "PASS",
+      "tapLine": 845
+    },
+    {
+      "ordinal": 136,
+      "name": "V3.19 disk policy fails closed below the reviewed capacity floor without deleting artifacts",
+      "status": "PASS",
+      "tapLine": 850
+    },
+    {
+      "ordinal": 137,
+      "name": "V3.19 readiness gives every candidate one visibility lane without treating missing authority as avoid",
+      "status": "PASS",
+      "tapLine": 855
+    },
+    {
+      "ordinal": 138,
+      "name": "V3.19 release reconciliation migration is additive, private and in the reviewed chain",
+      "status": "PASS",
+      "tapLine": 860
+    },
+    {
+      "ordinal": 139,
+      "name": "V3.19.4 reviewed replay skips only V3.19.2 after the stronger V3.19.3 contract is installed",
+      "status": "PASS",
+      "tapLine": 865
+    },
+    {
+      "ordinal": 140,
+      "name": "V3.19.1 runtime diagnostic contract preserves projection conflicts",
+      "status": "PASS",
+      "tapLine": 870
+    },
+    {
+      "ordinal": 141,
+      "name": "V3.19.2 compares compact landing cards with full detail revisions without dropping dossiers",
+      "status": "PASS",
+      "tapLine": 875
+    },
+    {
+      "ordinal": 142,
+      "name": "V3.19.3 validates bound dossier identities with the worker cyclic fields removed",
+      "status": "PASS",
+      "tapLine": 880
+    },
+    {
+      "ordinal": 143,
+      "name": "V3.19.6 admits every supported compact evaluation schema without reopening CREATE",
+      "status": "PASS",
+      "tapLine": 885
+    },
+    {
+      "ordinal": 144,
+      "name": "V3.19.7 binds reused frozen acquisitions to the current immutable job graph",
+      "status": "PASS",
+      "tapLine": 890
+    },
+    {
+      "ordinal": 145,
+      "name": "V3.20 admits only KOL-authorized nominations and evicts legacy official-only retention immediately",
+      "status": "PASS",
+      "tapLine": 895
+    },
+    {
+      "ordinal": 146,
+      "name": "V3.20.1 retains only a DB-revalidated historical InvestAnchors structured claim",
+      "status": "PASS",
+      "tapLine": 900
+    },
+    {
+      "ordinal": 147,
+      "name": "V3.20 retained legacy candidate uses database-derived historical lineage without minting the current run",
+      "status": "PASS",
+      "tapLine": 905
+    },
+    {
+      "ordinal": 148,
+      "name": "V3.20 rejects the 2605 new-emerging-market ETF false positive but accepts a public Telegram nomination",
+      "status": "PASS",
+      "tapLine": 910
+    },
+    {
+      "ordinal": 149,
+      "name": "V3.20 produces a complete five-connector terminal matrix and metadata-only input cannot become a thesis",
+      "status": "PASS",
+      "tapLine": 915
+    },
+    {
+      "ordinal": 150,
+      "name": "V3.20 records Telegram publication time only when the public message provides one and advertises cursor authority",
+      "status": "PASS",
+      "tapLine": 920
+    },
+    {
+      "ordinal": 151,
+      "name": "V3.20 projection is a second KOL-first boundary: it strips legacy cards and rejects official-only source signals",
+      "status": "PASS",
+      "tapLine": 925
+    },
+    {
+      "ordinal": 152,
+      "name": "V3.20 bounds live and reused connector envelopes without refetching or losing item conservation",
+      "status": "PASS",
+      "tapLine": 930
+    },
+    {
+      "ordinal": 153,
+      "name": "V3.20 authority bootstrap appends only the new public Telegram and structured-claim identities",
+      "status": "PASS",
+      "tapLine": 935
+    },
+    {
+      "ordinal": 154,
+      "name": "V3.20 turns a lost lease into an authoritative recoverable terminal instead of leaving a stuck run",
+      "status": "PASS",
+      "tapLine": 940
+    },
+    {
+      "ordinal": 155,
+      "name": "V3.20 recovery CLI accepts only a complete exact reviewed identity",
+      "status": "PASS",
+      "tapLine": 945
+    }
+  ]
+}

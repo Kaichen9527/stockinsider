@@ -1,0 +1,18 @@
+{
+  "startAt": "2026-10-11T18:01:17.753327+00:00",
+  "endAt": "2026-10-11T18:03:50.429229+00:00",
+  "durationSeconds": 152.6712353019975,
+  "exitCode": 1,
+  "stopReason": null,
+  "peakAggregateProcessGroupRssBytes": 757547008,
+  "rssMeasurement": "/proc stat session process group sampled 0.5s; excludes shared filesystem cache",
+  "minimumDiskAvailableBytes": {
+    "/workspace": 9268637696,
+    "/tmp": 16454451200
+  },
+  "command": [
+    "npm",
+    "run",
+    "test:source-led-opportunity-v3:product-correctness"
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "schema": "bounded-manual-engineering-evidence-v1",
+  "source": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3",
+  "tree": "05065f79c9023135eac56c0522bb44a043e6b843",
+  "webTree": "869ad0662b486108c1d74ae3736a1baca6b825e2",
+  "evidenceBranch": "codex/ptt-provenance-canonical-evidence-oct12",
+  "sourceUnmodified": true,
+  "canonicalSelection": {
+    "files": [
+      "scripts/opportunity-v3/product-correctness.test.mjs",
+      "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+      "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "scripts/opportunity-v3/v317-source-led-actionability.test.mjs",
+      "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs"
+    ],
+    "canonicalScript": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+    "canonicalScriptSha256": "acb6b3726aebe1781d5271473f8f3e1e5aeef0de46ec46bdedf5748c459d578e",
+    "fileCount": 9,
+    "omissions": false
+  },
+  "versions": {
+    "node": "v22.14.0",
+    "next": "16.3.4",
+    "pgNode": "8.18.0",
+    "pgNative": "17.11 Debian 17.11-0+deb13u1"
+  },
+  "locks": {
+    "package-lock.json": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "web/package-lock.json": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+  },
+  "environment": {
+    "osUser": "agent",
+    "proxyAndCA": "inherited unchanged; values not exported",
+    "dotenv": "only .env.example; no .env/.env.local in checkout/web",
+    "dependencies": {
+      "root": "local hardlink directory of existing same-lock deps",
+      "web": "existing local hardlink directory"
+    },
+    "rootDependencyCopySource": "/workspace/stockinsider/node_modules (same root lock SHA; cp -al local directory)",
+    "browser": "Playwright 1.58.2; Chromium/headless revision1208 cache absent; no download/alternate browser/sandbox change",
+    "clock": "original real clock; no fake clock/preload introduced"
+  },
+  "result": {
+    "startAt": "2026-10-11T18:01:17.753327+00:00",
+    "endAt": "2026-10-11T18:03:50.429229+00:00",
+    "durationSeconds": 152.6712353019975,
+    "exitCode": 1,
+    "stopReason": null,
+    "peakAggregateProcessGroupRssBytes": 757547008,
+    "rssMeasurement": "/proc stat session process group sampled 0.5s; excludes shared filesystem cache",
+    "minimumDiskAvailableBytes": {
+      "/workspace": 9268637696,
+      "/tmp": 16454451200
+    },
+    "command": [
+      "npm",
+      "run",
+      "test:source-led-opportunity-v3:product-correctness"
+    ]
+  },
+  "counts": {
+    "total": 155,
+    "pass": 153,
+    "fail": 2,
+    "skip": 0,
+    "pcrTotal": 31,
+    "pcrPass": 30,
+    "pcrFail": 1,
+    "pcrSkip": 0
+  },
+  "failedCases": [
+    {
+      "ordinal": 25,
+      "name": "acceptance PCR-024",
+      "status": "FAIL",
+      "tapLine": 160
+    },
+    {
+      "ordinal": 56,
+      "name": "V314-004 discovery and report visibility are backed by payload data",
+      "status": "FAIL",
+      "tapLine": 394
+    }
+  ],
+  "failureEvidenceLimit": "Original parent tests drop captured browser child stdout on execFileSync error. Parent command/stderr/ERR_TEST_FAILURE and existing Playwright last-run failure metadata preserved. Missing pinned executable independently established by filesystem inventory, but exact full child error unavailable; do not conflate observation with recovered causal proof. No retry.",
+  "resources": {
+    "processGroup": 757547008,
+    "supplementalAllService": {
+      "peakSampledRssBytes": 2115235840,
+      "scope": "all active Node/npm/PostgreSQL processes; no other such active processes at admission; includes daemonized native PG",
+      "intervalSeconds": 0.5,
+      "measurementStartEpoch": 1791741781.5005176,
+      "measurementEndEpoch": 1791741830.3316987,
+      "limitation": "Supplemental all-service sample started during the canonical invocation; original process-group sample covers the complete invocation but excludes daemonized PG outside group. These are sampled observations, not an exact OS high-water guarantee."
+    },
+    "minimumFree": {
+      "/workspace": 9268637696,
+      "/tmp": 16454451200
+    },
+    "limitBytes": 8589934592,
+    "manualLimitMinutes": 20,
+    "durationIncludes": "canonical command152.671s; setup/evidence separate within original bounded turn"
+  },
+  "buildArtifact": {
+    "standaloneBuildCommandExecutedSeparately": false,
+    "provenance": "artifact observed after unchanged canonical browser webServer invocations; no standalone build PASS inferred",
+    "BUILD_ID": "rljBNVoM7HviTv4-GBdt3",
+    "serverFileCount": 1794,
+    "manifestSha256": "2a9cdd7064900db18680dc033c20bb9e63560f4ef3af8a503151aa90a18ee260",
+    "priorPttBuildId": "GEECSVkE4LnJIliZtDUra",
+    "notRelabeledAsPriorBuild": true
+  },
+  "cleanup": {
+    "at": "2026-10-11T18:05:32.383603+00:00",
+    "activeOwnedHeavyServicesAfterCommand": [],
+    "method": "ps non-zombie Node/npm/PostgreSQL/chrome inventory returned no rows after canonical exit and lightweight RSS sampler exit",
+    "stoppedByOriginalTests": true,
+    "supervisorForcedKill": false,
+    "deletedPaths": [],
+    "reasonNoDeletion": "free disk remains above reserve; retain raw evidence and original failed logs; no cache/prune needed",
+    "diskAvailableBytes": {
+      "/workspace": 9268637696,
+      "/tmp": 16980275200
+    },
+    "trackedSourceStatus": ""
+  },
+  "rawManifest": [
+    {
+      "path": "browser-.last-run.json",
+      "bytes": 145,
+      "sha256": "71af0df90850532e9b4f40b692cb47beece9c312523d9c9989ecde69807c5d78"
+    },
+    {
+      "path": "browser-browsers.json",
+      "bytes": 1883,
+      "sha256": "6b6e0538d6e46eef71d3e1a0dcb65f8f5ea7914033c8150529d8e207afb6030c"
+    },
+    {
+      "path": "browser-capability.json",
+      "bytes": 734,
+      "sha256": "3889fb223d78920a2ac98acfb22e0cf791aa934370db884b6eda98554a4e0f0f"
+    },
+    {
+      "path": "canonical.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "canonical.stdout",
+      "bytes": 48049,
+      "sha256": "c973dec470b07fc65e8f854c3aeae6a038b57c6b0e431128eb1135a928c66f4c"
+    },
+    {
+      "path": "case-results.json",
+      "bytes": 30182,
+      "sha256": "217e310579a2c5b997123bce8fd787c759314e61802877e9e9d1feacf841f58d"
+    },
+    {
+      "path": "cleanup.json",
+      "bytes": 559,
+      "sha256": "23fd1eda554e4e89658de8135e70da1f885950d2bf06bcd7690ac56c49bd21b2"
+    },
+    {
+      "path": "observed-build.json",
+      "bytes": 420,
+      "sha256": "16b3844fbc8050d007bb43e56c0511cb17fba21d27a3c2bfc62f7b1cf5dd2bae"
+    },
+    {
+      "path": "observed-server-manifest.json",
+      "bytes": 332873,
+      "sha256": "2a9cdd7064900db18680dc033c20bb9e63560f4ef3af8a503151aa90a18ee260"
+    },
+    {
+      "path": "owned-service-rss-summary.json",
+      "bytes": 554,
+      "sha256": "a6c1daf63d68d7db902fa8269d351128cee529f850e515a7f153587939645f47"
+    },
+    {
+      "path": "owned-service-rss.jsonl",
+      "bytes": 51114,
+      "sha256": "5be284066632c0608ff2917f7de8c256ce9bfb4352feeb60572169fdaee6d679"
+    },
+    {
+      "path": "preflight.json",
+      "bytes": 1647,
+      "sha256": "90b2035a885416a2c2dc0e55cf67916418f3a2b52c50514db5b00302fdf797a0"
+    },
+    {
+      "path": "resources.jsonl",
+      "bytes": 60949,
+      "sha256": "13e39299b9b592e7122cae2fe0f20aa5a3b7f9b86dd7871e5871186dc832fa0c"
+    },
+    {
+      "path": "result.json",
+      "bytes": 522,
+      "sha256": "a4087ba7e2b74bbf263c0994081e8155fec53015ac3c5bbf2537320eadc61a48"
+    },
+    {
+      "path": "run.py",
+      "bytes": 3622,
+      "sha256": "1401136a4e232469f1f05aa646d58ca9171a236503c5cde1d8439dbb47370804"
+    },
+    {
+      "path": "source-manifest.json",
+      "bytes": 154724,
+      "sha256": "b4164df1d42b8cd06274a78da369c8754579aa201815273297bc71a6d1b3fbc0"
+    },
+    {
+      "path": "test-selection.json",
+      "bytes": 1492,
+      "sha256": "4ed0a49a300255447989cbdbe7f0b5ed2502d8dc5464e3c87b9e466895a605e2"
+    }
+  ],
+  "claims": {
+    "protectedPass": false,
+    "exactCodeReview": false,
+    "signedAttestation": false,
+    "actualModelExecution": false,
+    "productionDBWrites": false,
+    "sourceCrawl": false,
+    "strategyAdoption": false,
+    "deployment": false,
+    "newPR": false,
+    "ordinaryFullCanonicalPass": false
+  },
+  "createdAt": "2026-10-11T18:05:32.393700+00:00"
+}

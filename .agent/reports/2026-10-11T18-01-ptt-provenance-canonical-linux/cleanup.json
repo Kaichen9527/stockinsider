@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-11T18:05:32.383603+00:00",
+  "activeOwnedHeavyServicesAfterCommand": [],
+  "method": "ps non-zombie Node/npm/PostgreSQL/chrome inventory returned no rows after canonical exit and lightweight RSS sampler exit",
+  "stoppedByOriginalTests": true,
+  "supervisorForcedKill": false,
+  "deletedPaths": [],
+  "reasonNoDeletion": "free disk remains above reserve; retain raw evidence and original failed logs; no cache/prune needed",
+  "diskAvailableBytes": {
+    "/workspace": 9268637696,
+    "/tmp": 16980275200
+  },
+  "trackedSourceStatus": ""
+}

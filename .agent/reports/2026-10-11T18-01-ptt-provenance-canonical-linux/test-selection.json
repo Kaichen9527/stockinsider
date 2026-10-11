@@ -1,0 +1,17 @@
+{
+  "files": [
+    "scripts/opportunity-v3/product-correctness.test.mjs",
+    "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+    "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+    "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+    "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+    "scripts/opportunity-v3/v317-source-led-actionability.test.mjs",
+    "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+    "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+    "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs"
+  ],
+  "canonicalScript": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+  "canonicalScriptSha256": "acb6b3726aebe1781d5271473f8f3e1e5aeef0de46ec46bdedf5748c459d578e",
+  "fileCount": 9,
+  "omissions": false
+}

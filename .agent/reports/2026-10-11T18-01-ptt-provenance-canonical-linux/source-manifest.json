@@ -1,0 +1,3456 @@
+{
+  "source": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3",
+  "scope": "canonical test selection plus tracked opportunity-v3/runtime/migrations/e2e/contract dependencies; HEAD tree binds rest",
+  "files": [
+    {
+      "path": ".github/workflows/source-led-opportunity-v3.yml",
+      "bytes": 5813,
+      "sha256": "0de64e81f8ecfb5bd99bb99dc2f8d0edace15d53a2702e205476158a871a4c87",
+      "gitBlob": "ceac0e652105d68caaba0502854c149f69b26d04"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/acceptance-evidence-contract.md",
+      "bytes": 28681,
+      "sha256": "e40728f546a16c0187f5c69f8aab9105750f684a977a5f7dacb93833f2d5d102",
+      "gitBlob": "1f9e17111b55f29540329d83fc33c8f24733ea50"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/acceptance-tests.json",
+      "bytes": 267424,
+      "sha256": "12391dfdc34c55908abd25c50af6313f2b046dbf5992ec153054992a2f392219",
+      "gitBlob": "859635006747c03462aee89d6f588510e4d3ea9a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/acceptance-tests.md",
+      "bytes": 150071,
+      "sha256": "d07e53d71edfeecf0b346e24e9cd6fd28a70d36337d61a548f95a4d22fbb5e87",
+      "gitBlob": "baae32b4e381e1a49312e6be59ec99ddb87146de"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/active-artifact-catalog-v3.json",
+      "bytes": 6758,
+      "sha256": "2045dcda35da1f5387a8451c0f38b5b5908ffb124d88be5a130007710d4c11bd",
+      "gitBlob": "a60fd058cc66e34200dc3fba33369e19efedf439"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/analysis-revision-contract.md",
+      "bytes": 16372,
+      "sha256": "a61f768257e55ccd900e569ad3b88289d6305cc61beae37fa0068aa6e924ffc4",
+      "gitBlob": "75660f3a44dc167a44c876d748987b407e018ee5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-contabo-gate-reconcile.md",
+      "bytes": 3374,
+      "sha256": "7760a73bef7cde733e6edbd725d91fe6813bf27de01cf6b8745b47fee7588868",
+      "gitBlob": "072fb26a9bf02209174e03ad995d5c06c14ad87e"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-host-pin-v3.16-final.md",
+      "bytes": 4431,
+      "sha256": "08586359098c6bdba9e80bc1751f96fba82a39738a3496de447f91e6b474f138",
+      "gitBlob": "b8f435d8e10abe375187378a1c5e6d29b22a7ef6"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-host-pin-v3.16.md",
+      "bytes": 2901,
+      "sha256": "d7659c67b534ff84404739644f4c9f091147e37544dd3b77f212360dc569ffd3",
+      "gitBlob": "4709511dd79b2a7b5a091e5e40974513b82c8002"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-host-pin-v3.17.md",
+      "bytes": 3045,
+      "sha256": "30294029d2dd6e9b683dce25c8636c86d7b2c96dc55d0c712da5d0d086b12292",
+      "gitBlob": "1e946ffa8ff7088af9a77a525322fcacce861d7c"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-pr279-graph-registration.md",
+      "bytes": 3154,
+      "sha256": "e447d90e175fa4a1c24fb0855811f3cf09b1078391af6dbafe4d0adb04958359",
+      "gitBlob": "40db3bf2aa633f613be27e04bfc56d2c33514b73"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-1.md",
+      "bytes": 3152,
+      "sha256": "ad99a180564293915944afcfd8c45cd382de8e05deb8afe80fc92d6ee4dc6287",
+      "gitBlob": "5e6ec5eac3c04a5a62fd614217a7b5be754368c3"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-10.md",
+      "bytes": 13558,
+      "sha256": "450959b8d698c50372e42c2abe1de4028c0a7ef074caa937b64d32513d9cbffe",
+      "gitBlob": "ee28b09abc3f5721677e500a152eca4336bab28b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-11.md",
+      "bytes": 4236,
+      "sha256": "7703a703f195a14e80e99ed093008aa8068f26c384003f2a3f6c7f63db6e0e46",
+      "gitBlob": "52152aa4312da64e93f7d6cce8681c9fca95ddb8"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-12.md",
+      "bytes": 6548,
+      "sha256": "81eb50fb2cfb83d3460cb341daaf603c52b941d5b70a20a092d78d138dbb6382",
+      "gitBlob": "ba5c811c716032992ae7703cf9e0aaea3a2f8812"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-13.md",
+      "bytes": 3358,
+      "sha256": "c30330bd275890d4bcf7608ab2130c9ebb4f64e120ce1f225c5d6583773458ab",
+      "gitBlob": "6771a559538da579ad72b6f90fa708879d638a93"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-14.md",
+      "bytes": 2646,
+      "sha256": "9914e2041fa449c0f0defe9d0fee5a8e1bd9b4a66208780b5c1fde60a4a541cf",
+      "gitBlob": "b6cd49e124ba13d220a6a2db2bf52d918d303d2c"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-15.md",
+      "bytes": 2570,
+      "sha256": "a1d62d8d9389c3d179d670b097e861531b73f37f392278b16ad6a0810debca8e",
+      "gitBlob": "f3ea07d6a65220752ffe74e888639f8ef8f14dc4"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-16.md",
+      "bytes": 3046,
+      "sha256": "0d62aa652fe1b3519f005dd89e4684aa940a4abe438d6992ef7366a2f8cd77d0",
+      "gitBlob": "a627b5588e0ee481ec14003cdb95e6092e611dde"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-17.md",
+      "bytes": 1843,
+      "sha256": "19c1059f6a1f697fefff2a3160ae418dfa0794c9b7d0bf34f4c7daf93fd27576",
+      "gitBlob": "5dccd16583bab2cbdeb345982211bb2de394a56e"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-18.md",
+      "bytes": 2563,
+      "sha256": "fc9d00e19e935adfd9e78c371e6880b3641f7fdb6b75ff5c44cfaa35b52dc6c8",
+      "gitBlob": "823804a531339570ba72e9927ad333165c0b5170"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-19.md",
+      "bytes": 2852,
+      "sha256": "45a8ab3980120eab4078fa7880e33a276eaba33d9931cac7d8e3bf248402a4bb",
+      "gitBlob": "8a1e2c568871edb84d377d201cfa5827ff5063ff"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-2.md",
+      "bytes": 6880,
+      "sha256": "13485b7cb9ea649d70306b5f5c43ed73f459d3fd15ade1d810d27395a3c89dab",
+      "gitBlob": "2bb75907f3eb53286ad297dfae5d01ee070ee2b7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-20.md",
+      "bytes": 3246,
+      "sha256": "85dc47dc802f8af09d950976432a229110388cbf072415f84316f5ab0bd6b488",
+      "gitBlob": "62235d9e570177ef252b113bb004645bd6325c92"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-22.md",
+      "bytes": 2296,
+      "sha256": "a414837cbe61c9a5199223a0a1a6c1fe997acf30e910ccc1f5ff420d79808abe",
+      "gitBlob": "a0d809cb0a89a18f2edf40ade09ce6b2d47fef95"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-23.md",
+      "bytes": 1534,
+      "sha256": "7a004e82bba293205ac3bf15025c84ce1f54515ba68e749ecc00307b97c2dff3",
+      "gitBlob": "6b5ce41c3e8304fa269c739d4ab1684657ed16ce"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-3.md",
+      "bytes": 6183,
+      "sha256": "b7306bea6449d33a6f3ae26035c50425f1b8b37ed44247143cde1cbb82b15dbc",
+      "gitBlob": "3abfe6741a7edd14198969ea4c66107ffee42d32"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-4.md",
+      "bytes": 5585,
+      "sha256": "f35388abc7132215e7a2a94af1267de04ffda0d1b38f687802da185f207d2520",
+      "gitBlob": "f8d4d8340ebb8fd3f661c6c9fdbe25849ad826db"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-5.md",
+      "bytes": 9379,
+      "sha256": "b7e07b47df8c47a748f03da88598ec19381bfc7e1c7a492bce6ad8513eb51289",
+      "gitBlob": "45c626ac18d7d3149cf686c26dc600b9a4b76c87"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-6.md",
+      "bytes": 2593,
+      "sha256": "ce31a3316845e5c6267d3adc33e7c2fde1343c51dc11e1f4ca5e89acb2001893",
+      "gitBlob": "f174a1193423096a01849b6a937a47eb3edfc9ea"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-7.md",
+      "bytes": 2276,
+      "sha256": "31fd815241c0a90f0ac5cb3623be2f8250e0e38798c85e000a030e7f433c1353",
+      "gitBlob": "7e201a3926dcf284a5fab68679e956df2e54c45b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.16.8.md",
+      "bytes": 2893,
+      "sha256": "ec0e6bcb3e7dce46bb87e32a382ee9b4907248480dfa8e725803dcddb67e1c1d",
+      "gitBlob": "e1d5bfef4455714c6a982b9fbfe99896d44e0b3e"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.16.9-full-branch.md",
+      "bytes": 2304,
+      "sha256": "7454c3825e0378ba9108884dc750e37f8e5302ddf0656a038d6c64b34854c961",
+      "gitBlob": "2aca976a9a77f44f5ced6f3f26171d11256fb7fd"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.16.9.md",
+      "bytes": 2850,
+      "sha256": "8b92057d7b75e7cb311dbe0186f8bdfae02df09a6f53e48c8342b2027de2d92f",
+      "gitBlob": "547c435789d20ee49e465da4de14b29b221e49fb"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.18.md",
+      "bytes": 4744,
+      "sha256": "7026c463a3834794eb972b58660e715ae8c88dd2f894c46d9ab14c9121a44fb1",
+      "gitBlob": "c34193dd347f0a29e379d5abea49ce5baabdb9c7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.19.md",
+      "bytes": 1310,
+      "sha256": "3ac4ef4956d2abbf3a16701887fd08ad98fd9cc3b3efd5d2787ed27477391b95",
+      "gitBlob": "6bc9055ac453d0dfdfeee7b55572b1ad21e6ba44"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.20.md",
+      "bytes": 1700,
+      "sha256": "fd1f975a14867d7b8fa029de06a343bd6c1014d33a3263c090a750d2425d3059",
+      "gitBlob": "57405733b41e26147ef381ad117fa2342440d2a2"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.21.md",
+      "bytes": 2015,
+      "sha256": "4493238559ff1d5dfdbfbc84e2767f8b5a1929f11f92804052335f16b5824fbf",
+      "gitBlob": "4d0099c4ef0df5ccc93d74312fd321ae25dca0ad"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.22.md",
+      "bytes": 1939,
+      "sha256": "ebe223682bd39989869156851eda7e91bbce5ab125b19ad1822795ddde930b77",
+      "gitBlob": "4dcbfd00f894cd67b8a5e9d759c2f67de5d8f6f5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.23.md",
+      "bytes": 3536,
+      "sha256": "2e71e4f1ef6174f069c89c41257d7019c336d4ea998f771b8581eff2504827f3",
+      "gitBlob": "7e246279fc2564f4491be2fdf8f8100995fdc67f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.24-final.md",
+      "bytes": 5553,
+      "sha256": "3e2631c86be97f6ec65a38058370fc9f9b0bff086484bbc75facc2d3fea813bf",
+      "gitBlob": "82738389cbce5b46f17d0f32ac327864be7073b5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.24.md",
+      "bytes": 5561,
+      "sha256": "c0fada066ab25b4d99a6f9a5be348766afe588521dd340692ac979694e5ffc50",
+      "gitBlob": "3d7c5748f39ac8b076f87246c9f70d936f932920"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v318-digest.md",
+      "bytes": 1813,
+      "sha256": "4d0f4d9ec9a253b862b27a9dcfd32aa844799f87a0cc30659fe1d47aeb5a86a0",
+      "gitBlob": "a62085865ea890064c90e185cb42486ee071f022"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-round-13-p1-repair.md",
+      "bytes": 1992,
+      "sha256": "e2bb03173367d0d47545884a9ff59b35ba4a5d46cccd18f88a707edc76b8dae0",
+      "gitBlob": "0c97228d041470261755bfd8c1197cc5d8e52909"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-round-14-p1-repair.md",
+      "bytes": 1759,
+      "sha256": "5ca7ce942fe68eda4ea39e75b19b97305a9d1d961f222875bc6145eb43f06877",
+      "gitBlob": "a328dd5a6d555272011a9852a44ab4a3ea469ba5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-round-15-p1-repair.md",
+      "bytes": 2452,
+      "sha256": "4fd7b16e6c0c20e70c98d04cb08134ff1db4156539e3c2399d1275d399a00432",
+      "gitBlob": "6a087830c49749f70b0f481667c1459285a55dbe"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-round-17-p1-repair.md",
+      "bytes": 1348,
+      "sha256": "5398f52bb71e1e0e97464d8603a59dd7a6b431f9259812538212be01236e980d",
+      "gitBlob": "0feeea6dabe80d3982ee08ebb0d69d8fe64e6291"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/auth-principal-contract.md",
+      "bytes": 45350,
+      "sha256": "384fa38d3d8efd7aca71715a97c45643a817b6605b88f69a654f2b6aec184ed1",
+      "gitBlob": "de28043a1b099527e7fb5dd819f218554ca6e554"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/authority-supersession-contract.md",
+      "bytes": 8970,
+      "sha256": "1472f22a585918e2290b62937c6311b32bbf4b0f3e799a75c6d4187432811b54",
+      "gitBlob": "8231b276a028afb4b54c29e016397d809804a66e"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/baseline-evidence.md",
+      "bytes": 2398,
+      "sha256": "0d7b516c5785903bd026586398a1a7a0e0433d118d816dc90948d4b01c86f991",
+      "gitBlob": "81bd42247b7be1aee12c0200622720c77eeda1e9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/control-plane-contract.md",
+      "bytes": 11442,
+      "sha256": "cf5c31ebbe4a5530780b4be7809a30f733fd70a4d32163ab4a03f12c39f70980",
+      "gitBlob": "6425eaef30fbb4cd361dcecde731b25a193e5995"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/current-release.json",
+      "bytes": 1129,
+      "sha256": "45e5e337ac0ac72eb1a8d88213bf046e361ca842ea0bf4932254589f5e59f4f0",
+      "gitBlob": "2a28333cb1bf918e849327920d9ab1a73aff21e8"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/data-contract.md",
+      "bytes": 41597,
+      "sha256": "e4d7496ef220b634b405cf5fd36114c53a8fc97442bc991065386ed3a1712137",
+      "gitBlob": "1765e2d4e27bdcc24af2f23f6b6fb87064cfdf14"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/decision-contract.md",
+      "bytes": 9065,
+      "sha256": "e932264318ab2951e8ae4b0dd5adff4c7e1b708dff46527a4dec6fe336f47e09",
+      "gitBlob": "5e631d189d9b284b4a0d4f48023f9797a810c102"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/decision-log.md",
+      "bytes": 65283,
+      "sha256": "ab4551fb0c8ae7c94dcaeb7f9a25a4614bd884c6b4dbe6faff04595225fceccb",
+      "gitBlob": "2d2203946c4509eb357eca64027ca0196036b4f9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/design.md",
+      "bytes": 46566,
+      "sha256": "d4024fadfdc35235d4f752be4934475b3e574460bfe313b58c50044d547903ad",
+      "gitBlob": "40df46cf870702372d33d8d74f82b8252ee8a094"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/discovery-correctness-contract.md",
+      "bytes": 10280,
+      "sha256": "5568ebe2dc4004f83e0c0b1b6f38f1e115eeaf3ef1836b090947130110148cf1",
+      "gitBlob": "89ab082a3d18162c11bb4972e795ec81a54b8374"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/entity-link-contract.md",
+      "bytes": 17638,
+      "sha256": "ce5c030633f59121af51ae1009847e9f36aee47a1128dcb86c531af78f399d86",
+      "gitBlob": "4d05195c1d6620bc05aad79dc7f594913cf702a7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-v3.13.md",
+      "bytes": 2890,
+      "sha256": "3f277bebd19e5a6a5430d2dfa352745107b9da82168801a931494594ce1bfd5c",
+      "gitBlob": "f290cbbc10c39bd00f2974a3b7dfe9e954efd9a6"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-v3.14.md",
+      "bytes": 5612,
+      "sha256": "08d8b6aabe0971f6f610b6091178875c88e130f7c46ccac740d48139dca2a489",
+      "gitBlob": "05423c548a61eb4bd7e573ecab40c2c9060ba6c8"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-v3.15.md",
+      "bytes": 2263,
+      "sha256": "cc11f7486271ebdc38e7194ccf2f7310e230f9aa661aaad97a9b74bf25dca25b",
+      "gitBlob": "101125587642111963af38b4a9bddf912d0c78d0"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-v3.16.9.md",
+      "bytes": 3454,
+      "sha256": "74795171e428f72a814648c3113a431a4cb994465ebe62694cb57d62ee5fca36",
+      "gitBlob": "606679dc55e7ba7c9b7bb636be194fc5fd25f2cf"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-v3.16.md",
+      "bytes": 2607,
+      "sha256": "d1047aa417745738f49c7f99d7a5595fcd2292e0603ae4ab730ba2f58b7e2a2e",
+      "gitBlob": "f4adc08713883591fda84d4ca5cf6a452fb8c8ab"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review.md",
+      "bytes": 2997,
+      "sha256": "0fd60d35c25615e9df9efb3b6f4d400f06c891e1feb814a2803c703d636b05f6",
+      "gitBlob": "04328ddf2c0fa7ec81f65bdf3d8b99e4305800c9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-implementation-candidate-v3.18.md",
+      "bytes": 1682,
+      "sha256": "1c31e536be1becf36b5815ed0d8f5622d2dac309cb00f2bb3e53cb1dbc7b06e8",
+      "gitBlob": "ba38e1bf9a98076072e244012c63204414428703"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/external-gate-harness-contract.md",
+      "bytes": 6741,
+      "sha256": "84ac3f017e5af16e2d7d4dd996da8f22478024586b57ff75a72a6af7ea6d2abf",
+      "gitBlob": "801baa36b78a6767b45e5e03af5b65d939bac251"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/external-gate-release-registry-v1.json",
+      "bytes": 471,
+      "sha256": "bd1b4d2985de491411f003f591eb1b04d0f2b6af7e9904a42a2f0783e1356983",
+      "gitBlob": "c19750f649c89220a01161bc1e37d26556b00b28"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/factor-correctness-amendment.md",
+      "bytes": 12632,
+      "sha256": "754d51a468b2757adb9355d89b382d25376b58191bb11a68a2ee9a40fa589ef5",
+      "gitBlob": "6d8acdb89fcb01d3afbdf957c369279d3fdf9806"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/financial-data-contract.md",
+      "bytes": 40159,
+      "sha256": "8fb444e087d51d7c2d5c278012c656625e1d5d201fd9f01f314303d90c4b4549",
+      "gitBlob": "62258d4bd04cc1580c849bc49d1266297048bd62"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/gate-summary.md",
+      "bytes": 169939,
+      "sha256": "3b84ef3f6b2f4e2d31e6b93cce081cff44110b812770bdfe25edbcc5b51d289d",
+      "gitBlob": "df1921bbe645ecc87377f5d4f5a6602b0784d2d8"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/host-pin-compatibility-amendment.md",
+      "bytes": 3934,
+      "sha256": "bf7797b9dc76ddcc112c0680199c3b0a5735d9ad6f9262633e399817f2467bbd",
+      "gitBlob": "357c101bd2844444cb0eb7f9333912285f50ede9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/hybrid-product-amendment.md",
+      "bytes": 18752,
+      "sha256": "53d21a3d84d3eb4bdc993c48bdc8a1c551c86a8a59d43e4fa11cc5ca177ce742",
+      "gitBlob": "8e54322bebb49a6cd71d8ff55bcfd0057ec039aa"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/impact-analysis.md",
+      "bytes": 5455,
+      "sha256": "06498f18006843c60e6a72e5e5bd52630bdc112a88d0cfd5b367d8a1a2435a85",
+      "gitBlob": "29e23a3252d362af773633d8e456c38e9e20b39b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/instrument-roster-contract.md",
+      "bytes": 4015,
+      "sha256": "c3ce66cf267ed5d7b1480f958d6b6ed32f4058a8051a9cb2ecbaf248ad94eacb",
+      "gitBlob": "62317880d94080d0f69cd1daa0b0f42e8b4aa472"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/job-graph-contract.md",
+      "bytes": 49087,
+      "sha256": "56cdcb48003192d61f7f3ab165c6f6727cbc1485cf70bf816a2ca220c6a4de29",
+      "gitBlob": "1643134d0c4d1ff44c3f106a091c518866964796"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/legacy-baseline-lock.json",
+      "bytes": 629,
+      "sha256": "79b5118ffb3f986d1ba50a06c9198c3ba8938897bb4ff3e65c928bb20522ec5c",
+      "gitBlob": "2f78b771f1f07186a9fe8e22bbde0944fc6c76df"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/legacy-compatibility-contract.md",
+      "bytes": 9398,
+      "sha256": "8ffc11d19bb9a53293950fe6fb0f8f550bf0893604f99a58e944ee3ccfb8c8f8",
+      "gitBlob": "cbed5135c52a8eb9bf70c79ab44332520b1e9e01"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/legacy-radar-correctness-contract.md",
+      "bytes": 12933,
+      "sha256": "de577e2b7fcef121c85a8767e9c7949b21be925375865c7d3c5df6bdde9b8634",
+      "gitBlob": "a63609635bb5fa022974b9d633f6ae792606187a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/loop-doctor-v3.16.21.md",
+      "bytes": 1497,
+      "sha256": "5734f189a99dca157b69f2d523f7676fa9516d0d41f0d9e67ff52542d9549c73",
+      "gitBlob": "d013cb166672a9fdc580222c05e0563c34bc48ff"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/manifest-storage-contract.md",
+      "bytes": 21773,
+      "sha256": "7eed47734c0da43cc984a94ab0a6ab0e37e22e7ccf1e284b8d18ab6ace016dbb",
+      "gitBlob": "01baa56eca974bdbc81b017dadc0eb13080747e8"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/market-contract.md",
+      "bytes": 36395,
+      "sha256": "6095ae9dd872114b66116fa1ffd6c5e0b25d5851f6713680d22de0497ef9bf1b",
+      "gitBlob": "979e6de6ff5517f547a14d152027d5f94137c05a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-contract.md",
+      "bytes": 62763,
+      "sha256": "00783f380d7c0bfe1439fc762604d366f5e755e3a19fc573df79a491d4f9072d",
+      "gitBlob": "d3475fd8e44dc3903630bd4c5ebe698165db3ac6"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json",
+      "bytes": 2144,
+      "sha256": "9d7b0820a22d35b5de125d457c129272fea14be37d0c1ba81ee4531a2b246439",
+      "gitBlob": "31c61b3e2e2acb1eb017efd61be3b7413616c663"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/opportunity-recovery-v3.15-amendment.md",
+      "bytes": 17497,
+      "sha256": "1cd5c778a05313ff69a46a2ebf88866da754ad9ad8f15515d01e3094a65892b8",
+      "gitBlob": "a7f2f6aa6eaf3dda2497528597fedc44118139da"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-implementation-boundaries-v3.json",
+      "bytes": 16838,
+      "sha256": "2e9e87b0fa7ddf426b0ec6c743da7c8b812b56d8149100d408e4a8c3a339a530",
+      "gitBlob": "9c3aac21487f767ba2f8dadd9d239ef96e3597c3"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/portfolio-context-contract.md",
+      "bytes": 1703,
+      "sha256": "d4344518aa91148085acb3fec1a72a74e06319f15a1485a9521185b3583546db",
+      "gitBlob": "fe306a396a27f95b15ba31a41bfceb33c19fe603"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/postgres-type-contract.md",
+      "bytes": 38242,
+      "sha256": "04bd0fe4c3c7499b01f272d8ed08831d6cd73058d4999598b635aab4428f8dd8",
+      "gitBlob": "8ae8b3e0cefdc84e9d2fe8d9e52e0352ac31043b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/product-correctness-runtime-amendment.md",
+      "bytes": 9415,
+      "sha256": "77a75d22d76bff0346b5fc6e54568b403a36ac0cd88b7fe4bd09a2d9f36e0d16",
+      "gitBlob": "7c547ebb022a18d2e345010bf0d46f922affa7f7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/product-value-recovery-amendment.md",
+      "bytes": 5672,
+      "sha256": "7a29b9ebb5e6d7ff6357924e5c1f685a718d7e306593ead8807db35104164a0f",
+      "gitBlob": "6fdfc5b3ef543bc5cefa9cdcc34f4946848368e7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/production-authority-completion-amendment.md",
+      "bytes": 5717,
+      "sha256": "8b1133621448505d22aa2ca8a52930068d41b8d2773f65c820db2f07cb1afff3",
+      "gitBlob": "83d0ac21d528dbc43fb02fc3d604fe7efeef62f8"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/repair-closure-review-v3.13.md",
+      "bytes": 2233,
+      "sha256": "7958db220126c988b21127de17ddeb3b9d45578ef9ab4d8fc1837d109ef8d505",
+      "gitBlob": "47050b8207697843940dba3cb539a3a9de953f87"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/repair-closure-review-v3.15.md",
+      "bytes": 2112,
+      "sha256": "477b09173aa536f9d38b91d97d3147a099495c6c19bd4f91e81210b3f5238676",
+      "gitBlob": "2a57995fe980f59a305d33d1dfb16dd290550ebf"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-contabo-gate-reconcile.md",
+      "bytes": 3277,
+      "sha256": "cfb3a70faf4567ba5def94854acbbf3c20688c89b39aa9f871acd880736fe570",
+      "gitBlob": "1c4c5f7d81bb62954166b51a23bc857c1ea92fdc"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-host-pin-v3.16-final.md",
+      "bytes": 3437,
+      "sha256": "018b73fc806097384b23c14c916d151fb7d3ffd6cfea2a016c6d5df2c8046a5a",
+      "gitBlob": "052624446eb9ab82ecad3527d45438807ab4af07"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-host-pin-v3.16.md",
+      "bytes": 3140,
+      "sha256": "cad134b40fae240352df31a16f28118ac4a6a4515478ead88cf856e9f157674d",
+      "gitBlob": "514f2db5021c29d4c8b66fa050b7804de61190a7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-host-pin-v3.17.md",
+      "bytes": 2971,
+      "sha256": "3734cd748e8ad8c40e66a78a0cac8412fecea06826fa6b9c2c17519c810e9504",
+      "gitBlob": "979a65d38ff81fe8c979893bc52986d144ca5ff4"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-pr279-graph-registration.md",
+      "bytes": 3005,
+      "sha256": "1f0714f9afcee89442ea0eb3c0172f5b80d4c7c0231a80869543882d659f6b82",
+      "gitBlob": "fc02eef6e4f1255d49dfa184e0bf39ad55749c7f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-1.md",
+      "bytes": 1195,
+      "sha256": "a48b9a048fa92b67f81ae0aa5339b45eb30c5cec00b7997630fbe4500d6e510c",
+      "gitBlob": "fc65ef9f1ef696e7a70393f321acd0259f402e0b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-10.md",
+      "bytes": 3395,
+      "sha256": "6cf64f1d978c9a51ac67f75be57cdbec47d2c586fd8b487182100a13d6dbb1ea",
+      "gitBlob": "a039033cf62c811f79a78165fddc3c3fc0dd4177"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-100.md",
+      "bytes": 4285,
+      "sha256": "09ce59c256672a8cf95f0d4d5507dd6516e8d3feaf2d5490e694901c8f6b948e",
+      "gitBlob": "95fde01bf154e6a5f8da3b9252b1625d5ec70d80"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-101.md",
+      "bytes": 4987,
+      "sha256": "0b4ff62533b77c01bf35acd24fa7958048924fdf5a21e0d74a1391c8d6bf10de",
+      "gitBlob": "dc13100c479887eb956fdd80a24edbc558979f95"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-102.md",
+      "bytes": 1860,
+      "sha256": "93e2c8a38afc04aac93f8438d5f30af52e03cf7baee072085b80fd6115203f13",
+      "gitBlob": "2e69107d7f24aadff73db0bab3dd2221ca2e771d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-103.md",
+      "bytes": 2657,
+      "sha256": "f71b76e52371ab2959001eb83b062cd0a48b63420847a687032184fa42b8de05",
+      "gitBlob": "c094fd60ff5d2b66e7631be9425aefef30fa08d4"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-104.md",
+      "bytes": 1626,
+      "sha256": "88123845a73dcb6a91a8ad239aefb41ce0b3797a279514a265b1c6fe84f1db78",
+      "gitBlob": "92b1bc8ded4e8f5f4cf4c59ae423ecf95651c6e9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-105.md",
+      "bytes": 1873,
+      "sha256": "40c13480583e29e962f599ce05ca6c58079fe99129bd102ca39af09cd4328125",
+      "gitBlob": "1cd7837144211474589d2f4c4b49f108f870be16"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-106.md",
+      "bytes": 2145,
+      "sha256": "fe442c9f807cdbe72480e89b3748b6366a3a17854e83c33fed0c5654e5cafcdb",
+      "gitBlob": "f66e476c127f1abcf0a02670a8246b30e6472d0c"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-107.md",
+      "bytes": 2829,
+      "sha256": "824e3593baf9ec04353cc0ed66c7ae31c6c49aeeec12a7d171270ea4272e52f6",
+      "gitBlob": "543937da0be01a681ac9e5590245a2963a10ba60"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-108.md",
+      "bytes": 3785,
+      "sha256": "87c2dec6e7941f1f7b447114fae92fed59a05bcc782b0db6fb126f24b5c5867e",
+      "gitBlob": "d5773a257330c4c67b3e0f87a16248f7ecae3fa6"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-109.md",
+      "bytes": 2921,
+      "sha256": "c803c0ed7bbe0c82c426e8cfe1d8ef74948c5751ce17ab534e6ef3dc92c69375",
+      "gitBlob": "876bc5e6bb77c2b1b158d1d00214d5969dbd544f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-11.md",
+      "bytes": 2383,
+      "sha256": "a15e350954ad07cad3558e66228985692d0c37661a825b8e0cb0b99c723085c9",
+      "gitBlob": "15215c0eb247f881e3de882f79e271e5590e8fd7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-110.md",
+      "bytes": 2831,
+      "sha256": "ba313d6ab637258f8cfb449c66db800b4640e8c937c36c7075fcec8cdc70447f",
+      "gitBlob": "24683b8b34268ba9c4398bd99809b0e1f8375899"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-111.md",
+      "bytes": 2280,
+      "sha256": "01cd4c2b5991982c33bb0c941cdd69d76959cde1aab692e54bf5f275ce4e6092",
+      "gitBlob": "4db25994357ecca9557766829d3fc220eab6d158"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-112.md",
+      "bytes": 2469,
+      "sha256": "beb4b4dc4bcd9d62cc35d37eb59ea64d439ec1de597e1ca033ebcbc11f280dcd",
+      "gitBlob": "f6d3352073652a4b2cde96be790ab33af12bab5d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-113.md",
+      "bytes": 2706,
+      "sha256": "7997889552ae8d729771d6f6654fb7ee5c10cbf12bc1cbc80205975dcbe2d71e",
+      "gitBlob": "f6f7eb195f901223a51683d9c3a7b29172644f23"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-114.md",
+      "bytes": 3077,
+      "sha256": "234bec41e49cf9f65fdc277eee0fd613a64df80b86a79109b908b53945395816",
+      "gitBlob": "4e80acfba4c3095070991aceef4081f4b028df96"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-115.md",
+      "bytes": 2854,
+      "sha256": "9f1cd03aa58f63972d8989983bb0b6c154180e10a91cff2da146538842461354",
+      "gitBlob": "d1e4bf97168ef240684bbe4bccb40095d8a64eac"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-116.md",
+      "bytes": 2944,
+      "sha256": "f30c760eb4ae5bef107eff19014d638ac7299a14dbc6b8a55ad8e18bb399d446",
+      "gitBlob": "88b7462a38c32fff3fa18b1574c478d09e9e1377"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-117.md",
+      "bytes": 2609,
+      "sha256": "8b2a1e4a33af512175a141870c8814d72121c38e2c743e4958814a2eb0ddbd51",
+      "gitBlob": "66e88af20ad120a09a2517a87adea1bc05abed8f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-118.md",
+      "bytes": 1919,
+      "sha256": "248d51eb142aaf5bb9449baa8342ebb784965ed9d06adeba45589193618ec014",
+      "gitBlob": "abbe0a61c93d9e5eae65decdefc215c705df77d1"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-119.md",
+      "bytes": 1591,
+      "sha256": "1542897f1e0d68b1f6207a02bf1ad90f640104cb82fa01a8bb0e7cd7ee232b25",
+      "gitBlob": "b756e66642086953e75fc5b8b3beea53b21c0fd7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-12.md",
+      "bytes": 2706,
+      "sha256": "394710c052a9acce38d6bba2705cbe4058c2dab648e632176cb40b41e826db49",
+      "gitBlob": "260110531a4d749eb21c867478d35a18a5c893d0"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-120.md",
+      "bytes": 1528,
+      "sha256": "ef9b6646672e2fda6982fe79f8a8facc5711c78967b6db69418825adde742d7d",
+      "gitBlob": "6fd8696c131b6ced76e7f6521a7d2b23f6ab050f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-121.md",
+      "bytes": 1941,
+      "sha256": "dcd1f86717281e0a438b7cd637001eed3d1436036043057e7d74228595636412",
+      "gitBlob": "d034cd3723c8a0540b610231d9809516c499976d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-122.md",
+      "bytes": 1882,
+      "sha256": "0524058b1647c91861ca73fafc5d24b4038d6923772d2e4f2945dfb8a18efed4",
+      "gitBlob": "a5b6731954d62c742b7c36f72f7a8db250901190"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-123.md",
+      "bytes": 1679,
+      "sha256": "a1497b54facef54d0dee2c06b6b3594faf056f83ddc394f78dc088f81bd3992d",
+      "gitBlob": "20ee317e53839a06d1d6df094c2ca6307847ef0b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-124.md",
+      "bytes": 1435,
+      "sha256": "2fb9eda7702ce0808b37e1f9d539e72045e9d7702e0466e9746141d6037dc0d4",
+      "gitBlob": "223dc588ea907dc45e84c210062f04e4d858079a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-125.md",
+      "bytes": 1585,
+      "sha256": "7369f0553564a05e450c46bd49d74253fa21abf5db789855c5c6b3d099555efb",
+      "gitBlob": "05e43cf4c0759f085b5506cae200a9031a8f92b9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-126.md",
+      "bytes": 1634,
+      "sha256": "3fb8e26b91ac122505c39021c19dc72c297291f4238a138a6fab9abefcf4b0ff",
+      "gitBlob": "0ff5c6c8c2394f0d0bc1a0112b985a62224bde9a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-127.md",
+      "bytes": 1278,
+      "sha256": "bc30c5529353e219ff3e8caf80371ba6dc5fb25fcbe9486ffcd9e8ca431be02c",
+      "gitBlob": "c83da15758cadf46875b12e3eb9666f3206ff1ec"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-128.md",
+      "bytes": 1479,
+      "sha256": "476438a604ea7b1b2772d558c347f2244fbb75531ff1fd2c0d877c414e295dce",
+      "gitBlob": "1fa226da536ffb93c75731d75dc27c628d15e8e5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-129.md",
+      "bytes": 1658,
+      "sha256": "3cb8a4e9b64cacae54b475c54ac9d62485b781f8613303d609633eaeb22d9552",
+      "gitBlob": "af1606a98c7093c9c3e1963fe9d9f43a1f4a5e55"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-13.md",
+      "bytes": 3148,
+      "sha256": "d33a35269700f8b9570350f0d3706bbdc7c9a4142b132eabb23e341cd0d84d60",
+      "gitBlob": "cedfad45e6d13200907af2f3e5eae80f0593e3e9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-130.md",
+      "bytes": 1553,
+      "sha256": "c45817de99cf16f026364d5c794e8ca12040c24a58b192e39125c9b30a1db1f6",
+      "gitBlob": "d7ae2a9b72c1a330fad254e9fc7b9ea14def3023"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-131.md",
+      "bytes": 2812,
+      "sha256": "036e4d5b381e7f387ec8beaba48b4571db5cd0dfa5f83e45923931d8bc28d4f5",
+      "gitBlob": "feb9b62ded8adf7daf61bbb3b75e48678cec5d69"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-132.md",
+      "bytes": 2627,
+      "sha256": "4dd2217ace5cb832361b4e8cdca0b364fe5ead666a9625c7202b977ed4688787",
+      "gitBlob": "4c4fdf161d35c5d5e0c5389ef8ec2472fe1c6d33"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-133.md",
+      "bytes": 1221,
+      "sha256": "3ce0d44cd5b90b6a55ca0cff5c1e11b654e6e94c0b7b2008e850db1b9f52415d",
+      "gitBlob": "3bcec13333775b06a6df93326c36c3b870a7a751"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-134.md",
+      "bytes": 1340,
+      "sha256": "39235fcc2137fe555f4a3d0c6409fde029c85e8544f4bf15acf0075bc28e4526",
+      "gitBlob": "8a69185845e19b89d316e08cf682bd5fa286d426"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-135.md",
+      "bytes": 1142,
+      "sha256": "967e67ba6c0f6b8089c9199dc34ca512f621f8c67f925e0269cd53bde2da36b4",
+      "gitBlob": "34d5fca484834c2fa9024689576f62a425f4f86f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-136.md",
+      "bytes": 1580,
+      "sha256": "94ffa3291909d3dd7bdd59493f2202a6758443cf34151fe1e3dbce9078516324",
+      "gitBlob": "344f580ea79bd5d0c3b427568dd63f3cf18e008b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-137.md",
+      "bytes": 2251,
+      "sha256": "3ca74796909f9c545903b8027c83672c7ef7c9fe0b95354ea03ffd88999cf824",
+      "gitBlob": "e3b032488c96adaaa0a534d6229e6bbd9209a5b3"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-138.md",
+      "bytes": 2838,
+      "sha256": "239dcfbfcb8e7d5281f28b4ff641e9eb841d4afc4a69a47c63505afc129ede3b",
+      "gitBlob": "61899113a141e13d235982286e8132a0eeee89cc"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-139.md",
+      "bytes": 3210,
+      "sha256": "ee7ee2d3cc3ddb19a3df138413e06c9d2e241dc9c44fa4a31c679f2be7cb12dc",
+      "gitBlob": "3199c9af23eb1f3792f188521554321913f747bc"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-14.md",
+      "bytes": 6461,
+      "sha256": "7308681016d43f9fe29da5181e8d51ac74f8fd3f2e92aa2fc838d73059662c05",
+      "gitBlob": "03c1ab96de8e2aed856006bdc4e8692f9ccb9af2"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-142.md",
+      "bytes": 1627,
+      "sha256": "b1dcf42b73c8db319864609ec3382d3fc24877cffc28f166cb253f7edb6389b2",
+      "gitBlob": "c83ad97c89ba8d6296410465285088bb6a4b23a6"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-143.md",
+      "bytes": 1358,
+      "sha256": "e1d83cfb311b926c13b1ea3a6a274d9efaaf37615b01a5d0b7837bce4521154f",
+      "gitBlob": "e502d7dcee4d77c5a90a519f3cc42dcb62c5ff8c"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-15.md",
+      "bytes": 10220,
+      "sha256": "64e11e7b37dc38f0a5d059e835ef6189df01fb96a2b5b189c0cf26261653abdb",
+      "gitBlob": "48b60bf171636a3c811145126f00374783a52b6b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-16.md",
+      "bytes": 4668,
+      "sha256": "a1ded1cda3780f7cd85345c9a41038afa3081d741dfbfa48eac2db2e8dc0de12",
+      "gitBlob": "f4a434618094c0f245f50029a177e399d3fb2868"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-17.md",
+      "bytes": 7768,
+      "sha256": "4e7ccbdc554c4fc840e248254e35a46329de24adb30f5588c80a184d1da064b7",
+      "gitBlob": "07a50ca6d6fa5baac796e5fd67ff6b3c2c9834ba"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-18.md",
+      "bytes": 5605,
+      "sha256": "496db08b496b8de2c02621b39c5053ea0ad0fcb92f4b7e3c6df5048ced18a0f5",
+      "gitBlob": "f0bbc420242018932018d05380fa7fe6066e54fa"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-19.md",
+      "bytes": 3185,
+      "sha256": "47dccd0d81ff0747a6d5d5db4a8c33a3ab626154adfc39f847cf1ef272dc8891",
+      "gitBlob": "ebc03c404b879ac9669fe0d6025abfa9c240eab7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-2.md",
+      "bytes": 1846,
+      "sha256": "f8c76bbdf6b28fbd654992bceb3230fa57ee84e21bea50451eff243843d76c79",
+      "gitBlob": "ba243e86478d54dfa3a45c5bad231fca1b1081b1"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-20.md",
+      "bytes": 3078,
+      "sha256": "b9477588e8c4fd5f8462d64ba4172176a3e8355d554c136b8c072c979d9ee199",
+      "gitBlob": "5ce59e75703c9106fed94e87315cabbaa668973e"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-21.md",
+      "bytes": 3544,
+      "sha256": "2dd184b2301cdf91f853a5e5a677c07c1445a693921895a873b60cca3043fe6a",
+      "gitBlob": "02c39fdec63f6a3786d9f2ed0f59922f995f16f6"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-22.md",
+      "bytes": 6481,
+      "sha256": "1f0c2fa5c06770a0d7b52c4e9cde8230c49c38b40ee7a1f5aaf134f9c0ad6342",
+      "gitBlob": "fe3bd81a91247db419e4deb367e2bb0e51cb25e5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-23.md",
+      "bytes": 6793,
+      "sha256": "3eb834d4dd8d0330884e6364699a5ccce388260a992f692d0f57f7d69f23c27c",
+      "gitBlob": "0d1981a646b6bad75e321d6d29be363767662cd9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-24.md",
+      "bytes": 4739,
+      "sha256": "ec6911c07d08619b889d8de2217b3e3516d89829631fc3041dbfa256de6142ee",
+      "gitBlob": "f1f52b57cd9b1bf351cf4a764a0730014c6b48b5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-25.md",
+      "bytes": 10165,
+      "sha256": "0a669640733b276ea33d7b91a976dfc6382921aad04a5d0a8c22e0e133455e43",
+      "gitBlob": "bcf9f35140b7fb4d69e3fe8b4bac0d9da21e0fc9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-26.md",
+      "bytes": 6308,
+      "sha256": "cc4565366265f4124218e86623c58b2f604fc78ef4678a09f7c31e84725ef00a",
+      "gitBlob": "0b6ec42b462161a67910d09d6555c4c09e392f67"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-27.md",
+      "bytes": 7084,
+      "sha256": "0cdb4aaa533f4d7416bdcfc29fe611fbd1d3147fa9e71a025c06961242019150",
+      "gitBlob": "318a94d1dd39620be85f43b97eaa8e84bfca4e22"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-28.md",
+      "bytes": 21373,
+      "sha256": "ca9a88682d14015098a45823601daf1a5f5afeaa3c8b43fe433f3670e15bb82a",
+      "gitBlob": "92705ef1c930f9d83ddc91b69521a79dedc93342"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-29.md",
+      "bytes": 31765,
+      "sha256": "09e08cdf194112c78dc459038af31896106ef068485bf3e9ef7b80c14fe7e26a",
+      "gitBlob": "5abc01c6f056cf237321ede5dc7842a942c3670c"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-3.md",
+      "bytes": 1338,
+      "sha256": "079864ea834da4ecda89af47b15097b89a0addd59eb315d91a4182def9043144",
+      "gitBlob": "d369df9f62d632e05701c0459665d81c5693d7d8"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-30.md",
+      "bytes": 10157,
+      "sha256": "39227e09f08d3645bef546fae88eae6477e73fa82ccedaf2dc051974ed567967",
+      "gitBlob": "4a0578a05e2b05f3e8d726082928f555bb662bc5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-31.md",
+      "bytes": 6780,
+      "sha256": "03e945053f9b7209649bb0da14cca20089bfa7d7959f371da199bd778c73fd7a",
+      "gitBlob": "383b0f328cf38d75f6549fb40ac1869beb1a4378"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-32.md",
+      "bytes": 5947,
+      "sha256": "f8a8bfdde07cee869bb5710de9852a54f05bc2fac91687166d7df0d69a415300",
+      "gitBlob": "904c1ac531dfafc18a3050363d1ac48ba7dec268"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-33.md",
+      "bytes": 4245,
+      "sha256": "d2c3fa151d7974dea773cb2d3041b1202cb3f81a1772ff7a79e0677542ba26fd",
+      "gitBlob": "5063187f8a1c2cdd631c04c2ec5dc6a062416ec3"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-34.md",
+      "bytes": 4136,
+      "sha256": "810e143bc5378603ef160f375d0aa68b1a020e5015ddfe064dbcaf2da271a62d",
+      "gitBlob": "f00a9785e8734ad0620809432a9e8c91910c9be8"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-35.md",
+      "bytes": 2001,
+      "sha256": "6bd646782504241260b4ffd783fe5b8159820ee539f33cb07e542303702670a4",
+      "gitBlob": "23b08d54450f66fdc13d64bbcb0893fb4b0e5c3f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-36.md",
+      "bytes": 4652,
+      "sha256": "0efb2de449bab6250fb1434b23dea697b06e1465ed66734e0cd602acd0ef5322",
+      "gitBlob": "73679369731abd9c9b26ce261c8ca67d71328f64"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-37.md",
+      "bytes": 4699,
+      "sha256": "737896abc4e7e300be90c08c30839585404e2afe1a5ee68ede58dead3f511791",
+      "gitBlob": "bdcc203dbfe5c4466ea214a1774d2e9da36dd84d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-38.md",
+      "bytes": 3777,
+      "sha256": "8fb25e97c040ef1fac71c4561475cd98ef3939b671f36948f1073457ec121183",
+      "gitBlob": "706ff677bfe8ae8a79a44f2d56400d4b04df004f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-39.md",
+      "bytes": 4694,
+      "sha256": "8f04a97ed5df426425c3c4f7ebbb0e108c2062708a6ecd2429011f38972988a9",
+      "gitBlob": "e293cc2729a9e4db6a1ffe591a49b6d11fb3ebe0"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-4.md",
+      "bytes": 1548,
+      "sha256": "8f5bb9db1e4b1e8c80145951397c52ccc2ac0bb50eaf10bb6577a4815e5f9f9d",
+      "gitBlob": "782daa2da82d144dce8de4f890612f55438dd32f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-40.md",
+      "bytes": 5620,
+      "sha256": "3c154aac77fb17f33297871a73ca0f3a27b5efb8da9b4a67c86f1c9228e1031d",
+      "gitBlob": "2c4c264313bdbf8da2bc2f4323541f291feaecb6"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-41.md",
+      "bytes": 4489,
+      "sha256": "3a966c2db255d936ca03c3484701aae7337082f3c3493ae585a9c3fbb17447a4",
+      "gitBlob": "bd82a9994588d7d73975b1242ea248065d28f860"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-42.md",
+      "bytes": 3482,
+      "sha256": "0708e0e2bce8b64219638cf4024a73df1806bb9db83ee4558226e82d4afc97d2",
+      "gitBlob": "71acb456f8719417f51da59b3045af9d9f442eb7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-43.md",
+      "bytes": 4439,
+      "sha256": "3af82d0e45e1a5061e90f8507aedd23dc67e5bab16e93b3c45ecb5665d1cf989",
+      "gitBlob": "897a5af9198c8327db3602c465159f41cb13b388"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-44.md",
+      "bytes": 7801,
+      "sha256": "5d6cb69233ff5543f802b114f6fa759ddbfb0c91d309bf95596913f2d3629d3c",
+      "gitBlob": "212c77fff858d54491b972f08591dde81d322503"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-46.md",
+      "bytes": 4717,
+      "sha256": "451b7476d7ea4949d3b670f60008480eb852b6123978d1b0bbf203f6d4f17755",
+      "gitBlob": "5badddf9f1d4a7383cf7ff8e9d9d6e6467dfb060"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-48.md",
+      "bytes": 5188,
+      "sha256": "11bd459f909be21f4aa56db9d720800d52ee927b9f1aefb6c9e541af3889534d",
+      "gitBlob": "3df30f9eb36ce3e2613f55e7fe2b66cf1b71d735"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-49.md",
+      "bytes": 2137,
+      "sha256": "12710a9e17a4479e3b5b51f369e8eb17ca23a1c13c06d44a26776918c3b46bdb",
+      "gitBlob": "cfa72caa7264a65d32b8119d73e2f02d4f5c2be2"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-5.md",
+      "bytes": 1329,
+      "sha256": "736474f026f95f55c9a28f81d076c50c8dec0394b4ae6a72852dc5f0835d4bc4",
+      "gitBlob": "4edf77da6c1b22d69d9c8e325928dc4dfa1966f9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-50.md",
+      "bytes": 1937,
+      "sha256": "6ce2f4cf55fae3d6675daffcc22927fd4eab78db6c80656041e4be5313b7bb71",
+      "gitBlob": "ad28261da01054de4b4ac0f5003e708b11db4b26"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-51.md",
+      "bytes": 2827,
+      "sha256": "0b8bcded8b04c62224558628cb8fde0272232f211b2e9e21326d422d05efec2f",
+      "gitBlob": "e9c80e2f4fccd6cce7e6361d8fdcdfff4db73af7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-52.md",
+      "bytes": 3388,
+      "sha256": "0d9b50ddf94fc5986e72c06d57b8b6c0a405e1e19362b75feb8b4ccba5e3c67e",
+      "gitBlob": "60165a844be760a8f2602417107c778f6950d365"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-53.md",
+      "bytes": 3694,
+      "sha256": "64e2a1f0a2aec435af8175d744ca934481afd710afd79b9464e6f4e9eda4672b",
+      "gitBlob": "8eb6b5bdd975526177b03831db4fbb9a84c1cd24"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-54.md",
+      "bytes": 1728,
+      "sha256": "8acbc8f3a0687bc12657898f82d642a15b2cdc9ee74e7b500b2442d085590a6d",
+      "gitBlob": "58df7b9bb7ad7d3ebc45b860e0f523f02736d42e"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-56.md",
+      "bytes": 1699,
+      "sha256": "83e2d10946e99542271e45ab31a9d813362ebf8a71ba9e465952750e393e67ad",
+      "gitBlob": "63583295fdbca0d5ac9c5b2330333fa69c211ff8"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-57.md",
+      "bytes": 1890,
+      "sha256": "580570674dffcb9a9cc03665c616d71a509f6f2497c6f25edde2422a0493dbee",
+      "gitBlob": "f354b06dfef6592b2ac965145265f2682ffe0e0a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-58.md",
+      "bytes": 2116,
+      "sha256": "1aaaf6063cada42307b3dd41c7f9230fdd3f5763ba0d00436efd8fd99c22d78b",
+      "gitBlob": "b7cabedefa81fafe93bb7b17e5ed675f20235912"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-59.md",
+      "bytes": 2838,
+      "sha256": "a0676e78d739c326b9d6baca8eab7565497588c196b4eeb3cd14ccffc8f82386",
+      "gitBlob": "3dbd595e1427b48c9c99e029aecb46d770e26fc8"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-6.md",
+      "bytes": 2348,
+      "sha256": "ea334c9d7c5ab3ce656464a84e6f18b3cd1f68c6e86ab10db1ce96660e4b0afe",
+      "gitBlob": "d6c36b041d75a77cd3b01fb0d422873e40be62fe"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-61.md",
+      "bytes": 1202,
+      "sha256": "fc84464194bc451c7e8f737c0ed7089104cf2dcd10957322f44b9366e0294363",
+      "gitBlob": "9a8254b3a011199e22db9b9154c626abcd849174"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-62.md",
+      "bytes": 1703,
+      "sha256": "87231dbe60621a8f0fb4573f3dc7de66fdbd35c52e47275aa8470a1c9f3507bd",
+      "gitBlob": "7bb8da370a9c81f593b73ba3a91ec681bdbcf975"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-63.md",
+      "bytes": 1791,
+      "sha256": "cf9962a84ec5aa5170d11f40170bdbe059e4a15c08b16d7f9be6ecf9dc521b33",
+      "gitBlob": "ee3a3ad22a3c4c9d84e057810b3e68fda2c3bfe6"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-7.md",
+      "bytes": 1816,
+      "sha256": "b39452c8494831b2ff36149f63cfc07be517914bcc086e8cf8a5a67b28e3ba2d",
+      "gitBlob": "bbe951591df5d3fe6562a0cafc57ae213d9ed4bb"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-8.md",
+      "bytes": 1394,
+      "sha256": "14520fed7d987f87aa2aa0d82264c18fb0e53104df3cccf303f4ec06122b68b6",
+      "gitBlob": "77f87fe0335d3f907e3d02be5057691e17d1a13f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-84.md",
+      "bytes": 10664,
+      "sha256": "320a0228fee25279380ca397674d19b97ef3be1b1a6a1ab3b41cefbc18c70f7a",
+      "gitBlob": "29c7f1a9eeaaec04368dfe5577ef391d09add93b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-85.md",
+      "bytes": 13496,
+      "sha256": "f7c59f0668d435090533ffb4339a4dcd24535f5600e6c9f97e1238397bd10806",
+      "gitBlob": "a782299d3aabbf8b35e3ec5501d6328b77e387b6"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-86.md",
+      "bytes": 11573,
+      "sha256": "a3ce9dd54f1c0efb2aeeb13439413023e077269884af812cf5b24ccf827178b9",
+      "gitBlob": "275eadd4b909fbfa69d8ad6e5b88c9104511d79a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-87.md",
+      "bytes": 8244,
+      "sha256": "4ad4cfd4ed4ead12205c86e47bb87b5086ccf030b3a5af2872a6bbc3b52bf76b",
+      "gitBlob": "2c1050f58b02d4954389622aaa4e91749664318d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-88.md",
+      "bytes": 11025,
+      "sha256": "67fb2ec22221b2c92e12a453121c332ee097582e885adcd2d07dcbbbd0a36d8b",
+      "gitBlob": "c04d617d197e6c3155507b142f13340e75c786b9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-89.md",
+      "bytes": 13603,
+      "sha256": "ac86762b3781014f5ecb207491da9f9254863789da613599ad64446061470e23",
+      "gitBlob": "25369506ff6a531458f2c301fcd3131d8af101b2"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-9.md",
+      "bytes": 1400,
+      "sha256": "e2085acdd00585f70d01e14f936a1095573d1ff4ff59ad06d0955626e644c077",
+      "gitBlob": "512a3bfe1579b408ffb40a15a33ddd358b1d73e7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-90.md",
+      "bytes": 9724,
+      "sha256": "b0490b7a2d38a89f366618d76eebdf6077720ca72e348875baa2985409ab5431",
+      "gitBlob": "0c81796ad1465e3227a4f7f9dc1ffb8e6d673518"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-91.md",
+      "bytes": 3720,
+      "sha256": "1c790a91b91d20fe15059ce043a3e28741a6d38ec771e5c9f4ca0d2773126e14",
+      "gitBlob": "8a04e264933d784963b85fc7f9d3a1cd9c104191"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-92.md",
+      "bytes": 5800,
+      "sha256": "9b6219cd5177c83033191dab34849439739e9b91fffb3be4b279005474679bef",
+      "gitBlob": "4224c644fc8970e8df354438c26f0c1637755288"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-93.md",
+      "bytes": 6039,
+      "sha256": "8643dc9af77c3dd08f23883b0a6a5adc547693366306d60077ffab435baa9747",
+      "gitBlob": "3b166da20d9d273430174247d8464fa3f9e89c6d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-94.md",
+      "bytes": 5418,
+      "sha256": "5b75b0f40b7fab2330cb1dbf4a8c27787326a373465d2ed5bc71ae4e3d135f3d",
+      "gitBlob": "26859f1b34c5e1462e3cd6ef3483f93c86b08dc2"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-95.md",
+      "bytes": 6820,
+      "sha256": "ea57f848b3e0791b55b649735b4e2741e494edcb5bfb11812426767d6f14ff8c",
+      "gitBlob": "9f944daccdb316d80374969aa4888c3c66224291"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-96.md",
+      "bytes": 5585,
+      "sha256": "172a80b018743a0feebd32c88f4321aabb894a0124a55e16cf48f40261a974e2",
+      "gitBlob": "92281de03ef32dc2996c81582243a412110ee740"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-97.md",
+      "bytes": 5035,
+      "sha256": "ba8554921b1938554561efa025212f9fdf8ed1e23ab5f810aaa89e7b228dcaec",
+      "gitBlob": "931129c879c718b46ce65190c268a9ffc03185e2"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-98.md",
+      "bytes": 5278,
+      "sha256": "23fa1a407e819981db43ba5bd2b3a309d69f121c194007971089de6d4223018e",
+      "gitBlob": "cb0176795169932a17b18c4ce6831fd259c5b178"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-99.md",
+      "bytes": 3843,
+      "sha256": "f9acfa19f0b3dd5554b8fd7f81e6383cff54fa9bb635058e667d192bd5704908",
+      "gitBlob": "1acd624fb56e4c18e707affefba7db516e6fd7d6"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.16.8.md",
+      "bytes": 2595,
+      "sha256": "82ba2b74ac9ee74e53408b420198cc646e46444baed797615659e1ca5ab2ac30",
+      "gitBlob": "6dbc619fb51e357a0c3cd230cea642bcf9e51227"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.16.9-closure.md",
+      "bytes": 1092,
+      "sha256": "bea260d0720fba05c7243e67a9932a7ae676fa26e34c0bae49c749966de3661f",
+      "gitBlob": "09793c45fae5900057412f062f03716b2fedca89"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.16.9-full-branch.md",
+      "bytes": 1637,
+      "sha256": "cc4ac021c8e023a008d6a33230e54843138fad154b708f3163c36f120197e8b1",
+      "gitBlob": "5d85dd7b32a2c84be87de1d08d4c0b967ce206dd"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.16.9.md",
+      "bytes": 2858,
+      "sha256": "6f5a90d68ca926a926f1c990915b6a449290b316f135f5d59b89186532199c0b",
+      "gitBlob": "538b83de8e48bedb5f6a57a8d10a19a7fd070788"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.18.md",
+      "bytes": 5029,
+      "sha256": "58ad23d1b008044d366249cd2a572213c74aecef49197a0f5b3416d11223d153",
+      "gitBlob": "c3c50cc6a480a63a3c7644c184fd1c7d23b4f875"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.19.md",
+      "bytes": 1343,
+      "sha256": "12209c9e286cde15b5607ccf6f258a3a5b565962fb34f5b96524ae21489ece90",
+      "gitBlob": "80488ee01817033744ca3ea88d346fcb7e7e63ab"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.20.md",
+      "bytes": 1398,
+      "sha256": "4e43717d267754afaf11896a50c976351e24416e8caa48bded053bf6c5bc1a63",
+      "gitBlob": "22f8bd4e69e2e69e3f2c8fb3544b10d2de530cea"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.21.md",
+      "bytes": 1986,
+      "sha256": "eadabf1df145f2319438c2b4d691c94bb7cd3574d4bad87a13dd6b2432a10006",
+      "gitBlob": "d1a3af13f6da25079c70fe1751b18c3323023d0b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.22.md",
+      "bytes": 1590,
+      "sha256": "24d1adad6e2df5e0a78fb9bc6a788f550b2356637edbd975e12e9e91d846c941",
+      "gitBlob": "52bf942ceca49c67803b61436fd4f81bcbbf0a56"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.23.md",
+      "bytes": 3502,
+      "sha256": "462cda2e9e28abdcf3d5582d3f4ae98761857867dadc40474195804f5a587de9",
+      "gitBlob": "ec6da8f12974717389b5846c09a7f933b06e7a85"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v3.24.md",
+      "bytes": 4313,
+      "sha256": "7fbb2f3f0e8d5792372d39bd07f948bacad5fa53d1b623aba13539756b529073",
+      "gitBlob": "13973d6f87fb4751778c770b205ecf0fa3dfe10b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v318-digest.md",
+      "bytes": 2275,
+      "sha256": "84165da38f39926eca647d03fe8db8fed8d124e713fb368775dc260df80f56be",
+      "gitBlob": "ec98c7efa5f7288d49429cea2ea4ff1183278a49"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-118-p1-repair.md",
+      "bytes": 1607,
+      "sha256": "afbdcc461f88794a999acffe36b8a02e0960b3f1624ba76eebf4e1c8368e271e",
+      "gitBlob": "1e0977fd64d83304fe2bcf69a63f1e9d81c9b67d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-119-p1-repair.md",
+      "bytes": 2623,
+      "sha256": "39ba375f30a832063df1a86931796333efae421dbbf49d47eb53e99a56b91863",
+      "gitBlob": "196f16699c63c5e8e1c7023bde2773a548a36844"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-120-p1-repair.md",
+      "bytes": 2653,
+      "sha256": "a2e413b1f8529e54370ef74761d08ee9c3d02cc89b2353b18ff34e091ea1a0b3",
+      "gitBlob": "4f0bac7e0339a7615d2c7c9dc5ef751967552110"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-121-p1-repair.md",
+      "bytes": 2796,
+      "sha256": "b92748e9bfa22b1b38a148e4eca370a16f66b0cf9052effe77030267a3704b79",
+      "gitBlob": "e99e825231c2dce1825f4e48116cfd7d4579477a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-122-p1-repair.md",
+      "bytes": 2225,
+      "sha256": "56184929eb0f152772067ae749086a59b1c66b324211eb95148ea324b9545600",
+      "gitBlob": "dabaa956ee5c0ce0da43117173bbde0b37f0914a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-123-p1-repair.md",
+      "bytes": 1732,
+      "sha256": "d661f7504984fd08dffe2d7097794e66163893e4a3f0239ac99bb6da342c5db9",
+      "gitBlob": "96581dee1d95b778290ee0822521783dbe363013"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-124-p1-repair.md",
+      "bytes": 1604,
+      "sha256": "cf4216af3a431e9754266f09c136234ccc99d83531003ea9561dbfa27f10f3d0",
+      "gitBlob": "daa4c5d573fc37c50a242a3e6b05f394d93c53ea"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-125-p1-repair.md",
+      "bytes": 1716,
+      "sha256": "6c8c9c65cab754929173dc2cf498a144d085f0c63671f66defd7589e47356bc5",
+      "gitBlob": "9c39ac798445f0aabb59d481c5d8acfe70c130e9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-126-p1-repair.md",
+      "bytes": 1908,
+      "sha256": "35a16388221422dbcb6f7054336d8f3b6803497e2dc5d81c4895001bc17a4d72",
+      "gitBlob": "c0f7b08bdb5f3295dd2d0b9da791022b926fe358"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-127-p1-repair.md",
+      "bytes": 2465,
+      "sha256": "716060b3fd7a989e11bafd43e459b718d977ad86e7d64f6a7d2f5060a7419a8d",
+      "gitBlob": "d6b6844f73e36d067873231a4d7f80783921e7b9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-128-p1-repair.md",
+      "bytes": 1968,
+      "sha256": "60eef0aa7321608c327bafbf1b0f51836d599c50e48735ca2ca5bee8c1c8236e",
+      "gitBlob": "db0ef1a1c1f7ed88f81a7aa0ddab602ef0dfc9a9"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-129-p1-repair.md",
+      "bytes": 1771,
+      "sha256": "d3fe6fdb3caa42e27fd0733fd8b091a6fc31084a687dbf3d047dc7418fbae3eb",
+      "gitBlob": "d93eb9f5643b1af06191a33e946f5db4287da2fc"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-131-p1-repair.md",
+      "bytes": 1622,
+      "sha256": "6966592e0ecc2fc620cea9c194e626f8a129f00223e9ef87231d67c6ba183169",
+      "gitBlob": "77c91ef498aeefb1b75895f76b4e9f28223bef50"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-132-p1-repair.md",
+      "bytes": 2172,
+      "sha256": "3954b8c203c0fff6a899062e82b1679b2a53a1bc647abe1fd8e6eba96ca02b50",
+      "gitBlob": "dd7712cff679b0c21603da86bf1024dd42432197"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-133-p1-repair.md",
+      "bytes": 636,
+      "sha256": "2d59fe7328de88b65f156d167ea55d064a1291568d263c8ffa110aa974d51914",
+      "gitBlob": "d3db976005c44eec6fd73a1ff03c64e08994398f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-134-p1-repair.md",
+      "bytes": 867,
+      "sha256": "2a06636548d9a69bf0957cdafeeb6b37d1c44f3758729f37986e554e88d0ae1d",
+      "gitBlob": "52710936ff90de0332f13e00b25d051248c6ecfc"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-135-p1-repair.md",
+      "bytes": 639,
+      "sha256": "b45c0cf35f762b170ecd228f6d9e6a00cb2afde119d6988b560278c3185a73d0",
+      "gitBlob": "e4df5d5e8129f9977477566e4a4b85808a788d3e"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-136-p1-repair.md",
+      "bytes": 951,
+      "sha256": "60b8db1dcfd01f8d736ee9fc46ee6c8c0306a85317a7e6179a9b9fe93936892c",
+      "gitBlob": "8f4e6fd46c1a0ecfa04ed0fade5ddb0db22aed31"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-59-repair.md",
+      "bytes": 2499,
+      "sha256": "e4ea846b73f2d15370edb4922c81e2420c7ceffa56cad22262ec4b2912c0232f",
+      "gitBlob": "016a363a5de5e32c7ca6a95ca8cb920a2fbdcd35"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-60-repair.md",
+      "bytes": 2252,
+      "sha256": "dc0a291f0f134c815653dbb546e31829c0c35179acd0719a4bfca56ed35b81f4",
+      "gitBlob": "a2caab65f7041936f9515e9d6317caff826e3312"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-61-repair.md",
+      "bytes": 1015,
+      "sha256": "c08d527c62d898f8e31c3bccd2554203cb515070478fb5249ed4e20551a98e79",
+      "gitBlob": "dc04743c19ae2628be455fe36471dc7a1c447273"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-82-repair.md",
+      "bytes": 3723,
+      "sha256": "bf712d4ac26a2bb18ac909e4c60180db87d4120a762c740e2d94512b93271b45",
+      "gitBlob": "458ac39b55cc3a294c5b7bc65c495eed54ce9270"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-83-repair.md",
+      "bytes": 3780,
+      "sha256": "2f37b8c3520ef4de879dd82e0759149deda2a4db48967469d622a2c1f77d39f2",
+      "gitBlob": "16666f0f865133bb991ff7d8e9dc035c4cec4242"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-84-repair.md",
+      "bytes": 3697,
+      "sha256": "3027b06233357b23ddc8af43ca02e428e1b5529e636687e245fd865c4bc2ad19",
+      "gitBlob": "76ae015dae1c58a782978f74233e843ad4920b34"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-85-repair.md",
+      "bytes": 5812,
+      "sha256": "3340a8e8fc599965284c28f883a16fa1e3bf61002baf1d09a9ce5a271e924551",
+      "gitBlob": "7d45098b46fc35a4ef46f23be9cd351c87c5e9ba"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-86-repair.md",
+      "bytes": 5220,
+      "sha256": "88db1be6e82df8656dae939916d4ca01ae09793fd81fd0682ad43f088642fde2",
+      "gitBlob": "8c810710dbb249a4e0a1d6530e564d3150580ba3"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-87-repair.md",
+      "bytes": 2981,
+      "sha256": "6dfaf4aab861dcd121bdae1999fc52c9aa0d6ba39b275e0fe00cd8d0ba97194d",
+      "gitBlob": "9c831d215ceab2909497724fb1193041be1a706d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-88-repair.md",
+      "bytes": 3749,
+      "sha256": "052a01e5f23351174fd75636b1b2955b76106a8de061f9d083e23be6308b2e56",
+      "gitBlob": "65ea2e47c851e958d75f7eacb3c8ba35657a3a27"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-89-repair.md",
+      "bytes": 2690,
+      "sha256": "e866dee44a53455bb7ef266bb2920767015ad643f6ae988b54de241702324feb",
+      "gitBlob": "1b1b650198e4e4aff24ffad14ddf13697257a99f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-90-repair.md",
+      "bytes": 6354,
+      "sha256": "4bfb4a844bb2f39bc6e325e52c3197a329841d05ba0da30fc5b85db4a7f57e57",
+      "gitBlob": "7e61d52dd8f9eb3beb70dadfc8e7c0723bfce204"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-91-host-pin-repair.md",
+      "bytes": 3292,
+      "sha256": "6ba933cfb04e58f336b3550d1514b33e0b572299344cd731a6b9444863189d18",
+      "gitBlob": "bdd6c866ae74a7e15d3d50ba029da46a6b2e7821"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-92-governance-drift-repair.md",
+      "bytes": 2562,
+      "sha256": "da3b5c56760d836fba31aba5b00a09dbac43c0cac599712167e7190ab7fe70ee",
+      "gitBlob": "643112c7312a3ea0696ac654628659086d4a3827"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-93-gov004-singleton-repair.md",
+      "bytes": 2905,
+      "sha256": "c32cb63b5715172218c1385a8c4cd43ca92723fca45057905f82c847d36751c5",
+      "gitBlob": "e88dcd352eb3551c26c9d7713cea924675fe1afb"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-94-gov004-lexical-closure-repair.md",
+      "bytes": 3998,
+      "sha256": "a09d57ac29ec11851e3d3a5bce8c44ccce7e9dba2722f68eb9d0fcf0751a1af1",
+      "gitBlob": "08551c067ba9c1de88c1297c7be7c5f6aa7bf0c0"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-95-two-p1-repair.md",
+      "bytes": 4055,
+      "sha256": "0028b01c68ae29331cd590c9795666c6ea823010365acb46229e4fe00ad3947a",
+      "gitBlob": "c0d7eafcb2903fc594a4dd5c33f031f0ff3c09d7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-96-p1-repair.md",
+      "bytes": 3495,
+      "sha256": "8f17cc6d2c042961a805a816be6d9d66018cc91875727554c90c1949dfb253d5",
+      "gitBlob": "080c3dd3e28196b6e4047ce94cba4914aa7a581d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-97-p1-repair.md",
+      "bytes": 4174,
+      "sha256": "37d5986defcc09d92b80177e2542c7bf9803df092cae5b5f64552535281777ec",
+      "gitBlob": "038037ef20def88f16053c85434afdd7ed880d94"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-round-98-p1-repair.md",
+      "bytes": 3772,
+      "sha256": "6dc96ee4ba7f424cae4d519aa7104f2ca7abc0203ee92dc7c8ec2ae8cbcdd37f",
+      "gitBlob": "258909b8a49034c089ac8e87fcb8eee610d7aed5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements.md",
+      "bytes": 54364,
+      "sha256": "6e5d234ec7e817ec49cf0ef95f6de877f97daf4b762d22fb301b40b48b21f399",
+      "gitBlob": "0854261109e8e4ed4912f90e36c8ef7adf32a448"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-installation-contract.md",
+      "bytes": 43349,
+      "sha256": "740d8d9b38e6afe06243f0e2d1cf2cff173c4ca4746ee78bd9d8957fd7afbc24",
+      "gitBlob": "e437450ab5652e7caff40de583fc57762a7490a2"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-transaction-contract.md",
+      "bytes": 38196,
+      "sha256": "685f34c5ebfa4786f447fa6546df727969dbcb0d68af3e7bc2980189fe4544f2",
+      "gitBlob": "d704465d32648cfa8c73b5847e140ce347eea623"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/scoring-contract.md",
+      "bytes": 17613,
+      "sha256": "9a3af5b19b6baa71a22d4b30bc625bb2b5a2db62b7c0b2ae7614a87d4c5a7662",
+      "gitBlob": "a19db38ed36f8f84aa074d43616e3a1b1e90d76d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/sector-benchmark-contract.md",
+      "bytes": 3449,
+      "sha256": "35a12d087cae2904bde083fb8c3a4513ad7146689740de829a148d821a2c8e15",
+      "gitBlob": "2609dc0caa15a4d891c652e141671038239e1983"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/sector-cycle-contract.md",
+      "bytes": 2387,
+      "sha256": "1ab06df0a7408a8aef7c59251f59c153c1d416285a536c723a1e33b1961ee00e",
+      "gitBlob": "50f2cdf0c758092a16fc828279ddbae8de873872"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/sector-reference-contract.md",
+      "bytes": 11527,
+      "sha256": "74b20de0a30734fbf49bf95de4164fa431fedd9a72dda32c302c9e244a365974",
+      "gitBlob": "9e5a4efd5a1e117ccaf1335fe047c46cf55cb9db"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/sector-taxonomy-contract.md",
+      "bytes": 2883,
+      "sha256": "f5a1cb183b4a1b544f255acd5f0945089cf2ec313af9e54731d932fc31fd44f1",
+      "gitBlob": "eaf85a74632b8490e5be1f9259975b4482fd38a1"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/sector-taxonomy-map-v3.json",
+      "bytes": 1006,
+      "sha256": "ecf832761dac1c1ad9ce36f5a68719cd2f728c1ddf2cf58ff319ea907b73f7ec",
+      "gitBlob": "0de05911b7eda51d7b4e914672a1d9576716a512"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/shadow-evaluation-contract.md",
+      "bytes": 26063,
+      "sha256": "3669a1dfa36f75b6432112ae00a0d834493b264ef9d431c29ed2c141b1f6aae1",
+      "gitBlob": "37c57643c7fe66ea48c9d9b619b1caf00a1f4820"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/source-adapter-contract.md",
+      "bytes": 16182,
+      "sha256": "4f3380504048067c59c370d1cebc100a342216887a19f136fcef380d2e1602d2",
+      "gitBlob": "9e5a4fb8c9aa504e8372449de8aba1b174a36fc5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/source-led-opportunity-engine-v3.13-decision-integrity-amendment.md",
+      "bytes": 21373,
+      "sha256": "717731ab4abf6722426d5ee73259319bfbebfa5756bbc1adbfedd11226649838",
+      "gitBlob": "b76578791c52df551377997da149f937c9a14ca0"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md",
+      "bytes": 7668,
+      "sha256": "db3b6c69a456bd62591b9e48669ce25c8460bdfc03fb3d8d7297431a054d8a77",
+      "gitBlob": "e2924462f310b25d104f47dc012e5bdd28a3543e"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/source-matrix.md",
+      "bytes": 12627,
+      "sha256": "f826d403c8c4e9df421ac47950a8b55bb7252667fb2561a3d9fdbd1eb533c3ad",
+      "gitBlob": "74e6de4acad9732215ae79dc8429ac90d20e429d"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json",
+      "bytes": 33417,
+      "sha256": "9ec16e3c703a0f42c5700d6225c4a94ab2f56f81ae139fc1da2f9fda2ca6c3e3",
+      "gitBlob": "438a36604fc9bb2a0768a1750eb8b860ced0793e"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/storage-schema-contract.md",
+      "bytes": 116043,
+      "sha256": "58f6e6ef76e7221030d022f33bc0f12e100dce2522b55ab6b88e038f0be36306",
+      "gitBlob": "656881eeb655d581b7917e32912213030ea59b20"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/tasks.md",
+      "bytes": 153916,
+      "sha256": "d96e3dd9119f8ec2a64f1cec4bd472769563fe6d1a33b9d97f16dfe460f401d3",
+      "gitBlob": "e1991a6b9fbad13ee200d3a62bc21796b8d5117b"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/technical-decision-contract.md",
+      "bytes": 10862,
+      "sha256": "66fbe6eeab921fa6305dd99ad6b3ea357aac5207ada13ce2428b6b044d558c1b",
+      "gitBlob": "494e964f2f506109a4dd547dbb56a40c40e0258f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/trading-calendar-contract.md",
+      "bytes": 10670,
+      "sha256": "ea130136d2fd99864008550cf72719cb3ce5b773df61bfc289c0809990a22d3b",
+      "gitBlob": "f48d952fcb065eeb75de76f61166850aeaf31f19"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3-detail-contract.md",
+      "bytes": 6203,
+      "sha256": "a87d5dda2434b97412d4d678752b6cc76c53036dbe4c9d7b339ab253f8046917",
+      "gitBlob": "3e970031fbe6f1ba4001ebf4bc9e41f328fd0696"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.1-heartbeat-resume-amendment.md",
+      "bytes": 3334,
+      "sha256": "42117b193b48ec0ef9fb668b0ee2462aaa8540d4cc26a9ec70ae3a5fc00a2774",
+      "gitBlob": "043242be1ebbb75a215e9234f7beb49a632b3cdd"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.10-same-transaction-visibility-amendment.md",
+      "bytes": 2186,
+      "sha256": "ea33860318a177f2ab3306b5e1637eb8b3fd6ff09c9dc28a2e54c7870effa46c",
+      "gitBlob": "0fc2e62bf3cbae3c99656401ae51fccee34414d3"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.11-calendar-recovery-amendment.md",
+      "bytes": 3716,
+      "sha256": "1992f24013de11f9ac8405548d827236aaa8247a130a7b402a365b3285737376",
+      "gitBlob": "f421e9a8203c182fa827ddf586792b85e725e31a"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.12-candidate-fact-plane-bound-amendment.md",
+      "bytes": 1167,
+      "sha256": "562d6a29fb301727a4a8328b1f30f62af3d8e48c842f77a0a94efa7ebb8fb4da",
+      "gitBlob": "f476f3fe40bc6a24c705a66aeb04d6aa0320a993"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.2-activation-window-amendment.md",
+      "bytes": 2047,
+      "sha256": "dffdc0b2728dfd93d50a2a3486896b093a8198608b25ea427696fc66b9956524",
+      "gitBlob": "dbae54c0a4f0cc53013ffd4f3da1e22bf46b452f"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.21-frozen-acquisition-release-amendment.md",
+      "bytes": 5709,
+      "sha256": "91ad7cf5bbc1d309adb20ef3004377e793f565ee821e8ebda3d7da66ffdebba3",
+      "gitBlob": "f2cd639309d19a58e02099b97e23a1f4d6cd4e13"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.8-ingestion-lease-amendment.md",
+      "bytes": 4922,
+      "sha256": "fea276be681de3a6e3556957d844e17b60d01a5e8e6de0001c0401b0d566bcf4",
+      "gitBlob": "d8e04fc2de8be6ce5812c561b883d1a135596a27"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.9-transaction-time-amendment.md",
+      "bytes": 4826,
+      "sha256": "ba3f2f0a64361bb33ab0c31a4743e60de62bfd7481af60175437275c4fc583f7",
+      "gitBlob": "f2f3d03c991e8fc90f844e72352c35a57ba4b417"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.17-source-led-actionability-amendment.md",
+      "bytes": 3764,
+      "sha256": "b9c75512f581cd1ab484efaa70df21ce5f3e6bd1d2d66cbcd4c760b08000a380",
+      "gitBlob": "5b97fdcf73f9db7dea8b9e479eb0d19016278799"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.18-source-led-research-dossier-amendment.md",
+      "bytes": 4102,
+      "sha256": "f1ad740d42dc736e2d75eb78489025b2c2710cd1d312fb7e5e061c21dcff7d8c",
+      "gitBlob": "3f3ca9e88a6bd310174ce1bb2c76873055c39bd2"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.19-release-reconciliation-amendment.md",
+      "bytes": 3795,
+      "sha256": "f4780215fced7957be7ac6acd90f8ef0ff0784fcc733726ff15447bbea8e1d0b",
+      "gitBlob": "cd5709a8d15a90ba38127eba50cd10178d544525"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.20-kol-first-runtime-recovery-amendment.md",
+      "bytes": 3833,
+      "sha256": "8b267f0d91c567b7520cd348b804513c4835d76705974c31523c373269972b0b",
+      "gitBlob": "2ea2c3728417a0b9040c4c284218223da0e3becb"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v6-no-global-shadow-authority-amendment.md",
+      "bytes": 3946,
+      "sha256": "95cfcf50288e7e467c96327f8326e73b5370bbfa60268dd403bb046b1d8f72af",
+      "gitBlob": "9bd30df73546d508ae8db71f2d5072eb3f5a74e5"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/valuation-contract.md",
+      "bytes": 26001,
+      "sha256": "1c9a3b14e367f661e6752c4cb4c42a4e551fd0a2b725f069472925b42c719e6b",
+      "gitBlob": "409fe2e5c6c53e5d8f14979959dd8bbaf652cf09"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/verification-results.md",
+      "bytes": 12008,
+      "sha256": "3df6fe8297f7c9d919fb2df3d6dc4cf02b74c4a6dfba71973ce2baac4f7bc9b3",
+      "gitBlob": "419156254f6a7fd45e2d250f8fa59753811002f7"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/worktree-inventory-v3.16.21.md",
+      "bytes": 2949,
+      "sha256": "2acdb8477145fee6ea0a85325df3681a2184223d6f1f8d7825f25eda9f8e77b2",
+      "gitBlob": "120221b8603070098333252000488f7dbb9ecdc8"
+    },
+    {
+      "path": "migrations/20260228_opportunity_engine.sql",
+      "bytes": 8816,
+      "sha256": "61e72af43fdddaf70cd6fc2dca581840fdcd76062ce72d1ea8d90d723abf6574",
+      "gitBlob": "e608229d5451822103195de62ab61af2b839715a"
+    },
+    {
+      "path": "migrations/20260301_release_ops.sql",
+      "bytes": 2672,
+      "sha256": "faf82f3a7a22b2d4b69b749550264262c0aeaba75b9bbacf80d8e03d94932804",
+      "gitBlob": "145b53c59878365bc59dbb6f3336500ab21f7644"
+    },
+    {
+      "path": "migrations/20260314_social_signals_bulltalk.sql",
+      "bytes": 251,
+      "sha256": "5a38d171d722bf6efad3ea3bfac38e900ac79fb1fbfc2c46237d4ee5100404ac",
+      "gitBlob": "f72e4e8cd90a26a51c92b32d4d76f943aba90be6"
+    },
+    {
+      "path": "migrations/20260314_story_alpha_radar.sql",
+      "bytes": 10645,
+      "sha256": "3dc57ee882a7b7e06262317cc8796f5d1154144a20b0e8025fa955802817f994",
+      "gitBlob": "15acb95a1198be3dfedffb9869c349d877ea9ef1"
+    },
+    {
+      "path": "migrations/20260314_story_alpha_radar_followup.sql",
+      "bytes": 2191,
+      "sha256": "2707af592354eccfef6011d5f8edd5b58b18c883921f2c2d7effc9e662545899",
+      "gitBlob": "16ebee45e6ea36ac19473f17f637d1a0a7ec5b89"
+    },
+    {
+      "path": "migrations/20260315_research_runtime_v21.sql",
+      "bytes": 3962,
+      "sha256": "9b98539eb46a1a6590c3ba01a7641e39596079a7ff59a0abca423a90257dfef0",
+      "gitBlob": "d976ea9b17a27b7924616a079d19dfdd17be11d3"
+    },
+    {
+      "path": "migrations/20260315_research_system_v2.sql",
+      "bytes": 7713,
+      "sha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+      "gitBlob": "e6dfca0c2aa9430013ae3275bc7162d0ce475619"
+    },
+    {
+      "path": "migrations/20260315_z_source_watchlists_constraints.sql",
+      "bytes": 1688,
+      "sha256": "85c0b9089e6bb4ed9dd03c6f8b4c75e9ce86d064d282fdb556036c5c91690f99",
+      "gitBlob": "c08a4994cdb8f290e5b321762c2c33f33e6e9c6b"
+    },
+    {
+      "path": "migrations/20260316_telegram_kol_channels.sql",
+      "bytes": 654,
+      "sha256": "cdd1b481097c5227b2c1a2ac3a665afa69163eb703d3e64c5b421fce4fed5618",
+      "gitBlob": "449a715d7c4427ac638341928618e8bb9fe11402"
+    },
+    {
+      "path": "migrations/20260317_kol_expansion.sql",
+      "bytes": 1469,
+      "sha256": "56be51d5282ca76179ddce46b992e14a0f41b245cb16d1dc455e6a39de924178",
+      "gitBlob": "257b77e3c2ad16fa8d0884a35ce55e9ba7f6f50d"
+    },
+    {
+      "path": "migrations/20260317_recommendation_history.sql",
+      "bytes": 1066,
+      "sha256": "a3e77abc14f8a504af0a5006a0a9401444a244931e2b0f20a0ab8a43b026e61c",
+      "gitBlob": "10ee9c69d8d635f056c1edad92dfc71f4cdd05e4"
+    },
+    {
+      "path": "migrations/20260510_social_refresh_supabase_runtime.sql",
+      "bytes": 4544,
+      "sha256": "28ba013983908dc4d5063620a5a7b48cc444ae838e13085c7ca7d4820dc016e9",
+      "gitBlob": "8d22e0e6af3b7baf86b90aa894c36c40f5975cce"
+    },
+    {
+      "path": "migrations/20260516_v5_18_broker_cross_theme_model.sql",
+      "bytes": 4107,
+      "sha256": "90c9b032bcb5bff78355ef9a2c9d78a3e2a8bb5f822ebb8a60c1b97f9c9947d0",
+      "gitBlob": "1bc71d65c69fc4c7f7aa808fac2a0e59bec862f7"
+    },
+    {
+      "path": "migrations/20260519_v5_20_social_broker_leak.sql",
+      "bytes": 494,
+      "sha256": "ca34dabd5cb0822555d89c44428efbb257dffa0fbca1ed1caf01b336a0cbd084",
+      "gitBlob": "f9864857d404bdbdebc30d8c6cdd3767fea0e2ae"
+    },
+    {
+      "path": "migrations/20260523_v5_22_ml_ptt_broker_radar.sql",
+      "bytes": 3779,
+      "sha256": "2e0f6748e6ca1836514904cfe54da8cb32cd5febdfd2d75d80e751f2b0b5e78c",
+      "gitBlob": "df30c8edc88197d497a8fc6b5102eceed6514ffc"
+    },
+    {
+      "path": "migrations/20260607_v5_28_revaluation_jobs.sql",
+      "bytes": 3573,
+      "sha256": "643cc995d8e35cdc067e8e46c6a117881e271836b49e5b1dee9c0ad80a55b9df",
+      "gitBlob": "5a9c9ffaff30ada9d5b20b674288680d698ed928"
+    },
+    {
+      "path": "migrations/20260621_supabase_io_budget_indexes.sql",
+      "bytes": 1113,
+      "sha256": "bc9cc62bf2f437c4d44161e8a50ee0555f3e3bd43a2fd5cd30b6de47bc857948",
+      "gitBlob": "29132edd9404f4bc3931b6b91e8f178d7bf72d0e"
+    },
+    {
+      "path": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "bytes": 1023746,
+      "sha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "gitBlob": "c70c6b7366b7b70c2b506ad90427ac9f37d87dfe"
+    },
+    {
+      "path": "migrations/20260809_decision_integrity_v3_13.sql",
+      "bytes": 179700,
+      "sha256": "5e843da1049bc2f075d5f8bf901095b3047c42215fc87ada01a1a984d240f95b",
+      "gitBlob": "f95598869db4d935cffb9d835fbcdce3787e090a"
+    },
+    {
+      "path": "migrations/20260809_product_value_recovery_v3_12.sql",
+      "bytes": 15307,
+      "sha256": "9f2943db6353ef131d45f174556b8a40cd732101ae7bde825f6f187362ff3be6",
+      "gitBlob": "ed6219ba577cf494b4c5f437670fad4ce699a173"
+    },
+    {
+      "path": "migrations/20260811_actionability_recovery_v3_14.sql",
+      "bytes": 56751,
+      "sha256": "43771e50c0e59d2c1e7ed310a6a204283fc782cbd7e0f10f1de87d36389874af",
+      "gitBlob": "2c4aa4a31e39c9e6eaf5760e2a590cf2a3161a3f"
+    },
+    {
+      "path": "migrations/20260813_opportunity_recovery_v3_15.sql",
+      "bytes": 24692,
+      "sha256": "3e4cb338f8773689f5c760e40a9474266ad24e841f7b0e0b2646a5a1467aabb8",
+      "gitBlob": "e4155c5eaef441dd10d4ebee235fd52d972ab6c7"
+    },
+    {
+      "path": "migrations/20260814_official_ingestion_chunk_apply_v3_15.sql",
+      "bytes": 8404,
+      "sha256": "de514842565f02bdcc6408ea3c5b3deac56b88b8b10f7358ba302e74070279fd",
+      "gitBlob": "5d80afe19db23581c754290231d75753da3afb14"
+    },
+    {
+      "path": "migrations/20260816_analysis_payload_reuse_v3_16_15.sql",
+      "bytes": 4030,
+      "sha256": "be158f24dfb860c22b4436a406be926cf417f1badedae233587fdbead110059b",
+      "gitBlob": "da906253b29361a6f548b3adb045cd57c2b2677f"
+    },
+    {
+      "path": "migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql",
+      "bytes": 8267,
+      "sha256": "fff333808d5633c760de56e5e38ef73d14c600185202438c3745c7fe44b078b9",
+      "gitBlob": "f52dd6c698e9dcf47416792642669b4e0cadb884"
+    },
+    {
+      "path": "migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql",
+      "bytes": 4418,
+      "sha256": "c3ac5bbe4e09d1ab08c827e01c773673be9aee95d9b512dab32e2781b21c7dc5",
+      "gitBlob": "6044f56c80dff263ae635124d09e03f90489084d"
+    },
+    {
+      "path": "migrations/20260816_claim_handoff_lease_v3_16.sql",
+      "bytes": 3464,
+      "sha256": "7036c7ce513460c4cef7fa6df08d5bdf2cfefcddfda05c0b8ac84f75b38bc11c",
+      "gitBlob": "3da800f7757ffdac21c87a2437dba47e26038969"
+    },
+    {
+      "path": "migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql",
+      "bytes": 4941,
+      "sha256": "81d6bd393bee34985e7386aee309ec9eec33e87e280b64af3428719a2a280441",
+      "gitBlob": "035ab030d72189578d2d303f18cac3fda2e6d2fe"
+    },
+    {
+      "path": "migrations/20260816_official_ingestion_partial_resume_v3_16.sql",
+      "bytes": 5827,
+      "sha256": "3a57f4671e15c35ee2300ff780de61a0836ac50fed510291a31b21dd8eec8487",
+      "gitBlob": "f8ef6ecd629edc611d8037b14940ba990e3874a6"
+    },
+    {
+      "path": "migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql",
+      "bytes": 910,
+      "sha256": "9a9cc863060072a99d69da7c479cc8a4a8b4b2a009933d0e23b264d37ef9406a",
+      "gitBlob": "3a4b8d74369390ab73d97cdf3b4ec8accf08d2f5"
+    },
+    {
+      "path": "migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql",
+      "bytes": 21545,
+      "sha256": "7f3901bdba9d8c330cfe7131889deb4746dfefedf6e7d31b6cde0feaa94fcc51",
+      "gitBlob": "fc56da4799289ac52c0163f5367328499210f9e5"
+    },
+    {
+      "path": "migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql",
+      "bytes": 5321,
+      "sha256": "34bf9a61b0b736b0f4c4d63a590ae10a64638ab75b16dd4e22be45ee8c50ec63",
+      "gitBlob": "ae5964faa57ff4eafe4ddf26b21b9d5fa9fc6980"
+    },
+    {
+      "path": "migrations/20260817_evaluation_clock_v3_16_20.sql",
+      "bytes": 2414,
+      "sha256": "118314e0b0f3f7b7ea516a40ec81c5a8f148414fce3d9a0cafd635dc2d07c3a3",
+      "gitBlob": "850028eb86b6fd554be89785ab253625aae16b66"
+    },
+    {
+      "path": "migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql",
+      "bytes": 3953,
+      "sha256": "8fc00799dfeeb5ab063320cb0294f27a4b861fa1652634bf45d02bdb4b1080de",
+      "gitBlob": "e0cf23ea08fb58c010bb351521d28d54388ea39b"
+    },
+    {
+      "path": "migrations/20260817_projection_evaluation_supersession_v3_16_21.sql",
+      "bytes": 5252,
+      "sha256": "829c0b5733edbc38834591bcd1b25dd07f07042ed68d6e4b4f3115325a95b62b",
+      "gitBlob": "c172bf614a5f6f8f6720ef4fb3f30dbc84cf4e12"
+    },
+    {
+      "path": "migrations/20260817_provider_acquisition_v3_16_21.sql",
+      "bytes": 14512,
+      "sha256": "b5b0f8e59872c1142f6ed05f19b12689b6c1ee583878a5b49daf6dcecbe8dd8a",
+      "gitBlob": "e2a37cd303d7c64865fdff662e4b69998337e9a1"
+    },
+    {
+      "path": "migrations/20260817_runtime_health_bootstrap_v3_16_19.sql",
+      "bytes": 956,
+      "sha256": "c6d2817a33352e58c9d1dc5ba8d14b26c5633dd01d7f35af76a53879e7493b2c",
+      "gitBlob": "19a381c827290b1318223aa5b913181eaa60eac6"
+    },
+    {
+      "path": "migrations/20260822_candidate_ledger_retention_v3_18.sql",
+      "bytes": 6051,
+      "sha256": "f04e48280e348c2fcc91d5d7d874ede832a77706c42e9562829503ee177bb996",
+      "gitBlob": "6f534dd85018ee890500463723c9e390fc6930cd"
+    },
+    {
+      "path": "migrations/20260823_release_reconciliation_v3_19.sql",
+      "bytes": 21140,
+      "sha256": "bad89a7804139b90c1c214c798020273cbfe0e9e7f3465602ba88313758e616c",
+      "gitBlob": "91b05750e5166cc99bb938c42a057881e5b40fb4"
+    },
+    {
+      "path": "migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql",
+      "bytes": 2776,
+      "sha256": "73da7bfd01f3a76fa8a74366c230da301db5f01b61ec1f58cc70060aa5f3a209",
+      "gitBlob": "69437e8a0ab1845ca91564be6a3d1b39c444f387"
+    },
+    {
+      "path": "migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql",
+      "bytes": 825,
+      "sha256": "c5d6f4f5bbd3705c26803adba27de62ed15130096c01f57ed849991bcab42af2",
+      "gitBlob": "8c90b0c25229f7afa2883a1c3f7cf482d22c6147"
+    },
+    {
+      "path": "migrations/20260828_candidate_retention_authority_v3_19_10.sql",
+      "bytes": 9549,
+      "sha256": "d4faa743a166917c203f31dc6733784ea22058bf759881be4905348c1eb2148e",
+      "gitBlob": "85ba89881261e4e5bbc3bc43fda7ab361e3b9edd"
+    },
+    {
+      "path": "migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql",
+      "bytes": 3030,
+      "sha256": "f05edd50e6f9e799853c117603bf8b29f4573b979441c95a8a5c911a0f568334",
+      "gitBlob": "218f4bcad0557c3bd396d707eb303849d03559e4"
+    },
+    {
+      "path": "migrations/20260828_final_claim_handoff_lease_v3_19_16.sql",
+      "bytes": 5416,
+      "sha256": "f27aa2757d47aeb7c2328569dbd364c1ef93978f746ed3cae83e35233356bebf",
+      "gitBlob": "2cee98a740b682447fefa81f048b669eb1474b76"
+    },
+    {
+      "path": "migrations/20260828_full_candidate_retention_authority_v3_19_11.sql",
+      "bytes": 11665,
+      "sha256": "1a9e1a6dbe59ebe72a950a9af2ae795bc8b5c04b07002c49519da91e1924e0f4",
+      "gitBlob": "00d12ba1db92b11160762d48a4425dae55d5a9ae"
+    },
+    {
+      "path": "migrations/20260828_kol_first_runtime_recovery_v3_20.sql",
+      "bytes": 24653,
+      "sha256": "987eafaa934c375437ca5495891148d3619f101fa538d379b221c37921edfbc2",
+      "gitBlob": "28d0aeba90782822dbe5f0083fa95f59e5d270f0"
+    },
+    {
+      "path": "migrations/20260828_legacy_evaluation_schema_v3_19_6.sql",
+      "bytes": 1847,
+      "sha256": "7eaa03624dfed1548313ea745e5446248ca303cceb4762278708267b429d7093",
+      "gitBlob": "407fa84fa4100a1105c3b60c240d1e4fee634da6"
+    },
+    {
+      "path": "migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql",
+      "bytes": 8357,
+      "sha256": "5a8fb46c8e5370d0d78494356cee6bfeff53de9c3286c070dad66c7e62a65d74",
+      "gitBlob": "f9849681b40cd7e7735ca134c8c3cf6516dffa2c"
+    },
+    {
+      "path": "migrations/20260828_reused_acquisition_lineage_v3_19_7.sql",
+      "bytes": 6191,
+      "sha256": "b5c60ac5d4a3a81b4313224a39bfc3e3ef0a155e68aa23a01d9d45e946d5b54d",
+      "gitBlob": "07de1c99957e4ca740d2c2a752fe6e8b98f680c2"
+    },
+    {
+      "path": "migrations/20260829_v320_kol_projection_marker.sql",
+      "bytes": 6508,
+      "sha256": "f24e6f3ad03ef3dac263a42b35b3713c98a95a7571ed8ce52652b0a2d8c9abd2",
+      "gitBlob": "fd5f1f1e38dc376aefd3bef722a5a40e5e9de499"
+    },
+    {
+      "path": "migrations/20260829_v320_kol_source_authority_seed.sql",
+      "bytes": 8325,
+      "sha256": "e386cb8239115083be8c4c282b7bae43a2f2caa13e7e9e8bb2e6bf8d81164207",
+      "gitBlob": "247127314d04ddea020d5c351c1ea76787557a60"
+    },
+    {
+      "path": "migrations/20260829_v320_source_completion_cardinality_repair.sql",
+      "bytes": 3786,
+      "sha256": "0b2021a25fe9008e75fa32fce82236f43742aeec0bcb6a28f2a055aa8dd4f77e",
+      "gitBlob": "3c1e4356e84058a65ec15a7de9c309fce0c8013c"
+    },
+    {
+      "path": "migrations/20260830_source_ranking_v2.sql",
+      "bytes": 17381,
+      "sha256": "8bff800465680306da4aa2bf84321af564132adf021d4ff53fd001759d11f9ae",
+      "gitBlob": "b6dd04a18dc74c4803065ebd99e1c7c137f5af58"
+    },
+    {
+      "path": "migrations/20260830_v320_expired_unclaimed_run_reaper.sql",
+      "bytes": 4688,
+      "sha256": "638c2933f2b2bc7a94967baf4d9791db12b48917a396109100e86b558874e317",
+      "gitBlob": "2169db8f7ea691125ff921464152d759fc5f3b46"
+    },
+    {
+      "path": "migrations/20260830_v320_kol_claim_payload_compaction.sql",
+      "bytes": 7691,
+      "sha256": "25adad2dd860b71bf0833f2634a5a8795c5ba0b32348db709251451a9004cb75",
+      "gitBlob": "db42cb6a79729b4437a959d3126360bf2f25dc83"
+    },
+    {
+      "path": "migrations/20260830_v320_kol_retention_bridge.sql",
+      "bytes": 13772,
+      "sha256": "9e8bd294444f16ce8ab0e1b094e47d701ad56c253ff7b9991c0b38248a6d5040",
+      "gitBlob": "b004f29e754db2749476019627da8996876555f7"
+    },
+    {
+      "path": "migrations/20260830_v320_kol_retention_owner_boundary.sql",
+      "bytes": 8286,
+      "sha256": "550efd5ce9666730b22a1e786ba69fbc35d41374094c3b38ea96df6871bac848",
+      "gitBlob": "9971e1fc15d56460b6e7f7753de2ce91f3f58eb4"
+    },
+    {
+      "path": "migrations/20260831_candidate_research_official_calendar.sql",
+      "bytes": 2261,
+      "sha256": "7ae7c78d692e2acdf88378d22bb70edf3d929f15308a1dee02999990d40a43c1",
+      "gitBlob": "54f8b8903cca83d6f13613fe1058fb4078b35c82"
+    },
+    {
+      "path": "migrations/20260831_candidate_shadow_performance.sql",
+      "bytes": 17125,
+      "sha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+      "gitBlob": "416f5df11dcb5135591e5abddeafbaa8f9a5d9cf"
+    },
+    {
+      "path": "migrations/20260901_source_research_shadow_v2.sql",
+      "bytes": 16015,
+      "sha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "gitBlob": "2fbc579a08efbfdfe09b16c07b4ebf2b55061c43"
+    },
+    {
+      "path": "migrations/20260902_official_market_evidence_history.sql",
+      "bytes": 1155,
+      "sha256": "6f3a58e49d6f9a0f26a07f864e914dbb2b390f49fbac3da01dcd3d17c72358e4",
+      "gitBlob": "6ee5e5f2c61b69a470e9b3fbd0887a72ad82cc61"
+    },
+    {
+      "path": "migrations/20260906_authority_pagination_v2.sql",
+      "bytes": 2926,
+      "sha256": "535071bb33c5a4a2c191605e25a288b63e3c0d447551f30f3f6fdb7d2aa7323e",
+      "gitBlob": "847a6f31d965a6c48062e311d7d0ad7ebb0c08fa"
+    },
+    {
+      "path": "migrations/20260906_candidate_dossier_v4.sql",
+      "bytes": 11523,
+      "sha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016",
+      "gitBlob": "dee480e983c4ccd02dd325a512ff447de55347c1"
+    },
+    {
+      "path": "migrations/20260906_financial_acquisition_v4.sql",
+      "bytes": 12439,
+      "sha256": "1b7ce6cda7e52a110386b20cccb5c8c70bf4552edc9d705469c7928599beccb6",
+      "gitBlob": "931778e0049f7668cd7cecd8878228e4d983e81e"
+    },
+    {
+      "path": "migrations/20260906_finmind_financial_fallback_v5.sql",
+      "bytes": 11471,
+      "sha256": "4b5434b8b297b3858dd30caacb664d85dd7a4cefef1b7b60382f8a4d6865f50f",
+      "gitBlob": "e9b0f61678bbf57dfe5c29cdd393acefca4949ac"
+    },
+    {
+      "path": "migrations/20260906_shadow_signal_v4.sql",
+      "bytes": 7270,
+      "sha256": "1369698017f4381ceeea32c69b70a25b7061976bbe3fdd94795a7948f7e0d587",
+      "gitBlob": "b1669d33d2b6a8b2e31e9b327f63a284a5dc033e"
+    },
+    {
+      "path": "migrations/20260906_source_identity_v4.sql",
+      "bytes": 4155,
+      "sha256": "2c38cdc59171299fc039b360fb0bd2aba5ed9d7a5fafe92d226652453dc5f922",
+      "gitBlob": "5a815eeb1bcbfa029cd60733c923cae128132a65"
+    },
+    {
+      "path": "migrations/20260906_taiwan_data_provider_v5.sql",
+      "bytes": 35364,
+      "sha256": "7c802310ca0ec68dd60e1b072cc531d1b0f9005fd6598d5d9f3145f50d3d5553",
+      "gitBlob": "70282e9af1f2310b8e477b6d44841692e5831bfe"
+    },
+    {
+      "path": "migrations/20260906_truth_research_v3.sql",
+      "bytes": 10103,
+      "sha256": "4120225ac601dfb8cce49ace8f865f400c71112dce423c53bdf68b9892861dbb",
+      "gitBlob": "99aa94d63dd53099d347a7cdb96acea4f89766b9"
+    },
+    {
+      "path": "migrations/20260907_02_candidate_financial_documents_v6.sql",
+      "bytes": 28028,
+      "sha256": "db499bc50986a31763e1bf200db9e1f96013db6bd7686fbbd26e93b64a5abf21",
+      "gitBlob": "6a45fca6b052055c6519b93e03650ee946c01539"
+    },
+    {
+      "path": "migrations/20260907_03_candidate_financial_document_parser_v6.sql",
+      "bytes": 7191,
+      "sha256": "a1ace3767f81086e4d4d3c32304944e25fb70f283aef1bcefdabd5c8989d07c2",
+      "gitBlob": "9b90b8273b1c3c7b4f6aaed13cbdce9c63408ea1"
+    },
+    {
+      "path": "migrations/20260907_04_enterprise_multiple_history_v6.sql",
+      "bytes": 6136,
+      "sha256": "8500569d0b127dbfb976f9b6f3ede7b3adef8faaa929accdddf95ff035b51ed2",
+      "gitBlob": "c47e1248a3687bf13b3bc1c42d480e8042ee3cc1"
+    },
+    {
+      "path": "migrations/20260907_candidate_dossier_outbox_v5.sql",
+      "bytes": 2876,
+      "sha256": "48e3749f43d2eea1c2c2a4546bac9a001cdebd4b87d257f021e8260ae8f298f5",
+      "gitBlob": "142a5aa5a61b92dbc9bb8116c074707873ee82ed"
+    },
+    {
+      "path": "migrations/20260907_evidence_valuation_contract_v6.sql",
+      "bytes": 6792,
+      "sha256": "48357e2d7a036c8d484e454920059a749db3df2ba9678eae2766618f85ec7571",
+      "gitBlob": "44da6b3d32f953dbf2050f9faef26039e933b4a9"
+    },
+    {
+      "path": "migrations/20260907_shadow_replay_payload_v5.sql",
+      "bytes": 3836,
+      "sha256": "db705194fc8f96b681ff1a4e937b94c1408fc864cefb362981fb8f44674fa03f",
+      "gitBlob": "4a27849b5eb76f44374fdd28006c7aa9cf38b82e"
+    },
+    {
+      "path": "migrations/20260908_01_financial_failure_rpc_hotfix_v6.sql",
+      "bytes": 4163,
+      "sha256": "d9fcb1db86beb1b9918d1a8f493a4687543ef38d56c05ed79fcfe2be32c78805",
+      "gitBlob": "df3c8b19d2a861028e312b0e720dfa5753587f35"
+    },
+    {
+      "path": "migrations/20260908_threads_oauth_lifecycle_v7.sql",
+      "bytes": 7425,
+      "sha256": "9918cb5e3211fdf1029343113a3d2c383a7c74d5c068466ba76309fad4f4fe89",
+      "gitBlob": "4b6bdb1b786e9bf48f98ad161cc4bbad2732b7f9"
+    },
+    {
+      "path": "migrations/20260909_official_financial_validation_receipts.sql",
+      "bytes": 14359,
+      "sha256": "8fa6a6208c7cb32faafd92b247dc8403d48751481a2f02f746aa95986c001c89",
+      "gitBlob": "ea85d364f884ce78181ddce53182219db7c9cef3"
+    },
+    {
+      "path": "migrations/20260911_02_financial_field_work_fairness.sql",
+      "bytes": 4769,
+      "sha256": "84b14e32489d060de94c6ab1c3d604687962b0065b2b357c3deb35348b3b5030",
+      "gitBlob": "95ae39b5a02609018bd22194e68d352c71ba8a85"
+    },
+    {
+      "path": "migrations/20260911_03_financial_document_job_links.sql",
+      "bytes": 19729,
+      "sha256": "bbb766fcba98671bd31541874ffaf0419e82b437044ae773c6c876fb8b006701",
+      "gitBlob": "c7e561d73679dee2c3d17fe7bbc2affaaf781a14"
+    },
+    {
+      "path": "migrations/20260911_04_taiwan_candidate_refresh_queue.sql",
+      "bytes": 17557,
+      "sha256": "85bb399d63a96e58d84282b1d2edd2338d86c9343ce8c15a0672a6b53db1d4ff",
+      "gitBlob": "ae331876c731f412898dd0a9b616855ebeef9e13"
+    },
+    {
+      "path": "migrations/20260911_05_financial_fact_isolation_v10.sql",
+      "bytes": 48427,
+      "sha256": "819af34785d57379c2f2c39168d50d1fb29d317b0d33ece60bcb1c6370fa03f5",
+      "gitBlob": "b44487bdf4f664a179bc9ef69375328828fca071"
+    },
+    {
+      "path": "migrations/20260911_candidate_financial_fact_manifest_v8.sql",
+      "bytes": 25437,
+      "sha256": "1f148c0662e19af1d80871db11c43956b52d16325b8b09c2634e21e74cc4f3fc",
+      "gitBlob": "9892065568510912d332c2971fb14f656a450fd3"
+    },
+    {
+      "path": "migrations/20260911_candidate_history_backfill_v1.sql",
+      "bytes": 12642,
+      "sha256": "b95d8af87eb437824d7ffb3d495222651d593c89a9214c25883f1cad3df9bd59",
+      "gitBlob": "b2f635f270c25d6b7da6ba8ed8e502e36117887c"
+    },
+    {
+      "path": "migrations/20260911_contabo_data_plane_v1.sql",
+      "bytes": 19041,
+      "sha256": "2c2fd3413e2c633d70ccb171885837118a50e82a986e947fcf1dd3100c109ec1",
+      "gitBlob": "f3fa038cf6695f9ff8a8b422b1b3a64ed6da565a"
+    },
+    {
+      "path": "migrations/20260911_retention_archive_v1.sql",
+      "bytes": 36731,
+      "sha256": "9231fca2848b41804dbaa892f8dce533e7c6e0369016e2e34269240e48a2b0a0",
+      "gitBlob": "03c3b054704d393c2a05b62ed32f3689bebba491"
+    },
+    {
+      "path": "migrations/20260911_retention_archive_v2.sql",
+      "bytes": 31095,
+      "sha256": "dcedeb2094e6445f53f38d134708bdc212439dee4d25404d68ba0f2f153d5bab",
+      "gitBlob": "63bff76e812a1917ac3a4d1bdc20f965012e24d8"
+    },
+    {
+      "path": "migrations/20260911_v320_source_terminal_projection_authority.sql",
+      "bytes": 6471,
+      "sha256": "d4638c3d322fc3df0511803c75e28250adc96a1032d1aed219e68b4461579728",
+      "gitBlob": "8c09ea7f236a0ed358502a3118da8b923f326581"
+    },
+    {
+      "path": "migrations/20260912_02_financial_validation_status_text_hotfix.sql",
+      "bytes": 1991,
+      "sha256": "f17158f0dc73752e6a156682241b9e2a5b35f6451a20e0e661a5e55f71e8d46b",
+      "gitBlob": "0c76a94817374c19a186e539ab5f26400857e851"
+    },
+    {
+      "path": "migrations/20260912_legacy_runtime_compaction_receipts_v1.sql",
+      "bytes": 2253,
+      "sha256": "0917cfa9dc0332a23a928c7a63e4c8bea09a58ceb2caade1ef93e898a7534b71",
+      "gitBlob": "f5b103aa504db34f9dc46c1c25dad62b50037b41"
+    },
+    {
+      "path": "migrations/20260913_candidate_financial_prelisting_v7.sql",
+      "bytes": 2949,
+      "sha256": "0576ff8130cbac06771561640a3bb35c1ff6c1b3af081801d25c14699f47abd7",
+      "gitBlob": "058512f1cb0bd3dfa5d6574df67cac5957edb943"
+    },
+    {
+      "path": "migrations/20260913_candidate_financial_stock_scoped_read.sql",
+      "bytes": 2207,
+      "sha256": "c8ef1092dd56b7b0994815660d074230edef44dbf7756fecac5fb47d10c8079c",
+      "gitBlob": "3bbf34f7dc3effc35343ccf7f81055979dfc14ae"
+    },
+    {
+      "path": "migrations/20260913_taiwan_provider_contract_v6.sql",
+      "bytes": 6258,
+      "sha256": "e642f1552b43852f5d319089867f11605470e98e62b40329e69c00a2099ca831",
+      "gitBlob": "8ee81b3b18f4effe71dd53dc5e66cee2c646632a"
+    },
+    {
+      "path": "migrations/20260914_candidate_history_authority_reconciliation_v1.sql",
+      "bytes": 16545,
+      "sha256": "774af9aacedf8433a754fe7c700990f2cf8c06506a83e5e908f8735aa0bff993",
+      "gitBlob": "378baf0000a95296a2eada97bfa1327cfc82a49d"
+    },
+    {
+      "path": "migrations/20260914_taiwan_provider_attempt_size_v9.sql",
+      "bytes": 5533,
+      "sha256": "fb020124c790e4bb762db4bbc977be3ac76e4b109a02610f3cd5a16918542bfb",
+      "gitBlob": "a7d56603a9280893213a1359c985b2540f292be9"
+    },
+    {
+      "path": "migrations/20260919_auo_ir_sources_v1.sql",
+      "bytes": 403,
+      "sha256": "e85586bed799f064fe92ee680210f987df95f825b6ae2f9672d9876392d4863f",
+      "gitBlob": "890f9847f7dc23b3bf009707b0fc57eee2446ab7"
+    },
+    {
+      "path": "migrations/20260920_auo_forward_bvps_pb_contract_v1.sql",
+      "bytes": 1657,
+      "sha256": "3341e1b34f0c94adad78950ebd7092af6233cdac79abb684ce739d3530314d52",
+      "gitBlob": "11a88660ab60e5ba0f6c7d31979f3d4b71137dbe"
+    },
+    {
+      "path": "migrations/20260924_entry_plan_official_action_symbols.sql",
+      "bytes": 3738,
+      "sha256": "cc82ac701bb1ac4db4e2fa8880ac77fa9d90e71ca5925e02ca088dd3d3070968",
+      "gitBlob": "3288b1e1804a3a31e85cfc0dfff7870dd2a2f0ee"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "gitBlob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+    },
+    {
+      "path": "package.json",
+      "bytes": 24733,
+      "sha256": "6dae2b07a0d6ac9e653cc06aba741060a0cb50a0730ab3874e09a3919f0986cc",
+      "gitBlob": "8fa5650773f865612de193c0e85e01b68f6ea8c5"
+    },
+    {
+      "path": "scripts/opportunity-v3/acceptance-gate-runner.mjs",
+      "bytes": 7360,
+      "sha256": "8eb040e2bcfc45cbaad50393b1b0b6f176a6783aceeca5b33345a8181bf6f822",
+      "gitBlob": "e6ec8f6edf458f1c9693a916c40f66529f7f0f7a"
+    },
+    {
+      "path": "scripts/opportunity-v3/acceptance-traceability.test.mjs",
+      "bytes": 185762,
+      "sha256": "809c69156825ff1f0a81ef3d1f5f39bdd845c43c52122769eec94f67541984f1",
+      "gitBlob": "8240ff687b45f80d23974c1da6f801dab61582ed"
+    },
+    {
+      "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+      "bytes": 33975,
+      "sha256": "90b9c6fd6ba1f68b8a378759d0608e6e6aea38a11b2eeab700f8cfaaf2eca78a",
+      "gitBlob": "66291dc2c67eca0bd5f15f2ac61769095b0e42a4"
+    },
+    {
+      "path": "scripts/opportunity-v3/doctor.mjs",
+      "bytes": 5094,
+      "sha256": "d77fedf22fcbefea1ed3b1e632aa6b4fb9f69373b2da50c0319ab07d0f1b63e7",
+      "gitBlob": "abccd92fd71314224ab6a75f02e33a59e6dd0c0b"
+    },
+    {
+      "path": "scripts/opportunity-v3/evaluation-governance-gate.mjs",
+      "bytes": 7661,
+      "sha256": "bd5daf820c525b8f31e522882335cc74e911b1072402222c0276115ea892b707",
+      "gitBlob": "59316ab193fb30e6ac1b16f54550e6f40656773e"
+    },
+    {
+      "path": "scripts/opportunity-v3/fixtures/v313-source-plane-catalog-v1.json",
+      "bytes": 24119,
+      "sha256": "43a951d6f087eebc8aed8a8a02bccbdef886577dd0c22c50bb4ca07fac221569",
+      "gitBlob": "8582f3fc1d50686f6f61c081ffa349141b4c8acd"
+    },
+    {
+      "path": "scripts/opportunity-v3/gate-attestation.mjs",
+      "bytes": 1922,
+      "sha256": "aef0da033c3ebdcf3044ff6f4dde2cf423853992004683ffe7ec9f27b482a727",
+      "gitBlob": "c09699d059ea022ed2f4ca62e7a8a75024e71c19"
+    },
+    {
+      "path": "scripts/opportunity-v3/gate-evidence.mjs",
+      "bytes": 30003,
+      "sha256": "a091e4b461aff208b187c6f03853caa2ce6407f7f05e24f963759e181604109e",
+      "gitBlob": "2bb7dd6a92587f5ae025d13cafb6fda4cde4bfbc"
+    },
+    {
+      "path": "scripts/opportunity-v3/gate-evidence.test.mjs",
+      "bytes": 16624,
+      "sha256": "4ce5e53a74a9987d276a757655ec646b2f873201b8d426016fd309b085eee516",
+      "gitBlob": "6078a8caa514d7346ba9fa8f5ded5f937cba9d0d"
+    },
+    {
+      "path": "scripts/opportunity-v3/help.mjs",
+      "bytes": 1023,
+      "sha256": "f29c8101c2aa3917437e0f695e899fd37743880f5cfb564ceb21b9883b56ee28",
+      "gitBlob": "ce825f5822207e082cadbc23818211620431e4be"
+    },
+    {
+      "path": "scripts/opportunity-v3/internal-health-route-boundary.test.mjs",
+      "bytes": 916,
+      "sha256": "07751e3de977cd5f966b3ed7eb57018b7d363691ad5292f3e294c1d134b4a318",
+      "gitBlob": "dc0457753391921388bdd90751117959d2ab6458"
+    },
+    {
+      "path": "scripts/opportunity-v3/internal-health-route-harness.mjs",
+      "bytes": 2229,
+      "sha256": "8baeb5fa7857ec27443f501ea6779779dd25c091736430bbe4b245ad811fe62d",
+      "gitBlob": "09a1b9315018bcaad223504c1795467033905590"
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-contract.test.mjs",
+      "bytes": 504668,
+      "sha256": "063e0771311048d973896efcb7176f51e071e4514dc926e8f673ce37fcd8f30a",
+      "gitBlob": "61b1a349666dbaf9e80732bc660a2c8b8bf8192d"
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-plan.mjs",
+      "bytes": 4880,
+      "sha256": "ecb58eed30e4c247f4a362c397c8e932cf0ea7ec79b5e279714e2a1c946b622e",
+      "gitBlob": "bb8309d0fad31f77205a8cc9739c285b3e131921"
+    },
+    {
+      "path": "scripts/opportunity-v3/performance-harness.mjs",
+      "bytes": 14234,
+      "sha256": "583e5fcc747ab8a809fcbe4c80ee228990b51db15a54e670d879f35f50c7bde6",
+      "gitBlob": "4dd61b8f7d9c0397a820902031a8df26b0b93f3a"
+    },
+    {
+      "path": "scripts/opportunity-v3/performance.test.mjs",
+      "bytes": 8374,
+      "sha256": "e351ca37ebcd6a0c187ad74f7a0a9f98f1ce39b1b5f3db1c0a0b466f0074c0eb",
+      "gitBlob": "6a5ef56704526a62dd327d6031798e4babfff241"
+    },
+    {
+      "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "bytes": 170307,
+      "sha256": "2f597af461622793cd0f917d4e24b1902f9560e8131a2a94caa2b8507cedac6b",
+      "gitBlob": "973a36660634e9301716dcdb6b8956325609f7a9"
+    },
+    {
+      "path": "scripts/opportunity-v3/protected-code-gate-aggregate.mjs",
+      "bytes": 1318,
+      "sha256": "d6ec0565aaf27824e3c0ddd4a78634a830c43d76d8a4c8daf2c8a0f960fd9c8b",
+      "gitBlob": "6eafa0c9d63873f211083d687d57628565bbcdeb"
+    },
+    {
+      "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs",
+      "bytes": 75901,
+      "sha256": "0906ca3c1cbcac003f0708fd753ec0726874e57a5d68282bd051ca6bd2a2b68c",
+      "gitBlob": "326ba6c0190330b9683a26ca82989aa353a53263"
+    },
+    {
+      "path": "scripts/opportunity-v3/protected-external-gate-worker.test.mjs",
+      "bytes": 35349,
+      "sha256": "a413f4bb235af3ee315a445b6bcbb337f51bffcc4875f1fe5aa4c44abb864161",
+      "gitBlob": "01b8e2e7ab6d19b42d5327ae28d9097d2b07b9b4"
+    },
+    {
+      "path": "scripts/opportunity-v3/protected-gate-root.mjs",
+      "bytes": 6769,
+      "sha256": "0efdb5f213ade24716d33a49ace1b57b05c1da171289cc930225df718c340f91",
+      "gitBlob": "efa2547191a693c63f80901ebf480ba17862c01f"
+    },
+    {
+      "path": "scripts/opportunity-v3/schemas.mjs",
+      "bytes": 649,
+      "sha256": "76535cdfab501d4931c232dcadef14b64d45d8c89ba279d6c995a4d5b60d589c",
+      "gitBlob": "13345fe4a459fae6ab4dd69f644489982f107164"
+    },
+    {
+      "path": "scripts/opportunity-v3/shadow-activation-gate.mjs",
+      "bytes": 12095,
+      "sha256": "c9caa7d261a9f40b0a6ae55dd5386929b4ed8449ee8dfa90873360f339b2f94e",
+      "gitBlob": "b11a1a6391aa5976af9bbc9c5238e3e52d9e039f"
+    },
+    {
+      "path": "scripts/opportunity-v3/sign-internal-request.mjs",
+      "bytes": 4366,
+      "sha256": "1be7e9335fb43f93ea9e50982c0f0d4488f419d0cc557d781cb273613484e6a3",
+      "gitBlob": "7d8513ab2c6821adad750f34aab9174be6eec5de"
+    },
+    {
+      "path": "scripts/opportunity-v3/status.mjs",
+      "bytes": 1956,
+      "sha256": "528c7ff8d205488aeeabfcb6a83db6b4031811c193f7ece1732cdf52bcdff8b8",
+      "gitBlob": "33afaf475e15cb7718d035eb1ffe3b0e41027c73"
+    },
+    {
+      "path": "scripts/opportunity-v3/v313-decision-integrity.test.mjs",
+      "bytes": 120796,
+      "sha256": "a04ef8f1933eb70aa1ef60e288376763b714def207677e579df45dede42068af",
+      "gitBlob": "eabcabef4d46db2549c0ccbc39a0b7f56593527e"
+    },
+    {
+      "path": "scripts/opportunity-v3/v314-actionability-recovery.test.mjs",
+      "bytes": 74957,
+      "sha256": "9c809a743f0f1aa695dcd13e5c4dffcd016766c58bdbb250ea0e9c60b7357477",
+      "gitBlob": "6bafd20a5816a109670f1933ae52054a169bcd54"
+    },
+    {
+      "path": "scripts/opportunity-v3/v315-opportunity-recovery.test.mjs",
+      "bytes": 46235,
+      "sha256": "43caa018f438405168d5867af416aaacf5850f3508b131236c4dd29a811e3e05",
+      "gitBlob": "e6353c4002a98147d680df31cd5a793109e7b4a5"
+    },
+    {
+      "path": "scripts/opportunity-v3/v31621-release-recovery.test.mjs",
+      "bytes": 15334,
+      "sha256": "5462bb7dae96e75b37353cd8166a704462fc52be7988344dad9f31c429242eb8",
+      "gitBlob": "e8ccb799455217c092c8c6d5ab4d51aff9110d32"
+    },
+    {
+      "path": "scripts/opportunity-v3/v317-source-led-actionability.test.mjs",
+      "bytes": 7189,
+      "sha256": "4cf490fa46df8ec79f2fc2921d0894d6b8402c7fab209d859502ecd2725057fc",
+      "gitBlob": "58e54d5220b8f7b3130a9bca8e2af98c0651de64"
+    },
+    {
+      "path": "scripts/opportunity-v3/v318-source-led-research.test.mjs",
+      "bytes": 18025,
+      "sha256": "d56ada323203d95438b455fc8a201d9def9e67aae923a844972d6ddae336fb46",
+      "gitBlob": "2bb043c0046d513a4bb74bc6c8469bb1efadbb2b"
+    },
+    {
+      "path": "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+      "bytes": 11715,
+      "sha256": "6670b1c590c5ca05ea18054461006dab04232965a072742ec9a96f88fa30cba7",
+      "gitBlob": "db6ba56697215f804f7be35bdef214189e70628e"
+    },
+    {
+      "path": "scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+      "bytes": 16039,
+      "sha256": "d7e91177b522c4d6a75d3339ebaa1adfa73d6d9a23227b059d3be8cbb26baf3c",
+      "gitBlob": "a2bbeea0f6e307b2447c41ec5c20665a204d8eaa"
+    },
+    {
+      "path": "scripts/opportunity-v3/write-pcr-fulfillment-record.mjs",
+      "bytes": 7251,
+      "sha256": "83848624ed27962d2708192d17e8c0bf82c2577327b045ae20704fd9f5aa8839",
+      "gitBlob": "ba71ba4a9510edce14d329f3e2991493283926f0"
+    },
+    {
+      "path": "scripts/run-node22.js",
+      "bytes": 1432,
+      "sha256": "08693f6277f8284b50b93c3a641e438e918ab4ed83fadaa8f861e5959b48ee90",
+      "gitBlob": "b778b8bdce6d377637a24423effb8355a4e54f67"
+    },
+    {
+      "path": "scripts/runtime/action-decision.js",
+      "bytes": 1761,
+      "sha256": "2ca1968b1fad1950f6d94aaf7f09c5411910256c7fa7e5b10d3d7c082b417f32",
+      "gitBlob": "e149a38684d036e278f079e799872bc4b8ff24fc"
+    },
+    {
+      "path": "scripts/runtime/analysis-material-change.js",
+      "bytes": 1380,
+      "sha256": "cb5de86203b899de0540a419f8b55c5fe1ed54134f2aaa13cc5b8f889dab24c7",
+      "gitBlob": "c9ac56e46410af5e730817761bdfc0df033c03ec"
+    },
+    {
+      "path": "scripts/runtime/analysis-revision.js",
+      "bytes": 1548,
+      "sha256": "ab5a7370e6e951201c3c6c9035416fbf450df1df9307a0d6a764f0a0e58bb2ce",
+      "gitBlob": "abd76c4f9a9ab942e1ef11bd193dc45ba460eb83"
+    },
+    {
+      "path": "scripts/runtime/auth-source-worker-cli.js",
+      "bytes": 157538,
+      "sha256": "602948f0eb960a78a75a88b0ac6ffa080a8adb6755abe544b8530d93384b22ba",
+      "gitBlob": "08982920dafeb64f7138fa05367748a948b85e79"
+    },
+    {
+      "path": "scripts/runtime/auth-source-worker-installation.js",
+      "bytes": 11543,
+      "sha256": "165739dd256e92a3ffdaf1db34438ab9c88c8fd88b68a3616875ee014a109cb7",
+      "gitBlob": "a3fa6154e55d1c7fb8584873d064fc4de379d9d6"
+    },
+    {
+      "path": "scripts/runtime/auth-source-worker-installer.js",
+      "bytes": 982,
+      "sha256": "4250f70e2dd4836e157f3528c730e22d6296c5a12ff26ace25652ad933a1b072",
+      "gitBlob": "4b74c4411a5b73b0db204ee82db2246d5c328cc3"
+    },
+    {
+      "path": "scripts/runtime/auth-source-worker.js",
+      "bytes": 9799,
+      "sha256": "0b41d558d131c75d9bd5fe26fb1ed3876ccb5ba329bd52295c67a1de82624a1a",
+      "gitBlob": "edfdc2bbc093244a1d573eea638547803ccbe5d6"
+    },
+    {
+      "path": "scripts/runtime/bias-action-cap.js",
+      "bytes": 1638,
+      "sha256": "cb32276f202b080306ce801fe624b005cf4cff14f4daa59946e60dac2ba3eb37",
+      "gitBlob": "b4a6dabed2f00f6e625825ada41c9ccddcee5913"
+    },
+    {
+      "path": "scripts/runtime/bias-technical-history.js",
+      "bytes": 2968,
+      "sha256": "b68378b567289a3f042c72499c55536069fa640122496def721de66128c2036b",
+      "gitBlob": "e499f687ddef68af9b8d73d2ab1476c9518a868b"
+    },
+    {
+      "path": "scripts/runtime/bias-universe-manifest.js",
+      "bytes": 2258,
+      "sha256": "ff5baa00b8afd38473e60045cd3ce147a3dec7b7b9a223e8fc48bad70f091fcb",
+      "gitBlob": "bbcb8037697775bb4bd0dff0397a6d43e221bd21"
+    },
+    {
+      "path": "scripts/runtime/candidate-funnel.js",
+      "bytes": 20302,
+      "sha256": "025f83011a2486d3e0dcdc4b8a374b14ced0e7a562e4c53cfa8278fc108148b6",
+      "gitBlob": "66ca1675d70137abab43fe8591d24c883bea6c52"
+    },
+    {
+      "path": "scripts/runtime/candidate-nomination-authority.js",
+      "bytes": 2612,
+      "sha256": "06e96e92bd3031431bb5fe9f467d133b5f092d5f690b269dc8b0e947e2f41f2b",
+      "gitBlob": "7009b1ae3a8e1d4181553612bf890f51d1bf047d"
+    },
+    {
+      "path": "scripts/runtime/candidate-valuation.js",
+      "bytes": 22277,
+      "sha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58",
+      "gitBlob": "b876fce04e6811b9e87ff4750120060511b4bccf"
+    },
+    {
+      "path": "scripts/runtime/codec.js",
+      "bytes": 2566,
+      "sha256": "c1cd7bc6b391ee88137c792ab6b6b280e2f5ccad77d8e6e815b754d73d76cfbb",
+      "gitBlob": "1683982f54a10c401cd0f7b521abc073bdb05ea1"
+    },
+    {
+      "path": "scripts/runtime/compact-radar-projection.js",
+      "bytes": 42494,
+      "sha256": "a61867b6a19760c7f904f9d49ca5824bcbde3ea99e61cee214d301f7a0164cf1",
+      "gitBlob": "a97add37bf6f8a6a05c5f62b4d7218f103a7c97c"
+    },
+    {
+      "path": "scripts/runtime/comparable-evaluation.js",
+      "bytes": 295,
+      "sha256": "2dd253ca80c93426f5e31843467ae42db4dc9791c179d37debd782267cc8f599",
+      "gitBlob": "41faf71aa6f6afe5863f29c140263b9c87c89106"
+    },
+    {
+      "path": "scripts/runtime/comparison-identity.js",
+      "bytes": 4286,
+      "sha256": "aeaf087e25e3bacb6c8a35d88928616dfcce48a1c0c7d99536bf7c7b82c374c2",
+      "gitBlob": "4c50ae3e1c149ec2f15f3d4d023146a1eb93c3d0"
+    },
+    {
+      "path": "scripts/runtime/credential-resolver.js",
+      "bytes": 7431,
+      "sha256": "6959e3ca22aebedd9e28cfd1c7926f63f9c64a194bf1cd183d6535b37eb29102",
+      "gitBlob": "2063742c3a1029d0949459ece686042d0fbd2c27"
+    },
+    {
+      "path": "scripts/runtime/decision-envelope-v314.js",
+      "bytes": 11452,
+      "sha256": "a8b3e70c7603e27faec1c27b2c3f62b4e317941b2d95d3a9e087feee39322fd1",
+      "gitBlob": "8de753f30e4d247ef0fc07482579404c081db601"
+    },
+    {
+      "path": "scripts/runtime/decision-envelope.js",
+      "bytes": 26352,
+      "sha256": "1bb79394c15787358414810315a2e97b3168d327028f349c0c2242e9ead52062",
+      "gitBlob": "74ca1c33d9b8044c504f29b866005a0fa980cbc0"
+    },
+    {
+      "path": "scripts/runtime/discovery-disposition.js",
+      "bytes": 1396,
+      "sha256": "df39e0798c5c59ada5a635ab25a46d656a9fbf96eca75ed578087d37a712b12e",
+      "gitBlob": "d5ac63170abb43eccb544aa99d0ee3856abbeb85"
+    },
+    {
+      "path": "scripts/runtime/factor-score.js",
+      "bytes": 353,
+      "sha256": "359f0cc65bf93c5075a9f3148318638f403258f3ea6b3babd4323ee72e04e552",
+      "gitBlob": "fed85deb2af44d7bc1cb8965e42d480ad218d628"
+    },
+    {
+      "path": "scripts/runtime/factor-snapshot.js",
+      "bytes": 659,
+      "sha256": "873f8769664f4479eb3f79f2e46a36bd83558e7a7e6d8e40142f79206b99a33f",
+      "gitBlob": "b66d4f848da552e794fe303d13823fc4af99c357"
+    },
+    {
+      "path": "scripts/runtime/fundamental-quality.js",
+      "bytes": 3037,
+      "sha256": "0409db5e3f6faac4d083d32417c6e5dac4c611fc9579c48b21a168f2edc07290",
+      "gitBlob": "2a8318c76faeaa8b20b0a5d7d8abe09b7c626d9f"
+    },
+    {
+      "path": "scripts/runtime/instrument-authority-join.js",
+      "bytes": 1530,
+      "sha256": "646501c95e83095782c7dedea824026c811e0df0251dd3f14860ecd52bff5bd0",
+      "gitBlob": "6311b628d4bc37a29c498bc58d342df0fb92dd97"
+    },
+    {
+      "path": "scripts/runtime/local-runtime-platform.js",
+      "bytes": 28275,
+      "sha256": "361fa5161beafd8c22fc5582b6688e5db8542b1226147bc3e3d63f4f04f347c4",
+      "gitBlob": "59eb0032828a178e31324b336c7c57a8b70586b4"
+    },
+    {
+      "path": "scripts/runtime/market-analysis.js",
+      "bytes": 2549,
+      "sha256": "fb151ea91bd98d31e3b9c8a5e96e61c0c42203f582663f113d24d7f82a2c1d17",
+      "gitBlob": "8ae24c0127f08b0802b193bf9ddd0a8194df43d9"
+    },
+    {
+      "path": "scripts/runtime/official-calendar-v314.js",
+      "bytes": 7050,
+      "sha256": "220147e99e54ecda8fdaad10f6bee026591f88dc144c3a19f886ab78dc2b668a",
+      "gitBlob": "8a0ef915ed246e0d959639e814d5a50653140efd"
+    },
+    {
+      "path": "scripts/runtime/official-factor-discovery-v315.js",
+      "bytes": 5508,
+      "sha256": "898cad10b401845a8170cf346eb0623d5385ae72a52179966ef0d90632d427e5",
+      "gitBlob": "d84df074cf4f4dc84e943a3a3e0468e97f8962c2"
+    },
+    {
+      "path": "scripts/runtime/official-market-authority-v314.js",
+      "bytes": 13172,
+      "sha256": "c98d646163200ac28f2d835e6b19b44b4d38014e84110658a07d8267cf8ba9ce",
+      "gitBlob": "2c51103c241702c08f1219fc77cbc57c57626929"
+    },
+    {
+      "path": "scripts/runtime/official-mops-v314.js",
+      "bytes": 14058,
+      "sha256": "9b154a6fc245b976507640aaea9b113c4396ac003a89483ef73b42c2eaaadb3c",
+      "gitBlob": "059dddce59b875af2dc257870abfcbbc24936af2"
+    },
+    {
+      "path": "scripts/runtime/official-source-acquisition.js",
+      "bytes": 35248,
+      "sha256": "f174ff27f694637529ce06b562da7687d1d29077a5598c2083d0af88b479946e",
+      "gitBlob": "d1567221e603d63d0bef19e0a051532ca95fe9c9"
+    },
+    {
+      "path": "scripts/runtime/official-twse-valuation.js",
+      "bytes": 60659,
+      "sha256": "a298fe9c55e51fd50ca61155af1c2facecdfc5825abc80352424fe3d7c1eac32",
+      "gitBlob": "330820e0d0fb1ad15855657b0d42494b7e6fc55d"
+    },
+    {
+      "path": "scripts/runtime/postgres-legacy-producer-adapter.js",
+      "bytes": 17571,
+      "sha256": "035ea2786fa9790a346b029a5d1d082f7053863edfd760c5186491759c828a12",
+      "gitBlob": "843655de7bbed18e375a584ec0eec541687e1c2a"
+    },
+    {
+      "path": "scripts/runtime/production-authority-bootstrap-cli.js",
+      "bytes": 3940,
+      "sha256": "b347ab7170e27da24c9bebd5b90f9822c346f480bb6e4b1b13430421724e9137",
+      "gitBlob": "a1a1fb9d9e4ed5ef42c3bb2853a38e139cffbe16"
+    },
+    {
+      "path": "scripts/runtime/production-authority-bootstrap.js",
+      "bytes": 27081,
+      "sha256": "9c5a8c25bd5de11812481e6983af734d652c9d0edaa03e0bbf6a4e668f704a1c",
+      "gitBlob": "faa227130ba381a4248b8d5934b40c46dd64bdf3"
+    },
+    {
+      "path": "scripts/runtime/projection-freshness.js",
+      "bytes": 3235,
+      "sha256": "c2c5c24d5412a374a8556c04f8a93d6cf37d55af1622fac770cdb41111336239",
+      "gitBlob": "b8320f52b6d6af965de9df74bcb084b5559d06b9"
+    },
+    {
+      "path": "scripts/runtime/provider-acquisition-v31621.js",
+      "bytes": 10317,
+      "sha256": "806b00b80c8d07fce52f1999936c98d853037974dbaf629fdab81d8d40159db5",
+      "gitBlob": "ae69b2b323d02f0db31045b3e05159d2670683ba"
+    },
+    {
+      "path": "scripts/runtime/public-projection.js",
+      "bytes": 19622,
+      "sha256": "a78b212f19fc2e0b3dab0a31fe529e943eae32a6a440fe5ca8b62670c9393494",
+      "gitBlob": "1de2928030e1576f3e3b2c164f87feb79ca80776"
+    },
+    {
+      "path": "scripts/runtime/published-research-decision.js",
+      "bytes": 414,
+      "sha256": "50547d52df8ac4278da4507f9e3dd3083076efe770ee6a7fbb27f54b15c707ac",
+      "gitBlob": "0692d8eaca52dcb58132b7050568aea1205b0fdd"
+    },
+    {
+      "path": "scripts/runtime/reap-expired-producer-run-v320-cli.js",
+      "bytes": 1900,
+      "sha256": "9fd210dc0814bc932f10ce65363f5043feb4914689286280609c7ab7d375293b",
+      "gitBlob": "aa9afc697289df3704ca91688ce34d7d9769259c"
+    },
+    {
+      "path": "scripts/runtime/release-state-v319.js",
+      "bytes": 4362,
+      "sha256": "57710b97ba7933270601ce4f0ae9796d6372a0193f78468c6e6bc6dafd5e58e1",
+      "gitBlob": "f6f5cbc158722fb8cb08c59017942a53788a09ec"
+    },
+    {
+      "path": "scripts/runtime/reported-pe-authority.js",
+      "bytes": 5502,
+      "sha256": "a4f11a5d84b897efa1207d7fb4dd556ff216bb72adb3f5b4d0c9258849578448",
+      "gitBlob": "c5a836ac372d380b9f90a29cb156f582c67c3d87"
+    },
+    {
+      "path": "scripts/runtime/research-dossier-v318.js",
+      "bytes": 9205,
+      "sha256": "1e961730dc42532919700ed6f4920fb36a27bd8f346880a9ec9a9f3509cf8847",
+      "gitBlob": "874083e72c00b5969a6ed81748e291b4299cbbcc"
+    },
+    {
+      "path": "scripts/runtime/research-next-step-v317.js",
+      "bytes": 4090,
+      "sha256": "d7d66dbe6121208209268aaa43ed94c1d47aa44500f40ab5a0a50419c51d08f7",
+      "gitBlob": "15ba3981ac1fda2473fc1318367c8f824e498e72"
+    },
+    {
+      "path": "scripts/runtime/research-ranking-v314.js",
+      "bytes": 2046,
+      "sha256": "4ee2c526bdba3135ac85d3eec4da5bbb8e855474c5d766b7953aeefbbee618a4",
+      "gitBlob": "896795beb67d8ab44a02881c4dcb136c45ff9da4"
+    },
+    {
+      "path": "scripts/runtime/research-readiness-v319.js",
+      "bytes": 2996,
+      "sha256": "e180112105a3c1049104dd93ccb01ddf7fb9b6f283b61ad56e45e36d68219ae1",
+      "gitBlob": "136b8f85005744f2d3fcc203337eb1c977988dbd"
+    },
+    {
+      "path": "scripts/runtime/research-snapshot-v317.js",
+      "bytes": 5817,
+      "sha256": "5623ed161dfc8767c09256d044d629076793ec5e252738aa0514d62eea3bcceb",
+      "gitBlob": "190b121c99043f5c1642faf466e1d8660d77d993"
+    },
+    {
+      "path": "scripts/runtime/reviewed-runtime-installer-cli.js",
+      "bytes": 20520,
+      "sha256": "03520c3484b9c1745b5aa434da5c8ff3b1b521785c01b8aa2f2fb79aeda72caf",
+      "gitBlob": "077abbfd64fcddab6620172a8d3ee70a7874d4b1"
+    },
+    {
+      "path": "scripts/runtime/reviewed-runtime-release.js",
+      "bytes": 6857,
+      "sha256": "be7467a59df2322804493be740c7344df9e330c37820d655feccf335b6b98c48",
+      "gitBlob": "26977929788d365c3e787702f16f754289067fc3"
+    },
+    {
+      "path": "scripts/runtime/runtime-disk-policy-v319.js",
+      "bytes": 2912,
+      "sha256": "3e6dddca02cf6717064dd849eeffc79dad78279983a93b18b368a56f7b2184cb",
+      "gitBlob": "85f0a6be31e3f7b426cb9027090e64f59d5efaa9"
+    },
+    {
+      "path": "scripts/runtime/runtime-health-observer.js",
+      "bytes": 17015,
+      "sha256": "415bfc7b4a59a8529de89ba57efa7231e0f6134be02dc92247ea1e1bfe6c7fdc",
+      "gitBlob": "b3e5bd5f82fea2a648a62c5c73b2c4dfe70c935a"
+    },
+    {
+      "path": "scripts/runtime/runtime-health.js",
+      "bytes": 8350,
+      "sha256": "cb9b4eaace1f1fe28542b02c76b86ff2d68bc79fadc117cbf8f14becaca7cff9",
+      "gitBlob": "80b453d3d958c26f23dbb4d167da645a00c6afda"
+    },
+    {
+      "path": "scripts/runtime/runtime-installation-gate.mjs",
+      "bytes": 596,
+      "sha256": "4f86dc91c4834457b3d35c6170dc987b705a62d65b529764e38723f22e6c1292",
+      "gitBlob": "0c7a08354c853015e158691fe32b906f988b1e71"
+    },
+    {
+      "path": "scripts/runtime/safe-diagnostics.js",
+      "bytes": 3213,
+      "sha256": "d8d123dbac9022b4fac62257913867d53538d23df8636fac93afd60603a48d03",
+      "gitBlob": "0cfe536820133397f12780504e36d5b3c154dd8c"
+    },
+    {
+      "path": "scripts/runtime/source-claim-extraction.js",
+      "bytes": 1754,
+      "sha256": "f779e6e154de712864668767aee388f0e37f407eba35c1927c235227bd95cf1f",
+      "gitBlob": "94fd54c8a4464c361073c8914457ff7ec55e3d21"
+    },
+    {
+      "path": "scripts/runtime/source-revision-pagination.js",
+      "bytes": 1132,
+      "sha256": "93e7d7f1627af36f5146cf7be67735dc6e20e6c7879a65046a575653da92a5d8",
+      "gitBlob": "2053abc9d15a47680cbe2a537064d8c7060793e6"
+    },
+    {
+      "path": "scripts/runtime/source-run-config.js",
+      "bytes": 3961,
+      "sha256": "32259811ce1fb363b28c471ce1ea1080e16780a306d1048e27cb4f9fff5714ff",
+      "gitBlob": "f5b71a164aa0019381c8ec42d28d73b7e44a5ec7"
+    },
+    {
+      "path": "scripts/runtime/source-run-transaction.js",
+      "bytes": 3344,
+      "sha256": "bb5eb95f4060210a35daf9c320829076a100139f4d0572588b5f9b372279ed1d",
+      "gitBlob": "783393b4f81b4addfa916ae0769cdab6ef41dc43"
+    },
+    {
+      "path": "scripts/runtime/source-terminal-state.js",
+      "bytes": 2797,
+      "sha256": "83ab78d8a1d34a414896f3b32223482b4de1d05fb80688ee5a8bb262bb8e5afa",
+      "gitBlob": "f3d254e1793a5cd55deb25b1409162703f6ba53c"
+    },
+    {
+      "path": "scripts/runtime/supabase-rest-legacy-producer-adapter.js",
+      "bytes": 9429,
+      "sha256": "f827f55952d093f112721433c9420daebf25c35fdf00000610a43981bc331a86",
+      "gitBlob": "79aa9a810531118979d590a0de0850b39b64378d"
+    },
+    {
+      "path": "scripts/runtime/technical-entry-geometry.js",
+      "bytes": 1786,
+      "sha256": "a007eb8b726457dc2cc2b51e23d3490a7c613ec456f13c51a4803c2592be649c",
+      "gitBlob": "6261d42c7f2b0288eec280913515371ed2cd338c"
+    },
+    {
+      "path": "scripts/runtime/technical-plane.js",
+      "bytes": 7360,
+      "sha256": "103ceab35ffd449650d583ca26501114881b0afb02e3ab5e132fd75b6a076556",
+      "gitBlob": "2889cb49bdef715a3edfa4ce204dfeb104c70f7b"
+    },
+    {
+      "path": "scripts/runtime/technical-state.js",
+      "bytes": 4532,
+      "sha256": "28797cda111d331c7dd496d085f73f2c91251c858b8f9a9341977e8f38b25ec9",
+      "gitBlob": "fd0ac580611ace8bb762ff2cf982700760e99e04"
+    },
+    {
+      "path": "scripts/runtime/tracked-runtime-bundle.js",
+      "bytes": 5965,
+      "sha256": "c582b3b9760bd47f178af28f41e4077ad280419d4a9cc7b2ef615c4376b899ca",
+      "gitBlob": "5624783657bbb05c48fbbff50b5687f811d7dbfe"
+    },
+    {
+      "path": "scripts/runtime/underreaction-score.js",
+      "bytes": 3592,
+      "sha256": "1e93b631324d3c2951ad5df22c058f4dadeb59d927b18023ef5628f0989d8045",
+      "gitBlob": "80442d55025a6bab9dc2015f4ca0dc89e90834f6"
+    },
+    {
+      "path": "scripts/runtime/valuation-comparables.js",
+      "bytes": 1594,
+      "sha256": "9273909e9eee887f6ddb3cf9883a44065c8c101ed389bb79fdf09edc7b15119b",
+      "gitBlob": "5a6348930f23e100ae7d074de618e548b73e2f13"
+    },
+    {
+      "path": "scripts/runtime/valuation-evidence.js",
+      "bytes": 735,
+      "sha256": "6f6fbea1075ea6f079c8a70f80bee48365659ccc72edeba3f912ec396ea093da",
+      "gitBlob": "fa0564fc747717ba3bcbba23126fb9322292bd43"
+    },
+    {
+      "path": "scripts/runtime/valuation-method-bridge.js",
+      "bytes": 2549,
+      "sha256": "04a517c289905e6518d72d9705aa25e74b3818c61fb9233faeed14ff0651299e",
+      "gitBlob": "6b5b929c62f550c56aad66b7eea1583377bfb08e"
+    },
+    {
+      "path": "scripts/runtime/valuation-method.js",
+      "bytes": 1915,
+      "sha256": "589d959a538b97e3abe1e38fc31a9c137359e2dace1a738f9b28d8643225be8d",
+      "gitBlob": "e37df68740f0098723970468f5d3722439015539"
+    },
+    {
+      "path": "scripts/runtime/valuation-operating-bridge.js",
+      "bytes": 2832,
+      "sha256": "61cd119980bf55f2ee154c3142c5e9cf0ab6cb5f7eb4ce03243810605cec5208",
+      "gitBlob": "b23137ac7ab8916a8fe50cf136121aae6055a812"
+    },
+    {
+      "path": "web/e2e/deep-dive-story.spec.ts",
+      "bytes": 1726,
+      "sha256": "ffffe19e4e0df0ef126826ee50eb4b16ec5a1fc1189b0d4354cec0d741c724e3",
+      "gitBlob": "34fc718ea035cc3034f2b909861f0734db75470d"
+    },
+    {
+      "path": "web/e2e/governance-contracts.spec.ts",
+      "bytes": 17383,
+      "sha256": "4548946ecbd9c0e4be637fde514d4e317903bd6303d67ca5daf62c550133d233",
+      "gitBlob": "4be0d2dd437cc688aaf55e6c35e941925d7b9e93"
+    },
+    {
+      "path": "web/e2e/health-check.spec.ts",
+      "bytes": 1443,
+      "sha256": "065eba5fbd47ead3a809b591f2c182fa2591c7337380e464185e923ee3db8d46",
+      "gitBlob": "563e0910895b6b3ba1f5b25402ff87a79fc4d799"
+    },
+    {
+      "path": "web/e2e/investanchors-quality.spec.ts",
+      "bytes": 926,
+      "sha256": "ada3ab2be9fe47a09a1b68d77558077f772ef0bbe2db9e2a4c3c2cd3ab89e2d4",
+      "gitBlob": "8db5b0757c6253d9098b00c7d9edf3f47058199b"
+    },
+    {
+      "path": "web/e2e/investor.spec.ts",
+      "bytes": 5209,
+      "sha256": "78722fe52dcdb7017a3c1ec6009814449cd7a6d8484188f10fa0b91def16ca7f",
+      "gitBlob": "9f4c8f056b5d69401619c62c98b0afd70dc79d41"
+    },
+    {
+      "path": "web/e2e/radar-buckets.spec.ts",
+      "bytes": 2095,
+      "sha256": "eb4f37f9c4a160f3c82601c07b4e334304e1bd911434c2bd3f3e71db16efa635",
+      "gitBlob": "d5a8518b8dbef7cae8f7b1e3716e680a07bcaca5"
+    },
+    {
+      "path": "web/e2e/radar-layering.spec.ts",
+      "bytes": 2320,
+      "sha256": "a9224cb1530a8a28f9750d8ecdc725b8f04a8221b97e63334abce2a84fabb71a",
+      "gitBlob": "6141ba0fa1dd3d8609684a3ef8c15153b83965ad"
+    },
+    {
+      "path": "web/e2e/radar.spec.ts",
+      "bytes": 2736,
+      "sha256": "288e1cca62f89c0b900e5e915bd1982c717b24c1e257713789d0ea2f593d97a9",
+      "gitBlob": "0e75ee91b30e893b0f07bcfbce072a99032d8496"
+    },
+    {
+      "path": "web/e2e/sources.spec.ts",
+      "bytes": 1340,
+      "sha256": "ccc0c3da69f3d7b4e7c6a5295a0adfe3666a9b5f26230965326497eeb4d79314",
+      "gitBlob": "fa6c6f9009ef03b858e527f8a40adaa4c6aad295"
+    },
+    {
+      "path": "web/e2e/support/console.ts",
+      "bytes": 522,
+      "sha256": "db6e3a70f896beeec6f5fb1dab612e462ae0edd79efb02ade957e4b4620eba75",
+      "gitBlob": "858b850dbf72419368522c0a81add397648b3adf"
+    },
+    {
+      "path": "web/e2e/technical-page.spec.ts",
+      "bytes": 851,
+      "sha256": "f7bc589b9c95c915752b02d3328ed719ed1f9d77822bf30c1c54945c6c165878",
+      "gitBlob": "12a28bdd16affaf8b2065103e7ba4dcf9881c23c"
+    },
+    {
+      "path": "web/e2e/threads-quality.spec.ts",
+      "bytes": 1568,
+      "sha256": "e0e252f809d0a90a4fb56c7aad8e51a3c4120b5c2ed58de8d6c80b9db8adba6f",
+      "gitBlob": "3ae0a7dfdb46a7e88c23bd7df88098d8e04c0354"
+    },
+    {
+      "path": "web/e2e/trade-plan.spec.ts",
+      "bytes": 6073,
+      "sha256": "d2c92b6556f182272f6c57d7aa67f1c0f15846e6d14524699664ca74800cace6",
+      "gitBlob": "ac025bbbe3a848c8cf6b04ed4ac7f0e6d9aa6b7e"
+    },
+    {
+      "path": "web/e2e/v3-correctness.spec.ts",
+      "bytes": 13291,
+      "sha256": "87215ee1557895afd78060fdcd0b8a91ff97fd0d7b0d9775236fac24c40dd06c",
+      "gitBlob": "abebdb3b7ee3381d09778111f6c32698e6878560"
+    },
+    {
+      "path": "web/e2e/v314-readonly-visibility.spec.ts",
+      "bytes": 2449,
+      "sha256": "97d09457f408be839c2fe1a7ff992112d7776c7be36f92ee4926ba3766528ca9",
+      "gitBlob": "8cc74401c5662471dd8ebccbe2b0e563744245ef"
+    },
+    {
+      "path": "web/e2e/v317-source-led-actionability.spec.ts",
+      "bytes": 3311,
+      "sha256": "bc97f7c5e4acb7d4466a0111dfa20813566d3b511be975aeb6651fa6517e79f3",
+      "gitBlob": "e88477cb6c5457b903a13762cc7b7dda6037d0eb"
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274088,
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+      "gitBlob": "a41fd447e28f3b36829b689828c345e042619a38"
+    },
+    {
+      "path": "web/package.json",
+      "bytes": 1943,
+      "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+      "gitBlob": "446f308a2990f45dcd3dca14030068f878fae490"
+    },
+    {
+      "path": "web/playwright.v3-correctness.config.ts",
+      "bytes": 1759,
+      "sha256": "e0e44973dd214c634301aeef961b173a3e4d37017b5e45b944ac22962f9d0730",
+      "gitBlob": "d3356392b70cd075ccfbbe5937a992adbd7482ad"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/assistive.ts",
+      "bytes": 909,
+      "sha256": "1544776af5d6a7b29c7dee159d9b07ded73bb90d5c413519f4403dac482e82dc",
+      "gitBlob": "c22053c1f3c27df9bc9f460602ae215dfb701823"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/blinded-review.ts",
+      "bytes": 10113,
+      "sha256": "c51d20c6a029a0c2ad8032e253c6df09914d2db4d635a172feb3beaaa9395d5b",
+      "gitBlob": "0186f7ff4f8c5f7476179cf95d9022a9079e7696"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/canonical.ts",
+      "bytes": 2199,
+      "sha256": "477a34da818b8ef0618e5a61ebb173a368cd9018e2fa4a8aa2c895d9c52f0e24",
+      "gitBlob": "430174979e522a35585d8f44d7cba798f995d32d"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/compact-radar-read.ts",
+      "bytes": 11985,
+      "sha256": "cf03f15e7cdfa28f3e797e524167deb7411ec3c2aa8671ddc949a02ee376a26a",
+      "gitBlob": "e16436116d906d10b729e7930409b420658b7234"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/compact-radar-validation.ts",
+      "bytes": 5548,
+      "sha256": "1295193a5b4f65e8a47cb365916f0eaba0d8a44fde40230f5cca428bba503117",
+      "gitBlob": "2ccea81525e4f1bdb2d15bf1a42247aa4fac0442"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/config.ts",
+      "bytes": 1918,
+      "sha256": "63a9b9e4b8aaecff2f764587e761bf56df1c4be4c8dd70e0e1536096daf8d27b",
+      "gitBlob": "7df42bb9b4f0e1f466fc23091d89dc11a9fe5c4f"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/contracts.ts",
+      "bytes": 19464,
+      "sha256": "b9ca487057bb26966c2258eb8d6ea46ee1d3d8a6dba629dce9bba911cb5afa6d",
+      "gitBlob": "7bb459054a8cbfad2335f2a8831e1df78883b6bf"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/control.ts",
+      "bytes": 9925,
+      "sha256": "76e2754784bcee3108ae3843f46f283b44163143b1b3d706933f75049f62b43e",
+      "gitBlob": "ea4c1d6f5defd5eb5b65f0c6fdd339becd5e203f"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/decision-publication.ts",
+      "bytes": 42142,
+      "sha256": "fa758c5776d78390d371e615c56e2225328216d229bcaf4e790fca284220d5fb",
+      "gitBlob": "f151a14c564accc36c8846820be5d4eee0e42506"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/decision.ts",
+      "bytes": 13811,
+      "sha256": "ed1963f6c6a4e7a9d26d8df4f52af4b0bf9e9e746b0b43ae0b489440060d6885",
+      "gitBlob": "60c2a45de2d052b56eb46577a6fb3086a4821080"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/deployment.ts",
+      "bytes": 1540,
+      "sha256": "574f0084cf1c87228b8d1afc84fa76bac7aefc90f641cea1424a5201eb72d07a",
+      "gitBlob": "1537d09c73cc997011defc18864ef90b53e15184"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/detail-schema.ts",
+      "bytes": 2528,
+      "sha256": "8dbc6a8f1c1a6dcc114d00cb3853433d117240472c9913f83e52bedb1551cd53",
+      "gitBlob": "8e095a009d2cbbd5d246710f4331538881489cc8"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/detail.ts",
+      "bytes": 9151,
+      "sha256": "74528675ab05e5852586df7a2bc5bae2ac4976cb408605177f9d5f782cd96f9e",
+      "gitBlob": "bd91966739765c4e1543f42a782d4cb75b39b360"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/effective-health.ts",
+      "bytes": 2449,
+      "sha256": "2c7b0730da7bca052817df3a9d4d5ed0f209b5057cf0bb54fecacc2bc2306d9a",
+      "gitBlob": "1dbc834e3982fed93d90ed393d5021aede39261e"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/evaluation-readiness.ts",
+      "bytes": 3600,
+      "sha256": "ce77135b3464c22d55d02508f69e1b9444c4c8bb10a74fbe0fb1a6414ee1348f",
+      "gitBlob": "809a1f3fd881c8ebed4cb3acbe4f102a8dc482f7"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/evaluation.ts",
+      "bytes": 8386,
+      "sha256": "e46f38a1ce528d9405808fe4aecddaa086732dea930efc73f7fa6e096cbfd278",
+      "gitBlob": "4125a95e11475125b4e389a097a7f6152005fde0"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/factor-correctness-v311.ts",
+      "bytes": 28101,
+      "sha256": "9ecd33f6d4def2f3d1f14164d69906f7a463a92f02bad5f7f6324fdc93a3e4d9",
+      "gitBlob": "7fc21d2ad588067e737ee8641b162f24406e81ed"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/funnel.ts",
+      "bytes": 3612,
+      "sha256": "57c4d5f61eece8b92bebec6699e0cf35e21dd19d769340de7a741c03a40f6a26",
+      "gitBlob": "e37610ad67299f71815fa565eb3349bab50f4648"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/human-authority.ts",
+      "bytes": 3871,
+      "sha256": "937c5cd91dea6ced46c68b50151462b01971fdb57b7f9316a5f24126175c1367",
+      "gitBlob": "55e06bda75795234047133bac2867e1556dec127"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/identity.ts",
+      "bytes": 3559,
+      "sha256": "52800d4be171d05f3468fde2446cb068a83ebfc044c058fc4a586afa550e99c6",
+      "gitBlob": "32aa9324a6fbfa9258f136a070c6a7f1c8938c05"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/ingestion.ts",
+      "bytes": 4107,
+      "sha256": "b98165c81bb8eebbeac73ba8e499ccc82d708d0e38a7bb5c7da172099e13b106",
+      "gitBlob": "917e23952f29af094f6acbc88311696c2a8c50f6"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/internal.ts",
+      "bytes": 4448,
+      "sha256": "078b9eb9b654ec05581686bd88e4277f9e93f893ed2de8f1d9cfc043d62dccb0",
+      "gitBlob": "85a4d805d9c3182d227df9c5515e55816dad536a"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/legacy-v1-v2-regression.test.ts",
+      "bytes": 1141,
+      "sha256": "5a42b6bc66ec2855653cd0e14544e9fc0ecfdacff100d1c6706c74424f06ff3d",
+      "gitBlob": "a42555cc8a39575e4c2ca19c0b582ace621065c2"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/link-audit.ts",
+      "bytes": 3215,
+      "sha256": "26c68957581aec4198219042007e458975f88e15a0854027b7b9a807acd94a69",
+      "gitBlob": "3d7af6d7b1d3a90ab6d60a734e5a1b95c02f3f0d"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/market.ts",
+      "bytes": 2066,
+      "sha256": "d222799d59f4afbf50cf8dfe3fc457a193718339e9f65b85acffd9320991b7b2",
+      "gitBlob": "916efbf69df6a103856514030859fbae95267077"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/opportunity-v3.test.ts",
+      "bytes": 120111,
+      "sha256": "33184ce15ee2cf7fe8116063ab520fc6de4f9c71ab91a2540fca9aa830713132",
+      "gitBlob": "1b5788957b4ca58a74213e58628067a662d87204"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/outcomes.ts",
+      "bytes": 1565,
+      "sha256": "6e078101cbe36bae02f3dac8f301e3c7f810fc65d8ddc6f0adb9a62176b9d13d",
+      "gitBlob": "f1adfc7dcaf6bad5f21fdfda4db36db020db8736"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/portfolio.ts",
+      "bytes": 1883,
+      "sha256": "6970452e8d5e6cd18d03e9efd9611123450ea864013a610a5bda64075931bfb8",
+      "gitBlob": "828199b2f096ac9736b49ac7d22e213898a10d69"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/principal.ts",
+      "bytes": 4876,
+      "sha256": "1b171433836c518728a23e9155fee701a3f803275271ff87841b6508a0062248",
+      "gitBlob": "917f8c768469112648a678c26928a2616ec2caa9"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/projection-freshness.ts",
+      "bytes": 5038,
+      "sha256": "9c96bb3c473e20675ef7931f57a62b1fb383c6650bbc42572b14aed3fbd3a57b",
+      "gitBlob": "19f3e65db3c43cf8ee073b8662a0c2f7de55efdd"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/projection-readonly.ts",
+      "bytes": 5061,
+      "sha256": "3b740aeaa60493bc7ef2120f3c4bae3c7f3810fe6ba63df443c6e16f49c70295",
+      "gitBlob": "e59e06e7a31dc77d8ad549dc8acd0ffebe2d0c9a"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/projection.ts",
+      "bytes": 6348,
+      "sha256": "8d991a0d437a15e203790911e343d8f136356550618706f361c2861fa330cdc6",
+      "gitBlob": "7c557e31b970a1e31d5ee0fb1e56ef18fc82be91"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/public-schema.test.ts",
+      "bytes": 7821,
+      "sha256": "debca6175167ca6013f062405ff0ec89fd0c20b369bf4d443a8f36233ba7286a",
+      "gitBlob": "2d26fdafdcd09e653d6928b8f39519e16761dda5"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/public-schema.ts",
+      "bytes": 57787,
+      "sha256": "b3d423a24d7a0cd356233a224f4fd0c7d8bf1b2514849fb6b0ce0bf2afdf549a",
+      "gitBlob": "7606a6c73961b3326d9c10cfd513a71ea5586770"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/release-compatibility-runtime.d.ts",
+      "bytes": 379,
+      "sha256": "1b73cea670f6a950e296a632041706865010be78c0b87b02e9d94137f90ad300",
+      "gitBlob": "bd531cfd750d3434283494c0498cd57c0574b933"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/release-compatibility-runtime.js",
+      "bytes": 1459,
+      "sha256": "8f51e1a2f5e530cc734d316a2aeec44487ea6644b0b4611448cfa2d33f65fa81",
+      "gitBlob": "1f84c8f50437a460062022d6f7a160d845ddde4f"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/release-compatibility.ts",
+      "bytes": 108,
+      "sha256": "137889d5a10c506c3c9dfbf3a6bedd3892720e36cc5691c8813b945db4c135ef",
+      "gitBlob": "e3cf199a78c3db2e793c25e1e94386d23561a796"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/remote-credential.ts",
+      "bytes": 293,
+      "sha256": "cb7d8c0d69cfedc6c1ba5241620245f03490b61e9536a0b2fb0e988470525f7b",
+      "gitBlob": "51dde4d1c5a57b3a550da0e3f97a826e913a69ec"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/request-values.ts",
+      "bytes": 30647,
+      "sha256": "202e386c531f1f5509995c96ad2f2e2524e63261996d5123f7ec11d697053487",
+      "gitBlob": "975c6482024974a33aa80d5a7b314a2472c4d885"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/research-display.ts",
+      "bytes": 6659,
+      "sha256": "39c1a07312338f8bfecde816d050eab217368f86e5e665baa92799e37d457cbb",
+      "gitBlob": "6bf10555957c8153113b93c3285a5f21c2b6a48c"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/reviewed-release-identity.ts",
+      "bytes": 571,
+      "sha256": "c32a42f9173a3c6782aad4ce0b5e6e5c40b0998a0f6df0d4de2dea6287ba97f4",
+      "gitBlob": "060f2c49612b35873ff7b5f8cd69b06ff1b411f5"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/runtime-health.ts",
+      "bytes": 7307,
+      "sha256": "01bed6290b2d7095615d7301dd4124458888772edb851ff255436c77c2c0ac20",
+      "gitBlob": "a2f86a9de60e51bff020867903142f4b9cf12f40"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/scoring.ts",
+      "bytes": 4251,
+      "sha256": "feca472994bdfdecec0617b0e4d768be792bbafbb2993aaa36cc299213bc4970",
+      "gitBlob": "667efbb5dad5afac7648ab9de6b004ecd0a935d4"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/sector-cycle.ts",
+      "bytes": 2296,
+      "sha256": "aec3901e051023fb0fdeb2117b8bfbcfe6ebb5a4a9eefcfa1f54c3d1912ed9b7",
+      "gitBlob": "a7bb0335f3e0dfeb11f59a481ca971ebf6308278"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/service-client.ts",
+      "bytes": 2238,
+      "sha256": "05c44624555afa9b8588bd5c5f32a10a8f0f89760545bfb53591f7759ce015ac",
+      "gitBlob": "e9c76c50244ad2f6b9b3120d1300184fb12fc1f2"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/source.ts",
+      "bytes": 9855,
+      "sha256": "eddae367b2c36b10b013f1d1c32cdbb0ca2570a89591be0910a6e4beba837824",
+      "gitBlob": "716abf4d60fa337ed45266069f983d06b26c1145"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/valuation.ts",
+      "bytes": 20541,
+      "sha256": "c3b1f741610e5684124cb41a6a51ddaa30e8a27eb35508c12e52baac196fe329",
+      "gitBlob": "79ca2501a00463349b4777096e6cf215ce9b297c"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/verified-change.ts",
+      "bytes": 28849,
+      "sha256": "05fa796d9fbc4ea5bbbe151c70a0f126969c5eac5517e8a0a7dca11c624470d1",
+      "gitBlob": "5e036f48d37f23ff6822d47c017899721bfe48a7"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/worker-executors.ts",
+      "bytes": 103533,
+      "sha256": "3aa2c9d020bb00c4323cbbbabba9a420aca4e9e76a2c1144df17c1c25ab4d16d",
+      "gitBlob": "1b2ac243527cd419dedcff15fb1c32eaff20e942"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/worker.ts",
+      "bytes": 22326,
+      "sha256": "27dbf7fc02836490005cf260fdcfd49a047523ca77aeddc3c1259209c51a8786",
+      "gitBlob": "64b50e796533f4136b94730254dcf47ec3749628"
+    }
+  ]
+}

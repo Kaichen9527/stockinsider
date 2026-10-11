@@ -1,0 +1,8 @@
+{
+  "peakSampledRssBytes": 2115235840,
+  "scope": "all active Node/npm/PostgreSQL processes; no other such active processes at admission; includes daemonized native PG",
+  "intervalSeconds": 0.5,
+  "measurementStartEpoch": 1791741781.5005176,
+  "measurementEndEpoch": 1791741830.3316987,
+  "limitation": "Supplemental all-service sample started during the canonical invocation; original process-group sample covers the complete invocation but excludes daemonized PG outside group. These are sampled observations, not an exact OS high-water guarantee."
+}

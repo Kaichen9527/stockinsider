@@ -1,0 +1,28 @@
+{
+  "source": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3",
+  "tree": "05065f79c9023135eac56c0522bb44a043e6b843",
+  "webTree": "869ad0662b486108c1d74ae3736a1baca6b825e2",
+  "status": "",
+  "startAt": "2026-10-11T18:01:17.753327+00:00",
+  "command": [
+    "npm",
+    "run",
+    "test:source-led-opportunity-v3:product-correctness"
+  ],
+  "canonicalScript": "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs scripts/opportunity-v3/v320-kol-first-runtime-recovery.test.mjs",
+  "osUser": "agent",
+  "node": "v22.14.0",
+  "next": "16.3.4",
+  "pg": "8.18.0",
+  "dependencyPlacement": {
+    "root": "local hardlink directory of existing same-lock deps",
+    "web": "existing local hardlink directory"
+  },
+  "clock": "real; no preload or faketime set by supervisor",
+  "scratchRoot": "/tmp/si-7af-pcr-ugbto4h_",
+  "budgetSeconds": 750,
+  "locks": {
+    "package-lock.json": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "web/package-lock.json": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+  }
+}
