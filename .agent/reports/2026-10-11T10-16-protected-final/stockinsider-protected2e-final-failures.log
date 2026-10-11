@@ -1,0 +1,21 @@
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	﻿2026-10-11T09:55:17.7038220Z ##[group]Run node scripts/opportunity-v3/protected-external-gate-worker.mjs track --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "$RUNNER_TEMP/stockinsider-v3-subject" --track model_runner --output "$RUNNER_TEMP/opportunity-gate-result-model-runner-code-gate-2e078dfdd74272d3d50dffdd4cc6c14df3152c78.json"
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	2026-10-11T09:55:17.7039780Z ^[[36;1mnode scripts/opportunity-v3/protected-external-gate-worker.mjs track --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "$RUNNER_TEMP/stockinsider-v3-subject" --track model_runner --output "$RUNNER_TEMP/opportunity-gate-result-model-runner-code-gate-2e078dfdd74272d3d50dffdd4cc6c14df3152c78.json"^[[0m
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	2026-10-11T09:55:17.7090180Z shell: /bin/bash -e {0}
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	2026-10-11T09:55:17.7090320Z ##[endgroup]
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	2026-10-11T09:55:20.1410290Z protected external gate worker failed: spawnSync /Applications/ChatGPT.app/Contents/Resources/codex ENOENT
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	2026-10-11T09:55:20.1437090Z ##[error]Process completed with exit code 1.
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	﻿2026-10-11T10:11:03.3128728Z ##[group]Run test "$REQUIREMENTS_RESULT" = success
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3129191Z ^[[36;1mtest "$REQUIREMENTS_RESULT" = success^[[0m
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3129481Z ^[[36;1mtest "$ARCHITECTURE_RESULT" = success^[[0m
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3129763Z ^[[36;1mtest "$PRODUCT_RUNTIME_RESULT" = success^[[0m
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3130040Z ^[[36;1mtest "$MODEL_RUNNER_RESULT" = success^[[0m
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3130307Z ^[[36;1mtest "$EXACT_REVIEW_RESULT" = success^[[0m
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3543325Z shell: /usr/bin/bash -e {0}
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3543864Z env:
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3544086Z   ARCHITECTURE_RESULT: success
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3544328Z   EXACT_REVIEW_RESULT: success
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3544565Z   MODEL_RUNNER_RESULT: failure
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3544812Z   PRODUCT_RUNTIME_RESULT: success
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3545063Z   REQUIREMENTS_RESULT: success
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3545312Z ##[endgroup]
+stockinsider-v3-gate-root	Reject incomplete or failed Code Gate prerequisites	2026-10-11T10:11:03.3738556Z ##[error]Process completed with exit code 1.

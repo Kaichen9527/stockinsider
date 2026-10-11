@@ -128,3 +128,15 @@ Evidence: `.agent/reports/2026-10-11T07-48-release-review-repairs.json`; current
 - Latest VPS19.45GBfree/154.89GBtotal, six services active, PG17.11. Heavy default admission not passed; no VPS build or production mutation. No new confirmed removable stock data.
 - VM bounded read-only transfer probe d2634b5a preserved: existing token cannot upload; no credentials exported/retries. Durable artifact now exists independently.
 - See `.agent/reports/2026-10-11T10-12-protected-release-artifact.json` for exact hashed raw. Final protected product outcome and native trust recovery still required.
+
+## 2026-10-11T10:16Z — final actual protected result
+
+Run38130037645 finished: four of five required checks PASS (requirements,
+architecture, exact-review, full product272/272zero-fail/skip/todo). Product
+canonical result/evidence digests independently verified. Model still fails
+trusted missing old Codex CLI before tests; aggregate correctly FAIL.
+No unchanged retry, forged approval, main merge, production migration/deploy
+or schedule activation. Reviewed downloadable Linux package is ready.
+Final exact evidence: `.agent/reports/2026-10-11T10-16-protected-final.json`.
+The remaining external requirement is an actual trusted native recovery
+entry/procedure with provenance, as documented in the native blocker audit.

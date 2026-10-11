@@ -1,0 +1,50 @@
+{
+  "schema": "stockinsider-protected-final-outcome-v1",
+  "observedAt": "2026-10-11T10:13:23.778901+00:00",
+  "run": 38130037645,
+  "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "sourceTree": "6ca9a7227cea6f8312ec5e2dffc9503023d1b7bd",
+  "requirements": "PASS",
+  "architecture": "PASS",
+  "exactReview": "PASS",
+  "productRuntime": {
+    "status": "PASS",
+    "registeredCount": 272,
+    "executedCount": 272,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0,
+    "resultSha256": "df4f0bb243a61d50dbaa7d3e537b363c021a5a60e47b5b93f5759d898410e5a0",
+    "evidenceSha256": "57a06635015a9c0c862839a2b681100e47139dd8ef67caf1333b4ba116407fa1"
+  },
+  "modelRunner": {
+    "status": "FAIL",
+    "reason": "trusted protected-base spawnSync /Applications/ChatGPT.app/Contents/Resources/codex ENOENT; execution prerequisite fails before tests",
+    "unchangedManualRetry": false
+  },
+  "aggregate": "FAIL; correctly rejects failed model prerequisite",
+  "mainMerged": false,
+  "productionDeployed": false,
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T10-16-protected-final/opportunity-gate-result-product-runtime-code-gate-2e078dfdd74272d3d50dffdd4cc6c14df3152c78.json",
+      "sha256": "795198d5da4fa66c318407a12f1bb5a59da10c942e32913a328151ae566c52ae",
+      "bytes": 2332
+    },
+    {
+      "path": ".agent/reports/2026-10-11T10-16-protected-final/stockinsider-protected2e-final-run.json",
+      "sha256": "e5da5bc7fd020c5840cc993b6a540da28ef853d63a3ed7aae4d6d8b51159560d",
+      "bytes": 12111
+    },
+    {
+      "path": ".agent/reports/2026-10-11T10-16-protected-final/stockinsider-protected2e-product-success.log",
+      "sha256": "6f0a47d6514999cf5f2bc3a7b0abe16f5ba584b6720da0d0c3bf29340151ba2c",
+      "bytes": 225604
+    },
+    {
+      "path": ".agent/reports/2026-10-11T10-16-protected-final/stockinsider-protected2e-final-failures.log",
+      "sha256": "b8e8c1c5cc080c31cb23b4cc4be337306f263f22439781b38c7f51bac839a443",
+      "bytes": 3806
+    }
+  ]
+}

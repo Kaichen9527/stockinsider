@@ -65,8 +65,8 @@ atomically. Production was not changed during preparation.
   genuine unique three-file direct-child evidence is
   `e802254bc34432cdb32c5b553b8fd5b30009b66c`, published at its immutable
   exact-review ref. Protected run38130037645 has actual PASS requirements,
-  architecture and exact-review envelopes. Product runtime is still running at
-  the latest snapshot; model runner failed before tests. Do not infer full
+  architecture and exact-review envelopes. Product runtime also PASS:272/272, zero failures/skips/todos.
+  Model runner failed before tests; aggregate correctly rejects. Do not infer full
   release approval from the three successful envelopes.
 - The trusted main runner points at a removed Codex path. Its current signed
   native binary has a new hash; the earlier recovery packet does not cover it.
@@ -117,3 +117,14 @@ remeasured and admitted under the actual operation lock before migration or
 deployment. No capacity threshold was weakened, no production data was removed.
 
 Current receipt: `.agent/reports/2026-10-11T10-12-protected-release-artifact.json`.
+
+## Final protected outcome (2026-10-11T10:16Z)
+
+Run38130037645 completed: requirements, architecture, exact-review and full
+product-runtime PASS. The genuine product envelope reports272/272,0fail,0skip,
+0todo and result digest
+`df4f0bb243a61d50dbaa7d3e537b363c021a5a60e47b5b93f5759d898410e5a0`.
+Model-runner still fails the unchanged trusted old executable path ENOENT;
+the aggregate correctly fails. This is four of five required checks, not full
+release approval. CandidatePR364 remains2e; no main merge or production writes.
+Exact final receipt: `.agent/reports/2026-10-11T10-16-protected-final.json`.
