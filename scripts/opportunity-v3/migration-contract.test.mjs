@@ -1014,6 +1014,74 @@ after(() => {
   fs.rmSync(cluster.directory, { recursive: true, force: true });
 });
 
+test('PCR-007 and PCR-011 actual PostgreSQL adapter claims, completes and persists through the durable worker', async () => {
+  const codec = runtime('codec.js');
+  const configBytes = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json'));
+  const roster = JSON.parse(fs.readFileSync(path.join(root, 'config/runtime/approved-source-roster-v3.13.json'), 'utf8'));
+  const acquisition = await runtime('official-source-acquisition.js').acquireApprovedSources({ roster,
+    credentials: {}, fetchImpl: async () => new Response('{}', { status: 404 }),
+    now: new Date() });
+  assert.equal(acquisition.outcomes.length, 17);
+  assert.equal(acquisition.documents.length, 0);
+  const sourceResult = codec.immutableBundle('legacy_source_sync_result_v3_11', {
+    schema: 'legacy-source-sync-result-v3.11', sourceAcquisition: acquisition,
+  });
+  // A real adapter uses only this hook-owned isolated PG socket. No RPC owner,
+  // claim/completion function, SQL result or heartbeat implementation is mocked.
+  const connectionString = `postgresql://${encodeURIComponent(cluster.user)}@localhost:${cluster.port}/postgres?host=${encodeURIComponent(cluster.socket)}`;
+  const adapter = runtime('postgres-legacy-producer-adapter.js').createPostgresLegacyProducerAdapter({ connectionString });
+  const observed = [];
+  const stageHandlers = Object.fromEntries(runtime('source-run-config.js').LEGACY_STAGES.map((stage) => [stage, async (claim) => {
+    observed.push(claim);
+    assert.equal(codec.sha256(claim.payloadCanonical), claim.payloadHash);
+    assert.equal(codec.canonicalJson(JSON.parse(Buffer.from(claim.payloadCanonical).toString())), codec.canonicalJson(claim.payloadJson));
+    if (claim.readKind !== null) {
+      assert.equal(codec.sha256(claim.readCanonical), claim.readHash);
+      assert.equal(codec.canonicalJson(JSON.parse(Buffer.from(claim.readCanonical).toString())), codec.canonicalJson(claim.readJson));
+    } else {
+      assert.equal(claim.readCanonical, null);
+      assert.equal(claim.readJson, null);
+      assert.equal(claim.readHash, null);
+    }
+    if (stage === 'source_sync') return sourceResult;
+    // Stop after observing the genuine SQL-scheduled successor. This intentional
+    // failure proves the bounded probe cannot masquerade as a full successful run.
+    throw new Error('test-only stop after persisted source completion');
+  }]));
+  try {
+    const result = await runtime('auth-source-worker.js').runDurableAuthSourceWorker({
+      configBytes, adapter, sourceCommitSha: 'c'.repeat(40), workerBytes: Buffer.from('test-only PCR adapter worker'), stageHandlers,
+    });
+    assert.equal(observed.length, 2, JSON.stringify({ result, claims: observed.map(({ stage, jobKind, readKind, readHash, readCanonical }) =>
+      ({ stage, jobKind, readKind, readHash, readCanonical: readCanonical?.toString() })) }));
+    assert.equal(observed[0].stage, 'source_sync');
+    assert.notEqual(observed[1].stage, 'source_sync');
+    assert.equal(observed[0].runId, observed[1].runId);
+    assert.equal(result.disposition, 'failed');
+    assert.equal(result.completedJobs, 1);
+    const persisted = JSON.parse(psql(`SELECT jsonb_build_object(
+      'firstStatus',(SELECT status::text FROM public.legacy_producer_jobs_v3_11 WHERE job_id='${observed[0].jobId}'),
+      'successorStatus',(SELECT status::text FROM public.legacy_producer_jobs_v3_11 WHERE job_id='${observed[1].jobId}'),
+      'predecessor',(SELECT predecessor_job_id FROM public.legacy_producer_jobs_v3_11 WHERE job_id='${observed[1].jobId}'),
+      'resultHash',(SELECT result_hash FROM public.legacy_producer_job_results_v3_11 WHERE job_id='${observed[0].jobId}'),
+      'resultJson',(SELECT result_json FROM public.legacy_producer_job_results_v3_11 WHERE job_id='${observed[0].jobId}'),
+      'terminals',(SELECT count(*) FROM public.legacy_source_acquisition_outcomes_v3_13 WHERE source_run_id='${observed[0].runId}'),
+      'runStatus',(SELECT status::text FROM public.legacy_producer_runs_v3_11 WHERE run_id='${observed[0].runId}')
+    )::text;`, ['-At']).trim());
+    assert.equal(persisted.firstStatus, 'succeeded');
+    assert.equal(persisted.successorStatus, 'failed');
+    assert.equal(persisted.predecessor, observed[0].jobId);
+    assert.equal(persisted.resultHash, sourceResult.hash);
+    assert.deepEqual(persisted.resultJson, sourceResult.json);
+    assert.equal(persisted.terminals, 17);
+    assert.equal(persisted.runStatus, 'failed');
+    // Confirm the adapter's actual v3_14 entry delegates to the named v3_11
+    // owner in this installed schema, alongside persisted rows above.
+    assert.match(psql("SELECT pg_get_functiondef('public.complete_legacy_producer_job_v3_14(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure);", ['-At']),
+      /complete_legacy_producer_job_v3_11/u);
+  } finally { await adapter.close(); }
+});
+
 test('entry-plan authority migration accepts full market action symbols and keeps ledgers private', () => {
   const value = JSON.parse(psql(`SELECT jsonb_build_object(
     'symbolCheck', (SELECT pg_get_constraintdef(oid) FROM pg_constraint
