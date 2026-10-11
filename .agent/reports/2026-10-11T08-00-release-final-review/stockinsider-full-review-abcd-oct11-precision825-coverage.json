@@ -1,0 +1,195 @@
+{
+  "subject": "e0885815b39f86df34763279dc5fc22e54037a40",
+  "base": "49a1399a479f7ad0e069bc2ce18c1d554e18f0f3",
+  "paths": [
+    {
+      "path": "migrations/20261011_research_complete_mapping_precision_v2.sql",
+      "gitBlob": "36606dbdd6a14a6ae178b1c60acdde72f2f89299",
+      "sha256": "51179015df4257c68f96c52974710abaf969254fd00949bd289a0ea550ec33bf",
+      "status": "reviewed",
+      "basis": "Entire additive precondition/body reviewed; independently exercised original/successor/retry/attribute rejection in real isolated PG17. Historical migration bodies unchanged."
+    },
+    {
+      "path": "migrations/20261011_research_thesis_isolation_v1.sql",
+      "gitBlob": "0f0d13f6457cd08316f9714ecbd352a47fd0641c",
+      "sha256": "01aeb449de913b424b6711d0689b05979bca15164891a728f1c3c1bf6f051718",
+      "status": "reviewed",
+      "basis": "Entire additive precondition/body reviewed; independently exercised original/successor/retry/attribute rejection in real isolated PG17. Historical migration bodies unchanged."
+    },
+    {
+      "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+      "gitBlob": "7ea31dccdf88240e420e1ff0e70e1ffebd1258f8",
+      "sha256": "213755c2b0b23b2ec12ad2ccba4981b4cd631167015ca053b9ba1ab8daf4bc5f",
+      "status": "reviewed",
+      "basis": "Entire installer/catalog/inventory delta reviewed; adds two exact migrations/whole SHA pins; first-install/authority/gate paths unchanged."
+    },
+    {
+      "path": "scripts/opportunity-v3/fixtures/publication-catalog-20261011.json.gz",
+      "gitBlob": "ef115eac7bb2afe13f2c74c3aefd9c811a4c84b3",
+      "sha256": "2b067dff82331134499e5dcb6e56b9c826012b20e13e56105183501add8d6d6c",
+      "status": "reviewed",
+      "basis": "Parsed exact Git gzip; both baseline stages unchanged; installed only thesis/mapping definition SHA change, all other catalog fields/ACL identical."
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-plan.mjs",
+      "gitBlob": "ae581d409dabe74218ec3d0d41f7b7c97881f8ec",
+      "sha256": "e167f9abe09687041e8555eede04aee5939f391ca59bcbb8df52a6fc281fb51b",
+      "status": "reviewed",
+      "basis": "Entire installer/catalog/inventory delta reviewed; adds two exact migrations/whole SHA pins; first-install/authority/gate paths unchanged."
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+      "gitBlob": "29ce623d37675e14a6f0bfbe2db9b1061bef124f",
+      "sha256": "6060ea7eb5853d84b9a6cd57b7697e1491c404cf3338f6f66a145d23c33da04d",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-install-inventory.json",
+      "gitBlob": "e6c353afa83d0a84cbda5f974027fb71fd98cd6e",
+      "sha256": "fcbe48f624ea62bcbcafaf04b6c7d7386fbecfb2b2992d7c7d4e30cae3a8de92",
+      "status": "reviewed",
+      "basis": "Entire installer/catalog/inventory delta reviewed; adds two exact migrations/whole SHA pins; first-install/authority/gate paths unchanged."
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-install-profile.json",
+      "gitBlob": "7591b6fa518c6d49756f8f0e93322865b566bbc4",
+      "sha256": "7570e6522e68845f90164ba580d55dac9748ac1eb6f6f38301377835387438af",
+      "status": "reviewed",
+      "basis": "Entire installer/catalog/inventory delta reviewed; adds two exact migrations/whole SHA pins; first-install/authority/gate paths unchanged."
+    },
+    {
+      "path": "scripts/research-agent-migration-gate.test.mjs",
+      "gitBlob": "ef616b20352e26797941c546aad840b49451f7bc",
+      "sha256": "0e5bb6b92f78b8d73dcef97e99ec27fb4f79168ad41e1abec8629157d7f84e16",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-atomic-publication-postgres.test.mjs",
+      "gitBlob": "7ad22c7f9f74562f65a2240f2c632903d37bc379",
+      "sha256": "65f265bfdcf885e0f978372572ee4f7b1da67254f72d22b7b54ac9763ffaa691",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-author-assignment-http.test.mjs",
+      "gitBlob": "86f61d112608a33a7ddc6dc182920b09a1db70df",
+      "sha256": "857741b19185166bb3ad2c1c002df58664b8ea99119af7650552bbddd32ea61d",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-author-assignment-postgres.test.mjs",
+      "gitBlob": "02d4c47fc2e5807fedeba0641b19e8c9d76e6145",
+      "sha256": "58599ea3e2374b2199a70cc9c1e524fe3f566bc445859f3f9f7af8aebe5f0359",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-author-handoff-postgres.test.mjs",
+      "gitBlob": "33b270880af963b6b747942b10ad778ccd41aef2",
+      "sha256": "6f31cf4cb806564051bf0fcae660bf96fc1c629444cff1af128ff07ddbd15ce1",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-author-packet-postgres.test.mjs",
+      "gitBlob": "e0e4f2c7858fae508c1af1551406c7377aa598db",
+      "sha256": "7ed0a5f1cbd1ac06c306c526cba82e9d1b2559021250b3dc6dbb06e1ee246fd1",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-author-result-postgres.test.mjs",
+      "gitBlob": "6013901ba88dc422c2dc588c4bb2f052eda92ab4",
+      "sha256": "b9eeb221b65b28e5ea7e49af6d7aa010e10b6c87109e5231b324f1263ab55ced",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-complete-input-boundary-postgres.test.mjs",
+      "gitBlob": "e904c44f6a7210c0c909e71272a4cd5f56d0bbdb",
+      "sha256": "78e3284f2d23b1dacc498faf1c0cc2bc8e7edade17974db2dcf58aed7020de60",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-complete-input-http.test.mjs",
+      "gitBlob": "94e94691a00651257f5357bc7c376ada9fb66846",
+      "sha256": "682f3208bce34aa809f67b6b7c948beebd6535e01c380093240efa37f3d0513c",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-complete-input-postgres.test.mjs",
+      "gitBlob": "fd91637304322a6146bd13ffde0b940d079bd038",
+      "sha256": "163e44731013cf61f116362d2ffbc9fbac7fe1bdd4a17909195a956f6333724b",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-complete-input.test.mjs",
+      "gitBlob": "08c7c0c9dd49239e2e7c1772f45bbb5401dff91e",
+      "sha256": "d1703def58a62c7d748b0bb08481cc2cc3d2a8fb82db0844f39e930b7bfce023",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-publication-http.test.mjs",
+      "gitBlob": "af5eb8afb63673458594ed095c799677c970c2f7",
+      "sha256": "254e5e5304f568e7e34b990923d38147023e821dbe3e07b13f85920b631a62d9",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-reviewer-assignment-postgres.test.mjs",
+      "gitBlob": "154f90f6568660234146349b797d44d856c7ea3b",
+      "sha256": "04614d6be53773eae888d15f4bc6f60e8596484608c6084a50c8f90e074b50ba",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-reviewer-result-http.test.mjs",
+      "gitBlob": "c91ebc11773baca301c184cf5a742aa88e431992",
+      "sha256": "fcf2b7e372f2b40e14b6dffddc558ad3d243dc7317103d7ee14f6cf6320d198c",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-reviewer-result-postgres.test.mjs",
+      "gitBlob": "2996f6aab70491370b57441f3fc6a10aa9b474e9",
+      "sha256": "1ef72900dcea5f969dd901e1d94d405d69213f6535b6a264aa3f5ab444af3f8c",
+      "status": "reviewed",
+      "basis": "Entire changed hunks reviewed; fixture installs additive mapping, original assertions and clocks unchanged. Complete-input and author-context tests executed; other native/full-chain fixtures not rerun."
+    },
+    {
+      "path": "scripts/research-thesis-isolation-postgres.test.mjs",
+      "gitBlob": "6be266539dc868e07ddef0a899b7084a32552841",
+      "sha256": "1a515a4f3a8ba0cc9b5e1910727f97b2ffeaf8123c5796ed386e37e559e550f9",
+      "status": "reviewed",
+      "basis": "Entire new fixture and assertions reviewed, exact actual PG7/7 rerun; additional independent original RR probe closes."
+    },
+    {
+      "path": "web/src/lib/research-complete-mapping.json",
+      "gitBlob": "98284f2ff243d1efb2f094eab5961a7b04649f89",
+      "sha256": "ba44549b7efdc14a0c61523dadd950321fd7f85e72b30059415a555629baf704",
+      "status": "reviewed",
+      "basis": "All22 byte/hash pins and canonical closure hash independently checked; recursive local imports covered except intentional mapping self-reference; fixed company data unchanged."
+    },
+    {
+      "path": "web/src/lib/research-deep-author-input.ts",
+      "gitBlob": "c959684541854be703ee91d213bb3adc72914978",
+      "sha256": "4e4dd8e2f792071cf974631d08ffa852ad87b2c5e9edd11a3ccee71b27eeaf94",
+      "status": "reviewed",
+      "basis": "Entire four-line delta; failed proof stays rejected, future_at_cutoff normalized to existing clock_invalid contract; exact guarded route tests pass."
+    },
+    {
+      "path": "web/src/lib/research-strategy-release.generated.ts",
+      "gitBlob": "0ee99f69c957c677225682bb500598139b435ab2",
+      "sha256": "b03646126b6bc66409a7093863b5067c4fa14d7e80d408239a39f26169afa6f0",
+      "status": "reviewed",
+      "basis": "Exact generator --check independently passes; only thesis successor source/policy plus new codeHash, parameter hash unchanged; not strategy approval."
+    }
+  ]
+}

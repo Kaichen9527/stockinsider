@@ -1,0 +1,51 @@
+{
+  "kind": "unsigned_independent_scoped_test_code_review",
+  "subject": "b17b60896ac0c85a855812ed4a4a2f4aa2a0fb95",
+  "tree": "f465211d2573eebc31c00f1c02810ec6afa1a944",
+  "base": "9187d10ec7160448a83c2cc47147f8e50077b271",
+  "scope": [
+    "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs"
+  ],
+  "sourceSha256": "342528dc4b231ef001339dc796c1bfe5af11ade0e4336e6f5069bd81a08b6a9a",
+  "delta": "One require plus one19-line PCR018 test; original four tests and product/runtime bytes unchanged.",
+  "verdict": "SCOPED_CODE_PASS",
+  "findings": [],
+  "priorReceipt": {
+    "path": "/tmp/stockinsider-full-review-fge-oct11-callers9187-review.json",
+    "bytes": 3077,
+    "sha256": "60dd99a872c3747c3f76f377263ed0ac4f624c3943a2180bad62a1283b2d8fa4"
+  },
+  "execution": {
+    "command": "/Users/kaerchen/.nvm/versions/node/v22.23.3/bin/node --test /tmp/stockinsider-full-review-fge-oct11-callersb17/scripts/opportunity-v3/pcr-caller-boundaries.test.mjs",
+    "exactGitFilesExtracted": 11,
+    "pass": 5,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 81.178875,
+    "log": {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-callersb17.tap",
+      "bytes": 1298,
+      "sha256": "f5340fd848e80bd0cd76d226863ae6eb9edf82d8ab559511e212da44d7dbfe4e"
+    },
+    "bindings": {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-callersb17-bindings.json",
+      "bytes": 1224,
+      "sha256": "6aa2b00cc471c47c7740e3163e262de24581107c905bbc13013317f74e57bc1c"
+    }
+  },
+  "newClosure": {
+    "PCR-018": "Input has no injected plane. Actual deriveTechnicalEntryState therefore invokes calculateAdjustedTechnicalPlane. Test consumes real130-row output through the caller: current/prior close, independently computed MA20, equal-benchmark relative strength0, ATR2 and finite MACD. Missing benchmark,121-row insufficient history and future observation propagate owner reasons inside the returned unavailable state. No mocks or provider calls."
+  },
+  "retainedClosure": [
+    "PCR-025",
+    "PCR-026",
+    "PCR-029",
+    "PCR-031"
+  ],
+  "limits": [
+    "New closure covers the missing PCR018 actual-caller execution only, alongside prior owner-level coverage; it is not a new audit of all technical algorithms or adjustment/source authority.",
+    "PCR001/PCR005/PCR006/PCR007/PCR011/PCR023 remain open in the ongoing31-obligation audit; no full fulfillment conclusion.",
+    "Standalone test command was independently executed; no package hook addition,155-suite/build/nativePG rerun, protected approval, fullreleasePASS or signature requirement.",
+    "Previous9187 receipt/raw retained unchanged."
+  ]
+}

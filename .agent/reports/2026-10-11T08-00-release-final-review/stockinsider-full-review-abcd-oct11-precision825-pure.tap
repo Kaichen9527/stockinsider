@@ -1,0 +1,241 @@
+TAP version 13
+# research_complete_input_failure_phase read_validate research_complete_input_invalid
+# research_complete_input_failure_phase read_validate research_complete_input_invalid
+# (node:91622) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-abcd-oct11-precision825/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-abcd-oct11-precision825/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: canonical frozen vector 0
+ok 1 - canonical frozen vector 0
+  ---
+  duration_ms: 3.793542
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 1
+ok 2 - canonical frozen vector 1
+  ---
+  duration_ms: 0.264042
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 2
+ok 3 - canonical frozen vector 2
+  ---
+  duration_ms: 0.683417
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 3
+ok 4 - canonical frozen vector 3
+  ---
+  duration_ms: 0.356667
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 4
+ok 5 - canonical frozen vector 4
+  ---
+  duration_ms: 0.62
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 5
+ok 6 - canonical frozen vector 5
+  ---
+  duration_ms: 0.291708
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 6
+ok 7 - canonical frozen vector 6
+  ---
+  duration_ms: 0.44675
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 7
+ok 8 - canonical frozen vector 7
+  ---
+  duration_ms: 0.1895
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 8
+ok 9 - canonical frozen vector 8
+  ---
+  duration_ms: 1.705375
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 9
+ok 10 - canonical frozen vector 9
+  ---
+  duration_ms: 1.3315
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 10
+ok 11 - canonical frozen vector 10
+  ---
+  duration_ms: 0.328833
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 11
+ok 12 - canonical frozen vector 11
+  ---
+  duration_ms: 0.1405
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 12
+ok 13 - canonical frozen vector 12
+  ---
+  duration_ms: 0.086
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 13
+ok 14 - canonical frozen vector 13
+  ---
+  duration_ms: 0.255
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 14
+ok 15 - canonical frozen vector 14
+  ---
+  duration_ms: 0.264416
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects {"a":1,"a":2}
+ok 16 - strict JSON rejects {"a":1,"a":2}
+  ---
+  duration_ms: 0.809041
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects {"a":1,"\\u0061":2}
+ok 17 - strict JSON rejects {"a":1,"\\u0061":2}
+  ---
+  duration_ms: 0.194708
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects {"x":NaN}
+ok 18 - strict JSON rejects {"x":NaN}
+  ---
+  duration_ms: 0.068709
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects {"x":1} trailing
+ok 19 - strict JSON rejects {"x":1} trailing
+  ---
+  duration_ms: 0.069542
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects "\\ud800"
+ok 20 - strict JSON rejects "\\ud800"
+  ---
+  duration_ms: 0.065291
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects "\\u0000"
+ok 21 - strict JSON rejects "\\u0000"
+  ---
+  duration_ms: 0.054416
+  type: 'test'
+  ...
+# Subtest: non JSON value rejects Infinity
+ok 22 - non JSON value rejects Infinity
+  ---
+  duration_ms: 0.083875
+  type: 'test'
+  ...
+# Subtest: non JSON value rejects NaN
+ok 23 - non JSON value rejects NaN
+  ---
+  duration_ms: 0.053791
+  type: 'test'
+  ...
+# Subtest: non JSON value rejects ()=>{}
+ok 24 - non JSON value rejects ()=>{}
+  ---
+  duration_ms: 0.170208
+  type: 'test'
+  ...
+# Subtest: non JSON value rejects undefined
+ok 25 - non JSON value rejects undefined
+  ---
+  duration_ms: 0.058916
+  type: 'test'
+  ...
+# Subtest: 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+ok 26 - 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+  ---
+  duration_ms: 44.554791
+  type: 'test'
+  ...
+# Subtest: closed ingress cannot select executable, financial body or clock
+ok 27 - closed ingress cannot select executable, financial body or clock
+  ---
+  duration_ms: 0.292333
+  type: 'test'
+  ...
+# Subtest: schema constant and unknown nested fields reject
+ok 28 - schema constant and unknown nested fields reject
+  ---
+  duration_ms: 0.479125
+  type: 'test'
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping false
+ok 29 - old DB sealed mapping cannot bypass current mapping false
+  ---
+  duration_ms: 2.290792
+  type: 'test'
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping true
+ok 30 - old DB sealed mapping cannot bypass current mapping true
+  ---
+  duration_ms: 0.759625
+  type: 'test'
+  ...
+# Subtest: static schema bundles exactly preserve both original numeric and Unicode schemas
+ok 31 - static schema bundles exactly preserve both original numeric and Unicode schemas
+  ---
+  duration_ms: 12.360083
+  type: 'test'
+  ...
+# Subtest: closure metadata v1 preserves sorted keys independent of insertion order and binds SQL
+ok 32 - closure metadata v1 preserves sorted keys independent of insertion order and binds SQL
+  ---
+  duration_ms: 6.37325
+  type: 'test'
+  ...
+# Subtest: complete input clock closure includes the actual new executable imports
+ok 33 - complete input clock closure includes the actual new executable imports
+  ---
+  duration_ms: 1.179083
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/stockinsider-full-review-abcd-oct11-precision825/web/node_modules/typescript/lib/typescript.js' imported from /private/tmp/stockinsider-full-review-abcd-oct11-precision825/scripts/research-deep-job-context-route.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///private/tmp/stockinsider-full-review-abcd-oct11-precision825/web/node_modules/typescript/lib/typescript.js'
+# }
+# Node.js v22.23.3
+# Subtest: scripts/research-deep-job-context-route.test.mjs
+not ok 2 - scripts/research-deep-job-context-route.test.mjs
+  ---
+  duration_ms: 275.752041
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-abcd-oct11-precision825/scripts/research-deep-job-context-route.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 33
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 439.090042

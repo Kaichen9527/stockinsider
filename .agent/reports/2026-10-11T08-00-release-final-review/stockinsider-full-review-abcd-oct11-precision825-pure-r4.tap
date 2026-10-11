@@ -1,0 +1,446 @@
+TAP version 13
+# research_complete_input_failure_phase read_validate research_complete_input_invalid
+# research_complete_input_failure_phase read_validate research_complete_input_invalid
+# (node:93310) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-abcd-oct11-precision825/web/src/lib/research-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-abcd-oct11-precision825/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: canonical frozen vector 0
+ok 1 - canonical frozen vector 0
+  ---
+  duration_ms: 0.774916
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 1
+ok 2 - canonical frozen vector 1
+  ---
+  duration_ms: 0.054334
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 2
+ok 3 - canonical frozen vector 2
+  ---
+  duration_ms: 0.07675
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 3
+ok 4 - canonical frozen vector 3
+  ---
+  duration_ms: 0.041958
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 4
+ok 5 - canonical frozen vector 4
+  ---
+  duration_ms: 0.098417
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 5
+ok 6 - canonical frozen vector 5
+  ---
+  duration_ms: 0.042792
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 6
+ok 7 - canonical frozen vector 6
+  ---
+  duration_ms: 0.085125
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 7
+ok 8 - canonical frozen vector 7
+  ---
+  duration_ms: 0.035542
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 8
+ok 9 - canonical frozen vector 8
+  ---
+  duration_ms: 0.301208
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 9
+ok 10 - canonical frozen vector 9
+  ---
+  duration_ms: 0.321625
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 10
+ok 11 - canonical frozen vector 10
+  ---
+  duration_ms: 0.098208
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 11
+ok 12 - canonical frozen vector 11
+  ---
+  duration_ms: 0.0325
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 12
+ok 13 - canonical frozen vector 12
+  ---
+  duration_ms: 0.027333
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 13
+ok 14 - canonical frozen vector 13
+  ---
+  duration_ms: 0.101125
+  type: 'test'
+  ...
+# Subtest: canonical frozen vector 14
+ok 15 - canonical frozen vector 14
+  ---
+  duration_ms: 0.093709
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects {"a":1,"a":2}
+ok 16 - strict JSON rejects {"a":1,"a":2}
+  ---
+  duration_ms: 0.225292
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects {"a":1,"\\u0061":2}
+ok 17 - strict JSON rejects {"a":1,"\\u0061":2}
+  ---
+  duration_ms: 0.0645
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects {"x":NaN}
+ok 18 - strict JSON rejects {"x":NaN}
+  ---
+  duration_ms: 0.026209
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects {"x":1} trailing
+ok 19 - strict JSON rejects {"x":1} trailing
+  ---
+  duration_ms: 0.026959
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects "\\ud800"
+ok 20 - strict JSON rejects "\\ud800"
+  ---
+  duration_ms: 0.023916
+  type: 'test'
+  ...
+# Subtest: strict JSON rejects "\\u0000"
+ok 21 - strict JSON rejects "\\u0000"
+  ---
+  duration_ms: 0.021625
+  type: 'test'
+  ...
+# Subtest: non JSON value rejects Infinity
+ok 22 - non JSON value rejects Infinity
+  ---
+  duration_ms: 0.030875
+  type: 'test'
+  ...
+# Subtest: non JSON value rejects NaN
+ok 23 - non JSON value rejects NaN
+  ---
+  duration_ms: 0.021625
+  type: 'test'
+  ...
+# Subtest: non JSON value rejects ()=>{}
+ok 24 - non JSON value rejects ()=>{}
+  ---
+  duration_ms: 0.061292
+  type: 'test'
+  ...
+# Subtest: non JSON value rejects undefined
+ok 25 - non JSON value rejects undefined
+  ---
+  duration_ms: 0.024792
+  type: 'test'
+  ...
+# Subtest: 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+ok 26 - 8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail
+  ---
+  duration_ms: 11.116459
+  type: 'test'
+  ...
+# Subtest: closed ingress cannot select executable, financial body or clock
+ok 27 - closed ingress cannot select executable, financial body or clock
+  ---
+  duration_ms: 0.0975
+  type: 'test'
+  ...
+# Subtest: schema constant and unknown nested fields reject
+ok 28 - schema constant and unknown nested fields reject
+  ---
+  duration_ms: 0.107791
+  type: 'test'
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping false
+ok 29 - old DB sealed mapping cannot bypass current mapping false
+  ---
+  duration_ms: 0.597833
+  type: 'test'
+  ...
+# Subtest: old DB sealed mapping cannot bypass current mapping true
+ok 30 - old DB sealed mapping cannot bypass current mapping true
+  ---
+  duration_ms: 0.123708
+  type: 'test'
+  ...
+# Subtest: static schema bundles exactly preserve both original numeric and Unicode schemas
+ok 31 - static schema bundles exactly preserve both original numeric and Unicode schemas
+  ---
+  duration_ms: 5.9775
+  type: 'test'
+  ...
+# Subtest: closure metadata v1 preserves sorted keys independent of insertion order and binds SQL
+ok 32 - closure metadata v1 preserves sorted keys independent of insertion order and binds SQL
+  ---
+  duration_ms: 1.593708
+  type: 'test'
+  ...
+# Subtest: complete input clock closure includes the actual new executable imports
+ok 33 - complete input clock closure includes the actual new executable imports
+  ---
+  duration_ms: 0.09525
+  type: 'test'
+  ...
+# (node:93311) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-abcd-oct11-precision825/web/src/lib/candidate-dossier-contract.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-abcd-oct11-precision825/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: DCC-RT-01 exact internal bearer is checked before body parsing or database access
+ok 34 - DCC-RT-01 exact internal bearer is checked before body parsing or database access
+  ---
+  duration_ms: 568.42075
+  type: 'test'
+  ...
+# Subtest: DCC-RT-02 claim returns the actual durable reservation and immutable deadlines
+ok 35 - DCC-RT-02 claim returns the actual durable reservation and immutable deadlines
+  ---
+  duration_ms: 40.426792
+  type: 'test'
+  ...
+# Subtest: DCC-RT-03 independent SQL timestamps preserve both original deadlines without inventing equality
+ok 36 - DCC-RT-03 independent SQL timestamps preserve both original deadlines without inventing equality
+  ---
+  duration_ms: 41.043625
+  type: 'test'
+  ...
+# Subtest: DCC-RT-04 status recovers the same active claim using only bounded SELECTs
+ok 37 - DCC-RT-04 status recovers the same active claim using only bounded SELECTs
+  ---
+  duration_ms: 79.951209
+  type: 'test'
+  ...
+# Subtest: DCC-RT-05 author handoff completion is returned as accounting, without claiming another job
+ok 38 - DCC-RT-05 author handoff completion is returned as accounting, without claiming another job
+  ---
+  duration_ms: 47.210541
+  type: 'test'
+  ...
+# Subtest: DCC-RT-06 a finished model remains observable until the distinct job deadline
+ok 39 - DCC-RT-06 a finished model remains observable until the distinct job deadline
+  ---
+  duration_ms: 86.513125
+  type: 'test'
+  ...
+# Subtest: DCC-RT-07 foreign owner and absent or non-running jobs return no context and never mutate
+ok 40 - DCC-RT-07 foreign owner and absent or non-running jobs return no context and never mutate
+  ---
+  duration_ms: 237.34275
+  type: 'test'
+  ...
+# Subtest: DCC-RT-08 status requires an exact paired job/attempt selector and a valid owner
+ok 41 - DCC-RT-08 status requires an exact paired job/attempt selector and a valid owner
+  ---
+  duration_ms: 432.545875
+  type: 'test'
+  ...
+# Subtest: DCC-RT-09 original attempt deadline cannot be extended by mutable job state
+ok 42 - DCC-RT-09 original attempt deadline cannot be extended by mutable job state
+  ---
+  duration_ms: 44.666958
+  type: 'test'
+  ...
+# Subtest: DCC-RT-10 invalid reservation clocks fail closed
+ok 43 - DCC-RT-10 invalid reservation clocks fail closed
+  ---
+  duration_ms: 133.297167
+  type: 'test'
+  ...
+# Subtest: DCC-RT-11 an otherwise valid active reservation may not cross Taipei midnight
+ok 44 - DCC-RT-11 an otherwise valid active reservation may not cross Taipei midnight
+  ---
+  duration_ms: 53.558875
+  type: 'test'
+  ...
+# Subtest: DCC-RT-12 expired model reservation cannot be recovered as runnable work
+ok 45 - DCC-RT-12 expired model reservation cannot be recovered as runnable work
+  ---
+  duration_ms: 49.816541
+  type: 'test'
+  ...
+# Subtest: DCC-RT-13 expiry during database reads never returns an active claim context
+ok 46 - DCC-RT-13 expiry during database reads never returns an active claim context
+  ---
+  duration_ms: 50.799625
+  type: 'test'
+  ...
+# Subtest: DCC-RT-14 changed live job fence during reads is rejected without modifying the new state
+ok 47 - DCC-RT-14 changed live job fence during reads is rejected without modifying the new state
+  ---
+  duration_ms: 192.862958
+  type: 'test'
+  ...
+# Subtest: DCC-RT-15 a claim with no selected job returns null without inventing a reservation
+ok 48 - DCC-RT-15 a claim with no selected job returns null without inventing a reservation
+  ---
+  duration_ms: 49.3655
+  type: 'test'
+  ...
+# Subtest: DCC-RT-16 successful claim followed by missing or failed context is uncertain and never retried
+ok 49 - DCC-RT-16 successful claim followed by missing or failed context is uncertain and never retried
+  ---
+  duration_ms: 215.599959
+  type: 'test'
+  ...
+# Subtest: DCC-RT-17 RPC claim identity must match the reloaded durable job in every field
+ok 50 - DCC-RT-17 RPC claim identity must match the reloaded durable job in every field
+  ---
+  duration_ms: 305.871375
+  type: 'test'
+  ...
+# Subtest: DCC-RT-18 lost or malformed claim RPC replies are sanitized and never retried automatically
+ok 51 - DCC-RT-18 lost or malformed claim RPC replies are sanitized and never retried automatically
+  ---
+  duration_ms: 484.721791
+  type: 'test'
+  ...
+# Subtest: DCC-RT-19 status rejects missing, mismatched, duplicate, or unreadable durable context
+ok 52 - DCC-RT-19 status rejects missing, mismatched, duplicate, or unreadable durable context
+  ---
+  duration_ms: 1387.366834
+  type: 'test'
+  ...
+# Subtest: DCC-RT-20 completion identity, outcome, hash, and clocks remain bound to the reservation
+ok 53 - DCC-RT-20 completion identity, outcome, hash, and clocks remain bound to the reservation
+  ---
+  duration_ms: 604.648417
+  type: 'test'
+  ...
+# Subtest: DCC-RT-21 existing handoff, finish, and publication retain their authenticated RPC contracts
+ok 54 - DCC-RT-21 existing handoff, finish, and publication retain their authenticated RPC contracts
+  ---
+  duration_ms: 338.524709
+  type: 'test'
+  ...
+# Subtest: DAI-01 real input route exports only bounded facts/summary with live reservation and separate cutoffs
+ok 55 - DAI-01 real input route exports only bounded facts/summary with live reservation and separate cutoffs
+  ---
+  duration_ms: 108.100083
+  type: 'test'
+  ...
+# Subtest: DAI-02 auth and exact input validation happen before all database access
+ok 56 - DAI-02 auth and exact input validation happen before all database access
+  ---
+  duration_ms: 451.946542
+  type: 'test'
+  ...
+# Subtest: DAI-03 wrong reservation and a completed model cannot prepare another dispatch input
+ok 57 - DAI-03 wrong reservation and a completed model cannot prepare another dispatch input
+  ---
+  duration_ms: 137.253791
+  type: 'test'
+  ...
+# Subtest: DAI-04 denied, withdrawn, malformed rights, future microsecond and unrelated company stay explicit gaps
+ok 58 - DAI-04 denied, withdrawn, malformed rights, future microsecond and unrelated company stay explicit gaps
+  ---
+  duration_ms: 671.496625
+  type: 'test'
+  ...
+# Subtest: DAI-05 authenticated summary remains internal; industry is context without company/order attribution
+ok 59 - DAI-05 authenticated summary remains internal; industry is context without company/order attribution
+  ---
+  duration_ms: 79.521875
+  type: 'test'
+  ...
+# Subtest: DAI-06 stale RPC head and equal-clock conflicting sibling cannot slip into author input
+ok 60 - DAI-06 stale RPC head and equal-clock conflicting sibling cannot slip into author input
+  ---
+  duration_ms: 140.353917
+  type: 'test'
+  ...
+# Subtest: DAI-07 immutable dossier hash, issuer, published identity and clocks are verified
+ok 61 - DAI-07 immutable dossier hash, issuer, published identity and clocks are verified
+  ---
+  duration_ms: 424.51275
+  type: 'test'
+  ...
+# Subtest: DAI-08 absent selections are explicit gaps, never a complete financial forecast
+ok 62 - DAI-08 absent selections are explicit gaps, never a complete financial forecast
+  ---
+  duration_ms: 68.028625
+  type: 'test'
+  ...
+# Subtest: DAI-09 ownership changes during preparation invalidate the entire packet
+ok 63 - DAI-09 ownership changes during preparation invalidate the entire packet
+  ---
+  duration_ms: 71.607875
+  type: 'test'
+  ...
+# Subtest: DAI-10 source read failure cannot be reported as no new sources
+ok 64 - DAI-10 source read failure cannot be reported as no new sources
+  ---
+  duration_ms: 77.190834
+  type: 'test'
+  ...
+# Subtest: DAI-11 deadline rejects a stalled source read even when transport ignores cancellation
+ok 65 - DAI-11 deadline rejects a stalled source read even when transport ignores cancellation
+  ---
+  duration_ms: 93.690875
+  type: 'test'
+  ...
+# Subtest: DAI-12 fallback revision URLs cannot hide a contradictory same-clock sibling
+ok 66 - DAI-12 fallback revision URLs cannot hide a contradictory same-clock sibling
+  ---
+  duration_ms: 78.448625
+  type: 'test'
+  ...
+# Subtest: DCC-RT observed-only jobs cannot enter the legacy formal context
+ok 67 - DCC-RT observed-only jobs cannot enter the legacy formal context
+  ---
+  duration_ms: 145.508625
+  type: 'test'
+  ...
+# Subtest: DAI-13 precise clocks survive packet serialization and reject invalid microsecond sibling ordering
+ok 68 - DAI-13 precise clocks survive packet serialization and reject invalid microsecond sibling ordering
+  ---
+  duration_ms: 142.799166
+  type: 'test'
+  ...
+# Subtest: RIP-HTTP authentication precedes body/client for preparation
+ok 69 - RIP-HTTP authentication precedes body/client for preparation
+  ---
+  duration_ms: 72.131625
+  type: 'test'
+  ...
+# Subtest: RIP-HTTP closed observed preparation delegates to one atomic RPC without claim/reserve
+ok 70 - RIP-HTTP closed observed preparation delegates to one atomic RPC without claim/reserve
+  ---
+  duration_ms: 577.818625
+  type: 'test'
+  ...
+# Subtest: financial supplement auth rejects before body or database construction
+ok 71 - financial supplement auth rejects before body or database construction
+  ---
+  duration_ms: 60.299834
+  type: 'test'
+  ...
+1..71
+# tests 71
+# suites 0
+# pass 71
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9128.151875

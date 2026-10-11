@@ -1,0 +1,29 @@
+{
+  "kind": "unsigned_scoped_test_code_review",
+  "subject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+  "base": "e0885815b39f86df34763279dc5fc22e54037a40",
+  "tree": "166839f04519463ac9f8b0531c620eedddf9ca8c",
+  "path": "scripts/research-source-budget-postgres.test.mjs",
+  "sha256": "662194ad0c34e55c10afd840255cf6375724900a93f3c119da6944475ad2376c",
+  "verdict": "PASS",
+  "exactChange": "One migration array append; replacing precisely that addition yields byte-identical predecessor file. All assertions/skip/DDL/clock/cleanup otherwise unchanged.",
+  "execution": {
+    "command": "PATH=<Node22+PG17+system> TMPDIR=/tmp/stockinsider-full-review-abcd-oct11-t node --test /tmp/stockinsider-full-review-abcd-oct11-precision825/scripts/research-source-budget-postgres.test.mjs",
+    "pass": 1,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 19300.385709,
+    "ownPGStoppedAndTempRemoved": true,
+    "source": "exact d6 test with unchanged exact e088 migrations/manifest in isolated reviewer extraction"
+  },
+  "log": {
+    "path": "/tmp/stockinsider-full-review-abcd-oct11-budget-d6.tap",
+    "bytes": 360,
+    "sha256": "c8c102e505cd77bedb64c4da13117adbf1d0c889913fe7ea73e3fb9691c03abf"
+  },
+  "limits": [
+    "Actual PG test is isolated synthetic schema/roles, not production deployment.",
+    "No fullchain/build/PCR/protected approval or genuine authorship claimed.",
+    "Original e088 CI failure not erased or replaced."
+  ]
+}

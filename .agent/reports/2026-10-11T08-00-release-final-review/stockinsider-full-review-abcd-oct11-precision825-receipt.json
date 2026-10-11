@@ -1,0 +1,118 @@
+{
+  "kind": "unsigned_scoped_code_review",
+  "subject": "e0885815b39f86df34763279dc5fc22e54037a40",
+  "intermediate": "8250fff95398c603e2be2fc31fc538fd1674bf09",
+  "base": "49a1399a479f7ad0e069bc2ce18c1d554e18f0f3",
+  "tree": "3a3302a16466a4b42ad8d661458f2c4f36c7d8ff",
+  "verdict": "PASS",
+  "scopePaths": 27,
+  "findings": [],
+  "tests": {
+    "isolatedActualPG17": {
+      "pass": 7,
+      "fail": 0,
+      "skip": 0
+    },
+    "completeInputAndGuardedAuthorContext": {
+      "pass": 71,
+      "fail": 0,
+      "skip": 0
+    },
+    "independentOriginalRRReproducer": "second insert rejected; durable count1; own cluster stopped",
+    "generatedReleaseCheck": {
+      "codeHash": "786baeee2edf3b0769d286df73b02de8781b36b92efbfa724bdd835a4ca5b511",
+      "parameterHash": "8bbad7c16c55b4ef1483e1f0c348f35d2404397717e10d1daed49fba30843a39",
+      "files": 33
+    }
+  },
+  "closure": {
+    "files": 22,
+    "hash": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+    "bothSQLCompanyPayloadsUnchangedExceptClosureHash": true
+  },
+  "catalog": "old migration prefix unchanged; both baseline stages unchanged; installed only two function definition hashes, remaining attributes/ACL unchanged",
+  "limitations": [
+    "No full-chain installer, native HTTP, build, production or full-release suite rerun.",
+    "Existing maker CI03 Mac clock-library unavailability and earlier installer RED are not replaced by this review.",
+    "Preserved reviewer isolation setup failures: wrong cwd/missing pg, missing generated and route/dependency files. Final exact tests run after extraction completion; no repo modification.",
+    "Three untracked generated authority JS copied from existing disk only after matching immutable generated release manifest SHA; not independently rebuilt.",
+    "Original thesis table/trigger/function exact; three FK parents and payloads synthetic; no production schema/real authorship/protected attestation/strategy or deploy approval."
+  ],
+  "evidence": [
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-pg-r2.tap",
+      "bytes": 1774,
+      "sha256": "ddeeacb515c89bc585cb2a99d74c631d914ffd2fea8436a220bd24bf6855a9d9"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-pg-r3.tap",
+      "bytes": 1866,
+      "sha256": "2b949e13f7c380f2415b953ab6a5c448f25ec904bfd769d28b406567af48d108"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-pg.tap",
+      "bytes": 69,
+      "sha256": "205112c873f6c4766e41ea07b37a32a21a485cc399c960fc8ebc65485be892c4"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-pure-r2.tap",
+      "bytes": 7110,
+      "sha256": "f0d2f6e5fdc2d03c05a57c25631dfd278bef6bf1568e83080e2e367005db07a2"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-pure-r3.tap",
+      "bytes": 55293,
+      "sha256": "9fae977ed54ae546eedff098376817eb69a5aed216f379c5e13cd2426aed9cdc"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-pure-r4.tap",
+      "bytes": 15154,
+      "sha256": "47c61d6cacaea404f9ac51db62914db7125eae11d4b934bfde9865d5243ff68d"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-pure.tap",
+      "bytes": 7103,
+      "sha256": "c2613ea6761c2bfcfc21ddd6fb43c2a1b5ddb6530d130674ac805a383aa01aba"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-release-check-r2.log",
+      "bytes": 1832,
+      "sha256": "7a7c7a4f8b3e3f911fdb86bbf31db234063b69b0e5b861de377611febe956d9d"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-release-check-r3.log",
+      "bytes": 174,
+      "sha256": "dafb9a7509297ba70ff8e0ccf89e824af2a351c021b1ec143b2734102d7d2e52"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-release-check.log",
+      "bytes": 1493,
+      "sha256": "db7bacdc1bd8b4556445ff37d150ecae6d006a0492df1f83e6ae753f5b4af199"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-static.json",
+      "bytes": 1871,
+      "sha256": "93e2eaa4fa9c2304b1dc243fd24340aeacbb2feff5f6409ec89cdd9acb8451ca"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-coverage.json",
+      "bytes": 12358,
+      "sha256": "c3023dc7308228f6ce2a0a09d2875003b8b0fe008529a755b6698a912b4ec70f"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-thesis-repair825-probe.mjs",
+      "bytes": 3896,
+      "sha256": "6ee8e67ab585a8599da4e3d54e407ba8fb6e5bcc8fd81521544c892988560dfd"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-thesis-repair825-probe.log",
+      "bytes": 530,
+      "sha256": "0edc3b53f3a4f8d947a4770dcaf17a88b3e89c784d814b91fe876f0382eb1b8f"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825/copied-generated-provenance.json",
+      "bytes": 257,
+      "sha256": "e965e0edbaf5a9c529f5c58cfda8736c63b0c97af93f686c8504d83a65f4950f"
+    }
+  ]
+}

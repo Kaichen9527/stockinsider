@@ -1,0 +1,7 @@
+{
+  "diskGeneratedExactManifestHash": [
+    "web/src/lib/generated/official-authority/codec.js",
+    "web/src/lib/generated/official-authority/official-market-authority-v314.js",
+    "web/src/lib/generated/official-authority/official-calendar-v314.js"
+  ]
+}

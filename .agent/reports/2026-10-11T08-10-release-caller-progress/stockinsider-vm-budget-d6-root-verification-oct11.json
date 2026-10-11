@@ -1,0 +1,65 @@
+{
+  "raw": 30,
+  "bytes": 813364,
+  "receiptSha256": "45c35e063c72e5c18de8ea8e49eb261a3501cda127f30d189d444fb303e999cc",
+  "tests": {
+    "counts": {
+      "tests": 818,
+      "pass": 816,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "skips": [
+      "ok 350 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled",
+      "ok 351 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled"
+    ],
+    "originalPackageSelectionFiles": 78,
+    "originalScriptEquivalentInvocation": "bash saved literal package script, only --test-concurrency=1 inserted; no lifecycle hooks present",
+    "noAssertFileGlobOrTestNameChanges": true
+  },
+  "source": {
+    "head": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+    "parent": "e0885815b39f86df34763279dc5fc22e54037a40",
+    "tree": "166839f04519463ac9f8b0531c620eedddf9ca8c",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "node": "v22.14.0",
+    "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "pgConfigBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "nativeToolsExecutable": {
+      "initdb": true,
+      "pg_ctl": true,
+      "psql": true,
+      "postgres": true
+    },
+    "pgClient": {
+      "version": "8.18.0",
+      "user": "agent"
+    },
+    "osUser": "agent",
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "diskAvailableBytes": 10046193664,
+    "sourceStatus": "",
+    "admissionAt": "2026-10-11T07:56:27.755589Z",
+    "manualHardStopAt": "2026-10-11T08:16:27Z",
+    "memoryAvailableKiB": 33208964,
+    "activeHeavyAtAdmission": []
+  },
+  "cleanup": {
+    "checkedAt": "2026-10-11T08:02:49.378518+00:00",
+    "allStagesRemainingObservedChildren": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "liveRelevantProcesses": [],
+    "topLevelTestClusterPidFiles": [],
+    "diskAvailableBytes": 10045378560,
+    "rebuildableCacheAndSyntheticJournalScratchRetainedPrivate": true,
+    "uniqueEvidenceDeleted": false,
+    "noGlobalPrune": true
+  }
+}

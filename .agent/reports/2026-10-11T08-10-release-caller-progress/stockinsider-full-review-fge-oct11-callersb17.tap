@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: PCR-018 entry-state caller calculates and consumes the actual adjusted price plane
+ok 1 - PCR-018 entry-state caller calculates and consumes the actual adjusted price plane
+  ---
+  duration_ms: 3.4325
+  type: 'test'
+  ...
+# Subtest: PCR-025 caller returns bounded history or the actual unavailable reason
+ok 2 - PCR-025 caller returns bounded history or the actual unavailable reason
+  ---
+  duration_ms: 17.602708
+  type: 'test'
+  ...
+# Subtest: PCR-026 caller retains the roster manifest and rejects invalid universe inputs
+ok 3 - PCR-026 caller retains the roster manifest and rejects invalid universe inputs
+  ---
+  duration_ms: 7.064417
+  type: 'test'
+  ...
+# Subtest: PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted
+ok 4 - PCR-029 caller derives research eligibility from available quality and keeps BIAS unpromoted
+  ---
+  duration_ms: 0.367667
+  type: 'test'
+  ...
+# Subtest: PCR-031 caller preserves shadow rows and changes identity when the factor contract changes
+ok 5 - PCR-031 caller preserves shadow rows and changes identity when the factor contract changes
+  ---
+  duration_ms: 0.711417
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 81.178875

@@ -1,0 +1,33 @@
+{
+  "kind": "unsigned_independent_application_release_code_integration_review",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "subject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+  "tree": "166839f04519463ac9f8b0531c620eedddf9ca8c",
+  "verdict": "CODE_PASS",
+  "findings": [],
+  "counts": {
+    "changedPaths": 1714,
+    "applicationReleaseCodeConfigTests": 408,
+    "generatedHistoricalOutputs": 343,
+    "runtimeArtifacts": 20,
+    "otherEvidenceDocumentation": 943,
+    "post1aChangedPaths": 48
+  },
+  "limits": [
+    "Coverage is application/release code integration, not independent execution audit of all943 evidence/docs including35 historical producer/probe programs.",
+    "No protected-CI, runtime attestation, strategy approval or deployment authority conferred.",
+    "d6 PCR155/155/0skip observed, but31 dynamic fulfillment remains incomplete (PCR023 owner invocation/PCR011 namedSQL/PCR006 delegation under independent audit); VM complete research suite pending; e088 failure and2skips retained."
+  ],
+  "exactReviewSignatureRequired": false,
+  "exactReviewSignatureBasis": "protected main169 worker lines588-675; exact canonical ten-key unsigned schema",
+  "report": "/tmp/stockinsider-full-review-fge-oct11-integration-d6-report.md",
+  "coverage": "/tmp/stockinsider-full-review-fge-oct11-integration-d6-coverage.json",
+  "facts": "/tmp/stockinsider-full-review-fge-oct11-integration-d6-facts.json",
+  "evidenceIndex": "/tmp/stockinsider-full-review-fge-oct11-integration-d6-evidence-index.json",
+  "productCorrectnessExecution": {
+    "path": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+    "bytes": 40187,
+    "sha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4"
+  },
+  "pcrFulfillmentComplete": false
+}

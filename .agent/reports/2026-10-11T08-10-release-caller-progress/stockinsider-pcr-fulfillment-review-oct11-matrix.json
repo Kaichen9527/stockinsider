@@ -1,0 +1,1073 @@
+{
+  "schema": "unsigned-pcr-boundary-coverage-review-v1",
+  "subject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+  "tree": "166839f04519463ac9f8b0531c620eedddf9ca8c",
+  "verdict": "INCOMPLETE_FOR_31_DECLARED_CALLER_FULFILLMENT",
+  "scope": "Read-only static boundary/test evidence review; no suite rerun, protected attestation, signing, production or genuine model execution. Does not retract existing successful tests.",
+  "inventorySha256": "2e9e87b0fa7ddf426b0ec6c743da7c8b812b56d8149100d408e4a8c3a339a530",
+  "testSha256": "6e498b720b72f121c818bf5de128c09673d7e9592b204244a212dbc1ca1a8592",
+  "summary": {
+    "records": 31,
+    "callerEvidenceIncludingCrossCase": 20,
+    "gaps": 11,
+    "gapIds": [
+      "PCR-001",
+      "PCR-005",
+      "PCR-006",
+      "PCR-007",
+      "PCR-011",
+      "PCR-018",
+      "PCR-023",
+      "PCR-025",
+      "PCR-026",
+      "PCR-029",
+      "PCR-031"
+    ]
+  },
+  "logs": [
+    {
+      "path": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+      "bytes": 40187,
+      "sha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4",
+      "totals": {
+        "tests": 155,
+        "pass": 155,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "provenance": "Root executed; independent reviewer inspected retained bytes/TAP, did not rerun."
+    },
+    {
+      "path": "/tmp/stockinsider-pcr023-owner-execution-oct11.tap",
+      "bytes": 356,
+      "sha256": "03b16713f21108d0324ef14072499ec8cef6bf949c47b0b1b0e497db81e10a5e",
+      "totals": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "provenance": "Root executed; independent reviewer inspected retained bytes/TAP, did not rerun."
+    },
+    {
+      "path": "/tmp/stockinsider-pcr011-native-execution-oct11.tap",
+      "bytes": 1045,
+      "sha256": "06c46e1334c7ba0e4d4eac60f09a063562357908161c271f5e50986e76d4ada9",
+      "totals": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "provenance": "Root executed; independent reviewer inspected retained bytes/TAP, did not rerun."
+    }
+  ],
+  "records": [
+    {
+      "caller": {
+        "function": "runRuntimeInstallation",
+        "path": "scripts/runtime/runtime-installation-gate.mjs"
+      },
+      "effect": "resolves the exact source and direct-child evidence commits from Git, derives the tracked worker/config hashes, and writes the release only after the reviewed-release checks pass",
+      "id": "PCR-001",
+      "implementationState": "implemented",
+      "operation": "installTrackedAuthSourceWorker",
+      "owner": {
+        "export": "installTrackedAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker-installer.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/runtime-installation-gate.mjs",
+        "consumerFunction": "runRuntimeInstallation",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR001 calls installer and release resolver separately with synthetic repository/platform, but never runRuntimeInstallation. Add exact caller with real isolated Git source/direct-child evidence and prepare-only owned filesystem; assert returned disposition and rejection before filesystem on invalid lineage.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 177,
+        "testName": "acceptance PCR-001"
+      },
+      "callerOwnerSymbolLines": [
+        12
+      ],
+      "ownerBlobSha256": "4250f70e2dd4836e157f3528c730e22d6296c5a12ff26ace25652ad933a1b072",
+      "callerBlobSha256": "4f86dc91c4834457b3d35c6170dc987b705a62d65b529764e38723f22e6c1292"
+    },
+    {
+      "caller": {
+        "function": "installTrackedAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker-installer.js"
+      },
+      "effect": "accepts only canonical manifest, attestation, worker/config and rollback hashes in the documented precedence",
+      "id": "PCR-002",
+      "implementationState": "implemented",
+      "operation": "validateRuntimeInstallationManifest",
+      "owner": {
+        "export": "validateRuntimeInstallationManifest",
+        "path": "scripts/runtime/auth-source-worker-installation.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/auth-source-worker-installer.js",
+        "consumerFunction": "installTrackedAuthSourceWorker",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR002 validates manifest directly; PCR001 actual installer consumes validated manifest and passes it to stage/verify. Link both cases; mock platform is not actual machine activation.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 529,
+        "testName": "acceptance PCR-002"
+      },
+      "callerOwnerSymbolLines": [
+        3,
+        13
+      ],
+      "ownerBlobSha256": "165739dd256e92a3ffdaf1db34438ab9c88c8fd88b68a3616875ee014a109cb7",
+      "callerBlobSha256": "4250f70e2dd4836e157f3528c730e22d6296c5a12ff26ace25652ad933a1b072"
+    },
+    {
+      "caller": {
+        "function": "installTrackedAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker-installer.js"
+      },
+      "effect": "activates one scheduler owner or restores the byte-exact previous release without a partial scheduler state",
+      "id": "PCR-003",
+      "implementationState": "implemented",
+      "operation": "activateTrackedRuntimeRelease",
+      "owner": {
+        "export": "activateTrackedRuntimeRelease",
+        "path": "scripts/runtime/auth-source-worker-installation.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/auth-source-worker-installer.js",
+        "consumerFunction": "installTrackedAuthSourceWorker",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR003 exercises activation rollback/retry; PCR001 actual installer delegates install=true and consumes activated result. Synthetic scheduler/journal only.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 552,
+        "testName": "acceptance PCR-003"
+      },
+      "callerOwnerSymbolLines": [
+        3,
+        10
+      ],
+      "ownerBlobSha256": "165739dd256e92a3ffdaf1db34438ab9c88c8fd88b68a3616875ee014a109cb7",
+      "callerBlobSha256": "4250f70e2dd4836e157f3528c730e22d6296c5a12ff26ace25652ad933a1b072"
+    },
+    {
+      "caller": {
+        "function": "GET",
+        "path": "web/src/app/api/internal/health-check/route.ts"
+      },
+      "effect": "reports the closed runtime-health reason set from manifest, scheduler, terminal run, projection and compatibility observations",
+      "id": "PCR-004",
+      "implementationState": "implemented",
+      "operation": "assessTrackedRuntimeHealth",
+      "owner": {
+        "export": "assessTrackedRuntimeHealth",
+        "path": "web/src/lib/opportunity-v3/runtime-health.ts"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "web/src/app/api/internal/health-check/route.ts",
+        "consumerFunction": "GET",
+        "kind": "serialized_response"
+      },
+      "coverageStatus": "caller_evidence",
+      "reviewNote": "PCR004 executes actual GET via controlled route harness and asserts serialized failure response, plus health reason tests. Does not claim production health.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 605,
+        "testName": "acceptance PCR-004"
+      },
+      "callerOwnerSymbolLines": [
+        5,
+        88,
+        161,
+        199
+      ],
+      "ownerBlobSha256": "01bed6290b2d7095615d7301dd4124458888772edb851ff255436c77c2c0ac20",
+      "callerBlobSha256": "2b5a6e3e94646e4516c09ef7a6a2b9310fc7300a8d27959f363a2bee1dc3238d"
+    },
+    {
+      "caller": {
+        "function": "main",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "effect": "validates the exact occurrence-bound legacy-correctness configuration and passes its canonical bytes to the database-owned acquire path without V3 writes",
+      "id": "PCR-005",
+      "implementationState": "implemented",
+      "operation": "validateAuthSourceDagConfig",
+      "owner": {
+        "export": "validateAuthSourceDagConfig",
+        "path": "scripts/runtime/source-run-config.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/auth-source-worker-cli.js",
+        "consumerFunction": "main",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR005 validates configuration and invokes real buildStageHandlers, but never declared CLI main; dry-run alone would cover config serialization, not documented acquire-path canonical bytes. Add controlled main entry with real validation and captured acquire arguments; no credentials/provider activation.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 712,
+        "testName": "acceptance PCR-005"
+      },
+      "callerOwnerSymbolLines": [
+        9,
+        2117
+      ],
+      "ownerBlobSha256": "32259811ce1fb363b28c471ce1ea1080e16780a306d1048e27cb4f9fff5714ff",
+      "callerBlobSha256": "602948f0eb960a78a75a88b0ac6ffa080a8adb6755abe544b8530d93384b22ba"
+    },
+    {
+      "caller": {
+        "function": "main",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "effect": "commits the occurrence-to-terminal-run transaction with atomic frozen pages, claims, revisions and terminal recovery",
+      "id": "PCR-006",
+      "implementationState": "implemented",
+      "operation": "runDurableAuthSourceWorker",
+      "owner": {
+        "export": "runDurableAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/auth-source-worker-cli.js",
+        "consumerFunction": "main",
+        "kind": "serialized_response"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR006 runs real durable worker against test-only adapter and verifies heartbeat/recovery/lease-loss behavior. Declared CLI main never consumes and serializes this worker return. Add bounded CLI-main harness through actual worker, output envelope and failure assertions; no replacement worker implementation.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 980,
+        "testName": "acceptance PCR-006"
+      },
+      "callerOwnerSymbolLines": [
+        8,
+        2171
+      ],
+      "ownerBlobSha256": "0b41d558d131c75d9bd5fe26fb1ed3876ccb5ba329bd52295c67a1de82624a1a",
+      "callerBlobSha256": "602948f0eb960a78a75a88b0ac6ffa080a8adb6755abe544b8530d93384b22ba"
+    },
+    {
+      "caller": {
+        "function": "runDurableAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker.js"
+      },
+      "effect": "claims each database-derived successor with its bounded token-bound read bundle so retries cannot skip, enumerate or reorder a revision shard",
+      "id": "PCR-007",
+      "implementationState": "implemented",
+      "operation": "claimLegacyProducerJob",
+      "owner": {
+        "export": "claimLegacyProducerJob",
+        "path": "scripts/runtime/postgres-legacy-producer-adapter.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/auth-source-worker.js",
+        "consumerFunction": "runDurableAuthSourceWorker",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR007 uses paging/roster helpers; PCR006 worker claim is a fake method. v315 tests exercise different supabase-rest adapter, not inventory postgres adapter. Add actual postgres adapter passed to actual worker, assert returned claim determines dispatched stage/read bundle and successor order; isolated PG preferred for durable claim fence.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1239,
+        "testName": "acceptance PCR-007"
+      },
+      "callerOwnerSymbolLines": [
+        109,
+        126
+      ],
+      "ownerBlobSha256": "035ea2786fa9790a346b029a5d1d082f7053863edfd760c5186491759c828a12",
+      "callerBlobSha256": "0b41d558d131c75d9bd5fe26fb1ed3876ccb5ba329bd52295c67a1de82624a1a"
+    },
+    {
+      "caller": {
+        "function": "extractRevisionCandidates",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "effect": "returns one typed instrument-authority join result and never derives a symbol from a UUID substring",
+      "id": "PCR-008",
+      "implementationState": "implemented",
+      "operation": "resolveInstrumentAuthorityJoin",
+      "owner": {
+        "export": "resolveInstrumentAuthorityJoin",
+        "path": "scripts/runtime/instrument-authority-join.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/auth-source-worker-cli.js",
+        "consumerFunction": "extractRevisionCandidates",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "caller_evidence",
+      "reviewNote": "PCR008 invokes actual join and extractRevisionCandidates; linked UUID/symbol/disposition and rejected authority cases are asserted.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1285,
+        "testName": "acceptance PCR-008"
+      },
+      "callerOwnerSymbolLines": [
+        36,
+        373,
+        410
+      ],
+      "ownerBlobSha256": "646501c95e83095782c7dedea824026c811e0df0251dd3f14860ecd52bff5bd0",
+      "callerBlobSha256": "602948f0eb960a78a75a88b0ac6ffa080a8adb6755abe544b8530d93384b22ba"
+    },
+    {
+      "caller": {
+        "function": "buildCandidateFunnel",
+        "path": "scripts/runtime/candidate-funnel.js"
+      },
+      "effect": "persists source-signal discovery membership independently of valuation and records the typed entrant reason",
+      "id": "PCR-009",
+      "implementationState": "implemented",
+      "operation": "deriveDiscoveryDisposition",
+      "owner": {
+        "export": "deriveDiscoveryDisposition",
+        "path": "scripts/runtime/discovery-disposition.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/candidate-funnel.js",
+        "consumerFunction": "buildCandidateFunnel",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "caller_evidence",
+      "reviewNote": "PCR009 invokes actual buildCandidateFunnel and consumes derived discovery disposition in returned ledger entries. This caller returns values; do not infer DB persistence merely from inventory effect wording.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1301,
+        "testName": "acceptance PCR-009"
+      },
+      "callerOwnerSymbolLines": [
+        4,
+        150
+      ],
+      "ownerBlobSha256": "df39e0798c5c59ada5a635ab25a46d656a9fbf96eca75ed578087d37a712b12e",
+      "callerBlobSha256": "025f83011a2486d3e0dcdc4b8a374b14ced0e7a562e4c53cfa8278fc108148b6"
+    },
+    {
+      "caller": {
+        "function": "publishCompactRadarProjection",
+        "path": "scripts/runtime/compact-radar-projection.js"
+      },
+      "effect": "excludes seed-only live cards and publishes health-only output only when the complete persisted connector terminal plane proves total outage",
+      "id": "PCR-010",
+      "implementationState": "implemented",
+      "operation": "selectLiveDiscoveryCards",
+      "owner": {
+        "export": "selectLiveDiscoveryCards",
+        "path": "scripts/runtime/candidate-funnel.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/compact-radar-projection.js",
+        "consumerFunction": "publishCompactRadarProjection",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "caller_evidence",
+      "reviewNote": "PCR010 actual compact stage handler calls publishCompactRadarProjection; selected cards/health-only result assertions exercise selectLiveDiscoveryCards consumption.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1401,
+        "testName": "acceptance PCR-010"
+      },
+      "callerOwnerSymbolLines": [
+        14,
+        576
+      ],
+      "ownerBlobSha256": "025f83011a2486d3e0dcdc4b8a374b14ced0e7a562e4c53cfa8278fc108148b6",
+      "callerBlobSha256": "a61867b6a19760c7f904f9d49ca5824bcbde3ea99e61cee214d301f7a0164cf1"
+    },
+    {
+      "caller": {
+        "function": "completeLegacyProducerJob",
+        "path": "scripts/runtime/postgres-legacy-producer-adapter.js"
+      },
+      "effect": "persists one bounded typed document, claim, mention and evidence-disposition outcome per frozen revision",
+      "id": "PCR-011",
+      "implementationState": "implemented",
+      "operation": "complete_legacy_producer_job_v3_11",
+      "owner": {
+        "export": "complete_legacy_producer_job_v3_11",
+        "path": "migrations/20260724_source_led_opportunity_engine_v3.sql"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/postgres-legacy-producer-adapter.js",
+        "consumerFunction": "completeLegacyProducerJob",
+        "kind": "persisted_row"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR011 invokes writeRevisionEvidenceOutcomes, not named SQL owner. Supplemental native V3.13 test executes real v3_11 SQL and checks persisted rows, but bypasses declared JS adapter. Adapter lines246-251 calls v3_14, whose migration line538 delegates v3_11. Add actual postgres adapter completion and assert returned status/nextJob plus rows from same real SQL transaction; direct-SQL owner evidence remains reusable.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1429,
+        "testName": "acceptance PCR-011"
+      },
+      "callerOwnerSymbolLines": [],
+      "ownerBlobSha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "callerBlobSha256": "035ea2786fa9790a346b029a5d1d082f7053863edfd760c5186491759c828a12"
+    },
+    {
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "effect": "derives a complete revenue-to-diluted-EPS bridge or returns valuation_review with null public targets",
+      "id": "PCR-012",
+      "implementationState": "implemented",
+      "operation": "buildPointInTimeOperatingBridge",
+      "owner": {
+        "export": "buildPointInTimeOperatingBridge",
+        "path": "scripts/runtime/valuation-operating-bridge.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/candidate-valuation.js",
+        "consumerFunction": "evaluateCandidateValuation",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR012 directly tests operating bridge; PCR013 calls actual evaluateCandidateValuation and asserts computed EPS 0.9, finite target and incomplete rejection. Record both tests, not PCR012 alone as caller evidence.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1436,
+        "testName": "acceptance PCR-012"
+      },
+      "callerOwnerSymbolLines": [],
+      "ownerBlobSha256": "61cd119980bf55f2ee154c3142c5e9cf0ab6cb5f7eb4ce03243810605cec5208",
+      "callerBlobSha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58"
+    },
+    {
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "effect": "selects roster-first comparable inputs and terminalises incomplete, conflicting or divergent valuation evidence without hard-coded symbols",
+      "id": "PCR-013",
+      "implementationState": "implemented",
+      "operation": "selectComparableValuationInputs",
+      "owner": {
+        "export": "selectComparableValuationInputs",
+        "path": "scripts/runtime/valuation-comparables.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/candidate-valuation.js",
+        "consumerFunction": "evaluateCandidateValuation",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "caller_evidence",
+      "reviewNote": "PCR013 actual evaluateCandidateValuation consumes comparable selection in golden and incomplete paths; validates computed EPS/target plus direct point-in-time comparable checks.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1476,
+        "testName": "acceptance PCR-013"
+      },
+      "callerOwnerSymbolLines": [
+        5,
+        219
+      ],
+      "ownerBlobSha256": "9273909e9eee887f6ddb3cf9883a44065c8c101ed389bb79fdf09edc7b15119b",
+      "callerBlobSha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58"
+    },
+    {
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "effect": "chooses the closed sector method and cross-check outcome, suppressing PE for loss-making companies",
+      "id": "PCR-014",
+      "implementationState": "implemented",
+      "operation": "selectSectorValuationMethod",
+      "owner": {
+        "export": "selectSectorValuationMethod",
+        "path": "scripts/runtime/valuation-method.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/candidate-valuation.js",
+        "consumerFunction": "evaluateCandidateValuation",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR014 owner method branches plus PCR013 actual evaluateCandidateValuation consuming chosen method. Do not label direct method-only case as full caller execution.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1502,
+        "testName": "acceptance PCR-014"
+      },
+      "callerOwnerSymbolLines": [
+        6,
+        200
+      ],
+      "ownerBlobSha256": "589d959a538b97e3abe1e38fc31a9c137359e2dace1a738f9b28d8643225be8d",
+      "callerBlobSha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58"
+    },
+    {
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "effect": "validates company-specific, cutoff-valid evidence before it can verify an assumption or confidence",
+      "id": "PCR-015",
+      "implementationState": "implemented",
+      "operation": "verifyCompanyValuationEvidence",
+      "owner": {
+        "export": "verifyCompanyValuationEvidence",
+        "path": "scripts/runtime/valuation-evidence.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/candidate-valuation.js",
+        "consumerFunction": "evaluateCandidateValuation",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR015 owner company evidence cutoff checks plus PCR013 valuation caller consumes evidence availability.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1509,
+        "testName": "acceptance PCR-015"
+      },
+      "callerOwnerSymbolLines": [
+        7,
+        214
+      ],
+      "ownerBlobSha256": "6f6fbea1075ea6f079c8a70f80bee48365659ccc72edeba3f912ec396ea093da",
+      "callerBlobSha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58"
+    },
+    {
+      "caller": {
+        "function": "deriveActionDecision",
+        "path": "scripts/runtime/action-decision.js"
+      },
+      "effect": "turns a broken support into reclaim_required with former support as a trigger/resistance rather than a pullback entry",
+      "id": "PCR-016",
+      "implementationState": "implemented",
+      "operation": "deriveTechnicalEntryState",
+      "owner": {
+        "export": "deriveTechnicalEntryState",
+        "path": "scripts/runtime/technical-state.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/action-decision.js",
+        "consumerFunction": "deriveActionDecision",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR016 tests deriveTechnicalEntryState; actual deriveActionDecision is reached via buildLegacyCandidateDecision in additional public-fundamental provenance test and CLI handler cases. Controlled market/financial inputs only.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1514,
+        "testName": "acceptance PCR-016"
+      },
+      "callerOwnerSymbolLines": [
+        3,
+        10
+      ],
+      "ownerBlobSha256": "28797cda111d331c7dd496d085f73f2c91251c858b8f9a9341977e8f38b25ec9",
+      "callerBlobSha256": "2ca1968b1fad1950f6d94aaf7f09c5411910256c7fa7e5b10d3d7c082b417f32"
+    },
+    {
+      "caller": {
+        "function": "deriveActionDecision",
+        "path": "scripts/runtime/action-decision.js"
+      },
+      "effect": "returns typed unavailable geometry unless entry and invalidation satisfy the state-owned long-entry constraints",
+      "id": "PCR-017",
+      "implementationState": "implemented",
+      "operation": "validateLongEntryGeometry",
+      "owner": {
+        "export": "validateLongEntryGeometry",
+        "path": "scripts/runtime/technical-entry-geometry.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/action-decision.js",
+        "consumerFunction": "deriveActionDecision",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR017 tests geometry owner; actual deriveActionDecision calls geometry and uses result to gate publicStop in CLI candidate tests. Record associated caller tests.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1522,
+        "testName": "acceptance PCR-017"
+      },
+      "callerOwnerSymbolLines": [
+        4,
+        12
+      ],
+      "ownerBlobSha256": "a007eb8b726457dc2cc2b51e23d3490a7c613ec456f13c51a4803c2592be649c",
+      "callerBlobSha256": "2ca1968b1fad1950f6d94aaf7f09c5411910256c7fa7e5b10d3d7c082b417f32"
+    },
+    {
+      "caller": {
+        "function": "deriveTechnicalEntryState",
+        "path": "scripts/runtime/technical-state.js"
+      },
+      "effect": "derives indicators only from sufficient adjusted OHLCV and emits one closed unavailable reason otherwise",
+      "id": "PCR-018",
+      "implementationState": "implemented",
+      "operation": "calculateAdjustedTechnicalPlane",
+      "owner": {
+        "export": "calculateAdjustedTechnicalPlane",
+        "path": "scripts/runtime/technical-plane.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/technical-state.js",
+        "consumerFunction": "deriveTechnicalEntryState",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR018 tests technical plane directly; PCR016 gives precomputed available plane and bypasses deriveTechnicalEntryState line34 owner call. CLI unavailable-input path may call fallback, but positive returned-plane consumption lacks an explicit raw-rows caller assertion. Add deriveTechnicalEntryState({rows,asOf,benchmark,sector}) and compare embedded computed plane/state; future/insufficient cases must stay unavailable.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1528,
+        "testName": "acceptance PCR-018"
+      },
+      "callerOwnerSymbolLines": [
+        4,
+        34
+      ],
+      "ownerBlobSha256": "103ceab35ffd449650d583ca26501114881b0afb02e3ab5e132fd75b6a076556",
+      "callerBlobSha256": "28797cda111d331c7dd496d085f73f2c91251c858b8f9a9341977e8f38b25ec9"
+    },
+    {
+      "caller": {
+        "function": "appendAnalysisRevision",
+        "path": "scripts/runtime/analysis-revision.js"
+      },
+      "effect": "creates the canonical material-change hash from only the closed material identity members",
+      "id": "PCR-019",
+      "implementationState": "implemented",
+      "operation": "hashMaterialAnalysisChange",
+      "owner": {
+        "export": "hashMaterialAnalysisChange",
+        "path": "scripts/runtime/analysis-material-change.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/analysis-revision.js",
+        "consumerFunction": "appendAnalysisRevision",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR019 hashes material facts directly; PCR020 appendAnalysisRevision consumes owner hash to distinguish first/reused revisions. Link PCR020.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1535,
+        "testName": "acceptance PCR-019"
+      },
+      "callerOwnerSymbolLines": [
+        4,
+        10
+      ],
+      "ownerBlobSha256": "cb5de86203b899de0540a419f8b55c5fe1ed54134f2aaa13cc5b8f889dab24c7",
+      "callerBlobSha256": "ab5a7370e6e951201c3c6c9035416fbf450df1df9307a0d6a764f0a0e58bb2ce"
+    },
+    {
+      "caller": {
+        "function": "buildStageHandlers",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "effect": "reuses a no-change revision or atomically appends one fact/evidence-bound analysis revision with locked narrative claims",
+      "id": "PCR-020",
+      "implementationState": "implemented",
+      "operation": "appendAnalysisRevision",
+      "owner": {
+        "export": "appendAnalysisRevision",
+        "path": "scripts/runtime/analysis-revision.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/auth-source-worker-cli.js",
+        "consumerFunction": "buildStageHandlers",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR020 actual appendAnalysisRevision plus PCR005 real buildStageHandlers analysis_revision consumes revision disposition/hash/reuse output. No assertion that this mocked handler persists a production revision.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1540,
+        "testName": "acceptance PCR-020"
+      },
+      "callerOwnerSymbolLines": [
+        18,
+        1987
+      ],
+      "ownerBlobSha256": "ab5a7370e6e951201c3c6c9035416fbf450df1df9307a0d6a764f0a0e58bb2ce",
+      "callerBlobSha256": "602948f0eb960a78a75a88b0ac6ffa080a8adb6755abe544b8530d93384b22ba"
+    },
+    {
+      "caller": {
+        "function": "availableResearchDecision",
+        "path": "scripts/runtime/compact-radar-projection.js"
+      },
+      "effect": "serializes only declared additive fields, rejects cross-run or cross-config first entrants, preserves conditional wait geometry with null action stops, and enforces real disabled/drain 404 and zero-query behavior",
+      "id": "PCR-021",
+      "implementationState": "implemented",
+      "operation": "serializePublishedResearchDecision",
+      "owner": {
+        "export": "serializePublishedResearchDecision",
+        "path": "scripts/runtime/published-research-decision.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/compact-radar-projection.js",
+        "consumerFunction": "availableResearchDecision",
+        "kind": "serialized_response"
+      },
+      "coverageStatus": "caller_evidence",
+      "reviewNote": "PCR021 exercises real compact handler/serializer and public payload validation; availableResearchDecision spreads serializePublishedResearchDecision into serialized projection.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1545,
+        "testName": "acceptance PCR-021"
+      },
+      "callerOwnerSymbolLines": [
+        4,
+        217
+      ],
+      "ownerBlobSha256": "50547d52df8ac4278da4507f9e3dd3083076efe770ee6a7fbb27f54b15c707ac",
+      "callerBlobSha256": "a61867b6a19760c7f904f9d49ca5824bcbde3ea99e61cee214d301f7a0164cf1"
+    },
+    {
+      "caller": {
+        "function": "loadPublishedRadarProjection",
+        "path": "web/src/lib/radar-projection-read.ts"
+      },
+      "effect": "serves a precomputed compact projection through the exact indexed read, cache and size boundaries without producer work",
+      "id": "PCR-022",
+      "implementationState": "implemented",
+      "operation": "loadCompactRadarProjection",
+      "owner": {
+        "export": "loadCompactRadarProjection",
+        "path": "web/src/lib/opportunity-v3/compact-radar-read.ts"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "web/src/lib/radar-projection-read.ts",
+        "consumerFunction": "loadPublishedRadarProjection",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "caller_evidence",
+      "reviewNote": "PCR022 controlled performance oracle exercises actual published reader through isolated PG/HTTP/Next with read-count, byte and cache assertions; controlled source adapter, not live production database.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1719,
+        "testName": "acceptance PCR-022"
+      },
+      "callerOwnerSymbolLines": [
+        4,
+        19
+      ],
+      "ownerBlobSha256": "cf03f15e7cdfa28f3e797e524167deb7411ec3c2aa8671ddc949a02ee376a26a",
+      "callerBlobSha256": "91377feb7bdefc6d94bdabeff8350475b1a88948fc791974048ebbe8b2b68b50"
+    },
+    {
+      "caller": {
+        "function": "main",
+        "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs"
+      },
+      "effect": "validates canonical leaf and aggregate evidence against one externally checked clean subject while the V6 successor retires global research Shadow authority",
+      "id": "PCR-023",
+      "implementationState": "implemented",
+      "operation": "validateProtectedCodeGateAggregateInputs",
+      "owner": {
+        "export": "validateProtectedCodeGateAggregateInputs",
+        "path": "scripts/opportunity-v3/protected-code-gate-aggregate.mjs"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/opportunity-v3/protected-external-gate-worker.mjs",
+        "consumerFunction": "main",
+        "kind": "serialized_response"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR023 block1730-1764 is source regex/token assertions only. Supplemental named test invokes real aggregate validator and rejects missing/reordered/failed/unreviewed inputs but does not execute declared protected worker main or write its result envelope. Add bounded actual main entry over isolated input artifacts, consume returned array into result.inputs/envelope, and assert no write on validation failure. No protected authority created by this test.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1730,
+        "testName": "acceptance PCR-023"
+      },
+      "callerOwnerSymbolLines": [
+        17,
+        1389
+      ],
+      "ownerBlobSha256": "d6ec0565aaf27824e3c0ddd4a78634a830c43d76d8a4c8daf2c8a0f960fd9c8b",
+      "callerBlobSha256": "0906ca3c1cbcac003f0708fd753ec0726874e57a5d68282bd051ca6bd2a2b68c"
+    },
+    {
+      "caller": {
+        "function": "Home",
+        "path": "web/src/app/page.tsx"
+      },
+      "effect": "renders the disabled-V3 legacy card with four axes, BIAS context, separate official/model PE and typed unavailable reasons at accessible responsive widths",
+      "id": "PCR-024",
+      "implementationState": "implemented",
+      "operation": "renderLegacyResearchDecision",
+      "owner": {
+        "export": "StockCard",
+        "path": "web/src/app/components/RadarTabs.tsx"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "web/src/app/page.tsx",
+        "consumerFunction": "Home",
+        "kind": "serialized_response"
+      },
+      "coverageStatus": "caller_evidence",
+      "reviewNote": "PCR024 launches Playwright correctness suite requiring 9 passed and no skipped; actual fixture Home -> RadarTabs -> StockCard renders response. UI fixture scope, not production authority.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1765,
+        "testName": "acceptance PCR-024"
+      },
+      "callerOwnerSymbolLines": [],
+      "ownerBlobSha256": "6a256cfd90a41ea67ad1a4cf92e563b69d83f29917f0074a8c2029da2d6bbf9e",
+      "callerBlobSha256": "cdccf35099f982f69be9635ff61fa83f9a0208b180c9f8d7634bafb98d01d157"
+    },
+    {
+      "caller": {
+        "function": "buildFactorSnapshot",
+        "path": "scripts/runtime/factor-snapshot.js"
+      },
+      "effect": "selects only bounded pre-cutoff adjusted history and returns typed unavailable without a live-read backfill",
+      "id": "PCR-025",
+      "implementationState": "implemented",
+      "operation": "selectBiasTechnicalHistory",
+      "owner": {
+        "export": "selectBiasTechnicalHistory",
+        "path": "scripts/runtime/bias-technical-history.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/factor-snapshot.js",
+        "consumerFunction": "buildFactorSnapshot",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR025 tests selectBiasTechnicalHistory directly; no d6 test calls buildFactorSnapshot. Root reports new uncommitted caller test; pending independent review of successor, not d6 fulfillment.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1796,
+        "testName": "acceptance PCR-025"
+      },
+      "callerOwnerSymbolLines": [
+        3,
+        7
+      ],
+      "ownerBlobSha256": "b68378b567289a3f042c72499c55536069fa640122496def721de66128c2036b",
+      "callerBlobSha256": "873f8769664f4479eb3f79f2e46a36bd83558e7a7e6d8e40142f79206b99a33f"
+    },
+    {
+      "caller": {
+        "function": "buildFactorSnapshot",
+        "path": "scripts/runtime/factor-snapshot.js"
+      },
+      "effect": "constructs one capped roster/history manifest and bounded sector percentile selector without seed-only or fixed-page truncation",
+      "id": "PCR-026",
+      "implementationState": "implemented",
+      "operation": "buildBiasUniverseManifest",
+      "owner": {
+        "export": "buildBiasUniverseManifest",
+        "path": "scripts/runtime/bias-universe-manifest.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/factor-snapshot.js",
+        "consumerFunction": "buildFactorSnapshot",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR026 tests buildBiasUniverseManifest directly (20000 bound); no d6 test calls buildFactorSnapshot. New root caller test pending successor review.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1803,
+        "testName": "acceptance PCR-026"
+      },
+      "callerOwnerSymbolLines": [
+        4,
+        9
+      ],
+      "ownerBlobSha256": "ff5baa00b8afd38473e60045cd3ce147a3dec7b7b9a223e8fc48bad70f091fcb",
+      "callerBlobSha256": "873f8769664f4479eb3f79f2e46a36bd83558e7a7e6d8e40142f79206b99a33f"
+    },
+    {
+      "caller": {
+        "function": "deriveActionDecision",
+        "path": "scripts/runtime/action-decision.js"
+      },
+      "effect": "applies the shadow-only BIAS adjustment and mandatory deep-negative action cap without promoted-score influence",
+      "id": "PCR-027",
+      "implementationState": "implemented",
+      "operation": "applyBiasActionCap",
+      "owner": {
+        "export": "applyBiasActionCap",
+        "path": "scripts/runtime/bias-action-cap.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/action-decision.js",
+        "consumerFunction": "deriveActionDecision",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR027 directly tests bias cap; actual action-decision caller reached by CLI candidate tests consumes capped envelope/reason and preserves zero BIAS promotion. Link caller test explicitly.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1810,
+        "testName": "acceptance PCR-027"
+      },
+      "callerOwnerSymbolLines": [
+        5,
+        17
+      ],
+      "ownerBlobSha256": "cb32276f202b080306ce801fe624b005cf4cff14f4daa59946e60dac2ba3eb37",
+      "callerBlobSha256": "2ca1968b1fad1950f6d94aaf7f09c5411910256c7fa7e5b10d3d7c082b417f32"
+    },
+    {
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "effect": "selects only official reported-PE history and sector references, keeping model-comparable multiples separate",
+      "id": "PCR-028",
+      "implementationState": "implemented",
+      "operation": "selectOfficialReportedPe",
+      "owner": {
+        "export": "selectOfficialReportedPe",
+        "path": "scripts/runtime/reported-pe-authority.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/candidate-valuation.js",
+        "consumerFunction": "evaluateCandidateValuation",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "cross_case",
+      "reviewNote": "PCR028 owner official PE checks plus PCR013 evaluateCandidateValuation actual caller consumes reported PE context.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1816,
+        "testName": "acceptance PCR-028"
+      },
+      "callerOwnerSymbolLines": [
+        8,
+        220
+      ],
+      "ownerBlobSha256": "a4f11a5d84b897efa1207d7fb4dd556ff216bb72adb3f5b4d0c9258849578448",
+      "callerBlobSha256": "54071ad9c712f4dfac8427fe162a8b5ae908d22255574dbbad1fa950a4b96e58"
+    },
+    {
+      "caller": {
+        "function": "calculateFactorScore",
+        "path": "scripts/runtime/factor-score.js"
+      },
+      "effect": "computes each fundamental quality axis from named point-in-time facts with no imputation",
+      "id": "PCR-029",
+      "implementationState": "implemented",
+      "operation": "calculateFundamentalQualityAxes",
+      "owner": {
+        "export": "calculateFundamentalQualityAxes",
+        "path": "scripts/runtime/fundamental-quality.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/factor-score.js",
+        "consumerFunction": "calculateFactorScore",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR029 direct quality-axes checks; no d6 test invokes calculateFactorScore consuming eligibility and zero BIAS weight. New root caller test pending successor review.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1827,
+        "testName": "acceptance PCR-029"
+      },
+      "callerOwnerSymbolLines": [
+        3,
+        6
+      ],
+      "ownerBlobSha256": "0409db5e3f6faac4d083d32417c6e5dac4c611fc9579c48b21a168f2edc07290",
+      "callerBlobSha256": "359f0cc65bf93c5075a9f3148318638f403258f3ea6b3babd4323ee72e04e552"
+    },
+    {
+      "caller": {
+        "function": "serializePublishedResearchDecision",
+        "path": "scripts/runtime/published-research-decision.js"
+      },
+      "effect": "serializes every closed BIAS, factor, reported-PE and timing-risk union and preserves no-change versus factor-mutation revision identity",
+      "id": "PCR-030",
+      "implementationState": "implemented",
+      "operation": "serializeCorrectnessPublicUnion",
+      "owner": {
+        "export": "serializeCorrectnessPublicUnion",
+        "path": "scripts/runtime/public-projection.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/published-research-decision.js",
+        "consumerFunction": "serializePublishedResearchDecision",
+        "kind": "serialized_response"
+      },
+      "coverageStatus": "caller_evidence",
+      "reviewNote": "PCR030 invokes actual serializePublishedResearchDecision, which delegates serializeCorrectnessPublicUnion; closed union, unknown fields and public shape assertions consume serialized result.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1833,
+        "testName": "acceptance PCR-030"
+      },
+      "callerOwnerSymbolLines": [
+        3,
+        8
+      ],
+      "ownerBlobSha256": "a78b212f19fc2e0b3dab0a31fe529e943eae32a6a440fe5ca8b62670c9393494",
+      "callerBlobSha256": "50547d52df8ac4278da4507f9e3dd3083076efe770ee6a7fbb27f54b15c707ac"
+    },
+    {
+      "caller": {
+        "function": "evaluateComparableRun",
+        "path": "scripts/runtime/comparable-evaluation.js"
+      },
+      "effect": "builds the exact closed comparison identity so factor-contract changes cannot reuse an earlier comparable run",
+      "id": "PCR-031",
+      "implementationState": "implemented",
+      "operation": "buildComparableRunIdentity",
+      "owner": {
+        "export": "buildComparableRunIdentity",
+        "path": "scripts/runtime/comparison-identity.js"
+      },
+      "proposedResultDependency": {
+        "consumerPath": "scripts/runtime/comparable-evaluation.js",
+        "consumerFunction": "evaluateComparableRun",
+        "kind": "returned_value"
+      },
+      "coverageStatus": "gap",
+      "reviewNote": "PCR031 directly tests identity hash changes/invalid inputs; no d6 test calls evaluateComparableRun returning shadow-only result and rows. New root caller test pending successor review.",
+      "namedPcrCheck": {
+        "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+        "line": 1906,
+        "testName": "acceptance PCR-031"
+      },
+      "callerOwnerSymbolLines": [
+        3,
+        6
+      ],
+      "ownerBlobSha256": "aeaf087e25e3bacb6c8a35d88928616dfcce48a1c0c7d99536bf7c7b82c374c2",
+      "callerBlobSha256": "2dd253ca80c93426f5e31843467ae42db4dc9791c179d37debd782267cc8f599"
+    }
+  ],
+  "supplementalTests": [
+    {
+      "path": "scripts/opportunity-v3/protected-external-gate-worker.test.mjs",
+      "line": 151,
+      "testName": "PCR-023 actual protected aggregate rejects missing, reordered, failed and unreviewed inputs",
+      "proves": "real owner returned array validation; not declared main result envelope"
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-contract.test.mjs",
+      "line": 2098,
+      "testName": "V3.13 source acquisition persists seventeen terminals, citation, and typed claim/entity conservation",
+      "proves": "real SQL persisted outcomes; not actual postgres JS adapter caller"
+    }
+  ],
+  "authorityCaution": "20 coverage rows are code/evidence mappings, not new protected fulfillment records. Cross-case dependencies must be reflected honestly in recorded command/test evidence. Existing acceptance contract forbids token-only or test-only owner replacement. Supplemental test names are structurally allowed by writer but must semantically cover exact boundary."
+}

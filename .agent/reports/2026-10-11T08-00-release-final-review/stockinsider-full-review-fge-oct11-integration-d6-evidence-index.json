@@ -1,0 +1,90 @@
+{
+  "subject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+  "evidence": [
+    {
+      "path": "/tmp/stockinsider-full-review-coverage-oct11-inventory.json",
+      "bytes": 861521,
+      "sha256": "33f29ffaf690588ef841735b412d8b1d02bcf608a4ab102addb37504b80626f5"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-report.md",
+      "bytes": 8746,
+      "sha256": "a464a3049d5033e32ca8146a1e5f41234b6af764257fa44d36a93f90ba2213da"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-coverage.json",
+      "bytes": 388593,
+      "sha256": "9ab002ab34fa0b237e5838bcc68059033be758cb6a333588d147c2f0a06a113d"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-evidence-index.json",
+      "bytes": 6199,
+      "sha256": "8ac5a8a19de7150536b538eeb1fc52498d9c2598ae7baf30b3ee5e35052c4507"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-repair49-receipt.json",
+      "bytes": 3187,
+      "sha256": "ec55c4a402f66bd1d473338815e2f545267759a38b86dca7464d7f35090abd57"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-receipt.json",
+      "bytes": 5038,
+      "sha256": "c7ad63ee0ff4bcff21ee780c095a2ec74f27c5b442f51e2d0d059eb832c1494c"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-precision825-coverage.json",
+      "bytes": 12358,
+      "sha256": "c3023dc7308228f6ce2a0a09d2875003b8b0fe008529a755b6698a912b4ec70f"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-budget-d6-receipt.json",
+      "bytes": 1438,
+      "sha256": "0bc2c00c376ecd5caba40ede1c4de659938b798ca5a38cbda2614f20c837f6ae"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-budget-d6.tap",
+      "bytes": 360,
+      "sha256": "c8c102e505cd77bedb64c4da13117adbf1d0c889913fe7ea73e3fb9691c03abf"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-review.json",
+      "bytes": 15192,
+      "sha256": "1aafe7f8a088ac07391d9ac886d10ce9bd7347b5561b6e28d4a4a9197eba9a1a"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-coverage.json",
+      "bytes": 72232,
+      "sha256": "6a08ef3fc717848558aacb861961aee1ea08c145ad05a2e0092243c3065a4210"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-repair82-review.json",
+      "bytes": 6983,
+      "sha256": "b022a7b0969a25eb93b7e79d5e707a73db088b48e8e3d42e5a4d22c2e40fe605"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration-e088-pr284-live.json",
+      "bytes": 1226,
+      "sha256": "8f51379d4eb17d2519fe9d5c60ed3bb7bf301aad58fdb936a013a7f7bdf71dfa"
+    },
+    {
+      "path": "/tmp/stockinsider-precision-final-pcr-oct11.tap",
+      "bytes": 40219,
+      "sha256": "54852c0fe9149f74639ff5b03ee0f3fe3301de86032f79e03fae9ec1fcb4343e"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration-d6-facts.json",
+      "bytes": 4057,
+      "sha256": "4d0b39a6e7afa5896bae30d67bfa7ff67ad35e34be06d62a9b1cb23c8b91e653"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-integration-d6-coverage.json",
+      "bytes": 468796,
+      "sha256": "0f49c84a4bc7f20d59643903e4c987b0c36a5d559d213596408df45072192d35"
+    },
+    {
+      "path": "/tmp/stockinsider-budget-fixture-final-pcr-oct11.tap",
+      "bytes": 40187,
+      "sha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4"
+    }
+  ]
+}

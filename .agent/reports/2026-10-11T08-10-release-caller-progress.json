@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-11T08:10:25.097224+00:00",
+  "releaseSubject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+  "callerSupplement": "b17b60896ac0c85a855812ed4a4a2f4aa2a0fb95",
+  "releasePr": 364,
+  "supplementPr": 365,
+  "d6Linux": {
+    "sourceCommit": "37b1c8db0dc40e24f8a515b90035f5a9d16d22e8",
+    "receiptSha256": "45c35e063c72e5c18de8ea8e49eb261a3501cda127f30d189d444fb303e999cc",
+    "rootVerifiedRaw": 30,
+    "bytes": 813364,
+    "tests": 818,
+    "pass": 816,
+    "fail": 0,
+    "skip": 2,
+    "skips": "two explicit isolated native profiles, not claimed fulfilled",
+    "types": "PASS",
+    "lintErrors": 0,
+    "lintExistingWarnings": 33,
+    "normalBuild": "PASS"
+  },
+  "d6GitHubDiagnostic": {
+    "run": 38123025680,
+    "result": "success",
+    "productRuntime": "success",
+    "modelRunner": "skipped",
+    "evaluationGovernance": "skipped",
+    "protectedResult": "not PASS; exact evidence ref absent"
+  },
+  "callerTests": {
+    "pass": 5,
+    "fail": 0,
+    "skip": 0,
+    "independentScopedCode": "PASS",
+    "closed": [
+      "PCR-018",
+      "PCR-025",
+      "PCR-026",
+      "PCR-029",
+      "PCR-031"
+    ]
+  },
+  "remainingDeclaredCallerGaps": [
+    "PCR-001",
+    "PCR-005",
+    "PCR-006",
+    "PCR-007",
+    "PCR-011",
+    "PCR-023"
+  ],
+  "originalMatrix": "frozen d6 has20 mapped and11 gaps; new successor closes5 only; do not rewrite original matrix as all31 fulfilled",
+  "nativeSupplementLimits": "023 invokes actual owner but not main envelope caller;011 invokes actual SQL but not specified JS adapter; both1PASS zero skip do not close caller gaps",
+  "notDone": [
+    "31-entry exact fulfillment and evidence trio",
+    "protected runner/gate acceptance",
+    "main merge",
+    "formal deployment",
+    "genuine authored research acceptance",
+    "strategy adoption/efficacy",
+    "formal schedule/five trading days"
+  ],
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-budget-fixture-final-pcr-oct11.tap",
+      "bytes": 40187,
+      "sha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-d6-ci-status-oct11.json",
+      "bytes": 4434,
+      "sha256": "c025043852935678616ffb7dd0ea24d201a2ff7c012b737980522544fd4f7259"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-full-review-fge-oct11-callers9187-bindings.json",
+      "bytes": 1008,
+      "sha256": "9947ee5fc0f6be2813bbcc5c99cc5b46b6b88e31794eb6a3722e943ec3111a2a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-full-review-fge-oct11-callers9187-review.json",
+      "bytes": 3077,
+      "sha256": "60dd99a872c3747c3f76f377263ed0ac4f624c3943a2180bad62a1283b2d8fa4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-full-review-fge-oct11-callers9187.tap",
+      "bytes": 1067,
+      "sha256": "e85d5e06f459b62c4ba45e1f7c9015898476303e01890564c1ea4d946b78fbcc"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-full-review-fge-oct11-callersb17-bindings.json",
+      "bytes": 1224,
+      "sha256": "6aa2b00cc471c47c7740e3163e262de24581107c905bbc13013317f74e57bc1c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-full-review-fge-oct11-callersb17-review.json",
+      "bytes": 2609,
+      "sha256": "0d0444448e62e9c7b389ec02301f79cb4991c18b2e375ca36b79002d455984f9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-full-review-fge-oct11-callersb17.tap",
+      "bytes": 1298,
+      "sha256": "f5340fd848e80bd0cd76d226863ae6eb9edf82d8ab559511e212da44d7dbfe4e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-full-review-fge-oct11-integration-d6-corrigendum.md",
+      "bytes": 1549,
+      "sha256": "9ad5cd6faccbb04ef39c6c297d0893f62dd07b93383a4bb79bdd242fc503128b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-pcr-caller-build-oct11.log",
+      "bytes": 6500,
+      "sha256": "38b6bf18598585cf06c3b6dea1e716e574965bfb5e6c5b258a0646e5e3e8d8a2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-pcr-caller-five-build-oct11.log",
+      "bytes": 6498,
+      "sha256": "ca65fb23130286ffd33b21c0dd41065ab1cd89b883d4bb51e586ab544019811f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-pcr-callers-five-oct11.tap",
+      "bytes": 1225,
+      "sha256": "28ae17cbabc78ac6a5a1cced5c36e48d4fdba0850a8683dec5e5afd64c051c77"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-pcr-callers-four-oct11.tap",
+      "bytes": 1001,
+      "sha256": "0f006973dacae8ade5836988924bf5a8da6135e300c6c7bbd25d1f7d824732c2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-pcr-fulfillment-review-oct11-matrix.json",
+      "bytes": 47686,
+      "sha256": "0a2bc106b357948194167147242ec8004b9b7574a6acc34d1041ee16d968e807"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-pcr-fulfillment-review-oct11-report.md",
+      "bytes": 13425,
+      "sha256": "67b9ab8c26ac6f3e2591c05a89c4b107b59934978cba22f3c8c2ed81b45a8b78"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-pcr011-native-execution-oct11.tap",
+      "bytes": 1045,
+      "sha256": "06c46e1334c7ba0e4d4eac60f09a063562357908161c271f5e50986e76d4ada9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-pcr023-owner-execution-oct11.tap",
+      "bytes": 356,
+      "sha256": "03b16713f21108d0324ef14072499ec8cef6bf949c47b0b1b0e497db81e10a5e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-10-release-caller-progress/stockinsider-vm-budget-d6-root-verification-oct11.json",
+      "bytes": 2314,
+      "sha256": "829a74488b3e2f2e5b8bdf87c8c0688dce800ecb7b4f6c4a39dd91057ea67fd8"
+    }
+  ],
+  "rawTotalBytes": 136503
+}

@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-11T08:01:06.354277+00:00",
+  "subject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+  "tree": "166839f04519463ac9f8b0531c620eedddf9ca8c",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "independentApplicationReleaseCode": "PASS; unsigned, exact final blobs and scoped repair receipts verified; historical non-runtime evidence producer programs are not all independently reviewed",
+  "localProductCorrectness": {
+    "pass": 155,
+    "fail": 0,
+    "skip": 0,
+    "raw": "stockinsider-budget-fixture-final-pcr-oct11.tap"
+  },
+  "localBudgetFixture": {
+    "pass": 1,
+    "fail": 0,
+    "skip": 0
+  },
+  "normalBuild": "PASS on d6; same web tree as e088",
+  "historicalLinuxE088": {
+    "commit": "3777e6b6a571c8755952c6f21a81b7abf4369f39",
+    "verifiedRaw": 35,
+    "bytes": 819821,
+    "tests": 818,
+    "pass": 815,
+    "fail": 1,
+    "skip": 2,
+    "note": "stale budget fixture; retained RED; final d6 Linux in progress"
+  },
+  "exactReviewBoundary": "31 dynamic PCR fulfillment under independent audit; 155 PASS alone is insufficient. Existing canonical runtime-review-attestation has no signature field; no invented signer requirement. Protected runner restoration is separate.",
+  "notDone": [
+    "exact 31-entry fulfillment",
+    "protected gate PASS",
+    "merge",
+    "production migration/deployment",
+    "genuine authored AUO/other company publication",
+    "strategy efficacy/adoption",
+    "research schedule and five trading days"
+  ],
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-budget-fixture-build-oct11.log",
+      "bytes": 6498,
+      "sha256": "511c388c9d596a7ad48bb7872fecb0a11e0dde39ba138d74f447531cd4ec3471"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-budget-fixture-final-pcr-oct11.tap",
+      "bytes": 40187,
+      "sha256": "235999cdf6aef59733382499b218dd38f970ff21cf16de21b4316b919fc77cb4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-budget-fixture-successor-oct11.tap",
+      "bytes": 343,
+      "sha256": "e4565c08f55b111a97538a085be054bac90a0e1b12aee89fe812433c4918e055"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-diagnostic-e088-oct11.log",
+      "bytes": 802228,
+      "sha256": "75dbf20fb40d040abd5b5bcbf4ecc46b46c888fc66629142d7be775d1dd9ac33"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-budget-d6-receipt.json",
+      "bytes": 1438,
+      "sha256": "0bc2c00c376ecd5caba40ede1c4de659938b798ca5a38cbda2614f20c837f6ae"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-budget-d6.tap",
+      "bytes": 360,
+      "sha256": "c8c102e505cd77bedb64c4da13117adbf1d0c889913fe7ea73e3fb9691c03abf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/copied-generated-provenance.json",
+      "bytes": 257,
+      "sha256": "e965e0edbaf5a9c529f5c58cfda8736c63b0c97af93f686c8504d83a65f4950f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-coverage.json",
+      "bytes": 12358,
+      "sha256": "c3023dc7308228f6ce2a0a09d2875003b8b0fe008529a755b6698a912b4ec70f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-pg-r2.tap",
+      "bytes": 1774,
+      "sha256": "ddeeacb515c89bc585cb2a99d74c631d914ffd2fea8436a220bd24bf6855a9d9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-pg-r3.tap",
+      "bytes": 1866,
+      "sha256": "2b949e13f7c380f2415b953ab6a5c448f25ec904bfd769d28b406567af48d108"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-pg.tap",
+      "bytes": 69,
+      "sha256": "205112c873f6c4766e41ea07b37a32a21a485cc399c960fc8ebc65485be892c4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-pure-r2.tap",
+      "bytes": 7110,
+      "sha256": "f0d2f6e5fdc2d03c05a57c25631dfd278bef6bf1568e83080e2e367005db07a2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-pure-r3.tap",
+      "bytes": 55293,
+      "sha256": "9fae977ed54ae546eedff098376817eb69a5aed216f379c5e13cd2426aed9cdc"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-pure-r4.tap",
+      "bytes": 15154,
+      "sha256": "47c61d6cacaea404f9ac51db62914db7125eae11d4b934bfde9865d5243ff68d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-pure.tap",
+      "bytes": 7103,
+      "sha256": "c2613ea6761c2bfcfc21ddd6fb43c2a1b5ddb6530d130674ac805a383aa01aba"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-receipt.json",
+      "bytes": 5038,
+      "sha256": "c7ad63ee0ff4bcff21ee780c095a2ec74f27c5b442f51e2d0d059eb832c1494c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-release-check-r2.log",
+      "bytes": 1832,
+      "sha256": "7a7c7a4f8b3e3f911fdb86bbf31db234063b69b0e5b861de377611febe956d9d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-release-check-r3.log",
+      "bytes": 174,
+      "sha256": "dafb9a7509297ba70ff8e0ccf89e824af2a351c021b1ec143b2734102d7d2e52"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-release-check.log",
+      "bytes": 1493,
+      "sha256": "db7bacdc1bd8b4556445ff37d150ecae6d006a0492df1f83e6ae753f5b4af199"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-precision825-static.json",
+      "bytes": 1871,
+      "sha256": "93e2eaa4fa9c2304b1dc243fd24340aeacbb2feff5f6409ec89cdd9acb8451ca"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-thesis-repair825-probe.log",
+      "bytes": 530,
+      "sha256": "0edc3b53f3a4f8d947a4770dcaf17a88b3e89c784d814b91fe876f0382eb1b8f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-abcd-oct11-thesis-repair825-probe.mjs",
+      "bytes": 3896,
+      "sha256": "6ee8e67ab585a8599da4e3d54e407ba8fb6e5bcc8fd81521544c892988560dfd"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-fge-oct11-integration-d6-coverage.json",
+      "bytes": 468796,
+      "sha256": "0f49c84a4bc7f20d59643903e4c987b0c36a5d559d213596408df45072192d35"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-fge-oct11-integration-d6-evidence-index.json",
+      "bytes": 3393,
+      "sha256": "15fa27ec4d4e539d211a31a7a9063bd2afd9971b243da800648eb0b98d180f04"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-fge-oct11-integration-d6-facts.json",
+      "bytes": 4057,
+      "sha256": "4d0b39a6e7afa5896bae30d67bfa7ff67ad35e34be06d62a9b1cb23c8b91e653"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-fge-oct11-integration-d6-report.json",
+      "bytes": 1769,
+      "sha256": "55bfb7b39af0e6f554c72d52bba83bc87540178ca4e116ee2f53b84be86d8287"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-full-review-fge-oct11-integration-d6-report.md",
+      "bytes": 8768,
+      "sha256": "4651a5097e5fcc184b722271a4858b5e00c191243779f9fa66a1a9e5e23a1756"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-precision-final-pcr-oct11.tap",
+      "bytes": 40219,
+      "sha256": "54852c0fe9149f74639ff5b03ee0f3fe3301de86032f79e03fae9ec1fcb4343e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-protected-e088-oct11.log",
+      "bytes": 35202,
+      "sha256": "91dff6c63066dde0464a7a515abe7e0bc1a735c2fa96ff61c02320ec624b2251"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T08-00-release-final-review/stockinsider-vm-e088-root-verification-oct11.json",
+      "bytes": 186,
+      "sha256": "ae4351a05a3a5f861549e0e97b3315cf8d97b197e0356d81fd0d26202029362e"
+    }
+  ],
+  "rawTotalBytes": 1529262
+}

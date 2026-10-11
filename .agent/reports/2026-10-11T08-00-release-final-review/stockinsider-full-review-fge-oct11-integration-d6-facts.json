@@ -1,0 +1,89 @@
+{
+  "subject": "d6e0d13d1deb223ce978b372b4cce996c8541fe0",
+  "sourceClosure": {
+    "count": 22,
+    "hash": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+    "paths": [
+      "web/package-lock.json",
+      "web/src/lib/candidate-dossier-contract.ts",
+      "web/src/lib/public-source-url.ts",
+      "web/src/lib/research-agent-priority.ts",
+      "web/src/lib/research-agent-qualification.ts",
+      "web/src/lib/research-business-calculator.ts",
+      "web/src/lib/research-complete-2383.schema.json",
+      "web/src/lib/research-complete-2409.schema.json",
+      "web/src/lib/research-complete-canonical.ts",
+      "web/src/lib/research-complete-input.ts",
+      "web/src/lib/research-complete-schema-bundles.ts",
+      "web/src/lib/research-deep-author-input.ts",
+      "web/src/lib/research-deep-claim-context.ts",
+      "web/src/lib/research-discovery-evidence.ts",
+      "web/src/lib/research-financial-clock.ts",
+      "web/src/lib/research-financial-file-reader.ts",
+      "web/src/lib/research-financial-inventory.ts",
+      "web/src/lib/research-financial-supplement.ts",
+      "web/src/lib/research-source-association.ts",
+      "web/src/lib/research-source-clock.ts",
+      "web/src/lib/research-source-registry.ts",
+      "web/src/lib/research-source-roots.ts"
+    ]
+  },
+  "financialInventory": {
+    "count": 14,
+    "paths": [
+      "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
+      "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "docs/research/2026-10-08-auo/dataset.json",
+      "docs/research/2026-10-08-auo-market/dataset.json",
+      "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "docs/research/2026-10-08-emc-company-model/model-results.json",
+      "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+      "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+      "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+      "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+      "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json"
+    ]
+  },
+  "strategyRelease": {
+    "codeHash": "786baeee2edf3b0769d286df73b02de8781b36b92efbfa724bdd835a4ca5b511",
+    "parameterHash": "8bbad7c16c55b4ef1483e1f0c348f35d2404397717e10d1daed49fba30843a39",
+    "sourceFiles": 33,
+    "databaseFunctions": 11,
+    "generatedByteCopies": [
+      {
+        "generated": "web/src/lib/generated/official-authority/codec.js",
+        "canonical": "scripts/runtime/codec.js"
+      },
+      {
+        "generated": "web/src/lib/generated/official-authority/official-calendar-v314.js",
+        "canonical": "scripts/runtime/official-calendar-v314.js"
+      },
+      {
+        "generated": "web/src/lib/generated/official-authority/official-market-authority-v314.js",
+        "canonical": "scripts/runtime/official-market-authority-v314.js"
+      }
+    ]
+  },
+  "migrationProfile": {
+    "count": 76,
+    "orderedHash": "5a3146e4145ac193a3ee196c82f4e4a2e134a8a4637f332fe74bea039554ee4f",
+    "schemaBaseline": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+    "allPlanApplyPathsEqual": true
+  },
+  "runtimeInputs": {
+    "count": 20,
+    "bytes": 907264,
+    "manifestHash": "940ebe66b68375054019f28e4bcf29f20b7d055d93ec66e9724a614340ad9a5f"
+  },
+  "priorReviewProvenance": {
+    "apiRecordMatchesSaved": true,
+    "commentId": 4110740313,
+    "commit": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
+    "url": "https://github.com/Kaichen9527/stockinsider/pull/284#discussion_r4110740313",
+    "reviewer": "chatgpt-codex-connector[bot]"
+  },
+  "reuseBasis": "Only source-budget test fixture changes since e088; every listed source, migration, generated manifest and runtime input is byte-identical."
+}

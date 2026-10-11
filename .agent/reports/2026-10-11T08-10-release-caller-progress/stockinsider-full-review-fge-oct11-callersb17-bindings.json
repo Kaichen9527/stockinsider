@@ -1,0 +1,13 @@
+{
+  "scripts/opportunity-v3/pcr-caller-boundaries.test.mjs": "342528dc4b231ef001339dc796c1bfe5af11ade0e4336e6f5069bd81a08b6a9a",
+  "scripts/runtime/technical-state.js": "28797cda111d331c7dd496d085f73f2c91251c858b8f9a9341977e8f38b25ec9",
+  "scripts/runtime/technical-plane.js": "103ceab35ffd449650d583ca26501114881b0afb02e3ab5e132fd75b6a076556",
+  "scripts/runtime/codec.js": "c1cd7bc6b391ee88137c792ab6b6b280e2f5ccad77d8e6e815b754d73d76cfbb",
+  "scripts/runtime/comparable-evaluation.js": "2dd253ca80c93426f5e31843467ae42db4dc9791c179d37debd782267cc8f599",
+  "scripts/runtime/comparison-identity.js": "aeaf087e25e3bacb6c8a35d88928616dfcce48a1c0c7d99536bf7c7b82c374c2",
+  "scripts/runtime/factor-score.js": "359f0cc65bf93c5075a9f3148318638f403258f3ea6b3babd4323ee72e04e552",
+  "scripts/runtime/fundamental-quality.js": "0409db5e3f6faac4d083d32417c6e5dac4c611fc9579c48b21a168f2edc07290",
+  "scripts/runtime/factor-snapshot.js": "873f8769664f4479eb3f79f2e46a36bd83558e7a7e6d8e40142f79206b99a33f",
+  "scripts/runtime/bias-universe-manifest.js": "ff5baa00b8afd38473e60045cd3ce147a3dec7b7b9a223e8fc48bad70f091fcb",
+  "scripts/runtime/bias-technical-history.js": "b68378b567289a3f042c72499c55536069fa640122496def721de66128c2036b"
+}
