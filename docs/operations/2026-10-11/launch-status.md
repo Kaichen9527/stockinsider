@@ -1,4 +1,17 @@
-# 上線進度：2026-10-11 22:12 台灣時間
+# 上線進度：2026-10-11（最新補充置頂）
+
+## 15:08Z 接續：產品受保護驗證通過，模型發布工具仍失敗
+
+PR370 exact b43c0414 已有真實 exact evidence ceec62b8。第二次 run38147470839 的 requirements／architecture／exact-review／product-runtime 均成功；product envelope hash d6c20e85f872e03dae57297f2e7c4c5fde8ffc42922c2cc2a660405ed8f79e37。model-runner 實際失敗仍為 protected base 啟動已不存在的舊 Codex CLI 路徑 ENOENT，aggregate FAIL；沒有合併或部署、不重跑相同失敗。root 新 native sandbox canary14/14成功，但沒有讀真實憑證、呼叫模型、啟用候選信任基準，也不代表舊 gate 通過。既有 Cloud 工作接續最小發布工具修復準備，治理例外尚未批准。
+
+候選修訂7150164已保留舊空預設的 P1 及修正：預設每頁20筆未准入線索，研究准入明示待接線；沒有把272線索冒稱20合格標的。root獨立28項測試、原lock Next16.3.4 typecheck/lint/normalbuild通過，完整產品測試仍在跑。公司背景、財測及深度研究並未因此完成。報價改為有日期的technical close，無日期不從估值取代；舊P/B/TTM僅作歷史參考，沒有可核對的遠期估值及基準日期就不顯示Base空間。完整根源、逐則PTT證據與官方最新交易日投影仍是實際接線缺口。
+
+本機實讀定錨Threads兩則公開貼文及一個公開回覆（平台明示其餘回覆不完整）；內容談CPO測試／封裝良率，沒有友達或Intel訂單證據。IG同名帳號實讀0貼文，僅限該帳號。必要摘要／網址已保存，未入庫、未啟用伺服器收集器；憑證、私人內容與會員全文未匯出。伺服器IG retired、Threads blocked_auth、定錨網站manual、公開Telegram duplicate-only仍如實保留。
+
+正式web-standalone、internal-worker、preview、parser及PostgREST皆active；先前用錯unit別名的inactive不是正式站停機。failed oneshot不改寫成功。全量343終態不重送。一個月內Docker快取未刪；其他App收到針對其release ENV／apt父層的具體盤點線索，成因仍待確認，不能將全機共享快取歸於SOHO。VPS已擴容，15:02Z可用約18.03GB，以後每次仍現測。
+
+新原始證據與限制：`.agent/reports/2026-10-11T15-00-protected-and-source-probes/receipt.json`。以下為歷史記錄，以本節更新為準。
+
 
 ## 14:46Z 接續：日曆、匯入與候選品質
 

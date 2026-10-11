@@ -1,0 +1,122 @@
+{
+  "schema": "stockinsider-bounded-progress-v1",
+  "observedAt": "2026-10-11T15:01:27.919317+00:00",
+  "pr370": {
+    "subject": "b43c041448a19eb7f5cb025b4fab8e7ab9cefd75",
+    "exactReview": "ceec62b8bbbe9536f5006dcc9e70d65910830a5c",
+    "protectedRun": 38147470839,
+    "attempt": 2,
+    "requirements": "PASS",
+    "architecture": "PASS",
+    "exactReviewGate": "PASS",
+    "modelJob": 114498096268,
+    "model": "FAIL spawnSync old protected Codex path ENOENT",
+    "product": "PASS",
+    "merged": false,
+    "deployed": false,
+    "productJob": 114498096299,
+    "productEvidenceSha256": "d6c20e85f872e03dae57297f2e7c4c5fde8ffc42922c2cc2a660405ed8f79e37",
+    "aggregate": "FAIL (model ENOENT)"
+  },
+  "candidateDelivery": {
+    "head": "7150164cac2136bde3cc117be10b7f90c1cb63cb",
+    "code": "9154d59b1b2af638f7a84e98498c3b1a4546c4b7",
+    "rootSpecificTests": 28,
+    "rootSpecificResult": "PASS0FAIL0SKIP",
+    "rootNext": "16.3.4",
+    "rootTypes": "PASS",
+    "rootLint": "PASS with existing warnings",
+    "rootNormalBuild": "PASS",
+    "rootFullProduct": "running; no completion claim",
+    "schedulingIntegrated": false,
+    "actualAdmissionAdapter": "missing canonical roots and complete stock-specific PTT evidence; UI defaults bounded unqualified clues",
+    "cloudNext": "isolated minimal native publishing-tool repair preparation, no authority activation"
+  },
+  "runnerCanary": {
+    "subject": "892c93e2d4d44e863be9b6aed7407cf975e905b4",
+    "actualRootNativeChecks": 14,
+    "pass": 14,
+    "realCredentialsRead": false,
+    "modelInvoked": false,
+    "protectedPass": false,
+    "activated": false,
+    "scope": "fresh identity/hash verification and synthetic source/scratch/private transport/descendant/network policies; not live-model or bootstrap authority"
+  },
+  "publicBrowserProbe": {
+    "acquisition": "existing local browser login; no cookies/auth/private content exported",
+    "automaticCollectorEnabled": false,
+    "companyOrdersInferred": false,
+    "threads": {
+      "url": "https://www.threads.com/@investanchors",
+      "status": "read_success",
+      "observedProfilePosts": [
+        {
+          "url": "https://www.threads.com/@investanchors/post/Ddaum9QGFr_",
+          "displayedDate": "2026-09-18",
+          "summary": "CPO optical-engine screening and packaging yield require evolving testing flows; standards and supply-chain roles are not finalized."
+        },
+        {
+          "url": "https://www.threads.com/@investanchors/post/DdRGpqRGHyS",
+          "displayedDate": "2026-09-14",
+          "summary": "Probe-card demand shifts toward MEMS, higher pin counts and power; CPO testing remains a possible new application."
+        }
+      ],
+      "reply": {
+        "url": "https://www.threads.com/@gooptions/post/DdngHBpkoGb",
+        "displayedDate": "2026-09-23",
+        "summary": "A public reply discusses warpage, connector coplanarity and FAU alignment as packaging/yield challenges.",
+        "visibility": "one visible reply; site explicitly says some additional replies unavailable",
+        "complete": false
+      },
+      "auoExplicitlyMentioned": false,
+      "coverage": "two visible profile posts and one opened public thread, not exhaustive search"
+    },
+    "instagram": {
+      "url": "https://www.instagram.com/investanchors/",
+      "status": "read_success",
+      "posts": 0,
+      "display": "No posts yet",
+      "identityLink": "profile links to same Threads handle",
+      "coverage": "this one public account only; not a platform-wide zero-result claim"
+    }
+  },
+  "docker": {
+    "deleted": false,
+    "under30DaysProtected": true,
+    "ownershipAndGrowthRootCause": "awaiting other App Codex response; no entire-cache attribution",
+    "newReadOnlyInference": "SOHO current Dockerfile sets changing release ENV before runtime apt layers; prod/staging/canary pass varying release args. Possible cache invalidation mechanism, pending owner confirmation; not attribution of all cache."
+  },
+  "files": [
+    {
+      "path": "stockinsider-pr370-model-job-attempt2.log",
+      "sha256": "c4893d8ad552e75854b151b477356c8e049469e9008e60d0bfa2330f6f1c4c03",
+      "bytes": 21653
+    },
+    {
+      "path": "stockinsider-runner-recovery-root-canary-oct11-1458.json",
+      "sha256": "f50756ea9fba33ba00bc5b3b7ff22809a2e318cc6b618ec1f8a9d30019f8b343",
+      "bytes": 5594
+    },
+    {
+      "path": "stockinsider-runner-recovery-root-canary-oct11-1458.log",
+      "sha256": "530c71c0312310bac2f9bd875c5c7f6ab7c7b6cabe0b185b1c77757f95328a16",
+      "bytes": 45
+    },
+    {
+      "path": "stockinsider-pr370-product-job-attempt2.log",
+      "sha256": "35daf895e258bede51fc7543ef37f3e4d427457a5559c032deaa809cbb1df8b8",
+      "bytes": 152050
+    }
+  ],
+  "updatedAt": "2026-10-11T15:10:45.688381+00:00",
+  "productionServiceCorrection": {
+    "actualUnits": {
+      "stockinsider-web-standalone.service": "active running",
+      "stockinsider-internal-worker.service": "active running",
+      "stockinsider-auo-preview.service": "active running",
+      "stockinsider-financial-parser.service": "active running",
+      "stockinsider-postgrest.service": "active running"
+    },
+    "note": "Earlier stockinsider-web and stockinsider-worker aliases were nonexistent/inactive; not an outage. Failed oneshot jobs remain failed; no resets."
+  }
+}
