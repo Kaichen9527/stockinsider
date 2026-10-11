@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { constants } from 'node:fs';
-import { mkdtemp, writeFile, appendFile, open, rename, symlink, rm, readdir } from 'node:fs/promises';
+import { mkdtemp, writeFile, appendFile, open, rename, symlink, rm, readdir, chmod } from 'node:fs/promises';
 import { execFileSync, spawnSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
@@ -22,6 +22,8 @@ test('bounded regular bytes preserve exact boundary, reject oversized/directory/
   await assert.rejects(readResearchBoundedFile(path.join(dir, 'link'), policy), /ELOOP/);
   await assert.rejects(readResearchBoundedFile('relative', policy), /absolute_required/);
   await writeFile(path.join(dir, 'public'), '{}', { mode: 0o644 });
+  // Creation modes are filtered by umask; enforce the intended negative fixture.
+  await chmod(path.join(dir, 'public'), 0o644);
   await assert.rejects(readResearchBoundedFile(path.join(dir, 'public'), { ...policy, privateMode: true }), /file_bound/);
 }));
 for (const change of ['grow', 'shrink', 'replace', 'replace-with-symlink', 'rewrite']) {
