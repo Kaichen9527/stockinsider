@@ -1,0 +1,34 @@
+{
+  "source": "e67a17c7a24ddfec5235a8f4a708077a6ba0ddd4",
+  "parent": "622b61102d2204006dc2bb27b96a584de4ca3eeb",
+  "tree": "d2679bfa51b6ee3cbb17aba0fc8a92aca2f9d153",
+  "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+  "status": "",
+  "admissionAt": "2026-10-11T09:03:46.539420+00:00",
+  "deadlineAt": "2026-10-11T09:33:46.539420+00:00",
+  "diskAvailableBytes": 10044801024,
+  "osUser": "agent",
+  "node": "v22.14.0",
+  "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+  "pgBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+  "nativeExecutables": {
+    "initdb": true,
+    "pg_ctl": true,
+    "psql": true,
+    "postgres": true
+  },
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+  "pgClient": {
+    "version": "8.18.0",
+    "user": "agent"
+  },
+  "priorBuildId": "OHll1S-fj3VxEuEH6fzQs",
+  "noNewDependencies": true,
+  "networkPolicyObservedState": "unknown",
+  "networkPolicyMode": "restricted",
+  "skillsRead": [
+    "cloud-environment-onboarding:setup",
+    "cloud-environment:cloud-environment-runtime"
+  ]
+}

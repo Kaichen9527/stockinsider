@@ -1,0 +1,26 @@
+{
+  "exactTestFileSha256": "9fe377da98c04ab354979cb18c15da3a8c1ae1c1145000183379c0605187fa3d",
+  "originalBeforeAfterHooksExecuted": true,
+  "PGSchemaScope": "Original focused legacy prerequisite profile plus unchanged real original migrations; not a production schema install claim.",
+  "realAdapters": [
+    "postgres-legacy-producer-adapter.js",
+    "auth-source-worker.js"
+  ],
+  "noDbAdapterInjection": true,
+  "syntheticFixture": {
+    "acquisitionFetch": "test-owned fetch returns404 '{}'",
+    "credentials": {},
+    "sourceCommitSha": "test-only c repeated40",
+    "workerBytes": "test-only PCR adapter worker",
+    "noActualSourceAcquisitionOrModelCalls": true
+  },
+  "assertionsVerifiedByUnmodifiedTest": [
+    "Observed exactly2 genuine SQL claims from same run; source_sync first and a scheduled different successor.",
+    "payloadCanonical hash and JSON exact; readKind=null enforces null read bytes/json/hash, otherwise full read canonical hash and JSON exact.",
+    "Worker probe disposition=failed and completedJobs=1 due to explicit test-only stop after source completion.",
+    "First persisted job succeeded, successor failed and predecessor matches first job.",
+    "First result_hash/result_json exact immutable source bundle;17 source acquisition terminal rows;run failed.",
+    "Actual complete_legacy_producer_job_v3_14 delegates to named v3_11 owner."
+  ],
+  "syntheticIntendedFailedProbeIsNotFailedTest": true
+}
