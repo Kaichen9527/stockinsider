@@ -1,0 +1,42 @@
+{
+  "kind": "unsigned_independent_scoped_workflow_code_re_review",
+  "subject": "67901f1167ee3e2b7b2730b5e9a3ec4759787963",
+  "tree": "de271902d462791b9c178200a8e0b78f25d43cf0",
+  "base": "8d80ffb447c80f931f7a2012b821f5e2895506b8",
+  "scope": [
+    ".github/workflows/reviewed-linux-artifact.yml"
+  ],
+  "sourceSha256": "ef29c4d301053ea651bd5e44308f5341e8ac94113c9cb3e11a8b3f36b2579c29",
+  "verdict": "SCOPED_CODE_PASS",
+  "findings": [],
+  "repair": "Only mkdir line changed to create both destination and export_dir before original packager realpath(destinationRoot). Both variables remain quoted fixed paths under RUNNER_TEMP.",
+  "closedFinding": {
+    "severity": "P2",
+    "originalSubject": "8d80ffb447c80f931f7a2012b821f5e2895506b8",
+    "line": 48,
+    "originalReceipt": "/tmp/stockinsider-linux-artifact-8d80-review.json",
+    "originalReceiptSha256": "67a6f4e749cd9edcdb2b99310d0cc79e1b434af552e01993ec395d621171a766",
+    "originalFailureProbe": "/tmp/stockinsider-linux-artifact-8d80-probe.log",
+    "originalFailureProbeSha256": "1f8e9a781b122dc309af22e50bcc61a7a9e86d7a091ee31da0ffda3b94abb0b3",
+    "status": "closed by exact one-line change"
+  },
+  "retainedChecks": [
+    "Hardcoded reviewed source remains2e078dfdd74272d3d50dffdd4cc6c14df3152c78 for checkout,source andpackager.",
+    "Read-only token,pinnedexistingactions,persist-credentialsfalse andnoinput interpolation unchanged.",
+    "Clean source check,locked build,originalselectivepackager,verifier,archivehash/identityand14dayupload unchanged.",
+    "No gate,approval,production,DB,merge or deployment action added; binary preparation does not grant deployment authority."
+  ],
+  "validation": {
+    "method": "Exact Git byte diff and reverse-substitution equality; prior review and RED files hashed/preserved.",
+    "changedPaths": 1,
+    "changedLines": 1,
+    "buildRun": false,
+    "githubRunInspected": false,
+    "newFilesystemProbeRun": false
+  },
+  "limits": [
+    "Static scoped CODE review only; actualGitHub build/package/upload and downloadableartifact correctness not established by this review.",
+    "Original8d80RED remainsunchanged.",
+    "Deployment candidate stays2e078;workflowcommit is separate preparation infrastructure,not protected acceptance."
+  ]
+}

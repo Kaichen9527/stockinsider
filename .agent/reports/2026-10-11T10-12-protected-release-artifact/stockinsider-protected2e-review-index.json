@@ -1,0 +1,31 @@
+{
+  "run": 38130037645,
+  "genuineDownloadedEnvelopes": [
+    {
+      "path": "/tmp/stockinsider-protected2e-artifacts/architecture/opportunity-gate-result-architecture-2e078dfdd74272d3d50dffdd4cc6c14df3152c78.json",
+      "bytes": 2880,
+      "sha256": "0d4c96299493fad5e844ef7f77c5c4c144dd3715fb3e481b1a3fa3dd6d105193",
+      "check": "architecture",
+      "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "resultSha256": "ecfad35e714eb0383ad31341530b67d4498110864f61c4af65513e98db09a818"
+    },
+    {
+      "path": "/tmp/stockinsider-protected2e-artifacts/exact-review/opportunity-gate-result-exact-review-2e078dfdd74272d3d50dffdd4cc6c14df3152c78.json",
+      "bytes": 3220,
+      "sha256": "b2b2d1db736d0ac197c596a7518cede5908e0af7b466aa5b9563ada5cdd9dae0",
+      "check": "exact-review",
+      "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "resultSha256": "d7bcc1ca839ea6656d9af4e42a63f23da2a1da6ca97b77b6bdcb01ab20f67a3b"
+    },
+    {
+      "path": "/tmp/stockinsider-protected2e-artifacts/requirements/opportunity-gate-result-requirements-2e078dfdd74272d3d50dffdd4cc6c14df3152c78.json",
+      "bytes": 2880,
+      "sha256": "426f967fb572c6e4e28c89a40d4682152595b1278effc182857465aa97f14f4b",
+      "check": "requirements",
+      "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+      "resultSha256": "91cfa1f9272c983e91470f29f2ee1c2d9d8ad695b80d4e8b88f7bd80ca270c2d"
+    }
+  ],
+  "productNotYetComplete": true,
+  "modelFailed": true
+}

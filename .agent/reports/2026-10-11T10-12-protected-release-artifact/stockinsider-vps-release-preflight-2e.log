@@ -1,0 +1,23 @@
+2026-10-11T10:01:23Z
+Filesystem        1B-blocks         Used   Available Use% Mounted on
+/dev/sda1      154894188544 135428239360 19449171968  88% /
+/opt/stockinsider-standalone/releases/9fd86fe620ccc63c89c4acd208327bf2c4e15332
+active
+active
+active
+active
+active
+active
+PATH                                                                   COMMAND
+/var/lib/containerd/io.containerd.metadata.v1.bolt/meta.db             containerd
+/var/lib/docker/image/identity-cache.db                                dockerd
+/var/lib/docker/buildkit/containerd-overlayfs/metadata_v2.db           dockerd
+/run/containerd/io.containerd.mount-manager.v1.bolt/mounts.db          containerd
+/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/metadata.db containerd
+/root/.openclaw/tasks/runs.sqlite                                      openclaw-gatewa
+/root/.openclaw/tasks/runs.sqlite-shm                                  openclaw-gatewa
+/run/multipathd.pid                                                    multipathd
+/run/crond.pid                                                         cron
+/var/lib/docker/volumes/metadata.db                                    dockerd
+/var/lib/docker/network/files/local-kv.db                              dockerd
+17.11 (Ubuntu 17.11-1.pgdg24.04+2)|2732373683

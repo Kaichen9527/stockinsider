@@ -1,0 +1,20 @@
+prepare	Package and verify exact source without credentials	﻿2026-10-11T10:06:00.9542822Z ##[group]Run set -euo pipefail
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9543307Z ^[[36;1mset -euo pipefail^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9543720Z ^[[36;1mtest "$(git rev-parse HEAD)" = "$REVIEWED_SOURCE"^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9544185Z ^[[36;1mtest -z "$(git status --porcelain --untracked-files=no)"^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9544675Z ^[[36;1mdestination="$RUNNER_TEMP/reviewed-standalone"^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9545118Z ^[[36;1mexport_dir="$RUNNER_TEMP/standalone-export"^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9545521Z ^[[36;1mmkdir -p "$export_dir"^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9546250Z ^[[36;1mnode scripts/package-standalone-release.mjs "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE" "$destination" "$REVIEWED_SOURCE" "$REVIEWED_SOURCE" > "$export_dir/package.json"^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9547164Z ^[[36;1mnode scripts/verify-standalone-release.mjs "$destination/$REVIEWED_SOURCE" > "$export_dir/verification.json"^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9547895Z ^[[36;1mcp "$destination/$REVIEWED_SOURCE/release-manifest.json" "$export_dir/release-manifest.json"^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9548597Z ^[[36;1mgit rev-parse HEAD HEAD^{tree} HEAD:web > "$export_dir/source-identity.txt"^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9549211Z ^[[36;1mtar -czf "$export_dir/stockinsider-linux.tar.gz" -C "$destination" "$REVIEWED_SOURCE"^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9550052Z ^[[36;1m(cd "$export_dir" && sha256sum stockinsider-linux.tar.gz release-manifest.json package.json verification.json source-identity.txt > SHA256SUMS)^[[0m
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9593498Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9594054Z env:
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9594411Z   REVIEWED_SOURCE: 2e078dfdd74272d3d50dffdd4cc6c14df3152c78
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9594810Z   NEXT_TELEMETRY_DISABLED: 1
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:00.9595164Z ##[endgroup]
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:01.2190266Z {"error":"standalone_packaging_failed","reason":"ENOENT: no such file or directory, realpath '/home/runner/work/_temp/reviewed-standalone'"}
+prepare	Package and verify exact source without credentials	2026-10-11T10:06:01.2224168Z ##[error]Process completed with exit code 1.

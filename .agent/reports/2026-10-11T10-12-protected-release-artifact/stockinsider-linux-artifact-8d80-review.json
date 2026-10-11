@@ -1,0 +1,43 @@
+{
+  "kind": "unsigned_independent_scoped_workflow_code_review",
+  "subject": "8d80ffb447c80f931f7a2012b821f5e2895506b8",
+  "tree": "e2e6db2a5bd5cb6712bc79a10fceed70da0ebaad",
+  "base": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "scope": [
+    ".github/workflows/reviewed-linux-artifact.yml"
+  ],
+  "sourceSha256": "4ba830f248e490a388554db19fe17df4d9919cba0777a27b781eb7195a72ceac",
+  "verdict": "REQUEST_CHANGES",
+  "findings": [
+    {
+      "severity": "P2",
+      "path": ".github/workflows/reviewed-linux-artifact.yml",
+      "line": 48,
+      "title": "Packaging destination root is never created",
+      "trigger": "Fresh Ubuntu runner has no RUNNER_TEMP/reviewed-standalone; workflow creates only standalone-export.",
+      "consequence": "Original packager realpath(destinationRoot) failsENOENT before packaging. No downloadable artifact can be produced.",
+      "minimumFix": "mkdir -p \"$destination\" \"$export_dir\" before invoking original packager. Do not change packager or skip verification."
+    }
+  ],
+  "probe": {
+    "command": "Node22 imported unchanged original packageStandaloneRelease with nonexistent unique destinationRoot; expectedENOENT realpath asserted.",
+    "path": "/tmp/stockinsider-linux-artifact-8d80-probe.log",
+    "sha256": "1f8e9a781b122dc309af22e50bcc61a7a9e86d7a091ee31da0ffda3b94abb0b3",
+    "createdFiles": 0,
+    "buildRun": false
+  },
+  "securityChecks": [
+    "Hardcoded exact2e source and same packager identity; no workflow input interpolation or PR-controlled checkout ref.",
+    "Full action SHAs match existing reviewed workflow usage; checkout persist-credentialsfalse; job contentsread only, no deployment/environment/OIDC approval permissions.",
+    "Original npm locked install and build; clean tracked source checked before packaging, original verifier invoked before upload.",
+    "Packager copies standalone/static/public,explicit runtime scripts,deployment assets and20 hash-pinned runtime research files; does not copy entire Git/.agent/private originals; rejects.env/backup components,special files and final symlinks.",
+    "Export directory contains only package/verification/manifest/sourceidentity/archive/hash list; no explicit secret values,production credentials,DB/provider invocation or env dump.",
+    "Archive manifest/source identity andSHA256 sidecars identify bytes; these are not signed provenance/protected gate/production approval.",
+    "No change to PR364 source/gates or deployment path; preparation workflow cannot itself activate production."
+  ],
+  "limits": [
+    "No Linuxbuild/npm installation/workflow execution; binary transfer and fullartifactcontents await actualActions result.",
+    "This single-file scope does not reaudit locked dependency source or establish deployability.",
+    "Prior2e canonical/native/GOV results remain separately pending."
+  ]
+}

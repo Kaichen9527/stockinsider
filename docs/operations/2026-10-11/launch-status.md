@@ -120,3 +120,11 @@ Evidence: `.agent/reports/2026-10-11T07-48-release-review-repairs.json`; current
 - Genuine independent main-to2e CODE PASS and31per-ID provenance:20d6+9prior399 exact-source reuse;007/011 actual2e87native. Actual unchanged writer record abcec2f7fd1fa34fb537f34b27dabf04607803e2b3bc69b74e32283a8c227062. Unique3-file direct-childe802254bc34432cdb32c5b553b8fd5b30009b66c pushed immutable subject ref before PR364 source advance.
 - Actual main-based protected run38130037645: requirements/architecture/exact-review SUCCESS; product active, model FAILURE oldnativeENOENT. Unsigned CODE review/ordinary CI do not certify protectedPASS. Known trusted-native oldpath ENOENT remains a separate external recovery prerequisite; no same-input manual rerun or bypass.
 - No main merge, production DB mutation/deployment, strategy adoption or schedule enablement. AUO remains a demonstration research direction.
+
+## 2026-10-11T10:12Z — real envelopes and transferable Linux package
+
+- R2 requirements/architecture/exact-review actual protected envelopes PASS; product track remains active, model track fails trusted old CLI path ENOENT before tests. No main merge/deploy claimed.
+- Closed binary transfer gap: separate draftPR367 head67901f, actual GitHub Linux run38130717511 SUCCESS; downloaded artifact11698887764, all2819files/82,956,004B audited. Initial8d80 destination P2 and actual RED retained; minimal fix independently CODEPASS. CandidatePR364 remains unchanged2e.
+- Latest VPS19.45GBfree/154.89GBtotal, six services active, PG17.11. Heavy default admission not passed; no VPS build or production mutation. No new confirmed removable stock data.
+- VM bounded read-only transfer probe d2634b5a preserved: existing token cannot upload; no credentials exported/retries. Durable artifact now exists independently.
+- See `.agent/reports/2026-10-11T10-12-protected-release-artifact.json` for exact hashed raw. Final protected product outcome and native trust recovery still required.

@@ -61,11 +61,13 @@ atomically. Production was not changed during preparation.
 
 ## Remaining protected release blockers
 
-- The current protected run fails because the final exact-review evidence ref
-  does not exist. Requirements/architecture refs exist. Freeze final `R`, finish
-  genuine full `main..R` independent review and PCR evidence, then create the
-  unique direct-child three-file evidence commit. A scoped code pass is not this
-  full review and must not be represented as one.
+- Final reviewed source is `2e078dfdd74272d3d50dffdd4cc6c14df3152c78`;
+  genuine unique three-file direct-child evidence is
+  `e802254bc34432cdb32c5b553b8fd5b30009b66c`, published at its immutable
+  exact-review ref. Protected run38130037645 has actual PASS requirements,
+  architecture and exact-review envelopes. Product runtime is still running at
+  the latest snapshot; model runner failed before tests. Do not infer full
+  release approval from the three successful envelopes.
 - The trusted main runner points at a removed Codex path. Its current signed
   native binary has a new hash; the earlier recovery packet does not cover it.
   The current agent independently found no existing trusted recovery ingress or
@@ -94,3 +96,24 @@ second-industry author/reviewer flow. Full candidate coverage, source platform
 acceptance, strategy validation and five future trading days remain separate
 unfinished acceptance. Formal research schedules remain paused. No profitability
 claim or strategy adoption is authorized by these installer tests.
+
+## Downloadable deployment package (2026-10-11T10:12Z)
+
+Separate draft PR367 head67901f prepares only the fixed source2e package with
+read-only GitHub permissions and no production authority. Actual Linux run
+38130717511 succeeded; artifact11698887764 was downloaded and audited against
+all2819 manifest files (82,956,004 payload bytes). Tar SHA256 is
+`5051e5c9cf510917399ca5aa19973a96d6b80a176246743db444c5a73695f2e9`.
+The binary is retained in GitHub Actions for14days, not Git history. VM-local
+packages have separate build identities and are not relabeled. Initial8d80
+workflow failed destination realpath; the one-line mkdir fix and independent
+review are recorded with both actual failed and successful runs.
+
+Latest read-only VPS snapshot at10:01:23Z: total154,894,188,544B, free
+19,449,171,968B; six relevant services active, PG17.11 and database2,732,373,683B.
+Expansion is confirmed; the generic heavy-work20.40GB minimum is still above
+this snapshot. This package avoids a heavy VPS build, but capacity must be
+remeasured and admitted under the actual operation lock before migration or
+deployment. No capacity threshold was weakened, no production data was removed.
+
+Current receipt: `.agent/reports/2026-10-11T10-12-protected-release-artifact.json`.
