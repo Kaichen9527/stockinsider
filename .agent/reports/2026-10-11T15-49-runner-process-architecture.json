@@ -1,0 +1,75 @@
+{
+  "schema": "stockinsider-readonly-runner-process-architecture-observation-v1",
+  "observedAt": "2026-10-11T15:49:20.149199+00:00",
+  "api": "libproc proc_pidinfo PROC_PIDARCHINFO(19), struct proc_archinfo two signed 32-bit fields; SDK definition verified locally",
+  "scope": "existing Runner.Listener and two parent processes only; command names not argv or environment",
+  "processes": [
+    {
+      "pid": 2059,
+      "depth": 0,
+      "commOnly": "2059  2054 /Users/kaerchen/.local/share/stockinsider-github-actions-runner/bin/Runner.Listener",
+      "returnedBytes": 8,
+      "expectedBytes": 8,
+      "errno": 0,
+      "cpuType": 16777228,
+      "cpuSubtype": 0,
+      "architecture": "arm64"
+    },
+    {
+      "pid": 2054,
+      "depth": 1,
+      "commOnly": "2054  2045 ./externals/node20/bin/node",
+      "returnedBytes": 8,
+      "expectedBytes": 8,
+      "errno": 0,
+      "cpuType": 16777228,
+      "cpuSubtype": 0,
+      "architecture": "arm64"
+    },
+    {
+      "pid": 2045,
+      "depth": 2,
+      "commOnly": "2045     1 /bin/bash",
+      "returnedBytes": 8,
+      "expectedBytes": 8,
+      "errno": 0,
+      "cpuType": 16777228,
+      "cpuSubtype": -2147483646,
+      "architecture": "arm64"
+    }
+  ],
+  "sdkDefinitions": [
+    {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/proc_info.h",
+      "sha256": "e427fa96b348537b21552b9de71e01039410bcad2cedee5584c5e5fddafd70fc"
+    },
+    {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libproc.h",
+      "sha256": "246d87709fc6b9157ce5cf3c475656ac48e0e1ae8bbdc46cf45acd34294448cd"
+    },
+    {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/mach/machine.h",
+      "sha256": "f315bbdab024f89b45756410d1459c85cefe07316f57b67d0fdb2d0087fa6697"
+    }
+  ],
+  "firstProbeFailure": {
+    "argv": [
+      "ps",
+      "-axo",
+      "pid,ppid,arch,comm"
+    ],
+    "stderr": "ps: arch: keyword not found",
+    "notArchitectureEvidence": true,
+    "notRetried": true
+  },
+  "claimsExcluded": [
+    "actual next protected job pinned Node22 process.arch",
+    "full host fixture preflight",
+    "approved new trust baseline",
+    "provider/model execution",
+    "runner reconfiguration"
+  ],
+  "productionWrites": false,
+  "runnerChanges": false,
+  "dockerDeleted": false
+}

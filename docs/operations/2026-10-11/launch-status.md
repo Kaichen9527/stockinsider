@@ -1,5 +1,14 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 15:49Z：既有 runner 啟動父鏈唯讀確認
+
+GitHub PR370/371仍是原精確head、OPEN/BLOCKED，首次信任遷移決策未答覆；既有VM cursor50 idle，不新增重複派工。其他App cursor27仍執行自己的部署，快取歸屬答覆尚未出現。
+
+以本機SDK明定的libproc `proc_pidinfo(PROC_PIDARCHINFO=19)`真正讀取既有Listener2059、父node20 2054、父bash2045，三者皆arm64；每次讀前後只核對pid/ppid/comm，沒有讀argv、environment或憑證。先前`ps arch`欄位不支援的失敗保留，未當成架構結果。這補足既有runner父鏈的唯讀事實，但沒有執行下一個protected job，仍不能代稱該job實際Node22的process.arch或完整final-host preflight通過。沒有修改runner、fixture、保護、資料庫或Docker，亦未重跑已完成全量。
+
+收據`.agent/reports/2026-10-11T15-49-runner-process-architecture.json`，SHA256 `ae85fa43526ecfce7dfadc230ff01d0c09a4f61325cea1417c4ec52c5c0f8e36`。
+
+
 ## 15:40Z：候選 CI 已真正註冊；部署仍需發布工具復原
 
 PR371 final5b8a5c57加入一個普通PR workflow，GitHub run38151644908的既有28項候選/UI檢查已成功。root逐項核對20raw/manifest及14source條目；最終版本另重跑28項成功。第一輪canonical為153PASS/2FAIL：系統Python父程序讓universal Node以x64執行，與已安裝arm64 LightningCSS不符；保留RED。顯式arm64啟動不改指令或測試，完整155PASS/0FAIL/0SKIP/0TODO、31PCR全過。final head的普通product/diagnostic run38151644863亦已真SUCCESS（非protected批准）。新的三檔direct-child exact evidence606f5fab已推，不重用715的head簽述；相同web/lock的正常build/type/lint僅如實重用前證據。普通CI不能代替protected批准。
