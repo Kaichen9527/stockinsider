@@ -1,0 +1,17 @@
+{
+  "verdict": "UNSIGNED_SCOPED_CODE_PASS",
+  "subjectSha256": "f22475506c44eec7e68fd72abbf2487453a866007ab59f9c01162b451e1c6b7b",
+  "findings": [],
+  "priorSubjectsPreserved": [
+    "e005ce237b8959cb2183e8b952d5727628151a172dbe8e4d51c08a0766ec0af5",
+    "101974f59cb17151c2df807a1ac6a5c6f3353bda8f9bd87125ee93ed6b30fdc3"
+  ],
+  "independentProbeCount": 6,
+  "independentProbePass": 6,
+  "probePath": "/tmp/stockinsider-main169-operator-review-f224-probes.json",
+  "probeSha256": "8b57a5449be936d9e3455862f7fe91f12652c8a832eda5ccb82ade58486e364f",
+  "reportSha256": "fac5d8799cbcd926a45283bec712123b5701c345de1c8b19bfeabb87756f2115",
+  "productionExecuted": false,
+  "capacityAdmitted": false,
+  "protectedApproval": false
+}

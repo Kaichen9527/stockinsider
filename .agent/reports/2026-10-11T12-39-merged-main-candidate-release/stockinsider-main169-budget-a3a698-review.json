@@ -1,0 +1,54 @@
+{
+  "scriptSha256": "a3a6981ad372ee62a1a288e74e6d3c49a38304f4291321bc1ae3977a35df0a98",
+  "budgetSha256": "f17b782bb77e6483d58e2ae8d738f4217cc9d5b1e46373002faed99682035e43",
+  "onlyTwoResourceInvocationsChanged": true,
+  "twoInlineBudgetsByteEqualFile": true,
+  "originalOtherBudgetValuesUnchanged": true,
+  "actualGuardIndependentArithmetic": [
+    {
+      "availableBytes": 20254031872,
+      "disposition": "warning",
+      "allowed": true,
+      "reasons": [
+        "capacity_below_20_gib_warning"
+      ],
+      "additionalPeakBytes": 3892314112,
+      "projectedAvailableBytes": 16361717760,
+      "minimumReserveBytes": 16106127360
+    },
+    {
+      "availableBytes": 19998441472,
+      "disposition": "warning",
+      "allowed": true,
+      "reasons": [
+        "capacity_below_20_gib_warning"
+      ],
+      "additionalPeakBytes": 3892314112,
+      "projectedAvailableBytes": 16106127360,
+      "minimumReserveBytes": 16106127360
+    },
+    {
+      "availableBytes": 19998441471,
+      "disposition": "blocked",
+      "allowed": false,
+      "reasons": [
+        "capacity_below_15_gib_reserve"
+      ],
+      "additionalPeakBytes": 3892314112,
+      "projectedAvailableBytes": 16106127359,
+      "minimumReserveBytes": 16106127360
+    }
+  ],
+  "probeLimitation": "Reported free bytes input; no VPS statfs or actual admission executed. /proc/self/fd/3 is Linux-only and was inspected statically, not executed on Mac.",
+  "actualArchiveShaVerified": "7abffc2bcf78adb1291caac4bcad4cf6bea81f62c6d5cb0abe900bf2cc3b8e01",
+  "archiveBytes": 27563099,
+  "tarRegularFiles": 2585,
+  "tarDirectories": 514,
+  "roundedRegular4KiBBytes": 87633920,
+  "directory4KiBAllowance": 2105344,
+  "deploymentBudgetBytes": 134217728,
+  "marginAfterThoseAllocations": 44478464,
+  "runtimeGuardHardFloorBytes": 16106127360,
+  "verdict": "UNSIGNED_SCOPED_CODE_AND_BUDGET_DESIGN_PASS",
+  "productionAdmissionClaimed": false
+}

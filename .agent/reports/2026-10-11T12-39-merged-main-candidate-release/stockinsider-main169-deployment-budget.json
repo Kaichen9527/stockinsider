@@ -1,0 +1,13 @@
+{
+  "schema": "stockinsider-capacity-budget-v2",
+  "measurementBasis": "One exact prebuilt main169 Linux deployment: manifest 79,290,260 content bytes/2,584 files; 128 MiB disk allocation budget includes per-file block/metadata margin. 27,563,099-byte archive remains in /run RAM and is accounted within unchanged 1 GiB peakMemory. No VPS build, DB restore, new documents or backup staging. Keep unchanged 1 GiB WAL, 0.5 GiB temporary, 2 GiB growth and 15 GiB hard floor.",
+  "databaseRestoreBytes": 0,
+  "documentBytes": 0,
+  "peakWalBytes": 1073741824,
+  "peakTemporaryBytes": 536870912,
+  "deploymentBytes": 134217728,
+  "localBackupStagingBytes": 0,
+  "growthReserveBytes": 2147483648,
+  "peakMemoryBytes": 1073741824,
+  "minimumAvailableMemoryBytes": 1610612736
+}

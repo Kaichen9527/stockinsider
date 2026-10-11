@@ -1,0 +1,88 @@
+{
+  "subject": "da660bfc120663a64a9efb19e982c018f79a2f4f",
+  "tree": "db3683fa5f0f10a8ce233dbc13c27bc1cb361cf6",
+  "evidenceHead": "7913bc7db29865aaf409e31238652e15df020973",
+  "base": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "exactPackageDeltaVerified": true,
+  "originalExpandedCount": 78,
+  "originalUniqueCount": 77,
+  "newExpandedCount": 79,
+  "newUniqueCount": 78,
+  "originalAllMembershipRetained": true,
+  "rawCount": 39,
+  "rawBytes": 928362,
+  "rawHashesAllMatch": true,
+  "receiptSha256": "b6fabccc1e03601c7e511016b968e8f7fc81e56cf296c3b12c4e9d108f1dc1b9",
+  "sourceManifestVerifiedAgainstGit": 670,
+  "independentCommand": [
+    "node22",
+    "--test",
+    "scripts/research-agent-test-isolation.test.mjs"
+  ],
+  "independentExit": 0,
+  "independentTapSha256": "eff6549b02edde831e3b4df43ae16b4032617c67edaa4c72c005ce5760d4d9c3",
+  "temporaryExactBlobFixture": "/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/stockinsider-home-isolation-independent-oct11-5kowfiin",
+  "independentTests": {
+    "pass": 2,
+    "fail": 0,
+    "skip": 0
+  },
+  "makerReported": {
+    "invocations": [
+      {
+        "phase": 1,
+        "counts": {
+          "tests": 815,
+          "pass": 813,
+          "fail": 0,
+          "skipped": 2,
+          "cancelled": 0
+        },
+        "skipLines": [
+          "ok 352 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled",
+          "ok 353 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled"
+        ]
+      },
+      {
+        "phase": 2,
+        "counts": {
+          "tests": 5,
+          "pass": 5,
+          "fail": 0,
+          "skipped": 0,
+          "cancelled": 0
+        },
+        "skipLines": []
+      }
+    ],
+    "total": 820,
+    "pass": 818,
+    "fail": 0,
+    "skip": 2,
+    "originalDefaultsAndAssertionsPreserved": true,
+    "serialConcurrencyFlagAdded": false,
+    "newFocusedTestsAlsoInFullSuite": true,
+    "countsNotAddedTwice": true
+  },
+  "historicalFailure": {
+    "run": "38130038830",
+    "error": "financial_parent_replaced",
+    "rootReported": true,
+    "vmHistoricalLogReRead": false,
+    "actualHistoricalWriterProven": false
+  },
+  "noProductionOrFullSuiteExecution": true,
+  "reviewerProbeCorrection": "Initial membership probe incorrectly used token index5 instead of4 and asserted; corrected after independently verifying four-token invocation prefix. Not a product failure.",
+  "verdict": "UNSIGNED_SCOPED_CODE_PASS",
+  "findings": [],
+  "changedImplementationPaths": [
+    "docs/operations/2026-10-11/research-agent-home-isolation.md",
+    "package.json",
+    "scripts/research-agent-test-isolation.test.mjs"
+  ],
+  "originalReaderFixtureInventoryRunnerUnchanged": true,
+  "evidenceOnlyHead": true,
+  "reportSha256": "c4747155ddfd93c24eada59edc8e115d11798334893b056d94288d3c966c35da",
+  "protectedApproval": false,
+  "actualHistoricalWriterProven": false
+}

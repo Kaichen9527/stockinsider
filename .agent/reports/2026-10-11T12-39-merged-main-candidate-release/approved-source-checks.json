@@ -1,0 +1,58 @@
+[
+  {
+    "name": "stockinsider-v3-gate-root",
+    "head_sha": "110a7197afadfca6fd4f570c68a9c216d11aa9b4",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/36014062080/job/107688637287",
+    "completed_at": "2026-09-24T14:53:13Z"
+  },
+  {
+    "name": "model-runner-code-gate",
+    "head_sha": "110a7197afadfca6fd4f570c68a9c216d11aa9b4",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/36014062080/job/107682125576",
+    "completed_at": "2026-09-24T14:40:09Z"
+  },
+  {
+    "name": "product-runtime-code-gate",
+    "head_sha": "110a7197afadfca6fd4f570c68a9c216d11aa9b4",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/36014062080/job/107682125560",
+    "completed_at": "2026-09-24T14:52:54Z"
+  },
+  {
+    "name": "architecture",
+    "head_sha": "110a7197afadfca6fd4f570c68a9c216d11aa9b4",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/36014062080/job/107681989737",
+    "completed_at": "2026-09-24T14:37:32Z"
+  },
+  {
+    "name": "exact-review",
+    "head_sha": "110a7197afadfca6fd4f570c68a9c216d11aa9b4",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/36014062080/job/107681989685",
+    "completed_at": "2026-09-24T14:37:35Z"
+  },
+  {
+    "name": "requirements",
+    "head_sha": "110a7197afadfca6fd4f570c68a9c216d11aa9b4",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/36014062080/job/107681989492",
+    "completed_at": "2026-09-24T14:37:35Z"
+  },
+  {
+    "name": "stockinsider-v3-gate-bootstrap",
+    "head_sha": "110a7197afadfca6fd4f570c68a9c216d11aa9b4",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Kaichen9527/stockinsider/actions/runs/36014062080/job/107681903214",
+    "completed_at": "2026-09-24T14:37:15Z"
+  }
+]

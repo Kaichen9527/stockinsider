@@ -1,0 +1,45 @@
+{
+  "subjectSha256": "f22475506c44eec7e68fd72abbf2487453a866007ab59f9c01162b451e1c6b7b",
+  "syntaxPass": true,
+  "migrationSha256": "cc82ac701bb1ac4db4e2fa8880ac77fa9d90e71ca5925e02ca088dd3d3070968",
+  "rollbackProbeResults": [
+    {
+      "case": "success",
+      "exit": 17,
+      "stdout": "owned-cleanup-invoked\nowned-directory-cleanup-invoked\nprevious_writer_restored_and_verified\nowned-cleanup-invoked\nowned-directory-cleanup-invoked\n",
+      "stderr": "cutover_failed_attempting_previous_writer_restore\n"
+    },
+    {
+      "case": "mktemp_failure",
+      "exit": 17,
+      "stdout": "owned-cleanup-invoked\nowned-directory-cleanup-invoked\n",
+      "stderr": "cutover_failed_attempting_previous_writer_restore\nrecovery_required:previous_writer_restore_failed\n"
+    },
+    {
+      "case": "link_failure",
+      "exit": 17,
+      "stdout": "owned-cleanup-invoked\nowned-directory-cleanup-invoked\nowned-cleanup-invoked\nowned-directory-cleanup-invoked\n",
+      "stderr": "cutover_failed_attempting_previous_writer_restore\nrecovery_required:previous_writer_restore_failed\n"
+    },
+    {
+      "case": "activation_failure",
+      "exit": 17,
+      "stdout": "owned-cleanup-invoked\nowned-directory-cleanup-invoked\nowned-cleanup-invoked\nowned-directory-cleanup-invoked\n",
+      "stderr": "cutover_failed_attempting_previous_writer_restore\nrecovery_required:previous_writer_restore_failed\n"
+    },
+    {
+      "case": "writer_failure",
+      "exit": 17,
+      "stdout": "owned-cleanup-invoked\nowned-directory-cleanup-invoked\nowned-cleanup-invoked\nowned-directory-cleanup-invoked\n",
+      "stderr": "cutover_failed_attempting_previous_writer_restore\nrecovery_required:previous_writer_restore_failed\n"
+    },
+    {
+      "case": "service_failure",
+      "exit": 17,
+      "stdout": "owned-cleanup-invoked\nowned-directory-cleanup-invoked\nowned-cleanup-invoked\nowned-directory-cleanup-invoked\n",
+      "stderr": "cutover_failed_attempting_previous_writer_restore\nrecovery_required:previous_writer_restore_failed\n"
+    }
+  ],
+  "method": "Exact finish() shell text with all operational commands replaced by local controlled mocks. No actual ln/mv/rm/activation/psql/systemctl or VPS connection. Exit17 preserves primary failure in all6cases.",
+  "runtimeDeploymentExecuted": false
+}

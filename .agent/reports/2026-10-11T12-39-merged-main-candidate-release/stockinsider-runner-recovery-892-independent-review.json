@@ -1,0 +1,35 @@
+{
+  "subject": "892c93e2d4d44e863be9b6aed7407cf975e905b4",
+  "tree": "2df896d7ca54cfb8f58b362842b84f3419c49354",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "verdict": "UNSIGNED_SCOPED_INACTIVE_CODE_PASS",
+  "findings": [],
+  "scope": "33 changed paths; exact prior component reuse and new inactive identity/pin/policy/test/evidence boundaries",
+  "independentCommand": [
+    "/Users/kaerchen/.nvm/versions/node/v22.23.3/bin/node",
+    "--test",
+    "scripts/opportunity-v3/protected-external-gate-worker.test.mjs",
+    "scripts/opportunity-v3/runner-recovery-candidate.test.mjs",
+    "scripts/model-runner-v3/jsonl-parser.test.js",
+    "scripts/model-runner-v3/process-lifecycle.test.js"
+  ],
+  "tests": {
+    "pass": 103,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "todo": 0
+  },
+  "tapPath": "/tmp/stockinsider-runner-recovery-892-independent-focused.tap",
+  "tapSha256": "cc87200ef0acd4598da8f06f0d896a140e2e6fff45410c579e8a2b0bc34b7165",
+  "indexedFilesVerified": 42,
+  "indexedBytesVerified": 577976,
+  "actualCurrentHostReverified": false,
+  "nativeSandboxRerun": false,
+  "modelOrAuthInvoked": false,
+  "activationAvailable": false,
+  "protectedApproval": false,
+  "fullFrozenAcceptancePassed": false,
+  "sourceMutated": false,
+  "reportSha256": "29d9826b4cb179e0b1587dff4210117887c5502cb7136814d1c35806d43305fd"
+}

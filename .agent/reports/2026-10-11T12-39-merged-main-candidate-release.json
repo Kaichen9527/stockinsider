@@ -1,0 +1,145 @@
+{
+  "schema": "stockinsider-phased-main-release-preparation-v1",
+  "recordedAt": "2026-10-11T12:39:00Z",
+  "approvedSource": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "tree": "fb62be71161857affbaa8ea8ed7f4d7921a4b3c9",
+  "reviewedPrHead": "110a7197afadfca6fd4f570c68a9c216d11aa9b4",
+  "sameTreeVerified": true,
+  "mergedPr": 282,
+  "buildRun": 38138212902,
+  "artifactId": 11701238074,
+  "artifactSha256": "7abffc2bcf78adb1291caac4bcad4cf6bea81f62c6d5cb0abe900bf2cc3b8e01",
+  "artifactBytes": 27563099,
+  "contentBytes": 79290260,
+  "verifiedFiles": 2584,
+  "tests": {
+    "entryPlan": {
+      "passed": 98,
+      "failed": 0
+    },
+    "packageStandalone": {
+      "passed": 7,
+      "failed": 0
+    },
+    "playwrightTradePlan": {
+      "passed": 4,
+      "failed": 0
+    },
+    "typecheck": "pass",
+    "lint": "pass-with-warnings",
+    "build": "pass"
+  },
+  "migrationValidation": {
+    "evidenceCommit": "2e9723aff0c8cfe656f8ba3e57cdb4bea4091da3",
+    "groupCount": 9,
+    "expectedSqlstateRejections": 49,
+    "productionApplied": false
+  },
+  "operatorReview": "unsigned scoped CODE PASS, not a protected attestation",
+  "productionBefore": "9fd86fe620ccc63c89c4acd208327bf2c4e15332",
+  "productionActivated": false,
+  "admission": {
+    "at": "2026-10-11T12:29:13.700Z",
+    "availableBytes": 18135646208,
+    "additionalPeakBytes": 3892314112,
+    "minimumReserveBytes": 16106127360,
+    "allowed": false
+  },
+  "latestReadOnly": {
+    "at": "2026-10-11T12:36:17Z",
+    "availableBytes": 15004835840,
+    "filesystemBlockBytes": 4096,
+    "serviceRoleBypassRls": true
+  },
+  "cleanupPerformed": false,
+  "sharedDockerCleanupAuthority": "pending human response; existing StockInsider-only scope excludes other apps",
+  "testRepair": {
+    "codeCommit": "da660bfc120663a64a9efb19e982c018f79a2f4f",
+    "evidenceCommit": "7913bc7db29865aaf409e31238652e15df020973",
+    "pr": 369,
+    "total": 820,
+    "passed": 818,
+    "failed": 0,
+    "explicitNativeSkips": 2,
+    "protectedApproval": false
+  },
+  "runnerRecovery": {
+    "head": "892c93e2d4d44e863be9b6aed7407cf975e905b4",
+    "inactiveFixture": true,
+    "independentReview": "unsigned scoped inactive CODE PASS: 103/103, zero skips; no native/model/protected execution",
+    "initialTrustExceptionApproved": false,
+    "legallyActivatableRecoveryPath": false
+  },
+  "files": [
+    {
+      "path": "stockinsider-main169-deploy.sh",
+      "bytes": 12522,
+      "sha256": "a3a6981ad372ee62a1a288e74e6d3c49a38304f4291321bc1ae3977a35df0a98"
+    },
+    {
+      "path": "stockinsider-main169-deployment-budget.json",
+      "bytes": 769,
+      "sha256": "f17b782bb77e6483d58e2ae8d738f4217cc9d5b1e46373002faed99682035e43"
+    },
+    {
+      "path": "stockinsider-main169-operator-review-f224.json",
+      "bytes": 725,
+      "sha256": "ff91a9e5f43eb98f177222c8a40a2f899d0001d602c4ee9d62a79c41569ac1ed"
+    },
+    {
+      "path": "stockinsider-main169-operator-review-f224.md",
+      "bytes": 3196,
+      "sha256": "fac5d8799cbcd926a45283bec712123b5701c345de1c8b19bfeabb87756f2115"
+    },
+    {
+      "path": "stockinsider-main169-operator-review-f224-probes.json",
+      "bytes": 2308,
+      "sha256": "8b57a5449be936d9e3455862f7fe91f12652c8a832eda5ccb82ade58486e364f"
+    },
+    {
+      "path": "stockinsider-main169-budget-a3a698-review.json",
+      "bytes": 1910,
+      "sha256": "6b6a90ae64eaa4d14f2db179b2e225eee2c1a9243bd4595205278c4ecc5c7c1a"
+    },
+    {
+      "path": "stockinsider-home-isolation-independent-oct11-review.json",
+      "bytes": 3024,
+      "sha256": "b03a7171d2dbdfe76dd405783be270929c29c10a2104a4541081746113894a00"
+    },
+    {
+      "path": "stockinsider-main169-resource-admission-oct11.stdout",
+      "bytes": 572,
+      "sha256": "310ad0d129a788ebe44fe5fd57d01c7729687294e22eec62025eb41837402029"
+    },
+    {
+      "path": "stockinsider-main169-resource-admission-oct11.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 328,
+      "sha256": "0ce69c32b62381bf580569c9ee2509dd837048837b6e83baaae361e074da52f1"
+    },
+    {
+      "path": "source-identity.txt",
+      "bytes": 123,
+      "sha256": "4250ef261f59c8a22de2fad16544b15682b1b6bde69829f67e5b97f1512e9d52"
+    },
+    {
+      "path": "SHA256SUMS",
+      "bytes": 429,
+      "sha256": "c41192781026bdad5abfa0dffab7d8061284512d7ae429d02d6d92495ea87f03"
+    },
+    {
+      "path": "stockinsider-runner-recovery-892-independent-review.json",
+      "bytes": 1346,
+      "sha256": "7ad3e2450a761c45bc3f54e49501b5e3e24896b9a9b12e00215664a09d430120"
+    },
+    {
+      "path": "stockinsider-runner-recovery-892-independent-review.md",
+      "bytes": 6405,
+      "sha256": "29d9826b4cb179e0b1587dff4210117887c5502cb7136814d1c35806d43305fd"
+    }
+  ]
+}
