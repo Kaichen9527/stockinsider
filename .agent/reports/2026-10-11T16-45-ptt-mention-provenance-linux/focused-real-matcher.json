@@ -1,0 +1,25 @@
+{
+  "stage": "focused-real-matcher",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/ptt-mention-provenance.test.ts",
+    "scripts/ptt-mention-provenance-boundary.test.mjs",
+    "web/src/lib/ptt-policy.test.ts",
+    "web/src/lib/source-content-semantics.test.ts"
+  ],
+  "startedAt": "2026-10-11T16:57:44.526077+00:00",
+  "endedAt": "2026-10-11T16:57:45.689727+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 1.163657539000269,
+  "sampledAggregatePeakRssBytes": 161697792,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9277423616,
+  "diskAvailableAfterBytes": 9277423616,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

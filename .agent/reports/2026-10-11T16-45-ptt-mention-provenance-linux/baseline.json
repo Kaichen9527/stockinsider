@@ -1,0 +1,22 @@
+{
+  "stage": "baseline",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/ptt-mention-provenance-boundary.test.mjs"
+  ],
+  "startedAt": "2026-10-11T16:52:17.935457+00:00",
+  "endedAt": "2026-10-11T16:52:18.575632+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 0.640178851026576,
+  "sampledAggregatePeakRssBytes": 165355520,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9598910464,
+  "diskAvailableAfterBytes": 9598910464,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
