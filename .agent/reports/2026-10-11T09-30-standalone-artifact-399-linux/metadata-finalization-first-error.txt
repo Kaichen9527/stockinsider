@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+KeyError: 'releaseManifestJsonFileSha256'
+
+Cause: run.py stage receipt archive-audit.json replaced helper output with the same filename after the successful archive audit. Product packaging/verifier/archive audit all exited0. Recover original audit result from the unchanged archive-audit.stdout JSON; no archive/product operation rerun.

@@ -1,0 +1,11 @@
+{
+  "metadataRoute": "Existing authenticated Git HTTPS evidence branch; binary never committed.",
+  "binaryCrossVMTransferVerified": false,
+  "availableUploadOrArtifactExportToolFound": false,
+  "managedCapabilitiesReported": [],
+  "binaryServedOrUploaded": false,
+  "newApiOrPaidServiceUsed": false,
+  "binaryCurrentAccess": "VM local filesystem; private parent0700,tar0600 owned by agent.",
+  "retention": "Retain this VM/task filesystem; /tmp is tmpfs and no durability or access from another host is established.",
+  "deploymentAuthorized": false
+}

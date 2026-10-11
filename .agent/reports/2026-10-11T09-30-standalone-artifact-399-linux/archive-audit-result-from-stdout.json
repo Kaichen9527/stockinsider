@@ -1,0 +1,17 @@
+{
+  "archivePath": "/tmp/si-artifact-399-gwlxuq40/stockinsider-399e9bde-linux-standalone.tar.gz",
+  "archiveSha256": "415fe579ecc8545ec294d69744f114b3a068ce979e9d81a528e8b81ccf4bc69e",
+  "archiveBytes": 28209315,
+  "fileCountIncludingReleaseManifest": 2820,
+  "releaseManifestFileCount": 2819,
+  "directoryCount": 560,
+  "totalRegularFileBytesIncludingReleaseManifest": 83612029,
+  "releaseManifestJsonFileBytes": 656004,
+  "releaseManifestJsonFileSha256": "f305390485855ac8d52072eeb80a0ca8ce032cf7563463d305700a8d675b9388",
+  "manifestSha256": "5e0231a1641a964332ca4ba08ac30d14603a17083aa7919feca90277e8895478",
+  "allArchiveRegularMembersComparedToReleaseHashes": true,
+  "absoluteTraversalDuplicateUnexpectedPaths": 0,
+  "symlinksHardlinksSpecialFiles": 0,
+  "dotenvOrKnownCredentialStorePrivateKeyPaths": 0,
+  "pathAuditNotGenericSecretContentScan": true
+}

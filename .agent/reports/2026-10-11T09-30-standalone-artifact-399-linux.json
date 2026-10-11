@@ -1,0 +1,342 @@
+{
+  "schemaVersion": "standalone-artifact-399-linux-evidence-v1",
+  "sourceIdentity": {
+    "source": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+    "packagerCommit": "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+    "tree": "d3a623aff477b74fb0e217234958630742585250",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "sourceRepository": "/workspace/cloud-reviewer-result-http-vm-oct09",
+    "packagerRepository": "/workspace/cloud-reviewer-result-http-vm-oct09",
+    "destinationRoot": "/tmp/si-artifact-399-gwlxuq40/packages",
+    "destinationExternal": true,
+    "buildId": "Nj3J_1HFHcxV4EErafx07",
+    "retainedBuildManifestRehashed": 2088,
+    "serverManifestSha256": "c555e210cde700297e2e39f10376de7840b4629cab9dc137a98d14e603eedb50",
+    "diskAvailableBytes": 10042568704,
+    "admissionAt": "2026-10-11T09:30:07.538049Z",
+    "deadlineAt": "2026-10-11T10:00:07+00:00",
+    "node": "v22.14.0",
+    "osUser": "agent",
+    "noLiveProcessesAtAdmission": true,
+    "noBuildRerun": true,
+    "sourceClean": true,
+    "packagerClean": true,
+    "networkPolicyMode": "restricted",
+    "networkPolicyObservedState": "unknown",
+    "noNetworkTransferAttempted": true
+  },
+  "sourceAndPackagerExactClean399DuringExecution": true,
+  "evidenceParent": "d5c6025405a5e26d02ca57e79b2c0a5abddcb4df",
+  "onlyEvidenceCommittedNoSourceMerge": true,
+  "retainedBuildReverifiedNotRebuilt": {
+    "buildId": "Nj3J_1HFHcxV4EErafx07",
+    "serverFileCount": 2088,
+    "serverManifestSha256": "c555e210cde700297e2e39f10376de7840b4629cab9dc137a98d14e603eedb50"
+  },
+  "package": {
+    "releaseDirectory": "/tmp/si-artifact-399-gwlxuq40/packages/399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+    "manifestSha256": "5e0231a1641a964332ca4ba08ac30d14603a17083aa7919feca90277e8895478",
+    "releaseManifestFileSha256": "f305390485855ac8d52072eeb80a0ca8ce032cf7563463d305700a8d675b9388",
+    "releaseManifestFileBytes": 656004,
+    "fileCountExcludingManifest": 2819,
+    "uncompressedPayloadBytesExcludingManifest": 82956025,
+    "entrypoint": "app/server.js"
+  },
+  "archive": {
+    "archivePath": "/tmp/si-artifact-399-gwlxuq40/stockinsider-399e9bde-linux-standalone.tar.gz",
+    "archiveSha256": "415fe579ecc8545ec294d69744f114b3a068ce979e9d81a528e8b81ccf4bc69e",
+    "archiveBytes": 28209315,
+    "fileCountIncludingReleaseManifest": 2820,
+    "releaseManifestFileCount": 2819,
+    "directoryCount": 560,
+    "totalRegularFileBytesIncludingReleaseManifest": 83612029,
+    "releaseManifestJsonFileBytes": 656004,
+    "releaseManifestJsonFileSha256": "f305390485855ac8d52072eeb80a0ca8ce032cf7563463d305700a8d675b9388",
+    "manifestSha256": "5e0231a1641a964332ca4ba08ac30d14603a17083aa7919feca90277e8895478",
+    "allArchiveRegularMembersComparedToReleaseHashes": true,
+    "absoluteTraversalDuplicateUnexpectedPaths": 0,
+    "symlinksHardlinksSpecialFiles": 0,
+    "dotenvOrKnownCredentialStorePrivateKeyPaths": 0,
+    "pathAuditNotGenericSecretContentScan": true
+  },
+  "stages": [
+    {
+      "stage": "package-standalone",
+      "command": [
+        "node",
+        "scripts/package-standalone-release.mjs",
+        "/workspace/cloud-reviewer-result-http-vm-oct09",
+        "/workspace/cloud-reviewer-result-http-vm-oct09",
+        "/tmp/si-artifact-399-gwlxuq40/packages",
+        "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd",
+        "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd"
+      ],
+      "startedAt": "2026-10-11T09:31:15.751874+00:00",
+      "endedAt": "2026-10-11T09:31:17.233162+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.4812943380093202,
+      "sampledAggregatePeakRssBytes": 55898112,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10042568704,
+      "diskAvailableAfterBytes": 10042568704,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "verify-standalone",
+      "command": [
+        "node",
+        "scripts/verify-standalone-release.mjs",
+        "/tmp/si-artifact-399-gwlxuq40/packages/399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd"
+      ],
+      "startedAt": "2026-10-11T09:31:43.421748+00:00",
+      "endedAt": "2026-10-11T09:31:44.232357+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.8106179999886081,
+      "sampledAggregatePeakRssBytes": 62603264,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10042568704,
+      "diskAvailableAfterBytes": 10042568704,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "archive-create",
+      "command": [
+        "tar",
+        "-czf",
+        "/tmp/si-artifact-399-gwlxuq40/stockinsider-399e9bde-linux-standalone.tar.gz",
+        "-C",
+        "/tmp/si-artifact-399-gwlxuq40/packages",
+        "399e9bdebfdd05b7b2f8caf5efd879ff728ad9fd"
+      ],
+      "startedAt": "2026-10-11T09:32:18.639699+00:00",
+      "endedAt": "2026-10-11T09:32:21.954031+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 3.3143392800120637,
+      "sampledAggregatePeakRssBytes": 4141056,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10042568704,
+      "diskAvailableAfterBytes": 10042568704,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "archive-audit",
+      "command": [
+        "python3",
+        "/tmp/si-artifact-399-gwlxuq40/archive-audit.py"
+      ],
+      "startedAt": "2026-10-11T09:33:13.840619+00:00",
+      "endedAt": "2026-10-11T09:33:14.456464+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.6158528050291352,
+      "sampledAggregatePeakRssBytes": 21450752,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10042568704,
+      "diskAvailableAfterBytes": 10042568704,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    }
+  ],
+  "metadataFinalizationFailure": {
+    "error": "KeyError releaseManifestJsonFileSha256",
+    "cause": "diagnostic helper output and stage receipt used same archive-audit.json filename",
+    "preserved": "metadata-finalization-first-error.txt",
+    "repair": "Parsed original successful audit stdout unchanged, no package/archive/verify rerun"
+  },
+  "resources": {
+    "maximumManualMinutes": 30,
+    "sampledAggregatePeakRssBytes": 62603264,
+    "samplingCaveat": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "workspaceMinStageBoundaryDiskBytes": 10042568704,
+    "artifactTmpfsAvailableAtCompletionBytes": 17211969536,
+    "artifactTmpfsSpaceNotIncludedInProcessRss": true,
+    "diskReserveBytes": 8589934592,
+    "rssGuardBytes": 8589934592
+  },
+  "transfer": {
+    "metadataRoute": "Existing authenticated Git HTTPS evidence branch; binary never committed.",
+    "binaryCrossVMTransferVerified": false,
+    "availableUploadOrArtifactExportToolFound": false,
+    "managedCapabilitiesReported": [],
+    "binaryServedOrUploaded": false,
+    "newApiOrPaidServiceUsed": false,
+    "binaryCurrentAccess": "VM local filesystem; private parent0700,tar0600 owned by agent.",
+    "retention": "Retain this VM/task filesystem; /tmp is tmpfs and no durability or access from another host is established.",
+    "deploymentAuthorized": false
+  },
+  "cleanup": {
+    "checkedAt": "2026-10-11T09:36:33.416136+00:00",
+    "liveRelevantProcesses": [],
+    "stageRemainingChildren": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "temporaryChildrenAllStopped": true,
+    "releaseAndArchiveIntentionallyRetained": true,
+    "uniqueResearchOrRawDeleted": false,
+    "noGlobalPrune": true,
+    "workspaceDiskAvailableBytes": 10042568704,
+    "artifactTmpfsAvailableBytes": 17211969536,
+    "artifactTemporaryFilesystem": true,
+    "memAvailableKiB": 33061448
+  },
+  "rawFiles": [
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/archive-audit-result-from-stdout.json",
+      "bytes": 861,
+      "sha256": "fd44bc6de5bd4af8b36d3d1c7fe08d9466051c2bc8e0bbd3ef786eb7194aac8a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/archive-audit.json",
+      "bytes": 653,
+      "sha256": "17530a6cd6214aeb2c961a0d1bfba322b4478e4fa4fa00927010c052fafeddf3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/archive-audit.py",
+      "bytes": 2582,
+      "sha256": "4a1d4732a7caa410ee78e5264b5b96b53cfe2feeb6ddef0697b93f1b620b56df"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/archive-audit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/archive-audit.stdout",
+      "bytes": 829,
+      "sha256": "b01da906b15e2110e27c066d84eb4b1009488b1e1b0bb84bc025b4db4c88855d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/archive-audit.time",
+      "bytes": 770,
+      "sha256": "4968f26083ef8e7d973db93344a7d70093ea8f1ada72bc3b71c68c11a4a53c82"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/archive-create.json",
+      "bytes": 794,
+      "sha256": "81b891da83217f0d693c517df71f4aa6c8633a09c43896293b29b9725fd19380"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/archive-create.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/archive-create.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/archive-create.time",
+      "bytes": 885,
+      "sha256": "d757594bbd5822bb597094e9003d653029fdf7159e449c59d3d283ed33bc8f10"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/build-identity.json",
+      "bytes": 551,
+      "sha256": "5c3ed5b6018d788253ae9d132bbb2a022f1491ded7d8fd437ce7f4622a3e349a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/cleanup.json",
+      "bytes": 466,
+      "sha256": "3e2a17d7cf11faeafde483ccc5c47304fe0a4ce6a516bbb3f592e39378596141"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/compiled-server-manifest.json",
+      "bytes": 387190,
+      "sha256": "c555e210cde700297e2e39f10376de7840b4629cab9dc137a98d14e603eedb50"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/metadata-finalization-first-error.txt",
+      "bytes": 411,
+      "sha256": "b53838db1fbfc99180e2e96b09f6a3a1e06c3bc8963f2e2960dced4b03b68195"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/package-standalone.json",
+      "bytes": 897,
+      "sha256": "90ab3325d199e199a2e58ac44c81c6a1d7b0c56fc46d52b1a2b1f41f96f52dd3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/package-standalone.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/package-standalone.stdout",
+      "bytes": 250,
+      "sha256": "138eab166cce3ba74696dedf55ef8276e97ba6535ef4ec101dae526782caf837"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/package-standalone.time",
+      "bytes": 986,
+      "sha256": "e514121bf819ad1dbd4e708115259c7f75e7e32a8df791164f29d3a71c9d5077"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/preflight.json",
+      "bytes": 1048,
+      "sha256": "5dbebd80660ba0566a745f077455256818a9fa4eafed2568a63abb547d7ef6eb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/release-manifest.json",
+      "bytes": 656004,
+      "sha256": "f305390485855ac8d52072eeb80a0ca8ce032cf7563463d305700a8d675b9388"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/run.py",
+      "bytes": 3436,
+      "sha256": "544f08b5afb45ba5873f44bda8fef91ef921aaa27e4bd2512ba06ca03f7db41b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/source-packager-input-manifest.json",
+      "bytes": 15074,
+      "sha256": "8f3afcfbf2b37dcd973f4843809bb864b8f2c3ccba5a516099d26cc1b38b35d9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/transfer-status.json",
+      "bytes": 553,
+      "sha256": "75d92a3c7c19f8f0738feaa68aff338462d223f57417d7389bea76e48e5e9156"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/verify-standalone.json",
+      "bytes": 732,
+      "sha256": "5b2a0b5934cf73ddd7d16d30f1bd3e177dc116df12c040ae5597b95bca7f0bc6"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/verify-standalone.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/verify-standalone.stdout",
+      "bytes": 328,
+      "sha256": "1049d4320888d88c4e122b7444b54f6965cca814e457a7764a9ac38c2d250f4f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T09-30-standalone-artifact-399-linux/verify-standalone.time",
+      "bytes": 843,
+      "sha256": "5f5955205d2c6d2a6e1e25ea1154618f2b42dccf3f7fd0b823b5088aedf3ddb0"
+    }
+  ],
+  "rawFileCount": 27,
+  "rawTotalBytes": 1076143,
+  "limits": [
+    "Packaging and original per-file verification only; no deployment/activation/schedule/productionDB/credentials/models/merge.",
+    "Build reused only after exact2088 server file rehash and BUILD_ID comparison; no claim of new build.",
+    "Archive audit validates known secret-file paths and links, not generic secret-content absence.",
+    "Binary retained only on local ephemeral VM/tmpfs; crossVM transfer and durable binary retention not proven.",
+    "No new dependency/network downloads/API/service; metadata-only Git push."
+  ],
+  "recordedAt": "2026-10-11T09:36:33.455987+00:00"
+}
