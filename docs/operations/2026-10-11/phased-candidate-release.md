@@ -20,11 +20,30 @@
 
 首批新程式部署必須通過該精確版本必要檢查、安裝安全與首頁／個股頁檢查；不等待全平台內容驗收、全市場策略有效性或五個未來交易日。五交易日是部署後運作驗收，正式模型研究排程仍按其各自驗收啟用。
 
-## 真正的首批工程阻擋
+## 早先 PR364 發布阻擋（後續完整功能）
 
 1. 受保護模型閘門的 Mac runner 指向已移除的舊CLI。產品272/272和其他三項實際PASS保留，但不能代替失敗的模型閘門。首次信任遷移例外尚未獲明確批准；使用者的分批發布意圖不能推定為保護設定變更授權。
 2. 另一次普通CI38130038830出現financial_parent_replaced。現有嚴格讀取器在無關 sibling 變動 parent metadata時也拒絕；已重現機制，尚未證明CI實際變動路徑。已將一件測試隔離修復交給既有idle VM，獨立branch、保留所有斷言及真實測試，不改正式guard。
 3. 現有頁面行情與完整度訊息不一致：公開API asOf為2026-09-12、大盤freshness明示過期；個股技術日10/08、preliminary完整度98.77%、daily_price:empty，但首頁有完整度100%與大盤趨勢文字。不可把快照新發布時間當資料全部新鮮。需釐清各欄位範圍並修正誤導，不用補空數字。
+
+## 首批改採已批准 main，與 PR364 分開
+
+2026-10-11T12:39Z 再查實際 GitHub：main `169aad1b6cfa747f78ae3464b614f43c0749d806` 已包含候選與逐檔突破／回檔計畫。PR282 的真正受保護檢查 run `36014062080` 七項成功，於9/24合併；其 head `110a7197afadfca6fd4f570c68a9c216d11aa9b4` 與 main 的 tree 同為 `fb62be71161857affbaa8ea8ed7f4d7921a4b3c9`。正式執行檔9fd較舊，尚未取得這批已批准功能。
+
+因此第一批部署 main169，不等待 PR364、新 runner 信任遷移、全部來源或文章。這不是用舊批准替 PR364 背書，亦不需要再合併已合併的 main。
+
+- Linux build run `38138212902` 成功；固定 checkout 與 packager 皆為 main169。98項 entry-plan、7項打包測試、4項瀏覽器測試、型別、lint及正常build通過。
+- artifact `11701238074`：壓縮27,563,099 bytes、內容79,290,260 bytes／2,584檔。root逐檔核對大小、權限與SHA256，禁止路徑穿越、連結及秘密檔案。
+- 精確 migration 在 VM 的隔離 PostgreSQL 驗證：9組PASS、49次預期SQLSTATE拒絕、重複安裝一致。證據commit `2e9723aff0c8cfe656f8ba3e57cdb4bea4091da3`；不宣稱已套用正式DB。
+- 部署腳本 `a3a6981a…` 完成獨立 unsigned scoped CODE／預算審查。使用既有三鎖、完整套件驗證、固定DB身分、原子切換、writer註冊及可驗證故障恢復；非受保護簽章。
+- 不在VPS建置，archive留 `/run`；依實際4KiB區塊將此操作部署配置限定128MiB，其他WAL、暫存、成長、記憶體預留及15GiB硬門檻維持。即時需至少19,998,441,472 bytes可用，仍須鎖內實測。
+- 12:29鎖內准入失敗；12:36唯讀可用僅15,004,835,840 bytes，同機其他App建置造成波動。尚未傳輸、套用正式migration或切換。已與該App既有聊天協調；未取得新的範圍授權前，不清共享Docker cache、images或volumes。
+
+一般CI隔離修復另已推送 PR369（code da660bfc、證據7913bc7）：820項中818PASS、0FAIL、2項明示native-profile skip；型別、lint、build及獨立局部複審通過。原斷言、讀取器與14項批准腳本不變；它是後續PR364修復，不阻擋本次main169發布。新runner候選892c93e的fixture保持未啟用，獨立審查接續，沒有冒稱受保護閘門已修復。
+
+首批切換後立即走既有 authenticated core pipeline，全候選、非dryRun、不設symbols、不使用skipIfResearchSessionComplete。核對 `expected = evaluated + dataInsufficient`、同run revision、公開快照及桌面／手機。缺資料可明列，不能偽造可交易結果；第一批目前仍未部署。
+
+精確量測、腳本、unsigned審查與版本清單保存在 `.agent/reports/2026-10-11T12-39-merged-main-candidate-release.json` 及同名目錄。
 
 ## 後續逐批增加
 
