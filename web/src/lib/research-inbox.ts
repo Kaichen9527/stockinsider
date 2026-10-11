@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
-import { discoveryInstant } from './research-discovery-evidence.ts';
+import { financialInstant } from './research-financial-clock.ts';
 import { RESEARCH_SOURCE_PLATFORMS, validateResearchTimedExcerpts,
   type ResearchContentForm, type ResearchAcquisitionMethod, type ResearchTimedExcerpt } from './research-source-registry.ts';
 
@@ -66,9 +66,26 @@ function httpsUrl(value: unknown) {
   } catch { return false; }
 }
 
+/** The persistent source clock is PostgreSQL timestamptz (microseconds).
+ * Reject finer input instead of silently rounding availability or identity. */
+function inboxInstant(value: unknown): bigint {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$/u.test(value))
+    throw new Error('research_inbox_clock_precision_invalid');
+  return financialInstant(value);
+}
+function inboxClockValid(value: unknown): value is string {
+  try { inboxInstant(value); return true; } catch { return false; }
+}
+function canonicalInboxClock(value: string): string {
+  inboxInstant(value);
+  const fraction = (/\.(\d+)(?:Z|[+-]\d{2}:\d{2})$/u.exec(value)?.[1] || '').padEnd(6, '0');
+  const canonicalFraction = fraction.replace(/0+$/u, '').padEnd(3, '0');
+  return new Date(value).toISOString().replace(/\.\d{3}Z$/u, `.${canonicalFraction}Z`);
+}
+
 export function validateResearchInboxItemAt(value: unknown, asOf: string): value is ResearchInboxItem {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
-  if (!discoveryInstant(asOf) || Object.keys(value).some((key) => !(RESEARCH_INBOX_ITEM_KEYS as readonly string[]).includes(key))) return false;
+  if (!inboxClockValid(asOf) || Object.keys(value).some((key) => !(RESEARCH_INBOX_ITEM_KEYS as readonly string[]).includes(key))) return false;
   const item = value as Partial<ResearchInboxItem>;
   const subjectScope = item.subjectScope ?? 'company_mentions';
   if (!platforms.has(item.sourcePlatform as ResearchInboxPlatform)
@@ -94,17 +111,15 @@ export function validateResearchInboxItemAt(value: unknown, asOf: string): value
     || (subjectScope === 'industry_context' ? item.symbols.length !== 0 : item.symbols.length < 1)
     || item.symbols.length > 12
     || item.symbols.some((symbol) => typeof symbol !== 'string' || !/^\d{4}$/u.test(symbol))) return false;
-  const published = Date.parse(String(item.publishedAt));
-  const observed = Date.parse(String(item.observedAt));
-  const first = Date.parse(item.firstObservedAt || String(item.observedAt));
-  const revised = Date.parse(item.revisionObservedAt || String(item.observedAt));
   if (item.visibility === 'authenticated_summary' && item.timedExcerpts?.length) return false;
   if (item.contentForm === 'transcript_excerpt' && !item.timedExcerpts?.length) return false;
-  if (item.firstObservedAt !== undefined && !discoveryInstant(item.firstObservedAt)
-    || item.revisionObservedAt !== undefined && !discoveryInstant(item.revisionObservedAt)) return false;
-  return [item.publishedAt, item.observedAt, item.firstObservedAt || item.observedAt,
-    item.revisionObservedAt || item.observedAt].every(discoveryInstant)
-    && published <= first && first <= revised && revised <= observed && observed <= Date.parse(asOf);
+  if (item.firstObservedAt !== undefined && !inboxClockValid(item.firstObservedAt)
+    || item.revisionObservedAt !== undefined && !inboxClockValid(item.revisionObservedAt)) return false;
+  const clocks = [item.publishedAt, item.firstObservedAt || item.observedAt,
+    item.revisionObservedAt || item.observedAt, item.observedAt, asOf];
+  if (!clocks.every(inboxClockValid)) return false;
+  const instants = clocks.map(inboxInstant);
+  return instants.every((at, index) => index === 0 || instants[index - 1] <= at);
 }
 
 /** Keep the one-argument callback contract used by the existing inbox route. */
@@ -117,7 +132,7 @@ export function researchInboxContentHash(item: ResearchInboxItem) {
     sourcePlatform: item.sourcePlatform,
     sourceUrl: sanitizePublicSourceUrl(item.sourceUrl),
     author: item.author.trim(),
-    publishedAt: new Date(item.publishedAt).toISOString(),
+    publishedAt: canonicalInboxClock(item.publishedAt),
     symbols: [...new Set(item.symbols)].sort(),
     shortSummary: item.shortSummary.trim(),
     catalyst: item.catalyst.trim(),
@@ -150,8 +165,8 @@ export function buildResearchInboxRow(item: ResearchInboxItem) {
     title: `${item.claimStatus.toUpperCase()}｜${item.shortSummary.slice(0, 120)}`,
     summary: item.shortSummary.trim(),
     content_text: `${item.shortSummary.trim()}\n催化：${item.catalyst.trim()}\n風險：${item.risk.trim()}`,
-    published_at: new Date(item.publishedAt).toISOString(),
-    collected_at: new Date(item.observedAt).toISOString(),
+    published_at: canonicalInboxClock(item.publishedAt),
+    collected_at: canonicalInboxClock(item.observedAt),
     symbols: [...new Set(item.symbols)].sort(),
     sentiment_label: null,
     confidence: item.claimStatus === 'confirmed' ? 0.95 : item.claimStatus === 'reported' ? 0.65 : item.claimStatus === 'denied' ? 0.9 : 0.35,
@@ -166,10 +181,10 @@ export function buildResearchInboxRow(item: ResearchInboxItem) {
       industry_terms: [...(item.industryTerms || [])].sort(),
       canonical_url: canonicalUrl,
       parent_source_url: item.parentSourceUrl ? sanitizePublicSourceUrl(item.parentSourceUrl) : null,
-      first_observed_at: new Date(item.observedAt).toISOString(),
-      revision_observed_at: new Date(item.revisionObservedAt || item.observedAt).toISOString(),
-      ...(item.firstObservedAt ? { first_observed_at: new Date(item.firstObservedAt).toISOString() } : {}),
-      ...(item.retracted ? { retracted_at: new Date(item.revisionObservedAt || item.observedAt).toISOString() } : {}),
+      first_observed_at: canonicalInboxClock(item.observedAt),
+      revision_observed_at: canonicalInboxClock(item.revisionObservedAt || item.observedAt),
+      ...(item.firstObservedAt ? { first_observed_at: canonicalInboxClock(item.firstObservedAt) } : {}),
+      ...(item.retracted ? { retracted_at: canonicalInboxClock(item.revisionObservedAt || item.observedAt) } : {}),
       content_form: item.contentForm || 'research_summary',
       acquisition_method: item.acquisitionMethod || (item.visibility === 'authenticated_summary'
         ? 'authenticated_browser_summary' : 'public_document'),

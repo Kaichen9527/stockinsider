@@ -149,8 +149,45 @@ test('IS06 existing authenticated inbox POST accepts industry rows and rejects i
   assert.equal(writes[0][0].metadata.subject_scope, 'industry_context');
   assert.deepEqual(writes[0][1].symbols, ['2409']);
   for (const bad of [{ ...industry, symbols: ['2409'] }, { ...industry, industryTerms: ['CPO', 'cpo'] },
-    { ...industry, observedAt: '2099-01-01T00:00:00Z' }, { ...industry, fullText: 'not allowed' }]) {
+    { ...industry, observedAt: '2099-01-01T00:00:00Z' },
+    { ...industry, publishedAt: '2026-09-20T00:00:00.000002Z', observedAt: '2026-09-20T00:00:00.000001Z' },
+    { ...industry, publishedAt: '2026-09-20T00:00:00.000000001Z' }, { ...industry, fullText: 'not allowed' }]) {
     assert.equal((await post(request([bad]))).status, 400);
   }
   assert.equal(writes.length, 1);
+});
+
+
+test('IC01 inbox rejects sub-millisecond inversions and future observations at every clock boundary', () => {
+  const clocks = ['publishedAt', 'firstObservedAt', 'revisionObservedAt', 'observedAt'] as const;
+  const precise = { ...item, publishedAt: '2026-10-08T00:00:00.000001Z',
+    firstObservedAt: '2026-10-08T00:00:00.000002Z', revisionObservedAt: '2026-10-08T00:00:00.000003Z',
+    observedAt: '2026-10-08T00:00:00.000004Z' };
+  assert.equal(validateResearchInboxItemAt(precise, '2026-10-08T00:00:00.000004Z'), true);
+  for (let index = 0; index < clocks.length - 1; index++) {
+    const reversed = { ...precise, [clocks[index]]: precise[clocks[index + 1]], [clocks[index + 1]]: precise[clocks[index]] };
+    assert.equal(validateResearchInboxItemAt(reversed, '2026-10-08T00:00:00.000005Z'), false);
+  }
+  assert.equal(validateResearchInboxItemAt(precise, '2026-10-08T00:00:00.000003Z'), false);
+  for (const key of clocks) for (const invalid of ['2026-02-30T00:00:00Z', '2026-10-08T00:00:00.000000001Z', '2026-10-08T00:00:00.0000000Z'])
+    assert.equal(validateResearchInboxItemAt({ ...precise, [key]: invalid }, '2026-10-09T00:00:00Z'), false);
+  assert.equal(validateResearchInboxItemAt(precise, '2026-10-08T00:00:00.000004001Z'), false);
+});
+
+test('IC02 revisions preserve PostgreSQL microseconds and equivalent UTC identities without changing legacy hashes', () => {
+  const precise = { ...item, publishedAt: '2026-10-08T08:00:00.123001+08:00',
+    firstObservedAt: '2026-10-08T08:00:00.123002+08:00', revisionObservedAt: '2026-10-08T08:00:00.123003+08:00',
+    observedAt: '2026-10-08T08:00:00.123004+08:00', retracted: true };
+  const saved = buildResearchInboxRow(precise);
+  assert.equal(saved.published_at, '2026-10-08T00:00:00.123001Z');
+  assert.equal(saved.collected_at, '2026-10-08T00:00:00.123004Z');
+  assert.equal(saved.metadata.first_observed_at, '2026-10-08T00:00:00.123002Z');
+  assert.equal(saved.metadata.revision_observed_at, '2026-10-08T00:00:00.123003Z');
+  assert.equal(saved.metadata.retracted_at, '2026-10-08T00:00:00.123003Z');
+  assert.notEqual(researchInboxContentHash(precise), researchInboxContentHash({ ...precise, publishedAt: '2026-10-08T00:00:00.123002Z' }));
+  assert.equal(researchInboxContentHash(precise), researchInboxContentHash({ ...precise, publishedAt: '2026-10-08T00:00:00.123001Z' }));
+  assert.equal(researchInboxContentHash({ ...item, publishedAt: '2026-09-20T02:00:00.000000Z' }), researchInboxContentHash(item));
+  assert.equal(buildResearchInboxRow({ ...item, publishedAt: '2026-09-20T02:00:00.123400Z' }).published_at, '2026-09-20T02:00:00.1234Z');
+  assert.equal(buildResearchInboxRow({ ...item, publishedAt: '2026-09-20T02:00:00.1Z' }).published_at, '2026-09-20T02:00:00.100Z');
+  assert.throws(() => buildResearchInboxRow({ ...precise, publishedAt: '2026-10-08T00:00:00.1234567Z' }));
 });
