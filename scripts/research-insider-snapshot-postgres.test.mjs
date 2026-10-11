@@ -8,6 +8,7 @@ import os from 'node:os';
 import {createHash,randomUUID} from 'node:crypto';
 const binaries=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN;
 const migration=fs.readFileSync('migrations/20261008_insider_snapshots_v1.sql','utf8');
+const isolation=fs.readFileSync('migrations/20261011_research_insider_isolation_v1.sql','utf8');
 const literal=value=>"'"+String(value).replaceAll("'","''")+"'";
 const holding={公司代號:'2330',公司名稱:'台積電',職稱:'董事',姓名:'Synthetic Person',出表日期:'1151007',資料年月:'11509',目前持股:'123,456'};
 const transfer={公司代號:'2330',公司名稱:'台積電',申報人身分:'董事',姓名:'Synthetic Person',出表日期:'1151007','預定轉讓方式及股數-轉讓股數':'100','目前持有股數-自有持股':'1000','目前持有股數-保留運用決定權信託股數':'','預定轉讓方式及股數-轉讓方式':'一般交易',有效轉讓期間:'1151007-1151107'};
@@ -34,7 +35,7 @@ test('actual PostgreSQL snapshot admission, document proof, replay, restart and 
   // This is not the full production predecessor/ACL rehearsal or guarded HTTP acceptance.
   sql(`CREATE ROLE anon;CREATE ROLE authenticated;CREATE ROLE service_role NOLOGIN;CREATE SCHEMA extensions;CREATE EXTENSION pgcrypto WITH SCHEMA extensions;
    CREATE TABLE public.source_raw_documents(id uuid DEFAULT gen_random_uuid() PRIMARY KEY,platform text NOT NULL,document_url text NOT NULL,title text,summary text,content_text text,symbols jsonb,published_at timestamptz,collected_at timestamptz NOT NULL DEFAULT clock_timestamp(),metadata jsonb,sentiment_label text,content_semantics text,stance_semantics text,canonical_content_hash text,UNIQUE(platform,document_url));`);
-  sql(migration);
+  sql(migration);sql(isolation);
   let rid=randomUUID(),state;
   await t.test('service role has only narrow RPC writes, public has no snapshot read or helper execution',()=>{
    assert.throws(()=>sql('SET ROLE service_role;INSERT INTO insider_acquisition_runs_v1(id)VALUES(gen_random_uuid());'),/permission denied/);
@@ -89,7 +90,7 @@ test('actual PostgreSQL snapshot admission, document proof, replay, restart and 
    assert.throws(()=>begin(randomUUID()),/run_capacity/);assert.equal(begin(rid).members.length,5);assert.equal(sql('SELECT count(*) FROM insider_acquisition_runs_v1;'),'128');
   });
   await t.test('reapply is non-destructive and preserves exact clocks, bytes, progress',()=>{
-   const before=sql('SELECT md5(string_agg(id::text||raw_sha256||observed_at::text,\'\' ORDER BY id)) FROM insider_snapshots_v1;');sql(migration);assert.equal(sql('SELECT md5(string_agg(id::text||raw_sha256||observed_at::text,\'\' ORDER BY id)) FROM insider_snapshots_v1;'),before);assert.ok(begin(rid).members.every(m=>m.complete));
+   const before=sql('SELECT md5(string_agg(id::text||raw_sha256||observed_at::text,\'\' ORDER BY id)) FROM insider_snapshots_v1;');sql(migration);sql(isolation);assert.equal(sql('SELECT md5(string_agg(id::text||raw_sha256||observed_at::text,\'\' ORDER BY id)) FROM insider_snapshots_v1;'),before);assert.ok(begin(rid).members.every(m=>m.complete));
   });
   // New disposable capacity fixture only; all preceding evidence is synthetic.
   const reset=()=>sql('TRUNCATE insider_run_members_v1,insider_acquisition_runs_v1,insider_snapshot_progress_v1,insider_acquisitions_v1,insider_snapshots_v1,source_raw_documents;');

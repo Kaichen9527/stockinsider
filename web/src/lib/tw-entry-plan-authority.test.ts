@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
-import { loadTwEntryHistoricalAuthority, loadTwEntryPlanAuthority, type TwEntryAuthorityClient, type TwEntryAuthorityRequest } from './tw-entry-plan-authority.ts';
+import { loadTwEntryHistoricalAuthority, loadTwEntryPlanAuthority, loadTwEntrySettlementAuthority, type TwEntryAuthorityClient, type TwEntryAuthorityRequest } from './tw-entry-plan-authority.ts';
 
 type Row = Record<string, unknown>;
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -262,6 +262,9 @@ test('anchor action context retains a verified current event and fails closed on
   const result=await loadTwEntryPlanAuthority(mockClient(data).client,request);
   assert.deepEqual(result.missingData,[]);
   assert.deepEqual(result.anchorAction?.event,{kind:'ex_right_dividend',sourceRowRef:event.source_row_ref});
+  const settlement=await loadTwEntrySettlementAuthority(mockClient(data).client,request);
+  assert.deepEqual(settlement.missingData,[]); assert.deepEqual(settlement.anchorAction?.event,result.anchorAction?.event);
+  assert.equal(settlement.anchorAction?.datasetHash,result.anchorAction?.datasetHash);
   for(const defect of ['feed','hash','ambiguous']){
     const bad=structuredClone(data);
     if(defect==='feed') bad[tables.feeds]=bad[tables.feeds].filter(row=>!(row.snapshot_id===snapshot.snapshot_id && row.feed_ordinal===0));
@@ -392,4 +395,33 @@ test('legacy missing-forward and read-error complete outputs retain base2878038 
     const result=await loadTwEntryPlanAuthority(mockClient(data,kind==='read-error'?tables.calendar:undefined).client,request);
     assert.equal(hash(result),expected,kind);assert.equal(result.sourceDatasetRevision,'tw-entry-authority-v0.1:unavailable');
   }
+});
+
+
+test('settlement catches up a completed session after the following session has closed without granting live entry authority', async () => {
+  const { data, request } = fixture(); request.cutoff = '2026-09-29T12:00:00Z';
+  request.forwardCalendar!.availableAt = '2026-09-29T09:00:00Z';
+  for (const row of request.forwardCalendar!.calendarSessions) if (row.session === '2026-09-28') row.status = 'completed';
+  const settled = await loadTwEntrySettlementAuthority(mockClient(data).client, request);
+  assert.deepEqual(settled.missingData, []); assert.equal(settled.bars.length, 240);
+  assert.equal(settled.completedSessions.at(-1), request.signalSession);
+  assert.equal(settled.anchorAction?.event, null); assert.equal(settled.anchorAction?.sourceDatasetRevision, settled.sourceDatasetRevision);
+  assert.equal('calendar' in settled, false);
+  const live = await loadTwEntryPlanAuthority(mockClient(data).client, request);
+  assert.deepEqual(live.missingData, ['official_next_calendar_invalid']); assert.equal(live.bars.length, 0);
+});
+
+test('settlement still proves every historical opening, cancellation and complete corporate-action authority', async () => {
+  for (const mutation of ['missing_day', 'missing_feed', 'corrupt_hash', 'missing_anchor'] as const) {
+    const { data, request } = fixture();
+    if (mutation === 'missing_day') request.forwardCalendar!.calendarSessions = request.forwardCalendar!.calendarSessions.filter(row => row.session !== data[tables.calendar][30].session_id);
+    if (mutation === 'missing_feed') data[tables.feeds] = data[tables.feeds].slice(1);
+    if (mutation === 'corrupt_hash') data[tables.snapshots].at(-1)!.dataset_hash = 'f'.repeat(64);
+    if (mutation === 'missing_anchor') data[tables.snapshots].pop();
+    const result = await loadTwEntrySettlementAuthority(mockClient(data).client, request);
+    assert.ok(result.missingData.length, mutation); assert.equal(result.bars.length, 0); assert.equal(result.anchorAction, null);
+  }
+  const { data, request } = fixture(false, true);
+  const cancelled = await loadTwEntrySettlementAuthority(mockClient(data).client, request);
+  assert.deepEqual(cancelled.missingData, []); assert.equal(cancelled.bars.length, 240);
 });

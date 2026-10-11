@@ -64,7 +64,7 @@ export type CandidateDetailPayload = {
   datasetMissingComponents?: string[];
   narrativeKind: 'deterministic_fact' | 'codex_enriched';
   deepResearch?: ValidatedDeepArticle | null;
-  deepResearchSources?: Array<{ id: string; title: string; url: string; publishedAt: string; retracted: boolean }>;
+  deepResearchSources?: Array<{ id: string; title: string; url: string; publishedAt: string; retracted: boolean; evidenceStatus?: 'current' | 'retracted' | 'superseded' | 'unavailable' }>;
   thesisQualification?: { status: string; nextReviewAt: string; entryResearchAllowed: boolean; reason: string } | null;
   latestTechnicalSnapshot?: TechnicalDecisionSnapshot | null;
 };
@@ -303,20 +303,41 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
         .eq('article_hash', candidate.articleHash).eq('decision', 'accepted').limit(1);
       if (reviewRead.error) throw new Error(`candidate_deep_article_review_read_failed:${reviewRead.error.message}`);
       if (reviewRead.data?.length) {
+        deepResearch = candidate; // Keep the reviewed historical article readable even when current sources fail.
         const docs = candidate.sourceDocumentIds.length ? await supabase.from('source_raw_documents')
           .select('id,document_url,published_at,metadata').in('id', candidate.sourceDocumentIds)
           .limit(candidate.sourceDocumentIds.length) : { data: [], error: null };
-        if (docs.error) throw new Error(`candidate_deep_article_sources_read_failed:${docs.error.message}`);
-        if ((docs.data || []).length === candidate.sourceDocumentIds.length) {
-          deepResearch = candidate;
-          deepResearchSources = (docs.data || []).flatMap((doc) => {
+        const documents = Array.isArray(docs.data) ? docs.data : [];
+        const documentsComplete = !docs.error && documents.length === candidate.sourceDocumentIds.length
+          && new Set(documents.map(doc => doc.id)).size === candidate.sourceDocumentIds.length
+          && documents.every(doc => candidate.sourceDocumentIds.includes(String(doc.id)));
+        let sourceHeads: Row[] = [];
+        try {
+          const heads = candidate.sourceDocumentIds.length ? await supabase.rpc('research_evidence_heads_v1', {
+            p_ids: candidate.sourceDocumentIds, p_cutoff: new Date().toISOString(),
+          }) : { data: [], error: null };
+          const unique = new Set(candidate.sourceDocumentIds);
+          if (documentsComplete && !heads.error && Array.isArray(heads.data) && heads.data.length === unique.size
+            && unique.size === candidate.sourceDocumentIds.length
+            && new Set(heads.data.map((head: Row) => head.id)).size === unique.size
+            && heads.data.every((head: Row) => head && unique.has(String(head.id))
+              && typeof head.retracted === 'boolean' && typeof head.superseded === 'boolean'
+              && (head.headId === null || typeof head.headId === 'string'
+                && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu.test(head.headId)))) sourceHeads = heads.data;
+        } catch { /* A failed current-head read denies new entry; it does not erase the historical article. */ }
+        if (!docs.error) {
+          deepResearchSources = documents.flatMap((doc) => {
             const metadata = doc.metadata && typeof doc.metadata === 'object' ? doc.metadata as Row : {};
             const candidateUrl = String(metadata.canonical_url || doc.document_url || '').split('#si-revision-')[0];
             const { url } = deepSourceCitation(doc.metadata, candidateUrl);
+            const head = sourceHeads.find((head) => head.id === doc.id);
+            const evidenceStatus = metadata.retracted_at || head?.retracted === true ? 'retracted' as const
+              : head?.superseded === true ? 'superseded' as const
+              : head?.headId === doc.id ? 'current' as const : 'unavailable' as const;
             return url
               ? [{ id: String(doc.id), title: String(metadata.title || new URL(url).hostname),
                 url, publishedAt: String(doc.published_at || ''),
-                retracted: Boolean(metadata.retracted_at) }] : [];
+                retracted: evidenceStatus === 'retracted', evidenceStatus }] : [];
           });
         }
       }
@@ -337,11 +358,12 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
         if (thesis?.articleHash === researchCanonicalHash(overlay)
           && thesis.articleHash === latest.article_hash && thesis.status === latest.status) {
           const eligibility = researchEntryQualification(thesis, new Date().toISOString());
-          const sourceEvidenceCurrent = deepResearchSources.length === deepResearch.sourceDocumentIds.length
-            && deepResearchSources.every((source) => !source.retracted);
+          const sourceEvidenceCurrent = deepResearch.sourceDocumentIds.length > 0
+            && deepResearchSources.length === deepResearch.sourceDocumentIds.length
+            && deepResearchSources.every((source) => source.evidenceStatus === 'current');
           thesisQualification = { status: thesis.status, nextReviewAt: thesis.nextReviewAt,
             entryResearchAllowed: eligibility.allowed && sourceEvidenceCurrent,
-            reason: sourceEvidenceCurrent ? eligibility.reason : 'article_source_retracted_or_missing' };
+            reason: sourceEvidenceCurrent ? eligibility.reason : 'article_source_retracted_superseded_or_unavailable' };
           const technicalRead = await supabase.from('candidate_technical_decisions_v1')
             .select('snapshot').eq('thesis_qualification_id', latest.id)
             .order('session_date', { ascending: false }).order('observed_at', { ascending: false })

@@ -3,7 +3,7 @@ import test from 'node:test';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { buildResearchInboxRow, type ResearchInboxItem } from './research-inbox.ts';
 import { researchCanonicalHash } from './research-agent-qualification.ts';
-import { ASSOCIATION_DOCUMENT_COLUMNS, ASSOCIATION_LIMITS, loadIndustryAssociations, parseIndustryAssociations,
+import { ASSOCIATION_DOCUMENT_COLUMNS, ASSOCIATION_LIMITS, loadIndustryAssociations, parseIndustryAssociations, documentInvariantProof,
   type IndustryAssociationInput } from './research-source-association.ts';
 
 type Row = Record<string, unknown>;
@@ -314,4 +314,56 @@ test('IA33 a genuinely omitted legacy company scope remains compatible with expl
   const receipt = (await loadIndustryAssociations(mock.db, requests([input(source, [String(basis.id)])]), cutoff, clock)).get('2409')![0];
   assert.equal(receipt.evidenceStatus, 'awaiting_independent_review'); assert.equal(receipt.hasResearchCue, true);
   assert.deepEqual(receipt.gaps, []);
+});
+
+
+test('IA34 direct proof rejects microsecond-inverted or future source clocks without a usable cue', () => {
+  const source = document(); const meta = source.metadata as Row;
+  source.published_at = '2026-10-02T08:00:00.000002Z'; source.collected_at = '2026-10-02T08:00:00.000001Z';
+  meta.first_observed_at = source.collected_at; meta.revision_observed_at = source.collected_at;
+  assert.deepEqual(documentInvariantProof(source, clock), { proof: null, gap: 'clock_invalid' });
+  source.published_at = meta.first_observed_at = '2026-10-01T00:00:00Z';
+  assert.deepEqual(documentInvariantProof(source, cutoff), { proof: null, gap: 'future_at_cutoff' });
+  meta.revision_observed_at = '2026-10-02T08:00:00.0000001Z';
+  assert.deepEqual(documentInvariantProof(source, clock), { proof: null, gap: 'clock_invalid' });
+});
+
+test('IA35 proof, receipt and request identity retain microseconds and canonical equivalent offsets', async () => {
+  const source = document(); const meta = source.metadata as Row;
+  source.published_at = '2026-10-02T15:00:00.000001+08:00'; meta.first_observed_at = '2026-10-02T07:00:00.000002Z';
+  meta.revision_observed_at = '2026-10-02T07:00:00.000003Z'; source.collected_at = '2026-10-02T07:00:00.000004Z';
+  const checked = documentInvariantProof(source, cutoff); assert.equal(checked.gap, null);
+  assert.equal(checked.proof?.publishedAt, '2026-10-02T07:00:00.000001Z'); assert.equal(checked.proof?.availableAt, source.collected_at);
+  const exactCutoff = '2026-10-02T08:00:00.000001Z', exactClock = '2026-10-02T08:00:00.000002Z';
+  const sourceInput = { ...input(source), associatedAt: exactCutoff };
+  const mock = dbMock([source]); const req = parseIndustryAssociations([{ symbol: '2409', associations: [sourceInput] }], exactCutoff);
+  const receipt = (await loadIndustryAssociations(mock.db, req, exactCutoff, exactClock)).get('2409')![0];
+  assert.equal(receipt.dataCutoff, exactCutoff); assert.equal(receipt.availableAt, exactClock); assert.equal(receipt.associatedAt, exactCutoff);
+  const equivalent = parseIndustryAssociations([{ symbol: '2409', associations: [{ ...sourceInput, associatedAt: '2026-10-02T16:00:00.000001+08:00' }] }], exactCutoff);
+  assert.deepEqual(equivalent, req);
+  assert.throws(() => parseIndustryAssociations([{ symbol: '2409', associations: [{ ...sourceInput, associatedAt: exactClock }] }], exactCutoff));
+  await assert.rejects(loadIndustryAssociations(mock.db, req, exactClock, exactCutoff), /clock_invalid/);
+});
+
+test('IA36 a later microsecond sibling supersedes the earlier document instead of creating a false same-clock conflict', async () => {
+  const source = document(); const sibling = structuredClone(source); sibling.id = uuid(9);
+  const first = '2026-08-02T01:00:00.000001Z', later = '2026-08-02T01:00:00.000002Z';
+  source.collected_at = first; (source.metadata as Row).revision_observed_at = first;
+  sibling.collected_at = later; (sibling.metadata as Row).revision_observed_at = later; (sibling.metadata as Row).claim_status = 'rumor';
+  const mock = dbMock([source, sibling], { heads: [{ id: source.id, headId: source.id, retracted: false, superseded: false }] });
+  const receipt = (await loadIndustryAssociations(mock.db, requests([input(source)]), cutoff, clock)).get('2409')![0];
+  assert.equal(receipt.hasResearchCue, false); assert.ok(receipt.gaps.includes('source_superseded'));
+  assert.equal(receipt.gaps.includes('source_conflicting_head'), false);
+});
+
+test('IA37 a future microsecond revision cannot invalidate an earlier as-of source', async () => {
+  const source = document(); const sibling = structuredClone(source); sibling.id = uuid(9);
+  sibling.collected_at = '2026-10-02T08:00:00.000001Z'; (sibling.metadata as Row).revision_observed_at = sibling.collected_at;
+  (sibling.metadata as Row).claim_status = 'denied';
+  // The mock intentionally returns a sibling rounded into the cutoff by Date.parse;
+  // the exported loader must enforce its own precise boundary too.
+  const mock = dbMock([source, sibling], { heads: [{ id: source.id, headId: source.id, retracted: false, superseded: false }] });
+  const receipt = (await loadIndustryAssociations(mock.db, requests([input(source)]), cutoff, clock)).get('2409')![0];
+  assert.equal(receipt.hasResearchCue, true); assert.deepEqual(receipt.gaps, ['company_basis_missing']);
+  assert.equal(receipt.usableAtCutoff, false); assert.equal(receipt.rankingInfluence, false);
 });

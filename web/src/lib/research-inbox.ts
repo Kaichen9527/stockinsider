@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
-import { discoveryInstant } from './research-discovery-evidence.ts';
+import { sourceEvidenceInstant, sourceEvidenceClockValid, canonicalSourceEvidenceClock } from './research-source-clock.ts';
 import { RESEARCH_SOURCE_PLATFORMS, validateResearchTimedExcerpts,
   type ResearchContentForm, type ResearchAcquisitionMethod, type ResearchTimedExcerpt } from './research-source-registry.ts';
 
@@ -68,7 +68,7 @@ function httpsUrl(value: unknown) {
 
 export function validateResearchInboxItemAt(value: unknown, asOf: string): value is ResearchInboxItem {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
-  if (!discoveryInstant(asOf) || Object.keys(value).some((key) => !(RESEARCH_INBOX_ITEM_KEYS as readonly string[]).includes(key))) return false;
+  if (!sourceEvidenceClockValid(asOf) || Object.keys(value).some((key) => !(RESEARCH_INBOX_ITEM_KEYS as readonly string[]).includes(key))) return false;
   const item = value as Partial<ResearchInboxItem>;
   const subjectScope = item.subjectScope ?? 'company_mentions';
   if (!platforms.has(item.sourcePlatform as ResearchInboxPlatform)
@@ -94,17 +94,15 @@ export function validateResearchInboxItemAt(value: unknown, asOf: string): value
     || (subjectScope === 'industry_context' ? item.symbols.length !== 0 : item.symbols.length < 1)
     || item.symbols.length > 12
     || item.symbols.some((symbol) => typeof symbol !== 'string' || !/^\d{4}$/u.test(symbol))) return false;
-  const published = Date.parse(String(item.publishedAt));
-  const observed = Date.parse(String(item.observedAt));
-  const first = Date.parse(item.firstObservedAt || String(item.observedAt));
-  const revised = Date.parse(item.revisionObservedAt || String(item.observedAt));
   if (item.visibility === 'authenticated_summary' && item.timedExcerpts?.length) return false;
   if (item.contentForm === 'transcript_excerpt' && !item.timedExcerpts?.length) return false;
-  if (item.firstObservedAt !== undefined && !discoveryInstant(item.firstObservedAt)
-    || item.revisionObservedAt !== undefined && !discoveryInstant(item.revisionObservedAt)) return false;
-  return [item.publishedAt, item.observedAt, item.firstObservedAt || item.observedAt,
-    item.revisionObservedAt || item.observedAt].every(discoveryInstant)
-    && published <= first && first <= revised && revised <= observed && observed <= Date.parse(asOf);
+  if (item.firstObservedAt !== undefined && !sourceEvidenceClockValid(item.firstObservedAt)
+    || item.revisionObservedAt !== undefined && !sourceEvidenceClockValid(item.revisionObservedAt)) return false;
+  const clocks = [item.publishedAt, item.firstObservedAt || item.observedAt,
+    item.revisionObservedAt || item.observedAt, item.observedAt, asOf];
+  if (!clocks.every(sourceEvidenceClockValid)) return false;
+  const instants = clocks.map(sourceEvidenceInstant);
+  return instants.every((at, index) => index === 0 || instants[index - 1] <= at);
 }
 
 /** Keep the one-argument callback contract used by the existing inbox route. */
@@ -117,7 +115,7 @@ export function researchInboxContentHash(item: ResearchInboxItem) {
     sourcePlatform: item.sourcePlatform,
     sourceUrl: sanitizePublicSourceUrl(item.sourceUrl),
     author: item.author.trim(),
-    publishedAt: new Date(item.publishedAt).toISOString(),
+    publishedAt: canonicalSourceEvidenceClock(item.publishedAt),
     symbols: [...new Set(item.symbols)].sort(),
     shortSummary: item.shortSummary.trim(),
     catalyst: item.catalyst.trim(),
@@ -150,8 +148,8 @@ export function buildResearchInboxRow(item: ResearchInboxItem) {
     title: `${item.claimStatus.toUpperCase()}｜${item.shortSummary.slice(0, 120)}`,
     summary: item.shortSummary.trim(),
     content_text: `${item.shortSummary.trim()}\n催化：${item.catalyst.trim()}\n風險：${item.risk.trim()}`,
-    published_at: new Date(item.publishedAt).toISOString(),
-    collected_at: new Date(item.observedAt).toISOString(),
+    published_at: canonicalSourceEvidenceClock(item.publishedAt),
+    collected_at: canonicalSourceEvidenceClock(item.observedAt),
     symbols: [...new Set(item.symbols)].sort(),
     sentiment_label: null,
     confidence: item.claimStatus === 'confirmed' ? 0.95 : item.claimStatus === 'reported' ? 0.65 : item.claimStatus === 'denied' ? 0.9 : 0.35,
@@ -166,10 +164,10 @@ export function buildResearchInboxRow(item: ResearchInboxItem) {
       industry_terms: [...(item.industryTerms || [])].sort(),
       canonical_url: canonicalUrl,
       parent_source_url: item.parentSourceUrl ? sanitizePublicSourceUrl(item.parentSourceUrl) : null,
-      first_observed_at: new Date(item.observedAt).toISOString(),
-      revision_observed_at: new Date(item.revisionObservedAt || item.observedAt).toISOString(),
-      ...(item.firstObservedAt ? { first_observed_at: new Date(item.firstObservedAt).toISOString() } : {}),
-      ...(item.retracted ? { retracted_at: new Date(item.revisionObservedAt || item.observedAt).toISOString() } : {}),
+      first_observed_at: canonicalSourceEvidenceClock(item.observedAt),
+      revision_observed_at: canonicalSourceEvidenceClock(item.revisionObservedAt || item.observedAt),
+      ...(item.firstObservedAt ? { first_observed_at: canonicalSourceEvidenceClock(item.firstObservedAt) } : {}),
+      ...(item.retracted ? { retracted_at: canonicalSourceEvidenceClock(item.revisionObservedAt || item.observedAt) } : {}),
       content_form: item.contentForm || 'research_summary',
       acquisition_method: item.acquisitionMethod || (item.visibility === 'authenticated_summary'
         ? 'authenticated_browser_summary' : 'public_document'),

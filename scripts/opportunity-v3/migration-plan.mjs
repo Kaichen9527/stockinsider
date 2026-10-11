@@ -85,6 +85,7 @@ const researchAgentMigrationPaths = [
   'migrations/20261010_research_atomic_publication_v2.sql',
   'migrations/20261010_research_publication_view_v2.sql',
   'migrations/20261011_research_admission_isolation_v1.sql',
+  'migrations/20261011_research_insider_isolation_v1.sql',
 ];
 const researchAgentPreludePaths = ['migrations/20261005_release_function_ownership_bridge_v1.sql'];
 const describeMigration = (relativePath) => {

@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { researchCanonicalHash } from './research-agent-qualification.ts';
-import { discoveryInstant } from './research-discovery-evidence.ts';
+import { sourceEvidenceInstant, sourceEvidenceClockValid, canonicalSourceEvidenceClock } from './research-source-clock.ts';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
 import { hasDirectCompanyMentionScope } from './research-source-roots.ts';
 
@@ -45,7 +45,7 @@ function cleanUrl(value: unknown): value is string {
 }
 /** Parse before any database access. Bounds count raw submissions, even duplicates. */
 export function parseIndustryAssociations(assessments: Array<{ symbol: string; associations?: unknown }>, cutoff: string): AssociationRequests {
-  if (!discoveryInstant(cutoff)) throw new Error('research_association_request_invalid');
+  if (!sourceEvidenceClockValid(cutoff)) throw new Error('research_association_request_invalid');
   const parsed: AssociationRequests = new Map(); const ids = new Set<string>(); let total = 0;
   for (const assessment of assessments) {
     if (assessment.associations === undefined) continue;
@@ -59,7 +59,7 @@ export function parseIndustryAssociations(assessments: Array<{ symbol: string; a
         || item.relation !== 'industry_hypothesis' || typeof item.sourceDocumentId !== 'string' || !UUID.test(item.sourceDocumentId)
         || typeof item.sourceContentHash !== 'string' || !HASH.test(item.sourceContentHash) || !cleanUrl(item.sourceRootId)
         || !text(item.hypothesis, 600) || !text(item.rationale, 600) || !text(item.strongestCounterEvidence, 600)
-        || !discoveryInstant(item.associatedAt) || Date.parse(String(item.associatedAt)) > Date.parse(cutoff)
+        || !sourceEvidenceClockValid(item.associatedAt) || sourceEvidenceInstant(item.associatedAt) > sourceEvidenceInstant(cutoff)
         || !Array.isArray(item.companyBasisDocumentIds) || item.companyBasisDocumentIds.length > ASSOCIATION_LIMITS.basisPerAssociation
         || item.companyBasisDocumentIds.some((id) => typeof id !== 'string' || !UUID.test(id))
         || new Set(item.companyBasisDocumentIds.map((id) => String(id).toLowerCase())).size !== item.companyBasisDocumentIds.length) {
@@ -69,7 +69,7 @@ export function parseIndustryAssociations(assessments: Array<{ symbol: string; a
         sourceContentHash: item.sourceContentHash, sourceRootId: item.sourceRootId,
         hypothesis: String(item.hypothesis), rationale: String(item.rationale), strongestCounterEvidence: String(item.strongestCounterEvidence),
         companyBasisDocumentIds: item.companyBasisDocumentIds.map((id) => String(id).toLowerCase()).sort(),
-        associatedAt: new Date(String(item.associatedAt)).toISOString() };
+        associatedAt: canonicalSourceEvidenceClock(String(item.associatedAt)) };
       ids.add(input.sourceDocumentId); input.companyBasisDocumentIds.forEach((id) => ids.add(id));
       unique.set(researchCanonicalHash(input), input);
     }
@@ -87,7 +87,7 @@ function canonical(document: Row): string | null {
 }
 function revision(document: Row): string | null {
   const value = metadata(document)?.revision_observed_at ?? document.collected_at;
-  return discoveryInstant(value) ? new Date(String(value)).toISOString() : null;
+  return sourceEvidenceClockValid(value) ? canonicalSourceEvidenceClock(String(value)) : null;
 }
 function identity(document: Row) {
   const meta = metadata(document) || {};
@@ -123,10 +123,10 @@ export function documentInvariantProof(document: Row, cutoff: string): { proof: 
   const expectedRevisionUrl = `${root}#si-revision-${document.canonical_content_hash.slice(0, 16)}`;
   if (document.document_url !== root && document.document_url !== expectedRevisionUrl) return fail('identity_invalid');
   const clocks = [document.published_at, meta.first_observed_at, meta.revision_observed_at, document.collected_at];
-  if (!clocks.every(discoveryInstant)) return fail('clock_invalid');
-  const [published, first, revised, collected] = clocks.map((value) => Date.parse(String(value)));
+  if (!sourceEvidenceClockValid(cutoff) || !clocks.every(sourceEvidenceClockValid)) return fail('clock_invalid');
+  const [published, first, revised, collected] = clocks.map(sourceEvidenceInstant);
   if (!(published <= first && first <= revised && revised <= collected)) return fail('clock_invalid');
-  if (collected > Date.parse(cutoff)) return fail('future_at_cutoff');
+  if (collected > sourceEvidenceInstant(cutoff)) return fail('future_at_cutoff');
   if (meta.retracted_at != null) return fail('retracted');
   if (meta.claim_status === 'denied') return fail('denied');
   if (meta.parent_source_url != null && meta.parent_source_url !== root) return fail('parent_unresolved');
@@ -148,8 +148,8 @@ export function documentInvariantProof(document: Row, cutoff: string): { proof: 
   if (scope === 'industry_context' ? document.symbols.length !== 0 : document.symbols.length === 0) return fail('symbols_scope_invalid');
   return { gap: null, proof: { documentId: document.id, contentHash: document.canonical_content_hash, rootId: root,
     platform: document.platform, subjectScope: scope, symbols: [...document.symbols].sort(),
-    publishedAt: new Date(published).toISOString(), firstObservedAt: new Date(first).toISOString(),
-    revisionObservedAt: new Date(revised).toISOString(), collectedAt: new Date(collected).toISOString(), availableAt: new Date(collected).toISOString(),
+    publishedAt: canonicalSourceEvidenceClock(String(clocks[0])), firstObservedAt: canonicalSourceEvidenceClock(String(clocks[1])),
+    revisionObservedAt: canonicalSourceEvidenceClock(String(clocks[2])), collectedAt: canonicalSourceEvidenceClock(String(clocks[3])), availableAt: canonicalSourceEvidenceClock(String(clocks[3])),
     visibility: meta.visibility as AssociationDocumentProof['visibility'], rightsBoundary: meta.rights_boundary as AssociationDocumentProof['rightsBoundary'],
     acquisitionMethod: String(meta.acquisition_method), contentForm: String(meta.content_form), claimStatus: String(meta.claim_status) } };
 }
@@ -166,7 +166,7 @@ function documentProof(document: Row, head: Row | undefined, cutoff: string,
 /** No fetching, body text, scoring or writes. Every submitted association receives a server-bound receipt. */
 export async function loadIndustryAssociations(db: Pick<SupabaseClient, 'from' | 'rpc'>, requests: AssociationRequests,
   dataCutoff: string, serverClock: string, options: { deadlineMs?: number } = {}): Promise<Map<string, IndustryAssociationReceipt[]>> {
-  if (!discoveryInstant(serverClock) || !discoveryInstant(dataCutoff) || Date.parse(serverClock) < Date.parse(dataCutoff)) {
+  if (!sourceEvidenceClockValid(serverClock) || !sourceEvidenceClockValid(dataCutoff) || sourceEvidenceInstant(serverClock) < sourceEvidenceInstant(dataCutoff)) {
     throw new Error('research_association_clock_invalid');
   }
   // Revalidate at this exported trust boundary, not just the HTTP parser.
@@ -221,9 +221,10 @@ export async function loadIndustryAssociations(db: Pick<SupabaseClient, 'from' |
         conflicts.set(root, 'history_identity_invalid'); continue;
       }
       if (siblings.some((document) => !revision(document))) { conflicts.set(root, 'history_clock_invalid'); continue; }
-      const eligible = siblings.filter((document) => Date.parse(revision(document)!) <= Date.parse(dataCutoff));
-      const latestTime = Math.max(...eligible.map((document) => Date.parse(revision(document)!)));
-      const newest = eligible.filter((document) => Date.parse(revision(document)!) === latestTime);
+      const eligible = siblings.filter((document) => sourceEvidenceInstant(revision(document)!) <= sourceEvidenceInstant(dataCutoff));
+      const times = eligible.map((document) => sourceEvidenceInstant(revision(document)!));
+      const latestTime = times.length ? times.reduce((a, b) => a > b ? a : b) : null;
+      const newest = eligible.filter((document) => sourceEvidenceInstant(revision(document)!) === latestTime);
       // A deterministic head winner cannot vouch for other same-clock versions.
       // Validate every one with the exact same invariants as the requested row,
       // including fields that do not otherwise distinguish revision signatures.
@@ -236,7 +237,7 @@ export async function loadIndustryAssociations(db: Pick<SupabaseClient, 'from' |
       for (const original of documents.values()) {
         if (canonical(original) !== root || identity(original) !== null) continue;
         if (!eligible.some((document) => document.id === original.id)) { documentGaps.set(String(original.id), 'history_identity_missing'); continue; }
-        if (latestTime > Date.parse(revision(original) || dataCutoff)) documentGaps.set(String(original.id), 'superseded');
+        if (latestTime !== null && latestTime > sourceEvidenceInstant(revision(original) || dataCutoff)) documentGaps.set(String(original.id), 'superseded');
       }
     }
   } catch (error) {
@@ -275,8 +276,8 @@ export async function loadIndustryAssociations(db: Pick<SupabaseClient, 'from' |
       : gaps.some((gap) => /(?:superseded|conflicting_head|parent_unresolved|history_)/u.test(gap)) ? 'needs_update'
       : gaps.length ? 'needs_evidence' : 'awaiting_independent_review';
     const payload: Omit<IndustryAssociationReceipt, 'associationHash'> = { ...input, policyVersion: ASSOCIATION_POLICY, symbol, status: 'hypothesis' as const,
-      hypothesisOrigin: 'authenticated_research_submission' as const, dataCutoff: new Date(dataCutoff).toISOString(),
-      researchObservedAt: new Date(serverClock).toISOString(), availableAt: new Date(serverClock).toISOString(), usableAtCutoff: false as const,
+      hypothesisOrigin: 'authenticated_research_submission' as const, dataCutoff: canonicalSourceEvidenceClock(dataCutoff),
+      researchObservedAt: canonicalSourceEvidenceClock(serverClock), availableAt: canonicalSourceEvidenceClock(serverClock), usableAtCutoff: false as const,
       evidenceStatus, source, companyBasis, gaps: [...new Set(gaps)].sort(),
       hasResearchCue: Boolean(source) && (evidenceStatus === 'needs_evidence' || evidenceStatus === 'awaiting_independent_review')
         && !gaps.some((gap) => gap.startsWith('basis_')),
