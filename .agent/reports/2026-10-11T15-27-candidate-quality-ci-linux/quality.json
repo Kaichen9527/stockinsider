@@ -1,0 +1,23 @@
+{
+  "stage": "quality",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/candidate-discovery-admission.test.ts",
+    "scripts/candidate-discovery-admission-ui.test.mjs"
+  ],
+  "startedAt": "2026-10-11T15:29:28.623144+00:00",
+  "endedAt": "2026-10-11T15:29:29.546142+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.9230059540132061,
+  "sampledAggregatePeakRssBytes": 152334336,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9617907712,
+  "diskAvailableAfterBytes": 9617907712,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

@@ -1,0 +1,20 @@
+{
+  "stage": "workflow-validation",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "-e",
+    "const fs=require('node:fs'),assert=require('node:assert/strict'); const yaml=require('./web/node_modules/js-yaml'); const doc=yaml.load(fs.readFileSync('.github/workflows/candidate-discovery-quality.yml','utf8')); assert.deepEqual(Object.keys(doc.on),['pull_request']); assert.deepEqual(doc.permissions,{contents:'read'}); const job=doc.jobs['candidate-discovery-quality'];assert.equal(Object.keys(doc.jobs).length,1); assert.equal(job['timeout-minutes'],10); assert.equal(job.steps[0].uses,'actions/checkout@11d5960a326750d5838078e36cf38b85af677262');assert.equal(job.steps[0].with['persist-credentials'],false);assert.equal(job.steps[1].uses,'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020');assert.equal(job.steps[1].with['node-version'],'22.14.0');assert.equal(job.steps[2].run,'npm --prefix web ci --ignore-scripts');assert.equal(job.steps[3].run,'node web/scripts/sync-official-authority.mjs');assert.equal(job.steps[4].run.trim(),'node --experimental-strip-types --test --test-concurrency=1 web/src/lib/candidate-discovery-admission.test.ts scripts/candidate-discovery-admission-ui.test.mjs'); console.log(JSON.stringify({yamlParsed:true,onlyOrdinaryPullRequest:true,onlyContentsRead:true,actionPinsVerified:true,allThreeLocalCommandsEqualWorkflow:true,node:process.version,npm:require('./web/node_modules/next/package.json').version}));"
+  ],
+  "startedAt": "2026-10-11T15:30:36.144920+00:00",
+  "endedAt": "2026-10-11T15:30:36.338274+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.1933623959776014,
+  "sampledAggregatePeakRssBytes": 0,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9617870848,
+  "diskAvailableAfterBytes": 9617870848,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

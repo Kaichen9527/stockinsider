@@ -1,0 +1,11 @@
+{
+  "attempt": "Optional static YAML parsing via require(./web/node_modules/yaml)",
+  "result": "module unavailable",
+  "nodeError": "Cannot find module './web/node_modules/yaml'",
+  "nodeExitCode": 1,
+  "combinedShellExitCode": 0,
+  "combinedShellLaterCommitSucceeded": true,
+  "notWorkflowTestFailure": true,
+  "followup": "Used existing locked js-yaml dependency; successful schema and exact-command assertions are in workflow-validation stdout. No new dependency installed.",
+  "validationOutputLabelCorrection": "The workflow-validation stdout field named npm contains the installed Next version 16.3.4; it is not an npm version measurement."
+}

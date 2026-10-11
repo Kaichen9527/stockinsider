@@ -1,0 +1,86 @@
+[
+  {
+    "path": ".github/workflows/candidate-discovery-quality.yml",
+    "bytes": 1375,
+    "sha256": "7fc1616cc8024faa977629331d15cff1790219416dfea117914c57c8a76a331c",
+    "gitBlob": "f67711f56a0140ee0d3a10d50332a52a32ad601a"
+  },
+  {
+    "path": ".github/workflows/source-led-opportunity-external-gate.yml",
+    "bytes": 14710,
+    "sha256": "a9573672c1e56833e5f59ae98d33eea5755d5cee9eb36231919b4e592be9d286",
+    "gitBlob": "da2cfc5194dff81310c5072998876c06418a6f7f"
+  },
+  {
+    "path": ".github/actions/prepare-source-led-external-subject/action.yml",
+    "bytes": 1224,
+    "sha256": "802caf4078d70fe51a3ea487316aabc6a9b2bae0b02ef5efc2e0f2efd028f40f",
+    "gitBlob": "f4bbc4d172f7a466f88b1957d75bb87a7c2b656b"
+  },
+  {
+    "path": "package.json",
+    "bytes": 24733,
+    "sha256": "6dae2b07a0d6ac9e653cc06aba741060a0cb50a0730ab3874e09a3919f0986cc",
+    "gitBlob": "8fa5650773f865612de193c0e85e01b68f6ea8c5"
+  },
+  {
+    "path": "package-lock.json",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "gitBlob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+  },
+  {
+    "path": "web/package.json",
+    "bytes": 1943,
+    "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+    "gitBlob": "446f308a2990f45dcd3dca14030068f878fae490"
+  },
+  {
+    "path": "web/package-lock.json",
+    "bytes": 274088,
+    "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+    "gitBlob": "a41fd447e28f3b36829b689828c345e042619a38"
+  },
+  {
+    "path": "web/scripts/sync-official-authority.mjs",
+    "bytes": 4171,
+    "sha256": "d1e30d7e538d98ce5e5a012a0e007bb137bf7df829491d3b4ec5b5a316c5644d",
+    "gitBlob": "6510554d4787ef4a178207d260194341b619e7e0"
+  },
+  {
+    "path": "scripts/candidate-discovery-admission-ui.test.mjs",
+    "bytes": 8409,
+    "sha256": "5d00d252d2bd07a08adfff638d646ccf04c80668381d23b65a743bd6ecb0bca7",
+    "gitBlob": "d7f59e4bb907c23302484ef5310785460497fbd4"
+  },
+  {
+    "path": "web/src/lib/candidate-discovery-admission.test.ts",
+    "bytes": 12111,
+    "sha256": "a1aea54c230b1a32ce87bd9113dbde73a5895c1bbb653efb62148f29f0b33d54",
+    "gitBlob": "12377750ba42700e6a10f06ac9d87d4291cde6c6"
+  },
+  {
+    "path": "web/src/lib/candidate-discovery-admission.ts",
+    "bytes": 12548,
+    "sha256": "a7df49806bc8b261b5444ddf8e730f65197c05fa299126fa5cc0212415aeb5d2",
+    "gitBlob": "4f0fd0ac2d07b53787e495e32db6c92f535d4ab1"
+  },
+  {
+    "path": "web/src/lib/radar-stage-view.ts",
+    "bytes": 3215,
+    "sha256": "4c4c5406315631354dbbf8c1d0ab91f1b5d07d87cb2d026049c32d4a0e2daee9",
+    "gitBlob": "6a4dd5721024d3e92795093a3298f2a3ceaf4b2c"
+  },
+  {
+    "path": "web/src/app/components/RadarTabs.tsx",
+    "bytes": 112384,
+    "sha256": "a97bc973928e327731e9d07fafcdef5e963145b00dd2406e7e64507f3a4f4b01",
+    "gitBlob": "fbaf3277686b79391a1f6e31314c86e01d547754"
+  },
+  {
+    "path": "web/src/app/page.tsx",
+    "bytes": 32699,
+    "sha256": "25e7d8e1d14e1f99791ff456b354ec6c0072fb78d0919ea9627bdb27cf66b60e",
+    "gitBlob": "7f90cf6c43138c26884dd442f4a9fd4a7c8c8ce8"
+  }
+]

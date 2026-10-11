@@ -1,0 +1,19 @@
+{
+  "stage": "sync",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "web/scripts/sync-official-authority.mjs"
+  ],
+  "startedAt": "2026-10-11T15:29:10.840866+00:00",
+  "endedAt": "2026-10-11T15:29:11.030619+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.18976313999155536,
+  "sampledAggregatePeakRssBytes": 0,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9617907712,
+  "diskAvailableAfterBytes": 9617907712,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
