@@ -1,0 +1,211 @@
+﻿2026-10-11T23:25:34.0237174Z Current runner version: '2.337.0'
+##[group]Runner Image Provisioner
+Hosted Compute Agent
+Version: 20261002.596
+Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Build Date: 2026-10-02T22:28:27Z
+Worker ID: {83af716e-5794-41e1-8b62-688d4ee42e0d}
+Region: northcentralus
+Cloud: Azure
+##[endgroup]
+##[group]Operating System
+Ubuntu
+24.04.5
+LTS
+##[endgroup]
+##[group]Runner Image
+Image: ubuntu-24.04
+Version: 20261004.327.1
+Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+##[endgroup]
+##[group]GITHUB_TOKEN Permissions
+Contents: read
+Metadata: read
+##[endgroup]
+Secret source: Actions
+Cache mode: write
+Prepare workflow directory
+Prepare all required actions
+Getting action download info
+Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Complete job name: evaluation-governance
+﻿2026-10-11T23:25:34.7203602Z ##[group]Run actions/checkout@v4
+with:
+  repository: Kaichen9527/stockinsider
+  token: ***
+  ssh-strict: true
+  ssh-user: git
+  persist-credentials: true
+  clean: true
+  sparse-checkout-cone-mode: true
+  fetch-depth: 1
+  fetch-tags: false
+  show-progress: true
+  lfs: false
+  submodules: false
+  set-safe-directory: true
+  allow-unsafe-pr-checkout: false
+##[endgroup]
+Syncing repository: Kaichen9527/stockinsider
+##[group]Getting Git version info
+Working directory is '/home/runner/work/stockinsider/stockinsider'
+[command]/usr/bin/git version
+git version 2.55.0
+##[endgroup]
+Temporarily overriding HOME='/home/runner/work/_temp/aa5ff363-e9d2-43ab-a92f-3b1dfb9e04c9' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+[command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+##[group]Initializing the repository
+[command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: will change to "main" in Git 3.0. To configure the initial branch name
+hint: to use in all of your new repositories, which will suppress this warning,
+hint: call:
+hint:
+hint: 	git config --global init.defaultBranch <name>
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint: 	git branch -m <name>
+hint:
+hint: Disable this message with "git config set advice.defaultBranchName false"
+Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+[command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+##[endgroup]
+##[group]Disabling automatic garbage collection
+[command]/usr/bin/git config --local gc.auto 0
+##[endgroup]
+##[group]Setting up auth
+[command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+[command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+[command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+##[endgroup]
+##[group]Fetching the repository
+[command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +7af8cba0347010a1d2b007fc8e733ce30faf0ef3:refs/remotes/origin/codex/ptt-mention-provenance-oct12
+From https://github.com/Kaichen9527/stockinsider
+ * [new ref]         7af8cba0347010a1d2b007fc8e733ce30faf0ef3 -> origin/codex/ptt-mention-provenance-oct12
+##[endgroup]
+##[group]Determining the checkout info
+##[endgroup]
+[command]/usr/bin/git sparse-checkout disable
+[command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+##[group]Checking out the ref
+[command]/usr/bin/git checkout --progress --force -B codex/ptt-mention-provenance-oct12 refs/remotes/origin/codex/ptt-mention-provenance-oct12
+Switched to a new branch 'codex/ptt-mention-provenance-oct12'
+branch 'codex/ptt-mention-provenance-oct12' set up to track 'origin/codex/ptt-mention-provenance-oct12'.
+##[endgroup]
+[command]/usr/bin/git log -1 --format=%H
+7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+﻿2026-10-11T23:25:36.0144761Z ##[group]Run actions/setup-node@v4
+with:
+  node-version-file: .nvmrc
+  cache: npm
+  cache-dependency-path: package-lock.json
+  always-auth: false
+  check-latest: false
+  token: ***
+##[endgroup]
+Node version file is not JSON file
+Resolved .nvmrc as 22.14.0
+Attempting to download 22.14.0...
+(node:2221) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+Extracting ...
+[command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/6a7b2ae2-a8f1-4a9f-bd41-1819daff94fc -f /home/runner/work/_temp/c2247b34-9a27-4294-90bb-6cd2a9191a57
+Adding to the cache ...
+##[group]Environment details
+node: v22.14.0
+npm: 10.9.2
+yarn: 1.22.22
+##[endgroup]
+[command]/opt/hostedtoolcache/node/22.14.0/x64/bin/npm config get cache
+/home/runner/.npm
+npm cache is not found
+﻿2026-10-11T23:25:41.0601056Z ##[group]Run npm ci
+^[[36;1mnpm ci^[[0m
+shell: /usr/bin/bash -e {0}
+##[endgroup]
+
+added 39 packages, and audited 40 packages in 1s
+
+7 packages are looking for funding
+  run `npm fund` for details
+
+1 high severity vulnerability
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+﻿2026-10-11T23:25:42.3255136Z ##[group]Run node scripts/run-node22.js --experimental-strip-types --test --test-name-pattern="evaluation and product-value readiness|hybrid verified-change product boundary" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252
+^[[36;1mnode scripts/run-node22.js --experimental-strip-types --test --test-name-pattern="evaluation and product-value readiness|hybrid verified-change product boundary" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252^[[0m
+shell: /usr/bin/bash -e {0}
+##[endgroup]
+TAP version 13
+# (node:2295) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:2295) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/opportunity-v3/opportunity-v3.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+# node:internal/modules/package_json_reader:268
+#   throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);
+#         ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@supabase/supabase-js' imported from /home/runner/work/stockinsider/stockinsider/web/src/lib/data-plane-runtime.ts
+#     at Object.getPackageJSONURL (node:internal/modules/package_json_reader:268:9)
+#     at packageResolve (node:internal/modules/esm/resolve:768:81)
+#     at moduleResolve (node:internal/modules/esm/resolve:854:18)
+#     at defaultResolve (node:internal/modules/esm/resolve:984:11)
+#     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+#   code: 'ERR_MODULE_NOT_FOUND'
+# }
+# Node.js v22.14.0
+# Subtest: web/src/lib/opportunity-v3/opportunity-v3.test.ts
+not ok 1 - web/src/lib/opportunity-v3/opportunity-v3.test.ts
+  ---
+  duration_ms: 381.021081
+  location: '/home/runner/work/stockinsider/stockinsider/web/src/lib/opportunity-v3/opportunity-v3.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 387.850913
+##[error]Process completed with exit code 1.
+﻿2026-10-11T23:25:42.8260111Z Post job cleanup.
+[command]/usr/bin/git version
+git version 2.55.0
+Temporarily overriding HOME='/home/runner/work/_temp/723f7b0c-030c-4674-bc35-ec0c20fccb6f' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+[command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+[command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+http.https://github.com/.extraheader
+[command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+[command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+﻿2026-10-11T23:25:43.0467446Z Cleaning up orphan processes
+##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

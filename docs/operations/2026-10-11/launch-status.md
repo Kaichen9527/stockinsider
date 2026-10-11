@@ -1,5 +1,13 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 07:42台灣時間補充：產品完整驗證成功；工具獨立審查兩項待修
+
+GitHub普通run38184227555的product-runtime與diagnostic-product已真SUCCESS，exact7af8 canonical155PASS／0FAIL／0SKIP／0TODO、31PCR全部成功，types/lint/build/browser亦通過。Root保存完整原始joblog及具體canonical區段/hash；不把Cloud的152/153 RED改標PASS。整個workflow仍FAIL：獨立evaluation-governance job漏裝web依賴，ERR_MODULE_NOT_FOUND @supabase/supabase-js；不是測出策略有效或無效，亦未稱整體CI成功。該測試工具單點依賴修復已納入工具patch，原閾值及斷言不改。
+
+工具core已凍結f30beda55adc7c11ad42b1f2490e5742651173c9/tree36495327684494a2aa8b4798ce3d89615f1d6516、graphad4e4d19。Maker127低成本測試及14sandbox／native鏈有真證據；root另真正跑public native Node→Codex sandbox→pinned Node→run-node22鏈與disabled doctor，皆PASS、零讀憑證或呼叫模型。獨立review確認兩個P2：expired reuse仍讀舊subject／same-listing會擋住fresh live；real-model oracle wrapper在ownership-lost時無條件刪暫存且缺持久自動重試阻擋。Maker正修最小successor，f30不能建立PASS refs或執行真live。新graph requirements／architecture真review refs及最終closed mapping尚未完成。
+
+人類工具一次例外已批准，但尚未改保護、建工具PR、merge或啟用新trust。網站保護不變，app heads仍凍結；root不為即將合入新main而改變的舊7af8產生無用exactref或重跑protected。VPSfresh23:31Z 16,479,735,808bytes可用、五個正式unitsactive/currentmain169；本輪不heavy、不刪Docker，不能沿用舊未擴容結論。
+
 ## 2026-10-12 07:25台灣時間：人類批准一次性工具信任遷移，網站保護不變
 
 人類直接答覆「同意，只限發布工具修復 PR；網站仍須全部檢查」。這項明確決策取代以下歷史的「待答覆」，只授權獨立發布工具修復PR一次初始例外，不授權網站／策略跳過檢查，不把舊失敗改寫成功。原ruleset20177392已唯讀保存：active、無bypass actors、main必需stockinsider-v3-gate-root；尚未修改保護、啟用新trust或合併。精確工具patch、獨立審查及真實新runner驗證仍須完成，之後才在確切PR/head執行例外並恢復原保護。

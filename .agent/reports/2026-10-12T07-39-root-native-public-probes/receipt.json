@@ -1,0 +1,17 @@
+{
+  "recordedAt": "2026-10-11T23:44:52.016238+00:00",
+  "subject": "f30beda55adc7c11ad42b1f2490e5742651173c9",
+  "tree": "36495327684494a2aa8b4798ce3d89615f1d6516",
+  "independentRootPublicOnlyProbe": true,
+  "nativeChainPassed": true,
+  "disabledDoctorPassed": true,
+  "credentialsRead": false,
+  "modelInvoked": false,
+  "protectedApproved": false,
+  "releaseApproved": false,
+  "remainingReviewFindings": [
+    "expired reuse selection still touches old listing instead of fresh path",
+    "real-model oracle ownership-lost unconditional cleanup and missing durable retry fence"
+  ],
+  "noWebDatabaseMigrationDeploymentDiff": true
+}

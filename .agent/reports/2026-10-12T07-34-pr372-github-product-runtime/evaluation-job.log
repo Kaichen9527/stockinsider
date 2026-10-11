@@ -1,0 +1,211 @@
+evaluation-governance	Set up job	﻿2026-10-11T23:25:34.0237174Z Current runner version: '2.337.0'
+evaluation-governance	Set up job	2026-10-11T23:25:34.0271082Z ##[group]Runner Image Provisioner
+evaluation-governance	Set up job	2026-10-11T23:25:34.0272314Z Hosted Compute Agent
+evaluation-governance	Set up job	2026-10-11T23:25:34.0273169Z Version: 20261002.596
+evaluation-governance	Set up job	2026-10-11T23:25:34.0274059Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+evaluation-governance	Set up job	2026-10-11T23:25:34.0275072Z Build Date: 2026-10-02T22:28:27Z
+evaluation-governance	Set up job	2026-10-11T23:25:34.0276175Z Worker ID: {83af716e-5794-41e1-8b62-688d4ee42e0d}
+evaluation-governance	Set up job	2026-10-11T23:25:34.0277520Z Region: northcentralus
+evaluation-governance	Set up job	2026-10-11T23:25:34.0278347Z Cloud: Azure
+evaluation-governance	Set up job	2026-10-11T23:25:34.0279207Z ##[endgroup]
+evaluation-governance	Set up job	2026-10-11T23:25:34.0280974Z ##[group]Operating System
+evaluation-governance	Set up job	2026-10-11T23:25:34.0281866Z Ubuntu
+evaluation-governance	Set up job	2026-10-11T23:25:34.0282562Z 24.04.5
+evaluation-governance	Set up job	2026-10-11T23:25:34.0283193Z LTS
+evaluation-governance	Set up job	2026-10-11T23:25:34.0283920Z ##[endgroup]
+evaluation-governance	Set up job	2026-10-11T23:25:34.0284750Z ##[group]Runner Image
+evaluation-governance	Set up job	2026-10-11T23:25:34.0285561Z Image: ubuntu-24.04
+evaluation-governance	Set up job	2026-10-11T23:25:34.0286417Z Version: 20261004.327.1
+evaluation-governance	Set up job	2026-10-11T23:25:34.0288180Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+evaluation-governance	Set up job	2026-10-11T23:25:34.0290690Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+evaluation-governance	Set up job	2026-10-11T23:25:34.0292143Z ##[endgroup]
+evaluation-governance	Set up job	2026-10-11T23:25:34.0293734Z ##[group]GITHUB_TOKEN Permissions
+evaluation-governance	Set up job	2026-10-11T23:25:34.0296837Z Contents: read
+evaluation-governance	Set up job	2026-10-11T23:25:34.0297747Z Metadata: read
+evaluation-governance	Set up job	2026-10-11T23:25:34.0298647Z ##[endgroup]
+evaluation-governance	Set up job	2026-10-11T23:25:34.0301332Z Secret source: Actions
+evaluation-governance	Set up job	2026-10-11T23:25:34.0302724Z Cache mode: write
+evaluation-governance	Set up job	2026-10-11T23:25:34.0304240Z Prepare workflow directory
+evaluation-governance	Set up job	2026-10-11T23:25:34.0671690Z Prepare all required actions
+evaluation-governance	Set up job	2026-10-11T23:25:34.0739308Z Getting action download info
+evaluation-governance	Set up job	2026-10-11T23:25:34.2993688Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+evaluation-governance	Set up job	2026-10-11T23:25:34.3832318Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+evaluation-governance	Set up job	2026-10-11T23:25:34.6553169Z Complete job name: evaluation-governance
+evaluation-governance	Run actions/checkout@v4	﻿2026-10-11T23:25:34.7203602Z ##[group]Run actions/checkout@v4
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7204470Z with:
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7204989Z   repository: Kaichen9527/stockinsider
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7209182Z   token: ***
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7209699Z   ssh-strict: true
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7210212Z   ssh-user: git
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7210745Z   persist-credentials: true
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7211308Z   clean: true
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7211864Z   sparse-checkout-cone-mode: true
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7212450Z   fetch-depth: 1
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7212939Z   fetch-tags: false
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7213483Z   show-progress: true
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7214031Z   lfs: false
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7214542Z   submodules: false
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7215063Z   set-safe-directory: true
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7215697Z   allow-unsafe-pr-checkout: false
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.7216477Z ##[endgroup]
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8225678Z Syncing repository: Kaichen9527/stockinsider
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8228700Z ##[group]Getting Git version info
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8229988Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8232395Z [command]/usr/bin/git version
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8272828Z git version 2.55.0
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8291434Z ##[endgroup]
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8306071Z Temporarily overriding HOME='/home/runner/work/_temp/aa5ff363-e9d2-43ab-a92f-3b1dfb9e04c9' before making global git config changes
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8308665Z Adding repository directory to the temporary git global config as a safe directory
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8311011Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8375247Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8382964Z ##[group]Initializing the repository
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8388459Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8499585Z hint: Using 'master' as the name for the initial branch. This default branch name
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8500871Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8502125Z hint: to use in all of your new repositories, which will suppress this warning,
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8502970Z hint: call:
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8503438Z hint:
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8504049Z hint: 	git config --global init.defaultBranch <name>
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8504709Z hint:
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8505334Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8506301Z hint: 'development'. The just-created branch can be renamed via this command:
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8507505Z hint:
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8508027Z hint: 	git branch -m <name>
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8508570Z hint:
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8509241Z hint: Disable this message with "git config set advice.defaultBranchName false"
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8513894Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8524462Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8575673Z ##[endgroup]
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8577147Z ##[group]Disabling automatic garbage collection
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8580021Z [command]/usr/bin/git config --local gc.auto 0
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8611731Z ##[endgroup]
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8612859Z ##[group]Setting up auth
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8618774Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8654921Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.8992964Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.9022421Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.9211010Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.9241382Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.9421232Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.9457567Z ##[endgroup]
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.9459062Z ##[group]Fetching the repository
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:34.9468089Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +7af8cba0347010a1d2b007fc8e733ce30faf0ef3:refs/remotes/origin/codex/ptt-mention-provenance-oct12
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.8395351Z From https://github.com/Kaichen9527/stockinsider
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.8397836Z  * [new ref]         7af8cba0347010a1d2b007fc8e733ce30faf0ef3 -> origin/codex/ptt-mention-provenance-oct12
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.8403886Z ##[endgroup]
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.8405490Z ##[group]Determining the checkout info
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.8407595Z ##[endgroup]
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.8409220Z [command]/usr/bin/git sparse-checkout disable
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.8463719Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.8497479Z ##[group]Checking out the ref
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.8501450Z [command]/usr/bin/git checkout --progress --force -B codex/ptt-mention-provenance-oct12 refs/remotes/origin/codex/ptt-mention-provenance-oct12
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.9701641Z Switched to a new branch 'codex/ptt-mention-provenance-oct12'
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.9704998Z branch 'codex/ptt-mention-provenance-oct12' set up to track 'origin/codex/ptt-mention-provenance-oct12'.
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.9718364Z ##[endgroup]
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.9751390Z [command]/usr/bin/git log -1 --format=%H
+evaluation-governance	Run actions/checkout@v4	2026-10-11T23:25:35.9773175Z 7af8cba0347010a1d2b007fc8e733ce30faf0ef3
+evaluation-governance	Run actions/setup-node@v4	﻿2026-10-11T23:25:36.0144761Z ##[group]Run actions/setup-node@v4
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.0146232Z with:
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.0147461Z   node-version-file: .nvmrc
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.0148860Z   cache: npm
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.0150092Z   cache-dependency-path: package-lock.json
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.0151519Z   always-auth: false
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.0152741Z   check-latest: false
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.0161904Z   token: ***
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.0162943Z ##[endgroup]
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.1520601Z Node version file is not JSON file
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.1522860Z Resolved .nvmrc as 22.14.0
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.1537963Z Attempting to download 22.14.0...
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.1641414Z (node:2221) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.1645324Z (Use `node --trace-deprecation ...` to show where the warning was created)
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:36.8563647Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:37.3559373Z Extracting ...
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:37.3680262Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/6a7b2ae2-a8f1-4a9f-bd41-1819daff94fc -f /home/runner/work/_temp/c2247b34-9a27-4294-90bb-6cd2a9191a57
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:38.5986835Z Adding to the cache ...
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:40.6166346Z ##[group]Environment details
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:40.8243108Z node: v22.14.0
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:40.8244154Z npm: 10.9.2
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:40.8244757Z yarn: 1.22.22
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:40.8245828Z ##[endgroup]
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:40.8262229Z [command]/opt/hostedtoolcache/node/22.14.0/x64/bin/npm config get cache
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:40.9079187Z /home/runner/.npm
+evaluation-governance	Run actions/setup-node@v4	2026-10-11T23:25:41.0452488Z npm cache is not found
+evaluation-governance	Install root dependencies	﻿2026-10-11T23:25:41.0601056Z ##[group]Run npm ci
+evaluation-governance	Install root dependencies	2026-10-11T23:25:41.0601578Z ^[[36;1mnpm ci^[[0m
+evaluation-governance	Install root dependencies	2026-10-11T23:25:41.0807598Z shell: /usr/bin/bash -e {0}
+evaluation-governance	Install root dependencies	2026-10-11T23:25:41.0808076Z ##[endgroup]
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2877716Z 
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2884934Z added 39 packages, and audited 40 packages in 1s
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2885380Z 
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2885608Z 7 packages are looking for funding
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2886182Z   run `npm fund` for details
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2890744Z 
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2892265Z 1 high severity vulnerability
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2892775Z 
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2893084Z To address all issues, run:
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2893813Z   npm audit fix
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2894028Z 
+evaluation-governance	Install root dependencies	2026-10-11T23:25:42.2894336Z Run `npm audit` for details.
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	﻿2026-10-11T23:25:42.3255136Z ##[group]Run node scripts/run-node22.js --experimental-strip-types --test --test-name-pattern="evaluation and product-value readiness|hybrid verified-change product boundary" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.3259387Z ^[[36;1mnode scripts/run-node22.js --experimental-strip-types --test --test-name-pattern="evaluation and product-value readiness|hybrid verified-change product boundary" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252^[[0m
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.3304155Z shell: /usr/bin/bash -e {0}
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.3304563Z ##[endgroup]
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.4005790Z TAP version 13
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.4995085Z # (node:2295) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.5003297Z # (Use `node --trace-warnings ...` to show where the warning was created)
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.5779742Z # (node:2295) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/opportunity-v3/opportunity-v3.test.ts is not specified and it doesn't parse as CommonJS.
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.5781855Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.5784324Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7702774Z # node:internal/modules/package_json_reader:268
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7703733Z #   throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7705568Z #         ^
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7708592Z # Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@supabase/supabase-js' imported from /home/runner/work/stockinsider/stockinsider/web/src/lib/data-plane-runtime.ts
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7710319Z #     at Object.getPackageJSONURL (node:internal/modules/package_json_reader:268:9)
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7711304Z #     at packageResolve (node:internal/modules/esm/resolve:768:81)
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7712151Z #     at moduleResolve (node:internal/modules/esm/resolve:854:18)
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7713126Z #     at defaultResolve (node:internal/modules/esm/resolve:984:11)
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7714102Z #     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7715155Z #     at \#cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7716022Z #     at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7717083Z #     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7718248Z #     at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7719246Z #   code: 'ERR_MODULE_NOT_FOUND'
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7719724Z # }
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7720307Z # Node.js v22.14.0
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7780999Z # Subtest: web/src/lib/opportunity-v3/opportunity-v3.test.ts
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7787272Z not ok 1 - web/src/lib/opportunity-v3/opportunity-v3.test.ts
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7788159Z   ---
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7788972Z   duration_ms: 381.021081
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7790247Z   location: '/home/runner/work/stockinsider/stockinsider/web/src/lib/opportunity-v3/opportunity-v3.test.ts:1:1'
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7791123Z   failureType: 'testCodeFailure'
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7791579Z   exitCode: 1
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7791879Z   signal: ~
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7792267Z   error: 'test failed'
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7792597Z   code: 'ERR_TEST_FAILURE'
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7792963Z   ...
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7793600Z 1..1
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7793889Z # tests 1
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7794230Z # suites 0
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7794802Z # pass 0
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7795088Z # fail 1
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7795441Z # cancelled 0
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7795724Z # skipped 0
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7796040Z # todo 0
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7796339Z # duration_ms 387.850913
+evaluation-governance	Run evaluation/governance diagnostic (promotion evidence only)	2026-10-11T23:25:42.7860112Z ##[error]Process completed with exit code 1.
+evaluation-governance	Post Run actions/checkout@v4	﻿2026-10-11T23:25:42.8260111Z Post job cleanup.
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9053680Z [command]/usr/bin/git version
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9090529Z git version 2.55.0
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9125514Z Temporarily overriding HOME='/home/runner/work/_temp/723f7b0c-030c-4674-bc35-ec0c20fccb6f' before making global git config changes
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9127271Z Adding repository directory to the temporary git global config as a safe directory
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9131645Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9254526Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9292809Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9501881Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9549433Z http.https://github.com/.extraheader
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9561895Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9746201Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:42.9969523Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+evaluation-governance	Post Run actions/checkout@v4	2026-10-11T23:25:43.0003310Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+evaluation-governance	Complete job	﻿2026-10-11T23:25:43.0467446Z Cleaning up orphan processes
+evaluation-governance	Complete job	2026-10-11T23:25:43.0740781Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

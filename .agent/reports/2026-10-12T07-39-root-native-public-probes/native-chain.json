@@ -1,0 +1,24 @@
+{
+  "schema": "runner-installation-public-host-probe-v1",
+  "observedAt": "2026-10-11T23:39:40.235Z",
+  "controller": {
+    "arch": "arm64",
+    "execPath": "/usr/local/bin/node",
+    "version": "v22.14.0"
+  },
+  "nativePath": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+  "nativeSha256": "0d5ac7aae20c4eda6242428d5e218c55ba96d8763fda2a271088ff37104b9d28",
+  "chain": "native Node controller -> pinned Codex sandbox -> pinned Node -> unchanged run-node22 -> pinned Node",
+  "actual": {
+    "arch": "arm64",
+    "execPath": "/usr/local/bin/node",
+    "version": "v22.14.0"
+  },
+  "stdout": "{\"arch\":\"arm64\",\"execPath\":\"/usr/local/bin/node\",\"version\":\"v22.14.0\"}\n",
+  "stderr": "",
+  "passed": true,
+  "credentialsRead": false,
+  "modelInvoked": false,
+  "protectedPass": false,
+  "githubWorkerInvoked": false
+}
