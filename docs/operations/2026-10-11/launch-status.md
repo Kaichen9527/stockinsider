@@ -17,6 +17,8 @@ home `911534d6-372e-4345-8b66-13d5473320b4`、daily `7bac3286-762c-45e3-8664-2d4
 
 VPS154.894GB擴容已確認，14:11:53Z可用20.653GB，仍依原准入與雙鎖。工程heartbeat已校正全量終態及Cloud active工作，沒有啟用未驗收的新研究排程。證據：`.agent/reports/2026-10-11T14-12-full-refresh-complete/`。下文running敘述是13:13Z歷史快照，已由本節取代。
 
+逐檔展示核對補充：公開273個卡片包含waiting子集合，實際272個唯一symbol；其中269屬本輪研究，74個本輪標的未在公開列表，6000／7000／7500三個來源命中無本輪revision、stale且零分。主線展示採七日eligible來源加既有waiting／actionable，並非直接展示研究母體；74檔逐一排除依據及3個未合格代碼需再驗證，不宣稱公開列表也零缺口。快取又查到8筆近1.29GB的openssl＋npm ci層與多筆748MB的clamav／ffmpeg層，指令匹配SOHO Dockerfile，已交owner查父層與多環境重建原因；匹配部分不等於全機歸屬，沒有清理。
+
 首批已於12:41:54Z正式部署main169：實際容量准入、artifact完整驗證、migration、RLS／ACL、服務與active writer核對通過。Linux發布包（98+7項計算／打包、4項瀏覽器、型別、lint、build）與VM安裝驗證完成，不等PR364、全平台或全部文章。同機App自行清理其舊映像／快取後，實測20.815GB可用，root未清未授權的共享Docker資料。正式站已取得候選功能，桌面／手機及搜尋可用。全候選首輪重算research d500fa84、pipeline918db413仍running；尚不能宣稱新版資料已全量發布。詳見 `phased-candidate-release.md` 最新節及12:39收據。
 
 最新：全量pipeline手動HTTP於13:02Z逾20分鐘但後端仍running，未重送；既有晚間排程被DB lease以409拒絕，沒有重複run。13:11Z單次唯讀watcher已啟動保存終態／覆蓋，最長90分鐘，不改timer或發布。每小時工程接續已更新這些精確ID與禁止重送條件。一般GitHub CI38139887387真正成功；protected及真實文章／策略驗收仍另列待辦。公開快照仍272／1／0，新全量資料尚未確認發布。

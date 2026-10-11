@@ -1,0 +1,37 @@
+{
+  "schema": "stockinsider-public-roster-reconciliation-v1",
+  "researchRunId": "d500fa84-e57b-4c3d-bafd-deac37ebf249",
+  "homeSnapshot": "911534d6-372e-4345-8b66-13d5473320b4",
+  "researchCount": 343,
+  "publicCardsIncludingNestedWaiting": 273,
+  "publicUnique": 272,
+  "currentResearchMembersPublic": 269,
+  "currentResearchMembersNotPublic": 74,
+  "publicNotInResearch": [
+    "6000",
+    "7000",
+    "7500"
+  ],
+  "outsideCards": {
+    "stale": true,
+    "detailRevisionId": null,
+    "valuation": "missing",
+    "scores": 0
+  },
+  "interpretation": "Found list is all recent eligible mentions plus persisted waiting/actionable; waiting is a subset, so 273 cards is not a duplicate bug. 74 run members not displayed still have outcomes, but exact exclusions require per-symbol eligibility reconciliation. Three unqualified source hits bypass current ordinary-share research roster and must not be presented as evaluated candidates.",
+  "cacheLayerFinding": {
+    "topSameCommandCount": 8,
+    "approxFormattedSizes": [
+      "1.29GB x7",
+      "1.267GB x1"
+    ],
+    "matchingDockerfile": "SOHO build-deps apt-get openssl && npm ci",
+    "otherRepeatedLayer": "748.4MB ca-certificates clamav ffmpeg file matches SOHO media-worker",
+    "possibleInvalidation": "runtime-base release/URL ENV precedes API/media-worker apt install; parent changes may rebuild these layers",
+    "confirmedCause": false,
+    "ownerMessageSent": true,
+    "notAttributingWholeCache": true
+  },
+  "cloudCursor": "fb0ce0df-ca49-43e0-99fc-e874b21fb53d:38",
+  "cloudStatus": "active; proposed 20k/30s/8MiB calendar bound; not yet completed or merged"
+}
