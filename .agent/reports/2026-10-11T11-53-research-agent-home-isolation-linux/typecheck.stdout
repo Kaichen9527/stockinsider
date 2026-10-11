@@ -1,0 +1,9 @@
+
+> web@0.1.0 pretypecheck
+> node scripts/sync-official-authority.mjs
+
+Official authority build bridge verified (5 canonical modules).
+
+> web@0.1.0 typecheck
+> tsc --noEmit --pretty false
+

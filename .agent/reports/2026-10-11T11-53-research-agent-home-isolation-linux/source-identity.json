@@ -1,0 +1,16 @@
+{
+  "source": "da660bfc120663a64a9efb19e982c018f79a2f4f",
+  "tree": "db3683fa5f0f10a8ce233dbc13c27bc1cb361cf6",
+  "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+  "sourceCount": 670,
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+  "user": "agent",
+  "homedir": "/home/agent",
+  "repoRealpath": "/workspace/cloud-reviewer-result-http-vm-oct09",
+  "node22": "v22.14.0",
+  "pg17": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+  "noSecretValuesRead": true,
+  "workspaceFreeBytes": 10040635392,
+  "tmpFreeBytes": 17045348352
+}

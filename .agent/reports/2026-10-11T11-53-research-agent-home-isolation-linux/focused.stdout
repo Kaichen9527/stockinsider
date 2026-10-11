@@ -1,0 +1,20 @@
+TAP version 13
+# Subtest: research release artifact fixtures run only after the other research files finish
+ok 1 - research release artifact fixtures run only after the other research files finish
+  ---
+  duration_ms: 0.717462
+  ...
+# Subtest: research test isolation leaves every approved script catalog value unchanged
+ok 2 - research test isolation leaves every approved script catalog value unchanged
+  ---
+  duration_ms: 2.980378
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 64.363096

@@ -1,0 +1,20 @@
+{
+  "stage": "namespace-probe",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "/tmp/si-home-isolation-e86ou3n9/namespace-probe.mjs"
+  ],
+  "startedAt": "2026-10-11T11:56:20.098641+00:00",
+  "endedAt": "2026-10-11T11:56:21.054600+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.9559654630138539,
+  "sampledAggregatePeakRssBytes": 210022400,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10040705024,
+  "diskAvailableAfterBytes": 10040705024,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

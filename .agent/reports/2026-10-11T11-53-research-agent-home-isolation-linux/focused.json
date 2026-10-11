@@ -1,0 +1,21 @@
+{
+  "stage": "focused",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "scripts/research-agent-test-isolation.test.mjs"
+  ],
+  "startedAt": "2026-10-11T11:56:19.877790+00:00",
+  "endedAt": "2026-10-11T11:56:20.069284+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.19150364596862346,
+  "sampledAggregatePeakRssBytes": 28270592,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10040705024,
+  "diskAvailableAfterBytes": 10040705024,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

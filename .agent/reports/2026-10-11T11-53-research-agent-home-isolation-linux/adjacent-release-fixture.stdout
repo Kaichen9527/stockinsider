@@ -1,0 +1,40 @@
+TAP version 13
+# (node:356795) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:356795) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-financial-inventory.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: both runtime layouts contain only pinned research inputs and real readers load both companies
+ok 1 - both runtime layouts contain only pinned research inputs and real readers load both companies
+  ---
+  duration_ms: 274.991371
+  ...
+# Subtest: missing, altered and symlinked inputs reject before any research output is created
+ok 2 - missing, altered and symlinked inputs reject before any research output is created
+  ---
+  duration_ms: 134.060925
+  ...
+# Subtest: output symlinks, existing files and escaped entrypoints cannot redirect or overwrite evidence
+ok 3 - output symlinks, existing files and escaped entrypoints cannot redirect or overwrite evidence
+  ---
+  duration_ms: 54.132261
+  ...
+# Subtest: legacy fixtures skip research; a feature-enabled release cannot omit its manifest
+ok 4 - legacy fixtures skip research; a feature-enabled release cannot omit its manifest
+  ---
+  duration_ms: 20.808024
+  ...
+# Subtest: real financial reader still refuses a writable release ancestor
+ok 5 - real financial reader still refuses a writable release ancestor
+  ---
+  duration_ms: 48.321266
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 695.800073

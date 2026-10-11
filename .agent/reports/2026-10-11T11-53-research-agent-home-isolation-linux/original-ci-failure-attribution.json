@@ -1,0 +1,9 @@
+{
+  "run": "38130038830",
+  "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "reportedError": "financial_parent_replaced",
+  "attribution": "Root supplied historical ordinary CI failure; original root-held log not downloaded or re-read by this VM task.",
+  "historicalAncestorOrWriterIdentified": false,
+  "noRetryOfDeniedGithubApi": true,
+  "controlledProbeDoesNotProveHistoricalWriter": true
+}
