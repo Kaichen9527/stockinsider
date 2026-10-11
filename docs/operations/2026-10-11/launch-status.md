@@ -1,5 +1,11 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 18:02Z補充：workflow獨立核對完成；canonical placement RED據實保留
+
+Cloud對root所寫workflow完成真正唯讀獨立核對，blob46e753f9／SHA c66af5cc、1433bytes與root實檔一致；沒有新blocker，僅workflow範圍、不是它自己maker程式的批准，也不是protected簽章。原輔助解析EPERM及改用唯讀管線結果均留在收據。
+
+Root補跑未修改canonical指令出現152PASS／3FAIL／0SKIP：PCR022/024及V314004都是Turbopack拒絕本次review工作樹web/node_modules跨根symlink。這是實際RED，不能說155全過或寫PASS fulfillment。Mac可用約2.5GB，因此不在本機安裝或同輸入重試；單次交原已idle Cloud以maker已修正的本地exact-lock dependency placement，在8GiBfree/RSS8GiB、單一heavy及20分鐘限制下核對精確7af8 canonical，收據放獨立evidence branch、凍結PR372。沒有改測試或繞過protected。source/focused/ordinary30PASS仍是各自真實範圍，不被本輪RED抹去，也不蓋過它。
+
 ## 17:54Z：PTT逐則證據完成普通CI；其他App快取成因已有答覆
 
 既有Cloud任務已完成並idle後，root取得maker branch `codex/ptt-mention-provenance-oct12`。四個程式／測試檔由Cloud編寫，root獨立審查並實跑30/30、零skip，40份raw及16份source hash全部核對。新增有界逐則作者、parent、index、stock-local extractor basis、必要短excerpt/hash與title-only／partial讀取狀態；平台作者與討論串仍明確不等於獨立消息根源。Repo migration的FK實為source_raw_documents，先前normalized-ID是假說；本次保留source_document_id:null，沒有借ID或查正式schema。只影響未來新增來源，不回填272線索、不crawl、不寫DB、不重跑core。

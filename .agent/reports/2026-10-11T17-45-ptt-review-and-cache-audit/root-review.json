@@ -371,9 +371,29 @@
     "threadId": "01a106b8-a883-7185-9962-f7372109a093",
     "hostId": "durable",
     "turnId": "01a12c18-9af0-76f3-9ca8-e92638e3e11f",
-    "cursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:2",
-    "status": "active",
+    "cursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:3",
+    "status": "completed",
     "readOnlyMinutes": 10,
-    "scope": "root-authored workflow only; no self approval of maker code"
+    "scope": "root-authored workflow only; no self approval of maker code",
+    "scopeVerdict": "no new blocker, unsigned workflow-only independent review",
+    "reviewedBlob": "46e753f9991635a104bcc1f4a7a6d05bff6532ba",
+    "reviewedSha256": "c66af5cc2f0a00bb55ffd0bbe0897043a3d5245bf5692ce57aab83f8736e7a48"
+  },
+  "rootCanonicalAttempt": {
+    "subject": "7af8cba0347010a1d2b007fc8e733ce30faf0ef3",
+    "exitCode": 1,
+    "tests": 155,
+    "pass": 152,
+    "fail": 3,
+    "skip": 0,
+    "failedCases": [
+      "PCR-022",
+      "PCR-024",
+      "V314-004"
+    ],
+    "cause": "Turbopack rejects new root review web/node_modules symlink pointing outside filesystem root",
+    "repeatedUnchanged": false,
+    "noPassAttestationCreated": true,
+    "remainingAction": "one bounded existing Cloud canonical run with already corrected local dependency placement and capacity guard; no source edits or protected retry"
   }
 }

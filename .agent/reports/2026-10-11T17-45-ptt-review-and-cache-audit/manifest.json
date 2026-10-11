@@ -45,6 +45,16 @@
     "sha256": "4a4a911e9272730d11cd447e05e99f9b8c7f6d14da6d5c916d27c3db6feeeb64"
   },
   {
+    "file": "root-canonical-red.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "root-canonical-red.stdout",
+    "bytes": 61612,
+    "sha256": "65388af94c42cc9e96c44069968a10f326e250a3928bf6d746967b1a54f0a4c5"
+  },
+  {
     "file": "root-focused.stderr",
     "bytes": 0,
     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
@@ -56,7 +66,12 @@
   },
   {
     "file": "root-review.json",
-    "bytes": 15115,
-    "sha256": "f451b87b9314e00d7af8d6ff7a125799ff1b95fcca615680dec5d532059bc6e7"
+    "bytes": 15957,
+    "sha256": "9da3125f6cee960e738ff085bab99460fe917f180bb10980ce6a9e0bdd67344e"
+  },
+  {
+    "file": "workflow-independent-readonly.json",
+    "bytes": 13178,
+    "sha256": "8ae8d9a30ef26b1facb8a05406796549c86cd1e14c3407be5236c83388743cae"
   }
 ]
