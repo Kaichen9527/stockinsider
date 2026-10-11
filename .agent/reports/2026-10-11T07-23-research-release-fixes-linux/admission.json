@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-10-11T07:23:50.334039Z",
+  "noHeavyAtStart": true,
+  "diskAvailableBeforeBytes": 10073165824,
+  "memoryAvailableKiB": 33271776,
+  "initialFetch": {
+    "executionProfile": "default",
+    "exitCode": 128,
+    "command": [
+      "git",
+      "fetch",
+      "origin",
+      "codex/research-inbox-precision-oct11"
+    ],
+    "stderr": "fatal: unable to access 'https://github.com/Kaichen9527/stockinsider.git/': Failed to connect to proxy port 8080 after 0 ms: Could not connect to server"
+  },
+  "manualHardStopAt": "2026-10-11T07:53:50Z"
+}

@@ -1,0 +1,32 @@
+{
+  "stage": "source-unit",
+  "command": [
+    "node",
+    "scripts/run-node22.js",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/research-inbox.test.ts",
+    "web/src/lib/research-source-association.test.ts",
+    "web/src/lib/research-source-attempt-controller.test.ts",
+    "scripts/research-discovery-relay-prepare.test.mjs",
+    "scripts/research-saved-observation.test.mjs",
+    "scripts/research-legacy-article-heads.test.mjs",
+    "web/src/lib/candidate-detail.test.ts",
+    "web/src/lib/candidate-detail-view-contract.test.ts",
+    "web/src/lib/tw-entry-plan-authority.test.ts",
+    "scripts/research-paper-session-route.test.mjs"
+  ],
+  "startedAt": "2026-10-11T07:25:44.959781+00:00",
+  "endedAt": "2026-10-11T07:26:07.079547+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 22.1197733959998,
+  "sampledAggregatePeakRssBytes": 245383168,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10072588288,
+  "diskAvailableAfterBytes": 10072588288,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

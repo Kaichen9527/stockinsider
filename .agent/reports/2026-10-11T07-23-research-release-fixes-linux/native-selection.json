@@ -1,0 +1,32 @@
+{
+  "stage": "native-selection",
+  "command": [
+    "node",
+    "scripts/run-node22.js",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-insider-isolation-postgres.test.mjs",
+    "scripts/research-insider-snapshot-postgres.test.mjs",
+    "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+    "scripts/research-agent-migration-gate.test.mjs",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+    "scripts/opportunity-v3/research-publication-install-guard.test.mjs",
+    "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+    "scripts/opportunity-v3/vps-migration-peer.test.mjs",
+    "scripts/research-strategy-release.test.mjs"
+  ],
+  "startedAt": "2026-10-11T07:24:59.296272+00:00",
+  "endedAt": "2026-10-11T07:25:26.062670+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 26.766407258983236,
+  "sampledAggregatePeakRssBytes": 232816640,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10072588288,
+  "diskAvailableAfterBytes": 10072588288,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

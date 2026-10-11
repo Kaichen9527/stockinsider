@@ -1,0 +1,23 @@
+	Command being timed: "node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/research-insider-isolation-postgres.test.mjs scripts/research-insider-snapshot-postgres.test.mjs scripts/opportunity-v3/migration-sql-policy.test.mjs scripts/research-agent-migration-gate.test.mjs scripts/opportunity-v3/atomic-migration-chain.test.mjs scripts/opportunity-v3/migration-successor-guard.test.mjs scripts/opportunity-v3/research-publication-install-guard.test.mjs scripts/opportunity-v3/research-publication-full-chain.test.mjs scripts/opportunity-v3/vps-migration-peer.test.mjs scripts/research-strategy-release.test.mjs"
+	User time (seconds): 11.76
+	System time (seconds): 4.55
+	Percent of CPU this job got: 61%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:26.59
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 174656
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 2153489
+	Voluntary context switches: 14050
+	Involuntary context switches: 2974
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

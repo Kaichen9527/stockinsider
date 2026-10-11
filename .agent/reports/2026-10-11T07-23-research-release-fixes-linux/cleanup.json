@@ -1,0 +1,21 @@
+{
+  "observedAt": "2026-10-11T07:28:12.204857+00:00",
+  "activeRelevantProcesses": [],
+  "ownedClusterPrefixDirectoriesRemaining": {
+    "/tmp": {
+      "si-full-chain-*": [],
+      "si-hba-probe-*": [],
+      "si-insider-isolation-*": [],
+      "si-snapshot-pg-*": []
+    },
+    "/tmp/si-13026-jnhqygph": {
+      "si-full-chain-*": [],
+      "si-hba-probe-*": [],
+      "si-insider-isolation-*": [],
+      "si-snapshot-pg-*": []
+    }
+  },
+  "trackedStatus": "",
+  "diskAvailableBytes": 10056052736,
+  "method": "Original tests finally stop and remove their own isolated clusters; observer confirms no relevant live processes or owned prefix directories. No evidence deletion or broad prune."
+}
