@@ -1,0 +1,83 @@
+{
+  "schema": "stockinsider-existing-installation-closeout-v1",
+  "recordedAt": "2026-10-11T07:01:53.864706+00:00",
+  "frozenCodeCommit": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "codePR": 361,
+  "linuxEvidence": {
+    "sourceEvidenceCommit": "1b67ee7f7e61f2394dbf4e42e045237bf651c0d3",
+    "adoptedDocumentationCommit": "a8403f2f",
+    "receiptSha256": "af82aeb53109c814dd4f69b0cbc8d668cdedd8ca2499d6665241542af35ee0fd",
+    "rawFilesVerified": 24,
+    "rawBytesVerified": 454072,
+    "sourceManifestEntriesVerified": 109,
+    "headTreeWebTreeVerified": true,
+    "tests": 22,
+    "pass": 22,
+    "fail": 0,
+    "skip": 0,
+    "typecheck": "PASS",
+    "lint": {
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 33
+    },
+    "normalBuild": "PASS",
+    "sampledPeakRssBytes": 1416351744,
+    "lowestDiskAvailableBytes": 10073673728,
+    "resourceSamplingLimit": "100ms descendants/process group; not cgroup maximum",
+    "compiledServerManifestHashVerified": true,
+    "compiledFileContentsIndependentlyRetrieved": false
+  },
+  "coverageInventory": {
+    "independentObserver": "/root/author_input_review_oct08",
+    "main": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "allPaths": 1707,
+    "unchangedPR284Blobs": 443,
+    "unchangedNonGeneratedSourceConfigTests": 100,
+    "unchangedGeneratedReportsResults": 343,
+    "remainingPaths": 300,
+    "runtimeInputs": 20,
+    "runtimeInputBytes": 907264,
+    "verdict": "inventory only, no full CODE PASS"
+  },
+  "ongoing": {
+    "independentABCDReview": "existing /root/author_input_review_oct08,216 candidate paths",
+    "independentFGEReview": "existing /root/astra_recovery_oct04,84 candidate paths",
+    "linuxFullPCR": "single next existing VM job, exact1a, idle confirmed before dispatch"
+  },
+  "rawFiles": [
+    {
+      "file": ".agent/reports/2026-10-11T06-58-installation-closeout-raw/stockinsider-full-review-coverage-oct11-report.md",
+      "bytes": 31602,
+      "sha256": "6ae080108fafe8f270ce10cd0452d05740b7623fe9843890efabc90e166437d6"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-58-installation-closeout-raw/stockinsider-full-review-coverage-oct11-inventory.json",
+      "bytes": 861521,
+      "sha256": "33f29ffaf690588ef841735b412d8b1d02bcf608a4ab102addb37504b80626f5"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-58-installation-closeout-raw/stockinsider-full-review-coverage-oct11-284-native-inline.json",
+      "bytes": 4615,
+      "sha256": "b2c7c43ed68665a1387f2ed00bf5163f16caaedb7f95f55d80caa317cba6a25c"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-58-installation-closeout-raw/stockinsider-full-review-coverage-oct11-284-native-review.json",
+      "bytes": 2461,
+      "sha256": "3eaf39f10620a9589f2ff7a5a903fcd5379031aedd9bd4e77679a7bf53d95536"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-58-installation-closeout-raw/stockinsider-full-review-coverage-oct11-pr284.json",
+      "bytes": 41472,
+      "sha256": "93b9b16754b10e9df9ff817487b6e12d9a37e5185da7c6f10a26eea1dc973e1d"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-58-installation-closeout-raw/stockinsider-full-review-coverage-oct11-pr287.json",
+      "bytes": 416,
+      "sha256": "e7e6017816df6a756019752f951f526b505de9561ffe45b86f319302df1ac310"
+    }
+  ],
+  "productionChanged": false,
+  "mergedMain": false,
+  "scheduleEnabled": false
+}
