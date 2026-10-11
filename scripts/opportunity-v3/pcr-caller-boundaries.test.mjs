@@ -6,6 +6,7 @@ const require = createRequire(import.meta.url);
 const { buildFactorSnapshot } = require('../runtime/factor-snapshot.js');
 const { calculateFactorScore } = require('../runtime/factor-score.js');
 const { evaluateComparableRun } = require('../runtime/comparable-evaluation.js');
+const { deriveTechnicalEntryState } = require('../runtime/technical-state.js');
 
 function history(count) {
   return Array.from({ length: count }, (_, index) => {
@@ -20,6 +21,25 @@ function snapshotInput(count = 371) {
   return { stockId: 'subject', history: history(count), asOf: '2030-01-01T00:00:00Z', roster,
     histories: roster.map(({ stockId }) => ({ stockId, rows: history(20) })) };
 }
+
+test('PCR-018 entry-state caller calculates and consumes the actual adjusted price plane', () => {
+  const rows = history(130);
+  const input = { rows, benchmark: rows, asOf: '2030-01-01T00:00:00Z' };
+  assert.equal(Object.hasOwn(input, 'plane'), false);
+  const state = deriveTechnicalEntryState(input);
+  assert.equal(state.availability, 'available');
+  assert.equal(state.plane.current, rows.at(-1).close);
+  assert.equal(state.plane.previousClose, rows.at(-2).close);
+  assert.equal(state.plane.ma20, rows.slice(-20).reduce((sum, row) => sum + row.close, 0) / 20);
+  assert.equal(state.plane.relativeStrengthTaiex20, 0);
+  assert.equal(state.plane.atr14, 2);
+  assert.ok(Number.isFinite(state.plane.macdHistogram));
+  assert.equal(deriveTechnicalEntryState({ ...input, benchmark: [] }).plane.reason, 'taiex_reference_unavailable');
+  assert.equal(deriveTechnicalEntryState({ ...input, rows: rows.slice(-121) }).plane.reason,
+    'insufficient_adjusted_history');
+  const future = { ...rows.at(-1), session: '2031-01-01T00:00:00Z' };
+  assert.equal(deriveTechnicalEntryState({ ...input, rows: [...rows, future] }).plane.reason, 'future_observation');
+});
 
 test('PCR-025 caller returns bounded history or the actual unavailable reason', () => {
   const insufficient = buildFactorSnapshot(snapshotInput(370));
