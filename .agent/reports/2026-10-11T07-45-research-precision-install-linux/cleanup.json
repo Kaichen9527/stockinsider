@@ -1,0 +1,36 @@
+{
+  "observedAt": "2026-10-11T07:52:34.931003+00:00",
+  "activeRelevantProcesses": [],
+  "testClusterDirectoriesRemaining": {
+    "/tmp": {
+      "si-full-chain-*": [],
+      "si-thesis-*": [],
+      "stockinsider-source-budget-*": []
+    },
+    "/tmp/si-e088-dwocjkkd": {
+      "si-full-chain-*": [],
+      "si-thesis-*": [],
+      "stockinsider-source-budget-*": []
+    }
+  },
+  "remainingNestedArtifactDirectories": [
+    "node-compile-cache",
+    "source-priority-consumer-YwiJPP",
+    "source-priority-consumer-8zsA08",
+    "source-priority-consumer-qjkNV5",
+    "source-priority-consumer-I6Bb5D",
+    "source-priority-consumer-Eibwp1",
+    "source-priority-consumer-CMrxEw",
+    "source-priority-consumer-6aaGBJ",
+    "source-priority-consumer-lEU86M",
+    "source-priority-consumer-xgXg2v",
+    "source-priority-consumer-OYId2V",
+    "source-priority-consumer-ZAvlCH",
+    "source-priority-consumer-N48le2",
+    "source-priority-consumer-DI90NF",
+    "source-priority-consumer-mSiOSP"
+  ],
+  "trackedStatus": "",
+  "diskAvailableBytes": 10046545920,
+  "method": "Original test finally blocks stop/delete owned disposable PG; full observer finds no live PG/Node/npm/browser. No external deletion/prune and all raw retained."
+}

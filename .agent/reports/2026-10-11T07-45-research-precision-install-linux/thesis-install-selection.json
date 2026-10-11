@@ -1,0 +1,25 @@
+{
+  "stage": "thesis-install-selection",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/research-thesis-isolation-postgres.test.mjs",
+    "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+    "scripts/research-agent-migration-gate.test.mjs",
+    "scripts/research-strategy-release.test.mjs"
+  ],
+  "startedAt": "2026-10-11T07:49:30.231581+00:00",
+  "endedAt": "2026-10-11T07:49:42.729305+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 12.497732046002056,
+  "sampledAggregatePeakRssBytes": 195141632,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10054541312,
+  "diskAvailableAfterBytes": 10054541312,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

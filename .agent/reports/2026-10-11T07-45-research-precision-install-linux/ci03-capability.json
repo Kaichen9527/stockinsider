@@ -1,0 +1,14 @@
+{
+  "expectedClockSha256": "483dfc28d0b87718ce50b48d382f03b8615fe861c5f859c958ddfc934fa0b3c6",
+  "searchRoots": [
+    "/tmp",
+    "/workspace/.tools",
+    "/workspace/cloud-acceptance-0faebfd/tools"
+  ],
+  "foundLibraries": [],
+  "reviewedExactLibraryAvailable": false,
+  "CI03Status": "not_selected_by_original_package, not_run",
+  "noInstallNoShim": true,
+  "clockLibraryNotPassedToSuite": true,
+  "configuredLibraryVariablePresent": false
+}

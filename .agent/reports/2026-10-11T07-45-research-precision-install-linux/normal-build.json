@@ -1,0 +1,22 @@
+{
+  "stage": "normal-build",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "build"
+  ],
+  "startedAt": "2026-10-11T07:51:26.808070+00:00",
+  "endedAt": "2026-10-11T07:51:37.115167+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 10.307102203951217,
+  "sampledAggregatePeakRssBytes": 1439645696,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10054541312,
+  "diskAvailableAfterBytes": 10046562304,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
