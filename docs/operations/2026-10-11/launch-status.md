@@ -44,3 +44,12 @@
 - 獨立installer增量審查重跑22/22PASS、零skip，兩項P2已閉合，unsigned scoped CODE PASS。原產品正確性完整命令在同一source另跑155/155PASS、零skip，包含31個PCR acceptance名稱；沒有冒充完整發布批准。
 - Linux full-chain驗收已交由既有idle VM單次執行，完成前維持pending。最新protected run38119168980仍缺exact1a review ref；下游code gate為SKIPPED，沒有手動重跑。
 - 正在盤點可重用的既有精確審查：443份source blob與已接受PR284版本相同，後續變更需補review及跨模組邊界核對。此盤點本身不是fullreview PASS。
+
+
+## Linux完整安裝鏈已驗收（2026-10-11T06:58Z）
+
+- Codex VM exact1a安裝八檔22/22PASS、零skip；73選定/72套用/1superseded與三階段catalog通過。types/lint/normalbuild成功；lint33warnings。
+- VM證據1b67ee7f：root已逐項驗24raw／454,072bytes、109source hashes與head/tree/webtree，保存至此verification分支。實測抽樣峰值RSS1.32GiB、最低free10.07GB；僅這次有界驗收符合32GB目標，並非全部歷史工作容量保證。
+- coverage精確修正：443相同項目中100為非生成程式/設定/測試、343為生成報告/結果；剩餘300paths分成A-D216與F/G/E84，兩個既有獨立角色審查中。20runtime研究輸入另列，不能跳過。
+- 既有VM完成且idle後，另啟動單次完整Linux PCR，先補驗可重建且版本鎖定的瀏覽器cache，避免重複已知missing-executable失敗。code1a仍凍結。
+- 尚未main合併/production安裝/部署。完整精確審查及可信runner復原維持真正發布條件，沒有用測試數或scoped PASS代替。
