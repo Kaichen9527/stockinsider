@@ -27,6 +27,10 @@ export const RESEARCH_STRATEGY_RELEASE = {
       "sha256": "fd029de904e24b6dae16f51a73383acd5fafccd174871799697a87e34400939e"
     },
     {
+      "path": "migrations/20261011_research_thesis_isolation_v1.sql",
+      "sha256": "01aeb449de913b424b6711d0689b05979bca15164891a728f1c3c1bf6f051718"
+    },
+    {
       "path": "web/src/app/api/internal/research-paper-session/route.ts",
       "sha256": "91889cb26475a8de6f805af670711ec77f2d51beebe7e954bdff18795801644d"
     },
@@ -134,7 +138,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
   "databasePolicy": [
     {
       "name": "fence_candidate_thesis_append_v1",
-      "bodySha256": "108ffb2c9a6c3497e25b485c98640865f9b8ccc53b0efc4a474b42a3c4fbee8b",
+      "bodySha256": "e93aab1e75c3ba28eabed3b0c198182e12936b3e4bbb39259ff278bc2ebb7784",
       "securityDefiner": true,
       "volatility": "v",
       "argumentCount": 0,
@@ -255,7 +259,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     }
   ],
   "dependencyLockHash": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
-  "codeHash": "b4433b261b29e1178206b6be014d2de1c8d8d0d0b778b09658b7a7419a48a0ce",
+  "codeHash": "786baeee2edf3b0769d286df73b02de8781b36b92efbfa724bdd835a4ca5b511",
   "parameterMode": "fixed_baseline_source_bound",
   "parameterHash": "8bbad7c16c55b4ef1483e1f0c348f35d2404397717e10d1daed49fba30843a39",
   "parameterFiles": [

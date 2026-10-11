@@ -34,7 +34,15 @@ test('closure metadata v1 preserves sorted keys independent of insertion order a
  assert.equal(digest(mapping.sourceClosure.map(({file,bytes,sha256})=>({sha256,file,bytes}))),mapping.sourceClosureHash);
  for(const pin of mapping.sourceClosure){const bytes=fs.readFileSync(pin.file);assert.equal(bytes.length,pin.bytes,pin.file);assert.equal(createHash('sha256').update(bytes).digest('hex'),pin.sha256,pin.file);}
  for(const company of Object.values(mapping.companies))assert.equal(company.sourceClosureHash,mapping.sourceClosureHash);
- const sql=fs.readFileSync('migrations/20261009_research_complete_input_v2.sql','utf8');
+ const sql=fs.readFileSync('migrations/20261011_research_complete_mapping_precision_v2.sql','utf8');
  assert.ok(sql.includes('"sourceClosureHash":"'+mapping.sourceClosureHash+'"'));
  assert.ok(!sql.includes('ef95096ff64e63dd4def51fa1aa5ec608837100fbdad780274becda5463b40ff'));
+});
+
+// The successor binds newly imported executable clocks; historical SQL remains
+// immutable and a missing transitive import is a failure, not a new model pin.
+test('complete input clock closure includes the actual new executable imports',()=>{
+ const mapping=JSON.parse(fs.readFileSync('web/src/lib/research-complete-mapping.json','utf8'));
+ for(const file of ['web/src/lib/research-source-clock.ts','web/src/lib/research-financial-clock.ts'])
+  assert.ok(mapping.sourceClosure.some(row=>row.file===file));
 });

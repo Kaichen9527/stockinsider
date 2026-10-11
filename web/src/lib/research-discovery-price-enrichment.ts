@@ -1,6 +1,7 @@
+import { canonicalSourceEvidenceClock, sourceEvidenceClockValid } from './research-source-clock.ts';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { researchCanonicalHash } from './research-agent-qualification.ts';
-import { discoveryInstant, discoverySession, discoveryTaipeiDate, discoveryRelativeReturns,
+import { discoveryClockOrder, discoverySession, discoveryTaipeiDate, discoveryRelativeReturns,
   discoveryPricePhase, type DiscoveryPriceBar } from './research-discovery-evidence.ts';
 import { isOfficialCandidatePriceSource } from './candidate-price-history.ts';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
@@ -36,7 +37,7 @@ export type DiscoveryPriceRead = { quote: DiscoveryQuote | null; window: Discove
 const HASH = /^[a-f0-9]{64}$/u;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu;
 const positive = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value) && value > 0;
-const known = (value: unknown, cutoff: string): value is string => discoveryInstant(value) && Date.parse(value) <= Date.parse(cutoff);
+const known = (value: unknown, cutoff: string): value is string => sourceEvidenceClockValid(value) && discoveryClockOrder(value, cutoff) <= 0;
 const unique = (values: string[]) => [...new Set(values)].sort();
 function officialUrl(value: unknown): value is string {
   if (typeof value !== 'string' || value.length > 800 || !isOfficialCandidatePriceSource(value)
@@ -75,7 +76,7 @@ function rawQuoteShape(quote: DiscoveryQuote, cutoff: string) {
   return discoverySession(quote.session) && quote.session <= discoveryTaipeiDate(cutoff)
     && positive(quote.close) && (quote.volume === null || typeof quote.volume === 'number' && Number.isFinite(quote.volume) && quote.volume >= 0)
     && officialUrl(quote.sourceUrl) && known(quote.availableAt, cutoff)
-    && Date.parse(quote.availableAt) >= Date.parse(`${quote.session}T13:30:00+08:00`)
+    && discoveryClockOrder(quote.availableAt, `${quote.session}T13:30:00+08:00`) >= 0
     && quote.priceBasis === 'raw_exchange_quote';
 }
 function validQuote(quote: DiscoveryQuote, cutoff: string) {
@@ -89,7 +90,7 @@ export function discoveryWindowDatasetHash(window: Pick<DiscoveryOfficialWindow,
 /** The pure shadow evaluator requires complete verified source/clock context.
  * No score/queue/entry eligibility is returned or changed. */
 export function evaluateDiscoveryPrice(read: DiscoveryPriceRead, cutoff: string) {
-  if (!discoveryInstant(cutoff)) throw new Error('discovery_cutoff_invalid');
+  if (!sourceEvidenceClockValid(cutoff)) throw new Error('discovery_cutoff_invalid');
   const missing = [...read.missing];
   let quote = read.quote;
   if (quote && !validQuote(quote, cutoff)) { quote = null; missing.push('quote_invalid_or_unavailable_at_discovery'); }
@@ -105,7 +106,7 @@ export function evaluateDiscoveryPrice(read: DiscoveryPriceRead, cutoff: string)
     const sessions = window.calendar;
     if (sessions.length !== 61 || sessions.some((row, i) => !discoverySession(row.session)
       || i > 0 && row.session <= sessions[i - 1].session || !known(row.closeAt, cutoff) || !known(row.availableAt, cutoff)
-      || discoveryTaipeiDate(row.closeAt) !== row.session || Date.parse(row.availableAt) < Date.parse(row.closeAt))
+      || discoveryTaipeiDate(row.closeAt) !== row.session || discoveryClockOrder(row.availableAt, row.closeAt) < 0)
       || sessions.at(-1)?.session !== window.latestCompletedSession
       || read.latestCompletedSession !== window.latestCompletedSession) gaps.push('latest_completed_session_or_calendar_invalid');
     if (!window.priceBasis || window.priceBasis.kind !== 'adjusted_to_signal_session'
@@ -115,8 +116,8 @@ export function evaluateDiscoveryPrice(read: DiscoveryPriceRead, cutoff: string)
     if (!window.validation || window.validation.status !== 'passed' || !known(window.validation.recordedAt, cutoff)
       || !HASH.test(window.validation.evidenceHash) || window.validation.datasetHash !== datasetHash)
       gaps.push('official_dataset_validation_missing_or_failed');
-    if (window.validation && (window.priceBasis && Date.parse(window.priceBasis.availableAt) > Date.parse(window.validation.recordedAt)
-      || sessions.some((row) => Date.parse(row.availableAt) > Date.parse(window.validation!.recordedAt))))
+    if (window.validation && (window.priceBasis && discoveryClockOrder(window.priceBasis.availableAt, window.validation.recordedAt) > 0
+      || sessions.some((row) => discoveryClockOrder(row.availableAt, window.validation!.recordedAt) > 0)))
       gaps.push('price_session_or_validation_clock_invalid');
     if (window.stock.length !== 61 || window.benchmark.length !== 61 || window.stock.some((bar, i) => bar.session !== sessions[i]?.session)
       || window.benchmark.some((bar, i) => bar.session !== sessions[i]?.session)) gaps.push('aligned_61_session_window_missing');
@@ -124,8 +125,8 @@ export function evaluateDiscoveryPrice(read: DiscoveryPriceRead, cutoff: string)
       const computed = discoveryRelativeReturns(window.stock, window.benchmark, cutoff, { requireComplete61: true });
       if (computed.relative60d === null) gaps.push('aligned_61_session_window_missing');
       for (const bars of [window.stock, window.benchmark]) if (bars.some((bar, i) =>
-        Date.parse(bar.availableAt) < Date.parse(sessions[i]?.closeAt)
-        || Date.parse(bar.availableAt) > Date.parse(window.validation?.recordedAt || 'invalid')))
+        discoveryClockOrder(bar.availableAt, sessions[i]?.closeAt) < 0
+        || discoveryClockOrder(bar.availableAt, window.validation?.recordedAt || 'invalid') > 0))
         gaps.push('price_session_or_validation_clock_invalid');
       if (quote && (quote.session !== window.latestCompletedSession || quote.close !== window.stock.at(-1)?.close))
         gaps.push('quote_window_binding_invalid');
@@ -134,7 +135,7 @@ export function evaluateDiscoveryPrice(read: DiscoveryPriceRead, cutoff: string)
     const metadata = window.phase;
     if (!metadata || metadata.ruleset !== TW_ENTRY_PLAN_RULESET || metadata.session !== window.latestCompletedSession
       || metadata.datasetHash !== datasetHash || !known(metadata.availableAt, cutoff)
-      || Date.parse(metadata.availableAt) < Date.parse(window.validation?.recordedAt || 'invalid')
+      || discoveryClockOrder(metadata.availableAt, window.validation?.recordedAt || 'invalid') < 0
       || metadata.close !== window.stock.at(-1)?.close || !['confirmed','waiting'].includes(metadata.breakout)
       || !['confirmed','waiting'].includes(metadata.pullback)) missing.push('price_phase_metadata_missing_or_invalid');
     else if (!gaps.length && quote) {
@@ -153,7 +154,7 @@ export function evaluateDiscoveryPrice(read: DiscoveryPriceRead, cutoff: string)
 
 function clockSequence(row: Row, cutoff: string) {
   const clocks = ['source_timestamp','collected_at','recorded_at'].map((key) => row[key]);
-  return clocks.every((value, i) => known(value, cutoff) && (i === 0 || Date.parse(String(clocks[i - 1])) <= Date.parse(String(value))));
+  return clocks.every((value, i) => known(value, cutoff) && (i === 0 || discoveryClockOrder(String(clocks[i - 1]), String(value)) <= 0));
 }
 /** Fixed read-only surfaces, no network fetch/live backfill/model flags. These
  * tables do not prove a full adjusted benchmark window, so no returns/phase are
@@ -186,15 +187,15 @@ export async function readDiscoveryRawQuote(client: Client, candidate: Discovery
       || Buffer.byteLength(JSON.stringify(calendar.data)) > DISCOVERY_PRICE_BOUNDS.perReadBytes) return empty('official_calendar_read_bound');
     if (!calendar.data.length) return empty('official_calendar_head_missing');
     const semantic = (value: Row) => [value.status,value.provider,value.source_ref,
-      ...['open_at','close_at','source_timestamp','collected_at'].map((key)=>Date.parse(String(value[key])))];
+      ...['open_at','close_at','source_timestamp','collected_at'].map((key)=>canonicalSourceEvidenceClock(String(value[key])))];
     for (const row of calendar.data as Row[]) {
       if (!discoverySession(row.session_id) || !['completed','cancelled'].includes(String(row.status))
-        || row.session_id !== latest.session_id || Date.parse(String(row.recorded_at)) !== Date.parse(String(latest.recorded_at))
+        || row.session_id !== latest.session_id || discoveryClockOrder(String(row.recorded_at), String(latest.recorded_at)) !== 0
         || row.market !== candidate.exchange || row.provider !== candidate.exchange.toLowerCase()
         || !clockSequence(row, cutoff) || !known(row.open_at, cutoff) || !known(row.close_at, cutoff)
-        || Date.parse(row.open_at) >= Date.parse(row.close_at) || discoveryTaipeiDate(row.close_at) !== row.session_id
+        || discoveryClockOrder(row.open_at, row.close_at) >= 0 || discoveryTaipeiDate(row.close_at) !== row.session_id
         || discoveryTaipeiDate(row.open_at) !== row.session_id || typeof row.source_ref !== 'string' || !row.source_ref || row.source_ref.length > 512
-        || row.status === 'completed' && Date.parse(String(row.recorded_at)) < Date.parse(row.close_at))
+        || row.status === 'completed' && discoveryClockOrder(String(row.recorded_at), row.close_at) < 0)
         return empty('official_calendar_validation_failed');
       if (researchCanonicalHash(semantic(latest)) !== researchCanonicalHash(semantic(row)))
         return empty('official_calendar_conflict');
@@ -221,7 +222,7 @@ export async function readDiscoveryRawQuote(client: Client, candidate: Discovery
       || row.integrityStatus === 'conflict' || row.integrity_status === 'conflict'
       || !officialQuoteUrl(row.source_url,candidate.symbol,candidate.exchange,session)
       || !known(row.as_of, cutoff) || !known(row.available_at, cutoff)
-      || Date.parse(row.as_of) < Date.parse(String(latest.close_at)) || Date.parse(row.as_of) > Date.parse(row.available_at))
+      || discoveryClockOrder(row.as_of, String(latest.close_at)) < 0 || discoveryClockOrder(row.as_of, row.available_at) > 0)
       return {quote:null,window:null,latestCompletedSession,missing:[...gaps,'official_quote_validation_failed']};
     const quote = {session:String(row.session_date),close:row.close as number,volume:row.volume as number | null,
       sourceUrl:String(row.source_url),availableAt:String(row.available_at),priceBasis:'raw_exchange_quote' as const,
@@ -237,7 +238,7 @@ export async function readDiscoveryRawQuote(client: Client, candidate: Discovery
 type FirstRow = {symbol:string;run_id:string;first_seen_at:string;captured_at:string;snapshot:Row};
 function frozenContext(row: FirstRow, cutoff: string) {
   if (!known(row.first_seen_at, cutoff) || !known(row.captured_at, cutoff)
-    || Date.parse(row.first_seen_at) > Date.parse(row.captured_at) || !UUID.test(row.run_id)
+    || discoveryClockOrder(row.first_seen_at, row.captured_at) > 0 || !UUID.test(row.run_id)
     || !row.snapshot || typeof row.snapshot !== 'object' || Array.isArray(row.snapshot))
     throw new Error('immutable_first_discovery_invalid');
   const raw = row.snapshot.price as DiscoveryQuote | null;
@@ -273,9 +274,9 @@ function supplementaryObservation(read: DiscoveryPriceRead, candidate: Discovery
     && (p.provider==='official_primary' || p.provider===candidate.exchange.toLowerCase())
     && p.stockId===candidate.stockId && p.exchange===candidate.exchange
     && known(p.publishedAt,cutoff) && known(p.observedAt,cutoff) && known(p.availableAt,cutoff)
-    && Date.parse(p.publishedAt)>=Date.parse(`${read.quote.session}T13:30:00+08:00`)
-    && Date.parse(p.publishedAt)<=Date.parse(p.observedAt) && Date.parse(p.observedAt)<=Date.parse(p.availableAt)
-    && Date.parse(p.availableAt)===Date.parse(read.quote.availableAt);
+    && discoveryClockOrder(p.publishedAt, `${read.quote.session}T13:30:00+08:00`) >= 0
+    && discoveryClockOrder(p.publishedAt, p.observedAt) <= 0 && discoveryClockOrder(p.observedAt, p.availableAt) <= 0
+    && discoveryClockOrder(p.availableAt, read.quote.availableAt) === 0;
   // Raw-only in this batch: even an adapter window cannot silently activate
   // returns/phase or confer research/entry eligibility.
   const context=evaluateDiscoveryPrice({...read,quote:verified ? read.quote : null,window:null,
@@ -297,13 +298,13 @@ function supplementaryObservation(read: DiscoveryPriceRead, candidate: Discovery
 export async function loadDiscoveryPriceEnrichment(client: Client, candidates: DiscoveryPriceCandidate[], asOf: string,
   options: { reader?: typeof readDiscoveryRawQuote; monotonicNow?: () => number; firstDiscoveryTable?:'research_first_discoveries_v1'|'research_observed_first_discoveries_v1';
     currentRun?: { serverClock: string; prioritySymbols: string[] } } = {}) {
-  if (!discoveryInstant(asOf) || candidates.length > DISCOVERY_PRICE_BOUNDS.candidates
+  if (!sourceEvidenceClockValid(asOf) || candidates.length > DISCOVERY_PRICE_BOUNDS.candidates
     || new Set(candidates.map((row)=>row.symbol)).size !== candidates.length
     || candidates.some((row)=>!/^\d{4}$/u.test(row.symbol) || row.firstSeenAt !== null && !known(row.firstSeenAt,asOf)))
     throw new Error('discovery_price_candidates_invalid');
   const current=options.currentRun;
   const symbols=new Set(candidates.map((row)=>row.symbol));
-  if(current && (!known(asOf,current.serverClock) || !discoveryInstant(current.serverClock)
+  if(current && (!known(asOf,current.serverClock) || !sourceEvidenceClockValid(current.serverClock)
     || current.prioritySymbols.length>candidates.length || new Set(current.prioritySymbols).size!==current.prioritySymbols.length
     || current.prioritySymbols.some((symbol)=>!symbols.has(symbol)))) throw new Error('discovery_current_run_invalid');
   const abort = new AbortController();
@@ -373,7 +374,7 @@ export async function loadDiscoveryPriceEnrichment(client: Client, candidates: D
         catch {context={...evaluateDiscoveryPrice({quote:null,window:null,latestCompletedSession:null,
           missing:['immutable_first_discovery_invalid']},cutoff),origin:'not_read',firstRunId:null,capturedAt:null,immutableSnapshotHash:null};}
       } else {
-        const reused=current && Date.parse(cutoff)===Date.parse(asOf) ? currentReads.get(candidate.symbol) : undefined;
+        const reused=current && discoveryClockOrder(cutoff, asOf) === 0 ? currentReads.get(candidate.symbol) : undefined;
         const reason=!candidate.hasDiscoveryEvidence || !candidate.firstSeenAt ? 'discovery_evidence_missing'
           : reused ? null : budgetReason();
         let read:DiscoveryPriceRead={quote:null,window:null,latestCompletedSession:null,missing:reason ? [reason] : []};

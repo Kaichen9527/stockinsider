@@ -129,7 +129,9 @@ export async function loadResearchDeepAuthorInput(db: Pick<SupabaseClient, 'from
         const fail = (reason: string) => { gaps.push({ documentId: id, reason }); };
         if (!document) { fail('source_missing'); continue; }
         const checked = documentInvariantProof(document, cutoff), meta = row(document.metadata);
-        if (!checked.proof) { fail(checked.gap!); continue; }
+        // Preserve the author packet's clock gap contract when the shared proof
+        // rejects a future microsecond before this packet's own clock checks.
+        if (!checked.proof) { fail(checked.gap === 'future_at_cutoff' ? 'clock_invalid' : checked.gap!); continue; }
         const proof = { ...checked.proof, publishedAt: String(document.published_at),
           firstObservedAt: String(meta.first_observed_at), revisionObservedAt: String(meta.revision_observed_at),
           collectedAt: String(document.collected_at), availableAt: String(document.collected_at) };

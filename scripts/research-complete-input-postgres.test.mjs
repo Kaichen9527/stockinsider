@@ -58,7 +58,7 @@ test('complete-input actual PG, shared preparations and original lease boundarie
   const prepare=r=>JSON.parse(sql(`SET ROLE service_role;SELECT prepare_research_input_v2(${q(JSON.stringify(r))});`));
   add();let saved;
 
-  sql(fs.readFileSync('migrations/20261009_research_complete_input_v2.sql','utf8'));
+  sql(fs.readFileSync('migrations/20261009_research_complete_input_v2.sql','utf8'));sql(fs.readFileSync('migrations/20261011_research_complete_mapping_precision_v2.sql','utf8'));
   const db={rpc(name,a){const arg=Object.values(a).map(v=>q(typeof v==='object'?JSON.stringify(v):v)).join(',');const response=promisify(execFile)(path.join(bin,'psql'),[...args,'-c',`SET ROLE service_role;SELECT ${name}(${arg});`],{encoding:'utf8',timeout:6000,maxBuffer:1048576}).then(({stdout})=>({data:JSON.parse(stdout.trim()),error:null}));return Object.assign(response,{abortSignal:()=>response});}};
   const inputs=[];const count=()=>sql('SELECT count(*) FROM research_article_input_revisions_v2;SELECT count(*) FROM stocks;SELECT count(*) FROM research_model_completions_v1;');
   const read=r=>JSON.parse(sql(`SET ROLE service_role;SELECT read_research_article_input_revision_v2(${q(JSON.stringify(r))});`));

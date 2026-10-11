@@ -425,3 +425,36 @@ test('DP18 registry over the fixed row bound accounts all candidates as missing 
   assert.equal(reads,0);assert.equal(result.accountedCount,1);
   assert.ok(result.contexts.get('2409')!.missing.includes('first_discovery_registry_read_bound'));
 });
+
+
+test('DP27 future microsecond quotes and sub-storage clocks never enter a discovery snapshot',()=>{
+  const at=`${session}T06:00:00.000001Z`;
+  for(const availableAt of [`${session}T06:00:00.000002Z`,`${session}T06:00:00.0000011Z`]) {
+    const read=fixture();read.quote!.availableAt=availableAt;read.window=null;
+    const result=evaluateDiscoveryPrice(read,at);
+    assert.equal(result.quote,null);assert.equal(result.rankingInfluence,false);
+    assert.equal(result.pricePhase,'unknown');
+  }
+  const read=fixture();read.quote!.availableAt=`${session}T14:00:00.000001+08:00`;read.window=null;
+  assert.equal(evaluateDiscoveryPrice(read,at).quote?.availableAt,read.quote!.availableAt);
+});
+test('DP28 a later current-run quote is not reused for an older first-seen microsecond',async()=>{
+  const firstAt=`${session}T06:00:00.000001Z`, currentAt=`${session}T06:00:00.000002Z`;
+  const reads:string[]=[];
+  const result=await loadDiscoveryPriceEnrichment(mockClient().client,[{...candidate(),firstSeenAt:firstAt}],currentAt,
+    {currentRun:{serverClock:currentAt,prioritySymbols:['2409']},reader:async(_client,_candidate,at)=>{
+      reads.push(at);const read=fixture();read.quote!.availableAt=at;read.window=null;return read;
+    }});
+  assert.deepEqual(reads,[currentAt,firstAt]);
+  assert.equal(result.contexts.get('2409')!.quote?.availableAt,firstAt);
+  assert.equal(result.contexts.get('2409')!.rankingInfluence,false);
+});
+test('DP29 evidence window microsecond inversion cannot produce relative returns or phase',()=>{
+  const read=fixture();read.window!.validation!.recordedAt=`${session}T06:30:00.000001Z`;
+  read.window!.stock[60].availableAt=`${session}T06:30:00.000002Z`;
+  const hash=discoveryWindowDatasetHash(read.window!);
+  read.window!.validation!.datasetHash=hash;read.window!.phase!.datasetHash=hash;
+  const result=evaluateDiscoveryPrice(read,cutoff);
+  assert.equal(result.relative60d,null);assert.equal(result.pricePhase,'unknown');
+  assert.ok(result.missing.includes('price_session_or_validation_clock_invalid'));
+});

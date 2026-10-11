@@ -1,3 +1,4 @@
+import { sourceEvidenceInstant, sourceEvidenceClockValid } from './research-source-clock.ts';
 import { researchCanonicalHash } from './research-agent-qualification.ts';
 
 export const DISCOVERY_EVIDENCE_POLICY = 'early-discovery-shadow-v1' as const;
@@ -21,6 +22,14 @@ export function discoveryInstant(value: unknown): value is string {
   return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/u.test(value)
     && discoverySession(value.slice(0, 10)) && Number.isFinite(Date.parse(value));
 }
+/** Compare persistent clocks at PostgreSQL microsecond precision. Invalid clocks
+ * are never equal or ordered; callers retain their explicit availability checks. */
+export function discoveryClockOrder(a: unknown, b: unknown): number {
+  try {
+    const left = sourceEvidenceInstant(a); const right = sourceEvidenceInstant(b);
+    return left < right ? -1 : left > right ? 1 : 0;
+  } catch { return NaN; }
+}
 export function discoveryTaipeiDate(value: string) {
   if (!discoveryInstant(value)) throw new Error('discovery_cutoff_invalid');
   return new Date(Date.parse(value) + 8 * 3600_000).toISOString().slice(0, 10);
@@ -29,12 +38,11 @@ export function discoveryTaipeiDate(value: string) {
 /** Returns require aligned, complete windows; unknown prices are never "early". */
 export function discoveryRelativeReturns(stock: DiscoveryPriceBar[], benchmark: DiscoveryPriceBar[], asOf: string,
   options: { requireComplete61?: boolean } = {}) {
-  const cutoff = Date.parse(asOf);
-  if (!discoveryInstant(asOf)) throw new Error('discovery_cutoff_invalid');
+  if (!sourceEvidenceClockValid(asOf)) throw new Error('discovery_cutoff_invalid');
   const select = (bars: DiscoveryPriceBar[]) => {
     if (bars.length > 1320 || bars.some((bar, i) => !discoverySession(bar.session)
-      || !Number.isFinite(bar.close) || bar.close <= 0 || !discoveryInstant(bar.availableAt)
-      || Date.parse(bar.availableAt) > cutoff || bar.session > discoveryTaipeiDate(asOf)
+      || !Number.isFinite(bar.close) || bar.close <= 0 || !sourceEvidenceClockValid(bar.availableAt)
+      || discoveryClockOrder(bar.availableAt, asOf) > 0 || bar.session > discoveryTaipeiDate(asOf)
       || discoveryTaipeiDate(bar.availableAt) < bar.session
       || (i > 0 && bar.session <= bars[i - 1].session))) throw new Error('discovery_price_invalid');
     return bars.slice(-61);
@@ -79,8 +87,8 @@ export function validateDiscoveryFactors(factors: DiscoveryFactor[], asOf: strin
       || row.explanation.trim().length < 4 || row.explanation.length > 800
       || row.documentIds.length > 100 || row.rootIds.length > 100
       || row.status === 'available' && (!row.documentIds.length || !row.rootIds.length || !row.availableAt)
-      || row.availableAt !== null && (!Number.isFinite(Date.parse(row.availableAt))
-        || Date.parse(row.availableAt) > Date.parse(asOf)))) throw new Error('discovery_factor_evidence_invalid');
+      || row.availableAt !== null && (!sourceEvidenceClockValid(row.availableAt)
+        || !(discoveryClockOrder(row.availableAt, asOf) <= 0)))) throw new Error('discovery_factor_evidence_invalid');
   return researchCanonicalHash({ policy: DISCOVERY_EVIDENCE_POLICY, factors, asOf });
 }
 
@@ -93,8 +101,8 @@ export function validateDiscoverySourceBindings(factors: DiscoveryFactor[], sour
     const selected = factor.documentIds.map((id) => byId.get(id));
     if (selected.some((source) => !source || !factor.rootIds.includes(source.rootId))
       || factor.rootIds.some((id) => !selected.some((source) => source?.rootId === id))
-      || selected.some((source) => !Number.isFinite(Date.parse(source!.availableAt))
-        || !factor.availableAt || Date.parse(factor.availableAt) < Date.parse(source!.availableAt)
+      || selected.some((source) => !sourceEvidenceClockValid(source!.availableAt)
+        || !factor.availableAt || !(discoveryClockOrder(factor.availableAt, source!.availableAt) >= 0)
         || factor.status === 'available' && !source!.usable)) {
       throw new Error('research_priority_factor_source_binding_invalid');
     }

@@ -298,6 +298,14 @@
     [
       "migrations/20261011_research_insider_isolation_v1.sql",
       "29e6c343ec3846db4193f42718adea6a069af943642fced77650c749ecbfe1ce"
+    ],
+    [
+      "migrations/20261011_research_complete_mapping_precision_v2.sql",
+      "51179015df4257c68f96c52974710abaf969254fd00949bd289a0ea550ec33bf"
+    ],
+    [
+      "migrations/20261011_research_thesis_isolation_v1.sql",
+      "01aeb449de913b424b6711d0689b05979bca15164891a728f1c3c1bf6f051718"
     ]
   ],
   "stages": {
@@ -5627,7 +5635,7 @@
           {
             "name": "fence_candidate_thesis_append_v1",
             "signature": "fence_candidate_thesis_append_v1()",
-            "sha256": "dcb3b2b9bcb79878f871e3d43c252bffe3c89bc456e0a68179123b79ff689261"
+            "sha256": "956eadba26c57ae17d684c9d7b44689a9fbda286bf9c3e2d353f7ef847144580"
           },
           {
             "name": "fence_observed_model_completion_v2",
@@ -6037,7 +6045,7 @@
           {
             "name": "research_complete_mapping_v2",
             "signature": "research_complete_mapping_v2(text)",
-            "sha256": "9837403c5714cd15cf9a3ca304229029203ac4360399d7d85adabd7c098d93db"
+            "sha256": "2d2fa1c5845393394abce4ffff1c1cc08e5068d5b6016a71cd55b1e8e7772200"
           },
           {
             "name": "research_complete_parent_v2",

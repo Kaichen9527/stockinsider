@@ -44,6 +44,8 @@ test('research schema extends the same attested operator plan and cannot use a s
     'migrations/20261010_research_publication_view_v2.sql',
     'migrations/20261011_research_admission_isolation_v1.sql',
     'migrations/20261011_research_insider_isolation_v1.sql',
+  'migrations/20261011_research_complete_mapping_precision_v2.sql',
+  'migrations/20261011_research_thesis_isolation_v1.sql',
   ]);
   assert.equal(fs.existsSync(path.join(root, 'scripts/apply-research-agent-migrations.mjs')), false);
   assert.match(reviewed, /resolveReviewedRuntimeRelease/u);
