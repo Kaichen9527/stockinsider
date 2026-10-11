@@ -1,0 +1,85 @@
+{
+  "schema": "stockinsider-installer-verification-continuation-v1",
+  "recordedAt": "2026-10-11T06:55:20.240725+00:00",
+  "codeCommit": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "codeTree": "548ec17b1d8801ecb7f2e4c5635199aacd9989b2",
+  "codePR": 361,
+  "evidenceBranch": "codex/research-installer-verification-oct11",
+  "sourceChanged": false,
+  "scopedIndependentReview": {
+    "reviewer": "existing delegated /root/author_input_review_oct08",
+    "scope": "bc01c006..1a0043f installer increment",
+    "unsigned": true,
+    "verdict": "CODE PASS",
+    "remainingP1P2": 0,
+    "independentTests": 22,
+    "pass": 22,
+    "skip": 0
+  },
+  "productCorrectness": {
+    "command": "npm run test:source-led-opportunity-v3:product-correctness",
+    "exitCode": 0,
+    "tests": 155,
+    "pass": 155,
+    "fail": 0,
+    "skip": 0,
+    "acceptanceIdsObserved": 31,
+    "platform": "darwin",
+    "protectedApproval": false
+  },
+  "lint": {
+    "exitCode": 0,
+    "errors": 0,
+    "existingWarnings": 33
+  },
+  "protectedRun": {
+    "id": 38119168980,
+    "result": "FAIL",
+    "firstFailure": "missing exact-review evidence ref for1a0043f",
+    "rerunRequested": false,
+    "codeGateTracks": "SKIPPED; not PASS"
+  },
+  "cloud": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "hostId": "durable",
+    "turnId": "01a129b7-5915-71a8-ac8c-885529751f77",
+    "state": "active",
+    "sourceCommit": "1a0043f2656b63d54062224d1befeab761f554a3",
+    "job": "eight-file native full existing-schema chain; types/lint/build only if PASS and admitted"
+  },
+  "rawFiles": [
+    {
+      "file": ".agent/reports/2026-10-11T06-54-installer-verification-raw/independent-review.json",
+      "bytes": 2273,
+      "sha256": "141a78244413cee3bc2d85c4244efee31d2c9e1f084418a46d8ddb7c0ae728be"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-54-installer-verification-raw/independent-regression.tap",
+      "bytes": 5520,
+      "sha256": "baafb10556580629615dacdb7c443a0c5a8bb773ea31f3c42ec8c494686355d8"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-54-installer-verification-raw/pcr-execution-observations.json",
+      "bytes": 22771,
+      "sha256": "1925b9addb5caae5ab270b932fb73e00dcd2d274361701c5fb3dbf0e51dffead"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-54-installer-verification-raw/product-correctness.tap",
+      "bytes": 40200,
+      "sha256": "c3b5e49b2135ec7e3f9b55208854349fa1240e9c66dc7415ed3ac6e22d70b608"
+    },
+    {
+      "file": ".agent/reports/2026-10-11T06-54-installer-verification-raw/protected-failure.log",
+      "bytes": 35202,
+      "sha256": "a73f1a1560c022b7c653ccd5317e89948898476313899a1bf0100b4d51b49752"
+    }
+  ],
+  "pending": [
+    "Full independent main-to-final review / owner-caller dependencies",
+    "Linux full-chain exact source results",
+    "Trusted native runner recovery via legitimate owner authority",
+    "Protected checks then merge commit and production migration/deploy"
+  ],
+  "productionChanged": false,
+  "scheduleEnabled": false
+}

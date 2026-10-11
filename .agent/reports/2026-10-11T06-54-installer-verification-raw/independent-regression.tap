@@ -1,0 +1,144 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 2.032708
+  type: 'test'
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 114.132459
+  type: 'test'
+  ...
+# Subtest: whole-file protective exceptions keep lexical blockers and the approved base chain
+ok 3 - whole-file protective exceptions keep lexical blockers and the approved base chain
+  ---
+  duration_ms: 146.623875
+  type: 'test'
+  ...
+# Subtest: unknown destructive SQL, including comments and function bodies, still fails closed
+ok 4 - unknown destructive SQL, including comments and function bodies, still fails closed
+  ---
+  duration_ms: 0.142
+  type: 'test'
+  ...
+# Subtest: installed successors reject base replay and omitted extensions before any mutation
+ok 5 - installed successors reject base replay and omitted extensions before any mutation
+  ---
+  duration_ms: 2.730916
+  type: 'test'
+  ...
+# Subtest: an unextended base remains installable but unknown detection cannot authorize replay
+ok 6 - an unextended base remains installable but unknown detection cannot authorize replay
+  ---
+  duration_ms: 0.303958
+  type: 'test'
+  ...
+# Subtest: complete reviewed existing-schema installation is atomic and verifies actual PostgreSQL postconditions
+    # Subtest: missing prerequisites, composite attributes and reachable role changes reject before mutation
+    ok 1 - missing prerequisites, composite attributes and reachable role changes reject before mutation
+      ---
+      duration_ms: 439.029709
+      type: 'test'
+      ...
+    # Subtest: full chain and semantic mutations are verified before rollback
+    ok 2 - full chain and semantic mutations are verified before rollback
+      ---
+      duration_ms: 1376.883292
+      type: 'test'
+      ...
+    # Subtest: disconnect rolls back every schema/role/function change
+    ok 3 - disconnect rolls back every schema/role/function change
+      ---
+      duration_ms: 610.678083
+      type: 'test'
+      ...
+    # Subtest: two full clients serialize; committed installation prevents second replay
+    ok 4 - two full clients serialize; committed installation prevents second replay
+      ---
+      duration_ms: 638.002542
+      type: 'test'
+      ...
+    1..4
+ok 7 - complete reviewed existing-schema installation is atomic and verifies actual PostgreSQL postconditions
+  ---
+  duration_ms: 5152.704125
+  type: 'test'
+  ...
+# Subtest: first-install detection covers every residue before either base or extension can mutate
+    # Subtest: empty initial namespace passes; all fixed table/function/role/column/trigger residues reject
+    ok 1 - empty initial namespace passes; all fixed table/function/role/column/trigger residues reject
+      ---
+      duration_ms: 311.553
+      type: 'test'
+      ...
+    # Subtest: two real installers serialize then reject committed residue before replay
+    ok 2 - two real installers serialize then reject committed residue before replay
+      ---
+      duration_ms: 15.797125
+      type: 'test'
+      ...
+    # Subtest: unknown detection fails closed and installed check precedes all mutation
+    ok 3 - unknown detection fails closed and installed check precedes all mutation
+      ---
+      duration_ms: 0.254625
+      type: 'test'
+      ...
+    1..3
+ok 8 - first-install detection covers every residue before either base or extension can mutate
+  ---
+  duration_ms: 1631.206958
+  type: 'test'
+  ...
+# Subtest: VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+ok 9 - VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+  ---
+  duration_ms: 2.500875
+  type: 'test'
+  ...
+# Subtest: VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+ok 10 - VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+  ---
+  duration_ms: 4.3055
+  type: 'test'
+  ...
+# Subtest: actual pg authentication handlers never consult pgpass or transmit credentials
+ok 11 - actual pg authentication handlers never consult pgpass or transmit credentials
+  ---
+  duration_ms: 10.499417
+  type: 'test'
+  ...
+# Subtest: native PostgreSQL distinguishes a reject file on disk from effective loaded HBA
+ok 12 - native PostgreSQL distinguishes a reject file on disk from effective loaded HBA
+  ---
+  duration_ms: 1315.680583
+  type: 'test'
+  ...
+# Subtest: research schema extends the same attested operator plan and cannot use a separate raw runner
+ok 13 - research schema extends the same attested operator plan and cannot use a separate raw runner
+  ---
+  duration_ms: 4.588375
+  type: 'test'
+  ...
+# Subtest: base chain stays fixed and explicit extension authority never replaces reviewed apply
+ok 14 - base chain stays fixed and explicit extension authority never replaces reviewed apply
+  ---
+  duration_ms: 257.114875
+  type: 'test'
+  ...
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+ok 15 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 2071.985084
+  type: 'test'
+  ...
+1..15
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5347.293625
