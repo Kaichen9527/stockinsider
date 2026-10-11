@@ -41,7 +41,9 @@ test('cross-role budget, revision heads and first-discovery gaps survive real Po
           LANGUAGE sql AS $$ SELECT NULL::uuid,NULL::uuid,'rejected'::text,'[]'::jsonb,false $$;`);
       for (const name of ['20260907_candidate_dossier_outbox_v5.sql',
         '20260929_candidate_dossier_outbox_v6.sql',
-        '20260929_research_agent_state_v1.sql', '20260929_research_deep_jobs_v1.sql']) {
+        '20260929_research_agent_state_v1.sql', '20260929_research_deep_jobs_v1.sql',
+        '20261008_research_observed_roster_v1.sql', '20261008_research_observed_priority_v1.sql',
+        '20261008_research_observed_claim_v2.sql', '20261011_research_admission_isolation_v1.sql']) {
         run('psql', ['-X', '-v', 'ON_ERROR_STOP=1', '-h', temporary, '-p', String(port), '-d', 'postgres',
           '-f', path.join(root, 'migrations', name)]);
       }
