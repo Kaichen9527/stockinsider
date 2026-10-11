@@ -1,0 +1,1 @@
+SET statement_timeout='5s';INSERT INTO opportunity_corporate_action_events_v3(snapshot_id,event_ordinal,symbol,event_kind,pre_action_reference_price,post_action_reference_price,feed_identity,source_row_ref) VALUES('33333333-3333-4333-8333-333333333333',105,'006208','ex_right_dividend',100,95,'synthetic-feed','synthetic-row-5');

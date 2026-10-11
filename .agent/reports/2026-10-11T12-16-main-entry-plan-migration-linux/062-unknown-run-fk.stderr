@@ -1,0 +1,6 @@
+ERROR:  23503: insert or update on table "entry_plan_authority_jobs_v1" violates foreign key constraint "entry_plan_authority_jobs_v1_run_id_fkey"
+DETAIL:  Key (run_id)=(99999999-9999-4999-8999-999999999999) is not present in table "entry_plan_authority_runs_v1".
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_run_id_fkey
+LOCATION:  ri_ReportViolation, ri_triggers.c:2599

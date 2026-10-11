@@ -1,0 +1,1 @@
+SET statement_timeout='5s';SET ROLE service_role;INSERT INTO entry_plan_authority_jobs_v1(run_id,job_key,kind,exchange,symbol,month,sessions) VALUES('11111111-1111-4111-8111-111111111111','negative-price-key','unknown','TWSE','2330','2026-10','[]');

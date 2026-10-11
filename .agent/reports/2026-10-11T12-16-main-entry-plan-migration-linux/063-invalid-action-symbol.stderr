@@ -1,0 +1,6 @@
+ERROR:  23514: new row for relation "opportunity_corporate_action_events_v3" violates check constraint "opportunity_corporate_action_events_v3_symbol_check"
+DETAIL:  Failing row contains (33333333-3333-4333-8333-333333333333, 162, 1, ex_right_dividend, 100, 95, synthetic-feed, synthetic-row-62, 0.95, 2026-10-11 12:19:45.869063+00).
+SCHEMA NAME:  public
+TABLE NAME:  opportunity_corporate_action_events_v3
+CONSTRAINT NAME:  opportunity_corporate_action_events_v3_symbol_check
+LOCATION:  ExecConstraints, execMain.c:2074

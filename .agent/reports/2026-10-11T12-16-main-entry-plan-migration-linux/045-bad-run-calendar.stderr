@@ -1,0 +1,6 @@
+ERROR:  23514: new row for relation "entry_plan_authority_runs_v1" violates check constraint "entry_plan_authority_runs_v1_calendar_check"
+DETAIL:  Failing row contains (44444444-4444-4444-8444-444444444444, 2026-10-10 05:30:00+00, 2026-10-10, [], aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, [], [], bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, null, initializing, 2026-10-11 12:19:45.699108+00, 2026-10-11 12:19:45.699108+00, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_runs_v1
+CONSTRAINT NAME:  entry_plan_authority_runs_v1_calendar_check
+LOCATION:  ExecConstraints, execMain.c:2074

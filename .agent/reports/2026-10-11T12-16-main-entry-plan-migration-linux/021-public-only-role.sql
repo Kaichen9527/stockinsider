@@ -1,0 +1,1 @@
+SET statement_timeout='5s';CREATE ROLE public_only_probe NOLOGIN;

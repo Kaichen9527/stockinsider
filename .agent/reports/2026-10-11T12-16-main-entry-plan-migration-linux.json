@@ -1,0 +1,1253 @@
+{
+  "schema": "main_entry_plan_official_action_migration_linux_v1",
+  "source": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "sourceTree": "fb62be71161857affbaa8ea8ed7f4d7921a4b3c9",
+  "branch": "codex/main-entry-plan-migration-linux-oct11",
+  "completedAt": "2026-10-11T12:21:02.379565+00:00",
+  "targetMigration": "migrations/20260924_entry_plan_official_action_symbols.sql",
+  "sourceInputs": {
+    "source": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "tree": "fb62be71161857affbaa8ea8ed7f4d7921a4b3c9",
+    "inputs": [
+      {
+        "path": "scripts/opportunity-v3/migration-contract.test.mjs",
+        "bytes": 504668,
+        "sha256": "063e0771311048d973896efcb7176f51e071e4514dc926e8f673ce37fcd8f30a"
+      },
+      {
+        "path": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+        "bytes": 1023746,
+        "sha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7"
+      },
+      {
+        "path": "migrations/20260924_entry_plan_official_action_symbols.sql",
+        "bytes": 3738,
+        "sha256": "cc82ac701bb1ac4db4e2fa8880ac77fa9d90e71ca5925e02ca088dd3d3070968"
+      }
+    ],
+    "fixtureStartLine": 771,
+    "fixtureSha256": "31df812ffe1df072ef31f99bd600fab1bc62ca5729fafb6a665a3679bb759817",
+    "fixtureAttribution": "Verbatim original canonical test focused legacy prerequisite SQL, not full production schema or data."
+  },
+  "installation": {
+    "verbatimCanonicalFixtureExtracted": true,
+    "baseMigrationAppliedUnchanged": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+    "baseAppliedAs": "stockinsider_managed_migrator",
+    "targetAppliedAs": "stockinsider_managed_migrator",
+    "targetApplications": 2,
+    "noNewPackagesOrFrameworks": true,
+    "fixtureSynthetic": true,
+    "fullProductionSchemaProfile": false
+  },
+  "result": {
+    "status": "PASS",
+    "assertedCheckGroups": 9,
+    "checks": [
+      "Original constraint rejects 006208 before migration",
+      "Both new tables exist with RLS enabled",
+      "service_role actual SELECT/INSERT/UPDATE on both tables",
+      "Actual event rows accept 2..12 ASCII digits/letters, ETF and ordinary symbols",
+      "Second exact migration preserves catalog, rows and clocks",
+      "PUBLIC-only, anon, authenticated actual SELECT/INSERT/UPDATE denied on both tables",
+      "service_role receives no DELETE",
+      "Invalid shape/hash/status/symbol/month/count/kind/FK writes reject with zero row/clock changes",
+      "Global single-running partial unique index rejects second job without changes"
+    ],
+    "expectedRejectedQueries": 49,
+    "commandCountIncludingCleanup": 74,
+    "newNodeTestSuiteNotClaimed": true,
+    "publicOnlyRoleTestsInheritedPublicGrants": true,
+    "catalogAndFullRowBytesUnchangedOnSecondMigration": true,
+    "failedWritesPreserveState": true
+  },
+  "probe": {
+    "stage": "migration-probe",
+    "command": [
+      "node",
+      "/tmp/si-main-action-i5jiwvvg/probe.mjs"
+    ],
+    "startedAt": "2026-10-11T12:19:44.322883+00:00",
+    "endedAt": "2026-10-11T12:19:46.174803+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 1.8519264940405264,
+    "sampledAggregatePeakRssBytes": 85213184,
+    "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "diskAvailableBeforeBytes": 10109128704,
+    "diskAvailableAfterBytes": 10109128704,
+    "guardTermination": null,
+    "remainingObservedChildren": [],
+    "inheritedProxyAndCA": true,
+    "credentialValuesCopied": false
+  },
+  "versions": {
+    "node": "v22.14.0",
+    "pg17": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "user": "OS-derived agent",
+    "proxyCA": "inherited without values printed"
+  },
+  "cleanup": {
+    "at": "2026-10-11T12:21:02.353936+00:00",
+    "activeNodeOrPg": [],
+    "ownedPgStopped": true,
+    "ownedPgDataRemoved": true,
+    "rawLogsRetained": true,
+    "workspaceFreeBytes": 10109128704,
+    "tmpFreeBytes": 17063772160
+  },
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/001-initdb.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/001-initdb.stdout",
+      "bytes": 886,
+      "sha256": "44aa9474d7df6d88991439ea62ab4691ef8c8a76f43c696cc888e702ee8bdb7c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/002-start.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/002-start.stdout",
+      "bytes": 52,
+      "sha256": "66afd0411ccc09366e99fdd99b85f21899c8d2d064f5835126859618802153ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/003-original-fixture.sql",
+      "bytes": 3145,
+      "sha256": "634293381c55a025b111cf7e64f09c2dabc018b73a859864bd2a20a131da9796"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/003-original-fixture.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/003-original-fixture.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/004-base-migration.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/004-base-migration.stdout",
+      "bytes": 3554,
+      "sha256": "23d890d9ef149d97f90494b9b9d0b25c2b9b13d1b3b56fe62bca2800c2c26d3d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/005-synthetic-event-prerequisite.sql",
+      "bytes": 796,
+      "sha256": "068ec35fcfe8c70a53e08a99e4321245d1e393ad3d8b1905e96ace971ff522a0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/005-synthetic-event-prerequisite.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/005-synthetic-event-prerequisite.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/006-original-four-digit-rejects-etf.sql",
+      "bytes": 329,
+      "sha256": "4ec5331478ce4b817da2a4b26cbf99aa3fe8e4cbbe711830441e4ff75c050f2f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/006-original-four-digit-rejects-etf.stderr",
+      "bytes": 525,
+      "sha256": "13504256726b590d2f0fc291ac25609dbfc69343002124a295f66eba97dc5329"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/006-original-four-digit-rejects-etf.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/007-target-first.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/007-target-first.stdout",
+      "bytes": 126,
+      "sha256": "f398fd92f3d00322ced0920f640cc0a7f6805bc4c14cf67564a51cd2126efc77"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/008-catalog.sql",
+      "bytes": 757,
+      "sha256": "a760a850a2edddafae6d55fa6364c42a3db198d93648b39f155c5afad41033f3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/008-catalog.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/008-catalog.stdout",
+      "bytes": 4936,
+      "sha256": "42629af3a1f534d1a4f0c5cb70b6a3d8410970ca34e0985fe93d552ced1c6060"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/009-service-insert.sql",
+      "bytes": 622,
+      "sha256": "1056df4a8e74170bde046496b2b65fb7df43e08f217f540d17bf6b2cce9c7035"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/009-service-insert.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/009-service-insert.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/010-service-update-select.sql",
+      "bytes": 584,
+      "sha256": "e081c6c6b881812cc746ad85a6e3d581cf13d2266869bbb3e77cdba1774ca2ea"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/010-service-update-select.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/010-service-update-select.stdout",
+      "bytes": 50,
+      "sha256": "ce74d8cb97b8e76605373c2a6451364246698b3947561b6297b7ebf06d1fdc9e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/011-expanded-symbol-42.sql",
+      "bytes": 326,
+      "sha256": "6d4ae6760bed65414208054812cc2721f432a0e7bf862734a88bf9eb04cd1bbd"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/011-expanded-symbol-42.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/011-expanded-symbol-42.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/012-expanded-symbol-2330.sql",
+      "bytes": 328,
+      "sha256": "ae301ab40fba4d0e3d8681165bc65f9531a0517ddd31b637c607e54791941e53"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/012-expanded-symbol-2330.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/012-expanded-symbol-2330.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/013-expanded-symbol-006208.sql",
+      "bytes": 330,
+      "sha256": "08727997b5fa20807ee80fd83cf22ea46b5571eae6a79c432556fcf8fe1ea866"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/013-expanded-symbol-006208.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/013-expanded-symbol-006208.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/014-expanded-symbol-Ab12.sql",
+      "bytes": 328,
+      "sha256": "a73a70c9ae1a7c616dfef2d5332d6a6f98a78c5e040a026d157cc367ccb44ce5"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/014-expanded-symbol-Ab12.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/014-expanded-symbol-Ab12.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/015-expanded-symbol-Ab1234567890.sql",
+      "bytes": 336,
+      "sha256": "7caab20ef0b8529488e6e68cd614471fb1bf983619ca01a05c5b4ad2bce4471c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/015-expanded-symbol-Ab1234567890.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/015-expanded-symbol-Ab1234567890.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/016-state.sql",
+      "bytes": 432,
+      "sha256": "f2635e7c41570e584b1c78900d748084cb59bd70e842b3405381b7c856da8806"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/016-state.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/016-state.stdout",
+      "bytes": 2761,
+      "sha256": "450e6ffaaa8a4cdb0eb4be929b1247430e5eedd82c417f0b97e00b790d819b9e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/017-target-second.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/017-target-second.stdout",
+      "bytes": 126,
+      "sha256": "f398fd92f3d00322ced0920f640cc0a7f6805bc4c14cf67564a51cd2126efc77"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/018-catalog.sql",
+      "bytes": 757,
+      "sha256": "a760a850a2edddafae6d55fa6364c42a3db198d93648b39f155c5afad41033f3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/018-catalog.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/018-catalog.stdout",
+      "bytes": 4936,
+      "sha256": "42629af3a1f534d1a4f0c5cb70b6a3d8410970ca34e0985fe93d552ced1c6060"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/019-state.sql",
+      "bytes": 432,
+      "sha256": "f2635e7c41570e584b1c78900d748084cb59bd70e842b3405381b7c856da8806"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/019-state.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/019-state.stdout",
+      "bytes": 2761,
+      "sha256": "450e6ffaaa8a4cdb0eb4be929b1247430e5eedd82c417f0b97e00b790d819b9e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/020-acl.sql",
+      "bytes": 908,
+      "sha256": "bfc04ab2c29117eeba79c1e8c4474f46df016a52d712cabb13a03da86aa1c081"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/020-acl.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/020-acl.stdout",
+      "bytes": 97,
+      "sha256": "921b47530f243d5a7f1794354f7a6adf5bffc5a3f486926a3e5392893c8829b5"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/021-public-only-role.sql",
+      "bytes": 65,
+      "sha256": "d7b28f6ad8a7fafb7a16b0171846d42bca8452c3cfbbe64b2a696e03851c4435"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/021-public-only-role.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/021-public-only-role.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/022-deny-public_only_probe-entry_plan_authority_runs_v1.sql",
+      "bytes": 97,
+      "sha256": "7e396f207cf93e046206bffa629a35d3b881ee7f32a71b363d7b2b0355b9b6f4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/022-deny-public_only_probe-entry_plan_authority_runs_v1.stderr",
+      "bytes": 113,
+      "sha256": "eb757d85189044cb36e0d5b937f211cf8ee90dc03c5860b0cf4e774ee1a3e616"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/022-deny-public_only_probe-entry_plan_authority_runs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/023-deny-public_only_probe-entry_plan_authority_runs_v1.sql",
+      "bytes": 110,
+      "sha256": "c87f1f9e69a7fbb0695fdebfaf18ef9a8d00668adad1e53076b0b5cb2d4097eb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/023-deny-public_only_probe-entry_plan_authority_runs_v1.stderr",
+      "bytes": 113,
+      "sha256": "eb757d85189044cb36e0d5b937f211cf8ee90dc03c5860b0cf4e774ee1a3e616"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/023-deny-public_only_probe-entry_plan_authority_runs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/024-deny-public_only_probe-entry_plan_authority_runs_v1.sql",
+      "bytes": 423,
+      "sha256": "b4faf3c383488a6cf5f8fe62413ce089052cb6a7a91d317e1e08ed55180d5dd4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/024-deny-public_only_probe-entry_plan_authority_runs_v1.stderr",
+      "bytes": 113,
+      "sha256": "eb757d85189044cb36e0d5b937f211cf8ee90dc03c5860b0cf4e774ee1a3e616"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/024-deny-public_only_probe-entry_plan_authority_runs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/025-deny-public_only_probe-entry_plan_authority_jobs_v1.sql",
+      "bytes": 97,
+      "sha256": "ce3ab774c59c312ab720746a933fe3e8f103ccc375a750224066d620266688ce"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/025-deny-public_only_probe-entry_plan_authority_jobs_v1.stderr",
+      "bytes": 113,
+      "sha256": "40b0a96ac43f1f3b593e2d7b31a61ac9e075e57565972900d910bde6169de99d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/025-deny-public_only_probe-entry_plan_authority_jobs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/026-deny-public_only_probe-entry_plan_authority_jobs_v1.sql",
+      "bytes": 110,
+      "sha256": "c9da4300b12ad19ffef2def6206f3cfea070ffa1396a342a6018226acf903cc5"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/026-deny-public_only_probe-entry_plan_authority_jobs_v1.stderr",
+      "bytes": 113,
+      "sha256": "40b0a96ac43f1f3b593e2d7b31a61ac9e075e57565972900d910bde6169de99d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/026-deny-public_only_probe-entry_plan_authority_jobs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/027-deny-public_only_probe-entry_plan_authority_jobs_v1.sql",
+      "bytes": 249,
+      "sha256": "de069ba5985df641fc5f9956249c4132ff9c27c514b42f0fbd07d92592fcf6bf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/027-deny-public_only_probe-entry_plan_authority_jobs_v1.stderr",
+      "bytes": 113,
+      "sha256": "40b0a96ac43f1f3b593e2d7b31a61ac9e075e57565972900d910bde6169de99d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/027-deny-public_only_probe-entry_plan_authority_jobs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/028-deny-anon-entry_plan_authority_runs_v1.sql",
+      "bytes": 84,
+      "sha256": "a984af747f73b1b9f7d0d25b63d3d126eed752e7c97677ac3f1329ab40153c37"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/028-deny-anon-entry_plan_authority_runs_v1.stderr",
+      "bytes": 113,
+      "sha256": "eb757d85189044cb36e0d5b937f211cf8ee90dc03c5860b0cf4e774ee1a3e616"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/028-deny-anon-entry_plan_authority_runs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/029-deny-anon-entry_plan_authority_runs_v1.sql",
+      "bytes": 97,
+      "sha256": "57106f86171234a89ca76bc40797b1db6cf71c417d91c93052f10b927f82acab"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/029-deny-anon-entry_plan_authority_runs_v1.stderr",
+      "bytes": 113,
+      "sha256": "eb757d85189044cb36e0d5b937f211cf8ee90dc03c5860b0cf4e774ee1a3e616"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/029-deny-anon-entry_plan_authority_runs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/030-deny-anon-entry_plan_authority_runs_v1.sql",
+      "bytes": 410,
+      "sha256": "c5376c6aa125f05197027eed7ac20d1ceb7ec1194b6cb02269e2740dc2ae2f7b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/030-deny-anon-entry_plan_authority_runs_v1.stderr",
+      "bytes": 113,
+      "sha256": "eb757d85189044cb36e0d5b937f211cf8ee90dc03c5860b0cf4e774ee1a3e616"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/030-deny-anon-entry_plan_authority_runs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/031-deny-anon-entry_plan_authority_jobs_v1.sql",
+      "bytes": 84,
+      "sha256": "247cb5ee7120e78d97c1960f5da88d1075235a8df2978d5707c5195b5d84f98e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/031-deny-anon-entry_plan_authority_jobs_v1.stderr",
+      "bytes": 113,
+      "sha256": "40b0a96ac43f1f3b593e2d7b31a61ac9e075e57565972900d910bde6169de99d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/031-deny-anon-entry_plan_authority_jobs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/032-deny-anon-entry_plan_authority_jobs_v1.sql",
+      "bytes": 97,
+      "sha256": "a9336f7da9f92995261f99d158a58e7d568687ae0b8b1eeef6113f08e2a56334"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/032-deny-anon-entry_plan_authority_jobs_v1.stderr",
+      "bytes": 113,
+      "sha256": "40b0a96ac43f1f3b593e2d7b31a61ac9e075e57565972900d910bde6169de99d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/032-deny-anon-entry_plan_authority_jobs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/033-deny-anon-entry_plan_authority_jobs_v1.sql",
+      "bytes": 236,
+      "sha256": "c5a6570f8b22a4da5b5e17d08d14c687b91d79864012f17f35da72e24da87627"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/033-deny-anon-entry_plan_authority_jobs_v1.stderr",
+      "bytes": 113,
+      "sha256": "40b0a96ac43f1f3b593e2d7b31a61ac9e075e57565972900d910bde6169de99d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/033-deny-anon-entry_plan_authority_jobs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/034-deny-authenticated-entry_plan_authority_runs_v1.sql",
+      "bytes": 93,
+      "sha256": "fc0b6c04fd7a6f5b56285cd351fb0081835418acaae63e05ab62f09e63b38748"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/034-deny-authenticated-entry_plan_authority_runs_v1.stderr",
+      "bytes": 113,
+      "sha256": "eb757d85189044cb36e0d5b937f211cf8ee90dc03c5860b0cf4e774ee1a3e616"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/034-deny-authenticated-entry_plan_authority_runs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/035-deny-authenticated-entry_plan_authority_runs_v1.sql",
+      "bytes": 106,
+      "sha256": "1c09fa2b975db81603889e779a4cf12729de98c3be44d9315513a1f0235c390e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/035-deny-authenticated-entry_plan_authority_runs_v1.stderr",
+      "bytes": 113,
+      "sha256": "eb757d85189044cb36e0d5b937f211cf8ee90dc03c5860b0cf4e774ee1a3e616"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/035-deny-authenticated-entry_plan_authority_runs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/036-deny-authenticated-entry_plan_authority_runs_v1.sql",
+      "bytes": 419,
+      "sha256": "2a081f07d2fef7a70d227f668fc8dbf7ac54b16d79b3f5daf448a29fc8b3758d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/036-deny-authenticated-entry_plan_authority_runs_v1.stderr",
+      "bytes": 113,
+      "sha256": "eb757d85189044cb36e0d5b937f211cf8ee90dc03c5860b0cf4e774ee1a3e616"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/036-deny-authenticated-entry_plan_authority_runs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/037-deny-authenticated-entry_plan_authority_jobs_v1.sql",
+      "bytes": 93,
+      "sha256": "cdf5b13d5138bed039f3eb65e95d77f35d2391a27576cc04d1342804eecb4902"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/037-deny-authenticated-entry_plan_authority_jobs_v1.stderr",
+      "bytes": 113,
+      "sha256": "40b0a96ac43f1f3b593e2d7b31a61ac9e075e57565972900d910bde6169de99d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/037-deny-authenticated-entry_plan_authority_jobs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/038-deny-authenticated-entry_plan_authority_jobs_v1.sql",
+      "bytes": 106,
+      "sha256": "3d412a8ff0977baf45ad9f34f48f8afd04a6cca8670b37f8bd021cdca9460a4c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/038-deny-authenticated-entry_plan_authority_jobs_v1.stderr",
+      "bytes": 113,
+      "sha256": "40b0a96ac43f1f3b593e2d7b31a61ac9e075e57565972900d910bde6169de99d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/038-deny-authenticated-entry_plan_authority_jobs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/039-deny-authenticated-entry_plan_authority_jobs_v1.sql",
+      "bytes": 245,
+      "sha256": "a4480f9363390b59c635caa07d17cc363e60fd6ace8e4d20ee5f4c854f960cb3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/039-deny-authenticated-entry_plan_authority_jobs_v1.stderr",
+      "bytes": 113,
+      "sha256": "40b0a96ac43f1f3b593e2d7b31a61ac9e075e57565972900d910bde6169de99d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/039-deny-authenticated-entry_plan_authority_jobs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/040-service-no-delete-entry_plan_authority_runs_v1.sql",
+      "bytes": 90,
+      "sha256": "b0f124817bb69d9afbc0c117b60760fd7c71ac8189e888823056478375bd5c8d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/040-service-no-delete-entry_plan_authority_runs_v1.stderr",
+      "bytes": 113,
+      "sha256": "eb757d85189044cb36e0d5b937f211cf8ee90dc03c5860b0cf4e774ee1a3e616"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/040-service-no-delete-entry_plan_authority_runs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/041-service-no-delete-entry_plan_authority_jobs_v1.sql",
+      "bytes": 90,
+      "sha256": "3c79a984c1c1f4a149d467a9541d0955451fa9afa785caa3f9ecd0d5ddc82229"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/041-service-no-delete-entry_plan_authority_jobs_v1.stderr",
+      "bytes": 113,
+      "sha256": "40b0a96ac43f1f3b593e2d7b31a61ac9e075e57565972900d910bde6169de99d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/041-service-no-delete-entry_plan_authority_jobs_v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/042-bad-run-roster.sql",
+      "bytes": 418,
+      "sha256": "ed303a286242855485a54d4535cf7f78c8887c7fdc243237c9458894a641b9fb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/042-bad-run-roster.stderr",
+      "bytes": 642,
+      "sha256": "02556fc57771ea34a9118b39a4cca39109ef4af9547f34f98af397d830c13cb3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/042-bad-run-roster.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/043-bad-run-roster_hash.sql",
+      "bytes": 357,
+      "sha256": "19719cef92e5d84df6cf45319dca0dc50e4d0d2bfb32714a85d04eeb387967ec"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/043-bad-run-roster_hash.stderr",
+      "bytes": 589,
+      "sha256": "4fab085eda62a88be30e29040ba5cf8c64d339d03b55cc4fb12c7576b4475ba3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/043-bad-run-roster_hash.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/044-bad-run-excluded_symbols.sql",
+      "bytes": 418,
+      "sha256": "6deb61a3045eae2534e6bd30b9e31df546a806b3c59d4f976de3771d4edc9c76"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/044-bad-run-excluded_symbols.stderr",
+      "bytes": 662,
+      "sha256": "615d4b02f25a27c9cafa6eb95eacc8a71e280579873565a79c38d938bfe4fd26"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/044-bad-run-excluded_symbols.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/045-bad-run-calendar.sql",
+      "bytes": 418,
+      "sha256": "1d2a1c4005373711eaf3fff2efa2664f90f4c086e4cc6c13f9ef0aa9daf96193"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/045-bad-run-calendar.stderr",
+      "bytes": 646,
+      "sha256": "af380579efc452c1a9e12eca1bae1bebf5070f948f1eb641649aa25a7389b5fb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/045-bad-run-calendar.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/046-bad-run-calendar_hash.sql",
+      "bytes": 357,
+      "sha256": "b01f403cd89a80754b46076e0c1185364a168979485bb3fb1efabeee42f97558"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/046-bad-run-calendar_hash.stderr",
+      "bytes": 595,
+      "sha256": "217d65ce89022927786b9b98166dc14b659bb03ca29c21a4d529f2f0bfd971ee"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/046-bad-run-calendar_hash.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/047-bad-run-status.sql",
+      "bytes": 435,
+      "sha256": "194636daa5898bd9b41001bd76e8e2036a4cb4ba8a5c7023a1de3fec5e6a9e37"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/047-bad-run-status.stderr",
+      "bytes": 637,
+      "sha256": "a35e875c44449fb3ba75fcd3c42779c42ee86be8c4875041f2d893536fcef4f3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/047-bad-run-status.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/048-bad-job-job_key.sql",
+      "bytes": 236,
+      "sha256": "d3f41b611df2b6ff4194f67a9f69b54cf7d01f97645f2e32aad99a74825c7da3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/048-bad-job-job_key.stderr",
+      "bytes": 475,
+      "sha256": "1afc0036bdf4a6a4c88ac8f4c6102344861543f55257620b37393675f90f8e3b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/048-bad-job-job_key.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/049-bad-job-kind.sql",
+      "bytes": 249,
+      "sha256": "9a058709f03ffa15c1967d46a786969e6c3bb9d7203cae4a1b3f2a38fdc3c274"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/049-bad-job-kind.stderr",
+      "bytes": 472,
+      "sha256": "6938827051da1f1a38976a3fef59954132b8cac36166618529ef521f6b5f6f3e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/049-bad-job-kind.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/050-bad-job-exchange.sql",
+      "bytes": 254,
+      "sha256": "6d45dae7ed398c35093462dc92cb81b7084235a1c19764fe893ec7326a418dc5"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/050-bad-job-exchange.stderr",
+      "bytes": 495,
+      "sha256": "a44d713c29ce03e579f7bcc9a0b73227c08094816059b612538cd94ac78b4583"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/050-bad-job-exchange.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/051-bad-job-symbol.sql",
+      "bytes": 255,
+      "sha256": "587b66e6ac750b2881f475248ef4392b3d74a554c3af6219752aa657825d90cf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/051-bad-job-symbol.stderr",
+      "bytes": 492,
+      "sha256": "f493d87bd6b5fc865468a461717ff74437bd29b70fa91b3b474cf9b23eab0011"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/051-bad-job-symbol.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/052-bad-job-month.sql",
+      "bytes": 253,
+      "sha256": "4e8ea3631f4e650724b29e8e842b024171a1c7de67dcea42f3fcf84fa46e0589"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/052-bad-job-month.stderr",
+      "bytes": 488,
+      "sha256": "05859863128169910c6fc2236e4b6aefc144a2fda4ea6d91804efe05577222ee"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/052-bad-job-month.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/053-bad-job-sessions.sql",
+      "bytes": 253,
+      "sha256": "6195e267e27407eb18f3c3e7bd461d4bfdf3e79740d627eb24ee8b0b3167927a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/053-bad-job-sessions.stderr",
+      "bytes": 494,
+      "sha256": "c460fc1010be785e213258c12502eac92ef14c2889ca88c8f0fb2310468fb8ee"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/053-bad-job-sessions.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/054-bad-job-status.sql",
+      "bytes": 270,
+      "sha256": "2a4a2674a2de19dc076435b46748856d9fd217028bf2734935cf2e62553837b8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/054-bad-job-status.stderr",
+      "bytes": 490,
+      "sha256": "08a6049b81f46b9e826818f82848ff5a2d267ab856132ebafa57aaf351472ce0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/054-bad-job-status.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/055-bad-job-attempt_count.sql",
+      "bytes": 269,
+      "sha256": "6bb3cfaaf9708e4f11e23e857c285ff4b5f8878ee9eeb14d482ed8653dbea4b9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/055-bad-job-attempt_count.stderr",
+      "bytes": 504,
+      "sha256": "0b57f9b9c3f8bab3c95b7e4385f8d1049d6d17f7850bd2effabb58d07ee733d8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/055-bad-job-attempt_count.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/056-bad-job-evidence_hash.sql",
+      "bytes": 273,
+      "sha256": "989fcd807d71ce70313a61a2c459349593902ba9a35aa0a9edee4af56fef631b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/056-bad-job-evidence_hash.stderr",
+      "bytes": 503,
+      "sha256": "11c64b3f781faf2bc5198e28aa416ba7da5afd4a6e072d54fedb85900f246bf4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/056-bad-job-evidence_hash.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/057-bad-job-source_urls.sql",
+      "bytes": 270,
+      "sha256": "73a771149ee479ae1d25c950485c3643f15e7b93cd6308d7e57602bd3ab6ac50"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/057-bad-job-source_urls.stderr",
+      "bytes": 500,
+      "sha256": "ce713b09aed70e50afe07c4e79aea96339c09a9567aa19a1a9f03756ba995c07"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/057-bad-job-source_urls.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/058-bad-job-accepted_rows.sql",
+      "bytes": 270,
+      "sha256": "48ffb9e0a9312113e9f5c86656d090355bdc3787abef30c3c03bf6783ca6fa33"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/058-bad-job-accepted_rows.stderr",
+      "bytes": 505,
+      "sha256": "5b5e39b8b6f9cfd3d4354bde3e3c5d6de30bf908212daadc98bab5c48b30c999"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/058-bad-job-accepted_rows.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/059-bad-job-missing_rows.sql",
+      "bytes": 269,
+      "sha256": "77b655e8e621014037369cea851bb1c31e64d1d00232ce5a981977717482bdbe"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/059-bad-job-missing_rows.stderr",
+      "bytes": 503,
+      "sha256": "f9725aa86dbde5258b6c36ac312742c0781d30c4f0426cfb78d1500df314f909"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/059-bad-job-missing_rows.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/060-price-kind-null-symbol.sql",
+      "bytes": 250,
+      "sha256": "3a063f744f6062619eca3cbfd7991dd9f791565b23fbbb34d6d560f59b556037"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/060-price-kind-null-symbol.stderr",
+      "bytes": 475,
+      "sha256": "78e0b1e0d0443a01a2915ce64c10668bbfe94934801f426890c5e0715714701e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/060-price-kind-null-symbol.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/061-action-kind-with-symbol.sql",
+      "bytes": 253,
+      "sha256": "0d880dafe746678002e10f3a3451bc90257657e2c92cb5a64a1bc4f8389cca94"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/061-action-kind-with-symbol.stderr",
+      "bytes": 476,
+      "sha256": "e1805d6828abe4c4e31bfd532648a4905a3f13d4b6a20e147110c83242881b95"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/061-action-kind-with-symbol.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/062-unknown-run-fk.sql",
+      "bytes": 253,
+      "sha256": "7d3cefaa3e2ba4fd8f53014a8888c1d49dd62dc901d6430e48401cff0be5daf7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/062-unknown-run-fk.stderr",
+      "bytes": 436,
+      "sha256": "a5d7189d300b765f0ec3e9ee37db312c1674f860b412b9572a1e144222e657e2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/062-unknown-run-fk.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/063-invalid-action-symbol.sql",
+      "bytes": 325,
+      "sha256": "f6264542d90c2cb99324ea2869ea52005f497eeee4bed432d582fc1af614ddd2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/063-invalid-action-symbol.stderr",
+      "bytes": 521,
+      "sha256": "848328356795e3921408f28b42d30f2fed8c87548fa67b8c7a1bfc799f7d7800"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/063-invalid-action-symbol.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/064-invalid-action-symbol.sql",
+      "bytes": 337,
+      "sha256": "0234005ecf7a4f3802570bff5916eafe7e48a400a5667cb9c176ed0e51870d70"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/064-invalid-action-symbol.stderr",
+      "bytes": 533,
+      "sha256": "df157b43fe6ce6c8938437902f9552261f52592166de77da80ca4ea11cd16579"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/064-invalid-action-symbol.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/065-invalid-action-symbol.sql",
+      "bytes": 327,
+      "sha256": "d0e189bee8489781eb1e9dc0a45ddbf6421b40bec4e0ed391168d3b9e9e8b8dc"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/065-invalid-action-symbol.stderr",
+      "bytes": 522,
+      "sha256": "1531f7910b6529f6415d2ec68db35275b9eab7db8b879b11d06f2f53bbda6a97"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/065-invalid-action-symbol.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/066-invalid-action-symbol.sql",
+      "bytes": 330,
+      "sha256": "f6832ce8fd0f519e38023ef9950245cadbd77d7e9f0d7c570d7084b9f093e505"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/066-invalid-action-symbol.stderr",
+      "bytes": 526,
+      "sha256": "2426969423aab9f261dc864fc722599abd40fa0974e311d6450ede02b17b245a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/066-invalid-action-symbol.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/067-invalid-action-symbol.sql",
+      "bytes": 329,
+      "sha256": "80603984eaa6f9724bc33c73044c19150b1ec9c49af673d890d6315a017a0a1e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/067-invalid-action-symbol.stderr",
+      "bytes": 525,
+      "sha256": "8dd93cbd524cf8fcad25330c5602e569d8b29c87b7c9ddf4792bed8713dc3188"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/067-invalid-action-symbol.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/068-invalid-action-symbol.sql",
+      "bytes": 324,
+      "sha256": "ea946999fedc0429de972dec5da8bd6464ea04a76f76857eff7c94ac55d61aae"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/068-invalid-action-symbol.stderr",
+      "bytes": 520,
+      "sha256": "438cdd7653987f1a8c560356e2ed55daf452f911f9002e2bbc7a9469fe1629c8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/068-invalid-action-symbol.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/069-state.sql",
+      "bytes": 432,
+      "sha256": "f2635e7c41570e584b1c78900d748084cb59bd70e842b3405381b7c856da8806"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/069-state.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/069-state.stdout",
+      "bytes": 2761,
+      "sha256": "450e6ffaaa8a4cdb0eb4be929b1247430e5eedd82c417f0b97e00b790d819b9e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/070-single-running-first.sql",
+      "bytes": 158,
+      "sha256": "40c05d226965ec5bc0ef2651854b7eecc84c8d6937b67c84cd3d7504c7d02274"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/070-single-running-first.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/070-single-running-first.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/071-state.sql",
+      "bytes": 432,
+      "sha256": "f2635e7c41570e584b1c78900d748084cb59bd70e842b3405381b7c856da8806"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/071-state.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/071-state.stdout",
+      "bytes": 2760,
+      "sha256": "de7615d8f4313f26c503f025fe68da38c28a36eab3bb17770f14b7ae818776b9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/072-single-running-second.sql",
+      "bytes": 272,
+      "sha256": "a4036fe120b9324136bce616873a696768005ca88cd26b97f1b9a4004ac97bf0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/072-single-running-second.stderr",
+      "bytes": 320,
+      "sha256": "562d1716bd0316c182134ec11f24c911138b9b883fd29f620b8b8f488af9da9e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/072-single-running-second.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/073-state.sql",
+      "bytes": 432,
+      "sha256": "f2635e7c41570e584b1c78900d748084cb59bd70e842b3405381b7c856da8806"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/073-state.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/073-state.stdout",
+      "bytes": 2760,
+      "sha256": "de7615d8f4313f26c503f025fe68da38c28a36eab3bb17770f14b7ae818776b9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/074-stop.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/074-stop.stdout",
+      "bytes": 56,
+      "sha256": "ca19178a35ab4153b75b494963b66ce8243e1b94c173107c87b44d09db23652d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/admission.json",
+      "bytes": 160,
+      "sha256": "82adc9976fe249cad6b009a37dea0f17dfc50c371e367541786ab89116b46583"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/cleanup.json",
+      "bytes": 222,
+      "sha256": "72b13ce10e170f0e80d87dd166eb7d0c47d471533df0b900220545e7100c7be6"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/command-ledger.json",
+      "bytes": 40896,
+      "sha256": "68bb99805aae74f7461c0f18b66a27b5bd5d1dcbeda2ba0d063de912beef136e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/fixture-extracted.sql",
+      "bytes": 3118,
+      "sha256": "31df812ffe1df072ef31f99bd600fab1bc62ca5729fafb6a665a3679bb759817"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/migration-probe.json",
+      "bytes": 644,
+      "sha256": "f1fecafa42501e0bc2ca303490b604171cfd3cae1a60987735067a02bef977f1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/migration-probe.stderr",
+      "bytes": 19907,
+      "sha256": "88037d12e55e11a9791ebb4ffb99440abb4ce0e412f6bc721d82d1ce39dc7895"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/migration-probe.stdout",
+      "bytes": 660,
+      "sha256": "81c9ea089f0e79bff4a653ecdbc833de2382752931fe4c89032d15f5c30da3cf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/migration-probe.time",
+      "bytes": 765,
+      "sha256": "daf5569d72c53071d75de3a53b1cae03ac2fe4e8d9606995c52602beaf953145"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/postgres.log",
+      "bytes": 27689,
+      "sha256": "2071331e7a00e3a6bc285510c8d34de6dc02190e72a8ccf5620e7e0633b30889"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/probe-result.json",
+      "bytes": 45041,
+      "sha256": "776551ea1393ab67aba5d47542797d9040f72c2572701e71303fe1bf9037152d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/probe.mjs",
+      "bytes": 12886,
+      "sha256": "50f16926c1c65c95929736a21d09449318f75978ae2a9de60fe940fa8f2be851"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/run.py",
+      "bytes": 3441,
+      "sha256": "bab0a47c07090d4b08de0637c47a4e1ab017dba720d337cf8af6d047502035af"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T12-16-main-entry-plan-migration-linux/source-inputs.json",
+      "bytes": 948,
+      "sha256": "470d8d776fdd82882ab54f1ca18fedc165cb27680e21d3c0b48c0e4502359ce5"
+    }
+  ],
+  "rawCount": 229,
+  "rawBytes": 226119,
+  "limitations": [
+    "Only synthetic focused legacy prerequisites from exact main canonical migration-contract test, not production data.",
+    "Full reviewed chain, production migration/DB, application deployment and protected authorization were not exercised.",
+    "No build run and no old artifact relabelled as main169.",
+    "7913bc7 repair remains on its independent branch; no self-approval or merge."
+  ],
+  "sourceUnchangedBeforeEvidence": true
+}

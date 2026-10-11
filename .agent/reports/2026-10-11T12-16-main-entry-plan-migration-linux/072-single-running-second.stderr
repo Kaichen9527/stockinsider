@@ -1,0 +1,6 @@
+ERROR:  23505: duplicate key value violates unique constraint "entry_plan_authority_jobs_v1_single_running"
+DETAIL:  Key ((true))=(t) already exists.
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_single_running
+LOCATION:  _bt_check_unique, nbtinsert.c:666

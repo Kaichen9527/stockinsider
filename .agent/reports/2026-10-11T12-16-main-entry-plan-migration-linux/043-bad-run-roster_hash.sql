@@ -1,0 +1,1 @@
+SET statement_timeout='5s';SET ROLE service_role;INSERT INTO entry_plan_authority_runs_v1(run_id,source_cutoff,latest_session,roster,roster_hash,excluded_symbols,calendar,calendar_hash) VALUES('44444444-4444-4444-8444-444444444444','2026-10-10T05:30:00Z','2026-10-10','[]','bad','[]','{}','bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');

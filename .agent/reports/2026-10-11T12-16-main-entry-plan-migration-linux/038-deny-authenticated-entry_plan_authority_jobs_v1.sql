@@ -1,0 +1,1 @@
+SET statement_timeout='5s';SET ROLE authenticated;UPDATE entry_plan_authority_jobs_v1 SET status='failed';

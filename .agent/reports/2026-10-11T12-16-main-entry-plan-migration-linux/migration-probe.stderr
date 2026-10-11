@@ -1,0 +1,226 @@
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260724_source_led_opportunity_engine_v3.sql:472: NOTICE:  index "opportunity_financial_facts_v3_point_in_time" does not exist, skipping
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260724_source_led_opportunity_engine_v3.sql:615: NOTICE:  index "tw_trading_sessions_v3_cutoff" does not exist, skipping
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260724_source_led_opportunity_engine_v3.sql:981: NOTICE:  trigger "opportunity_manifests_v3_lifecycle" for relation "opportunity_manifests_v3" does not exist, skipping
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260724_source_led_opportunity_engine_v3.sql:986: NOTICE:  trigger "opportunity_manifest_pages_v3_immutable" for relation "opportunity_manifest_pages_v3" does not exist, skipping
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260724_source_led_opportunity_engine_v3.sql:991: NOTICE:  trigger "opportunity_manifest_rows_v3_immutable" for relation "opportunity_manifest_rows_v3" does not exist, skipping
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260724_source_led_opportunity_engine_v3.sql:1094: NOTICE:  trigger "opportunity_manifest_page_rows_v3_page_check" for relation "opportunity_manifest_pages_v3" does not exist, skipping
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260724_source_led_opportunity_engine_v3.sql:1100: NOTICE:  trigger "opportunity_manifest_page_rows_v3_row_check" for relation "opportunity_manifest_rows_v3" does not exist, skipping
+ERROR:  23514: new row for relation "opportunity_corporate_action_events_v3" violates check constraint "opportunity_corporate_action_events_v3_symbol_check"
+DETAIL:  Failing row contains (33333333-3333-4333-8333-333333333333, 105, 006208, ex_right_dividend, 100, 95, synthetic-feed, synthetic-row-5, 0.95, 2026-10-11 12:19:45.409442+00).
+SCHEMA NAME:  public
+TABLE NAME:  opportunity_corporate_action_events_v3
+CONSTRAINT NAME:  opportunity_corporate_action_events_v3_symbol_check
+LOCATION:  ExecConstraints, execMain.c:2074
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260924_entry_plan_official_action_symbols.sql:27: NOTICE:  relation "entry_plan_authority_runs_v1" already exists, skipping
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260924_entry_plan_official_action_symbols.sql:29: NOTICE:  relation "entry_plan_authority_runs_v1_created" already exists, skipping
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260924_entry_plan_official_action_symbols.sql:54: NOTICE:  relation "entry_plan_authority_jobs_v1" already exists, skipping
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260924_entry_plan_official_action_symbols.sql:56: NOTICE:  relation "entry_plan_authority_jobs_v1_pending" already exists, skipping
+psql:/workspace/cloud-reviewer-result-http-vm-oct09/migrations/20260924_entry_plan_official_action_symbols.sql:58: NOTICE:  relation "entry_plan_authority_jobs_v1_single_running" already exists, skipping
+ERROR:  42501: permission denied for table entry_plan_authority_runs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_runs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_runs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_jobs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_jobs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_jobs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_runs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_runs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_runs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_jobs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_jobs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_jobs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_runs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_runs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_runs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_jobs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_jobs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_jobs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_runs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  42501: permission denied for table entry_plan_authority_jobs_v1
+LOCATION:  aclcheck_error, aclchk.c:2843
+ERROR:  23514: new row for relation "entry_plan_authority_runs_v1" violates check constraint "entry_plan_authority_runs_v1_roster_check"
+DETAIL:  Failing row contains (44444444-4444-4444-8444-444444444444, 2026-10-10 05:30:00+00, 2026-10-10, {}, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, [], {}, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, null, initializing, 2026-10-11 12:19:45.676858+00, 2026-10-11 12:19:45.676858+00, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_runs_v1
+CONSTRAINT NAME:  entry_plan_authority_runs_v1_roster_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_runs_v1" violates check constraint "entry_plan_authority_runs_v1_roster_hash_check"
+DETAIL:  Failing row contains (44444444-4444-4444-8444-444444444444, 2026-10-10 05:30:00+00, 2026-10-10, [], bad, [], {}, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, null, initializing, 2026-10-11 12:19:45.68491+00, 2026-10-11 12:19:45.68491+00, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_runs_v1
+CONSTRAINT NAME:  entry_plan_authority_runs_v1_roster_hash_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_runs_v1" violates check constraint "entry_plan_authority_runs_v1_excluded_symbols_check"
+DETAIL:  Failing row contains (44444444-4444-4444-8444-444444444444, 2026-10-10 05:30:00+00, 2026-10-10, [], aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, {}, {}, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, null, initializing, 2026-10-11 12:19:45.691331+00, 2026-10-11 12:19:45.691331+00, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_runs_v1
+CONSTRAINT NAME:  entry_plan_authority_runs_v1_excluded_symbols_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_runs_v1" violates check constraint "entry_plan_authority_runs_v1_calendar_check"
+DETAIL:  Failing row contains (44444444-4444-4444-8444-444444444444, 2026-10-10 05:30:00+00, 2026-10-10, [], aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, [], [], bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, null, initializing, 2026-10-11 12:19:45.699108+00, 2026-10-11 12:19:45.699108+00, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_runs_v1
+CONSTRAINT NAME:  entry_plan_authority_runs_v1_calendar_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_runs_v1" violates check constraint "entry_plan_authority_runs_v1_calendar_hash_check"
+DETAIL:  Failing row contains (44444444-4444-4444-8444-444444444444, 2026-10-10 05:30:00+00, 2026-10-10, [], aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, [], {}, BAD, null, initializing, 2026-10-11 12:19:45.707303+00, 2026-10-11 12:19:45.707303+00, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_runs_v1
+CONSTRAINT NAME:  entry_plan_authority_runs_v1_calendar_hash_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_runs_v1" violates check constraint "entry_plan_authority_runs_v1_status_check"
+DETAIL:  Failing row contains (44444444-4444-4444-8444-444444444444, 2026-10-10 05:30:00+00, 2026-10-10, [], aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, [], {}, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, null, unknown, 2026-10-11 12:19:45.714327+00, 2026-10-11 12:19:45.714327+00, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_runs_v1
+CONSTRAINT NAME:  entry_plan_authority_runs_v1_status_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_job_key_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, x, price_month, TWSE, 2330, 2026-10, [], pending, 0, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_job_key_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, unknown, TWSE, 2330, 2026-10, [], pending, 0, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_exchange_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, OTHER, 2330, 2026-10, [], pending, 0, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_exchange_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_symbol_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, TWSE, 006208, 2026-10, [], pending, 0, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_symbol_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_month_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, TWSE, 2330, 2026-13, [], pending, 0, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_month_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_sessions_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, TWSE, 2330, 2026-10, {}, pending, 0, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_sessions_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_status_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, TWSE, 2330, 2026-10, [], unknown, 0, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_status_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_attempt_count_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, TWSE, 2330, 2026-10, [], pending, 6, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_attempt_count_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_evidence_hash_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, TWSE, 2330, 2026-10, [], pending, 0, null, null, BAD, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_evidence_hash_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_source_urls_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, TWSE, 2330, 2026-10, [], pending, 0, null, null, null, null, {}, 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_source_urls_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_accepted_rows_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, TWSE, 2330, 2026-10, [], pending, 0, null, null, null, null, [], -1, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_accepted_rows_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_missing_rows_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, TWSE, 2330, 2026-10, [], pending, 0, null, null, null, null, [], 0, -1, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_missing_rows_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-kind-key, price_month, TWSE, null, 2026-10, [], pending, 0, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-kind-key, action_range, TWSE, 2330, 2026-10, [], pending, 0, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23503: insert or update on table "entry_plan_authority_jobs_v1" violates foreign key constraint "entry_plan_authority_jobs_v1_run_id_fkey"
+DETAIL:  Key (run_id)=(99999999-9999-4999-8999-999999999999) is not present in table "entry_plan_authority_runs_v1".
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_run_id_fkey
+LOCATION:  ri_ReportViolation, ri_triggers.c:2599
+ERROR:  23514: new row for relation "opportunity_corporate_action_events_v3" violates check constraint "opportunity_corporate_action_events_v3_symbol_check"
+DETAIL:  Failing row contains (33333333-3333-4333-8333-333333333333, 162, 1, ex_right_dividend, 100, 95, synthetic-feed, synthetic-row-62, 0.95, 2026-10-11 12:19:45.869063+00).
+SCHEMA NAME:  public
+TABLE NAME:  opportunity_corporate_action_events_v3
+CONSTRAINT NAME:  opportunity_corporate_action_events_v3_symbol_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "opportunity_corporate_action_events_v3" violates check constraint "opportunity_corporate_action_events_v3_symbol_check"
+DETAIL:  Failing row contains (33333333-3333-4333-8333-333333333333, 163, Ab12345678901, ex_right_dividend, 100, 95, synthetic-feed, synthetic-row-63, 0.95, 2026-10-11 12:19:45.875525+00).
+SCHEMA NAME:  public
+TABLE NAME:  opportunity_corporate_action_events_v3
+CONSTRAINT NAME:  opportunity_corporate_action_events_v3_symbol_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "opportunity_corporate_action_events_v3" violates check constraint "opportunity_corporate_action_events_v3_symbol_check"
+DETAIL:  Failing row contains (33333333-3333-4333-8333-333333333333, 164, A-B, ex_right_dividend, 100, 95, synthetic-feed, synthetic-row-64, 0.95, 2026-10-11 12:19:45.88189+00).
+SCHEMA NAME:  public
+TABLE NAME:  opportunity_corporate_action_events_v3
+CONSTRAINT NAME:  opportunity_corporate_action_events_v3_symbol_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "opportunity_corporate_action_events_v3" violates check constraint "opportunity_corporate_action_events_v3_symbol_check"
+DETAIL:  Failing row contains (33333333-3333-4333-8333-333333333333, 165, 台股, ex_right_dividend, 100, 95, synthetic-feed, synthetic-row-65, 0.95, 2026-10-11 12:19:45.888682+00).
+SCHEMA NAME:  public
+TABLE NAME:  opportunity_corporate_action_events_v3
+CONSTRAINT NAME:  opportunity_corporate_action_events_v3_symbol_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "opportunity_corporate_action_events_v3" violates check constraint "opportunity_corporate_action_events_v3_symbol_check"
+DETAIL:  Failing row contains (33333333-3333-4333-8333-333333333333, 166, 23 30, ex_right_dividend, 100, 95, synthetic-feed, synthetic-row-66, 0.95, 2026-10-11 12:19:45.894837+00).
+SCHEMA NAME:  public
+TABLE NAME:  opportunity_corporate_action_events_v3
+CONSTRAINT NAME:  opportunity_corporate_action_events_v3_symbol_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23514: new row for relation "opportunity_corporate_action_events_v3" violates check constraint "opportunity_corporate_action_events_v3_symbol_check"
+DETAIL:  Failing row contains (33333333-3333-4333-8333-333333333333, 167, , ex_right_dividend, 100, 95, synthetic-feed, synthetic-row-67, 0.95, 2026-10-11 12:19:45.901538+00).
+SCHEMA NAME:  public
+TABLE NAME:  opportunity_corporate_action_events_v3
+CONSTRAINT NAME:  opportunity_corporate_action_events_v3_symbol_check
+LOCATION:  ExecConstraints, execMain.c:2074
+ERROR:  23505: duplicate key value violates unique constraint "entry_plan_authority_jobs_v1_single_running"
+DETAIL:  Key ((true))=(t) already exists.
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_single_running
+LOCATION:  _bt_check_unique, nbtinsert.c:666

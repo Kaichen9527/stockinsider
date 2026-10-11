@@ -1,0 +1,1 @@
+SET statement_timeout='5s';SET ROLE service_role;DELETE FROM entry_plan_authority_jobs_v1;

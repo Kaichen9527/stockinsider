@@ -1,0 +1,19 @@
+{
+  "stage": "migration-probe",
+  "command": [
+    "node",
+    "/tmp/si-main-action-i5jiwvvg/probe.mjs"
+  ],
+  "startedAt": "2026-10-11T12:19:44.322883+00:00",
+  "endedAt": "2026-10-11T12:19:46.174803+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 1.8519264940405264,
+  "sampledAggregatePeakRssBytes": 85213184,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10109128704,
+  "diskAvailableAfterBytes": 10109128704,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

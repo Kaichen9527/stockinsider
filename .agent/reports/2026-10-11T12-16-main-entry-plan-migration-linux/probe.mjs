@@ -1,0 +1,70 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const root=process.cwd(),art='/tmp/si-main-action-i5jiwvvg',bin=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,user=os.userInfo().username;
+assert.equal(process.env.USER,user);for(const n of ['initdb','pg_ctl','psql'])fs.accessSync(path.join(bin,n),fs.constants.X_OK);
+const source='169aad1b6cfa747f78ae3464b614f43c0749d806';assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),source);
+const testFile='scripts/opportunity-v3/migration-contract.test.mjs',canonical=fs.readFileSync(testFile,'utf8');
+const start=canonical.indexOf('  psql(`\n    CREATE ROLE anon NOLOGIN;',canonical.indexOf('before(() => {'));
+const end=canonical.indexOf('  `);',start);assert.ok(start>=0&&end>start);
+const fixture=canonical.slice(start+'  psql(`'.length,end);assert.ok(!fixture.includes('${'));
+fs.writeFileSync(path.join(art,'fixture-extracted.sql'),fixture);
+const sqlFile='migrations/20260924_entry_plan_official_action_symbols.sql',base='migrations/20260724_source_led_opportunity_engine_v3.sql';
+const inputs=[testFile,base,sqlFile].map(name=>{const b=fs.readFileSync(name);return {path:name,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+fs.writeFileSync(path.join(art,'source-inputs.json'),JSON.stringify({source,tree:execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),inputs,fixtureStartLine:canonical.slice(0,start).split('\n').length,fixtureSha256:createHash('sha256').update(fixture).digest('hex'),fixtureAttribution:'Verbatim original canonical test focused legacy prerequisite SQL, not full production schema or data.'},null,2)+'\n');
+const pg=path.join(art,'pg'),socket=path.join(art,'s');fs.mkdirSync(socket);const port=56000+process.pid%4000;
+let active=false,count=0;const commands=[],checks=[];
+function command(label,name,args,input,expectedError){
+ const stem=String(++count).padStart(3,'0')+'-'+label,begin=Date.now(),argv=[path.join(bin,name),...args];let stdout='',stderr='',exit=0;
+ if(input!==undefined)fs.writeFileSync(path.join(art,stem+'.sql'),input);
+ try{stdout=execFileSync(argv[0],argv.slice(1),{input,encoding:'utf8',timeout:15000,maxBuffer:8*1048576,env:{...process.env,LC_ALL:'C'}});}catch(e){exit=e.status??-1;stdout=e.stdout?.toString()??'';stderr=e.stderr?.toString()??'';}
+ fs.writeFileSync(path.join(art,stem+'.stdout'),stdout);fs.writeFileSync(path.join(art,stem+'.stderr'),stderr);
+ const record={label,argv,inputFile:input===undefined?null:stem+'.sql',exit,startedAt:new Date(begin).toISOString(),wallMs:Date.now()-begin,expectedError:expectedError??null};commands.push(record);
+ if(expectedError){assert.notEqual(exit,0,label);assert.ok(stderr.includes(expectedError),label+': '+stderr);}else assert.equal(exit,0,label+': '+stderr);
+ return stdout.trim();
+}
+const args=['-X','-qAt','-v','ON_ERROR_STOP=1','-v','VERBOSITY=verbose','-h',socket,'-p',String(port),'-U',user,'-d','postgres'];
+const sql=(label,s,error)=>command(label,'psql',args,"SET statement_timeout='5s';"+s,error);
+const state=()=>sql('state',`SELECT jsonb_build_object('runs',(SELECT coalesce(jsonb_agg(to_jsonb(r) ORDER BY run_id),'[]'::jsonb) FROM entry_plan_authority_runs_v1 r),'jobs',(SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY run_id,job_key),'[]'::jsonb) FROM entry_plan_authority_jobs_v1 j),'events',(SELECT coalesce(jsonb_agg(to_jsonb(e) ORDER BY snapshot_id,event_ordinal),'[]'::jsonb) FROM opportunity_corporate_action_events_v3 e));`);
+const catalog=()=>sql('catalog',`SELECT jsonb_build_object('tables',(SELECT jsonb_agg(jsonb_build_object('name',relname,'rls',relrowsecurity,'acl',relacl::text) ORDER BY relname) FROM pg_class WHERE oid IN ('entry_plan_authority_runs_v1'::regclass,'entry_plan_authority_jobs_v1'::regclass)),'constraints',(SELECT jsonb_agg(jsonb_build_array(conname,pg_get_constraintdef(oid)) ORDER BY conrelid,conname) FROM pg_constraint WHERE conrelid IN ('entry_plan_authority_runs_v1'::regclass,'entry_plan_authority_jobs_v1'::regclass,'opportunity_corporate_action_events_v3'::regclass)),'indexes',(SELECT jsonb_agg(jsonb_build_array(indexname,indexdef) ORDER BY indexname) FROM pg_indexes WHERE tablename IN ('entry_plan_authority_runs_v1','entry_plan_authority_jobs_v1')));`);
+const runId='11111111-1111-4111-8111-111111111111',sid='22222222-2222-4222-8222-222222222222',snapshot='33333333-3333-4333-8333-333333333333';
+const q=s=>"'"+String(s).replaceAll("'","''")+"'";
+const runValues={run_id:q(runId),source_cutoff:"'2026-10-10T05:30:00Z'",latest_session:"'2026-10-10'",roster:"'[]'",roster_hash:q('a'.repeat(64)),excluded_symbols:"'[]'",calendar:"'{}'",calendar_hash:q('b'.repeat(64))};
+const insert=(table,v)=>`INSERT INTO ${table}(${Object.keys(v).join(',')}) VALUES(${Object.values(v).join(',')});`;
+const jobValues={run_id:q(runId),job_key:"'price:2330:2026-10'",kind:"'price_month'",exchange:"'TWSE'",symbol:"'2330'",month:"'2026-10'",sessions:"'[]'"};
+const event=symbol=>`INSERT INTO opportunity_corporate_action_events_v3(snapshot_id,event_ordinal,symbol,event_kind,pre_action_reference_price,post_action_reference_price,feed_identity,source_row_ref) VALUES('${snapshot}',${100+count},${q(symbol)},'ex_right_dividend',100,95,'synthetic-feed','synthetic-row-${count}');`;
+try{
+ command('initdb','initdb',['-D',pg,'--auth=trust','--no-locale','--encoding=UTF8','-U',user]);
+ command('start','pg_ctl',['-D',pg,'-l',path.join(art,'postgres.log'),'-o',`-F -h '' -k ${socket} -p ${port}`,'-w','start']);active=true;
+ sql('original-fixture',fixture);command('base-migration','psql',['-X','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(port),'-U','stockinsider_managed_migrator','-d','postgres','-f',path.join(root,base)]);
+ sql('synthetic-event-prerequisite',`INSERT INTO tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,provider,source_timestamp,collected_at,source_ref) VALUES('${sid}','2026-10-10','TWSE','2026-10-10T01:00:00Z','2026-10-10T05:30:00Z','completed','twse','2026-10-10T05:30:00Z','2026-10-10T06:00:00Z','synthetic-calendar');INSERT INTO opportunity_corporate_action_snapshots_v3(snapshot_id,exchange,session_id,session_authority_id,corporate_action_version,provider,collected_at,declared_event_count,dataset_hash) VALUES('${snapshot}','TWSE','2026-10-10','${sid}','tw-corporate-action-v3.1','twse','2026-10-10T06:00:00Z',5,'${'c'.repeat(64)}');`);
+ sql('original-four-digit-rejects-etf',event('006208'),'23514');checks.push('Original constraint rejects 006208 before migration');
+ command('target-first','psql',['-X','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(port),'-U','stockinsider_managed_migrator','-d','postgres','-f',path.join(root,sqlFile)]);
+ const first=catalog();const parsed=JSON.parse(first);assert.equal(parsed.tables.length,2);assert.ok(parsed.tables.every(x=>x.rls));checks.push('Both new tables exist with RLS enabled');
+ sql('service-insert',`SET ROLE service_role;${insert('entry_plan_authority_runs_v1',runValues)}${insert('entry_plan_authority_jobs_v1',jobValues)}`);
+ const selected=JSON.parse(sql('service-update-select',`SET ROLE service_role;UPDATE entry_plan_authority_runs_v1 SET status='running',updated_at=clock_timestamp() WHERE run_id='${runId}';UPDATE entry_plan_authority_jobs_v1 SET status='complete',attempt_count=1,accepted_rows=2 WHERE run_id='${runId}';SELECT jsonb_build_object('runStatus',(SELECT status FROM entry_plan_authority_runs_v1 WHERE run_id='${runId}'),'jobStatus',(SELECT status FROM entry_plan_authority_jobs_v1 WHERE run_id='${runId}'));`));assert.deepEqual(selected,{runStatus:'running',jobStatus:'complete'});checks.push('service_role actual SELECT/INSERT/UPDATE on both tables');
+ for(const symbol of ['42','2330','006208','Ab12','Ab1234567890'])sql('expanded-symbol-'+symbol,event(symbol));checks.push('Actual event rows accept 2..12 ASCII digits/letters, ETF and ordinary symbols');
+ const before=state();command('target-second','psql',['-X','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(port),'-U','stockinsider_managed_migrator','-d','postgres','-f',path.join(root,sqlFile)]);assert.equal(catalog(),first);assert.equal(state(),before);checks.push('Second exact migration preserves catalog, rows and clocks');
+ const priv=JSON.parse(sql('acl',`SELECT jsonb_build_object('publicGranted',(SELECT count(*) FROM pg_class c CROSS JOIN LATERAL aclexplode(coalesce(c.relacl,acldefault('r',c.relowner))) a WHERE c.oid IN ('entry_plan_authority_runs_v1'::regclass,'entry_plan_authority_jobs_v1'::regclass) AND a.grantee=0),'anonGranted',has_table_privilege('anon','entry_plan_authority_runs_v1','SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') OR has_table_privilege('anon','entry_plan_authority_jobs_v1','SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER'),'authenticatedGranted',has_table_privilege('authenticated','entry_plan_authority_runs_v1','SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') OR has_table_privilege('authenticated','entry_plan_authority_jobs_v1','SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER'),'serviceBypass',(SELECT rolbypassrls FROM pg_roles WHERE rolname='service_role'));`));assert.deepEqual(priv,{publicGranted:0,anonGranted:false,authenticatedGranted:false,serviceBypass:true});
+ sql('public-only-role','CREATE ROLE public_only_probe NOLOGIN;');
+ for(const role of ['public_only_probe','anon','authenticated'])for(const table of ['entry_plan_authority_runs_v1','entry_plan_authority_jobs_v1'])for(const operation of ['SELECT * FROM '+table+';','UPDATE '+table+" SET status='failed';",insert(table,table.endsWith('runs_v1')?{...runValues,run_id:"'44444444-4444-4444-8444-444444444444'"}:{...jobValues,job_key:"'other-key'"})])sql('deny-'+role+'-'+table,`SET ROLE ${role};${operation}`,'42501');
+ checks.push('PUBLIC-only, anon, authenticated actual SELECT/INSERT/UPDATE denied on both tables');
+ for(const table of ['entry_plan_authority_runs_v1','entry_plan_authority_jobs_v1'])sql('service-no-delete-'+table,`SET ROLE service_role;DELETE FROM ${table};`,'42501');checks.push('service_role receives no DELETE');
+ for(const [field,bad] of Object.entries({roster:"'{}'",roster_hash:"'bad'",excluded_symbols:"'{}'",calendar:"'[]'",calendar_hash:"'BAD'",status:"'unknown'"}))sql('bad-run-'+field,`SET ROLE service_role;${insert('entry_plan_authority_runs_v1',{...runValues,run_id:"'44444444-4444-4444-8444-444444444444'",[field]:bad})}`,'23514');
+ for(const [field,bad] of Object.entries({job_key:"'x'",kind:"'unknown'",exchange:"'OTHER'",symbol:"'006208'",month:"'2026-13'",sessions:"'{}'",status:"'unknown'",attempt_count:'6',evidence_hash:"'BAD'",source_urls:"'{}'",accepted_rows:'-1',missing_rows:'-1'}))sql('bad-job-'+field,`SET ROLE service_role;${insert('entry_plan_authority_jobs_v1',{...jobValues,job_key:"'negative-price-key'",[field]:bad})}`,'23514');
+ sql('price-kind-null-symbol',`SET ROLE service_role;${insert('entry_plan_authority_jobs_v1',{...jobValues,job_key:"'negative-kind-key'",symbol:'NULL'})}`,'23514');
+ sql('action-kind-with-symbol',`SET ROLE service_role;${insert('entry_plan_authority_jobs_v1',{...jobValues,job_key:"'negative-kind-key'",kind:"'action_range'"})}`,'23514');
+ sql('unknown-run-fk',`SET ROLE service_role;${insert('entry_plan_authority_jobs_v1',{...jobValues,run_id:"'99999999-9999-4999-8999-999999999999'"})}`,'23503');
+ for(const symbol of ['1','Ab12345678901','A-B','台股','23 30',''])sql('invalid-action-symbol',event(symbol),'23514');
+ assert.equal(state(),before);checks.push('Invalid shape/hash/status/symbol/month/count/kind/FK writes reject with zero row/clock changes');
+ sql('single-running-first',`SET ROLE service_role;UPDATE entry_plan_authority_jobs_v1 SET status='running' WHERE run_id='${runId}';`);
+ const runningState=state();sql('single-running-second',`SET ROLE service_role;${insert('entry_plan_authority_jobs_v1',{...jobValues,job_key:"'second-running-price'",status:"'running'"})}`,'23505');assert.equal(state(),runningState);checks.push('Global single-running partial unique index rejects second job without changes');
+ fs.writeFileSync(path.join(art,'probe-result.json'),JSON.stringify({status:'PASS',checks,checkCount:checks.length,commands,expectedRejections:commands.filter(c=>c.expectedError).length,source,syntheticFixture:true,productionDataValidated:false,fullMigrationChainValidated:false},null,2)+'\n');console.log(JSON.stringify({status:'PASS',checks,commandCount:commands.length,expectedRejections:commands.filter(c=>c.expectedError).length}));
+}finally{
+ if(active)command('stop','pg_ctl',['-D',pg,'-m','fast','-w','stop']);
+ fs.writeFileSync(path.join(art,'command-ledger.json'),JSON.stringify(commands,null,2)+'\n');
+ fs.rmSync(pg,{recursive:true,force:true});fs.rmSync(socket,{recursive:true,force:true});
+}

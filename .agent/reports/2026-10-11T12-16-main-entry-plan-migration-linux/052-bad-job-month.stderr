@@ -1,0 +1,6 @@
+ERROR:  23514: new row for relation "entry_plan_authority_jobs_v1" violates check constraint "entry_plan_authority_jobs_v1_month_check"
+DETAIL:  Failing row contains (11111111-1111-4111-8111-111111111111, negative-price-key, price_month, TWSE, 2330, 2026-13, [], pending, 0, null, null, null, null, [], 0, 0, null, null).
+SCHEMA NAME:  public
+TABLE NAME:  entry_plan_authority_jobs_v1
+CONSTRAINT NAME:  entry_plan_authority_jobs_v1_month_check
+LOCATION:  ExecConstraints, execMain.c:2074
