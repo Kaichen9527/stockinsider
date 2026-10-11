@@ -1,0 +1,230 @@
+TAP version 13
+# (node:73054) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:73054) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-discovery-evidence.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: DE01 61 aligned completed sessions count holiday short weeks, with exact 5/20/60 ratios
+ok 1 - DE01 61 aligned completed sessions count holiday short weeks, with exact 5/20/60 ratios
+  ---
+  duration_ms: 4.116708
+  ...
+# Subtest: DE02 incomplete or misaligned benchmark makes all horizons unknown
+ok 2 - DE02 incomplete or misaligned benchmark makes all horizons unknown
+  ---
+  duration_ms: 1.828958
+  ...
+# Subtest: DE03 impossible, timezone-free, 24-hour and malformed date clocks reject
+ok 3 - DE03 impossible, timezone-free, 24-hour and malformed date clocks reject
+  ---
+  duration_ms: 0.704083
+  ...
+# Subtest: DE04 future availability/session and availability before session cannot be silently filtered
+ok 4 - DE04 future availability/session and availability before session cannot be silently filtered
+  ---
+  duration_ms: 0.400291
+  ...
+# Subtest: DE05 RSI ranges, official failure, absent or conflicting trigger metadata stay unknown
+ok 5 - DE05 RSI ranges, official failure, absent or conflicting trigger metadata stay unknown
+  ---
+  duration_ms: 0.186542
+  ...
+# Subtest: DE06 existing overheating predicates outrank breakout and pullback
+ok 6 - DE06 existing overheating predicates outrank breakout and pullback
+  ---
+  duration_ms: 0.0465
+  ...
+# Subtest: DE07 established breakout, pullback and waiting are research phases only
+ok 7 - DE07 established breakout, pullback and waiting are research phases only
+  ---
+  duration_ms: 0.090042
+  ...
+# Subtest: relative return evidence rejects a price one microsecond after the cutoff
+ok 8 - relative return evidence rejects a price one microsecond after the cutoff
+  ---
+  duration_ms: 0.356292
+  ...
+# (node:73055) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:73055) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-discovery-price-enrichment.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: DP01 approved synthetic window computes all horizons; breakout does not grant research eligibility
+ok 9 - DP01 approved synthetic window computes all horizons; breakout does not grant research eligibility
+  ---
+  duration_ms: 11.358667
+  ...
+# Subtest: DP19 124+ ordinary historical sessions do not exhaust latest-head admission
+ok 10 - DP19 124+ ordinary historical sessions do not exhaust latest-head admission
+  ---
+  duration_ms: 2.036
+  ...
+# Subtest: DP20 newest head ties remain bounded and newer cancellation cannot resurrect a completion
+ok 11 - DP20 newest head ties remain bounded and newer cancellation cannot resurrect a completion
+  ---
+  duration_ms: 0.986375
+  ...
+# Subtest: DP21 actual TWSE/TPEx collector month URLs and exact-day quotes are admitted
+ok 12 - DP21 actual TWSE/TPEx collector month URLs and exact-day quotes are admitted
+  ---
+  duration_ms: 145.880875
+  ...
+# Subtest: DP22 endpoint-specific stock/date/host/parameter mismatches reject both exchanges
+ok 13 - DP22 endpoint-specific stock/date/host/parameter mismatches reject both exchanges
+  ---
+  duration_ms: 86.5275
+  ...
+# Subtest: DP23 strict-reader rejected row cannot be upgraded by a later weak immutable registry capture
+ok 14 - DP23 strict-reader rejected row cannot be upgraded by a later weak immutable registry capture
+  ---
+  duration_ms: 2.332125
+  ...
+# Subtest: DP24 a first missing capture remains frozen after admission/date/available-data changes
+ok 15 - DP24 a first missing capture remains frozen after admission/date/available-data changes
+  ---
+  duration_ms: 0.627792
+  ...
+# Subtest: DP02 wrong benchmark, incomplete calendar or stale last session never yields relative returns
+ok 16 - DP02 wrong benchmark, incomplete calendar or stale last session never yields relative returns
+  ---
+  duration_ms: 9.455833
+  ...
+# Subtest: DP03 future available/session and validation clocks fail closed
+ok 17 - DP03 future available/session and validation clocks fail closed
+  ---
+  duration_ms: 9.524291
+  ...
+# Subtest: DP04 missing quotes, corporate actions and failed official verification are explicit unknowns
+ok 18 - DP04 missing quotes, corporate actions and failed official verification are explicit unknowns
+  ---
+  duration_ms: 6.695042
+  ...
+# Subtest: DP05 valid returns do not invent a phase when metadata is absent, future or wrong ruleset
+ok 19 - DP05 valid returns do not invent a phase when metadata is absent, future or wrong ruleset
+  ---
+  duration_ms: 6.0925
+  ...
+# Subtest: DP06 overheating and established pullback preserve existing thresholds
+ok 20 - DP06 overheating and established pullback preserve existing thresholds
+  ---
+  duration_ms: 5.38375
+  ...
+# Subtest: DP07 immutable first quote/gap survives later reads and a changed current firstSeenAt
+ok 21 - DP07 immutable first quote/gap survives later reads and a changed current firstSeenAt
+  ---
+  duration_ms: 0.565541
+  ...
+# Subtest: DP08 missing discovery, admitted success and failed read each account for a full symbol
+ok 22 - DP08 missing discovery, admitted success and failed read each account for a full symbol
+  ---
+  duration_ms: 2.262334
+  ...
+# Subtest: DP09 deterministic sorted admission caps reads at 32 without losing symbols
+ok 23 - DP09 deterministic sorted admission caps reads at 32 without losing symbols
+  ---
+  duration_ms: 62.79975
+  ...
+# Subtest: DP10 registry failure and read deadline do not backfill an unconfirmed first capture
+ok 24 - DP10 registry failure and read deadline do not backfill an unconfirmed first capture
+  ---
+  duration_ms: 0.399667
+  ...
+# Subtest: DS01 weak first quote and verified current raw observation coexist without promotion
+ok 25 - DS01 weak first quote and verified current raw observation coexist without promotion
+  ---
+  duration_ms: 1.440292
+  ...
+# Subtest: DS02 server priority at lexical rear consumes the shared32 budget first and accounts all45
+ok 26 - DS02 server priority at lexical rear consumes the shared32 budget first and accounts all45
+  ---
+  duration_ms: 63.590625
+  ...
+# Subtest: DS03 no future source clock/session or weak provenance enters an earlier current cutoff
+ok 27 - DS03 no future source clock/session or weak provenance enters an earlier current cutoff
+  ---
+  duration_ms: 13.529
+  ...
+# Subtest: DS04 current priority is independent of missing first evidence or registry read failure
+ok 28 - DS04 current priority is independent of missing first evidence or registry read failure
+  ---
+  duration_ms: 0.417208
+  ...
+# Subtest: DS05 supplemental reads and earlier first reads share32 without leaking current data into first
+ok 29 - DS05 supplemental reads and earlier first reads share32 without leaking current data into first
+  ---
+  duration_ms: 8.629792
+  ...
+# Subtest: DS06 invalid server clock/unknown priority rejects before reads; deadline accounts all candidates
+ok 30 - DS06 invalid server clock/unknown priority rejects before reads; deadline accounts all candidates
+  ---
+  duration_ms: 0.674917
+  ...
+# Subtest: DS07 a late completed read is discarded and cannot enter current or first receipt
+ok 31 - DS07 a late completed read is discarded and cannot enter current or first receipt
+  ---
+  duration_ms: 0.329
+  ...
+# Subtest: DP11 fixed DB reader obtains only cutoff-visible raw quote; absent adapters remain missing
+ok 32 - DP11 fixed DB reader obtains only cutoff-visible raw quote; absent adapters remain missing
+  ---
+  duration_ms: 0.327083
+  ...
+# Subtest: DP12 cache official conflicts, future availability and invalid price source never verify a quote
+ok 33 - DP12 cache official conflicts, future availability and invalid price source never verify a quote
+  ---
+  duration_ms: 0.393417
+  ...
+# Subtest: DP13 no weekday or holiday guess certifies a stale latest completed session
+ok 34 - DP13 no weekday or holiday guess certifies a stale latest completed session
+  ---
+  duration_ms: 0.162959
+  ...
+# Subtest: DP14 calendar correction conflicts and incomplete clocks cannot become completed authority
+ok 35 - DP14 calendar correction conflicts and incomplete clocks cannot become completed authority
+  ---
+  duration_ms: 0.162292
+  ...
+# Subtest: DP15 exchange/provider conflict and ambiguous integrity flags remain visible failures
+ok 36 - DP15 exchange/provider conflict and ambiguous integrity flags remain visible failures
+  ---
+  duration_ms: 0.21975
+  ...
+# Subtest: DP16 row clock before actual calendar close fails even with a recomputed dataset hash
+ok 37 - DP16 row clock before actual calendar close fails even with a recomputed dataset hash
+  ---
+  duration_ms: 1.936042
+  ...
+# Subtest: DP17 malformed/future immutable registry record cannot be replaced by a current quote
+ok 38 - DP17 malformed/future immutable registry record cannot be replaced by a current quote
+  ---
+  duration_ms: 0.324792
+  ...
+# Subtest: DP18 registry over the fixed row bound accounts all candidates as missing without new reads
+ok 39 - DP18 registry over the fixed row bound accounts all candidates as missing without new reads
+  ---
+  duration_ms: 3.388958
+  ...
+# Subtest: DP27 future microsecond quotes and sub-storage clocks never enter a discovery snapshot
+ok 40 - DP27 future microsecond quotes and sub-storage clocks never enter a discovery snapshot
+  ---
+  duration_ms: 1.008292
+  ...
+# Subtest: DP28 a later current-run quote is not reused for an older first-seen microsecond
+ok 41 - DP28 a later current-run quote is not reused for an older first-seen microsecond
+  ---
+  duration_ms: 0.642542
+  ...
+# Subtest: DP29 evidence window microsecond inversion cannot produce relative returns or phase
+ok 42 - DP29 evidence window microsecond inversion cannot produce relative returns or phase
+  ---
+  duration_ms: 1.957458
+  ...
+1..42
+# tests 42
+# suites 0
+# pass 42
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 754.094333

@@ -1,0 +1,253 @@
+{
+  "schema": "unsigned-scoped-independent-code-review-v1",
+  "recordedAt": "2026-10-11T07:13:40.307353+00:00",
+  "subject": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "tree": "548ec17b1d8801ecb7f2e4c5635199aacd9989b2",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "pullRequest": 361,
+  "scope": {
+    "groups": {
+      "F": 45,
+      "G": 5,
+      "E": 34
+    },
+    "paths": {
+      "F": [
+        ".github/workflows/source-led-opportunity-v3.yml",
+        "deployment/vps/research-backtest-budget.json",
+        "deployment/vps/research-runtime-files-v1.json",
+        "deployment/vps/run-heavy-operation.sh",
+        "migrations/20261005_release_function_ownership_bridge_v1.sql",
+        "package.json",
+        "scripts/cleanup-unused-stockinsider.py",
+        "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+        "scripts/opportunity-v3/atomic-migration-chain.mjs",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+        "scripts/opportunity-v3/fixtures/publication-catalog-20261011.json.gz",
+        "scripts/opportunity-v3/fixtures/publication-install-README.md",
+        "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+        "scripts/opportunity-v3/migration-contract.test.mjs",
+        "scripts/opportunity-v3/migration-plan.mjs",
+        "scripts/opportunity-v3/migration-sql-policy.mjs",
+        "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+        "scripts/opportunity-v3/migration-successor-guard.mjs",
+        "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+        "scripts/opportunity-v3/product-correctness.test.mjs",
+        "scripts/opportunity-v3/research-publication-catalog.mjs",
+        "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+        "scripts/opportunity-v3/research-publication-install-guard.mjs",
+        "scripts/opportunity-v3/research-publication-install-guard.test.mjs",
+        "scripts/opportunity-v3/research-publication-install-inventory.json",
+        "scripts/opportunity-v3/research-publication-install-profile.json",
+        "scripts/opportunity-v3/vps-migration-peer.mjs",
+        "scripts/opportunity-v3/vps-migration-peer.test.mjs",
+        "scripts/package-standalone-release.mjs",
+        "scripts/package-standalone-release.test.mjs",
+        "scripts/package-vps-standalone.mjs",
+        "scripts/release-owner-bridge-postgres.test.mjs",
+        "scripts/research-agent-migration-gate.test.mjs",
+        "scripts/research-bounded-file.mjs",
+        "scripts/research-bounded-file.test.mjs",
+        "scripts/research-host-resource-check.mjs",
+        "scripts/research-host-resource-check.test.mjs",
+        "scripts/research-release-artifacts.mjs",
+        "scripts/research-release-artifacts.test.mjs",
+        "scripts/research-reviewer-result-psql-child-fixture.py",
+        "scripts/research-reviewer-result-psql-transport.mjs",
+        "scripts/research-reviewer-result-psql-transport.test.mjs",
+        "scripts/test-support/collect-piped-child.mjs",
+        "web/package-lock.json",
+        "web/package.json"
+      ],
+      "G": [
+        "scripts/research-agent-routes.test.mjs",
+        "web/src/lib/candidate-research.ts",
+        "web/src/lib/internal-auth.ts",
+        "web/src/lib/opportunity-v3/ingestion.ts",
+        "web/src/lib/research-v2.ts"
+      ],
+      "E": [
+        "migrations/20261004_research_technical_identity_v2.sql",
+        "research/tw-strategy-lab/artifact_audit.py",
+        "research/tw-strategy-lab/test_artifact_audit.py",
+        "scripts/research-approval-replay-route.test.mjs",
+        "scripts/research-monitor-controller.mjs",
+        "scripts/research-monitor-controller.test.mjs",
+        "scripts/research-monitor-progress.mjs",
+        "scripts/research-monitor-progress.test.mjs",
+        "scripts/research-paper-session-route.test.mjs",
+        "scripts/research-strategy-release.test.mjs",
+        "scripts/sync-research-strategy-release.mjs",
+        "web/src/app/api/internal/research-monitor-worklist/route.ts",
+        "web/src/app/api/internal/research-paper-session/route.ts",
+        "web/src/app/api/internal/research-strategy-record/route.ts",
+        "web/src/app/api/internal/research-technical-snapshot/route.ts",
+        "web/src/app/api/internal/research-thesis-event/route.ts",
+        "web/src/app/api/internal/research-thesis-review/route.ts",
+        "web/src/lib/research-agent-qualification.test.ts",
+        "web/src/lib/research-agent-qualification.ts",
+        "web/src/lib/research-monitor-benchmark-context.test.ts",
+        "web/src/lib/research-monitor-benchmark-context.ts",
+        "web/src/lib/research-paper-books.test.ts",
+        "web/src/lib/research-paper-books.ts",
+        "web/src/lib/research-strategy-governance.test.ts",
+        "web/src/lib/research-strategy-governance.ts",
+        "web/src/lib/research-strategy-release.generated.ts",
+        "web/src/lib/research-weekly-bars.test.ts",
+        "web/src/lib/research-weekly-bars.ts",
+        "web/src/lib/technical-features-v2.test.ts",
+        "web/src/lib/technical-features-v2.ts",
+        "web/src/lib/tw-entry-plan-authority.test.ts",
+        "web/src/lib/tw-entry-plan-authority.ts",
+        "web/src/lib/tw-entry-plan.test.ts",
+        "web/src/lib/tw-entry-plan.ts"
+      ]
+    },
+    "coverageFile": "/tmp/stockinsider-full-review-fge-oct11-coverage.json"
+  },
+  "verdict": "REQUEST_CHANGES within F/G/E scope; one reproducible P2; not full main-to-head or protected approval",
+  "findings": [
+    {
+      "id": "FGE-P2-01",
+      "severity": "P2",
+      "title": "Delayed paper sessions require a future-only calendar and become permanently unprocessable",
+      "primaryFile": "web/src/lib/tw-entry-plan-authority.ts",
+      "primaryLine": 288,
+      "integrationFile": "web/src/app/api/internal/research-paper-session/route.ts",
+      "integrationLine": 115,
+      "trigger": "A paper book with a held position or eligible pre-open snapshot misses a session and resumes after the following official trading session has completed.",
+      "actual": "The route acquires today's annual calendar, then invokes live loadTwEntryPlanAuthority for the older required session. forwardCalendar rejects the next official date once its status is completed (only holiday/scheduled accepted), returning no bars. The route returns paper_official_session_pending and chronology prevents skipping the blocked session.",
+      "evidence": {
+        "probe": "/tmp/stockinsider-full-review-fge-oct11-catchup-probe.ts",
+        "raw": "/tmp/stockinsider-full-review-fge-oct11-catchup-probe.tap",
+        "fixture": "Exact source authority fixture; signal=2026-09-24, cutoff=2026-09-29T12:00:00Z, next 2026-09-28 changed to completed. Result official_next_calendar_invalid, bars=0. Synthetic local module repro, not production HTTP."
+      },
+      "minimalRepair": "Add a settlement-only reader sharing exact historical bar/action/hash and annual past-calendar completeness validation, without a next-future-scheduled prerequisite. Return completedSessions and a source-bound anchorAction including explicit verified zero-event context. Do not directly substitute the existing historical reader, which intentionally does not prove every expected session and omits anchorAction. Preserve inception/chronology, cutoff-visible qualification/approval/liquidity and corporate-action reconciliation. Regenerate exact strategy release identity; no old approval inheritance.",
+      "regressionFiles": [
+        "web/src/lib/tw-entry-plan-authority.test.ts",
+        "scripts/research-paper-session-route.test.mjs",
+        "scripts/research-strategy-release.test.mjs"
+      ],
+      "acceptance": [
+        "held catch-up after next close succeeds in chronological order with proven complete history",
+        "eligible historical entry remains bound to original pre-open snapshot/approval and cannot use newly available evidence",
+        "missing/cancelled historical session does not create a synthetic bar or skip day",
+        "anchor action corrections, explicit no-event proof and corporate-action reconciliation remain enforced",
+        "live entry-plan future-session admission remains unchanged"
+      ]
+    }
+  ],
+  "inspection": {
+    "E": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+    "F": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+    "G": "Reviewed shared-entry changes and actual boundary dependencies: current snapshot mode versus legacy partial collector, candidate stage/qualification and guarded auth/source roles. Cross-component A-D business logic is owned by the other reviewer; tested synthetic alias behavior without real credential reads."
+  },
+  "tests": [
+    {
+      "log": "/tmp/stockinsider-full-review-fge-oct11-focused.tap",
+      "result": "140 TAP: 130 pass / 10 fail / 0 skip; 9 cases lacked exact extraction imports/data; authority file-level failure lacked generated official bridge. Original failures retained."
+    },
+    {
+      "log": "/tmp/stockinsider-full-review-fge-oct11-focused-dependencies.tap",
+      "result": "40/40 pass / 0 skip after adding exact dependency blobs and generating existing official bridge. Closes all 10 initial extraction failures."
+    },
+    {
+      "log": "/tmp/stockinsider-full-review-fge-oct11-extra.tap",
+      "result": "32 TAP:30 pass /2 fail /0 skip. SQL-policy planner lacked status.json in extraction; native HBA test failed before cluster creation because pg_config absent from constrained PATH."
+    },
+    {
+      "log": "/tmp/stockinsider-full-review-fge-oct11-plan-dependencies.tap",
+      "result": "4/4 pass /0 skip after exact status.json extraction; policy failure closed, two migration-plan gate checks added."
+    },
+    {
+      "log": "/tmp/stockinsider-full-review-fge-oct11-artifact-audit.log",
+      "result": "21/21 stdlib unittest pass; no network, no model, no holdout reads or promotion."
+    },
+    {
+      "log": "/tmp/stockinsider-full-review-fge-oct11-auth-probe.log",
+      "result": "4 synthetic credential alias cases passed in empty child environment. Writer/cron cannot review; reviewer/tester or reviewer/approver alias selects reviewer while the other role is disabled. No dual-role strategy adoption."
+    },
+    {
+      "log": "/tmp/stockinsider-full-review-fge-oct11-catchup-probe.tap",
+      "result": "1 independent expected-success probe RED, preserving genuine FGE-P2-01."
+    }
+  ],
+  "reusedEvidence": [
+    {
+      "review": "/tmp/stockinsider-installer-independent-oct11-1a0043f-review.json",
+      "exactSubject": "1a0043f2656b63d54062224d1befeab761f554a3",
+      "base": "bc01c006cba307735ccd50c78841b94242e1c014",
+      "log": "/tmp/stockinsider-installer-independent-oct11-1a0043f-regression.tap",
+      "sha256": "baafb10556580629615dacdb7c443a0c5a8bb773ea31f3c42ec8c494686355d8",
+      "tests": "22/22 independent Mac PG17.10 pass; raw byte length and SHA independently rechecked",
+      "limitation": "Installer increment only, not full main range or Linux/prod execution."
+    }
+  ],
+  "notReusedAsApproval": [
+    "PR284 prior 443 unchanged source claims are not counted as a fresh integration approval by this report.",
+    "Root-reported PCR155/155 and Cloud22/build/type/lint are maker evidence, not independently rerun or counted as this reviewer execution.",
+    "Original f2e identical blobs recorded only as equality, not automatic approval inheritance."
+  ],
+  "limitations": [
+    "Review covers the assigned84 F/G/E paths and necessary dependencies; A-D and other main changes require their separate reviewer.",
+    "No production database, authenticated live model, native recovery/registry, current platform source acquisition, main merge or deployment was executed.",
+    "No fresh full native PG suite, whole-app build/lint/type rerun, browser/E2E/PCR or dependency advisory audit here. The native HBA case was not independently rerun after constrained-PATH failure; exact prior22-case scoped raw is the evidence.",
+    "Schema fixture/profile recomputation validates captured bytes and fingerprints, not actual current production catalog/rows or production migration permission.",
+    "Live source rights/PIT coverage, approved strategy, real held corporate-action entitlements, all-market/holdout/forward validation and five live trading days are not established by fixtures.",
+    "Linux Chromium CDN403/0tests relayed by root is not treated as a browser acceptance pass.",
+    "No signed gate artifact, protected review ref or authority was created."
+  ],
+  "evidence": [
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-focused.tap",
+      "bytes": 49393,
+      "sha256": "f10880c79b6b72c7a44e50be4f2995211a7215fd704916ab2c85562a45b4df54"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-focused-dependencies.tap",
+      "bytes": 10734,
+      "sha256": "7666c16be9ba9ae04f91a29424400763657ce14899c384684b381f34fc077b62"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-extra.tap",
+      "bytes": 12614,
+      "sha256": "df8e7ce700d69eaee5d485252f2477598d970410a6735eea00608d286eccb5d7"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-plan-dependencies.tap",
+      "bytes": 1091,
+      "sha256": "f9a4863b33c9c656a22f371899ce845bf776722c9472baac445a3860aa60be0f"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-artifact-audit.log",
+      "bytes": 3537,
+      "sha256": "846743f904ffb4fb960eb225a179daed5756cdb5f0952f8e1de03943e8cbac49"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-auth-probe.log",
+      "bytes": 1076,
+      "sha256": "415f7ec5e5edff7f36b5dd4595129f4d1f24620468e434cb21e5dfc686b24bc5"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-catalog-fingerprint.log",
+      "bytes": 341,
+      "sha256": "5597d6d6b5514caa3e9e205255220b1a35e7492123f992d9171fd1aac35684d2"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-artifact-verification.json",
+      "bytes": 5148,
+      "sha256": "69c257b992464165a5dc305d1b4c1da02ff2a5e7e6a05117841a03648213793e"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-catchup-probe.ts",
+      "bytes": 8001,
+      "sha256": "6c4c821ce45e374903f0921aed1c720ca5fa0068a0535b8860099907a39611ec"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-catchup-probe.tap",
+      "bytes": 1696,
+      "sha256": "2c99f0df872a26d1a2db41c1a9a291fff81ff7abe8dbf253bd7b678e7d95c256"
+    }
+  ],
+  "mutations": "Only /tmp/stockinsider-full-review-fge-oct11* files/extracted fixtures. Source worktrees, tests, services and credentials unchanged."
+}

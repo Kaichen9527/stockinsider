@@ -1,0 +1,49 @@
+{
+  "subject": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "reversed": {
+    "gap": null,
+    "proof": {
+      "documentId": "00000000-0000-4000-8000-000000000001",
+      "contentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "rootId": "https://example.test/industry",
+      "platform": "ptt",
+      "subjectScope": "industry_context",
+      "symbols": [],
+      "publishedAt": "2026-10-08T00:00:00.000Z",
+      "firstObservedAt": "2026-10-08T00:00:00.000Z",
+      "revisionObservedAt": "2026-10-08T00:00:00.000Z",
+      "collectedAt": "2026-10-08T00:00:00.000Z",
+      "availableAt": "2026-10-08T00:00:00.000Z",
+      "visibility": "public",
+      "rightsBoundary": "public_citation",
+      "acquisitionMethod": "public_document",
+      "contentForm": "research_summary",
+      "claimStatus": "reported"
+    }
+  },
+  "future": {
+    "gap": null,
+    "proof": {
+      "documentId": "00000000-0000-4000-8000-000000000001",
+      "contentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "rootId": "https://example.test/industry",
+      "platform": "ptt",
+      "subjectScope": "industry_context",
+      "symbols": [],
+      "publishedAt": "2026-10-07T00:00:00.000Z",
+      "firstObservedAt": "2026-10-07T00:00:00.000Z",
+      "revisionObservedAt": "2026-10-08T00:00:00.000Z",
+      "collectedAt": "2026-10-08T00:00:00.000Z",
+      "availableAt": "2026-10-08T00:00:00.000Z",
+      "visibility": "public",
+      "rightsBoundary": "public_citation",
+      "acquisitionMethod": "public_document",
+      "contentForm": "research_summary",
+      "claimStatus": "reported"
+    }
+  }
+}
+(node:48455) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-source-association.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

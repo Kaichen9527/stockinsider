@@ -53,3 +53,20 @@
 - coverage精確修正：443相同項目中100為非生成程式/設定/測試、343為生成報告/結果；剩餘300paths分成A-D216與F/G/E84，兩個既有獨立角色審查中。20runtime研究輸入另列，不能跳過。
 - 既有VM完成且idle後，另啟動單次完整Linux PCR，先補驗可重建且版本鎖定的瀏覽器cache，避免重複已知missing-executable失敗。code1a仍凍結。
 - 尚未main合併/production安裝/部署。完整精確審查及可信runner復原維持真正發布條件，沒有用測試數或scoped PASS代替。
+
+
+## 2026-10-11 release review repairs — exact e0885815
+
+Code source `e0885815b39f86df34763279dc5fc22e54037a40` / web tree `e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1`, PR363 stacked on PR362/361. Main and production remain unchanged. Separate evidence branches preserve exact code identities.
+
+- [x] A–D review coverage completed:216 paths plus20 runtime inputs; F/G/E84 paths completed separately. Frozen1a had7 reproducible P2 findings and remains REQUEST_CHANGES. Reuse is exact-blob/scoped, not a claim that all1707 changed paths are code.
+- [x] Implement inbox/association/price microsecond fixes, insider and thesis snapshot-isolation guards, paper historical catch-up authority, and legacy article withdrawal. Preserve generic attention19-digit contract and old failed examples.
+- [x] Rebind22-file calculation source closure through an additive mapping successor; preserve financial inputs/schema/assumptions. Rebind execution manifest to guarded thesis function without creating strategy approval.
+- [x] Current native15/15zero-skip:76 selected migrations,75 applied plus1already-superseded; actual existing-schema restore, postconditions, ACL/catalog checks, disconnect/rollback/concurrency and trigger guards. Only2installed function definition hashes change versus130; all other catalog attributes and pre-install stages remain identical.
+- [x] Current discovery/evidence/attention64/64 and author-context/mapping71/71zero-skip; typecheck,lint0errors33existingwarnings and normal build passed. The larger intermediate PG run166pass2fail is retained: stale profile repaired; CI03 lacks its exact reviewed Mac clock library and is NOT accepted.
+- [x] Preserve and verify historical130 Linux44native+149unit+normalbuild and Mac155PCR. These are not automatically current e088 results.
+- [ ] Latest SQL/mapping/manifest independent scoped review and latest Linux acceptance are active in existing authorized workers; do not duplicate dispatch or modify the frozen code.
+- [ ] Current full PCR/fulfillment, genuine exact review evidence and trusted runner recovery remain necessary before merge/deploy. Ordinary CI at130 had809pass2fail2skip; both concrete failures are addressed in e088 but the whole current CI still needs execution.
+- [ ] Real source/author/reviewer publications, complete candidate forward validation, approved strategies and five trading-day operation acceptance remain open. AUO remains a demonstration research direction.
+
+Evidence: `.agent/reports/2026-10-11T07-48-release-review-repairs.json`; current code PR https://github.com/Kaichen9527/stockinsider/pull/363 . Protected130 run38121306971 fails missing exact-review ref; known runner trust ingress is still absent. Do not invent signatures/authority, rerun unchanged missing capability, push main directly or enable the research schedule. Expanded VPS capacity is not the current blocker; no production writes or deletions in this increment.

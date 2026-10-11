@@ -1,0 +1,5 @@
+Error: Query read timeout
+    at /Users/kaerchen/.cache/stockinsider-workspaces/research-agents-oct04/node_modules/pg/lib/client.js:624:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///private/tmp/stockinsider-full-review-abcd-oct11-insider-rr-probe.mjs:11:10
+owned cluster stopped; directory retained /tmp/stockinsider-full-review-abcd-oct11-pg-eppaTb

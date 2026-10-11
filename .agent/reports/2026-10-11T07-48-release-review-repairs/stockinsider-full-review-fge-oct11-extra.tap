@@ -1,0 +1,282 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 3.213667
+  type: 'test'
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 121.798708
+  type: 'test'
+  ...
+# node:fs:560
+#   return binding.open(
+#                  ^
+# Error: ENOENT: no such file or directory, open '/private/tmp/stockinsider-full-review-fge-oct11-source/.loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json'
+#     at Object.openSync (node:fs:560:18)
+#     at Object.readFileSync (node:fs:444:35)
+#     at file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/opportunity-v3/migration-plan.mjs:10:27
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+#   errno: -2,
+#   code: 'ENOENT',
+#   syscall: 'open',
+#   path: '/private/tmp/stockinsider-full-review-fge-oct11-source/.loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json'
+# }
+# Node.js v22.23.3
+# Subtest: whole-file protective exceptions keep lexical blockers and the approved base chain
+not ok 3 - whole-file protective exceptions keep lexical blockers and the approved base chain
+  ---
+  duration_ms: 52.318791
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/opportunity-v3/migration-sql-policy.test.mjs:11:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: /Users/kaerchen/.nvm/versions/node/v22.23.3/bin/node scripts/opportunity-v3/migration-plan.mjs
+    node:fs:560
+      return binding.open(
+                     ^
+    
+    Error: ENOENT: no such file or directory, open '/private/tmp/stockinsider-full-review-fge-oct11-source/.loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json'
+        at Object.openSync (node:fs:560:18)
+        at Object.readFileSync (node:fs:444:35)
+        at file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/opportunity-v3/migration-plan.mjs:10:27
+        at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+        at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+        at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+      errno: -2,
+      code: 'ENOENT',
+      syscall: 'open',
+      path: '/private/tmp/stockinsider-full-review-fge-oct11-source/.loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json'
+    }
+    
+    Node.js v22.23.3
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    Object.openSync (node:fs:560:18)
+    Object.readFileSync (node:fs:444:35)
+    file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/opportunity-v3/migration-plan.mjs:10:27
+    ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+    genericNodeError (node:internal/errors:983:15)
+    wrappedFn (node:internal/errors:537:14)
+    checkExecSyncError (node:child_process:916:11)
+    execFileSync (node:child_process:952:15)
+    plan (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/opportunity-v3/migration-sql-policy.test.mjs:8:31)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/opportunity-v3/migration-sql-policy.test.mjs:12:13)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: unknown destructive SQL, including comments and function bodies, still fails closed
+ok 4 - unknown destructive SQL, including comments and function bodies, still fails closed
+  ---
+  duration_ms: 6.462791
+  type: 'test'
+  ...
+# Subtest: installed successors reject base replay and omitted extensions before any mutation
+ok 5 - installed successors reject base replay and omitted extensions before any mutation
+  ---
+  duration_ms: 3.024625
+  type: 'test'
+  ...
+# Subtest: an unextended base remains installable but unknown detection cannot authorize replay
+ok 6 - an unextended base remains installable but unknown detection cannot authorize replay
+  ---
+  duration_ms: 0.128708
+  type: 'test'
+  ...
+# Subtest: VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+ok 7 - VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+  ---
+  duration_ms: 2.255167
+  type: 'test'
+  ...
+# Subtest: VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+ok 8 - VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+  ---
+  duration_ms: 2.500667
+  type: 'test'
+  ...
+# Subtest: actual pg authentication handlers never consult pgpass or transmit credentials
+ok 9 - actual pg authentication handlers never consult pgpass or transmit credentials
+  ---
+  duration_ms: 5.327708
+  type: 'test'
+  ...
+# Subtest: native PostgreSQL distinguishes a reject file on disk from effective loaded HBA
+not ok 10 - native PostgreSQL distinguishes a reject file on disk from effective loaded HBA
+  ---
+  duration_ms: 8.812084
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/opportunity-v3/vps-migration-peer.test.mjs:84:1'
+  failureType: 'testCodeFailure'
+  error: 'spawnSync pg_config ENOENT'
+  code: 'ENOENT'
+  stack: |-
+    Object.spawnSync (node:internal/child_process:1120:20)
+    spawnSync (node:child_process:902:24)
+    execFileSync (node:child_process:945:15)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/opportunity-v3/vps-migration-peer.test.mjs:86:13)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: packages only the standalone runtime and binds a full git identity
+ok 11 - packages only the standalone runtime and binds a full git identity
+  ---
+  duration_ms: 508.1995
+  type: 'test'
+  ...
+# Subtest: release manifest covers every research dependency and verification rejects altered evidence
+ok 12 - release manifest covers every research dependency and verification rejects altered evidence
+  ---
+  duration_ms: 308.393834
+  type: 'test'
+  ...
+# Subtest: release verification rejects a modified runtime file
+ok 13 - release verification rejects a modified runtime file
+  ---
+  duration_ms: 251.516334
+  type: 'test'
+  ...
+# Subtest: accepts identical bundled static and public assets, but rejects mismatches
+ok 14 - accepts identical bundled static and public assets, but rejects mismatches
+  ---
+  duration_ms: 764.884541
+  type: 'test'
+  ...
+# Subtest: verification CLI cannot skip a release symlink invocation
+ok 15 - verification CLI cannot skip a release symlink invocation
+  ---
+  duration_ms: 37.848625
+  type: 'test'
+  ...
+# Subtest: packager CLI cannot skip a checkout symlink invocation
+ok 16 - packager CLI cannot skip a checkout symlink invocation
+  ---
+  duration_ms: 39.5185
+  type: 'test'
+  ...
+# Subtest: rejects incomplete builds, short commit ids and traced backup or env files
+ok 17 - rejects incomplete builds, short commit ids and traced backup or env files
+  ---
+  duration_ms: 281.881375
+  type: 'test'
+  ...
+# Subtest: rejects mismatched source or packager identity and dirty tracked tooling
+ok 18 - rejects mismatched source or packager identity and dirty tracked tooling
+  ---
+  duration_ms: 337.280333
+  type: 'test'
+  ...
+# (node:47414) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: live technical snapshot freezes cutoff after the official calendar acquisition
+ok 19 - live technical snapshot freezes cutoff after the official calendar acquisition
+  ---
+  duration_ms: 48.29075
+  type: 'test'
+  ...
+# Subtest: historical cutoff is not moved to admit calendar evidence first observed later
+ok 20 - historical cutoff is not moved to admit calendar evidence first observed later
+  ---
+  duration_ms: 13.463084
+  type: 'test'
+  ...
+# Subtest: actual snapshot saves benchmark and correction hash; prior approval cannot authorize new code
+ok 21 - actual snapshot saves benchmark and correction hash; prior approval cannot authorize new code
+  ---
+  duration_ms: 53.334542
+  type: 'test'
+  ...
+# Subtest: missing benchmark is persisted explicitly without altering price-only or held monitoring semantics
+ok 22 - missing benchmark is persisted explicitly without altering price-only or held monitoring semantics
+  ---
+  duration_ms: 17.734375
+  type: 'test'
+  ...
+# Subtest: actual snapshot refuses missing exact auth before any fixture database access
+ok 23 - actual snapshot refuses missing exact auth before any fixture database access
+  ---
+  duration_ms: 11.270583
+  type: 'test'
+  ...
+# Subtest: observer measures every fixed root; only absent logs may count as zero
+ok 24 - observer measures every fixed root; only absent logs may count as zero
+  ---
+  duration_ms: 2.681042
+  type: 'test'
+  ...
+# Subtest: resource CLI cannot skip checks through current symlink invocation
+ok 25 - resource CLI cannot skip checks through current symlink invocation
+  ---
+  duration_ms: 80.671375
+  type: 'test'
+  ...
+# Subtest: heavy wrapper blocks the actual command when the research guard fails
+ok 26 - heavy wrapper blocks the actual command when the research guard fails
+  ---
+  duration_ms: 496.528667
+  type: 'test'
+  ...
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+ok 27 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 1935.307917
+  type: 'test'
+  ...
+# (node:47417) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/technical-features-v2.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: technical research cannot mark a two-bar price fragment complete
+ok 28 - technical research cannot mark a two-bar price fragment complete
+  ---
+  duration_ms: 0.424666
+  type: 'test'
+  ...
+# Subtest: golden fixture keeps MA5/20/60/120/240 identities explicit
+ok 29 - golden fixture keeps MA5/20/60/120/240 identities explicit
+  ---
+  duration_ms: 11.046084
+  type: 'test'
+  ...
+# Subtest: insufficient history remains null and cannot masquerade as long MA
+ok 30 - insufficient history remains null and cannot masquerade as long MA
+  ---
+  duration_ms: 0.177916
+  type: 'test'
+  ...
+# Subtest: institutional 5/20 day flow is normalized by official traded volume and deduped by session
+ok 31 - institutional 5/20 day flow is normalized by official traded volume and deduped by session
+  ---
+  duration_ms: 0.293791
+  type: 'test'
+  ...
+# Subtest: MACD is neutral on a flat full series; partial flows stay explicitly missing
+ok 32 - MACD is neutral on a flat full series; partial flows stay explicitly missing
+  ---
+  duration_ms: 1.552
+  type: 'test'
+  ...
+1..32
+# tests 32
+# suites 0
+# pass 30
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2606.051667

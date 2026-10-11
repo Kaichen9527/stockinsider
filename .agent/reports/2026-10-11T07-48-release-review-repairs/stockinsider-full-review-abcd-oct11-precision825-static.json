@@ -1,0 +1,48 @@
+{
+  "catalogDiff": [
+    [
+      "/migrations",
+      "length 74->76"
+    ],
+    [
+      "/stages/installed/catalog/functions/69/definitionSha256",
+      "c0b0ec33e2d0cfe6b43d4a6db3f263800e0da77f1359cbba74d400136c92ec44 -> d7adc7f7cd651f033dcdb63ed2a80833bce24168141a8eea50528a7a7d985aef"
+    ],
+    [
+      "/stages/installed/catalog/functions/151/definitionSha256",
+      "adbffefa74b918e2bb1afbbf2c892781934b642f7b5217469b70e02b09f254f7 -> c59e819f942784ca15f18b77a2c2e70d12096a759407958682e297ecb133d7fb"
+    ]
+  ],
+  "closureFiles": [
+    "web/package-lock.json",
+    "web/src/lib/candidate-dossier-contract.ts",
+    "web/src/lib/public-source-url.ts",
+    "web/src/lib/research-agent-priority.ts",
+    "web/src/lib/research-agent-qualification.ts",
+    "web/src/lib/research-business-calculator.ts",
+    "web/src/lib/research-complete-2383.schema.json",
+    "web/src/lib/research-complete-2409.schema.json",
+    "web/src/lib/research-complete-canonical.ts",
+    "web/src/lib/research-complete-input.ts",
+    "web/src/lib/research-complete-schema-bundles.ts",
+    "web/src/lib/research-deep-author-input.ts",
+    "web/src/lib/research-deep-claim-context.ts",
+    "web/src/lib/research-discovery-evidence.ts",
+    "web/src/lib/research-financial-clock.ts",
+    "web/src/lib/research-financial-file-reader.ts",
+    "web/src/lib/research-financial-inventory.ts",
+    "web/src/lib/research-financial-supplement.ts",
+    "web/src/lib/research-source-association.ts",
+    "web/src/lib/research-source-clock.ts",
+    "web/src/lib/research-source-registry.ts",
+    "web/src/lib/research-source-roots.ts"
+  ],
+  "closureHash": "77b1cc06b12d45063af75e976605fb9c4725da60f2c58bd39b28d54028590a41",
+  "missingImports": [
+    [
+      "web/src/lib/research-complete-input.ts",
+      "web/src/lib/research-complete-mapping.json"
+    ]
+  ],
+  "sqlFinancialPayloadsUnchanged": true
+}

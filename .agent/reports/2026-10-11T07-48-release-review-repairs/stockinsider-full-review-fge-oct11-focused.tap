@@ -1,0 +1,1107 @@
+TAP version 13
+# Subtest: exact approval retry survives effective time; changed input does not replay
+ok 1 - exact approval retry survives effective time; changed input does not replay
+  ---
+  duration_ms: 122.026666
+  type: 'test'
+  ...
+# Subtest: bounded regular bytes preserve exact boundary, reject oversized/directory/symlink/private mode
+ok 2 - bounded regular bytes preserve exact boundary, reject oversized/directory/symlink/private mode
+  ---
+  duration_ms: 12.510334
+  type: 'test'
+  ...
+# Subtest: actual grow between fstat and read rejects; allocation and reads stay size plus one
+ok 3 - actual grow between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 15.441083
+  type: 'test'
+  ...
+# Subtest: actual shrink between fstat and read rejects; allocation and reads stay size plus one
+ok 4 - actual shrink between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 4.1085
+  type: 'test'
+  ...
+# Subtest: actual replace between fstat and read rejects; allocation and reads stay size plus one
+ok 5 - actual replace between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 7.596125
+  type: 'test'
+  ...
+# Subtest: actual replace-with-symlink between fstat and read rejects; allocation and reads stay size plus one
+ok 6 - actual replace-with-symlink between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 15.622625
+  type: 'test'
+  ...
+# Subtest: actual rewrite between fstat and read rejects; allocation and reads stay size plus one
+ok 7 - actual rewrite between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 63.999666
+  type: 'test'
+  ...
+# Subtest: source actual FIFO rejects before HTTP, output or journal; no FIFO writer
+not ok 8 - source actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 51.726084
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:70:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:internal/modules/esm/resolve:275
+        throw new ERR_MODULE_NOT_FOUND(
+              ^
+    
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-source-controller.mjs' imported from /private/tmp/stockinsider-full-review-fge-oct11-source/[eval1]
+        at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+        at moduleResolve (node:internal/modules/esm/resolve:865:10)
+        at defaultResolve (node:internal/modules/esm/resolve:989:11)
+        at #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+        at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+        at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+        at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+      code: 'ERR_MODULE_NOT_FOUND',
+      url: 'file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-source-controller.mjs'
+    }
+    
+    Node.js v22.23.3
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    moduleResolve (node:internal/modules/esm/resolve:865:10)
+    defaultResolve (node:internal/modules/esm/resolve:989:11)
+    #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+    file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:79:12
+    fixture (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:14:15)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: cloud actual FIFO rejects before HTTP, output or journal; no FIFO writer
+ok 9 - cloud actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 177.175125
+  type: 'test'
+  ...
+# Subtest: priority actual FIFO rejects before HTTP, output or journal; no FIFO writer
+not ok 10 - priority actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 57.779667
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:70:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:internal/modules/esm/resolve:275
+        throw new ERR_MODULE_NOT_FOUND(
+              ^
+    
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-source-priority-consumer.mjs' imported from /private/tmp/stockinsider-full-review-fge-oct11-source/[eval1]
+        at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+        at moduleResolve (node:internal/modules/esm/resolve:865:10)
+        at defaultResolve (node:internal/modules/esm/resolve:989:11)
+        at #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+        at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+        at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+        at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+      code: 'ERR_MODULE_NOT_FOUND',
+      url: 'file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-source-priority-consumer.mjs'
+    }
+    
+    Node.js v22.23.3
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    moduleResolve (node:internal/modules/esm/resolve:865:10)
+    defaultResolve (node:internal/modules/esm/resolve:989:11)
+    #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+    file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:79:12
+    fixture (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:14:15)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: deep-recovery actual FIFO rejects before HTTP, output or journal; no FIFO writer
+not ok 11 - deep-recovery actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 58.073084
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:70:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:internal/modules/esm/resolve:275
+        throw new ERR_MODULE_NOT_FOUND(
+              ^
+    
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-deep-controller.mjs' imported from /private/tmp/stockinsider-full-review-fge-oct11-source/[eval1]
+        at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+        at moduleResolve (node:internal/modules/esm/resolve:865:10)
+        at defaultResolve (node:internal/modules/esm/resolve:989:11)
+        at #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+        at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+        at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+        at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+      code: 'ERR_MODULE_NOT_FOUND',
+      url: 'file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-deep-controller.mjs'
+    }
+    
+    Node.js v22.23.3
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    moduleResolve (node:internal/modules/esm/resolve:865:10)
+    defaultResolve (node:internal/modules/esm/resolve:989:11)
+    #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+    file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:79:12
+    fixture (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:14:15)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: discovery CLI actual FIFO rejects before network or output; security-scope uses same reader
+not ok 12 - discovery CLI actual FIFO rejects before network or output; security-scope uses same reader
+  ---
+  duration_ms: 84.128458
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:83:1'
+  failureType: 'testCodeFailure'
+  error: `Unexpected token 'N', "Node.js v22.23.3" is not valid JSON`
+  code: 'ERR_TEST_FAILURE'
+  name: 'SyntaxError'
+  stack: |-
+    JSON.parse (<anonymous>)
+    file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:96:23
+    async fixture (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-bounded-file.test.mjs:14:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# (node:41891) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: bounded cohort transport is explicit; ordinary monitor keeps its original response limit
+ok 13 - bounded cohort transport is explicit; ordinary monitor keeps its original response limit
+  ---
+  duration_ms: 211.812209
+  type: 'test'
+  ...
+# Subtest: consumes server membership held-first, accounts expiry, and never renews or adopts a strategy
+ok 14 - consumes server membership held-first, accounts expiry, and never renews or adopts a strategy
+  ---
+  duration_ms: 92.403667
+  type: 'test'
+  ...
+# Subtest: server rechecks latest invalidation and does not receive a stale cutoff or caller eligibility
+ok 15 - server rechecks latest invalidation and does not receive a stale cutoff or caller eligibility
+  ---
+  duration_ms: 79.124667
+  type: 'test'
+  ...
+# Subtest: 32 tasks bound accounts every leftover, including held stocks outside the batch
+ok 16 - 32 tasks bound accounts every leftover, including held stocks outside the batch
+  ---
+  duration_ms: 598.617
+  type: 'test'
+  ...
+# Subtest: total deadline defers work instead of pretending the monitoring run completed
+ok 17 - total deadline defers work instead of pretending the monitoring run completed
+  ---
+  duration_ms: 230.808625
+  type: 'test'
+  ...
+# Subtest: deadline exhausted while journaling does not dispatch a snapshot with a negative timeout
+ok 18 - deadline exhausted while journaling does not dispatch a snapshot with a negative timeout
+  ---
+  duration_ms: 59.258584
+  type: 'test'
+  ...
+# Subtest: explicit server gaps remain visible and do not stop another held stock from being checked
+ok 19 - explicit server gaps remain visible and do not stop another held stock from being checked
+  ---
+  duration_ms: 98.459583
+  type: 'test'
+  ...
+# Subtest: network ambiguity stops further mutations and preserves original worklist and completed responses
+ok 20 - network ambiguity stops further mutations and preserves original worklist and completed responses
+  ---
+  duration_ms: 56.007167
+  type: 'test'
+  ...
+# Subtest: missing held membership, duplicates, future or stale server clock, invalid renewal fail closed
+ok 21 - missing held membership, duplicates, future or stale server clock, invalid renewal fail closed
+  ---
+  duration_ms: 0.716792
+  type: 'test'
+  ...
+# Subtest: mismatched response, future snapshot and manufactured eligibility become uncertain without retry
+ok 22 - mismatched response, future snapshot and manufactured eligibility become uncertain without retry
+  ---
+  duration_ms: 101.384083
+  type: 'test'
+  ...
+# Subtest: unsafe origin, shared writer key, dirty source, caller stock selection reject before any request
+ok 23 - unsafe origin, shared writer key, dirty source, caller stock selection reject before any request
+  ---
+  duration_ms: 8.31225
+  type: 'test'
+  ...
+# Subtest: existing output blocks all requests, preserving previous receipt
+ok 24 - existing output blocks all requests, preserving previous receipt
+  ---
+  duration_ms: 16.054458
+  type: 'test'
+  ...
+# Subtest: real transport uses finite authenticated routes and rejects redirects without forwarding the bearer
+ok 25 - real transport uses finite authenticated routes and rejects redirects without forwarding the bearer
+  ---
+  duration_ms: 99.851917
+  type: 'test'
+  ...
+# Subtest: GC cannot cancel the strongly held body deadline after response headers
+ok 26 - GC cannot cancel the strongly held body deadline after response headers
+  ---
+  duration_ms: 1177.836416
+  type: 'test'
+  ...
+# (node:41892) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 70 members continue32/32/6 held-first, preserve observation and immutable predecessor
+ok 27 - 70 members continue32/32/6 held-first, preserve observation and immutable predecessor
+  ---
+  duration_ms: 1230.310542
+  type: 'test'
+  ...
+# Subtest: fresh membership removes prior dispositions; rejoining, new and flag-changed companies run again
+ok 28 - fresh membership removes prior dispositions; rejoining, new and flag-changed companies run again
+  ---
+  duration_ms: 228.087667
+  type: 'test'
+  ...
+# Subtest: explicit rejection counts as a disposition and never as saved; later batches still progress
+ok 29 - explicit rejection counts as a disposition and never as saved; later batches still progress
+  ---
+  duration_ms: 816.07825
+  type: 'test'
+  ...
+# Subtest: fresh server invalidation is preserved; controller sends no old cutoff or eligibility
+ok 30 - fresh server invalidation is preserved; controller sends no old cutoff or eligibility
+  ---
+  duration_ms: 620.302583
+  type: 'test'
+  ...
+# Subtest: reject date predecessor before network
+ok 31 - reject date predecessor before network
+  ---
+  duration_ms: 315.861291
+  type: 'test'
+  ...
+# Subtest: reject future predecessor before network
+ok 32 - reject future predecessor before network
+  ---
+  duration_ms: 318.635917
+  type: 'test'
+  ...
+# Subtest: reject source predecessor before network
+ok 33 - reject source predecessor before network
+  ---
+  duration_ms: 395.455041
+  type: 'test'
+  ...
+# Subtest: reject origin predecessor before network
+ok 34 - reject origin predecessor before network
+  ---
+  duration_ms: 354.625041
+  type: 'test'
+  ...
+# Subtest: reject hash predecessor before network
+ok 35 - reject hash predecessor before network
+  ---
+  duration_ms: 379.510458
+  type: 'test'
+  ...
+# Subtest: reject truncate predecessor before network
+ok 36 - reject truncate predecessor before network
+  ---
+  duration_ms: 350.984834
+  type: 'test'
+  ...
+# Subtest: reject uncertain predecessor before network
+ok 37 - reject uncertain predecessor before network
+  ---
+  duration_ms: 701.768167
+  type: 'test'
+  ...
+# Subtest: reject extra_phase predecessor before network
+ok 38 - reject extra_phase predecessor before network
+  ---
+  duration_ms: 674.071667
+  type: 'test'
+  ...
+# Subtest: reject duplicate_progress predecessor before network
+ok 39 - reject duplicate_progress predecessor before network
+  ---
+  duration_ms: 305.156375
+  type: 'test'
+  ...
+# Subtest: changed book heads reject after fresh read and before snapshot writes
+ok 40 - changed book heads reject after fresh read and before snapshot writes
+  ---
+  duration_ms: 471.998917
+  type: 'test'
+  ...
+# Subtest: closed trace rejects unearned_first_progress despite recomputed local integrity hashes
+ok 41 - closed trace rejects unearned_first_progress despite recomputed local integrity hashes
+  ---
+  duration_ms: 81.300792
+  type: 'test'
+  ...
+# Subtest: closed trace rejects changed_response_observation despite recomputed local integrity hashes
+ok 42 - closed trace rejects changed_response_observation despite recomputed local integrity hashes
+  ---
+  duration_ms: 60.990875
+  type: 'test'
+  ...
+# Subtest: private predecessor symlink rejects without blocking or transport
+ok 43 - private predecessor symlink rejects without blocking or transport
+  ---
+  duration_ms: 411.230834
+  type: 'test'
+  ...
+# Subtest: private predecessor fifo rejects without blocking or transport
+ok 44 - private predecessor fifo rejects without blocking or transport
+  ---
+  duration_ms: 647.758833
+  type: 'test'
+  ...
+# Subtest: private predecessor permissions rejects without blocking or transport
+ok 45 - private predecessor permissions rejects without blocking or transport
+  ---
+  duration_ms: 314.851958
+  type: 'test'
+  ...
+# Subtest: private predecessor oversize rejects without blocking or transport
+ok 46 - private predecessor oversize rejects without blocking or transport
+  ---
+  duration_ms: 298.51825
+  type: 'test'
+  ...
+# Subtest: paired and distinct paths, normalized aliases, invalid HTTP rejection are rejected
+ok 47 - paired and distinct paths, normalized aliases, invalid HTTP rejection are rejected
+  ---
+  duration_ms: 17.391167
+  type: 'test'
+  ...
+# Subtest: Asia/Taipei date, not UTC date, fences continuation
+ok 48 - Asia/Taipei date, not UTC date, fences continuation
+  ---
+  duration_ms: 0.11775
+  type: 'test'
+  ...
+# Subtest: journal/output sync failure at boundary5 cannot authorize continuation
+ok 49 - journal/output sync failure at boundary5 cannot authorize continuation
+  ---
+  duration_ms: 22.997834
+  type: 'test'
+  ...
+# Subtest: journal/output sync failure at boundary6 cannot authorize continuation
+ok 50 - journal/output sync failure at boundary6 cannot authorize continuation
+  ---
+  duration_ms: 27.182333
+  type: 'test'
+  ...
+# Subtest: journal/output sync failure at boundary7 cannot authorize continuation
+ok 51 - journal/output sync failure at boundary7 cannot authorize continuation
+  ---
+  duration_ms: 30.363916
+  type: 'test'
+  ...
+# Subtest: future current worklist, duplicate membership and midnight boundary never mutate snapshots
+ok 52 - future current worklist, duplicate membership and midnight boundary never mutate snapshots
+  ---
+  duration_ms: 349.161875
+  type: 'test'
+  ...
+# Subtest: clock crosses midnight after response: saved outcomes remain in journal but no resumable success
+ok 53 - clock crosses midnight after response: saved outcomes remain in journal but no resumable success
+  ---
+  duration_ms: 28.992333
+  type: 'test'
+  ...
+# Subtest: continuation worklist request crossing midnight cannot carry yesterday dispositions
+ok 54 - continuation worklist request crossing midnight cannot carry yesterday dispositions
+  ---
+  duration_ms: 56.73775
+  type: 'test'
+  ...
+# Subtest: largest unique four-digit cohort plus monthly reviews and progress fits both file bounds
+ok 55 - largest unique four-digit cohort plus monthly reviews and progress fits both file bounds
+  ---
+  duration_ms: 21.233708
+  type: 'test'
+  ...
+# Subtest: real HTTP multi-batch continuation fetches fresh membership and never forwards progress
+ok 56 - real HTTP multi-batch continuation fetches fresh membership and never forwards progress
+  ---
+  duration_ms: 427.900625
+  type: 'test'
+  ...
+# Subtest: real clocks: request log precedes delayed server worklist cutoff and continuation remains valid
+ok 57 - real clocks: request log precedes delayed server worklist cutoff and continuation remains valid
+  ---
+  duration_ms: 494.112125
+  type: 'test'
+  ...
+# Subtest: an inactive unheld entry cannot block monitoring an existing inactive position
+ok 58 - an inactive unheld entry cannot block monitoring an existing inactive position
+  ---
+  duration_ms: 146.783375
+  type: 'test'
+  ...
+# Subtest: paper session uses verified zero-event anchor rather than any superseded historical event
+ok 59 - paper session uses verified zero-event anchor rather than any superseded historical event
+  ---
+  duration_ms: 60.614584
+  type: 'test'
+  ...
+# Subtest: current verified corporate action still blocks held book and frozen new entry
+ok 60 - current verified corporate action still blocks held book and frozen new entry
+  ---
+  duration_ms: 52.722417
+  type: 'test'
+  ...
+# Subtest: missing or mismatched anchor action context never marks or appends a book
+ok 61 - missing or mismatched anchor action context never marks or appends a book
+  ---
+  duration_ms: 276.480917
+  type: 'test'
+  ...
+# Subtest: paper exact replay returns its original immutable receipt without current authority reads
+ok 62 - paper exact replay returns its original immutable receipt without current authority reads
+  ---
+  duration_ms: 14.49125
+  type: 'test'
+  ...
+# (node:41894) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/research-financial-inventory.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: both runtime layouts contain only pinned research inputs and real readers load both companies
+not ok 63 - both runtime layouts contain only pinned research inputs and real readers load both companies
+  ---
+  duration_ms: 34.151375
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:30:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, lstat '/private/tmp/stockinsider-full-review-fge-oct11-source/docs/research/2026-10-08-auo-four-segment-model/article.md'"
+  code: 'ENOENT'
+  stack: |-
+    async lstat (node:internal/fs/promises:1028:18)
+    async Promise.all (index 0)
+    async checkPaths (node:internal/fs/cp/cp:76:39)
+    async cpFn (node:internal/fs/cp/cp:65:17)
+    async fixture (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:27:131)
+    async TestContext.<anonymous> (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:32:18)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: missing, altered and symlinked inputs reject before any research output is created
+not ok 64 - missing, altered and symlinked inputs reject before any research output is created
+  ---
+  duration_ms: 81.44025
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:44:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, lstat '/private/tmp/stockinsider-full-review-fge-oct11-source/docs/research/2026-10-08-auo-four-segment-model/article.md'"
+  code: 'ENOENT'
+  stack: |-
+    async lstat (node:internal/fs/promises:1028:18)
+    async Promise.all (index 0)
+    async checkPaths (node:internal/fs/cp/cp:76:39)
+    async cpFn (node:internal/fs/cp/cp:65:17)
+    async fixture (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:27:131)
+    async TestContext.<anonymous> (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:46:18)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: output symlinks, existing files and escaped entrypoints cannot redirect or overwrite evidence
+not ok 65 - output symlinks, existing files and escaped entrypoints cannot redirect or overwrite evidence
+  ---
+  duration_ms: 106.601875
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:56:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, lstat '/private/tmp/stockinsider-full-review-fge-oct11-source/docs/research/2026-10-08-auo-four-segment-model/article.md'"
+  code: 'ENOENT'
+  stack: |-
+    async lstat (node:internal/fs/promises:1028:18)
+    async Promise.all (index 0)
+    async checkPaths (node:internal/fs/cp/cp:76:39)
+    async cpFn (node:internal/fs/cp/cp:65:17)
+    async fixture (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:27:131)
+    async TestContext.<anonymous> (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:57:16)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: legacy fixtures skip research; a feature-enabled release cannot omit its manifest
+not ok 66 - legacy fixtures skip research; a feature-enabled release cannot omit its manifest
+  ---
+  duration_ms: 53.545125
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:67:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, lstat '/private/tmp/stockinsider-full-review-fge-oct11-source/docs/research/2026-10-08-auo-four-segment-model/article.md'"
+  code: 'ENOENT'
+  stack: |-
+    async lstat (node:internal/fs/promises:1028:18)
+    async Promise.all (index 0)
+    async checkPaths (node:internal/fs/cp/cp:76:39)
+    async cpFn (node:internal/fs/cp/cp:65:17)
+    async fixture (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:27:131)
+    async TestContext.<anonymous> (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:68:16)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: real financial reader still refuses a writable release ancestor
+not ok 67 - real financial reader still refuses a writable release ancestor
+  ---
+  duration_ms: 43.0675
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:74:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, lstat '/private/tmp/stockinsider-full-review-fge-oct11-source/docs/research/2026-10-08-auo-four-segment-model/article.md'"
+  code: 'ENOENT'
+  stack: |-
+    async lstat (node:internal/fs/promises:1028:18)
+    async Promise.all (index 0)
+    async checkPaths (node:internal/fs/cp/cp:76:39)
+    async cpFn (node:internal/fs/cp/cp:65:17)
+    async fixture (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:27:131)
+    async TestContext.<anonymous> (file:///private/tmp/stockinsider-full-review-fge-oct11-source/scripts/research-release-artifacts.test.mjs:75:16)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SQL larger than Linux single-argv limit travels entirely through stdin
+ok 68 - SQL larger than Linux single-argv limit travels entirely through stdin
+  ---
+  duration_ms: 275.460458
+  type: 'test'
+  ...
+# Subtest: exact four-MiB input accepted; +1 UTF-8 byte rejected before spawn
+ok 69 - exact four-MiB input accepted; +1 UTF-8 byte rejected before spawn
+  ---
+  duration_ms: 137.158875
+  type: 'test'
+  ...
+# Subtest: nonzero child exit preserves native code, stdout and stderr
+ok 70 - nonzero child exit preserves native code, stdout and stderr
+  ---
+  duration_ms: 131.598125
+  type: 'test'
+  ...
+# Subtest: failed spawn propagates ENOENT without unhandled stdin errors
+ok 71 - failed spawn propagates ENOENT without unhandled stdin errors
+  ---
+  duration_ms: 2.581792
+  type: 'test'
+  ...
+# Subtest: closed stdin propagates pipe failure even when child exits successfully
+ok 72 - closed stdin propagates pipe failure even when child exits successfully
+  ---
+  duration_ms: 220.399667
+  type: 'test'
+  ...
+# Subtest: stdout buffer cap rejects rather than truncating success
+ok 73 - stdout buffer cap rejects rather than truncating success
+  ---
+  duration_ms: 116.628333
+  type: 'test'
+  ...
+# Subtest: stderr buffer cap rejects rather than truncating success
+ok 74 - stderr buffer cap rejects rather than truncating success
+  ---
+  duration_ms: 106.5305
+  type: 'test'
+  ...
+# Subtest: stalled child retains bounded timeout and killed exit
+ok 75 - stalled child retains bounded timeout and killed exit
+  ---
+  duration_ms: 53.028625
+  type: 'test'
+  ...
+# Subtest: blocked maximum stdin write is bounded and preserves timeout error
+ok 76 - blocked maximum stdin write is bounded and preserves timeout error
+  ---
+  duration_ms: 53.361875
+  type: 'test'
+  ...
+# Subtest: transport callers cannot widen original timeout or output cap
+ok 77 - transport callers cannot widen original timeout or output cap
+  ---
+  duration_ms: 0.589709
+  type: 'test'
+  ...
+# (node:41896) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/research-agent-qualification.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: publishing an article cannot by itself qualify a stock for entry research
+ok 78 - publishing an article cannot by itself qualify a stock for entry research
+  ---
+  duration_ms: 23.078208
+  type: 'test'
+  ...
+# Subtest: technical confirmation does not cross data, thesis, liquidity, or strategy gates
+ok 79 - technical confirmation does not cross data, thesis, liquidity, or strategy gates
+  ---
+  duration_ms: 2.462166
+  type: 'test'
+  ...
+# Subtest: material counterevidence stops new entries but preserves paper-position monitoring
+ok 80 - material counterevidence stops new entries but preserves paper-position monitoring
+  ---
+  duration_ms: 0.864792
+  type: 'test'
+  ...
+# Subtest: a no-change monthly review extends the deadline without changing the article hash
+ok 81 - a no-change monthly review extends the deadline without changing the article hash
+  ---
+  duration_ms: 0.488917
+  type: 'test'
+  ...
+# Subtest: future research or a future market session cannot be used
+ok 82 - future research or a future market session cannot be used
+  ---
+  duration_ms: 0.628625
+  type: 'test'
+  ...
+# Subtest: timestamp aliases cannot generate a new review identity
+ok 83 - timestamp aliases cannot generate a new review identity
+  ---
+  duration_ms: 0.837583
+  type: 'test'
+  ...
+# (node:41897) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/research-monitor-benchmark-context.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:41897) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: TWSE: official aligned61 context returns explicit wealth-ratio fractions
+ok 84 - TWSE: official aligned61 context returns explicit wealth-ratio fractions
+  ---
+  duration_ms: 31.020958
+  type: 'test'
+  ...
+# Subtest: TPEX: official aligned61 context returns explicit wealth-ratio fractions
+ok 85 - TPEX: official aligned61 context returns explicit wealth-ratio fractions
+  ---
+  duration_ms: 8.690917
+  type: 'test'
+  ...
+# Subtest: missing session, insufficient authority and cancelled latest calendar never become zero strength
+ok 86 - missing session, insufficient authority and cancelled latest calendar never become zero strength
+  ---
+  duration_ms: 12.521084
+  type: 'test'
+  ...
+# Subtest: latest calendar correction requires a matching latest official index observation
+ok 87 - latest calendar correction requires a matching latest official index observation
+  ---
+  duration_ms: 39.60625
+  type: 'test'
+  ...
+# Subtest: wrong authority/unit/provider, invalid clocks and conflicts are unavailable
+ok 88 - wrong authority/unit/provider, invalid clocks and conflicts are unavailable
+  ---
+  duration_ms: 75.480625
+  type: 'test'
+  ...
+# Subtest: corporate action price basis and source revision are bound without changing authority
+ok 89 - corporate action price basis and source revision are bound without changing authority
+  ---
+  duration_ms: 12.2875
+  type: 'test'
+  ...
+# Subtest: actual adapter requests official relations, unique order, exact count and abort signal
+ok 90 - actual adapter requests official relations, unique order, exact count and abort signal
+  ---
+  duration_ms: 17.96675
+  type: 'test'
+  ...
+# Subtest: short server page and absent exact count refuse successful-partial reads
+ok 91 - short server page and absent exact count refuse successful-partial reads
+  ---
+  duration_ms: 2.877833
+  type: 'test'
+  ...
+# Subtest: future revision is excluded by the same frozen server cutoff
+ok 92 - future revision is excluded by the same frozen server cutoff
+  ---
+  duration_ms: 10.82875
+  type: 'test'
+  ...
+# Subtest: equal-time conflict across500-row pages is never hidden
+ok 93 - equal-time conflict across500-row pages is never hidden
+  ---
+  duration_ms: 42.340542
+  type: 'test'
+  ...
+# Subtest: shared deadline aborts stalled read and never starts another page
+ok 94 - shared deadline aborts stalled read and never starts another page
+  ---
+  duration_ms: 1.67925
+  type: 'test'
+  ...
+# Subtest: successful response delivered after the monotonic deadline is discarded
+ok 95 - successful response delivered after the monotonic deadline is discarded
+  ---
+  duration_ms: 1.88625
+  type: 'test'
+  ...
+# Subtest: row bound exact and+1 remain finite
+ok 96 - row bound exact and+1 remain finite
+  ---
+  duration_ms: 82.319292
+  type: 'test'
+  ...
+# Subtest: all-read serialized byte exact and+1 include discarded revisions
+ok 97 - all-read serialized byte exact and+1 include discarded revisions
+  ---
+  duration_ms: 273.785667
+  type: 'test'
+  ...
+# (node:41902) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/research-paper-books.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: fills cannot exceed the entire official session volume and predecessor exits stay frozen
+ok 98 - fills cannot exceed the entire official session volume and predecessor exits stay frozen
+  ---
+  duration_ms: 3.115292
+  type: 'test'
+  ...
+# Subtest: two separately funded books enforce their risk and exposure caps
+ok 99 - two separately funded books enforce their risk and exposure caps
+  ---
+  duration_ms: 0.448583
+  type: 'test'
+  ...
+# Subtest: unapproved strategy, missing qualification and missing liquidity never fill
+ok 100 - unapproved strategy, missing qualification and missing liquidity never fill
+  ---
+  duration_ms: 0.207041
+  type: 'test'
+  ...
+# Subtest: a final next-session bar can fill, but a gap above the entry zone cannot
+ok 101 - a final next-session bar can fill, but a gap above the entry zone cannot
+  ---
+  duration_ms: 1.521708
+  type: 'test'
+  ...
+# Subtest: same-bar stop is conservatively resolved as a loss, not a winning trade
+ok 102 - same-bar stop is conservatively resolved as a loss, not a winning trade
+  ---
+  duration_ms: 0.425
+  type: 'test'
+  ...
+# Subtest: existing positions keep their original strategy and are monitored after thesis invalidation
+ok 103 - existing positions keep their original strategy and are monitored after thesis invalidation
+  ---
+  duration_ms: 0.236292
+  type: 'test'
+  ...
+# Subtest: same session processes old-position risk, multiple distinct orders and rejects replay
+ok 104 - same session processes old-position risk, multiple distinct orders and rejects replay
+  ---
+  duration_ms: 0.419666
+  type: 'test'
+  ...
+# Subtest: the final close records new-position peak exactly once after same-day orders
+ok 105 - the final close records new-position peak exactly once after same-day orders
+  ---
+  duration_ms: 4.163208
+  type: 'test'
+  ...
+# Subtest: an unfilled order does not consume the other symbol's same-day opportunity
+ok 106 - an unfilled order does not consume the other symbol's same-day opportunity
+  ---
+  duration_ms: 0.93275
+  type: 'test'
+  ...
+# Subtest: zero-share orders cannot advance past an unsettled session or reopen a settled session
+ok 107 - zero-share orders cannot advance past an unsettled session or reopen a settled session
+  ---
+  duration_ms: 0.766708
+  type: 'test'
+  ...
+# Subtest: unofficial data and same-session execution are rejected
+ok 108 - unofficial data and same-session execution are rejected
+  ---
+  duration_ms: 0.55175
+  type: 'test'
+  ...
+# Subtest: intraday exits and same-day marks cannot finance or enlarge opening orders
+ok 109 - intraday exits and same-day marks cannot finance or enlarge opening orders
+  ---
+  duration_ms: 2.254875
+  type: 'test'
+  ...
+# Subtest: paper adoption binds parameters, risk policy, effective time and receipt version
+ok 110 - paper adoption binds parameters, risk policy, effective time and receipt version
+  ---
+  duration_ms: 0.388958
+  type: 'test'
+  ...
+# Subtest: flat and zero-volume bars cannot fabricate a fill or stopped-position cash
+ok 111 - flat and zero-volume bars cannot fabricate a fill or stopped-position cash
+  ---
+  duration_ms: 0.351958
+  type: 'test'
+  ...
+# Subtest: MA20 and time exits wait for the next tradable session and reject invalid volume
+ok 112 - MA20 and time exits wait for the next tradable session and reject invalid volume
+  ---
+  duration_ms: 0.591625
+  type: 'test'
+  ...
+# (node:41907) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/research-strategy-governance.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one hypothesis, three arms and at most three pre-registered variants
+ok 113 - one hypothesis, three arms and at most three pre-registered variants
+  ---
+  duration_ms: 10.908333
+  type: 'test'
+  ...
+# Subtest: historically unavailable research and KOL claims cannot be backfilled
+ok 114 - historically unavailable research and KOL claims cannot be backfilled
+  ---
+  duration_ms: 1.381292
+  type: 'test'
+  ...
+# Subtest: low sample and weak cost-adjusted expectancy stay research-only
+ok 115 - low sample and weak cost-adjusted expectancy stay research-only
+  ---
+  duration_ms: 0.531916
+  type: 'test'
+  ...
+# Subtest: a promising backtest cannot approve itself or omit independent holdout validation
+ok 116 - a promising backtest cannot approve itself or omit independent holdout validation
+  ---
+  duration_ms: 5.161916
+  type: 'test'
+  ...
+# Subtest: duplicated daily signals cannot manufacture thirty independent trades
+ok 117 - duplicated daily signals cannot manufacture thirty independent trades
+  ---
+  duration_ms: 0.422625
+  type: 'test'
+  ...
+# Subtest: equivalent timestamps and different times within one Taiwan session are one daily signal
+ok 118 - equivalent timestamps and different times within one Taiwan session are one daily signal
+  ---
+  duration_ms: 0.442667
+  type: 'test'
+  ...
+# Subtest: an omitted registered variant cannot pass on the first variant alone
+ok 119 - an omitted registered variant cannot pass on the first variant alone
+  ---
+  duration_ms: 1.296417
+  type: 'test'
+  ...
+# (node:41915) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/research-weekly-bars.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a short holiday week is one complete Taiwan calendar week
+ok 120 - a short holiday week is one complete Taiwan calendar week
+  ---
+  duration_ms: 2.287958
+  type: 'test'
+  ...
+# Subtest: unfinished or missing sessions never create a completed weekly signal
+ok 121 - unfinished or missing sessions never create a completed weekly signal
+  ---
+  duration_ms: 0.47175
+  type: 'test'
+  ...
+# Subtest: a Friday week is complete after the official next session moves to Monday
+ok 122 - a Friday week is complete after the official next session moves to Monday
+  ---
+  duration_ms: 0.351625
+  type: 'test'
+  ...
+# Subtest: month crossing does not split a calendar week
+ok 123 - month crossing does not split a calendar week
+  ---
+  duration_ms: 0.336333
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/generated/official-authority/official-market-authority-v314.js' imported from /private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/tw-entry-plan-authority.ts
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/generated/official-authority/official-market-authority-v314.js'
+# }
+# Node.js v22.23.3
+# Subtest: web/src/lib/tw-entry-plan-authority.test.ts
+not ok 13 - web/src/lib/tw-entry-plan-authority.test.ts
+  ---
+  duration_ms: 145.169875
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/tw-entry-plan-authority.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# (node:41921) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/tw-entry-plan.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: P1-01: prior20 excludes the signal high and its exactly 1.5x volume
+ok 125 - P1-01: prior20 excludes the signal high and its exactly 1.5x volume
+  ---
+  duration_ms: 24.453625
+  type: 'test'
+  ...
+# Subtest: P1-02: a confirmed signal retains unchanged formal market/overseas blockers
+ok 126 - P1-02: a confirmed signal retains unchanged formal market/overseas blockers
+  ---
+  duration_ms: 6.768583
+  type: 'test'
+  ...
+# Subtest: P1-03: a touch without stabilization never confirms a pullback
+ok 127 - P1-03: a touch without stabilization never confirms a pullback
+  ---
+  duration_ms: 5.468791
+  type: 'test'
+  ...
+# Subtest: P1-03: a stabilized uptrend pullback produces a bounded current-scale research zone
+ok 128 - P1-03: a stabilized uptrend pullback produces a bounded current-scale research zone
+  ---
+  duration_ms: 6.156333
+  type: 'test'
+  ...
+# Subtest: P1-03: a valid breakout that is too far above resistance keeps the signal without a usable entry zone
+ok 129 - P1-03: a valid breakout that is too far above resistance keeps the signal without a usable entry zone
+  ---
+  duration_ms: 6.999625
+  type: 'test'
+  ...
+# Subtest: P1-03: tick rounding that leaves U below L cannot publish an entry zone
+ok 130 - P1-03: tick rounding that leaves U below L cannot publish an entry zone
+  ---
+  duration_ms: 4.759834
+  type: 'test'
+  ...
+# Subtest: P1-04: Taiwan ticks use the correct tier on both sides of every boundary
+ok 131 - P1-04: Taiwan ticks use the correct tier on both sides of every boundary
+  ---
+  duration_ms: 0.25375
+  type: 'test'
+  ...
+# Subtest: P1-04: only the supplied official next session determines validity across closures
+ok 132 - P1-04: only the supplied official next session determines validity across closures
+  ---
+  duration_ms: 4.419125
+  type: 'test'
+  ...
+# Subtest: P1-04: late knowledge cannot manufacture next-open eligibility; close-time publication is expired
+ok 133 - P1-04: late knowledge cannot manufacture next-open eligibility; close-time publication is expired
+  ---
+  duration_ms: 12.805084
+  type: 'test'
+  ...
+# Subtest: P1-01/P1-05: insufficient, unfinished, missing-adjustment and conflicting inputs fail closed
+ok 134 - P1-01/P1-05: insufficient, unfinished, missing-adjustment and conflicting inputs fail closed
+  ---
+  duration_ms: 28.676459
+  type: 'test'
+  ...
+# Subtest: P1-05: official session gaps, duplicate dates, impossible dates, bad OHLC and future observations fail closed
+ok 135 - P1-05: official session gaps, duplicate dates, impossible dates, bad OHLC and future observations fail closed
+  ---
+  duration_ms: 24.173083
+  type: 'test'
+  ...
+# Subtest: P1-09: rebind/retry preserves semantic plan identity and frozen knowledge time
+ok 136 - P1-09: rebind/retry preserves semantic plan identity and frozen knowledge time
+  ---
+  duration_ms: 21.299875
+  type: 'test'
+  ...
+# Subtest: missing liquidity/formal authority never changes a technical observation into actionable permission
+ok 137 - missing liquidity/formal authority never changes a technical observation into actionable permission
+  ---
+  duration_ms: 10.925625
+  type: 'test'
+  ...
+# Subtest: zero-volume history cannot provide a breakout denominator and input size is bounded
+ok 138 - zero-volume history cannot provide a breakout denominator and input size is bounded
+  ---
+  duration_ms: 5.986875
+  type: 'test'
+  ...
+# Subtest: shared raw extraction preserves six full base2878038 plan JSON hashes
+ok 139 - shared raw extraction preserves six full base2878038 plan JSON hashes
+  ---
+  duration_ms: 28.813416
+  type: 'test'
+  ...
+# Subtest: raw fixed-window formulas equal entry signals and do not confer entry authority
+ok 140 - raw fixed-window formulas equal entry signals and do not confer entry authority
+  ---
+  duration_ms: 13.918042
+  type: 'test'
+  ...
+1..140
+# tests 140
+# suites 0
+# pass 130
+# fail 10
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10630.22125

@@ -1,0 +1,14 @@
+{
+  "subject": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "reverseClockAccepted": true,
+  "futureObservedAccepted": true,
+  "differentPublicationInstantSameHash": true,
+  "savedPublication": "2026-10-08T00:00:00.000Z",
+  "savedObserved": "2026-10-08T00:00:00.000Z",
+  "savedRevision": "2026-10-08T00:00:00.000Z",
+  "sourceSha256": "941f43e817fb6311479767b9701f7c201b7e6e4b54c22e8eff0a868c8864bfca"
+}
+(node:44797) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-inbox.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

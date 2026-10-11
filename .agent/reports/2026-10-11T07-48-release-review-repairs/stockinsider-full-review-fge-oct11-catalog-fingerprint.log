@@ -1,0 +1,3 @@
+{"stage":"beforeBase","matched":true,"counts":{"roles":9,"types":117,"tables":91,"schemas":3,"functions":85}}
+{"stage":"beforePublication","matched":true,"counts":{"roles":9,"types":117,"tables":104,"schemas":3,"functions":110}}
+{"stage":"installed","matched":true,"counts":{"roles":12,"types":117,"tables":129,"schemas":3,"functions":178}}

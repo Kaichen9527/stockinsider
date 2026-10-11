@@ -1,0 +1,87 @@
+TAP version 13
+# Subtest: complete reviewed existing-schema installation is atomic and verifies actual PostgreSQL postconditions
+    # Subtest: missing prerequisites, composite attributes and reachable role changes reject before mutation
+    ok 1 - missing prerequisites, composite attributes and reachable role changes reject before mutation
+      ---
+      duration_ms: 1812.014709
+      ...
+    # Subtest: full chain and semantic mutations are verified before rollback
+    ok 2 - full chain and semantic mutations are verified before rollback
+      ---
+      duration_ms: 2896.023333
+      ...
+    # Subtest: disconnect rolls back every schema/role/function change
+    ok 3 - disconnect rolls back every schema/role/function change
+      ---
+      duration_ms: 1160.888958
+      ...
+    # Subtest: two full clients serialize; committed installation prevents second replay
+    ok 4 - two full clients serialize; committed installation prevents second replay
+      ---
+      duration_ms: 1365.592416
+      ...
+    1..4
+ok 1 - complete reviewed existing-schema installation is atomic and verifies actual PostgreSQL postconditions
+  ---
+  duration_ms: 11324.560875
+  ...
+# Subtest: research schema extends the same attested operator plan and cannot use a separate raw runner
+ok 2 - research schema extends the same attested operator plan and cannot use a separate raw runner
+  ---
+  duration_ms: 2.223541
+  ...
+# Subtest: base chain stays fixed and explicit extension authority never replaces reviewed apply
+ok 3 - base chain stays fixed and explicit extension authority never replaces reviewed apply
+  ---
+  duration_ms: 326.924667
+  ...
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+ok 4 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 3655.677459
+  ...
+# Subtest: thesis append isolation successor rejects stale roots and preserves RC reconciliation
+    # Subtest: only first-statement guard changes and retry preserves OID, owner, ACL and semantics
+    ok 1 - only first-statement guard changes and retry preserves OID, owner, ACL and semantics
+      ---
+      duration_ms: 4.939958
+      ...
+    # Subtest: changed predecessor semantics fail before replacement
+    ok 2 - changed predecessor semantics fail before replacement
+      ---
+      duration_ms: 8.409459
+      ...
+    # Subtest: missing or changed trigger body rejects without creating a replacement
+    ok 3 - missing or changed trigger body rejects without creating a replacement
+      ---
+      duration_ms: 3.363833
+      ...
+    # Subtest: mapping successor changes only code closure; financial values, schemas and routine privileges remain exact
+    ok 4 - mapping successor changes only code closure; financial values, schemas and routine privileges remain exact
+      ---
+      duration_ms: 119.657708
+      ...
+    # Subtest: real two-connection RR snapshot cannot insert a second root after competing RC commit
+    ok 5 - real two-connection RR snapshot cannot insert a second root after competing RC commit
+      ---
+      duration_ms: 8.872375
+      ...
+    # Subtest: serializable rejects before any append while history is retained
+    ok 6 - serializable rejects before any append while history is retained
+      ---
+      duration_ms: 1.509583
+      ...
+    1..6
+ok 5 - thesis append isolation successor rejects stale roots and preserves RC reconciliation
+  ---
+  duration_ms: 1470.901917
+  ...
+1..5
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 17297.182125

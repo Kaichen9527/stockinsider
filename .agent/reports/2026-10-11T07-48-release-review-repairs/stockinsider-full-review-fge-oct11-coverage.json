@@ -1,0 +1,909 @@
+{
+  "subject": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "tree": "548ec17b1d8801ecb7f2e4c5635199aacd9989b2",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "status": "completed_scoped_review_request_changes_not_approval",
+  "paths": [
+    {
+      "path": ".github/workflows/source-led-opportunity-v3.yml",
+      "group": "F",
+      "finalBlob": "a4d901d1c9c2914429966f38416d9fc9063e2b97",
+      "sha256": "663a887528c6a4082d9a408337e8442ddff30474bff3a69453be0bea1ca55f45",
+      "bytes": 6152,
+      "sameAsF2e": true,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "deployment/vps/research-backtest-budget.json",
+      "group": "F",
+      "finalBlob": "beffc8c83cc4b84f31401b95deec70545138ac1f",
+      "sha256": "62b415d522e215a30e67c6f0efa77ae08827d43ad9e51532a30270e89bec7e69",
+      "bytes": 244,
+      "sameAsF2e": true,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "deployment/vps/research-runtime-files-v1.json",
+      "group": "F",
+      "finalBlob": "15be8f3af85c79476a2fd8c925eabfcfcbd7e5d9",
+      "sha256": "940ebe66b68375054019f28e4bcf29f20b7d055d93ec66e9724a614340ad9a5f",
+      "bytes": 4026,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Exact blob/hash; fixture decompression/profile/readable contract and recomputed static fingerprints. No independent fresh PG catalog generation here."
+    },
+    {
+      "path": "deployment/vps/run-heavy-operation.sh",
+      "group": "F",
+      "finalBlob": "47c830e5690b16b8263861999128b6b4c96c2804",
+      "sha256": "fb93199ec909821a483a924334d8bc75e754e368066b516eb5134829e54d5f69",
+      "bytes": 1299,
+      "sameAsF2e": true,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "migrations/20261004_research_technical_identity_v2.sql",
+      "group": "E",
+      "finalBlob": "5330009d85f22f694b93080de969a9d1e936f847",
+      "sha256": "fd029de904e24b6dae16f51a73383acd5fafccd174871799697a87e34400939e",
+      "bytes": 2479,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "migrations/20261005_release_function_ownership_bridge_v1.sql",
+      "group": "F",
+      "finalBlob": "b9b529144e0dacf792d64703677f2c2cb2284013",
+      "sha256": "d86fb28d4b23b95b1b1c97d9eedf418f8162610171e72dccc9b5a88f1fada747",
+      "bytes": 5282,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "package.json",
+      "group": "F",
+      "finalBlob": "097e54d0fa9bdb2fa258bb282b1561f0b042de45",
+      "sha256": "37d26e3341c847285d99e96cf705288e7db96392bb3578308e2ce56fcf7beb93",
+      "bytes": 33110,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "research/tw-strategy-lab/artifact_audit.py",
+      "group": "E",
+      "finalBlob": "6b26a3ff212ab7f7e13c24e8d2b05995d67d5bb0",
+      "sha256": "4e67d5c2a8c10d7a374ba2bcc5b1940178bd661ffac563529b77b8ec393252d3",
+      "bytes": 26234,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "research/tw-strategy-lab/test_artifact_audit.py",
+      "group": "E",
+      "finalBlob": "1e1e1fdc57881db909965c1bf7aace941ff783ac",
+      "sha256": "9ee3deffc33a321797a485ba2a07d8d86e95332b31bc01271fc9587c781a6750",
+      "bytes": 15716,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/cleanup-unused-stockinsider.py",
+      "group": "F",
+      "finalBlob": "d816791caf2b7a73bfded5e876e1d88ce624b649",
+      "sha256": "2365489a9aa69debd7c15eac73376e3d6a0857ef8c791acbcb4d29c2171c323e",
+      "bytes": 5834,
+      "sameAsF2e": true,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+      "group": "F",
+      "finalBlob": "4cfce6e2f7eeda0da463890419d638ff9e8de9a9",
+      "sha256": "d200f62c13c2b85a697381ce9dfaeae60cae8995ccbb142dc2ce04340197c4eb",
+      "bytes": 44110,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/atomic-migration-chain.mjs",
+      "group": "F",
+      "finalBlob": "b21fcfff0590bcb31ccf9491e0a1db820fb311bf",
+      "sha256": "7c1dfdcb6e670f91f320a54d1dbd683d14c2506944410b80f010826e723898c7",
+      "bytes": 2888,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+      "group": "F",
+      "finalBlob": "6ad4e15dd0d20194307b3d7bb257cb3f0609b837",
+      "sha256": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466",
+      "bytes": 2066,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/opportunity-v3/fixtures/publication-catalog-20261011.json.gz",
+      "group": "F",
+      "finalBlob": "869164199a123fc7405f6c76cf1a8030331befb0",
+      "sha256": "3cf3784f3fe3c429762e73d168b30ed6e0d345f5e938ab21ad8a273c929f066a",
+      "bytes": 193616,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Exact blob/hash; fixture decompression/profile/readable contract and recomputed static fingerprints. No independent fresh PG catalog generation here."
+    },
+    {
+      "path": "scripts/opportunity-v3/fixtures/publication-install-README.md",
+      "group": "F",
+      "finalBlob": "fbe2dc230d1ca6cad9ce11f726a8d1c06f1f3966",
+      "sha256": "51cb32fb8fe8e40a7fd0d27c4605156140732a03c708bcefc675217659ee37c7",
+      "bytes": 3034,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+      "group": "F",
+      "finalBlob": "627d6f6b248e679927494a33494c1bec477a5257",
+      "sha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+      "bytes": 322909,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Exact blob/hash; fixture decompression/profile/readable contract and recomputed static fingerprints. No independent fresh PG catalog generation here."
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-contract.test.mjs",
+      "group": "F",
+      "finalBlob": "4cef27381a31c54f8738c2cad3bf32a150a4655c",
+      "sha256": "477fa4ae840bdaac2ca8b34d033ffe0fd3fa9a83b59db5556bfb24232fdae474",
+      "bytes": 513796,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "All main-to-head changed hunks and surrounding fixture contract reviewed. Did not rerun the full pre-existing migration/PCR suite."
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-plan.mjs",
+      "group": "F",
+      "finalBlob": "bb72fdddf629b862b9e24d918d4b7de0cb7b7173",
+      "sha256": "6aca5807720dda1bb44c3d27ff8d016840ef761f87ed420d00a933b6da9dbe9f",
+      "bytes": 7493,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-sql-policy.mjs",
+      "group": "F",
+      "finalBlob": "c02052d7e40bd90cd9fad68d5ffcc80a4b81cb21",
+      "sha256": "054c982f02379d8d57b10fcddaf0c211b7019f08e8820e9e63adb7f3a3a75a7b",
+      "bytes": 2477,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+      "group": "F",
+      "finalBlob": "e0ca2386de8110ac32307fa68dc89aa33beb3d45",
+      "sha256": "d73707afeb6dedac252e17823bd030517fed276f9421ca1ea1e115c722d526ad",
+      "bytes": 2785,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-successor-guard.mjs",
+      "group": "F",
+      "finalBlob": "5cbb400613ec1bf33c5d30bd7ddaa34245814e07",
+      "sha256": "e9e79246aae764802650ddaef3c662b9502beb4f4436b5b8534fdbc69ed0e3ac",
+      "bytes": 1328,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+      "group": "F",
+      "finalBlob": "7028f642bc5ec98ef34e9a7be1366c64147c2d5f",
+      "sha256": "20c4c6ae74794bfa31141658662dc79a468b11cc0642ec111945dfed2a39b5f8",
+      "bytes": 1997,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/opportunity-v3/product-correctness.test.mjs",
+      "group": "F",
+      "finalBlob": "2ce14450ea9c6eecae8563662603f2b2735fa980",
+      "sha256": "6e498b720b72f121c818bf5de128c09673d7e9592b204244a212dbc1ca1a8592",
+      "bytes": 171667,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "All main-to-head changed hunks and surrounding fixture contract reviewed. Did not rerun the full pre-existing migration/PCR suite."
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-catalog.mjs",
+      "group": "F",
+      "finalBlob": "f06f05fe84224e91252a703af9b0f76db4bd42b6",
+      "sha256": "49e3348b60d995994d864437eba8d2a38390fb09d59e2c82fe5f60c2954887f1",
+      "bytes": 10594,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+      "group": "F",
+      "finalBlob": "d4b9c4b28d84a6863571d55c79b20167439a7608",
+      "sha256": "0c8f8308b58c60f548d252da5a5efc6eaba3839102fcc952eecee4b64c1b95b9",
+      "bytes": 9233,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-install-guard.mjs",
+      "group": "F",
+      "finalBlob": "bd2dfe89ae68934d02a318d6bb2cf02d0c6b4876",
+      "sha256": "e21a75cde841eecb0befc43c6e46c68762538df71e9395380d6184a213f3bd45",
+      "bytes": 2137,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-install-guard.test.mjs",
+      "group": "F",
+      "finalBlob": "c59f6e749d70e1789c0c06936c9df4ee64a45b12",
+      "sha256": "7973bbeb6b816ab53ecb0a7f5dd79803f75c5f9f241c3e56d01fd7ecdfae38f0",
+      "bytes": 5442,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-install-inventory.json",
+      "group": "F",
+      "finalBlob": "07108b3a5f0d79141cf1d6519be1f64718e0e9e2",
+      "sha256": "eaeefae7dcbfb2331bb9636ac6d07068cebe5fb92524dff81b2eaf6be2f7b3ec",
+      "bytes": 9074,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/research-publication-install-profile.json",
+      "group": "F",
+      "finalBlob": "3fdce7b6256e059681ecec6a14a4f2035cea1f3b",
+      "sha256": "f0d9505aadfd287e04f892b6aa6a86a435b1fd2f8b6feabe7337dd0cb3f77086",
+      "bytes": 281918,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Exact blob/hash; fixture decompression/profile/readable contract and recomputed static fingerprints. No independent fresh PG catalog generation here."
+    },
+    {
+      "path": "scripts/opportunity-v3/vps-migration-peer.mjs",
+      "group": "F",
+      "finalBlob": "825d28b093f3c0173701c190fa78a6cebd3c0d6e",
+      "sha256": "a488b4b25141ac5f23b6a859d2366ec2c91907441b10fd3ed810bd6c5dc695c9",
+      "bytes": 6693,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/opportunity-v3/vps-migration-peer.test.mjs",
+      "group": "F",
+      "finalBlob": "0545b22d0444f8d5222926ca1b86581f15145dc6",
+      "sha256": "4012f6f7f3f57dfd0d0a8f6db818e93a230964b909184815a676f740e26e6592",
+      "bytes": 8823,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/package-standalone-release.mjs",
+      "group": "F",
+      "finalBlob": "220872d35bc60b81bbce64f1540878a0a3c33f0f",
+      "sha256": "0cb1488a1407cb8bcb96b6d5897b3be0b93d72b75990ea57eb61b767a4fd6314",
+      "bytes": 8922,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/package-standalone-release.test.mjs",
+      "group": "F",
+      "finalBlob": "fcb5b0a455a59563ccfc60ea7778aa0895b3d6af",
+      "sha256": "8e168a0c462c49fb73649bc8a6449f82b9a14dbee2c4cc02b73629f0a4a7eb42",
+      "bytes": 10394,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/package-vps-standalone.mjs",
+      "group": "F",
+      "finalBlob": "c040ad5e922eeeeb89fd946842cb0d314b618cdd",
+      "sha256": "72e1f2e5cbbceb076257c510a24693ebb04011ff77c114fe0556fb15e83c5f63",
+      "bytes": 1442,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/release-owner-bridge-postgres.test.mjs",
+      "group": "F",
+      "finalBlob": "b8197a05e3f3ded6ae78efb52904b51d3d8bcf4a",
+      "sha256": "6fd05b6abea442ceac835dd56663700d287ca934480e0ce6aada7ba2e41d3bfb",
+      "bytes": 7522,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-agent-migration-gate.test.mjs",
+      "group": "F",
+      "finalBlob": "6383db720ccf84556707bea79c3d761352576642",
+      "sha256": "3e0715bff3728077b83bfaf232ce07534ac32f5aee859c25f6441ccd5216e52d",
+      "bytes": 6028,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-agent-routes.test.mjs",
+      "group": "G",
+      "finalBlob": "44a2d2b3e4f0192ee6ed76207c0cb5bdd76ff237",
+      "sha256": "e58c08473226f1f1ad1e998992d5ff73f55be81b9f32511c86671e676dfcccb2",
+      "bytes": 17001,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed shared-entry changes and actual boundary dependencies: current snapshot mode versus legacy partial collector, candidate stage/qualification and guarded auth/source roles. Cross-component A-D business logic is owned by the other reviewer; tested synthetic alias behavior without real credential reads.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-approval-replay-route.test.mjs",
+      "group": "E",
+      "finalBlob": "ddcc218b099ebfb87bab335585d75223511fb50b",
+      "sha256": "0da0c7d9d290cbb106b9dd8871aaa6e26e039bb2e12c6a65c67187e384dfab23",
+      "bytes": 2333,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-bounded-file.mjs",
+      "group": "F",
+      "finalBlob": "cbe7af25510f54d8b85e3b53c5b364f5fd6b2794",
+      "sha256": "5524720aa2e614f681050f029a2dd9d89c2964991902dafb15c0b080c34d9871",
+      "bytes": 1787,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/research-bounded-file.test.mjs",
+      "group": "F",
+      "finalBlob": "36d5e0e724c88bf20dc37be513b1e38ec5b45fc1",
+      "sha256": "5dddebde24c0e768acd1f7f6182f18c7f2bf6e85fc49cb59c6b9227ecb30773c",
+      "bytes": 6982,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-host-resource-check.mjs",
+      "group": "F",
+      "finalBlob": "165a27a2489f653c5f936a028d591c00845243bd",
+      "sha256": "4d48edc37cfc85a3948156ac496170af57ef0264e41b447c72ee16f013744675",
+      "bytes": 2910,
+      "sameAsF2e": true,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/research-host-resource-check.test.mjs",
+      "group": "F",
+      "finalBlob": "6b2774d562a0fb0b5c9ca1da108913e5cb659d48",
+      "sha256": "360f538dec3d31f3003f4a38aec4b6c7281db5339adeca6396b86b0fe2a9e298",
+      "bytes": 4255,
+      "sameAsF2e": true,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-monitor-controller.mjs",
+      "group": "E",
+      "finalBlob": "b2772114335fe06e09281783ec79d858b8b44b0e",
+      "sha256": "ddace5c81ba0cac70808a84abf53c4ab3964723fec6bf9ca95f88dbe7a860ae7",
+      "bytes": 18087,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/research-monitor-controller.test.mjs",
+      "group": "E",
+      "finalBlob": "89d450ca99a33807622d589a08b0b06d23f03918",
+      "sha256": "5c0fd7f69e9fe0a27be24be3f41dce01789bcbdf0169825f4864b53d2508025b",
+      "bytes": 17182,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-monitor-progress.mjs",
+      "group": "E",
+      "finalBlob": "b108770e81f689b1aec7cff754303a4251148bd3",
+      "sha256": "c08a6963ade6de08d9af84f10765142997c46e324a918f5d7115a0607a0c4315",
+      "bytes": 11550,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/research-monitor-progress.test.mjs",
+      "group": "E",
+      "finalBlob": "de2d3e17d97cea5671264a2fb53a7cfe58c428e9",
+      "sha256": "4c0f7b974936972fd2cf7e55a9f8992d239a8d682819e4af837be5be03d7a2af",
+      "bytes": 19004,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-paper-session-route.test.mjs",
+      "group": "E",
+      "finalBlob": "4502ffde5eed71a921ff9311165569a9aa50c61f",
+      "sha256": "9e8a4fd1ccf2ed2e5ef46430ff88162979aab1340bc3bf0a7fa7b2d6aa7b97a3",
+      "bytes": 12651,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-release-artifacts.mjs",
+      "group": "F",
+      "finalBlob": "567146fdca77bb18bd97aa500f04e482ab75eec1",
+      "sha256": "59bec6b79b9466c6db37de563ac2488d9ec0915f459db52c444709ffc6d3f0d3",
+      "bytes": 4651,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/research-release-artifacts.test.mjs",
+      "group": "F",
+      "finalBlob": "bb4331b46df9c890f17a41f1e5dd48172b57e162",
+      "sha256": "4c1e6c2e217849b0b66f734f73817e02d211d00cd423d69b6eafffed9b87d21d",
+      "bytes": 6337,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-reviewer-result-psql-child-fixture.py",
+      "group": "F",
+      "finalBlob": "e8fb49fecf90427a371504e1d0407766e245d5ad",
+      "sha256": "4b29e2a15cb9741e4cc27ebd575463520e97e33693e20ffbeb2504f97181ea98",
+      "bytes": 708,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/research-reviewer-result-psql-transport.mjs",
+      "group": "F",
+      "finalBlob": "d133498d46f2413218d9e3b6e3f5b837ef998565",
+      "sha256": "c6ffd871f7086d360ee37dfbafca694a39a3508fe532b7361bae65981ee3e6c0",
+      "bytes": 1580,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/research-reviewer-result-psql-transport.test.mjs",
+      "group": "F",
+      "finalBlob": "381b6beb270bd14c21544efd5c2d3f30f00a78c9",
+      "sha256": "e8e422cd3352b6750745555159c6917373784fd94387027d6b0ecfba0fbad4b0",
+      "bytes": 3298,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/research-strategy-release.test.mjs",
+      "group": "E",
+      "finalBlob": "6a5ec2d793a84c02d3a8db39056890c492398254",
+      "sha256": "5d97116856052ed6b54c04310586d6b03ddc5b90d43d66750a218c880e2402ef",
+      "bytes": 3245,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "scripts/sync-research-strategy-release.mjs",
+      "group": "E",
+      "finalBlob": "4d170a8f78e1883be9889b35f7095f75477a25da",
+      "sha256": "ff16fe2f5246145ebaf37947f87cab2f4cfc74f77c7d839ba2d8ba3bc62c4cdd",
+      "bytes": 8658,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "scripts/test-support/collect-piped-child.mjs",
+      "group": "F",
+      "finalBlob": "93e97a51369c32f6460dac814dd8414e2348def9",
+      "sha256": "5e9fdc0f17224024cef9cea68fa8548261577d379ef42d4693068822f824a652",
+      "bytes": 2874,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/package-lock.json",
+      "group": "F",
+      "finalBlob": "f62dd3cd9195d739ca3fab5f2b5b4d6b65209ac2",
+      "sha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+      "bytes": 274090,
+      "sameAsF2e": true,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Dependency delta, lock identity and build source-manifest binding reviewed; unchanged from exact prior f2e source. No new package vulnerability advisory scan or dependency-source audit."
+    },
+    {
+      "path": "web/package.json",
+      "group": "F",
+      "finalBlob": "adf57832d7c721079bbe923a33aca76878ea911e",
+      "sha256": "bd2b13381a5e9e5bdafe83a2a2803b753edd8fbf27f125710d191fa2d46a600b",
+      "bytes": 2137,
+      "sameAsF2e": true,
+      "reviewBasis": "Reviewed installation/packaging/CI/dependency deltas and final new guards/transports/ownership prelude; verified all 73 profile source pins, 20 runtime inputs, captured catalog fingerprints and exact installer review raw. Large pre-existing migration/PCR test files reviewed at changed hunks and relevant call paths, not as a new exhaustive baseline audit. No live installer run by this review.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/app/api/internal/research-monitor-worklist/route.ts",
+      "group": "E",
+      "finalBlob": "de292f8185ea7c0e0a38ded31ba6d70cfdeba9d3",
+      "sha256": "2e56476d86cd418024cf0624be45094b07db2da00d22e1ba6edffb02ca7b5bf0",
+      "bytes": 3098,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/app/api/internal/research-paper-session/route.ts",
+      "group": "E",
+      "finalBlob": "defc57c00bc903229bdf1756e5e8822e4891686e",
+      "sha256": "102af9121f151747d620aadafe17dde781c1952f10c74aec0f03c59ee89c6c7b",
+      "bytes": 16951,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/app/api/internal/research-strategy-record/route.ts",
+      "group": "E",
+      "finalBlob": "141ae744d5b26e63fe210c606b10a289248f635a",
+      "sha256": "47c558bf7d552aef50af7e84df6d7e9178f92191953c63e08eb1d085445559fb",
+      "bytes": 8497,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/app/api/internal/research-technical-snapshot/route.ts",
+      "group": "E",
+      "finalBlob": "e67af138987d928cc8317f01ab5fbca01de7f300",
+      "sha256": "f0e1238d3cf464e0c0c94a6fcb56939100d3a35f2271a6a68cca28ea1cf1ec4c",
+      "bytes": 12582,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/app/api/internal/research-thesis-event/route.ts",
+      "group": "E",
+      "finalBlob": "706125e8091e671c6afedcb403f81df31495d709",
+      "sha256": "74bc2e0c56129cef3533a18f2898d9d13c6f357aa314a2bbd8ec0c99937e9bc0",
+      "bytes": 4848,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/app/api/internal/research-thesis-review/route.ts",
+      "group": "E",
+      "finalBlob": "a3ccc9406d346d4f8de3783bf39cbd008ecfab2e",
+      "sha256": "801131607cb44f94d0d39095fc51f205d284090324bfd4f956d70ebcdaf037dc",
+      "bytes": 9078,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/candidate-research.ts",
+      "group": "G",
+      "finalBlob": "89137b188f02b26ba20057af22fbddf74b0c0755",
+      "sha256": "7764c1cb0eb32c96e8a81bd1583171d86975d2d8780973d4fbc574a7d01a192a",
+      "bytes": 184305,
+      "sameAsF2e": true,
+      "reviewBasis": "Reviewed shared-entry changes and actual boundary dependencies: current snapshot mode versus legacy partial collector, candidate stage/qualification and guarded auth/source roles. Cross-component A-D business logic is owned by the other reviewer; tested synthetic alias behavior without real credential reads.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/internal-auth.ts",
+      "group": "G",
+      "finalBlob": "286ee4fd5115aa3b1fea2ecacdf9f118ce35e18f",
+      "sha256": "dc9cb79909675d16159a3c37ad4c12a464f8966efca9bbd431e367a00245472b",
+      "bytes": 3548,
+      "sameAsF2e": true,
+      "reviewBasis": "Reviewed shared-entry changes and actual boundary dependencies: current snapshot mode versus legacy partial collector, candidate stage/qualification and guarded auth/source roles. Cross-component A-D business logic is owned by the other reviewer; tested synthetic alias behavior without real credential reads.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/ingestion.ts",
+      "group": "G",
+      "finalBlob": "080ca9ff6fe70cec6c7248544c208c63832db7be",
+      "sha256": "3fc39209494c0d998eac298fa5aa2dfcfde9294b4b65c552cc38bd433d169e39",
+      "bytes": 4142,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed shared-entry changes and actual boundary dependencies: current snapshot mode versus legacy partial collector, candidate stage/qualification and guarded auth/source roles. Cross-component A-D business logic is owned by the other reviewer; tested synthetic alias behavior without real credential reads.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/research-agent-qualification.test.ts",
+      "group": "E",
+      "finalBlob": "da73d87e8f96976df751afa7acdd6a9b643cb076",
+      "sha256": "c6ed14cecf8d96b9ed4041fc7664fbeec1876978a115e0e7b6b07b5b6796b6e9",
+      "bytes": 4784,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "web/src/lib/research-agent-qualification.ts",
+      "group": "E",
+      "finalBlob": "3b0618f0b1d4944b0dcdbb5d06c365520dd767b8",
+      "sha256": "690de1fb4265366c0431da990fbe2519057562600727de6f44340060c9d34da0",
+      "bytes": 8864,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/research-monitor-benchmark-context.test.ts",
+      "group": "E",
+      "finalBlob": "0bd91cfbb0644a0d80f6bf36f1ec38262ca8b794",
+      "sha256": "c54076115482797aae2f0d4d900bd63cd03e15acd55779b03cdef09f68592bad",
+      "bytes": 14499,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "web/src/lib/research-monitor-benchmark-context.ts",
+      "group": "E",
+      "finalBlob": "b49f671ab8ac24b77a03983943b36dfbe6cd6014",
+      "sha256": "2e3ae49d207a3fc9062075adf004233578ebd54d33cbaebf7d4140e17b82b875",
+      "bytes": 14748,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/research-paper-books.test.ts",
+      "group": "E",
+      "finalBlob": "796944336b6227f8adedfa163b4dd3f5fbd06c44",
+      "sha256": "dc2faf6ec5a50de08bfecb1a74bed1ce2038d53e45a40ca84a76113f320d64e6",
+      "bytes": 15604,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "web/src/lib/research-paper-books.ts",
+      "group": "E",
+      "finalBlob": "8c4a93a283eec385ab23868de8bb3b095eeac48c",
+      "sha256": "44a4d45b6f2db7d1f124f2277042840e9c142f0a6fb869d2dd4e1408bd1a2830",
+      "bytes": 20393,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/research-strategy-governance.test.ts",
+      "group": "E",
+      "finalBlob": "361e0693407423bcde957c44aeff328ac047d992",
+      "sha256": "a5e806d1b4fc77562bc49e88e623c3fb4870ce78a979a99375b4c053bc8ede80",
+      "bytes": 9770,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "web/src/lib/research-strategy-governance.ts",
+      "group": "E",
+      "finalBlob": "21a54143507ad75a22f001d31b24ac7829795063",
+      "sha256": "4379ee64672bd7ce1777c3aebd4894382cc169c957ceb144ad04a86867c4cda7",
+      "bytes": 13185,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/research-strategy-release.generated.ts",
+      "group": "E",
+      "finalBlob": "12197c74cd37c775b0ece3e3f3887ced258b3753",
+      "sha256": "6d219bfd6efc1b90930893841ba84339ca575667979e9e1a886fc77452d5e3f6",
+      "bytes": 10214,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/research-v2.ts",
+      "group": "G",
+      "finalBlob": "501fd10210de568ab7c3c5c633d181bf4f36d66e",
+      "sha256": "abd07715be302a0a0601b4d5b812af6b7e80a63b358e6ba186abd81867fe6e7c",
+      "bytes": 285140,
+      "sameAsF2e": false,
+      "reviewBasis": "Reviewed shared-entry changes and actual boundary dependencies: current snapshot mode versus legacy partial collector, candidate stage/qualification and guarded auth/source roles. Cross-component A-D business logic is owned by the other reviewer; tested synthetic alias behavior without real credential reads.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/research-weekly-bars.test.ts",
+      "group": "E",
+      "finalBlob": "3430e01bceb81dff588c9fd5c972257f0d4053cb",
+      "sha256": "f480ba4943516bfe83c7074c5ad3ddcf68f25b68b3ef069ead671f08fda8a157",
+      "bytes": 2190,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "web/src/lib/research-weekly-bars.ts",
+      "group": "E",
+      "finalBlob": "bb50c390c363569542dd935ade10dfaea69db7e9",
+      "sha256": "f8546c903abba36a6cd6178c6b0b914e0d197c83b8b4ec51ebb2d96fcdde18db",
+      "bytes": 3119,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/technical-features-v2.test.ts",
+      "group": "E",
+      "finalBlob": "232af3574a40234f4fe7b616d523bccf5153ae58",
+      "sha256": "a81521ded4e8ded1f0ecea1589f4324500576fb26bd6976d59dc54bf79edd9e8",
+      "bytes": 3498,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "web/src/lib/technical-features-v2.ts",
+      "group": "E",
+      "finalBlob": "808363c022af7202e14968b49c09405d7314d351",
+      "sha256": "3272d4e9644ce1eeabbf0640b7b42365dc133d5d502df1bfe6495feb5fc3e87b",
+      "bytes": 4818,
+      "sameAsF2e": true,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/tw-entry-plan-authority.test.ts",
+      "group": "E",
+      "finalBlob": "d95fc590c76affe24bf067aca2570cc51fb796ef",
+      "sha256": "ed27e812f5dd9d14803755c976758a161510063d83f487ad6d8c9ae992faf96b",
+      "bytes": 28779,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "web/src/lib/tw-entry-plan-authority.ts",
+      "group": "E",
+      "finalBlob": "a73ab004fb4e5cd75d0c7c84bb1a55b0d0bce588",
+      "sha256": "e2891c33de8c49198f24abf71689b7d0ee68b708f169c69e16d4ead5630d33f6",
+      "bytes": 31834,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    },
+    {
+      "path": "web/src/lib/tw-entry-plan.test.ts",
+      "group": "E",
+      "finalBlob": "49fa434e4c56143064e3cbef6c5041f7c52d010e",
+      "sha256": "93e6387d270b9fc2682b3d78ff974b0ac6b6646488c94413e300b5696cafa209",
+      "bytes": 15557,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Assertions/fixture boundaries reviewed; applicable focused executions recorded. PG-only suites reused exact scoped independent installer evidence where applicable, otherwise not independently rerun."
+    },
+    {
+      "path": "web/src/lib/tw-entry-plan.ts",
+      "group": "E",
+      "finalBlob": "bb4894b11c2a096043f8f6df08b733e004bdf947",
+      "sha256": "ae7b950b747786757ba21f04adc5f40107c9b9b910fd5336fef0aea8750b9b7d",
+      "bytes": 17651,
+      "sameAsF2e": false,
+      "reviewBasis": "Read final executable technical/qualification/strategy/paper implementations, source graph and associated changed assertions; exercised pure/route fixtures; checked PIT/clock, costs, volume/position rules, action provenance and exact-approval boundaries. FGE-P2-01 remains.",
+      "specificCoverage": "Final implementation/delta and relevant call/data/authority boundary inspected; finding applies where noted in report."
+    }
+  ],
+  "recordedAt": "2026-10-11T07:13:40.307353+00:00",
+  "groupCounts": {
+    "F": 45,
+    "G": 5,
+    "E": 34
+  },
+  "findings": [
+    "FGE-P2-01"
+  ],
+  "evidence": [
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-focused.tap",
+      "bytes": 49393,
+      "sha256": "f10880c79b6b72c7a44e50be4f2995211a7215fd704916ab2c85562a45b4df54"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-focused-dependencies.tap",
+      "bytes": 10734,
+      "sha256": "7666c16be9ba9ae04f91a29424400763657ce14899c384684b381f34fc077b62"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-extra.tap",
+      "bytes": 12614,
+      "sha256": "df8e7ce700d69eaee5d485252f2477598d970410a6735eea00608d286eccb5d7"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-plan-dependencies.tap",
+      "bytes": 1091,
+      "sha256": "f9a4863b33c9c656a22f371899ce845bf776722c9472baac445a3860aa60be0f"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-artifact-audit.log",
+      "bytes": 3537,
+      "sha256": "846743f904ffb4fb960eb225a179daed5756cdb5f0952f8e1de03943e8cbac49"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-auth-probe.log",
+      "bytes": 1076,
+      "sha256": "415f7ec5e5edff7f36b5dd4595129f4d1f24620468e434cb21e5dfc686b24bc5"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-catalog-fingerprint.log",
+      "bytes": 341,
+      "sha256": "5597d6d6b5514caa3e9e205255220b1a35e7492123f992d9171fd1aac35684d2"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-artifact-verification.json",
+      "bytes": 5148,
+      "sha256": "69c257b992464165a5dc305d1b4c1da02ff2a5e7e6a05117841a03648213793e"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-catchup-probe.ts",
+      "bytes": 8001,
+      "sha256": "6c4c821ce45e374903f0921aed1c720ca5fa0068a0535b8860099907a39611ec"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-catchup-probe.tap",
+      "bytes": 1696,
+      "sha256": "2c99f0df872a26d1a2db41c1a9a291fff81ff7abe8dbf253bd7b678e7d95c256"
+    }
+  ]
+}

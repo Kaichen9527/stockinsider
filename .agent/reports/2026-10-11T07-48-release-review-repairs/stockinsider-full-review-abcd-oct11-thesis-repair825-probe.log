@@ -1,0 +1,14 @@
+{
+  "subject": "8250fff95398c603e2be2fc31fc538fd1674bf09",
+  "RRRejected": true,
+  "fixture": "isolated exact thesis table/index/trigger/function; synthetic dependency tables and payloads, no production",
+  "rows": [
+    {
+      "id": "8cbf659a-c724-498c-9e15-62fe73afa6a0",
+      "parent_id": null,
+      "status": "qualified",
+      "review_receipt_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}
+owned cluster stopped; directory retained /tmp/stockinsider-full-review-abcd-oct11-pg-fZG5dd

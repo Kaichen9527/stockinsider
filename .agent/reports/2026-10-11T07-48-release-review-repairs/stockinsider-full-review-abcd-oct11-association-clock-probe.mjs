@@ -1,0 +1,7 @@
+import {execFileSync} from 'node:child_process';import {readFileSync} from 'node:fs';import {pathToFileURL} from 'node:url';
+const subject='1a0043f2656b63d54062224d1befeab761f554a3';const f='web/src/lib/research-source-association.ts';if(!execFileSync('git',['show',subject+':'+f]).equals(readFileSync(f)))throw Error('source mismatch');
+const {documentInvariantProof,parseIndustryAssociations}=await import(pathToFileURL(process.cwd()+'/'+f));
+const root='https://example.test/industry';const hash='a'.repeat(64), id='00000000-0000-4000-8000-000000000001';
+const doc={id,platform:'ptt',document_url:root,canonical_content_hash:hash,content_semantics:'editorial_discussion',symbols:[],published_at:'2026-10-08T00:00:00.000002Z',collected_at:'2026-10-08T00:00:00.000001Z',metadata:{canonical_url:root,content_hash:hash,first_observed_at:'2026-10-08T00:00:00.000001Z',revision_observed_at:'2026-10-08T00:00:00.000001Z',subject_scope:'industry_context',claim_status:'reported',content_form:'research_summary',visibility:'public',rights_boundary:'public_citation',acquisition_method:'public_document'}};
+const future={...doc,published_at:'2026-10-07T00:00:00Z',metadata:{...doc.metadata,first_observed_at:'2026-10-07T00:00:00Z'}};
+console.log(JSON.stringify({subject,reversed:documentInvariantProof(doc,'2026-10-08T00:00:01Z'),future:documentInvariantProof(future,'2026-10-08T00:00:00.000000Z')},null,2));

@@ -1,0 +1,542 @@
+{
+  "schemaVersion": "stockinsider-bounded-release-repairs-v1",
+  "recordedAt": "2026-10-11T07:48:27.963875+00:00",
+  "source": {
+    "commit": "e0885815b39f86df34763279dc5fc22e54037a40",
+    "tree": "3a3302a16466a4b42ad8d661458f2c4f36c7d8ff",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "currentEvidenceBranchContainsOnlyDocumentationBeyondSource": true
+  },
+  "pullRequests": {
+    "installer": 361,
+    "firstFiveRepairs": 362,
+    "precisionThesisAndMapping": 363
+  },
+  "currentSourceValidation": {
+    "discoveryEvidenceAttention": {
+      "tests": 64,
+      "pass": 64,
+      "fail": 0,
+      "skip": 0
+    },
+    "authorContextAndCompleteMapping": {
+      "tests": 71,
+      "pass": 71,
+      "fail": 0,
+      "skip": 0
+    },
+    "nativeFullInstallerThesisAndExecutionManifest": {
+      "tests": 15,
+      "pass": 15,
+      "fail": 0,
+      "skip": 0,
+      "selectedMigrations": 76,
+      "applied": 75,
+      "alreadySuperseded": 1
+    },
+    "typecheck": "PASS",
+    "lint": {
+      "errors": 0,
+      "warnings": 33
+    },
+    "normalBuild": "PASS",
+    "independentLatestSqlReview": "pending",
+    "latestLinuxValidation": "active; not copied from earlier source",
+    "fullPCR": "current e088 not yet run; historical130155PASS only"
+  },
+  "retainedFailures": {
+    "frozen1aReview": "A-D6P2 plus FGE1P2; REQUEST_CHANGES; never overwritten",
+    "intermediate79b": "new attention precision regression; repaired49a with64 independent passes",
+    "intermediatePgRegression": "166pass2fail: stale installer profile repaired, CI03 exact reviewed clock library unavailable on Mac",
+    "intermediateInstaller": "10pass4fail: old execution policy mismatch plus derivative lock timeout; repaired generated manifest then15pass",
+    "github130Diagnostic": "809pass2fail2skip; stale closure and author gap now repaired in sourcee088",
+    "protected130": "missing exact-review evidence ref; bootstrap success is not gate pass"
+  },
+  "limits": [
+    "No production DB write/migration/deployment",
+    "No actual model author/reviewer publication or strategy approval",
+    "No protected authority recovery or bypass",
+    "No Linux fullPCR browser retry after official CDN403",
+    "CI03 byte-boundary is not accepted without its exact reviewed clock library"
+  ],
+  "historicalEvidenceCommits": [
+    "32afa9abd6258fd63f5c2322280c413eea9abf4a",
+    "a8403f2f8cd37002bb9db0bd853c87231b079de2",
+    "41a1b440407ec24a26a712782fe2f0a8a200699d",
+    "7c2f13e419ebeffbabb222f1f3fd51df4fb1e48a",
+    "c8322f9c13de43922806ce75315a55002c53b5c0"
+  ],
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-diagnostic-130-oct11.log",
+      "bytes": 796343,
+      "sha256": "c83e2ce47714ef5177acb1d871da22acc5f4acee7759e78daf4b50a50d06bfb3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-discovery-clock-attention-oct11.tap",
+      "bytes": 16251,
+      "sha256": "055b87ae8009d8cdea5f82a26a444f1606e6b71a34f31bd140437882a259371d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-discovery-clock-green-oct11.tap",
+      "bytes": 10896,
+      "sha256": "721dbd1b8ec7077eb00e4a13a123d166b45c618305925b28d570d950cc7339f6"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-discovery-clock-red-oct11.tap",
+      "bytes": 15161,
+      "sha256": "197cc86ab9d110612c90a9e38341cc1cc679a42e9346583333176027796d30aa"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-association-clock-probe.log",
+      "bytes": 2201,
+      "sha256": "43987a35baf7c63e68dac1e1014c728cf789b1ce530b7b46788635d8ddbae789"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-association-clock-probe.mjs",
+      "bytes": 1402,
+      "sha256": "d4b982eb3ca152536ca6382b51ef994f0476002df51eeaa5715a6578405e5cc9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-association-repair-r2.tap",
+      "bytes": 10436,
+      "sha256": "c255b4b3da44e7cdd5bab2d4cc5fb21822ac4dc2539af77e682e188eaafd3154"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-association-repair-r3.tap",
+      "bytes": 11652,
+      "sha256": "ff80dea25d3cd7b83f3dba2bd7ee6106ed1b4bda96e9b5addf41579f9b2606c6"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-association-repair.tap",
+      "bytes": 10545,
+      "sha256": "d7b646d8aed609fc396879badf6e968304d4d52de55c5daa4d1469cbd0897641"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-coverage.json",
+      "bytes": 388593,
+      "sha256": "9ab002ab34fa0b237e5838bcc68059033be758cb6a333588d147c2f0a06a113d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-evidence-index.json",
+      "bytes": 6199,
+      "sha256": "8ac5a8a19de7150536b538eeb1fc52498d9c2598ae7baf30b3ee5e35052c4507"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-focused-command.json",
+      "bytes": 3232,
+      "sha256": "8fc68c16892765941bd45eebfbbaf364bfd04dc688dc580c8d5e38731fafdd49"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-focused.tap",
+      "bytes": 215907,
+      "sha256": "dacab702a709eeb9ca237be8331e560036133952b18fd56a9529e6609dbf8785"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-inbox-clock-probe.log",
+      "bytes": 947,
+      "sha256": "6810ae514d429ad960bb53f75850094da29aab559e9eded4807744feb4f7897d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-inbox-clock-probe.mjs",
+      "bytes": 1755,
+      "sha256": "9769882e62e97ad7cc5f499541ea5e22cd6f6a9612eb91f061dae66ce9ddb7dd"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-inbox-repair-probe.log",
+      "bytes": 1136,
+      "sha256": "ac7c39aff353b0915b27a40a15d12f03df0c2aa9648b446d3201987757047930"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-inbox-repair-probe.mjs",
+      "bytes": 2087,
+      "sha256": "69aef90bf4d468854b6b1f841a24d9bb3f266648789202af28d8e8d0730c7457"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-insider-catalog-delta.json",
+      "bytes": 605,
+      "sha256": "350c6252aa4419eb1728c65b53b66c85bf69a3ec5f09a3028f16f771228bdaac"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-insider-repair-probe.log",
+      "bytes": 575,
+      "sha256": "9897d1cca8561861757bd7e4e344561c6745fdf75835f3cc35d800cb1a78bed7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-insider-repair-probe.mjs",
+      "bytes": 3397,
+      "sha256": "fef5342c14488c00f36aa43e1f39c1a6b53c8181c770f8cb8efab01f5b12f11b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-insider-rr-probe-v2.log",
+      "bytes": 575,
+      "sha256": "2c700e47f22b6daf2b2121a8ff87142b2abed60b9c5d839f7ccb15483d3760e4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-insider-rr-probe-v2.mjs",
+      "bytes": 3096,
+      "sha256": "f013680ba3e3cec6ca7f55326b1426690f306bea42be9d8a36ab7580bf099a04"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-insider-rr-probe.log",
+      "bytes": 411,
+      "sha256": "77769a60a3838e711e13b894cdcfd0e81c797f16fd02ae748f8eac48c5c2d007"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-insider-rr-probe.mjs",
+      "bytes": 3100,
+      "sha256": "1e3b336da761499423932db19e5234e8f89ec5706ac6c3c24dc6a2669b7d7220"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-legacy-withdrawal-probe.log",
+      "bytes": 1301,
+      "sha256": "15f2871e49ea6e0c11cab0efab43252d3c6d50f88b17385bd5a997ccf6483b0d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-legacy-withdrawal-probe.mjs",
+      "bytes": 4587,
+      "sha256": "469154b14af9544b2fd46a8d78610c22e23659ab35e366f8ba271d17438f452b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-legacy-withdrawal-repair-probe.log",
+      "bytes": 1372,
+      "sha256": "28ab295bdea9f40d0d0074b43c1de964383605b2b92afcca51f4ea4bdd694dc8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-legacy-withdrawal-repair-probe.mjs",
+      "bytes": 4587,
+      "sha256": "237d64223b6ebce3f964feeee26bdb054590eedb3d33bd20de34d3fffa2d5a52"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-precision825-pg-r2.tap",
+      "bytes": 1774,
+      "sha256": "ddeeacb515c89bc585cb2a99d74c631d914ffd2fea8436a220bd24bf6855a9d9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-precision825-pg-r3.tap",
+      "bytes": 1866,
+      "sha256": "2b949e13f7c380f2415b953ab6a5c448f25ec904bfd769d28b406567af48d108"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-precision825-pg.tap",
+      "bytes": 69,
+      "sha256": "205112c873f6c4766e41ea07b37a32a21a485cc399c960fc8ebc65485be892c4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-precision825-pure-r2.tap",
+      "bytes": 7110,
+      "sha256": "f0d2f6e5fdc2d03c05a57c25631dfd278bef6bf1568e83080e2e367005db07a2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-precision825-pure.tap",
+      "bytes": 7103,
+      "sha256": "c2613ea6761c2bfcfc21ddd6fb43c2a1b5ddb6530d130674ac805a383aa01aba"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-precision825-release-check-r2.log",
+      "bytes": 1832,
+      "sha256": "7a7c7a4f8b3e3f911fdb86bbf31db234063b69b0e5b861de377611febe956d9d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-precision825-release-check.log",
+      "bytes": 1493,
+      "sha256": "db7bacdc1bd8b4556445ff37d150ecae6d006a0492df1f83e6ae753f5b4af199"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-precision825-static.json",
+      "bytes": 1871,
+      "sha256": "93e2eaa4fa9c2304b1dc243fd24340aeacbb2feff5f6409ec89cdd9acb8451ca"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-baseline-shadow.tap",
+      "bytes": 5104,
+      "sha256": "acbf22a7942702dfdd5eba9776eb512deafb9fbc298d8592af324fdb79719f54"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-clock-probe.log",
+      "bytes": 1694,
+      "sha256": "394f7c4ac7438f1000bae6328e555760fe0cda82c3b298005632303c893870e5"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-clock-probe.mjs",
+      "bytes": 995,
+      "sha256": "ceb8326f5edc3250374d5b5f0b52fc16a38dc6d303edd23be6b07ef92275387c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-repair-focused-r2.tap",
+      "bytes": 16370,
+      "sha256": "63befba5f39e17d94c03723e7bf94613b6832aa831daa1675690fb6f42e68f22"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-repair-focused.tap",
+      "bytes": 18493,
+      "sha256": "c6d9007edceccd4ae947960cc20e880bd29b80854fa521eaf518e4857da89a31"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-repair-probe.log",
+      "bytes": 967,
+      "sha256": "5c9e4d3411f1b8b071794831052625cde604614b55867caad298441fc5efa1bf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-repair-probe.mjs",
+      "bytes": 1653,
+      "sha256": "55c532b529b2bc1bd28cf0da8846253ea335caf2d5cfcdee3ca30a6b9f6abd73"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-repair-receipt.json",
+      "bytes": 3527,
+      "sha256": "a8b3e431e34b5c5ea2fff463d5b891f9ae9cc9b90bc9038fe625e6a9cfa17b7d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-repair49-focused.tap",
+      "bytes": 15179,
+      "sha256": "029a28276fbdd277541cdca16ccdf12c51cf1b6845a2883263bc19066a0bff32"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-repair49-probe.log",
+      "bytes": 967,
+      "sha256": "6532adcfef9fe60aa15d7bf13b45bf61eb9cf1befd3b3a90526397155cd148bf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-repair49-probe.mjs",
+      "bytes": 1657,
+      "sha256": "48e24206a215dd4cb27821d9e2a01b77a3f964448ef4737cf38d0d56f9c051a3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-price-repair49-receipt.json",
+      "bytes": 3187,
+      "sha256": "ec55c4a402f66bd1d473338815e2f545267759a38b86dca7464d7f35090abd57"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-report.md",
+      "bytes": 8746,
+      "sha256": "a464a3049d5033e32ca8146a1e5f41234b6af764257fa44d36a93f90ba2213da"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-runtime-input-bindings.json",
+      "bytes": 14688,
+      "sha256": "6d393fd3f1b32ff759086ca1adcadae6c61144c6367550efa22ec09334978162"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-test-map.json",
+      "bytes": 76175,
+      "sha256": "d5104c7cf6a068efd89e03640e0829cdcf958259b3d8a9398271fbc387d148cf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-thesis-repair825-probe.log",
+      "bytes": 530,
+      "sha256": "0edc3b53f3a4f8d947a4770dcaf17a88b3e89c784d814b91fe876f0382eb1b8f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-thesis-repair825-probe.mjs",
+      "bytes": 3896,
+      "sha256": "6ee8e67ab585a8599da4e3d54e407ba8fb6e5bcc8fd81521544c892988560dfd"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-thesis-rr-probe-r2.log",
+      "bytes": 723,
+      "sha256": "604cbd6a33fb3676d2e2a252d76c9a20406be4da3f9ceba586b3554c54a295e6"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-thesis-rr-probe.log",
+      "bytes": 1028,
+      "sha256": "74bbbb02c382d3df2b6038a7e1e11d051ddc7c4563a2084fba4c9a2ade226096"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-abcd-oct11-thesis-rr-probe.mjs",
+      "bytes": 3372,
+      "sha256": "579e7780f8f8a0d3468b0137281d42864142807f7f687eeb9119512a12593b33"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-artifact-audit.log",
+      "bytes": 3537,
+      "sha256": "846743f904ffb4fb960eb225a179daed5756cdb5f0952f8e1de03943e8cbac49"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-artifact-verification.json",
+      "bytes": 5148,
+      "sha256": "69c257b992464165a5dc305d1b4c1da02ff2a5e7e6a05117841a03648213793e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-auth-probe.log",
+      "bytes": 1076,
+      "sha256": "415f7ec5e5edff7f36b5dd4595129f4d1f24620468e434cb21e5dfc686b24bc5"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-auth-probe.mjs",
+      "bytes": 1272,
+      "sha256": "d52be35dc568ca5ebee172b7d6ee5a17bf9abbe8718d9d0eb54db4bd3f5e7d5a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-catalog-fingerprint.log",
+      "bytes": 341,
+      "sha256": "5597d6d6b5514caa3e9e205255220b1a35e7492123f992d9171fd1aac35684d2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-catchup-probe.tap",
+      "bytes": 1696,
+      "sha256": "2c99f0df872a26d1a2db41c1a9a291fff81ff7abe8dbf253bd7b678e7d95c256"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-coverage.json",
+      "bytes": 72232,
+      "sha256": "6a08ef3fc717848558aacb861961aee1ea08c145ad05a2e0092243c3065a4210"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-extra.tap",
+      "bytes": 12614,
+      "sha256": "df8e7ce700d69eaee5d485252f2477598d970410a6735eea00608d286eccb5d7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-focused-dependencies.tap",
+      "bytes": 10734,
+      "sha256": "7666c16be9ba9ae04f91a29424400763657ce14899c384684b381f34fc077b62"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-focused.tap",
+      "bytes": 49393,
+      "sha256": "f10880c79b6b72c7a44e50be4f2995211a7215fd704916ab2c85562a45b4df54"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-plan-dependencies.tap",
+      "bytes": 1091,
+      "sha256": "f9a4863b33c9c656a22f371899ce845bf776722c9472baac445a3860aa60be0f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-repair82-generated.tap",
+      "bytes": 9551,
+      "sha256": "3f6c64b18e6024ae4ec75aa7117f7f680300f4771047980a33cbb36a2e1aba73"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-repair82-original-probe.tap",
+      "bytes": 1646,
+      "sha256": "3bb73b140d05f899e41da1d7073543f3c873ab4edf073ac09209d65553f3d2ba"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-repair82-review.json",
+      "bytes": 6983,
+      "sha256": "b022a7b0969a25eb93b7e79d5e707a73db088b48e8e3d42e5a4d22c2e40fe605"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-repair82.tap",
+      "bytes": 9504,
+      "sha256": "f243a9c62b54ee667ffa194fb353ef2f6c632fee53ecde261b93e804f4fcb30e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-review.json",
+      "bytes": 15192,
+      "sha256": "1aafe7f8a088ac07391d9ac886d10ce9bd7347b5561b6e28d4a4a9197eba9a1a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-full-review-fge-oct11-review.md",
+      "bytes": 3907,
+      "sha256": "ab465a8cce99fdbaa2f249594ceb4279fd260b56db584dacc3e0485e9967931c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-insider-successor-green-oct11.tap",
+      "bytes": 10277,
+      "sha256": "8ff9c28e084e34acb8d15f191b038c7c33d1c730116e39316622a668003a5d3a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-legacy-heads-green-oct11.tap",
+      "bytes": 6443,
+      "sha256": "b3d4159e15d50ed137a625d52104c6cf6f469085f2acd56c3090d38be9a2a770"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-paper-catchup-verified-oct11.tap",
+      "bytes": 8327,
+      "sha256": "85df684a698b0a43cbf337e43421325a58bb568778944ee840e6ff790a589746"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-ci-regression-oct11.tap",
+      "bytes": 14339,
+      "sha256": "e6ffbcefe583292f7b5de36b4ddd950e72bd60c745e4016869f4b76509c7e3e8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-final-build-oct11.log",
+      "bytes": 6500,
+      "sha256": "c524ef937de15d1a12c3985d4901e565db5d63fa988e1ceecab3126c245d8185"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-final-catalog-capture-r2-oct11.log",
+      "bytes": 8187,
+      "sha256": "f024ebb59e9b13d16f305b9a732fa7778cbfbb1ac7d23a3a3ef385110a860083"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-final-lint-oct11.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-final-profile-observed-oct11.json",
+      "bytes": 7704635,
+      "sha256": "52337251924e6d260356a2c4c57ed80273581c0dcf36cf242b6c9e6a304561c2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-final-typecheck-oct11.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-install-chain-oct11.tap",
+      "bytes": 141090,
+      "sha256": "d108b6264a29e6a0265f6d1059c062346497a1083fdae5bec700f0935a191746"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-installer-final-oct11.tap",
+      "bytes": 7086,
+      "sha256": "08649780bccce31c76003302a0b574c7c23b4058451ff47bd78809fece9f0588"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-installer-manifest-green-oct11.tap",
+      "bytes": 3591,
+      "sha256": "0bb469ebebc0b2fa56157ce8f8a83c3b7b40a00689e7d6758276205b1414635f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-profile-delta-fixed-oct11.json",
+      "bytes": 206,
+      "sha256": "43ab31edcd1d0714599717e32dc49848c1790eff537acfb8cd8defc8ca9a7b5b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-profile-final-delta-oct11.json",
+      "bytes": 171,
+      "sha256": "008a32a19a7cd2e416d9ae9db92c48b5d077ea55270877b9272e46bd3c2715b3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-precision-strategy-sync-oct11.json",
+      "bytes": 174,
+      "sha256": "dafb9a7509297ba70ff8e0ccf89e824af2a351c021b1ec143b2734102d7d2e52"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-protected-130-oct11.log",
+      "bytes": 35204,
+      "sha256": "f8c12575bc5f6e09d68b379b8044acf391dee45f5fca5486655161d5dbf7d20d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-review-final-build-oct11.log",
+      "bytes": 6499,
+      "sha256": "572705756012210a182f52b248e76235d3a0f4151680f5360cf9bd92b94ff735"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-review-final-lint-oct11.log",
+      "bytes": 4956,
+      "sha256": "732ca9886ef8b80e00f4bb23ca042b0da42a1e3fdd1a585fde8f4ae3f2576bab"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-review-final-pcr-oct11.tap",
+      "bytes": 40232,
+      "sha256": "62b4c6ddf0232fa3686128731ee0400cfaf8beda41a07837681c100288a5f83f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-review-final-typecheck-oct11.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-48-release-review-repairs/stockinsider-source-clocks-green-oct11.tap",
+      "bytes": 25221,
+      "sha256": "09052bdb8efa8bf18caa763e92d50eb8aff817c1db7b1b2d90b22784dd750df3"
+    }
+  ],
+  "rawBytes": 9954805
+}

@@ -1,0 +1,5 @@
+import {execFileSync}from'node:child_process';import {readFileSync}from'node:fs';import{pathToFileURL}from'node:url';
+const subject='1a0043f2656b63d54062224d1befeab761f554a3';for(const f of ['research-discovery-price-enrichment.ts','research-discovery-evidence.ts'])if(!execFileSync('git',['show',subject+':web/src/lib/'+f]).equals(readFileSync('web/src/lib/'+f)))throw Error('source mismatch');
+const {evaluateDiscoveryPrice}=await import(pathToFileURL(process.cwd()+'/web/src/lib/research-discovery-price-enrichment.ts'));
+const cutoff='2026-10-08T05:30:00.000001Z';const quote={session:'2026-10-08',close:15,volume:10000,sourceUrl:'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=2409',availableAt:'2026-10-08T05:30:00.000002Z',priceBasis:'raw_exchange_quote',symbol:'2409',exchange:'TWSE'};
+console.log(JSON.stringify({subject,cutoff,futureQuote:evaluateDiscoveryPrice({quote,window:null,latestCompletedSession:'2026-10-08',missing:[]},cutoff)},null,2));

@@ -1,0 +1,14 @@
+{
+  "subject": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "pg": {
+    "version": "PostgreSQL 17.10 (Homebrew) on aarch64-apple-darwin25.4.0, compiled by Apple clang version 21.0.0 (clang-2100.0.123.102), 64-bit"
+  },
+  "fixture": "isolated partial dependency schema; 127 real run RPCs share original five pending acquisition tokens; no production/source HTTP",
+  "aAdmitted": true,
+  "bRepeatableReadAdmitted": true,
+  "durable": {
+    "runs": "129",
+    "mappings": "645"
+  }
+}
+owned cluster stopped; directory retained /tmp/stockinsider-full-review-abcd-oct11-pg-HyBzh2

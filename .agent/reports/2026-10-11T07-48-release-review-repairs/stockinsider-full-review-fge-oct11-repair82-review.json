@@ -1,0 +1,122 @@
+{
+  "schema": "unsigned-scoped-independent-code-review-v1",
+  "recordedAt": "2026-10-11T07:22:06.970482+00:00",
+  "subject": "82d3a6e62d6ce392834182b7d579353a840736ed",
+  "tree": "d146b9ffe6e57fcea74c4d4e6e284129793c91bb",
+  "base": "9050865144e97ac552c5101cb2eee44eaa72faa0",
+  "verdict": "PASS within five-file paper catch-up repair; FGE-P2-01 closed; no new P1/P2 found in this repair",
+  "findings": [],
+  "closedFinding": "FGE-P2-01",
+  "scope": [
+    {
+      "path": "scripts/research-paper-session-route.test.mjs",
+      "finalBlob": "74e281361573ce9023362449ad49719b98b7a88f",
+      "bytes": 13264,
+      "sha256": "91df9b34718fc2bec600618850b263b3e32b575868f797c09bbbe9bad6035d2d"
+    },
+    {
+      "path": "web/src/app/api/internal/research-paper-session/route.ts",
+      "finalBlob": "5cac42549531227993948313d72851f9d58c1efc",
+      "bytes": 16953,
+      "sha256": "91889cb26475a8de6f805af670711ec77f2d51beebe7e954bdff18795801644d"
+    },
+    {
+      "path": "web/src/lib/research-strategy-release.generated.ts",
+      "finalBlob": "1801ad0c982cbf58dc33aee4f1add2469a574813",
+      "bytes": 10214,
+      "sha256": "d00a6550e9c9a1fa8cd3645c862257a2f3a4efc067ebb77896229574eb264829"
+    },
+    {
+      "path": "web/src/lib/tw-entry-plan-authority.test.ts",
+      "finalBlob": "7bcaede426f1d6a782c60b05d9c696d46bae4c17",
+      "bytes": 31328,
+      "sha256": "a06a5cb7ce8aea015326640288915ee432edcb281e31b4c9a4fd4add9cb929e8"
+    },
+    {
+      "path": "web/src/lib/tw-entry-plan-authority.ts",
+      "finalBlob": "8f7fe77909b9e8523934bb9c83cfd3b84fccd1c2",
+      "bytes": 34316,
+      "sha256": "c851e65872e2a884569e8e94f957fdf480b4e8517e1f97213b9a6e10f4930352"
+    }
+  ],
+  "priorFgeCoverage": {
+    "subject": "1a0043f2656b63d54062224d1befeab761f554a3",
+    "unchangedPaths": 71,
+    "changedPaths": [
+      "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+      "scripts/opportunity-v3/fixtures/publication-catalog-20261011.json.gz",
+      "scripts/opportunity-v3/migration-plan.mjs",
+      "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+      "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+      "scripts/opportunity-v3/research-publication-install-inventory.json",
+      "scripts/opportunity-v3/research-publication-install-profile.json",
+      "scripts/research-agent-migration-gate.test.mjs",
+      "scripts/research-paper-session-route.test.mjs",
+      "web/src/app/api/internal/research-paper-session/route.ts",
+      "web/src/lib/research-strategy-release.generated.ts",
+      "web/src/lib/tw-entry-plan-authority.test.ts",
+      "web/src/lib/tw-entry-plan-authority.ts"
+    ],
+    "interveningFgeChangesNotReviewedInThisRepair": [
+      "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+      "scripts/opportunity-v3/fixtures/publication-catalog-20261011.json.gz",
+      "scripts/opportunity-v3/migration-plan.mjs",
+      "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+      "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+      "scripts/opportunity-v3/research-publication-install-inventory.json",
+      "scripts/opportunity-v3/research-publication-install-profile.json",
+      "scripts/research-agent-migration-gate.test.mjs"
+    ],
+    "note": "Compared all84 original F/G/E identities. Intervening installer/isolation-plan deltas are OUTSIDE this five-file review and need separate review; prior scope approval cannot be automatically inherited."
+  },
+  "checks": [
+    "Settlement shares readSharedAuthority/readHistoricalCore:240 days, complete corporate-action feeds and canonical hash checks.",
+    "annualHistory preserves prior past-calendar daily coverage/cancellation checks. Live forwardCalendar still requires a scheduled next tradable day.",
+    "Settlement result omits calendar/next execution authority. Original independent delayed-next-completed repro now returns240 bars, while live reader still rejects.",
+    "Shared anchor builder preserves explicit verified zero-event and selected event/source/hash/cutoff binding. Route retains invalid context and held corporate-action rejection.",
+    "Route uses completedSessions for mandatory sequential settlement; inception, frozen pre-open qualification/approval/liquidity, book sizing/costs and entry rules unchanged.",
+    "Regenerated codeHash b4433b261b29e1178206b6be014d2de1c8d8d0d0b778b09658b7a7419a48a0ce binds new bytes; parameterHash unchanged and no approval created.",
+    "Live output byte-equivalence and source-release altered-dependency tests pass."
+  ],
+  "independentExecution": {
+    "command": "TMPDIR=<isolated scratch> PATH=<node22>:/usr/bin:/bin node --experimental-strip-types --test web/src/lib/tw-entry-plan-authority.test.ts scripts/research-paper-session-route.test.mjs scripts/research-strategy-release.test.mjs /tmp/stockinsider-full-review-fge-oct11-repair82-original-probe.ts",
+    "tests": 34,
+    "pass": 34,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 29103.908125,
+    "log": "/tmp/stockinsider-full-review-fge-oct11-repair82-generated.tap",
+    "node": "v22.23.3",
+    "environment": "Mac exact-source isolated extraction; synthetic fixtures; no provider/network/auth/production",
+    "initialFailures": "Initial extraction lacked generated official bridge. Original-probe file failed import; initial focused8TAP6pass2fail due missing bridge. Retained logs. Running existing official-authority sync from extracted cwd produced5 canonical generated modules, then all34 passed. Setup failures are not product failures."
+  },
+  "evidence": [
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-repair82.tap",
+      "bytes": 9504,
+      "sha256": "f243a9c62b54ee667ffa194fb353ef2f6c632fee53ecde261b93e804f4fcb30e"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-repair82-original-probe.ts",
+      "bytes": 8367,
+      "sha256": "c4c3e88a21036c3896d9da151cd727ca8ce3f945c5258229ee9559669521c896"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-repair82-original-probe.tap",
+      "bytes": 1646,
+      "sha256": "3bb73b140d05f899e41da1d7073543f3c873ab4edf073ac09209d65553f3d2ba"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-fge-oct11-repair82-generated.tap",
+      "bytes": 9551,
+      "sha256": "3f6c64b18e6024ae4ec75aa7117f7f680300f4771047980a33cbb36a2e1aba73"
+    }
+  ],
+  "limitations": [
+    "No full release/protected approval, signatures or evidence ref.",
+    "No production PG/HTTP, fresh build/type/lint or VM integration executed in this repair review.",
+    "Historical1a F/G/E remains request-changes. This addendum closes its paper finding only at exact82; A-D and additional F installer changes are separate review obligations.",
+    "Synthetic history/action evidence proves contract behavior, not actual market availability, strategy adoption or profitability."
+  ],
+  "mutations": "Only /tmp/stockinsider-full-review-fge-oct11* extraction/raw/receipts. Root source/tests/runtime/services/secrets unchanged."
+}

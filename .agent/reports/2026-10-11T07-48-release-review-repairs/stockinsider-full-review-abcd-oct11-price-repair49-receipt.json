@@ -1,0 +1,75 @@
+{
+  "kind": "unsigned_scoped_code_review",
+  "subject": "49a1399a479f7ad0e069bc2ce18c1d554e18f0f3",
+  "tree": "d22ce92e96c4f5a01b0fefc7e38db93b5acd8104",
+  "base": "13026a9071856268edc11efbb991497f4e504b13",
+  "scope": [
+    "web/src/lib/research-discovery-evidence.test.ts",
+    "web/src/lib/research-discovery-evidence.ts",
+    "web/src/lib/research-discovery-price-enrichment.test.ts",
+    "web/src/lib/research-discovery-price-enrichment.ts"
+  ],
+  "verdict": "PASS",
+  "tests": {
+    "exact_head_existing_price_evidence_and_shadow": {
+      "total": 64,
+      "pass": 64,
+      "fail": 0,
+      "skip": 0
+    },
+    "independent_original_future_quote_probe": "now rejects",
+    "invalid_clocks": "NaN, rejected quotes",
+    "equal_offset_negative_epoch_cross_day": "pass",
+    "current_run_reuse": "DP28 passes; distinct microseconds require distinct reads"
+  },
+  "review": [
+    "Entire four-file base-to-head diff reviewed; head clock predicates use strict persistent validator while generic shadow predicate restored byte-equivalent to base.",
+    "All price/evidence ordering uses microseconds; query filters carry original precise clocks; calendar tie semantic canonicalization uses strings, no BigInt JSON serialization.",
+    "Original 79b high-precision shadow regression and extraction-error logs retained separately; repaired shadow 19-digit boundary succeeds unchanged.",
+    "Shadow/rankingInfluence false retained, no adapter authority/source activation change."
+  ],
+  "limits": [
+    "No PG, full build, production or protected approval.",
+    "Source-closure mapping/additive SQL synchronization is separate pending work; this PASS is only the four-file repair scope."
+  ],
+  "blobs": [
+    {
+      "path": "web/src/lib/research-discovery-evidence.test.ts",
+      "sha256": "e9893e8c69358037dcdaaa8689b43c371d9b6c710fef79ebe2278bcc71a4de28"
+    },
+    {
+      "path": "web/src/lib/research-discovery-evidence.ts",
+      "sha256": "832e279429951e548bc12e8a0dd578a9c38c4e7ffa18e3e2e2bc649941517896"
+    },
+    {
+      "path": "web/src/lib/research-discovery-price-enrichment.test.ts",
+      "sha256": "385f56fe6fc39d44148a9bacfaebfe2995bd38a3157978bd57eed9a526f5c2a2"
+    },
+    {
+      "path": "web/src/lib/research-discovery-price-enrichment.ts",
+      "sha256": "e155edfd54a61bc4dc22c24573f6f8293e210d52250011b56bce971c8f284fde"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-repair49-focused.tap",
+      "bytes": 15179,
+      "sha256": "029a28276fbdd277541cdca16ccdf12c51cf1b6845a2883263bc19066a0bff32"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-repair49-probe.mjs",
+      "bytes": 1657,
+      "sha256": "48e24206a215dd4cb27821d9e2a01b77a3f964448ef4737cf38d0d56f9c051a3"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-repair49-probe.log",
+      "bytes": 967,
+      "sha256": "6532adcfef9fe60aa15d7bf13b45bf61eb9cf1befd3b3a90526397155cd148bf"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-repair-receipt.json",
+      "bytes": 3527,
+      "sha256": "a8b3e431e34b5c5ea2fff463d5b891f9ae9cc9b90bc9038fe625e6a9cfa17b7d"
+    }
+  ]
+}

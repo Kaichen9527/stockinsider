@@ -1,0 +1,39 @@
+{
+  "subject": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "cutoff": "2026-10-08T05:30:00.000001Z",
+  "futureQuote": {
+    "policyVersion": "discovery-price-shadow-v1",
+    "cutoff": "2026-10-08T05:30:00.000001Z",
+    "quote": {
+      "session": "2026-10-08",
+      "close": 15,
+      "volume": 10000,
+      "sourceUrl": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20261001&stockNo=2409",
+      "availableAt": "2026-10-08T05:30:00.000002Z",
+      "priceBasis": "raw_exchange_quote",
+      "symbol": "2409",
+      "exchange": "TWSE"
+    },
+    "quoteStatus": "official_raw_quote",
+    "latestCompletedSession": "2026-10-08",
+    "relative5d": null,
+    "relative20d": null,
+    "relative60d": null,
+    "pricePhase": "unknown",
+    "phaseIsResearchSignalOnly": true,
+    "researchEvidenceRequired": true,
+    "rankingInfluence": false,
+    "missing": [
+      "aligned_61_session_window_missing",
+      "benchmark_pit_validation_missing",
+      "corporate_action_basis_missing",
+      "official_dataset_validation_missing",
+      "price_phase_metadata_missing"
+    ],
+    "sourceDatasetHash": null
+  }
+}
+(node:69012) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-discovery-price-enrichment.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

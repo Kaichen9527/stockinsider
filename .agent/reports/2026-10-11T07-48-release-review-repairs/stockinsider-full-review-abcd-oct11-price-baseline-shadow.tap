@@ -1,0 +1,142 @@
+TAP version 13
+# Subtest: old public material acquired today is a discovery, not recent discussion or attention
+ok 1 - old public material acquired today is a discovery, not recent discussion or attention
+  ---
+  duration_ms: 26.855
+  type: 'test'
+  ...
+# Subtest: same canonical publisher keeps different topics/URLs but contributes one reviewed voice
+ok 2 - same canonical publisher keeps different topics/URLs but contributes one reviewed voice
+  ---
+  duration_ms: 1.748583
+  type: 'test'
+  ...
+# Subtest: shared origin across publishers is one confirmation; independent origins and publishers are two
+ok 3 - shared origin across publishers is one confirmation; independent origins and publishers are two
+  ---
+  duration_ms: 2.361875
+  type: 'test'
+  ...
+# Subtest: legacy original flag or absent parent never supplies reviewed independent identity
+ok 4 - legacy original flag or absent parent never supplies reviewed independent identity
+  ---
+  duration_ms: 7.473792
+  type: 'test'
+  ...
+# Subtest: publisher-origin bridge components are conservative and permutation invariant
+ok 5 - publisher-origin bridge components are conservative and permutation invariant
+  ---
+  duration_ms: 10.10125
+  type: 'test'
+  ...
+# Subtest: new repost cannot move an older origin into the recent publication bucket
+ok 6 - new repost cannot move an older origin into the recent publication bucket
+  ---
+  duration_ms: 0.539125
+  type: 'test'
+  ...
+# Subtest: exact seven/fourteen-day boundaries are disjoint and acquisition stays separate
+ok 7 - exact seven/fourteen-day boundaries are disjoint and acquisition stays separate
+  ---
+  duration_ms: 0.735291
+  type: 'test'
+  ...
+# Subtest: distinct prior-week voices reduce attention without deleting current evidence
+ok 8 - distinct prior-week voices reduce attention without deleting current evidence
+  ---
+  duration_ms: 0.404333
+  type: 'test'
+  ...
+# Subtest: stale binding cannot authorize a corrected selected revision
+ok 9 - stale binding cannot authorize a corrected selected revision
+  ---
+  duration_ms: 1.232666
+  type: 'test'
+  ...
+# Subtest: canonical parent root dedup and original withdrawal outrank later repost
+ok 10 - canonical parent root dedup and original withdrawal outrank later repost
+  ---
+  duration_ms: 0.844958
+  type: 'test'
+  ...
+# Subtest: metadata-only and contradicted roots do not become confirmations
+ok 11 - metadata-only and contradicted roots do not become confirmations
+  ---
+  duration_ms: 0.483042
+  type: 'test'
+  ...
+# Subtest: v1 root/revision selection stays equivalent and baseline is echoed separately
+ok 12 - v1 root/revision selection stays equivalent and baseline is echoed separately
+  ---
+  duration_ms: 1.221375
+  type: 'test'
+  ...
+# Subtest: equal-time revision ties match v1; contradictory identities reject
+ok 13 - equal-time revision ties match v1; contradictory identities reject
+  ---
+  duration_ms: 0.822334
+  type: 'test'
+  ...
+# Subtest: future or pre-revision origin reviews, duplicate and contradictory bindings reject
+ok 14 - future or pre-revision origin reviews, duplicate and contradictory bindings reject
+  ---
+  duration_ms: 0.586458
+  type: 'test'
+  ...
+# Subtest: sub-millisecond cutoff and source review clocks retain supplied precision
+ok 15 - sub-millisecond cutoff and source review clocks retain supplied precision
+  ---
+  duration_ms: 0.6775
+  type: 'test'
+  ...
+# Subtest: fractional bucket boundaries and equivalent timezone offsets compare exactly
+ok 16 - fractional bucket boundaries and equivalent timezone offsets compare exactly
+  ---
+  duration_ms: 1.087709
+  type: 'test'
+  ...
+# Subtest: v1-ambiguous fractional revision or Unicode collation ties reject in either permutation
+ok 17 - v1-ambiguous fractional revision or Unicode collation ties reject in either permutation
+  ---
+  duration_ms: 1.630833
+  type: 'test'
+  ...
+# Subtest: newer winning revision cannot hide an older ambiguous pair in any permutation
+ok 18 - newer winning revision cannot hide an older ambiguous pair in any permutation
+  ---
+  duration_ms: 5.908875
+  type: 'test'
+  ...
+# Subtest: URL fallback and explicit revision with the same selection key cannot collide
+ok 19 - URL fallback and explicit revision with the same selection key cannot collide
+  ---
+  duration_ms: 1.811333
+  type: 'test'
+  ...
+# Subtest: missing revision leaves independence unknown; no supplied binding is inferred
+ok 20 - missing revision leaves independence unknown; no supplied binding is inferred
+  ---
+  duration_ms: 0.358
+  type: 'test'
+  ...
+# Subtest: invalid enum/clock/identifier/field/prototype and credential URL reject
+ok 21 - invalid enum/clock/identifier/field/prototype and credential URL reject
+  ---
+  duration_ms: 1.125334
+  type: 'test'
+  ...
+# Subtest: input count and total byte limits reject while 20,000 rows run with bounded graph traversal
+ok 22 - input count and total byte limits reject while 20,000 rows run with bounded graph traversal
+  ---
+  duration_ms: 1657.007875
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1998.216584

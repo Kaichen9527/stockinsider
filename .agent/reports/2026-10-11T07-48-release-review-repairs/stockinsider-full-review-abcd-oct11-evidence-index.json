@@ -1,0 +1,160 @@
+{
+  "scope": "unsigned A-D only",
+  "files": [
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-association-clock-probe.log",
+      "bytes": 2201,
+      "sha256": "43987a35baf7c63e68dac1e1014c728cf789b1ce530b7b46788635d8ddbae789"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-association-clock-probe.mjs",
+      "bytes": 1402,
+      "sha256": "d4b982eb3ca152536ca6382b51ef994f0476002df51eeaa5715a6578405e5cc9"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-association-repair-r2.tap",
+      "bytes": 10436,
+      "sha256": "c255b4b3da44e7cdd5bab2d4cc5fb21822ac4dc2539af77e682e188eaafd3154"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-association-repair-r3.tap",
+      "bytes": 11652,
+      "sha256": "ff80dea25d3cd7b83f3dba2bd7ee6106ed1b4bda96e9b5addf41579f9b2606c6"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-association-repair.tap",
+      "bytes": 10545,
+      "sha256": "d7b646d8aed609fc396879badf6e968304d4d52de55c5daa4d1469cbd0897641"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-coverage.json",
+      "bytes": 388593,
+      "sha256": "9ab002ab34fa0b237e5838bcc68059033be758cb6a333588d147c2f0a06a113d"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-focused-command.json",
+      "bytes": 3232,
+      "sha256": "8fc68c16892765941bd45eebfbbaf364bfd04dc688dc580c8d5e38731fafdd49"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-focused.tap",
+      "bytes": 215907,
+      "sha256": "dacab702a709eeb9ca237be8331e560036133952b18fd56a9529e6609dbf8785"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-inbox-clock-probe.log",
+      "bytes": 947,
+      "sha256": "6810ae514d429ad960bb53f75850094da29aab559e9eded4807744feb4f7897d"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-inbox-clock-probe.mjs",
+      "bytes": 1755,
+      "sha256": "9769882e62e97ad7cc5f499541ea5e22cd6f6a9612eb91f061dae66ce9ddb7dd"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-inbox-repair-probe.log",
+      "bytes": 1136,
+      "sha256": "ac7c39aff353b0915b27a40a15d12f03df0c2aa9648b446d3201987757047930"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-inbox-repair-probe.mjs",
+      "bytes": 2087,
+      "sha256": "69aef90bf4d468854b6b1f841a24d9bb3f266648789202af28d8e8d0730c7457"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-insider-catalog-delta.json",
+      "bytes": 605,
+      "sha256": "350c6252aa4419eb1728c65b53b66c85bf69a3ec5f09a3028f16f771228bdaac"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-insider-repair-probe.log",
+      "bytes": 575,
+      "sha256": "9897d1cca8561861757bd7e4e344561c6745fdf75835f3cc35d800cb1a78bed7"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-insider-repair-probe.mjs",
+      "bytes": 3397,
+      "sha256": "fef5342c14488c00f36aa43e1f39c1a6b53c8181c770f8cb8efab01f5b12f11b"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-insider-rr-probe-v2.log",
+      "bytes": 575,
+      "sha256": "2c700e47f22b6daf2b2121a8ff87142b2abed60b9c5d839f7ccb15483d3760e4"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-insider-rr-probe-v2.mjs",
+      "bytes": 3096,
+      "sha256": "f013680ba3e3cec6ca7f55326b1426690f306bea42be9d8a36ab7580bf099a04"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-insider-rr-probe.log",
+      "bytes": 411,
+      "sha256": "77769a60a3838e711e13b894cdcfd0e81c797f16fd02ae748f8eac48c5c2d007"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-insider-rr-probe.mjs",
+      "bytes": 3100,
+      "sha256": "1e3b336da761499423932db19e5234e8f89ec5706ac6c3c24dc6a2669b7d7220"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-legacy-withdrawal-probe.log",
+      "bytes": 1301,
+      "sha256": "15f2871e49ea6e0c11cab0efab43252d3c6d50f88b17385bd5a997ccf6483b0d"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-legacy-withdrawal-probe.mjs",
+      "bytes": 4587,
+      "sha256": "469154b14af9544b2fd46a8d78610c22e23659ab35e366f8ba271d17438f452b"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-legacy-withdrawal-repair-probe.log",
+      "bytes": 1372,
+      "sha256": "28ab295bdea9f40d0d0074b43c1de964383605b2b92afcca51f4ea4bdd694dc8"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-legacy-withdrawal-repair-probe.mjs",
+      "bytes": 4587,
+      "sha256": "237d64223b6ebce3f964feeee26bdb054590eedb3d33bd20de34d3fffa2d5a52"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-clock-probe.log",
+      "bytes": 1694,
+      "sha256": "394f7c4ac7438f1000bae6328e555760fe0cda82c3b298005632303c893870e5"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-clock-probe.mjs",
+      "bytes": 995,
+      "sha256": "ceb8326f5edc3250374d5b5f0b52fc16a38dc6d303edd23be6b07ef92275387c"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-report.md",
+      "bytes": 8746,
+      "sha256": "a464a3049d5033e32ca8146a1e5f41234b6af764257fa44d36a93f90ba2213da"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-runtime-input-bindings.json",
+      "bytes": 14688,
+      "sha256": "6d393fd3f1b32ff759086ca1adcadae6c61144c6367550efa22ec09334978162"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-test-map.json",
+      "bytes": 76175,
+      "sha256": "d5104c7cf6a068efd89e03640e0829cdcf958259b3d8a9398271fbc387d148cf"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-thesis-rr-probe-r2.log",
+      "bytes": 723,
+      "sha256": "604cbd6a33fb3676d2e2a252d76c9a20406be4da3f9ceba586b3554c54a295e6"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-thesis-rr-probe.log",
+      "bytes": 1028,
+      "sha256": "74bbbb02c382d3df2b6038a7e1e11d051ddc7c4563a2084fba4c9a2ade226096"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-thesis-rr-probe.mjs",
+      "bytes": 3372,
+      "sha256": "579e7780f8f8a0d3468b0137281d42864142807f7f687eeb9119512a12593b33"
+    }
+  ]
+}

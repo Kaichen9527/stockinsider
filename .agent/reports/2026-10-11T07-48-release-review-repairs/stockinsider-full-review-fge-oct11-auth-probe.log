@@ -1,0 +1,9 @@
+{"aliasPeer":"INTERNAL_API_KEY","reviewAccepted":false,"selectedRole":"internal_api_key","simultaneousTesterOrApprover":false}
+{"aliasPeer":"CRON_SECRET","reviewAccepted":false,"selectedRole":"cron_secret","simultaneousTesterOrApprover":false}
+{"aliasPeer":"RESEARCH_TEST_KEY","reviewAccepted":true,"selectedRole":"research_review_key","simultaneousTesterOrApprover":false}
+{"aliasPeer":"STRATEGY_APPROVAL_KEY","reviewAccepted":true,"selectedRole":"research_review_key","simultaneousTesterOrApprover":false}
+synthetic alias matrix: 4 cases passed; no real credentials loaded
+(node:49999) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/internal-auth.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

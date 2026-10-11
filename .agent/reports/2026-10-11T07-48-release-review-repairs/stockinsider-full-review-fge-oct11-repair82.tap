@@ -1,0 +1,137 @@
+TAP version 13
+# Subtest: an inactive unheld entry cannot block monitoring an existing inactive position
+ok 1 - an inactive unheld entry cannot block monitoring an existing inactive position
+  ---
+  duration_ms: 224.158
+  type: 'test'
+  ...
+# Subtest: paper session uses verified zero-event anchor rather than any superseded historical event
+ok 2 - paper session uses verified zero-event anchor rather than any superseded historical event
+  ---
+  duration_ms: 76.925083
+  type: 'test'
+  ...
+# Subtest: current verified corporate action still blocks held book and frozen new entry
+ok 3 - current verified corporate action still blocks held book and frozen new entry
+  ---
+  duration_ms: 124.19075
+  type: 'test'
+  ...
+# Subtest: missing or mismatched anchor action context never marks or appends a book
+ok 4 - missing or mismatched anchor action context never marks or appends a book
+  ---
+  duration_ms: 542.250791
+  type: 'test'
+  ...
+# Subtest: paper exact replay returns its original immutable receipt without current authority reads
+ok 5 - paper exact replay returns its original immutable receipt without current authority reads
+  ---
+  duration_ms: 22.613834
+  type: 'test'
+  ...
+# Subtest: delayed held settlement consumes completed-session authority and cannot skip an older completed day
+ok 6 - delayed held settlement consumes completed-session authority and cannot skip an older completed day
+  ---
+  duration_ms: 44.852125
+  type: 'test'
+  ...
+# file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:40
+#         if (!resolved) throw new Error('strategy_local_import_unresolved:' + name);
+#                              ^
+# Error: strategy_local_import_unresolved:./generated/official-authority/official-market-authority-v314.js
+#     at walk (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:40:30)
+#     at visitNodes (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32457:22)
+#     at forEachChildInSourceFile (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32670:12)
+#     at Object.forEachChild (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32970:35)
+#     at walk (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:44:8)
+#     at visit (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:46:3)
+#     at walk (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:41:9)
+#     at visitNodes (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32457:22)
+#     at forEachChildInSourceFile (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32670:12)
+#     at Object.forEachChild (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32970:35)
+# Node.js v22.23.3
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+not ok 7 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 716.780334
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/research-strategy-release.test.mjs:10:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: /Users/kaerchen/.nvm/versions/node/v22.23.3/bin/node /private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs --check
+    file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:40
+            if (!resolved) throw new Error('strategy_local_import_unresolved:' + name);
+                                 ^
+    
+    Error: strategy_local_import_unresolved:./generated/official-authority/official-market-authority-v314.js
+        at walk (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:40:30)
+        at visitNodes (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32457:22)
+        at forEachChildInSourceFile (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32670:12)
+        at Object.forEachChild (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32970:35)
+        at walk (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:44:8)
+        at visit (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:46:3)
+        at walk (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:41:9)
+        at visitNodes (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32457:22)
+        at forEachChildInSourceFile (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32670:12)
+        at Object.forEachChild (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32970:35)
+    
+    Node.js v22.23.3
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    walk (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:40:30)
+    visitNodes (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32457:22)
+    forEachChildInSourceFile (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32670:12)
+    Object.forEachChild (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32970:35)
+    walk (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:44:8)
+    visit (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:46:3)
+    walk (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/sync-research-strategy-release.mjs:41:9)
+    visitNodes (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32457:22)
+    forEachChildInSourceFile (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32670:12)
+    Object.forEachChild (/Users/kaerchen/.cache/stockinsider-workspaces/research-integration-oct09/web/node_modules/typescript/lib/typescript.js:32970:35)
+    genericNodeError (node:internal/errors:983:15)
+    wrappedFn (node:internal/errors:537:14)
+    checkExecSyncError (node:child_process:916:11)
+    execFileSync (node:child_process:952:15)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/scripts/research-strategy-release.test.mjs:11:17)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/stockinsider-full-review-fge-oct11-repair82-source/web/src/lib/generated/official-authority/official-market-authority-v314.js' imported from /private/tmp/stockinsider-full-review-fge-oct11-repair82-source/web/src/lib/tw-entry-plan-authority.ts
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/web/src/lib/generated/official-authority/official-market-authority-v314.js'
+# }
+# Node.js v22.23.3
+# Subtest: web/src/lib/tw-entry-plan-authority.test.ts
+not ok 3 - web/src/lib/tw-entry-plan-authority.test.ts
+  ---
+  duration_ms: 233.374833
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-repair82-source/web/src/lib/tw-entry-plan-authority.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 6
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1860.722625

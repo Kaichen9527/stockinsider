@@ -1,0 +1,223 @@
+TAP version 13
+# {"case":"completed-next-session-catchup","signalSession":"2026-09-24","cutoff":"2026-09-29T12:00:00Z","missingData":[],"bars":240}
+# (node:63227) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/web/src/lib/tw-entry-plan-authority.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-repair82-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: independent delayed paper catch-up: completed next session
+ok 1 - independent delayed paper catch-up: completed next session
+  ---
+  duration_ms: 774.3975
+  type: 'test'
+  ...
+# Subtest: an inactive unheld entry cannot block monitoring an existing inactive position
+ok 2 - an inactive unheld entry cannot block monitoring an existing inactive position
+  ---
+  duration_ms: 385.107625
+  type: 'test'
+  ...
+# Subtest: paper session uses verified zero-event anchor rather than any superseded historical event
+ok 3 - paper session uses verified zero-event anchor rather than any superseded historical event
+  ---
+  duration_ms: 154.339917
+  type: 'test'
+  ...
+# Subtest: current verified corporate action still blocks held book and frozen new entry
+ok 4 - current verified corporate action still blocks held book and frozen new entry
+  ---
+  duration_ms: 238.218709
+  type: 'test'
+  ...
+# Subtest: missing or mismatched anchor action context never marks or appends a book
+ok 5 - missing or mismatched anchor action context never marks or appends a book
+  ---
+  duration_ms: 1269.200708
+  type: 'test'
+  ...
+# Subtest: paper exact replay returns its original immutable receipt without current authority reads
+ok 6 - paper exact replay returns its original immutable receipt without current authority reads
+  ---
+  duration_ms: 25.246208
+  type: 'test'
+  ...
+# Subtest: delayed held settlement consumes completed-session authority and cannot skip an older completed day
+ok 7 - delayed held settlement consumes completed-session authority and cannot skip an older completed day
+  ---
+  duration_ms: 79.626833
+  type: 'test'
+  ...
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+ok 8 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 15573.075541
+  type: 'test'
+  ...
+# (node:63230) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-repair82-source/web/src/lib/tw-entry-plan-authority.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-repair82-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: loads 240 proved observations and an official next session after a holiday and weekend
+ok 9 - loads 240 proved observations and an official next session after a holiday and weekend
+  ---
+  duration_ms: 356.480333
+  type: 'test'
+  ...
+# Subtest: verified event chain rescales prior prices to the unchanged signal-session price
+ok 10 - verified event chain rescales prior prices to the unchanged signal-session price
+  ---
+  duration_ms: 452.443542
+  type: 'test'
+  ...
+# Subtest: market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+ok 11 - market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+  ---
+  duration_ms: 369.970584
+  type: 'test'
+  ...
+# Subtest: absent price/session/action authority and read failure never abort the candidate run
+ok 12 - absent price/session/action authority and read failure never abort the candidate run
+  ---
+  duration_ms: 84.573166
+  type: 'test'
+  ...
+# Subtest: corporate-action hash corruption and changed daily factor fail closed
+ok 13 - corporate-action hash corruption and changed daily factor fail closed
+  ---
+  duration_ms: 210.5905
+  type: 'test'
+  ...
+# Subtest: post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+ok 14 - post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+  ---
+  duration_ms: 624.06775
+  type: 'test'
+  ...
+# Subtest: an absent weekday and conflicting calendar heads cannot be skipped
+ok 15 - an absent weekday and conflicting calendar heads cannot be skipped
+  ---
+  duration_ms: 386.019583
+  type: 'test'
+  ...
+# Subtest: zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+ok 16 - zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+  ---
+  duration_ms: 35.975833
+  type: 'test'
+  ...
+# Subtest: shared market authority is acquired once for the immutable run cutoff
+ok 17 - shared market authority is acquired once for the immutable run cutoff
+  ---
+  duration_ms: 467.975166
+  type: 'test'
+  ...
+# Subtest: an older raw observation remains valid against its own immutable calendar revision
+ok 18 - an older raw observation remains valid against its own immutable calendar revision
+  ---
+  duration_ms: 224.805625
+  type: 'test'
+  ...
+# Subtest: a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+ok 19 - a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+  ---
+  duration_ms: 212.36025
+  type: 'test'
+  ...
+# Subtest: a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+ok 20 - a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+  ---
+  duration_ms: 280.832
+  type: 'test'
+  ...
+# Subtest: a recent share-changing action does not manufacture a comparable volume ratio
+ok 21 - a recent share-changing action does not manufacture a comparable volume ratio
+  ---
+  duration_ms: 69.094958
+  type: 'test'
+  ...
+# Subtest: anchor action context uses corrected zero-event head and ignores old, future and other-exchange events
+ok 22 - anchor action context uses corrected zero-event head and ignores old, future and other-exchange events
+  ---
+  duration_ms: 410.253292
+  type: 'test'
+  ...
+# Subtest: anchor action context retains a verified current event and fails closed on incomplete evidence
+ok 23 - anchor action context retains a verified current event and fails closed on incomplete evidence
+  ---
+  duration_ms: 717.237084
+  type: 'test'
+  ...
+# Subtest: historical core retains selected evidence without inventing forward execution authority
+ok 24 - historical core retains selected evidence without inventing forward execution authority
+  ---
+  duration_ms: 1542.767458
+  type: 'test'
+  ...
+# Subtest: historical core validates real TPEX zero-event evidence and fails unchanged authority defects
+ok 25 - historical core validates real TPEX zero-event evidence and fails unchanged authority defects
+  ---
+  duration_ms: 426.464917
+  type: 'test'
+  ...
+# Subtest: historical reads never cache results, including aborted calls
+ok 26 - historical reads never cache results, including aborted calls
+  ---
+  duration_ms: 265.394125
+  type: 'test'
+  ...
+# Subtest: abort races a noncooperative pending query and stops all later relation dispatch
+ok 27 - abort races a noncooperative pending query and stops all later relation dispatch
+  ---
+  duration_ms: 3.159708
+  type: 'test'
+  ...
+# Subtest: shared serialized bytes include every relation and oversized server pages fail closed
+ok 28 - shared serialized bytes include every relation and oversized server pages fail closed
+  ---
+  duration_ms: 327.921791
+  type: 'test'
+  ...
+# Subtest: legacy rejected shared authority is evicted so a later repaired read is fresh
+ok 29 - legacy rejected shared authority is evicted so a later repaired read is fresh
+  ---
+  duration_ms: 611.551334
+  type: 'test'
+  ...
+# Subtest: full legacy authority bytes equal base2878038 across selected history cases
+ok 30 - full legacy authority bytes equal base2878038 across selected history cases
+  ---
+  duration_ms: 3366.373541
+  type: 'test'
+  ...
+# Subtest: deadline bounds a noncooperative shared query and does not poison its later repaired cache
+ok 31 - deadline bounds a noncooperative shared query and does not poison its later repaired cache
+  ---
+  duration_ms: 15469.436208
+  type: 'test'
+  ...
+# Subtest: legacy missing-forward and read-error complete outputs retain base2878038 identities
+ok 32 - legacy missing-forward and read-error complete outputs retain base2878038 identities
+  ---
+  duration_ms: 355.74825
+  type: 'test'
+  ...
+# Subtest: settlement catches up a completed session after the following session has closed without granting live entry authority
+ok 33 - settlement catches up a completed session after the following session has closed without granting live entry authority
+  ---
+  duration_ms: 817.724666
+  type: 'test'
+  ...
+# Subtest: settlement still proves every historical opening, cancellation and complete corporate-action authority
+ok 34 - settlement still proves every historical opening, cancellation and complete corporate-action authority
+  ---
+  duration_ms: 435.146167
+  type: 'test'
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 29103.908125

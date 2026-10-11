@@ -1,0 +1,17 @@
+{
+  "subject": "f98b0aba5e7892c762cca46ab1104797e178457d",
+  "reverseClockAccepted": false,
+  "futureObservedAccepted": false,
+  "differentPublicationInstantSameHash": false,
+  "savedPublication": "2026-10-08T00:00:00.000002Z",
+  "savedObserved": "2026-10-08T00:00:00.000001Z",
+  "savedRevision": "2026-10-08T00:00:00.000001Z",
+  "sourceSha256": "a8eb55b0ddbf0a601421885e1fe291983cec1c41a8843298bd81e184242f31a2",
+  "submicrosecondAccepted": false,
+  "offsetEquivalent": true
+}
+(node:48296) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:48296) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/public-source-url.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.

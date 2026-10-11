@@ -1,0 +1,180 @@
+TAP version 13
+# Subtest: an inactive unheld entry cannot block monitoring an existing inactive position
+ok 1 - an inactive unheld entry cannot block monitoring an existing inactive position
+  ---
+  duration_ms: 472.700542
+  ...
+# Subtest: paper session uses verified zero-event anchor rather than any superseded historical event
+ok 2 - paper session uses verified zero-event anchor rather than any superseded historical event
+  ---
+  duration_ms: 330.715667
+  ...
+# Subtest: current verified corporate action still blocks held book and frozen new entry
+ok 3 - current verified corporate action still blocks held book and frozen new entry
+  ---
+  duration_ms: 199.3535
+  ...
+# Subtest: missing or mismatched anchor action context never marks or appends a book
+ok 4 - missing or mismatched anchor action context never marks or appends a book
+  ---
+  duration_ms: 1704.121375
+  ...
+# Subtest: paper exact replay returns its original immutable receipt without current authority reads
+ok 5 - paper exact replay returns its original immutable receipt without current authority reads
+  ---
+  duration_ms: 66.540625
+  ...
+# Subtest: delayed held settlement consumes completed-session authority and cannot skip an older completed day
+ok 6 - delayed held settlement consumes completed-session authority and cannot skip an older completed day
+  ---
+  duration_ms: 170.660125
+  ...
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+ok 7 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 12089.593542
+  ...
+# (node:60815) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:60815) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/tw-entry-plan-authority.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: loads 240 proved observations and an official next session after a holiday and weekend
+ok 8 - loads 240 proved observations and an official next session after a holiday and weekend
+  ---
+  duration_ms: 800.843792
+  ...
+# Subtest: verified event chain rescales prior prices to the unchanged signal-session price
+ok 9 - verified event chain rescales prior prices to the unchanged signal-session price
+  ---
+  duration_ms: 668.028958
+  ...
+# Subtest: market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+ok 10 - market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+  ---
+  duration_ms: 661.284792
+  ...
+# Subtest: absent price/session/action authority and read failure never abort the candidate run
+ok 11 - absent price/session/action authority and read failure never abort the candidate run
+  ---
+  duration_ms: 156.911459
+  ...
+# Subtest: corporate-action hash corruption and changed daily factor fail closed
+ok 12 - corporate-action hash corruption and changed daily factor fail closed
+  ---
+  duration_ms: 186.089042
+  ...
+# Subtest: post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+ok 13 - post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+  ---
+  duration_ms: 647.055
+  ...
+# Subtest: an absent weekday and conflicting calendar heads cannot be skipped
+ok 14 - an absent weekday and conflicting calendar heads cannot be skipped
+  ---
+  duration_ms: 649.397625
+  ...
+# Subtest: zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+ok 15 - zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+  ---
+  duration_ms: 90.537916
+  ...
+# Subtest: shared market authority is acquired once for the immutable run cutoff
+ok 16 - shared market authority is acquired once for the immutable run cutoff
+  ---
+  duration_ms: 807.514625
+  ...
+# Subtest: an older raw observation remains valid against its own immutable calendar revision
+ok 17 - an older raw observation remains valid against its own immutable calendar revision
+  ---
+  duration_ms: 464.05475
+  ...
+# Subtest: a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+ok 18 - a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+  ---
+  duration_ms: 488.655417
+  ...
+# Subtest: a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+ok 19 - a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+  ---
+  duration_ms: 482.9635
+  ...
+# Subtest: a recent share-changing action does not manufacture a comparable volume ratio
+ok 20 - a recent share-changing action does not manufacture a comparable volume ratio
+  ---
+  duration_ms: 71.83825
+  ...
+# Subtest: anchor action context uses corrected zero-event head and ignores old, future and other-exchange events
+ok 21 - anchor action context uses corrected zero-event head and ignores old, future and other-exchange events
+  ---
+  duration_ms: 416.383916
+  ...
+# Subtest: anchor action context retains a verified current event and fails closed on incomplete evidence
+ok 22 - anchor action context retains a verified current event and fails closed on incomplete evidence
+  ---
+  duration_ms: 1110.574791
+  ...
+# Subtest: historical core retains selected evidence without inventing forward execution authority
+ok 23 - historical core retains selected evidence without inventing forward execution authority
+  ---
+  duration_ms: 760.106458
+  ...
+# Subtest: historical core validates real TPEX zero-event evidence and fails unchanged authority defects
+ok 24 - historical core validates real TPEX zero-event evidence and fails unchanged authority defects
+  ---
+  duration_ms: 529.864125
+  ...
+# Subtest: historical reads never cache results, including aborted calls
+ok 25 - historical reads never cache results, including aborted calls
+  ---
+  duration_ms: 372.158458
+  ...
+# Subtest: abort races a noncooperative pending query and stops all later relation dispatch
+ok 26 - abort races a noncooperative pending query and stops all later relation dispatch
+  ---
+  duration_ms: 2.690042
+  ...
+# Subtest: shared serialized bytes include every relation and oversized server pages fail closed
+ok 27 - shared serialized bytes include every relation and oversized server pages fail closed
+  ---
+  duration_ms: 335.643917
+  ...
+# Subtest: legacy rejected shared authority is evicted so a later repaired read is fresh
+ok 28 - legacy rejected shared authority is evicted so a later repaired read is fresh
+  ---
+  duration_ms: 341.819875
+  ...
+# Subtest: full legacy authority bytes equal base2878038 across selected history cases
+ok 29 - full legacy authority bytes equal base2878038 across selected history cases
+  ---
+  duration_ms: 1283.819167
+  ...
+# Subtest: deadline bounds a noncooperative shared query and does not poison its later repaired cache
+ok 30 - deadline bounds a noncooperative shared query and does not poison its later repaired cache
+  ---
+  duration_ms: 15310.844833
+  ...
+# Subtest: legacy missing-forward and read-error complete outputs retain base2878038 identities
+ok 31 - legacy missing-forward and read-error complete outputs retain base2878038 identities
+  ---
+  duration_ms: 275.918
+  ...
+# Subtest: settlement catches up a completed session after the following session has closed without granting live entry authority
+ok 32 - settlement catches up a completed session after the following session has closed without granting live entry authority
+  ---
+  duration_ms: 622.040459
+  ...
+# Subtest: settlement still proves every historical opening, cancellation and complete corporate-action authority
+ok 33 - settlement still proves every historical opening, cancellation and complete corporate-action authority
+  ---
+  duration_ms: 946.474875
+  ...
+1..33
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 29193.555208

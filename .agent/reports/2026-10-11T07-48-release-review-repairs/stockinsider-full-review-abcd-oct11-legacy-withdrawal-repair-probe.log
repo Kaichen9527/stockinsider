@@ -1,0 +1,26 @@
+{
+  "subject": "13026a9071856268edc11efbb991497f4e504b13",
+  "fixture": "synthetic already-valid published v1 dossier/receipt; unrelated input-hash helper fixed; actual loader, rights and qualification functions; source table contains original plus retracted new revision",
+  "sourceHeadRpcRead": true,
+  "displaySource": [
+    {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "title": "example.test",
+      "url": "https://example.test/source",
+      "publishedAt": "2026-10-11T07:22:48.320Z",
+      "retracted": true,
+      "evidenceStatus": "retracted"
+    }
+  ],
+  "qualification": {
+    "status": "qualified",
+    "nextReviewAt": "2026-10-12T07:23:18.320Z",
+    "entryResearchAllowed": false,
+    "reason": "article_source_retracted_superseded_or_unavailable"
+  },
+  "entryBadgeCondition": false
+}
+(node:66432) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

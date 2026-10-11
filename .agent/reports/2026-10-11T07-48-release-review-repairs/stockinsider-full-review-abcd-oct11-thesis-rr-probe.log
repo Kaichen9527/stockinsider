@@ -1,0 +1,16 @@
+file:///private/tmp/stockinsider-full-review-abcd-oct11-thesis-rr-probe.mjs:17
+}catch(e){console.error(e);process.exitCode=1;}finally{for(const c of clients)await c.end().catch(()=>{});if(started){run('pg_ctl',['-D',dir,'-m','fast','-w','stop']);console.log('owned cluster stopped; directory retained',tmp);}}
+^
+
+SyntaxError: Unexpected token '}'
+    at compileSourceTextModule (node:internal/modules/esm/utils:346:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:110:18)
+    at #translate (node:internal/modules/esm/loader:559:20)
+    at afterLoad (node:internal/modules/esm/loader:612:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:617:12)
+    at #createModuleJob (node:internal/modules/esm/loader:640:36)
+    at #getJobFromResolveResult (node:internal/modules/esm/loader:353:34)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:321:41)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:680:25)
+
+Node.js v22.23.3

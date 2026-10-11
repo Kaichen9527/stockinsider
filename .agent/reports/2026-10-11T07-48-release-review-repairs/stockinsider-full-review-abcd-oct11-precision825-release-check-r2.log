@@ -1,0 +1,17 @@
+file:///private/tmp/stockinsider-full-review-abcd-oct11-precision825/scripts/sync-research-strategy-release.mjs:40
+        if (!resolved) throw new Error('strategy_local_import_unresolved:' + name);
+                             ^
+
+Error: strategy_local_import_unresolved:./generated/official-authority/official-market-authority-v314.js
+    at walk (file:///private/tmp/stockinsider-full-review-abcd-oct11-precision825/scripts/sync-research-strategy-release.mjs:40:30)
+    at visitNodes (/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/node_modules/typescript/lib/typescript.js:32457:22)
+    at forEachChildInSourceFile (/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/node_modules/typescript/lib/typescript.js:32670:12)
+    at Object.forEachChild (/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/node_modules/typescript/lib/typescript.js:32970:35)
+    at walk (file:///private/tmp/stockinsider-full-review-abcd-oct11-precision825/scripts/sync-research-strategy-release.mjs:44:8)
+    at visit (file:///private/tmp/stockinsider-full-review-abcd-oct11-precision825/scripts/sync-research-strategy-release.mjs:46:3)
+    at walk (file:///private/tmp/stockinsider-full-review-abcd-oct11-precision825/scripts/sync-research-strategy-release.mjs:41:9)
+    at visitNodes (/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/node_modules/typescript/lib/typescript.js:32457:22)
+    at forEachChildInSourceFile (/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/node_modules/typescript/lib/typescript.js:32670:12)
+    at Object.forEachChild (/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/node_modules/typescript/lib/typescript.js:32970:35)
+
+Node.js v22.23.3

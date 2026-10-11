@@ -1,0 +1,125 @@
+TAP version 13
+# (node:65752) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:65752) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-agent-qualification.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: legacy reader requires the original source to remain its verified current head
+ok 1 - legacy reader requires the original source to remain its verified current head
+  ---
+  duration_ms: 220.793708
+  ...
+# Subtest: legacy reader append-only withdrawal keeps the historical article and denies new entry
+ok 2 - legacy reader append-only withdrawal keeps the historical article and denies new entry
+  ---
+  duration_ms: 87.006042
+  ...
+# Subtest: legacy reader newer non-withdrawn revision keeps the historical article and denies new entry
+ok 3 - legacy reader newer non-withdrawn revision keeps the historical article and denies new entry
+  ---
+  duration_ms: 60.806625
+  ...
+# Subtest: legacy reader null head keeps the historical article and denies new entry
+ok 4 - legacy reader null head keeps the historical article and denies new entry
+  ---
+  duration_ms: 49.682583
+  ...
+# Subtest: legacy reader incomplete heads keeps the historical article and denies new entry
+ok 5 - legacy reader incomplete heads keeps the historical article and denies new entry
+  ---
+  duration_ms: 40.639042
+  ...
+# Subtest: legacy reader RPC failure keeps the historical article and denies new entry
+ok 6 - legacy reader RPC failure keeps the historical article and denies new entry
+  ---
+  duration_ms: 38.10775
+  ...
+# Subtest: legacy reader connection rejection keeps the historical article and denies new entry
+ok 7 - legacy reader connection rejection keeps the historical article and denies new entry
+  ---
+  duration_ms: 36.355833
+  ...
+# Subtest: legacy reader unknown head identity keeps the historical article and denies new entry
+ok 8 - legacy reader unknown head identity keeps the historical article and denies new entry
+  ---
+  duration_ms: 35.012583
+  ...
+# Subtest: legacy reader malformed flags keeps the historical article and denies new entry
+ok 9 - legacy reader malformed flags keeps the historical article and denies new entry
+  ---
+  duration_ms: 47.228042
+  ...
+# Subtest: legacy reader extra head keeps the historical article and denies new entry
+ok 10 - legacy reader extra head keeps the historical article and denies new entry
+  ---
+  duration_ms: 32.729333
+  ...
+# Subtest: legacy reader malformed head keeps the historical article and denies new entry
+ok 11 - legacy reader malformed head keeps the historical article and denies new entry
+  ---
+  duration_ms: 39.353917
+  ...
+# Subtest: legacy reader stored withdrawal keeps the historical article and denies new entry
+ok 12 - legacy reader stored withdrawal keeps the historical article and denies new entry
+  ---
+  duration_ms: 35.23425
+  ...
+# Subtest: legacy reader duplicate document rows keeps the historical article and denies new entry
+ok 13 - legacy reader duplicate document rows keeps the historical article and denies new entry
+  ---
+  duration_ms: 32.866334
+  ...
+# Subtest: missing source evidence does not erase the reviewed historical article
+ok 14 - missing source evidence does not erase the reviewed historical article
+  ---
+  duration_ms: 38.815333
+  ...
+# Subtest: missing source evidence does not erase the reviewed historical article
+ok 15 - missing source evidence does not erase the reviewed historical article
+  ---
+  duration_ms: 29.187083
+  ...
+# (node:65753) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:65753) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/candidate-detail-view-contract.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: candidate detail keeps publication state separate from issuer research completeness
+ok 16 - candidate detail keeps publication state separate from issuer research completeness
+  ---
+  duration_ms: 6.15675
+  ...
+# Subtest: raw facts and source links are collapsed below decision content
+ok 17 - raw facts and source links are collapsed below decision content
+  ---
+  duration_ms: 8.0195
+  ...
+# Subtest: enriched public prose requires an accepted receipt for the same dossier, revision and input hash
+ok 18 - enriched public prose requires an accepted receipt for the same dossier, revision and input hash
+  ---
+  duration_ms: 7.519459
+  ...
+# (node:65754) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:65754) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/candidate-detail.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: candidate detail fact IDs are deduplicated into URL-safe bounded batches
+ok 19 - candidate detail fact IDs are deduplicated into URL-safe bounded batches
+  ---
+  duration_ms: 2.626417
+  ...
+# Subtest: candidate detail rejects a batch size that could rebuild an oversized query
+ok 20 - candidate detail rejects a batch size that could rebuild an oversized query
+  ---
+  duration_ms: 0.593
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1333.378791

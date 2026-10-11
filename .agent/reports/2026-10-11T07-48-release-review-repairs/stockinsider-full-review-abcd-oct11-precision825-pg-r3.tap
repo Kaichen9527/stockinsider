@@ -1,0 +1,53 @@
+TAP version 13
+# Subtest: thesis append isolation successor rejects stale roots and preserves RC reconciliation
+    # Subtest: only first-statement guard changes and retry preserves OID, owner, ACL and semantics
+    ok 1 - only first-statement guard changes and retry preserves OID, owner, ACL and semantics
+      ---
+      duration_ms: 9.731208
+      type: 'test'
+      ...
+    # Subtest: changed predecessor semantics fail before replacement
+    ok 2 - changed predecessor semantics fail before replacement
+      ---
+      duration_ms: 28.530458
+      type: 'test'
+      ...
+    # Subtest: missing or changed trigger body rejects without creating a replacement
+    ok 3 - missing or changed trigger body rejects without creating a replacement
+      ---
+      duration_ms: 14.25675
+      type: 'test'
+      ...
+    # Subtest: mapping successor changes only code closure; financial values, schemas and routine privileges remain exact
+    ok 4 - mapping successor changes only code closure; financial values, schemas and routine privileges remain exact
+      ---
+      duration_ms: 191.094709
+      type: 'test'
+      ...
+    # Subtest: real two-connection RR snapshot cannot insert a second root after competing RC commit
+    ok 5 - real two-connection RR snapshot cannot insert a second root after competing RC commit
+      ---
+      duration_ms: 13.702375
+      type: 'test'
+      ...
+    # Subtest: serializable rejects before any append while history is retained
+    ok 6 - serializable rejects before any append while history is retained
+      ---
+      duration_ms: 1.639
+      type: 'test'
+      ...
+    1..6
+ok 1 - thesis append isolation successor rejects stale roots and preserves RC reconciliation
+  ---
+  duration_ms: 2368.170542
+  type: 'test'
+  ...
+1..1
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2510.9345

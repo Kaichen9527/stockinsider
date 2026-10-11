@@ -1,0 +1,258 @@
+TAP version 13
+# Subtest: bounded regular bytes preserve exact boundary, reject oversized/directory/symlink/private mode
+ok 1 - bounded regular bytes preserve exact boundary, reject oversized/directory/symlink/private mode
+  ---
+  duration_ms: 11.040916
+  type: 'test'
+  ...
+# Subtest: actual grow between fstat and read rejects; allocation and reads stay size plus one
+ok 2 - actual grow between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 2.42475
+  type: 'test'
+  ...
+# Subtest: actual shrink between fstat and read rejects; allocation and reads stay size plus one
+ok 3 - actual shrink between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 2.480708
+  type: 'test'
+  ...
+# Subtest: actual replace between fstat and read rejects; allocation and reads stay size plus one
+ok 4 - actual replace between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 2.31725
+  type: 'test'
+  ...
+# Subtest: actual replace-with-symlink between fstat and read rejects; allocation and reads stay size plus one
+ok 5 - actual replace-with-symlink between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 2.99075
+  type: 'test'
+  ...
+# Subtest: actual rewrite between fstat and read rejects; allocation and reads stay size plus one
+ok 6 - actual rewrite between fstat and read rejects; allocation and reads stay size plus one
+  ---
+  duration_ms: 1.816667
+  type: 'test'
+  ...
+# Subtest: source actual FIFO rejects before HTTP, output or journal; no FIFO writer
+ok 7 - source actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 106.433042
+  type: 'test'
+  ...
+# Subtest: cloud actual FIFO rejects before HTTP, output or journal; no FIFO writer
+ok 8 - cloud actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 97.0215
+  type: 'test'
+  ...
+# Subtest: priority actual FIFO rejects before HTTP, output or journal; no FIFO writer
+ok 9 - priority actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 142.536
+  type: 'test'
+  ...
+# Subtest: deep-recovery actual FIFO rejects before HTTP, output or journal; no FIFO writer
+ok 10 - deep-recovery actual FIFO rejects before HTTP, output or journal; no FIFO writer
+  ---
+  duration_ms: 149.897042
+  type: 'test'
+  ...
+# Subtest: discovery CLI actual FIFO rejects before network or output; security-scope uses same reader
+ok 11 - discovery CLI actual FIFO rejects before network or output; security-scope uses same reader
+  ---
+  duration_ms: 274.147584
+  type: 'test'
+  ...
+# (node:46375) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/research-financial-inventory.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: both runtime layouts contain only pinned research inputs and real readers load both companies
+ok 12 - both runtime layouts contain only pinned research inputs and real readers load both companies
+  ---
+  duration_ms: 520.39125
+  type: 'test'
+  ...
+# Subtest: missing, altered and symlinked inputs reject before any research output is created
+ok 13 - missing, altered and symlinked inputs reject before any research output is created
+  ---
+  duration_ms: 250.152625
+  type: 'test'
+  ...
+# Subtest: output symlinks, existing files and escaped entrypoints cannot redirect or overwrite evidence
+ok 14 - output symlinks, existing files and escaped entrypoints cannot redirect or overwrite evidence
+  ---
+  duration_ms: 83.550875
+  type: 'test'
+  ...
+# Subtest: legacy fixtures skip research; a feature-enabled release cannot omit its manifest
+ok 15 - legacy fixtures skip research; a feature-enabled release cannot omit its manifest
+  ---
+  duration_ms: 27.248625
+  type: 'test'
+  ...
+# Subtest: real financial reader still refuses a writable release ancestor
+ok 16 - real financial reader still refuses a writable release ancestor
+  ---
+  duration_ms: 59.034875
+  type: 'test'
+  ...
+# (node:46376) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/tw-entry-plan-authority.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: loads 240 proved observations and an official next session after a holiday and weekend
+ok 17 - loads 240 proved observations and an official next session after a holiday and weekend
+  ---
+  duration_ms: 88.283167
+  type: 'test'
+  ...
+# Subtest: verified event chain rescales prior prices to the unchanged signal-session price
+ok 18 - verified event chain rescales prior prices to the unchanged signal-session price
+  ---
+  duration_ms: 78.932834
+  type: 'test'
+  ...
+# Subtest: market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+ok 19 - market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+  ---
+  duration_ms: 73.86025
+  type: 'test'
+  ...
+# Subtest: absent price/session/action authority and read failure never abort the candidate run
+ok 20 - absent price/session/action authority and read failure never abort the candidate run
+  ---
+  duration_ms: 39.1945
+  type: 'test'
+  ...
+# Subtest: corporate-action hash corruption and changed daily factor fail closed
+ok 21 - corporate-action hash corruption and changed daily factor fail closed
+  ---
+  duration_ms: 23.9165
+  type: 'test'
+  ...
+# Subtest: post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+ok 22 - post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+  ---
+  duration_ms: 114.054833
+  type: 'test'
+  ...
+# Subtest: an absent weekday and conflicting calendar heads cannot be skipped
+ok 23 - an absent weekday and conflicting calendar heads cannot be skipped
+  ---
+  duration_ms: 135.249625
+  type: 'test'
+  ...
+# Subtest: zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+ok 24 - zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+  ---
+  duration_ms: 11.729917
+  type: 'test'
+  ...
+# Subtest: shared market authority is acquired once for the immutable run cutoff
+ok 25 - shared market authority is acquired once for the immutable run cutoff
+  ---
+  duration_ms: 164.756209
+  type: 'test'
+  ...
+# Subtest: an older raw observation remains valid against its own immutable calendar revision
+ok 26 - an older raw observation remains valid against its own immutable calendar revision
+  ---
+  duration_ms: 86.635708
+  type: 'test'
+  ...
+# Subtest: a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+ok 27 - a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+  ---
+  duration_ms: 81.277834
+  type: 'test'
+  ...
+# Subtest: a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+ok 28 - a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+  ---
+  duration_ms: 72.044541
+  type: 'test'
+  ...
+# Subtest: a recent share-changing action does not manufacture a comparable volume ratio
+ok 29 - a recent share-changing action does not manufacture a comparable volume ratio
+  ---
+  duration_ms: 11.726625
+  type: 'test'
+  ...
+# Subtest: anchor action context uses corrected zero-event head and ignores old, future and other-exchange events
+ok 30 - anchor action context uses corrected zero-event head and ignores old, future and other-exchange events
+  ---
+  duration_ms: 66.356791
+  type: 'test'
+  ...
+# Subtest: anchor action context retains a verified current event and fails closed on incomplete evidence
+ok 31 - anchor action context retains a verified current event and fails closed on incomplete evidence
+  ---
+  duration_ms: 85.416125
+  type: 'test'
+  ...
+# Subtest: historical core retains selected evidence without inventing forward execution authority
+ok 32 - historical core retains selected evidence without inventing forward execution authority
+  ---
+  duration_ms: 135.185542
+  type: 'test'
+  ...
+# Subtest: historical core validates real TPEX zero-event evidence and fails unchanged authority defects
+ok 33 - historical core validates real TPEX zero-event evidence and fails unchanged authority defects
+  ---
+  duration_ms: 148.584917
+  type: 'test'
+  ...
+# Subtest: historical reads never cache results, including aborted calls
+ok 34 - historical reads never cache results, including aborted calls
+  ---
+  duration_ms: 137.421
+  type: 'test'
+  ...
+# Subtest: abort races a noncooperative pending query and stops all later relation dispatch
+ok 35 - abort races a noncooperative pending query and stops all later relation dispatch
+  ---
+  duration_ms: 1.5315
+  type: 'test'
+  ...
+# Subtest: shared serialized bytes include every relation and oversized server pages fail closed
+ok 36 - shared serialized bytes include every relation and oversized server pages fail closed
+  ---
+  duration_ms: 96.570791
+  type: 'test'
+  ...
+# Subtest: legacy rejected shared authority is evicted so a later repaired read is fresh
+ok 37 - legacy rejected shared authority is evicted so a later repaired read is fresh
+  ---
+  duration_ms: 131.194542
+  type: 'test'
+  ...
+# Subtest: full legacy authority bytes equal base2878038 across selected history cases
+ok 38 - full legacy authority bytes equal base2878038 across selected history cases
+  ---
+  duration_ms: 672.490542
+  type: 'test'
+  ...
+# Subtest: deadline bounds a noncooperative shared query and does not poison its later repaired cache
+ok 39 - deadline bounds a noncooperative shared query and does not poison its later repaired cache
+  ---
+  duration_ms: 15195.706333
+  type: 'test'
+  ...
+# Subtest: legacy missing-forward and read-error complete outputs retain base2878038 identities
+ok 40 - legacy missing-forward and read-error complete outputs retain base2878038 identities
+  ---
+  duration_ms: 137.979625
+  type: 'test'
+  ...
+1..40
+# tests 40
+# suites 0
+# pass 40
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 17909.521375

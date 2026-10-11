@@ -1,0 +1,934 @@
+[
+  {
+    "path": "scripts/candidate-dossier-outbox-v6-postgres.test.mjs",
+    "lines": 283,
+    "assertions": 54,
+    "tests": [
+      "test('outbox v6 fences stale workers and atomically closes accepted and rejected receipts',",
+      "test('piped child waits for inherited stderr after the leader exits', { timeout: 5000 }, async () => {",
+      "test('piped child preserves output and original normal/nonzero/signal exits', async () => {",
+      "test('piped child explicitly fails spawn and output limits', async () => {",
+      "test('piped child bounds an inherited pipe that remains open after leader exit', { timeout:5000 }, async () => {",
+      "test('piped child rejects late close despite a delayed timer, and settles once', async () => {",
+      "test('piped child captures post-exit data, clears timer, and rejects stream errors/cancel', async () => {",
+      "test('piped child never signals a failed spawn without a positive PID and handles late errors', async () => {"
+    ],
+    "skip": [
+      "import { execFileSync, spawnSync, spawn } from 'node:child_process';",
+      "{ skip: !available && 'local PostgreSQL tools unavailable' }, async () => {",
+      "const run = (binary, args) => execFileSync(path.join(binaries, binary), args, {",
+      "const child = spawn(path.join(binaries,'psql'),['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',temporary,'-p',String(port),'-d','postgres','-c',query]);",
+      "const leader = `const{spawn}=require('node:child_process');spawn(process.execPath,['-e',${JSON.stringify(grandchild)}],{stdio:['ignore','ignore',process.stderr],detached:true}).unref();process.exit(3);`;",
+      "const child = spawn(process.execPath, ['-e', leader], { stdio: ['ignore','pipe','pipe'] });",
+      "const child = spawn(process.execPath, ['-e', `process.stdout.write('out');process.stderr.write('err');process.exitCode=${code};`], { stdio: ['ignore','pipe','pipe'] });",
+      "const child = spawn(process.execPath, ['-e', `process.kill(process.pid,'SIGTERM')`], { stdio: ['ignore','pipe','pipe'] });",
+      "const missing = spawn(path.join(os.tmpdir(), `missing-stockinsider-executable-${process.pid}`), [], { stdio: ['ignore','pipe','pipe'] });",
+      "const noisy = spawn(process.execPath, ['-e', `process.${stream}.write('a'.repeat(1025));setInterval(()=>{},1000);`], { stdio: ['ignore','pipe','pipe'] });",
+      "const leader = `const{spawn}=require('node:child_process');spawn(process.execPath,['-e',${JSON.stringify(descendant)}],{stdio:['ignore','ignore',process.stderr],detached:true}).unref();process.exit(4);`;",
+      "const child = spawn(process.execPath, ['-e',leader], { stdio:['ignore','pipe','pipe'] });"
+    ]
+  },
+  {
+    "path": "scripts/candidate-financial-queue-write-lease-route.test.mjs",
+    "lines": 131,
+    "assertions": 41,
+    "tests": [
+      "assert.ok(!state.calls.some(c => /^(?:acquire:|release:|refresh$|validate$)/u.test(c)));",
+      "test('FQL-01 invalid input/auth/writer cannot acquire or mutate', async () => {",
+      "test('FQL-02 no due jobs retains read-only empty result', async () => {",
+      "test('FQL-03 read failures return failure before lease acquisition', async () => {",
+      "test('FQL-04 busy/unavailable lease distinguish failures without mutation or release', async () => {",
+      "test('FQL-05 acquired owner encloses refresh/validation with original inputs and output', async () => {",
+      "test('FQL-06 financial failure/incomplete validation retain original error semantics and release', async () => {",
+      "test('FQL-07 thrown refresh/validation retain original exception even if release also fails', async () => {",
+      "test('FQL-08 release failure after successful workers cannot report success', async () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/fixtures/research-cloud-article.ts",
+    "lines": 42,
+    "assertions": 0,
+    "tests": [],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-atomic-publication-postgres.test.mjs",
+    "lines": 320,
+    "assertions": 68,
+    "tests": [
+      "const check=async(name,fn)=>{await t.test(name,async ctx=>{try{await fn(ctx);}catch(error){childFailed=true;throw error;}});if(childFailed)throw Error('dependent_publication_case_stopped');};",
+      "for(const scenario of ['positive','new-revision','rights-ABA','unaccepted-review','paid-content','expires-waiting','publication-first']) test('atomic publication: original private pipeline, synthetic reports — '+scenario,t=>publicationFixture(t,scenario));"
+    ],
+    "skip": [
+      "import { execFileSync } from 'node:child_process';",
+      "const bin = process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN || (() => {",
+      "try { return execFileSync('pg_config', ['--bindir'], { encoding: 'utf8', timeout: 5000 }).trim(); } catch { return ''; }",
+      "const run = (name, argv, input) => execFileSync(path.join(bin, name), argv, { input, encoding: 'utf8', timeout: 15000, maxBuffer: 4 * 1048576 }).trim();",
+      "const previous={INTERNAL_API_KEY:process.env.INTERNAL_API_KEY,RESEARCH_REVIEW_KEY:process.env.RESEARCH_REVIEW_KEY,CRON_SECRET:process.env.CRON_SECRET,RESEARCH_TEST_KEY:process.env.RESEARCH_TEST_KEY,STRATEGY_APPROVAL_KEY:process.env.STRATEGY_APPROVAL_KEY};",
+      "process.env.INTERNAL_API_KEY='synthetic-result-writer';process.env.RESEARCH_REVIEW_KEY='synthetic-result-reviewer';for(const key of ['CRON_SECRET','RESEARCH_TEST_KEY','STRATEGY_APPROVAL_KEY'])delete process.env[key];"
+    ]
+  },
+  {
+    "path": "scripts/research-atomic-publication.test.mjs",
+    "lines": 43,
+    "assertions": 20,
+    "tests": [
+      "test('closed publication request permits only original result identities; all mixed controls rejected',async()=>{",
+      "test('stalled reader cancels under original deadline, expired execution starts zero I/O',async()=>{",
+      "test('only actual independent configured author bearer can reach publication body',async t=>{",
+      "test('saved reports and calculators revalidated; no synthetic reviewer Request or caller prose authority',async t=>{",
+      "test('completed read precedes live readers and never reserves or rewrites content',async()=>{"
+    ],
+    "skip": [
+      "process.env.RESEARCH_REVIEW_KEY='rotated-real-server-config';assert.throws(()=>validate());"
+    ]
+  },
+  {
+    "path": "scripts/research-capacity-admission.test.mjs",
+    "lines": 34,
+    "assertions": 7,
+    "tests": [
+      "test('research admission includes peak allocation and an eight GB app reserve', () => {",
+      "test('unused app quota cannot bypass whole-host disk or RAM admission', () => {",
+      "test('stale, duplicate and nested inventories never manufacture free capacity', () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-cloud-capacity.test.mjs",
+    "lines": 24,
+    "assertions": 5,
+    "tests": [
+      "test('visible filesystem and counted resident input are independent; unknown quota stays explicit', () => {",
+      "test('stale, missing, future and overflow measurements fail closed', () => {",
+      "test('resident, temporary, free-disk and memory targets are separate constraints', () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-cloud-receipts-postgres.test.mjs",
+    "lines": 101,
+    "assertions": 16,
+    "tests": [
+      "test('Cloud validated receipts are atomic, immutable and distinct from generic completions',"
+    ],
+    "skip": [
+      "import { execFileSync, spawnSync } from 'node:child_process';",
+      "{ skip: !available && 'local PostgreSQL tools unavailable' }, () => {",
+      "const run = (binary, args) => execFileSync(path.join(binaries, binary), args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();"
+    ]
+  },
+  {
+    "path": "scripts/research-cloud-result-route.test.mjs",
+    "lines": 73,
+    "assertions": 15,
+    "tests": [
+      "test('Cloud receive requires distinct tester auth and completes the existing reservation, never publishes', async () => {",
+      "test('withdrawal, incorrect live binding, expiry during persistence and synthetic packets reject before acceptance', async () => {",
+      "test('durable identical replay survives expiry; changed bytes do not recreate a completion', async () => {",
+      "test('generic model accounting completion cannot bypass current source verification or mint an expired receipt', async () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-complete-input-boundary-postgres.test.mjs",
+    "lines": 155,
+    "assertions": 38,
+    "tests": [
+      "test('CI-03 original SQL real PG exact cumulative bytes, +1 rollback and shared count (synthetic clock/source/job; real fixed financial material)',async t=>{",
+      "await t.test('PG-only deterministic serialization clock; original RPC bodies/cap unchanged',async()=>{",
+      "await t.test('actual original RPC rejects cumulative524289 at third shared slot; all counts/row hashes/charges roll back',()=>{",
+      "await t.test('actual original RPC admits exactly524288 with real AUO recomputation and three shared entries',()=>{",
+      "await t.test('full exact replay at byte cap is free; fourth new preparation rejects by bytes and leaves complete/source/budget history identical',()=>{",
+      "await t.test('independent four-count gate remains active below byte cap across old prepares and complete revision',async()=>{"
+    ],
+    "skip": [
+      "import {execFileSync,execFile} from 'node:child_process';",
+      "const bin=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN || process.env.OPPORTUNITY_V3_POSTGRES_BIN || (()=>{",
+      "try {return execFileSync('pg_config',['--bindir'],{encoding:'utf8',timeout:5000,maxBuffer:4096}).trim();}",
+      "const lib=process.env.STOCKINSIDER_TEST_PG_CLOCK_LIBRARY;",
+      "const run=(n,a,input,env=process.env)=>execFileSync(path.join(bin,n),a,{encoding:'utf8',input,env,timeout:10000,maxBuffer:4*1024*1024}).trim();",
+      "const db={rpc(name,a){const arg=Object.values(a).map(v=>q(typeof v==='object'?JSON.stringify(v):v)).join(',');const response=promisify(execFile)(path.join(bin,'psql'),[...args,'-c',`SET ROLE service_role;SELECT ${name}(${arg});`],{encoding:'utf8',timeout:6000,",
+      "if(process.env.RESEARCH_BYTE_BOUNDARY_ARTIFACTS){const dest=process.env.RESEARCH_BYTE_BOUNDARY_ARTIFACTS;fs.mkdirSync(dest,{recursive:true,mode:0o700});if(fs.existsSync(path.join(tmp,'pg.log')))fs.copyFileSync(path.join(tmp,'pg.log'),path.join(dest,'pg.log'));"
+    ]
+  },
+  {
+    "path": "scripts/research-complete-input-http.test.mjs",
+    "lines": 58,
+    "assertions": 31,
+    "tests": [
+      "for(const symbol of ['2409','2383'])test(`compiled complete-input ${symbol}, synthetic job, actual fixed financial inputs`,{timeout:120000},async t=>{",
+      "try {const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,observedClaim:true,t",
+      "await t.test('compiled guarded preparation binds actual job, lease and source seal',async()=>{",
+      "await t.test('compiled read-only financial diagnostic before immutable admission',async()=>{",
+      "await t.test('actual compiled marker path seals fixed calculation with all false capabilities',async()=>{",
+      "await t.test('guarded read and exact duplicate preserve original payload/hash/charge',async()=>{",
+      "await t.test('anonymous, extra executable/body/clock and wrong original binding reject',async()=>{",
+      "await t.test('actual restart reread persists and expired reservation refuses historical replay',async()=>{"
+    ],
+    "skip": [
+      "try {const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,",
+      "fs.writeFileSync(process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS+'-'+symbol+'/financial-supplement-diagnostic.json',JSON.stringify(body),{flag:'wx',mode:0o600});"
+    ]
+  },
+  {
+    "path": "scripts/research-complete-input-postgres.test.mjs",
+    "lines": 113,
+    "assertions": 40,
+    "tests": [
+      "test('complete-input actual PG, shared preparations and original lease boundaries (synthetic)',async t=>{",
+      "await t.test('all frozen canonical vectors agree with actual PG numeric/Unicode bytes',()=>{const vs=JSON.parse(fs.readFileSync('openspec/changes/research-complete-input-v2/canonical-vectors.json'));for(const v of vs.vectors){assert.equal(sql(`SELECT research_complete_canonical_v",
+      "for(const symbol of ['2409','2383'])await t.test(symbol+' real fixed files recompute and private input seals without formal stocks',async()=>{",
+      "await t.test('application rereads current mapping and full payload without reopening fixed files',async()=>{",
+      "await t.test('replay and read retain clocks and charges; changed request rejects',()=>{for(const x of inputs){const before=count();assert.deepEqual({...seal(x.req,null),replay:false},x.saved);assert.equal(read(x.req).input_hash,x.saved.input_hash);assert.equal(count(),before);ass",
+      "await t.test('unknown nested, numeric, locator, clock and mapping material fails before insertion',()=>{for(const x of inputs){const r=unit();const p=prepare(r);const req={...x.req,jobId:r.jobId,reservationId:r.reservationId,preparationId:p.preparation_id,preparationHash:p.input_",
+      "await t.test('direct service RPC rejects numeric, locator, unit, nested, future and swapped material with rollback',async()=>{",
+      "await t.test('BYPASSRLS service and owner cannot mutate history; anonymous and helper access forbidden',()=>{for(const c of ['SELECT * FROM research_article_input_revisions_v2','INSERT INTO research_article_input_revisions_v2 SELECT * FROM research_article_input_revisions_v2','DE",
+      "await t.test('actual non-superuser login executes closed read RPC but cannot become private owner',()=>{",
+      "await t.test('new table charge shares four slots with old prepare; full replay is free',()=>{const x=inputs[0];for(const extra of [randomUUID(),randomUUID()]){add(extra,base+'/'+extra);prepare({...x.r,sourceDocumentIds:[extra]});}assert.equal(sql(`SELECT count(*) FROM (SELECT 1 F",
+      "await t.test('two actual clients race old preparation versus complete seal for final shared slot',async()=>{",
+      "await t.test('actual restart preserves revision and input hash',()=>{run('pg_ctl',['-D',pg,'-m','fast','-w','stop']);active=false;start();assert.equal(read(inputs[0].req).input_hash,inputs[0].saved.input_hash);});",
+      "await t.test('expired original reservation and RR cannot reread; no lease renewal',()=>{const x=inputs[0];sql(`UPDATE research_model_reservations_v1 SET lease_expires_at=now()-interval '1 microsecond' WHERE reservation_id=${q(x.r.reservationId)};`);assert.throws(()=>read(x.req),/",
+      "await t.test('withdrawal invalidates persisted read without deleting history',()=>{const x=inputs[1];sql(`SET ROLE service_role;UPDATE source_raw_documents SET metadata=metadata||'{\"rights_boundary\":\"none\"}' WHERE id=${q(id)};`);assert.throws(()=>read(x.req),/source_seal_invalida"
+    ],
+    "skip": [
+      "import {execFileSync,execFile} from 'node:child_process';",
+      "const bin=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN || process.env.OPPORTUNITY_V3_POSTGRES_BIN || (()=>{",
+      "try {return execFileSync('pg_config',['--bindir'],{encoding:'utf8',timeout:5000,maxBuffer:4096}).trim();}",
+      "const run=(n,a,input)=>execFileSync(path.join(bin,n),a,{encoding:'utf8',input,timeout:10000,maxBuffer:4*1024*1024}).trim();",
+      "const db={rpc(name,a){const arg=Object.values(a).map(v=>q(typeof v==='object'?JSON.stringify(v):v)).join(',');const response=promisify(execFile)(path.join(bin,'psql'),[...args,'-c',`SET ROLE service_role;SELECT ${name}(${arg});`],{encoding:'utf8',timeout:6000,",
+      "const race=s=>promisify(execFile)(path.join(bin,'psql'),[...args,'-c',`SET statement_timeout='5s';SET ROLE service_role;SELECT ${s};`],{encoding:'utf8',timeout:10000,maxBuffer:1048576});"
+    ]
+  },
+  {
+    "path": "scripts/research-complete-input.test.mjs",
+    "lines": 40,
+    "assertions": 23,
+    "tests": [
+      "for(const [i,v]of vectors.vectors.entries())test('canonical frozen vector '+i,()=>{const n=JSON.parse(v.rawJson);assert.equal(completeCanonical(n),v.canonicalUtf8);assert.equal(Buffer.byteLength(completeCanonical(n)),v.bytes);assert.equal(completeHash(n),v.sha256);});",
+      "for(const s of ['{\"a\":1,\"a\":2}','{\"a\":1,\"\\\\u0061\":2}','{\"x\":NaN}','{\"x\":1} trailing','\"\\\\ud800\"','\"\\\\u0000\"'])test('strict JSON rejects '+s,()=>assert.throws(()=>parseCompleteJson(s)));",
+      "for(const n of [Infinity,NaN,()=>{},undefined])test('non JSON value rejects '+String(n),()=>assert.throws(()=>completeCanonical(n)));",
+      "test('8192 actual UTF8 body bound inclusive, +1 and malformed UTF8 fail',async()=>{const req=s=>new Request('http://localhost',{method:'POST',headers:{'content-type':'application/json'},body:s});assert.deepEqual(await readCompleteBody(req('{\"a\":\"'+'x'.repeat(8184)+'\"}'),new Finan",
+      "test('closed ingress cannot select executable, financial body or clock',()=>{for(const k of ['command','calculation','clock','sourceDocumentIds'])assert.throws(()=>parseCompleteRequest({[k]:'ignored'}));});",
+      "test('schema constant and unknown nested fields reject',()=>{const s={type:'object',properties:{a:{const:1}},required:['a'],additionalProperties:false};validateCompleteSchema({a:1},s,'');for(const v of [{a:2},{a:1,b:0},{}])assert.throws(()=>validateCompleteSchema(v,s,''));});",
+      "for(const seal of [false,true])test('old DB sealed mapping cannot bypass current mapping '+seal,async()=>{",
+      "test('static schema bundles exactly preserve both original numeric and Unicode schemas',async()=>{",
+      "test('closure metadata v1 preserves sorted keys independent of insertion order and binds SQL',async()=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-deep-controller.test.mjs",
+    "lines": 265,
+    "assertions": 94,
+    "tests": [
+      "test('claim journals before one guarded request and saves real reservation without dispatch/publication', async () => fixture(async ({ file, args, dependencies }) => {",
+      "test('lost claim response recovers owner status once instead of claiming a second slot', async () => fixture(async ({ file, args, dependencies }) => {",
+      "test('completed accounting remains a handoff, and exact known attempt fences status recovery', async () => fixture(async ({ args, dependencies }) => {",
+      "test('old lost response cannot recover a later claim reusing the same worker label', async () => fixture(async ({ args, file, dependencies }) => {",
+      "test('empty claim and expired/lost owned job have different explicit gaps', async () => fixture(async ({ args, dependencies }) => {",
+      "test('claim server rejection remains uncertain because RPC may already have committed', async () => fixture(async ({ file, args, dependencies }) => {",
+      "test('foreign owner, wrong role, extended deadline, changed attempt, stale clock and extra secrets fail closed', async () => {",
+      "test('recovery binds original owner, origin, source and saved receipt before requests', async () => {",
+      "test('recovery rejects symlinks, public permissions and truncated journals', async () => {",
+      "test('unsafe origins, dirty source, shared key, caller stock selection and invalid owner send nothing', async () => fixture(async ({ args, dependencies }) => {",
+      "test('existing destination preserves prior receipt and prevents mutation', async () => fixture(async ({ file, args, dependencies }) => {",
+      "test('actual local HTTP lost response recovers identical reservation without a second claim', async () => fixture(async ({ args, dependencies }) => {",
+      "test('prepare consumes original claim journal, observes status and fetches input without another claim', async () => fixture(async ({ file, args, dependencies }) => {",
+      "test('prepare lost response uses only status and input, never a new claim or reservation', async () => fixture(async ({ file, args, dependencies }) => {",
+      "test('prepare refuses completed work before fetching any input', async () => fixture(async ({ args, dependencies }) => {",
+      "test('prepare rejects packet hash/owner/deadline/rights/extra fields and missing selection accounting', async () => {",
+      "test('explicit observed claim journal recovers scoped context, prepares v2 and privately saves incomplete draft',async()=>fixture(async({file,args,dependencies})=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-deep-job-context-route.test.mjs",
+    "lines": 698,
+    "assertions": 136,
+    "tests": [
+      "return row.metadata?.canonical_url === root || row.metadata?.canonical_url == null && new RegExp(pattern).test(row.document_url);",
+      "assert.ok(fields.every((field) => /^[a-z_]+$/u.test(field)), 'simple explicit column projection');",
+      "test('DCC-RT-01 exact internal bearer is checked before body parsing or database access', async () => {",
+      "test('DCC-RT-02 claim returns the actual durable reservation and immutable deadlines', async () => {",
+      "test('DCC-RT-03 independent SQL timestamps preserve both original deadlines without inventing equality', async () => {",
+      "test('DCC-RT-04 status recovers the same active claim using only bounded SELECTs', async () => {",
+      "test('DCC-RT-05 author handoff completion is returned as accounting, without claiming another job', async () => {",
+      "test('DCC-RT-06 a finished model remains observable until the distinct job deadline', async () => {",
+      "test('DCC-RT-07 foreign owner and absent or non-running jobs return no context and never mutate', async () => {",
+      "test('DCC-RT-08 status requires an exact paired job/attempt selector and a valid owner', async () => {",
+      "test('DCC-RT-09 original attempt deadline cannot be extended by mutable job state', async () => {",
+      "test('DCC-RT-10 invalid reservation clocks fail closed', async () => {",
+      "test('DCC-RT-11 an otherwise valid active reservation may not cross Taipei midnight', async () => {",
+      "test('DCC-RT-12 expired model reservation cannot be recovered as runnable work', async () => {",
+      "test('DCC-RT-13 expiry during database reads never returns an active claim context', async () => {",
+      "test('DCC-RT-14 changed live job fence during reads is rejected without modifying the new state', async () => {",
+      "test('DCC-RT-15 a claim with no selected job returns null without inventing a reservation', async () => {",
+      "test('DCC-RT-16 successful claim followed by missing or failed context is uncertain and never retried', async () => {",
+      "test('DCC-RT-17 RPC claim identity must match the reloaded durable job in every field', async () => {",
+      "test('DCC-RT-18 lost or malformed claim RPC replies are sanitized and never retried automatically', async () => {",
+      "test('DCC-RT-19 status rejects missing, mismatched, duplicate, or unreadable durable context', async () => {",
+      "test('DCC-RT-20 completion identity, outcome, hash, and clocks remain bound to the reservation', async () => {",
+      "test('DCC-RT-21 existing handoff, finish, and publication retain their authenticated RPC contracts', async () => {",
+      "test('DAI-01 real input route exports only bounded facts/summary with live reservation and separate cutoffs', async () => {",
+      "test('DAI-02 auth and exact input validation happen before all database access', async () => {",
+      "test('DAI-03 wrong reservation and a completed model cannot prepare another dispatch input', async () => {",
+      "test('DAI-04 denied, withdrawn, malformed rights, future microsecond and unrelated company stay explicit gaps', async () => {",
+      "test('DAI-05 authenticated summary remains internal; industry is context without company/order attribution', async () => {",
+      "test('DAI-06 stale RPC head and equal-clock conflicting sibling cannot slip into author input', async () => {",
+      "test('DAI-07 immutable dossier hash, issuer, published identity and clocks are verified', async () => {",
+      "test('DAI-08 absent selections are explicit gaps, never a complete financial forecast', async () => {",
+      "test('DAI-09 ownership changes during preparation invalidate the entire packet', async () => {",
+      "test('DAI-10 source read failure cannot be reported as no new sources', async () => {",
+      "test('DAI-11 deadline rejects a stalled source read even when transport ignores cancellation', async () => {",
+      "test('DAI-12 fallback revision URLs cannot hide a contradictory same-clock sibling', async () => {",
+      "test('DCC-RT observed-only jobs cannot enter the legacy formal context', async () => {",
+      "test('DAI-13 precise clocks survive packet serialization and reject invalid microsecond sibling ordering', async () => {",
+      "test('RIP-HTTP authentication precedes body/client for preparation',async()=>{",
+      "test('RIP-HTTP closed observed preparation delegates to one atomic RPC without claim/reserve',async()=>{",
+      "test('financial supplement auth rejects before body or database construction', async()=>{const {response,calls}=await run({body:{action:'financialSupplement',owner:OWNER},headers:{}});assert.equal(response.status,401);assert.equal(calls.body,0);assert.equal(calls.client,0);});"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-deep-jobs-postgres.test.mjs",
+    "lines": 97,
+    "assertions": 16,
+    "tests": [
+      "test('weekly five-article cap and daily four-attempt/one-lease Mac queue fail closed',"
+    ],
+    "skip": [
+      "import { execFileSync, spawnSync } from 'node:child_process';",
+      "{ skip: !available && 'local PostgreSQL tools unavailable' }, () => {",
+      "const run = (binary, args) => execFileSync(path.join(binaries, binary), args, {"
+    ]
+  },
+  {
+    "path": "scripts/research-deep-publication-postgres.test.mjs",
+    "lines": 196,
+    "assertions": 46,
+    "tests": [
+      "for (const recovery of ['rejected', 'explicit_failure']) test(`deep publication preserves ordinary history and recovers ${recovery} plus expired leases`,"
+    ],
+    "skip": [
+      "import { execFileSync, spawnSync } from 'node:child_process';",
+      "{ skip: !available && 'local PostgreSQL tools unavailable' }, () => {",
+      "const run = (binary, args) => execFileSync(path.join(bin, binary), args, {"
+    ]
+  },
+  {
+    "path": "scripts/research-discovery-relay-prepare.test.mjs",
+    "lines": 96,
+    "assertions": 45,
+    "tests": [
+      "test('RB01 original social relay cannot export nested authorization',()=>{",
+      "test('RB02 timed public summaries require raw SHA/bytes and exact matching acquisition',()=>{",
+      "test('RB03 acquisition chain rejects inverted microseconds in the same millisecond',()=>{",
+      "test('RB04 exact corrected real relay retains three industry items, no 3037 candidate',async()=>{",
+      "test('RB05 every input plane rejects hidden credential fields and arbitrary metadata',()=>{",
+      "test('RB06 independently valid hashes/bytes cannot be rebound to a different acquisition receipt',()=>{",
+      "test('RB07 sub-millisecond completed/future clocks, invalid calendar dates and excessive precision reject',()=>{",
+      "test('RB08 output receipt projects required fields and retains original acquisition attribution',()=>{",
+      "test('RC01 observed1978 keeps old1946 immutable; innovation31 and restricted-CFI3673 are research observations only',()=>{",
+      "test('RC02 four-digit TDR9136 excluded, never infer ordinary scope by code/name suffix',()=>{",
+      "test('RC03 preferred/warrant and forged ES outside stock/innovation section rejected',()=>{",
+      "test('RC04 exact original TWSE/TPEX clock split and large raw reference preserved without VM raw hash claim',()=>{",
+      "test('RC05 only fixed CFI raw reference can exceed4MB, selected input/bounds/secret validation unchanged',()=>{",
+      "test('RC06 duplicate/count/future-nanosecond/legacy-binding mutations fail closed',()=>{",
+      "test('RC07 actual expanded cohort controller consumes3same-root industry summaries, restart dedup zero new',async()=>{",
+      "test('RC08 configured Gooaye provider IDs match the actual publisher relay, without enabling platforms',()=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-execution-binding.test.mjs",
+    "lines": 187,
+    "assertions": 22,
+    "tests": [
+      "test('REB01 actual matched credentials resolve private role-separated controller principals', () => {",
+      "test('REB02 absent/shared writer-reviewer or cron-reviewer authority fails closed before authentication', () => {",
+      "test('REB03 role swap, alias header, raw/malformed token and cron do not authenticate', () => {",
+      "test('REB04 author and independent reviewer fixtures bind hashes while unknown model identity stays null', () => {",
+      "test('REB05 key rotation cannot adopt an existing assignment and does not log credential values', () => {",
+      "test('REB06 original work owner and reservation role are separate from principal and cannot be swapped', () => {",
+      "test('REB07 closed observation rejects self-asserted authority, unknown/missing fields and fake platform attestation', () => {",
+      "test('REB08 exact assignment/job/attempt/reservation/input/article/review/output binding rejects mixed revisions', () => {",
+      "test('REB09 dispatch/completion must fit original assignment, reservation, job and real receive clocks', () => {",
+      "test('REB10 reviewer cannot reuse author principal, thread, invocation or pre-author execution', () => {",
+      "test('REB11 used invocation is rejected rather than silently creating a new execution or budget charge', () => {",
+      "test('REB12 PG microseconds and explicit offsets preserve exact original boundary ordering', () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-input-preparation-postgres.test.mjs",
+    "lines": 153,
+    "assertions": 62,
+    "tests": [
+      "test('real PostgreSQL immutable input preparations, original leases and source fences (synthetic)',async t=>{",
+      "await t.test('company absent from stocks prepares an immutable incomplete input without claiming or dispatching',()=>{",
+      "await t.test('read-only assertion rechecks existing preparation without any new charge or seal',()=>{",
+      "await t.test('real PG read-only assertions feed both fixed calculators without formal rows or durable financial state',async()=>{",
+      "await t.test('exact replay preserves hash/clocks and restart remains identical',()=>{",
+      "await t.test('unknown identity/authority/calculator/clock fields and wrong binding fail closed',()=>{",
+      "await t.test('BYPASSRLS direct insert/update/delete/truncate and anonymous RPC forbidden',()=>{",
+      "await t.test('priority immutable-store proof cannot be bypassed by service RPC',()=>{",
+      "await t.test('completed or expired reservation never becomes fresh and receipts remain immutable',()=>{",
+      "await t.test('four preparations fill one original unit; fifth rejects instead of durable growth',()=>{",
+      "await t.test('full UTF-8 serialized request/payload/new seal charges include exact524288 and +1 bytes',()=>{",
+      "await t.test('cumulative bytes reject below count cap and rollback seal/preparation/budget counts',()=>{",
+      "await t.test('two actual concurrent clients compete for the last original-unit slot',async()=>{",
+      "await t.test('source withdrawal rejects replay without replacing old bytes or returning publishable',()=>{",
+      "await t.test('repeatable read cannot seal stale input; null/oversized/invalid-ID requests reject',()=>{"
+    ],
+    "skip": [
+      "import {execFileSync,execFile} from 'node:child_process';",
+      "const bin=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN || process.env.OPPORTUNITY_V3_POSTGRES_BIN || (()=>{",
+      "try {return execFileSync('pg_config',['--bindir'],{encoding:'utf8',timeout:5000,maxBuffer:4096}).trim();}",
+      "const run=(n,a,input)=>execFileSync(path.join(bin,n),a,{encoding:'utf8',input,timeout:10000,maxBuffer:4*1024*1024}).trim();",
+      "const db={rpc(name,a){assert.equal(name,'assert_research_input_preparation_v2');calls++;const response=promisify(execFile)(path.join(bin,'psql'),[...args,'-c',`SET ROLE service_role;SELECT ${name}(${q(JSON.stringify(a.p_request))},${q(a.p_preparation_id)},${q(",
+      "const race=x=>promisify(execFile)(path.join(bin,'psql'),[...args,'-c',`SET statement_timeout='5s';SET ROLE service_role;SELECT prepare_research_input_v2(${q(JSON.stringify({...r,sourceDocumentIds:x}))});`],{encoding:'utf8',timeout:10000,maxBuffer:4*1024*1024})"
+    ]
+  },
+  {
+    "path": "scripts/research-insider-acceptance-lifecycle.test.mjs",
+    "lines": 46,
+    "assertions": 28,
+    "tests": [
+      "test('old unconditional receipt is a reproducible false-positive despite red TAP',async()=>{",
+      "const child=spawn(process.execPath,['--input-type=module','-e',`import test from 'node:test';test('old fixture',async t=>{const report={};await t.test('child',async()=>{throw Error('controlled_child_failure')});report.passed=true;console.log('RECEIPT '+JSON.stringify(report));});",
+      "test('failed child check cannot produce positive receipt after await t.test resolves',async()=>{",
+      "const child=spawn(process.execPath,['--input-type=module','-e',`import test from 'node:test';import {insiderAcceptanceLifecycle} from ${JSON.stringify(helper)};test('fixture',async t=>{const l=insiderAcceptanceLifecycle({signal:t.signal,timeoutMs:1000,requiredChecks:['one']});l.a",
+      "test('real hanging HTTP aborted by hard deadline, owned child closed, late result cannot pass',async()=>{",
+      "test('external cancellation triggers idempotent cleanup before hung operation returns',async()=>{",
+      "test('pending, failed cleanup, log overflow and success have explicit bounded verdicts',async()=>{",
+      "test('actual node:test cancellation aborts work and emits only a cleaned negative receipt',async()=>{",
+      "const child=spawn(process.execPath,['--input-type=module','-e',`import test from 'node:test';import {insiderAcceptanceLifecycle} from ${JSON.stringify(helper)};test('timed fixture',{timeout:25},async t=>{const l=insiderAcceptanceLifecycle({signal:t.signal,timeoutMs:1000,requiredC",
+      "test('owned child ignoring TERM is killed and close confirmed within bounded cleanup',async()=>{"
+    ],
+    "skip": [
+      "const child=spawn(process.execPath,['--input-type=module','-e',`import test from 'node:test';test('old fixture',async t=>{const report={};await t.test('child',async()=>{throw Error('controlled_child_failure')});report.passed=true;console.log('RECEIPT '+JSON.st",
+      "const child=spawn(process.execPath,['--input-type=module','-e',`import test from 'node:test';import {insiderAcceptanceLifecycle} from ${JSON.stringify(helper)};test('fixture',async t=>{const l=insiderAcceptanceLifecycle({signal:t.signal,timeoutMs:1000,required",
+      "const child=trackInsiderAcceptanceChild(spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:['ignore','pipe','pipe']}));l.addCleanup(()=>stopInsiderAcceptanceChild(child));",
+      "const child=spawn(process.execPath,['--input-type=module','-e',`import test from 'node:test';import {insiderAcceptanceLifecycle} from ${JSON.stringify(helper)};test('timed fixture',{timeout:25},async t=>{const l=insiderAcceptanceLifecycle({signal:t.signal,time",
+      "const child=trackInsiderAcceptanceChild(spawn(process.execPath,['-e',\"process.on('SIGTERM',()=>{});process.stdout.write('ready');setInterval(()=>{},1000)\"],{stdio:['ignore','pipe','pipe']}));"
+    ]
+  },
+  {
+    "path": "scripts/research-insider-capacity-witness.test.mjs",
+    "lines": 20,
+    "assertions": 8,
+    "tests": [
+      "test('frozen actual-only capacity admits an unfinishable partial five-member set',()=>{",
+      "test('transient free-space check alone loses reservation across another request',()=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-insider-command-input.test.mjs",
+    "lines": 38,
+    "assertions": 13,
+    "tests": [
+      "test('FIFO input refuses promptly before any HTTP or journal, instead of blocking open',()=>{",
+      "test('regular exact/MAX+1, symlink/directory and malformed UTF8 inputs are bounded',async()=>{",
+      "test('a real regular file grown between descriptor stat/read never allocates or reads beyond MAX+1',async()=>{"
+    ],
+    "skip": [
+      "import {execFileSync,spawnSync} from 'node:child_process';",
+      "execFileSync('mkfifo',[fifo]);",
+      "const child=spawnSync(process.execPath,['--input-type=module','-e',code],{timeout:700,encoding:'utf8',env:{PATH:process.env.PATH}});"
+    ]
+  },
+  {
+    "path": "scripts/research-insider-continuation.test.mjs",
+    "lines": 11,
+    "assertions": 20,
+    "tests": [
+      "test('only typed exact pinned502 pages continue, durable journal precedes all calls',async()=>{const journals=[];let calls=0;const result=await continueInsiderSnapshots({runId},{invoke:async(body)=>{assert.ok(journals.length>calls);assert.equal(body.connector,'twse_insider');if(c",
+      "for(const mutate of [r=>r.body=null,r=>r.status=500,r=>r.body.result.errorCode='mixed_failure',r=>r.body.result.degradedReason='other',r=>r.body.result.metadata.insider_snapshot.pins[0].snapshotId=runId,r=>r.body.result.metadata.insider_snapshot.members[0].offset=999])test(`unkno",
+      "test('lost HTTP response never retries, save failure prevents next page',async()=>{let calls=0;await assert.rejects(continueInsiderSnapshots({runId},{invoke:async()=>{calls++;throw Error('lost');},saveJournal:async()=>{}}),/lost/);assert.equal(calls,1);calls=0;await assert.reject",
+      "test('bounded invocation/deadline stop retains complete pins for explicit resume',async()=>{let clock=0;let calls=0;const result=await continueInsiderSnapshots({runId},{invoke:async()=>{calls++;clock=1800001;return response();},saveJournal:async()=>{},monotonicNow:()=>clock});ass",
+      "test('completed member drift and source clock renewal reject',()=>{const previous=validateInsiderContinuationResponse(response(),{runId}).progress;for(const change of [r=>r.body.result.metadata.insider_snapshot.members[1].complete=false,r=>r.body.result.metadata.insider_snapshot."
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-insider-dataplane.test.mjs",
+    "lines": 107,
+    "assertions": 32,
+    "tests": [
+      "test('actual isolated Next→PostgREST→PostgreSQL snapshot continuation and maximum admission transport',{timeout:190000},async t=>{",
+      "await t.test('real guarded endpoint unauthorized401 writes no documents',()=>life.check('auth401_zero_documents',async()=>{const r=await boundedFetch(origin+'api/internal/source-sync',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(request)});assert",
+      "await t.test('real Next/DB three rounds complete1001rows and fourempty snapshots via existing document writer',()=>life.check('three_rounds_exact_five_pins',async()=>{",
+      "await t.test('real completed replay keeps fiveidentities and first collected_at unchanged',()=>life.check('replay_no_reacquisition_or_clock_reset',async()=>{",
+      "await t.test('actual PostgREST12MiB raw /16MiBbase64 envelope accepted; +1 rejected',()=>life.check('actual_maximum_base64_transport',async()=>{",
+      "await t.test('actual escaped500row projection rejects before activation over PostgREST',()=>life.check('projection_rejection_atomic',async()=>{"
+    ],
+    "skip": [
+      "import {execFileSync,spawn} from 'node:child_process';",
+      "assert.equal(process.platform,'linux','VM Linux acceptance required');assert.equal(process.env.NODE_TEST_CONTEXT,'child-v8');",
+      "const pg=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN;const pgrst=process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN;const artifacts=process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS;",
+      "const extracted=execFileSync('tar',['-xOJf','-','postgrest'],{input:archive,maxBuffer:32_000_000,env,timeout:Math.min(10000,life.remaining()),killSignal:'SIGKILL'});assert.equal(hash(fs.readFileSync(pgrst)),hash(extracted));",
+      "const exec=(name,args,input)=>execFileSync(path.join(pg,name),args,{env:{...env,PGPASSFILE:'/dev/null'},encoding:'utf8',input,stdio:['pipe','pipe','pipe'],timeout:Math.min(45000,life.remaining()),killSignal:'SIGKILL',maxBuffer:32*1024*1024}).trim();",
+      "const ownedSpawn=(...args)=>{life.remaining();const child=trackInsiderAcceptanceChild(spawn(...args));child.on('error',error=>life.cancel(error));life.addCleanup(()=>stopInsiderAcceptanceChild(child));return child;};",
+      "life.addCleanup(async()=>{if(!pgRunning)return;await new Promise((resolve,reject)=>{const child=spawn(path.join(pg,'pg_ctl'),['-D',cluster,'-m','immediate','-w','-t','5','stop'],{env,stdio:'ignore'});let timer=setTimeout(()=>{if(child.exitCode===null&&child.si"
+    ]
+  },
+  {
+    "path": "scripts/research-insider-guarded-http.test.mjs",
+    "lines": 23,
+    "assertions": 8,
+    "tests": [
+      "test('real loopback guarded adapter retains typed502, bounds bytes/UTF8 and refuses redirects',async t=>{",
+      "await t.test('actual502 body is available for strict progress validation',async()=>{const r=await invoke();assert.equal(r.status,502);assert.equal(r.body.result.typed,'pages_remaining');});",
+      "await t.test('exact32KiB body allowed, +1 rejected without retry',async()=>{mode='exact';assert.deepEqual((await invoke()).body,{});mode='over';const before=requests;await assert.rejects(invoke(),/response_bound/);assert.equal(requests,before+1);});",
+      "await t.test('redirect/error/invalidUTF8 rejected',async()=>{for(const m of ['redirect','unknown','invalid_utf8']){mode=m;await assert.rejects(invoke());}});"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-insider-health-route.test.mjs",
+    "lines": 61,
+    "assertions": 28,
+    "tests": [
+      "for(const duplicatesSkipped of [0,1501])test(`actual route rejects incomplete zero-new replay ${duplicatesSkipped}`,async()=>{",
+      "test('actual route rejects partial dataset failure with zero new documents',async()=>{",
+      "test('actual route keeps completed duplicate and empty results successful',async()=>{",
+      "test('actual route authentication precedes collector and lease',async()=>{",
+      "test('cached complete yesterday remains stale502 and cannot renew succeededAt or next cadence',async()=>{",
+      "test('fresh cached completion succeeds as processing without claiming a new live acquisition',async()=>{",
+      "test('live observation ledger uses original source clock rather than processing completion',async()=>{",
+      "test('explicit snapshot scope is closed before the write lease or collector',async()=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-insider-journal-linux.test.mjs",
+    "lines": 25,
+    "assertions": 16,
+    "tests": [
+      "test('Linux durable journals save five pins before another HTTP and preserve uncertain writes for explicit resume',async()=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-insider-snapshot-postgres.test.mjs",
+    "lines": 130,
+    "assertions": 62,
+    "tests": [
+      "test('actual PostgreSQL snapshot admission, document proof, replay, restart and bounded metadata',async t=>{",
+      "await t.test('service role has only narrow RPC writes, public has no snapshot read or helper execution',()=>{",
+      "await t.test('run identity precedes fetch; clocks/hash/schema/parser/rights reject without admission',()=>{",
+      "await t.test('whole response validated before activation including row501',()=>{",
+      "await t.test('escaped-control500row projection rejects before any snapshot/progress/member admission',()=>{",
+      "await t.test('five fixed members freeze before reading; mixed sizes and derived exclusions',()=>{",
+      "await t.test('invented or changed persisted content cannot advance; documents precede CAS',()=>{",
+      "await t.test('fresh run reuses original active snapshot and never admits new bytes',()=>{",
+      "await t.test('crash after documents, restart, exact CAS replay and completed empty receipts',()=>{",
+      "await t.test('immutable raw and run bindings cannot be rewritten',()=>{",
+      "await t.test('existing run remains replayable at128run limit;129 rejected without deleting maps',()=>{",
+      "await t.test('reapply is non-destructive and preserves exact clocks, bytes, progress',()=>{",
+      "await t.test('stranded112MiB example rejects entire reservation before fetch with no token/run leak',()=>{",
+      "await t.test('actual+pending exact128MiB accepted, +1byte rejected atomically',()=>{",
+      "await t.test('27actual+5pending exact32slots accepted;28actual refuses before partial activation',()=>{",
+      "await t.test('consumed token retains exact lost-response identity even after newer acquisition exists',()=>{"
+    ],
+    "skip": [
+      "// VM-only actual PostgreSQL acceptance; no unavailable-tool skip is a pass.",
+      "import {execFileSync} from 'node:child_process';",
+      "const binaries=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN;",
+      "const run=(name,args,options={})=>execFileSync(path.join(binaries,name),args,{encoding:'utf8',stdio:['pipe','pipe','pipe'],maxBuffer:32*1024*1024,...options}).trim();",
+      "} finally {if(started)run('pg_ctl',['-D',cluster,'-m','immediate','-w','stop']);const target=process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS;if(target&&fs.existsSync(path.join(tmp,'pg.log'))){fs.mkdirSync(target,{recursive:true,mode:0o700});fs.copyFileSync(path"
+    ]
+  },
+  {
+    "path": "scripts/research-insider-snapshot.test.mjs",
+    "lines": 34,
+    "assertions": 23,
+    "tests": [
+      "test('baseline red witness: changing full response hash repeatedly starves raw rows500+',()=>{",
+      "test('mixed pinned run completes in3rounds including empty/completed members without reacquiring after restart',async()=>{const h=harness();let pins;let result;for(let i=0;i<3;i++){result=await snapshot.processInsiderSnapshotRun({runId,...(pins?{pins}:{})},h.deps);pins=result.pin",
+      "test('failed document persistence never invokes commit',async()=>{const h=harness({failPersist:true});await assert.rejects(snapshot.processInsiderSnapshotRun({runId},h.deps),/persist failed/);assert.equal(h.calls.includes('commit_insider_snapshot_page_v1'),false);assert.equal(h.m",
+      "test('changed or missing closed pins cannot reacquire or progress',async()=>{const h=harness();const result=await snapshot.processInsiderSnapshotRun({runId},h.deps);const pins=structuredClone(result.pins);pins[0].snapshotId=runId;await assert.rejects(snapshot.processInsiderSnapsh",
+      "test('partial initialization restart reads stable map and fetches missing datasets only',async()=>{const h=harness();const acquire=h.deps.acquire;h.deps.acquire=async d=>{if(h.fetched.length===2)throw Error('lost transport');return acquire(d);};await assert.rejects(snapshot.proce",
+      "test('escaped-control500row witness: raw below12MiB can exceed4MiB in DB-derived metadata alone',()=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-local-inbox-dataplane.test.mjs",
+    "lines": 50,
+    "assertions": 15,
+    "tests": [
+      "test('local profile selects existing SQL and never seeds observed authority or invents RPCs',async()=>{",
+      "assert.ok(profile.definitions.every(row=>/^[0-9a-f]{64}$/.test(row.definitionSha256)));",
+      "test('local child environment excludes inherited credentials and production writer identity',()=>{",
+      "test('actual attributed relay through real local Next/Supabase/PostgREST/PostgreSQL',{",
+      "check:(name,fn)=>t.test(name,fn),",
+      "test('joined log removes ephemeral values across every pipe-chunk split',()=>{"
+    ],
+    "skip": [
+      "const enabled=process.env.RESEARCH_LOCAL_DATAPLANE_VERIFY==='enabled';",
+      "skip:!enabled && 'explicit local development verification not enabled',timeout:120000,",
+      "artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,",
+      "pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,",
+      "postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,"
+    ]
+  },
+  {
+    "path": "scripts/research-observed-priority-native.test.mjs",
+    "lines": 250,
+    "assertions": 166,
+    "tests": [
+      "test('real observed priority accounts1978 and admits an old public company research lead without formal identity',{skip:!enabled&&'explicit isolated profile not enabled',timeout:120000},async t=>{",
+      "const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,testPgClockLibrary:process.env.STOCK",
+      "await t.test('guarded1978 admission retains formal stocks count zero',async()=>{",
+      "await t.test('formal409, observed200 all1978 needs evidence and no synthetic queue',async()=>{",
+      "await t.test('existing controller and guarded inbox consume actual EP8 description with original March/October clocks',async()=>{",
+      "await t.test('real source-priority consumer explicitly selects observed roster and replays without new DB run',async()=>{",
+      "await t.test('reasoned low-impact zero-novelty old lead creates one real observed-only job and accounts all other companies',async()=>{",
+      "await t.test('exact durable RPC replay after restart preserves charge and first discovery; inbox redelivery0new',async()=>{",
+      "await t.test('direct service RPC rejects invented source root, backdated first observation and crossscope receipt',async()=>{",
+      "await t.test('future scope, anonymous write and crossscope receipt reject with no formal products',async()=>{",
+      "await t.test('current admission week ignores different old asOf weeks, exact zero-job replay is durable',async()=>{",
+      "await t.test('global current-week fifth cap and same issuer dedup reject; no past-week or caller-createdAt bypass',async()=>{",
+      "await t.test('DB clock is captured after actual shared-lock wait and Taiwan Monday expressions retain microseconds',async()=>{",
+      "const release=(await blocker).split('\\n').find(x=>/^2026-/u.test(x));const admitted=outcome.split('\\n').find(x=>/^2026-/u.test(x));",
+      "for(const variant of ['empty-accounting','invented-root','forged-receipt'])await t.test(`BYPASSRLS service direct observed priority INSERT rejects ${variant}`,async()=>{",
+      "if(process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled')await t.test('v1 claim alone seals expired observed attempt and can claim a queued formal fixture',async()=>{",
+      "if(!fits){await t.test('real Taiwan midnight reservation refusal retains queued job and consumes no model budget',async()=>{const response=await post('api/internal/research-deep-job',{action:'claim',owner,...scope});const data=await response.json();assert.equal(response.status,20",
+      "await t.test('guarded v2 claim reserves original real model budget with research-only company identity',async()=>{",
+      "await t.test('v1 status cannot see observed claim; restart status preserves same attempt and original deadlines',async()=>{",
+      "await t.test('actual author v2 input retains real EP8 document and missing financial/publication gaps',async()=>{",
+      "await t.test('actual guarded Next/PostgREST prepares old EP8 input with original lease and no trusted role fiction',async()=>{",
+      "await t.test('actual preparation replay and restart return original admitted clock/hash',async()=>{",
+      "await t.test('anonymous/caller-identity input cannot cause preparation or budget writes',async()=>{",
+      "await t.test('direct v1 completion/review/publication RPCs reject observed job without completing budget or writing outbox',async()=>{",
+      "await t.test('cross snapshot, anonymous, missing explicit scope and unmapped publication refuse',async()=>{",
+      "if(pgClock)await t.test('actual enqueue crosses Taipei Monday with one captured clock; old exact trigger splits weeks',async()=>{"
+    ],
+    "skip": [
+      "import {execFileSync}from 'node:child_process';",
+      "const enabled=process.env.RESEARCH_LOCAL_DATAPLANE_VERIFY==='enabled';",
+      "test('real observed priority accounts1978 and admits an old public company research lead without formal identity',{skip:!enabled&&'explicit isolated profile not enabled',timeout:120000},async t=>{",
+      "const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedPriority:true,testPgClockLibra",
+      "if(process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled')await t.test('v1 claim alone seals expired observed attempt and can claim a queued formal fixture',async()=>{",
+      "if(process.env.RESEARCH_OBSERVED_CLAIM_VERIFY==='enabled') {",
+      "if(process.env.RESEARCH_INPUT_PREPARATION_VERIFY==='enabled') {",
+      "const old=execFileSync('git',['show','4868472ee479aa14aed24587311d1a5f1118d07b:migrations/20261008_research_observed_priority_v1.sql'],{cwd:root,encoding:'utf8'});"
+    ]
+  },
+  {
+    "path": "scripts/research-observed-roster-native.test.mjs",
+    "lines": 72,
+    "assertions": 29,
+    "tests": [
+      "test('real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart',{skip:!enabled&&'explicit isolated profile not enabled',timeout:120000},async t=>{",
+      "const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedRoster:true,observedPriority:true,check:(name,fn)=",
+      "const verify=(name,fn)=>t.test(name,fn);"
+    ],
+    "skip": [
+      "const enabled=process.env.RESEARCH_LOCAL_DATAPLANE_VERIFY==='enabled';",
+      "test('real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart',{skip:!enabled&&'explicit isolated profile not enabled',timeout:120000},async t=>{",
+      "const report=await verifyLocalInboxDataPlane({root,artifacts:process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS,pgBin:process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN,postgrestBin:process.env.RESEARCH_LOCAL_DATAPLANE_POSTGREST_BIN,observedRoster:true,observedPriority:t"
+    ]
+  },
+  {
+    "path": "scripts/research-publication-lineage-postgres.test.mjs",
+    "lines": 120,
+    "assertions": 25,
+    "tests": [
+      "test('existing publication tables: exclusive v1/v2 lineage, inert writes, real PG restart and truncate races',async t=>{",
+      "const check=async(name,fn)=>{await t.test(name,async()=>{try{await fn();}catch(e){failed=true;throw e;}});if(failed)throw Error('dependent_lineage_cases_stopped_after_failed_prerequisite');};"
+    ],
+    "skip": [
+      "import {execFileSync,execFile} from 'node:child_process';",
+      "const bin=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN||execFileSync('pg_config',['--bindir'],{encoding:'utf8'}).trim();",
+      "const run=(cmd,argv,input)=>execFileSync(path.join(bin,cmd),argv,{input,encoding:'utf8',timeout:15000,maxBuffer:1048576}).trim();",
+      "const asyncSQL=s=>promisify(execFile)(path.join(bin,'psql'),[...args,'-c',\"SET statement_timeout='8s';\"+s],{encoding:'utf8',timeout:12000,maxBuffer:1048576}).then(r=>({ok:true,stdout:r.stdout.trim()}),e=>({ok:false,stderr:e.stderr,stdout:e.stdout}));"
+    ]
+  },
+  {
+    "path": "scripts/research-publication-source-fence-postgres.test.mjs",
+    "lines": 64,
+    "assertions": 38,
+    "tests": [
+      "test('real PostgreSQL shared source fence and immutable dependency seals (synthetic)',async t=>{",
+      "await t.test('date-only/unknown publication remains null; exact seal replay retains received clock',()=>{saved=seal(p,cut);assert.equal(saved.documents[0].publishedAt,null);assert.equal(saved.publicationAuthorized,false);assert.deepEqual(seal(p,cut),saved);});",
+      "await t.test('BYPASSRLS service cannot forge/update receipt or call trigger helpers; anonymous denied',()=>{for(const s of ['INSERT INTO research_source_seals_v2(request_hash,cutoff,documents)VALUES(\\'x\\',now(),\\'[]\\')','UPDATE research_source_seals_v2 SET documents=\\'[]\\'','SELE",
+      "await t.test('null/unknown members/duplicate IDs/hash tamper/future cutoff fail closed',()=>{for(const v of ['null','[]',JSON.stringify([{id,rowHash:null}]),JSON.stringify([{id,rowHash:'a'.repeat(64),verified:true}]),JSON.stringify([...JSON.parse(p),...JSON.parse(p)])])assert.thr",
+      "await t.test('older ancestor denied rights cannot be laundered by newer child public citation',()=>{",
+      "await t.test('two-hop child cannot launder a withdrawn original ancestor',()=>{",
+      "await t.test('actual REPEATABLE READ stale writer cannot miss a newer committed seal',async()=>{",
+      "await t.test('source exact INSERT conflict replay and no-op UPDATE do not invalidate seal',()=>{sql(`SET ROLE service_role;INSERT INTO source_raw_documents SELECT * FROM source_raw_documents WHERE id=${q(id)} ON CONFLICT(id) DO NOTHING;UPDATE source_raw_documents SET metadata=met",
+      "await t.test('private publication recheck rejects service callers and accepts only intact seal',()=>{assert.throws(()=>sql(`SET ROLE service_role;SELECT assert_research_source_seal_v2(${q(saved.seal_id)});`),/permission denied/);assert.equal(JSON.parse(sql(`SET ROLE research_sour",
+      "await t.test('direct legacy rights mutation invalidates immutable seal atomically',()=>{sql(`SET ROLE service_role;UPDATE source_raw_documents SET metadata=metadata||'{\"rights_boundary\":\"none\"}' WHERE id=${q(id)};`);assert.equal(sql(`SELECT count(*) FROM research_source_seal_inva",
+      "await t.test('new same-root revision invalidates predecessor; retraction cannot be hidden by cutoff',()=>{const a=randomUUID(),b=randomUUID();add(a,'https://example.invalid/revision');const at=sql('SELECT clock_timestamp();');const prior=seal(packet(a),at);add(b,'https://example.",
+      "await t.test('source-first concurrent commit forces waiting sealer to recheck changed bytes',async()=>{const a=randomUUID();add(a,'https://example.invalid/source-first');const pp=packet(a),at=sql('SELECT clock_timestamp();');const writer=launch(`BEGIN;SET ROLE service_role;UPDATE",
+      "await t.test('seal-first concurrent new revision records invalidation after commit (no phantom)',async()=>{const a=randomUUID(),b=randomUUID(),url='https://example.invalid/seal-first';add(a,url);const pp=packet(a),at=sql('SELECT clock_timestamp();');const reader=launch(`BEGIN;SET",
+      "await t.test('parent-root repost rights changes invalidate dependency; delete and truncate fenced',()=>{const a=randomUUID(),b=randomUUID(),url='https://example.invalid/parent';add(a,url);const receipt=seal(packet(a),sql('SELECT clock_timestamp();'));add(b,'https://example.invali",
+      "await t.test('restart preserves source receipts/invalidation, old hashes never become valid',()=>{const beforeRows=sql('SELECT count(*) FROM source_raw_documents;');const before=sql('SELECT jsonb_agg(to_jsonb(s) ORDER BY seal_id) FROM research_source_seals_v2 s;');run('pg_ctl',['"
+    ],
+    "skip": [
+      "import {execFileSync,spawn} from 'node:child_process';",
+      "const bin=process.env.RESEARCH_LOCAL_DATAPLANE_PG_BIN || process.env.OPPORTUNITY_V3_POSTGRES_BIN || (()=>{",
+      "try {return execFileSync('pg_config',['--bindir'],{encoding:'utf8',timeout:5000,maxBuffer:4096}).trim();}",
+      "const run=(n,a,input)=>execFileSync(path.join(bin,n),a,{encoding:'utf8',input,timeout:10000,maxBuffer:4*1024*1024}).trim();",
+      "const launch=s=>{const c=spawn(path.join(bin,'psql'),args,{stdio:['pipe','pipe','pipe']});let out='',err='';c.stdout.on('data',d=>out+=d);c.stderr.on('data',d=>err+=d);c.stdin.end(`SET statement_timeout='5s';${s}`);return{c,done:once(c,'close').then(([code])=>",
+      "sql(process.env.SOURCE_FENCE_REVIEW_SUBJECT==='6b49b8a1' ? execFileSync('git',['show','6b49b8a1:migrations/20261009_research_publication_source_fence_v2.sql'],{encoding:'utf8'}) : fs.readFileSync('migrations/20261009_research_publication_source_fence_v2.sql','"
+    ]
+  },
+  {
+    "path": "scripts/research-publication-view-fixture.mjs",
+    "lines": 16,
+    "assertions": 0,
+    "tests": [],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-publication-view.test.mjs",
+    "lines": 90,
+    "assertions": 47,
+    "tests": [
+      "test('display derives only original published public content without altering hashed input',async()=>{",
+      "test('tampering, private fields, identity conflicts and failed read never become a working draft',async()=>{",
+      "test('public URL conversion occurs after original hash check; private targets are rejected',async()=>{",
+      "test('negative EPS cannot acquire applicable P/E; annual periods cannot borrow future-four labels',async()=>{",
+      "test('closed query and exclusive view preserve original legacy/draft choices without fallback',()=>{",
+      "test('writer-to-reader compatibility preserves maximum catalysts, long locators and printed month/half-year units',async()=>{",
+      "test('actual shared published component SSR escapes prose and shows periods, withdrawal and accessible folded tables',async()=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-saved-observation.test.mjs",
+    "lines": 127,
+    "assertions": 22,
+    "tests": [
+      "test('RSO01 saved author and reviewer original reports equal authenticated structural results without a Request', () => {",
+      "test('RSO02 saved validation cannot substitute for actual receive authentication', () => {",
+      "test('RSO03 absent or aliased current role configuration and unknown role fail closed', () => {",
+      "test('RSO04 key rotation cannot adopt an immutable role assignment', () => {",
+      "test('RSO05 shared validation preserves all hash, owner, clock, shape and invocation rejections', () => {",
+      "test('RSO06 reviewer independence remains mandatory for saved observations', () => {",
+      "test('RSO07 original microsecond receive boundary is preserved and current time cannot renew it', () => {",
+      "test('RSO08 validation results contain no raw credential or authority flag', () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "scripts/research-source-priority-consumer.test.mjs",
+    "lines": 170,
+    "assertions": 51,
+    "tests": [
+      "test('PC01 actual loopback HTTP POST and completed journal replay issue no second request',async()=>{",
+      "test('PC02 uncertain POST is fenced on restart rather than repeated',async()=>{",
+      "test('PC03 remote origin rejected before transport or journal creation',async()=>{",
+      "test('PC04 tampered controller or shared principal rejected',async()=>{",
+      "test('PC05 incomplete journal never becomes successful empty receipt',async()=>{",
+      "test('PC06 explicit observed roster reaches actual HTTP endpoint and replays once',async()=>{",
+      "])test(`PC07 rejects ${name} and fences uncertain submission`,async()=>{",
+      "test('PC08 formal response cannot silently switch to an observed roster',async()=>{",
+      "test('PC09 controller cannot smuggle a different roster or cutoff',async()=>{",
+      "test('PCscope default is formal; observed scope requires a valid explicit snapshot',()=>{",
+      "test('PCsize actual scoring/enrichment modules produce a cohort larger than the old four-MB transport budget',async()=>{",
+      "test('PC10 full1978 HTTP response persists compactly and replays all candidate and price rows',async()=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+    "lines": 359,
+    "assertions": 132,
+    "tests": [
+      "filters.push((row)=>(row.metadata as TestRow)?.canonical_url===root || (row.metadata as TestRow)?.canonical_url==null && pattern.test(String(row.document_url)));",
+      "test('industry-only current head never gains company attention from unioned legacy symbols',async()=>{",
+      "test('DR01 executable route rejects absent/non-exact bearer before any DB read',async()=>{",
+      "test('DR02 model/request supplied price contexts or arbitrary verified flags cannot enter server evidence',async()=>{",
+      "test('DR03 route persists and returns every shadow context and hashes it while retaining existing queue',async()=>{",
+      "test('DR04 price evidence changes immutable input hash without changing score or Top20 queue',async()=>{",
+      "test('DR05 impossible cutoff rejects before any source or price acquisition',async()=>{",
+      "test('DR06 actual route keeps weak/missing first immutable beside current verified raw quote',async()=>{",
+      "test('DR07 actual supplementary evidence changes inputHash while first, scores and queue remain identical',async()=>{",
+      "test('DR08 actual server-selected Top20 at lexical rear precedes outside candidates in shared32 admission',async()=>{",
+      "test('DR09 actual DB predicates exclude later available/published quotes from original cutoff',async()=>{",
+      "test('DR10 active research outside Top20 has server priority; model inProgress cannot promote other candidates',async()=>{",
+      "test('AR01 actual route rejects malformed/injected association authority before obtaining DB',async()=>{",
+      "test('AR02 old source outside discovery window persists a server-hashed supplementary cue with no new priority roots',async()=>{",
+      "test('AR03 one original associated with two issuers never creates company mentions, attention or discovery times',async()=>{",
+      "test('AR04 denial/retraction/supersession stay as visible invalidated or needs-update receipts',async()=>{",
+      "test('AR05 source DB failure accounts every association without claiming no news or leaking raw diagnostics',async()=>{",
+      "test('AR06 association issuer must be an official common-stock roster member',async()=>{",
+      "test('AR07 persistence/read errors remain bounded stable codes',async()=>{",
+      "test('AR08 caller association cannot satisfy factor bindings or add a direct source claim',async()=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "web/src/lib/insider-completed-archive-codec-v2.test.ts",
+    "lines": 57,
+    "assertions": 24,
+    "tests": [
+      "test('byte-identical raw, independent observed metadata excluded, identity and gzip roundtrip',async()=>{",
+      "test('raw12MiB exact and +1, encoded bound exact and +1, strict manifest fields',async()=>{",
+      "test('actual single-member gzip accepted; concatenation, trailing, header, checksum, truncation refuse even with matching encoded hash',async()=>{",
+      "test('declared size, hash tampering and bounded decompression bomb refuse',async()=>{",
+      "test('actual valid gzip at encoded maximum with empty DEFLATE blocks restores; +1 envelope rejects',async()=>{",
+      "test('stream abort/check failure rejects after close, caller mutation cannot change captured bytes',async()=>{"
+    ],
+    "skip": []
+  },
+  {
+    "path": "web/src/lib/insider-completed-archive-io-v2.test.ts",
+    "lines": 67,
+    "assertions": 29,
+    "tests": [
+      "test('private store publication/fsync/readback and dedup preserve exact bytes without DB authority',async()=>fixture(async root=>{",
+      "test('FIFO, symlink, device/directory and corrupt existing object refuse without overwrite',async()=>fixture(async root=>{",
+      "test('real regular growth and directory replacement during descriptor read reject',async t=>fixture(async root=>{",
+      "test('fsync failure, already-aborted operation and corrupt requested encoding cannot return verification',async t=>fixture(async root=>{",
+      "test('replacement during final fsync cannot return a positive component result',async t=>fixture(async root=>{",
+      "test('deadline and in-flight abort lock failure after bounded regular I/O, descriptors close',async t=>fixture(async root=>{",
+      "test('two same-content publishers never overwrite; existing verified final remains readable',async()=>fixture(async root=>{"
+    ],
+    "skip": [
+      "import {execFileSync} from 'node:child_process';",
+      "execFileSync('/usr/bin/mkfifo',[location(root)]);const start=performance.now();await assert.rejects(readInsiderArchiveV2(root,encoded.binding),/file/);assert.ok(performance.now()-start<1000);await assert.rejects(publishInsiderArchiveV2(root,encoded.bytes,encod"
+    ]
+  },
+  {
+    "path": "web/src/lib/research-agent-priority.test.ts",
+    "lines": 65,
+    "assertions": 14,
+    "tests": [
+      "test('one original story shared by many reposts gives one attention root', () => {",
+      "test('a retraction removes evidence, and a failed source is not scored as zero attention', () => {",
+      "test('in-progress research retains its lane seat, with a bounded emerging lane', () => {",
+      "test('future evidence, duplicates, and missing reasons fail closed', () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "web/src/lib/research-broker-estimate.test.ts",
+    "lines": 9,
+    "assertions": 4,
+    "tests": [
+      "test('broker EPS keeps annual scope and negative estimates; a year cannot become EPS', () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "web/src/lib/research-cloud-work.test.ts",
+    "lines": 90,
+    "assertions": 26,
+    "tests": [
+      "test('portable Cloud recomputation shares publication math but grants no publication or strategy authority', () => {",
+      "test('altered binding, role and input bytes cannot travel between jobs, versions or owners', () => {",
+      "test('original expiry, Taipei midnight and future evidence are enforced without moving the cutoff', () => {",
+      "test('secret-like fields, credential URLs, metadata substitution and excessive input are rejected', () => {",
+      "test('withdrawal, private citation and disguised source identifiers cannot pass accounting validation', () => {",
+      "test('recomputed EPS, discounting, negative earnings and fabricated commercialization stay consistent', () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "web/src/lib/research-execution-context.test.ts",
+    "lines": 14,
+    "assertions": 4,
+    "tests": [
+      "test('official low times shares admits only conservative whole lots and complete windows', () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "web/src/lib/research-inbox.test.ts",
+    "lines": 156,
+    "assertions": 46,
+    "tests": [
+      "test('research inbox validates bounded point-in-time summaries', () => {",
+      "test('research inbox produces immutable deterministic revisions', () => {",
+      "test('authenticated content stores only the submitted bounded summary', () => {",
+      "test('IS01 industry-only source preserves empty direct symbols and bounded metadata', () => {",
+      "test('IS02 industry-only symbols cannot nominate a company or bypass explicit subject scope', () => {",
+      "test('IS03 industry terms require bounded trimmed unique strings and exact source shape', () => {",
+      "test('IS04 legacy identity stays stable while industry metadata creates immutable revisions', () => {",
+      "test('IS05 inbox itself enforces exact clocks and authenticated summary boundaries', () => {",
+      "test('IS06 existing authenticated inbox POST accepts industry rows and rejects invalid input before persistence', async () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "web/src/lib/research-review-auth.test.ts",
+    "lines": 55,
+    "assertions": 11,
+    "tests": [
+      "test('research qualification requires a separate bearer identity', () => {",
+      "test('independent testing and human approval cannot share writer or each other identity', () => {"
+    ],
+    "skip": [
+      "writer: process.env.INTERNAL_API_KEY, cron: process.env.CRON_SECRET,",
+      "reviewer: process.env.RESEARCH_REVIEW_KEY,",
+      "process.env.INTERNAL_API_KEY = 'writer-test-secret';",
+      "process.env.CRON_SECRET = 'cron-test-secret';",
+      "process.env.RESEARCH_REVIEW_KEY = 'reviewer-test-secret';",
+      "process.env.RESEARCH_REVIEW_KEY = 'writer-test-secret';",
+      "delete process.env.RESEARCH_REVIEW_KEY;",
+      "assert.deepEqual(requireInternalAuth(req(process.env.RESEARCH_TEST_KEY!), opts), { ok: true, authSource: 'research_test_key' });",
+      "assert.deepEqual(requireInternalAuth(req(process.env.STRATEGY_APPROVAL_KEY!), opts), { ok: true, authSource: 'strategy_approval_key' });",
+      "process.env.RESEARCH_TEST_KEY = process.env.STRATEGY_APPROVAL_KEY;",
+      "assert.equal(requireInternalAuth(req(process.env.RESEARCH_TEST_KEY!), opts).ok, false);",
+      "process.env.RESEARCH_TEST_KEY = process.env.INTERNAL_API_KEY;",
+      "const writer = requireInternalAuth(req(process.env.RESEARCH_TEST_KEY!), opts);"
+    ]
+  },
+  {
+    "path": "web/src/lib/research-source-extensions.test.ts",
+    "lines": 103,
+    "assertions": 28,
+    "tests": [
+      "test('a factor binds the matching root and cannot predate a withdrawal or revision', () => {",
+      "test('new platforms retain timecodes and reject impossible/private transcript excerpts', () => {",
+      "test('prefixed social summaries and unreviewed issuer domains cannot become official roots', () => {",
+      "test('a correction observed tomorrow is excluded from a historical cutoff', () => {",
+      "test('same-time retraction wins regardless of input order without creating new attention', () => {",
+      "test('insider dataset entries remain distinct and intended transfers do not imply actual selling', () => {",
+      "test('missing prices never qualify as early discovery; relative returns require aligned sessions', () => {",
+      "test('a successful scope cannot erase another failed scope; chapter indexes contribute no attention', () => {",
+      "test('later reposts cannot revive an original source withdrawal', () => {"
+    ],
+    "skip": []
+  },
+  {
+    "path": "web/src/lib/research-working-draft-fifo.test.ts",
+    "lines": 29,
+    "assertions": 5,
+    "tests": [
+      "test('four concurrent FIFO artifacts refuse within bounded subprocess deadline without fs-pool exhaustion',async()=>{",
+      "test('device and directory leaves reject before reading; symlink is not followed',async()=>{"
+    ],
+    "skip": [
+      "import {execFileSync, execFile} from 'node:child_process';",
+      "const execute=promisify(execFile),root=path.resolve(import.meta.dirname,'../../..');",
+      "const article=path.join(tmp,folder,'article.md');await rm(article);execFileSync('mkfifo',[article]);"
+    ]
+  },
+  {
+    "path": "web/src/lib/research-working-draft.test.ts",
+    "lines": 70,
+    "assertions": 27,
+    "tests": [
+      "for (const symbol of ['2409','2383']) test(`${symbol} actual artifact renders seven chapters, original tables and direct citations without formal authority`, async()=>{",
+      "test('preview requires explicit local demo flag; default and production remain disabled',()=>{",
+      "test('published/qualification/strategy/target mutations are never accepted as working draft',()=>{",
+      "test('nanosecond cutoff after authored clock rejects, original clocks stay exact',()=>{",
+      "test('private/credential/javascript citation URLs reject rather than silently disclose',()=>{",
+      "test('missing/duplicate references and malformed or oversized tables reject',()=>{",
+      "test('HTML stays plain paragraph data and local historical reference has no fabricated URL/date',()=>{",
+      "test('unsupported symbols never become paths',async()=>{",
+      "test('changed bytes, model/cutoff binding, and symlink artifact reject',async()=>{",
+      "test('both future author and cutoff reject against actual reader clock; no historical clock rewriting',()=>{"
+    ],
+    "skip": []
+  }
+]

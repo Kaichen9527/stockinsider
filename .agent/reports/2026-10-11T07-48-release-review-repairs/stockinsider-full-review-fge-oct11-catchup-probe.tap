@@ -1,0 +1,42 @@
+TAP version 13
+# {"case":"completed-next-session-catchup","signalSession":"2026-09-24","cutoff":"2026-09-29T12:00:00Z","missingData":["official_next_calendar_invalid"],"bars":0}
+# (node:46371) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-full-review-fge-oct11-source/web/src/lib/tw-entry-plan-authority.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-full-review-fge-oct11-source/web/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: independent delayed paper catch-up: completed next session
+not ok 1 - independent delayed paper catch-up: completed next session
+  ---
+  duration_ms: 74.878209
+  type: 'test'
+  location: '/private/tmp/stockinsider-full-review-fge-oct11-catchup-probe.ts:84:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    a chronologically required past paper session should remain processable
+    + actual - expected
+    
+    + [
+    +   'official_next_calendar_invalid'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'official_next_calendar_invalid'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-full-review-fge-oct11-catchup-probe.ts:91:8)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 163.495708

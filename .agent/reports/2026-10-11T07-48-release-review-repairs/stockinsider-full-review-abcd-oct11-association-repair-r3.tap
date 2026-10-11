@@ -1,0 +1,298 @@
+TAP version 13
+# Subtest: research inbox validates bounded point-in-time summaries
+ok 1 - research inbox validates bounded point-in-time summaries
+  ---
+  duration_ms: 6.641833
+  type: 'test'
+  ...
+# Subtest: research inbox produces immutable deterministic revisions
+ok 2 - research inbox produces immutable deterministic revisions
+  ---
+  duration_ms: 1.387334
+  type: 'test'
+  ...
+# Subtest: authenticated content stores only the submitted bounded summary
+ok 3 - authenticated content stores only the submitted bounded summary
+  ---
+  duration_ms: 0.196459
+  type: 'test'
+  ...
+# Subtest: IS01 industry-only source preserves empty direct symbols and bounded metadata
+ok 4 - IS01 industry-only source preserves empty direct symbols and bounded metadata
+  ---
+  duration_ms: 1.258542
+  type: 'test'
+  ...
+# Subtest: IS02 industry-only symbols cannot nominate a company or bypass explicit subject scope
+ok 5 - IS02 industry-only symbols cannot nominate a company or bypass explicit subject scope
+  ---
+  duration_ms: 0.676
+  type: 'test'
+  ...
+# Subtest: IS03 industry terms require bounded trimmed unique strings and exact source shape
+ok 6 - IS03 industry terms require bounded trimmed unique strings and exact source shape
+  ---
+  duration_ms: 1.000041
+  type: 'test'
+  ...
+# Subtest: IS04 legacy identity stays stable while industry metadata creates immutable revisions
+ok 7 - IS04 legacy identity stays stable while industry metadata creates immutable revisions
+  ---
+  duration_ms: 1.104208
+  type: 'test'
+  ...
+# Subtest: IS05 inbox itself enforces exact clocks and authenticated summary boundaries
+ok 8 - IS05 inbox itself enforces exact clocks and authenticated summary boundaries
+  ---
+  duration_ms: 0.7065
+  type: 'test'
+  ...
+# Subtest: IS06 existing authenticated inbox POST accepts industry rows and rejects invalid input before persistence
+ok 9 - IS06 existing authenticated inbox POST accepts industry rows and rejects invalid input before persistence
+  ---
+  duration_ms: 108.791
+  type: 'test'
+  ...
+# Subtest: IC01 inbox rejects sub-millisecond inversions and future observations at every clock boundary
+ok 10 - IC01 inbox rejects sub-millisecond inversions and future observations at every clock boundary
+  ---
+  duration_ms: 1.2865
+  type: 'test'
+  ...
+# Subtest: IC02 revisions preserve PostgreSQL microseconds and equivalent UTC identities without changing legacy hashes
+ok 11 - IC02 revisions preserve PostgreSQL microseconds and equivalent UTC identities without changing legacy hashes
+  ---
+  duration_ms: 0.820084
+  type: 'test'
+  ...
+# Subtest: IA01 an old industry-only source creates a current supplementary hypothesis with missing company basis
+ok 12 - IA01 an old industry-only source creates a current supplementary hypothesis with missing company basis
+  ---
+  duration_ms: 21.297084
+  type: 'test'
+  ...
+# Subtest: IA02 company direct evidence still requires independent review and never means supported or an order
+ok 13 - IA02 company direct evidence still requires independent review and never means supported or an order
+  ---
+  duration_ms: 3.23875
+  type: 'test'
+  ...
+# Subtest: IA03 no associations is legacy compatible and performs no DB queries
+ok 14 - IA03 no associations is legacy compatible and performs no DB queries
+  ---
+  duration_ms: 0.256875
+  type: 'test'
+  ...
+# Subtest: IA04 bounds enforce 3/company, 50/run, 100 distinct documents and exact keys before reads
+ok 15 - IA04 bounds enforce 3/company, 50/run, 100 distinct documents and exact keys before reads
+  ---
+  duration_ms: 5.868958
+  type: 'test'
+  ...
+# Subtest: IA05 canonical input deduplicates one company hypothesis but never merges different companies
+ok 16 - IA05 canonical input deduplicates one company hypothesis but never merges different companies
+  ---
+  duration_ms: 1.377416
+  type: 'test'
+  ...
+# Subtest: IA06 server observation time is hash-bound and cannot be backfilled with writer associatedAt
+ok 17 - IA06 server observation time is hash-bound and cannot be backfilled with writer associatedAt
+  ---
+  duration_ms: 2.406125
+  type: 'test'
+  ...
+# Subtest: IA07 caller cannot bind a different root/hash or inject a direct symbol into industry evidence
+ok 18 - IA07 caller cannot bind a different root/hash or inject a direct symbol into industry evidence
+  ---
+  duration_ms: 2.349334
+  type: 'test'
+  ...
+# Subtest: IA08 same-row denied source invalidates even when the SQL RPC booleans are false
+ok 19 - IA08 same-row denied source invalidates even when the SQL RPC booleans are false
+  ---
+  duration_ms: 0.7115
+  type: 'test'
+  ...
+# Subtest: IA09 direct or RPC retraction invalidates the hypothesis without dropping its input record
+ok 20 - IA09 direct or RPC retraction invalidates the hypothesis without dropping its input record
+  ---
+  duration_ms: 1.339
+  type: 'test'
+  ...
+# Subtest: IA10 another head ID is rejected even if SQL reports superseded false
+ok 21 - IA10 another head ID is rejected even if SQL reports superseded false
+  ---
+  duration_ms: 0.924959
+  type: 'test'
+  ...
+# Subtest: IA11 missing and future source records remain explicit gaps, not evidence
+ok 22 - IA11 missing and future source records remain explicit gaps, not evidence
+  ---
+  duration_ms: 0.9635
+  type: 'test'
+  ...
+# Subtest: IA12 all four source clocks must be valid and ordered
+ok 23 - IA12 all four source clocks must be valid and ordered
+  ---
+  duration_ms: 2.318209
+  type: 'test'
+  ...
+# Subtest: IA13 nonself parent provenance is unresolved; self-parent is accepted as the same root
+ok 24 - IA13 nonself parent provenance is unresolved; self-parent is accepted as the same root
+  ---
+  duration_ms: 1.01275
+  type: 'test'
+  ...
+# Subtest: IA14 contradictory latest same-clock variants fail closed across platform and scope
+ok 25 - IA14 contradictory latest same-clock variants fail closed across platform and scope
+  ---
+  duration_ms: 0.952916
+  type: 'test'
+  ...
+# Subtest: IA15 legacy fallback variants join the conflict audit while later revisions remain outside cutoff
+ok 26 - IA15 legacy fallback variants join the conflict audit while later revisions remain outside cutoff
+  ---
+  duration_ms: 1.923167
+  type: 'test'
+  ...
+# Subtest: IA16 saturated version history is visibly incomplete rather than declaring a single trusted head
+ok 27 - IA16 saturated version history is visibly incomplete rather than declaring a single trusted head
+  ---
+  duration_ms: 1.589541
+  type: 'test'
+  ...
+# Subtest: IA17 basis must be direct company-specific evidence, current, not denied or withdrawn
+ok 28 - IA17 basis must be direct company-specific evidence, current, not denied or withdrawn
+  ---
+  duration_ms: 3.803833
+  type: 'test'
+  ...
+# Subtest: IA18 authenticated summaries retain rights proof without content or timed transcript export
+ok 29 - IA18 authenticated summaries retain rights proof without content or timed transcript export
+  ---
+  duration_ms: 1.028833
+  type: 'test'
+  ...
+# Subtest: IA19 metadata-only, chapter titles and contradictory rights cannot become a research cue
+ok 30 - IA19 metadata-only, chapter titles and contradictory rights cannot become a research cue
+  ---
+  duration_ms: 1.707833
+  type: 'test'
+  ...
+# Subtest: IA20 query failure or malicious returned IDs produce bounded unavailable receipts without raw errors
+ok 31 - IA20 query failure or malicious returned IDs produce bounded unavailable receipts without raw errors
+  ---
+  duration_ms: 1.682916
+  type: 'test'
+  ...
+# Subtest: IA25 malformed SQL-group members cannot vanish from same-root revision audit
+ok 32 - IA25 malformed SQL-group members cannot vanish from same-root revision audit
+  ---
+  duration_ms: 1.169709
+  type: 'test'
+  ...
+# Subtest: IA26 non-array transcript metadata is not an authenticated bounded summary
+ok 33 - IA26 non-array transcript metadata is not an authenticated bounded summary
+  ---
+  duration_ms: 0.722459
+  type: 'test'
+  ...
+# Subtest: IA21 deadline returns an accounted gap and aborts the bounded database read
+ok 34 - IA21 deadline returns an accounted gap and aborts the bounded database read
+  ---
+  duration_ms: 11.233167
+  type: 'test'
+  ...
+# Subtest: IA22 body/metadata size bound prevents unbounded receipt propagation
+ok 35 - IA22 body/metadata size bound prevents unbounded receipt propagation
+  ---
+  duration_ms: 1.101417
+  type: 'test'
+  ...
+# Subtest: IA23 large allowed document sets split direct and RPC reads at 50
+ok 36 - IA23 large allowed document sets split direct and RPC reads at 50
+  ---
+  duration_ms: 44.302875
+  type: 'test'
+  ...
+# Subtest: IA24 escaped canonical URLs cannot broaden the PostgREST conflict query
+ok 37 - IA24 escaped canonical URLs cannot broaden the PostgREST conflict query
+  ---
+  duration_ms: 2.800542
+  type: 'test'
+  ...
+# Subtest: IA27 requesting an old revision does not erase the valid current receipt for the same root
+ok 38 - IA27 requesting an old revision does not erase the valid current receipt for the same root
+  ---
+  duration_ms: 2.476958
+  type: 'test'
+  ...
+# Subtest: IA28 the healthy UUID009 winner cannot hide UUID008 with nonempty authenticated excerpts
+ok 39 - IA28 the healthy UUID009 winner cannot hide UUID008 with nonempty authenticated excerpts
+  ---
+  duration_ms: 0.980334
+  type: 'test'
+  ...
+# Subtest: IA29 the healthy UUID009 winner cannot hide UUID008 with string authenticated excerpts
+ok 40 - IA29 the healthy UUID009 winner cannot hide UUID008 with string authenticated excerpts
+  ---
+  duration_ms: 0.911209
+  type: 'test'
+  ...
+# Subtest: IA30 the healthy UUID009 winner cannot hide UUID008 with mismatched metadata content hash
+ok 41 - IA30 the healthy UUID009 winner cannot hide UUID008 with mismatched metadata content hash
+  ---
+  duration_ms: 1.712584
+  type: 'test'
+  ...
+# Subtest: IA31 every maximum-clock sibling must pass identity and clock invariants beyond signature fields
+ok 42 - IA31 every maximum-clock sibling must pass identity and clock invariants beyond signature fields
+  ---
+  duration_ms: 3.153833
+  type: 'test'
+  ...
+# Subtest: IA32 null/unknown company-basis sibling scope cannot normalize into a valid legacy mention
+ok 43 - IA32 null/unknown company-basis sibling scope cannot normalize into a valid legacy mention
+  ---
+  duration_ms: 3.396667
+  type: 'test'
+  ...
+# Subtest: IA33 a genuinely omitted legacy company scope remains compatible with explicit company_mentions
+ok 44 - IA33 a genuinely omitted legacy company scope remains compatible with explicit company_mentions
+  ---
+  duration_ms: 1.638834
+  type: 'test'
+  ...
+# Subtest: IA34 direct proof rejects microsecond-inverted or future source clocks without a usable cue
+ok 45 - IA34 direct proof rejects microsecond-inverted or future source clocks without a usable cue
+  ---
+  duration_ms: 0.598583
+  type: 'test'
+  ...
+# Subtest: IA35 proof, receipt and request identity retain microseconds and canonical equivalent offsets
+ok 46 - IA35 proof, receipt and request identity retain microseconds and canonical equivalent offsets
+  ---
+  duration_ms: 2.3075
+  type: 'test'
+  ...
+# Subtest: IA36 a later microsecond sibling supersedes the earlier document instead of creating a false same-clock conflict
+ok 47 - IA36 a later microsecond sibling supersedes the earlier document instead of creating a false same-clock conflict
+  ---
+  duration_ms: 1.24675
+  type: 'test'
+  ...
+# Subtest: IA37 a future microsecond revision cannot invalidate an earlier as-of source
+ok 48 - IA37 a future microsecond revision cannot invalidate an earlier as-of source
+  ---
+  duration_ms: 1.595333
+  type: 'test'
+  ...
+1..48
+# tests 48
+# suites 0
+# pass 48
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 664.158417

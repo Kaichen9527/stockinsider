@@ -1,0 +1,19 @@
+{
+  "subject": "1a0043f2656b63d54062224d1befeab761f554a3",
+  "fixture": "isolated exact thesis table/index/trigger/function; synthetic dependency tables and payloads, no production",
+  "rows": [
+    {
+      "id": "f2ace337-d0f1-4625-ad55-2c181e15a5db",
+      "parent_id": null,
+      "status": "qualified",
+      "review_receipt_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "id": "8c783d84-2c67-4b8a-bdbe-69a3c4b4520c",
+      "parent_id": null,
+      "status": "qualified",
+      "review_receipt_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ]
+}
+owned cluster stopped; directory retained /tmp/stockinsider-full-review-abcd-oct11-pg-UMuZG4

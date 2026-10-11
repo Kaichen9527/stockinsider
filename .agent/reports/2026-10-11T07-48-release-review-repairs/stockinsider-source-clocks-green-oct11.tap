@@ -1,0 +1,520 @@
+TAP version 13
+# (node:57378) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:57378) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-source-attempt-controller.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: RB01 original social relay cannot export nested authorization
+ok 1 - RB01 original social relay cannot export nested authorization
+  ---
+  duration_ms: 14.909666
+  ...
+# Subtest: RB02 timed public summaries require raw SHA/bytes and exact matching acquisition
+ok 2 - RB02 timed public summaries require raw SHA/bytes and exact matching acquisition
+  ---
+  duration_ms: 109.684375
+  ...
+# Subtest: RB03 acquisition chain rejects inverted microseconds in the same millisecond
+ok 3 - RB03 acquisition chain rejects inverted microseconds in the same millisecond
+  ---
+  duration_ms: 27.181875
+  ...
+# Subtest: RB04 exact corrected real relay retains three industry items, no 3037 candidate
+ok 4 - RB04 exact corrected real relay retains three industry items, no 3037 candidate
+  ---
+  duration_ms: 53.537666
+  ...
+# Subtest: RB05 every input plane rejects hidden credential fields and arbitrary metadata
+ok 5 - RB05 every input plane rejects hidden credential fields and arbitrary metadata
+  ---
+  duration_ms: 115.989708
+  ...
+# Subtest: RB06 independently valid hashes/bytes cannot be rebound to a different acquisition receipt
+ok 6 - RB06 independently valid hashes/bytes cannot be rebound to a different acquisition receipt
+  ---
+  duration_ms: 62.746
+  ...
+# Subtest: RB07 sub-millisecond completed/future clocks, invalid calendar dates and excessive precision reject
+ok 7 - RB07 sub-millisecond completed/future clocks, invalid calendar dates and excessive precision reject
+  ---
+  duration_ms: 37.090125
+  ...
+# Subtest: RB08 output receipt projects required fields and retains original acquisition attribution
+ok 8 - RB08 output receipt projects required fields and retains original acquisition attribution
+  ---
+  duration_ms: 20.015083
+  ...
+# Subtest: RC01 observed1978 keeps old1946 immutable; innovation31 and restricted-CFI3673 are research observations only
+ok 9 - RC01 observed1978 keeps old1946 immutable; innovation31 and restricted-CFI3673 are research observations only
+  ---
+  duration_ms: 113.584125
+  ...
+# Subtest: RC02 four-digit TDR9136 excluded, never infer ordinary scope by code/name suffix
+ok 10 - RC02 four-digit TDR9136 excluded, never infer ordinary scope by code/name suffix
+  ---
+  duration_ms: 74.850334
+  ...
+# Subtest: RC03 preferred/warrant and forged ES outside stock/innovation section rejected
+ok 11 - RC03 preferred/warrant and forged ES outside stock/innovation section rejected
+  ---
+  duration_ms: 92.14075
+  ...
+# Subtest: RC04 exact original TWSE/TPEX clock split and large raw reference preserved without VM raw hash claim
+ok 12 - RC04 exact original TWSE/TPEX clock split and large raw reference preserved without VM raw hash claim
+  ---
+  duration_ms: 66.753
+  ...
+# Subtest: RC05 only fixed CFI raw reference can exceed4MB, selected input/bounds/secret validation unchanged
+ok 13 - RC05 only fixed CFI raw reference can exceed4MB, selected input/bounds/secret validation unchanged
+  ---
+  duration_ms: 64.836083
+  ...
+# Subtest: RC06 duplicate/count/future-nanosecond/legacy-binding mutations fail closed
+ok 14 - RC06 duplicate/count/future-nanosecond/legacy-binding mutations fail closed
+  ---
+  duration_ms: 91.466334
+  ...
+# Subtest: RC07 actual expanded cohort controller consumes3same-root industry summaries, restart dedup zero new
+ok 15 - RC07 actual expanded cohort controller consumes3same-root industry summaries, restart dedup zero new
+  ---
+  duration_ms: 69.880333
+  ...
+# Subtest: RC08 configured Gooaye provider IDs match the actual publisher relay, without enabling platforms
+ok 16 - RC08 configured Gooaye provider IDs match the actual publisher relay, without enabling platforms
+  ---
+  duration_ms: 1.379709
+  ...
+# (node:57379) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:57379) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-execution-binding.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: RSO01 saved author and reviewer original reports equal authenticated structural results without a Request
+ok 17 - RSO01 saved author and reviewer original reports equal authenticated structural results without a Request
+  ---
+  duration_ms: 82.417958
+  ...
+# Subtest: RSO02 saved validation cannot substitute for actual receive authentication
+ok 18 - RSO02 saved validation cannot substitute for actual receive authentication
+  ---
+  duration_ms: 2.532625
+  ...
+# Subtest: RSO03 absent or aliased current role configuration and unknown role fail closed
+ok 19 - RSO03 absent or aliased current role configuration and unknown role fail closed
+  ---
+  duration_ms: 1.577084
+  ...
+# Subtest: RSO04 key rotation cannot adopt an immutable role assignment
+ok 20 - RSO04 key rotation cannot adopt an immutable role assignment
+  ---
+  duration_ms: 0.316084
+  ...
+# Subtest: RSO05 shared validation preserves all hash, owner, clock, shape and invocation rejections
+ok 21 - RSO05 shared validation preserves all hash, owner, clock, shape and invocation rejections
+  ---
+  duration_ms: 9.948375
+  ...
+# Subtest: RSO06 reviewer independence remains mandatory for saved observations
+ok 22 - RSO06 reviewer independence remains mandatory for saved observations
+  ---
+  duration_ms: 1.235
+  ...
+# Subtest: RSO07 original microsecond receive boundary is preserved and current time cannot renew it
+ok 23 - RSO07 original microsecond receive boundary is preserved and current time cannot renew it
+  ---
+  duration_ms: 0.332792
+  ...
+# Subtest: RSO08 validation results contain no raw credential or authority flag
+ok 24 - RSO08 validation results contain no raw credential or authority flag
+  ---
+  duration_ms: 0.2215
+  ...
+# (node:57380) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:57380) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-inbox.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: research inbox validates bounded point-in-time summaries
+ok 25 - research inbox validates bounded point-in-time summaries
+  ---
+  duration_ms: 8.980375
+  ...
+# Subtest: research inbox produces immutable deterministic revisions
+ok 26 - research inbox produces immutable deterministic revisions
+  ---
+  duration_ms: 1.943375
+  ...
+# Subtest: authenticated content stores only the submitted bounded summary
+ok 27 - authenticated content stores only the submitted bounded summary
+  ---
+  duration_ms: 2.308667
+  ...
+# Subtest: IS01 industry-only source preserves empty direct symbols and bounded metadata
+ok 28 - IS01 industry-only source preserves empty direct symbols and bounded metadata
+  ---
+  duration_ms: 1.396375
+  ...
+# Subtest: IS02 industry-only symbols cannot nominate a company or bypass explicit subject scope
+ok 29 - IS02 industry-only symbols cannot nominate a company or bypass explicit subject scope
+  ---
+  duration_ms: 0.668792
+  ...
+# Subtest: IS03 industry terms require bounded trimmed unique strings and exact source shape
+ok 30 - IS03 industry terms require bounded trimmed unique strings and exact source shape
+  ---
+  duration_ms: 0.843167
+  ...
+# Subtest: IS04 legacy identity stays stable while industry metadata creates immutable revisions
+ok 31 - IS04 legacy identity stays stable while industry metadata creates immutable revisions
+  ---
+  duration_ms: 6.467041
+  ...
+# Subtest: IS05 inbox itself enforces exact clocks and authenticated summary boundaries
+ok 32 - IS05 inbox itself enforces exact clocks and authenticated summary boundaries
+  ---
+  duration_ms: 1.068458
+  ...
+# Subtest: IS06 existing authenticated inbox POST accepts industry rows and rejects invalid input before persistence
+ok 33 - IS06 existing authenticated inbox POST accepts industry rows and rejects invalid input before persistence
+  ---
+  duration_ms: 123.048041
+  ...
+# Subtest: IC01 inbox rejects sub-millisecond inversions and future observations at every clock boundary
+ok 34 - IC01 inbox rejects sub-millisecond inversions and future observations at every clock boundary
+  ---
+  duration_ms: 1.462042
+  ...
+# Subtest: IC02 revisions preserve PostgreSQL microseconds and equivalent UTC identities without changing legacy hashes
+ok 35 - IC02 revisions preserve PostgreSQL microseconds and equivalent UTC identities without changing legacy hashes
+  ---
+  duration_ms: 2.899291
+  ...
+# (node:57381) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:57381) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-source-association.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: IA01 an old industry-only source creates a current supplementary hypothesis with missing company basis
+ok 36 - IA01 an old industry-only source creates a current supplementary hypothesis with missing company basis
+  ---
+  duration_ms: 49.08175
+  ...
+# Subtest: IA02 company direct evidence still requires independent review and never means supported or an order
+ok 37 - IA02 company direct evidence still requires independent review and never means supported or an order
+  ---
+  duration_ms: 2.508792
+  ...
+# Subtest: IA03 no associations is legacy compatible and performs no DB queries
+ok 38 - IA03 no associations is legacy compatible and performs no DB queries
+  ---
+  duration_ms: 0.96375
+  ...
+# Subtest: IA04 bounds enforce 3/company, 50/run, 100 distinct documents and exact keys before reads
+ok 39 - IA04 bounds enforce 3/company, 50/run, 100 distinct documents and exact keys before reads
+  ---
+  duration_ms: 11.023584
+  ...
+# Subtest: IA05 canonical input deduplicates one company hypothesis but never merges different companies
+ok 40 - IA05 canonical input deduplicates one company hypothesis but never merges different companies
+  ---
+  duration_ms: 2.551625
+  ...
+# Subtest: IA06 server observation time is hash-bound and cannot be backfilled with writer associatedAt
+ok 41 - IA06 server observation time is hash-bound and cannot be backfilled with writer associatedAt
+  ---
+  duration_ms: 3.2495
+  ...
+# Subtest: IA07 caller cannot bind a different root/hash or inject a direct symbol into industry evidence
+ok 42 - IA07 caller cannot bind a different root/hash or inject a direct symbol into industry evidence
+  ---
+  duration_ms: 7.3135
+  ...
+# Subtest: IA08 same-row denied source invalidates even when the SQL RPC booleans are false
+ok 43 - IA08 same-row denied source invalidates even when the SQL RPC booleans are false
+  ---
+  duration_ms: 1.10425
+  ...
+# Subtest: IA09 direct or RPC retraction invalidates the hypothesis without dropping its input record
+ok 44 - IA09 direct or RPC retraction invalidates the hypothesis without dropping its input record
+  ---
+  duration_ms: 2.840708
+  ...
+# Subtest: IA10 another head ID is rejected even if SQL reports superseded false
+ok 45 - IA10 another head ID is rejected even if SQL reports superseded false
+  ---
+  duration_ms: 1.309959
+  ...
+# Subtest: IA11 missing and future source records remain explicit gaps, not evidence
+ok 46 - IA11 missing and future source records remain explicit gaps, not evidence
+  ---
+  duration_ms: 1.154458
+  ...
+# Subtest: IA12 all four source clocks must be valid and ordered
+ok 47 - IA12 all four source clocks must be valid and ordered
+  ---
+  duration_ms: 1.786334
+  ...
+# Subtest: IA13 nonself parent provenance is unresolved; self-parent is accepted as the same root
+ok 48 - IA13 nonself parent provenance is unresolved; self-parent is accepted as the same root
+  ---
+  duration_ms: 1.748625
+  ...
+# Subtest: IA14 contradictory latest same-clock variants fail closed across platform and scope
+ok 49 - IA14 contradictory latest same-clock variants fail closed across platform and scope
+  ---
+  duration_ms: 1.143708
+  ...
+# Subtest: IA15 legacy fallback variants join the conflict audit while later revisions remain outside cutoff
+ok 50 - IA15 legacy fallback variants join the conflict audit while later revisions remain outside cutoff
+  ---
+  duration_ms: 4.447625
+  ...
+# Subtest: IA16 saturated version history is visibly incomplete rather than declaring a single trusted head
+ok 51 - IA16 saturated version history is visibly incomplete rather than declaring a single trusted head
+  ---
+  duration_ms: 2.568417
+  ...
+# Subtest: IA17 basis must be direct company-specific evidence, current, not denied or withdrawn
+ok 52 - IA17 basis must be direct company-specific evidence, current, not denied or withdrawn
+  ---
+  duration_ms: 5.402209
+  ...
+# Subtest: IA18 authenticated summaries retain rights proof without content or timed transcript export
+ok 53 - IA18 authenticated summaries retain rights proof without content or timed transcript export
+  ---
+  duration_ms: 1.308917
+  ...
+# Subtest: IA19 metadata-only, chapter titles and contradictory rights cannot become a research cue
+ok 54 - IA19 metadata-only, chapter titles and contradictory rights cannot become a research cue
+  ---
+  duration_ms: 1.257333
+  ...
+# Subtest: IA20 query failure or malicious returned IDs produce bounded unavailable receipts without raw errors
+ok 55 - IA20 query failure or malicious returned IDs produce bounded unavailable receipts without raw errors
+  ---
+  duration_ms: 3.642917
+  ...
+# Subtest: IA25 malformed SQL-group members cannot vanish from same-root revision audit
+ok 56 - IA25 malformed SQL-group members cannot vanish from same-root revision audit
+  ---
+  duration_ms: 3.401667
+  ...
+# Subtest: IA26 non-array transcript metadata is not an authenticated bounded summary
+ok 57 - IA26 non-array transcript metadata is not an authenticated bounded summary
+  ---
+  duration_ms: 2.935667
+  ...
+# Subtest: IA21 deadline returns an accounted gap and aborts the bounded database read
+ok 58 - IA21 deadline returns an accounted gap and aborts the bounded database read
+  ---
+  duration_ms: 25.9435
+  ...
+# Subtest: IA22 body/metadata size bound prevents unbounded receipt propagation
+ok 59 - IA22 body/metadata size bound prevents unbounded receipt propagation
+  ---
+  duration_ms: 2.389125
+  ...
+# Subtest: IA23 large allowed document sets split direct and RPC reads at 50
+ok 60 - IA23 large allowed document sets split direct and RPC reads at 50
+  ---
+  duration_ms: 57.17225
+  ...
+# Subtest: IA24 escaped canonical URLs cannot broaden the PostgREST conflict query
+ok 61 - IA24 escaped canonical URLs cannot broaden the PostgREST conflict query
+  ---
+  duration_ms: 1.69625
+  ...
+# Subtest: IA27 requesting an old revision does not erase the valid current receipt for the same root
+ok 62 - IA27 requesting an old revision does not erase the valid current receipt for the same root
+  ---
+  duration_ms: 1.080792
+  ...
+# Subtest: IA28 the healthy UUID009 winner cannot hide UUID008 with nonempty authenticated excerpts
+ok 63 - IA28 the healthy UUID009 winner cannot hide UUID008 with nonempty authenticated excerpts
+  ---
+  duration_ms: 1.179833
+  ...
+# Subtest: IA29 the healthy UUID009 winner cannot hide UUID008 with string authenticated excerpts
+ok 64 - IA29 the healthy UUID009 winner cannot hide UUID008 with string authenticated excerpts
+  ---
+  duration_ms: 1.155125
+  ...
+# Subtest: IA30 the healthy UUID009 winner cannot hide UUID008 with mismatched metadata content hash
+ok 65 - IA30 the healthy UUID009 winner cannot hide UUID008 with mismatched metadata content hash
+  ---
+  duration_ms: 1.485458
+  ...
+# Subtest: IA31 every maximum-clock sibling must pass identity and clock invariants beyond signature fields
+ok 66 - IA31 every maximum-clock sibling must pass identity and clock invariants beyond signature fields
+  ---
+  duration_ms: 3.372458
+  ...
+# Subtest: IA32 null/unknown company-basis sibling scope cannot normalize into a valid legacy mention
+ok 67 - IA32 null/unknown company-basis sibling scope cannot normalize into a valid legacy mention
+  ---
+  duration_ms: 3.989458
+  ...
+# Subtest: IA33 a genuinely omitted legacy company scope remains compatible with explicit company_mentions
+ok 68 - IA33 a genuinely omitted legacy company scope remains compatible with explicit company_mentions
+  ---
+  duration_ms: 1.528291
+  ...
+# Subtest: IA34 direct proof rejects microsecond-inverted or future source clocks without a usable cue
+ok 69 - IA34 direct proof rejects microsecond-inverted or future source clocks without a usable cue
+  ---
+  duration_ms: 0.325042
+  ...
+# Subtest: IA35 proof, receipt and request identity retain microseconds and canonical equivalent offsets
+ok 70 - IA35 proof, receipt and request identity retain microseconds and canonical equivalent offsets
+  ---
+  duration_ms: 1.387417
+  ...
+# Subtest: IA36 a later microsecond sibling supersedes the earlier document instead of creating a false same-clock conflict
+ok 71 - IA36 a later microsecond sibling supersedes the earlier document instead of creating a false same-clock conflict
+  ---
+  duration_ms: 0.57175
+  ...
+# Subtest: IA37 a future microsecond revision cannot invalidate an earlier as-of source
+ok 72 - IA37 a future microsecond revision cannot invalidate an earlier as-of source
+  ---
+  duration_ms: 0.487208
+  ...
+# (node:57382) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:57382) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/src/lib/research-source-attempt-controller.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/package.json.
+# Subtest: SC01 single authorized rumor survives; output matches existing inbox and priority contracts
+ok 73 - SC01 single authorized rumor survives; output matches existing inbox and priority contracts
+  ---
+  duration_ms: 42.646542
+  ...
+# Subtest: IS07 authorized industry-only content follows existing controller and inbox contracts
+ok 74 - IS07 authorized industry-only content follows existing controller and inbox contracts
+  ---
+  duration_ms: 5.255417
+  ...
+# Subtest: IS08 industry replay, repost and withdrawal preserve source roots without company labels
+ok 75 - IS08 industry replay, repost and withdrawal preserve source roots without company labels
+  ---
+  duration_ms: 10.585167
+  ...
+# Subtest: IS09 industry scope cannot bypass metadata, rights, private content or cutoff failures
+ok 76 - IS09 industry scope cannot bypass metadata, rights, private content or cutoff failures
+  ---
+  duration_ms: 1.433667
+  ...
+# Subtest: SC02 failures, auth, metadata and missing transcript never become no_relevant
+ok 77 - SC02 failures, auth, metadata and missing transcript never become no_relevant
+  ---
+  duration_ms: 3.248583
+  ...
+# Subtest: SC03 actual public body without summary adapter remains awaiting_summary
+ok 78 - SC03 actual public body without summary adapter remains awaiting_summary
+  ---
+  duration_ms: 1.667167
+  ...
+# Subtest: SC04 podcast index and YouTube watch metadata do not prove transcript content
+ok 79 - SC04 podcast index and YouTube watch metadata do not prove transcript content
+  ---
+  duration_ms: 2.666541
+  ...
+# Subtest: SC05 HTML code is discarded, login stays visible, unrecognized body is not inferred
+ok 80 - SC05 HTML code is discarded, login stays visible, unrecognized body is not inferred
+  ---
+  duration_ms: 5.535625
+  ...
+# Subtest: SC06 SSRF, credential URLs, injected query destinations and unreviewed hosts reject
+ok 81 - SC06 SSRF, credential URLs, injected query destinations and unreviewed hosts reject
+  ---
+  duration_ms: 2.287833
+  ...
+# Subtest: SC07 unknown/secret fields and unbounded authenticated/full text cannot enter packet
+ok 82 - SC07 unknown/secret fields and unbounded authenticated/full text cannot enter packet
+  ---
+  duration_ms: 2.047708
+  ...
+# Subtest: SC08 future publication/observation, rights and stale local terminals reject
+ok 83 - SC08 future publication/observation, rights and stale local terminals reject
+  ---
+  duration_ms: 2.185125
+  ...
+# Subtest: SC09 replay suppresses same content but correction retains original first observation
+ok 84 - SC09 replay suppresses same content but correction retains original first observation
+  ---
+  duration_ms: 4.268625
+  ...
+# Subtest: SC10 repost chain shares root; original withdrawal is not resurrected by repost
+ok 85 - SC10 repost chain shares root; original withdrawal is not resurrected by repost
+  ---
+  duration_ms: 5.245292
+  ...
+# Subtest: SC11 public item requires exact response hash and reviewed content scope
+ok 86 - SC11 public item requires exact response hash and reviewed content scope
+  ---
+  duration_ms: 1.572292
+  ...
+# Subtest: SC12 bounds, parent cycles, forged observations and unknown scope keys reject
+ok 87 - SC12 bounds, parent cycles, forged observations and unknown scope keys reject
+  ---
+  duration_ms: 1.994542
+  ...
+# Subtest: SC13 skipped deadline scopes are not_attempted, never claimed as a real read
+ok 88 - SC13 skipped deadline scopes are not_attempted, never claimed as a real read
+  ---
+  duration_ms: 0.404458
+  ...
+# Subtest: SC14 a parent discovery cannot backdate a newly observed repost document
+ok 89 - SC14 a parent discovery cannot backdate a newly observed repost document
+  ---
+  duration_ms: 2.061
+  ...
+# Subtest: SC15 JSON primitive types and actual local terminal cannot be substituted
+ok 90 - SC15 JSON primitive types and actual local terminal cannot be substituted
+  ---
+  duration_ms: 0.89625
+  ...
+# Subtest: SC16 actual AUO detail markers establish body, but index/template drift do not
+ok 91 - SC16 actual AUO detail markers establish body, but index/template drift do not
+  ---
+  duration_ms: 1.99925
+  ...
+# Subtest: SC17 public RSS/JSON login wording is content, not authentication failure
+ok 92 - SC17 public RSS/JSON login wording is content, not authentication failure
+  ---
+  duration_ms: 1.203541
+  ...
+# Subtest: SC18 known public publication clock cannot be backdated by an exact-byte summary
+ok 93 - SC18 known public publication clock cannot be backdated by an exact-byte summary
+  ---
+  duration_ms: 1.735
+  ...
+# Subtest: SC19 corrected ancestors use the latest accepted revision regardless of input order
+ok 94 - SC19 corrected ancestors use the latest accepted revision regardless of input order
+  ---
+  duration_ms: 7.846959
+  ...
+# Subtest: SC20 all acquired scopes resolve before roots, so reversed repost order cannot revive a withdrawn root
+ok 95 - SC20 all acquired scopes resolve before roots, so reversed repost order cannot revive a withdrawn root
+  ---
+  duration_ms: 4.854834
+  ...
+# Subtest: Apple numeric episode query granted only on exact public podcast-show path, never general query keys
+ok 96 - Apple numeric episode query granted only on exact public podcast-show path, never general query keys
+  ---
+  duration_ms: 1.064458
+  ...
+# Subtest: SC-POD01 creator RSS with same-origin transcript and chapters stays metadata only
+ok 97 - SC-POD01 creator RSS with same-origin transcript and chapters stays metadata only
+  ---
+  duration_ms: 0.784125
+  ...
+1..97
+# tests 97
+# suites 0
+# pass 97
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1478.976459

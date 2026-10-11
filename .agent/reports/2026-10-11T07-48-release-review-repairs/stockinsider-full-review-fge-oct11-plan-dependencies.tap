@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: whole-file protective exceptions keep lexical blockers and the approved base chain
+ok 1 - whole-file protective exceptions keep lexical blockers and the approved base chain
+  ---
+  duration_ms: 191.530209
+  type: 'test'
+  ...
+# Subtest: unknown destructive SQL, including comments and function bodies, still fails closed
+ok 2 - unknown destructive SQL, including comments and function bodies, still fails closed
+  ---
+  duration_ms: 0.357166
+  type: 'test'
+  ...
+# Subtest: research schema extends the same attested operator plan and cannot use a separate raw runner
+ok 3 - research schema extends the same attested operator plan and cannot use a separate raw runner
+  ---
+  duration_ms: 4.319333
+  type: 'test'
+  ...
+# Subtest: base chain stays fixed and explicit extension authority never replaces reviewed apply
+ok 4 - base chain stays fixed and explicit extension authority never replaces reviewed apply
+  ---
+  duration_ms: 433.111625
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 546.712833

@@ -1,0 +1,90 @@
+{
+  "kind": "unsigned_scoped_code_review",
+  "base": "13026a9071856268edc11efbb991497f4e504b13",
+  "subject": "79b86037bfa5e120a2782c302246f8d2fb004585",
+  "tree": "60c395bb3828ea960e08e2eac6aacfa1d84ed26d",
+  "verdict": "REQUEST_CHANGES",
+  "files": [
+    {
+      "path": "web/src/lib/research-discovery-evidence.test.ts",
+      "sha256": "e9893e8c69358037dcdaaa8689b43c371d9b6c710fef79ebe2278bcc71a4de28"
+    },
+    {
+      "path": "web/src/lib/research-discovery-evidence.ts",
+      "sha256": "704d0791e1b96e66a67ca86e7aaaf980820d106efaf9d74c5909b20b92c4f376"
+    },
+    {
+      "path": "web/src/lib/research-discovery-price-enrichment.test.ts",
+      "sha256": "385f56fe6fc39d44148a9bacfaebfe2995bd38a3157978bd57eed9a526f5c2a2"
+    },
+    {
+      "path": "web/src/lib/research-discovery-price-enrichment.ts",
+      "sha256": "177f5ee1f832df8e14c5a8e87993724862f8226e3b408a31471e3b7ed918cc98"
+    }
+  ],
+  "checks": {
+    "price_evidence_tests": {
+      "pass": 42,
+      "fail": 0,
+      "skip": 0
+    },
+    "combined_exact_head": {
+      "pass": 63,
+      "fail": 1,
+      "skip": 0
+    },
+    "baseline_shadow": {
+      "pass": 22,
+      "fail": 0,
+      "skip": 0
+    },
+    "independent_futurequote_invalidclock_negativeepoch_offset_probe": "passed",
+    "initial_combined": {
+      "pass": 61,
+      "fail": 3,
+      "note": "Two reviewer extraction omissions (tw-market.ts) corrected without changing source; remaining shadow regression retained."
+    }
+  },
+  "finding": {
+    "severity": "P2",
+    "path": "web/src/lib/research-discovery-evidence.ts",
+    "lines": "21-22",
+    "consumer": "web/src/lib/research-attention-shadow-v2.ts:40",
+    "trigger": "Unchanged shadow accepted 19-digit fractional cutoff 2026-10-09T04:00:00.0000000000000000001Z",
+    "actual": "research_attention_shadow_invalid; unchanged existing test fails",
+    "impact": "Persistent-clock validator narrows independent shadow input contract, breaking valid precise bucket calculations.",
+    "minimum_fix": "Separate <=6-digit persistent price/evidence clock validation from shadow high-precision validation; preserve its existing test and exact parser, do not round/truncate or weaken the price fix."
+  },
+  "limits": [
+    "No build, PG, production, provider, or full-release acceptance executed.",
+    "Source-closure mapping pending; code changes require exact mapping synchronization separately.",
+    "Pure shadow/rankingInfluence=false retained; no real market source or trading qualification claimed."
+  ],
+  "evidence": [
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-repair-focused.tap",
+      "bytes": 18493,
+      "sha256": "c6d9007edceccd4ae947960cc20e880bd29b80854fa521eaf518e4857da89a31"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-repair-focused-r2.tap",
+      "bytes": 16370,
+      "sha256": "63befba5f39e17d94c03723e7bf94613b6832aa831daa1675690fb6f42e68f22"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-baseline-shadow.tap",
+      "bytes": 5104,
+      "sha256": "acbf22a7942702dfdd5eba9776eb512deafb9fbc298d8592af324fdb79719f54"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-repair-probe.mjs",
+      "bytes": 1653,
+      "sha256": "55c532b529b2bc1bd28cf0da8846253ea335caf2d5cfcdee3ca30a6b9f6abd73"
+    },
+    {
+      "path": "/tmp/stockinsider-full-review-abcd-oct11-price-repair-probe.log",
+      "bytes": 967,
+      "sha256": "5c9e4d3411f1b8b071794831052625cde604614b55867caad298441fc5efa1bf"
+    }
+  ]
+}

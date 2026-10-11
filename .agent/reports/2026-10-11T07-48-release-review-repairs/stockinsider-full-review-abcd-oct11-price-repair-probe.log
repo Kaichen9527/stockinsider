@@ -1,0 +1,30 @@
+{
+  "subject": "79b86037bfa5e120a2782c302246f8d2fb004585",
+  "futureQuote": {
+    "policyVersion": "discovery-price-shadow-v1",
+    "cutoff": "2026-10-08T05:30:00.000001Z",
+    "quote": null,
+    "quoteStatus": "missing_at_discovery",
+    "latestCompletedSession": "2026-10-08",
+    "relative5d": null,
+    "relative20d": null,
+    "relative60d": null,
+    "pricePhase": "unknown",
+    "phaseIsResearchSignalOnly": true,
+    "researchEvidenceRequired": true,
+    "rankingInfluence": false,
+    "missing": [
+      "aligned_61_session_window_missing",
+      "benchmark_pit_validation_missing",
+      "corporate_action_basis_missing",
+      "official_dataset_validation_missing",
+      "price_phase_metadata_missing",
+      "quote_invalid_or_unavailable_at_discovery",
+      "quote_missing_at_discovery"
+    ],
+    "sourceDatasetHash": null
+  },
+  "equalOffsetAdmitted": "official_raw_quote",
+  "invalidClocksRejected": 4,
+  "negativeEpochAndCrossDayOffset": "passed"
+}
