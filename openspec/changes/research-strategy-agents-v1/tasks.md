@@ -1,5 +1,15 @@
 # Execution ledger
 
+## Human-directed phased delivery — 2026-10-11T11:54Z
+
+- [x] Verify current production candidate availability through public API, read-only DB and Internal Browser search2409:272found／1waiting／0actionable. Existing release9fd86fe remains active; not a new PR364 deployment.
+- [x] Adopt candidates-first delivery; full source breadth, all deep articles, strategy effectiveness and five future trading days do not block the first candidate-view release. Preserve each publication/entry qualification and protected-check requirement.
+- [x] Update existing hourly engineering continuation; no duplicate automation or formal research schedule activation. Dispatch one bounded CI filesystem-isolation repair to the existing idle VM on a separate branch.
+- [ ] Resolve native runner trust and ordinary CI failure separately; no governance exception approved by the phased-delivery answer. No main merge or production mutation in this increment.
+- [ ] Reconcile current displayed dates/completeness and DB337 versus public273 scope. Do not claim zero omissions or current market data from the new snapshot timestamp.
+
+Details: docs/operations/2026-10-11/phased-candidate-release.md.
+
 - [x] Foundation: bounded research queue, generic article contract and shared renderer.
 - [x] Editorial/thesis distinction, immutable retries and separate ordinary/deep publication slots.
 - [x] Calendar cutoff, concurrent thesis append and prior-session paper funding repairs.
