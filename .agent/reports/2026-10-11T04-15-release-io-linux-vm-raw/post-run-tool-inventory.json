@@ -1,0 +1,25 @@
+{
+  "existingPgTools": [
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb",
+      "exists": true,
+      "executable": true
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+      "exists": true,
+      "executable": true
+    },
+    {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+      "exists": true,
+      "executable": true
+    }
+  ],
+  "pathsNotIncludedInRunEnvironment": true,
+  "PCRFailRootCauseAll8NotProven": true,
+  "dotenvFilenameInventory": [
+    ".env.example"
+  ],
+  "webBuildIdExists": true
+}
