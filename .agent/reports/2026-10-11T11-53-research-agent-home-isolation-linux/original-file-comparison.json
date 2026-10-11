@@ -1,0 +1,58 @@
+[
+  {
+    "path": "package.json",
+    "originalBytes": 32997,
+    "originalSha256": "c23aaf85d3bd53c959006693c67e92604a5e8f83216de03a4fa89e89f2a4e952",
+    "currentBytes": 33108,
+    "currentSha256": "32dddb61c5422c2762224a3fa2e10111c981297db5b656b4bce840b74d48292b",
+    "unchanged": false
+  },
+  {
+    "path": "scripts/research-release-artifacts.test.mjs",
+    "originalBytes": 6337,
+    "originalSha256": "4c1e6c2e217849b0b66f734f73817e02d211d00cd423d69b6eafffed9b87d21d",
+    "currentBytes": 6337,
+    "currentSha256": "4c1e6c2e217849b0b66f734f73817e02d211d00cd423d69b6eafffed9b87d21d",
+    "unchanged": true
+  },
+  {
+    "path": "scripts/research-atomic-publication-postgres.test.mjs",
+    "originalBytes": 39375,
+    "originalSha256": "65f265bfdcf885e0f978372572ee4f7b1da67254f72d22b7b54ac9763ffaa691",
+    "currentBytes": 39375,
+    "currentSha256": "65f265bfdcf885e0f978372572ee4f7b1da67254f72d22b7b54ac9763ffaa691",
+    "unchanged": true
+  },
+  {
+    "path": "web/src/lib/research-financial-file-reader.ts",
+    "originalBytes": 10211,
+    "originalSha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+    "currentBytes": 10211,
+    "currentSha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+    "unchanged": true
+  },
+  {
+    "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/acceptance-tests.json",
+    "originalBytes": 267424,
+    "originalSha256": "12391dfdc34c55908abd25c50af6313f2b046dbf5992ec153054992a2f392219",
+    "currentBytes": 267424,
+    "currentSha256": "12391dfdc34c55908abd25c50af6313f2b046dbf5992ec153054992a2f392219",
+    "unchanged": true
+  },
+  {
+    "path": "package-lock.json",
+    "originalBytes": 31809,
+    "originalSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "currentBytes": 31809,
+    "currentSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "unchanged": true
+  },
+  {
+    "path": "web/package-lock.json",
+    "originalBytes": 274090,
+    "originalSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "currentBytes": 274090,
+    "currentSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "unchanged": true
+  }
+]

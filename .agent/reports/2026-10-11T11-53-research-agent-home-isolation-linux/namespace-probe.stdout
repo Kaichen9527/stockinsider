@@ -1,0 +1,75 @@
+{
+  "observations": [
+    {
+      "case": "write_inside_existing_sibling",
+      "outcome": "reader_success",
+      "before": {
+        "dev": "27",
+        "ino": "-9223372036854770877",
+        "size": "4096",
+        "mtimeNs": "1791719780177280240",
+        "ctimeNs": "1791719780177280240"
+      },
+      "after": {
+        "dev": "27",
+        "ino": "-9223372036854770877",
+        "size": "4096",
+        "mtimeNs": "1791719780177280240",
+        "ctimeNs": "1791719780177280240"
+      }
+    },
+    {
+      "case": "actual_release_artifacts_fixture_during_reader_checkpoint",
+      "outcome": "expected_financial_parent_replaced",
+      "writer": "controlled actual scripts/research-release-artifacts.test.mjs child fixture mkdtemp/rm at OS home",
+      "before": {
+        "dev": "27",
+        "ino": "-9223372036854770877",
+        "size": "4096",
+        "mtimeNs": "1791719780177280240",
+        "ctimeNs": "1791719780177280240"
+      },
+      "after": {
+        "dev": "27",
+        "ino": "-9223372036854770877",
+        "size": "4096",
+        "mtimeNs": "1791719780925299157",
+        "ctimeNs": "1791719780925299157"
+      },
+      "childResult": {
+        "command": [
+          "/workspace/.tools/node22/node_modules/node/bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-reporter=tap",
+          "scripts/research-release-artifacts.test.mjs"
+        ],
+        "startedAt": "2026-10-11T11:56:20.214Z",
+        "completedAt": "2026-10-11T11:56:20.944Z",
+        "exit": 0
+      }
+    },
+    {
+      "case": "reader_after_actual_release_fixture_finished",
+      "outcome": "reader_success",
+      "before": {
+        "dev": "27",
+        "ino": "-9223372036854770877",
+        "size": "4096",
+        "mtimeNs": "1791719780925299157",
+        "ctimeNs": "1791719780925299157"
+      },
+      "after": {
+        "dev": "27",
+        "ino": "-9223372036854770877",
+        "size": "4096",
+        "mtimeNs": "1791719780925299157",
+        "ctimeNs": "1791719780925299157"
+      }
+    }
+  ],
+  "syntheticSetup": true,
+  "readerAndFixtureUnchanged": true,
+  "ciHistoricalWriterProven": false,
+  "cleanup": "finally removes only owned probe root after reader cleanup"
+}

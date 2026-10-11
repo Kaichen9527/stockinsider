@@ -1,0 +1,532 @@
+{
+  "schema": "research_agent_home_isolation_linux_v1",
+  "base": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "sourceIdentity": {
+    "source": "da660bfc120663a64a9efb19e982c018f79a2f4f",
+    "tree": "db3683fa5f0f10a8ce233dbc13c27bc1cb361cf6",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "sourceCount": 670,
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "user": "agent",
+    "homedir": "/home/agent",
+    "repoRealpath": "/workspace/cloud-reviewer-result-http-vm-oct09",
+    "node22": "v22.14.0",
+    "pg17": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "noSecretValuesRead": true,
+    "workspaceFreeBytes": 10040635392,
+    "tmpFreeBytes": 17045348352
+  },
+  "branch": "codex/research-agent-home-isolation-oct11",
+  "conservativeManualDeadline": "2026-10-11T12:22:30Z",
+  "capacityAdmission": {
+    "root": "/tmp/si-home-isolation-e86ou3n9",
+    "admittedAt": "2026-10-11T11:54:37.553689+00:00",
+    "deadlineEpoch": 1791721417.5536988,
+    "diskBudgetBytes": 34359738368,
+    "rssLimitBytes": 8589934592,
+    "diskReserveBytes": 8589934592
+  },
+  "completedAt": "2026-10-11T12:01:34.743441+00:00",
+  "change": "Unchanged release artifact fixture moved out of parallel research group into a second sequential Node22 invocation. Two new pure sequencing/catalog regression tests added to first group.",
+  "protected14CatalogUnchanged": true,
+  "original78ExpandedFilesRetained": true,
+  "originalFixtureAndReaderHashes": [
+    {
+      "path": "package.json",
+      "originalBytes": 32997,
+      "originalSha256": "c23aaf85d3bd53c959006693c67e92604a5e8f83216de03a4fa89e89f2a4e952",
+      "currentBytes": 33108,
+      "currentSha256": "32dddb61c5422c2762224a3fa2e10111c981297db5b656b4bce840b74d48292b",
+      "unchanged": false
+    },
+    {
+      "path": "scripts/research-release-artifacts.test.mjs",
+      "originalBytes": 6337,
+      "originalSha256": "4c1e6c2e217849b0b66f734f73817e02d211d00cd423d69b6eafffed9b87d21d",
+      "currentBytes": 6337,
+      "currentSha256": "4c1e6c2e217849b0b66f734f73817e02d211d00cd423d69b6eafffed9b87d21d",
+      "unchanged": true
+    },
+    {
+      "path": "scripts/research-atomic-publication-postgres.test.mjs",
+      "originalBytes": 39375,
+      "originalSha256": "65f265bfdcf885e0f978372572ee4f7b1da67254f72d22b7b54ac9763ffaa691",
+      "currentBytes": 39375,
+      "currentSha256": "65f265bfdcf885e0f978372572ee4f7b1da67254f72d22b7b54ac9763ffaa691",
+      "unchanged": true
+    },
+    {
+      "path": "web/src/lib/research-financial-file-reader.ts",
+      "originalBytes": 10211,
+      "originalSha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+      "currentBytes": 10211,
+      "currentSha256": "298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49",
+      "unchanged": true
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/acceptance-tests.json",
+      "originalBytes": 267424,
+      "originalSha256": "12391dfdc34c55908abd25c50af6313f2b046dbf5992ec153054992a2f392219",
+      "currentBytes": 267424,
+      "currentSha256": "12391dfdc34c55908abd25c50af6313f2b046dbf5992ec153054992a2f392219",
+      "unchanged": true
+    },
+    {
+      "path": "package-lock.json",
+      "originalBytes": 31809,
+      "originalSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "currentBytes": 31809,
+      "currentSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "unchanged": true
+    },
+    {
+      "path": "web/package-lock.json",
+      "originalBytes": 274090,
+      "originalSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+      "currentBytes": 274090,
+      "currentSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+      "unchanged": true
+    }
+  ],
+  "historicalFailure": {
+    "run": "38130038830",
+    "error": "financial_parent_replaced",
+    "rootReported": true,
+    "vmHistoricalLogReRead": false,
+    "actualHistoricalWriterProven": false
+  },
+  "controlledProbe": {
+    "actualReaderAndActualReleaseFixture": true,
+    "controlledSharedAncestor": "/home/agent",
+    "sameDevInode": true,
+    "mtimeCtimeChanged": true,
+    "parallelCheckpointResult": "expected financial_parent_replaced",
+    "existingNestedSiblingWriteResult": "reader success; shared ancestor unchanged",
+    "afterActualFixtureFinishedResult": "reader success",
+    "probeChildReleaseTests": {
+      "pass": 5,
+      "fail": 0,
+      "skip": 0
+    },
+    "realPinnedAUOInputsCopied": true,
+    "probeIsNotHistoricalCIProof": true,
+    "vmCheckoutOutsideHome": true
+  },
+  "fullResearchSuite": {
+    "invocations": [
+      {
+        "phase": 1,
+        "counts": {
+          "tests": 815,
+          "pass": 813,
+          "fail": 0,
+          "skipped": 2,
+          "cancelled": 0
+        },
+        "skipLines": [
+          "ok 352 - real observed priority accounts1978 and admits an old public company research lead without formal identity # SKIP explicit isolated profile not enabled",
+          "ok 353 - real guarded1978 observed admission, concurrent replay, ACL and PostgreSQL restart # SKIP explicit isolated profile not enabled"
+        ]
+      },
+      {
+        "phase": 2,
+        "counts": {
+          "tests": 5,
+          "pass": 5,
+          "fail": 0,
+          "skipped": 0,
+          "cancelled": 0
+        },
+        "skipLines": []
+      }
+    ],
+    "total": 820,
+    "pass": 818,
+    "fail": 0,
+    "skip": 2,
+    "originalDefaultsAndAssertionsPreserved": true,
+    "serialConcurrencyFlagAdded": false,
+    "newFocusedTestsAlsoInFullSuite": true,
+    "countsNotAddedTwice": true
+  },
+  "stages": [
+    {
+      "stage": "focused",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "scripts/research-agent-test-isolation.test.mjs"
+      ],
+      "startedAt": "2026-10-11T11:56:19.877790+00:00",
+      "endedAt": "2026-10-11T11:56:20.069284+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.19150364596862346,
+      "sampledAggregatePeakRssBytes": 28270592,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10040705024,
+      "diskAvailableAfterBytes": 10040705024,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "namespace-probe",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "/tmp/si-home-isolation-e86ou3n9/namespace-probe.mjs"
+      ],
+      "startedAt": "2026-10-11T11:56:20.098641+00:00",
+      "endedAt": "2026-10-11T11:56:21.054600+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.9559654630138539,
+      "sampledAggregatePeakRssBytes": 210022400,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10040705024,
+      "diskAvailableAfterBytes": 10040705024,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "research-agents",
+      "command": [
+        "npm",
+        "run",
+        "test:research-agents"
+      ],
+      "startedAt": "2026-10-11T11:57:20.351436+00:00",
+      "endedAt": "2026-10-11T11:58:31.828920+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 71.4774958229973,
+      "sampledAggregatePeakRssBytes": 859893760,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10040651776,
+      "diskAvailableAfterBytes": 10040651776,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T11:59:01.010806+00:00",
+      "endedAt": "2026-10-11T11:59:03.992917+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 2.982114668993745,
+      "sampledAggregatePeakRssBytes": 566800384,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10040651776,
+      "diskAvailableAfterBytes": 10040651776,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T11:59:04.019822+00:00",
+      "endedAt": "2026-10-11T11:59:28.440434+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 24.42062046303181,
+      "sampledAggregatePeakRssBytes": 1521258496,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10040651776,
+      "diskAvailableAfterBytes": 10040651776,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T11:59:28.468888+00:00",
+      "endedAt": "2026-10-11T11:59:34.731247+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 6.26236744801281,
+      "sampledAggregatePeakRssBytes": 1238724608,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10040651776,
+      "diskAvailableAfterBytes": 10039848960,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    }
+  ],
+  "typecheck": "PASS",
+  "lint": {
+    "exit": 0,
+    "errors": 0,
+    "warnings": 33
+  },
+  "normalBuild": {
+    "source": "da660bfc120663a64a9efb19e982c018f79a2f4f",
+    "tree": "db3683fa5f0f10a8ce233dbc13c27bc1cb361cf6",
+    "webTree": "e9d3ae1fdf2ed05017a6ab8ef4fb84a4310adcb1",
+    "buildID": "V3qfLF22RUoxi61YvU608",
+    "serverFileCount": 2088,
+    "serverLogicalBytes": 67439593,
+    "serverManifestSha256": "4c4fb5c1b045b55cf5a44d7eff06289af5c2da349871354e19a6ddd486151f59",
+    "node": "v22.14.0",
+    "next": "16.3.8",
+    "compiler": "normal npm build / Turbopack",
+    "newBuildExecuted": true,
+    "previous2eBuildId": "YN7dtDWB1rU0c7CJ1ogS9",
+    "notReused": true
+  },
+  "sourceManifest": {
+    "files": 670,
+    "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/source-manifest.json",
+    "sha256": "cc51d33ef272a68134126ee159f4b7cfa7fdbb1745f191a2a5f6b71397aaa633"
+  },
+  "resources": {
+    "sampledPeakAggregateRssBytes": 1521258496,
+    "minimumSampledWorkspaceFreeBytes": 10039848960,
+    "rssMethod": "100ms aggregate process group/recursive descendants; may miss short or reparented processes. GNU time per-stage raw also retained.",
+    "fullDiskSamplingLimit": "Runtime wrapper enforces 8GiB workspace reserve each sample; receipt minimum is stage boundary minimum.",
+    "singleHeavyStageAtOnce": true
+  },
+  "cleanup": {
+    "checkedAt": "2026-10-11T12:00:26.942587+00:00",
+    "activeNodeAndPostgres": [],
+    "preexistingZombiesNotKilled": 1200,
+    "noServicesStartedOutsideTests": true,
+    "fixtureCleanup": "Original child fixtures remove themselves; owned probe root removed in finally. Test-native clusters cleaned by original tests. No unique evidence or historical artifacts deleted.",
+    "workspaceFreeBytes": 10039832576,
+    "tmpFreeBytes": 17064501248
+  },
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/adjacent-release-fixture.stdout",
+      "bytes": 1847,
+      "sha256": "07dc50661a0326a74054b059d9982628c8a934853cf1fbb518eb64d2180dbafd"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/admission.json",
+      "bytes": 238,
+      "sha256": "7df233931fd9d98a901179a4b9a860c3d588c57e6eb1c8eba0fc0273b2943df9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/build-identity.json",
+      "bytes": 548,
+      "sha256": "fd44445d42a70415ad060025c00fa083a44563a885d33fb174144408ba1af9c7"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/cleanup.json",
+      "bytes": 436,
+      "sha256": "f76638b547b8a945a6e294a9189591196f771230cb84184cd69b91ef68de9ce3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/compiled-server-manifest.json",
+      "bytes": 387190,
+      "sha256": "4c4fb5c1b045b55cf5a44d7eff06289af5c2da349871354e19a6ddd486151f59"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/focused.json",
+      "bytes": 686,
+      "sha256": "97f444b7440aa2a53135e9392a47602e392fdae2c03ad63f0035e50e84b3de5c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/focused.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/focused.stdout",
+      "bytes": 544,
+      "sha256": "5edee5028e7648a54cd06d11587dd20ebb1c5b88b6a1f6aae1fbdfa1311c906a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/focused.time",
+      "bytes": 797,
+      "sha256": "acf4141ee638fe616fa0dfb8b113461347c841efc21ffdb431b49e2622de8f67"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/lint.json",
+      "bytes": 637,
+      "sha256": "64091f7f4c1f1834d4dfcf1cbf039f4cb4ea4370e1d0a38b01e9aa78bda2bec2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/lint.stderr",
+      "bytes": 165,
+      "sha256": "53ff59b476fd010d11fef53ad7aa4ce767f0d66ecdf81f0beb2574e64d3cf653"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/lint.stdout",
+      "bytes": 4588,
+      "sha256": "f87ea0d0119a73ea1de32052bea45d673cf13f72999e57cd44ae707acb4433cb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/lint.time",
+      "bytes": 753,
+      "sha256": "a262e49ccfc7c6813c6484e9d1071f96984314b21dcc386db3ca1ff40e6e1e29"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/membership.json",
+      "bytes": 24020,
+      "sha256": "8f82b3a1634d8becceb4b498d62a4f23cb9d17dbffa8a13de91fe9540af1dccb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/namespace-probe.json",
+      "bytes": 692,
+      "sha256": "ef7302ddcc3154db12fedc9f0901786418133ebe7959d55208fdc189e92c5b4c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/namespace-probe.mjs",
+      "bytes": 3620,
+      "sha256": "6b84a631c28811d9bb92c066b596a0ac1496d5ab42bdca3bc4e9a9308024f532"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/namespace-probe.stderr",
+      "bytes": 609,
+      "sha256": "6ad97f4b03f460cb1d511f5e8306f1b3d54593d9d7350b0d81eee275d2bc14bb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/namespace-probe.stdout",
+      "bytes": 2221,
+      "sha256": "477327d930980933f955e96aa90e4efe4b80ee775be4e273657c0e3781645a15"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/namespace-probe.time",
+      "bytes": 812,
+      "sha256": "1dea5b3e735f957e1d682be0aab0b4a61dc393a6fdfb2a047aac63758e379f1b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/normal-build.json",
+      "bytes": 645,
+      "sha256": "ab8153275b4f4d74357a8591646ecf395323330b1956089063b7792731cb84b2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/normal-build.stdout",
+      "bytes": 6499,
+      "sha256": "818976b3f5389032d3eb0c3e97bdd9e2cc9e2a551fa8c20614a9a25df9c72f0f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/normal-build.time",
+      "bytes": 758,
+      "sha256": "f169efc4c59b508ff15521ba67b90c2320789a4eacc792a0580312d321bf5521"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/original-ci-failure-attribution.json",
+      "bytes": 403,
+      "sha256": "98a84c6024ad5c8c75c53c7645f2bfd52f3a37ab08600d54054999400748c11d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/original-file-comparison.json",
+      "bytes": 2250,
+      "sha256": "c383661f4171d1390829ee5d030dadb3089744f9a5e7ffd7549fe49a92f9e3c0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/research-agents.json",
+      "bytes": 635,
+      "sha256": "11d25e48232aa7d0b14fface3b6ba190712f97ded08b81012711f352fe411cc4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/research-agents.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/research-agents.stdout",
+      "bytes": 265678,
+      "sha256": "228133115091f3c254f67d04a8006cad20f1810dcc649b50a23cd65bfa03ae0a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/research-agents.time",
+      "bytes": 763,
+      "sha256": "e8b65f15a7e4188d2259183f4c23dbbbcbc7393f276c618b068c003100a95cf6"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/run.py",
+      "bytes": 3438,
+      "sha256": "1ff1ee1e0955ff3f48a77cb18369783c3a22ae38980e2ef41cf4404a614d362f"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/setup-helper-history.txt",
+      "bytes": 344,
+      "sha256": "3edb0802a4fe3db712326e16465c1c772b352ada2b9a65782dc4cc7e6989e925"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/source-delta.patch",
+      "bytes": 13123,
+      "sha256": "ce38137c081be3387033d51f528d094ece9cec3041cd6f15d1d8e782cbfef03a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/source-identity.json",
+      "bytes": 666,
+      "sha256": "434b3cd7e4b44078998717a43c2d00d5e5dd7e316db48c5e051cdb1194e5b129"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/source-manifest.json",
+      "bytes": 131091,
+      "sha256": "cc51d33ef272a68134126ee159f4b7cfa7fdbb1745f191a2a5f6b71397aaa633"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/test-results.json",
+      "bytes": 70077,
+      "sha256": "4e7acee0c5f52733a1f915a0048d602d21db1eabcf09f2b84f48200f02ac54ec"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/typecheck.json",
+      "bytes": 646,
+      "sha256": "686ccc5e8f8609e93d45c76bfa4ab36b01ad0e9801ab458c642e93a1cc2c942a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T11-53-research-agent-home-isolation-linux/typecheck.time",
+      "bytes": 755,
+      "sha256": "455444066a1cbc54355ec3a0fa26dc701b47385552cecfca1945d3e84a213f60"
+    }
+  ],
+  "rawCount": 39,
+  "rawTotalBytes": 928362,
+  "limits": [
+    "Two observed native profiles remained explicitly disabled/skipped in the original suite.",
+    "Original PostgreSQL tests use their existing synthetic prerequisites/credentials/jobs; this is not full production role execution or deployment.",
+    "Historical CI writer remains unknown.",
+    "No independent CODE review performed by maker.",
+    "No protected approval, production write, strategy adoption, model execution or release upload."
+  ],
+  "noSourceOrLockDriftAfterBuild": true,
+  "noConfigurationChangeNeeded": true
+}

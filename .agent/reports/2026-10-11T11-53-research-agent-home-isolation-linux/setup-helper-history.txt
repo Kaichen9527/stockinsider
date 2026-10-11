@@ -1,0 +1,1 @@
+First package string edit helper exited with AssertionError before write: the final author-assignment token appeared in two package scripts. Corrected by selecting the parsed test:research-agents value and replacing that unique full JSON string. No runtime/test assertion changed and no acceptance run was retried because of this helper error.

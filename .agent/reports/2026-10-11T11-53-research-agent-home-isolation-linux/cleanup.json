@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-10-11T12:00:26.942587+00:00",
+  "activeNodeAndPostgres": [],
+  "preexistingZombiesNotKilled": 1200,
+  "noServicesStartedOutsideTests": true,
+  "fixtureCleanup": "Original child fixtures remove themselves; owned probe root removed in finally. Test-native clusters cleaned by original tests. No unique evidence or historical artifacts deleted.",
+  "workspaceFreeBytes": 10039832576,
+  "tmpFreeBytes": 17064501248
+}

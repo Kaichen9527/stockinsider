@@ -1,0 +1,8 @@
+{
+  "root": "/tmp/si-home-isolation-e86ou3n9",
+  "admittedAt": "2026-10-11T11:54:37.553689+00:00",
+  "deadlineEpoch": 1791721417.5536988,
+  "diskBudgetBytes": 34359738368,
+  "rssLimitBytes": 8589934592,
+  "diskReserveBytes": 8589934592
+}
