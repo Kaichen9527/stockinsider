@@ -1,0 +1,234 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 2.774938
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 94.54672
+  ...
+# Subtest: whole-file protective exceptions keep lexical blockers and the approved base chain
+ok 3 - whole-file protective exceptions keep lexical blockers and the approved base chain
+  ---
+  duration_ms: 142.695304
+  ...
+# Subtest: unknown destructive SQL, including comments and function bodies, still fails closed
+ok 4 - unknown destructive SQL, including comments and function bodies, still fails closed
+  ---
+  duration_ms: 0.534907
+  ...
+# Subtest: installed successors reject base replay and omitted extensions before any mutation
+ok 5 - installed successors reject base replay and omitted extensions before any mutation
+  ---
+  duration_ms: 2.399621
+  ...
+# Subtest: an unextended base remains installable but unknown detection cannot authorize replay
+ok 6 - an unextended base remains installable but unknown detection cannot authorize replay
+  ---
+  duration_ms: 0.274905
+  ...
+# Subtest: complete reviewed existing-schema installation is atomic and verifies actual PostgreSQL postconditions
+    # Subtest: missing prerequisites, composite attributes and reachable role changes reject before mutation
+    ok 1 - missing prerequisites, composite attributes and reachable role changes reject before mutation
+      ---
+      duration_ms: 815.040079
+      ...
+    # Subtest: full chain and semantic mutations are verified before rollback
+    ok 2 - full chain and semantic mutations are verified before rollback
+      ---
+      duration_ms: 2575.734377
+      ...
+    # Subtest: disconnect rolls back every schema/role/function change
+    ok 3 - disconnect rolls back every schema/role/function change
+      ---
+      duration_ms: 1056.540702
+      ...
+    # Subtest: two full clients serialize; committed installation prevents second replay
+    ok 4 - two full clients serialize; committed installation prevents second replay
+      ---
+      duration_ms: 1148.806991
+      ...
+    1..4
+ok 7 - complete reviewed existing-schema installation is atomic and verifies actual PostgreSQL postconditions
+  ---
+  duration_ms: 7054.581205
+  ...
+# Subtest: first-install detection covers every residue before either base or extension can mutate
+    # Subtest: empty initial namespace passes; all fixed table/function/role/column/trigger residues reject
+    ok 1 - empty initial namespace passes; all fixed table/function/role/column/trigger residues reject
+      ---
+      duration_ms: 367.562713
+      ...
+    # Subtest: two real installers serialize then reject committed residue before replay
+    ok 2 - two real installers serialize then reject committed residue before replay
+      ---
+      duration_ms: 19.569164
+      ...
+    # Subtest: unknown detection fails closed and installed check precedes all mutation
+    ok 3 - unknown detection fails closed and installed check precedes all mutation
+      ---
+      duration_ms: 0.428516
+      ...
+    1..3
+ok 8 - first-install detection covers every residue before either base or extension can mutate
+  ---
+  duration_ms: 996.338725
+  ...
+# Subtest: VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+ok 9 - VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+  ---
+  duration_ms: 1.576389
+  ...
+# Subtest: VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+ok 10 - VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+  ---
+  duration_ms: 1.801058
+  ...
+# Subtest: actual pg authentication handlers never consult pgpass or transmit credentials
+ok 11 - actual pg authentication handlers never consult pgpass or transmit credentials
+  ---
+  duration_ms: 4.535365
+  ...
+# Subtest: native PostgreSQL distinguishes a reject file on disk from effective loaded HBA
+ok 12 - native PostgreSQL distinguishes a reject file on disk from effective loaded HBA
+  ---
+  duration_ms: 611.510344
+  ...
+# Subtest: research schema extends the same attested operator plan and cannot use a separate raw runner
+ok 13 - research schema extends the same attested operator plan and cannot use a separate raw runner
+  ---
+  duration_ms: 2.052688
+  ...
+# Subtest: base chain stays fixed and explicit extension authority never replaces reviewed apply
+ok 14 - base chain stays fixed and explicit extension authority never replaces reviewed apply
+  ---
+  duration_ms: 198.096882
+  ...
+# Subtest: insider successor preserves semantics and rejects stale snapshots before capacity and CAS writes
+    # Subtest: missing predecessor fails without manufacturing a routine
+    ok 1 - missing predecessor fails without manufacturing a routine
+      ---
+      duration_ms: 2.598331
+      ...
+    # Subtest: only first-statement isolation guards change; owner ACLs and all attributes survive retry
+    ok 2 - only first-statement isolation guards change; owner ACLs and all attributes survive retry
+      ---
+      duration_ms: 4.330245
+      ...
+    # Subtest: independently changed body or execution semantics reject atomically
+    ok 3 - independently changed body or execution semantics reject atomically
+      ---
+      duration_ms: 11.877285
+      ...
+    # Subtest: RR and serializable reject all three write RPCs before argument checks or writes
+    ok 4 - RR and serializable reject all three write RPCs before argument checks or writes
+      ---
+      duration_ms: 12.742762
+      ...
+    # Subtest: real two-connection stale127 snapshot cannot admit129 after competing128; RC replay remains available
+    ok 5 - real two-connection stale127 snapshot cannot admit129 after competing128; RC replay remains available
+      ---
+      duration_ms: 28.549047
+      ...
+    1..5
+ok 15 - insider successor preserves semantics and rejects stale snapshots before capacity and CAS writes
+  ---
+  duration_ms: 666.402409
+  ...
+# Subtest: actual PostgreSQL snapshot admission, document proof, replay, restart and bounded metadata
+    # Subtest: service role has only narrow RPC writes, public has no snapshot read or helper execution
+    ok 1 - service role has only narrow RPC writes, public has no snapshot read or helper execution
+      ---
+      duration_ms: 21.103671
+      ...
+    # Subtest: run identity precedes fetch; clocks/hash/schema/parser/rights reject without admission
+    ok 2 - run identity precedes fetch; clocks/hash/schema/parser/rights reject without admission
+      ---
+      duration_ms: 143.315407
+      ...
+    # Subtest: whole response validated before activation including row501
+    ok 3 - whole response validated before activation including row501
+      ---
+      duration_ms: 44.992376
+      ...
+    # Subtest: escaped-control500row projection rejects before any snapshot/progress/member admission
+    ok 4 - escaped-control500row projection rejects before any snapshot/progress/member admission
+      ---
+      duration_ms: 379.511667
+      ...
+    # Subtest: five fixed members freeze before reading; mixed sizes and derived exclusions
+    ok 5 - five fixed members freeze before reading; mixed sizes and derived exclusions
+      ---
+      duration_ms: 521.801611
+      ...
+    # Subtest: invented or changed persisted content cannot advance; documents precede CAS
+    ok 6 - invented or changed persisted content cannot advance; documents precede CAS
+      ---
+      duration_ms: 4403.439446
+      ...
+    # Subtest: fresh run reuses original active snapshot and never admits new bytes
+    ok 7 - fresh run reuses original active snapshot and never admits new bytes
+      ---
+      duration_ms: 34.041227
+      ...
+    # Subtest: crash after documents, restart, exact CAS replay and completed empty receipts
+    ok 8 - crash after documents, restart, exact CAS replay and completed empty receipts
+      ---
+      duration_ms: 4424.656717
+      ...
+    # Subtest: immutable raw and run bindings cannot be rewritten
+    ok 9 - immutable raw and run bindings cannot be rewritten
+      ---
+      duration_ms: 15.283407
+      ...
+    # Subtest: existing run remains replayable at128run limit;129 rejected without deleting maps
+    ok 10 - existing run remains replayable at128run limit;129 rejected without deleting maps
+      ---
+      duration_ms: 28.465672
+      ...
+    # Subtest: reapply is non-destructive and preserves exact clocks, bytes, progress
+    ok 11 - reapply is non-destructive and preserves exact clocks, bytes, progress
+      ---
+      duration_ms: 47.523426
+      ...
+    # Subtest: stranded112MiB example rejects entire reservation before fetch with no token/run leak
+    ok 12 - stranded112MiB example rejects entire reservation before fetch with no token/run leak
+      ---
+      duration_ms: 1020.549053
+      ...
+    # Subtest: actual+pending exact128MiB accepted, +1byte rejected atomically
+    ok 13 - actual+pending exact128MiB accepted, +1byte rejected atomically
+      ---
+      duration_ms: 1332.898764
+      ...
+    # Subtest: 27actual+5pending exact32slots accepted;28actual refuses before partial activation
+    ok 14 - 27actual+5pending exact32slots accepted;28actual refuses before partial activation
+      ---
+      duration_ms: 67.933097
+      ...
+    # Subtest: consumed token retains exact lost-response identity even after newer acquisition exists
+    ok 15 - consumed token retains exact lost-response identity even after newer acquisition exists
+      ---
+      duration_ms: 248.615859
+      ...
+    1..15
+ok 16 - actual PostgreSQL snapshot admission, document proof, replay, restart and bounded metadata
+  ---
+  duration_ms: 13366.334266
+  ...
+# Subtest: release identity covers imported execution sources and rejects altered dependencies
+ok 17 - release identity covers imported execution sources and rejects altered dependencies
+  ---
+  duration_ms: 2704.93619
+  ...
+1..17
+# tests 44
+# suites 0
+# pass 44
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 26535.211666

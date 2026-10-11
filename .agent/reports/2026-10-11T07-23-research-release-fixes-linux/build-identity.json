@@ -1,0 +1,14 @@
+{
+  "source": "13026a9071856268edc11efbb991497f4e504b13",
+  "tree": "0ba15c1f1c0f3bc00c0b5ef11ab955a8c0dad57f",
+  "webTree": "f079609665b3098f523ffa899880c7092657f419",
+  "compiler": "normal npm --prefix web run build (Turbopack)",
+  "buildId": "_jtzhWYRo2fGAI6CkfuAn",
+  "serverFiles": 2088,
+  "serverLogicalBytes": 67435997,
+  "serverManifestSha256": "83a81d2f89e12244cebfc4480d47183e1840a622c0f8aa27c9ef07e5f9082508",
+  "node": "v22.14.0",
+  "nextVersion": "16.3.8",
+  "npmVersion": "11.9.0",
+  "prebuildExecuted": true
+}

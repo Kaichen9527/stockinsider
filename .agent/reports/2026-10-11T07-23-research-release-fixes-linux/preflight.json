@@ -1,0 +1,23 @@
+{
+  "head": "13026a9071856268edc11efbb991497f4e504b13",
+  "tree": "0ba15c1f1c0f3bc00c0b5ef11ab955a8c0dad57f",
+  "webTree": "f079609665b3098f523ffa899880c7092657f419",
+  "node": "v22.14.0",
+  "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+  "pgConfigBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+  "nativeToolsExecutable": {
+    "initdb": true,
+    "pg_ctl": true,
+    "psql": true,
+    "postgres": true
+  },
+  "pgClient": {
+    "version": "8.18.0",
+    "user": "agent"
+  },
+  "osUser": "agent",
+  "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+  "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+  "diskAvailableBytes": 10072588288,
+  "trackedStatus": ""
+}

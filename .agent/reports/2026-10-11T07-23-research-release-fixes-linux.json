@@ -1,0 +1,473 @@
+{
+  "schemaVersion": "bounded-linux-engineering-receipt-v1",
+  "recordedAt": "2026-10-11T07:28:50.578700+00:00",
+  "task": "Exact reviewed inbox/insider isolation/paper settlement/legacy source-head release fixes Linux acceptance",
+  "source": {
+    "head": "13026a9071856268edc11efbb991497f4e504b13",
+    "tree": "0ba15c1f1c0f3bc00c0b5ef11ab955a8c0dad57f",
+    "webTree": "f079609665b3098f523ffa899880c7092657f419",
+    "node": "v22.14.0",
+    "pg": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+    "pgConfigBindir": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "nativeToolsExecutable": {
+      "initdb": true,
+      "pg_ctl": true,
+      "psql": true,
+      "postgres": true
+    },
+    "pgClient": {
+      "version": "8.18.0",
+      "user": "agent"
+    },
+    "osUser": "agent",
+    "rootLockSha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "webLockSha256": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
+    "diskAvailableBytes": 10072588288,
+    "trackedStatus": ""
+  },
+  "branch": "codex/research-release-fixes-linux-evidence-oct11",
+  "manualAdmission": {
+    "observedAt": "2026-10-11T07:23:50.334039Z",
+    "noHeavyAtStart": true,
+    "diskAvailableBeforeBytes": 10073165824,
+    "memoryAvailableKiB": 33271776,
+    "initialFetch": {
+      "executionProfile": "default",
+      "exitCode": 128,
+      "command": [
+        "git",
+        "fetch",
+        "origin",
+        "codex/research-inbox-precision-oct11"
+      ],
+      "stderr": "fatal: unable to access 'https://github.com/Kaichen9527/stockinsider.git/': Failed to connect to proxy port 8080 after 0 ms: Could not connect to server"
+    },
+    "manualHardStopAt": "2026-10-11T07:53:50Z"
+  },
+  "manualBudgetNotRoleBudget": true,
+  "stages": [
+    {
+      "stage": "native-selection",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/research-insider-isolation-postgres.test.mjs",
+        "scripts/research-insider-snapshot-postgres.test.mjs",
+        "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+        "scripts/research-agent-migration-gate.test.mjs",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+        "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+        "scripts/opportunity-v3/research-publication-install-guard.test.mjs",
+        "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+        "scripts/opportunity-v3/vps-migration-peer.test.mjs",
+        "scripts/research-strategy-release.test.mjs"
+      ],
+      "startedAt": "2026-10-11T07:24:59.296272+00:00",
+      "endedAt": "2026-10-11T07:25:26.062670+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 26.766407258983236,
+      "sampledAggregatePeakRssBytes": 232816640,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10072588288,
+      "diskAvailableAfterBytes": 10072588288,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "9123c4cd786cc53766422bde4824361388f9d8f6338970ee0bbeea0d9c6393b7",
+      "commandHashEncoding": "compact_utf8_json_array_v1"
+    },
+    {
+      "stage": "source-unit",
+      "command": [
+        "node",
+        "scripts/run-node22.js",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/research-inbox.test.ts",
+        "web/src/lib/research-source-association.test.ts",
+        "web/src/lib/research-source-attempt-controller.test.ts",
+        "scripts/research-discovery-relay-prepare.test.mjs",
+        "scripts/research-saved-observation.test.mjs",
+        "scripts/research-legacy-article-heads.test.mjs",
+        "web/src/lib/candidate-detail.test.ts",
+        "web/src/lib/candidate-detail-view-contract.test.ts",
+        "web/src/lib/tw-entry-plan-authority.test.ts",
+        "scripts/research-paper-session-route.test.mjs"
+      ],
+      "startedAt": "2026-10-11T07:25:44.959781+00:00",
+      "endedAt": "2026-10-11T07:26:07.079547+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 22.1197733959998,
+      "sampledAggregatePeakRssBytes": 245383168,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10072588288,
+      "diskAvailableAfterBytes": 10072588288,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "5c191114509014f61ac07e278c6e608555a7ddc11b3678e16223212ddd53a3a1",
+      "commandHashEncoding": "compact_utf8_json_array_v1"
+    },
+    {
+      "stage": "typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T07:26:28.481994+00:00",
+      "endedAt": "2026-10-11T07:26:40.053587+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 11.571598253969569,
+      "sampledAggregatePeakRssBytes": 1107144704,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10072588288,
+      "diskAvailableAfterBytes": 10072596480,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "8ac999e55fa5ea36d85b28b65866851498beb4c9609f7f1c0f741dae1ee223a2",
+      "commandHashEncoding": "compact_utf8_json_array_v1"
+    },
+    {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T07:26:52.027187+00:00",
+      "endedAt": "2026-10-11T07:27:17.065492+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 25.038313609024044,
+      "sampledAggregatePeakRssBytes": 1422553088,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10072596480,
+      "diskAvailableAfterBytes": 10072596480,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "1ded22d1a648d19d7e494b6cf545f81772d40d2512b2d33c34e58eeb8c47fde0",
+      "commandHashEncoding": "compact_utf8_json_array_v1"
+    },
+    {
+      "stage": "normal-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T07:27:30.356702+00:00",
+      "endedAt": "2026-10-11T07:27:49.467844+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 19.111147077055648,
+      "sampledAggregatePeakRssBytes": 1379151872,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 10072596480,
+      "diskAvailableAfterBytes": 10056069120,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false,
+      "commandSha256": "30afddbd6164a1c9a1745d7a4eeba53e9fb618211d6ee0b8caf850215486d5ce",
+      "commandHashEncoding": "compact_utf8_json_array_v1"
+    }
+  ],
+  "tests": [
+    {
+      "stage": "native-selection",
+      "counts": {
+        "tests": 44,
+        "pass": 44,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "executedNames": 44
+    },
+    {
+      "stage": "source-unit",
+      "counts": {
+        "tests": 149,
+        "pass": 149,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "executedNames": 149
+    }
+  ],
+  "countScope": "44 native-selected parent/nested cases and149 specified unit cases, no skipped or cancelled cases. This is only the exact two commanded selections, not full PCR or all research test suites. Native44 are not44 separate production installations.",
+  "installation": {
+    "selectedMigrations": 74,
+    "appliedMigrations": 73,
+    "supersededMigrations": 1,
+    "fullChainFixture": "Real existing VPS schema-only baseline restored into owned PG17, three fixed catalog stages checked; no production data or VPS connection",
+    "insiderFixture": "Original isolated synthetic partial prerequisite profile and unchanged original migrations + isolation successor; not full production insider deployment",
+    "peerProbe": "Own native cluster disk HBA vs actually loaded rule only, not live VPS peer proof"
+  },
+  "environment": {
+    "nodeVersion": "v22.14.0",
+    "pgVersion": "17.11 Debian17.11-0+deb13u1",
+    "pgDependencyVersion": "8.18.0",
+    "userSource": "pwd.getpwuid(os.geteuid()).pw_name",
+    "user": "agent",
+    "pgClientUserMatchesOs": true,
+    "RESEARCH_LOCAL_DATAPLANE_PG_BIN": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+    "privateTmpDir": "/tmp/si-13026-jnhqygph",
+    "umask": "0077",
+    "proxyAndCaPreserved": true,
+    "secretsPrintedOrRead": false,
+    "clockOverride": false,
+    "newDependenciesInstalled": false,
+    "sourceLockSqlTestsGuardsChanged": false,
+    "fetchNote": "Initial default execution profile failed to connect to configured proxy; the one corrected authorized Git execution profile fetched source successfully. Original stderr retained in admission.json and authorized stdout/stderr raw. No proxy/TLS/network bypass."
+  },
+  "build": {
+    "source": "13026a9071856268edc11efbb991497f4e504b13",
+    "tree": "0ba15c1f1c0f3bc00c0b5ef11ab955a8c0dad57f",
+    "webTree": "f079609665b3098f523ffa899880c7092657f419",
+    "compiler": "normal npm --prefix web run build (Turbopack)",
+    "buildId": "_jtzhWYRo2fGAI6CkfuAn",
+    "serverFiles": 2088,
+    "serverLogicalBytes": 67435997,
+    "serverManifestSha256": "83a81d2f89e12244cebfc4480d47183e1840a622c0f8aa27c9ef07e5f9082508",
+    "node": "v22.14.0",
+    "nextVersion": "16.3.8",
+    "npmVersion": "11.9.0",
+    "prebuildExecuted": true
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 33,
+    "warningsPreserved": true
+  },
+  "resources": {
+    "peakAggregateSampledRssBytes": 1422553088,
+    "lowestObservedFreeBytes": 10056052736,
+    "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+    "gnuTimeRetainedPerStage": true,
+    "diskReserveBytes": 8589934592,
+    "rssTargetBytes": 8589934592,
+    "samplingLimitations": "100ms live process group + descendants sampling may miss short/reparented processes; not a cgroup peak claim."
+  },
+  "sourceManifestFiles": 114,
+  "sourceHashCoverage": "Exact Git head/tree/webtree bind entire tracked source; readable SHA/byte manifest binds all source delta from1a, selected tests/migrations, original fixture/profile and dependency locks.",
+  "cleanup": {
+    "observedAt": "2026-10-11T07:28:12.204857+00:00",
+    "activeRelevantProcesses": [],
+    "ownedClusterPrefixDirectoriesRemaining": {
+      "/tmp": {
+        "si-full-chain-*": [],
+        "si-hba-probe-*": [],
+        "si-insider-isolation-*": [],
+        "si-snapshot-pg-*": []
+      },
+      "/tmp/si-13026-jnhqygph": {
+        "si-full-chain-*": [],
+        "si-hba-probe-*": [],
+        "si-insider-isolation-*": [],
+        "si-snapshot-pg-*": []
+      }
+    },
+    "trackedStatus": "",
+    "diskAvailableBytes": 10056052736,
+    "method": "Original tests finally stop and remove their own isolated clusters; observer confirms no relevant live processes or owned prefix directories. No evidence deletion or broad prune."
+  },
+  "raw": [
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/admission.json",
+      "bytes": 562,
+      "sha256": "c9925e738436f1b4062cd921280f173901d7cbc1dfa57ffaa374ea62aa1f56ac"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/before-build-inventory.json",
+      "bytes": 246,
+      "sha256": "25b6e41b2090adc1bedf9ee18423e10e18a9a8fa5bfb79530b0118174142fad4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/build-identity.json",
+      "bytes": 525,
+      "sha256": "e82257b49cc8a2acc902d02acfc5f209e6f7e99755f25b485c681b50c8466f15"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/cleanup.json",
+      "bytes": 696,
+      "sha256": "7f04daa9f4148ffd78bd0d764f5b7fa1d7b5712c9429436c58afcc4933bbfd01"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/compiled-server-manifest.json",
+      "bytes": 387190,
+      "sha256": "83a81d2f89e12244cebfc4480d47183e1840a622c0f8aa27c9ef07e5f9082508"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/executed-test-inventory.json",
+      "bytes": 18369,
+      "sha256": "97ae8693de37946e6f560066e71530767cbd8348b012cdf4a0cba050c1c0b7d0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/fetch-authorized.stderr",
+      "bytes": 123,
+      "sha256": "30427b96ee86990af9983ebb5a7efe8cba3e0f9b17d0f9fdb2df5542e4f548a3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/fetch-authorized.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/lint.json",
+      "bytes": 638,
+      "sha256": "0d8fd2fce51e5bfbe5a0c5c814b8124b0f53ba1778b9c9045c91408b6d04964c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/lint.stderr",
+      "bytes": 165,
+      "sha256": "53ff59b476fd010d11fef53ad7aa4ce767f0d66ecdf81f0beb2574e64d3cf653"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/lint.stdout",
+      "bytes": 4588,
+      "sha256": "f87ea0d0119a73ea1de32052bea45d673cf13f72999e57cd44ae707acb4433cb"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/lint.time",
+      "bytes": 753,
+      "sha256": "606f9d45f3e3fe70ec16e15ff7cd54fb7e0a1eac7bb4802d7332f1f7e6a0248b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/migration-plan.json",
+      "bytes": 17879,
+      "sha256": "3867f5d424af4afb439e109422ff649894fe0b4f05eab9a13671d4cf2d2444df"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/native-selection.json",
+      "bytes": 1318,
+      "sha256": "c54da2848b0cdc352ea786cc14ea47f85494865a01cd9cacd53e8fd9d8971cee"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/native-selection.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/native-selection.stdout",
+      "bytes": 10288,
+      "sha256": "2040975e4ce7a2071e567a0c3f82ebe19ca217c0243323998549e2a07c4bab74"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/native-selection.time",
+      "bytes": 1351,
+      "sha256": "498dcd15db7071e1439fd23f54f4e5cb942a51178f3f560e2774d0f68d0a0425"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/normal-build.json",
+      "bytes": 647,
+      "sha256": "a5f4458bb0d9cd621c48e7a34abaab499941a4c6a179c218d377689e8bee5110"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/normal-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/normal-build.stdout",
+      "bytes": 6499,
+      "sha256": "b1f42d39a20d14831163790e1619c934cf4dc75f8f790bff96d7075dbbdafb82"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/normal-build.time",
+      "bytes": 758,
+      "sha256": "0f82be338ba903c151321266deea5def89366cfa88f7125d5c7c07a25ec20896"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/preflight.json",
+      "bytes": 781,
+      "sha256": "a6672367896d6ee442beb7e1e5d5c5bef5f2d9f61223eecaba4307ff684ea14b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/run.py",
+      "bytes": 3494,
+      "sha256": "d44fcabbe8a2d1eb8ee37708b3eb720df8384cc2f7a5250abf73d76849ca13ae"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/source-manifest.json",
+      "bytes": 20523,
+      "sha256": "4ae3e61497683a1ab539bdddd38bf1cbc0e03a4400d3417f4c3ab25cb03472bf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/source-unit.json",
+      "bytes": 1225,
+      "sha256": "f3be12e8d03e3e556b5ce839a45fa6f58a94d245c1d89b9f287ee9d53a7029c8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/source-unit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/source-unit.stdout",
+      "bytes": 39079,
+      "sha256": "a2b6128ffb323f9127753b59cf9e02d8d2ac780ae71e86589c14cd8e3b60679c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/source-unit.time",
+      "bytes": 1261,
+      "sha256": "876c0e287d0447ccd8a0740719bec6ac8ac81fdce01d7698204155534f4fa26b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/typecheck.json",
+      "bytes": 648,
+      "sha256": "549979aeecc67a3c1f982de02ae931f614b840beaab5e7ff59c681efeffa0d13"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T07-23-research-release-fixes-linux/typecheck.time",
+      "bytes": 758,
+      "sha256": "e7c8a3bc9e37812ec760af957e2f999d8ab2ec122361923749f2a2111703eb23"
+    }
+  ],
+  "rawTotalBytes": 520552,
+  "notExecuted": [
+    "Known browser-blocked full155-case PCR",
+    "Any browser install/download",
+    "Actual model author/reviewer or strategy adoption",
+    "Production install/peer/connect/deploy"
+  ],
+  "authority": {
+    "boundedEngineeringPass": true,
+    "independentFullCodeReview": false,
+    "protectedPassed": false,
+    "productionInstalled": false,
+    "researchQualified": false,
+    "strategyApproved": false,
+    "entryEligible": false,
+    "actualModelsDispatched": false
+  },
+  "historicalEvidence": "Prior exact1a acceptance, original empty schema/auth RED, browser missing and officialCDN403 RED remain on their prior branches unchanged."
+}
