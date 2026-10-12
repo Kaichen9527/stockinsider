@@ -1,0 +1,98 @@
+{
+  "kind": "read-only-exact-git-financial-bound-audit",
+  "recorded_at": "2026-10-12T05:59:14Z",
+  "main": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+  "main_tree": "31b29c0a0bb065341a7ecc22245b215248d60282",
+  "pending": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "no_tests_build_db_http_crawl_cleanup": true,
+  "application_sql_permission_changes": false,
+  "new_live_status_obtained": false,
+  "production_1723_event": "user/root supplied; not independently found in the exact financial receipts searched; no production query",
+  "base48_same_bytes": true,
+  "review_claim": "audit, not independent release approval or production fulfillment",
+  "report": {
+    "path": "docs/operations/2026-10-12/financial-bound-minimal-audit.md",
+    "bytes": 9365,
+    "sha256": "1d222f0fdb6951750c25560529ef1811595bc2299c420a1b0608ec618021d9b2"
+  },
+  "raw_files": [
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/base-chain.json",
+      "bytes": 17033,
+      "sha256": "f869adf18c7ced6ef1f47ac0527c33d0e1dcaaf14fc31cc8dd7cb5030fda9548"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/main-fact-read-window.txt",
+      "bytes": 2180,
+      "sha256": "2d8167bc4a40b5676aa2e74da89ca1ea2b30e33f8926f4c187602c6642b23fea"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/main-series-trigger.txt",
+      "bytes": 2098,
+      "sha256": "6660b3a3e858109068f09f560b5a7ede8a49bb9961982c4448aa58ec87d2999e"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/pending-financial-amendment.txt",
+      "bytes": 12731,
+      "sha256": "90b9a6d8ed071091e550bc392bf9b70252fc7694b5bd408eb5e3c3cbe9aa4967"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/pending-financial-native-cases.txt",
+      "bytes": 9642,
+      "sha256": "ed2956aad0b1887e5ecb80fe31741b747a3361ed3033dfccb39f2bca73b34164"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/read-0.command.json",
+      "bytes": 1536,
+      "sha256": "f352c639a35929e40c727d82c250dea200b5bca72ed76576ed79081bbb0ccd69"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/read-0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/read-0.stdout",
+      "bytes": 1249,
+      "sha256": "95a5f0a9663fa95626c388032b9dc70ac26b8922e1428bfe910740eae5645ab9"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/read-1.command.json",
+      "bytes": 213,
+      "sha256": "46e33fee05aa6420d11275521f51af6adbd12e048e77385564cee138080ed932"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/read-1.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/read-1.stdout",
+      "bytes": 4715,
+      "sha256": "c847352c5bf9be09bebe51bcf00851d9a4971773fad005a099d966a1c9756b93"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/read-2.command.json",
+      "bytes": 175,
+      "sha256": "ee97d8397051903164b3a8bea70589fa1aa28037cc21276f6bcd8d6aab166a5b"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/read-2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/read-2.stdout",
+      "bytes": 1437,
+      "sha256": "3276a7522455c8b2419588acc06c2394e41c818fb9dc3509247b6c7669534d37"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T05-52-financial-bound-minimal-audit/source-manifest.json",
+      "bytes": 10843,
+      "sha256": "a68dada5b32ca025b597518bf2214296424341d3f9f96d94b123f0f1ca7414b3"
+    }
+  ],
+  "workspace_free_bytes": 8836263936,
+  "tmp_free_bytes": 16942010368,
+  "own_heavy_services_started": 0
+}

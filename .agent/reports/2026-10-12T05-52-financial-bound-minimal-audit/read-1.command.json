@@ -1,0 +1,11 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "--",
+    "scripts/opportunity-v3/migration-plan.mjs"
+  ],
+  "exit": 0
+}

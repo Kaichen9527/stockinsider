@@ -1,0 +1,33 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--stat",
+    "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "--",
+    "migrations/20261005_financial_history_admission_v1.sql",
+    "migrations/20260809_decision_integrity_v3_13.sql",
+    "migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql",
+    "scripts/opportunity-v3/migration-contract.test.mjs",
+    "scripts/opportunity-v3/migration-plan.mjs",
+    "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "scripts/opportunity-v3/atomic-migration-chain.mjs",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "scripts/opportunity-v3/migration-successor-guard.mjs",
+    "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+    "scripts/opportunity-v3/migration-sql-policy.mjs",
+    "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+    "migrations/20261005_release_function_ownership_bridge_v1.sql",
+    "scripts/opportunity-v3/fixtures/publication-install-README.md",
+    "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+    "docs/operations/2026-10-05/financial-history-independent-review.json",
+    "docs/operations/2026-10-05/financial-history-local-acceptance.md",
+    "docs/financial-series-bound-repair-proposal.md",
+    "openspec/changes/financial-history-admission-v1/spec.md",
+    "openspec/changes/financial-history-admission-v1/tasks.md",
+    "web/src/lib/opportunity-v3/request-values.ts",
+    "scripts/runtime/official-mops-v314.js"
+  ],
+  "exit": 0
+}

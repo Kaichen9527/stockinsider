@@ -1,0 +1,19 @@
+ docs/financial-series-bound-repair-proposal.md     |  27 +++
+ .../financial-history-independent-review.json      |  25 +++
+ .../financial-history-local-acceptance.md          |  50 +++++
+ .../20261005_financial_history_admission_v1.sql    | 169 +++++++++++++++++
+ ...261005_release_function_ownership_bridge_v1.sql |  78 ++++++++
+ .../changes/financial-history-admission-v1/spec.md |  44 +++++
+ .../financial-history-admission-v1/tasks.md        |  16 ++
+ .../opportunity-v3/apply-reviewed-migrations.mjs   | 184 ++++++++++++++++---
+ scripts/opportunity-v3/atomic-migration-chain.mjs  |  61 +++++++
+ .../opportunity-v3/atomic-migration-chain.test.mjs |  27 +++
+ .../fixtures/publication-install-README.md         |  51 ++++++
+ scripts/opportunity-v3/migration-contract.test.mjs | 203 +++++++++++++++++++++
+ scripts/opportunity-v3/migration-plan.mjs          |  54 +++++-
+ scripts/opportunity-v3/migration-sql-policy.mjs    |  33 ++++
+ .../opportunity-v3/migration-sql-policy.test.mjs   |  49 +++++
+ .../opportunity-v3/migration-successor-guard.mjs   |  18 ++
+ .../migration-successor-guard.test.mjs             |  28 +++
+ .../research-publication-full-chain.test.mjs       | 124 +++++++++++++
+ 18 files changed, 1211 insertions(+), 30 deletions(-)

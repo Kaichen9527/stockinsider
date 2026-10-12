@@ -1,0 +1,25 @@
+{
+  "kind": "unsigned_independent_code_scope_review",
+  "sourceCommit": "6899996a8e3006425bf5bc54777b90e6b0c51cc3",
+  "sourceTree": "3bd0fa403d224fa9ff2d35457cb5da1bc758414e",
+  "baseCommit": "3b448b44674dd681b41c03f6c6fdd4af8d87167e",
+  "reviewer": "astra_recovery_oct04",
+  "disposition": "approve",
+  "blockersRemainingInReviewedScope": 0,
+  "closedFindings": ["base-only replay overwrites installed successor", "partial extension commit leaves predecessor controls"],
+  "independentChecks": {
+    "predecessorPgAndPlan": { "passed": 83, "failed": 0, "skipped": 0 },
+    "scannerGuardPlan": { "passed": 6, "failed": 0, "skipped": 0 },
+    "focusedPg": { "passed": 2, "failed": 0, "skipped": 0 },
+    "additionalProbes": ["successful atomic predecessor and amendment replay", "required NULL input rejection", "private wrapper and revoked schema CREATE"]
+  },
+  "syntheticCostProbe": {
+    "facts": 10000, "periods": 200, "revisionsPerPeriod": 50,
+    "historyIndexBytes": 786432, "periodIndexBytes": 122880, "tableBytes": 1744896,
+    "warmFullRangePage129Ms": 0.086, "fullRangeSharedHits": 6,
+    "warmNarrowRangeMs": 0.208, "narrowRangeSharedHits": 66
+  },
+  "limitations": ["warm synthetic cost probe is not production capacity evidence", "complete production prerequisite schema has not yet been rehearsed", "not production migration acceptance"],
+  "protectedGatePassed": false,
+  "productionApplyAuthorizedByThisRecord": false
+}

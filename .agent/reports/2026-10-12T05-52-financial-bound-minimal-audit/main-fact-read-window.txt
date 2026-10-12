@@ -1,0 +1,26 @@
+17566:           ORDER BY selected.period_end DESC,selected.period_start DESC NULLS LAST,selected.duration_kind) identity_rank
+17567:         FROM public.opportunity_financial_facts_v3 selected
+17568:         WHERE selected.stock_id=candidate.stock_id::uuid AND selected.recorded_at<=p_source_cutoff
+17569:           AND selected.filing_published_at<=p_source_cutoff AND selected.source_timestamp<=p_source_cutoff
+17570:           AND selected.collected_at<=p_source_cutoff AND selected.period_end<=p_source_cutoff::date
+17571:       ) bounded
+17572:       WHERE bounded.identity_rank<=CASE
+17573:         WHEN bounded.fact_key='monthly_revenue' THEN 18
+17574:         WHEN bounded.fact_key IN('pe_multiple','pb_multiple','ev_ebitda_multiple','ev_sales_multiple') THEN 20
+17575:         WHEN bounded.fact_key='book_value_per_share' THEN 9
+17576:         WHEN bounded.fact_key IN('invested_capital','total_assets') THEN 2
+17577:         WHEN bounded.fact_key IN('quarterly_revenue','quarterly_gross_profit','quarterly_operating_expense',
+17578:           'quarterly_operating_income','quarterly_non_operating_income','quarterly_pretax_income',
+17579:           'quarterly_income_tax_expense','quarterly_noncontrolling_interest','quarterly_net_income',
+17580:           'quarterly_net_income_attributable_to_common','quarterly_diluted_eps','quarterly_ebitda',
+17581:           'depreciation_amortization','operating_cash_flow','capital_expenditure','interest_expense') THEN 12
+17582:         ELSE 1 END
+17583:       ORDER BY bounded.fact_key,bounded.period_end DESC,bounded.filing_published_at DESC,
+17584:         bounded.source_timestamp DESC,bounded.collected_at DESC,bounded.recorded_at DESC,
+17585:         bounded.filing_restatement_id DESC NULLS LAST,bounded.source_ref,bounded.fact_id
+17586:     ) fact ON candidate.deep_selected
+17587:   ), selected_prices AS MATERIALIZED (
+17588:     SELECT candidate.ordinal,candidate.symbol,selected.observation_id,selected.session_id,selected.volume,
+17589:       max(selected.session_id) OVER (PARTITION BY candidate.stock_id) AS anchor_session
+17590:     FROM candidates candidate JOIN LATERAL (
+17591:       SELECT bounded.* FROM (

@@ -1,0 +1,280 @@
+[
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "migrations/20261005_financial_history_admission_v1.sql",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "migrations/20261005_financial_history_admission_v1.sql",
+    "bytes": 11994,
+    "sha256": "5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27",
+    "blob": "766f37241820e10c12806d407fa9eb99d3cf654c"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "migrations/20260809_decision_integrity_v3_13.sql",
+    "bytes": 179700,
+    "sha256": "5e843da1049bc2f075d5f8bf901095b3047c42215fc87ada01a1a984d240f95b",
+    "blob": "f95598869db4d935cffb9d835fbcdce3787e090a"
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "migrations/20260809_decision_integrity_v3_13.sql",
+    "bytes": 179700,
+    "sha256": "5e843da1049bc2f075d5f8bf901095b3047c42215fc87ada01a1a984d240f95b",
+    "blob": "f95598869db4d935cffb9d835fbcdce3787e090a"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql",
+    "bytes": 4941,
+    "sha256": "81d6bd393bee34985e7386aee309ec9eec33e87e280b64af3428719a2a280441",
+    "blob": "035ab030d72189578d2d303f18cac3fda2e6d2fe"
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql",
+    "bytes": 4941,
+    "sha256": "81d6bd393bee34985e7386aee309ec9eec33e87e280b64af3428719a2a280441",
+    "blob": "035ab030d72189578d2d303f18cac3fda2e6d2fe"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/migration-contract.test.mjs",
+    "bytes": 504668,
+    "sha256": "063e0771311048d973896efcb7176f51e071e4514dc926e8f673ce37fcd8f30a",
+    "blob": "61b1a349666dbaf9e80732bc660a2c8b8bf8192d"
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/migration-contract.test.mjs",
+    "bytes": 519144,
+    "sha256": "9942c1f31c0ca61a6715fb04bc2af69c17828629fbcf4f7df5ba388d8a8cb105",
+    "blob": "ca07382c748cb687925eacd54c252001c814765d"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/migration-plan.mjs",
+    "bytes": 4880,
+    "sha256": "ecb58eed30e4c247f4a362c397c8e932cf0ea7ec79b5e279714e2a1c946b622e",
+    "blob": "bb8309d0fad31f77205a8cc9739c285b3e131921"
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/migration-plan.mjs",
+    "bytes": 7678,
+    "sha256": "e167f9abe09687041e8555eede04aee5939f391ca59bcbb8df52a6fc281fb51b",
+    "blob": "ae581d409dabe74218ec3d0d41f7b7c97881f8ec"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "bytes": 33975,
+    "sha256": "90b9c6fd6ba1f68b8a378759d0608e6e6aea38a11b2eeab700f8cfaaf2eca78a",
+    "blob": "66291dc2c67eca0bd5f15f2ac61769095b0e42a4"
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "bytes": 44295,
+    "sha256": "213755c2b0b23b2ec12ad2ccba4981b4cd631167015ca053b9ba1ab8daf4bc5f",
+    "blob": "7ea31dccdf88240e420e1ff0e70e1ffebd1258f8"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/atomic-migration-chain.mjs",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/atomic-migration-chain.mjs",
+    "bytes": 2888,
+    "sha256": "7c1dfdcb6e670f91f320a54d1dbd683d14c2506944410b80f010826e723898c7",
+    "blob": "b21fcfff0590bcb31ccf9491e0a1db820fb311bf"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "bytes": 2066,
+    "sha256": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466",
+    "blob": "6ad4e15dd0d20194307b3d7bb257cb3f0609b837"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/migration-successor-guard.mjs",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/migration-successor-guard.mjs",
+    "bytes": 1328,
+    "sha256": "e9e79246aae764802650ddaef3c662b9502beb4f4436b5b8534fdbc69ed0e3ac",
+    "blob": "5cbb400613ec1bf33c5d30bd7ddaa34245814e07"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/migration-successor-guard.test.mjs",
+    "bytes": 1997,
+    "sha256": "20c4c6ae74794bfa31141658662dc79a468b11cc0642ec111945dfed2a39b5f8",
+    "blob": "7028f642bc5ec98ef34e9a7be1366c64147c2d5f"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/migration-sql-policy.mjs",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/migration-sql-policy.mjs",
+    "bytes": 2477,
+    "sha256": "054c982f02379d8d57b10fcddaf0c211b7019f08e8820e9e63adb7f3a3a75a7b",
+    "blob": "c02052d7e40bd90cd9fad68d5ffcc80a4b81cb21"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/migration-sql-policy.test.mjs",
+    "bytes": 2785,
+    "sha256": "682406d940425ecaf2f47685f60ddaaf4caaf9deaad5216d990307dac3198620",
+    "blob": "020ef52bab4c0f97b19542792a0ab8e85a42b263"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "migrations/20261005_release_function_ownership_bridge_v1.sql",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "migrations/20261005_release_function_ownership_bridge_v1.sql",
+    "bytes": 5282,
+    "sha256": "d86fb28d4b23b95b1b1c97d9eedf418f8162610171e72dccc9b5a88f1fada747",
+    "blob": "b9b529144e0dacf792d64703677f2c2cb2284013"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/fixtures/publication-install-README.md",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/fixtures/publication-install-README.md",
+    "bytes": 3034,
+    "sha256": "51cb32fb8fe8e40a7fd0d27c4605156140732a03c708bcefc675217659ee37c7",
+    "blob": "fbe2dc230d1ca6cad9ce11f726a8d1c06f1f3966"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/research-publication-full-chain.test.mjs",
+    "bytes": 9233,
+    "sha256": "6060ea7eb5853d84b9a6cd57b7697e1491c404cf3338f6f66a145d23c33da04d",
+    "blob": "29ce623d37675e14a6f0bfbe2db9b1061bef124f"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "docs/operations/2026-10-05/financial-history-independent-review.json",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "docs/operations/2026-10-05/financial-history-independent-review.json",
+    "bytes": 1437,
+    "sha256": "3276a7522455c8b2419588acc06c2394e41c818fb9dc3509247b6c7669534d37",
+    "blob": "1318001c5bfff6de52b34aad6575e34663d65cec"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "docs/operations/2026-10-05/financial-history-local-acceptance.md",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "docs/operations/2026-10-05/financial-history-local-acceptance.md",
+    "bytes": 3264,
+    "sha256": "c21797dbf0f3a6fc323eb3d36360b8aae9d4ad60ec614c7106ddbb3645d9c112",
+    "blob": "f6c51ab91db5a3cc8c4b3a0d700f65853c3ed281"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "docs/financial-series-bound-repair-proposal.md",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "docs/financial-series-bound-repair-proposal.md",
+    "bytes": 3056,
+    "sha256": "b82a1d8b22844e9d116b6bedfb723ce5429493c414c21d0ec12d930cb2f93461",
+    "blob": "d0401de48640a6f1a824d0ca13f3aa5c968a29f1"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "openspec/changes/financial-history-admission-v1/spec.md",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "openspec/changes/financial-history-admission-v1/spec.md",
+    "bytes": 2911,
+    "sha256": "e3225dffc566db4be2e38d0e22b8b702ae99fd93090d41d23e4cf7c15c542103",
+    "blob": "d9d43be245ab8c5089b0188562a73c8915ae6910"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "openspec/changes/financial-history-admission-v1/tasks.md",
+    "absent": true
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "openspec/changes/financial-history-admission-v1/tasks.md",
+    "bytes": 1057,
+    "sha256": "cef21bccb3084f0a82ff61c047a2b1de3e22a577993ca6f4e8b829eb85c8e62a",
+    "blob": "39d9994721a502712ba6e4196aa24d1f1823470d"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "web/src/lib/opportunity-v3/request-values.ts",
+    "bytes": 30647,
+    "sha256": "202e386c531f1f5509995c96ad2f2e2524e63261996d5123f7ec11d697053487",
+    "blob": "975c6482024974a33aa80d5a7b314a2472c4d885"
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "web/src/lib/opportunity-v3/request-values.ts",
+    "bytes": 30647,
+    "sha256": "202e386c531f1f5509995c96ad2f2e2524e63261996d5123f7ec11d697053487",
+    "blob": "975c6482024974a33aa80d5a7b314a2472c4d885"
+  },
+  {
+    "commit": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+    "path": "scripts/runtime/official-mops-v314.js",
+    "bytes": 14058,
+    "sha256": "9b154a6fc245b976507640aaea9b113c4396ac003a89483ef73b42c2eaaadb3c",
+    "blob": "059dddce59b875af2dc257870abfcbbc24936af2"
+  },
+  {
+    "commit": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/runtime/official-mops-v314.js",
+    "bytes": 14058,
+    "sha256": "9b154a6fc245b976507640aaea9b113c4396ac003a89483ef73b42c2eaaadb3c",
+    "blob": "059dddce59b875af2dc257870abfcbbc24936af2"
+  }
+]

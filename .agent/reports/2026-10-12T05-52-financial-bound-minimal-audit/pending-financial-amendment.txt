@@ -1,0 +1,169 @@
+1: -- Approved historical-storage/read-window separation. No facts are deleted,
+2: -- retimed or merged by URL. Existing disclosure identity and RPC validation stay
+3: -- intact; the 128-revision safety bound applies to ONE economic period.
+4: BEGIN;
+5: GRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;
+6: 
+7: CREATE INDEX IF NOT EXISTS opportunity_financial_facts_v3_history_page_v1
+8:   ON public.opportunity_financial_facts_v3(stock_id,fact_key,duration_kind,
+9:     estimate_kind,estimate_horizon,recorded_at,fact_id);
+10: CREATE INDEX IF NOT EXISTS opportunity_financial_facts_v3_period_revisions_v1
+11:   ON public.opportunity_financial_facts_v3(stock_id,fact_key,duration_kind,
+12:     estimate_kind,estimate_horizon,period_end,period_start);
+13: 
+14: CREATE OR REPLACE FUNCTION public.prepare_opportunity_financial_fact_series_v3()
+15: RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
+16: DECLARE v_count integer;
+17: BEGIN
+18:   -- Preserve the existing series serialization and deferred registry checks.
+19:   PERFORM pg_advisory_xact_lock(hashtextextended(concat_ws('|','financial_fact_series',NEW.stock_id,
+20:     NEW.fact_key,NEW.duration_kind,NEW.estimate_kind,NEW.estimate_horizon),0));
+21:   INSERT INTO public.opportunity_financial_fact_series_registry_v3(stock_id,fact_key,duration_kind,
+22:     estimate_kind,estimate_horizon)
+23:   VALUES(NEW.stock_id,NEW.fact_key,NEW.duration_kind,NEW.estimate_kind,NEW.estimate_horizon)
+24:   ON CONFLICT(stock_id,fact_key,duration_kind,estimate_kind,estimate_horizon) DO NOTHING;
+25:   PERFORM 1 FROM public.opportunity_financial_fact_series_registry_v3 registry
+26:   WHERE registry.stock_id=NEW.stock_id AND registry.fact_key=NEW.fact_key
+27:     AND registry.duration_kind=NEW.duration_kind AND registry.estimate_kind=NEW.estimate_kind
+28:     AND registry.estimate_horizon=NEW.estimate_horizon FOR UPDATE;
+29: 
+30:   -- Collection is an observation, not a disclosure revision. Publication and
+31:   -- source timestamps remain in identity: an undated fallback is NOT backdated
+32:   -- or merged with an earlier observation simply because its URL/value match.
+33:   SELECT count(*) INTO v_count FROM (
+34:     SELECT fact.value,fact.unit,fact.provider,fact.authority_tier,
+35:       fact.filing_published_at,fact.source_timestamp,fact.filing_restatement_id,fact.source_ref
+36:     FROM public.opportunity_financial_facts_v3 fact
+37:     WHERE fact.stock_id=NEW.stock_id AND fact.fact_key=NEW.fact_key
+38:       AND fact.duration_kind=NEW.duration_kind AND fact.estimate_kind=NEW.estimate_kind
+39:       AND fact.estimate_horizon=NEW.estimate_horizon
+40:       AND fact.period_end=NEW.period_end AND fact.period_start IS NOT DISTINCT FROM NEW.period_start
+41:     UNION
+42:     SELECT NEW.value,NEW.unit,NEW.provider,NEW.authority_tier,
+43:       NEW.filing_published_at,NEW.source_timestamp,NEW.filing_restatement_id,NEW.source_ref
+44:     LIMIT 129
+45:   ) revisions;
+46:   IF v_count>128 THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='financial_period_revision_bound';END IF;
+47:   RETURN NEW;
+48: END $function$;
+49: ALTER FUNCTION public.prepare_opportunity_financial_fact_series_v3() OWNER TO opportunity_v3_rpc_owner;
+50: REVOKE ALL ON FUNCTION public.prepare_opportunity_financial_fact_series_v3() FROM PUBLIC,anon,authenticated,service_role;
+51: 
+52: CREATE TABLE IF NOT EXISTS public.opportunity_financial_observations_v1 (
+53:   observation_id uuid PRIMARY KEY DEFAULT extensions.gen_random_uuid(),
+54:   fact_id uuid NOT NULL REFERENCES public.opportunity_financial_facts_v3(fact_id) ON DELETE RESTRICT,
+55:   input_hash text NOT NULL CHECK(input_hash ~ '^[0-9a-f]{64}$'),
+56:   observation_kind text NOT NULL CHECK(observation_kind IN ('legacy_fact','rpc_observation')),
+57:   caller_principal_id uuid,
+58:   filing_published_at timestamptz NOT NULL,
+59:   source_timestamp timestamptz NOT NULL,
+60:   collected_at timestamptz NOT NULL,
+61:   recorded_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+62:   CONSTRAINT financial_observation_identity_v1 UNIQUE(fact_id,input_hash),
+63:   CHECK(filing_published_at<=source_timestamp AND source_timestamp<=collected_at AND collected_at<=recorded_at),
+64:   CHECK((observation_kind='legacy_fact' AND caller_principal_id IS NULL)
+65:     OR (observation_kind='rpc_observation' AND caller_principal_id IS NOT NULL))
+66: );
+67: -- Only timestamps already present in immutable legacy facts are backfilled.
+68: -- Historical audit hashes cannot reveal lost acquisition times; do not invent them.
+69: INSERT INTO public.opportunity_financial_observations_v1(fact_id,input_hash,observation_kind,
+70:   filing_published_at,source_timestamp,collected_at,recorded_at)
+71: SELECT fact_id,encode(extensions.digest(convert_to('legacy_fact:'||fact_id::text,'utf8'),'sha256'),'hex'),
+72:   'legacy_fact',filing_published_at,source_timestamp,collected_at,recorded_at
+73: FROM public.opportunity_financial_facts_v3
+74: ON CONFLICT(fact_id,input_hash) DO NOTHING;
+75: ALTER TABLE public.opportunity_financial_observations_v1 OWNER TO opportunity_v3_rpc_owner;
+76: ALTER TABLE public.opportunity_financial_observations_v1 ENABLE ROW LEVEL SECURITY;
+77: REVOKE ALL ON public.opportunity_financial_observations_v1 FROM PUBLIC,anon,authenticated,service_role;
+78: GRANT SELECT ON public.opportunity_financial_observations_v1 TO service_role;
+79: CREATE OR REPLACE TRIGGER opportunity_financial_observations_v1_immutable
+80:   BEFORE UPDATE OR DELETE ON public.opportunity_financial_observations_v1
+81:   FOR EACH ROW EXECUTE FUNCTION public.legacy_correctness_immutable_v3_11();
+82: 
+83: DO $preserve_append$
+84: BEGIN
+85:   IF to_regprocedure('public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid)') IS NULL THEN
+86:     IF to_regprocedure('public.append_financial_fact_pre_v3_16_16(public.financial_fact_input_v3,uuid)') IS NULL
+87:       THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='financial_history_predecessor_missing'; END IF;
+88:     ALTER FUNCTION public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)
+89:       RENAME TO append_financial_fact_pre_history_v1;
+90:   END IF;
+91: END $preserve_append$;
+92: CREATE OR REPLACE FUNCTION public.append_financial_fact_v3(input public.financial_fact_input_v3,caller_principal uuid)
+93: RETURNS TABLE(fact_id uuid,recorded_at timestamptz)
+94: LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
+95: DECLARE v_fact uuid;v_recorded timestamptz;v_hash text;
+96: BEGIN
+97:   -- The predecessor performs principal, disclosure, period and recollection
+98:   -- validation. Receipt and fact/audit are committed or rolled back together.
+99:   SELECT appended.fact_id,appended.recorded_at INTO STRICT v_fact,v_recorded
+100:   FROM public.append_financial_fact_pre_history_v1(input,caller_principal) appended;
+101:   v_hash:=encode(extensions.digest(convert_to(regexp_replace(jsonb_build_array(
+102:     (input).stock_id,(input).fact_key,(input).period_start,(input).period_end,(input).duration_kind,
+103:     (input).value,(input).unit,(input).provider,(input).authority_tier,(input).estimate_kind,
+104:     (input).estimate_horizon,(input).filing_published_at,(input).source_timestamp,
+105:     (input).collected_at,(input).filing_restatement_id,(input).source_ref
+106:   )::text,', ', ',', 'g'),'utf8'),'sha256'),'hex');
+107:   INSERT INTO public.opportunity_financial_observations_v1(fact_id,input_hash,observation_kind,
+108:     caller_principal_id,filing_published_at,source_timestamp,collected_at)
+109:   VALUES(v_fact,v_hash,'rpc_observation',caller_principal,(input).filing_published_at,
+110:     (input).source_timestamp,(input).collected_at)
+111:   ON CONFLICT ON CONSTRAINT financial_observation_identity_v1 DO NOTHING;
+112:   RETURN QUERY SELECT v_fact,v_recorded;
+113: END $function$;
+114: ALTER FUNCTION public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid) OWNER TO opportunity_v3_rpc_owner;
+115: ALTER FUNCTION public.append_financial_fact_v3(public.financial_fact_input_v3,uuid) OWNER TO opportunity_v3_rpc_owner;
+116: REVOKE ALL ON FUNCTION public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid)
+117:   FROM PUBLIC,anon,authenticated,service_role;
+118: REVOKE ALL ON FUNCTION public.append_financial_fact_v3(public.financial_fact_input_v3,uuid) FROM PUBLIC,anon,authenticated;
+119: GRANT EXECUTE ON FUNCTION public.append_financial_fact_v3(public.financial_fact_input_v3,uuid) TO service_role;
+120: 
+121: -- Keyset order is immutable recorded_at/fact_id, NOT a mutable latest-head
+122: -- ranking. A fixed cutoff and explicit sentinel preserve conflicts and revisions.
+123: CREATE OR REPLACE FUNCTION public.read_financial_history_page_v1(
+124:   p_stock uuid,p_fact_key public.financial_fact_key_v3,p_duration public.financial_duration_kind_v3,
+125:   p_kind public.financial_estimate_kind_v3,p_horizon public.financial_estimate_horizon_v3,
+126:   p_period_from date,p_period_to date,p_cutoff timestamptz,p_after uuid,p_limit integer,p_caller uuid
+127: ) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
+128: DECLARE v_after_recorded timestamptz;v_result jsonb;
+129: BEGIN
+130:   IF NOT public.internal_principal_role_is_exact_v3_internal(p_caller,'opportunity_runner',clock_timestamp())
+131:     THEN RAISE EXCEPTION USING ERRCODE='PT403',MESSAGE='principal_role_unavailable'; END IF;
+132:   IF p_stock IS NULL OR p_fact_key IS NULL OR p_duration IS NULL OR p_kind IS NULL OR p_horizon IS NULL
+133:     OR p_period_from IS NULL OR p_period_to IS NULL OR p_period_from>p_period_to
+134:     OR p_cutoff IS NULL OR p_cutoff>clock_timestamp() OR p_limit IS NULL OR p_limit NOT BETWEEN 1 AND 128
+135:     THEN RAISE EXCEPTION USING ERRCODE='PT422',MESSAGE='financial_history_page_invalid'; END IF;
+136:   IF p_after IS NOT NULL THEN
+137:     SELECT f.recorded_at INTO v_after_recorded FROM public.opportunity_financial_facts_v3 f
+138:     WHERE f.fact_id=p_after AND f.stock_id=p_stock AND f.fact_key=p_fact_key AND f.duration_kind=p_duration
+139:       AND f.estimate_kind=p_kind AND f.estimate_horizon=p_horizon AND f.period_end BETWEEN p_period_from AND p_period_to
+140:       AND f.recorded_at<=p_cutoff AND f.collected_at<=p_cutoff AND f.source_timestamp<=p_cutoff AND f.filing_published_at<=p_cutoff;
+141:     IF NOT FOUND THEN RAISE EXCEPTION USING ERRCODE='PT422',MESSAGE='financial_history_cursor_invalid'; END IF;
+142:   END IF;
+143:   WITH bounded AS MATERIALIZED (
+144:     SELECT f.* FROM public.opportunity_financial_facts_v3 f
+145:     WHERE f.stock_id=p_stock AND f.fact_key=p_fact_key AND f.duration_kind=p_duration
+146:       AND f.estimate_kind=p_kind AND f.estimate_horizon=p_horizon AND f.period_end BETWEEN p_period_from AND p_period_to
+147:       AND f.recorded_at<=p_cutoff AND f.collected_at<=p_cutoff AND f.source_timestamp<=p_cutoff AND f.filing_published_at<=p_cutoff
+148:       AND (p_after IS NULL OR (f.recorded_at,f.fact_id)>(v_after_recorded,p_after))
+149:     ORDER BY f.recorded_at,f.fact_id LIMIT p_limit+1
+150:   ), page AS (SELECT * FROM bounded ORDER BY recorded_at,fact_id LIMIT p_limit)
+151:   SELECT jsonb_build_object('schema','financial-history-page-v1','cutoff',p_cutoff,
+152:     'accounting_scope','legacy_unspecified','currency','derived_from_unit_not_independently_disclosed',
+153:     'rows',coalesce((SELECT jsonb_agg(to_jsonb(page) ORDER BY recorded_at,fact_id) FROM page),'[]'::jsonb),
+154:     'has_more',(SELECT count(*)>p_limit FROM bounded),
+155:     'next_cursor',CASE WHEN (SELECT count(*)>p_limit FROM bounded)
+156:       THEN (SELECT fact_id FROM page ORDER BY recorded_at DESC,fact_id DESC LIMIT 1) ELSE NULL END)
+157:   INTO v_result;
+158:   RETURN v_result;
+159: END $function$;
+160: ALTER FUNCTION public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,
+161:   public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid)
+162:   OWNER TO opportunity_v3_rpc_owner;
+163: REVOKE ALL ON FUNCTION public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,
+164:   public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid)
+165:   FROM PUBLIC,anon,authenticated;
+166: GRANT EXECUTE ON FUNCTION public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,
+167:   public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid) TO service_role;
+168: REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner;
+169: COMMIT;

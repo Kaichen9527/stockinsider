@@ -1,0 +1,121 @@
+8209: test('financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain', () => {
+8210:   // Apply twice in a rollback-only local transaction. Existing base acceptance,
+8211:   // including the old 128-series contract, remains unchanged on the base schema.
+8212:   const amendment = financialHistorySql.replace(/^BEGIN;|^COMMIT;/gmu, '');
+8213:   const result = JSON.parse(psql(`BEGIN; SET ROLE stockinsider_managed_migrator;
+8214:     ${amendment}
+8215:     ${amendment}
+8216:     RESET ROLE;
+8217:     INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
+8218:     VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,'active',repeat('8',64),clock_timestamp());
+8219:     INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-000000000081','9181');
+8220:     CREATE TEMP TABLE history_acceptance(value jsonb);
+8221:     DO $history$
+8222:     DECLARE i integer;v_start date;v_end date;v_input public.financial_fact_input_v3;
+8223:       v_original uuid;v_again uuid;v_cutoff timestamptz;v_page jsonb;v_next jsonb;
+8224:       v_bad_cursor boolean:=false;v_bad_size boolean:=false;v_unauthorized boolean:=false;v_bound boolean:=false;
+8225:     BEGIN
+8226:       FOR i IN 0..159 LOOP
+8227:         v_start:=(date '2010-01-01'+i*interval '1 month')::date;
+8228:         v_end:=(v_start+interval '1 month'-interval '1 day')::date;
+8229:         v_input:=ROW('71300000-0000-4000-8000-000000000081','monthly_revenue',v_start,v_end,'monthly',
+8230:           (100+i)::double precision,'TWD','twse','official_filing','reported','reported_period',
+8231:           v_end::timestamptz+interval '45 days',v_end::timestamptz+interval '45 days','2025-01-01'::timestamptz,
+8232:           NULL,'twse-openapi:history:'||i)::public.financial_fact_input_v3;
+8233:         SELECT fact_id INTO v_again FROM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8234:         IF i=0 THEN v_original:=v_again;END IF;
+8235:       END LOOP;
+8236:       -- Exact later collection resolves the same immutable ID and stores its
+8237:       -- actual timestamp; retrying the same input adds no duplicate receipt.
+8238:       v_input:=ROW('71300000-0000-4000-8000-000000000081','monthly_revenue','2010-01-01','2010-01-31','monthly',
+8239:         100,'TWD','twse','official_filing','reported','reported_period','2010-03-17','2010-03-17',
+8240:         '2025-02-01',NULL,'twse-openapi:history:0')::public.financial_fact_input_v3;
+8241:       SELECT fact_id INTO v_again FROM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8242:       IF v_again<>v_original THEN RAISE EXCEPTION 'recollection changed identity';END IF;
+8243:       PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8244:       v_cutoff:=clock_timestamp();
+8245:       PERFORM pg_sleep(0.002);
+8246:       -- A changed value, unit, restatement or provider remains another claim.
+8247:       v_input.value:=105;
+8248:       v_input.filing_restatement_id:='correction-1';
+8249:       v_input.filing_published_at:='2025-03-01';v_input.source_timestamp:='2025-03-01';v_input.collected_at:='2025-03-02';
+8250:       PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8251:       v_input.unit:='TWD_thousand';
+8252:       PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8253:       v_input.provider:='mops';
+8254:       PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8255:       v_page:=public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
+8256:         'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,NULL,128,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8257:       IF jsonb_array_length(v_page->'rows')<>128 OR (v_page->>'has_more')::boolean IS NOT TRUE
+8258:         THEN RAISE EXCEPTION 'first page lost sentinel';END IF;
+8259:       v_next:=public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
+8260:         'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,(v_page->>'next_cursor')::uuid,128,
+8261:         'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8262:       IF jsonb_array_length(v_next->'rows')<>32 OR (v_next->>'has_more')::boolean IS NOT FALSE
+8263:         OR v_next->>'next_cursor' IS NOT NULL THEN RAISE EXCEPTION 'cutoff or page coverage';END IF;
+8264:       IF (SELECT count(DISTINCT value->>'fact_id') FROM jsonb_array_elements((v_page->'rows')||(v_next->'rows')))<>160
+8265:         THEN RAISE EXCEPTION 'duplicate or lost page rows';END IF;
+8266:       BEGIN
+8267:         PERFORM public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
+8268:           'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,extensions.gen_random_uuid(),128,
+8269:           'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8270:       EXCEPTION WHEN SQLSTATE 'PT422' THEN v_bad_cursor:=true;END;
+8271:       BEGIN
+8272:         PERFORM public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
+8273:           'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,NULL,129,
+8274:           'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8275:       EXCEPTION WHEN SQLSTATE 'PT422' THEN v_bad_size:=true;END;
+8276:       BEGIN
+8277:         PERFORM public.append_financial_fact_v3(v_input,extensions.gen_random_uuid());
+8278:       EXCEPTION WHEN SQLSTATE 'PT403' THEN v_unauthorized:=true;END;
+8279:       -- Same-period correction storms remain bounded; other periods are unaffected.
+8280:       FOR i IN 1..124 LOOP
+8281:         v_input.value:=1000+i;
+8282:         PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8283:       END LOOP;
+8284:       BEGIN
+8285:         v_input.value:=9999;
+8286:         PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+8287:       EXCEPTION WHEN SQLSTATE 'PT409' THEN v_bound:=true;END;
+8288:       INSERT INTO history_acceptance SELECT jsonb_build_object('originalRetained',
+8289:         EXISTS(SELECT 1 FROM public.opportunity_financial_facts_v3 WHERE fact_id=v_original AND value=100),
+8290:         'facts',(SELECT count(*) FROM public.opportunity_financial_facts_v3 WHERE stock_id=v_input.stock_id),
+8291:         'observations',(SELECT count(*) FROM public.opportunity_financial_observations_v1 o
+8292:           JOIN public.opportunity_financial_facts_v3 f USING(fact_id) WHERE f.stock_id=v_input.stock_id),
+8293:         'cutoffCoverage',jsonb_array_length(v_page->'rows')+jsonb_array_length(v_next->'rows'),
+8294:         'scope',v_page->>'accounting_scope','cursorRejected',v_bad_cursor,'sizeRejected',v_bad_size,
+8295:         'unauthorizedRejected',v_unauthorized,'periodBound',v_bound,
+8296:         'noServiceInsert',NOT has_table_privilege('service_role','public.opportunity_financial_observations_v1','INSERT'),
+8297:         'privatePredecessor',NOT has_function_privilege('service_role',
+8298:           'public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid)','EXECUTE'),
+8299:         'noOwnerCreate',NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE'));
+8300:     END $history$;
+8301:     SELECT value::text FROM history_acceptance; ROLLBACK;`, ['-At']).trim().split('\n').find((line) => line.startsWith('{')));
+8302:   assert.deepEqual(result, { originalRetained: true, facts: 287, observations: 288,
+8303:     cutoffCoverage: 160, scope: 'legacy_unspecified', cursorRejected: true,
+8304:     sizeRejected: true, unauthorizedRejected: true, periodBound: true,
+8305:     noServiceInsert: true, privatePredecessor: true, noOwnerCreate: true });
+8306:   assert.doesNotMatch(financialHistorySql, /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+8307: });
+8308: 
+8309: test('financial atomic replay rollback retains installed successor after predecessor replacement and forced failure', () => {
+8310:   psql(`SET ROLE stockinsider_managed_migrator; ${financialHistorySql}`);
+8311:   const probe = () => JSON.parse(psql(`SELECT jsonb_build_object(
+8312:     'periodBound',position('financial_period_revision_bound' IN pg_get_functiondef(
+8313:       'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0,
+8314:     'observationWrapper',position('opportunity_financial_observations_v1' IN pg_get_functiondef(
+8315:       'public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure))>0)::text;`, ['-At']).trim());
+8316:   assert.deepEqual(probe(), { periodBound: true, observationWrapper: true });
+8317:   const error = rejectedSql(`BEGIN; SET ROLE stockinsider_managed_migrator;
+8318:     ${migrationBodyInAtomicTransaction(decisionIntegritySql)}
+8319:     ${migrationBodyInAtomicTransaction(financialFactRecollectionSql)}
+8320:     DO $forced$
+8321:     BEGIN
+8322:       IF position('financial_period_revision_bound' IN pg_get_functiondef(
+8323:         'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0
+8324:         THEN RAISE EXCEPTION 'predecessor_not_replaced'; END IF;
+8325:       RAISE EXCEPTION 'forced_extension_failure';
+8326:     END $forced$;`);
+8327:   assert.match(error, /forced_extension_failure/u);
+8328:   assert.deepEqual(probe(), { periodBound: true, observationWrapper: true });
+8329: });

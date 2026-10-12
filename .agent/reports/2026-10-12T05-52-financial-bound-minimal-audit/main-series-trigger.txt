@@ -1,0 +1,31 @@
+570: CREATE OR REPLACE FUNCTION public.prepare_opportunity_financial_fact_series_v3()
+571: RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
+572: DECLARE v_count integer;
+573: BEGIN
+574:   PERFORM pg_advisory_xact_lock(hashtextextended(concat_ws('|','financial_fact_series',NEW.stock_id,
+575:     NEW.fact_key,NEW.duration_kind,NEW.estimate_kind,NEW.estimate_horizon),0));
+576:   INSERT INTO public.opportunity_financial_fact_series_registry_v3(stock_id,fact_key,duration_kind,
+577:     estimate_kind,estimate_horizon)
+578:   VALUES(NEW.stock_id,NEW.fact_key,NEW.duration_kind,NEW.estimate_kind,NEW.estimate_horizon)
+579:   ON CONFLICT(stock_id,fact_key,duration_kind,estimate_kind,estimate_horizon) DO NOTHING;
+580:   PERFORM 1 FROM public.opportunity_financial_fact_series_registry_v3 registry
+581:   WHERE registry.stock_id=NEW.stock_id AND registry.fact_key=NEW.fact_key
+582:     AND registry.duration_kind=NEW.duration_kind AND registry.estimate_kind=NEW.estimate_kind
+583:     AND registry.estimate_horizon=NEW.estimate_horizon FOR UPDATE;
+584:   SELECT count(*) INTO v_count FROM(
+585:     SELECT 1 FROM public.opportunity_financial_facts_v3 fact
+586:     WHERE fact.stock_id=NEW.stock_id AND fact.fact_key=NEW.fact_key
+587:       AND fact.duration_kind=NEW.duration_kind AND fact.estimate_kind=NEW.estimate_kind
+588:       AND fact.estimate_horizon=NEW.estimate_horizon
+589:     ORDER BY fact.period_end DESC,fact.filing_published_at DESC,fact.source_timestamp DESC,
+590:       fact.collected_at DESC,fact.recorded_at DESC,fact.fact_id LIMIT 129
+591:   ) bounded;
+592:   IF v_count>=128 THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='bound_violation';END IF;
+593:   RETURN NEW;
+594: END $function$;
+595: 
+596: CREATE OR REPLACE FUNCTION public.validate_opportunity_financial_fact_series_v3()
+597: RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
+598: BEGIN
+599:   IF TG_TABLE_NAME='opportunity_financial_facts_v3' THEN
+600:     IF NOT EXISTS(SELECT 1 FROM public.opportunity_financial_fact_series_registry_v3 registry

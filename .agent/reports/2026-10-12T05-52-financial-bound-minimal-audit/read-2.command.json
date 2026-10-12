@@ -1,0 +1,8 @@
+{
+  "command": [
+    "git",
+    "show",
+    "2e078dfdd74272d3d50dffdd4cc6c14df3152c78:docs/operations/2026-10-05/financial-history-independent-review.json"
+  ],
+  "exit": 0
+}
