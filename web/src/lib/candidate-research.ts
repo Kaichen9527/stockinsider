@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from 'crypto';
+import { adaptLegacyDiscoveryEvidence } from './live-discovery-evidence-adapter';
 import auoPbHistory from '../data/auo-pb-history-v1.json' with { type: 'json' };
 import { dailyCandidatePrices, monthlyCandidatePrices, isOfficialCandidatePriceSource, isOfficialCandidatePriceProvider } from './candidate-price-history';
 import { candidateRevisionHref } from './candidate-revision-query';
@@ -2099,7 +2100,7 @@ export async function loadCandidateStageCards(options: { sourceCutoff?: string }
   const sourceCutoff = options.sourceCutoff || new Date().toISOString();
   if (!Number.isFinite(Date.parse(sourceCutoff))) throw new Error('candidate_publication_source_cutoff_invalid');
   const cutoff = new Date(Date.parse(sourceCutoff) - 7 * 86_400_000).toISOString();
-  const mentionSelect = 'stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,provenance,stocks(id,symbol,name,market,sector)';
+  const mentionSelect = 'id,stock_id,source_document_id,as_of,created_at,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,provenance,stocks(id,symbol,name,market,sector)';
   const latest = (rows: Row[]) => {
     const selected = new Map<string, Row>();
     for (const row of rows) {
@@ -2129,6 +2130,12 @@ export async function loadCandidateStageCards(options: { sourceCutoff?: string }
     }, { pageSize: 750, maxRows: 100000, requireComplete: true }),
   ]);
   const recentMentions = mentionRows.filter((row) => candidateMentionDiscoveryEligible(row.provenance, String(row.platform || '')));
+  const discoveryRowsByStock = new Map<string, Row[]>();
+  for (const row of mentionRows) {
+    const key = String(row.stock_id || '');
+    const rows = discoveryRowsByStock.get(key) || [];
+    rows.push(row); discoveryRowsByStock.set(key, rows);
+  }
   const recentStockIds = [...new Set(recentMentions.map((row) => String(row.stock_id || '')).filter(Boolean))];
   const stageByStock = latest(stageRows);
   const persistedStockIds = [...stageByStock.entries()].filter(([, stage]) => ['waiting', 'actionable'].includes(String(stage.lifecycle_stage))).map(([stockId]) => stockId);
@@ -2175,6 +2182,12 @@ export async function loadCandidateStageCards(options: { sourceCutoff?: string }
     const stage = stageByStock.get(stockId);
     const stock = rowRelation(stockMentions[0]?.stocks) || rowRelation(stage?.stocks);
     if (!stock) continue;
+    // Audit the unfiltered complete window before display dedup/8-link slicing.
+    // Historical limit5000 rows are not passed off as a complete current cohort.
+    const discoveryEvidenceAudit = /^\d{4}$/u.test(String(stock.symbol || ''))
+      ? adaptLegacyDiscoveryEvidence({ symbol: String(stock.symbol), stockId,
+        rows: discoveryRowsByStock.get(stockId) || [],
+        since: cutoff, asOf: sourceCutoff, rowsComplete: true }).summary : undefined;
     const stageSession = stage?.session_date ? String(stage.session_date) : null;
     const latestTechnical = technicalByStock.get(stockId);
     const latestValuation = valuationByStock.get(stockId);
@@ -2239,6 +2252,7 @@ export async function loadCandidateStageCards(options: { sourceCutoff?: string }
     const tradePlanSummary = tradeSummaryRow?.stock_id === stockId
       ? readCandidateTradePlanSummary(tradeSummaryRow.trade_plan_summary, { revisionId: String(stage?.detail_revision_id) }) : null;
     cardsByStock.set(stockId, {
+      discoveryEvidenceAudit,
       symbol: String(stock.symbol || ''), chineseName: String(stock.name || stock.symbol || ''), sector: stock.sector ? String(stock.sector) : null, market: String(stock.market || 'TW') === 'US' ? 'US' : 'TW', lifecycleStage,
       latestMentionAt, mentionCount: stockMentions.length, rawMentionCount: concentration.rawMentions,
       effectiveMentionCount: concentration.effectiveMentions, publisherCount: concentration.publisherCount,

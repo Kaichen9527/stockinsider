@@ -1635,6 +1635,8 @@ export interface SourceSignalCard {
 
 export interface CandidateStageCard {
   symbol: string;
+  /** Source-row audit only; does not qualify a candidate or schedule research. */
+  discoveryEvidenceAudit?: import('./live-discovery-evidence-adapter').LiveDiscoveryEvidenceSummary;
   chineseName: string;
   sector?: string | null;
   market: 'TW' | 'US';
