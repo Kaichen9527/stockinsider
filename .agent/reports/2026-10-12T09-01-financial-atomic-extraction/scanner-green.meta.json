@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--test",
+    "--test-name-pattern=^(transaction normalization|atomic scanner)",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs"
+  ],
+  "start_utc": "2026-10-12T09:17:24Z",
+  "seconds": 0.27085089683532715,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 22638592,
+  "min_free_bytes": 8759279616
+}

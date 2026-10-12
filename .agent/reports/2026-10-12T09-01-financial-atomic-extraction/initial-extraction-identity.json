@@ -1,0 +1,8 @@
+{
+  "base": "baf2bbeafd84837f6a08475460fd2f84cf6e091b",
+  "from": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "helper_exact_original_sha256": "7c1dfdcb6e670f91f320a54d1dbd683d14c2506944410b80f010826e723898c7",
+  "pure_test_exact_original_sha256": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466",
+  "native_atomic_case_exact_extracted": true,
+  "no_pending_plan_apply_or_other_migrations_copied": true
+}

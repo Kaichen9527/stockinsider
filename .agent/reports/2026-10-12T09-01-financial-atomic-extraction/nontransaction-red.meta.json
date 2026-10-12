@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--test",
+    "--test-name-pattern=^atomic scanner rejects additional documented commands",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs"
+  ],
+  "start_utc": "2026-10-12T09:16:27Z",
+  "seconds": 0.27114200592041016,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 23408640,
+  "min_free_bytes": 8759287808
+}

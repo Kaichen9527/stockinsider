@@ -1,0 +1,4 @@
+[
+  "transaction normalization preserves quoted PL/pgSQL and rejects embedded control",
+  "every explicitly reviewed migration is compatible with one atomic transaction"
+]

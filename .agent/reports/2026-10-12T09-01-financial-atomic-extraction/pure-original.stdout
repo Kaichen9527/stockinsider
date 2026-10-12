@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 2.859816
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+not ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 88.734725
+  location: '/workspace/cloud-financial-atomic-extraction-oct12/scripts/opportunity-v3/atomic-migration-chain.test.mjs:18:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(runner.lastIndexOf("await client.query('COMMIT')") > runner.indexOf('await verifyReviewedMigrationPostconditions(client, options)'))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-financial-atomic-extraction-oct12/scripts/opportunity-v3/atomic-migration-chain.test.mjs:25:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 160.511017

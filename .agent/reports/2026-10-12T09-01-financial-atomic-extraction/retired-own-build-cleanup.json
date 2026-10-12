@@ -1,0 +1,12 @@
+{
+  "path": "/workspace/cloud-financial-history-extraction-oct12/web/.next",
+  "retired_source": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+  "saved_and_root_verified_evidence": "baf2bbeafd84837f6a08475460fd2f84cf6e091b",
+  "verified_compiled_files": 1796,
+  "saved_manifest_sha256": "f04d654ab71ea9f72a719d3e6af1d27efb634487c0e65ba2b4c4bf75b926775d",
+  "logical_bytes": 293249379,
+  "workspace_free_before": 8759263232,
+  "workspace_free_after": 9069277184,
+  "original_evidence_source_and_other_worktrees_preserved": true,
+  "own_active_build_count": 0
+}

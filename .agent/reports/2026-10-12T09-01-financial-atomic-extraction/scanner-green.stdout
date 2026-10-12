@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 4.651261
+  ...
+# Subtest: atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+ok 2 - atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+  ---
+  duration_ms: 0.933068
+  ...
+# Subtest: atomic scanner recognizes CR line endings rather than silently dropping real control
+ok 3 - atomic scanner recognizes CR line endings rather than silently dropping real control
+  ---
+  duration_ms: 0.215426
+  ...
+# Subtest: atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+ok 4 - atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+  ---
+  duration_ms: 0.394405
+  ...
+# Subtest: atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+ok 5 - atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+  ---
+  duration_ms: 0.292491
+  ...
+# Subtest: atomic scanner normalizes every unchanged base migration without claiming installer integration
+ok 6 - atomic scanner normalizes every unchanged base migration without claiming installer integration
+  ---
+  duration_ms: 93.859612
+  ...
+# Subtest: atomic scanner rejects additional documented commands that cannot run in a transaction
+ok 7 - atomic scanner rejects additional documented commands that cannot run in a transaction
+  ---
+  duration_ms: 1.144417
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 169.394045

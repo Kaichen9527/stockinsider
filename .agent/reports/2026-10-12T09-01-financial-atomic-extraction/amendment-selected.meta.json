@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "--test-name-pattern=^financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain$",
+    "scripts/opportunity-v3/migration-contract.test.mjs"
+  ],
+  "start_utc": "2026-10-12T09:24:20Z",
+  "seconds": 3.0538597106933594,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 169840640,
+  "min_free_bytes": 9068822528
+}

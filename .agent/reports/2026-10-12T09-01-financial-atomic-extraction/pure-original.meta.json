@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--test",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs"
+  ],
+  "start_utc": "2026-10-12T09:09:39Z",
+  "seconds": 0.2764613628387451,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 17342464,
+  "min_free_bytes": 8759328768
+}

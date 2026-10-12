@@ -1,0 +1,9 @@
+[
+  "transaction normalization preserves quoted PL/pgSQL and rejects embedded control",
+  "atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers",
+  "atomic scanner recognizes CR line endings rather than silently dropping real control",
+  "atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control",
+  "atomic scanner rejects control verbs and nontransactional DDL outside lexical islands",
+  "atomic scanner normalizes every unchanged base migration without claiming installer integration",
+  "atomic scanner rejects additional documented commands that cannot run in a transaction"
+]

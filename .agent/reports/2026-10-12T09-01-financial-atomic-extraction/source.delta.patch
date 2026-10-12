@@ -1,0 +1,306 @@
+diff --git a/docs/operations/2026-10-12/financial-history-atomic-extraction-handoff.md b/docs/operations/2026-10-12/financial-history-atomic-extraction-handoff.md
+new file mode 100644
+index 00000000..05eb1c2d
+--- /dev/null
++++ b/docs/operations/2026-10-12/financial-history-atomic-extraction-handoff.md
+@@ -0,0 +1,73 @@
++# Financial history atomic extraction — slice 2
++
++Base: frozen slice1 `baf2bbeafd84837f6a08475460fd2f84cf6e091b`.
++Original source: PR364 `2e078dfdd74272d3d50dffdd4cc6c14df3152c78`.
++Only the atomic helper/test, minimal native import/original rollback case with
++supplementary invariants, this handoff and unique receipts are owned.
++No planner/apply, 48-base SQL, authority/catalog, package/locks, other research
++migrations or production selection/profile was copied or changed.
++
++## Actual original RED and minimum scanner repairs
++
++The original helper/pure-test bytes were saved before changes. On unchanged main
++apply, its full original pure suite is 1 PASS / 1 FAIL: the second test also
++requires an actual atomic installer caller, which is absent. New adversarial
++cases then produce 3 PASS / 3 FAIL: that dependency plus two actual lexer faults.
++Dollar-quote detection treated `$tag$` embedded in an unquoted SQL identifier as
++a literal delimiter, allowing a real COMMIT/ROLLBACK between identifiers to be
++hidden. A bare CR ended a PostgreSQL line comment but the scanner searched only
++LF, silently dropping the following real control. Both have minimal boundary/
++line-ending fixes; quoted bodies, nested comments, ordinary/E-string escapes and
++all 48 unchanged reviewed base bodies still normalize.
++
++A separate original-predicate RED shows missing nontransactional classification
++(first actual failure: DROP DATABASE). Rejection now also covers database/
++tablespace create/drop, option-form concurrent REINDEX, DISCARD ALL and database
++SET TABLESPACE. This is conservative fail-closed classification, not a general
++PostgreSQL grammar/permission proof; unknown source still needs reviewed SQL pins.
++
++The original installer expectations remain in the pure file, with explicit
++BEGIN/COMMIT presence checks added so an index=-1 cannot make an absent BEGIN
++appear ordered before the migration loop. **Full pure suite remains 7 PASS /
++1 FAIL**, specifically `actual atomic installer BEGIN is missing`. It is not
++skipped or rewritten to PASS. A clearly labeled scanner-only selection is 7/7;
++that excludes the still-unfulfilled installer assertion and is not full-suite
++acceptance. Root's next installer slice must make the preserved assertion true.
++
++## Real native rollback
++
++The saved original financial atomic case is now executable through the real
++helper; original marker/forced-error/rollback assertions remain. It actually
++installs the financial successor, executes genuine predecessor replacements
++within BEGIN, proves the old period-bound body was restored inside that failing
++transaction, deliberately raises `forced_extension_failure`, and compares the
++successor afterward.
++
++Supplementary synthetic setup adds one valid fact and one immutable observation
++through the actual append RPC before that failure. Full fact/observation rows,
++function definitions/owners/ACL/config, table ACL/RLS/owner, trigger definitions/
++enabled status and public schema ACL are compared byte-for-byte in returned
++JSON before/after rollback. The existing private PG additionally accepts
++unquoted dollar-containing temporary table identifiers, confirming that the
++new lexical counterexample is not an invented quote grammar. This is isolated
++synthetic engineering data, not an official filing, real investment result or
++production catalog/role acceptance.
++
++The original baseline lifetime128 rejection and 160-month amendment assertions
++are unchanged. They and the rollback case run on the existing main predecessor
++fixture and real native PG17.11; it is not the complete existing-VPS installation
++schema profile. Separate selected commands are preserved; overlapping passes are
++not added. No libfaketime/clock/source-time edits or new prerequisite stub is used.
++
++## Remaining before production
++
++This slice does not change the default installer and does not install anything
++in production or fix 343 usable=0. Next still requires a narrow financial
++49-file selection/profile (or separately reviewed precise existing-schema tail),
++installed-successor guard before base replay, exact SQL postconditions and
++owner/ACL/catalog verification, one atomic reviewed plan/apply path, existing
++schema rehearsal/rollback/concurrent-install/disconnect acceptance, protected
++exact approval, capacity admission and real post-apply coverage accounting.
++The full-publication 76-file plan/profile cannot be relabeled as this profile.
++No merge/deploy, genuine model author/reviewer, strategy admission or signed
++independent review was performed. Root owns independent review and later scope.
+diff --git a/scripts/opportunity-v3/atomic-migration-chain.mjs b/scripts/opportunity-v3/atomic-migration-chain.mjs
+new file mode 100644
+index 00000000..93a3e200
+--- /dev/null
++++ b/scripts/opportunity-v3/atomic-migration-chain.mjs
+@@ -0,0 +1,64 @@
++/** Preserve SQL bytes except standalone transaction wrappers. Dollar-quoted
++ * function bodies and comments are lexical islands, not transaction commands. */
++export function migrationBodyInAtomicTransaction(sql) {
++  if (typeof sql !== 'string' || !sql.trim()) throw new Error('migration_sql_empty');
++  const statements = [];
++  let start = 0, i = 0, visible = '';
++  const finish = (end) => {
++    if (visible.trim()) statements.push({ raw: sql.slice(start, end), visible: visible.trim() });
++    start = end; visible = '';
++  };
++  while (i < sql.length) {
++    if (sql.startsWith('--', i)) {
++      const lineEnd = sql.slice(i + 2).search(/[\r\n]/u);
++      i = lineEnd < 0 ? sql.length : i + 2 + lineEnd + 1; visible += ' '; continue;
++    }
++    if (sql.startsWith('/*', i)) {
++      let depth = 1; i += 2;
++      while (i < sql.length && depth) {
++        if (sql.startsWith('/*', i)) { depth++; i += 2; }
++        else if (sql.startsWith('*/', i)) { depth--; i += 2; }
++        else i++;
++      }
++      if (depth) throw new Error('migration_sql_unterminated_comment');
++      visible += ' '; continue;
++    }
++    // Dollar quotes need a token boundary; dollar signs inside identifiers are not quotes.
++    const boundary = i === 0 || !/[A-Za-z0-9_$\u0080-\uFFFF]/u.test(sql[i - 1]);
++    const dollar = boundary ? sql.slice(i).match(/^\$(?:[A-Za-z_][A-Za-z0-9_]*)?\$/u)?.[0] : undefined;
++    if (dollar) {
++      const end = sql.indexOf(dollar, i + dollar.length);
++      if (end < 0) throw new Error('migration_sql_unterminated_dollar_quote');
++      i = end + dollar.length; visible += ' quoted_body '; continue;
++    }
++    if (sql[i] === "'" || sql[i] === '"') {
++      const quote = sql[i];
++      const escaped = quote === "'" && /(?:^|[^A-Za-z0-9_])[eE]$/u.test(sql.slice(Math.max(0, i - 2), i));
++      i++; let closed = false;
++      while (i < sql.length) {
++        if (escaped && sql[i] === '\\') { i += 2; continue; }
++        if (sql[i] === quote) {
++          if (sql[i + 1] === quote) { i += 2; continue; }
++          i++; closed = true; break;
++        }
++        i++;
++      }
++      if (!closed) throw new Error('migration_sql_unterminated_quote');
++      visible += ' quoted_value '; continue;
++    }
++    visible += sql[i]; i++;
++    if (sql[i - 1] === ';') finish(i);
++  }
++  finish(sql.length);
++  const control = /^(?:BEGIN\b|START\s+TRANSACTION\b|COMMIT\b|END\b|ROLLBACK\b|ABORT\b|SAVEPOINT\b|RELEASE\s+SAVEPOINT\b|PREPARE\s+TRANSACTION\b|SET\s+(?:LOCAL\s+)?TRANSACTION\b)/iu;
++  const wrapped = statements.length >= 2 && /^BEGIN\s*;$/iu.test(statements[0].visible)
++    && /^COMMIT\s*;$/iu.test(statements.at(-1).visible);
++  const body = wrapped ? statements.slice(1, -1) : statements;
++  for (const statement of body) {
++    if (control.test(statement.visible)) throw new Error('migration_embedded_transaction_control');
++    if (/^(?:VACUUM\b|(?:CREATE|DROP)\s+(?:DATABASE|TABLESPACE)\b|ALTER\s+SYSTEM\b|DISCARD\s+ALL\b)|^ALTER\s+DATABASE\b[^;]*\bSET\s+TABLESPACE\b|\b(?:INDEX|REINDEX)\s+CONCURRENTLY\b|\bREINDEX\s*\([^)]*\bCONCURRENTLY\b/iu.test(statement.visible))
++      throw new Error('migration_nontransactional_statement');
++  }
++  if (!body.length) throw new Error('migration_sql_empty');
++  return body.map((statement) => statement.raw).join('\n');
++}
+diff --git a/scripts/opportunity-v3/atomic-migration-chain.test.mjs b/scripts/opportunity-v3/atomic-migration-chain.test.mjs
+new file mode 100644
+index 00000000..e451662d
+--- /dev/null
++++ b/scripts/opportunity-v3/atomic-migration-chain.test.mjs
+@@ -0,0 +1,76 @@
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import test from 'node:test';
++import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
++
++test('transaction normalization preserves quoted PL/pgSQL and rejects embedded control', () => {
++  const body = "CREATE FUNCTION f() RETURNS void AS $fn$ BEGIN; /* nested */ COMMIT; END; $fn$ LANGUAGE plpgsql;";
++  assert.equal(migrationBodyInAtomicTransaction(`-- outer\nBEGIN;\n${body}\nCOMMIT;`).trim(), body);
++  assert.equal(migrationBodyInAtomicTransaction("SELECT 'COMMIT;''literal'; /* BEGIN; /* nested */ */ SELECT $$ROLLBACK;$$;"),
++    "SELECT 'COMMIT;''literal';\n /* BEGIN; /* nested */ */ SELECT $$ROLLBACK;$$;");
++  for (const sql of ['BEGIN; SELECT 1;', 'SELECT 1; COMMIT;', 'BEGIN; SELECT 1; COMMIT; SELECT 2;',
++    'SELECT 1; /* comment */ ROLLBACK;', 'START TRANSACTION; SELECT 1; COMMIT;',
++    'SELECT 1; SAVEPOINT injected;', 'CREATE INDEX CONCURRENTLY idx ON t(id);', 'VACUUM t;',
++    'SELECT $body$unclosed', "SELECT 'unclosed", 'SELECT 1; /* unclosed']) {
++    assert.throws(() => migrationBodyInAtomicTransaction(sql), /migration_/u);
++  }
++});
++test('every explicitly reviewed migration is compatible with one atomic transaction', () => {
++  const plan = fs.readFileSync(new URL('./migration-plan.mjs', import.meta.url), 'utf8');
++  const paths = [...plan.matchAll(/['"](migrations\/[^'"]+[.]sql)['"]/gu)].map((match) => match[1]);
++  assert.ok(paths.length > 40);
++  for (const path of paths) assert.ok(migrationBodyInAtomicTransaction(fs.readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8')), path);
++  const runner = fs.readFileSync(new URL('./apply-reviewed-migrations.mjs', import.meta.url), 'utf8');
++  // Keep original installer expectations; absence is a real pending dependency, not -1 < loop.
++  assert.ok(runner.includes("await client.query('BEGIN')"), 'actual atomic installer BEGIN is missing');
++  assert.ok(runner.includes("await client.query('COMMIT')"), 'actual atomic installer COMMIT is missing');
++  assert.ok(runner.indexOf("await client.query('BEGIN')") < runner.indexOf('for(const migration of plan.migrations)'));
++  assert.ok(runner.lastIndexOf("await client.query('COMMIT')") > runner.indexOf('await verifyReviewedMigrationPostconditions(client, options)'));
++  assert.match(runner, /if\(transactionOpen\)try\{await client.query\('ROLLBACK'\)/u);
++});
++
++test('atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers', () => {
++  for (const sql of [
++    'BEGIN; CREATE TEMP TABLE foo$tag$(i integer); COMMIT; CREATE TEMP TABLE bar$tag$(i integer); COMMIT;',
++    'CREATE TEMP TABLE foo$$(i integer); ROLLBACK; CREATE TEMP TABLE bar$$(i integer);',
++    'CREATE TEMP TABLE 名$tag$(i integer); COMMIT; CREATE TEMP TABLE 別$tag$(i integer);',
++  ]) assert.throws(() => migrationBodyInAtomicTransaction(sql), /migration_embedded_transaction_control/u);
++});
++test('atomic scanner recognizes CR line endings rather than silently dropping real control', () => {
++  assert.throws(() => migrationBodyInAtomicTransaction('SELECT 1; -- not a quote\rCOMMIT; SELECT 2;'), /migration_embedded_transaction_control/u);
++  const body = 'CREATE TABLE t(i integer);';
++  assert.equal(migrationBodyInAtomicTransaction(`-- comment\rBEGIN;\r${body}\rCOMMIT;`).trim(),body);
++});
++test('atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control', () => {
++  for (const body of [
++    String.raw`SELECT E'escaped\' COMMIT; -- still string';`,
++    String.raw`SELECT e'backslash\\ quote\' ROLLBACK;';`,
++    '/* outer /* nested COMMIT; */ still comment */ SELECT 1;',
++    'DO $fn$ BEGIN PERFORM 1; /* COMMIT; */ END $fn$;',
++    'SELECT $$COMMIT; ROLLBACK;$$;',
++    'CREATE TABLE foo$tag$(i integer); CREATE TABLE bar$tag$(i integer);',
++  ]) assert.equal(migrationBodyInAtomicTransaction(`BEGIN; ${body} COMMIT;`).trim().replaceAll('\n',''), body.replaceAll('\n',''));
++});
++test('atomic scanner rejects control verbs and nontransactional DDL outside lexical islands', () => {
++  for (const sql of ['SAVEPOINT s;', 'RELEASE SAVEPOINT s;', 'ABORT;', 'END;',
++    'PREPARE TRANSACTION \'x\';', 'SET LOCAL TRANSACTION READ ONLY;',
++    'CREATE DATABASE d;', 'ALTER SYSTEM SET work_mem=\'1MB\';',
++    'REINDEX CONCURRENTLY i;', 'CREATE INDEX CONCURRENTLY i ON t(id);']) {
++    assert.throws(()=>migrationBodyInAtomicTransaction(sql), /migration_/u);
++  }
++});
++
++test('atomic scanner normalizes every unchanged base migration without claiming installer integration', () => {
++  const plan = fs.readFileSync(new URL('./migration-plan.mjs', import.meta.url), 'utf8');
++  const paths = [...plan.matchAll(/['"](migrations\/[^'"]+[.]sql)['"]/gu)].map(match => match[1]);
++  assert.equal(paths.length, 48);
++  for (const path of paths) assert.ok(migrationBodyInAtomicTransaction(fs.readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8')), path);
++});
++
++test('atomic scanner rejects additional documented commands that cannot run in a transaction', () => {
++  for (const sql of ['DROP DATABASE d;', 'CREATE TABLESPACE t LOCATION \'/tmp/t\';',
++    'DROP TABLESPACE t;', 'REINDEX (CONCURRENTLY) INDEX i;', 'DISCARD ALL;',
++    'ALTER DATABASE d SET TABLESPACE t;']) {
++    assert.throws(()=>migrationBodyInAtomicTransaction(sql), /migration_nontransactional_statement/u);
++  }
++});
+diff --git a/scripts/opportunity-v3/migration-contract.test.mjs b/scripts/opportunity-v3/migration-contract.test.mjs
+index b5abd27f..f3942200 100644
+--- a/scripts/opportunity-v3/migration-contract.test.mjs
++++ b/scripts/opportunity-v3/migration-contract.test.mjs
+@@ -9,6 +9,7 @@ import test, { after, before } from 'node:test';
+ import { fileURLToPath } from 'node:url';
+ import { canonicalJson, sha256Canonical } from '../../web/src/lib/opportunity-v3/canonical.ts';
+ import { executeWorkerPayload } from '../../web/src/lib/opportunity-v3/worker-executors.ts';
++import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
+ 
+ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+ const require = createRequire(import.meta.url);
+@@ -8226,3 +8227,62 @@ test('financial history amendment admits genuine periods, preserves PIT revision
+     noServiceInsert: true, privatePredecessor: true, noOwnerCreate: true });
+   assert.doesNotMatch(financialHistorySql, /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+ });
++
++test('financial atomic replay rollback retains installed successor after predecessor replacement and forced failure', () => {
++  psql(`SET ROLE stockinsider_managed_migrator; ${financialHistorySql}`);
++  const probe = () => JSON.parse(psql(`SELECT jsonb_build_object(
++    'periodBound',position('financial_period_revision_bound' IN pg_get_functiondef(
++      'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0,
++    'observationWrapper',position('opportunity_financial_observations_v1' IN pg_get_functiondef(
++      'public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure))>0)::text;`, ['-At']).trim());
++  assert.deepEqual(probe(), { periodBound: true, observationWrapper: true });
++  // Additional isolated fixture only: prove nonempty immutable data/catalog survives rollback.
++  // PostgreSQL accepts these unquoted identifiers; their dollar substrings are not literal delimiters.
++  psql(`BEGIN;
++    CREATE TEMP TABLE lexical$tag$(i integer);
++    CREATE TEMP TABLE other$tag$(i integer);
++    INSERT INTO lexical$tag$ VALUES(1);
++    SELECT i FROM lexical$tag$;
++    ROLLBACK;`);
++  psql(`INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
++    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875003','opportunity_runner','2026-01-01',NULL,'active',repeat('9',64),clock_timestamp());
++    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-000000000083','9183');
++    SELECT * FROM public.append_financial_fact_v3(ROW(
++      '71300000-0000-4000-8000-000000000083','net_asset_value',NULL,'2025-01-01','instant',100,
++      'TWD','twse','official_filing','reported','reported_period','2025-01-02T00:00:00Z',
++      '2025-01-02T00:00:00Z','2025-01-02T01:00:00Z',NULL,'twse-openapi:synthetic-atomic-rollback')::public.financial_fact_input_v3,
++      'a11d4e67-7d0a-4c44-8a9d-1d5c3b875003');`);
++  const snapshot = () => JSON.parse(psql(`SELECT jsonb_build_object(
++    'facts',(SELECT jsonb_agg(to_jsonb(f) ORDER BY fact_id) FROM public.opportunity_financial_facts_v3 f
++      WHERE stock_id='71300000-0000-4000-8000-000000000083'),
++    'observations',(SELECT jsonb_agg(to_jsonb(o) ORDER BY observation_id) FROM public.opportunity_financial_observations_v1 o
++      WHERE fact_id IN(SELECT fact_id FROM public.opportunity_financial_facts_v3 WHERE stock_id='71300000-0000-4000-8000-000000000083')),
++    'functions',(SELECT jsonb_agg(jsonb_build_object('definition',pg_get_functiondef(p.oid),
++      'owner',pg_get_userbyid(p.proowner),'acl',p.proacl,'config',p.proconfig) ORDER BY p.proname)
++      FROM pg_proc p WHERE p.oid=ANY(ARRAY[
++        'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure,
++        'public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure,
++        'public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid)'::regprocedure])),
++    'tables',(SELECT jsonb_agg(jsonb_build_object('name',c.relname,'owner',pg_get_userbyid(c.relowner),
++      'acl',c.relacl,'rls',c.relrowsecurity) ORDER BY c.relname) FROM pg_class c
++      WHERE c.oid=ANY(ARRAY['public.opportunity_financial_facts_v3'::regclass,'public.opportunity_financial_observations_v1'::regclass])),
++    'triggers',(SELECT jsonb_agg(jsonb_build_object('definition',pg_get_triggerdef(t.oid),'enabled',t.tgenabled) ORDER BY t.tgname)
++      FROM pg_trigger t WHERE t.tgrelid=ANY(ARRAY['public.opportunity_financial_facts_v3'::regclass,'public.opportunity_financial_observations_v1'::regclass])),
++    'schemaAcl',(SELECT nspacl FROM pg_namespace WHERE nspname='public'))::text;`,['-At']).trim());
++  const before = snapshot();
++  assert.equal(before.facts.length,1);
++  assert.equal(before.observations.length,1);
++  const error = rejectedSql(`BEGIN; SET ROLE stockinsider_managed_migrator;
++    ${migrationBodyInAtomicTransaction(decisionIntegritySql)}
++    ${migrationBodyInAtomicTransaction(financialFactRecollectionSql)}
++    DO $forced$
++    BEGIN
++      IF position('financial_period_revision_bound' IN pg_get_functiondef(
++        'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0
++        THEN RAISE EXCEPTION 'predecessor_not_replaced'; END IF;
++      RAISE EXCEPTION 'forced_extension_failure';
++    END $forced$;`);
++  assert.match(error, /forced_extension_failure/u);
++  assert.deepEqual(probe(), { periodBound: true, observationWrapper: true });
++  assert.deepEqual(snapshot(),before, 'fact/observation full rows and body/owner/ACL/RLS/trigger/schema catalog must survive forced rollback');
++});
