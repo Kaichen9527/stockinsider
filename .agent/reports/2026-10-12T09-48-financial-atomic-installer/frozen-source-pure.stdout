@@ -1,0 +1,110 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 7.087712
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 76.332271
+  ...
+# Subtest: atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+ok 3 - atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+  ---
+  duration_ms: 0.684613
+  ...
+# Subtest: atomic scanner recognizes CR line endings rather than silently dropping real control
+ok 4 - atomic scanner recognizes CR line endings rather than silently dropping real control
+  ---
+  duration_ms: 0.16613
+  ...
+# Subtest: atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+ok 5 - atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+  ---
+  duration_ms: 0.265321
+  ...
+# Subtest: atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+ok 6 - atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+  ---
+  duration_ms: 0.302867
+  ...
+# Subtest: atomic scanner normalizes every unchanged base migration without claiming installer integration
+ok 7 - atomic scanner normalizes every unchanged base migration without claiming installer integration
+  ---
+  duration_ms: 71.612647
+  ...
+# Subtest: atomic scanner rejects additional documented commands that cannot run in a transaction
+ok 8 - atomic scanner rejects additional documented commands that cannot run in a transaction
+  ---
+  duration_ms: 0.323328
+  ...
+# Subtest: default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+ok 9 - default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+  ---
+  duration_ms: 85.82621
+  ...
+# Subtest: omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+ok 10 - omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+  ---
+  duration_ms: 0.647657
+  ...
+# Subtest: extension flag alone is not review authority: exact hash must be in hash-bound review once
+ok 11 - extension flag alone is not review authority: exact hash must be in hash-bound review once
+  ---
+  duration_ms: 0.984606
+  ...
+# Subtest: base-only cannot replay installed successor and partial residue cannot replay even with tail
+ok 12 - base-only cannot replay installed successor and partial residue cannot replay even with tail
+  ---
+  duration_ms: 1.108383
+  ...
+# Subtest: missing/ambiguous state and any failed postcondition reject
+ok 13 - missing/ambiguous state and any failed postcondition reject
+  ---
+  duration_ms: 0.615539
+  ...
+# Subtest: busy guard performs no BEGIN/mutation and closes owned session
+ok 14 - busy guard performs no BEGIN/mutation and closes owned session
+  ---
+  duration_ms: 0.476129
+  ...
+# Subtest: installed successor guard runs under lock+BEGIN before any base mutation
+ok 15 - installed successor guard runs under lock+BEGIN before any base mutation
+  ---
+  duration_ms: 1.227322
+  ...
+# Subtest: one shared transaction strips inner controls and commits after verification
+ok 16 - one shared transaction strips inner controls and commits after verification
+  ---
+  duration_ms: 2.645253
+  ...
+# Subtest: forced failure and disconnect attempt rollback, do not commit, retain original error
+ok 17 - forced failure and disconnect attempt rollback, do not commit, retain original error
+  ---
+  duration_ms: 1.044988
+  ...
+# Subtest: postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+ok 18 - postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+  ---
+  duration_ms: 0.926488
+  ...
+# Subtest: unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+ok 19 - unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+  ---
+  duration_ms: 0.400715
+  ...
+# Subtest: installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+ok 20 - installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+  ---
+  duration_ms: 0.486575
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 216.54919

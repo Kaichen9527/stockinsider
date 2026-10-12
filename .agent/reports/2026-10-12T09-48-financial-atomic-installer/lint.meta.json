@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "lint"
+  ],
+  "start_utc": "2026-10-12T10:02:56Z",
+  "seconds": 22.8768789768219,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 1491349504,
+  "min_free_bytes": 9028886528
+}

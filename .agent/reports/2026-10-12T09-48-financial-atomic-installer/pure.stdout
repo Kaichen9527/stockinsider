@@ -1,0 +1,122 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 4.813074
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 80.272729
+  ...
+# Subtest: atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+ok 3 - atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+  ---
+  duration_ms: 0.648659
+  ...
+# Subtest: atomic scanner recognizes CR line endings rather than silently dropping real control
+ok 4 - atomic scanner recognizes CR line endings rather than silently dropping real control
+  ---
+  duration_ms: 0.192781
+  ...
+# Subtest: atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+ok 5 - atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+  ---
+  duration_ms: 0.274024
+  ...
+# Subtest: atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+ok 6 - atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+  ---
+  duration_ms: 0.266332
+  ...
+# Subtest: atomic scanner normalizes every unchanged base migration without claiming installer integration
+ok 7 - atomic scanner normalizes every unchanged base migration without claiming installer integration
+  ---
+  duration_ms: 78.159225
+  ...
+# Subtest: atomic scanner rejects additional documented commands that cannot run in a transaction
+ok 8 - atomic scanner rejects additional documented commands that cannot run in a transaction
+  ---
+  duration_ms: 0.330599
+  ...
+# Subtest: default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+ok 9 - default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+  ---
+  duration_ms: 84.070911
+  ...
+# Subtest: omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+ok 10 - omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+  ---
+  duration_ms: 0.653456
+  ...
+# Subtest: extension flag alone is not review authority: exact hash must be in hash-bound review once
+ok 11 - extension flag alone is not review authority: exact hash must be in hash-bound review once
+  ---
+  duration_ms: 0.427486
+  ...
+# Subtest: base-only cannot replay installed successor and partial residue cannot replay even with tail
+ok 12 - base-only cannot replay installed successor and partial residue cannot replay even with tail
+  ---
+  duration_ms: 0.787859
+  ...
+# Subtest: missing/ambiguous state and any failed postcondition reject
+ok 13 - missing/ambiguous state and any failed postcondition reject
+  ---
+  duration_ms: 0.398692
+  ...
+# Subtest: busy guard performs no BEGIN/mutation and closes owned session
+ok 14 - busy guard performs no BEGIN/mutation and closes owned session
+  ---
+  duration_ms: 0.414545
+  ...
+# Subtest: installed successor guard runs under lock+BEGIN before any base mutation
+ok 15 - installed successor guard runs under lock+BEGIN before any base mutation
+  ---
+  duration_ms: 0.396668
+  ...
+# Subtest: one shared transaction strips inner controls and commits after verification
+not ok 16 - one shared transaction strips inner controls and commits after verification
+  ---
+  duration_ms: 2.48463
+  location: '/workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-install-guard.test.mjs:62:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-install-guard.test.mjs:65:100)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: forced failure and disconnect attempt rollback, do not commit, retain original error
+not ok 17 - forced failure and disconnect attempt rollback, do not commit, retain original error
+  ---
+  duration_ms: 0.838947
+  location: '/workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-install-guard.test.mjs:67:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-install-guard.test.mjs:68:90)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 15
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 226.5775

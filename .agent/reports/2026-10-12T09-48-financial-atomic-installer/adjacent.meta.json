@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "scripts/opportunity-v3/v319-release-reconciliation.test.mjs",
+    "scripts/opportunity-v3/v31621-release-recovery.test.mjs"
+  ],
+  "start_utc": "2026-10-12T09:56:55Z",
+  "seconds": 0.27986598014831543,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 23797760,
+  "min_free_bytes": 9029431296
+}

@@ -1,0 +1,115 @@
+TAP version 13
+# Subtest: V31621 operator migration plan exactly matches the reviewed apply chain
+ok 1 - V31621 operator migration plan exactly matches the reviewed apply chain
+  ---
+  duration_ms: 3.41222
+  ...
+# Subtest: V3.18 candidate retention reuses only the preceding immutable terminal ledger
+ok 2 - V3.18 candidate retention reuses only the preceding immutable terminal ledger
+  ---
+  duration_ms: 0.789131
+  ...
+# Subtest: V31621 projection repair separates immutable content cutoff from reviewed evaluation order
+ok 3 - V31621 projection repair separates immutable content cutoff from reviewed evaluation order
+  ---
+  duration_ms: 0.408507
+  ...
+# Subtest: V31621 production-cardinality repair keeps pooler-safe chunks and snapshots roster integrity once
+ok 4 - V31621 production-cardinality repair keeps pooler-safe chunks and snapshots roster integrity once
+  ---
+  duration_ms: 1.579224
+  ...
+# Subtest: V31621 provider acquisition freezes true fetched time and exact response bytes
+ok 5 - V31621 provider acquisition freezes true fetched time and exact response bytes
+  ---
+  duration_ms: 30.222516
+  ...
+# Subtest: V31621 same request reuses immutable acquisition and produces identical evidence without refetch
+ok 6 - V31621 same request reuses immutable acquisition and produces identical evidence without refetch
+  ---
+  duration_ms: 1.492473
+  ...
+# Subtest: V31621 partial retry fetches only missing request keys and quarantines a response conflict
+ok 7 - V31621 partial retry fetches only missing request keys and quarantines a response conflict
+  ---
+  duration_ms: 4.933266
+  ...
+# Subtest: V31621 provider failure diagnostic cannot echo URI, SQL, payload or secret
+ok 8 - V31621 provider failure diagnostic cannot echo URI, SQL, payload or secret
+  ---
+  duration_ms: 1.522728
+  ...
+# Subtest: V31621 action authority commits to the complete provider lineage rather than one fact fetch
+ok 9 - V31621 action authority commits to the complete provider lineage rather than one fact fetch
+  ---
+  duration_ms: 30.91388
+  ...
+# (node:425139) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:425139) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-financial-atomic-installer-oct12/web/src/lib/opportunity-v3/effective-health.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-financial-atomic-installer-oct12/web/package.json.
+# Subtest: V31621 effective public and internal health disables actions for every authority mismatch but retains last-good research
+ok 10 - V31621 effective public and internal health disables actions for every authority mismatch but retains last-good research
+  ---
+  duration_ms: 45.860709
+  ...
+# Subtest: V3.19 release state advances once per closed checkpoint and cannot skip runtime identity
+ok 11 - V3.19 release state advances once per closed checkpoint and cannot skip runtime identity
+  ---
+  duration_ms: 3.636598
+  ...
+# Subtest: V3.19 disk policy fails closed below the reviewed capacity floor without deleting artifacts
+ok 12 - V3.19 disk policy fails closed below the reviewed capacity floor without deleting artifacts
+  ---
+  duration_ms: 1.54996
+  ...
+# Subtest: V3.19 readiness gives every candidate one visibility lane without treating missing authority as avoid
+ok 13 - V3.19 readiness gives every candidate one visibility lane without treating missing authority as avoid
+  ---
+  duration_ms: 0.7883
+  ...
+# Subtest: V3.19 release reconciliation migration is additive, private and in the reviewed chain
+ok 14 - V3.19 release reconciliation migration is additive, private and in the reviewed chain
+  ---
+  duration_ms: 1.567115
+  ...
+# Subtest: V3.19.4 reviewed replay skips only V3.19.2 after the stronger V3.19.3 contract is installed
+ok 15 - V3.19.4 reviewed replay skips only V3.19.2 after the stronger V3.19.3 contract is installed
+  ---
+  duration_ms: 0.360173
+  ...
+# Subtest: V3.19.1 runtime diagnostic contract preserves projection conflicts
+ok 16 - V3.19.1 runtime diagnostic contract preserves projection conflicts
+  ---
+  duration_ms: 0.268515
+  ...
+# Subtest: V3.19.2 compares compact landing cards with full detail revisions without dropping dossiers
+ok 17 - V3.19.2 compares compact landing cards with full detail revisions without dropping dossiers
+  ---
+  duration_ms: 0.458392
+  ...
+# Subtest: V3.19.3 validates bound dossier identities with the worker cyclic fields removed
+ok 18 - V3.19.3 validates bound dossier identities with the worker cyclic fields removed
+  ---
+  duration_ms: 0.333864
+  ...
+# Subtest: V3.19.6 admits every supported compact evaluation schema without reopening CREATE
+ok 19 - V3.19.6 admits every supported compact evaluation schema without reopening CREATE
+  ---
+  duration_ms: 0.751234
+  ...
+# Subtest: V3.19.7 binds reused frozen acquisitions to the current immutable job graph
+ok 20 - V3.19.7 binds reused frozen acquisitions to the current immutable job graph
+  ---
+  duration_ms: 0.898577
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 198.768825
