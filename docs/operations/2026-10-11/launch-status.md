@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 17:50台灣時間：金融atomic slice完成真回滾驗證，完整installer單一接續中
+
+Cloud金融slice2 code e8d11097／deliveryb48b3b0b已完成。Root實核64raw／13source hash/blob，receipt9d16cab9；maker scanner7selectedPASS、native baseline／160monthly／forcedrollback3selectedPASS，各自單項1PASS有重疊不相加，types/lint/normalbuildPASS。原lexer dollar-identifier／CRcomment／nontransactional缺口RED保存，最小修補後synthetic非空facts/observations及body/owner/ACL/RLS/trigger/schemaACL於真PG失敗交易回滾前後相同。
+
+仍有完整pure8項中的7PASS1FAIL：main apply尚缺真正BEGIN，原installer期待不跳過／不改PASS。Root額外親跑negative name pattern未排除該項，真輸出同7PASS1FAIL，已保存選檔錯誤及完整RED，不宣稱root7selected綠。Root scoped靜態審查零P0/P1/P2，這不是完整installer批准或root新native執行。48base/defaultplan/apply/authority/SQL原bytes未動，金融SQL仍未正式安裝，不能宣稱修好343usable0。
+
+Cloud cursor83271615:1確認idle後只接一件30分鐘下一slice，branchcodex/financial-history-atomic-installer-oct12／turn01a12f83-08d1-7152-9112-734d8a534d02／cursor83271615-2ee9-4bed-bd38-321f1348ab62:2 active。Root明確將工程scope收斂為existing plan/apply的opt-in49financial（48base+exacttail），保留default48、不帶27researchtails或publicationbundle；鎖內mutation前successor guard／真單交易／postconditions／對應負例，無新批准權或正式DB。若native existing-schema/applytwice/disconnect/concurrent未完據實pending，活動中不重派／改ownedfiles。原helper完整8項期待須由實際installer補齊，不能只改assertion過關。
+
+Remote main仍4dddb8f0、PR375已合併終態不重跑；正式仍169及舊容量guard/待答選擇不變，本輪無VPS重測／部署／migration／刪cache／重算343／重抓PTT2409。正式來源/Top20/文章/研究排程未驗收。新證據`.agent/reports/2026-10-12T17-50-financial-atomic-root-review/`。
+
 ## 2026-10-12 17:06台灣時間：PR375正常protected全部通過並已標準合併
 
 Protected38216491152 attempt2全七項bootstrap／requirements／architecture／exact／model／product／aggregate真SUCCESS；原attempt1 ENOSPC RED仍保留，Mac空間已實際改變才單次failed續跑，不是改失敗結果。Root核exact c82e0e4e、base099、全部普通checks／原active/bypass[]保護，沿已獨立審查的單次merge guard只替換PR/head/base/run/audit參數，真正常gh --merge --match-head-commit完成09:04:50Z。main4dddb8f01f518350c7d54b7995ee9358c1d945a7，實查parents099+c82/treeef47439e/web08c8f0db，前後rules完整JSON一致，無admin/bypass/mainpush。

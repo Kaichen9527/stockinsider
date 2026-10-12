@@ -1,0 +1,28 @@
+{
+  "head": "b48b3b0b9e9ac5464609ef6a2e2acf735a3834b2",
+  "rawVerified": 64,
+  "sourceVerified": 13,
+  "receiptSha256": "9d16cab93614efed1cab5c1b3603a417b226688d3015bc7817f3ba452b11ac34",
+  "rootNativeExecution": false,
+  "rootFixture": "52 exact tracked files; intended selection did not exclude installer assertion, true full8 result preserved",
+  "makerFullPure": "7PASS1FAIL installer missing BEGIN, not accepted",
+  "production": false,
+  "rootActualFullPure": {
+    "tests": 8,
+    "pass": 7,
+    "fail": 1,
+    "skip": 0,
+    "failure": "known pending atomic installer BEGIN, not scanner failure"
+  },
+  "rootCommand": "arch -arm64 node --test --test-name-pattern=^(?!every explicitly reviewed migration) scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+  "selectionMistake": "negative name pattern did not exclude installer test; exact output retained, no claim of root7selectedPASS",
+  "scopedReview": {
+    "reviewer": "root independent of Cloud maker",
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "scope": "64line SQL tokenizer +76line pure tests +60line native rollback diff. Scanner boundary/CR/nontransactional cases and unchanged48base normalization verified; production apply not integrated."
+  },
+  "fullInstallerApproved": false,
+  "nativeRunByRoot": false
+}

@@ -1,0 +1,66 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 2.268291
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+not ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 45.015292
+  location: '/private/tmp/stockinsider-financial-atomic-root-review-oct12/scripts/opportunity-v3/atomic-migration-chain.test.mjs:18:1'
+  failureType: 'testCodeFailure'
+  error: 'actual atomic installer BEGIN is missing'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-financial-atomic-root-review-oct12/scripts/opportunity-v3/atomic-migration-chain.test.mjs:25:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+ok 3 - atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+  ---
+  duration_ms: 0.516625
+  ...
+# Subtest: atomic scanner recognizes CR line endings rather than silently dropping real control
+ok 4 - atomic scanner recognizes CR line endings rather than silently dropping real control
+  ---
+  duration_ms: 0.073709
+  ...
+# Subtest: atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+ok 5 - atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+  ---
+  duration_ms: 0.340084
+  ...
+# Subtest: atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+ok 6 - atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+  ---
+  duration_ms: 0.142292
+  ...
+# Subtest: atomic scanner normalizes every unchanged base migration without claiming installer integration
+ok 7 - atomic scanner normalizes every unchanged base migration without claiming installer integration
+  ---
+  duration_ms: 37.15725
+  ...
+# Subtest: atomic scanner rejects additional documented commands that cannot run in a transaction
+ok 8 - atomic scanner rejects additional documented commands that cannot run in a transaction
+  ---
+  duration_ms: 0.124666
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 7
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 125.90225

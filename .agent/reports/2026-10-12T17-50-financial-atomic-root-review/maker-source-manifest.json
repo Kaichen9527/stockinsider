@@ -1,0 +1,93 @@
+[
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": "scripts/opportunity-v3/atomic-migration-chain.mjs",
+    "bytes": 3241,
+    "sha256": "d7f372c93f8ff4dcdbc4b34295e03e6c4e04722591a3111e719b3f79409e14fd",
+    "blob": "93a3e200399e9e055eb8c85e61dcff51cfc98197"
+  },
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "bytes": 5303,
+    "sha256": "bd5b021093fdab95ff2337206ce38ee2de05dc672ab5cac7ce756078d222882c",
+    "blob": "e451662d28d94088d3ee5e140f524142f48ad43f"
+  },
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": "scripts/opportunity-v3/migration-contract.test.mjs",
+    "bytes": 516977,
+    "sha256": "83953d8acc313b2b109b8ba6d5f4d52d1473a2fcd7223805d3183e8034fd108b",
+    "blob": "f394220058bdb1b9d7290c23960d34f33f14bb5c"
+  },
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": "docs/operations/2026-10-12/financial-history-atomic-extraction-handoff.md",
+    "bytes": 4554,
+    "sha256": "1ded66356d096d0c87641fa1c837bd428cfa13bc08320f9d0ddc436ce1d64246",
+    "blob": "05eb1c2d7e14c70dde81021b278ec3d7b3ef00e7"
+  },
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": "migrations/20261005_financial_history_admission_v1.sql",
+    "bytes": 11994,
+    "sha256": "5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27",
+    "blob": "766f37241820e10c12806d407fa9eb99d3cf654c"
+  },
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": "scripts/opportunity-v3/migration-plan.mjs",
+    "bytes": 4880,
+    "sha256": "ecb58eed30e4c247f4a362c397c8e932cf0ea7ec79b5e279714e2a1c946b622e",
+    "blob": "bb8309d0fad31f77205a8cc9739c285b3e131921"
+  },
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "bytes": 33975,
+    "sha256": "90b9c6fd6ba1f68b8a378759d0608e6e6aea38a11b2eeab700f8cfaaf2eca78a",
+    "blob": "66291dc2c67eca0bd5f15f2ac61769095b0e42a4"
+  },
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": "package.json",
+    "bytes": 24733,
+    "sha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc",
+    "blob": "f25f4bebad793fb7eabc03e2320e4472553a0fb9"
+  },
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": "package-lock.json",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+  },
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": "web/package-lock.json",
+    "bytes": 274088,
+    "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+    "blob": "a41fd447e28f3b36829b689828c345e042619a38"
+  },
+  {
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json",
+    "bytes": 33417,
+    "sha256": "9ec16e3c703a0f42c5700d6225c4a94ab2f56f81ae139fc1da2f9fda2ca6c3e3",
+    "blob": "438a36604fc9bb2a0768a1750eb8b860ced0793e"
+  },
+  {
+    "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/atomic-migration-chain.mjs",
+    "bytes": 2888,
+    "sha256": "7c1dfdcb6e670f91f320a54d1dbd683d14c2506944410b80f010826e723898c7",
+    "blob": "b21fcfff0590bcb31ccf9491e0a1db820fb311bf"
+  },
+  {
+    "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "bytes": 2066,
+    "sha256": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466",
+    "blob": "6ad4e15dd0d20194307b3d7bb257cb3f0609b837"
+  }
+]

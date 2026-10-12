@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-12T09:49:37.774923+00:00",
+  "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+  "hostId": "durable",
+  "turn": "01a12f83-08d1-7152-9112-734d8a534d02",
+  "cursor": "83271615-2ee9-4bed-bd38-321f1348ab62:2",
+  "branch": "codex/financial-history-atomic-installer-oct12",
+  "base": "b48b3b0b9e9ac5464609ef6a2e2acf735a3834b2",
+  "integrateApprovedMain": "4dddb8f01f518350c7d54b7995ee9358c1d945a7",
+  "status": "active; no implementation result yet",
+  "scope": "one30min optin49financial chain plan/apply/atomic/successor/postconditions/puretests; no whole76migration bundle",
+  "productionWrite": false,
+  "protectedApproval": false
+}

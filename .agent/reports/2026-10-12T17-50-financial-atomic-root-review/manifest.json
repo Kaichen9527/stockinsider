@@ -1,0 +1,42 @@
+[
+  {
+    "path": "verification.json",
+    "bytes": 1284,
+    "sha256": "cfaac762201321519bacd8af6356a95b1a9e9bf967108630fa159a35d2cb052c"
+  },
+  {
+    "path": "scanner.stdout",
+    "bytes": 2794,
+    "sha256": "930779c9d1d36baaab9dd643978ab075b2ffdc0f3893b8361f64764d58511e40"
+  },
+  {
+    "path": "scanner.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "maker-receipt.json",
+    "bytes": 23841,
+    "sha256": "9d16cab93614efed1cab5c1b3603a417b226688d3015bc7817f3ba452b11ac34"
+  },
+  {
+    "path": "maker-native.stdout",
+    "bytes": 1586,
+    "sha256": "4f21ced1784950ac3264a4a0cee38d6d215ed944955245b4bd8f76d1fb9bc142"
+  },
+  {
+    "path": "maker-pure-full-final.stdout",
+    "bytes": 2773,
+    "sha256": "831ab8d6240bd7146ecd230166cbffca07bca8b1aea42ed77628c146c77cb2d7"
+  },
+  {
+    "path": "maker-scanner-green.stdout",
+    "bytes": 1724,
+    "sha256": "cb0c14cd77cbf6c06fa658395dbba23669d550f0f6b9391693deaf7d886d4f9d"
+  },
+  {
+    "path": "maker-source-manifest.json",
+    "bytes": 3734,
+    "sha256": "0c260b31cc824c7ff3d83606ebbfcba64f013b468a91269a57b5b09ad3b0b159"
+  }
+]

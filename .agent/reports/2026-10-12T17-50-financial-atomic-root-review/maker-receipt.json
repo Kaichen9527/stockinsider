@@ -1,0 +1,613 @@
+{
+  "kind": "financial-atomic-extraction-slice2-maker",
+  "recorded_at": "2026-10-12T09:30:40Z",
+  "manual_start": "2026-10-12T09:01:44Z",
+  "manual_deadline": "2026-10-12T09:31:44Z",
+  "branch": "codex/financial-history-atomic-extraction-oct12",
+  "base": "baf2bbeafd84837f6a08475460fd2f84cf6e091b",
+  "extracted_from": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "source_head": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+  "source_tree": "48c96235b46c688079db489f52893f8d88d32476",
+  "source_webtree": "68f36363fa1671cd3b3c74fdf05ed2e7d3be3e5a",
+  "webtree_unchanged": true,
+  "SQL_48base_planner_apply_authority_package_locks_unchanged": true,
+  "original_pure": {
+    "pass": 1,
+    "fail": 1,
+    "skip": 0,
+    "reason": "original installer atomic COMMIT assertion not satisfied by unchanged main"
+  },
+  "adversarial_red": {
+    "tests": 6,
+    "pass": 3,
+    "fail": 3,
+    "reason": "pending installer + identifier dollar-boundary + bareCR comment faults"
+  },
+  "nontransaction_red": {
+    "tests": 1,
+    "pass": 0,
+    "fail": 1,
+    "first_actual_missing_rejection": "DROP DATABASE"
+  },
+  "final_scanner_selection": {
+    "tests": 7,
+    "pass": 7,
+    "fail": 0,
+    "skip": 0,
+    "scope": "scanner-only; unfulfilled installer test excluded by name, not counted PASS"
+  },
+  "final_full_pure": {
+    "tests": 8,
+    "pass": 7,
+    "fail": 1,
+    "skip": 0,
+    "exit": 1,
+    "exact_failure": "actual atomic installer BEGIN is missing",
+    "assertions_retained_not_skipped_or_weakened": true
+  },
+  "native_combined": {
+    "tests": 3,
+    "pass": 3,
+    "fail": 0,
+    "skip": 0,
+    "scope": "original baseline128 + amendment160 + original rollback with supplementary full data/catalog equality"
+  },
+  "individual_native": {
+    "baseline": {
+      "pass": 1,
+      "fail": 0
+    },
+    "amendment": {
+      "pass": 1,
+      "fail": 0
+    },
+    "rollback": {
+      "pass": 1,
+      "fail": 0
+    },
+    "overlap_not_added": true
+  },
+  "native_state_proof": "real predecessor function replacements + forced_extension_failure rollback; nonempty one fact/one observation, full rows/functions/owner/ACL/config/RLS/triggers/schema ACL before-after equality; real PG accepts unquoted dollar-containing names",
+  "profile": "existing unchanged synthetic predecessor fixture on real local PG17.11; no production schema/role/attestation claim",
+  "typecheck": "PASS",
+  "lint": {
+    "exit": 0,
+    "errors": 0,
+    "existing_warnings": 33
+  },
+  "normal_build": {
+    "exit": 0,
+    "subject": "e8d11097d9b3c5e30dbb67eb4ae31f2229d71236",
+    "Node": "22.14.0",
+    "Next": "16.3.4",
+    "build_id": "MEjvxqrfYfnPNGzJTnbfP",
+    "server_files": 1796,
+    "manifest_sha256": "d13f34df8d7bf896052c1b238b0bf45e8357eab95f20e88f9aa07f57d527c76a",
+    "server_logical_bytes": 59953031
+  },
+  "commands": {
+    "pure-full-after-fix": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs"
+      ],
+      "start_utc": "2026-10-12T09:13:47Z",
+      "seconds": 0.5738663673400879,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 25706496,
+      "min_free_bytes": 8759291904
+    },
+    "baseline-selected": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row$",
+        "scripts/opportunity-v3/migration-contract.test.mjs"
+      ],
+      "start_utc": "2026-10-12T09:24:17Z",
+      "seconds": 3.050333261489868,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 167161856,
+      "min_free_bytes": 9068830720
+    },
+    "scanner-green": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "--test-name-pattern=^(transaction normalization|atomic scanner)",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs"
+      ],
+      "start_utc": "2026-10-12T09:17:24Z",
+      "seconds": 0.27085089683532715,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 22638592,
+      "min_free_bytes": 8759279616
+    },
+    "pure-full-final": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs"
+      ],
+      "start_utc": "2026-10-12T09:21:06Z",
+      "seconds": 0.27334070205688477,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 21565440,
+      "min_free_bytes": 9069273088
+    },
+    "rollback-selected": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^financial atomic replay rollback retains installed successor after predecessor replacement and forced failure$",
+        "scripts/opportunity-v3/migration-contract.test.mjs"
+      ],
+      "start_utc": "2026-10-12T09:24:23Z",
+      "seconds": 3.057692766189575,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 155488256,
+      "min_free_bytes": 9068814336
+    },
+    "amendment-selected": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain$",
+        "scripts/opportunity-v3/migration-contract.test.mjs"
+      ],
+      "start_utc": "2026-10-12T09:24:20Z",
+      "seconds": 3.0538597106933594,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 169840640,
+      "min_free_bytes": 9068822528
+    },
+    "nontransaction-red": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "--test-name-pattern=^atomic scanner rejects additional documented commands",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs"
+      ],
+      "start_utc": "2026-10-12T09:16:27Z",
+      "seconds": 0.27114200592041016,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 23408640,
+      "min_free_bytes": 8759287808
+    },
+    "pure-adversarial-red": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs"
+      ],
+      "start_utc": "2026-10-12T09:10:14Z",
+      "seconds": 0.27422237396240234,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 22773760,
+      "min_free_bytes": 8759320576
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start_utc": "2026-10-12T09:24:26Z",
+      "seconds": 50.292017698287964,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1659097088,
+      "min_free_bytes": 8758546432
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start_utc": "2026-10-12T09:21:21Z",
+      "seconds": 21.364369869232178,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1031270400,
+      "min_free_bytes": 9068851200
+    },
+    "pure-original": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--test",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs"
+      ],
+      "start_utc": "2026-10-12T09:09:39Z",
+      "seconds": 0.2764613628387451,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 17342464,
+      "min_free_bytes": 8759328768
+    },
+    "native": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^(V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row|financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain|financial atomic replay rollback retains installed successor after predecessor replacement and forced failure)$",
+        "scripts/opportunity-v3/migration-contract.test.mjs"
+      ],
+      "start_utc": "2026-10-12T09:17:24Z",
+      "seconds": 3.304460048675537,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 185012224,
+      "min_free_bytes": 8759267328
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-12T09:21:07Z",
+      "seconds": 14.668524503707886,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1177649152,
+      "min_free_bytes": 9068863488
+    }
+  },
+  "resources": {
+    "peak_sampled_tree_RSS_bytes": 1659097088,
+    "minimum_sampled_workspace_free_bytes": 8758546432,
+    "rss_goal_bytes": 8589934592,
+    "workspace_reserve_bytes": 8589934592,
+    "one_heavy": true,
+    "method": "250ms ps descendant summed RSS/statvfs, shared RSS conservative; detached server/brief spikes may be missed; tmp measured admission/final"
+  },
+  "pending": [
+    "narrow financial49 selection/profile",
+    "installed-successor guard",
+    "SQL/catalog postconditions",
+    "actual atomic plan/apply (full pure installer assertion currently RED)",
+    "existing-schema rehearsal",
+    "root independent exact review/protected/capacity",
+    "real post-apply 343 coverage"
+  ],
+  "claims": {
+    "self_independent_review": false,
+    "full_installer_pass": false,
+    "production_apply": false,
+    "model_execution": false,
+    "343usable_fixed": false,
+    "strategy_or_schedule_or_deploy": false
+  },
+  "raw_files": [
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/amendment-selected-inventory.json",
+      "bytes": 131,
+      "sha256": "a6138a1aec3dd50931f2ab08a9431a0b17468c2d97c7da49de37e881f06002b2"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/amendment-selected.meta.json",
+      "bytes": 531,
+      "sha256": "a7e4bc0e223c06833553aab4e74b7d49ac48834a19c8177f2ccc89fcdf999cad"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/amendment-selected.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/amendment-selected.stdout",
+      "bytes": 1043,
+      "sha256": "93ddf12ed97f324c6be50fc7529899119f2c7c5270e84fdf529b4faf80e7bc22"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/baseline-selected-inventory.json",
+      "bytes": 114,
+      "sha256": "4074d12029e4e73949d532556a9d6cf00e3b5800827bca1f333b30c99c4a19de"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/baseline-selected.meta.json",
+      "bytes": 513,
+      "sha256": "79e59ec5dd31f705042705652f6333a700d6a8d65d8a7651dcb86c9410d56a79"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/baseline-selected.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/baseline-selected.stdout",
+      "bytes": 1008,
+      "sha256": "3f42bbf46a1a3f0fd84a5608b6cec1c658e4a509b2d557e4aab262dbc340d8ec"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/build-inventory.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/build.meta.json",
+      "bytes": 253,
+      "sha256": "aee852ec6a1121227117d248ad3c636ac7417e2a7074bbe9743f46a923ab6a98"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/build.stdout",
+      "bytes": 5556,
+      "sha256": "c6542f7ffa04afa2fd125fdf6133bcb9102fad2e6335fb11d6cce7eca0a282dd"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/cleanup.json",
+      "bytes": 250,
+      "sha256": "e9497702454f19da41f2dc80fd67c462b9d1cce26d767f11930caebd26a78255"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/compiled-server-manifest.json",
+      "bytes": 333261,
+      "sha256": "d13f34df8d7bf896052c1b238b0bf45e8357eab95f20e88f9aa07f57d527c76a"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/initial-extraction-identity.json",
+      "bytes": 424,
+      "sha256": "622b43ae00ffa441b9514ca89635cf994bd8becc63bde3e592de72d0262355e6"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/lint-inventory.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/lint.meta.json",
+      "bytes": 252,
+      "sha256": "f3ce737cc0ce2b9fa1d8bdae8be65fa28a116bf49c615e4c360c0c704ecede94"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/lint.stderr",
+      "bytes": 169,
+      "sha256": "71929ba2bea0dfebdb1ea73e7090ab5ff1bf7f0091b1b6b16a2cdcff45f5a2fb"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/lint.stdout",
+      "bytes": 4612,
+      "sha256": "8ffb0269554a352aa9aff57932c4784fce703429c0b9e521eeae8ab33f1d12b9"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/native-inventory.json",
+      "bytes": 357,
+      "sha256": "14ce5418615630275e3be828f740eeb03cae61196e7d6f0b43b8f08df0caf624"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/native.meta.json",
+      "bytes": 748,
+      "sha256": "1e534aed46e9917b791ddfeaba0eb7a695ef14c48ed1657933177aef3c126da6"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/native.stdout",
+      "bytes": 1586,
+      "sha256": "4f21ced1784950ac3264a4a0cee38d6d215ed944955245b4bd8f76d1fb9bc142"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/nontransaction-red-inventory.json",
+      "bytes": 95,
+      "sha256": "85cc0f3f9cc62cddafcff7024824eeb3d65c97b8e290de92e5db1861c6618acb"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/nontransaction-red.meta.json",
+      "bytes": 403,
+      "sha256": "fe5e3998e0d4f36c7e180f76967be5ec4eefedb5da358c28a5e178ffbc105000"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/nontransaction-red.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/nontransaction-red.stdout",
+      "bytes": 1023,
+      "sha256": "be55e93e98eb10374c45ca37b5099aede796a3a718787925e5cc1e53f12e61af"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/original-atomic-migration-chain.mjs.txt",
+      "bytes": 2888,
+      "sha256": "7c1dfdcb6e670f91f320a54d1dbd683d14c2506944410b80f010826e723898c7"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/original-atomic-migration-chain.test.mjs.txt",
+      "bytes": 2066,
+      "sha256": "048b851bba73ea6f010d9e8d2e752af413e10162f71d77c3f1fac69b50351466"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-adversarial-red-inventory.json",
+      "bytes": 541,
+      "sha256": "4191564c9e48234c0e30a71687073290c04171f63d8d8826cde0d2ccd3d34ddd"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-adversarial-red.meta.json",
+      "bytes": 321,
+      "sha256": "4d17018a0674254d0449008daf5c366220bf6e0970c9fd22dc94b8e220b02f23"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-adversarial-red.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-adversarial-red.stdout",
+      "bytes": 4084,
+      "sha256": "2837fc43e5055ae3b375b55d41c4d90dd0f6c552d6e679b321ee686093acbd17"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-full-after-fix-inventory.json",
+      "bytes": 642,
+      "sha256": "4eb54d02c9466decf066083ad384a30a79b3bba4cb2f7f84ec9e111374d33d86"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-full-after-fix.meta.json",
+      "bytes": 320,
+      "sha256": "432847654e3eccbc63544109cf5d5cc165155082d1423aab1751da0ddbd66234"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-full-after-fix.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-full-after-fix.stdout",
+      "bytes": 2547,
+      "sha256": "6cd91b7e6e49f8d16527a49f5c077478a32b7e9b8df3827decfa2b5f8764ba7c"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-full-final-inventory.json",
+      "bytes": 734,
+      "sha256": "a3d1dd8d2fe9b5cd27a80f9ec314b6096013b6a28d4eeb9567d00e145e956d8d"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-full-final.meta.json",
+      "bytes": 321,
+      "sha256": "152b224ad94a4bccc37ddb7be984508f8a4a5fa176197d98bbd315b23161c9ea"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-full-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-full-final.stdout",
+      "bytes": 2773,
+      "sha256": "831ab8d6240bd7146ecd230166cbffca07bca8b1aea42ed77628c146c77cb2d7"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-original-inventory.json",
+      "bytes": 172,
+      "sha256": "f187b8d5f3fb41a9056fa6b416b322e82a786eabae07e73fb00a911f5c64d332"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-original.meta.json",
+      "bytes": 320,
+      "sha256": "3788e4cadaebcbcf422a6056da7872e8654d079c86a47e5ef19c8c745e3b91a6"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-original.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/pure-original.stdout",
+      "bytes": 1553,
+      "sha256": "d2d4b2bb8c641f9c53110799e35eac79ac53286b90d30b6623532bd4af1b2fc7"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/red-atomic-migration-chain.mjs.txt",
+      "bytes": 2888,
+      "sha256": "7c1dfdcb6e670f91f320a54d1dbd683d14c2506944410b80f010826e723898c7"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/red-atomic-migration-chain.test.mjs.txt",
+      "bytes": 4086,
+      "sha256": "9a142bea731871bc3c428e8750a50be335e8fefb66c3d4ff1f6a6b7401e0e531"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/resource-runner.py.txt",
+      "bytes": 1330,
+      "sha256": "7d0ff7fdc971f7490632b57ea3bdd719af9c36847cc1d40cf795545d54cb3399"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/retired-own-build-cleanup.json",
+      "bytes": 558,
+      "sha256": "45959be2d5e871cba433aca3572b32412b9b5ff9dcc1f2f8dae6ed98a1693a8a"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/rollback-selected-inventory.json",
+      "bytes": 118,
+      "sha256": "ee8d79771a2bd662830c63b7fdb818c5ff355afa67068c27b952545788752103"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/rollback-selected.meta.json",
+      "bytes": 517,
+      "sha256": "bdfd3cd13b0147f5def9be97bbdfdb489818100eac4713f6c74faa3a9356af0f"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/rollback-selected.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/rollback-selected.stdout",
+      "bytes": 1017,
+      "sha256": "4b5dd6f51edad24ac752fac4ca17c23be5d07be7393c79fab5399b0d345d9188"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/scanner-green-inventory.json",
+      "bytes": 651,
+      "sha256": "2ebc86cbab340cc410a61ee8a0fd15c465f17db57ba824c88379ef2a03d6605a"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/scanner-green.meta.json",
+      "bytes": 392,
+      "sha256": "ac44687b09a30b6a1e20c0b6372a2b8b1b88d4178f246b6b6a3b48a392078e1b"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/scanner-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/scanner-green.stdout",
+      "bytes": 1724,
+      "sha256": "cb0c14cd77cbf6c06fa658395dbba23669d550f0f6b9391693deaf7d886d4f9d"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/source-manifest.json",
+      "bytes": 3734,
+      "sha256": "0c260b31cc824c7ff3d83606ebbfcba64f013b468a91269a57b5b09ad3b0b159"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/source.delta.patch",
+      "bytes": 19834,
+      "sha256": "688b89fdc79cdd82f457882e41fdcdd250695fed352f242c853d8559238045a1"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/typecheck-inventory.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/typecheck.meta.json",
+      "bytes": 257,
+      "sha256": "0c6afebf3b890d6c25cdcd460caa33c9afe4f6f143a8b67b97c29adffdc1481d"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/unchanged-base-chain.json",
+      "bytes": 12234,
+      "sha256": "3b7fff920e0d8fce46e1ae4e40fcb5d6d40089fd24a640cccf405f73534b7db2"
+    }
+  ]
+}
