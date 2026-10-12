@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 10:49台灣時間：來源audit已有真實58項驗證；獨立審查攔下兩項完整性錯誤
+
+Cloud來源adapter完成code943cf179／delivery ef5d4db2，root核對31raw及13source的bytes/hash/blob，親跑同一58項全PASS／零skip；VM types/lint/build證據如實保留。Root已成功建立並附上[draft PR374](https://github.com/Kaichen9527/stockinsider/pull/374)，原VM GraphQL Forbidden不重試。這份增量只提供真實legacy mention audit，尚無verified creator/news-root/withdrawal或PTT parent body，所以不是live准入、Top20或研究排程完成；RadarTabs仍unsupported。
+
+真正獨立review REQUEST_CHANGES（P0=0／P1=0／P2=2）：既有短頁即停的reader遇server cap100/request750可只返200列母體中的100列，新hardcoded rowsComplete:true因此不成立；同一PTT parent/index可被兩UUID／兩作者重複記數，且未綁row source_url。兩個純資料負例已實際重現，原58綠不能覆蓋這些缺漏，也不能稱診斷作者數已是下界。原ef5d不批准、不merge；後續需要完整性缺口可見、URL綁定、重送去重與衝突整個reply key失效／排序不變的測試。原TS2737 RED與其他歷史證據保留。
+
+Cloud先接15分鐘只讀authority契約盤點（cursor11／turn01a12e00），再依單次序列followup進行最多30分鐘兩P2修補與新負例，並只把新adapter test加入既有ordinary quality workflow；root不改ownedfiles、不重派重疊工作。修補後重新獨立review與正常必要檢查；不假造creator/root或以null永久冒充完成。PR374初次protected因缺exact review refs失敗、model/product code gates skip，不是舊CLI故障；不對同輸入重跑。其ordinary28項PASS只涵蓋既有policy/UI，不能宣稱新adapter已在CI執行。
+
+main仍已正常合併8bcd，已驗證Linux發布包不重建；正式VPS仍169，先前原鎖內容量缺3.41GB、待人類容量選擇，本輪未擅降准入或刪月內Docker。343全量及PTT2409保持原終態不重跑。完整新收據`.agent/reports/2026-10-12T10-49-live-adapter-independent-review/`。
+
 ## 2026-10-12 09:35台灣時間：精確main Linux發布包已驗證；VPS鎖內容量仍不足，VM接續真准入adapter
 
 正常批准合併main8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14/tree70833148/webd9af68f1已完成既有PR368 artifact-only workflow。4fa3d622僅3sourcepins，獨立CODE P0/P1/P2=0；push後自動pull_request run38192054066/prepare114626723373真SUCCESS，沒有再dispatch。實際107計算+7打包+4瀏覽器、types/lint/build全過。下載27,563,760byte Linux包、全部SHA256SUMS/三Git identity一致；安全檢查3100archive成員無symlink/special/path traversal後，既有verifier對2,585檔/79,322,648bytes逐項hash/mode/manifest/source都真PASS。archive SHA1a9032529df500fb4c1daf5a21be7ce98c0bb0f18c60ae70f9d5fec0169e1db0，manifest073badff1165a7931b58af21a6432c016c7b70559cb7c90c18d7cc414a91c310。產物在GitHub，binary不入Git history或VPS暫存。

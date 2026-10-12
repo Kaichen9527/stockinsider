@@ -1,0 +1,21 @@
+{
+  "observedAt": "2026-10-12T02:45:29.285260+00:00",
+  "exactHead": "ef5d4db22381fd364700f8a3fe65c7b398326467",
+  "rawManifestVerified": 31,
+  "sourceManifestVerified": 13,
+  "receiptSha256": "613f6b92961f5d2fe31adace5e001b3b07333fd96811aefb6410d1f915e565a5",
+  "command": [
+    "/usr/bin/arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/live-discovery-evidence-adapter.test.ts",
+    "web/src/lib/candidate-discovery-admission.test.ts",
+    "web/src/lib/ptt-mention-provenance.test.ts",
+    "web/src/lib/candidate-research-policy.test.ts"
+  ],
+  "exitCode": 0,
+  "scope": "Exact source focused rerun using existing read-only dependency directory; no installation/build/database/source crawl"
+}

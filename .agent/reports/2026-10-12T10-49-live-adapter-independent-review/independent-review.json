@@ -1,0 +1,41 @@
+{
+  "schema": "manual-independent-code-review-v1",
+  "reviewer": "/root/author_input_review_oct08",
+  "exactHead": "ef5d4db22381fd364700f8a3fe65c7b398326467",
+  "codeHead": "943cf179dbae6a85e250be0183feb7f708d5e058",
+  "codeTree": "024da72ce55ab2c15ea1ff6f7e76ff1101e8436c",
+  "deliveryTree": "e9aaa0d7d905971f5cbc2a669f83c41155d82ada",
+  "result": "REQUEST_CHANGES",
+  "counts": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 2
+  },
+  "findings": [
+    {
+      "priority": "P2",
+      "file": "web/src/lib/candidate-research.ts",
+      "line": 2190,
+      "problem": "rowsComplete:true is unsupported by the existing offset pagination helper, which exits on a short page.",
+      "independentProbe": "200 total rows, server cap100, requested page750, requireComplete:true returns100 after1call.",
+      "requiredClosure": "Do not claim complete unless verified; mark incomplete or implement bounded count/page completeness proof."
+    },
+    {
+      "priority": "P2",
+      "file": "web/src/lib/live-discovery-evidence-adapter.ts",
+      "line": 83,
+      "problem": "PTT count does not bind row source_url and permits conflicting author records for same parent/comment_index.",
+      "independentProbe": "Two UUIDs/different source_url, same internal parent#push-1, different authors and valid excerpt hashes yield explicitPttAuthorsMax2/excludedRows0.",
+      "requiredClosure": "Bind retained document to actual row URL, deduplicate exact reply identities and invalidate conflicting entire reply key independent of input order."
+    }
+  ],
+  "reviewScope": "Independent read-only exact-blob review plus two in-memory counterexamples; not protected approval or maker-suite rerun.",
+  "limitations": "All current legacy results remain unsupported; neither issue currently bypasses investment qualification. Original reviewer probe MODULE_NOT_FOUND retained as reported; no install used.",
+  "rootVerification": "31 raw and13 source manifest entries byte/hash/blob verified; exact source58tests root PASS0FAIL0SKIP, separate from independent negative probes.",
+  "draftPr": "https://github.com/Kaichen9527/stockinsider/pull/374",
+  "publication": "NOT_APPROVED_NOT_MERGED_NOT_DEPLOYED",
+  "nextWork": "Existing Cloud single followup: finish active authority contract read-only audit, then bounded two-P2 repair+new regression cases+add adapter test to existing ordinary CI command. No overlapping edits or duplicate crawl.",
+  "cloudCursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:11",
+  "cloudTurn": "01a12e00-eacd-74e3-b5ed-4ff02c4dc03e",
+  "observedAt": "2026-10-12T02:49:56.313826+00:00"
+}
