@@ -1,81 +1,17 @@
-# Model Runner Host-Pin Compatibility Amendment
+# Model Runner Initial Trust Migration Amendment
 
-Amendment version: `model-runner-host-pin-amendment-v3.18`
+Amendment version: `model-runner-host-pin-amendment-v3.25`
 
-Status: active
+Status: proposed tool-only migration; independent review and owner landing pending.
 
-V3.18 records the signed ChatGPT/Codex application update and macOS root-volume
-identity observed on 2026-09-24. Every path, stat identity, executable digest,
-version and CodeDirectory identity is measured rather than inferred. No broader
-device, version or path is admitted.
+## Exact pin and one-time boundary
 
-## Decision
+The human authorized only a standalone release-tool repair PR initial migration: 「同意，只限發布工具修復 PR；網站仍須全部檢查」. This is not signed evidence. The old protected worker cannot execute the removed old binary; it has no pre-authorized successor ingress. This amendment does not pretend that the candidate may self-register in that old authority. The owner must perform the separately authorized initial governance operation after independent review. Applications retain every required check. See `docs/engineering/runner-trust-migration-20261012/governance.md`.
 
-The repository-owned `model_runner_v3` host oracle is compatible with the
-currently installed Codex line only through the exact observed build string
-`codex-cli 0.155.0-alpha.16.3`. This is an exact pin, not a
-semver/range allowance: another alpha build, patch-suffixed build, or any later
-binary is rejected until a new compatibility amendment and fixture are
-reviewed.
+The only accepted version is `codex-cli 0.162.0-alpha.17.2`, exact lexical and real path `/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex`, SHA-256 `0d5ac7aae20c4eda6242428d5e218c55ba96d8763fda2a271088ff37104b9d28`. No semver range, environment override, binary replacement or symlink fallback exists. Fresh full public stat/hash/codesign/strict verification/Gatekeeper evidence is in `docs/engineering/runner-trust-migration-20261012/host-observation.json`. It contains no authentication material or model execution.
 
-The active immutable fixture remains
-`model-runner-host-pins-v3.json`, version
-`model-runner-host-pins-v3.18`. Its canonical pre-LF payload is exactly 2,143
-UTF-8 bytes with SHA-256
-`4e3a508b5120903ec7364771ba1aea8b98bd43e1d58f0ed1fcee1faaf8457008`;
-the tracked LF-terminated file is exactly 2,144 bytes.
+The exact canonical fixture v3.25 payload is 2,251 UTF-8 bytes, SHA-256 `e10f04c5fff073c6c03109af457d2fe9597db83c6f7f5b719fa6412cbcf151a4`; the file has one final LF and 2,252 bytes. All Node/Git/bundle/executable and ancestor invariants remain mandatory. The actual executing pinned Node must be `/usr/local/bin/node`, `v22.14.0`, `process.arch=arm64`; a historical runner-parent architecture is insufficient.
 
-## Verified host identity
+This amendment also adopts the finite previously reviewed protocol/routing/parser/lifecycle repairs from PR288/317/318: `loop-model-manifest-v3.7`, Sol 6.1 High make and Astra High review/verify, no overrides/waivers, unique strict JSONL terminal, separate stdout/stderr bounds, monotonic deadlines, owned-child signaling, and resource-retaining `recovery_required` when child quiescence cannot be proved. Contract `model-runner-v3.10` is the complete active owner. Prior old-host fixtures and old journal identities remain historical and cannot be resumed by the new namespace.
 
-The compatibility evidence observed on the approved macOS arm64 host is:
-
-- lexical and real executable path:
-  `/Applications/ChatGPT.app/Contents/Resources/codex`
-- version: `codex-cli 0.155.0-alpha.16.3`
-- executable SHA-256:
-  `c67698d0990aae05211d9c43ab343ad9517e406824dea77eca103a2806232b3a`
-- stat identity: device `16777234`, inode `187722471`, size `235548432`,
-  uid `501`, gid `20`, mode `100755`
-- signing identifier: `codex`
-- signing Team ID: `2DC432GLL2`
-- full CodeDirectory SHA-256:
-  `ca7400ca48cc1ce76ba1cbaf002760d0017ef413c971ea21b6d6e3df52bed075`
-- bundle assessment: `Notarized Developer ID`
-
-The refreshed ChatGPT bundle, Node and Git stat identities are also exact fixture
-members: bundle device/inode `16777234/187721324`, Node `16777234/1802834`, Git
-`16777234/1152921500312571562`; the bundle CodeDirectory SHA-256 is
-`53d8ceac529c5ab21133d0b086b4c01e9833155c1a382032a3967feb48d2f303`.
-The runner and doctor must call the same host preflight and verify every fixture member
-and the static runner identity before granting model authority. They may not learn a
-replacement value from the executable under test or fall back to a different executable.
-
-## Compatibility boundary
-
-This amendment changes only the compatible host identity. It does not change
-the runner protocol, routing, approval policy, sandbox permissions, journal
-state machine, trusted Git apply boundary, proposal authority, product
-scoring, evaluation governance, deployment authority, or production mutation
-boundary. `model_runner_v3` remains an independent verification track with
-`influence: none`.
-
-Any observable path, stat, digest, version, signing, designated-requirement,
-Team-ID, CodeDirectory or notarization mismatch is fail-closed. A ChatGPT or
-Codex update therefore blocks the runner until another explicit amendment is
-created and reviewed.
-
-## One-time protected rotation
-
-The successor values above were measured independently with `stat`, SHA-256,
-`codesign --verify --deep --strict`, designated requirement, Team ID and
-`spctl -a -vv`. They are not learned by the candidate test. Before this fixture
-may be accepted in a PR, a protected-base owner must approve the exact trimmed
-Git model-oracle listing transition from predecessor SHA-256
-`5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6` to successor
-SHA-256 `fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161`
-and bind that successor listing to `model-runner-host-pins-v3.18`. The candidate
-supplies only byte-exact model-oracle files that the already-reviewed protected
-base compares against that record; it cannot add or alter its own approval. The
-approval is single-use for this old-to-new listing pair. The protected listing
-map remains closed, so any later, unapproved listing or binary drift fails
-closed.
+Doctor accepts only the exact v3.25 selector. The new protected worker's closed listing map may recognize this exact installation after it becomes protected base; it does not authorize a candidate-chosen alternate listing, stale model-oracle reuse artifact, or future update. A different host identity fails closed and requires another independently reviewed amendment. Requirements/architecture evidence for the new active graph is still required; no fake review ref is inserted here.

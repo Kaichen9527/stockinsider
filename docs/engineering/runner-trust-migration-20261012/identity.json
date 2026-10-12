@@ -1,0 +1,84 @@
+{
+  "fixtureBytes": 2252,
+  "fixtureCanonicalSha256": "e10f04c5fff073c6c03109af457d2fe9597db83c6f7f5b719fa6412cbcf151a4",
+  "identityBytes": 906,
+  "identitySha256": "04e4f083dfabed992e0f9101e7983efe4987d2ce2871a288647a68b5f7afa5f8",
+  "identity": [
+    [
+      "approvalPolicy",
+      "never"
+    ],
+    [
+      "codexVersion",
+      "0.162.0-alpha.17.2"
+    ],
+    [
+      "contractVersion",
+      "model-runner-v3.10"
+    ],
+    [
+      "gitVersion",
+      "2.50.1 (Apple Git-155)"
+    ],
+    [
+      "hardIsolationClaims",
+      [
+        "external_user_read",
+        "authoritative_write",
+        "command_network"
+      ]
+    ],
+    [
+      "hostPinFixtureSha256",
+      "e10f04c5fff073c6c03109af457d2fe9597db83c6f7f5b719fa6412cbcf151a4"
+    ],
+    [
+      "hostPinVersion",
+      "model-runner-host-pins-v3.25"
+    ],
+    [
+      "journalVersion",
+      "model-runner-journal-v3.5"
+    ],
+    [
+      "manifestVersion",
+      "loop-model-manifest-v3.7"
+    ],
+    [
+      "nodeVersion",
+      "v22.14.0"
+    ],
+    [
+      "permissionProfileVersion",
+      "model-runner-permissions-v3.6"
+    ],
+    [
+      "promptPolicyVersion",
+      "model-runner-prompt-v3.5"
+    ],
+    [
+      "requestProtocol",
+      "loop-model-v3.5"
+    ],
+    [
+      "resultProtocol",
+      "loop-model-result-v3.5"
+    ],
+    [
+      "routingVersion",
+      "model-runner-routing-v3.7"
+    ],
+    [
+      "sourceViewVersion",
+      "model-runner-source-view-v3.5"
+    ],
+    [
+      "stateNamespace",
+      "model-runner-v3-trust-migration-v1"
+    ],
+    [
+      "trustedApplyVersion",
+      "model-runner-trusted-apply-v3.5"
+    ]
+  ]
+}

@@ -1,0 +1,1710 @@
+TAP version 13
+# Subtest: PCR-023 actual protected aggregate rejects missing, reordered, failed and unreviewed inputs
+ok 1 - PCR-023 actual protected aggregate rejects missing, reordered, failed and unreviewed inputs
+  ---
+  duration_ms: 1.458666
+  ...
+# Subtest: the configured protected check includes the independent model-runner envelope aggregate
+ok 2 - the configured protected check includes the independent model-runner envelope aggregate
+  ---
+  duration_ms: 0.264541
+  ...
+# Subtest: candidate execution waits for exact review and model-runner failure cannot be bypassed
+ok 3 - candidate execution waits for exact review and model-runner failure cannot be bypassed
+  ---
+  duration_ms: 0.465125
+  ...
+# Subtest: public candidate detail changes trigger the protected product workflow
+ok 4 - public candidate detail changes trigger the protected product workflow
+  ---
+  duration_ms: 0.08325
+  ...
+# Subtest: every third-party action is pinned to an immutable commit
+ok 5 - every third-party action is pinned to an immutable commit
+  ---
+  duration_ms: 0.156167
+  ...
+# Subtest: subject preparation pins Node from the protected base
+ok 6 - subject preparation pins Node from the protected base
+  ---
+  duration_ms: 0.175291
+  ...
+# Subtest: the base worker owns validation and performs the final exclusive envelope write
+ok 7 - the base worker owns validation and performs the final exclusive envelope write
+  ---
+  duration_ms: 0.127791
+  ...
+# Subtest: review envelopes require reviewed-parent evidence with an exact closed diff and bound attestation
+ok 8 - review envelopes require reviewed-parent evidence with an exact closed diff and bound attestation
+  ---
+  duration_ms: 0.072667
+  ...
+# Subtest: the protected root selects closed graph-bound Requirements/Architecture evidence and subject-addressed exact review evidence
+ok 9 - the protected root selects closed graph-bound Requirements/Architecture evidence and subject-addressed exact review evidence
+  ---
+  duration_ms: 0.463333
+  ...
+# Subtest: the production parser accepts the actual immutable PR210 architecture evidence bytes
+ok 10 - the production parser accepts the actual immutable PR210 architecture evidence bytes
+  ---
+  duration_ms: 1.80525
+  ...
+# Subtest: the protected root executes the closed v1 and v2 graph algorithms and rejects unknown catalogs
+ok 11 - the protected root executes the closed v1 and v2 graph algorithms and rejects unknown catalogs
+  ---
+  duration_ms: 2540.6745
+  ...
+# Subtest: the protected model-oracle rotation executes the exact v3.15 to v3.16 listing transition
+ok 12 - the protected model-oracle rotation executes the exact v3.15 to v3.16 listing transition
+  ---
+  duration_ms: 24.692916
+  ...
+# Subtest: the protected model-oracle rotation approves only the exact v3.16 to v3.17 successor
+ok 13 - the protected model-oracle rotation approves only the exact v3.16 to v3.17 successor
+  ---
+  duration_ms: 24.809208
+  ...
+# Subtest: the protected model-oracle rotation approves only the exact v3.17 to v3.18 successor
+ok 14 - the protected model-oracle rotation approves only the exact v3.17 to v3.18 successor
+  ---
+  duration_ms: 0.205333
+  ...
+# Subtest: each candidate command is isolated in a process group that is cleared on return
+ok 15 - each candidate command is isolated in a process group that is cleared on return
+  ---
+  duration_ms: 0.071416
+  ...
+# Subtest: candidate model code receives no credential and is enclosed by a base-owned filesystem/network sandbox
+not ok 16 - candidate model code receives no credential and is enclosed by a base-owned filesystem/network sandbox
+  ---
+  duration_ms: 0.607917
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/scripts/opportunity-v3/protected-external-gate-worker.test.mjs:541:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /":root" = "deny"/u. Input:
+    
+    "import assert from 'node:assert/strict';\n" +
+      "import { execFileSync, spawnSync } from 'node:child_process';\n" +
+      "import { createHash } from 'node:crypto';\n" +
+      'import {\n' +
+      '  chmodSync,\n' +
+      '  lstatSync,\n' +
+      '  mkdirSync,\n' +
+      '  mkdtempSync,\n' +
+      '  readFileSync,\n' +
+      '  realpathSync,\n' +
+      '  rmSync,\n' +
+      '  writeFileSync,\n' +
+      "} from 'node:fs';\n" +
+      "import os from 'node:os';\n" +
+      "import path from 'node:path';\n" +
+      "import { fileURLToPath } from 'node:url';\n" +
+      "import { validateProtectedCodeGateAggregateInputs } from './protected-code-gate-aggregate.mjs';\n" +
+      "import { candidateSandboxPolicy } from './candidate-sandbox-policy.mjs';\n" +
+      '\n' +
+      '// This program is deliberately base-owned: it is checked out from the protected\n' +
+      '// pull-request base, consumes only the preceding base-owned bootstrap artifact,\n' +
+      '// and writes every envelope itself. Candidate scripts may be executed only after\n' +
+      '// this program creates a detached, clean checkout with a replacement environment.\n' +
+      "const baseRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');\n" +
+      "const changeRelative = '.loop-engineering/state/changes/source-led-opportunity-engine-v3';\n" +
+      'const registryRelative = `${changeRelative}/external-gate-release-registry-v1.json`;\n' +
+      "const modelOracleReuseRelative = '.github/protected-model-oracle-reuse-v1.json';\n" +
+      'const attestationKeys = [\n' +
+      "  'baseCommitSha', 'checkRun', 'registryCommitSha', 'registryPath', 'registrySha256',\n" +
+      "  'registryTreeSha', 'releaseId', 'releaseSha256', 'repository', 'schema',\n" +
+      "  'subjectCommitSha', 'subjectTreeSha', 'workflowPath',\n" +
+      '];\n' +
+      'const envelopeKeys = [\n' +
+      "  'attestation', 'harnessReleaseSha256', 'issuedAt', 'issuer', 'result', 'resultSha256',\n" +
+      "  'schema', 'subjectCommitSha', 'subjectTreeSha',\n" +
+      '];\n' +
+      'const resultKeys = [\n' +
+      "  'acceptanceVersion', 'activeGraphSha256', 'blockedReason', 'check', 'commandCatalogSha256',\n" +
+      "  'commands', 'commitSha', 'completedAt', 'cwdMode', 'evidenceSha256', 'executedCount',\n" +
+      "  'inputs', 'partition', 'registeredCount', 'review', 'schema', 'scriptValueRowsSha256',\n" +
+      "  'status', 'treeSha',\n" +
+      '];\n' +
+      'const reviewKeys = [\n' +
+      "  'evidenceCommitSha', 'evidenceFileSha256', 'evidenceOnlyPaths', 'evidencePath',\n" +
+      "  'evidenceTreeSha', 'p0', 'p1', 'pcrFulfillmentPath', 'pcrFulfillmentSha256',\n" +
+      "  'reviewedActiveGraphSha256', 'reviewedBaseSha', 'reviewedHeadOrTreeSha', 'reviewedRange',\n" +
+      "  'reviewedTreeSha', 'verdict',\n" +
+      '];\n' +
+      'const requiredChecks = [\n' +
+      "  'requirements', 'architecture', 'product-runtime-code-gate', 'model-runner-code-gate', 'exact-review',\n" +
+      '];\n' +
+      'const gatePolicies = Object.freeze({\n' +
+      '  requirements: { commands: [], count: 0, partition: null, review: true },\n' +
+      '  architecture: { commands: [], count: 0, partition: null, review: true },\n' +
+      "  'product-runtime-code-gate': {\n" +
+      "    commands: [['product-runtime-track', 'protected://stockinsider-v3-gate-root/execute-track --track product_runtime']],\n" +
+      '    count: 272,\n' +
+      "    partition: 'product_runtime',\n" +
+      '    review: false,\n' +
+      '  },\n' +
+      "  'model-runner-code-gate': {\n" +
+      "    commands: [['model-runner-track', 'protected://stockinsider-v3-gate-root/execute-track --track model_runner']],\n" +
+      '    count: 28,\n' +
+      "    partition: 'model_runner',\n" +
+      '    review: false,\n' +
+      '  },\n' +
+      "  'exact-review': { commands: [], count: 0, partition: null, review: true },\n" +
+      "  'code-gate-aggregate': { commands: [], count: 0, partition: null, review: false },\n" +
+      '});\n' +
+      'const reviewSources = Object.freeze({\n' +
+      '  requirements: {\n' +
+      "    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',\n" +
+      '    path: `${changeRelative}/requirements-review-v3.20.md`,\n' +
+      "    finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "    rangeLine: 'Full reviewed range',\n" +
+      '  },\n' +
+      '  architecture: {\n' +
+      "    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence',\n" +
+      '    path: `${changeRelative}/architecture-review-v3.20.md`,\n' +
+      "    finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "    rangeLine: 'Full reviewed implementation range',\n" +
+      '  },\n' +
+      "  'exact-review': {\n" +
+      "    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-exact-review-evidence',\n" +
+      '    path: `${changeRelative}/exact-commit-review-final.md`,\n' +
+      "    finalLine: 'Final reviewed repair/tree',\n" +
+      "    rangeLine: 'Full final range',\n" +
+      '  },\n' +
+      '});\n' +
+      '\n' +
+      'const v319ReviewSources = Object.freeze({\n' +
+      '  requirements: Object.freeze({\n' +
+      "    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v319-requirements-evidence',\n" +
+      '    path: `${changeRelative}/requirements-review-v3.19.md`,\n' +
+      "    finalLine: 'Final repair-closure commit/tree',\n" +
+      "    rangeLine: 'Full reviewed range',\n" +
+      '  }),\n' +
+      '  architecture: Object.freeze({\n' +
+      "    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v319-architecture-evidence',\n" +
+      '    path: `${changeRelative}/architecture-review-v3.19.md`,\n' +
+      "    finalLine: 'Final repair-closure commit/tree',\n" +
+      "    rangeLine: 'Full reviewed implementation range',\n" +
+      '  }),\n' +
+      '});\n' +
+      '\n' +
+      'const graphBoundReviewSources = Object.freeze({\n' +
+      '  // The final V3.14 catalog-identity closure propagates the corrected catalog\n' +
+      '  // digest into its two canonical authority comments. It retains the same\n' +
+      '  // independently reviewed signed-host and product authority.\n' +
+      "  '1c32b707a2e3d36e0ca01b4e78b9c20fa5bcef5eb34dce486063d9f694a2c9fc': Object.freeze({\n" +
+      '    requirements: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-gate-bootstrap-20260906',\n" +
+      '      path: `${changeRelative}/requirements-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "      rangeLine: 'Full reviewed range',\n" +
+      '    }),\n' +
+      '    architecture: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-gate-bootstrap-20260906',\n" +
+      '      path: `${changeRelative}/architecture-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "      rangeLine: 'Full reviewed implementation range',\n" +
+      '    }),\n' +
+      '  }),\n' +
+      '  // V3.14 host-pin governance alignment corrects stale V3.13 catalog and\n' +
+      '  // traceability declarations without changing the independently reviewed\n' +
+      '  // signed host identity or product authority. Register the resulting graph\n' +
+      '  // from this bootstrap change so subsequent protected runs can bind the same\n' +
+      '  // immutable Requirements and Architecture reviews.\n' +
+      "  '8c4d36c50c2e4d2437429a4bf2dbc3911cfe69a59f9ae6a231dd7105a69b1c2c': Object.freeze({\n" +
+      '    requirements: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-requirements-90de150b',\n" +
+      '      path: `${changeRelative}/requirements-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "      rangeLine: 'Full reviewed range',\n" +
+      '    }),\n' +
+      '    architecture: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-architecture-fa523ba1',\n" +
+      '      path: `${changeRelative}/architecture-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "      rangeLine: 'Full reviewed implementation range',\n" +
+      '    }),\n' +
+      '  }),\n' +
+      '  // The signed-host compatibility amendment changes active authority bytes.\n' +
+      '  // Register its independent review refs from the preceding protected base so\n' +
+      '  // the candidate cannot select or modify its own review source.\n' +
+      "  '81dceab0d17b6c0f0c104ee3376f6d1dc5065a283040a4c1ee0ac40f574580d4': Object.freeze({\n" +
+      '    requirements: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-requirements-90de150b',\n" +
+      '      path: `${changeRelative}/requirements-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "      rangeLine: 'Full reviewed range',\n" +
+      '    }),\n' +
+      '    architecture: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-architecture-fa523ba1',\n" +
+      '      path: `${changeRelative}/architecture-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "      rangeLine: 'Full reviewed implementation range',\n" +
+      '    }),\n' +
+      '  }),\n' +
+      "  '4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b': Object.freeze({\n" +
+      '    requirements: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',\n" +
+      '      path: `${changeRelative}/requirements-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "      rangeLine: 'Full reviewed range',\n" +
+      '    }),\n' +
+      '    architecture: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence',\n" +
+      '      path: `${changeRelative}/architecture-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "      rangeLine: 'Full reviewed implementation range',\n" +
+      '    }),\n' +
+      '  }),\n' +
+      "// V3.20's final amendment graph adds the graph-authoritative KOL/runtime\n" +
+      '// artifact. The protected worker runs from the base branch, so this mapping\n' +
+      '// belongs here before a PR with that graph can prove its own reviews.\n' +
+      "  '13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587': Object.freeze({\n" +
+      '    requirements: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',\n" +
+      '      path: `${changeRelative}/requirements-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "      rangeLine: 'Full reviewed range',\n" +
+      '    }),\n' +
+      '    architecture: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence',\n" +
+      '      path: `${changeRelative}/architecture-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/tree',\n" +
+      "      rangeLine: 'Full reviewed implementation range',\n" +
+      '    }),\n' +
+      '  }),\n' +
+      "  // V3.20's catalog-integrity repair changes the active graph because its\n" +
+      '  // protected authority bytes changed. These immutable evidence refs are\n' +
+      '  // registered from a normal bootstrap change while the prior graph remains\n' +
+      '  // authoritative, so a candidate cannot select its own review source.\n' +
+      "  '329de76e514164f7ebd1905708491aa15e80c9ce34eb0fb7be3eb03786cdcf64': Object.freeze({\n" +
+      '    requirements: Object.freeze({\n' +
+      "      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-ef3dbb25a599e9d132aec24041ddca96f244e003',\n" +
+      '      path: `${changeRelative}/requirements-review-v3.20.md`,\n' +
+      "      finalLine: 'Final reviewed implementation commit/"... 65359 more characters
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import assert from 'node:assert/strict';
+    import { execFileSync, spawnSync } from 'node:child_process';
+    import { createHash } from 'node:crypto';
+    import {
+      chmodSync,
+      lstatSync,
+      mkdirSync,
+      mkdtempSync,
+      readFileSync,
+      realpathSync,
+      rmSync,
+      writeFileSync,
+    } from 'node:fs';
+    import os from 'node:os';
+    import path from 'node:path';
+    import { fileURLToPath } from 'node:url';
+    import { validateProtectedCodeGateAggregateInputs } from './protected-code-gate-aggregate.mjs';
+    import { candidateSandboxPolicy } from './candidate-sandbox-policy.mjs';
+    
+    // This program is deliberately base-owned: it is checked out from the protected
+    // pull-request base, consumes only the preceding base-owned bootstrap artifact,
+    // and writes every envelope itself. Candidate scripts may be executed only after
+    // this program creates a detached, clean checkout with a replacement environment.
+    const baseRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+    const changeRelative = '.loop-engineering/state/changes/source-led-opportunity-engine-v3';
+    const registryRelative = `${changeRelative}/external-gate-release-registry-v1.json`;
+    const modelOracleReuseRelative = '.github/protected-model-oracle-reuse-v1.json';
+    const attestationKeys = [
+      'baseCommitSha', 'checkRun', 'registryCommitSha', 'registryPath', 'registrySha256',
+      'registryTreeSha', 'releaseId', 'releaseSha256', 'repository', 'schema',
+      'subjectCommitSha', 'subjectTreeSha', 'workflowPath',
+    ];
+    const envelopeKeys = [
+      'attestation', 'harnessReleaseSha256', 'issuedAt', 'issuer', 'result', 'resultSha256',
+      'schema', 'subjectCommitSha', 'subjectTreeSha',
+    ];
+    const resultKeys = [
+      'acceptanceVersion', 'activeGraphSha256', 'blockedReason', 'check', 'commandCatalogSha256',
+      'commands', 'commitSha', 'completedAt', 'cwdMode', 'evidenceSha256', 'executedCount',
+      'inputs', 'partition', 'registeredCount', 'review', 'schema', 'scriptValueRowsSha256',
+      'status', 'treeSha',
+    ];
+    const reviewKeys = [
+      'evidenceCommitSha', 'evidenceFileSha256', 'evidenceOnlyPaths', 'evidencePath',
+      'evidenceTreeSha', 'p0', 'p1', 'pcrFulfillmentPath', 'pcrFulfillmentSha256',
+      'reviewedActiveGraphSha256', 'reviewedBaseSha', 'reviewedHeadOrTreeSha', 'reviewedRange',
+      'reviewedTreeSha', 'verdict',
+    ];
+    const requiredChecks = [
+      'requirements', 'architecture', 'product-runtime-code-gate', 'model-runner-code-gate', 'exact-review',
+    ];
+    const gatePolicies = Object.freeze({
+      requirements: { commands: [], count: 0, partition: null, review: true },
+      architecture: { commands: [], count: 0, partition: null, review: true },
+      'product-runtime-code-gate': {
+        commands: [['product-runtime-track', 'protected://stockinsider-v3-gate-root/execute-track --track product_runtime']],
+        count: 272,
+        partition: 'product_runtime',
+        review: false,
+      },
+      'model-runner-code-gate': {
+        commands: [['model-runner-track', 'protected://stockinsider-v3-gate-root/execute-track --track model_runner']],
+        count: 28,
+        partition: 'model_runner',
+        review: false,
+      },
+      'exact-review': { commands: [], count: 0, partition: null, review: true },
+      'code-gate-aggregate': { commands: [], count: 0, partition: null, review: false },
+    });
+    const reviewSources = Object.freeze({
+      requirements: {
+        ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',
+        path: `${changeRelative}/requirements-review-v3.20.md`,
+        finalLine: 'Final reviewed implementation commit/tree',
+        rangeLine: 'Full reviewed range',
+      },
+      architecture: {
+        ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence',
+        path: `${changeRelative}/architecture-review-v3.20.md`,
+        finalLine: 'Final reviewed implementation commit/tree',
+        rangeLine: 'Full reviewed implementation range',
+      },
+      'exact-review': {
+        ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-exact-review-evidence',
+        path: `${changeRelative}/exact-commit-review-final.md`,
+        finalLine: 'Final reviewed repair/tree',
+        rangeLine: 'Full final range',
+      },
+    });
+    
+    const v319ReviewSources = Object.freeze({
+      requirements: Object.freeze({
+        ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v319-requirements-evidence',
+        path: `${changeRelative}/requirements-review-v3.19.md`,
+        finalLine: 'Final repair-closure commit/tree',
+        rangeLine: 'Full reviewed range',
+      }),
+      architecture: Object.freeze({
+        ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v319-architecture-evidence',
+        path: `${changeRelative}/architecture-review-v3.19.md`,
+        finalLine: 'Final repair-closure commit/tree',
+        rangeLine: 'Full reviewed implementation range',
+      }),
+    });
+    
+    const graphBoundReviewSources = Object.freeze({
+      // The final V3.14 catalog-identity closure propagates the corrected catalog
+      // digest into its two canonical authority comments. It retains the same
+      // independently reviewed signed-host and product authority.
+      '1c32b707a2e3d36e0ca01b4e78b9c20fa5bcef5eb34dce486063d9f694a2c9fc': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-gate-bootstrap-20260906',
+          path: `${changeRelative}/requirements-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-gate-bootstrap-20260906',
+          path: `${changeRelative}/architecture-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      // V3.14 host-pin governance alignment corrects stale V3.13 catalog and
+      // traceability declarations without changing the independently reviewed
+      // signed host identity or product authority. Register the resulting graph
+      // from this bootstrap change so subsequent protected runs can bind the same
+      // immutable Requirements and Architecture reviews.
+      '8c4d36c50c2e4d2437429a4bf2dbc3911cfe69a59f9ae6a231dd7105a69b1c2c': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-requirements-90de150b',
+          path: `${changeRelative}/requirements-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-architecture-fa523ba1',
+          path: `${changeRelative}/architecture-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      // The signed-host compatibility amendment changes active authority bytes.
+      // Register its independent review refs from the preceding protected base so
+      // the candidate cannot select or modify its own review source.
+      '81dceab0d17b6c0f0c104ee3376f6d1dc5065a283040a4c1ee0ac40f574580d4': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-requirements-90de150b',
+          path: `${changeRelative}/requirements-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-architecture-fa523ba1',
+          path: `${changeRelative}/architecture-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      '4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',
+          path: `${changeRelative}/requirements-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence',
+          path: `${changeRelative}/architecture-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+    // V3.20's final amendment graph adds the graph-authoritative KOL/runtime
+    // artifact. The protected worker runs from the base branch, so this mapping
+    // belongs here before a PR with that graph can prove its own reviews.
+      '13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',
+          path: `${changeRelative}/requirements-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence',
+          path: `${changeRelative}/architecture-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      // V3.20's catalog-integrity repair changes the active graph because its
+      // protected authority bytes changed. These immutable evidence refs are
+      // registered from a normal bootstrap change while the prior graph remains
+      // authoritative, so a candidate cannot select its own review source.
+      '329de76e514164f7ebd1905708491aa15e80c9ce34eb0fb7be3eb03786cdcf64': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-ef3dbb25a599e9d132aec24041ddca96f244e003',
+          path: `${changeRelative}/requirements-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-01599c20d11044c0d0bac730df393c5c383ff78c',
+          path: `${changeRelative}/architecture-review-v3.20.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      // Evidence/valuation V6 changes active product and signed-host authority.
+      // Register its independently reviewed immutable evidence from this bootstrap
+      // commit so the candidate branch cannot select or rewrite its own reviewers.
+      '4f08c1a3a126236039247c5d8542ddf7dbdab0d2384c6e953fe22bcc151808ab': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-4b1e75f5',
+          path: `${changeRelative}/requirements-review-v3.21.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-4b1e75f5',
+          path: `${changeRelative}/architecture-review-v3.21.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      // V6's gate-integrity closure updates the canonical command inventory and
+      // catalog authority tags. Register its independently reviewed graph from the
+      // protected base so the candidate cannot select or rewrite its own reviews.
+      'c74be1cd14439580505e05f2ec5904ea7dc9732ee7a4164c9ec1573691ebe352': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-f0a7b874',
+          path: `${changeRelative}/requirements-review-v3.22.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-f0a7b874',
+          path: `${changeRelative}/architecture-review-v3.22.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      // The no-global-Shadow evidence/research closure introduces the catalog-v2
+      // graph preimage while preserving the independently reviewed product and
+      // architecture authority. Register its immutable direct-child review refs
+      // from the protected base so a candidate cannot select its own evidence.
+      'a4cf40d99dbfe7d23e0bdd39130f73cf6943a5535394d8313f2055de9a7d3058': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-6ed9d39a',
+          path: `${changeRelative}/requirements-review-v3.23.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-6ed9d39a',
+          path: `${changeRelative}/architecture-review-v3.23.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      // PR #210's final no-global-Shadow and principal-bound financial validation
+      // graph was independently reviewed at c7b4776. Register only its immutable
+      // direct-child evidence refs from the protected base before the candidate
+      // can consume them.
+      '10ddc6020b010a557f2ad000e11df7ebb2413432bb63351d3a4a5bdba26c46bf': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-c7b4776-final',
+          path: `${changeRelative}/requirements-review-v3.24.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-c7b4776-final2',
+          path: `${changeRelative}/architecture-review-v3.24-final.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+      }),
+      // A root-volume remount changed only the exact device identity of the pinned
+      // runner paths. Register the independently reviewed V3.16 graph before the
+      // one-time successor is proposed, so candidate bytes cannot select reviews.
+      '7700f1c0940dae14034c852e5ffe9e8a9f18439834bcc1c744876dc478470159': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-requirements-aa0c08b',
+          path: `${changeRelative}/requirements-review-host-pin-v3.16.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-architecture-aa0c08b',
+          path: `${changeRelative}/architecture-review-host-pin-v3.16.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+      }),
+      // Final V3.16 host-pin reconciliation fixes the frozen script digest,
+      // protected-gate test/count prose and the active product acceptance totals.
+      // Both immutable direct-child reviews bind the resulting graph and are
+      // registered on the protected base before the candidate can consume them.
+      '6193ebf24dfd5dd6c6d1f52d03e7efda09e3335003ab36cf4a59d62d9598faf4': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-requirements-ba3124f',
+          path: `${changeRelative}/requirements-review-host-pin-v3.16-final.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-architecture-ba3124f',
+          path: `${changeRelative}/architecture-review-host-pin-v3.16-final.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+      }),
+      // The signed ChatGPT/Codex update and current macOS root-volume identity are
+      // independently reviewed before the one-time V3.17 successor is proposed.
+      // Candidate bytes cannot select or rewrite either immutable review source.
+      'dea5f4dee7aadf11435bd95f5f0d8024605e5f298f9a02645aa9352865099b7f': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v317-requirements-245cf0d',
+          path: `${changeRelative}/requirements-review-host-pin-v3.17.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v317-architecture-245cf0d',
+          path: `${changeRelative}/architecture-review-host-pin-v3.17.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      // The v3.17 acceptance JSON retained the predecessor fixture byte count
+      // while its Markdown mirror and signed fixture were already canonical. The
+      // protected base registers the independently reviewed corrected graph before
+      // a candidate can consume it; candidate bytes cannot select these refs.
+      'c563d77e416fdc2284b7aba50ca2eb03fd5f4cbed44f4edb1c918c63db96e3a2': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-contabo-requirements-f569888',
+          path: `${changeRelative}/requirements-review-contabo-gate-reconcile.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-contabo-architecture-f569888',
+          path: `${changeRelative}/architecture-review-contabo-gate-reconcile.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
+        requirements: v319ReviewSources.requirements,
+        architecture: v319ReviewSources.architecture,
+      }),
+      // The already-active V3.18 graph on protected main has separately reviewed
+      // direct-child evidence refs. Register only this exact graph and these refs.
+      'da0305fd3f28b39964617a4b6eb4fce7bd94d3db0884d0b4b3d47a3c0f047fd0': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-pr279-graph',
+          path: `${changeRelative}/requirements-review-pr279-graph-registration.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-pr279-graph',
+          path: `${changeRelative}/architecture-review-pr279-graph-registration.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+      // V3.18 authority metadata is reconciled with the active catalog and host
+      // amendment. Bind the resulting graph to exact direct-child reviews.
+      '722095adecd208b54cc794f72e262dd5b77ed970da80f0ab5771a55259651625': Object.freeze({
+        requirements: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v318-digest',
+          path: `${changeRelative}/requirements-review-v318-digest.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed range',
+        }),
+        architecture: Object.freeze({
+          ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v318-digest',
+          path: `${changeRelative}/architecture-review-v318-digest.md`,
+          finalLine: 'Final reviewed implementation commit/tree',
+          rangeLine: 'Full reviewed implementation range',
+        }),
+      }),
+    });
+    
+    function reviewSource(check, attestation = null, identity = null) {
+      const source = reviewSources[check];
+      assert.ok(source, 'closed review check');
+      if (check !== 'exact-review' && identity !== null) {
+        const graphSources = graphBoundReviewSources[identity.activeGraphSha256];
+        assert.ok(graphSources, `${check} active graph evidence source`);
+        return graphSources[check];
+      }
+      if (check !== 'exact-review' || attestation === null) return source;
+      // Exact-review evidence is about one immutable subject commit.  Keep the
+      // Requirements and Architecture evidence on their already graph-bound
+      // immutable refs, but fetch the exact review from its subject-addressed
+      // append-only ref so one later review cannot move an earlier PR's proof.
+      return {
+        ...source,
+        ref: `refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-${attestation.subjectCommitSha}`,
+      };
+    }
+    
+    function reviewSourceValues(attestation, identity) {
+      const values = [
+        reviewSource('exact-review', attestation),
+        reviewSource('requirements', attestation, identity),
+        reviewSource('architecture', attestation, identity),
+      ];
+      return [...new Map(values.map((source) => [source.ref, source])).values()];
+    }
+    
+    function canonicalJson(value) {
+      if (value === null) return 'null';
+      if (typeof value === 'boolean') return value ? 'true' : 'false';
+      if (typeof value === 'number') {
+        assert.ok(Number.isFinite(value), 'canonical JSON finite number');
+        return Object.is(value, -0) ? '0' : JSON.stringify(value);
+      }
+      if (typeof value === 'string') return JSON.stringify(value);
+      if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+      assert.ok(value && typeof value === 'object', 'canonical JSON object');
+      return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(',')}}`;
+    }
+    
+    function sha256(value) {
+      return createHash('sha256').update(value).digest('hex');
+    }
+    
+    function exactKeys(value, keys, label) {
+      assert.ok(value && typeof value === 'object' && !Array.isArray(value), `${label} object`);
+      assert.deepEqual(Object.keys(value).sort(), [...keys].sort(), `${label} keys`);
+    }
+    
+    function sha(value, label, length = 40) {
+      assert.match(value, new RegExp(`^[0-9a-f]{${length}}$`, 'u'), label);
+    }
+    
+    function absolute(value, label) {
+      assert.equal(path.isAbsolute(value), true, `${label} absolute`);
+      return path.resolve(value);
+    }
+    
+    function git(cwd, args, options = {}) {
+      return execFileSync('/usr/bin/git', args, { cwd, encoding: 'utf8', ...options }).trim();
+    }
+    
+    function gitStatus(cwd, args) {
+      const result = spawnSync('/usr/bin/git', args, { cwd, encoding: 'utf8' });
+      assert.equal(result.error, undefined, `git ${args.join(' ')} starts`);
+      return result.status;
+    }
+    
+    function treeBlob(cwd, treeSha, relativePath, label) {
+      assert.match(relativePath, /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9._/-]+$/u, `${label} safe path`);
+      assert.equal(git(cwd, ['cat-file', '-t', `${treeSha}:${relativePath}`]), 'blob', `${label} blob`);
+      return execFileSync('/usr/bin/git', ['cat-file', 'blob', `${treeSha}:${relativePath}`], { cwd });
+    }
+    
+    function cleanTree(cwd, expectedCommit, expectedTree) {
+      assert.equal(git(cwd, ['rev-parse', 'HEAD']), expectedCommit, 'subject HEAD');
+      assert.equal(git(cwd, ['rev-parse', 'HEAD^{tree}']), expectedTree, 'subject tree');
+      assert.equal(gitStatus(cwd, ['symbolic-ref', '--quiet', 'HEAD']), 1, 'subject must be detached');
+      assert.equal(git(cwd, ['status', '--porcelain=v1', '--untracked-files=all']), '', 'subject checkout clean');
+    }
+    
+    function readAttestation(filename) {
+      const value = JSON.parse(readFileSync(absolute(filename, 'attestation path'), 'utf8'));
+      exactKeys(value, attestationKeys, 'bootstrap attestation');
+      assert.equal(value.schema, 'stockinsider-external-gate-attestation-v1', 'attestation schema');
+      assert.equal(value.repository, 'Kaichen9527/stockinsider', 'attestation repository');
+      assert.equal(value.workflowPath, '.github/workflows/source-led-opportunity-external-gate.yml', 'attestation workflow');
+      assert.equal(value.checkRun, 'stockinsider-v3-gate-root', 'attestation root check');
+      assert.equal(value.registryPath, registryRelative, 'attestation registry path');
+      for (const key of ['baseCommitSha', 'registryCommitSha', 'registryTreeSha', 'subjectCommitSha', 'subjectTreeSha']) sha(value[key], `attestation ${key}`);
+      for (const key of ['registrySha256', 'releaseSha256']) sha(value[key], `attestation ${key}`, 64);
+      return value;
+    }
+    
+    function validateAttestation(attestation, subjectRoot) {
+      assert.equal(git(baseRoot, ['rev-parse', 'HEAD']), attestation.baseCommitSha, 'worker must execute protected base');
+      assert.equal(git(baseRoot, ['status', '--porcelain=v1', '--untracked-files=all']), '', 'protected base checkout clean');
+      assert.equal(git(subjectRoot, ['cat-file', '-t', attestation.subjectCommitSha]), 'commit', 'attested subject commit exists');
+      assert.equal(git(subjectRoot, ['cat-file', '-t', attestation.baseCommitSha]), 'commit', 'attested base commit exists');
+      assert.equal(gitStatus(subjectRoot, ['merge-base', '--is-ancestor', attestation.baseCommitSha, attestation.subjectCommitSha]), 0, 'subject descends from attested base');
+      assert.equal(git(subjectRoot, ['rev-parse', `${attestation.subjectCommitSha}^{tree}`]), attestation.subjectTreeSha, 'attested subject tree');
+      assert.equal(git(subjectRoot, ['rev-parse', `${attestation.registryCommitSha}^{tree}`]), attestation.registryTreeSha, 'attested registry tree');
+      assert.equal(gitStatus(subjectRoot, ['merge-base', '--is-ancestor', attestation.registryCommitSha, attestation.baseCommitSha]), 0, 'registry precedes base');
+      const registryBytes = treeBlob(subjectRoot, attestation.registryTreeSha, registryRelative, 'registered release registry');
+      assert.equal(sha256(registryBytes), attestation.registrySha256, 'registered release registry digest');
+      const registry = JSON.parse(registryBytes);
+      exactKeys(registry, ['issuer', 'protectedCheckRun', 'protectedWorkflowPath', 'releases', 'repository', 'schema'], 'registered release registry');
+      assert.equal(registry.schema, 'stockinsider-external-gate-release-registry-v1', 'registry schema');
+      assert.equal(registry.issuer, 'stockinsider-v3-gate-root', 'registry issuer');
+      assert.equal(registry.repository, attestation.repository, 'registry repository');
+      const release = registry.releases.find(({ id }) => id === attestation.releaseId);
+      assert.ok(release, 'attestation release exists');
+      exactKeys(release, ['bootstrapPath', 'bootstrapSha256', 'id'], 'attestation release');
+      const bootstrapBytes = treeBlob(subjectRoot, attestation.registryTreeSha, release.bootstrapPath, 'registered bootstrap');
+      assert.equal(sha256(bootstrapBytes), attestation.releaseSha256, 'registered bootstrap digest');
+      assert.equal(release.bootstrapSha256, attestation.releaseSha256, 'release digest matches attestation');
+      cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
+    }
+    
+    export function treeIdentity(subjectRoot, treeSha) {
+      const catalogPath = `${changeRelative}/active-artifact-catalog-v3.json`;
+      const catalogBytes = treeBlob(subjectRoot, treeSha, catalogPath, 'active catalog');
+      const catalog = JSON.parse(catalogBytes);
+      const rows = catalog.activeFiles.map((file) => {
+        const repositoryPath = `${changeRelative}/${file}`;
+        const bytes = treeBlob(subjectRoot, treeSha, repositoryPath, `active artifact ${file}`);
+        return [file, git(subjectRoot, ['rev-parse', `${treeSha}:${repositoryPath}`]), bytes.length, sha256(bytes)];
+      });
+      const external = (paths, label) => (paths ?? []).map((repositoryPath) => {
+        const bytes = treeBlob(subjectRoot, treeSha, repositoryPath, `${label} ${repositoryPath}`);
+        return [repositoryPath, git(subjectRoot, ['rev-parse', `${treeSha}:${repositoryPath}`]), bytes.length, sha256(bytes)];
+      });
+      const inventory = JSON.parse(treeBlob(subjectRoot, treeSha, `${changeRelative}/acceptance-tests.json`, 'acceptance inventory'));
+      assert.ok([
+        'opportunity-active-artifact-catalog-v1',
+        'opportunity-active-artifact-catalog-v2',
+      ].includes(catalog.schema), 'unknown active artifact catalog schema');
+      const graphPreimage = catalog.schema === 'opportunity-active-artifact-catalog-v1'
+        ? ['opportunity-active-graph-v1', sha256(catalogBytes), rows]
+        : [
+          'opportunity-active-graph-v2',
+          sha256(catalogBytes),
+          rows,
+          external(catalog.incorporatedFiles, 'incorporated artifact'),
+          external(catalog.historicalAuditFiles, 'historical audit artifact'),
+        ];
+      return {
+        activeGraphSha256: sha256(canonicalJson(graphPreimage)),
+        inventory,
+      };
+    }
+    
+    function subjectIdentity(subjectRoot, attestation) {
+      return treeIdentity(subjectRoot, attestation.subjectTreeSha);
+    }
+    
+    function timestamp() {
+      return new Date().toISOString().replace(/\.\d{3}Z$/u, 'Z');
+    }
+    
+    function writeCanonical(filename, value) {
+      writeFileSync(absolute(filename, 'output path'), `${canonicalJson(value)}\n`, { encoding: 'utf8', flag: 'wx' });
+    }
+    
+    function envelope(attestation, result) {
+      return {
+        attestation,
+        harnessReleaseSha256: attestation.releaseSha256,
+        issuedAt: timestamp(),
+        issuer: 'stockinsider-v3-gate-root',
+        result,
+        resultSha256: sha256(canonicalJson(result)),
+        schema: 'stockinsider-external-gate-envelope-v1',
+        subjectCommitSha: attestation.subjectCommitSha,
+        subjectTreeSha: attestation.subjectTreeSha,
+      };
+    }
+    
+    function baseResult(check, identity, attestation) {
+      return {
+        acceptanceVersion: identity.inventory.version,
+        activeGraphSha256: identity.activeGraphSha256,
+        blockedReason: null,
+        check,
+        commandCatalogSha256: null,
+        commands: [],
+        commitSha: attestation.subjectCommitSha,
+        completedAt: timestamp(),
+        cwdMode: null,
+        inputs: [],
+        partition: null,
+        registeredCount: 0,
+        executedCount: 0,
+        review: null,
+        schema: 'opportunity-gate-result-v1',
+        scriptValueRowsSha256: identity.inventory.scriptValueRowsSha256,
+        status: 'pass',
+        treeSha: attestation.subjectTreeSha,
+      };
+    }
+    
+    function captureReview(subjectRoot, check, identity, attestation) {
+      const source = reviewSource(check, attestation, identity);
+      const evidenceCommitSha = git(subjectRoot, ['rev-parse', source.ref]);
+      sha(evidenceCommitSha, 'evidence commit');
+      const evidenceTreeSha = git(subjectRoot, ['rev-parse', `${evidenceCommitSha}^{tree}`]);
+      const bytes = treeBlob(subjectRoot, evidenceTreeSha, source.path, `${check} evidence`);
+      const markdown = bytes.toString('utf8');
+      assert.match(markdown, /(?:Result|Final verdict): `PASS`/u, `${check} review verdict`);
+      assert.match(markdown, /P0=0 P1=0/u, `${check} review findings`);
+      const finalMatch = markdown.match(new RegExp('^- ' + source.finalLine + ': `([0-9a-f]{40})` / `([0-9a-f]{40})`$', 'mu'));
+      assert.ok(finalMatch, `${check} reviewed commit/tree`);
+      const rangeMatch = markdown.match(new RegExp('^- ' + source.rangeLine + ': `([0-9a-f]{40}\\.\\.[0-9a-f]{40})`$', 'mu'));
+      assert.ok(rangeMatch, `${check} reviewed range`);
+      const reviewedGraph = parseReviewActiveGraph(markdown, check);
+      assert.equal(reviewedGraph, identity.activeGraphSha256, `${check} active graph matches subject`);
+      const reviewedBaseSha = rangeMatch[1].slice(0, 40);
+      const reviewedHeadOrTreeSha = rangeMatch[1].slice(42);
+      assert.equal(reviewedHeadOrTreeSha, finalMatch[1], `${check} reviewed range head`);
+      assert.equal(git(subjectRoot, ['rev-parse', `${reviewedHeadOrTreeSha}^{tree}`]), finalMatch[2], `${check} reviewed head tree`);
+      const evidenceParent = check === 'exact-review' ? attestation.subjectCommitSha : reviewedHeadOrTreeSha;
+      assert.deepEqual(git(subjectRoot, ['show', '-s', '--format=%P', evidenceCommitSha]).split(/\s+/u).filter(Boolean),
+        [evidenceParent], `${check} evidence must be its reviewed commit's unique direct child`);
+      if (check === 'exact-review') {
+        // A review of an equal tree is not a review of an equal implementation
+        // commit: parentage and immutable range provenance are part of the claim.
+        assert.equal(reviewedHeadOrTreeSha, attestation.subjectCommitSha, 'exact-review reviewed subject commit');
+        assert.equal(finalMatch[2], attestation.subjectTreeSha, 'exact-review reviewed subject tree');
+      }
+      const exactReviewPaths = [
+        `${changeRelative}/exact-commit-review-final.md`,
+        `${changeRelative}/pcr-fulfillment-record-v1.json`,
+        `${changeRelative}/runtime-review-attestation.json`,
+      ].toSorted();
+      const allowedPaths = check === 'exact-review' ? exactReviewPaths : [source.path];
+      const changedRows = git(subjectRoot, ['diff-tree', '--no-commit-id', '--name-status', '-r',
+        evidenceParent, evidenceCommitSha]).split('\n').filter(Boolean).map((line) => line.split('\t'));
+      if (check === 'exact-review') {
+        assert.deepEqual(changedRows, allowedPaths.map((repositoryPath) => ['A', repositoryPath]),
+          `${check} evidence-only diff must exactly match its closed path set`);
+      } else {
+        assert.deepEqual(changedRows.map((row) => row[1]), allowedPaths, `${check} evidence-only path set`);
+        assert.ok(['A', 'M'].includes(changedRows[0][0]), `${check} evidence path status`);
+        assert.ok(treeBlob(subjectRoot, attestation.subjectTreeSha, source.path, `${check} carried evidence`).equals(bytes),
+          `${check} evidence bytes must be carried by subject`);
+        assert.equal(treeIdentity(subjectRoot, finalMatch[2]).activeGraphSha256, identity.activeGraphSha256,
+          `${check} reviewed graph reusable by subject`);
+      }
+      const evidenceOnlyPaths = changedRows.map((row) => row[1]);
+      const review = {
+        evidenceCommitSha,
+        evidenceFileSha256: sha256(bytes),
+        evidenceOnlyPaths,
+        evidencePath: source.path,
+        evidenceTreeSha,
+        p0: 0,
+        p1: 0,
+        pcrFulfillmentPath: null,
+        pcrFulfillmentSha256: null,
+        reviewedActiveGraphSha256: identity.activeGraphSha256,
+        reviewedBaseSha,
+        reviewedHeadOrTreeSha,
+        reviewedRange: rangeMatch[1],
+        reviewedTreeSha: finalMatch[2],
+        verdict: 'PASS',
+      };
+      if (check === 'exact-review') {
+        const pcrFulfillmentPath = `${changeRelative}/pcr-fulfillment-record-v1.json`;
+        const fulfillment = treeBlob(subjectRoot, evidenceTreeSha, pcrFulfillmentPath, 'exact-review PCR fulfillment');
+        const attestationPath = `${changeRelative}/runtime-review-attestation.json`;
+        const reviewAttestationBytes = treeBlob(subjectRoot, evidenceTreeSha, attestationPath, 'exact-review runtime attestation');
+        const reviewAttestationText = reviewAttestationBytes.toString('utf8');
+        assert.equal(reviewAttestationText.endsWith('\n'), true, 'exact-review attestation final LF');
+        const reviewAttestation = JSON.parse(reviewAttestationText);
+        exactKeys(reviewAttestation, ['baseSha','evidenceSha256','headSha','p0','p1','range','reviewedAt','schema','treeSha','verdict'],
+          'exact-review runtime attestation');
+        assert.equal(`${canonicalJson(reviewAttestation)}\n`, reviewAttestationText, 'exact-review attestation canonical');
+        assert.equal(reviewAttestation.schema, 'stockinsider-exact-review-attestation-v1', 'exact-review attestation schema');
+        assert.equal(reviewAttestation.baseSha, reviewedBaseSha, 'exact-review attestation base');
+        assert.equal(reviewAttestation.headSha, attestation.subjectCommitSha, 'exact-review attestation subject');
+        assert.equal(reviewAttestation.treeSha, attestation.subjectTreeSha, 'exact-review attestation tree');
+        assert.equal(reviewAttestation.range, rangeMatch[1], 'exact-review attestation range');
+        assert.equal(reviewAttestation.verdict, 'PASS', 'exact-review attestation verdict');
+        assert.equal(reviewAttestation.p0, 0, 'exact-review attestation P0');
+        assert.equal(reviewAttestation.p1, 0, 'exact-review attestation P1');
+        assert.equal(reviewAttestation.evidenceSha256, sha256(bytes), 'exact-review attestation evidence binding');
+        review.pcrFulfillmentPath = pcrFulfillmentPath;
+        review.pcrFulfillmentSha256 = sha256(fulfillment);
+      }
+      return review;
+    }
+    
+    /** The immutable review grammar is intentionally shared with its fixture test. */
+    export function parseReviewActiveGraph(markdown, check = 'review') {
+      const graphMatch = markdown.match(/^- Active graph: `([0-9a-f]{64})`$/mu);
+      assert.ok(graphMatch, `${check} active graph`);
+      return graphMatch[1];
+    }
+    
+    function sanitizedEnvironment(attestation, track, extra = {}) {
+      const scratch = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-external-gate-'));
+      try {
+        return {
+          environment: {
+            HOME: scratch,
+            LANG: 'C',
+            LC_ALL: 'C',
+            PATH: process.env.PATH ?? '/usr/local/bin:/usr/bin:/bin',
+            PLAYWRIGHT_BROWSERS_PATH: '0',
+            TMPDIR: scratch,
+            TZ: 'Asia/Taipei',
+            OPPORTUNITY_V3_GATE_HARNESS_RELEASE_SHA256: attestation.releaseSha256,
+            OPPORTUNITY_V3_GATE_RUNNER: 'protected-external-harness-v1',
+            OPPORTUNITY_V3_GATE_RUNNER_COMMIT: attestation.subjectCommitSha,
+            ...extra,
+          },
+          scratch,
+        };
+      } catch (error) {
+        rmSync(scratch, { force: true, recursive: true });
+        throw error;
+      }
+    }
+    
+    function trustedPostgresBin() {
+      assert.equal(process.platform, 'linux', 'protected PostgreSQL fixture requires Linux');
+      const directory = process.env.OPPORTUNITY_V3_POSTGRES_BIN;
+      assert.match(directory ?? '', /^\/usr\/lib\/postgresql\/[0-9]+\/bin$/u,
+        'protected PostgreSQL bin uses the package-owned path');
+      assert.equal(realpathSync(directory), directory, 'protected PostgreSQL bin realpath');
+      const stat = lstatSync(directory);
+      assert.equal(stat.isDirectory() && !stat.isSymbolicLink() && (stat.mode & 0o002) === 0,
+        true, 'protected PostgreSQL bin is non-world-writable');
+      for (const name of ['initdb', 'pg_ctl', 'psql']) {
+        const executable = path.join(directory, name);
+        const executableStat = lstatSync(executable);
+        assert.equal(realpathSync(executable), executable, `protected PostgreSQL ${name} realpath`);
+        assert.equal(executableStat.isFile() && !executableStat.isSymbolicLink() && (executableStat.mode & 0o111) !== 0,
+          true, `protected PostgreSQL ${name} executable`);
+      }
+      return directory;
+    }
+    
+    function stageNonCredentialModelHome(scratch) {
+      const codexDirectory = path.join(scratch, '.codex');
+      mkdirSync(codexDirectory, { mode: 0o700 });
+      writeFileSync(path.join(codexDirectory, 'auth.json'), '{"externalGate":"non-credential-placeholder"}\n',
+        { flag: 'wx', mode: 0o600 });
+    }
+    
+    function protectedHostPinFixture() {
+      return JSON.parse(treeBlob(baseRoot, git(baseRoot, ['rev-parse', 'HEAD^{tree}']),
+        `${changeRelative}/model-runner-host-pins-v3.json`, 'protected host pin fixture'));
+    }
+    
+    function trustedPinnedNodeExecutable() {
+      const node = protectedHostPinFixture().executables.find(({ name }) => name === 'node');
+      assert.ok(node && path.isAbsolute(node.path), 'protected pinned Node path');
+      assert.equal(realpathSync(node.path), node.realpath, 'protected pinned Node realpath');
+      return node.path;
+    }
+    
+    function trustedNodeToolchainRoot() {
+      const nodeExecutable = realpathSync(process.execPath);
+      const binDirectory = path.dirname(nodeExecutable);
+      assert.equal(path.basename(binDirectory), 'bin', 'protected Node executable lives in a bin directory');
+      const toolchainRoot = realpathSync(path.dirname(binDirectory));
+      const npmExecutable = realpathSync(path.join(binDirectory, 'npm'));
+      const npmRelative = path.relative(toolchainRoot, npmExecutable);
+      assert.equal(
+        npmRelative.length > 0 && npmRelative !== '..' && !npmRelative.startsWith(`..${path.sep}`) && !path.isAbsolute(npmRelative),
+        true,
+        'protected npm resolves inside the setup-node toolchain root',
+      );
+      return toolchainRoot;
+    }
+    
+    function trustedAppleDeveloperToolchainRoot() {
+      assert.equal(process.platform, 'darwin', 'protected external model runner requires macOS');
+      const developerRoot = realpathSync(execFileSync('/usr/bin/xcode-select', ['-p'], {
+        encoding: 'utf8',
+      }).trim());
+      const gitExecutable = realpathSync(execFileSync('/usr/bin/xcrun', ['--find', 'git'], {
+        encoding: 'utf8',
+      }).trim());
+      const gitRelative = path.relative(developerRoot, gitExecutable);
+      assert.equal(
+        gitRelative.length > 0 && gitRelative !== '..' && !gitRelative.startsWith(`..${path.sep}`) && !path.isAbsolute(gitRelative),
+        true,
+        'protected git resolves inside the selected Apple developer root',
+      );
+      return { gitBin: path.dirname(gitExecutable), root: developerRoot };
+    }
+    
+    function candidateSandbox(subjectRoot, scratch, environment, executable, args, { writableSource = false, network = false } = {}) {
+      const fixture = protectedHostPinFixture();
+      const codex = fixture.executables.find(({ name }) => name === 'codex');
+      assert.ok(codex && path.isAbsolute(codex.path), 'protected Codex path');
+      const pinnedNodeExecutable = trustedPinnedNodeExecutable();
+      const nodeToolchainRoot = trustedNodeToolchainRoot();
+      const appleDeveloperToolchain = trustedAppleDeveloperToolchainRoot();
+      const policyRoot = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-candidate-policy-'));
+      try {
+        const profile = candidateSandboxPolicy({ subjectRoot, scratch, policyRoot,
+          nodeToolchainRoot, pinnedNodeExecutable, developerRoot: appleDeveloperToolchain.root,
+          writableSource, network });
+        writeFileSync(path.join(policyRoot, 'config.toml'), profile, { flag: 'wx', mode: 0o600 });
+        return run(subjectRoot, codex.path, [
+          'sandbox', '--profile', 'external-gate-candidate', '--permission-profile', 'external-gate-candidate',
+          '-C', subjectRoot, '--', executable, ...args,
+        ], {
+          ...environment,
+          CODEX_HOME: policyRoot,
+          OPPORTUNITY_V3_PROTECTED_CANDIDATE_POLICY: policyRoot,
+          OPPORTUNITY_V3_PROTECTED_CANDIDATE_SCRATCH: scratch,
+          PATH: `${appleDeveloperToolchain.gitBin}${path.delimiter}${environment.PATH}`,
+        }, `sandboxed ${executable} ${args.join(' ')}`);
+      } finally {
+        rmSync(policyRoot, { force: true, recursive: true });
+      }
+    }
+    
+    const MODEL_ORACLE_PATHS = Object.freeze([
+      '.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json',
+      'scripts/loop-model-runner-v3.js',
+      'scripts/model-runner-v3',
+    ]);
+    
+    const modelOracleReuseKeys = Object.freeze([
+      'artifactDigest', 'artifactId', 'artifactName', 'completedAt', 'expiresAt',
+      'jobId', 'requiredRunnerLabels', 'rootJobId', 'schema', 'subjectCommitSha',
+      'workflowRunId',
+    ]);
+    
+    // The bootstrap commit is reviewed and merged while the old signed host is
+    // still authoritative. It may approve exactly one content-addressed successor
+    // listing. Once that successor becomes the protected base, the old digest no
+    // longer matches and this transition record cannot authorize another rotation.
+    const modelOracleSuccessorApprovals = Object.freeze({
+      'bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed': Object.freeze({
+        approvalId: 'model-runner-host-pin-amendment-v3.15',
+        subjectListingSha256: 'cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5',
+      }),
+      'cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5': Object.freeze({
+        approvalId: 'model-runner-host-pin-amendment-v3.16',
+        subjectListingSha256: '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115',
+      }),
+      '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': Object.freeze({
+        approvalId: 'model-runner-host-pin-amendment-v3.17',
+        subjectListingSha256: '5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6',
+      }),
+      '5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6': Object.freeze({
+        approvalId: 'model-runner-host-pin-amendment-v3.18',
+        subjectListingSha256: 'fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161',
+      }),
+    });
+    
+    const modelOracleHostPinByListingSha256 = Object.freeze({
+      bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3.14',
+      cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
+      '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': 'model-runner-host-pins-v3.16',
+      '5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6': 'model-runner-host-pins-v3.17',
+      fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161: 'model-runner-host-pins-v3.18',
+    });
+    
+    export function modelOracleListing(root, commit) {
+      return git(root, ['ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS]);
+    }
+    
+    export function modelOracleListingSha256(listing) {
+      return sha256(Buffer.from(listing, 'utf8'));
+    }
+    
+    export function hostPinForModelOracleListing(listing) {
+      const listingSha256 = modelOracleListingSha256(listing);
+      const hostPin = modelOracleHostPinByListingSha256[listingSha256];
+      assert.ok(hostPin, 'model runner host pin requires an exact protected listing');
+      return hostPin;
+    }
+    
+    export function requiredModelRunnerHostPin(subjectRoot, subjectCommitSha) {
+      return hostPinForModelOracleListing(modelOracleListing(subjectRoot, subjectCommitSha));
+    }
+    
+    export function trustedModelOracleAuthorityForListings(baseListing, subjectListing) {
+      if (subjectListing === baseListing) return 'protected_base';
+      const approval = modelOracleSuccessorApprovals[modelOracleListingSha256(baseListing)];
+      assert.ok(approval, 'model oracle successor requires protected-base approval');
+      assert.equal(
+        modelOracleListingSha256(subjectListing),
+        approval.subjectListingSha256,
+        'model oracle successor listing must match the one reviewed digest',
+      );
+      return approval.approvalId;
+    }
+    
+    function trustedModelOracleAuthority(subjectRoot, subjectCommitSha) {
+      return trustedModelOracleAuthorityForListings(
+        modelOracleListing(baseRoot, 'HEAD'),
+        modelOracleListing(subjectRoot, subjectCommitSha),
+      );
+    }
+    
+    function publicGithubJson(url, label) {
+      assert.match(url, /^https:\/\/api[.]github[.]com\/repos\/Kaichen9527\/stockinsider\/actions\//u,
+        `${label} closed GitHub API URL`);
+      const bytes = execFileSync('/usr/bin/curl', [
+        '--fail', '--silent', '--show-error', '--location', '--max-time', '15',
+        '--header', 'Accept: application/vnd.github+json',
+        '--header', 'X-GitHub-Api-Version: 2022-11-28',
+        '--header', 'User-Agent: stockinsider-protected-model-oracle-v1',
+        url,
+      ], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+      return JSON.parse(bytes);
+    }
+    
+    function readModelOracleReuse() {
+      const bytes = treeBlob(baseRoot, git(baseRoot, ['rev-parse', 'HEAD^{tree}']),
+        modelOracleReuseRelative, 'protected model oracle reuse record');
+      const value = JSON.parse(bytes);
+      exactKeys(value, modelOracleReuseKeys, 'protected model oracle reuse record');
+      assert.equal(value.schema, 'stockinsider-protected-model-oracle-reuse-v1', 'model oracle reuse schema');
+      sha(value.subjectCommitSha, 'model oracle reuse subjectCommitSha');
+      for (const key of ['artifactId', 'jobId', 'rootJobId', 'workflowRunId']) {
+        assert.equal(Number.isSafeInteger(value[key]) && value[key] > 0, true, `model oracle reuse ${key}`);
+      }
+      assert.match(value.artifactDigest, /^sha256:[0-9a-f]{64}$/u, 'model oracle artifact digest');
+      assert.equal(value.artifactName,
+        `opportunity-gate-result-model-runner-code-gate-${value.subjectCommitSha}`,
+        'model oracle artifact name');
+      assert.deepEqual(value.requiredRunnerLabels, ['ARM64', 'macOS', 'self-hosted'],
+        'model oracle runner labels');
+      for (const key of ['completedAt', 'expiresAt']) {
+        assert.match(value[key], /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/u, `model oracle reuse ${key}`);
+      }
+      assert.ok(Date.parse(value.expiresAt) > Date.now(), 'model oracle reuse evidence has not expired');
+      return value;
+    }
+    
+    function trustedReusableHostModelOracle(subjectRoot, attestation) {
+      const reuse = readModelOracleReuse();
+      const listing = (root, commit) => git(root, [
+        'ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS,
+      ]);
+      assert.equal(git(subjectRoot, ['cat-file', '-t', reuse.subjectCommitSha]), 'commit',
+        'reused model oracle subject exists');
+      assert.equal(listing(subjectRoot, attestation.subjectCommitSha), listing(subjectRoot, reuse.subjectCommitSha),
+        'reused live oracle is allowed only for byte-identical model-runner inputs');
+    
+      const artifact = publicGithubJson(
+        `https://api.github.com/repos/Kaichen9527/stockinsider/actions/artifacts/${reuse.artifactId}`,
+        'model oracle artifact',
+      );
+      assert.equal(artifact.id, reuse.artifactId, 'model oracle artifact id');
+      assert.equal(artifact.name, reuse.artifactName, 'model oracle artifact name from GitHub');
+      assert.equal(artifact.digest, reuse.artifactDigest, 'model oracle artifact digest from GitHub');
+      assert.equal(artifact.expired, false, 'model oracle artifact is live');
+      assert.equal(artifact.expires_at, reuse.expiresAt, 'model oracle artifact expiry');
+      assert.equal(artifact.workflow_run?.id, reuse.workflowRunId, 'model oracle artifact workflow run');
+      assert.equal(artifact.workflow_run?.head_sha, reuse.subjectCommitSha, 'model oracle artifact subject');
+    
+      const workflow = publicGithubJson(
+        `https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/${reuse.workflowRunId}`,
+        'model oracle workflow',
+      );
+      assert.equal(workflow.id, reuse.workflowRunId, 'model oracle workflow id');
+      assert.equal(workflow.head_sha, reuse.subjectCommitSha, 'model oracle workflow subject');
+      assert.equal(workflow.event, 'pull_request_target', 'model oracle workflow event');
+      assert.equal(workflow.conclusion, 'success', 'model oracle workflow conclusion');
+      assert.equal(workflow.path, '.github/workflows/source-led-opportunity-external-gate.yml',
+        'model oracle workflow path');
+    
+      const jobs = publicGithubJson(
+        `https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/${reuse.workflowRunId}/jobs?per_page=100`,
+        'model oracle jobs',
+      ).jobs;
+      assert.ok(Array.isArray(jobs), 'model oracle jobs array');
+      const modelJob = jobs.find(({ id }) => id === reuse.jobId);
+      assert.ok(modelJob, 'model oracle job exists');
+      assert.equal(modelJob.name, 'model-runner-code-gate', 'model oracle job name');
+      assert.equal(modelJob.head_sha, reuse.subjectCommitSha, 'model oracle job subject');
+      assert.equal(modelJob.conclusion, 'success', 'model oracle job conclusion');
+      assert.equal(modelJob.completed_at, reuse.completedAt, 'model oracle job completion');
+      assert.deepEqual([...modelJob.labels].toSorted(), reuse.requiredRunnerLabels,
+        'model oracle trusted runner labels');
+      const rootJob = jobs.find(({ id }) => id === reuse.rootJobId);
+      assert.ok(rootJob, 'model oracle root job exists');
+      assert.equal(rootJob.name, 'stockinsider-v3-gate-root', 'model oracle root job name');
+      assert.equal(rootJob.head_sha, reuse.subjectCommitSha, 'model oracle root subject');
+      assert.equal(rootJob.conclusion, 'success', 'model oracle root conclusion');
+      return {
+        stderr: Buffer.alloc(0),
+        stdout: Buffer.from(`${canonicalJson({
+          artifactDigest: reuse.artifactDigest,
+          artifactId: reuse.artifactId,
+          mode: 'content_addressed_reuse',
+          priorSubjectCommitSha: reuse.subjectCommitSha,
+          status: 'pass',
+          workflowRunId: reuse.workflowRunId,
+        })}\n`),
+      };
+    }
+    
+    function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
+      const authority = trustedModelOracleAuthority(subjectRoot, attestation.subjectCommitSha);
+      const reuse = readModelOracleReuse();
+      if (modelOracleListing(subjectRoot, attestation.subjectCommitSha) === modelOracleListing(subjectRoot, reuse.subjectCommitSha)) {
+        return trustedReusableHostModelOracle(subjectRoot, attestation);
+      }
+      const runnerHome = process.env.HOME;
+      assert.equal(typeof runnerHome, 'string', 'runner HOME required for trusted host oracle');
+      const authentication = path.join(absolute(runnerHome, 'runner HOME'), '.codex', 'auth.json');
+      const stat = lstatSync(authentication);
+      assert.equal(stat.isFile() && !stat.isSymbolicLink() && stat.uid === process.getuid() && (stat.mode & 0o077) === 0,
+        true, 'trusted host oracle authentication boundary');
+      const hostScratch = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-host-oracle-'));
+      try {
+        chmodSync(hostScratch, 0o700);
+        const oracleRoot = authority === 'protected_base' ? baseRoot : subjectRoot;
+        return run(oracleRoot, nodeExecutable, [
+          '--test', 'scripts/model-runner-v3/model-runner-v3.test.js',
+        ], {
+          ...process.env,
+          OPPORTUNITY_V3_PROTECTED_HOST_PREFLIGHT_SCRATCH: hostScratch,
+          OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: '0',
+          OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1',
+        }, `trusted host model oracle (${authority})`);
+      } finally {
+        rmSync(hostScratch, { force: true, recursive: true });
+      }
+    }
+    
+    function measuredResult(output, label) {
+      const text = Buffer.from(output.stdout ?? '').toString('utf8');
+      const tapPass = [...text.matchAll(/^# pass (\d+)$/gmu)].at(-1);
+      const tapFail = [...text.matchAll(/^# fail (\d+)$/gmu)].at(-1);
+      const tapSkipped = [...text.matchAll(/^# skipped (\d+)$/gmu)].at(-1);
+      if (tapPass) {
+        return {
+          label,
+          passed: Number(tapPass[1]),
+          failed: Number(tapFail?.[1] ?? 0),
+          skipped: Number(tapSkipped?.[1] ?? 0),
+          todo: Number([...text.matchAll(/^# todo (\d+)$/gmu)].at(-1)?.[1] ?? 0),
+        };
+      }
+      if (label === 'test:e2e:v3-correctness') {
+        const playwrightPassed = [...text.matchAll(/(?:^|\s)(\d+) passed(?:\s|$)/gmu)].at(-1);
+        const playwrightSkipped = [...text.matchAll(/(?:^|\s)(\d+) skipped(?:\s|$)/gmu)].at(-1);
+        assert.ok(playwrightPassed || playwrightSkipped, 'Playwright output must contain a recognized final result');
+        return {
+          label,
+          passed: Number(playwrightPassed?.[1] ?? 0),
+          failed: 0,
+          skipped: Number(playwrightSkipped?.[1] ?? 0),
+          todo: 0,
+        };
+      }
+      return { label, passed: 1, failed: 0, skipped: 0, todo: 0 };
+    }
+    
+    function run(subjectRoot, executable, args, environment, label) {
+      const detached = process.platform !== 'win32';
+      const result = spawnSync(executable, args, {
+        cwd: subjectRoot,
+        detached,
+        encoding: null,
+        env: environment,
+        maxBuffer: 128 * 1024 * 1024,
+      });
+      if (detached && Number.isSafeInteger(result.pid) && result.pid > 1) {
+        try {
+          process.kill(-result.pid, 'SIGKILL');
+        } catch (error) {
+          assert.equal(error?.code, 'ESRCH', `${label} candidate process-group cleanup`);
+        }
+      }
+      if (result.error) throw result.error;
+      const stdout = Buffer.from(result.stdout ?? '');
+      const stderr = Buffer.from(result.stderr ?? '');
+      assert.equal(result.signal, null, `${label} signal`);
+      assert.equal(
+        result.status,
+        0,
+        `${label} failed:\nstdout:\n${stdout.toString('utf8')}\nstderr:\n${stderr.toString('utf8')}`,
+      );
+      return { stdout, stderr };
+    }
+    
+    function executeTrack(subjectRoot, track, identity, attestation) {
+      const descriptor = track === 'product_runtime'
+        ? { check: 'product-runtime-code-gate', registeredCount: 272, name: 'product-runtime-track' }
+        : track === 'model_runner'
+          ? { check: 'model-runner-code-gate', registeredCount: 28, name: 'model-runner-track' }
+          : null;
+      assert.ok(descriptor, 'closed executable track');
+      const postgresBin = track === 'product_runtime' ? trustedPostgresBin() : null;
+      const { environment, scratch } = sanitizedEnvironment(attestation, track, {
+        OPPORTUNITY_V3_ACCEPTANCE_TRACK: track,
+        OPPORTUNITY_V3_GATE_ROOT: realpathSync(subjectRoot),
+        ...(postgresBin === null ? {} : {
+          OPPORTUNITY_V3_POSTGRES_BIN: postgresBin,
+          PATH: `${postgresBin}${path.delimiter}${process.env.PATH ?? '/usr/local/bin:/usr/bin:/bin'}`,
+        }),
+      });
+      try {
+        const outputs = [];
+        const measured = [];
+        const modelNodeExecutable = track === 'model_runner' ? trustedPinnedNodeExecutable() : process.execPath;
+        const execute = (executable, args, label) => outputs.push(run(subjectRoot, executable, args, environment, label));
+        const executeCandidate = track === 'model_runner'
+          ? (executable, args, label, options) => outputs.push(candidateSandbox(subjectRoot, scratch, environment,
+            executable, args, options ?? {}))
+          : (executable, args, label) => execute(executable, args, label);
+        if (track === 'model_runner') stageNonCredentialModelHome(scratch);
+        executeCandidate('npm', ['ci', '--ignore-scripts'], 'root dependency preparation',
+          { writableSource: true, network: true });
+        // Both partition traces import the shared Web TypeScript graph, so both need
+        // its JavaScript dependencies. Only the product partition owns browser cases
+        // and may download Chromium or its operating-system dependencies.
+        executeCandidate('npm', ['--prefix', 'web', 'ci', '--ignore-scripts'], 'web dependency preparation',
+          { writableSource: true, network: true });
+        if (track === 'product_runtime') {
+          executeCandidate(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'],
+            'project-local Chromium preparation', { writableSource: true, network: true });
+          const parserEnvironment = path.join(scratch, 'candidate-financial-parser');
+          const parserRequirements = path.join(subjectRoot, 'scripts/requirements-candidate-financial-document-parser.txt');
+          assert.equal(sha256(readFileSync(parserRequirements)),
+            '3793b8b7228a8b08e273b1deb0977d681c7f4fdc8e3cb4d38a101b7c36579640',
+          'candidate financial parser requirements match the protected-base review');
+          executeCandidate('python3', ['-m', 'venv', parserEnvironment],
+            'candidate financial parser environment preparation', { writableSource: false, network: false });
+          executeCandidate(path.join(parserEnvironment, 'bin', 'pip'), ['install', '--disable-pip-version-check',
+            'arelle-release==2.44.7', 'pdfplumber==0.11.8'],
+          'candidate financial parser dependency preparation', { writableSource: false, network: true });
+          environment.STOCKINSIDER_DOCUMENT_PARSER_PYTHON = path.join(parserEnvironment, 'bin', 'python');
+          environment.STOCKINSIDER_DOCUMENT_PARSER_SCRIPT = path.join(subjectRoot, 'scripts/candidate_financial_document_parser.py');
+        }
+        cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
+        const candidateEnvironment = track === 'model_runner'
+          ? { ...environment, OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: '1' } : environment;
+        const executeClosedCandidate = track === 'model_runner'
+          ? (executable, args, label) => outputs.push(candidateSandbox(subjectRoot, scratch, candidateEnvironment,
+            executable, args, { writableSource: false, network: false }))
+          : execute;
+        const verify = (executeCommand, executable, args, label, ownsPartitionCount = false) => {
+          const before = outputs.length;
+          executeCommand(executable, args, label);
+          assert.equal(outputs.length, before + 1, `${label} output ownership`);
+          measured.push({ ...measuredResult(outputs.at(-1), label), ownsPartitionCount });
+        };
+        verify(executeClosedCandidate, modelNodeExecutable, ['--experimental-strip-types', 'scripts/opportunity-v3/acceptance-gate-runner.mjs', '--track', track], `${track} traceability`, true);
+        if (track === 'product_runtime') {
+          for (const script of [
+            'test:candidate-shadow-performance:runtime',
+            'test:candidate-shadow-performance:contracts',
+            'test:source-led-opportunity-v3',
+            'test:source-led-opportunity-v3:product-correctness',
+            'test:source-led-opportunity-v3:migration',
+            'test:legacy-v1-v2-regression',
+            'typecheck:source-led-opportunity-v3',
+            'lint:source-led-opportunity-v3',
+            'build:source-led-opportunity-v3',
+          ]) verify(execute, 'npm', ['run', script], script);
+          verify(execute, 'npm', ['--prefix', 'web', 'run', 'test:e2e:v3-correctness'], 'test:e2e:v3-correctness');
+          verify(execute, 'npm', ['run', 'test:source-led-opportunity-v3:performance'], 'test:source-led-opportunity-v3:performance');
+        } else {
+          verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--test',
+            'scripts/model-runner-v3/model-runner-v3.test.js'], 'test:model-runner-v3');
+          verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--experimental-strip-types',
+            'scripts/opportunity-v3/doctor.mjs', '--expect-mode', 'disabled', '--require-host-pin',
+            requiredModelRunnerHostPin(subjectRoot, attestation.subjectCommitSha)], 'disabled model runner doctor');
+          const oracle = trustedHostModelOracle(subjectRoot, attestation, modelNodeExecutable);
+          outputs.push(oracle);
+          measured.push({ ...measuredResult(oracle, 'trusted protected-base exact-subject model oracle'), ownsPartitionCount: false });
+        }
+        cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
+        const stdout = Buffer.concat(outputs.map(({ stdout: value }) => value));
+        const stderr = Buffer.concat(outputs.map(({ stderr: value }) => value));
+        const totals = measured.reduce((result, row) => ({
+          passed: result.passed + (row.ownsPartitionCount ? row.passed : 0),
+          failed: result.failed + row.failed,
+          // Every skip/todo is fatal, including supplementary suites. The protected
+          // worker provisions the reviewed Arelle environment above, so the parser
+          // integration must execute instead of disappearing from the envelope.
+          skipped: result.skipped + row.skipped,
+          todo: result.todo + row.todo,
+        }), { passed: 0, failed: 0, skipped: 0, todo: 0 });
+        assert.equal(measured.filter((row) => row.ownsPartitionCount).length, 1,
+          `${track} has exactly one registered acceptance owner`);
+        assert.deepEqual(
+          { ...totals, registeredCount: descriptor.registeredCount },
+          { passed: descriptor.registeredCount, failed: 0, skipped: 0, todo: 0,
+            registeredCount: descriptor.registeredCount },
+          `measured ${track} execution must close the registered partition`,
+        );
+        const result = baseResult(descriptor.check, identity, attestation);
+        result.commands = [{
+          command: `protected://stockinsider-v3-gate-root/execute-track --track ${track}`,
+          exitCode: 0,
+          failed: totals.failed,
+          name: descriptor.name,
+          passed: totals.passed,
+          skipped: totals.skipped,
+          stderrSha256: sha256(stderr),
+          stdoutSha256: sha256(stdout),
+          todo: totals.todo,
+        }];
+        result.executedCount = totals.passed + totals.failed + totals.skipped + totals.todo;
+        result.partition = track;
+        result.registeredCount = descriptor.registeredCount;
+        result.evidenceSha256 = sha256(canonicalJson(result));
+        return result;
+      } finally {
+        rmSync(scratch, { force: true, recursive: true });
+      }
+    }
+    
+    function validateCommand(command, policy, index) {
+      exactKeys(command, [
+        'command', 'exitCode', 'failed', 'name', 'passed', 'skipped', 'stderrSha256',
+        'stdoutSha256', 'todo',
+      ], `command ${index}`);
+      const [expectedName, expectedCommand] = policy.commands[index];
+      assert.equal(command.name, expectedName, `command ${index} name`);
+      assert.equal(command.command, expectedCommand, `command ${index} invocation`);
+      assert.equal(command.exitCode, 0, `command ${index} exit`);
+      assert.equal(command.passed, policy.count, `command ${index} pass count`);
+      for (const key of ['failed', 'skipped', 'todo']) assert.equal(command[key], 0, `command ${index} ${key}`);
+      for (const key of ['stderrSha256', 'stdoutSha256']) sha(command[key], `command ${index} ${key}`, 64);
+    }
+    
+    function validateReview(review, expectedCheck, identity, attestation) {
+      exactKeys(review, reviewKeys, `${expectedCheck} review`);
+      assert.equal(review.verdict, 'PASS', `${expectedCheck} review verdict`);
+      assert.equal(review.p0, 0, `${expectedCheck} review P0`);
+      assert.equal(review.p1, 0, `${expectedCheck} review P1`);
+      for (const key of [
+        'evidenceCommitSha', 'evidenceTreeSha', 'reviewedBaseSha', 'reviewedHeadOrTreeSha',
+        'reviewedTreeSha',
+      ]) sha(review[key], `${expectedCheck} review ${key}`);
+      for (const key of ['evidenceFileSha256', 'reviewedActiveGraphSha256']) {
+        sha(review[key], `${expectedCheck} review ${key}`, 64);
+      }
+      assert.equal(review.reviewedActiveGraphSha256, identity.activeGraphSha256, `${expectedCheck} review graph`);
+      assert.match(review.reviewedRange, /^[0-9a-f]{40}\.\.[0-9a-f]{40}$/u, `${expectedCheck} reviewed range`);
+      assert.equal(review.reviewedRange.slice(0, 40), review.reviewedBaseSha, `${expectedCheck} range base`);
+      assert.equal(review.reviewedRange.slice(42), review.reviewedHeadOrTreeSha, `${expectedCheck} range head`);
+      assert.ok(Array.isArray(review.evidenceOnlyPaths), `${expectedCheck} evidence path array`);
+      assert.deepEqual(review.evidenceOnlyPaths, [...new Set(review.evidenceOnlyPaths)].toSorted(), `${expectedCheck} evidence path order`);
+      for (const evidencePath of review.evidenceOnlyPaths) {
+        assert.match(evidencePath, /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9._/-]+$/u, `${expectedCheck} evidence path`);
+      }
+      assert.ok(review.evidenceOnlyPaths.includes(review.evidencePath), `${expectedCheck} evidence file included`);
+      if (expectedCheck === 'exact-review') {
+        assert.equal(review.reviewedHeadOrTreeSha, attestation.subjectCommitSha, 'exact-review subject commit');
+        assert.equal(review.reviewedTreeSha, attestation.subjectTreeSha, 'exact-review subject tree');
+        assert.equal(review.pcrFulfillmentPath, `${changeRelative}/pcr-fulfillment-record-v1.json`, 'exact-review PCR fulfillment path');
+        sha(review.pcrFulfillmentSha256, 'exact-review PCR fulfillment digest', 64);
+        assert.ok(review.evidenceOnlyPaths.includes(review.pcrFulfillmentPath), 'exact-review PCR fulfillment included');
+      } else {
+        assert.equal(review.pcrFulfillmentPath, null, `${expectedCheck} no PCR fulfillment path`);
+        assert.equal(review.pcrFulfillmentSha256, null, `${expectedCheck} no PCR fulfillment digest`);
+      }
+    }
+    
+    function validateEnvelope(value, identity, attestation, expectedCheck) {
+      exactKeys(value, envelopeKeys, 'external gate envelope');
+      assert.equal(value.schema, 'stockinsider-external-gate-envelope-v1', 'envelope schema');
+      assert.equal(value.issuer, 'stockinsider-v3-gate-root', 'envelope issuer');
+      assert.deepEqual(value.attestation, attestation, 'envelope exact attestation');
+      assert.equal(value.harnessReleaseSha256, attestation.releaseSha256, 'envelope release');
+      assert.equal(value.subjectCommitSha, attestation.subjectCommitSha, 'envelope subject commit');
+      assert.equal(value.subjectTreeSha, attestation.subjectTreeSha, 'envelope subject tree');
+      assert.match(value.issuedAt, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/u, 'envelope issue time');
+      sha(value.resultSha256, 'envelope result digest', 64);
+      exactKeys(value.result, resultKeys, 'external gate result');
+      const policy = gatePolicies[expectedCheck];
+      assert.ok(policy, 'closed expected check policy');
+      assert.equal(value.result.schema, 'opportunity-gate-result-v1', 'result schema');
+      assert.equal(value.result.check, expectedCheck, 'envelope check');
+      assert.equal(value.result.status, 'pass', 'envelope pass');
+      assert.equal(value.result.blockedReason, null, 'pass has no blocker');
+      assert.equal(value.result.commandCatalogSha256, null, 'no candidate command catalog authority');
+      assert.equal(value.result.cwdMode, null, 'no candidate cwd claim');
+      assert.equal(value.result.commitSha, attestation.subjectCommitSha, 'result subject commit');
+      assert.equal(value.result.treeSha, attestation.subjectTreeSha, 'result subject tree');
+      assert.equal(value.result.activeGraphSha256, identity.activeGraphSha256, 'result graph');
+      assert.equal(value.result.acceptanceVersion, identity.inventory.version, 'result acceptance version');
+      assert.equal(value.result.scriptValueRowsSha256, identity.inventory.scriptValueRowsSha256, 'result script rows');
+      assert.match(value.result.completedAt, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/u, 'result completion time');
+      sha(value.result.evidenceSha256, 'result evidence digest', 64);
+      assert.equal(value.result.partition, policy.partition, 'result partition');
+      assert.equal(value.result.registeredCount, policy.count, 'result registered count');
+      assert.equal(value.result.executedCount, policy.count, 'result executed count');
+      assert.ok(Array.isArray(value.result.commands), 'result commands array');
+      assert.equal(value.result.commands.length, policy.commands.length, 'result command count');
+      value.result.commands.forEach((command, index) => validateCommand(command, policy, index));
+      if (policy.review) validateReview(value.result.review, expectedCheck, identity, attestation);
+      else assert.equal(value.result.review, null, `${expectedCheck} cannot carry review evidence`);
+      const expectedInputs = expectedCheck === 'code-gate-aggregate' ? requiredChecks : [];
+      assert.ok(Array.isArray(value.result.inputs), 'result inputs array');
+      assert.deepEqual(value.result.inputs.map(({ check }) => check), expectedInputs, 'result input order');
+      for (const input of value.result.inputs) {
+        exactKeys(input, ['check', 'evidenceSha256'], `result input ${input.check}`);
+        sha(input.evidenceSha256, `result input ${input.check} digest`, 64);
+      }
+      const withoutEvidence = { ...value.result };
+      delete withoutEvidence.evidenceSha256;
+      assert.equal(value.result.evidenceSha256, sha256(canonicalJson(withoutEvidence)), 'result canonical evidence digest');
+      assert.equal(value.resultSha256, sha256(canonicalJson(value.result)), 'result digest');
+      return value;
+    }
+    
+    function parseArguments(argv) {
+      const [verb, ...rest] = argv;
+      assert.ok(['prepare', 'review', 'track', 'aggregate'].includes(verb), 'closed worker verb');
+      const values = { inputs: [], verb };
+      for (let index = 0; index < rest.length; index += 2) {
+        const key = rest[index];
+        const value = rest[index + 1];
+        assert.ok(['--attestation', '--subject-root', '--output', '--check', '--track', '--input'].includes(key) && typeof value === 'string', 'closed worker arguments');
+        if (key === '--input') values.inputs.push(value);
+        else {
+          assert.equal(values[key], undefined, `one ${key}`);
+          values[key] = value;
+        }
+      }
+      for (const key of ['--attestation', '--subject-root']) assert.equal(typeof values[key], 'string', `${key} required`);
+      if (verb !== 'prepare') assert.equal(typeof values['--output'], 'string', '--output required');
+      if (verb === 'review') assert.ok(['requirements', 'architecture', 'exact-review'].includes(values['--check']), 'closed review check');
+      if (verb === 'track') assert.ok(['product_runtime', 'model_runner'].includes(values['--track']), 'closed executable track');
+      if (verb === 'aggregate') assert.equal(values.inputs.length, requiredChecks.length, 'five aggregate inputs');
+      return values;
+    }
+    
+    function prepare(attestation, subjectRoot) {
+      assert.equal(git(baseRoot, ['rev-parse', 'HEAD']), attestation.baseCommitSha, 'prepare from protected base');
+      assert.equal(git(baseRoot, ['status', '--porcelain=v1', '--untracked-files=all']), '', 'prepare base clean');
+      // Fetch the immutable subject first so review selection can be bound to its
+      // active graph. Unrelated future graph refs are deliberately not fetched.
+      execFileSync('/usr/bin/git', ['fetch', '--no-tags', 'origin', attestation.subjectCommitSha],
+        { cwd: baseRoot, stdio: 'inherit' });
+      const identity = treeIdentity(baseRoot, attestation.subjectTreeSha);
+      const selectedReviewSources = reviewSourceValues(attestation, identity);
+      const remoteTargets = selectedReviewSources.map(({ ref }) => {
+          const remoteBranch = ref.replace('refs/remotes/origin/', 'refs/heads/');
+          return `${remoteBranch}:${ref}`;
+        });
+      execFileSync('/usr/bin/git', ['fetch', '--no-tags', 'origin', ...remoteTargets], { cwd: baseRoot, stdio: 'inherit' });
+      const target = absolute(subjectRoot, 'subject root');
+      execFileSync('/usr/bin/git', ['init', target], { cwd: baseRoot, stdio: 'inherit' });
+      const localTargets = [
+        attestation.subjectCommitSha,
+        attestation.baseCommitSha,
+        attestation.registryCommitSha,
+        ...selectedReviewSources.map(({ ref }) => `${ref}:${ref}`),
+      ];
+      execFileSync('/usr/bin/git', ['fetch', '--no-tags', baseRoot, ...localTargets], { cwd: target, stdio: 'inherit' });
+      execFileSync('/usr/bin/git', ['checkout', '--detach', attestation.subjectCommitSha], { cwd: target, stdio: 'inherit' });
+      assert.equal(git(target, ['remote']), '', 'subject checkout has no configured remote');
+      const credentialConfig = spawnSync('/usr/bin/git', ['config', '--local', '--get-regexp', '^http[.].*[.]extraheader$'], {
+        cwd: target,
+        encoding: 'utf8',
+      });
+      assert.equal(credentialConfig.status, 1, 'subject checkout has no credential-bearing Git config');
+      validateAttestation(attestation, target);
+    }
+    
+    function main() {
+      const args = parseArguments(process.argv.slice(2));
+      const attestation = readAttestation(args['--attestation']);
+      const subjectRoot = absolute(args['--subject-root'], 'subject root');
+      if (args.verb === 'prepare') {
+        prepare(attestation, subjectRoot);
+        process.stdout.write(`${canonicalJson({ status: 'prepared', subjectCommitSha: attestation.subjectCommitSha, subjectRoot })}\n`);
+        return;
+      }
+      validateAttestation(attestation, subjectRoot);
+      const identity = subjectIdentity(subjectRoot, attestation);
+      let result;
+      if (args.verb === 'review') {
+        result = baseResult(args['--check'], identity, attestation);
+        result.review = captureReview(subjectRoot, args['--check'], identity, attestation);
+        result.evidenceSha256 = sha256(canonicalJson(result));
+      } else if (args.verb === 'track') {
+        result = executeTrack(subjectRoot, args['--track'], identity, attestation);
+      } else {
+        const values = args.inputs.map((filename) => JSON.parse(readFileSync(absolute(filename, 'aggregate input'), 'utf8')));
+        const aggregateInputs = validateProtectedCodeGateAggregateInputs({ values, requiredChecks,
+          validateEnvelope: (value, check) => validateEnvelope(value, identity, attestation, check),
+          validateReviewBinding: (value, check) => {
+            if (reviewSources[check]) assert.deepEqual(value.result.review,
+              captureReview(subjectRoot, check, identity, attestation), `${check} aggregate Git/evidence binding`);
+          } });
+        result = baseResult('code-gate-aggregate', identity, attestation);
+        result.inputs = aggregateInputs;
+        result.evidenceSha256 = sha256(canonicalJson(result));
+      }
+      const output = absolute(args['--output'], 'output');
+      const produced = envelope(attestation, result);
+      validateEnvelope(produced, identity, attestation, result.check);
+      writeCanonical(output, produced);
+      process.stdout.write(`${canonicalJson({ check: result.check, evidenceSha256: result.evidenceSha256, status: 'pass', subjectCommitSha: attestation.subjectCommitSha })}\n`);
+    }
+    
+    if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+      try {
+        main();
+      } catch (error) {
+        process.stderr.write(`protected external gate worker failed: ${error instanceof Error ? error.message : String(error)}\n`);
+        process.exitCode = 1;
+      }
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/scripts/opportunity-v3/protected-external-gate-worker.test.mjs:545:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 15
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2641.485416

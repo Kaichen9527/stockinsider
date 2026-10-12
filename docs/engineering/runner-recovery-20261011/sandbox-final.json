@@ -1,0 +1,129 @@
+{
+  "schema": "runner-recovery-no-credential-canary-v1",
+  "candidateOnly": true,
+  "protectedPass": false,
+  "modelInvoked": false,
+  "realCredentialsRead": false,
+  "fixtureSha256": "a5bc7f4a0e7122c54fdbacdde9cef8e72c98e96584eba4d4faaea2f897f6d579",
+  "scriptSha256": "299e94f537a2e9e9e0a253a94c226ad75958c891e66462f5b73bc3b75c8856e9",
+  "policyModuleSha256": "09d3f69e8392a0bace4a678712d29f65683c137863834e9c5de253c3614fc3db",
+  "profiles": {
+    "external-gate-candidate": "default_permissions = \"external-gate-candidate\"\n\n[permissions.external-gate-candidate.filesystem]\n\":root\" = \"deny\"\n\":minimal\" = \"read\"\n\"/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/view\" = \"read\"\n\"/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/scratch\" = \"write\"\n\"/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/policy\" = \"read\"\n\"/usr/local\" = \"read\"\n\"/usr/local/bin/node\" = \"read\"\n\"/Library/Developer/CommandLineTools\" = \"read\"\n\"/System/Library/OpenSSL\" = \"read\"\n\"/Applications/ChatGPT.app\" = \"read\"\n\n[permissions.external-gate-candidate.network]\nenabled = false\n",
+    "model-runner-v3": "default_permissions = \"model-runner-v3\"\n\n[permissions.model-runner-v3.filesystem]\n\":root\" = \"deny\"\n\":minimal\" = \"read\"\n\"/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk\" = \"deny\"\n\"/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/transport\" = \"deny\"\n\"/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/view\" = \"read\"\n\"/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/scratch\" = \"write\"\n\n[permissions.model-runner-v3.network]\nenabled = false\n"
+  },
+  "checks": [
+    {
+      "policy": "external-gate-candidate",
+      "name": "source_read",
+      "passed": true,
+      "exitCode": 0,
+      "stdout": "synthetic source\n",
+      "stderr": ""
+    },
+    {
+      "policy": "external-gate-candidate",
+      "name": "scratch_write",
+      "passed": true,
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "policy": "external-gate-candidate",
+      "name": "source_write",
+      "passed": true,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "sh: /private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/view/bad.txt: Operation not permitted\n"
+    },
+    {
+      "policy": "external-gate-candidate",
+      "name": "private_sibling",
+      "passed": true,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "cat: /private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/private.txt: Operation not permitted\n"
+    },
+    {
+      "policy": "external-gate-candidate",
+      "name": "transport_read",
+      "passed": true,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "cat: /private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/transport/synthetic-private.json: Operation not permitted\n"
+    },
+    {
+      "policy": "external-gate-candidate",
+      "name": "descendant_transport",
+      "passed": true,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "cat: /private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/transport/synthetic-private.json: Operation not permitted\n"
+    },
+    {
+      "policy": "external-gate-candidate",
+      "name": "network_denial_positive_control",
+      "passed": true,
+      "exitCode": 7,
+      "stdout": "",
+      "stderr": "curl: (7) Failed to connect to 127.0.0.1 port 57240 after 0 ms: Couldn't connect to server\n"
+    },
+    {
+      "policy": "model-runner-v3",
+      "name": "source_read",
+      "passed": true,
+      "exitCode": 0,
+      "stdout": "synthetic source\n",
+      "stderr": ""
+    },
+    {
+      "policy": "model-runner-v3",
+      "name": "scratch_write",
+      "passed": true,
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "policy": "model-runner-v3",
+      "name": "source_write",
+      "passed": true,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "sh: /private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/view/bad.txt: Operation not permitted\n"
+    },
+    {
+      "policy": "model-runner-v3",
+      "name": "private_sibling",
+      "passed": true,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "cat: /private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/private.txt: Operation not permitted\n"
+    },
+    {
+      "policy": "model-runner-v3",
+      "name": "transport_read",
+      "passed": true,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "cat: /private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/transport/synthetic-private.json: Operation not permitted\n"
+    },
+    {
+      "policy": "model-runner-v3",
+      "name": "descendant_transport",
+      "passed": true,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "cat: /private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/si-recovery-canary-wxd2b5wk/transport/synthetic-private.json: Operation not permitted\n"
+    },
+    {
+      "policy": "model-runner-v3",
+      "name": "network_denial_positive_control",
+      "passed": true,
+      "exitCode": 7,
+      "stdout": "",
+      "stderr": "curl: (7) Failed to connect to 127.0.0.1 port 57240 after 0 ms: Couldn't connect to server\n"
+    }
+  ],
+  "passed": true
+}

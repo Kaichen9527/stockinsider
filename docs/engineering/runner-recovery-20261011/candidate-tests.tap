@@ -1,0 +1,30 @@
+TAP version 13
+# Subtest: measured candidate is inactive, separate from unchanged frozen active authority
+ok 1 - measured candidate is inactive, separate from unchanged frozen active authority
+  ---
+  duration_ms: 62.722541
+  ...
+# Subtest: candidate route rejects legacy strategy and operation/model swaps
+ok 2 - candidate route rejects legacy strategy and operation/model swaps
+  ---
+  duration_ms: 0.23525
+  ...
+# Subtest: actual execution parser rejects terminal transcript without thread/turn start
+ok 3 - actual execution parser rejects terminal transcript without thread/turn start
+  ---
+  duration_ms: 0.2665
+  ...
+# Subtest: worker policy extraction preserves all legacy bytes for ordinary canonical roots
+ok 4 - worker policy extraction preserves all legacy bytes for ordinary canonical roots
+  ---
+  duration_ms: 14.193625
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 137.662542
