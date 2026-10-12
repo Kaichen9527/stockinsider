@@ -9,6 +9,7 @@ import test, { after, before } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { canonicalJson, sha256Canonical } from '../../web/src/lib/opportunity-v3/canonical.ts';
 import { executeWorkerPayload } from '../../web/src/lib/opportunity-v3/worker-executors.ts';
+import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const require = createRequire(import.meta.url);
@@ -8225,4 +8226,63 @@ test('financial history amendment admits genuine periods, preserves PIT revision
     sizeRejected: true, unauthorizedRejected: true, periodBound: true,
     noServiceInsert: true, privatePredecessor: true, noOwnerCreate: true });
   assert.doesNotMatch(financialHistorySql, /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+});
+
+test('financial atomic replay rollback retains installed successor after predecessor replacement and forced failure', () => {
+  psql(`SET ROLE stockinsider_managed_migrator; ${financialHistorySql}`);
+  const probe = () => JSON.parse(psql(`SELECT jsonb_build_object(
+    'periodBound',position('financial_period_revision_bound' IN pg_get_functiondef(
+      'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0,
+    'observationWrapper',position('opportunity_financial_observations_v1' IN pg_get_functiondef(
+      'public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure))>0)::text;`, ['-At']).trim());
+  assert.deepEqual(probe(), { periodBound: true, observationWrapper: true });
+  // Additional isolated fixture only: prove nonempty immutable data/catalog survives rollback.
+  // PostgreSQL accepts these unquoted identifiers; their dollar substrings are not literal delimiters.
+  psql(`BEGIN;
+    CREATE TEMP TABLE lexical$tag$(i integer);
+    CREATE TEMP TABLE other$tag$(i integer);
+    INSERT INTO lexical$tag$ VALUES(1);
+    SELECT i FROM lexical$tag$;
+    ROLLBACK;`);
+  psql(`INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
+    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875003','opportunity_runner','2026-01-01',NULL,'active',repeat('9',64),clock_timestamp());
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-000000000083','9183');
+    SELECT * FROM public.append_financial_fact_v3(ROW(
+      '71300000-0000-4000-8000-000000000083','net_asset_value',NULL,'2025-01-01','instant',100,
+      'TWD','twse','official_filing','reported','reported_period','2025-01-02T00:00:00Z',
+      '2025-01-02T00:00:00Z','2025-01-02T01:00:00Z',NULL,'twse-openapi:synthetic-atomic-rollback')::public.financial_fact_input_v3,
+      'a11d4e67-7d0a-4c44-8a9d-1d5c3b875003');`);
+  const snapshot = () => JSON.parse(psql(`SELECT jsonb_build_object(
+    'facts',(SELECT jsonb_agg(to_jsonb(f) ORDER BY fact_id) FROM public.opportunity_financial_facts_v3 f
+      WHERE stock_id='71300000-0000-4000-8000-000000000083'),
+    'observations',(SELECT jsonb_agg(to_jsonb(o) ORDER BY observation_id) FROM public.opportunity_financial_observations_v1 o
+      WHERE fact_id IN(SELECT fact_id FROM public.opportunity_financial_facts_v3 WHERE stock_id='71300000-0000-4000-8000-000000000083')),
+    'functions',(SELECT jsonb_agg(jsonb_build_object('definition',pg_get_functiondef(p.oid),
+      'owner',pg_get_userbyid(p.proowner),'acl',p.proacl,'config',p.proconfig) ORDER BY p.proname)
+      FROM pg_proc p WHERE p.oid=ANY(ARRAY[
+        'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure,
+        'public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure,
+        'public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid)'::regprocedure])),
+    'tables',(SELECT jsonb_agg(jsonb_build_object('name',c.relname,'owner',pg_get_userbyid(c.relowner),
+      'acl',c.relacl,'rls',c.relrowsecurity) ORDER BY c.relname) FROM pg_class c
+      WHERE c.oid=ANY(ARRAY['public.opportunity_financial_facts_v3'::regclass,'public.opportunity_financial_observations_v1'::regclass])),
+    'triggers',(SELECT jsonb_agg(jsonb_build_object('definition',pg_get_triggerdef(t.oid),'enabled',t.tgenabled) ORDER BY t.tgname)
+      FROM pg_trigger t WHERE t.tgrelid=ANY(ARRAY['public.opportunity_financial_facts_v3'::regclass,'public.opportunity_financial_observations_v1'::regclass])),
+    'schemaAcl',(SELECT nspacl FROM pg_namespace WHERE nspname='public'))::text;`,['-At']).trim());
+  const before = snapshot();
+  assert.equal(before.facts.length,1);
+  assert.equal(before.observations.length,1);
+  const error = rejectedSql(`BEGIN; SET ROLE stockinsider_managed_migrator;
+    ${migrationBodyInAtomicTransaction(decisionIntegritySql)}
+    ${migrationBodyInAtomicTransaction(financialFactRecollectionSql)}
+    DO $forced$
+    BEGIN
+      IF position('financial_period_revision_bound' IN pg_get_functiondef(
+        'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0
+        THEN RAISE EXCEPTION 'predecessor_not_replaced'; END IF;
+      RAISE EXCEPTION 'forced_extension_failure';
+    END $forced$;`);
+  assert.match(error, /forced_extension_failure/u);
+  assert.deepEqual(probe(), { periodBound: true, observationWrapper: true });
+  assert.deepEqual(snapshot(),before, 'fact/observation full rows and body/owner/ACL/RLS/trigger/schema catalog must survive forced rollback');
 });
