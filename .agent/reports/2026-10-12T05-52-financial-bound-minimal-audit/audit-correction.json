@@ -1,0 +1,8 @@
+{
+  "reason": "narrow factual count correction before task handoff",
+  "amendment_actual_lines": 169,
+  "pending_selected_files": 76,
+  "report_current_sha256": "807151f06bddb5ef3e438b3438394acbbc4adc86c07c20474716d8040e0d194e",
+  "previous_report_sha_retained_in_original_receipt": true,
+  "runtime_db_tests": false
+}

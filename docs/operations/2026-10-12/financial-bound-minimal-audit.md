@@ -26,7 +26,7 @@ separate possible blockers requiring real accounting after the admitted repair.
 
 ## Narrow SQL and compatibility boundary
 
-The pending 172-line financial amendment is logically separable from the new
+The pending 169-line financial amendment is logically separable from the new
 research/author/reviewer/publication system. It:
 
 - Reuses the series advisory lock/registry and deferred consistency checks.
@@ -68,8 +68,10 @@ Do **not** cherry-pick the complete pending planner/apply files as the minimal
 fix. Pending `migration-plan.mjs` places this SQL sixth in a 27-migration research
 extension; the apply path additionally requires research catalog, cloud/deep and
 publication postconditions. That is incidental installer bundling, not a direct
-financial SQL dependency. The existing pending 73-selected/72-applied profile is
-an isolated full-research fixture, not an approved 49-file financial-only profile.
+financial SQL dependency. The pending code selects 76 files (one prelude + 48 base + 27 research tails).
+The README still describes an earlier 73-selected/72-applied fixture. Those
+dated full-research results cannot be relabeled as a current 76-file execution,
+nor as an approved 49-file financial-only profile.
 
 A narrow production-capable change still needs the following reviewed installer
 behavior, adapted to the current main rather than copied wholesale:
