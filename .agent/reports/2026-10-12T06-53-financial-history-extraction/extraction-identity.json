@@ -1,0 +1,12 @@
+{
+  "base": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+  "pending": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "sql_path": "migrations/20261005_financial_history_admission_v1.sql",
+  "sql_bytes": 11994,
+  "sql_sha256": "5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27",
+  "original_native_file_sha256": "063e0771311048d973896efcb7176f51e071e4514dc926e8f673ce37fcd8f30a",
+  "extracted_native_case_sha256": "19891733a43aaff928ae3a0b0df90f7a34f4592fca3aacd76dc3b63ed2d17b9d",
+  "pending_atomic_case_sha256": "3756aa8823e3071f8864a731bc970cff3a59bcb1f3132fa5830f416caea88957",
+  "pending_atomic_reason": "main lacks scripts/opportunity-v3/atomic-migration-chain.mjs / migrationBodyInAtomicTransaction; no stub/helper/skip added",
+  "main_file_kept_except_exact_2_line_import_and_appended_existing_case": true
+}

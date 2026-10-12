@@ -1,0 +1,12 @@
+{
+  "path": "/workspace/cloud-discovery-publisher-reader-oct12/web/.next",
+  "source": "3b4e21f72b26149795e05c632e075df067818ca0",
+  "already_pushed_evidence": "bfc2f1d729177d7b5f3a48c660a5c67f61f766d8",
+  "manifest_verified_files": 1796,
+  "manifest_sha256": "470ca6b33692ad9a6599560523d241227371635cd832f80edd9ad6d40a65087b",
+  "logical_bytes": 293316420,
+  "free_before": 8796913664,
+  "free_after": 9106997248,
+  "source_and_unique_evidence_untouched": true,
+  "no_active_reader_process": true
+}

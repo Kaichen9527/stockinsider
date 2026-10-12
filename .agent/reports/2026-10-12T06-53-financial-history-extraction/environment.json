@@ -1,0 +1,43 @@
+{
+  "OS_user": "agent",
+  "Node": "v22.14.0",
+  "Next": "16.3.4",
+  "pg_tools": {
+    "initdb": {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb",
+      "exit": 0,
+      "version": "initdb (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+      "binary_sha256": "a0363354125bc00f25075bb47fc32a2838fa7668c008326227f5bc04d628ca1d"
+    },
+    "pg_ctl": {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+      "exit": 0,
+      "version": "pg_ctl (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+      "binary_sha256": "c8a0fa6df90600186575e3f3c47a352bafac73547416cf67675b41991b5b5d74"
+    },
+    "psql": {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/psql",
+      "exit": 0,
+      "version": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+      "binary_sha256": "3c94c29652ea7ff8803ab1ca35e48c38a39c8a94a8c8eeadbb1d87c68494506c"
+    },
+    "pg_config": {
+      "path": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_config",
+      "exit": 0,
+      "version": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1)",
+      "binary_sha256": "8fc0425c51a3d1772ea60aa5d88c26e5903f46e5ee37b0652cefe9ffea377427"
+    }
+  },
+  "dependency_install": false,
+  "local_hardlink_web_deps": true,
+  "proxy_CA_variable_names_present": [
+    "HTTP_PROXY",
+    "HTTPS_PROXY",
+    "NODE_EXTRA_CA_CERTS",
+    "SSL_CERT_FILE"
+  ],
+  "existing_env_preserved": true,
+  "private_TMPDIR": "/tmp/si-financial-extract-0612",
+  "clock_changes": false,
+  "external_connection": false
+}

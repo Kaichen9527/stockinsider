@@ -1,0 +1,282 @@
+{
+  "kind": "financial-history-native-extraction-slice1",
+  "recorded_at": "2026-10-12T07:08:04Z",
+  "manual_start": "2026-10-12T06:53:45Z",
+  "manual_deadline": "2026-10-12T07:23:45Z",
+  "branch": "codex/financial-history-native-extraction-oct12",
+  "base": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+  "extracted_from": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "source_head": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+  "source_tree": "5a21c2693fe3b7a0beb72b6184e854cdd6ba48c4",
+  "source_webtree": "68f36363fa1671cd3b3c74fdf05ed2e7d3be3e5a",
+  "base_webtree": "68f36363fa1671cd3b3c74fdf05ed2e7d3be3e5a",
+  "webtree_identical": true,
+  "unchanged_SQL_sha256": "5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27",
+  "existing_case_body_byte_identical": true,
+  "existing_native_file_retained_except_import_and_exact_case": true,
+  "first_native_working_phase": {
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "skip": 0,
+    "note": "A surplus EOF LF was removed before freeze; original assertions/body unchanged. Frozen subject was then actually verified separately; counts not added."
+  },
+  "frozen_native": {
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "skip": 0,
+    "selected_scope": "base 129th-series rejection + original amendment160-month case only",
+    "other_canonical_cases": "not run; name-pattern exclusion, not claimed accepted"
+  },
+  "not_executed": {
+    "atomic_replay_rollback": "original source archived; absent main atomic helper; no stub/skip/pass",
+    "full_canonical": "not requested/run",
+    "full_existing_VPS_schema_installation": "not run/profile not claimed",
+    "production_repair_1723_343": "not executed"
+  },
+  "test_profile": "original main migration-contract before() synthetic legacy predecessor fixture on real native PG17.11, all predecessor SQL unchanged; not full production schema/principal/attestation",
+  "commands": {
+    "native-frozen": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^(V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row|financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain)$",
+        "scripts/opportunity-v3/migration-contract.test.mjs"
+      ],
+      "start_utc": "2026-10-12T07:03:17Z",
+      "seconds": 3.3144729137420654,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 181698560,
+      "min_free_bytes": 9106505728
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start_utc": "2026-10-12T07:03:20Z",
+      "seconds": 50.08953356742859,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1798144000,
+      "min_free_bytes": 8796475392
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start_utc": "2026-10-12T06:59:48Z",
+      "seconds": 22.786949157714844,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1208643584,
+      "min_free_bytes": 9106571264
+    },
+    "native": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^(V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row|financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain)$",
+        "scripts/opportunity-v3/migration-contract.test.mjs"
+      ],
+      "start_utc": "2026-10-12T06:56:18Z",
+      "seconds": 2.7090446949005127,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 164737024,
+      "min_free_bytes": 8796917760
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-12T06:59:34Z",
+      "seconds": 14.43275237083435,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1174163456,
+      "min_free_bytes": 9106870272
+    }
+  },
+  "typecheck": "PASS",
+  "lint": {
+    "exit": 0,
+    "errors": 0,
+    "existing_warnings": 33
+  },
+  "normal_build": {
+    "exit": 0,
+    "source": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "build_id": "XCyGxQ63jYWtMAPPfx82O",
+    "server_files": 1796,
+    "manifest_sha256": "f04d654ab71ea9f72a719d3e6af1d27efb634487c0e65ba2b4c4bf75b926775d",
+    "logical_server_bytes": 59953031,
+    "no_prior_build_relabel": true
+  },
+  "resources": {
+    "peak_sampled_RSS_bytes": 1798144000,
+    "min_sampled_workspace_free_bytes": 8796475392,
+    "rss_goal_bytes": 8589934592,
+    "workspace_reserve_bytes": 8589934592,
+    "one_heavy_at_once": true,
+    "sample_method": "250ms process-tree summed RSS/statvfs; shared RSS conservative, brief peaks can be missed; tmp measured at admission/final, not continuous"
+  },
+  "default_planner_apply_48base_authority_PCR_catalog_package_locks_unchanged": true,
+  "production_model_deploy_role_strategy_claim": false,
+  "independent_code_review_claim": false,
+  "remaining": "root review; later existing atomic installer/successor guard/profile integration before production apply",
+  "raw_files": [
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/build.meta.json",
+      "bytes": 252,
+      "sha256": "364730099df4e2973b1ea79662a076a1e25c9806ecc149c1b0adc932728dbf60"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/build.stdout",
+      "bytes": 5556,
+      "sha256": "4ffd341a76255fa69394196b1c391e5e869d842f3b05012c7267761027076452"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/cleanup.json",
+      "bytes": 329,
+      "sha256": "f66918fba8f624041b46dd47d92ad1a4a0c6ccb9c724f409ac53c091a3e3fd40"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/compiled-server-manifest.json",
+      "bytes": 333261,
+      "sha256": "f04d654ab71ea9f72a719d3e6af1d27efb634487c0e65ba2b4c4bf75b926775d"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/environment.json",
+      "bytes": 1610,
+      "sha256": "f2334a3efec343434aae0cddfd201472df76c72f747808839becd71d0b9ca4ae"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/exact-extraction-check.json",
+      "bytes": 222,
+      "sha256": "1a46fc9db7c464c5f0486a7384de9591d2c947ba0a0ed5bf5e535973d431eac9"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/extraction-identity.json",
+      "bytes": 828,
+      "sha256": "dd511abc50b577a5fd0e66cce97fb133694f326861e6d9106cf879601898531d"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/lint.meta.json",
+      "bytes": 252,
+      "sha256": "9568210995a7cbf55d3a3ce54f85354cb684c1735f46d4a2a4eec0b6e3d4b34b"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/lint.stderr",
+      "bytes": 170,
+      "sha256": "c8dce2762f0054d1a72b48549fda64faa7d951d529cdd0af2f5785ae1c2ebd3f"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/lint.stdout",
+      "bytes": 4618,
+      "sha256": "98b76df59a0d9aae1deb9fd51c6add56f3b92f90224d9b43d78670c076369f13"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/native-frozen.meta.json",
+      "bytes": 639,
+      "sha256": "0e9afc692ed604871fed080cba169a4263470c85a7d3d993593315adc6cf062d"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/native-frozen.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/native-frozen.stdout",
+      "bytes": 1311,
+      "sha256": "6098a92bbba148e9706c0efac572f410b1c571741a8bcfdd0a902a6906c7d7a7"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/native-selected-inventory.json",
+      "bytes": 242,
+      "sha256": "019c1a8b2ef8495d3217db38c8934bb5906e59cc4688165a32dd6744b4dd2cbb"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/native.meta.json",
+      "bytes": 639,
+      "sha256": "6836bbb605a7bc5c19f32df05ae0ab47cec500fee8972e410d956e27620c02aa"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/native.stdout",
+      "bytes": 1312,
+      "sha256": "ab3670b8f7b64adc7ad8cdeeaa8d8ae0ed4082bd12eb5797481ae65418729435"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/pending-atomic-replay-case.mjs.txt",
+      "bytes": 1391,
+      "sha256": "3756aa8823e3071f8864a731bc970cff3a59bcb1f3132fa5830f416caea88957"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/pre-freeze-native-file-identity.json",
+      "bytes": 290,
+      "sha256": "4fe86397828903fa3f54f3f26e7e5fdb1ed6f8ccf728bfe3397e176d20587f65"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/resource-runner.py.txt",
+      "bytes": 1332,
+      "sha256": "cbc6789109769bd0cb2b32d577fb201cecc04b07bac31ea7528762c6019f76a2"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/retired-own-build-cleanup.json",
+      "bytes": 500,
+      "sha256": "4811dc87b3ca6127f37d4b9f555b917446b34fa378d9160c82d1d63fb00a7107"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/source-manifest.json",
+      "bytes": 3454,
+      "sha256": "c187c06149c789b564073bb6e441820662f3c48f8da86f1f3c5c909c156249b6"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/source.delta.patch",
+      "bytes": 26254,
+      "sha256": "3c36d71583b85d299b0b06c85c4489bb0080aecdcf9fb5c359f81eaac8da4822"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/typecheck.meta.json",
+      "bytes": 256,
+      "sha256": "93a10985e36450d88fa5b29cdfef958c5bc675a7c93db0d56e44c50aa8a710f9"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/unchanged-base-chain.json",
+      "bytes": 12234,
+      "sha256": "3b7fff920e0d8fce46e1ae4e40fcb5d6d40089fd24a640cccf405f73534b7db2"
+    }
+  ]
+}

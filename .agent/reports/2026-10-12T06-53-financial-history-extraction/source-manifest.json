@@ -1,0 +1,86 @@
+[
+  {
+    "subject": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "path": "migrations/20261005_financial_history_admission_v1.sql",
+    "bytes": 11994,
+    "sha256": "5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27",
+    "blob": "766f37241820e10c12806d407fa9eb99d3cf654c"
+  },
+  {
+    "subject": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "path": "scripts/opportunity-v3/migration-contract.test.mjs",
+    "bytes": 512324,
+    "sha256": "5a68669011002cde8055fb5481ca06ba756eb50be1c650ca9fe57776f57ed141",
+    "blob": "b5abd27f8c0be9adbc868ebacbc85458ee744c03"
+  },
+  {
+    "subject": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "path": "docs/operations/2026-10-12/financial-history-native-extraction-handoff.md",
+    "bytes": 4597,
+    "sha256": "f3622b6792a0fed5b52f884dbe778ff0e4652e0dd2ba6e3f5812768cc1c6e759",
+    "blob": "3f7e9fa979ed920c6a67a2bcbb1bf991269ed5fc"
+  },
+  {
+    "subject": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "path": "scripts/opportunity-v3/migration-plan.mjs",
+    "bytes": 4880,
+    "sha256": "ecb58eed30e4c247f4a362c397c8e932cf0ea7ec79b5e279714e2a1c946b622e",
+    "blob": "bb8309d0fad31f77205a8cc9739c285b3e131921"
+  },
+  {
+    "subject": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "bytes": 33975,
+    "sha256": "90b9c6fd6ba1f68b8a378759d0608e6e6aea38a11b2eeab700f8cfaaf2eca78a",
+    "blob": "66291dc2c67eca0bd5f15f2ac61769095b0e42a4"
+  },
+  {
+    "subject": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "path": "package.json",
+    "bytes": 24733,
+    "sha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc",
+    "blob": "f25f4bebad793fb7eabc03e2320e4472553a0fb9"
+  },
+  {
+    "subject": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "path": "package-lock.json",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+  },
+  {
+    "subject": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "path": "web/package-lock.json",
+    "bytes": 274088,
+    "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+    "blob": "a41fd447e28f3b36829b689828c345e042619a38"
+  },
+  {
+    "subject": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json",
+    "bytes": 33417,
+    "sha256": "9ec16e3c703a0f42c5700d6225c4a94ab2f56f81ae139fc1da2f9fda2ca6c3e3",
+    "blob": "438a36604fc9bb2a0768a1750eb8b860ced0793e"
+  },
+  {
+    "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "openspec/changes/financial-history-admission-v1/spec.md",
+    "bytes": 2911,
+    "sha256": "e3225dffc566db4be2e38d0e22b8b702ae99fd93090d41d23e4cf7c15c542103",
+    "blob": "d9d43be245ab8c5089b0188562a73c8915ae6910"
+  },
+  {
+    "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "openspec/changes/financial-history-admission-v1/tasks.md",
+    "bytes": 1057,
+    "sha256": "cef21bccb3084f0a82ff61c047a2b1de3e22a577993ca6f4e8b829eb85c8e62a",
+    "blob": "39d9994721a502712ba6e4196aa24d1f1823470d"
+  },
+  {
+    "subject": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+    "path": "migrations/20261005_financial_history_admission_v1.sql",
+    "bytes": 11994,
+    "sha256": "5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27",
+    "blob": "766f37241820e10c12806d407fa9eb99d3cf654c"
+  }
+]

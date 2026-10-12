@@ -1,0 +1,373 @@
+diff --git a/docs/operations/2026-10-12/financial-history-native-extraction-handoff.md b/docs/operations/2026-10-12/financial-history-native-extraction-handoff.md
+new file mode 100644
+index 00000000..3f7e9fa9
+--- /dev/null
++++ b/docs/operations/2026-10-12/financial-history-native-extraction-handoff.md
+@@ -0,0 +1,75 @@
++# Financial history native extraction — slice 1
++
++Base approved main: `0997336d0eb8ec43ea0899f22fe5a03cc774518f`.
++Source of the existing approved financial amendment/cases:
++`2e078dfdd74272d3d50dffdd4cc6c14df3152c78` (pending PR364).
++Prior scope audit: `3fb0b0f08a4611f39d487d7b33fd0d62ccadd56d`,
++`docs/operations/2026-10-12/financial-bound-minimal-audit.md` in that docs-only branch.
++Original financial spec remains at that pending Git subject under
++`openspec/changes/financial-history-admission-v1/spec.md`; no thresholds or
++expectations from it are changed.
++
++## Exact extraction
++
++`migrations/20261005_financial_history_admission_v1.sql` is copied byte-for-byte
++(169 lines). It separates stored history from the 128 distinct claims within one
++period, preserves original facts/disclosure clocks, wraps the existing append
++RPC, adds immutable observations with known-only backfill and a bounded PIT
++keyset reader. The same-period cap is still 128; no dates or facts were changed.
++
++The main `migration-contract.test.mjs` retains every original test/fixture and
++adds only the existing `financialHistorySql` file read plus the exact original
++**financial history amendment admits genuine periods, preserves PIT revisions
++and bounds pages on the real predecessor chain** case. No complete pending test
++file or unrelated test imports were copied. The original baseline
++**V3.16.16 financial fact append is recollection-idempotent and still rejects the
++129th distinct series row** remains unchanged.
++
++The original amendment test applies SQL twice inside its rollback-only isolated
++transaction, then validates 160 monthly periods, original fact ID on recollection,
++exact retry, changed value/unit/restatement/provider, cutoff pagination 128+32,
++unique coverage, invalid cursor/size/principal, period correction storm, private
++predecessor/no service INSERT/no owner CREATE. It asserts 287 fixture facts and
++288 observation rows before rolling back. This is a genuine native SQL test on
++synthetic rows, not an official refresh or 1723/343 production repair.
++
++## Explicitly pending case and installer
++
++The second original **financial atomic replay rollback retains installed
++successor after predecessor replacement and forced failure** case requires
++`migrationBodyInAtomicTransaction` from `scripts/opportunity-v3/atomic-migration-chain.mjs`,
++which does not exist in approved main. Its exact original case is archived in
++this slice's unique receipt directory as `pending-atomic-replay-case.mjs.txt`.
++It is **not** registered, skipped, replaced with a stub, or counted PASS. The
++next authorized installer slice owns that real dependency and its guard/scanner
++regression. This first slice does not claim atomic installation/replay acceptance.
++
++The 48 original migration files, default planner/apply, authority artifacts,
++roles outside the existing copied SQL, package/lock and PCR catalog are untouched.
++The default installer still does not select this new financial tail. Do not apply
++it to production by a raw SQL route. A narrow reviewed atomic plan/profile,
++installed-successor guard, existing-schema rehearsal, exact/protected review and
++capacity-admitted operation remain necessary before production apply.
++
++## Native profile and limits
++
++Node22.14.0 and the already available PostgreSQL17.11 tools execute the unchanged
++main `before()` predecessor migration fixture. It starts a private Unix-socket
++cluster with `listen_addresses=''` and uses the original synthetic legacy tables
++and managed migration role. No new prerequisite stub, alternative schema fixture,
++clock shim or live connection was introduced. This focused predecessor fixture
++is **not** the complete VPS schema-only installation profile or a production
++role/permission/clock attestation.
++
++The native command selects precisely the old baseline and new amendment case,
++not the entire canonical suite. Actual PASS/FAIL/SKIP and raw output are retained;
++unselected original tests and pending atomic case are not called verified.
++OS-derived USER and a short private TMPDIR are runner-only settings. Existing
++proxy/CA settings are inherited. No model/provider/crawl/HTTP operation or
++qualification/strategy release is part of this manual engineering task.
++
++Web dependencies are reused from the own exact-main-lock checkout through a local
++hardlink directory (no cross-root symlink and no install/lock change). Typecheck,
++lint and normal build are separately captured. Only a stopped, already pushed
++own `.next` was retired after all compiled file hashes matched its saved manifest;
++source, unique raw evidence and other worktrees were preserved.
+diff --git a/migrations/20261005_financial_history_admission_v1.sql b/migrations/20261005_financial_history_admission_v1.sql
+new file mode 100644
+index 00000000..766f3724
+--- /dev/null
++++ b/migrations/20261005_financial_history_admission_v1.sql
+@@ -0,0 +1,169 @@
++-- Approved historical-storage/read-window separation. No facts are deleted,
++-- retimed or merged by URL. Existing disclosure identity and RPC validation stay
++-- intact; the 128-revision safety bound applies to ONE economic period.
++BEGIN;
++GRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;
++
++CREATE INDEX IF NOT EXISTS opportunity_financial_facts_v3_history_page_v1
++  ON public.opportunity_financial_facts_v3(stock_id,fact_key,duration_kind,
++    estimate_kind,estimate_horizon,recorded_at,fact_id);
++CREATE INDEX IF NOT EXISTS opportunity_financial_facts_v3_period_revisions_v1
++  ON public.opportunity_financial_facts_v3(stock_id,fact_key,duration_kind,
++    estimate_kind,estimate_horizon,period_end,period_start);
++
++CREATE OR REPLACE FUNCTION public.prepare_opportunity_financial_fact_series_v3()
++RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
++DECLARE v_count integer;
++BEGIN
++  -- Preserve the existing series serialization and deferred registry checks.
++  PERFORM pg_advisory_xact_lock(hashtextextended(concat_ws('|','financial_fact_series',NEW.stock_id,
++    NEW.fact_key,NEW.duration_kind,NEW.estimate_kind,NEW.estimate_horizon),0));
++  INSERT INTO public.opportunity_financial_fact_series_registry_v3(stock_id,fact_key,duration_kind,
++    estimate_kind,estimate_horizon)
++  VALUES(NEW.stock_id,NEW.fact_key,NEW.duration_kind,NEW.estimate_kind,NEW.estimate_horizon)
++  ON CONFLICT(stock_id,fact_key,duration_kind,estimate_kind,estimate_horizon) DO NOTHING;
++  PERFORM 1 FROM public.opportunity_financial_fact_series_registry_v3 registry
++  WHERE registry.stock_id=NEW.stock_id AND registry.fact_key=NEW.fact_key
++    AND registry.duration_kind=NEW.duration_kind AND registry.estimate_kind=NEW.estimate_kind
++    AND registry.estimate_horizon=NEW.estimate_horizon FOR UPDATE;
++
++  -- Collection is an observation, not a disclosure revision. Publication and
++  -- source timestamps remain in identity: an undated fallback is NOT backdated
++  -- or merged with an earlier observation simply because its URL/value match.
++  SELECT count(*) INTO v_count FROM (
++    SELECT fact.value,fact.unit,fact.provider,fact.authority_tier,
++      fact.filing_published_at,fact.source_timestamp,fact.filing_restatement_id,fact.source_ref
++    FROM public.opportunity_financial_facts_v3 fact
++    WHERE fact.stock_id=NEW.stock_id AND fact.fact_key=NEW.fact_key
++      AND fact.duration_kind=NEW.duration_kind AND fact.estimate_kind=NEW.estimate_kind
++      AND fact.estimate_horizon=NEW.estimate_horizon
++      AND fact.period_end=NEW.period_end AND fact.period_start IS NOT DISTINCT FROM NEW.period_start
++    UNION
++    SELECT NEW.value,NEW.unit,NEW.provider,NEW.authority_tier,
++      NEW.filing_published_at,NEW.source_timestamp,NEW.filing_restatement_id,NEW.source_ref
++    LIMIT 129
++  ) revisions;
++  IF v_count>128 THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='financial_period_revision_bound';END IF;
++  RETURN NEW;
++END $function$;
++ALTER FUNCTION public.prepare_opportunity_financial_fact_series_v3() OWNER TO opportunity_v3_rpc_owner;
++REVOKE ALL ON FUNCTION public.prepare_opportunity_financial_fact_series_v3() FROM PUBLIC,anon,authenticated,service_role;
++
++CREATE TABLE IF NOT EXISTS public.opportunity_financial_observations_v1 (
++  observation_id uuid PRIMARY KEY DEFAULT extensions.gen_random_uuid(),
++  fact_id uuid NOT NULL REFERENCES public.opportunity_financial_facts_v3(fact_id) ON DELETE RESTRICT,
++  input_hash text NOT NULL CHECK(input_hash ~ '^[0-9a-f]{64}$'),
++  observation_kind text NOT NULL CHECK(observation_kind IN ('legacy_fact','rpc_observation')),
++  caller_principal_id uuid,
++  filing_published_at timestamptz NOT NULL,
++  source_timestamp timestamptz NOT NULL,
++  collected_at timestamptz NOT NULL,
++  recorded_at timestamptz NOT NULL DEFAULT clock_timestamp(),
++  CONSTRAINT financial_observation_identity_v1 UNIQUE(fact_id,input_hash),
++  CHECK(filing_published_at<=source_timestamp AND source_timestamp<=collected_at AND collected_at<=recorded_at),
++  CHECK((observation_kind='legacy_fact' AND caller_principal_id IS NULL)
++    OR (observation_kind='rpc_observation' AND caller_principal_id IS NOT NULL))
++);
++-- Only timestamps already present in immutable legacy facts are backfilled.
++-- Historical audit hashes cannot reveal lost acquisition times; do not invent them.
++INSERT INTO public.opportunity_financial_observations_v1(fact_id,input_hash,observation_kind,
++  filing_published_at,source_timestamp,collected_at,recorded_at)
++SELECT fact_id,encode(extensions.digest(convert_to('legacy_fact:'||fact_id::text,'utf8'),'sha256'),'hex'),
++  'legacy_fact',filing_published_at,source_timestamp,collected_at,recorded_at
++FROM public.opportunity_financial_facts_v3
++ON CONFLICT(fact_id,input_hash) DO NOTHING;
++ALTER TABLE public.opportunity_financial_observations_v1 OWNER TO opportunity_v3_rpc_owner;
++ALTER TABLE public.opportunity_financial_observations_v1 ENABLE ROW LEVEL SECURITY;
++REVOKE ALL ON public.opportunity_financial_observations_v1 FROM PUBLIC,anon,authenticated,service_role;
++GRANT SELECT ON public.opportunity_financial_observations_v1 TO service_role;
++CREATE OR REPLACE TRIGGER opportunity_financial_observations_v1_immutable
++  BEFORE UPDATE OR DELETE ON public.opportunity_financial_observations_v1
++  FOR EACH ROW EXECUTE FUNCTION public.legacy_correctness_immutable_v3_11();
++
++DO $preserve_append$
++BEGIN
++  IF to_regprocedure('public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid)') IS NULL THEN
++    IF to_regprocedure('public.append_financial_fact_pre_v3_16_16(public.financial_fact_input_v3,uuid)') IS NULL
++      THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='financial_history_predecessor_missing'; END IF;
++    ALTER FUNCTION public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)
++      RENAME TO append_financial_fact_pre_history_v1;
++  END IF;
++END $preserve_append$;
++CREATE OR REPLACE FUNCTION public.append_financial_fact_v3(input public.financial_fact_input_v3,caller_principal uuid)
++RETURNS TABLE(fact_id uuid,recorded_at timestamptz)
++LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
++DECLARE v_fact uuid;v_recorded timestamptz;v_hash text;
++BEGIN
++  -- The predecessor performs principal, disclosure, period and recollection
++  -- validation. Receipt and fact/audit are committed or rolled back together.
++  SELECT appended.fact_id,appended.recorded_at INTO STRICT v_fact,v_recorded
++  FROM public.append_financial_fact_pre_history_v1(input,caller_principal) appended;
++  v_hash:=encode(extensions.digest(convert_to(regexp_replace(jsonb_build_array(
++    (input).stock_id,(input).fact_key,(input).period_start,(input).period_end,(input).duration_kind,
++    (input).value,(input).unit,(input).provider,(input).authority_tier,(input).estimate_kind,
++    (input).estimate_horizon,(input).filing_published_at,(input).source_timestamp,
++    (input).collected_at,(input).filing_restatement_id,(input).source_ref
++  )::text,', ', ',', 'g'),'utf8'),'sha256'),'hex');
++  INSERT INTO public.opportunity_financial_observations_v1(fact_id,input_hash,observation_kind,
++    caller_principal_id,filing_published_at,source_timestamp,collected_at)
++  VALUES(v_fact,v_hash,'rpc_observation',caller_principal,(input).filing_published_at,
++    (input).source_timestamp,(input).collected_at)
++  ON CONFLICT ON CONSTRAINT financial_observation_identity_v1 DO NOTHING;
++  RETURN QUERY SELECT v_fact,v_recorded;
++END $function$;
++ALTER FUNCTION public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid) OWNER TO opportunity_v3_rpc_owner;
++ALTER FUNCTION public.append_financial_fact_v3(public.financial_fact_input_v3,uuid) OWNER TO opportunity_v3_rpc_owner;
++REVOKE ALL ON FUNCTION public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid)
++  FROM PUBLIC,anon,authenticated,service_role;
++REVOKE ALL ON FUNCTION public.append_financial_fact_v3(public.financial_fact_input_v3,uuid) FROM PUBLIC,anon,authenticated;
++GRANT EXECUTE ON FUNCTION public.append_financial_fact_v3(public.financial_fact_input_v3,uuid) TO service_role;
++
++-- Keyset order is immutable recorded_at/fact_id, NOT a mutable latest-head
++-- ranking. A fixed cutoff and explicit sentinel preserve conflicts and revisions.
++CREATE OR REPLACE FUNCTION public.read_financial_history_page_v1(
++  p_stock uuid,p_fact_key public.financial_fact_key_v3,p_duration public.financial_duration_kind_v3,
++  p_kind public.financial_estimate_kind_v3,p_horizon public.financial_estimate_horizon_v3,
++  p_period_from date,p_period_to date,p_cutoff timestamptz,p_after uuid,p_limit integer,p_caller uuid
++) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
++DECLARE v_after_recorded timestamptz;v_result jsonb;
++BEGIN
++  IF NOT public.internal_principal_role_is_exact_v3_internal(p_caller,'opportunity_runner',clock_timestamp())
++    THEN RAISE EXCEPTION USING ERRCODE='PT403',MESSAGE='principal_role_unavailable'; END IF;
++  IF p_stock IS NULL OR p_fact_key IS NULL OR p_duration IS NULL OR p_kind IS NULL OR p_horizon IS NULL
++    OR p_period_from IS NULL OR p_period_to IS NULL OR p_period_from>p_period_to
++    OR p_cutoff IS NULL OR p_cutoff>clock_timestamp() OR p_limit IS NULL OR p_limit NOT BETWEEN 1 AND 128
++    THEN RAISE EXCEPTION USING ERRCODE='PT422',MESSAGE='financial_history_page_invalid'; END IF;
++  IF p_after IS NOT NULL THEN
++    SELECT f.recorded_at INTO v_after_recorded FROM public.opportunity_financial_facts_v3 f
++    WHERE f.fact_id=p_after AND f.stock_id=p_stock AND f.fact_key=p_fact_key AND f.duration_kind=p_duration
++      AND f.estimate_kind=p_kind AND f.estimate_horizon=p_horizon AND f.period_end BETWEEN p_period_from AND p_period_to
++      AND f.recorded_at<=p_cutoff AND f.collected_at<=p_cutoff AND f.source_timestamp<=p_cutoff AND f.filing_published_at<=p_cutoff;
++    IF NOT FOUND THEN RAISE EXCEPTION USING ERRCODE='PT422',MESSAGE='financial_history_cursor_invalid'; END IF;
++  END IF;
++  WITH bounded AS MATERIALIZED (
++    SELECT f.* FROM public.opportunity_financial_facts_v3 f
++    WHERE f.stock_id=p_stock AND f.fact_key=p_fact_key AND f.duration_kind=p_duration
++      AND f.estimate_kind=p_kind AND f.estimate_horizon=p_horizon AND f.period_end BETWEEN p_period_from AND p_period_to
++      AND f.recorded_at<=p_cutoff AND f.collected_at<=p_cutoff AND f.source_timestamp<=p_cutoff AND f.filing_published_at<=p_cutoff
++      AND (p_after IS NULL OR (f.recorded_at,f.fact_id)>(v_after_recorded,p_after))
++    ORDER BY f.recorded_at,f.fact_id LIMIT p_limit+1
++  ), page AS (SELECT * FROM bounded ORDER BY recorded_at,fact_id LIMIT p_limit)
++  SELECT jsonb_build_object('schema','financial-history-page-v1','cutoff',p_cutoff,
++    'accounting_scope','legacy_unspecified','currency','derived_from_unit_not_independently_disclosed',
++    'rows',coalesce((SELECT jsonb_agg(to_jsonb(page) ORDER BY recorded_at,fact_id) FROM page),'[]'::jsonb),
++    'has_more',(SELECT count(*)>p_limit FROM bounded),
++    'next_cursor',CASE WHEN (SELECT count(*)>p_limit FROM bounded)
++      THEN (SELECT fact_id FROM page ORDER BY recorded_at DESC,fact_id DESC LIMIT 1) ELSE NULL END)
++  INTO v_result;
++  RETURN v_result;
++END $function$;
++ALTER FUNCTION public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,
++  public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid)
++  OWNER TO opportunity_v3_rpc_owner;
++REVOKE ALL ON FUNCTION public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,
++  public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid)
++  FROM PUBLIC,anon,authenticated;
++GRANT EXECUTE ON FUNCTION public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,
++  public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid) TO service_role;
++REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner;
++COMMIT;
+diff --git a/scripts/opportunity-v3/migration-contract.test.mjs b/scripts/opportunity-v3/migration-contract.test.mjs
+index 61b1a349..b5abd27f 100644
+--- a/scripts/opportunity-v3/migration-contract.test.mjs
++++ b/scripts/opportunity-v3/migration-contract.test.mjs
+@@ -42,6 +42,8 @@ const analysisPayloadReuseSql = fs.readFileSync(analysisPayloadReuseMigrationPat
+ const financialFactRecollectionMigrationPath = path.join(root,
+   'migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql');
+ const financialFactRecollectionSql = fs.readFileSync(financialFactRecollectionMigrationPath, 'utf8');
++const financialHistorySql = fs.readFileSync(path.join(root,
++  'migrations/20261005_financial_history_admission_v1.sql'), 'utf8');
+ const analysisPayloadExactReuseMigrationPath = path.join(root,
+   'migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql');
+ const analysisPayloadExactReuseSql = fs.readFileSync(analysisPayloadExactReuseMigrationPath, 'utf8');
+@@ -8124,3 +8126,103 @@ test('V3.19.12 executes the production-shaped JSONB cardinality read and reconci
+   {directExecuteCount:9,currentExecute:true,oldBaseExecute:false,preHandoffExecute:false,
+     newHelperExecute:false});
+ });
++
++test('financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain', () => {
++  // Apply twice in a rollback-only local transaction. Existing base acceptance,
++  // including the old 128-series contract, remains unchanged on the base schema.
++  const amendment = financialHistorySql.replace(/^BEGIN;|^COMMIT;/gmu, '');
++  const result = JSON.parse(psql(`BEGIN; SET ROLE stockinsider_managed_migrator;
++    ${amendment}
++    ${amendment}
++    RESET ROLE;
++    INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
++    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,'active',repeat('8',64),clock_timestamp());
++    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-000000000081','9181');
++    CREATE TEMP TABLE history_acceptance(value jsonb);
++    DO $history$
++    DECLARE i integer;v_start date;v_end date;v_input public.financial_fact_input_v3;
++      v_original uuid;v_again uuid;v_cutoff timestamptz;v_page jsonb;v_next jsonb;
++      v_bad_cursor boolean:=false;v_bad_size boolean:=false;v_unauthorized boolean:=false;v_bound boolean:=false;
++    BEGIN
++      FOR i IN 0..159 LOOP
++        v_start:=(date '2010-01-01'+i*interval '1 month')::date;
++        v_end:=(v_start+interval '1 month'-interval '1 day')::date;
++        v_input:=ROW('71300000-0000-4000-8000-000000000081','monthly_revenue',v_start,v_end,'monthly',
++          (100+i)::double precision,'TWD','twse','official_filing','reported','reported_period',
++          v_end::timestamptz+interval '45 days',v_end::timestamptz+interval '45 days','2025-01-01'::timestamptz,
++          NULL,'twse-openapi:history:'||i)::public.financial_fact_input_v3;
++        SELECT fact_id INTO v_again FROM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++        IF i=0 THEN v_original:=v_again;END IF;
++      END LOOP;
++      -- Exact later collection resolves the same immutable ID and stores its
++      -- actual timestamp; retrying the same input adds no duplicate receipt.
++      v_input:=ROW('71300000-0000-4000-8000-000000000081','monthly_revenue','2010-01-01','2010-01-31','monthly',
++        100,'TWD','twse','official_filing','reported','reported_period','2010-03-17','2010-03-17',
++        '2025-02-01',NULL,'twse-openapi:history:0')::public.financial_fact_input_v3;
++      SELECT fact_id INTO v_again FROM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      IF v_again<>v_original THEN RAISE EXCEPTION 'recollection changed identity';END IF;
++      PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      v_cutoff:=clock_timestamp();
++      PERFORM pg_sleep(0.002);
++      -- A changed value, unit, restatement or provider remains another claim.
++      v_input.value:=105;
++      v_input.filing_restatement_id:='correction-1';
++      v_input.filing_published_at:='2025-03-01';v_input.source_timestamp:='2025-03-01';v_input.collected_at:='2025-03-02';
++      PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      v_input.unit:='TWD_thousand';
++      PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      v_input.provider:='mops';
++      PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      v_page:=public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
++        'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,NULL,128,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      IF jsonb_array_length(v_page->'rows')<>128 OR (v_page->>'has_more')::boolean IS NOT TRUE
++        THEN RAISE EXCEPTION 'first page lost sentinel';END IF;
++      v_next:=public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
++        'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,(v_page->>'next_cursor')::uuid,128,
++        'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      IF jsonb_array_length(v_next->'rows')<>32 OR (v_next->>'has_more')::boolean IS NOT FALSE
++        OR v_next->>'next_cursor' IS NOT NULL THEN RAISE EXCEPTION 'cutoff or page coverage';END IF;
++      IF (SELECT count(DISTINCT value->>'fact_id') FROM jsonb_array_elements((v_page->'rows')||(v_next->'rows')))<>160
++        THEN RAISE EXCEPTION 'duplicate or lost page rows';END IF;
++      BEGIN
++        PERFORM public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
++          'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,extensions.gen_random_uuid(),128,
++          'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      EXCEPTION WHEN SQLSTATE 'PT422' THEN v_bad_cursor:=true;END;
++      BEGIN
++        PERFORM public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
++          'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,NULL,129,
++          'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      EXCEPTION WHEN SQLSTATE 'PT422' THEN v_bad_size:=true;END;
++      BEGIN
++        PERFORM public.append_financial_fact_v3(v_input,extensions.gen_random_uuid());
++      EXCEPTION WHEN SQLSTATE 'PT403' THEN v_unauthorized:=true;END;
++      -- Same-period correction storms remain bounded; other periods are unaffected.
++      FOR i IN 1..124 LOOP
++        v_input.value:=1000+i;
++        PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      END LOOP;
++      BEGIN
++        v_input.value:=9999;
++        PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
++      EXCEPTION WHEN SQLSTATE 'PT409' THEN v_bound:=true;END;
++      INSERT INTO history_acceptance SELECT jsonb_build_object('originalRetained',
++        EXISTS(SELECT 1 FROM public.opportunity_financial_facts_v3 WHERE fact_id=v_original AND value=100),
++        'facts',(SELECT count(*) FROM public.opportunity_financial_facts_v3 WHERE stock_id=v_input.stock_id),
++        'observations',(SELECT count(*) FROM public.opportunity_financial_observations_v1 o
++          JOIN public.opportunity_financial_facts_v3 f USING(fact_id) WHERE f.stock_id=v_input.stock_id),
++        'cutoffCoverage',jsonb_array_length(v_page->'rows')+jsonb_array_length(v_next->'rows'),
++        'scope',v_page->>'accounting_scope','cursorRejected',v_bad_cursor,'sizeRejected',v_bad_size,
++        'unauthorizedRejected',v_unauthorized,'periodBound',v_bound,
++        'noServiceInsert',NOT has_table_privilege('service_role','public.opportunity_financial_observations_v1','INSERT'),
++        'privatePredecessor',NOT has_function_privilege('service_role',
++          'public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid)','EXECUTE'),
++        'noOwnerCreate',NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE'));
++    END $history$;
++    SELECT value::text FROM history_acceptance; ROLLBACK;`, ['-At']).trim().split('\n').find((line) => line.startsWith('{')));
++  assert.deepEqual(result, { originalRetained: true, facts: 287, observations: 288,
++    cutoffCoverage: 160, scope: 'legacy_unspecified', cursorRejected: true,
++    sizeRejected: true, unauthorizedRejected: true, periodBound: true,
++    noServiceInsert: true, privatePredecessor: true, noOwnerCreate: true });
++  assert.doesNotMatch(financialHistorySql, /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
++});

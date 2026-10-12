@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "--test-name-pattern=^(V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row|financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain)$",
+    "scripts/opportunity-v3/migration-contract.test.mjs"
+  ],
+  "start_utc": "2026-10-12T06:56:18Z",
+  "seconds": 2.7090446949005127,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 164737024,
+  "min_free_bytes": 8796917760
+}

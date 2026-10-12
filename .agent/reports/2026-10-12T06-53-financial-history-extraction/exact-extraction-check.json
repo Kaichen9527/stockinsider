@@ -1,0 +1,7 @@
+{
+  "unchanged_sql_bytes": true,
+  "original_canonical_file_retained": true,
+  "only_exact_case_plus_import_added": true,
+  "no_atomic_stub_skip_or_registration": true,
+  "base_sql_planner_apply_package_unchanged": true
+}
