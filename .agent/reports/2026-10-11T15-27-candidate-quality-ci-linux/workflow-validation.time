@@ -1,0 +1,23 @@
+	Command being timed: "/workspace/.tools/node22/node_modules/.bin/node -e const fs=require('node:fs'),assert=require('node:assert/strict'); const yaml=require('./web/node_modules/js-yaml'); const doc=yaml.load(fs.readFileSync('.github/workflows/candidate-discovery-quality.yml','utf8')); assert.deepEqual(Object.keys(doc.on),['pull_request']); assert.deepEqual(doc.permissions,{contents:'read'}); const job=doc.jobs['candidate-discovery-quality'];assert.equal(Object.keys(doc.jobs).length,1); assert.equal(job['timeout-minutes'],10); assert.equal(job.steps[0].uses,'actions/checkout@11d5960a326750d5838078e36cf38b85af677262');assert.equal(job.steps[0].with['persist-credentials'],false);assert.equal(job.steps[1].uses,'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020');assert.equal(job.steps[1].with['node-version'],'22.14.0');assert.equal(job.steps[2].run,'npm --prefix web ci --ignore-scripts');assert.equal(job.steps[3].run,'node web/scripts/sync-official-authority.mjs');assert.equal(job.steps[4].run.trim(),'node --experimental-strip-types --test --test-concurrency=1 web/src/lib/candidate-discovery-admission.test.ts scripts/candidate-discovery-admission-ui.test.mjs'); console.log(JSON.stringify({yamlParsed:true,onlyOrdinaryPullRequest:true,onlyContentsRead:true,actionPinsVerified:true,allThreeLocalCommandsEqualWorkflow:true,node:process.version,npm:require('./web/node_modules/next/package.json').version}));"
+	User time (seconds): 0.02
+	System time (seconds): 0.01
+	Percent of CPU this job got: 108%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.03
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 30288
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 7905
+	Voluntary context switches: 21
+	Involuntary context switches: 2
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

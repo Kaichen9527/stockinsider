@@ -1,0 +1,21 @@
+{
+  "stage": "original-ui-red",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "/tmp/si-admission-msky7769/original-ui-contract.test.mjs"
+  ],
+  "startedAt": "2026-10-11T14:43:49.982878+00:00",
+  "endedAt": "2026-10-11T14:43:50.606567+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 0.6236983629642054,
+  "sampledAggregatePeakRssBytes": 155258880,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10096689152,
+  "diskAvailableAfterBytes": 10096689152,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

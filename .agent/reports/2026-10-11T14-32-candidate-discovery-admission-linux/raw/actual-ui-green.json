@@ -1,0 +1,21 @@
+{
+  "stage": "actual-ui-green",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "scripts/candidate-discovery-admission-ui.test.mjs"
+  ],
+  "startedAt": "2026-10-11T14:43:50.635221+00:00",
+  "endedAt": "2026-10-11T14:43:51.316375+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.6811799140414223,
+  "sampledAggregatePeakRssBytes": 156954624,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10096689152,
+  "diskAvailableAfterBytes": 10096689152,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

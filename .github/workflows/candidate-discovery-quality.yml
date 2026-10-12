@@ -1,0 +1,39 @@
+name: Candidate discovery quality diagnostics
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/candidate-discovery-quality.yml'
+      - 'scripts/candidate-discovery-admission-ui.test.mjs'
+      - 'scripts/runtime/**'
+      - 'web/src/**'
+      - 'web/scripts/sync-official-authority.mjs'
+      - 'web/package.json'
+      - 'web/package-lock.json'
+
+permissions:
+  contents: read
+
+jobs:
+  candidate-discovery-quality:
+    name: Candidate discovery admission and UI diagnostics
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Set up pinned Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Install locked web test dependencies without lifecycle scripts
+        run: npm --prefix web ci --ignore-scripts
+      - name: Sync canonical official modules
+        run: node web/scripts/sync-official-authority.mjs
+      - name: Test candidate admission and actual card rendering
+        run: >-
+          node --experimental-strip-types --test --test-concurrency=1
+          web/src/lib/candidate-discovery-admission.test.ts
+          scripts/candidate-discovery-admission-ui.test.mjs

@@ -1,0 +1,22 @@
+{
+  "stage": "locked-normal-build",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "build"
+  ],
+  "startedAt": "2026-10-11T15:01:34.095759+00:00",
+  "endedAt": "2026-10-11T15:02:08.225462+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 34.12970946304267,
+  "sampledAggregatePeakRssBytes": 2047893504,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9829322752,
+  "diskAvailableAfterBytes": 9676984320,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

@@ -1,0 +1,295 @@
+{
+  "schema": "candidate-quality-ordinary-ci-registration-evidence-v1",
+  "sourceIdentity": {
+    "base": "7150164cac2136bde3cc117be10b7f90c1cb63cb",
+    "workflowCommit": "350da66f86578a8923b256640dbca272f128c6ab",
+    "workflowTree": "574ccabb3b0ad87d0ac1da0569b1a01811ecaf24",
+    "webTree": "49bcc4b72b81201ba6728845dec76759a7cf177a",
+    "branch": "codex/candidate-discovery-admission-oct11",
+    "runtimeWebUnchanged": true,
+    "ownTrackedCodeDelta": [
+      ".github/workflows/candidate-discovery-quality.yml"
+    ]
+  },
+  "manualWindow": {
+    "startedAt": "2026-10-11T15:27:35Z",
+    "deadline": "2026-10-11T15:57:35Z",
+    "recordedAt": "2026-10-11T15:31:19.672513+00:00",
+    "notProductRoleBudget": true
+  },
+  "workflow": {
+    "path": ".github/workflows/candidate-discovery-quality.yml",
+    "trigger": "pull_request",
+    "pathFiltered": true,
+    "permission": {
+      "contents": "read"
+    },
+    "checkoutPersistCredentials": false,
+    "node": "22.14.0",
+    "timeoutMinutes": 10,
+    "pinnedActionsReusedFromRepo": true,
+    "noSecretReferences": true,
+    "noNativeOrDatabaseSteps": true,
+    "noProviderOrPaidApi": true,
+    "notProtectedCodeGate": true,
+    "githubRunExecutedThisTurn": false
+  },
+  "localEquivalent": {
+    "phases": [
+      {
+        "stage": "install",
+        "command": [
+          "npm",
+          "--prefix",
+          "web",
+          "ci",
+          "--ignore-scripts"
+        ],
+        "startedAt": "2026-10-11T15:28:37.457712+00:00",
+        "endedAt": "2026-10-11T15:28:53.219596+00:00",
+        "exitCode": 0,
+        "elapsedSeconds": 15.761892356036697,
+        "sampledAggregatePeakRssBytes": 1227317248,
+        "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+        "diskAvailableBeforeBytes": 9656221696,
+        "diskAvailableAfterBytes": 9617907712,
+        "guardTermination": null,
+        "remainingObservedChildren": [],
+        "inheritedProxyAndCA": true,
+        "credentialValuesCopied": false
+      },
+      {
+        "stage": "sync",
+        "command": [
+          "/workspace/.tools/node22/node_modules/.bin/node",
+          "web/scripts/sync-official-authority.mjs"
+        ],
+        "startedAt": "2026-10-11T15:29:10.840866+00:00",
+        "endedAt": "2026-10-11T15:29:11.030619+00:00",
+        "exitCode": 0,
+        "elapsedSeconds": 0.18976313999155536,
+        "sampledAggregatePeakRssBytes": 0,
+        "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+        "diskAvailableBeforeBytes": 9617907712,
+        "diskAvailableAfterBytes": 9617907712,
+        "guardTermination": null,
+        "remainingObservedChildren": [],
+        "inheritedProxyAndCA": true,
+        "credentialValuesCopied": false
+      },
+      {
+        "stage": "quality",
+        "command": [
+          "/workspace/.tools/node22/node_modules/.bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "web/src/lib/candidate-discovery-admission.test.ts",
+          "scripts/candidate-discovery-admission-ui.test.mjs"
+        ],
+        "startedAt": "2026-10-11T15:29:28.623144+00:00",
+        "endedAt": "2026-10-11T15:29:29.546142+00:00",
+        "exitCode": 0,
+        "elapsedSeconds": 0.9230059540132061,
+        "sampledAggregatePeakRssBytes": 152334336,
+        "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+        "diskAvailableBeforeBytes": 9617907712,
+        "diskAvailableAfterBytes": 9617907712,
+        "guardTermination": null,
+        "remainingObservedChildren": [],
+        "inheritedProxyAndCA": true,
+        "credentialValuesCopied": false
+      },
+      {
+        "stage": "workflow-validation",
+        "command": [
+          "/workspace/.tools/node22/node_modules/.bin/node",
+          "-e",
+          "const fs=require('node:fs'),assert=require('node:assert/strict'); const yaml=require('./web/node_modules/js-yaml'); const doc=yaml.load(fs.readFileSync('.github/workflows/candidate-discovery-quality.yml','utf8')); assert.deepEqual(Object.keys(doc.on),['pull_request']); assert.deepEqual(doc.permissions,{contents:'read'}); const job=doc.jobs['candidate-discovery-quality'];assert.equal(Object.keys(doc.jobs).length,1); assert.equal(job['timeout-minutes'],10); assert.equal(job.steps[0].uses,'actions/checkout@11d5960a326750d5838078e36cf38b85af677262');assert.equal(job.steps[0].with['persist-credentials'],false);assert.equal(job.steps[1].uses,'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020');assert.equal(job.steps[1].with['node-version'],'22.14.0');assert.equal(job.steps[2].run,'npm --prefix web ci --ignore-scripts');assert.equal(job.steps[3].run,'node web/scripts/sync-official-authority.mjs');assert.equal(job.steps[4].run.trim(),'node --experimental-strip-types --test --test-concurrency=1 web/src/lib/candidate-discovery-admission.test.ts scripts/candidate-discovery-admission-ui.test.mjs'); console.log(JSON.stringify({yamlParsed:true,onlyOrdinaryPullRequest:true,onlyContentsRead:true,actionPinsVerified:true,allThreeLocalCommandsEqualWorkflow:true,node:process.version,npm:require('./web/node_modules/next/package.json').version}));"
+        ],
+        "startedAt": "2026-10-11T15:30:36.144920+00:00",
+        "endedAt": "2026-10-11T15:30:36.338274+00:00",
+        "exitCode": 0,
+        "elapsedSeconds": 0.1933623959776014,
+        "sampledAggregatePeakRssBytes": 0,
+        "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+        "diskAvailableBeforeBytes": 9617870848,
+        "diskAvailableAfterBytes": 9617870848,
+        "guardTermination": null,
+        "remainingObservedChildren": [],
+        "inheritedProxyAndCA": true,
+        "credentialValuesCopied": false
+      }
+    ],
+    "tests": 28,
+    "pass": 28,
+    "fail": 0,
+    "skip": 0,
+    "node": "v22.14.0",
+    "nextFromFrozenWebLock": "16.3.4",
+    "allWorkflowRunCommandsVerifiedEqual": true,
+    "installIgnoreScripts": true,
+    "officialBridgeModules": [
+      {
+        "path": "web/src/lib/generated/official-authority/codec.js",
+        "bytes": 2566,
+        "sha256": "c1cd7bc6b391ee88137c792ab6b6b280e2f5ccad77d8e6e815b754d73d76cfbb"
+      },
+      {
+        "path": "web/src/lib/generated/official-authority/official-calendar-v314.js",
+        "bytes": 7050,
+        "sha256": "220147e99e54ecda8fdaad10f6bee026591f88dc144c3a19f886ab78dc2b668a"
+      },
+      {
+        "path": "web/src/lib/generated/official-authority/official-market-authority-v314.js",
+        "bytes": 13172,
+        "sha256": "c98d646163200ac28f2d835e6b19b44b4d38014e84110658a07d8267cf8ba9ce"
+      },
+      {
+        "path": "web/src/lib/generated/official-authority/official-mops-v314.js",
+        "bytes": 14058,
+        "sha256": "9b154a6fc245b976507640aaea9b113c4396ac003a89483ef73b42c2eaaadb3c"
+      },
+      {
+        "path": "web/src/lib/generated/official-authority/official-twse-valuation.js",
+        "bytes": 60659,
+        "sha256": "a298fe9c55e51fd50ca61155af1c2facecdfc5825abc80352424fe3d7c1eac32"
+      }
+    ],
+    "npmAuditOutputPreservedWithoutDependencyChanges": true
+  },
+  "invariants": {
+    "canonicalCommandsUnchanged": true,
+    "packageAndLocksUnchanged": true,
+    "existingTestsAndAssertionsUnchanged": true,
+    "protectedWorkflowAndGateUnchanged": true,
+    "activeGraphAndFixturesUnchanged": true,
+    "uiAndAdmissionPolicyUnchanged": true,
+    "databaseUnchanged": true,
+    "noPrCreated": true,
+    "noMergeOrDeploy": true
+  },
+  "resources": {
+    "sampledAggregatePeakRssBytes": 1227317248,
+    "method": "100ms aggregate process group and recursive observed descendants; short/reparented children may be missed",
+    "minMeasuredFreeBytes": 9617870848,
+    "reserveBytes": 8589934592,
+    "diskFreeAtReceiptBytes": 9617793024
+  },
+  "cleanup": {
+    "remainingObservedChildren": [],
+    "noPersistentServicesStarted": true,
+    "scratchPreserved": "/tmp/si-candidate-ci-h8ctj8i0",
+    "noUniqueEvidenceRemoved": true,
+    "otherWorktreesUnchanged": true
+  },
+  "notRerun": [
+    "full product build",
+    "protected gates",
+    "runner/native103",
+    "database tests"
+  ],
+  "handoff": "Root should review the new ordinary workflow and frozen ref; a local 28/28 equivalent execution is not evidence that the new GitHub job has already run. Existing canonical diagnostic and protected acceptance command catalog were left untouched.",
+  "rawAndManifests": [
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/install.json",
+      "bytes": 650,
+      "sha256": "f1ecf0211dd18d3a2aa1e7e35ab2aefd8e96f582012b57cbed17dcc464502cab"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/install.stderr",
+      "bytes": 122,
+      "sha256": "67389c0b6efbe86c5fc51293d278be25159d27ace6d73ae2da626b49a0143470"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/install.stdout",
+      "bytes": 345,
+      "sha256": "97aab22fc4aacc0f81d5f7d0288dfb6709382db09d5ad43ad76ac74ca4b1bbcf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/install.time",
+      "bytes": 772,
+      "sha256": "b6c090b24be8c7d8058b89acb3b34d22df7f280ddbc4f427b64ce1c7ba22bbc0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/quality.json",
+      "bytes": 822,
+      "sha256": "00c1cd4733d9fe1c4f17cf69d43c653d1525ca79c6e29e36a386ddde7eb82910"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/quality.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/quality.stdout",
+      "bytes": 7696,
+      "sha256": "a72667e8750bcc6c7ad98efcb26ac6a21d3c9e90725e06a19092794d5047068b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/quality.time",
+      "bytes": 924,
+      "sha256": "5c088e82fe888e2b6fcca8aea8c63030500b8e2a875797a9444ea67ac69d4801"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/run.py",
+      "bytes": 3250,
+      "sha256": "974712a24ff3193a69ebb56eeaaba1c6805dc8084bd1b92fef0d321b129d8d37"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/source-manifest.json",
+      "bytes": 3092,
+      "sha256": "e3abb36bb9b4c9eb64ea2b2beccef8d3b451cdfba32fdf24a01a2c725b0df4d3"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/sync.json",
+      "bytes": 669,
+      "sha256": "359cfdd3c2a73bec0bc06dbe77e453ac33dbe967f1949f045b0a30fb271cabdc"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/sync.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/sync.stdout",
+      "bytes": 64,
+      "sha256": "94a485944fab8394500f5dc8ba0cdd0f7ceae222abb1af8acdaebfdae5a25810"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/sync.time",
+      "bytes": 805,
+      "sha256": "e0a9f387f75d5011c2919f7313334582fa18aa3553e10c5589ef20c991e74c2b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/test-inventory.json",
+      "bytes": 2551,
+      "sha256": "ef9aa354baeaf82d4ac32757af9bb9c16d4bd99fb3f9240a6f1096835b54dab0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/workflow-validation.json",
+      "bytes": 2011,
+      "sha256": "7c369ca1ca5d6cd9973d4e9f3f7c07b14bcea986e21f95edbab5d0f49c17d224"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/workflow-validation.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/workflow-validation.stdout",
+      "bytes": 176,
+      "sha256": "ebf88f159b979ac11b20b36e97166a49f09351fa5b3c0d8fa0c2148aec297acc"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/workflow-validation.time",
+      "bytes": 2125,
+      "sha256": "df020fe97b73f0f9526a28456fbc8448bc61915f40e5cca84bd1981482346f03"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T15-27-candidate-quality-ci-linux/yaml-parser-capability.json",
+      "bytes": 650,
+      "sha256": "25e139fb4d696797af05b4ed460758b31218363f0ddfe979a4285676e24b60d9"
+    }
+  ]
+}

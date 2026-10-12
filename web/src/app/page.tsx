@@ -12,6 +12,7 @@ import { isHealthySourceTerminal } from '@/lib/source-terminal-policy';
 export const dynamic = 'force-dynamic';
 
 const HOME_STAGE_PAGE_SIZE = 24;
+const HOME_FOUND_STAGE_PAGE_SIZE = 20;
 
 const connectorLabel: Record<string, string> = {
   investanchors: '定錨投筆',
@@ -147,7 +148,7 @@ export default async function Home() {
     ...radar,
     stages: {
       ...radar.stages,
-      found: radar.stages.found.slice(0, HOME_STAGE_PAGE_SIZE),
+      found: radar.stages.found.slice(0, HOME_FOUND_STAGE_PAGE_SIZE),
       waiting: radar.stages.waiting.slice(0, HOME_STAGE_PAGE_SIZE),
       actionable: radar.stages.actionable.slice(0, HOME_STAGE_PAGE_SIZE),
     },

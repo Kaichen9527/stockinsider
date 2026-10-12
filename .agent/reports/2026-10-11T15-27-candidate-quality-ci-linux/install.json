@@ -1,0 +1,22 @@
+{
+  "stage": "install",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "ci",
+    "--ignore-scripts"
+  ],
+  "startedAt": "2026-10-11T15:28:37.457712+00:00",
+  "endedAt": "2026-10-11T15:28:53.219596+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 15.761892356036697,
+  "sampledAggregatePeakRssBytes": 1227317248,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9656221696,
+  "diskAvailableAfterBytes": 9617907712,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

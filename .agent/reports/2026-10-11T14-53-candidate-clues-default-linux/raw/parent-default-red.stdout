@@ -1,0 +1,135 @@
+TAP version 13
+# (node:371960) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:371960) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/candidate-discovery-admission.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-reviewer-result-http-vm-oct09/web/package.json.
+# Subtest: actual main card displays technical dated close and reference method, hides old price and upside
+ok 1 - actual main card displays technical dated close and reference method, hides old price and upside
+  ---
+  duration_ms: 9.061465
+  ...
+# Subtest: actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+ok 2 - actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+  ---
+  duration_ms: 1.398671
+  ...
+# Subtest: missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+ok 3 - missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+  ---
+  duration_ms: 1.104767
+  ...
+# Subtest: actual main defaults to existing clues while research admission remains explicitly pending
+not ok 4 - actual main defaults to existing clues while research admission remains explicitly pending
+  ---
+  duration_ms: 13.041372
+  location: '/tmp/si-admission-default-2gqqfx9m/parent-default-red.test.mjs:49:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /aria-pressed="true"[^>]*>所有線索（1）/u. Input:
+    
+    '<div class="min-w-0"><header class="mb-5 border-b border-line pb-5"><p class="research-kicker">MARKET RESEARCH FUNNEL</p><h2 class="mt-2 text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">從來源線索走到可驗證的行動條件</h2><p class="mt-2 max-w-3xl text-sm leading-6 text-stone-600 dark:text-stone-300">完整名單依同一份快照搜尋與排序；社群熱度只決定發現順位，不會直接產生買進結論。</p></header><div role="tablist" aria-label="股票三層漏斗" class="mb-5 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3"><button role="tab" aria-selected="true" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-stone-950 text-white dark:bg-orange-400 dark:text-stone-950"><span class="block">全部來源命中</span><span class="mt-1 block text-xs opacity-65">1 檔</span></button><button role="tab" aria-selected="false" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-[var(--surface)] text-stone-600 hover:bg-orange-500/5 dark:text-stone-300"><span class="block">等待條件</span><span class="mt-1 block text-xs opacity-65">0 檔</span></button><button role="tab" aria-selected="false" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-[var(--surface)] text-stone-600 hover:bg-orange-500/5 dark:text-stone-300"><span class="block">現在可行動</span><span class="mt-1 block text-xs opacity-65">0 檔</span></button></div><section class="mb-4 rounded-xl border border-line p-3" aria-label="研究來源准入"><div class="flex flex-wrap gap-2"><button type="button" aria-pressed="true" class="min-h-11 rounded-lg border border-line px-4">研究候選</button><button type="button" aria-pressed="false" class="min-h-11 rounded-lg border border-line px-4">所有線索（1）</button></div><p class="mt-2 text-xs leading-5">目前卡片未提供完整 publisher／根源／PTT 逐則股票回覆，研究准入待接線。所有線索完整保留，不以 links 或總推文量湊確認；不是買點或交易限制。</p><p class="mt-1 text-xs">研究名額最多 15 一般＋5 低聲量，每週最多 5 個新深研；既有 priority／預算契約不變，此篩選尚未接研究排程。</p></section><section aria-label="完整名單篩選" aria-busy="false" class="mb-5 rounded-xl border border-line bg-[var(--surface)] p-3"><div class="grid min-w-0 gap-2 sm:grid-cols-2 lg:grid-cols-6"><label class="min-w-0 lg:col-span-2"><span class="sr-only">搜尋股票</span><input type="search" placeholder="搜尋代碼、公司或產業" class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm outline-none focus:border-orange-500 disabled:cursor-wait disabled:opacity-60" value=""/></label><label class="min-w-0"><span class="sr-only">產業</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部產業</option><option value="測試">測試</option></select></label><label class="min-w-0"><span class="sr-only">來源</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部來源</option><option value="broker">broker</option><option value="instagram">Instagram</option><option value="investanchors">定錨（需授權結構化摘要）</option><option value="news">新聞</option><option value="official">官方資料</option><option value="ptt">PTT Stock</option><option value="telegram">Telegram（需授權訊息）</option><option value="threads">Threads</option></select></label><label class="min-w-0"><span class="sr-only">訊號</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部訊號</option><option value="positive">正向提及</option><option value="negative">負向提及</option><option value="valuation_ready">估值完整</option><option value="data_gap">資料待補</option></select></label><label class="min-w-0"><span class="sr-only">排序</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="stage_rank" selected="">接近條件</option><option value="latest">最新提及</option><option value="upside">估值空間</option><option value="research">研究完整度</option><option value="source_diversity">來源多樣性</option></select></label></div><div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500"><label class="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-line px-3"><input type="checkbox"/>只看本機自選</label><span>符合 1 / 1 檔 · 快照 待確認</span></div></section><div class="grid min-w-0 gap-3 xl:grid-cols-2"></div><div class="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500">完整來源准入待接線；請切至「所有線索」查看保留的命中與原因。</div></div>'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: '<div class="min-w-0"><header class="mb-5 border-b border-line pb-5"><p class="research-kicker">MARKET RESEARCH FUNNEL</p><h2 class="mt-2 text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">從來源線索走到可驗證的行動條件</h2><p class="mt-2 max-w-3xl text-sm leading-6 text-stone-600 dark:text-stone-300">完整名單依同一份快照搜尋與排序；社群熱度只決定發現順位，不會直接產生買進結論。</p></header><div role="tablist" aria-label="股票三層漏斗" class="mb-5 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3"><button role="tab" aria-selected="true" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-stone-950 text-white dark:bg-orange-400 dark:text-stone-950"><span class="block">全部來源命中</span><span class="mt-1 block text-xs opacity-65">1 檔</span></button><button role="tab" aria-selected="false" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-[var(--surface)] text-stone-600 hover:bg-orange-500/5 dark:text-stone-300"><span class="block">等待條件</span><span class="mt-1 block text-xs opacity-65">0 檔</span></button><button role="tab" aria-selected="false" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-[var(--surface)] text-stone-600 hover:bg-orange-500/5 dark:text-stone-300"><span class="block">現在可行動</span><span class="mt-1 block text-xs opacity-65">0 檔</span></button></div><section class="mb-4 rounded-xl border border-line p-3" aria-label="研究來源准入"><div class="flex flex-wrap gap-2"><button type="button" aria-pressed="true" class="min-h-11 rounded-lg border border-line px-4">研究候選</button><button type="button" aria-pressed="false" class="min-h-11 rounded-lg border border-line px-4">所有線索（1）</button></div><p class="mt-2 text-xs leading-5">目前卡片未提供完整 publisher／根源／PTT 逐則股票回覆，研究准入待接線。所有線索完整保留，不以 links 或總推文量湊確認；不是買點或交易限制。</p><p class="mt-1 text-xs">研究名額最多 15 一般＋5 低聲量，每週最多 5 個新深研；既有 priority／預算契約不變，此篩選尚未接研究排程。</p></section><section aria-label="完整名單篩選" aria-busy="false" class="mb-5 rounded-xl border border-line bg-[var(--surface)] p-3"><div class="grid min-w-0 gap-2 sm:grid-cols-2 lg:grid-cols-6"><label class="min-w-0 lg:col-span-2"><span class="sr-only">搜尋股票</span><input type="search" placeholder="搜尋代碼、公司或產業" class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm outline-none focus:border-orange-500 disabled:cursor-wait disabled:opacity-60" value=""/></label><label class="min-w-0"><span class="sr-only">產業</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部產業</option><option value="測試">測試</option></select></label><label class="min-w-0"><span class="sr-only">來源</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部來源</option><option value="broker">broker</option><option value="instagram">Instagram</option><option value="investanchors">定錨（需授權結構化摘要）</option><option value="news">新聞</option><option value="official">官方資料</option><option value="ptt">PTT Stock</option><option value="telegram">Telegram（需授權訊息）</option><option value="threads">Threads</option></select></label><label class="min-w-0"><span class="sr-only">訊號</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部訊號</option><option value="positive">正向提及</option><option value="negative">負向提及</option><option value="valuation_ready">估值完整</option><option value="data_gap">資料待補</option></select></label><label class="min-w-0"><span class="sr-only">排序</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="stage_rank" selected="">接近條件</option><option value="latest">最新提及</option><option value="upside">估值空間</option><option value="research">研究完整度</option><option value="source_diversity">來源多樣性</option></select></label></div><div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500"><label class="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-line px-3"><input type="checkbox"/>只看本機自選</label><span>符合 1 / 1 檔 · 快照 待確認</span></div></section><div class="grid min-w-0 gap-3 xl:grid-cols-2"></div><div class="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500">完整來源准入待接線；請切至「所有線索」查看保留的命中與原因。</div></div>'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/si-admission-default-2gqqfx9m/parent-default-red.test.mjs:52:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+ok 5 - existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+  ---
+  duration_ms: 1.200412
+  ...
+# Subtest: actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+not ok 6 - actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+  ---
+  duration_ms: 4.648706
+  location: '/tmp/si-admission-default-2gqqfx9m/parent-default-red.test.mjs:61:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 20
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 20
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/si-admission-default-2gqqfx9m/parent-default-red.test.mjs:66:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+not ok 7 - actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+  ---
+  duration_ms: 1.67016
+  location: '/tmp/si-admission-default-2gqqfx9m/parent-default-red.test.mjs:74:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Instagram：已退役/u. Input:
+    
+    '<div class="min-w-0"><header class="mb-5 border-b border-line pb-5"><p class="research-kicker">MARKET RESEARCH FUNNEL</p><h2 class="mt-2 text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">從來源線索走到可驗證的行動條件</h2><p class="mt-2 max-w-3xl text-sm leading-6 text-stone-600 dark:text-stone-300">完整名單依同一份快照搜尋與排序；社群熱度只決定發現順位，不會直接產生買進結論。</p></header><div role="tablist" aria-label="股票三層漏斗" class="mb-5 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3"><button role="tab" aria-selected="true" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-stone-950 text-white dark:bg-orange-400 dark:text-stone-950"><span class="block">全部來源命中</span><span class="mt-1 block text-xs opacity-65">1 檔</span></button><button role="tab" aria-selected="false" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-[var(--surface)] text-stone-600 hover:bg-orange-500/5 dark:text-stone-300"><span class="block">等待條件</span><span class="mt-1 block text-xs opacity-65">0 檔</span></button><button role="tab" aria-selected="false" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-[var(--surface)] text-stone-600 hover:bg-orange-500/5 dark:text-stone-300"><span class="block">現在可行動</span><span class="mt-1 block text-xs opacity-65">0 檔</span></button></div><section class="mb-4 rounded-xl border border-line p-3" aria-label="研究來源准入"><div class="flex flex-wrap gap-2"><button type="button" aria-pressed="true" class="min-h-11 rounded-lg border border-line px-4">研究候選</button><button type="button" aria-pressed="false" class="min-h-11 rounded-lg border border-line px-4">所有線索（1）</button></div><p class="mt-2 text-xs leading-5">目前卡片未提供完整 publisher／根源／PTT 逐則股票回覆，研究准入待接線。所有線索完整保留，不以 links 或總推文量湊確認；不是買點或交易限制。</p><p class="mt-1 text-xs">研究名額最多 15 一般＋5 低聲量，每週最多 5 個新深研；既有 priority／預算契約不變，此篩選尚未接研究排程。</p></section><section aria-label="完整名單篩選" aria-busy="false" class="mb-5 rounded-xl border border-line bg-[var(--surface)] p-3"><div class="grid min-w-0 gap-2 sm:grid-cols-2 lg:grid-cols-6"><label class="min-w-0 lg:col-span-2"><span class="sr-only">搜尋股票</span><input type="search" placeholder="搜尋代碼、公司或產業" class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm outline-none focus:border-orange-500 disabled:cursor-wait disabled:opacity-60" value=""/></label><label class="min-w-0"><span class="sr-only">產業</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部產業</option><option value="測試">測試</option></select></label><label class="min-w-0"><span class="sr-only">來源</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部來源</option><option value="broker">broker</option><option value="instagram">Instagram</option><option value="investanchors">定錨（需授權結構化摘要）</option><option value="news">新聞</option><option value="official">官方資料</option><option value="ptt">PTT Stock</option><option value="telegram">Telegram（需授權訊息）</option><option value="threads">Threads</option></select></label><label class="min-w-0"><span class="sr-only">訊號</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部訊號</option><option value="positive">正向提及</option><option value="negative">負向提及</option><option value="valuation_ready">估值完整</option><option value="data_gap">資料待補</option></select></label><label class="min-w-0"><span class="sr-only">排序</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="stage_rank" selected="">接近條件</option><option value="latest">最新提及</option><option value="upside">估值空間</option><option value="research">研究完整度</option><option value="source_diversity">來源多樣性</option></select></label></div><div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500"><label class="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-line px-3"><input type="checkbox"/>只看本機自選</label><span>符合 1 / 1 檔 · 快照 待確認</span></div></section><div class="grid min-w-0 gap-3 xl:grid-cols-2"></div><div class="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500">完整來源准入待接線；請切至「所有線索」查看保留的命中與原因。</div></div>'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: '<div class="min-w-0"><header class="mb-5 border-b border-line pb-5"><p class="research-kicker">MARKET RESEARCH FUNNEL</p><h2 class="mt-2 text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">從來源線索走到可驗證的行動條件</h2><p class="mt-2 max-w-3xl text-sm leading-6 text-stone-600 dark:text-stone-300">完整名單依同一份快照搜尋與排序；社群熱度只決定發現順位，不會直接產生買進結論。</p></header><div role="tablist" aria-label="股票三層漏斗" class="mb-5 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3"><button role="tab" aria-selected="true" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-stone-950 text-white dark:bg-orange-400 dark:text-stone-950"><span class="block">全部來源命中</span><span class="mt-1 block text-xs opacity-65">1 檔</span></button><button role="tab" aria-selected="false" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-[var(--surface)] text-stone-600 hover:bg-orange-500/5 dark:text-stone-300"><span class="block">等待條件</span><span class="mt-1 block text-xs opacity-65">0 檔</span></button><button role="tab" aria-selected="false" class="min-h-14 px-4 py-3 text-left text-sm font-semibold bg-[var(--surface)] text-stone-600 hover:bg-orange-500/5 dark:text-stone-300"><span class="block">現在可行動</span><span class="mt-1 block text-xs opacity-65">0 檔</span></button></div><section class="mb-4 rounded-xl border border-line p-3" aria-label="研究來源准入"><div class="flex flex-wrap gap-2"><button type="button" aria-pressed="true" class="min-h-11 rounded-lg border border-line px-4">研究候選</button><button type="button" aria-pressed="false" class="min-h-11 rounded-lg border border-line px-4">所有線索（1）</button></div><p class="mt-2 text-xs leading-5">目前卡片未提供完整 publisher／根源／PTT 逐則股票回覆，研究准入待接線。所有線索完整保留，不以 links 或總推文量湊確認；不是買點或交易限制。</p><p class="mt-1 text-xs">研究名額最多 15 一般＋5 低聲量，每週最多 5 個新深研；既有 priority／預算契約不變，此篩選尚未接研究排程。</p></section><section aria-label="完整名單篩選" aria-busy="false" class="mb-5 rounded-xl border border-line bg-[var(--surface)] p-3"><div class="grid min-w-0 gap-2 sm:grid-cols-2 lg:grid-cols-6"><label class="min-w-0 lg:col-span-2"><span class="sr-only">搜尋股票</span><input type="search" placeholder="搜尋代碼、公司或產業" class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm outline-none focus:border-orange-500 disabled:cursor-wait disabled:opacity-60" value=""/></label><label class="min-w-0"><span class="sr-only">產業</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部產業</option><option value="測試">測試</option></select></label><label class="min-w-0"><span class="sr-only">來源</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部來源</option><option value="broker">broker</option><option value="instagram">Instagram</option><option value="investanchors">定錨（需授權結構化摘要）</option><option value="news">新聞</option><option value="official">官方資料</option><option value="ptt">PTT Stock</option><option value="telegram">Telegram（需授權訊息）</option><option value="threads">Threads</option></select></label><label class="min-w-0"><span class="sr-only">訊號</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all" selected="">全部訊號</option><option value="positive">正向提及</option><option value="negative">負向提及</option><option value="valuation_ready">估值完整</option><option value="data_gap">資料待補</option></select></label><label class="min-w-0"><span class="sr-only">排序</span><select class="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="stage_rank" selected="">接近條件</option><option value="latest">最新提及</option><option value="upside">估值空間</option><option value="research">研究完整度</option><option value="source_diversity">來源多樣性</option></select></label></div><div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500"><label class="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-line px-3"><input type="checkbox"/>只看本機自選</label><span>符合 1 / 1 檔 · 快照 待確認</span></div></section><div class="grid min-w-0 gap-3 xl:grid-cols-2"></div><div class="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500">完整來源准入待接線；請切至「所有線索」查看保留的命中與原因。</div></div>'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/si-admission-default-2gqqfx9m/parent-default-red.test.mjs:81:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+not ok 8 - saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+  ---
+  duration_ms: 7.487571
+  location: '/tmp/si-admission-default-2gqqfx9m/parent-default-red.test.mjs:86:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    1 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/si-admission-default-2gqqfx9m/parent-default-red.test.mjs:92:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 4
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 585.48332

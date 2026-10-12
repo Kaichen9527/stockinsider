@@ -1,0 +1,23 @@
+{
+  "stage": "admission-unit",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "web/src/lib/candidate-discovery-admission.test.ts",
+    "web/src/lib/radar-stage-view.test.ts",
+    "web/src/lib/source-content-semantics.test.ts"
+  ],
+  "startedAt": "2026-10-11T14:41:55.446670+00:00",
+  "endedAt": "2026-10-11T14:41:55.838551+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.39188628003466874,
+  "sampledAggregatePeakRssBytes": 28741632,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10096697344,
+  "diskAvailableAfterBytes": 10096697344,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

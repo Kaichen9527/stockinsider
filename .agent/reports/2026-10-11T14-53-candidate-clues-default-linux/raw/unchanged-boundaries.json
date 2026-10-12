@@ -1,0 +1,50 @@
+[
+  {
+    "path": "package.json",
+    "bytes": 24733,
+    "sha256": "6dae2b07a0d6ac9e653cc06aba741060a0cb50a0730ab3874e09a3919f0986cc",
+    "unchangedAgainstParent": true
+  },
+  {
+    "path": "package-lock.json",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "unchangedAgainstParent": true
+  },
+  {
+    "path": "web/package.json",
+    "bytes": 1943,
+    "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+    "unchangedAgainstParent": true
+  },
+  {
+    "path": "web/package-lock.json",
+    "bytes": 274088,
+    "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+    "unchangedAgainstParent": true
+  },
+  {
+    "path": "web/src/lib/entry-plan-authority-backfill.ts",
+    "bytes": 18589,
+    "sha256": "ae12d825b1141dfd254cbb678ee0d4b396c7898db618a01088c253bf006676d6",
+    "unchangedAgainstParent": true
+  },
+  {
+    "path": "web/src/app/api/internal/research-inbox/route.ts",
+    "bytes": 1507,
+    "sha256": "36149f8a25cce10f51410a2b6afd973113e0cfb636e84f2258eceb8bf88fcbab",
+    "unchangedAgainstParent": true
+  },
+  {
+    "path": "web/src/lib/candidate-research.ts",
+    "bytes": 183284,
+    "sha256": "8057b60998f8058971095effe537970fa1de49f7c97157706381503ce3cbca20",
+    "unchangedAgainstParent": true
+  },
+  {
+    "path": "web/src/lib/source-policy.ts",
+    "bytes": 7218,
+    "sha256": "f773af096c0470765bb9eaf67adf2d3591d8289831b1df41ec7e5990f746c630",
+    "unchangedAgainstParent": true
+  }
+]
