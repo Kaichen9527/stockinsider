@@ -1912,3 +1912,10 @@ This approval authorizes implementation only. It does not authorize production m
   apply plan and verify its private-helper privilege boundary after apply.
 - [x] Make the V3.16.12 owner transfer production-safe by granting schema CREATE
   only inside the migration transaction and proving it is revoked at completion.
+
+## Initial release-tool trust migration (2026-10-12)
+
+- [x] Prepare the `model-runner-v3.10` / host pin v3.25 tool-only candidate and no-credential checks.
+- [ ] Obtain independent requirements, architecture and code review for the exact migration subject.
+- [ ] Owner performs the explicitly authorized one-time tool-PR landing; no website check exception.
+- [ ] Rebase application subjects onto the new protected base and run all required checks, including the real credentialed oracle.

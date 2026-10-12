@@ -1,0 +1,9 @@
+{
+  "schema": "initial-trust-migration-final-review-input-v1",
+  "graph": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+  "listing": "64d0f7a298240d044d08117f5497772581dfc9f5cac0151e4116ccd240db07cd",
+  "hostPin": "model-runner-host-pins-v3.25",
+  "review": "pending",
+  "protectedPass": false,
+  "modelInvoked": false
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "role": "requirements",
+    "ref": "refs/heads/evidence/source-led-opportunity-v3-requirements-v325-digest",
+    "commit": "cf942588ffa03c81c4af384bb7cc4442468cf13d",
+    "tree": "7c6b60d945f730f4f1afad566b5157fbce691717",
+    "parent": "91c4c815619d2beda4336445a0ed6aae82ee4d04",
+    "file": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-v325-digest.md"
+  },
+  {
+    "role": "architecture",
+    "ref": "refs/heads/evidence/source-led-opportunity-v3-architecture-v325-digest",
+    "commit": "2a710eab65e8c60204493ae08848d47fec3faa9c",
+    "tree": "1efca9fb9ca106d6210ddc63c08bde0527ac6595",
+    "parent": "91c4c815619d2beda4336445a0ed6aae82ee4d04",
+    "file": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v325-digest.md"
+  }
+]

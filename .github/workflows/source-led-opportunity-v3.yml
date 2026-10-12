@@ -113,6 +113,8 @@ jobs:
           cache-dependency-path: package-lock.json
       - name: Install root dependencies
         run: npm ci
+      - name: Install exact Web dependencies for evaluation imports
+        run: npm --prefix web ci --ignore-scripts
       - name: Run evaluation/governance diagnostic (promotion evidence only)
         run: node scripts/run-node22.js --experimental-strip-types --test --test-name-pattern="evaluation and product-value readiness|hybrid verified-change product boundary" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252
 

@@ -1,0 +1,239 @@
+{
+  "schema": "runner-recovery-candidate-evidence-v1",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "independentApproval": false,
+  "activationAllowed": false,
+  "protectedPass": false,
+  "candidateSourceFiles": [
+    {
+      "path": "scripts/model-runner-v3/artifacts.js",
+      "bytes": 1216,
+      "sha256": "3dfcd7a3561d86887f6f86827eaecc106bb03ed7f6e4323c4d5dcee8593fc32e"
+    },
+    {
+      "path": "scripts/model-runner-v3/canonicalJson.js",
+      "bytes": 4887,
+      "sha256": "948fa3612559622b4eb96df92832bcb2697e1fb9218aaa9cf7c7ba4f0ad48177"
+    },
+    {
+      "path": "scripts/model-runner-v3/codexAdapter.js",
+      "bytes": 2885,
+      "sha256": "de37af11d8df27d071cef5d6beae039ab95c9335fa66c9f5f6f8b9c97be929c2"
+    },
+    {
+      "path": "scripts/model-runner-v3/execution.js",
+      "bytes": 61936,
+      "sha256": "b83d9bd8869dc0906dc6068b88016561d0ad77d8a52f59b81689e7d3ddd5103f"
+    },
+    {
+      "path": "scripts/model-runner-v3/hostPreflight.js",
+      "bytes": 12100,
+      "sha256": "411621c3de45c5d8d1d0b523aa9493a3e1b05f573c4665415d02147a0e3bb4a9"
+    },
+    {
+      "path": "scripts/model-runner-v3/journalStore.js",
+      "bytes": 16267,
+      "sha256": "03a391868d370a00d1f5e6a88ae1833a1e0392a697e9956b6d09657b97796f74"
+    },
+    {
+      "path": "scripts/model-runner-v3/jsonl-parser.test.js",
+      "bytes": 9894,
+      "sha256": "883809f4449cbc66f206afeafa51cef758fae770712c80b831103f5b794feaaa"
+    },
+    {
+      "path": "scripts/model-runner-v3/jsonlParser.js",
+      "bytes": 6425,
+      "sha256": "ed19f2a8587478090d13650d09c011faaa0038fbdab54f0c22f082d70086447d"
+    },
+    {
+      "path": "scripts/model-runner-v3/manifest.js",
+      "bytes": 6552,
+      "sha256": "8910e653a858d89247342dfce5040cb3a8ac976394649ada580df0e019ce05cf"
+    },
+    {
+      "path": "scripts/model-runner-v3/model-runner-v3.test.js",
+      "bytes": 46507,
+      "sha256": "e887c09eb16ebf00dd02013bc46e92b89df9a4cbb4062ecc8c68fe3a9773e3e2"
+    },
+    {
+      "path": "scripts/model-runner-v3/patchParser.js",
+      "bytes": 2567,
+      "sha256": "e1102f3257174890d3784dd81ccfe2b84c50e868ea01d01f2d7c3a27a17b247e"
+    },
+    {
+      "path": "scripts/model-runner-v3/process-lifecycle.test.js",
+      "bytes": 17773,
+      "sha256": "422f2e9443a71189988ec46658401e920719b9e7d9c0343c5ec479c0e996439a"
+    },
+    {
+      "path": "scripts/model-runner-v3/processLifecycle.js",
+      "bytes": 6133,
+      "sha256": "68408b100e15ae54b5725645c7cc5a4579c222aa2dfcb0cc360f22bd9238ccd1"
+    },
+    {
+      "path": "scripts/model-runner-v3/real-model-attempt-worker.js",
+      "bytes": 328,
+      "sha256": "465de7f0e9d38e1d387fbd34242b997e67f90fe84b2030fb946429561aa4eded"
+    },
+    {
+      "path": "scripts/model-runner-v3/real-model-attempt.js",
+      "bytes": 2843,
+      "sha256": "25a2b406960370423d6ed3ce32cd12574a94d476bdd047bf3717cebeb41a5271"
+    },
+    {
+      "path": "scripts/model-runner-v3/recoveryCandidate.js",
+      "bytes": 1758,
+      "sha256": "9a3ff5dd9862203d3548f65410424a0cf677f260f72a5ff71cbc09e8c4b3e823"
+    },
+    {
+      "path": "scripts/model-runner-v3/resourceJournal.js",
+      "bytes": 1086,
+      "sha256": "b879c7d937f7a515fb87565001ec3fce782dd24f1f3bea50107587f6d84c1a03"
+    },
+    {
+      "path": "scripts/model-runner-v3/routing.js",
+      "bytes": 1261,
+      "sha256": "a14aa5e4838147f7c7f58345d155a15ae01ac3c89a8b34be013c5a83c008b24f"
+    },
+    {
+      "path": "scripts/model-runner-v3/runner.js",
+      "bytes": 6275,
+      "sha256": "455a5db9d518aa7b194e0619eac45cfa60e3b73ade5293aa24ce3f992d44b4c9"
+    },
+    {
+      "path": "scripts/model-runner-v3/seal.js",
+      "bytes": 5860,
+      "sha256": "e440484225eefe89734bc21cfec3325bf3f54e14606888bcf218ef2a6710bf1b"
+    },
+    {
+      "path": "scripts/model-runner-v3/source.js",
+      "bytes": 20,
+      "sha256": "0178ebe33198629bc345d7410d644ab4991518d537db5fd04912d281df792928"
+    },
+    {
+      "path": "scripts/model-runner-v3/sourceView.js",
+      "bytes": 2572,
+      "sha256": "29c8e629cea82d75b755ff13acb0dc5b82d30d66e84ccfa3d06c3bbf2465f793"
+    },
+    {
+      "path": "scripts/model-runner-v3/transactionJournal.js",
+      "bytes": 1357,
+      "sha256": "d3ffe1a9bd19abbeeee6e33e34763bfcebf0c774f32e801ebf1e514894e271e3"
+    },
+    {
+      "path": "scripts/model-runner-v3/trustedGit.js",
+      "bytes": 1164,
+      "sha256": "2a616b996367dfa5012027adf8ff0784800f869afde29a195817524b9b629048"
+    },
+    {
+      "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs",
+      "bytes": 76895,
+      "sha256": "998815fc9a12f6dbe1d3a286e2fa2fadc07ee14cc88bfe7f91d02c409908c232"
+    },
+    {
+      "path": "scripts/opportunity-v3/runner-recovery-candidate.test.mjs",
+      "bytes": 5450,
+      "sha256": "c79b32848234b652599bd0256884ac1377c17ea969fb7639da7b4ce18c981499"
+    },
+    {
+      "path": "scripts/opportunity-v3/runner-recovery-sandbox-canary.py",
+      "bytes": 6100,
+      "sha256": "299e94f537a2e9e9e0a253a94c226ad75958c891e66462f5b73bc3b75c8856e9"
+    }
+  ],
+  "raw": [
+    {
+      "path": "docs/engineering/runner-recovery-20261011/base-parser-negative-red.tap",
+      "bytes": 1002,
+      "sha256": "e04c693bf8da98db0a8dc59471c1301dd8ae220c88a0dc1c52fc313fd1307251"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/candidate-tests-final.tap",
+      "bytes": 1182,
+      "sha256": "4fa5cafa0fea12ab3eda9cd1ebd29190183b6d8e70b54cbab147e0c2858137e1"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/candidate-tests.tap",
+      "bytes": 944,
+      "sha256": "ba87dc163020cbd843cac699dc29ae53860fdaf132b1f82ad9111667975dce9c"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/final-focused.tap",
+      "bytes": 18380,
+      "sha256": "cbe685603622d21b000801a680fe9a6ca18400f0278a132172c1e5158d63ec85"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/host-observation.json",
+      "bytes": 9611,
+      "sha256": "f73a9f01152771dbdf7f3378a328b4b6c5a39873eb15a9cd3a3296b6fc1f5108"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/host-pins.candidate.json",
+      "bytes": 2425,
+      "sha256": "a5bc7f4a0e7122c54fdbacdde9cef8e72c98e96584eba4d4faaea2f897f6d579"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/host-validation-arm64.json",
+      "bytes": 978,
+      "sha256": "06ba4eabfe6bf1e37e310f914e9a068a019faf53bf0dfc66f290da137edebe94"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/host-validation.json",
+      "bytes": 1647,
+      "sha256": "33ef29ff542f661e266d3f761daf2644a9c94e6e0c06ec6fb8f4734d88c79eb3"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/parser-lifecycle.tap",
+      "bytes": 13438,
+      "sha256": "7e21226b0458ca13fd350f0a8da1647d5232c54dd94c85dbb07b8b39fa6de4cd"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/protected-worker-unit.tap",
+      "bytes": 98088,
+      "sha256": "90695d14c7c9ad26b8d4a3cd44e9ea9b7db4319a4f56cad335ef5a1adce25f18"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/sandbox-before.json",
+      "bytes": 5594,
+      "sha256": "1a31061cd915f3be0c8766af0c01ebe423110493ef42124ce30c4de5541b0c0a"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/sandbox-final.json",
+      "bytes": 5594,
+      "sha256": "83e8df95f36d02d38e675df8befe88083b26d528c40d30a310db1f0008115666"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/sandbox-frozen-source.json",
+      "bytes": 5594,
+      "sha256": "bcfe934539641b692f76bc2c61c4065f84a01ce6c844d788c99729a0a7fedf4f"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/worker-candidate-final.tap",
+      "bytes": 100572,
+      "sha256": "c296e8ba3b3845eb14437ea16dc9d6db613a07f9b1b391fa6fa57644ef2ed99c"
+    },
+    {
+      "path": "docs/engineering/runner-recovery-20261011/worker-candidate-green.tap",
+      "bytes": 4816,
+      "sha256": "05fb4c0840f617a9d4d827ffe991e2b550bc087111d36b1517d2abd1a3f3f8bb"
+    }
+  ],
+  "tests": {
+    "finalFocused": {
+      "pass": 103,
+      "fail": 0,
+      "skip": 0
+    },
+    "currentNativeCanary": {
+      "pass": 14,
+      "fail": 0
+    },
+    "fullBuild": "not run per bounded Mac scope",
+    "liveOracle": "not run; unauthorized"
+  },
+  "reusedExactSubjects": [
+    "e94d21f9fe05dc436211a2458ea59adb52195e26",
+    "1afdd69bcc3bedbeae4151a56a7b372f64b3a58f",
+    "0825db4f5cb563d7760f8e4b0e087a9c9d4bf8e7"
+  ]
+}

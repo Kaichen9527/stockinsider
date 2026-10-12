@@ -9,6 +9,9 @@ import { fileURLToPath } from 'node:url';
 import { validateProtectedCodeGateAggregateInputs } from './protected-code-gate-aggregate.mjs';
 import {
   hostPinForModelOracleListing,
+  trustedHostAuthenticationPath,
+  validateModelOracleReuseTime,
+  shouldReuseModelOracle,
   modelOracleListing,
   modelOracleListingSha256,
   parseReviewActiveGraph,
@@ -588,4 +591,27 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /passed: totals[.]passed/u);
   assert.doesNotMatch(worker, /writeFileSync\(path\.join\(codexDirectory, 'auth\.json'\), bytes/u);
   assert.match(worker, /rmSync\(scratch, \{ force: true, recursive: true \}\)/u);
+});
+
+test('fresh model oracle does not reuse expired evidence and auth path ignores inherited HOME', () => {
+  const prior = process.env.HOME;
+  try { process.env.HOME = '/tmp/synthetic-untrusted-home';
+    assert.equal(trustedHostAuthenticationPath(), path.join(os.userInfo().homedir, '.codex', 'auth.json'));
+  } finally { if (prior === undefined) delete process.env.HOME; else process.env.HOME = prior; }
+  const evidence = { completedAt:'2026-01-01T00:00:00Z', expiresAt:'2026-01-02T00:00:00Z' };
+  assert.throws(()=>validateModelOracleReuseTime(evidence,true,Date.parse('2026-10-12T00:00:00Z')),/expired/);
+  assert.equal(validateModelOracleReuseTime(evidence,false),true);
+  assert.throws(()=>validateModelOracleReuseTime({...evidence,expiresAt:evidence.completedAt},false),/ordered/);
+  assert.match(worker,/const reuse = readModelOracleReuse\(false\);/);
+  assert.match(worker,/function trustedReusableHostModelOracle[\s\S]*?const reuse = readModelOracleReuse\(\);/);
+});
+
+test('expired reuse never loads old Git objects, including matching listing; unexpired reuse remains exact', () => {
+  const old={completedAt:'2026-01-01T00:00:00Z',expiresAt:'2026-01-02T00:00:00Z'};
+  const now=Date.parse('2026-10-12T00:00:00Z');
+  for(const listing of ['same','different'])assert.equal(shouldReuseModelOracle(old,listing,()=>assert.fail('expired old Git object read'),now),false);
+  const live={...old,expiresAt:'2026-10-13T00:00:00Z'};let reads=0;
+  assert.equal(shouldReuseModelOracle(live,'same',()=>{reads++;return 'same';},now),true);
+  assert.equal(shouldReuseModelOracle(live,'different',()=>{reads++;return 'same';},now),false);assert.equal(reads,2);
+  assert.throws(()=>shouldReuseModelOracle({...old,expiresAt:'bad'},'same',()=>assert.fail(),now));
 });

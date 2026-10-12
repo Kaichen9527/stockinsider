@@ -7,19 +7,35 @@ const { spawnSync } = require('node:child_process');
 const { assert, RunnerError } = require('./artifacts');
 const { canonicalJson, parseJsonWithNoDuplicateKeys, sha256 } = require('./canonicalJson');
 
-const PIN_FIXTURE_SHA256 = '4e3a508b5120903ec7364771ba1aea8b98bd43e1d58f0ed1fcee1faaf8457008';
-const PIN_FIXTURE_BYTES = 2144;
+const PIN_FIXTURE_SHA256 = 'e10f04c5fff073c6c03109af457d2fe9597db83c6f7f5b719fa6412cbcf151a4';
+const PIN_FIXTURE_BYTES = 2252;
 const CANDIDATE_POLICY_ENV = 'OPPORTUNITY_V3_PROTECTED_CANDIDATE_POLICY';
 const CANDIDATE_SCRATCH_ENV = 'OPPORTUNITY_V3_PROTECTED_CANDIDATE_SCRATCH';
 const HOST_ORACLE_SCRATCH_ENV = 'OPPORTUNITY_V3_PROTECTED_HOST_PREFLIGHT_SCRATCH';
 let stableAncestorIdentity = null;
 
 function loadHostPins(filename) {
-  let buffer;
+  let buffer, descriptor;
   try {
-    buffer = fs.readFileSync(filename);
+    descriptor = fs.openSync(filename, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW | fs.constants.O_NONBLOCK);
+    const before = fs.fstatSync(descriptor, { bigint: true });
+    assert(before.isFile() && before.size === BigInt(PIN_FIXTURE_BYTES), 5);
+    buffer = Buffer.alloc(PIN_FIXTURE_BYTES + 1);
+    let count = 0, n;
+    while ((n = fs.readSync(descriptor, buffer, count, buffer.length - count, null)) > 0) {
+      count += n; assert(count <= PIN_FIXTURE_BYTES, 5);
+    }
+    const after = fs.fstatSync(descriptor, { bigint: true });
+    const current = fs.lstatSync(filename, { bigint: true });
+    for (const field of ['dev','ino','size','mode','uid','gid','mtimeNs','ctimeNs']) {
+      assert(before[field] === after[field] && after[field] === current[field], 5);
+    }
+    assert(count === PIN_FIXTURE_BYTES && !current.isSymbolicLink(), 5);
+    buffer = buffer.subarray(0, count);
   } catch {
     throw new RunnerError(5);
+  } finally {
+    if (descriptor !== undefined) fs.closeSync(descriptor);
   }
   assert(buffer.length === PIN_FIXTURE_BYTES && buffer.at(-1) === 0x0a && buffer.at(-2) !== 0x0a, 5);
   const raw = buffer.subarray(0, -1).toString('utf8');
@@ -30,7 +46,7 @@ function loadHostPins(filename) {
   } catch {
     throw new RunnerError(5);
   }
-  assert(canonicalJson(fixture) === raw && fixture.fixtureVersion === 'model-runner-host-pins-v3.18', 5);
+  assert(canonicalJson(fixture) === raw && fixture.fixtureVersion === 'model-runner-host-pins-v3.25', 5);
   assert(fixture.platform === 'darwin' && fixture.architecture === 'arm64' && Array.isArray(fixture.executables), 5);
   const node = fixture.executables.find((entry) => entry.name === 'node');
   assert(node && typeof node.path === 'string' && typeof node.realpath === 'string' && node.version === 'v22.14.0', 5);
@@ -46,13 +62,22 @@ function hashFile(filename) {
   const buffer = Buffer.allocUnsafe(1024 * 1024);
   let descriptor;
   try {
-    descriptor = fs.openSync(filename, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
+    descriptor = fs.openSync(filename, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW | fs.constants.O_NONBLOCK);
+    const before = fs.fstatSync(descriptor, { bigint: true });
+    assert(before.isFile() && before.size >= 0n && before.size <= 1024n * 1024n * 1024n, 5);
     let offset = 0;
     while (true) {
       const bytes = fs.readSync(descriptor, buffer, 0, buffer.length, offset);
       if (bytes === 0) break;
       digest.update(buffer.subarray(0, bytes));
       offset += bytes;
+      assert(BigInt(offset) <= before.size, 5);
+    }
+    const after = fs.fstatSync(descriptor, { bigint: true });
+    const current = fs.lstatSync(filename, { bigint: true });
+    assert(BigInt(offset) === before.size && !current.isSymbolicLink(), 5);
+    for (const field of ['dev','ino','size','mode','uid','gid','mtimeNs','ctimeNs']) {
+      assert(before[field] === after[field] && after[field] === current[field], 5);
     }
     return digest.digest('hex');
   } catch {
@@ -137,7 +162,16 @@ function hostProbeEnvironment() {
     // the protected-base worker. An absent handle preserves direct host tests.
     if (requestedHostScratch === undefined) return environment;
     assert(hostScratch !== null, 5);
-    return { ...environment, CODEX_HOME: hostScratch, HOME: hostScratch, TMPDIR: hostScratch };
+    // Codex refuses helper binaries beneath TMPDIR. The trusted worker creates
+    // these fixed siblings; none may resolve through a symlink or shared root.
+    const home = path.join(hostScratch, 'home');
+    const temporary = path.join(hostScratch, 'tmp');
+    for (const directory of [hostScratch, home, temporary]) {
+      assert(privateSandboxDirectory(directory) !== null, 5);
+      try { assert(fs.realpathSync(directory) === directory, 5); }
+      catch { throw new RunnerError(5); }
+    }
+    return { ...environment, CODEX_HOME: home, HOME: home, TMPDIR: temporary };
   }
   // `codex sandbox` intentionally rewrites HOME and TMPDIR for its child. The
   // protected worker therefore passes its two pre-created, non-secret roots in
@@ -182,7 +216,7 @@ function validatedVersionOutput(command, stdout, stderr) {
   const admittedAppleGitDenial = command === '/usr/bin/git'
     && lines.length >= 1 && lines.length <= 2
     && lines.every((line) => appleGitSandboxCacheDenial.test(line));
-  const admittedCodexAliasWarning = command === '/Applications/ChatGPT.app/Contents/Resources/codex'
+  const admittedCodexAliasWarning = command === '/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex'
     && lines.length === 1 && codexPathAliasSandboxWarning.test(lines[0]);
   assert(admittedAppleGitDenial || admittedCodexAliasWarning, 5);
   return stdout;
