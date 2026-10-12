@@ -1,0 +1,24 @@
+# Exact application integration review
+
+Result: `PASS`
+
+P0=0 P1=0 P2=0
+
+- Final reviewed repair/tree: `e06b14b8fc3f947c10f77b6d6c0c4d09f7efb2e8` / `c63a6d8bc03b4afa2f4572b2a085a2e17c6de50a`
+- Full final range: `c6bc227ccaa5309226cbb833b35a35198491cb48..e06b14b8fc3f947c10f77b6d6c0c4d09f7efb2e8`
+- Active graph: `c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a`
+
+## Exact PTT code and independent integration/workflow review
+
+Root independently reviewed the PTT maker code previously and reread the integration against newmain c6bc227ccaa5309226cbb833b35a35198491cb48. Its four code/test blobs are unchanged from the earlier reviewed maker04384e9. Root reran the two changed PTT files at exacte06b14b8fc3f947c10f77b6d6c0c4d09f7efb2e8:23 PASS,0 FAIL,0 SKIP (a subset, not the full30). Original root30-case evidence remains attributed to its original source. Scoped CODE opinion P0/P1/P2=0.
+
+The existing independent Cloud task separately reviewed root's merge parentage and ordinary workflow, since it had authored the original PTT code and cannot approve its own code. It confirmed exacte06/treec63a6d8bc03b4afa2f4572b2a085a2e17c6de50a has parents7af8cba andc6bc227c; newmain is its ancestor, and integration did not overwrite auth/FK/protected files. Its integration/workflow opinion has no P0/P1/P2. Ordinary workflow remains blob46e753f9991635a104bcc1f4a7a6d05bff6532ba, read-only fixed actions and closed test scope. Cloud executed30 focused tests with zero fail/skip using existing checkout blobs proven identical, not a full integration checkout/build; raw8197bytes SHA6df124d2ad651d37f9c3270e9e4cf9c74b063b081ee63050bb973f0a3611055d. Initial restricted4-file result is not substituted for these30 cases.
+
+The collector stores bounded stock-local author/parent/index/excerpt/hash/basis and read status for future rows. Platform-local unresolved author identity and a discussion parent are not independent publishers or news roots. source_document_id:null is retained; no incorrect raw/normalized FK assignment or historical backfill is added. Full admission adapter, resolved root identity and live scheduling remain incomplete. Source availability failures stay visible. Neither review claims new crawls, AUO/Intel orders, model publication, production writes or qualified trades. Original failed dependency/browser attempts are preserved. Root-authored ordinary workflow has separate independent review; root does not self-approve it.
+
+
+## Fresh complete execution
+
+GitHub ordinary run 38186994222, product-runtime job 114611348857, checked out this exact subject and completed successfully. Its unchanged canonical product-correctness command actually executed 155 tests with zero failures/skips/todos, including all 31 named PCR cases. Typecheck, lint, build, migration and browser checks in the parent diagnostic chain also completed. The fulfillment captures the actual timestamp-stripped canonical section of the parent GitHub combined output; it is not a separately rerun or isolated stdout claim. The original full job log is retained. Metadata for immutable owner/caller/fixture and result dependency uses the existing boundaries and matches the earlier record; every execution hash/result is fresh for this subject.
+
+These are ordinary engineering results, not protected PASS, strategy success or production data. The evaluation promotion diagnostic independently remains BLOCKED because elapsed cohorts are unavailable; no history is fabricated. Normal required protected checks remain mandatory before this application can merge or deploy. Tool PR373 was the sole separately authorized initial exception and original protection is restored. AUO content remains a demonstration research direction. No full candidate/PTT recrawl or production write occurred.
