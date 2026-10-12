@@ -40,6 +40,8 @@ on:
       - 'web/src/app/components/RadarTabs.tsx'
       - 'web/src/lib/types.ts'
       - 'web/src/lib/candidate-*.ts'
+      - 'web/src/lib/discovery-*.ts'
+      - 'web/src/lib/live-discovery-*.ts'
       - 'web/src/lib/finmind-*.ts'
       - 'web/src/lib/shadow-*.ts'
       - 'web/src/app/components/ShadowOpportunityV3.tsx'
