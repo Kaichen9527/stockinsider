@@ -61,7 +61,7 @@ test('precise offset microseconds and invalid dates',()=>{
   assert.equal(discoveryClock('2026-10-08T12:00:00.123457Z')-discoveryClock(cut),BigInt(1));
   for(const clock of ['2026-02-30T00:00:00Z','2026-10-08T24:00:00Z','2026-10-08T12:00:00.1234567Z','2026-10-08T12:00:00','2026-10-08T12:00:00+24:00']) assert.throws(()=>discoveryClock(clock));
 });
-for(const clock of ['published_at','collected_at','recorded_at'] as const) test(`future revision ${clock} 1us cannot replace known head`,()=>{
+for(const clock of ['collected_at','recorded_at'] as const) test(`future revision ${clock} 1us cannot replace known head`,()=>{
   const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),[clock]:'2026-10-08T12:00:00.123457Z'});
   const a=invariant(x);assert.equal(a.bindings.length,1);assert.ok(a.dispositions.some(d=>d.disposition==='after_cutoff'));
 });
@@ -123,7 +123,7 @@ test('equal cutoff is included and valid_to equal cutoff is expired',()=>{
   const x=fixture();x.tables.revisions[0].recorded_at=cut;assert.equal(read(x).bindings.length,1);
   x.tables.publishers[0].valid_to=cut;manifest(x);assert.equal(read(x).bindings.length,0);
 });
-for(const clock of ['published_at','collected_at','recorded_at'] as const) test(`invalid ${clock} is explicitly rejected, not a chosen head`,()=>{
+for(const clock of ['collected_at','recorded_at'] as const) test(`invalid ${clock} is explicitly rejected, not a chosen head`,()=>{
   const x=fixture();x.tables.revisions[0][clock]='not-a-clock';assert.equal(invariant(x).reason,'invalid_clock');
 });
 test('partial page with lower local count cannot match previously counted packet',()=>{
@@ -150,11 +150,45 @@ test('public_research institution required by original authority schema',()=>{
 test('unbounded strings and depth fail before projection, no truncation success',()=>{
   const x=fixture();x.tables.verifications[0].canonical_document_id='x'.repeat(4194305);assert.equal(read(x).reason,'input_bound');
 });
-for(const clock of ['published_at','collected_at','recorded_at'] as const) test(`future same-UUID ${clock} cannot poison known family/identity`,()=>{
+for(const clock of ['collected_at','recorded_at'] as const) test(`future same-UUID ${clock} cannot poison known family/identity`,()=>{
   const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_family_key:'c'.repeat(64),[clock]:'2026-10-08T12:00:00.123457Z'});
   assert.equal(invariant(x).bindings.length,1);
 });
 test('manifest full retained publisher head population, not merely one matching row',()=>{
   const x=fixture();x.tables.publishers.push({...x.tables.publishers[0],publisher_identity_id:id(50),authority_id:id(51)});
   assert.equal(invariant(x).reason,'publisher_manifest_binding_mismatch');
+});
+
+// Independent review counterexample: known collection/recording selects head FIRST.
+for(const [label,published] of [['cutoff+1us','2026-10-08T12:00:00.123457Z'],['before-cutoff-after-collection','2026-10-08T11:00:00.123457Z'],['invalid-clock','bad-clock']] as const) {
+  test(`known latest head ${label} blocks older complete family, both orders`,()=>{
+    const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),recorded_at:cut,published_at:published});
+    const a=invariant(x);assert.equal(a.bindings.length,0);
+    assert.ok(a.dispositions.some(d=>d.disposition==='latest_revision_publication_invalid'));
+    assert.ok(a.dispositions.some(d=>d.disposition==='superseded_revision'));
+    assert.ok(!a.dispositions.some(d=>d.table==='revisions'&&d.disposition==='after_cutoff'));
+  });
+  test(`known same-UUID conflicting ${label} cannot revive old revision, both orders`,()=>{
+    const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],recorded_at:cut,published_at:published});
+    const a=invariant(x);assert.equal(a.bindings.length,0);assert.equal(a.reason,'conflicting_row_identity');
+  });
+}
+test('known latest head with published null is allowed when verification also preserves null',()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),recorded_at:cut,published_at:null});
+  x.tables.verifications[0].revision_id=id(20);x.tables.verifications[0].published_at=null;
+  const a=invariant(x);assert.equal(a.bindings.length,1);assert.equal(a.bindings[0].revision_id,id(20));assert.equal(a.bindings[0].published_at,null);
+});
+test('known legal head at publication=collection remains usable with all microseconds',()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),recorded_at:cut});
+  x.tables.verifications[0].revision_id=id(20);assert.equal(invariant(x).bindings[0].revision_id,id(20));
+});
+
+for(const clock of ['collected_at','recorded_at'] as const) test(`truly future ${clock} with invalid publication remains unknown without UUID poisoning`,()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_family_key:'c'.repeat(64),published_at:'invalid-publication',
+    [clock]:'2026-10-08T12:00:00.123457Z'});
+  const a=invariant(x);assert.equal(a.bindings.length,1);assert.ok(a.dispositions.some(d=>d.disposition==='after_cutoff'));
+});
+test('single known head with malformed publication is blocked with explicit family disposition',()=>{
+  const x=fixture();x.tables.revisions[0].published_at='invalid-publication';
+  const a=invariant(x);assert.equal(a.bindings.length,0);assert.ok(a.dispositions.some(d=>d.disposition==='latest_revision_publication_invalid'));
 });

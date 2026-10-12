@@ -1,8 +1,9 @@
 # Frozen revision / publisher read projection — A slice
 
 Base: `8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14`. Ownership is the two new
-`discovery-revision-publisher-reader` library/test files. No existing adapter,
-server projection, workflow, policy, writer, SQL or API changed.
+`discovery-revision-publisher-reader` library/test files. No existing adapter, server projection, policy, writer, SQL or API changed.
+The reviewed main099 ordinary workflow now gains one test-file argument, as
+explicitly authorized for the P2 successor; its privileges/configuration are unchanged.
 
 `readDiscoveryRevisionPublishers` is a pure, bounded projection of an injected
 frozen read packet. Its snake_case projected columns come from the existing
@@ -53,8 +54,10 @@ resolved by URL/hash or UUID equality.
 ## Time, bounds and accounting
 
 Cutoff comparisons retain all six PostgreSQL fractional digits and explicit
-UTC offsets. Source publication/collection/recorded and authority approval/
-recorded/valid-from clocks are checked before known identity/head selection.
+UTC offsets. Source collection/recorded and authority approval/recorded/valid-from clocks
+are checked before known identity/head selection. A known family head is selected
+first, then its publication clock is validated; future/malformed publication or
+publication after collection blocks that head/family instead of reviving old data.
 Future rows cannot poison known UUIDs. Source clocks remain unchanged.
 Verification/manifest sealing clocks may naturally follow source cutoff; these
 are bounded by the separate read `snapshot_at`, not falsely backdated.
@@ -82,3 +85,21 @@ rows and DB-native clocks; the legacy raw mapping and independently reviewed
 origin/creator decisions still need separate existing-contract work. This
 slice is not connected to production candidate cards and does not change
 PR374's incomplete mention-window audit or admission policy.
+
+## Independent review P2 and successor (2026-10-12)
+
+Original code64b / evidencec032 and its 52 PASS remain immutable historical
+maker evidence, not closure. Root/author_input_review_oct08 independently found
+one P2: filtering publication before head selection revived older complete rows.
+The original two future-publication loop cases incorrectly expected that behavior.
+Those expectations are replaced with known-head invalid-publication cases;
+collection/recorded truly-future cases still establish non-interference. Malformed
+publication on a known head is now an explicit family disposition rather than
+unknown knowledge. Same-UUID known conflicts remain whole-packet fail closed.
+New cases run in both orders with full microseconds, null publication, equality,
+publication-after-collection and malformed clocks. No publication time is retimed.
+
+Approved main099 was merged only into this feature, preserving PR374's finalized
+adapter/server/workflow. The ordinary diagnostic command gains only one reader
+file argument; action pins, permissions, job, install, timeout and protected
+commands are unchanged. There is no production reader integration or new authority.

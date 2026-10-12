@@ -190,8 +190,8 @@ export function readDiscoveryRevisionPublishers(input: ReaderInput) {
     // Validate clocks before head/dedup identity selection. Future rows do not pollute known IDs.
     const knownSources = t.sourceAuthorities.filter(r => authorityKnown(r, cutoff));
     const knownPublishers = t.publishers.filter(r => authorityKnown(r, cutoff));
-    const knownRevisions = t.revisions.filter(r => before(r.recorded_at, cutoff) && before(r.collected_at, cutoff) &&
-      (r.published_at === null || before(r.published_at, cutoff)));
+    // Knowledge is collection/recording. A known invalid publication must remain a head candidate.
+    const knownRevisions = t.revisions.filter(r => before(r.recorded_at, cutoff) && before(r.collected_at, cutoff));
     for (const [table, rows] of [['revisions', knownRevisions], ['sourceAuthorities', knownSources],
       ['publishers', knownPublishers], ['verifications', t.verifications]] as const) {
       const identities = new Map<string, string>();
@@ -224,6 +224,13 @@ export function readDiscoveryRevisionPublishers(input: ReaderInput) {
       let disposition = 'selected_no_publisher_binding';
       const mark = () => { for (const d of dispositions.filter(d => d.table === 'revisions' && d.input_hash === sha256Canonical(r))) d.disposition = disposition; };
       if (r.acquisition_status !== 'complete') { disposition = 'latest_revision_not_complete'; mark(); continue; }
+      let publicationInvalid = false;
+      try {
+        publicationInvalid = r.published_at !== null && (discoveryClock(r.published_at) > cutoff ||
+          discoveryClock(r.published_at) > discoveryClock(r.collected_at));
+      } catch { publicationInvalid = true; }
+      if (publicationInvalid) { disposition = 'latest_revision_publication_invalid'; mark(); continue; }
+
       const sa = sourceHeads.get(r.approved_source_identity_id);
       if (!sa || !active(sa, cutoff) || sa.authority_id !== r.source_identity_authority_id || sa.source_key !== r.source_key) { disposition = 'source_authority_not_effective'; mark(); continue; }
       const registry = t.registry.filter(x => x.source_key === r.source_key && x.revision_family_key === r.revision_family_key);
