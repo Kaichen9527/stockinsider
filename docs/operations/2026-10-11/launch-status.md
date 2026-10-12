@@ -1,5 +1,13 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 09:11台灣時間：三個精確產品驗證完成，正常protected最後一輪已啟動
+
+3703338160a／371bc1b6aff／372680d0c9d各自ordinary product-runtime真SUCCESS：155PASS零fail/skip/todo、全部31PCR，types/lint/build/migration/browser通過。Optional evaluation diagnostic仍因缺真實elapsed cohorts blocked，不改歷史或當上線前置。原始完整parent logs、timestamp-stripped canonical及其hash均保存；fresh direct-child exact89d924d9／6c2a6182／ef4a36bb已先推，再更新網站PR heads。
+
+最後正常protected37038190772969／37138190779815／37238190723740正在執行，requirements／architecture／exact三review已真SUCCESS，product/model待終態。沒有合併網站或改保護，工具一次例外不再使用。獨立pure-data診斷另外核對剩餘212規範斷言通過，但不替代protected。
+
+VPS01:03:45Z可用16,590,028,800bytes／154,894,188,544bytes，current169、五個真units active及首頁HTTP200。postgrest錯誤別名inactive不是服務停機，實際stockinsider-postgrest active；failed oneshot不改寫成功。原容量准入保留、人類容量選擇仍待答覆；不刪月內Docker、不重跑全量、不中止GitHub發布準備。新收據.agent/reports/2026-10-12T09-11-fresh-canonical-and-protected/。
+
 ## 2026-10-12 09:00台灣時間：三個正常模型閘門成功，精確標題鏡像修復驗證中
 
 工具PR373的一次例外已消耗，main c6bc227c、原ruleset active及bypass[]仍完整。三個上一輪應用protected的requirements／architecture／exact-review／model-runner-code-gate均真SUCCESS；產品270PASS／2FAIL在共同host amendment小寫exact pin斷言，不是新模型或應用錯誤。原RED保留；6759bytes/hash修補後已通過對應檢查。
