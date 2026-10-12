@@ -1,0 +1,54 @@
+{
+  "schema": "normal-merge-and-continuation-v1",
+  "observedAt": "2026-10-12T05:11:06.706237+00:00",
+  "pr": 374,
+  "source": "ff2b15f7a85c3b8da5461dbe968d6a93822981ae",
+  "main": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+  "tree": "31b29c0a0bb065341a7ecc22245b215248d60282",
+  "webTree": "68f36363fa1671cd3b3c74fdf05ed2e7d3be3e5a",
+  "mergeParents": [
+    "8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14",
+    "ff2b15f7a85c3b8da5461dbe968d6a93822981ae"
+  ],
+  "mergedAt": "2026-10-12T05:06:44Z",
+  "protectedRun": 38205225068,
+  "allSevenJobs": "genuineSUCCESS",
+  "originalGuardFailure": "Before any merge/audit, unqualified check-name uniqueness rejected retained oldFAIL+newPASS for samehead architecture. No GitHub mutation; original script preserved.",
+  "opsDeltaIndependentReview": {
+    "reviewer": "/root/author_input_review_oct08",
+    "verdict": "unsigned scopedPASS/P0P1P2=0",
+    "actualNegativeProbes": 4,
+    "method": "Bind protected rollup selectors to already-verified exactrun jobURLs; retained oldfailures earlier than newrun, no laterfailure hidden; ordinaryuniquePASS/allotherstrictguardsunchanged."
+  },
+  "protection": "before/afterrulesJSONequal; active,bypass[],noadmin/bypass/directpush",
+  "production": {
+    "current": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "deployedNewMain": false,
+    "latestLightweightDf": {
+      "observedAt": "2026-10-12T05:11:06.706237+00:00",
+      "filesystemBytes": 154894188544,
+      "usedBytes": 138302005248,
+      "availableBytes": 16575406080,
+      "lockedHeavyPreflight": false
+    },
+    "approvedBinaryJobRequiredAvailableBytes": 19998441472,
+    "gapBytes": 3423035392,
+    "meaning": "Lightweight df only after meaningful merge; still below unchanged originalbudget. No second doomed heavy preflight, upload/switch/migration/cleanup. Existing humancapacitychoicepending."
+  },
+  "artifact": {
+    "source": "8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14",
+    "validated": true,
+    "latestMainAlreadyIncluded": false,
+    "decision": "Keep approvedstaged8bcd candidate release, do not claim artifactcontains099or silentlyrebuildwhilecapacitypending."
+  },
+  "cloud": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "host": "durable",
+    "turn": "01a12e71-2b46-774d-9292-436cafd6175b",
+    "cursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:16",
+    "state": "active",
+    "branch": "codex/discovery-revision-publisher-reader-oct12",
+    "ownership": "newpurehelper/tests/handoff/evidence on8bcd only; noPR374overlap/DB/API/authority/schema/writer/CI/crawl/strategy/deploy"
+  },
+  "goalMetadata": "get_goal reports originalgoalhistoricalblocked, notachieved; noagentAPIresume available. Engineeringheartbeatcontinues under existinghumancontinuation, not markedcomplete."
+}

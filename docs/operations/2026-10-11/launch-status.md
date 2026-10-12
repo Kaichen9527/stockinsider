@@ -1,5 +1,17 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 13:11台灣時間：PR374正常受保護檢查全部成功並已合併；部署容量仍不足
+
+PR374 exact ff2b15f7/tree31b29c0a的正常protected38205225068全七項bootstrap／requirements／architecture／exact／model／product／aggregate真正SUCCESS。Root看完終態、核對原active/bypass[]保護、精確head、所有普通checks與main8bcd後，標準gh --merge --match-head-commit真合併：0997336d0eb8ec43ea0899f22fe5a03cc774518f，05:06:44Z。Git實查兩parents正是8bcd與ff2b，tree31b29c0a/web68f36363；保護前後JSON一致，沒有admin／再次例外／直接pushmain。不要再跑PR374 checks或merge。
+
+操作guard第一次在真正merge前誤假設rollup同name唯一，遇保留舊FAIL與新PASS而拒絕，無GitHub寫入／audit。只將七個protected selectors綁已驗證的精確run/job URL，原要求全7真綠、普通checks唯一PASS、head/base/CLEAN與保護完全不變；獨立opsreview實測4個負例拒絕後給零P0/P1/P2。原失敗腳本與真JSON保留，不刪失敗check或偽造成功。
+
+合併後僅輕量df確認154,894,188,544bytes檔案系統，可用16,575,406,080、current仍169；仍低於原預建包job需要19,998,441,472，差3,423,035,392bytes。沒有再次啟動必敗的heavy preflight、傳包／切換／migration／刪月內Docker。人類前次容量選擇未回覆，不重問或自動付費。已備妥／驗證的Linux包來源是approved8bcd，不能冒稱包含剛合併099；目前不為尚未能發布的每個小增量反覆重建。
+
+PR374是來源資料audit的正確性修補，仍沒有live獨立root／creator／PTT原body或真正Top20／研究排程；UI／策略資格不因merge自動通過。Cloud下一件pure revision／reviewed publisher reader仍單一active turn01a12e71／cursor16，base8bcd、無重疊編輯；先wait精確結果。343全量及PTT2409終態保留不重跑，AUO3摘要未入庫、來源平台與文章／策略後續尚未完成。原Goal metadata仍historicalblocked並非完成，不拿來停止已授權工程heartbeat。
+
+真merge audit、全部protected raw、guard原RED及獨立closure見`.agent/reports/2026-10-12T13-11-pr374-normal-merge/`。
+
 ## 2026-10-12 12:51台灣時間：來源PIT修補真正獨立通過，正常protected已進入模型與產品檢查
 
 PR374 runtime ecd991af／final ff2b15f7/tree31b29c0a，root核對35raw／9source hash/blob，親跑100項語義與88項ordinary選檔全PASS零skip（有重疊不相加）；真正GHA38201703059新88項CI及38201703224/product114656319357的canonical155項／全部31PCR、types/lint/build/migration/browser成功。完整原始parent log與只去GH欄前綴／timestamp的canonical155輸出保留，不冒稱本機新build或把舊綠改新。
