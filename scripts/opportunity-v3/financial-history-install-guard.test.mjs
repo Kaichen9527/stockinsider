@@ -4,13 +4,13 @@ import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import test from 'node:test';
 import {MIGRATIONS,parseArguments,applyReviewedMigrationPlanToClient} from './apply-reviewed-migrations.mjs';
-import {FINANCIAL_TAIL,FINANCIAL_TAIL_SHA256,BASE_CHAIN_SHA256,orderedHash,selectFinancialHistoryChain,assertFinancialReviewBinding,assertInstalledFinancialHistoryPlan,verifyFinancialHistoryPostconditions} from './financial-history-install-guard.mjs';
+import {FINANCIAL_TAIL,FINANCIAL_TAIL_SHA256,BASE_CHAIN_SHA256,orderedHash,selectFinancialHistoryChain,assertFinancialReviewBinding,assertInstalledFinancialHistoryPlan,verifyFinancialHistoryPostconditions,FINANCIAL_HISTORY_EXPECTED_CATALOG,assertFinancialHistoryCatalog} from './financial-history-install-guard.mjs';
 const base=MIGRATIONS.map(relativePath=>({relativePath,bytes:fs.readFileSync(relativePath),sha256:createHash('sha256').update(fs.readFileSync(relativePath)).digest('hex')}));
 const tail={relativePath:FINANCIAL_TAIL,bytes:fs.readFileSync(FINANCIAL_TAIL),sha256:FINANCIAL_TAIL_SHA256};
 const chain=selectFinancialHistoryChain(base,tail,true);
 const empty={observations:false,wrapper:false,reader:false,residue:false,unknown_successor:false};
 const good=Object.fromEntries(['observationRls','observationAcl','periodBound','appendWrapper','privatePredecessor','immutable','ownerNoCreate','pageReader'].map(k=>[k,true]));
-const clientFor=state=>({query:async sql=>({rows:[sql.includes(' AS observations')?state:{result:good}]})});
+const clientFor=state=>({query:async sql=>({rows:[sql.includes(' AS observations')?state:sql.includes(' AS catalog')?{catalog:FINANCIAL_HISTORY_EXPECTED_CATALOG}:{result:good}]})});
 test('default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49',()=>{
  assert.equal(base.length,48);assert.equal(orderedHash(base),BASE_CHAIN_SHA256);
  assert.deepEqual(selectFinancialHistoryChain(base,null),base);assert.equal(chain.length,49);
@@ -85,4 +85,35 @@ test('installed function body fingerprints bind complete pinned SQL bodies, not 
  const sql=tail.bytes.toString('utf8');const helper=fs.readFileSync('scripts/opportunity-v3/financial-history-install-guard.mjs','utf8');
  const bodies=[...sql.matchAll(/CREATE OR REPLACE FUNCTION public\.([a-z_0-9]+)\([\s\S]*?AS \$function\$([\s\S]*?)\$function\$;/gu)];
  assert.equal(bodies.length,3);for(const match of bodies) assert.ok(helper.includes(createHash('sha256').update(match[2]).digest('hex')),match[1]);
+});
+
+test('exact observed catalog rejects every function binding, schema/index/trigger field drift',()=>{
+ assertFinancialHistoryCatalog(FINANCIAL_HISTORY_EXPECTED_CATALOG);
+ const mutate=run=>{const c=structuredClone(FINANCIAL_HISTORY_EXPECTED_CATALOG);run(c);assert.throws(()=>assertFinancialHistoryCatalog(c),/postcondition_failed/u);};
+ for(let i=0;i<FINANCIAL_HISTORY_EXPECTED_CATALOG.functions.length;i++){
+  mutate(c=>c.functions[i].config=['search_path=public']);mutate(c=>c.functions[i].securityDefiner=!c.functions[i].securityDefiner);
+  mutate(c=>c.functions[i].owner='service_role');mutate(c=>c.functions[i].bodySha256='0'.repeat(64));
+  mutate(c=>c.functions[i].acl.push({grantee:'PUBLIC',privilege:'EXECUTE',grantable:false}));
+ }
+ for(let i=0;i<2;i++){
+  for(const key of ['valid','ready','live'])mutate(c=>c.indexes[i][key]=false);
+  mutate(c=>c.indexes.splice(i,1));mutate(c=>c.indexes[i].definition+=' WHERE true');
+ }
+ mutate(c=>c.observation.columns.pop());mutate(c=>c.observation.columns[1].notNull=false);
+ mutate(c=>c.observation.columns[2].type='varchar');mutate(c=>c.observation.columns[0].default=null);
+ for(let i=0;i<7;i++)mutate(c=>c.observation.constraints.splice(i,1));
+ mutate(c=>c.observation.triggers[0].type=25);mutate(c=>c.observation.triggers[0].enabled='D');
+ mutate(c=>c.observation.rls=false);mutate(c=>c.observation.acl.push({grantee:'service_role',privilege:'INSERT',grantable:false}));
+});
+test('catalog private predecessor full body originates in the unchanged recollection migration',()=>{
+ const sql=fs.readFileSync('migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql','utf8');
+ const body=sql.match(/AS \$function\$([\s\S]*?)\$function\$;/u)?.[1];assert.ok(body);
+ assert.equal(FINANCIAL_HISTORY_EXPECTED_CATALOG.functions.find(x=>x.name==='append_financial_fact_pre_history_v1').bodySha256,createHash('sha256').update(body).digest('hex'));
+});
+
+test('immutable trigger dependency body originates in unchanged base SQL and stays security invoker',()=>{
+ const sql=fs.readFileSync('migrations/20260724_source_led_opportunity_engine_v3.sql','utf8');
+ const body=sql.match(/CREATE OR REPLACE FUNCTION legacy_correctness_immutable_v3_11\(\)[\s\S]*?AS \$\$([\s\S]*?)\$\$;/u)?.[1];assert.ok(body);
+ const functionRow=FINANCIAL_HISTORY_EXPECTED_CATALOG.functions.find(x=>x.name==='legacy_correctness_immutable_v3_11');
+ assert.equal(functionRow.bodySha256,createHash('sha256').update(body).digest('hex'));assert.equal(functionRow.securityDefiner,false);
 });

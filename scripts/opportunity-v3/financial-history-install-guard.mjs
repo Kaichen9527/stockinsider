@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import { readFinancialHistoryCatalog } from './financial-history-catalog.mjs';
 import { createHash } from 'node:crypto';
 export const FINANCIAL_TAIL = 'migrations/20261005_financial_history_admission_v1.sql';
 export const FINANCIAL_TAIL_SHA256 = '5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27';
@@ -15,6 +17,12 @@ export function selectFinancialHistoryChain(base, tail, enabled = false) {
 export function assertFinancialReviewBinding(review, hash) {
   if (!/^[0-9a-f]{64}$/u.test(hash) || review.split(/\r?\n/u).filter(x => x === `Financial history ordered chain SHA256: ${hash}`).length !== 1)
     throw new Error('financial_chain_review_binding_missing');
+}
+const freezeCatalog = value => { if(value && typeof value==='object'){Object.values(value).forEach(freezeCatalog);Object.freeze(value);}return value;};
+export const FINANCIAL_HISTORY_EXPECTED_CATALOG = freezeCatalog(JSON.parse(fs.readFileSync(new URL('./financial-history-catalog.expected.json',import.meta.url),'utf8')));
+const canonicalCatalog = value => JSON.stringify(value, function(key,item){return item && typeof item==='object' && !Array.isArray(item) ? Object.fromEntries(Object.keys(item).sort().map(k=>[k,item[k]])) : item;});
+export function assertFinancialHistoryCatalog(catalog) {
+  if(canonicalCatalog(catalog)!==canonicalCatalog(FINANCIAL_HISTORY_EXPECTED_CATALOG)) throw new Error('financial_history_postcondition_failed');
 }
 export async function verifyFinancialHistoryPostconditions(client) {
   const { rows } = await client.query(`SELECT jsonb_build_object(
@@ -60,6 +68,7 @@ export async function verifyFinancialHistoryPostconditions(client) {
   ) result`);
   const value=rows[0]?.result;
   if (!value || Object.keys(value).length !== 8 || Object.values(value).some(x=>x!==true)) throw new Error('financial_history_postcondition_failed');
+  assertFinancialHistoryCatalog(await readFinancialHistoryCatalog(client));
   return value;
 }
 export async function assertInstalledFinancialHistoryPlan(client, plan, enabled) {
