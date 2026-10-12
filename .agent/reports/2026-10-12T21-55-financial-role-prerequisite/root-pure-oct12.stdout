@@ -1,0 +1,145 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 2.425292
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 35.7925
+  ...
+# Subtest: atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+ok 3 - atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+  ---
+  duration_ms: 0.5665
+  ...
+# Subtest: atomic scanner recognizes CR line endings rather than silently dropping real control
+ok 4 - atomic scanner recognizes CR line endings rather than silently dropping real control
+  ---
+  duration_ms: 0.081583
+  ...
+# Subtest: atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+ok 5 - atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+  ---
+  duration_ms: 0.178875
+  ...
+# Subtest: atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+ok 6 - atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+  ---
+  duration_ms: 0.138166
+  ...
+# Subtest: atomic scanner normalizes every unchanged base migration without claiming installer integration
+ok 7 - atomic scanner normalizes every unchanged base migration without claiming installer integration
+  ---
+  duration_ms: 39.565917
+  ...
+# Subtest: atomic scanner rejects additional documented commands that cannot run in a transaction
+ok 8 - atomic scanner rejects additional documented commands that cannot run in a transaction
+  ---
+  duration_ms: 0.14025
+  ...
+# Subtest: default48 and ordinary financial49 outputs remain byte-equivalent; profile separately reports 50 steps
+ok 9 - default48 and ordinary financial49 outputs remain byte-equivalent; profile separately reports 50 steps
+  ---
+  duration_ms: 111.831541
+  ...
+# Subtest: missing/wrong prelude bytes/hash/order/chain and profile omission reject
+ok 10 - missing/wrong prelude bytes/hash/order/chain and profile omission reject
+  ---
+  duration_ms: 2.682625
+  ...
+# Subtest: profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed
+ok 11 - profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed
+  ---
+  duration_ms: 0.309667
+  ...
+# Subtest: actual installer checks successor and profile under lock/BEGIN before any prelude query
+ok 12 - actual installer checks successor and profile under lock/BEGIN before any prelude query
+  ---
+  duration_ms: 0.245416
+  ...
+# Subtest: default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+ok 13 - default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+  ---
+  duration_ms: 40.072791
+  ...
+# Subtest: omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+ok 14 - omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+  ---
+  duration_ms: 0.324
+  ...
+# Subtest: extension flag alone is not review authority: exact hash must be in hash-bound review once
+ok 15 - extension flag alone is not review authority: exact hash must be in hash-bound review once
+  ---
+  duration_ms: 0.283917
+  ...
+# Subtest: base-only cannot replay installed successor and partial residue cannot replay even with tail
+ok 16 - base-only cannot replay installed successor and partial residue cannot replay even with tail
+  ---
+  duration_ms: 0.713708
+  ...
+# Subtest: missing/ambiguous state and any failed postcondition reject
+ok 17 - missing/ambiguous state and any failed postcondition reject
+  ---
+  duration_ms: 0.198709
+  ...
+# Subtest: busy guard performs no BEGIN/mutation and closes owned session
+ok 18 - busy guard performs no BEGIN/mutation and closes owned session
+  ---
+  duration_ms: 0.191958
+  ...
+# Subtest: installed successor guard runs under lock+BEGIN before any base mutation
+ok 19 - installed successor guard runs under lock+BEGIN before any base mutation
+  ---
+  duration_ms: 0.13775
+  ...
+# Subtest: one shared transaction strips inner controls and commits after verification
+ok 20 - one shared transaction strips inner controls and commits after verification
+  ---
+  duration_ms: 0.931292
+  ...
+# Subtest: forced failure and disconnect attempt rollback, do not commit, retain original error
+ok 21 - forced failure and disconnect attempt rollback, do not commit, retain original error
+  ---
+  duration_ms: 0.612958
+  ...
+# Subtest: postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+ok 22 - postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+  ---
+  duration_ms: 0.38225
+  ...
+# Subtest: unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+ok 23 - unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+  ---
+  duration_ms: 0.183667
+  ...
+# Subtest: installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+ok 24 - installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+  ---
+  duration_ms: 0.11625
+  ...
+# Subtest: exact observed catalog rejects every function binding, schema/index/trigger field drift
+ok 25 - exact observed catalog rejects every function binding, schema/index/trigger field drift
+  ---
+  duration_ms: 8.124208
+  ...
+# Subtest: catalog private predecessor full body originates in the unchanged recollection migration
+ok 26 - catalog private predecessor full body originates in the unchanged recollection migration
+  ---
+  duration_ms: 0.145708
+  ...
+# Subtest: immutable trigger dependency body originates in unchanged base SQL and stays security invoker
+ok 27 - immutable trigger dependency body originates in unchanged base SQL and stays security invoker
+  ---
+  duration_ms: 1.0435
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 184.627167

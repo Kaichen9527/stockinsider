@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 21:55台灣時間：擁有者profile已通過27純測試；真VPS只讀確認runtime角色前置差異
+
+Cloud code8d5d036c／evidence8cdc6ac5的獨立financial-existing-schema profile完成，root真核69raw／157source hash/blob，receipt63bf000b，親跑27pure全PASS零fail/skip，scoped source review零P0/P1/P2。Default48／原49輸出與hash不變，另外50SQL selectionprofile acdee42a及originalbridge d86fb28d，unique hash-bound exactreview／原successorguard／同交易rollback接線保持。Maker真bridge-only6PASS含5子項+父項，與fullnative5PASS2FAIL重疊不相加；新profile已越過原42501，後續同一P0001 runtime_role_contract_invalid子父失敗、真beforeafter回滾保留。First-run WIP module未另外封存，不能把finalsource冒稱當時精確source；正式CLI／完整安裝尚未驗收。
+
+Root13:50:21Z實際VPS唯讀transaction（只查3個既知roleattrs與membership，password只讀IS NULL boolean，無值輸出）確認PG170011，runtime真NOLOGIN/NOINHERIT/limit-1/無高權/password/config/membership/CREATE，兩ownerroles也低權。故不能只說是localfixture遺漏，也不能偷偷改成LOGIN/6當『還原正式狀態』；現行standalone服務身份未變、不推論停機。未改正式role／DB／capacity／部署／cache。
+
+下一單件30分鐘候選修補明確為private VPS operator prerequisite：原peer/context/HBA實際reject檢查＋獨立hash-bound action literal；same lock/BEGIN及原successor/profileguard後才精確NOLOGIN/-1→LOGIN/6，其他attrs/password/membership/objectauthority保持、membership需空，已合法LOGIN/6 replay嚴格驗證再no-op。不得新role/member/grant／整76bundle、不得keychainfallback或造peer證據；roleaction+prelude+49+postconditions共rollback。LocalPG可驗工程helper，但formal peerCLI仍需真驗收，未跑不算。
+
+Cloud cursor9 idle後已只派codex/financial-vps-operator-prerequisite-oct12/base8cdc6ac5，turn01a13062-c356-70dc-ab43-0bc7cae337f8／cursor83271615-2ee9-4bed-bd38-321f1348ab62:10 active。先compactwait真終態、不重派或改ownedsource。Main4ddd／正式169／原capacityguard及待答容量選擇不變；無候選重算／PTT重送／排程啟用。完整來源／Top20／文章／策略仍待。證據`.agent/reports/2026-10-12T21-55-financial-role-prerequisite/`。
+
 ## 2026-10-12 20:55台灣時間：真VPS結構安裝重現舊函式擁有者阻擋，已接續精確金融既有結構profile
 
 Cloud code032bbcf1／evidence503bdee8完成真captured schema restore及原49 firstapply，root實核48raw／75source hash/blob，receipt98c80237。實際native0PASS2FAIL為同一42501子項與父項：20260823_release_reconciliation_v3_19.sql以legacy owner重建postgres-owned checkpoint reader，financial tail尚未到達。完整記錄範圍內before/after1,436,239bytes／4dacab49一致回滾；另restore-only只讀診斷1PASS確認5個既有bridge targets原owner/body/config/ACL，不是安裝成功。Type/lint/normalbuild為maker真證據，root未新跑native/build；原RED保留，沒有用synthetic37項替完整安裝。

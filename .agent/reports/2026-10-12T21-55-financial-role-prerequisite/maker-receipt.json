@@ -1,0 +1,177 @@
+{
+  "schema": "financial-existing-schema-owner-profile-engineering-v1",
+  "source": {
+    "head": "8d5d036cee34de9a781d8c0287f11416d2ca3381",
+    "tree": "693ad8f06b761c842d25b042e563b7448de7afda",
+    "webTree": "08c8f0db7388a47b4cb663aa1c64ae7cc03e682f",
+    "base": "503bdee801dca0d0ad5c11bc759b48f28883d654",
+    "branch": "codex/financial-existing-schema-owner-profile-oct12"
+  },
+  "window": {
+    "start": "2026-10-12T12:55:43Z",
+    "deadline": "2026-10-12T13:25:43Z",
+    "sealed": "2026-10-12T13:21:41Z",
+    "manualEngineering": true,
+    "productRoleBudgetProof": false
+  },
+  "profile": {
+    "chainSteps": 49,
+    "selectedSteps": 50,
+    "chainSha256": "cec630ce83aea1f7bdcafae815990e2e964ebbf599a3441e08d978e4427f46cd",
+    "profileSha256": "acdee42a8ca130d259541b5c0b4b14e228c355528b60a2ac4ea3ef9633d611d9",
+    "preludeSha256": "d86fb28d4b23b95b1b1c97d9eedf418f8162610171e72dccc9b5a88f1fada747",
+    "fiftySelectedDoesNotMeanFiftyExecuted": true
+  },
+  "results": {
+    "pureFinal": {
+      "pass": 27,
+      "fail": 0,
+      "skip": 0,
+      "raw": "pure-literal-final.stdout"
+    },
+    "retainedPureRed": {
+      "pass": 26,
+      "fail": 1,
+      "raw": "pure-final.stdout",
+      "reason": "negative fixture omitted valid chain hash, stronger rejection preceded profile-missing assertion; fixture-only correction"
+    },
+    "nativeFirst": {
+      "pass": 5,
+      "fail": 2,
+      "skip": 0,
+      "raw": "native-first.stdout",
+      "sourceStage": "WIP before final stricter profile/literal/pure additions; original prelude and49 SQL unchanged; not relabelled final code rerun",
+      "underlyingFailures": 1,
+      "sqlstate": "P0001",
+      "message": "runtime_role_contract_invalid",
+      "path": "migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql",
+      "historical42501LocationPassed": true,
+      "limitation": "Raw first-run WIP module blob was not separately archived before later code freeze; final source manifest cannot be claimed as exact first-run test/helper manifest. Original SQL hashes and actual query trace are preserved."
+    },
+    "bridgeOnly": {
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "raw": "native-bridge-proof.stdout",
+      "overlapsFiveFirstRunBridgeCases": true,
+      "installerRetried": false
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-12T13:08:58Z",
+      "seconds": 15.614891529083252,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1178824704,
+      "min_free_bytes": 8922607616
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start_utc": "2026-10-12T13:09:14Z",
+      "seconds": 23.0166072845459,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1507758080,
+      "min_free_bytes": 8922312704
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start_utc": "2026-10-12T13:14:21Z",
+      "seconds": 50.66513156890869,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1813962752,
+      "min_free_bytes": 8612155392
+    }
+  },
+  "build": {
+    "sourceHead": "8d5d036cee34de9a781d8c0287f11416d2ca3381",
+    "id": "cAccWy0uA9XsdM2Pt4BOj",
+    "serverFiles": 1796,
+    "serverManifestSha256": "7abc949854ba431bb37f73893425d2077b990f462b229354f0915f95d2777f99",
+    "normalBuild": true
+  },
+  "rollback": {
+    "beforeAfterEqual": true,
+    "bytes": 1436239,
+    "sha256": "4dacab49c50d4d92bb4c91f704fff0b769b7db306d0394e8c5c202d51949ae59",
+    "scope": "public functions/body/owner/config/ACL; table owner/ACL/RLS; roles/memberships; schemaACL; not exhaustive column/constraint/index inventory"
+  },
+  "blocker": {
+    "capturedSchemaOnlyDoesNotCaptureGlobalRoles": true,
+    "unchangedBootstrapRole": {
+      "rolcanlogin": false,
+      "rolconnlimit": -1
+    },
+    "originalBaseExpectedRole": {
+      "rolcanlogin": true,
+      "rolconnlimit": 6
+    },
+    "roleChanged": false,
+    "currentProductionRoleInvalidityProven": false
+  },
+  "pending": [
+    "first complete50 profile commit",
+    "second apply",
+    "nonempty real-RPC seed rows",
+    "full catalog postconditions after install",
+    "forced failure after predecessor replacement",
+    "installed partial/config drift",
+    "disconnect",
+    "competing lock",
+    "formal CLI/keychain/exact attestation/operator role prerequisite",
+    "independent source review/protected approval"
+  ],
+  "limits": {
+    "minDiskReserveBytes": 8589934592,
+    "rssTargetBytes": 8589934592,
+    "resourceMethod": "250ms sampled process-tree RSS and filesystem free; detached PostgreSQL/brief peaks not cgroup total",
+    "noProductionOrModelExecution": true
+  },
+  "cleanup": {
+    "utc": "2026-10-12T13:21:41Z",
+    "owned_services": [],
+    "remaining_owned_pg_dirs": [],
+    "free_workspace_bytes": 8611753984,
+    "free_tmp_bytes": 16834170880,
+    "USER_os": "agent"
+  },
+  "rawFiles": 69,
+  "rawBytes": 4566444,
+  "sourceFiles": 157,
+  "rawManifestSha256": "1638c03ecf61bf7128eacb45dada416696c49e630c1a71e27ae5561b2ef753be",
+  "sourceManifestSha256": "f05ba0d10e9dbed054be4e2de36753476f44b28ecf9216f198b3e88f04053061",
+  "formalApproval": false,
+  "versions": {
+    "node": "v22.14.0",
+    "pg": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1)",
+    "pgDependency": "8.18.0",
+    "next": "16.3.4"
+  },
+  "locks": {
+    "package-lock.json": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "web/package-lock.json": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+  },
+  "fixture": {
+    "kind": "captured VPS schema-only; original local compatibility-role bootstrap; not live global-role profile",
+    "gzipSHA256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "decodedSHA256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+    "noRemoteDatabase": true
+  },
+  "testCountAttribution": "27 final pure; 5/2 pipeline includes parent failure; bridge-only6 includes parent and overlaps original5, not summed."
+}

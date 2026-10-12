@@ -1,0 +1,62 @@
+[
+  {
+    "path": "independent-review.md",
+    "bytes": 3667,
+    "sha256": "a139424596f5a454c0a43955d8533a7a303e417b68eca06853bc1f64a9e09259"
+  },
+  {
+    "path": "maker-native-bridge-proof.stdout",
+    "bytes": 1376,
+    "sha256": "5c7f5b22331a63023bd49042244b87fb7fb5b8c61e07bac50a5b3401e05e9a00"
+  },
+  {
+    "path": "maker-native-first.stdout",
+    "bytes": 3656,
+    "sha256": "fb12ee463d0c3807a4f70c2c2830c46d95e72f76bbb0148b4f3a23d85b5fc666"
+  },
+  {
+    "path": "maker-receipt.json",
+    "bytes": 6180,
+    "sha256": "63bf000b8398dadb6734484f20109ffbe1a46f9061a1967faf3755acd7d3c64c"
+  },
+  {
+    "path": "root-pure-oct12.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "root-pure-oct12.stdout",
+    "bytes": 6184,
+    "sha256": "850fffecfa35b06362bcfba5f845e13244a354851532860ef8a1b0f31069fd8c"
+  },
+  {
+    "path": "root-verification.json",
+    "bytes": 252,
+    "sha256": "569870c58f67d3af659b27603ca9c43b01f03aeb14b2962309a1fee07f502acf"
+  },
+  {
+    "path": "vps-role-meta.json",
+    "bytes": 196,
+    "sha256": "b623d3add0aa4f27643586f774692f9f322ad391392f1df43378633dc6b57acb"
+  },
+  {
+    "path": "vps-role-profile.json",
+    "bytes": 1329,
+    "sha256": "75c75912120c6e3ef81d025612d0895d48c4cd702643521754492ac6282aa6a5"
+  },
+  {
+    "path": "vps-role-query.sql",
+    "bytes": 1206,
+    "sha256": "b36fa5f022e6950b9e4f574a5f6a540c61b2ae09762c2fdc6d2e9b12d7b0bacd"
+  },
+  {
+    "path": "vps-role-stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "vps-role-stdout",
+    "bytes": 1031,
+    "sha256": "d970f36bab15062a86ed82b1d5e267960bd926fd66526016ece9d34eb6b01b27"
+  }
+]

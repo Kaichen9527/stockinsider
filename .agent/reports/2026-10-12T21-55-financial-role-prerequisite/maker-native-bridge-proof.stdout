@@ -1,0 +1,41 @@
+TAP version 13
+# Subtest: captured schema original bridge rejection only (no profile install)
+    # Subtest: original bridge rejects body before any owner/grant mutation
+    ok 1 - original bridge rejects body before any owner/grant mutation
+      ---
+      duration_ms: 109.572672
+      ...
+    # Subtest: original bridge rejects config before any owner/grant mutation
+    ok 2 - original bridge rejects config before any owner/grant mutation
+      ---
+      duration_ms: 107.160442
+      ...
+    # Subtest: original bridge rejects unknown_owner before any owner/grant mutation
+    ok 3 - original bridge rejects unknown_owner before any owner/grant mutation
+      ---
+      duration_ms: 109.721936
+      ...
+    # Subtest: original bridge rejects public_acl before any owner/grant mutation
+    ok 4 - original bridge rejects public_acl before any owner/grant mutation
+      ---
+      duration_ms: 106.963484
+      ...
+    # Subtest: original bridge rejects invalid_target_role before any owner/grant mutation
+    ok 5 - original bridge rejects invalid_target_role before any owner/grant mutation
+      ---
+      duration_ms: 100.405066
+      ...
+    1..5
+ok 1 - captured schema original bridge rejection only (no profile install)
+  ---
+  duration_ms: 1962.696618
+  ...
+1..1
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2160.529784
