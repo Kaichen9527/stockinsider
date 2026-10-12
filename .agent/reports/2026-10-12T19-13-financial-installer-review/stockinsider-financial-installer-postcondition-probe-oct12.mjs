@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {verifyFinancialHistoryPostconditions,assertInstalledFinancialHistoryPlan} from '/tmp/stockinsider-financial-installer-root-review-oct12/scripts/opportunity-v3/financial-history-install-guard.mjs';
+const query=[];const keys=['observationRls','observationAcl','periodBound','appendWrapper','privatePredecessor','immutable','ownerNoCreate','pageReader'];
+await verifyFinancialHistoryPostconditions({query:async sql=>{query.push(sql);return{rows:[{result:Object.fromEntries(keys.map(k=>[k,true]))}]};}});
+assert.equal(query.length,1);assert.equal(/\bproconfig\b/.test(query[0]),false);assert.equal(/opportunity_financial_facts_v3_history_page_v1|opportunity_financial_facts_v3_period_revisions_v1/.test(query[0]),false);
+const privatePredicate=query[0].slice(query[0].indexOf("'privatePredecessor'"),query[0].indexOf("'immutable'"));
+assert.equal(/prosrc|pg_get_userbyid\(p[.]proowner\)|proconfig|prosecdef/.test(privatePredicate),false);
+const source=fs.readFileSync('/tmp/stockinsider-financial-installer-root-review-oct12/scripts/opportunity-v3/financial-history-install-guard.mjs','utf8');
+const result={subject:'6fec2fc54e9f35b02a65c7f6d6c6b1d298b292f6',proof:'actual generated SQL predicate inspection only, no real DB/alteration/privilege escalation executed',postconditionKeyCount:keys.length,missingExactFunctionConfig:true,privatePredecessorMissingBodyOwnerConfigChecks:true,postconditionsMissingBothIndexChecks:true,guardResidueUsesORInsteadOfExactPresence:source.includes("OR to_regclass('public.opportunity_financial_facts_v3_period_revisions_v1')"),verdict:'REQUEST_CHANGES: complete installed profile verification remains incomplete; existing20green pure cannot close SQL drift negatives',P0:0,P1:0,P2:1};
+fs.writeFileSync('/tmp/stockinsider-financial-installer-postcondition-probe-oct12.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));

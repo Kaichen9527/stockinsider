@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-12T10:52:21.623404+00:00",
+  "subject": "6fec2fc54e9f35b02a65c7f6d6c6b1d298b292f6",
+  "verdict": "REQUEST_CHANGES",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1
+  },
+  "basis": "actual generated SQL lacks exact proconfig/private predecessor body-owner-config/index definitions; static predicate inspection, no root native SQL/attack",
+  "rootPure": {
+    "tests": 20,
+    "pass": 20,
+    "fail": 0,
+    "skip": 0
+  },
+  "originalToolErrors": [
+    "receipt verifier initially expected raw_files, actual raw receipt-relative; corrected and genuinely verified48raw66source",
+    "first probe index regexp matched page-reader function name instead of exact indexname; first assertionRED preserved",
+    "second probe generic proowner matched ACLdefault owner argument, corrected to actual owner-verification predicate; original assertion not a finding"
+  ],
+  "Cloud": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "hostId": "durable",
+    "cursor": "83271615-2ee9-4bed-bd38-321f1348ab62:4",
+    "turn": "01a12fbd-0869-75b5-bb23-530948b4bba7",
+    "branch": "codex/financial-history-atomic-installer-oct12",
+    "status": "one30min native drift RED then minimal guard repair task accepted, no completion yet"
+  },
+  "unchanged": {
+    "main": "4dddb8f01f518350c7d54b7995ee9358c1d945a7",
+    "production": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "noVPSmeasureWriteCleanup": true,
+    "no343PTTretry": true
+  },
+  "fullInstallerNative": "still pending"
+}

@@ -1,0 +1,13 @@
+{
+  "subject": "6fec2fc54e9f35b02a65c7f6d6c6b1d298b292f6",
+  "proof": "actual generated SQL predicate inspection only, no real DB/alteration/privilege escalation executed",
+  "postconditionKeyCount": 8,
+  "missingExactFunctionConfig": true,
+  "privatePredecessorMissingBodyOwnerConfigChecks": true,
+  "postconditionsMissingBothIndexChecks": true,
+  "guardResidueUsesORInsteadOfExactPresence": true,
+  "verdict": "REQUEST_CHANGES: complete installed profile verification remains incomplete; existing20green pure cannot close SQL drift negatives",
+  "P0": 0,
+  "P1": 0,
+  "P2": 1
+}

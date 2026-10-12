@@ -1,0 +1,15 @@
+{
+  "head": "6fec2fc54e9f35b02a65c7f6d6c6b1d298b292f6",
+  "rawVerified": 48,
+  "sourceVerified": 66,
+  "receiptSha256": "63ec4927314d6a281a538fad0ca957b44295ce35ab5f06177cdac728edf39960",
+  "rootNative": false,
+  "rootPure": {
+    "tests": 20,
+    "pass": 20,
+    "fail": 0,
+    "skip": 0
+  },
+  "makerNativeIsExisting3CasesNotInstaller": true,
+  "earlierManifestVerifierKeyError": "expected raw_files but actual raw entries are receipt-relative; failed before verification, corrected per actual shape"
+}

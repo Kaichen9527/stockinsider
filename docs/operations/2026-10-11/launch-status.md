@@ -1,5 +1,17 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 19:13台灣時間：49金融installer接線已有真20項純測試；獨立審查攔下schema漂移驗證缺口
+
+Cloud code1ed39c70／evidence6fec2fc5已整合approved4ddd，新增opt-in49financial orderedhash＋hash-bound exactreview literal、鎖內successor guard與共享BEGIN/COMMIT/ROLLBACK。Default48原orderedhash／SQLbytes／authority保持，沒有新增批准。Root真核48raw／66source hash/blob並親跑完整atomic/guard20PASS零fail/skip，maker相鄰20／原native3及type/lint/build各自有收據、有重疊不相加。原PG3仍不是新49installer native acceptance。
+
+Root獨立CODE REQUEST_CHANGES P0=0/P1=0/P2=1：actual generated postconditionSQL未驗3個SECURITY DEFINER proconfig，private predecessor未驗合法body/owner/config/prosecdef；兩個history/periodindex只有residue OR偵測、postconditions未驗真定義/完整性，table constraints/trigger精確profile也未足。既有20綠的syntheticclient只回8個booleans，不能封閉真SQL漂移反例。這是實際predicate靜態缺口，root未native改schema或證明攻擊。原6fec不批准／不建PR／不merge；不是受保護工具復發。
+
+Root manifest checker第一次欄位假設錯誤及兩次probe粗略regexp誤匹配（page-reader名／ACLdefault proowner）均保留紀錄；修成exact index／owner-verification predicate後真檢查缺口成立。不能拿這些原probe assertion作產品反例。新證據`.agent/reports/2026-10-12T19-13-financial-installer-review/`。
+
+Cloud原cursor3 idle後只接單件30分鐘同branch後續修補，turn01a12fbd-0869-75b5-bb23-530948b4bba7／cursor83271615-2ee9-4bed-bd38-321f1348ab62:4 inProgress。先真localPG known-valid金融successor釘search_path/privatebody-owner/missingindex漂移RED，再最小guard/postcondition修補與native負例，不能stub／放寬原標準。8GiBfree/RSS8GiB/單heavy、無遠端DB/HTTP/VPS/crawl/343/PTT/策略/排程。Full49existing-schema/applytwice/disconnect/concurrent及完整postconditions仍需自身驗收；活動中不重派或改ownedsource。
+
+Main4ddd與正式169／舊容量guard及待答問題不變，沒有VPS重測／部署／migration／刪cache／候選重算。來源/Top20/完整文章/正式研究排程仍待完成，AUO維持示範方向。
+
 ## 2026-10-12 17:50台灣時間：金融atomic slice完成真回滾驗證，完整installer單一接續中
 
 Cloud金融slice2 code e8d11097／deliveryb48b3b0b已完成。Root實核64raw／13source hash/blob，receipt9d16cab9；maker scanner7selectedPASS、native baseline／160monthly／forcedrollback3selectedPASS，各自單項1PASS有重疊不相加，types/lint/normalbuildPASS。原lexer dollar-identifier／CRcomment／nontransactional缺口RED保存，最小修補後synthetic非空facts/observations及body/owner/ACL/RLS/trigger/schemaACL於真PG失敗交易回滾前後相同。

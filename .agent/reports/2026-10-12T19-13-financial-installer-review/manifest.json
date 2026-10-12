@@ -1,0 +1,42 @@
+[
+  {
+    "path": "stockinsider-financial-installer-root-verification-oct12.json",
+    "bytes": 505,
+    "sha256": "17986c82c17d3a20000630b28142a6d86c93a725e1deaa83b18c0fffb527a965"
+  },
+  {
+    "path": "stockinsider-financial-installer-root-pure-oct12.stdout",
+    "bytes": 4570,
+    "sha256": "a1ddd36d40dbc7b4d039963761c794b9e0444167fe503a909fcd0e698c50a23e"
+  },
+  {
+    "path": "stockinsider-financial-installer-root-pure-oct12.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "stockinsider-financial-installer-postcondition-probe-oct12.json",
+    "bytes": 580,
+    "sha256": "38e501b3d8f67e257d57617ca3016beae11b63b244b241e161bf9c3e63b40d31"
+  },
+  {
+    "path": "stockinsider-financial-installer-postcondition-probe-oct12.mjs",
+    "bytes": 1953,
+    "sha256": "56e8b84658088955bd116adea1b4f6289a42bc1b5911018b05843edd1305deee"
+  },
+  {
+    "path": "stockinsider-financial-installer-postcondition-probe-original-red-oct12.mjs",
+    "bytes": 1868,
+    "sha256": "4bf346460ff179eee65c72e8dd38c834bbe22658490d5de3ea77bce5bd24aa70"
+  },
+  {
+    "path": "maker-receipt.json",
+    "bytes": 12101,
+    "sha256": "63ec4927314d6a281a538fad0ca957b44295ce35ab5f06177cdac728edf39960"
+  },
+  {
+    "path": "maker-source-manifest.json",
+    "bytes": 15594,
+    "sha256": "069efe355b98389e584424ae87cb9a28b74f385238dea91fcc85c39b1d4539d0"
+  }
+]
