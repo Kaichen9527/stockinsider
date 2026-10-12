@@ -1,0 +1,31 @@
+{
+  "subject": "0dd1f36dfe80660b073aa5102f42671cec577e3a",
+  "rawVerified": 283,
+  "sourceVerified": 70,
+  "receiptSha256": "27f1dd13cada25db1142b97bdc00357f0aa92f774d4959a15c390398de456c06",
+  "makerFinalTests": {
+    "pure": {
+      "raw": "pure-invoker-corrected.stdout",
+      "pass": 23,
+      "fail": 0,
+      "skip": 0,
+      "includesOriginal8AtomicAndOriginal12Financial": true
+    },
+    "native": {
+      "raw": "native-source-final.stdout",
+      "pass": 37,
+      "fail": 0,
+      "skip": 0,
+      "childTapAuthoritative": true,
+      "profile": "unchanged original migration-contract synthetic legacy prerequisite fixture and real original predecessor SQL; not genuine VPS full49",
+      "tailApplyTwice": true,
+      "originalRpcSeedFacts": 1,
+      "legacyObservations": 1,
+      "replayFullRowsIdsClocksUnchanged": true,
+      "eachDriftOwnRollbackFullCatalogAndDataRestored": true,
+      "indexInvalidReadyCases": "explicit isolated pg_catalog fault injection; not production corruption mechanism"
+    }
+  },
+  "rootNativeExecution": false,
+  "completeExistingVPS49InstallerAcceptance": false
+}

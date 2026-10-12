@@ -1,0 +1,37 @@
+[
+  {
+    "path": "stockinsider-financial-catalog-root-verification-oct12.json",
+    "bytes": 1113,
+    "sha256": "9a9b6c6704821e85f821a509d53875d4922e73bf54a3354885be9602cadec82d"
+  },
+  {
+    "path": "stockinsider-financial-catalog-root-pure-oct12.stdout",
+    "bytes": 5276,
+    "sha256": "04f37e3f68abfe1742b3abe044ec49d62be4d33f506775e8b53820be6e7af9cc"
+  },
+  {
+    "path": "stockinsider-financial-catalog-root-pure-oct12.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "maker-receipt.json",
+    "bytes": 55673,
+    "sha256": "27f1dd13cada25db1142b97bdc00357f0aa92f774d4959a15c390398de456c06"
+  },
+  {
+    "path": "maker-source-manifest.json",
+    "bytes": 16556,
+    "sha256": "741a42f70959b0b11aa04f10c3880845e1e44ca82a94a48629c0cf84af5c99b9"
+  },
+  {
+    "path": "maker-native-red.stdout",
+    "bytes": 4718,
+    "sha256": "52fe13e6df9e2f89814080b336db9a9ea4507269d6dec8be5b29d5f6fc3175ee"
+  },
+  {
+    "path": "maker-native-source-final.stdout",
+    "bytes": 6227,
+    "sha256": "baf4e1fbcd47e474f5c7b1d4d918cc03090f0e2c15e61b97b6068552254cbd29"
+  }
+]

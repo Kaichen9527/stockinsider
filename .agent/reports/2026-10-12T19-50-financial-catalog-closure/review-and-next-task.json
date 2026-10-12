@@ -1,0 +1,46 @@
+{
+  "recordedAt": "2026-10-12T11:51:37.645179+00:00",
+  "subject": "0dd1f36dfe80660b073aa5102f42671cec577e3a",
+  "code": "3db3e1d568bc30668dcee52eede14f0a1048f01a",
+  "scopedReview": {
+    "reviewer": "root independent of Cloud maker",
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "closure": "new finite exact catalog + native37 drift matrix closes prior missing installedfinancial predicate P2; original native1PASS4FAIL retained",
+    "limits": "not full49 native/reviewed authorization/production acceptance; root did not execute new native or build"
+  },
+  "rootPure": {
+    "pass": 23,
+    "fail": 0,
+    "skip": 0
+  },
+  "hashesVerified": {
+    "raw": 283,
+    "source": 70
+  },
+  "VPSLightweightObservation": {
+    "command": "ssh -o BatchMode=yes -o ConnectTimeout=10 root@5.104.83.211 df -B1 /",
+    "filesystemBytes": 154894188544,
+    "usedBytes": 138330644480,
+    "availableBytes": 16546766848,
+    "existingBinaryThresholdBytes": 19998441472,
+    "gapBytes": 3451674624,
+    "heavyPreflightRerun": false,
+    "writeCleanup": false
+  },
+  "CloudNext": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "hostId": "durable",
+    "cursor": "83271615-2ee9-4bed-bd38-321f1348ab62:6",
+    "turn": "01a12ff2-aa5b-7675-896f-0173bb1a6e19",
+    "branch": "codex/financial-history-existing-schema-native-oct12",
+    "status": "single task accepted, no results yet",
+    "fixtureGzSha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "fixtureUncompressedSha256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+    "fixtureSource": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78:scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz"
+  },
+  "main": "4dddb8f01f518350c7d54b7995ee9358c1d945a7",
+  "production": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "no343PTTRetry": true
+}
