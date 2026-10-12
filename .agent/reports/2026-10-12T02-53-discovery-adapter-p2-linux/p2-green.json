@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/live-discovery-evidence-adapter.test.ts",
+    "web/src/lib/candidate-discovery-admission.test.ts",
+    "web/src/lib/ptt-mention-provenance.test.ts",
+    "web/src/lib/candidate-research-policy.test.ts"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 0.8186131509719416
+}

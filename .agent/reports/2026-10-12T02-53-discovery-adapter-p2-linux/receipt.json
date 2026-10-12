@@ -1,0 +1,375 @@
+{
+  "schema": "bounded-manual-repair-evidence-v1",
+  "priorSource": "ef5d4db22381fd364700f8a3fe65c7b398326467",
+  "priorCode": "943cf179dbae6a85e250be0183feb7f708d5e058",
+  "source": "48e82005a5b1f8f3549a1d8a575dc1c85f101f9b",
+  "tree": "fe69a9fc3d2fce9e5b433a47eb9ca38cd56e7c12",
+  "webTree": "c6a24c81b521be38a1e0958a1d1c470832753997",
+  "baseMain": "8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14",
+  "scopeFiles": [
+    "web/src/lib/live-discovery-evidence-adapter.ts",
+    "web/src/lib/live-discovery-evidence-adapter.test.ts",
+    "web/src/lib/candidate-research.ts",
+    ".github/workflows/candidate-discovery-quality.yml",
+    "docs/operations/2026-10-12/live-discovery-evidence-adapter-handoff.md"
+  ],
+  "precedingSeparateReadOnlyAudit": "5691b523efe19ec9e9aa3f2981f4d097a351fe7f",
+  "independentReviewFinding": "original P0=0/P1=0/P2=2; successor independent review pending",
+  "repair1": "server rowsComplete:false; mention_window_incomplete always explicit without exact-count/cursor receipt; existing pagination unchanged, actual100cap/750request/total200 fixture returns100 reproduced",
+  "repair2": "row source_url exact retained document URL; collect all current comment-key instances before author counting, exact replay once, differing normalized author/text/hash conflicts invalidate whole key independent of order; repeated row UUID cannot hide contradiction",
+  "red": {
+    "command": {
+      "runtimeSubject": "ef5d4db22381fd364700f8a3fe65c7b398326467",
+      "testDelta": "new owned URL/comment-key/completeness regression assertions",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 0.5661306640249677,
+      "at": "2026-10-12T02:55:56.175800+00:00"
+    },
+    "counts": {
+      "tests": 24,
+      "pass": 18,
+      "fail": 6,
+      "skip": 0
+    },
+    "note": "new tests run before runtime修復; original58PASS/TS2737RED receipts untouched"
+  },
+  "green": {
+    "focused": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/ptt-mention-provenance.test.ts",
+        "web/src/lib/candidate-research-policy.test.ts"
+      ],
+      "startAt": "2026-10-12T03:01:21.651258+00:00",
+      "durationSeconds": 0.823698026011698,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 149725184,
+      "minimumFreeBytes": {
+        "/workspace": 9207988224,
+        "/tmp": 16960532480
+      }
+    },
+    "ordinary-workflow": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts",
+        "scripts/candidate-discovery-admission-ui.test.mjs"
+      ],
+      "startAt": "2026-10-12T03:01:22.475462+00:00",
+      "durationSeconds": 1.3731607649824582,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 141987840,
+      "minimumFreeBytes": {
+        "/workspace": 9207988224,
+        "/tmp": 16960499712
+      }
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startAt": "2026-10-12T03:01:23.848910+00:00",
+      "durationSeconds": 8.108085058047436,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 854253568,
+      "minimumFreeBytes": {
+        "/workspace": 9207988224,
+        "/tmp": 16960487424
+      }
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startAt": "2026-10-12T03:01:31.957272+00:00",
+      "durationSeconds": 20.07912348100217,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 1040617472,
+      "minimumFreeBytes": {
+        "/workspace": 9207988224,
+        "/tmp": 16960466944
+      }
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startAt": "2026-10-12T03:01:52.036711+00:00",
+      "durationSeconds": 33.21430228400277,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 1667559424,
+      "minimumFreeBytes": {
+        "/workspace": 8974848000,
+        "/tmp": 16960438272
+      }
+    }
+  },
+  "testSelections": {
+    "focused": {
+      "tests": 65,
+      "pass": 65,
+      "fail": 0,
+      "skipped": 0
+    },
+    "ordinary-workflow": {
+      "tests": 53,
+      "pass": 53,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "overlapNote": "65 semantic and53 ordinary selections overlap; not summed into118 distinct tests",
+  "build": {
+    "BUILD_ID": "lsCvyOJ9pk3g2kmLVQVEB",
+    "serverFiles": 1796,
+    "serverManifestSha256": "0853c8b32c8824288890883e16c1b22df1fef2babbea1f6ad80ee48c24492429",
+    "startedOnCleanCodeCommit": "48e82005a5b1f8f3549a1d8a575dc1c85f101f9b"
+  },
+  "versions": {
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "dependencies": "unchanged local hardlink placement/main exact lock; no install/browser download"
+  },
+  "resourceLimits": {
+    "manualMinutes": 30,
+    "rssGoalBytes": 8589934592,
+    "diskReserveBytes": 8589934592,
+    "peakSampledProcessGroupRssBytes": 1667559424,
+    "minimumWorkspaceFreeBytes": 8974848000,
+    "minimumTmpFreeBytes": 16960438272,
+    "sampleIntervalSeconds": 0.25
+  },
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 33,
+    "exit": 0
+  },
+  "cleanup": {
+    "activeOwnedHeavyServices": [],
+    "check": "after stages exited, ps non-zombie Node/npm/PostgreSQL/chrome inventory empty",
+    "deletedPaths": [
+      "/workspace/cloud-live-discovery-adapter-oct12/web/.next (previous stopped/rebuildable48 parent artifact only; detailed owned-next-cleanup.json preserved)"
+    ],
+    "otherWorkspacesUnchanged": true,
+    "uniqueEvidenceDeleted": false,
+    "finalDiskAvailableBytes": {
+      "/workspace": 8898011136,
+      "/tmp": 16960073728
+    },
+    "at": "2026-10-12T03:04:47.496037+00:00"
+  },
+  "rawManifest": [
+    {
+      "path": "build.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build.final.stdout",
+      "bytes": 5556,
+      "sha256": "7fe362a177a060e71538973ecd47950c6a0dfb80f98198cbda05950b12ba603d"
+    },
+    {
+      "path": "build.resources.jsonl",
+      "bytes": 13345,
+      "sha256": "44588c3a4c2f649c2751d6d32987f8714f88c8fbf4522371c92b6af7835f5a4d"
+    },
+    {
+      "path": "build.result.json",
+      "bytes": 337,
+      "sha256": "0e2eacfd5175b7cb89d014a0412b9fa59f9ea28643ddeae8a70eec9be0def2fc"
+    },
+    {
+      "path": "cleanup.json",
+      "bytes": 518,
+      "sha256": "f8d4c254721e15908dc8f6d6a162d798e469d46ac1662b6347121dc3bf9c1ea8"
+    },
+    {
+      "path": "compiled-server-manifest.json",
+      "bytes": 333261,
+      "sha256": "0853c8b32c8824288890883e16c1b22df1fef2babbea1f6ad80ee48c24492429"
+    },
+    {
+      "path": "focused.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "focused.final.stdout",
+      "bytes": 15524,
+      "sha256": "e0307fdb28825adbf5ad02b836b270aea4ccc014934a7bbe149f7e1be3bda278"
+    },
+    {
+      "path": "focused.resources.jsonl",
+      "bytes": 334,
+      "sha256": "4a33517eea588d81da4bb6feeb5614a6db3e8d74905e77ee03d7bc0139338946"
+    },
+    {
+      "path": "focused.result.json",
+      "bytes": 581,
+      "sha256": "d456f8453dd6a17d5fb345aa950609ba55a0ab5d3b954ea8f62bdcceaba0c02c"
+    },
+    {
+      "path": "lint.final.stderr",
+      "bytes": 164,
+      "sha256": "4c4f6b3ef6cdd3d6e6dac94de8384200bf8f9f1665a0bfbd48e69aad1119c2bf"
+    },
+    {
+      "path": "lint.final.stdout",
+      "bytes": 4582,
+      "sha256": "4f985c31b4b292aa0959f2c432c06a2a51b79cfc368d43bae7a8916247c86ef7"
+    },
+    {
+      "path": "lint.resources.jsonl",
+      "bytes": 8055,
+      "sha256": "bf805be5389624e32906cfcb0d0ba89a425ff355bfddb3ca7a4e89c96e4c4de8"
+    },
+    {
+      "path": "lint.result.json",
+      "bytes": 336,
+      "sha256": "64ca32219098f08ed41b49ee374dd1876488a7d84ca52307c8ce693e4dcdc082"
+    },
+    {
+      "path": "ordinary-workflow.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ordinary-workflow.final.stdout",
+      "bytes": 13264,
+      "sha256": "a90aeb0d8999cdaaadaf030278180b9dfaf6f2e1269aa4d825493f3de8edc85c"
+    },
+    {
+      "path": "ordinary-workflow.resources.jsonl",
+      "bytes": 549,
+      "sha256": "5b5606e212612aa27df53136c7761e9cce9372ade680d615c2a4b8247a4a9d2e"
+    },
+    {
+      "path": "ordinary-workflow.result.json",
+      "bytes": 536,
+      "sha256": "edd20599be1a5d8bb1076f8bec859686acc161984772f04428b15f230eec037e"
+    },
+    {
+      "path": "owned-next-cleanup.json",
+      "bytes": 687,
+      "sha256": "1325d6650d2d54957e74ad9f9163a029a0b35465eaeeda9aeccd3d9b435f30a1"
+    },
+    {
+      "path": "p2-green.json",
+      "bytes": 426,
+      "sha256": "82e845f4a64b855f6caacb91fcceb413b5a7659e0043f34f2356fc0aa6af1883"
+    },
+    {
+      "path": "p2-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "p2-green.stdout",
+      "bytes": 15318,
+      "sha256": "426f43c55ba8471ac2d29d51ad1326e5f6d835b23f777462f6f7263cf3b03c36"
+    },
+    {
+      "path": "p2-red.json",
+      "bytes": 453,
+      "sha256": "605ae3a3b3b7e77770780f1510c18118471a4032d74017b6c339d9e0830240ee"
+    },
+    {
+      "path": "p2-red.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "p2-red.stdout",
+      "bytes": 10522,
+      "sha256": "4b871f48ea07c216d7cc46dd7572d37c8b5358931faadbeafc6b3f90daaabfaa"
+    },
+    {
+      "path": "source-manifest.json",
+      "bytes": 2228,
+      "sha256": "f6640789645863a7390ee0ab7d569863cc7901c4d117d71be1cb2c4896874791"
+    },
+    {
+      "path": "stages.py",
+      "bytes": 2719,
+      "sha256": "cce503038ee10548b7901d72477d3bf5685d4daedccd8e44b9e3ffa1916b0177"
+    },
+    {
+      "path": "test-inventory.json",
+      "bytes": 10291,
+      "sha256": "62b56115a31974a4aad37f436d29e3d8164176ccef9aa9e54905046747d470bc"
+    },
+    {
+      "path": "typecheck.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "typecheck.final.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "typecheck.resources.jsonl",
+      "bytes": 3238,
+      "sha256": "274782f63d82cd2d1f8ec099e552a1f4b742f4deff787b24827580bb9c6df3af"
+    },
+    {
+      "path": "typecheck.result.json",
+      "bytes": 340,
+      "sha256": "a48d89f6efdc16e37ff640786ab4c924677fbb1c4b203080d2f65c8b54b3801e"
+    },
+    {
+      "path": "workflow-delta.json",
+      "bytes": 347,
+      "sha256": "02faf62a901b84bfd7ac0590064ed38c3c7d2f5bff7427069d1942b43b2e00b6"
+    }
+  ],
+  "unchanged": [
+    "policy thresholds",
+    "identity/root unresolved/no invention",
+    "strategy/scoring/DB/API/scheduler",
+    "VPS/production/browser/protected tools/main",
+    "AUO demo flags",
+    "originalRED/58PASS/TS2737 history"
+  ],
+  "remainingGaps": [
+    "no total mention-window completeness proof",
+    "creator/root/withdrawal authority binding and PTT parent body pending",
+    "still unsupported/live admission not complete; client not wired to qualify from audit"
+  ],
+  "createdAt": "2026-10-12T03:04:47.504047+00:00"
+}

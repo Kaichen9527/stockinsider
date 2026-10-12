@@ -1,0 +1,290 @@
+TAP version 13
+# (node:403686) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:403686) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/candidate-discovery-admission.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-live-discovery-adapter-oct12/web/package.json.
+# Subtest: actual main card displays technical dated close and reference method, hides old price and upside
+ok 1 - actual main card displays technical dated close and reference method, hides old price and upside
+  ---
+  duration_ms: 8.637146
+  ...
+# Subtest: actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+ok 2 - actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+  ---
+  duration_ms: 1.202645
+  ...
+# Subtest: missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+ok 3 - missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+  ---
+  duration_ms: 1.017616
+  ...
+# Subtest: actual main defaults to existing clues while research admission remains explicitly pending
+ok 4 - actual main defaults to existing clues while research admission remains explicitly pending
+  ---
+  duration_ms: 9.649845
+  ...
+# Subtest: existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+ok 5 - existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+  ---
+  duration_ms: 1.190497
+  ...
+# Subtest: actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+ok 6 - actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+  ---
+  duration_ms: 23.444146
+  ...
+# Subtest: actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+ok 7 - actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+  ---
+  duration_ms: 3.345269
+  ...
+# Subtest: saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+ok 8 - saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+  ---
+  duration_ms: 7.404045
+  ...
+# (node:403697) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:403697) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/candidate-discovery-admission.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-live-discovery-adapter-oct12/web/package.json.
+# Subtest: only a pair with different canonical publishers and roots enters general research
+ok 9 - only a pair with different canonical publishers and roots enters general research
+  ---
+  duration_ms: 1.78919
+  ...
+# Subtest: same author across platforms
+ok 10 - same author across platforms
+  ---
+  duration_ms: 0.143987
+  ...
+# Subtest: syndicated original root
+ok 11 - syndicated original root
+  ---
+  duration_ms: 0.079049
+  ...
+# Subtest: same-platform original authors with independent roots qualify; platform diversity is display-only
+ok 12 - same-platform original authors with independent roots qualify; platform diversity is display-only
+  ---
+  duration_ms: 0.21852
+  ...
+# Subtest: retracted root cannot be laundered by a current repost
+ok 13 - retracted root cannot be laundered by a current repost
+  ---
+  duration_ms: 0.264699
+  ...
+# Subtest: industry-only and unresolved aliases cannot count as direct company confirmation
+ok 14 - industry-only and unresolved aliases cannot count as direct company confirmation
+  ---
+  duration_ms: 0.133081
+  ...
+# Subtest: bounded legacy links, counters and missing PTT detail are unsupported
+ok 15 - bounded legacy links, counters and missing PTT detail are unsupported
+  ---
+  duration_ms: 0.178059
+  ...
+# Subtest: PTT 19/20 actual different stock-mention authors boundary
+ok 16 - PTT 19/20 actual different stock-mention authors boundary
+  ---
+  duration_ms: 0.463359
+  ...
+# Subtest: PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+ok 17 - PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+  ---
+  duration_ms: 0.369979
+  ...
+# Subtest: PTT requires stock in body, current article, and one post, not pooled reply totals
+ok 18 - PTT requires stock in body, current article, and one post, not pooled reply totals
+  ---
+  duration_ms: 0.408457
+  ...
+# Subtest: reasoned new official event can enter low-volume lane, never multi-source confirmation
+ok 19 - reasoned new official event can enter low-volume lane, never multi-source confirmation
+  ---
+  duration_ms: 0.183768
+  ...
+# Subtest: high-impact new lead requires explained known direct source; ordinary news is not official
+ok 20 - high-impact new lead requires explained known direct source; ordinary news is not official
+  ---
+  duration_ms: 0.098899
+  ...
+# Subtest: existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+ok 21 - existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+  ---
+  duration_ms: 0.562519
+  ...
+# Subtest: bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+ok 22 - bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+  ---
+  duration_ms: 0.501807
+  ...
+# Subtest: technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+ok 23 - technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+  ---
+  duration_ms: 0.598603
+  ...
+# Subtest: PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+ok 24 - PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+  ---
+  duration_ms: 0.301455
+  ...
+# Subtest: missing, future, malformed dates never manufacture a displayed current close
+ok 25 - missing, future, malformed dates never manufacture a displayed current close
+  ---
+  duration_ms: 0.109045
+  ...
+# Subtest: clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+ok 26 - clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+  ---
+  duration_ms: 0.90067
+  ...
+# Subtest: coverage states distinguish retired/blocked/duplicate without inventing source enablement
+ok 27 - coverage states distinguish retired/blocked/duplicate without inventing source enablement
+  ---
+  duration_ms: 0.326143
+  ...
+# Subtest: coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+ok 28 - coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+  ---
+  duration_ms: 0.294275
+  ...
+# (node:403708) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:403708) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-live-discovery-adapter-oct12/web/package.json.
+# Subtest: real retained provenance maps scoped row identity, never URL/hash/publisher authority
+ok 29 - real retained provenance maps scoped row identity, never URL/hash/publisher authority
+  ---
+  duration_ms: 2.235414
+  ...
+# Subtest: 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+ok 30 - 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+  ---
+  duration_ms: 3.543479
+  ...
+# Subtest: authors are counted once within one conversation, never pooled across posts
+ok 31 - authors are counted once within one conversation, never pooled across posts
+  ---
+  duration_ms: 1.725243
+  ...
+# Subtest: non-explicit reply 👍👍👍 does not count
+ok 32 - non-explicit reply 👍👍👍 does not count
+  ---
+  duration_ms: 0.196857
+  ...
+# Subtest: non-explicit reply 推 does not count
+ok 33 - non-explicit reply 推 does not count
+  ---
+  duration_ms: 0.236677
+  ...
+# Subtest: non-explicit reply 台積電 does not count
+ok 34 - non-explicit reply 台積電 does not count
+  ---
+  duration_ms: 0.150367
+  ...
+# Subtest: non-explicit reply 12409 does not count
+ok 35 - non-explicit reply 12409 does not count
+  ---
+  duration_ms: 0.294494
+  ...
+# Subtest: non-explicit reply a2409 does not count
+ok 36 - non-explicit reply a2409 does not count
+  ---
+  duration_ms: 0.174172
+  ...
+# Subtest: non-explicit reply 2409x does not count
+ok 37 - non-explicit reply 2409x does not count
+  ---
+  duration_ms: 0.361675
+  ...
+# Subtest: hash mismatch, missing author/parent/index and read failure do not count
+ok 38 - hash mismatch, missing author/parent/index and read failure do not count
+  ---
+  duration_ms: 0.803493
+  ...
+# Subtest: withheld/retracted mention never becomes active evidence; missing root heads block all admission
+ok 39 - withheld/retracted mention never becomes active evidence; missing root heads block all admission
+  ---
+  duration_ms: 0.263247
+  ...
+# Subtest: cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+ok 40 - cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+  ---
+  duration_ms: 0.166912
+  ...
+# Subtest: backdated availability cannot admit a newly received row into an older observation
+ok 41 - backdated availability cannot admit a newly received row into an older observation
+  ---
+  duration_ms: 0.123537
+  ...
+# Subtest: same instant offset notation, exact date validation and invalid clocks
+ok 42 - same instant offset notation, exact date validation and invalid clocks
+  ---
+  duration_ms: 0.216267
+  ...
+# Subtest: stable accounting retains duplicates, foreign stock and incomplete window as gaps
+ok 43 - stable accounting retains duplicates, foreign stock and incomplete window as gaps
+  ---
+  duration_ms: 0.16535
+  ...
+# Subtest: bound exhaustion reports unexamined rows, never truncation-success
+ok 44 - bound exhaustion reports unexamined rows, never truncation-success
+  ---
+  duration_ms: 0.355807
+  ...
+# Subtest: untrusted getters, prototype and object index cannot execute or acquire authority
+ok 45 - untrusted getters, prototype and object index cannot execute or acquire authority
+  ---
+  duration_ms: 0.305551
+  ...
+# Subtest: server real initializer audits complete pre-link rows rather than eight display sources
+ok 46 - server real initializer audits complete pre-link rows rather than eight display sources
+  ---
+  duration_ms: 265.049095
+  ...
+# Subtest: missing or mismatched row URL cannot borrow retained document provenance
+ok 47 - missing or mismatched row URL cannot borrow retained document provenance
+  ---
+  duration_ms: 0.393244
+  ...
+# Subtest: two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders
+ok 48 - two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders
+  ---
+  duration_ms: 0.296628
+  ...
+# Subtest: conflicting text and correct hashes invalidate the whole key in both orders
+ok 49 - conflicting text and correct hashes invalidate the whole key in both orders
+  ---
+  duration_ms: 1.085889
+  ...
+# Subtest: exact comment replay across UUIDs counts once, same author across keys still once
+ok 50 - exact comment replay across UUIDs counts once, same author across keys still once
+  ---
+  duration_ms: 0.263508
+  ...
+# Subtest: twenty authors containing one conflicting comment cannot be counted as twenty
+ok 51 - twenty authors containing one conflicting comment cannot be counted as twenty
+  ---
+  duration_ms: 2.218529
+  ...
+# Subtest: same-row UUID conflict cannot hide behind row dedup
+ok 52 - same-row UUID conflict cannot hide behind row dedup
+  ---
+  duration_ms: 0.275886
+  ...
+# Subtest: actual page reader capped at100/request750 cannot prove total200 exhaustion
+ok 53 - actual page reader capped at100/request750 cannot prove total200 exhaustion
+  ---
+  duration_ms: 2.202235
+  ...
+1..53
+# tests 53
+# suites 0
+# pass 53
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1093.727167
