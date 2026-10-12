@@ -1,0 +1,159 @@
+diff --git a/.github/workflows/candidate-discovery-quality.yml b/.github/workflows/candidate-discovery-quality.yml
+index 468b60c8..aed644d7 100644
+--- a/.github/workflows/candidate-discovery-quality.yml
++++ b/.github/workflows/candidate-discovery-quality.yml
+@@ -37,4 +37,5 @@ jobs:
+           node --experimental-strip-types --test --test-concurrency=1
+           web/src/lib/candidate-discovery-admission.test.ts
+           web/src/lib/live-discovery-evidence-adapter.test.ts
++          web/src/lib/discovery-revision-publisher-reader.test.ts
+           scripts/candidate-discovery-admission-ui.test.mjs
+diff --git a/docs/operations/2026-10-12/discovery-revision-publisher-reader-handoff.md b/docs/operations/2026-10-12/discovery-revision-publisher-reader-handoff.md
+index fb7d055f..9a82eaa0 100644
+--- a/docs/operations/2026-10-12/discovery-revision-publisher-reader-handoff.md
++++ b/docs/operations/2026-10-12/discovery-revision-publisher-reader-handoff.md
+@@ -1,8 +1,9 @@
+ # Frozen revision / publisher read projection — A slice
+ 
+ Base: `8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14`. Ownership is the two new
+-`discovery-revision-publisher-reader` library/test files. No existing adapter,
+-server projection, workflow, policy, writer, SQL or API changed.
++`discovery-revision-publisher-reader` library/test files. No existing adapter, server projection, policy, writer, SQL or API changed.
++The reviewed main099 ordinary workflow now gains one test-file argument, as
++explicitly authorized for the P2 successor; its privileges/configuration are unchanged.
+ 
+ `readDiscoveryRevisionPublishers` is a pure, bounded projection of an injected
+ frozen read packet. Its snake_case projected columns come from the existing
+@@ -53,8 +54,10 @@ resolved by URL/hash or UUID equality.
+ ## Time, bounds and accounting
+ 
+ Cutoff comparisons retain all six PostgreSQL fractional digits and explicit
+-UTC offsets. Source publication/collection/recorded and authority approval/
+-recorded/valid-from clocks are checked before known identity/head selection.
++UTC offsets. Source collection/recorded and authority approval/recorded/valid-from clocks
++are checked before known identity/head selection. A known family head is selected
++first, then its publication clock is validated; future/malformed publication or
++publication after collection blocks that head/family instead of reviving old data.
+ Future rows cannot poison known UUIDs. Source clocks remain unchanged.
+ Verification/manifest sealing clocks may naturally follow source cutoff; these
+ are bounded by the separate read `snapshot_at`, not falsely backdated.
+@@ -82,3 +85,21 @@ rows and DB-native clocks; the legacy raw mapping and independently reviewed
+ origin/creator decisions still need separate existing-contract work. This
+ slice is not connected to production candidate cards and does not change
+ PR374's incomplete mention-window audit or admission policy.
++
++## Independent review P2 and successor (2026-10-12)
++
++Original code64b / evidencec032 and its 52 PASS remain immutable historical
++maker evidence, not closure. Root/author_input_review_oct08 independently found
++one P2: filtering publication before head selection revived older complete rows.
++The original two future-publication loop cases incorrectly expected that behavior.
++Those expectations are replaced with known-head invalid-publication cases;
++collection/recorded truly-future cases still establish non-interference. Malformed
++publication on a known head is now an explicit family disposition rather than
++unknown knowledge. Same-UUID known conflicts remain whole-packet fail closed.
++New cases run in both orders with full microseconds, null publication, equality,
++publication-after-collection and malformed clocks. No publication time is retimed.
++
++Approved main099 was merged only into this feature, preserving PR374's finalized
++adapter/server/workflow. The ordinary diagnostic command gains only one reader
++file argument; action pins, permissions, job, install, timeout and protected
++commands are unchanged. There is no production reader integration or new authority.
+diff --git a/web/src/lib/discovery-revision-publisher-reader.test.ts b/web/src/lib/discovery-revision-publisher-reader.test.ts
+index d9ad718f..f7995623 100644
+--- a/web/src/lib/discovery-revision-publisher-reader.test.ts
++++ b/web/src/lib/discovery-revision-publisher-reader.test.ts
+@@ -61,7 +61,7 @@ test('precise offset microseconds and invalid dates',()=>{
+   assert.equal(discoveryClock('2026-10-08T12:00:00.123457Z')-discoveryClock(cut),BigInt(1));
+   for(const clock of ['2026-02-30T00:00:00Z','2026-10-08T24:00:00Z','2026-10-08T12:00:00.1234567Z','2026-10-08T12:00:00','2026-10-08T12:00:00+24:00']) assert.throws(()=>discoveryClock(clock));
+ });
+-for(const clock of ['published_at','collected_at','recorded_at'] as const) test(`future revision ${clock} 1us cannot replace known head`,()=>{
++for(const clock of ['collected_at','recorded_at'] as const) test(`future revision ${clock} 1us cannot replace known head`,()=>{
+   const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),[clock]:'2026-10-08T12:00:00.123457Z'});
+   const a=invariant(x);assert.equal(a.bindings.length,1);assert.ok(a.dispositions.some(d=>d.disposition==='after_cutoff'));
+ });
+@@ -123,7 +123,7 @@ test('equal cutoff is included and valid_to equal cutoff is expired',()=>{
+   const x=fixture();x.tables.revisions[0].recorded_at=cut;assert.equal(read(x).bindings.length,1);
+   x.tables.publishers[0].valid_to=cut;manifest(x);assert.equal(read(x).bindings.length,0);
+ });
+-for(const clock of ['published_at','collected_at','recorded_at'] as const) test(`invalid ${clock} is explicitly rejected, not a chosen head`,()=>{
++for(const clock of ['collected_at','recorded_at'] as const) test(`invalid ${clock} is explicitly rejected, not a chosen head`,()=>{
+   const x=fixture();x.tables.revisions[0][clock]='not-a-clock';assert.equal(invariant(x).reason,'invalid_clock');
+ });
+ test('partial page with lower local count cannot match previously counted packet',()=>{
+@@ -150,7 +150,7 @@ test('public_research institution required by original authority schema',()=>{
+ test('unbounded strings and depth fail before projection, no truncation success',()=>{
+   const x=fixture();x.tables.verifications[0].canonical_document_id='x'.repeat(4194305);assert.equal(read(x).reason,'input_bound');
+ });
+-for(const clock of ['published_at','collected_at','recorded_at'] as const) test(`future same-UUID ${clock} cannot poison known family/identity`,()=>{
++for(const clock of ['collected_at','recorded_at'] as const) test(`future same-UUID ${clock} cannot poison known family/identity`,()=>{
+   const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_family_key:'c'.repeat(64),[clock]:'2026-10-08T12:00:00.123457Z'});
+   assert.equal(invariant(x).bindings.length,1);
+ });
+@@ -158,3 +158,37 @@ test('manifest full retained publisher head population, not merely one matching
+   const x=fixture();x.tables.publishers.push({...x.tables.publishers[0],publisher_identity_id:id(50),authority_id:id(51)});
+   assert.equal(invariant(x).reason,'publisher_manifest_binding_mismatch');
+ });
++
++// Independent review counterexample: known collection/recording selects head FIRST.
++for(const [label,published] of [['cutoff+1us','2026-10-08T12:00:00.123457Z'],['before-cutoff-after-collection','2026-10-08T11:00:00.123457Z'],['invalid-clock','bad-clock']] as const) {
++  test(`known latest head ${label} blocks older complete family, both orders`,()=>{
++    const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),recorded_at:cut,published_at:published});
++    const a=invariant(x);assert.equal(a.bindings.length,0);
++    assert.ok(a.dispositions.some(d=>d.disposition==='latest_revision_publication_invalid'));
++    assert.ok(a.dispositions.some(d=>d.disposition==='superseded_revision'));
++    assert.ok(!a.dispositions.some(d=>d.table==='revisions'&&d.disposition==='after_cutoff'));
++  });
++  test(`known same-UUID conflicting ${label} cannot revive old revision, both orders`,()=>{
++    const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],recorded_at:cut,published_at:published});
++    const a=invariant(x);assert.equal(a.bindings.length,0);assert.equal(a.reason,'conflicting_row_identity');
++  });
++}
++test('known latest head with published null is allowed when verification also preserves null',()=>{
++  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),recorded_at:cut,published_at:null});
++  x.tables.verifications[0].revision_id=id(20);x.tables.verifications[0].published_at=null;
++  const a=invariant(x);assert.equal(a.bindings.length,1);assert.equal(a.bindings[0].revision_id,id(20));assert.equal(a.bindings[0].published_at,null);
++});
++test('known legal head at publication=collection remains usable with all microseconds',()=>{
++  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),recorded_at:cut});
++  x.tables.verifications[0].revision_id=id(20);assert.equal(invariant(x).bindings[0].revision_id,id(20));
++});
++
++for(const clock of ['collected_at','recorded_at'] as const) test(`truly future ${clock} with invalid publication remains unknown without UUID poisoning`,()=>{
++  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_family_key:'c'.repeat(64),published_at:'invalid-publication',
++    [clock]:'2026-10-08T12:00:00.123457Z'});
++  const a=invariant(x);assert.equal(a.bindings.length,1);assert.ok(a.dispositions.some(d=>d.disposition==='after_cutoff'));
++});
++test('single known head with malformed publication is blocked with explicit family disposition',()=>{
++  const x=fixture();x.tables.revisions[0].published_at='invalid-publication';
++  const a=invariant(x);assert.equal(a.bindings.length,0);assert.ok(a.dispositions.some(d=>d.disposition==='latest_revision_publication_invalid'));
++});
+diff --git a/web/src/lib/discovery-revision-publisher-reader.ts b/web/src/lib/discovery-revision-publisher-reader.ts
+index 6e490cb7..012f7036 100644
+--- a/web/src/lib/discovery-revision-publisher-reader.ts
++++ b/web/src/lib/discovery-revision-publisher-reader.ts
+@@ -190,8 +190,8 @@ export function readDiscoveryRevisionPublishers(input: ReaderInput) {
+     // Validate clocks before head/dedup identity selection. Future rows do not pollute known IDs.
+     const knownSources = t.sourceAuthorities.filter(r => authorityKnown(r, cutoff));
+     const knownPublishers = t.publishers.filter(r => authorityKnown(r, cutoff));
+-    const knownRevisions = t.revisions.filter(r => before(r.recorded_at, cutoff) && before(r.collected_at, cutoff) &&
+-      (r.published_at === null || before(r.published_at, cutoff)));
++    // Knowledge is collection/recording. A known invalid publication must remain a head candidate.
++    const knownRevisions = t.revisions.filter(r => before(r.recorded_at, cutoff) && before(r.collected_at, cutoff));
+     for (const [table, rows] of [['revisions', knownRevisions], ['sourceAuthorities', knownSources],
+       ['publishers', knownPublishers], ['verifications', t.verifications]] as const) {
+       const identities = new Map<string, string>();
+@@ -224,6 +224,13 @@ export function readDiscoveryRevisionPublishers(input: ReaderInput) {
+       let disposition = 'selected_no_publisher_binding';
+       const mark = () => { for (const d of dispositions.filter(d => d.table === 'revisions' && d.input_hash === sha256Canonical(r))) d.disposition = disposition; };
+       if (r.acquisition_status !== 'complete') { disposition = 'latest_revision_not_complete'; mark(); continue; }
++      let publicationInvalid = false;
++      try {
++        publicationInvalid = r.published_at !== null && (discoveryClock(r.published_at) > cutoff ||
++          discoveryClock(r.published_at) > discoveryClock(r.collected_at));
++      } catch { publicationInvalid = true; }
++      if (publicationInvalid) { disposition = 'latest_revision_publication_invalid'; mark(); continue; }
++
+       const sa = sourceHeads.get(r.approved_source_identity_id);
+       if (!sa || !active(sa, cutoff) || sa.authority_id !== r.source_identity_authority_id || sa.source_key !== r.source_key) { disposition = 'source_authority_not_effective'; mark(); continue; }
+       const registry = t.registry.filter(x => x.source_key === r.source_key && x.revision_family_key === r.revision_family_key);
