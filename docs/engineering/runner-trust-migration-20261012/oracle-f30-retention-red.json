@@ -1,0 +1,10 @@
+{
+  "subject": "f30beda55adc7c11ad42b1f2490e5742651173c9",
+  "syntheticNoCredentials": true,
+  "modelInvoked": false,
+  "actualMakeStarts": 2,
+  "expectedMakeStarts": 1,
+  "retainedDirectories": 0,
+  "expectedRetainedDirectories": 1,
+  "red": true
+}

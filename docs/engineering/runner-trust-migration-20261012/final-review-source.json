@@ -1,0 +1,9 @@
+{
+  "schema": "initial-trust-migration-final-review-input-v1",
+  "activeGraphSha256": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+  "modelListingSha256": "39feb8c4f66a697b21b499da3d1535b1112b31d53c095cc767c8090ea66c43f8",
+  "hostPin": "model-runner-host-pins-v3.25",
+  "independentReview": "pending",
+  "protectedPass": false,
+  "modelInvoked": false
+}

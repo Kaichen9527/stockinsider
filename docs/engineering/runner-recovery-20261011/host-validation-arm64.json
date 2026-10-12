@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/usr/bin/arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "-e",
+    "const {loadRecoveryCandidatePins}=require('./scripts/model-runner-v3/recoveryCandidate');const {verifyCurrentNode}=require('./scripts/model-runner-v3/hostPreflight');console.log(JSON.stringify({verified:verifyCurrentNode(loadRecoveryCandidatePins()),candidateOnly:true,modelInvoked:false,credentialsRead:false}));"
+  ],
+  "exitCode": 0,
+  "stdout": "{\"verified\":true,\"candidateOnly\":true,\"modelInvoked\":false,\"credentialsRead\":false}\n",
+  "stderr": "",
+  "candidateOnly": true,
+  "noRealCredentials": true,
+  "noProvider": true,
+  "gatekeeperNote": "This noncredential hostPreflight omits spctl by original design; separate public observation has actual full spctl exit0.",
+  "note": "Python parent default architecture was not pinned; first probe correctly rejected at platform/architecture guard. This explicit arm64 invocation retains original architecture constraint."
+}

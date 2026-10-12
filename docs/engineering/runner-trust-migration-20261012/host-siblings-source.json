@@ -1,0 +1,16 @@
+{
+  "schema": "initial-trust-migration-host-siblings-review-input-v1",
+  "predecessor": "f6e45b33a863cb96ad8a71299adac48b2b04a1bf",
+  "activeGraphSha256": "c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a",
+  "modelListingSha256": "080db93a9b98e75b4b2bcb14e4097e25cb745f449d2c6c3c0b022dc204afd027",
+  "hostPin": "model-runner-host-pins-v3.25",
+  "independentReview": "pending",
+  "protectedPass": false,
+  "modelInvoked": false,
+  "focusedTests": {
+    "passed": 137,
+    "failed": 0,
+    "skipped": 0,
+    "sha256": "703ecbb20232a004eeca409989fbcf8178e3c9d90281b433c019559c627f2d41"
+  }
+}

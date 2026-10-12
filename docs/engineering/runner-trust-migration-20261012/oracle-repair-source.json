@@ -1,0 +1,9 @@
+{
+  "schema": "initial-trust-migration-oracle-repair-input-v1",
+  "activeGraphSha256": "053989fac70f18855d64557648117fbcda87148469d0d9e9b05bb9bbe6a8e85d",
+  "modelListingSha256": "dbc19f885607aaada0fb4f058ae5878c6c62fd55b6906cf7c217062671f5bb28",
+  "hostPin": "model-runner-host-pins-v3.25",
+  "independentReview": "pending",
+  "protectedPass": false,
+  "modelInvoked": false
+}

@@ -1,11 +1,13 @@
 'use strict';
 
+const { RunnerError, diagnostic } = require('./artifacts');
 const { runRealModelAttempt } = require('./real-model-attempt');
 
 runRealModelAttempt().then(
-  () => process.stdout.write('{"protocol":"model-runner-real-attempt-v1","status":"pass"}\n'),
+  (result) => process.stdout.write(`${JSON.stringify(result)}\n`),
   (error) => {
-    process.stderr.write(`${error instanceof Error ? error.message : 'real model attempt failed'}\n`);
-    process.exitCode = 1;
+    const normalized = error instanceof RunnerError ? error : new RunnerError(12);
+    process.stderr.write(diagnostic(normalized));
+    process.exitCode = normalized.exit;
   },
 );

@@ -1,0 +1,178 @@
+{
+  "schema": "runner-recovery-public-host-observation-v1",
+  "observedAt": "2026-10-11T12:04:36.846099+00:00",
+  "candidateOnly": true,
+  "approvalAuthority": null,
+  "modelInvoked": false,
+  "credentialsRead": false,
+  "executables": [
+    {
+      "path": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "realpath": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "stat": {
+        "device": "16777231",
+        "inode": "211775622",
+        "size": "246046384",
+        "uid": 501,
+        "gid": 20,
+        "mode": "100755"
+      },
+      "sha256": "0d5ac7aae20c4eda6242428d5e218c55ba96d8763fda2a271088ff37104b9d28",
+      "name": "codex",
+      "versionProbe": {
+        "argv": [
+          "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+          "--version"
+        ],
+        "exitCode": 0,
+        "stdout": "codex-cli 0.162.0-alpha.17.2\n",
+        "stderr": ""
+      }
+    },
+    {
+      "path": "/usr/bin/git",
+      "realpath": "/usr/bin/git",
+      "stat": {
+        "device": "16777231",
+        "inode": "1152921500312571562",
+        "size": "118640",
+        "uid": 0,
+        "gid": 0,
+        "mode": "100755"
+      },
+      "sha256": "b8763cf250e607a778bb4603cecb5b90338814d0a3dfcba0d57b1de242f610e9",
+      "name": "git",
+      "versionProbe": {
+        "argv": [
+          "/usr/bin/git",
+          "--version"
+        ],
+        "exitCode": 0,
+        "stdout": "git version 2.50.1 (Apple Git-155)\n",
+        "stderr": ""
+      }
+    },
+    {
+      "path": "/usr/local/bin/node",
+      "realpath": "/usr/local/bin/node",
+      "stat": {
+        "device": "16777231",
+        "inode": "1802834",
+        "size": "220243216",
+        "uid": 0,
+        "gid": 0,
+        "mode": "100755"
+      },
+      "sha256": "c583851fc85e4618b2374cda13399d59d373ad7cebfc4b55160820b88dcce67b",
+      "name": "node",
+      "versionProbe": {
+        "argv": [
+          "/usr/local/bin/node",
+          "--version"
+        ],
+        "exitCode": 0,
+        "stdout": "v22.14.0\n",
+        "stderr": ""
+      }
+    }
+  ],
+  "codexBundleStat": {
+    "device": "16777231",
+    "inode": "211775579",
+    "size": "96",
+    "uid": 501,
+    "gid": 80,
+    "mode": "040755"
+  },
+  "signatureProbes": [
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Executable=/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex\nIdentifier=codex\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20500 size=1907569 flags=0x10000(runtime) hashes=59601+7 location=embedded\nVersionPlatform=1\nVersionMin=720896\nVersionSDK=984320\nHash type=sha256 size=32\nCandidateCDHash sha256=9968cf1ea4020a7730965d776bd02cdc2ce4544d\nCandidateCDHashFull sha256=9968cf1ea4020a7730965d776bd02cdc2ce4544dd28cc7c5bda7e7fdc2fb90be\nHash choices=sha256\nCMSDigest=9968cf1ea4020a7730965d776bd02cdc2ce4544dd28cc7c5bda7e7fdc2fb90be\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=233472000\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=9968cf1ea4020a7730965d776bd02cdc2ce4544d\nSignature size=9047\nAuthority=Developer ID Application: OpenAI OpCo, LLC (2DC432GLL2)\nAuthority=Developer ID Certification Authority\nAuthority=Apple Root CA\nTimestamp=Oct 8, 2026 at 3:10:22\u202fPM\nNotarization Ticket=stapled\nInfo.plist entries=6\nTeamIdentifier=2DC432GLL2\nRuntime Version=15.5.0\nSealed Resources version=2 rules=13 files=1\nInternal requirements count=1 size=168\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+      ],
+      "exitCode": 0,
+      "stdout": "designated => identifier codex and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"2DC432GLL2\"\n",
+      "stderr": "Executable=/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Applications/ChatGPT.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Executable=/Applications/ChatGPT.app/Contents/MacOS/ChatGPT\nIdentifier=com.openai.codex\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20500 size=764 flags=0x10000(runtime) hashes=13+7 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1703936\nHash type=sha256 size=32\nCandidateCDHash sha256=73332b93baf1f0bc5ed95ca079cfa6aeceecb677\nCandidateCDHashFull sha256=73332b93baf1f0bc5ed95ca079cfa6aeceecb677c03a3ff15464aa7407f1dc9b\nHash choices=sha256\nCMSDigest=73332b93baf1f0bc5ed95ca079cfa6aeceecb677c03a3ff15464aa7407f1dc9b\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=16384\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=73332b93baf1f0bc5ed95ca079cfa6aeceecb677\nSignature size=9047\nAuthority=Developer ID Application: OpenAI OpCo, LLC (2DC432GLL2)\nAuthority=Developer ID Certification Authority\nAuthority=Apple Root CA\nTimestamp=Oct 10, 2026 at 1:32:05\u202fPM\nNotarization Ticket=stapled\nInfo.plist entries=64\nTeamIdentifier=2DC432GLL2\nRuntime Version=26.0.0\nSealed Resources version=2 rules=13 files=3616\nInternal requirements count=1 size=176\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Applications/ChatGPT.app"
+      ],
+      "exitCode": 0,
+      "stdout": "designated => identifier \"com.openai.codex\" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"2DC432GLL2\"\n",
+      "stderr": "Executable=/Applications/ChatGPT.app/Contents/MacOS/ChatGPT\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Applications/ChatGPT.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/usr/sbin/spctl",
+        "-a",
+        "-vv",
+        "/Applications/ChatGPT.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "/Applications/ChatGPT.app: accepted\nsource=Notarized Developer ID\norigin=Developer ID Application: OpenAI OpCo, LLC (2DC432GLL2)\n"
+    }
+  ],
+  "sandboxHelp": {
+    "argv": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "sandbox",
+      "--help"
+    ],
+    "exitCode": 0,
+    "stdout": "Run commands within a Codex-provided sandbox\n\nUsage: codex sandbox [OPTIONS] [COMMAND]... [COMMAND]\n\nCommands:\n  uninstall  Remove the legacy Windows sandbox's machine-wide accounts and network rules\n  help       Print this message or the help of the given subcommand(s)\n\nArguments:\n  [COMMAND]...\n          Full command args to run under seatbelt\n\nOptions:\n  -c, --config <key=value>\n          Override a configuration value that would otherwise be loaded from `~/.codex/config.toml`.\n          Use a dotted path (`foo.bar.baz`) to override nested values. The `value` portion is parsed\n          as TOML. If it fails to parse as TOML, the raw string is used as a literal.\n          \n          Examples: - `-c model=\"o3\"` - `-c 'sandbox_permissions=[\"disk-full-read-access\"]'` - `-c\n          shell_environment_policy.inherit=all`\n\n      --sandbox-state-json <JSON>\n          JSON value from `codex/sandbox-state-meta` to apply directly\n\n      --enable <FEATURE>\n          Enable a feature (repeatable). Equivalent to `-c features.<name>=true`\n\n      --sandbox-state-readable-root <SANDBOX_STATE_READABLE_ROOT>\n          Add a readable root to the supplied sandbox state. Repeat for multiple roots\n\n      --disable <FEATURE>\n          Disable a feature (repeatable). Equivalent to `-c features.<name>=false`\n\n      --sandbox-state-disable-network\n          Disable direct network access in the supplied sandbox state\n\n  -P, --permission-profile <NAME>\n          Named permissions profile to apply from the active configuration stack\n\n  -p, --profile <CONFIG_PROFILE>\n          Layer $CODEX_HOME/<name>.config.toml on top of the base user config\n\n  -C, --cd <DIR>\n          Working directory used for profile resolution and command execution\n\n      --include-managed-config\n          Include managed requirements while resolving an explicit permissions profile\n\n      --allow-unix-socket <ALLOW_UNIX_SOCKETS>\n          Allow the sandboxed command to bind/connect AF_UNIX sockets rooted at this path. Relative\n          paths are resolved against the current directory. Repeat to allow multiple paths\n\n      --log-denials\n          While the command runs, capture macOS sandbox denials via `log stream` and print them\n          after exit\n\n  -h, --help\n          Print help (see a summary with '-h')\n",
+    "stderr": ""
+  }
+}

@@ -1,0 +1,135 @@
+TAP version 13
+# Subtest: actual oracle wrapper retains ownership-lost resources and refuses a restarted process before any role
+ok 1 - actual oracle wrapper retains ownership-lost resources and refuses a restarted process before any role
+  ---
+  duration_ms: 79.7975
+  ...
+# Subtest: success and proven-safe failure release only own resources; concurrent and abandoned fences refuse
+ok 2 - success and proven-safe failure release only own resources; concurrent and abandoned fences refuse
+  ---
+  duration_ms: 43.615958
+  ...
+# Subtest: oracle refusal root is bound to OS account and has no HOME or environment override
+ok 3 - oracle refusal root is bound to OS account and has no HOME or environment override
+  ---
+  duration_ms: 0.846791
+  ...
+# Subtest: oracle cleanup failure retains the durable refusal fence and owned bytes
+not ok 4 - oracle cleanup failure retains the durable refusal fence and owned bytes
+  ---
+  duration_ms: 5.036959
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/scripts/model-runner-v3/oracle-recovery.test.js:50:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/private/var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/oracle-recovery-test-iOjMRD/ledger/active.json'"
+  code: 'ENOENT'
+  stack: |-
+    Object.openSync (node:fs:562:18)
+    Object.readFileSync (node:fs:446:35)
+    TestContext.<anonymous> (/Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/scripts/model-runner-v3/oracle-recovery.test.js:54:29)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: real oracle worker propagates a closed IO_ERROR/11 with no success output
+ok 5 - real oracle worker propagates a closed IO_ERROR/11 with no success output
+  ---
+  duration_ms: 2.696416
+  ...
+# Subtest: PCR-023 actual protected aggregate rejects missing, reordered, failed and unreviewed inputs
+ok 6 - PCR-023 actual protected aggregate rejects missing, reordered, failed and unreviewed inputs
+  ---
+  duration_ms: 1.513667
+  ...
+# Subtest: the configured protected check includes the independent model-runner envelope aggregate
+ok 7 - the configured protected check includes the independent model-runner envelope aggregate
+  ---
+  duration_ms: 0.280959
+  ...
+# Subtest: candidate execution waits for exact review and model-runner failure cannot be bypassed
+ok 8 - candidate execution waits for exact review and model-runner failure cannot be bypassed
+  ---
+  duration_ms: 0.49125
+  ...
+# Subtest: public candidate detail changes trigger the protected product workflow
+ok 9 - public candidate detail changes trigger the protected product workflow
+  ---
+  duration_ms: 0.090834
+  ...
+# Subtest: every third-party action is pinned to an immutable commit
+ok 10 - every third-party action is pinned to an immutable commit
+  ---
+  duration_ms: 0.171917
+  ...
+# Subtest: subject preparation pins Node from the protected base
+ok 11 - subject preparation pins Node from the protected base
+  ---
+  duration_ms: 0.184666
+  ...
+# Subtest: the base worker owns validation and performs the final exclusive envelope write
+ok 12 - the base worker owns validation and performs the final exclusive envelope write
+  ---
+  duration_ms: 0.131041
+  ...
+# Subtest: review envelopes require reviewed-parent evidence with an exact closed diff and bound attestation
+ok 13 - review envelopes require reviewed-parent evidence with an exact closed diff and bound attestation
+  ---
+  duration_ms: 0.080708
+  ...
+# Subtest: the protected root selects closed graph-bound Requirements/Architecture evidence and subject-addressed exact review evidence
+ok 14 - the protected root selects closed graph-bound Requirements/Architecture evidence and subject-addressed exact review evidence
+  ---
+  duration_ms: 0.496792
+  ...
+# Subtest: the production parser accepts the actual immutable PR210 architecture evidence bytes
+ok 15 - the production parser accepts the actual immutable PR210 architecture evidence bytes
+  ---
+  duration_ms: 0.905958
+  ...
+# Subtest: the protected root executes the closed v1 and v2 graph algorithms and rejects unknown catalogs
+ok 16 - the protected root executes the closed v1 and v2 graph algorithms and rejects unknown catalogs
+  ---
+  duration_ms: 2326.73625
+  ...
+# Subtest: the protected model-oracle rotation executes the exact v3.15 to v3.16 listing transition
+ok 17 - the protected model-oracle rotation executes the exact v3.15 to v3.16 listing transition
+  ---
+  duration_ms: 21.354916
+  ...
+# Subtest: the protected model-oracle rotation approves only the exact v3.16 to v3.17 successor
+ok 18 - the protected model-oracle rotation approves only the exact v3.16 to v3.17 successor
+  ---
+  duration_ms: 20.827959
+  ...
+# Subtest: the protected model-oracle rotation approves only the exact v3.17 to v3.18 successor
+ok 19 - the protected model-oracle rotation approves only the exact v3.17 to v3.18 successor
+  ---
+  duration_ms: 0.229417
+  ...
+# Subtest: each candidate command is isolated in a process group that is cleared on return
+ok 20 - each candidate command is isolated in a process group that is cleared on return
+  ---
+  duration_ms: 0.067833
+  ...
+# Subtest: candidate model code receives no credential and is enclosed by a base-owned filesystem/network sandbox
+ok 21 - candidate model code receives no credential and is enclosed by a base-owned filesystem/network sandbox
+  ---
+  duration_ms: 0.571583
+  ...
+# Subtest: fresh model oracle does not reuse expired evidence and auth path ignores inherited HOME
+ok 22 - fresh model oracle does not reuse expired evidence and auth path ignores inherited HOME
+  ---
+  duration_ms: 1.335042
+  ...
+# Subtest: expired reuse never loads old Git objects, including matching listing; unexpired reuse remains exact
+ok 23 - expired reuse never loads old Git objects, including matching listing; unexpired reuse remains exact
+  ---
+  duration_ms: 0.135167
+  ...
+1..23
+# tests 23
+# suites 0
+# pass 22
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2419.031667

@@ -198,7 +198,7 @@ graph; static fixtures and planned PCR boundaries are the immutable requirement 
 The active graph oracle validates the two canonical authority tags below, ASCII order,
 duplicate and active-graph closure,
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6758,"catalogSha256":"2045dcda35da1f5387a8451c0f38b5b5908ffb124d88be5a130007710d4c11bd","kind":"evidence-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6759,"catalogSha256":"d0bed2c2d3db38d28145c903bdb0f9215f73266fbecf55826e25ee402dff5b64","kind":"evidence-catalog-identity"} -->
 <!-- GOV-004-AUTHORITY {"activeFiles":55,"kind":"evidence-file-owner-topology","owners":45} -->
 
 then recomputes every `[path,blobOid,byteLength,sha256]` row and compares the result to
@@ -255,14 +255,14 @@ registry-pinned command catalog; it does not trust an npm script as bootstrap au
 then runs the model track traceability reconciliation for exactly 28 IDs,
 `npm run test:model-runner-v3`, then
 `npm run v3:doctor -- --expect-mode disabled --require-host-pin
-model-runner-host-pins-v3.16`; doctor must reproduce the fixture's exact
-`codex-cli 0.153.4` bytes and report deployment mode disabled. It is a
+model-runner-host-pins-v3.25`; doctor must reproduce the fixture's exact
+`codex-cli 0.162.0-alpha.17.2` bytes and report deployment mode disabled. It is a
 required Code Gate input when a Code Gate is assembled; it is deliberately collected
 on the pinned self-hosted runner rather than represented as a skipped pull-request
 aggregate job.
 
 Candidate-side model execution receives no host credential and conditionally registers
-only the nineteen non-live tests, so its TAP has zero skipped/todo. A credentialed
+only the non-live tests, including the strict JSONL and lifecycle suites, so its TAP has zero skipped/todo. A credentialed
 protected-base oracle executes the remaining two live tests only after proving the
 complete model-runner implementation/test/host-pin blob listing is byte-identical to
 the exact subject. The 28 reported passes are parsed from the acceptance trace owner;
