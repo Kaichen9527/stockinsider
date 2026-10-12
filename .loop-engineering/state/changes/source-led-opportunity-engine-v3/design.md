@@ -70,7 +70,7 @@ native rows/header semantics. `opportunity-runtime-v3.17`,
 `opportunity-storage-v3.25` and `opportunity-postgres-types-v3.22` own byte-exact run
 identity, transaction, physical and type closure.
 
-`model-runner-v3.6` solely owns local Loop manifest/CLI/routing/status,
+`model-runner-v3.10` solely owns local Loop manifest/CLI/routing/status,
 proposal-visible sanitized views, the lexical exclusion oracle, profile/scratch/FD
 authority, sealed result handoff, deterministic trusted Git, identity-bound durable
 pre-`prepared` resource-attempt reservation, total dual-journal recovery/cleanup
@@ -87,7 +87,7 @@ canonical authority tags immediately below are the only design-side declarations
 catalog identity, active-file topology and the shortened product-correctness owner.
 Their JSON payloads use RFC 8785 key order and are permitted exactly once only.
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6758,"catalogSha256":"2045dcda35da1f5387a8451c0f38b5b5908ffb124d88be5a130007710d4c11bd","kind":"design-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6759,"catalogSha256":"d0bed2c2d3db38d28145c903bdb0f9215f73266fbecf55826e25ee402dff5b64","kind":"design-catalog-identity"} -->
 <!-- GOV-004-AUTHORITY {"activeFiles":55,"kind":"design-active-file-topology"} -->
 <!-- GOV-004-AUTHORITY {"kind":"design-product-correctness-owner","owner":"product-correctness-runtime-v3.11.12"} -->
 
@@ -123,9 +123,9 @@ historical audit-only `shadow-evaluation-contract.md` v3.7 (never a publication 
 `acceptance-evidence-contract.md` v3.13.0,
 `factor-correctness-amendment.md` v3.11.6,
 `authority-supersession-contract.md` v3.2, `auth-principal-contract.md` v3.8,
-`trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.6 with 886-byte identity SHA-256
-`ba88a6551f8640036ecc4d31c4217fb8a55a10c44e82636e4b9739781068d9cf`, host fixture
-SHA-256 `4e3a508b5120903ec7364771ba1aea8b98bd43e1d58f0ed1fcee1faaf8457008`,
+`trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.10 with 906-byte identity SHA-256
+`04e4f083dfabed992e0f9101e7983efe4987d2ce2871a288647a68b5f7afa5f8`, host fixture
+SHA-256 `e10f04c5fff073c6c03109af457d2fe9597db83c6f7f5b719fa6412cbcf151a4`,
 and acceptance `1.46.0/320`. Hash-preimage schema tags inside fenced canonical
 preimages are data, not active contract references. Model-runner identity remains
 independent of the opportunity runtime tuple.

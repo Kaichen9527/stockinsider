@@ -1,0 +1,9 @@
+# Final bounded implementation handoff
+
+The latest source extends the two independent f30 P2 repairs and the explicit process-risk follow-up. Current review input is `final-review-source.json`; earlier handoff/source/graph files are historical subjects, not the current identity.
+
+Final no-credential test command remains the four-file command in `handoff.md`: 136 PASS / 0 FAIL / 0 SKIP. Original raw `/tmp/stockinsider-oracle-wrapper-final-focused-oct12.tap` is copied unchanged to `final-wrapper-focused.tap`. This final addition exercises the actual oracle wrapper: unbranded host-after-spawn rejection retains recovery_required, a new invocation starts zero roles, pre-transport failure cleans safely, and all three successful operation-bound roles clear only their own fence. It complements the branded-loss, new-process restart, actual controller-exit, concurrent, cleanup-error and strict diagnostic tests.
+
+No live call or real account refusal ledger was created. The host fixture, native binary, profile policy and true ARM64 startup-chain evidence remain the exact f30 bytes; the latest change does not relabel those records as new provider/protected evidence. Old f30 independent REQUEST_CHANGES and every RED remain preserved. The implementer makes no independent PASS claim.
+
+Independent review must decide closure before any root-operated live calls. Genuine requirements and architecture refs for the current active graph remain uncreated/unregistered. Once supplied, the reviewer-owned finite map registration and final exact review are still required before the root-controlled one-time tool-PR landing. No application bypass is authorized. The fixed local safety fence has no automatic clearing command: uncertain prior process cleanup requires owner investigation before any manually reviewed recovery.

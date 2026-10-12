@@ -103,6 +103,22 @@ const v319ReviewSources = Object.freeze({
 });
 
 const graphBoundReviewSources = Object.freeze({
+  // One-time human-authorized initial tool migration. These independent reviews
+  // are unique direct children of the measured implementation, never self-approval.
+  'c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v325-digest',
+      path: `${changeRelative}/requirements-review-v325-digest.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v325-digest',
+      path: `${changeRelative}/architecture-review-v325-digest.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   // The final V3.14 catalog-identity closure propagates the corrected catalog
   // digest into its two canonical authority comments. It retains the same
   // independently reviewed signed-host and product authority.
@@ -778,15 +794,15 @@ function trustedAppleDeveloperToolchainRoot() {
   return { gitBin: path.dirname(gitExecutable), root: developerRoot };
 }
 
-function candidateSandbox(subjectRoot, scratch, environment, executable, args, { writableSource = false, network = false } = {}) {
-  const fixture = protectedHostPinFixture();
-  const codex = fixture.executables.find(({ name }) => name === 'codex');
-  assert.ok(codex && path.isAbsolute(codex.path), 'protected Codex path');
-  const pinnedNodeExecutable = trustedPinnedNodeExecutable();
-  const nodeToolchainRoot = trustedNodeToolchainRoot();
-  const appleDeveloperToolchain = trustedAppleDeveloperToolchainRoot();
-  const policyRoot = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-candidate-policy-'));
-  try {
+// Pure policy construction, not authority. The protected caller still obtains
+// executable identities exclusively from its own base tree.
+export function candidateSandboxPolicy({ subjectRoot, scratch, policyRoot,
+  nodeToolchainRoot, pinnedNodeExecutable, developerRoot, writableSource = false, network = false }) {
+  const paths = [subjectRoot, scratch, policyRoot, nodeToolchainRoot, pinnedNodeExecutable, developerRoot];
+  assert.ok(paths.every(value => typeof value === 'string' && path.isAbsolute(value)
+    && path.resolve(value) === value && !/[\u0000-\u001f\u007f]/u.test(value)), 'canonical policy paths');
+  assert.equal(typeof writableSource, 'boolean'); assert.equal(typeof network, 'boolean');
+  const appleDeveloperToolchain = { root: developerRoot };
     const escaped = (value) => value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
     const profile = [
       'default_permissions = "external-gate-candidate"', '',
@@ -803,6 +819,21 @@ function candidateSandbox(subjectRoot, scratch, environment, executable, args, {
       '[permissions.external-gate-candidate.network]',
       `enabled = ${network ? 'true' : 'false'}`, '',
     ].join('\n');
+  return profile;
+}
+
+function candidateSandbox(subjectRoot, scratch, environment, executable, args, { writableSource = false, network = false } = {}) {
+  const fixture = protectedHostPinFixture();
+  const codex = fixture.executables.find(({ name }) => name === 'codex');
+  assert.ok(codex && path.isAbsolute(codex.path), 'protected Codex path');
+  const pinnedNodeExecutable = trustedPinnedNodeExecutable();
+  const nodeToolchainRoot = trustedNodeToolchainRoot();
+  const appleDeveloperToolchain = trustedAppleDeveloperToolchainRoot();
+  const policyRoot = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-candidate-policy-'));
+  try {
+    const profile = candidateSandboxPolicy({ subjectRoot, scratch, policyRoot,
+      nodeToolchainRoot, pinnedNodeExecutable, developerRoot: appleDeveloperToolchain.root,
+      writableSource, network });
     writeFileSync(path.join(policyRoot, 'config.toml'), profile, { flag: 'wx', mode: 0o600 });
     return run(subjectRoot, codex.path, [
       'sandbox', '--profile', 'external-gate-candidate', '--permission-profile', 'external-gate-candidate',
@@ -855,6 +886,8 @@ const modelOracleSuccessorApprovals = Object.freeze({
 });
 
 const modelOracleHostPinByListingSha256 = Object.freeze({
+  // Initial migration: recognized only once this independently reviewed code is protected base.
+  '080db93a9b98e75b4b2bcb14e4097e25cb745f449d2c6c3c0b022dc204afd027': 'model-runner-host-pins-v3.25',
   bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3.14',
   cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
   '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': 'model-runner-host-pins-v3.16',
@@ -913,7 +946,23 @@ function publicGithubJson(url, label) {
   return JSON.parse(bytes);
 }
 
-function readModelOracleReuse() {
+export function validateModelOracleReuseTime(value, requireUnexpired = true, now = Date.now()) {
+  for (const key of ['completedAt', 'expiresAt']) {
+    assert.match(value[key], /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/u, `model oracle reuse ${key}`);
+    assert.ok(Number.isFinite(Date.parse(value[key])), `model oracle reuse valid ${key}`);
+  }
+  assert.ok(Date.parse(value.expiresAt) > Date.parse(value.completedAt), 'model oracle reuse ordered time');
+  if (requireUnexpired) assert.ok(Date.parse(value.expiresAt) > now, 'model oracle reuse evidence has not expired');
+  return true;
+}
+
+export function shouldReuseModelOracle(record, subjectListing, loadPriorListing, now = Date.now()) {
+  validateModelOracleReuseTime(record, false, now);
+  if (Date.parse(record.expiresAt) <= now) return false;
+  return subjectListing === loadPriorListing();
+}
+
+function readModelOracleReuse(requireUnexpired = true) {
   const bytes = treeBlob(baseRoot, git(baseRoot, ['rev-parse', 'HEAD^{tree}']),
     modelOracleReuseRelative, 'protected model oracle reuse record');
   const value = JSON.parse(bytes);
@@ -929,10 +978,7 @@ function readModelOracleReuse() {
     'model oracle artifact name');
   assert.deepEqual(value.requiredRunnerLabels, ['ARM64', 'macOS', 'self-hosted'],
     'model oracle runner labels');
-  for (const key of ['completedAt', 'expiresAt']) {
-    assert.match(value[key], /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/u, `model oracle reuse ${key}`);
-  }
-  assert.ok(Date.parse(value.expiresAt) > Date.now(), 'model oracle reuse evidence has not expired');
+  validateModelOracleReuseTime(value, requireUnexpired);
   return value;
 }
 
@@ -1000,21 +1046,44 @@ function trustedReusableHostModelOracle(subjectRoot, attestation) {
   };
 }
 
+export function trustedHostAuthenticationPath() {
+  return path.join(absolute(os.userInfo().homedir, 'operating-system account home'), '.codex', 'auth.json');
+}
+
+export function prepareTrustedHostScratch(root) {
+  assert.equal(typeof root === 'string' && path.isAbsolute(root), true, 'host scratch absolute root');
+  const check = (directory) => {
+    const stat = lstatSync(directory);
+    assert.equal(stat.isDirectory() && !stat.isSymbolicLink() && stat.uid === process.getuid()
+      && (stat.mode & 0o077) === 0 && realpathSync(directory) === directory,
+    true, 'host scratch private canonical directory');
+  };
+  check(root);
+  for (const name of ['home', 'tmp']) {
+    const directory = path.join(root, name);
+    mkdirSync(directory, { mode: 0o700 }); // Exclusive: never adopt existing contents.
+    check(directory);
+  }
+  check(root);
+  return root;
+}
+
 function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
   const authority = trustedModelOracleAuthority(subjectRoot, attestation.subjectCommitSha);
-  const reuse = readModelOracleReuse();
-  if (modelOracleListing(subjectRoot, attestation.subjectCommitSha) === modelOracleListing(subjectRoot, reuse.subjectCommitSha)) {
+  // Expiry prevents reuse, not a fresh independently executed live oracle.
+  const reuse = readModelOracleReuse(false);
+  if (shouldReuseModelOracle(reuse, modelOracleListing(subjectRoot, attestation.subjectCommitSha),
+    () => modelOracleListing(subjectRoot, reuse.subjectCommitSha))) {
     return trustedReusableHostModelOracle(subjectRoot, attestation);
   }
-  const runnerHome = process.env.HOME;
-  assert.equal(typeof runnerHome, 'string', 'runner HOME required for trusted host oracle');
-  const authentication = path.join(absolute(runnerHome, 'runner HOME'), '.codex', 'auth.json');
+  const authentication = trustedHostAuthenticationPath();
   const stat = lstatSync(authentication);
   assert.equal(stat.isFile() && !stat.isSymbolicLink() && stat.uid === process.getuid() && (stat.mode & 0o077) === 0,
     true, 'trusted host oracle authentication boundary');
-  const hostScratch = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-host-oracle-'));
+  const hostScratch = realpathSync(mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-host-oracle-')));
   try {
     chmodSync(hostScratch, 0o700);
+    prepareTrustedHostScratch(hostScratch);
     const oracleRoot = authority === 'protected_base' ? baseRoot : subjectRoot;
     return run(oracleRoot, nodeExecutable, [
       '--test', 'scripts/model-runner-v3/model-runner-v3.test.js',

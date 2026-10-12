@@ -1,0 +1,20 @@
+TAP version 13
+# Subtest: pinned Codex blocks filesystem DNS TCP UDP HTTP HTTPS loopback private IP proxy and Unix sockets across direct setsid and double-fork paths
+ok 1 - pinned Codex blocks filesystem DNS TCP UDP HTTP HTTPS loopback private IP proxy and Unix sockets across direct setsid and double-fork paths
+  ---
+  duration_ms: 11779.077458
+  ...
+# Subtest: pinned Codex propagates network denials through distinct ordinary process-group setsid fork double-fork and delayed descendants before an actual model attempt
+ok 2 - pinned Codex propagates network denials through distinct ordinary process-group setsid fork double-fork and delayed descendants before an actual model attempt
+  ---
+  duration_ms: 90064.463375
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 101897.686667

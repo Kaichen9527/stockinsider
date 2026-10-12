@@ -1,0 +1,28 @@
+TAP version 13
+# Subtest: protected169 parser must reject missing thread/turn start
+not ok 1 - protected169 parser must reject missing thread/turn start
+  ---
+  duration_ms: 0.740334
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/[eval1]:5:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected exception.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/[eval1]:5:77)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3.745458

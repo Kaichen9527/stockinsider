@@ -1,0 +1,571 @@
+TAP version 13
+# Subtest: closed JSONL accepts a sealed completed-only terminal with optional final LF
+ok 1 - closed JSONL accepts a sealed completed-only terminal with optional final LF
+  ---
+  duration_ms: 1.614625
+  ...
+# Subtest: closed JSONL rejects missing_starts
+ok 2 - closed JSONL rejects missing_starts
+  ---
+  duration_ms: 0.253416
+  ...
+# Subtest: closed JSONL rejects missing_turn
+ok 3 - closed JSONL rejects missing_turn
+  ---
+  duration_ms: 0.084791
+  ...
+# Subtest: closed JSONL rejects missing_thread
+ok 4 - closed JSONL rejects missing_thread
+  ---
+  duration_ms: 0.091167
+  ...
+# Subtest: closed JSONL rejects duplicate_thread
+ok 5 - closed JSONL rejects duplicate_thread
+  ---
+  duration_ms: 0.066
+  ...
+# Subtest: closed JSONL rejects duplicate_turn
+ok 6 - closed JSONL rejects duplicate_turn
+  ---
+  duration_ms: 0.089584
+  ...
+# Subtest: closed JSONL rejects unknown_event
+ok 7 - closed JSONL rejects unknown_event
+  ---
+  duration_ms: 0.0525
+  ...
+# Subtest: closed JSONL rejects unknown_member
+ok 8 - closed JSONL rejects unknown_member
+  ---
+  duration_ms: 0.10275
+  ...
+# Subtest: closed JSONL rejects invalid_uuid
+ok 9 - closed JSONL rejects invalid_uuid
+  ---
+  duration_ms: 0.217458
+  ...
+# Subtest: closed JSONL rejects uppercase_uuid
+ok 10 - closed JSONL rejects uppercase_uuid
+  ---
+  duration_ms: 0.88975
+  ...
+# Subtest: closed JSONL rejects missing_usage
+ok 11 - closed JSONL rejects missing_usage
+  ---
+  duration_ms: 0.260958
+  ...
+# Subtest: closed JSONL rejects negative_usage
+ok 12 - closed JSONL rejects negative_usage
+  ---
+  duration_ms: 0.116
+  ...
+# Subtest: closed JSONL rejects unsafe_usage
+ok 13 - closed JSONL rejects unsafe_usage
+  ---
+  duration_ms: 0.095458
+  ...
+# Subtest: closed JSONL rejects extra_usage
+ok 14 - closed JSONL rejects extra_usage
+  ---
+  duration_ms: 0.085875
+  ...
+# Subtest: closed JSONL rejects duplicate_terminal
+ok 15 - closed JSONL rejects duplicate_terminal
+  ---
+  duration_ms: 0.095917
+  ...
+# Subtest: closed JSONL rejects duplicate_item_id
+ok 16 - closed JSONL rejects duplicate_item_id
+  ---
+  duration_ms: 0.098166
+  ...
+# Subtest: closed JSONL rejects progress_after_terminal
+ok 17 - closed JSONL rejects progress_after_terminal
+  ---
+  duration_ms: 0.215333
+  ...
+# Subtest: closed JSONL rejects duplicate_end
+ok 18 - closed JSONL rejects duplicate_end
+  ---
+  duration_ms: 0.099709
+  ...
+# Subtest: closed JSONL rejects trailing_event
+ok 19 - closed JSONL rejects trailing_event
+  ---
+  duration_ms: 0.083333
+  ...
+# Subtest: closed JSONL rejects no_terminal
+ok 20 - closed JSONL rejects no_terminal
+  ---
+  duration_ms: 0.066125
+  ...
+# Subtest: closed JSONL rejects arbitrary_json_terminal
+ok 21 - closed JSONL rejects arbitrary_json_terminal
+  ---
+  duration_ms: 0.053208
+  ...
+# Subtest: closed JSONL rejects invalid_result_schema
+ok 22 - closed JSONL rejects invalid_result_schema
+  ---
+  duration_ms: 0.0675
+  ...
+# Subtest: closed JSONL rejects incomplete_turn
+ok 23 - closed JSONL rejects incomplete_turn
+  ---
+  duration_ms: 0.115292
+  ...
+# Subtest: closed JSONL rejects unknown_item
+ok 24 - closed JSONL rejects unknown_item
+  ---
+  duration_ms: 0.042042
+  ...
+# Subtest: closed JSONL rejects extra_item_member
+ok 25 - closed JSONL rejects extra_item_member
+  ---
+  duration_ms: 0.051292
+  ...
+# Subtest: closed JSONL rejects update_without_start
+ok 26 - closed JSONL rejects update_without_start
+  ---
+  duration_ms: 0.059625
+  ...
+# Subtest: closed JSONL rejects unfinished_item
+ok 27 - closed JSONL rejects unfinished_item
+  ---
+  duration_ms: 0.098709
+  ...
+# Subtest: closed JSONL rejects changed_item_type
+ok 28 - closed JSONL rejects changed_item_type
+  ---
+  duration_ms: 0.059125
+  ...
+# Subtest: closed JSONL rejects non_ascii_id
+ok 29 - closed JSONL rejects non_ascii_id
+  ---
+  duration_ms: 0.092875
+  ...
+# Subtest: closed JSONL rejects long_id
+ok 30 - closed JSONL rejects long_id
+  ---
+  duration_ms: 0.09125
+  ...
+# Subtest: closed JSONL rejects surrogate_text
+ok 31 - closed JSONL rejects surrogate_text
+  ---
+  duration_ms: 0.061541
+  ...
+# Subtest: closed JSONL rejects error_extra_member
+ok 32 - closed JSONL rejects error_extra_member
+  ---
+  duration_ms: 0.055208
+  ...
+# Subtest: closed JSONL rejects failed_extra_member
+ok 33 - closed JSONL rejects failed_extra_member
+  ---
+  duration_ms: 0.033541
+  ...
+# Subtest: closed JSONL rejects prohibited item file_change
+ok 34 - closed JSONL rejects prohibited item file_change
+  ---
+  duration_ms: 0.052875
+  ...
+# Subtest: closed JSONL rejects prohibited item web_search
+ok 35 - closed JSONL rejects prohibited item web_search
+  ---
+  duration_ms: 0.04
+  ...
+# Subtest: closed JSONL rejects prohibited item collab_tool_call
+ok 36 - closed JSONL rejects prohibited item collab_tool_call
+  ---
+  duration_ms: 0.037291
+  ...
+# Subtest: closed JSONL rejects prohibited item todo_list
+ok 37 - closed JSONL rejects prohibited item todo_list
+  ---
+  duration_ms: 0.036667
+  ...
+# Subtest: closed JSONL rejects prohibited item error
+ok 38 - closed JSONL rejects prohibited item error
+  ---
+  duration_ms: 0.036958
+  ...
+# Subtest: closed JSONL validates ordered item lifecycle and command diagnostic only
+ok 39 - closed JSONL validates ordered item lifecycle and command diagnostic only
+  ---
+  duration_ms: 0.242791
+  ...
+# Subtest: closed JSONL rejects invalid bytes, duplicate JSON keys and byte/line bounds
+ok 40 - closed JSONL rejects invalid bytes, duplicate JSON keys and byte/line bounds
+  ---
+  duration_ms: 5.4725
+  ...
+# Subtest: closed JSONL recognizes typed model failure without accepting malformed failure
+ok 41 - closed JSONL recognizes typed model failure without accepting malformed failure
+  ---
+  duration_ms: 0.3275
+  ...
+# Subtest: diagnostic oracle terminal requires explicit bounded protocol and exact operation
+ok 42 - diagnostic oracle terminal requires explicit bounded protocol and exact operation
+  ---
+  duration_ms: 0.609625
+  ...
+# Subtest: closed JSONL rejects every outer unknown member
+ok 43 - closed JSONL rejects every outer unknown member
+  ---
+  duration_ms: 0.538375
+  ...
+# Subtest: closed JSONL preserves progress text and completed agent lifecycle before terminal
+ok 44 - closed JSONL preserves progress text and completed agent lifecycle before terminal
+  ---
+  duration_ms: 0.683834
+  ...
+# Subtest: closed JSONL checks every usage field and UUID variant
+ok 45 - closed JSONL checks every usage field and UUID variant
+  ---
+  duration_ms: 1.8505
+  ...
+# Subtest: closed JSONL rejects data after typed failures and malformed failure shapes
+ok 46 - closed JSONL rejects data after typed failures and malformed failure shapes
+  ---
+  duration_ms: 0.251792
+  ...
+# Subtest: closed JSONL validates original bytes inside otherwise valid progress and result
+ok 47 - closed JSONL validates original bytes inside otherwise valid progress and result
+  ---
+  duration_ms: 0.285542
+  ...
+# Subtest: closed JSONL applies the exact line byte bound
+ok 48 - closed JSONL applies the exact line byte bound
+  ---
+  duration_ms: 17.231292
+  ...
+# Subtest: closed JSONL counts nonempty lines rather than allowing unbounded valid items
+ok 49 - closed JSONL counts nonempty lines rather than allowing unbounded valid items
+  ---
+  duration_ms: 42.735916
+  ...
+# Subtest: closed JSONL binds production operation and rejects diagnostic option expansion
+ok 50 - closed JSONL binds production operation and rejects diagnostic option expansion
+  ---
+  duration_ms: 0.207459
+  ...
+# Subtest: authentication source is bound to the operating-system account, not mutable HOME
+ok 51 - authentication source is bound to the operating-system account, not mutable HOME
+  ---
+  duration_ms: 2.461667
+  ...
+# Subtest: manifest requires canonical LF-terminated JSON with unique keys
+ok 52 - manifest requires canonical LF-terminated JSON with unique keys
+  ---
+  duration_ms: 2.384666
+  ...
+# Subtest: permanent path exclusions outrank manifest selectors and prompts
+ok 53 - permanent path exclusions outrank manifest selectors and prompts
+  ---
+  duration_ms: 0.163291
+  ...
+# Subtest: only Sol 6.1 High makes and Astra High reviews or verifies; legacy routes fail
+ok 54 - only Sol 6.1 High makes and Astra High reviews or verifies; legacy routes fail
+  ---
+  duration_ms: 2.851417
+  ...
+# Subtest: source-view identity binds sorted readable tracked entries
+ok 55 - source-view identity binds sorted readable tracked entries
+  ---
+  duration_ms: 0.478583
+  ...
+# Subtest: Codex profile is custom least privilege and never uses legacy sandbox
+ok 56 - Codex profile is custom least privilege and never uses legacy sandbox
+  ---
+  duration_ms: 0.464875
+  ...
+# Subtest: patch parser accepts only selected ordinary text paths
+ok 57 - patch parser accepts only selected ordinary text paths
+  ---
+  duration_ms: 1.869709
+  ...
+# Subtest: sealed terminal results enforce operation-specific result matrices
+ok 58 - sealed terminal results enforce operation-specific result matrices
+  ---
+  duration_ms: 0.657083
+  ...
+# Subtest: pinned Codex JSONL parser accepts one terminal agent message and rejects trailing events
+ok 59 - pinned Codex JSONL parser accepts one terminal agent message and rejects trailing events
+  ---
+  duration_ms: 2.595416
+  ...
+# Subtest: operation and resource identities are deterministic and bound
+ok 60 - operation and resource identities are deterministic and bound
+  ---
+  duration_ms: 0.600375
+  ...
+# Subtest: task locks, contiguous reservations and resource hash chains fail closed
+ok 61 - task locks, contiguous reservations and resource hash chains fail closed
+  ---
+  duration_ms: 97.415375
+  ...
+# Subtest: host pin fixture has an exact hash-bound format
+ok 62 - host pin fixture has an exact hash-bound format
+  ---
+  duration_ms: 2388.586
+  ...
+# Subtest: version probes admit only closed known sandbox diagnostics
+ok 63 - version probes admit only closed known sandbox diagnostics
+  ---
+  duration_ms: 0.231125
+  ...
+# Subtest: non-credential host probes retain only the verified private sandbox directory
+ok 64 - non-credential host probes retain only the verified private sandbox directory
+  ---
+  duration_ms: 0.691208
+  ...
+# Subtest: trusted live host probes admit only an explicit private cache scratch
+ok 65 - trusted live host probes admit only an explicit private cache scratch
+  ---
+  duration_ms: 0.329875
+  ...
+# Subtest: disabled doctor accepts only the exact successor and rejects historical selectors
+not ok 66 - disabled doctor accepts only the exact successor and rejects historical selectors
+  ---
+  duration_ms: 3547.678625
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/scripts/model-runner-v3/model-runner-v3.test.js:502:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/Users/kaerchen/.cache/stockinsider-workspaces/runner-recovery-current-native-oct11/scripts/model-runner-v3/model-runner-v3.test.js:523:12)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: only the explicit non-credential sandbox defers Gatekeeper to the trusted host oracle
+ok 67 - only the explicit non-credential sandbox defers Gatekeeper to the trusted host oracle
+  ---
+  duration_ms: 0.05125
+  ...
+# Subtest: CLI validates canonical input and fails closed before execution when the adjacent pin fixture is absent
+ok 68 - CLI validates canonical input and fails closed before execution when the adjacent pin fixture is absent
+  ---
+  duration_ms: 57.225209
+  ...
+# Subtest: maker execution materializes a tracked source view, applies the sealed patch, and persists its result ref
+ok 69 - maker execution materializes a tracked source view, applies the sealed patch, and persists its result ref
+  ---
+  duration_ms: 1289.436792
+  ...
+# Subtest: operation-bound adapter and direct entry reject swaps overrides and waivers before probes
+ok 70 - operation-bound adapter and direct entry reject swaps overrides and waivers before probes
+  ---
+  duration_ms: 3.446
+  ...
+# Subtest: successor never resumes old ready reviewed recovery or sealed state and preserves historical bytes
+ok 71 - successor never resumes old ready reviewed recovery or sealed state and preserves historical bytes
+  ---
+  duration_ms: 2.249083
+  ...
+# Subtest: separate stdout 16 MiB and stderr 8 MiB bounds permit combined >17 MiB
+ok 72 - separate stdout 16 MiB and stderr 8 MiB bounds permit combined >17 MiB
+  ---
+  duration_ms: 5.144333
+  ...
+# Subtest: stderr between old 1 MiB and approved 8 MiB is accepted
+ok 73 - stderr between old 1 MiB and approved 8 MiB is accepted
+  ---
+  duration_ms: 0.67525
+  ...
+# Subtest: stdout over-limit terminates TERM then bounded KILL
+ok 74 - stdout over-limit terminates TERM then bounded KILL
+  ---
+  duration_ms: 2.406291
+  ...
+# Subtest: stderr over-limit terminates TERM then bounded KILL
+ok 75 - stderr over-limit terminates TERM then bounded KILL
+  ---
+  duration_ms: 1.152792
+  ...
+# Subtest: idle deadline is 300 seconds, not 30
+ok 76 - idle deadline is 300 seconds, not 30
+  ---
+  duration_ms: 0.156875
+  ...
+# Subtest: partial stdout and complete stderr lines cannot reset stdout idle-line deadline
+ok 77 - partial stdout and complete stderr lines cannot reset stdout idle-line deadline
+  ---
+  duration_ms: 0.186875
+  ...
+# Subtest: a complete stdout line resets only the idle deadline
+ok 78 - a complete stdout line resets only the idle deadline
+  ---
+  duration_ms: 0.087209
+  ...
+# Subtest: manifest wall deadline is checked at events even when timer callback is delayed
+ok 79 - manifest wall deadline is checked at events even when timer callback is delayed
+  ---
+  duration_ms: 0.063667
+  ...
+# Subtest: successful close cannot outrun delayed monotonic wall check
+ok 80 - successful close cannot outrun delayed monotonic wall check
+  ---
+  duration_ms: 0.269292
+  ...
+# Subtest: prompt and stdout/stderr pipe errors fail closed without uncaught errors
+ok 81 - prompt and stdout/stderr pipe errors fail closed without uncaught errors
+  ---
+  duration_ms: 0.374666
+  ...
+# Subtest: close without successful pipe EOF is rejected
+ok 82 - close without successful pipe EOF is rejected
+  ---
+  duration_ms: 0.122041
+  ...
+# Subtest: exit with descendant-retained pipe is bounded and cannot pass
+ok 83 - exit with descendant-retained pipe is bounded and cannot pass
+  ---
+  duration_ms: 0.053375
+  ...
+# Subtest: nonzero exit and signal never produce stdout result
+ok 84 - nonzero exit and signal never produce stdout result
+  ---
+  duration_ms: 0.075083
+  ...
+# Subtest: identity recheck failure cannot become success and preserves routing failure
+ok 85 - identity recheck failure cannot become success and preserves routing failure
+  ---
+  duration_ms: 0.063292
+  ...
+# Subtest: TERM followed by leader exit revokes all later group signalling
+ok 86 - TERM followed by leader exit revokes all later group signalling
+  ---
+  duration_ms: 0.056459
+  ...
+# Subtest: normal leader exit with retained pipes never signals a potentially recycled PGID
+ok 87 - normal leader exit with retained pipes never signals a potentially recycled PGID
+  ---
+  duration_ms: 0.044041
+  ...
+# Subtest: late events after bounded rejection cannot invoke journal callbacks
+ok 88 - late events after bounded rejection cannot invoke journal callbacks
+  ---
+  duration_ms: 0.062
+  ...
+# Subtest: failed spawn has no PID fallback or ambient group signals
+ok 89 - failed spawn has no PID fallback or ambient group signals
+  ---
+  duration_ms: 0.277167
+  ...
+# Subtest: monotonic clock regression is a terminal invariant failure
+ok 90 - monotonic clock regression is a terminal invariant failure
+  ---
+  duration_ms: 0.066792
+  ...
+# Subtest: wall deadline remains fixed despite frequent complete lines
+ok 91 - wall deadline remains fixed despite frequent complete lines
+  ---
+  duration_ms: 0.089041
+  ...
+# Subtest: identity failure immediately after spawn return follows owned-group teardown
+ok 92 - identity failure immediately after spawn return follows owned-group teardown
+  ---
+  duration_ms: 0.065542
+  ...
+# Subtest: actual controlled Node child concurrently drains >17 MiB valid JSONL plus diagnostics
+ok 93 - actual controlled Node child concurrently drains >17 MiB valid JSONL plus diagnostics
+  ---
+  duration_ms: 154.882041
+  ...
+# Subtest: actual controlled Node child timeout is terminated without waiting for provider
+ok 94 - actual controlled Node child timeout is terminated without waiting for provider
+  ---
+  duration_ms: 1002.423709
+  ...
+# Subtest: ownership loss (leader_exited) retains caller resources and round across persisted retry
+ok 95 - ownership loss (leader_exited) retains caller resources and round across persisted retry
+  ---
+  duration_ms: 738.574042
+  ...
+# Subtest: ownership loss (kill_unconfirmed) retains caller resources and round across persisted retry
+ok 96 - ownership loss (kill_unconfirmed) retains caller resources and round across persisted retry
+  ---
+  duration_ms: 382.284292
+  ...
+# Subtest: natural EOF and exit may arrive in either order, but close requires both
+ok 97 - natural EOF and exit may arrive in either order, but close requires both
+  ---
+  duration_ms: 0.1545
+  ...
+# Subtest: late valid exit/EOF cannot reverse a locked timeout failure
+ok 98 - late valid exit/EOF cannot reverse a locked timeout failure
+  ---
+  duration_ms: 0.0875
+  ...
+# Subtest: child exit and pending KILL at the same time cannot signal the expired anchor
+ok 99 - child exit and pending KILL at the same time cannot signal the expired anchor
+  ---
+  duration_ms: 0.064666
+  ...
+# Subtest: raw UTF-8 split across stdout chunks is preserved losslessly
+ok 100 - raw UTF-8 split across stdout chunks is preserved losslessly
+  ---
+  duration_ms: 0.108375
+  ...
+# Subtest: drain deadline is fixed and further data cannot prolong or recover it
+ok 101 - drain deadline is fixed and further data cannot prolong or recover it
+  ---
+  duration_ms: 0.152
+  ...
+# Subtest: pipe data after EOF rejects rather than becoming accepted result bytes
+ok 102 - pipe data after EOF rejects rather than becoming accepted result bytes
+  ---
+  duration_ms: 0.068625
+  ...
+# Subtest: historical candidate stays inactive and installed fixture is exact successor
+ok 103 - historical candidate stays inactive and installed fixture is exact successor
+  ---
+  duration_ms: 33.586667
+  ...
+# Subtest: candidate route rejects legacy strategy and operation/model swaps
+ok 104 - candidate route rejects legacy strategy and operation/model swaps
+  ---
+  duration_ms: 0.31075
+  ...
+# Subtest: actual execution parser rejects terminal transcript without thread/turn start
+ok 105 - actual execution parser rejects terminal transcript without thread/turn start
+  ---
+  duration_ms: 0.221208
+  ...
+# Subtest: worker policy extraction preserves all legacy bytes for ordinary canonical roots
+ok 106 - worker policy extraction preserves all legacy bytes for ordinary canonical roots
+  ---
+  duration_ms: 14.200292
+  ...
+# Subtest: actual CLI routes while missing exact host fixture rejects model operations
+ok 107 - actual CLI routes while missing exact host fixture rejects model operations
+  ---
+  duration_ms: 5.6115
+  ...
+# Subtest: live oracle remains operation-bound and uses OS-account authentication path
+ok 108 - live oracle remains operation-bound and uses OS-account authentication path
+  ---
+  duration_ms: 1.425958
+  ...
+1..108
+# tests 108
+# suites 0
+# pass 107
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7470.415209

@@ -1,0 +1,22 @@
+{
+  "schema": "manual-owned-oracle-recovery-v1",
+  "at": "2026-10-12T00:01:31.380Z",
+  "subject": "f6e45b33a863cb96ad8a71299adac48b2b04a1bf",
+  "review": "Independent reviewer confirmed stopped-process sampling includes same-second workers; manual only.",
+  "processFilter": "Date.parse(startedAt) >= Date.parse(attemptStartedAt)-1000",
+  "fenceSha256": "b2968ac29964357df8c29dbfbb6add3269eeae9b58fe980b06a0bec692fefb72",
+  "fenceIdentity": {
+    "dev": 16777231,
+    "ino": 214735027
+  },
+  "attemptIdentity": {
+    "dev": 16777231,
+    "ino": 214735016
+  },
+  "lsofStatus": 1,
+  "originalLiveResult": "0 PASS / 2 FAIL",
+  "providerPass": false,
+  "automaticResetAdded": false,
+  "onlyOwnAttemptRemoved": true,
+  "rootPreserved": true
+}

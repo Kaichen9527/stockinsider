@@ -1,0 +1,17 @@
+# Two independent P2 repair candidate
+
+This successor repairs the two findings from the independent f30 review. It is not self-approved. Source f30 and its review remain historical; no live credential/provider call occurred.
+
+The independent counterexamples are `/tmp/stockinsider-f30-independent-counterexamples-oct12.json`, SHA-256 `200e19fca42597ddd39df6f1d0188a8357f93b723ae346aba23a386807941cfb`: expired old-object read, expired matching-listing reuse, and unconditional removal after real branded lifecycle ownership loss.
+
+Expired evidence is parsed strictly but returns the fresh path before the old object loader is called. Both expired counterexamples now pass finite tests; unexpired exact-match and mismatch still behave separately, and actual reuse still requires the existing artifact/run/digest checks.
+
+The live wrapper now places one fsynced exclusive refusal record at the OS-account fixed `.stockinsider-model-oracle-v1/active.json` before creating auth transports. The attempt's three role directories share one private root. Ownership loss records recovery_required, returns closed IO_ERROR/11, retains resources and stops further roles. Existing records always refuse a new invocation: no expiry, dead-PID takeover, reset flag, environment override or automatic cleanup exists. A controller crash leaves in_progress and also blocks restart. Successful or proven-safe failure removes only the token-owned directory before clearing its own fence. Cleanup failure retains the record and bytes. No production fence was created by tests; all test roots are synthetic private disposable directories.
+
+Owner recovery is deliberately not implemented: a human must independently prove process/descendant cleanup and inspect retained evidence before clearing an exact owned fence. This ledger is a local fail-closed safety mechanism, not an authority registry, signed approval or generic recovery service.
+
+The actual wrapper is exercised with a real branded lifecycle error and I/O/provider mocks; the durable filesystem is real. Tests confirm one make call only, retained bytes, same-process rejection, a separately started Node process rejection, actual controller process exit retaining an in-progress fence, safe failure/success cleanup, concurrent refusal and closed worker exit 11 without success stdout. The prior f30 synthetic retention RED is preserved. One test-setup RED used a VM-created object with the real canonical writer (cross-realm prototype rejection); the repaired fixture injects only rmSync failure in the actual module and preserves the assertion.
+
+Full no-credential focused suite: 134 pass / 0 fail / 0 skip. Raw original `/tmp/stockinsider-oracle-successor-final-focused-oct12.tap`, SHA-256 `a9e12044867f8bacbca77515bdc705d605f4f4924b399a1264ab46de0cb27e75`, copied byte-for-byte here as `oracle-repair-focused.tap`. Host fixture, host loader, native binary, sandbox profiles and prior actual arm64 chain are unchanged from f30; no old host evidence is relabeled as a newly executed live model oracle.
+
+This repair changes the runner listing and active graph because the normative live-oracle amendment changed. `oracle-repair-source.json` is the current pending review input; `graph-pending-review.json` and `model-oracle-listing.txt` remain the preserved f30 inputs. Genuine requirements/architecture/code reviews and exact ref registration remain pending. Root alone controls the separately authorized tool-PR landing. Application checks are unchanged.

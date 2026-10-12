@@ -1,0 +1,13 @@
+# Standalone release-tool initial trust migration
+
+Status: implementation candidate; independent review and owner-controlled landing pending.
+
+On 2026-10-12 the human explicitly authorized: 「同意，只限發布工具修復 PR；網站仍須全部檢查」. This records the authorization relayed in this task, not a cryptographic signature, a GitHub approval, or a protected PASS. The implementing agent cannot approve, merge, change GitHub rules, activate host trust, or deploy this implementation.
+
+The only exceptional landing subject is a separately reviewed release-tool repair PR based on protected main `169aad1b6cfa747f78ae3464b614f43c0749d806`. Application PRs 370/371/372 and their successors retain every normal required check. The owner must choose and audit the actual GitHub governance operation; GitHub does not inherently guarantee that a bypass entitlement is restricted to this SHA. There is no pre-existing recovery ingress or invented owner key.
+
+The runtime fixture deliberately retains `approvalAuthority: null`. Exact bytes, version, signature and filesystem identity—not this narrative—are checked by the loader. Only after independent review and owner-controlled initial landing do those bytes become protected-base authority. The implementation does not register a predecessor successor-approval exception in the old base; it adds only the new exact listing-to-pin mapping for use when that code is the protected base. A different candidate listing remains rejected.
+
+Scope: host pin v3.25, runner contract v3.10, manifest/routing v3.7, permissions v3.6, strict parser, bounded lifecycle, operation-bound Sol 6.1 High maker and Astra High reviewer/verifier, and new isolated durable namespace. Previous proposals, journals, reviews and reservations are not migrated. Product runtime/SQL/strategy identity is unchanged. The acceptance inventory retains its product version/count/owner partition; this finite model-track amendment changes its content hash and exact model command mirrors, and therefore requires fresh active-graph reviews. No acceptance ID is removed, waived, reclassified or marked passed by this candidate.
+
+No credential or provider call was authorized for this preparation. The no-credential canary uses only synthetic files and loopback network denial. It is not the live model oracle. Full live validation remains the protected base-owned worker's existing `trustedHostModelOracle` flow after review/landing, invoking the pinned Node with `OPPORTUNITY_V3_PROTECTED_LIVE_ONLY=1` and the existing exact-source `model-runner-v3.test.js`. It uses the operating-system account auth source; no auth bytes, environment credential fallback, copied personal configuration or symlink replacement are provided by this change.
