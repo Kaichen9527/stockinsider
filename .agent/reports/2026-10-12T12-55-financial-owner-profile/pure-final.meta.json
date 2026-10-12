@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "scripts/opportunity-v3/financial-history-install-guard.test.mjs",
+    "scripts/opportunity-v3/financial-existing-schema-profile.test.mjs"
+  ],
+  "start_utc": "2026-10-12T13:07:11Z",
+  "seconds": 0.552070140838623,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 101343232,
+  "min_free_bytes": 8922746880
+}

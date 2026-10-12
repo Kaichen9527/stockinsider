@@ -1,0 +1,6 @@
+{
+  "name": "error",
+  "message": "runtime_role_contract_invalid",
+  "code": "P0001",
+  "routine": "exec_stmt_raise"
+}

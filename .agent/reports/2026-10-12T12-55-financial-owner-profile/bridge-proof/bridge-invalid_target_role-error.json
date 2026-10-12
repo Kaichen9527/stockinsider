@@ -1,0 +1,6 @@
+{
+  "name": "error",
+  "message": "release_owner_bridge_target_role_invalid:legacy_correctness_rpc_owner",
+  "code": "P0001",
+  "routine": "exec_stmt_raise"
+}

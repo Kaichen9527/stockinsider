@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/financial-existing-schema-owner-profile-native.test.mjs"
+  ],
+  "start_utc": "2026-10-12T13:02:04Z",
+  "seconds": 3.0583786964416504,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 195444736,
+  "min_free_bytes": 8924430336
+}

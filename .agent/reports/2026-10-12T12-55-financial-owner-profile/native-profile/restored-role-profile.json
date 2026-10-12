@@ -1,0 +1,46 @@
+[
+  {
+    "rolname": "legacy_correctness_rpc_owner",
+    "rolcanlogin": false,
+    "rolsuper": false,
+    "rolinherit": false,
+    "rolbypassrls": false,
+    "rolcreaterole": false,
+    "rolcreatedb": false,
+    "rolreplication": false,
+    "public_create": false
+  },
+  {
+    "rolname": "opportunity_v3_rpc_owner",
+    "rolcanlogin": false,
+    "rolsuper": false,
+    "rolinherit": false,
+    "rolbypassrls": false,
+    "rolcreaterole": false,
+    "rolcreatedb": false,
+    "rolreplication": false,
+    "public_create": false
+  },
+  {
+    "rolname": "postgres",
+    "rolcanlogin": true,
+    "rolsuper": true,
+    "rolinherit": true,
+    "rolbypassrls": true,
+    "rolcreaterole": true,
+    "rolcreatedb": true,
+    "rolreplication": true,
+    "public_create": true
+  },
+  {
+    "rolname": "stockinsider_runtime_v319",
+    "rolcanlogin": false,
+    "rolsuper": false,
+    "rolinherit": false,
+    "rolbypassrls": false,
+    "rolcreaterole": false,
+    "rolcreatedb": false,
+    "rolreplication": false,
+    "public_create": false
+  }
+]

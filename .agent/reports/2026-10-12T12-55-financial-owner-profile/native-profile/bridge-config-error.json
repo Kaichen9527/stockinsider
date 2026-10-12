@@ -1,0 +1,6 @@
+{
+  "name": "error",
+  "message": "release_owner_bridge_unknown_profile:public.read_legacy_release_checkpoints_v3_19()",
+  "code": "P0001",
+  "routine": "exec_stmt_raise"
+}

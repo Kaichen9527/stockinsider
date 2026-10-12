@@ -1,0 +1,14 @@
+{
+  "stage": "first financial profile50 apply",
+  "error": {
+    "name": "Error",
+    "message": "dependent_stages_blocked_by_first_apply"
+  },
+  "firstNativeFailure": {
+    "name": "error",
+    "message": "runtime_role_contract_invalid",
+    "code": "P0001",
+    "routine": "exec_stmt_raise"
+  },
+  "lastMigration": "migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql"
+}

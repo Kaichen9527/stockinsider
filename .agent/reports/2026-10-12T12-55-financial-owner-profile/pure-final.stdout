@@ -1,0 +1,177 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 4.255913
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 81.291158
+  ...
+# Subtest: atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+ok 3 - atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+  ---
+  duration_ms: 0.717483
+  ...
+# Subtest: atomic scanner recognizes CR line endings rather than silently dropping real control
+ok 4 - atomic scanner recognizes CR line endings rather than silently dropping real control
+  ---
+  duration_ms: 0.178359
+  ...
+# Subtest: atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+ok 5 - atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+  ---
+  duration_ms: 0.301735
+  ...
+# Subtest: atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+ok 6 - atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+  ---
+  duration_ms: 0.271871
+  ...
+# Subtest: atomic scanner normalizes every unchanged base migration without claiming installer integration
+ok 7 - atomic scanner normalizes every unchanged base migration without claiming installer integration
+  ---
+  duration_ms: 88.643094
+  ...
+# Subtest: atomic scanner rejects additional documented commands that cannot run in a transaction
+ok 8 - atomic scanner rejects additional documented commands that cannot run in a transaction
+  ---
+  duration_ms: 0.387835
+  ...
+# Subtest: default48 and ordinary financial49 outputs remain byte-equivalent; profile separately reports 50 steps
+ok 9 - default48 and ordinary financial49 outputs remain byte-equivalent; profile separately reports 50 steps
+  ---
+  duration_ms: 273.736465
+  ...
+# Subtest: missing/wrong prelude bytes/hash/order/chain and profile omission reject
+not ok 10 - missing/wrong prelude bytes/hash/order/chain and profile omission reject
+  ---
+  duration_ms: 6.805912
+  location: '/workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-existing-schema-profile.test.mjs:16:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /profile_missing/u. Input:
+    
+    'Error: financial_existing_chain_mismatch'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+  error: 'financial_existing_chain_mismatch'
+  stack: |-
+    assertFinancialExistingSchemaPlan (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-existing-schema-profile.mjs:23:49)
+    file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-existing-schema-profile.test.mjs:20:20
+    getActual (node:assert:840:5)
+    Function.throws (node:assert:986:24)
+    TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-existing-schema-profile.test.mjs:20:9)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-existing-schema-profile.test.mjs:20:9)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed
+ok 11 - profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed
+  ---
+  duration_ms: 0.700076
+  ...
+# Subtest: actual installer checks successor and profile under lock/BEGIN before any prelude query
+ok 12 - actual installer checks successor and profile under lock/BEGIN before any prelude query
+  ---
+  duration_ms: 0.572634
+  ...
+# Subtest: default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+ok 13 - default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+  ---
+  duration_ms: 86.554461
+  ...
+# Subtest: omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+ok 14 - omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+  ---
+  duration_ms: 0.674388
+  ...
+# Subtest: extension flag alone is not review authority: exact hash must be in hash-bound review once
+ok 15 - extension flag alone is not review authority: exact hash must be in hash-bound review once
+  ---
+  duration_ms: 0.566445
+  ...
+# Subtest: base-only cannot replay installed successor and partial residue cannot replay even with tail
+ok 16 - base-only cannot replay installed successor and partial residue cannot replay even with tail
+  ---
+  duration_ms: 1.529008
+  ...
+# Subtest: missing/ambiguous state and any failed postcondition reject
+ok 17 - missing/ambiguous state and any failed postcondition reject
+  ---
+  duration_ms: 3.047419
+  ...
+# Subtest: busy guard performs no BEGIN/mutation and closes owned session
+ok 18 - busy guard performs no BEGIN/mutation and closes owned session
+  ---
+  duration_ms: 0.462608
+  ...
+# Subtest: installed successor guard runs under lock+BEGIN before any base mutation
+ok 19 - installed successor guard runs under lock+BEGIN before any base mutation
+  ---
+  duration_ms: 0.316257
+  ...
+# Subtest: one shared transaction strips inner controls and commits after verification
+ok 20 - one shared transaction strips inner controls and commits after verification
+  ---
+  duration_ms: 1.677752
+  ...
+# Subtest: forced failure and disconnect attempt rollback, do not commit, retain original error
+ok 21 - forced failure and disconnect attempt rollback, do not commit, retain original error
+  ---
+  duration_ms: 0.910124
+  ...
+# Subtest: postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+ok 22 - postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+  ---
+  duration_ms: 0.674658
+  ...
+# Subtest: unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+ok 23 - unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+  ---
+  duration_ms: 0.298941
+  ...
+# Subtest: installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+ok 24 - installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+  ---
+  duration_ms: 0.269757
+  ...
+# Subtest: exact observed catalog rejects every function binding, schema/index/trigger field drift
+ok 25 - exact observed catalog rejects every function binding, schema/index/trigger field drift
+  ---
+  duration_ms: 20.011813
+  ...
+# Subtest: catalog private predecessor full body originates in the unchanged recollection migration
+ok 26 - catalog private predecessor full body originates in the unchanged recollection migration
+  ---
+  duration_ms: 0.290769
+  ...
+# Subtest: immutable trigger dependency body originates in unchanged base SQL and stays security invoker
+ok 27 - immutable trigger dependency body originates in unchanged base SQL and stays security invoker
+  ---
+  duration_ms: 2.923663
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 26
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 366.360242

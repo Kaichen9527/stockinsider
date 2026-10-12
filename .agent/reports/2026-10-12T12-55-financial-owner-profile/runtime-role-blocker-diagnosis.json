@@ -1,0 +1,34 @@
+{
+  "underlyingError": "P0001 runtime_role_contract_invalid",
+  "failedPath": "migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql",
+  "sourceLines": [
+    100,
+    108
+  ],
+  "observedOriginalCompatibilityRole": {
+    "rolname": "stockinsider_runtime_v319",
+    "rolcanlogin": false,
+    "rolsuper": false,
+    "rolinherit": false,
+    "rolbypassrls": false,
+    "rolcreaterole": false,
+    "rolcreatedb": false,
+    "rolreplication": false,
+    "rolconnlimit": -1,
+    "public_create": false
+  },
+  "requiredByUnchangedSource": {
+    "login": true,
+    "inherit": false,
+    "superuser": false,
+    "createDb": false,
+    "createRole": false,
+    "replication": false,
+    "bypassRls": false,
+    "connectionLimit": 6
+  },
+  "notCurrentVpsRoleProof": true,
+  "schemaOnlyDumpOmitsGlobalRoleDefinitions": true,
+  "operatorAmendmentApplied": false,
+  "nextDecision": "separate reviewed existing operator role/prerequisite, not profile widening or inline grant"
+}
