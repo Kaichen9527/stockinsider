@@ -1,0 +1,29 @@
+{
+  "schema": "post-tool-merge-continuation-v1",
+  "main": "c6bc227ccaa5309226cbb833b35a35198491cb48",
+  "toolPr": 373,
+  "protectionRestored": true,
+  "applicationBypass": false,
+  "apps": [
+    {
+      "pr": 370,
+      "subject": "c0ad855257297706d714727e461684f723ac5875",
+      "ordinaryRun": 38186981588
+    },
+    {
+      "pr": 371,
+      "subject": "1f154fe022d7dd1df5a7965ff3fb3366ee071586",
+      "ordinaryRun": 38186987889
+    },
+    {
+      "pr": 372,
+      "subject": "e06b14b8fc3f947c10f77b6d6c0c4d09f7efb2e8",
+      "ordinaryRun": 38186994222
+    }
+  ],
+  "appPrHeadsPublished": false,
+  "appSourceChangedBeyondMerge": false,
+  "fullCoreRepeated": false,
+  "evaluationDiagnostic": "12 tests pass; promotion blocked missing nonfabricated elapsed cohorts. Not product/protected failure.",
+  "localIntegrationCorrection": "Two checkout commands referenced absent local branches; unintended local detached/evidence merges preserved under refs/invalidated, local evidence ref restored before any remote push. Correct integrations start exact old PR heads. No incorrect refs were published."
+}

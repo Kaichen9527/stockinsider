@@ -1,0 +1,24 @@
+{
+  "schema": "human-authorized-tool-only-once-merge-v1",
+  "startedAt": "2026-10-12T00:07:52.697Z",
+  "pr": 373,
+  "head": "9b74e535d3dfb698043a53eb0b24cfa14f6563a3",
+  "expectedBase": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "humanAuthorization": "同意，只限發布工具修復 PR；網站仍須全部檢查",
+  "protectedPassClaim": false,
+  "temporaryRuleConfirmedAt": "2026-10-12T00:07:55.497Z",
+  "mergeResponse": {
+    "sha": "c6bc227ccaa5309226cbb833b35a35198491cb48",
+    "merged": true,
+    "message": "Pull Request successfully merged"
+  },
+  "mergedAt": "2026-10-12T00:07:59.088Z",
+  "originalRulesRestored": true,
+  "restoredAt": "2026-10-12T00:08:00.401Z",
+  "completedAt": "2026-10-12T00:08:00.402Z",
+  "finalPr": {
+    "merged": true,
+    "head": "9b74e535d3dfb698043a53eb0b24cfa14f6563a3"
+  },
+  "finalMain": "c6bc227ccaa5309226cbb833b35a35198491cb48"
+}

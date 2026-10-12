@@ -1,0 +1,279 @@
+﻿2026-10-12T00:10:14.2064511Z Current runner version: '2.337.0'
+2026-10-12T00:10:14.2102092Z ##[group]Runner Image Provisioner
+2026-10-12T00:10:14.2103448Z Hosted Compute Agent
+2026-10-12T00:10:14.2104465Z Version: 20261002.596
+2026-10-12T00:10:14.2105769Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-12T00:10:14.2106971Z Build Date: 2026-10-02T22:28:27Z
+2026-10-12T00:10:14.2108129Z Worker ID: {fec66f25-3eab-4cef-8f1c-5e958b1c1ffd}
+2026-10-12T00:10:14.2109474Z Region: eastus
+2026-10-12T00:10:14.2110429Z Cloud: Azure
+2026-10-12T00:10:14.2111753Z ##[endgroup]
+2026-10-12T00:10:14.2113970Z ##[group]Operating System
+2026-10-12T00:10:14.2115066Z Ubuntu
+2026-10-12T00:10:14.2116003Z 24.04.5
+2026-10-12T00:10:14.2116842Z LTS
+2026-10-12T00:10:14.2117766Z ##[endgroup]
+2026-10-12T00:10:14.2118693Z ##[group]Runner Image
+2026-10-12T00:10:14.2119729Z Image: ubuntu-24.04
+2026-10-12T00:10:14.2121104Z Version: 20261004.327.1
+2026-10-12T00:10:14.2123348Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-12T00:10:14.2126027Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-12T00:10:14.2127778Z ##[endgroup]
+2026-10-12T00:10:14.2130178Z ##[group]GITHUB_TOKEN Permissions
+2026-10-12T00:10:14.2133490Z Contents: read
+2026-10-12T00:10:14.2134658Z Metadata: read
+2026-10-12T00:10:14.2135621Z ##[endgroup]
+2026-10-12T00:10:14.2138637Z Secret source: Actions
+2026-10-12T00:10:14.2140230Z Cache mode: write
+2026-10-12T00:10:14.2141846Z Prepare workflow directory
+2026-10-12T00:10:14.2617739Z Prepare all required actions
+2026-10-12T00:10:14.2689256Z Getting action download info
+2026-10-12T00:10:14.4461894Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-12T00:10:14.5576473Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-12T00:10:14.7587690Z Complete job name: evaluation-governance
+2026-10-12T00:10:14.8498125Z ##[group]Run actions/checkout@v4
+2026-10-12T00:10:14.8499045Z with:
+2026-10-12T00:10:14.8499491Z   repository: Kaichen9527/stockinsider
+2026-10-12T00:10:14.8503915Z   token: ***
+2026-10-12T00:10:14.8504352Z   ssh-strict: true
+2026-10-12T00:10:14.8504786Z   ssh-user: git
+2026-10-12T00:10:14.8505227Z   persist-credentials: true
+2026-10-12T00:10:14.8505709Z   clean: true
+2026-10-12T00:10:14.8506144Z   sparse-checkout-cone-mode: true
+2026-10-12T00:10:14.8506648Z   fetch-depth: 1
+2026-10-12T00:10:14.8507067Z   fetch-tags: false
+2026-10-12T00:10:14.8507500Z   show-progress: true
+2026-10-12T00:10:14.8507944Z   lfs: false
+2026-10-12T00:10:14.8508350Z   submodules: false
+2026-10-12T00:10:14.8508782Z   set-safe-directory: true
+2026-10-12T00:10:14.8509337Z   allow-unsafe-pr-checkout: false
+2026-10-12T00:10:14.8510137Z ##[endgroup]
+2026-10-12T00:10:14.9524427Z Syncing repository: Kaichen9527/stockinsider
+2026-10-12T00:10:14.9526984Z ##[group]Getting Git version info
+2026-10-12T00:10:14.9528269Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+2026-10-12T00:10:14.9530005Z [command]/usr/bin/git version
+2026-10-12T00:10:14.9596087Z git version 2.55.0
+2026-10-12T00:10:14.9619084Z ##[endgroup]
+2026-10-12T00:10:14.9648366Z Temporarily overriding HOME='/home/runner/work/_temp/3d65bcd9-6a41-4a36-83f6-d5344ab7ac1a' before making global git config changes
+2026-10-12T00:10:14.9651500Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-12T00:10:14.9653799Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-12T00:10:14.9696808Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+2026-10-12T00:10:14.9701495Z ##[group]Initializing the repository
+2026-10-12T00:10:14.9705496Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+2026-10-12T00:10:14.9815585Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T00:10:14.9817285Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T00:10:14.9818568Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T00:10:14.9819316Z hint: call:
+2026-10-12T00:10:14.9819710Z hint:
+2026-10-12T00:10:14.9820238Z hint: 	git config --global init.defaultBranch <name>
+2026-10-12T00:10:14.9821215Z hint:
+2026-10-12T00:10:14.9821836Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T00:10:14.9823406Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T00:10:14.9824291Z hint:
+2026-10-12T00:10:14.9825008Z hint: 	git branch -m <name>
+2026-10-12T00:10:14.9825944Z hint:
+2026-10-12T00:10:14.9827195Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T00:10:14.9829239Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+2026-10-12T00:10:14.9836989Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+2026-10-12T00:10:14.9886053Z ##[endgroup]
+2026-10-12T00:10:14.9887309Z ##[group]Disabling automatic garbage collection
+2026-10-12T00:10:14.9889666Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-12T00:10:14.9923079Z ##[endgroup]
+2026-10-12T00:10:14.9924268Z ##[group]Setting up auth
+2026-10-12T00:10:14.9928625Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T00:10:14.9963371Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T00:10:15.0375596Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T00:10:15.0421143Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T00:10:15.0648696Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T00:10:15.0686289Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T00:10:15.0911924Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-12T00:10:15.0952387Z ##[endgroup]
+2026-10-12T00:10:15.0961727Z ##[group]Fetching the repository
+2026-10-12T00:10:15.0963743Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c0ad855257297706d714727e461684f723ac5875:refs/remotes/origin/codex/calendar-inbox-main325-validation-oct12
+2026-10-12T00:10:15.6763621Z From https://github.com/Kaichen9527/stockinsider
+2026-10-12T00:10:15.6766249Z  * [new ref]         c0ad855257297706d714727e461684f723ac5875 -> origin/codex/calendar-inbox-main325-validation-oct12
+2026-10-12T00:10:15.6793132Z ##[endgroup]
+2026-10-12T00:10:15.6794553Z ##[group]Determining the checkout info
+2026-10-12T00:10:15.6796268Z ##[endgroup]
+2026-10-12T00:10:15.6797240Z [command]/usr/bin/git sparse-checkout disable
+2026-10-12T00:10:15.6837699Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-12T00:10:15.6884347Z ##[group]Checking out the ref
+2026-10-12T00:10:15.6886857Z [command]/usr/bin/git checkout --progress --force -B codex/calendar-inbox-main325-validation-oct12 refs/remotes/origin/codex/calendar-inbox-main325-validation-oct12
+2026-10-12T00:10:15.8179827Z Switched to a new branch 'codex/calendar-inbox-main325-validation-oct12'
+2026-10-12T00:10:15.8183804Z branch 'codex/calendar-inbox-main325-validation-oct12' set up to track 'origin/codex/calendar-inbox-main325-validation-oct12'.
+2026-10-12T00:10:15.8193286Z ##[endgroup]
+2026-10-12T00:10:15.8238468Z [command]/usr/bin/git log -1 --format=%H
+2026-10-12T00:10:15.8265334Z c0ad855257297706d714727e461684f723ac5875
+2026-10-12T00:10:15.8646359Z ##[group]Run actions/setup-node@v4
+2026-10-12T00:10:15.8647833Z with:
+2026-10-12T00:10:15.8648795Z   node-version-file: .nvmrc
+2026-10-12T00:10:15.8649900Z   cache: npm
+2026-10-12T00:10:15.8651155Z   cache-dependency-path: package-lock.json
+2026-10-12T00:10:15.8652469Z   always-auth: false
+2026-10-12T00:10:15.8653509Z   check-latest: false
+2026-10-12T00:10:15.8663399Z   token: ***
+2026-10-12T00:10:15.8664359Z ##[endgroup]
+2026-10-12T00:10:16.0033177Z Node version file is not JSON file
+2026-10-12T00:10:16.0035440Z Resolved .nvmrc as 22.14.0
+2026-10-12T00:10:16.0051246Z Attempting to download 22.14.0...
+2026-10-12T00:10:16.0161886Z (node:2307) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-12T00:10:16.0164512Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-12T00:10:16.3603801Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+2026-10-12T00:10:16.9015104Z Extracting ...
+2026-10-12T00:10:16.9146269Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/ef7b7a56-983a-4067-9f02-baf1f7abeb7e -f /home/runner/work/_temp/916ddaea-4ded-4b6a-bbc5-9b90756f0d0a
+2026-10-12T00:10:18.0976315Z Adding to the cache ...
+2026-10-12T00:10:20.1382161Z ##[group]Environment details
+2026-10-12T00:10:20.3778193Z node: v22.14.0
+2026-10-12T00:10:20.3778849Z npm: 10.9.2
+2026-10-12T00:10:20.3779238Z yarn: 1.22.22
+2026-10-12T00:10:20.3780067Z ##[endgroup]
+2026-10-12T00:10:20.3802882Z [command]/opt/hostedtoolcache/node/22.14.0/x64/bin/npm config get cache
+2026-10-12T00:10:20.4732333Z /home/runner/.npm
+2026-10-12T00:10:20.5508981Z npm cache is not found
+2026-10-12T00:10:20.5688087Z ##[group]Run npm ci
+2026-10-12T00:10:20.5688393Z [36;1mnpm ci[0m
+2026-10-12T00:10:20.5958112Z shell: /usr/bin/bash -e {0}
+2026-10-12T00:10:20.5958462Z ##[endgroup]
+2026-10-12T00:10:21.9788504Z 
+2026-10-12T00:10:21.9796568Z added 39 packages, and audited 40 packages in 1s
+2026-10-12T00:10:21.9796972Z 
+2026-10-12T00:10:21.9797203Z 7 packages are looking for funding
+2026-10-12T00:10:21.9797581Z   run `npm fund` for details
+2026-10-12T00:10:21.9804102Z 
+2026-10-12T00:10:21.9804347Z 1 high severity vulnerability
+2026-10-12T00:10:21.9804717Z 
+2026-10-12T00:10:21.9804878Z To address all issues, run:
+2026-10-12T00:10:21.9805143Z   npm audit fix
+2026-10-12T00:10:21.9805284Z 
+2026-10-12T00:10:21.9805421Z Run `npm audit` for details.
+2026-10-12T00:10:22.0271368Z ##[group]Run npm --prefix web ci --ignore-scripts
+2026-10-12T00:10:22.0271837Z [36;1mnpm --prefix web ci --ignore-scripts[0m
+2026-10-12T00:10:22.0338868Z shell: /usr/bin/bash -e {0}
+2026-10-12T00:10:22.0339174Z ##[endgroup]
+2026-10-12T00:10:23.6852477Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-10-12T00:10:39.5443772Z 
+2026-10-12T00:10:39.5444854Z added 432 packages, and audited 433 packages in 17s
+2026-10-12T00:10:39.5450840Z 
+2026-10-12T00:10:39.5451306Z 169 packages are looking for funding
+2026-10-12T00:10:39.5452043Z   run `npm fund` for details
+2026-10-12T00:10:39.6649488Z 
+2026-10-12T00:10:39.6650599Z 11 vulnerabilities (10 high, 1 critical)
+2026-10-12T00:10:39.6651497Z 
+2026-10-12T00:10:39.6651991Z To address issues that do not require attention, run:
+2026-10-12T00:10:39.6652470Z   npm audit fix
+2026-10-12T00:10:39.6652649Z 
+2026-10-12T00:10:39.6653297Z To address all issues (including breaking changes), run:
+2026-10-12T00:10:39.6654053Z   npm audit fix --force
+2026-10-12T00:10:39.6654365Z 
+2026-10-12T00:10:39.6654578Z Run `npm audit` for details.
+2026-10-12T00:10:39.7189310Z ##[group]Run node scripts/run-node22.js --experimental-strip-types --test --test-name-pattern="evaluation and product-value readiness|hybrid verified-change product boundary" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252
+2026-10-12T00:10:39.7192941Z [36;1mnode scripts/run-node22.js --experimental-strip-types --test --test-name-pattern="evaluation and product-value readiness|hybrid verified-change product boundary" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252[0m
+2026-10-12T00:10:39.7259498Z shell: /usr/bin/bash -e {0}
+2026-10-12T00:10:39.7259761Z ##[endgroup]
+2026-10-12T00:10:39.7921669Z TAP version 13
+2026-10-12T00:10:39.9063024Z # (node:2401) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T00:10:39.9064650Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T00:10:39.9823078Z # (node:2401) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/opportunity-v3/opportunity-v3.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T00:10:39.9825531Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T00:10:39.9827865Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T00:10:40.3153268Z # Subtest: hybrid verified-change product boundary
+2026-10-12T00:10:40.3162285Z     # Subtest: omits every sizing key from public decisions and rejects nested leaks
+2026-10-12T00:10:40.3171985Z     ok 1 - omits every sizing key from public decisions and rejects nested leaks
+2026-10-12T00:10:40.3201781Z       ---
+2026-10-12T00:10:40.3231693Z       duration_ms: 1.087129
+2026-10-12T00:10:40.3241910Z       ...
+2026-10-12T00:10:40.3242717Z     # Subtest: requires exact persisted verification tier and stance on detail evidence
+2026-10-12T00:10:40.3257744Z     ok 2 - requires exact persisted verification tier and stance on detail evidence
+2026-10-12T00:10:40.3258226Z       ---
+2026-10-12T00:10:40.3258446Z       duration_ms: 0.50914
+2026-10-12T00:10:40.3258687Z       ...
+2026-10-12T00:10:40.3259106Z     # Subtest: rejects recursively malformed detail cards, horizons and factor tuples
+2026-10-12T00:10:40.3259713Z     ok 3 - rejects recursively malformed detail cards, horizons and factor tuples
+2026-10-12T00:10:40.3260372Z       ---
+2026-10-12T00:10:40.3261009Z       duration_ms: 10.501983
+2026-10-12T00:10:40.3261489Z       ...
+2026-10-12T00:10:40.3262260Z     # Subtest: derives deterministic brief, lane bounds and sizing-free homepage summary
+2026-10-12T00:10:40.3263449Z     ok 4 - derives deterministic brief, lane bounds and sizing-free homepage summary
+2026-10-12T00:10:40.3264203Z       ---
+2026-10-12T00:10:40.3264576Z       duration_ms: 9.904998
+2026-10-12T00:10:40.3264985Z       ...
+2026-10-12T00:10:40.3265839Z     # Subtest: assigns contradictions first and computes fixed-order strategy rows with null facts
+2026-10-12T00:10:40.3267189Z     ok 5 - assigns contradictions first and computes fixed-order strategy rows with null facts
+2026-10-12T00:10:40.3268060Z       ---
+2026-10-12T00:10:40.3268472Z       duration_ms: 3.78781
+2026-10-12T00:10:40.3268903Z       ...
+2026-10-12T00:10:40.3269729Z     # Subtest: hashes the complete pre-cap population and retains exactly the first 400 rows
+2026-10-12T00:10:40.3271188Z     ok 6 - hashes the complete pre-cap population and retains exactly the first 400 rows
+2026-10-12T00:10:40.3271974Z       ---
+2026-10-12T00:10:40.3272341Z       duration_ms: 37.768802
+2026-10-12T00:10:40.3272768Z       ...
+2026-10-12T00:10:40.3273558Z     1..6
+2026-10-12T00:10:40.3273904Z ok 1 - hybrid verified-change product boundary
+2026-10-12T00:10:40.3274432Z   ---
+2026-10-12T00:10:40.3274815Z   duration_ms: 64.649528
+2026-10-12T00:10:40.3275271Z   type: 'suite'
+2026-10-12T00:10:40.3275650Z   ...
+2026-10-12T00:10:40.3276204Z # Subtest: evaluation and product-value readiness
+2026-10-12T00:10:40.3277195Z     # Subtest: ranks one identical cohort and reproduces Precision, NDCG and Type-7 MAE
+2026-10-12T00:10:40.3278692Z     ok 1 - ranks one identical cohort and reproduces Precision, NDCG and Type-7 MAE
+2026-10-12T00:10:40.3279455Z       ---
+2026-10-12T00:10:40.3279907Z       duration_ms: 1.155908
+2026-10-12T00:10:40.3280341Z       ...
+2026-10-12T00:10:40.3281425Z     # Subtest: computes V3 and legacy metrics from the same supplied cohort
+2026-10-12T00:10:40.3282428Z     ok 2 - computes V3 and legacy metrics from the same supplied cohort
+2026-10-12T00:10:40.3283106Z       ---
+2026-10-12T00:10:40.3283468Z       duration_ms: 0.545599
+2026-10-12T00:10:40.3283889Z       ...
+2026-10-12T00:10:40.3284659Z     # Subtest: keeps partial maturity fail-closed and requires every promotion conjunct
+2026-10-12T00:10:40.3285950Z     ok 3 - keeps partial maturity fail-closed and requires every promotion conjunct
+2026-10-12T00:10:40.3286789Z       ---
+2026-10-12T00:10:40.3287225Z       duration_ms: 0.446273
+2026-10-12T00:10:40.3287733Z       ...
+2026-10-12T00:10:40.3288533Z     # Subtest: selects exact most-recent distinct cohorts and rejects duplicate dates
+2026-10-12T00:10:40.3289795Z     ok 4 - selects exact most-recent distinct cohorts and rejects duplicate dates
+2026-10-12T00:10:40.3290929Z       ---
+2026-10-12T00:10:40.3291378Z       duration_ms: 0.718631
+2026-10-12T00:10:40.3291874Z       ...
+2026-10-12T00:10:40.3292702Z     # Subtest: blocks rather than fabricates an incomplete 120-date point-in-time corpus
+2026-10-12T00:10:40.3294014Z     ok 5 - blocks rather than fabricates an incomplete 120-date point-in-time corpus
+2026-10-12T00:10:40.3294878Z       ---
+2026-10-12T00:10:40.3295316Z       duration_ms: 1.445609
+2026-10-12T00:10:40.3295753Z       ...
+2026-10-12T00:10:40.3296652Z     # Subtest: computes bounded feedback measures without persistent or portfolio state
+2026-10-12T00:10:40.3297971Z     ok 6 - computes bounded feedback measures without persistent or portfolio state
+2026-10-12T00:10:40.3298890Z       ---
+2026-10-12T00:10:40.3299392Z       duration_ms: 0.472021
+2026-10-12T00:10:40.3299884Z       ...
+2026-10-12T00:10:40.3300259Z     1..6
+2026-10-12T00:10:40.3301059Z ok 2 - evaluation and product-value readiness
+2026-10-12T00:10:40.3301602Z   ---
+2026-10-12T00:10:40.3301991Z   duration_ms: 5.224061
+2026-10-12T00:10:40.3302490Z   type: 'suite'
+2026-10-12T00:10:40.3302876Z   ...
+2026-10-12T00:10:40.3385487Z 1..2
+2026-10-12T00:10:40.3385870Z # tests 12
+2026-10-12T00:10:40.3386237Z # suites 2
+2026-10-12T00:10:40.3386810Z # pass 12
+2026-10-12T00:10:40.3387396Z # fail 0
+2026-10-12T00:10:40.3387952Z # cancelled 0
+2026-10-12T00:10:40.3391369Z # skipped 0
+2026-10-12T00:10:40.3391752Z # todo 0
+2026-10-12T00:10:40.3392217Z # duration_ms 558.278119
+2026-10-12T00:10:40.4127477Z {"protocol":"opportunity-verification-track-v3.0","track":"evaluation_governance","status":"blocked","blocker":"non_fabricated_elapsed_cohorts_unavailable","requiredBacktestDates":120,"requiredLiveDates":20,"requiredAttemptRosterDates":252}
+2026-10-12T00:10:40.4188281Z ##[error]Process completed with exit code 2.
+2026-10-12T00:10:40.4337086Z Post job cleanup.
+2026-10-12T00:10:40.5170982Z [command]/usr/bin/git version
+2026-10-12T00:10:40.5218382Z git version 2.55.0
+2026-10-12T00:10:40.5267546Z Temporarily overriding HOME='/home/runner/work/_temp/cbdbfa65-3ad8-417e-bf97-cb7eda56d1c4' before making global git config changes
+2026-10-12T00:10:40.5274047Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-12T00:10:40.5275658Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-12T00:10:40.5313456Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T00:10:40.5351074Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T00:10:40.5603885Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T00:10:40.5635232Z http.https://github.com/.extraheader
+2026-10-12T00:10:40.5647927Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-12T00:10:40.5684985Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T00:10:40.5974312Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T00:10:40.6022231Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T00:10:40.6459034Z Cleaning up orphan processes
+2026-10-12T00:10:40.6837973Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

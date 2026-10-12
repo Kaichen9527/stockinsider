@@ -1,0 +1,100 @@
+TAP version 13
+# Subtest: PCR-023 actual protected aggregate rejects missing, reordered, failed and unreviewed inputs
+ok 1 - PCR-023 actual protected aggregate rejects missing, reordered, failed and unreviewed inputs
+  ---
+  duration_ms: 2.968875
+  ...
+# Subtest: the configured protected check includes the independent model-runner envelope aggregate
+ok 2 - the configured protected check includes the independent model-runner envelope aggregate
+  ---
+  duration_ms: 0.444333
+  ...
+# Subtest: candidate execution waits for exact review and model-runner failure cannot be bypassed
+ok 3 - candidate execution waits for exact review and model-runner failure cannot be bypassed
+  ---
+  duration_ms: 0.990416
+  ...
+# Subtest: public candidate detail changes trigger the protected product workflow
+ok 4 - public candidate detail changes trigger the protected product workflow
+  ---
+  duration_ms: 0.139875
+  ...
+# Subtest: every third-party action is pinned to an immutable commit
+ok 5 - every third-party action is pinned to an immutable commit
+  ---
+  duration_ms: 0.918083
+  ...
+# Subtest: subject preparation pins Node from the protected base
+ok 6 - subject preparation pins Node from the protected base
+  ---
+  duration_ms: 0.538584
+  ...
+# Subtest: the base worker owns validation and performs the final exclusive envelope write
+ok 7 - the base worker owns validation and performs the final exclusive envelope write
+  ---
+  duration_ms: 0.791167
+  ...
+# Subtest: review envelopes require reviewed-parent evidence with an exact closed diff and bound attestation
+ok 8 - review envelopes require reviewed-parent evidence with an exact closed diff and bound attestation
+  ---
+  duration_ms: 0.179
+  ...
+# Subtest: the protected root selects closed graph-bound Requirements/Architecture evidence and subject-addressed exact review evidence
+ok 9 - the protected root selects closed graph-bound Requirements/Architecture evidence and subject-addressed exact review evidence
+  ---
+  duration_ms: 1.484875
+  ...
+# Subtest: the production parser accepts the actual immutable PR210 architecture evidence bytes
+ok 10 - the production parser accepts the actual immutable PR210 architecture evidence bytes
+  ---
+  duration_ms: 2.839292
+  ...
+# Subtest: the protected root executes the closed v1 and v2 graph algorithms and rejects unknown catalogs
+ok 11 - the protected root executes the closed v1 and v2 graph algorithms and rejects unknown catalogs
+  ---
+  duration_ms: 2987.018584
+  ...
+# Subtest: the protected model-oracle rotation executes the exact v3.15 to v3.16 listing transition
+ok 12 - the protected model-oracle rotation executes the exact v3.15 to v3.16 listing transition
+  ---
+  duration_ms: 23.860125
+  ...
+# Subtest: the protected model-oracle rotation approves only the exact v3.16 to v3.17 successor
+ok 13 - the protected model-oracle rotation approves only the exact v3.16 to v3.17 successor
+  ---
+  duration_ms: 22.127292
+  ...
+# Subtest: the protected model-oracle rotation approves only the exact v3.17 to v3.18 successor
+ok 14 - the protected model-oracle rotation approves only the exact v3.17 to v3.18 successor
+  ---
+  duration_ms: 0.220667
+  ...
+# Subtest: each candidate command is isolated in a process group that is cleared on return
+ok 15 - each candidate command is isolated in a process group that is cleared on return
+  ---
+  duration_ms: 0.071958
+  ...
+# Subtest: candidate model code receives no credential and is enclosed by a base-owned filesystem/network sandbox
+ok 16 - candidate model code receives no credential and is enclosed by a base-owned filesystem/network sandbox
+  ---
+  duration_ms: 0.57025
+  ...
+# Subtest: fresh model oracle does not reuse expired evidence and auth path ignores inherited HOME
+ok 17 - fresh model oracle does not reuse expired evidence and auth path ignores inherited HOME
+  ---
+  duration_ms: 1.275958
+  ...
+# Subtest: expired reuse never loads old Git objects, including matching listing; unexpired reuse remains exact
+ok 18 - expired reuse never loads old Git objects, including matching listing; unexpired reuse remains exact
+  ---
+  duration_ms: 0.127583
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3122.440333

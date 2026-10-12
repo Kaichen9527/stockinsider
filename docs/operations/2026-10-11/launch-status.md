@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 08:08台灣時間：發布工具PR373已合併，網站保護完整恢復
+
+人類僅工具一次例外已實際完成：[PR373](https://github.com/Kaichen9527/stockinsider/pull/373) exact9b74e535 merge commit c6bc227ccaa5309226cbb833b35a35198491cb48。原ruleset20177392只短暫加入該owner的PR-only bypass，合併後立即恢復並GET逐欄核對active／bypass[]及所有原規則；沒有將任何原失敗改為PASS，也沒有網站例外。完整真實操作及原／恢復規則保存在本節收據。
+
+最終工具91c核心：root真正native live2PASS零fail/skip，既有entry實際完成permissions／network／descendant checks及三個operation-bound provider calls；root137focused通過。兩份獨立review及final9b74 registration delta均真scoped PASS，unique direct-child refs與carried bytes已核對。這是人工live工程證據及授權例外，不能冒稱373舊protected全部成功。前次f6 live RED及限定manual cleanup保留。
+
+三個網站PR先在獨立validation refs整合新main，未更新PR heads：370 c0ad8552／ordinary38186981588；371 1f154fe0／38186987889；372 e06b14b8／38186994222。各自完整canonical／build正在GitHub驗證，精確程式獨立審查同步進行。先取得真canonical再建立fresh exact refs，然後才更新PR並跑正常protected。普通evaluation diagnostic已能正常跑12tests全過，但以non_fabricated_elapsed_cohorts_unavailable如實BLOCKED，不能為上線假造120／20／252日期的策略證據。
+
+正式站仍169，沒有新網站部署或重跑343全量。VPS fresh可用16,592,592,896bytes／總154,894,188,544bytes、五個正式unitsactive；不刪月內Docker、不改容量准入。Mac不新增fullbuild。源與失敗證據`.agent/reports/2026-10-12T08-08-tool-trust-migration-merged/`。
+
 ## 2026-10-12 08:02台灣時間：工具136測試與獨立closure完成，真live擋在新版本host環境限制
 
 工具f6e45b33/tree9d5d7c20的expired reuse／durable fence與unknown process-risk修復，maker及root各自136PASS零fail/skip；獨立reviewer實讀runtime delta、8個recovery tests與5個executeModel注入probe後給scoped CODE PASS。不是protected或provider PASS。舊f30兩P2 REQUEST_CHANGES與0ae過早PASS refs均保留為失效，未推remote consumer。
