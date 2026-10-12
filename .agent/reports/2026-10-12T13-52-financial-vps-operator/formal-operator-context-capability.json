@@ -1,0 +1,8 @@
+{
+  "platform": "linux",
+  "osUsername": "agent",
+  "pgEnvironmentNames": [],
+  "defaultContextRejected": "vps_peer_migration_operator_context_required",
+  "connectionAttempted": false,
+  "formalPeerTransportVerified": false
+}

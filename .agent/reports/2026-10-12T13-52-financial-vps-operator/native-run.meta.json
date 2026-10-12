@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/financial-vps-operator-native.test.mjs"
+  ],
+  "start_utc": "2026-10-12T13:57:47Z",
+  "seconds": 1.9244732856750488,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 151318528,
+  "min_free_bytes": 8919941120
+}

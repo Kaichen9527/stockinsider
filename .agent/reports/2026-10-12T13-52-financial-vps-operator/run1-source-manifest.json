@@ -1,0 +1,32 @@
+[
+  {
+    "path": "scripts/opportunity-v3/vps-migration-peer.mjs",
+    "bytes": 6693,
+    "sha256": "a488b4b25141ac5f23b6a859d2366ec2c91907441b10fd3ed810bd6c5dc695c9"
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-vps-operator-action.mjs",
+    "bytes": 3384,
+    "sha256": "0d05e847db6da9dbf1f7ae9eb1ba581a9b8dc94d20a9f4b81d623fa4a3d025d1"
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-vps-operator-binding.mjs",
+    "bytes": 2537,
+    "sha256": "a237bef3aee765a2dc1166e202f6656b9a40c87620905fedf04cbdcf0f384844"
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-vps-operator-native.test.mjs",
+    "bytes": 13567,
+    "sha256": "7f91de9cb6028ad6e76439c69a8fa66c207dd3cc1e2edc130ed8164196520b69"
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs",
+    "bytes": 11150,
+    "sha256": "6287754d09e19c1c7466c93adbc5931d11e722b5a9706f0b2e6647457a0a388c"
+  },
+  {
+    "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "bytes": 39399,
+    "sha256": "e8f9f2fb5b1b31535093f42f12c0f9dbbb469b103179f1c4a7b7af28b5e19338"
+  }
+]

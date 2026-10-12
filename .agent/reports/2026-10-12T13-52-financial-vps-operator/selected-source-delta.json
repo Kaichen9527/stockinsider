@@ -1,0 +1,16 @@
+{
+  "base": "8cdc6ac5fb5a1e234808ca3f0de22ab1f1752d23",
+  "files": [
+    "docs/operations/2026-10-12/financial-vps-operator-prerequisite-handoff.md",
+    "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-action.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-binding.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-native.test.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs",
+    "scripts/opportunity-v3/vps-migration-peer.mjs"
+  ],
+  "lockAndSqlChanged": false,
+  "protectedAuthorityFilesChanged": false,
+  "reviewStatus": "not independently approved by maker"
+}

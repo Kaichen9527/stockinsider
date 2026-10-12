@@ -1,0 +1,10 @@
+{
+  "initialCommandRaw": "pure.stdout",
+  "initialFileLevelPass": 2,
+  "initialFileLevelFail": 2,
+  "diagnosticObservation": "Direct node module execution revealed spawnSync /workspace/.tools/node22/node_modules/node/bin/node EPERM in default48/49 planner child. Diagnosis was tool-observed; its complete direct stdout was not separately archived.",
+  "correction": "Existing approved execution outside nested sandbox; no test/source/security-guard relaxation or new dependency.",
+  "supportedRaw": "pure-supported.stdout",
+  "finalRaw": "pure-final.stdout",
+  "unchangedFailureNotBlindlyRetried": true
+}

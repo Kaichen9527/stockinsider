@@ -1,0 +1,16 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs",
+    "scripts/opportunity-v3/financial-existing-schema-profile.test.mjs",
+    "scripts/opportunity-v3/financial-history-install-guard.test.mjs",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs"
+  ],
+  "start_utc": "2026-10-12T14:01:49Z",
+  "seconds": 0.5551738739013672,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 175693824,
+  "min_free_bytes": 8915279872
+}

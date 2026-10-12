@@ -1,0 +1,44 @@
+[
+  {
+    "at": "2026-10-12T13:57:48.773Z",
+    "sha256": "191f6c3587eb99bc57bf2f477e9343049fc1cd185df32d6a19fb3ec458bf20a5",
+    "migration": null,
+    "kind": "SELECT pg_try_advisory_lock(hashtextextended('stockinsider-r"
+  },
+  {
+    "at": "2026-10-12T13:57:48.774Z",
+    "sha256": "a8402858d4f1e1d27afee976520485ebb4b96a5387355b823f0d0b8079729032",
+    "migration": null,
+    "kind": "BEGIN"
+  },
+  {
+    "at": "2026-10-12T13:57:48.774Z",
+    "sha256": "bcd2639091d097d5a154e2fb2084b848c78c86b652b6ab9f9f7fa5c2c1685137",
+    "migration": null,
+    "kind": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED"
+  },
+  {
+    "at": "2026-10-12T13:57:48.775Z",
+    "sha256": "035ab3619f94124d2258042d26a70465efb0266962bfaf17e8f0715f83dbdc87",
+    "migration": null,
+    "kind": "SELECT\n    to_regclass('public.opportunity_financial_observa"
+  },
+  {
+    "at": "2026-10-12T13:57:48.778Z",
+    "sha256": "c218cb96b5cd70ca6c2af122a1ba811575906e2370776cd98b826483d2307c5c",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object('oid',r.oid,'name',r.rolname,\n    "
+  },
+  {
+    "at": "2026-10-12T13:57:48.788Z",
+    "sha256": "587fa628a9fe4642ac0e22825a97e81d388af674f7251a9fb699f96901dcb710",
+    "migration": null,
+    "kind": "ROLLBACK"
+  },
+  {
+    "at": "2026-10-12T13:57:48.789Z",
+    "sha256": "b6263222023173926d2216bd0bccb82a56b8ee5093bd4430a0ae04e4c2ba6bd7",
+    "migration": null,
+    "kind": "SELECT pg_advisory_unlock(hashtextextended('stockinsider-rev"
+  }
+]

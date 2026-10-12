@@ -1,0 +1,14 @@
+{
+  "initial": {
+    "bytes": 1438549,
+    "beforeSha256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+    "afterSha256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+    "equal": true
+  },
+  "corrected": {
+    "bytes": 1438549,
+    "beforeSha256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+    "afterSha256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+    "equal": true
+  }
+}

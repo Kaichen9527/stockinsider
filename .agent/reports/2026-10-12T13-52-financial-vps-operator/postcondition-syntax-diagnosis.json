@@ -1,0 +1,148 @@
+{
+  "sqlState": "42601",
+  "reportedPosition": 24449,
+  "sameAsBase8cdc": true,
+  "sqlSHA256": "d4e1f1f9f106af0b953a8a1f92e6fc69effcd87f92073eef6097dbbd81fc3a84",
+  "context": "as_function_privilege('service_role',\n          'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')\n        AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')\n        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')\n    ) result",
+  "sourceLine": 444,
+  "changedInThisSlice": false,
+  "remainingStagesBlocked": true,
+  "lexicalParenthesisDiagnostics": {
+    "topLevelClosures": [
+      {
+        "open": 26,
+        "close": 20257,
+        "line": 390,
+        "context": "legacyRadarCompatibility''' IN pg_get_functiondef(\n            'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure\n          ))>0)\n      ,'v320KolRetentionBridge',to_reg"
+      },
+      {
+        "open": 20306,
+        "close": 20382,
+        "line": 392,
+        "context": "d,uuid,integer)'::regprocedure\n          ))>0)\n      ,'v320KolRetentionBridge',to_regprocedure(\n        'public.read_v320_revalidated_kol_retention_internal(timestamptz)') IS NOT NULL\n        AND to_regprocedur"
+      },
+      {
+        "open": 20423,
+        "close": 20526,
+        "line": 394,
+        "context": "ion_internal(timestamptz)') IS NOT NULL\n        AND to_regprocedure(\n          'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)') IS NOT NULL\n        AND (SELECT pg_get"
+      },
+      {
+        "open": 20552,
+        "close": 20911,
+        "line": 398,
+        "context": "et_functiondef(oid) LIKE '%kolRetentionAuthorityContract%'\n          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)\n        AND NOT has_function_privilege"
+      },
+      {
+        "open": 20951,
+        "close": 21054,
+        "line": 400,
+        "context": "uid,integer)'::regprocedure)\n        AND NOT has_function_privilege('service_role',\n          'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')\n        AND NOT has_function_privilege"
+      },
+      {
+        "open": 21094,
+        "close": 21222,
+        "line": 402,
+        "context": "E')\n        AND NOT has_function_privilege('service_role',\n          'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)','EXECUTE')\n        AND (NOT EXISTS(SELECT 1 FROM "
+      },
+      {
+        "open": 21236,
+        "close": 21814,
+        "line": 409,
+        "context": "OT has_function_privilege('stockinsider_runtime_v319',\n            'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)','EXECUTE')))\n      ,'v320KolClaimPayloadCompaction'"
+      },
+      {
+        "open": 21870,
+        "close": 21960,
+        "line": 411,
+        "context": "id,integer)','EXECUTE')))\n      ,'v320KolClaimPayloadCompaction',to_regprocedure(\n          'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL\n        AND public.verify_"
+      },
+      {
+        "open": 22035,
+        "close": 22036,
+        "line": 412,
+        "context": "dure(\n          'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL\n        AND public.verify_legacy_claim_delegation_chain_v3_20()\n        AND (SELECT pg_get_userbyid(pr"
+      },
+      {
+        "open": 22050,
+        "close": 22397,
+        "line": 417,
+        "context": "NOT LIKE '%coarseUniverseRows%'\n          FROM pg_proc WHERE oid=\n            'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)'::regprocedure)\n        AND NOT has_function_privilege"
+      },
+      {
+        "open": 22437,
+        "close": 22552,
+        "line": 419,
+        "context": "'::regprocedure)\n        AND NOT has_function_privilege('service_role',\n          'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)','EXECUTE')\n        AND NOT has_function_privilege"
+      },
+      {
+        "open": 22592,
+        "close": 22682,
+        "line": 421,
+        "context": "v3_16(uuid,uuid,uuid,integer)','EXECUTE')\n        AND NOT has_function_privilege('service_role',\n          'public.verify_legacy_claim_delegation_chain_v3_20()','EXECUTE')\n        AND (NOT EXISTS(SELECT 1 FROM "
+      },
+      {
+        "open": 22696,
+        "close": 22944,
+        "line": 424,
+        "context": "OR\n          NOT has_function_privilege('stockinsider_runtime_v319',\n            'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)','EXECUTE'))\n      ,'v320KolRetentionOwnerBoundary'"
+      },
+      {
+        "open": 23000,
+        "close": 23090,
+        "line": 426,
+        "context": "uid,integer)','EXECUTE'))\n      ,'v320KolRetentionOwnerBoundary',to_regprocedure(\n          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)') IS NOT NULL\n        AND (SELECT pg_get"
+      },
+      {
+        "open": 23116,
+        "close": 23405,
+        "line": 430,
+        "context": "%source_document_revisions_v3%'\n          FROM pg_proc WHERE oid=\n            'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)'::regprocedure)\n        AND (SELECT pg_get_userbyid(pr"
+      },
+      {
+        "open": 23419,
+        "close": 23808,
+        "line": 435,
+        "context": ") NOT LIKE '%source_document_revisions_v3%'\n          FROM pg_proc WHERE oid=\n            'public.read_v320_revalidated_kol_retention_internal(timestamptz)'::regprocedure)\n        AND has_function_privilege('le"
+      },
+      {
+        "open": 23844,
+        "close": 23975,
+        "line": 437,
+        "context": "ure)\n        AND has_function_privilege('legacy_correctness_rpc_owner',\n          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)','EXECUTE')\n        AND NOT has_function_privilege"
+      },
+      {
+        "open": 24015,
+        "close": 24130,
+        "line": 439,
+        "context": "ptz)','EXECUTE')\n        AND NOT has_function_privilege('service_role',\n          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)','EXECUTE')\n        AND NOT has_function_privilege"
+      },
+      {
+        "open": 24170,
+        "close": 24273,
+        "line": 441,
+        "context": "nal(timestamptz)','EXECUTE')\n        AND NOT has_function_privilege('service_role',\n          'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')\n        AND NOT has_schema_privilege('"
+      },
+      {
+        "open": 24311,
+        "close": 24356,
+        "line": 442,
+        "context": "\n          'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')\n        AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')\n        AND NOT has_schema_privilege('"
+      },
+      {
+        "open": 24394,
+        "close": 24443,
+        "line": 443,
+        "context": ")\n        AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')\n        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')\n    ) result"
+      }
+    ],
+    "unmatched": [
+      {
+        "position": 24449,
+        "line": 444
+      }
+    ],
+    "openCount": 0
+  },
+  "candidateSeparateMinimalCorrection": "The extra close in /length('legacyRadarCompatibility'))=2 closes SELECT before the following AND. Review removing exactly one ')' there; retain =2 and position>0 inside SELECT and final JSON object close. Not applied or natively accepted in this slice."
+}

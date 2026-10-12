@@ -1,0 +1,6 @@
+{
+  "name": "error",
+  "message": "syntax error at or near \")\"",
+  "code": "42601",
+  "routine": "scanner_yyerror"
+}

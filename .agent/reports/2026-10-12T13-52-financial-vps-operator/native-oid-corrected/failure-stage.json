@@ -1,0 +1,14 @@
+{
+  "stage": "first financial profile50 apply",
+  "error": {
+    "name": "Error",
+    "message": "dependent_stages_blocked_by_first_apply"
+  },
+  "firstNativeFailure": {
+    "name": "error",
+    "message": "syntax error at or near \")\"",
+    "code": "42601",
+    "routine": "scanner_yyerror"
+  },
+  "lastMigration": "migrations/20261005_financial_history_admission_v1.sql"
+}

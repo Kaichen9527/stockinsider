@@ -1,0 +1,20 @@
+{
+  "schema": "financial-vps-operator-prerequisite-v1",
+  "action": "bootstrapVpsRuntimeRole",
+  "profileSha256": "acdee42a8ca130d259541b5c0b4b14e228c355528b60a2ac4ea3ef9633d611d9",
+  "sources": [
+    {
+      "relativePath": "scripts/opportunity-v3/vps-migration-peer.mjs",
+      "sha256": "a488b4b25141ac5f23b6a859d2366ec2c91907441b10fd3ed810bd6c5dc695c9"
+    },
+    {
+      "relativePath": "scripts/opportunity-v3/financial-vps-operator-action.mjs",
+      "sha256": "c2140ca65eb87068e934b18f4f2cc5efb4c9851ba717362a57013972a9f1585f"
+    },
+    {
+      "relativePath": "scripts/opportunity-v3/financial-vps-operator-binding.mjs",
+      "sha256": "a237bef3aee765a2dc1166e202f6656b9a40c87620905fedf04cbdcf0f384844"
+    }
+  ],
+  "actionSha256": "97697bc3f8a2c3c1bd4676c579eaa9b33e4273c9e98e0a0045998698b736a42b"
+}
