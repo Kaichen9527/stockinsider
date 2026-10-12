@@ -1,0 +1,20 @@
+{
+  "stage": "related-entry-plan",
+  "command": [
+    "npm",
+    "run",
+    "test:tw-entry-plan"
+  ],
+  "startedAt": "2026-10-11T14:19:06.499128+00:00",
+  "endedAt": "2026-10-11T14:19:42.361394+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 35.86229053803254,
+  "sampledAggregatePeakRssBytes": 397848576,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10108596224,
+  "diskAvailableAfterBytes": 10108596224,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

@@ -1,0 +1,16 @@
+
+> web@0.1.0 prebuild
+> node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs
+
+Official authority build bridge verified (5 canonical modules).
+
+> web@0.1.0 build
+> next build
+
+▲ Next.js 16.3.8 (Turbopack)
+✓ Running next.config.ts took 22ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 14.9s
+  Running TypeScript ...
+src/lib/entry-plan-authority-backfill.test.ts(166,13): error TS2339: Property 'status' does not exist on type '{ session_authority_id: string; }'.

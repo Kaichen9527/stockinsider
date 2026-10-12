@@ -1,0 +1,22 @@
+{
+  "command": [
+    "gh",
+    "pr",
+    "create",
+    "--repo",
+    "Kaichen9527/stockinsider",
+    "--draft",
+    "--base",
+    "main",
+    "--head",
+    "codex/entry-plan-calendar-pagination-oct11",
+    "--title",
+    "Fix bounded entry-plan calendar pagination and inbox writer lease",
+    "--body-file",
+    "/tmp/si-calendar-ijqf378a/pr-body.md"
+  ],
+  "startedAt": "2026-10-11T14:25:46.846105+00:00",
+  "elapsedSeconds": 0.11449738795636222,
+  "exitCode": 1,
+  "credentialsReadOrCopied": false
+}

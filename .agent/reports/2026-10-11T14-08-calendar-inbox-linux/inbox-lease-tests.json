@@ -1,0 +1,22 @@
+{
+  "stage": "inbox-lease-tests",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "scripts/research-inbox-write-lease.test.mjs",
+    "web/src/lib/research-inbox.test.ts"
+  ],
+  "startedAt": "2026-10-11T14:21:05.401950+00:00",
+  "endedAt": "2026-10-11T14:21:05.917563+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.5155802899971604,
+  "sampledAggregatePeakRssBytes": 134803456,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10108522496,
+  "diskAvailableAfterBytes": 10108522496,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

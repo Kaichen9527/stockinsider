@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { createRequire } from 'node:module';
+import vm from 'node:vm';
+import { buildResearchInboxRow, validateResearchInboxItem } from '/workspace/cloud-reviewer-result-http-vm-oct09/web/src/lib/research-inbox.ts';
+const require=createRequire(import.meta.url),ts=require('/workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules/typescript');
+const source=execFileSync('git',['show','169aad1b6cfa747f78ae3464b614f43c0749d806:web/src/app/api/internal/research-inbox/route.ts'],{cwd:'/workspace/cloud-reviewer-result-http-vm-oct09',encoding:'utf8'});
+const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+const calls=[];const modules={'next/server':{NextResponse:{json:(v,i)=>Response.json(v,i)}},'@/lib/internal-auth':{requireInternalAuth:()=>({ok:true,authSource:'synthetic_internal'})},'@/lib/research-inbox':{buildResearchInboxRow,validateResearchInboxItem},'@/lib/production-write-lease':{acquireProductionWriteLease:async()=>{calls.push('acquire');return 'synthetic-owner';}},'@/lib/supabase-server':{getSupabaseServerClient:()=>({from:()=>({upsert:()=>{calls.push('upsert');return {select:async()=>({data:null,error:{message:'production_writer_lease_required'}})}}})})}};
+const exports={};vm.runInNewContext(compiled,{exports,require:key=>modules[key]});
+const item={sourcePlatform:'official',sourceUrl:'https://example.com/official',author:'synthetic',publishedAt:'2026-10-08T00:00:00Z',observedAt:'2026-10-11T00:00:00Z',symbols:['2409'],shortSummary:'Synthetic bounded summary.',catalyst:'Unverified.',risk:'No order claim.',claimStatus:'reported',visibility:'public'};
+const response=await exports.POST(new Request('http://localhost/api/internal/research-inbox',{method:'POST',body:JSON.stringify({items:[item]})}));const body=await response.json();assert.equal(response.status,500);assert.equal(body.error,'production_writer_lease_required');assert.deepEqual(calls,['upsert']);console.log(JSON.stringify({status:response.status,body,calls,boundary:'synthetic database trigger error; original route and real validators; no production request'}));

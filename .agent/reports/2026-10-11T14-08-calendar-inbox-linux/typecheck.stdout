@@ -1,0 +1,26 @@
+
+> web@0.1.0 pretypecheck
+> node scripts/sync-official-authority.mjs
+
+Official authority build bridge verified (5 canonical modules).
+
+> web@0.1.0 typecheck
+> tsc --noEmit --pretty false
+
+.next/types/validator.ts(98,39): error TS2307: Cannot find module '../../src/app/preview/research-agent-2409/page.js' or its corresponding type declarations.
+.next/types/validator.ts(107,39): error TS2307: Cannot find module '../../src/app/preview/research-working/[symbol]/page.js' or its corresponding type declarations.
+.next/types/validator.ts(278,39): error TS2307: Cannot find module '../../src/app/api/internal/candidate-audit-export/route.js' or its corresponding type declarations.
+.next/types/validator.ts(296,39): error TS2307: Cannot find module '../../src/app/api/internal/candidate-dossier-lease/route.js' or its corresponding type declarations.
+.next/types/validator.ts(791,39): error TS2307: Cannot find module '../../src/app/api/internal/research-cloud-result/route.js' or its corresponding type declarations.
+.next/types/validator.ts(800,39): error TS2307: Cannot find module '../../src/app/api/internal/research-deep-job/route.js' or its corresponding type declarations.
+.next/types/validator.ts(809,39): error TS2307: Cannot find module '../../src/app/api/internal/research-deep-review/route.js' or its corresponding type declarations.
+.next/types/validator.ts(827,39): error TS2307: Cannot find module '../../src/app/api/internal/research-model-reservation/route.js' or its corresponding type declarations.
+.next/types/validator.ts(836,39): error TS2307: Cannot find module '../../src/app/api/internal/research-monitor-worklist/route.js' or its corresponding type declarations.
+.next/types/validator.ts(845,39): error TS2307: Cannot find module '../../src/app/api/internal/research-observed-roster/route.js' or its corresponding type declarations.
+.next/types/validator.ts(854,39): error TS2307: Cannot find module '../../src/app/api/internal/research-paper-session/route.js' or its corresponding type declarations.
+.next/types/validator.ts(863,39): error TS2307: Cannot find module '../../src/app/api/internal/research-priority-run/route.js' or its corresponding type declarations.
+.next/types/validator.ts(881,39): error TS2307: Cannot find module '../../src/app/api/internal/research-strategy-record/route.js' or its corresponding type declarations.
+.next/types/validator.ts(890,39): error TS2307: Cannot find module '../../src/app/api/internal/research-technical-snapshot/route.js' or its corresponding type declarations.
+.next/types/validator.ts(899,39): error TS2307: Cannot find module '../../src/app/api/internal/research-thesis-event/route.js' or its corresponding type declarations.
+.next/types/validator.ts(908,39): error TS2307: Cannot find module '../../src/app/api/internal/research-thesis-review/route.js' or its corresponding type declarations.
+src/lib/entry-plan-authority-backfill.test.ts(166,13): error TS2339: Property 'status' does not exist on type '{ session_authority_id: string; }'.

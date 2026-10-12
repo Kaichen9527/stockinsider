@@ -1,0 +1,20 @@
+{
+  "stage": "original-inbox-red",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "/tmp/si-calendar-ijqf378a/original-inbox-probe.mjs"
+  ],
+  "startedAt": "2026-10-11T14:25:27.338669+00:00",
+  "endedAt": "2026-10-11T14:25:27.867254+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 0.5285918770241551,
+  "sampledAggregatePeakRssBytes": 84545536,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10097119232,
+  "diskAvailableAfterBytes": 10097119232,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

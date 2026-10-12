@@ -1,0 +1,22 @@
+{
+  "stage": "calendar-tests",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-reporter=tap",
+    "web/src/lib/entry-plan-authority-backfill.test.ts"
+  ],
+  "startedAt": "2026-10-11T14:14:33.590841+00:00",
+  "endedAt": "2026-10-11T14:15:05.245074+00:00",
+  "exitCode": 1,
+  "elapsedSeconds": 31.65424385998631,
+  "sampledAggregatePeakRssBytes": 189853696,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 10108596224,
+  "diskAvailableAfterBytes": 10108596224,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}
