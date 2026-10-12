@@ -1,0 +1,46 @@
+# Exact application integration review
+
+Result: `PASS`
+
+P0=0 P1=0 P2=0
+
+- Final reviewed repair/tree: `c0ad855257297706d714727e461684f723ac5875` / `6f7cf33714bca2377377a3da5d1bfe8775eb8592`
+- Full final range: `c6bc227ccaa5309226cbb833b35a35198491cb48..c0ad855257297706d714727e461684f723ac5875`
+- Active graph: `c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a`
+
+# PR370 independent scoped code review
+
+Result: `PASS` — unsigned scoped code opinion. P0=0, P1=0, P2=0.
+
+- Base: `c6bc227ccaa5309226cbb833b35a35198491cb48`
+- Reviewed head: `c0ad855257297706d714727e461684f723ac5875`
+- Reviewed tree: `6f7cf33714bca2377377a3da5d1bfe8775eb8592`
+
+I independently read the exact two runtime deltas, their two test deltas, the two operation handoffs, and directly relevant unchanged auth/lease/row-construction/calendar schema and build-bridge dependencies. The 84-path range contains four code/test paths, two operation documents and 78 historical report paths. The four changed source/test blobs match prior source `5ea9a2f083630460ab37e6a65dfcdfa2403f1211` exactly; the restored tool-main merge adds no extra application behavior. Historical evidence is not treated as a new protected approval.
+
+Inbox admission remains after auth and complete existing input validation. Busy/acquisition failures do not write or release a foreign owner. The acquired owner is released once in finally for write success, client/query exceptions and database errors. Release errors cannot become successful responses, and the response distinguishes a possibly committed write from confirmed cleanup. The existing lease RPC semantics and backend database authority remain unchanged.
+
+Calendar acquisition now freezes date heads rather than a raw revision prefix. The strict stable order includes authority ID; each date is finished across pages before its head is selected. Latest cancellation excludes the date without reviving an older completed revision; contradictory same-clock heads fail closed. Source/collection/recorded clocks use sub-millisecond comparisons and the original cutoff; selected sessions stay chronological. Page/aggregate row/byte limits, overflow sentinel, monotonic deadline and post-await clock checks reject incomplete acquisition before run creation.
+
+Actual independent execution from an isolated exact Git extraction: **33 PASS / 0 FAIL / 0 SKIP**, Node22.23.3, including the real 30-second stalled-query abort. No tests or source were rewritten. Existing TypeScript dependencies were reused, and the five generated official-authority inputs were byte-identical exact Git runtime sources. No install or build was performed.
+
+Raw: `/tmp/stockinsider-pr370-c0ad-independent-oct12.tap`  
+SHA256: `e994b7839d81c6e015f1a947c0e489ff9044604d37209aa2818c76bbc56d6c46`  
+Extraction manifest: `/tmp/stockinsider-pr370-c0ad-independent-oct12/manifest.json`  
+SHA256: `05d8baf00c81edc63ddfc6d8288d790fba7f6bd9bb001dea47e3531c172938cf`
+
+## Scope limits
+
+- No real HTTP/PostgREST/PostgreSQL or production writes in this review. Auth/database/lease route boundaries use synthetic doubles; real route, validators and row construction execute.
+- Calendar pagination uses synthetic thenable dependencies, including actual 30-second abort test. Historical production-row replay and Linux build evidence are not new execution here.
+- Offset pagination relies on existing immutable calendar revisions, recorded-at cutoff and writer serialization; this review does not establish a new cross-request database snapshot or authority generation.
+- Byte caps apply to selected parsed JSON accounting, not pre-parse network transport or hard process memory.
+- Historical .agent evidence/probe files are classified as provenance; no claim every historical producer program was independently executed or reviewed as runtime.
+- No whole-application/protected PASS, strategy authority, deployment, auth/model execution or GitHub status modification. GHA38186981588 remains separate.
+
+
+## Fresh complete execution
+
+GitHub ordinary run 38186981588, product-runtime job 114611309065, checked out this exact subject and completed successfully. Its unchanged canonical product-correctness command actually executed 155 tests with zero failures/skips/todos, including all 31 named PCR cases. Typecheck, lint, build, migration and browser checks in the parent diagnostic chain also completed. The fulfillment captures the actual timestamp-stripped canonical section of the parent GitHub combined output; it is not a separately rerun or isolated stdout claim. The original full job log is retained. Metadata for immutable owner/caller/fixture and result dependency uses the existing boundaries and matches the earlier record; every execution hash/result is fresh for this subject.
+
+These are ordinary engineering results, not protected PASS, strategy success or production data. The evaluation promotion diagnostic independently remains BLOCKED because elapsed cohorts are unavailable; no history is fabricated. Normal required protected checks remain mandatory before this application can merge or deploy. Tool PR373 was the sole separately authorized initial exception and original protection is restored. AUO content remains a demonstration research direction. No full candidate/PTT recrawl or production write occurred.
