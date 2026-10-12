@@ -1,0 +1,320 @@
+TAP version 13
+# (node:400160) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:400160) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/candidate-discovery-admission.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-live-discovery-adapter-oct12/web/package.json.
+# Subtest: only a pair with different canonical publishers and roots enters general research
+ok 1 - only a pair with different canonical publishers and roots enters general research
+  ---
+  duration_ms: 1.998175
+  ...
+# Subtest: same author across platforms
+ok 2 - same author across platforms
+  ---
+  duration_ms: 0.156456
+  ...
+# Subtest: syndicated original root
+ok 3 - syndicated original root
+  ---
+  duration_ms: 0.081333
+  ...
+# Subtest: same-platform original authors with independent roots qualify; platform diversity is display-only
+ok 4 - same-platform original authors with independent roots qualify; platform diversity is display-only
+  ---
+  duration_ms: 0.224859
+  ...
+# Subtest: retracted root cannot be laundered by a current repost
+ok 5 - retracted root cannot be laundered by a current repost
+  ---
+  duration_ms: 0.270779
+  ...
+# Subtest: industry-only and unresolved aliases cannot count as direct company confirmation
+ok 6 - industry-only and unresolved aliases cannot count as direct company confirmation
+  ---
+  duration_ms: 0.136275
+  ...
+# Subtest: bounded legacy links, counters and missing PTT detail are unsupported
+ok 7 - bounded legacy links, counters and missing PTT detail are unsupported
+  ---
+  duration_ms: 0.183707
+  ...
+# Subtest: PTT 19/20 actual different stock-mention authors boundary
+ok 8 - PTT 19/20 actual different stock-mention authors boundary
+  ---
+  duration_ms: 0.472954
+  ...
+# Subtest: PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+ok 9 - PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+  ---
+  duration_ms: 0.382117
+  ...
+# Subtest: PTT requires stock in body, current article, and one post, not pooled reply totals
+ok 10 - PTT requires stock in body, current article, and one post, not pooled reply totals
+  ---
+  duration_ms: 0.428236
+  ...
+# Subtest: reasoned new official event can enter low-volume lane, never multi-source confirmation
+ok 11 - reasoned new official event can enter low-volume lane, never multi-source confirmation
+  ---
+  duration_ms: 0.192431
+  ...
+# Subtest: high-impact new lead requires explained known direct source; ordinary news is not official
+ok 12 - high-impact new lead requires explained known direct source; ordinary news is not official
+  ---
+  duration_ms: 0.097858
+  ...
+# Subtest: existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+ok 13 - existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+  ---
+  duration_ms: 0.564792
+  ...
+# Subtest: bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+ok 14 - bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+  ---
+  duration_ms: 0.514256
+  ...
+# Subtest: technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+ok 15 - technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+  ---
+  duration_ms: 1.449868
+  ...
+# Subtest: PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+ok 16 - PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+  ---
+  duration_ms: 0.255145
+  ...
+# Subtest: missing, future, malformed dates never manufacture a displayed current close
+ok 17 - missing, future, malformed dates never manufacture a displayed current close
+  ---
+  duration_ms: 0.104418
+  ...
+# Subtest: clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+ok 18 - clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+  ---
+  duration_ms: 0.918587
+  ...
+# Subtest: coverage states distinguish retired/blocked/duplicate without inventing source enablement
+ok 19 - coverage states distinguish retired/blocked/duplicate without inventing source enablement
+  ---
+  duration_ms: 0.330389
+  ...
+# Subtest: coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+ok 20 - coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+  ---
+  duration_ms: 0.327665
+  ...
+# (node:400171) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:400171) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/candidate-research-policy.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-live-discovery-adapter-oct12/web/package.json.
+# Subtest: valuation histories keep only the latest positive observation per month
+ok 21 - valuation histories keep only the latest positive observation per month
+  ---
+  duration_ms: 6.998233
+  ...
+# Subtest: versioned P/B ledger filters future rows and rejects untraceable observations
+ok 22 - versioned P/B ledger filters future rows and rejects untraceable observations
+  ---
+  duration_ms: 0.47054
+  ...
+# Subtest: point-in-time P/B requires an official same-day close and disclosed denominator period
+ok 23 - point-in-time P/B requires an official same-day close and disclosed denominator period
+  ---
+  duration_ms: 0.414796
+  ...
+# (node:400182) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:400182) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-live-discovery-adapter-oct12/web/package.json.
+# Subtest: real retained provenance maps scoped row identity, never URL/hash/publisher authority
+ok 24 - real retained provenance maps scoped row identity, never URL/hash/publisher authority
+  ---
+  duration_ms: 2.136155
+  ...
+# Subtest: 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+ok 25 - 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+  ---
+  duration_ms: 3.758924
+  ...
+# Subtest: authors are counted once within one conversation, never pooled across posts
+ok 26 - authors are counted once within one conversation, never pooled across posts
+  ---
+  duration_ms: 1.31852
+  ...
+# Subtest: non-explicit reply 👍👍👍 does not count
+ok 27 - non-explicit reply 👍👍👍 does not count
+  ---
+  duration_ms: 0.193252
+  ...
+# Subtest: non-explicit reply 推 does not count
+ok 28 - non-explicit reply 推 does not count
+  ---
+  duration_ms: 0.147332
+  ...
+# Subtest: non-explicit reply 台積電 does not count
+ok 29 - non-explicit reply 台積電 does not count
+  ---
+  duration_ms: 0.175845
+  ...
+# Subtest: non-explicit reply 12409 does not count
+ok 30 - non-explicit reply 12409 does not count
+  ---
+  duration_ms: 0.189837
+  ...
+# Subtest: non-explicit reply a2409 does not count
+ok 31 - non-explicit reply a2409 does not count
+  ---
+  duration_ms: 0.146281
+  ...
+# Subtest: non-explicit reply 2409x does not count
+ok 32 - non-explicit reply 2409x does not count
+  ---
+  duration_ms: 0.495898
+  ...
+# Subtest: hash mismatch, missing author/parent/index and read failure do not count
+ok 33 - hash mismatch, missing author/parent/index and read failure do not count
+  ---
+  duration_ms: 0.696341
+  ...
+# Subtest: withheld/retracted mention never becomes active evidence; missing root heads block all admission
+ok 34 - withheld/retracted mention never becomes active evidence; missing root heads block all admission
+  ---
+  duration_ms: 0.289276
+  ...
+# Subtest: cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+ok 35 - cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+  ---
+  duration_ms: 0.160041
+  ...
+# Subtest: backdated availability cannot admit a newly received row into an older observation
+ok 36 - backdated availability cannot admit a newly received row into an older observation
+  ---
+  duration_ms: 0.239271
+  ...
+# Subtest: same instant offset notation, exact date validation and invalid clocks
+ok 37 - same instant offset notation, exact date validation and invalid clocks
+  ---
+  duration_ms: 0.177168
+  ...
+# Subtest: stable accounting retains duplicates, foreign stock and incomplete window as gaps
+ok 38 - stable accounting retains duplicates, foreign stock and incomplete window as gaps
+  ---
+  duration_ms: 0.205831
+  ...
+# Subtest: bound exhaustion reports unexamined rows, never truncation-success
+ok 39 - bound exhaustion reports unexamined rows, never truncation-success
+  ---
+  duration_ms: 0.336228
+  ...
+# Subtest: untrusted getters, prototype and object index cannot execute or acquire authority
+ok 40 - untrusted getters, prototype and object index cannot execute or acquire authority
+  ---
+  duration_ms: 0.243638
+  ...
+# Subtest: server real initializer audits complete pre-link rows rather than eight display sources
+ok 41 - server real initializer audits complete pre-link rows rather than eight display sources
+  ---
+  duration_ms: 300.228398
+  ...
+# (node:400193) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:400193) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/ptt-mention-provenance.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-live-discovery-adapter-oct12/web/package.json.
+# Subtest: reply retains bounded local lineage and exact excerpt hash without independent authority
+ok 42 - reply retains bounded local lineage and exact excerpt hash without independent authority
+  ---
+  duration_ms: 2.633015
+  ...
+# Subtest: article keeps no body or pooled reply evidence
+ok 43 - article keeps no body or pooled reply evidence
+  ---
+  duration_ms: 0.210477
+  ...
+# Subtest: missing parent_document_url stays partial
+ok 44 - missing parent_document_url stays partial
+  ---
+  duration_ms: 0.229897
+  ...
+# Subtest: missing author_name stays partial
+ok 45 - missing author_name stays partial
+  ---
+  duration_ms: 0.17235
+  ...
+# Subtest: missing comment_index stays partial
+ok 46 - missing comment_index stays partial
+  ---
+  duration_ms: 0.183196
+  ...
+# Subtest: same article authors remain local observations, never separate news roots
+ok 47 - same article authors remain local observations, never separate news roots
+  ---
+  duration_ms: 0.395907
+  ...
+# Subtest: non PTT metadata is not projected
+ok 48 - non PTT metadata is not projected
+  ---
+  duration_ms: 0.142865
+  ...
+# Subtest: stock-specific matched symbols do not inherit article or other stock context
+ok 49 - stock-specific matched symbols do not inherit article or other stock context
+  ---
+  duration_ms: 0.286573
+  ...
+# Subtest: title_only_fetch_failed body read cannot prove full text or local body basis
+ok 50 - title_only_fetch_failed body read cannot prove full text or local body basis
+  ---
+  duration_ms: 0.356878
+  ...
+# Subtest: title_only_body_missing body read cannot prove full text or local body basis
+ok 51 - title_only_body_missing body read cannot prove full text or local body basis
+  ---
+  duration_ms: 0.30435
+  ...
+# Subtest: unknown body read cannot prove full text or local body basis
+ok 52 - unknown body read cannot prove full text or local body basis
+  ---
+  duration_ms: 0.143997
+  ...
+# Subtest: malicious metadata never copies fulltext, credentials or overbound excerpt
+ok 53 - malicious metadata never copies fulltext, credentials or overbound excerpt
+  ---
+  duration_ms: 0.697813
+  ...
+# Subtest: getters and prototype inheritance cannot supply authority
+ok 54 - getters and prototype inheritance cannot supply authority
+  ---
+  duration_ms: 0.153131
+  ...
+# Subtest: foreign parent, invalid URL and index mismatch reject local linkage
+ok 55 - foreign parent, invalid URL and index mismatch reject local linkage
+  ---
+  duration_ms: 0.19241
+  ...
+# Subtest: metadata-only retention cannot export even a small reply excerpt
+ok 56 - metadata-only retention cannot export even a small reply excerpt
+  ---
+  duration_ms: 0.094152
+  ...
+# Subtest: invalid stock symbol is bounded, cannot be serialized as arbitrary metadata
+ok 57 - invalid stock symbol is bounded, cannot be serialized as arbitrary metadata
+  ---
+  duration_ms: 0.146962
+  ...
+# Subtest: exact240 UTF-16 excerpt bound preserves Unicode bytes; plus1 is omitted
+ok 58 - exact240 UTF-16 excerpt bound preserves Unicode bytes; plus1 is omitted
+  ---
+  duration_ms: 0.15254
+  ...
+1..58
+# tests 58
+# suites 0
+# pass 58
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 788.292018
