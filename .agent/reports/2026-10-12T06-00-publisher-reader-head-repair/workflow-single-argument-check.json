@@ -1,0 +1,7 @@
+{
+  "base": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+  "base_sha256": "7a918718cf162488b7233d8c8fce6c19d85a974715b529bacd764d4e8efc9537",
+  "new_sha256": "09d00728ca5cf22812f215ff8b3211a68887253588ca723275127568155c98bf",
+  "exact_single_argument_only": true,
+  "pins_permissions_jobs_timeout_install_unchanged": true
+}

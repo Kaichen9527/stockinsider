@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/candidate-discovery-admission.test.ts",
+    "web/src/lib/live-discovery-evidence-adapter.test.ts",
+    "web/src/lib/discovery-revision-publisher-reader.test.ts",
+    "scripts/candidate-discovery-admission-ui.test.mjs"
+  ],
+  "start_utc": "2026-10-12T06:05:34Z",
+  "seconds": 1.9286422729492188,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 166842368,
+  "min_free_bytes": 9143734272
+}

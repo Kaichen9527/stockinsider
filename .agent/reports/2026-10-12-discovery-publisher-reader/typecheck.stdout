@@ -1,0 +1,12 @@
+
+> web@0.1.0 pretypecheck
+> node scripts/sync-official-authority.mjs
+
+Official authority build bridge verified (5 canonical modules).
+
+> web@0.1.0 typecheck
+> tsc --noEmit --pretty false
+
+src/lib/discovery-revision-publisher-reader.test.ts(75,13): error TS2345: Argument of type '{ authority_id: string; status: string; recorded_at: string; source_identity_id: string; source_key: string; source_class: string; distribution_identity: string; valid_from: string; valid_to: string | null; approved_at: string; approving_principal_id: string; } | { ...; }' is not assignable to parameter of type 'PublisherAuthority & SourceAuthority'.
+  Type '{ authority_id: string; status: string; recorded_at: string; source_identity_id: string; source_key: string; source_class: string; distribution_identity: string; valid_from: string; valid_to: string | null; approved_at: string; approving_principal_id: string; }' is not assignable to type 'PublisherAuthority & SourceAuthority'.
+    Type '{ authority_id: string; status: string; recorded_at: string; source_identity_id: string; source_key: string; source_class: string; distribution_identity: string; valid_from: string; valid_to: string | null; approved_at: string; approving_principal_id: string; }' is missing the following properties from type 'PublisherAuthority': publisher_identity_id, domains, feed_identity, institution_identity

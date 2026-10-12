@@ -1,0 +1,324 @@
+{
+  "kind": "known-family-head-publication-order-P2-maker-repair",
+  "recorded_at": "2026-10-12T06:09:53Z",
+  "manual_window_start": "2026-10-12T06:00:35Z",
+  "manual_deadline": "2026-10-12T06:20:35Z",
+  "approved_main_base": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+  "integration_merge": "76e981cb110b0bc28a36572bc999267a095da628",
+  "original_runtime": "64b71a91c45fd1fc73f0937c608290d31d60bddd",
+  "original_delivery": "c03265a84abfeef4271b5dcd33f187cf907afb90",
+  "original_52_green_unchanged": true,
+  "independent_review_input": "root relayed author_input_review_oct08 REQUEST_CHANGES P0=0/P1=0/P2=1; not this maker claiming independent closure",
+  "source_head": "3b4e21f72b26149795e05c632e075df067818ca0",
+  "source_tree": "5716e54ed541cb75b1a8ff3d97759c662c9f6fab",
+  "source_webtree": "08c8f0db7388a47b4cb663aa1c64ae7cc03e682f",
+  "build_clean_source": true,
+  "fix": "Choose known family head using collected_at/recorded_at, then invalidate publication after cutoff/collection or malformed publication. No old revision revival. True future knowledge cannot pollute IDs.",
+  "red": {
+    "tests": 58,
+    "pass": 53,
+    "fail": 5,
+    "skip": 0,
+    "runtime_sha256": "335e17d1f35a5a82c141243709042101213e0f3b4795b55e367b6c1108d1c922",
+    "tests_snapshot_sha256": "a71ff8fa6f6b8fa1ae1afc417980ce44ee991b1f9247e67976929337fae243cb"
+  },
+  "green": {
+    "reader_tests": 60,
+    "pass": 60,
+    "fail": 0,
+    "skip": 0,
+    "ordinary_full_command_tests": 148,
+    "ordinary_pass": 148,
+    "ordinary_fail": 0,
+    "ordinary_skip": 0,
+    "counts_overlap": true,
+    "explanation": "Correct two prior future-publication expectations, change malformed-publication expectation to explicit blocked known head, add microsecond/NULL/sameUUID and truly-future-knowledge regressions."
+  },
+  "commands": {
+    "ordinary-diagnostics": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts",
+        "web/src/lib/discovery-revision-publisher-reader.test.ts",
+        "scripts/candidate-discovery-admission-ui.test.mjs"
+      ],
+      "start_utc": "2026-10-12T06:05:34Z",
+      "seconds": 1.9286422729492188,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 166842368,
+      "min_free_bytes": 9143734272
+    },
+    "head-publication-green": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/discovery-revision-publisher-reader.test.ts"
+      ],
+      "start_utc": "2026-10-12T06:04:15Z",
+      "seconds": 0.5511209964752197,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 125935616,
+      "min_free_bytes": 9143775232
+    },
+    "head-publication-red": {
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "web/src/lib/discovery-revision-publisher-reader.test.ts"
+      ],
+      "start_utc": "2026-10-12T06:02:38Z",
+      "seconds": 0.5660974979400635,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 123551744,
+      "min_free_bytes": 9143840768
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start_utc": "2026-10-12T06:07:03Z",
+      "seconds": 48.815646171569824,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1692516352,
+      "min_free_bytes": 8833536000
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start_utc": "2026-10-12T06:05:36Z",
+      "seconds": 20.86305832862854,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1160179712,
+      "min_free_bytes": 9143709696
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-12T06:04:15Z",
+      "seconds": 10.264525651931763,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 978214912,
+      "min_free_bytes": 9143758848
+    }
+  },
+  "typecheck": "PASS",
+  "lint": {
+    "exit": 0,
+    "errors": 0,
+    "existing_warnings": 33
+  },
+  "normal_build": {
+    "exit": 0,
+    "Node": "22.14.0",
+    "Next": "16.3.4",
+    "build_id": "9T9U6qjVR8S7r9jq1zZPP",
+    "server_files": 1796,
+    "server_manifest_sha256": "470ca6b33692ad9a6599560523d241227371635cd832f80edd9ad6d40a65087b",
+    "server_logical_bytes": 59953031
+  },
+  "resource_limits": {
+    "one_heavy": true,
+    "rss_goal_bytes": 8589934592,
+    "disk_reserve_bytes": 8589934592,
+    "peak_sampled_tree_rss_bytes": 1692516352,
+    "minimum_sampled_workspace_free_bytes": 8833536000,
+    "method": "250ms statvfs/ps descendant RSS; shared RSS conservative; brief peaks can be missed"
+  },
+  "cleanup": {
+    "own_services_started": 0,
+    "own_node_npm_pg_next_active": 0,
+    "prior_own_build_retired_after_all_manifest_hashes_verified": true,
+    "unique_original_red_evidence_retained": true,
+    "final_workspace_free_bytes": 8833146880,
+    "final_tmp_free_bytes": 16942010368
+  },
+  "remaining": [
+    "independent exact successor review",
+    "existing coherent live frozen-run reader/count binding",
+    "legacy raw mapping",
+    "reviewed news-origin/creator decisions",
+    "production caller wiring"
+  ],
+  "authority": {
+    "self_independent_code_pass": false,
+    "protected_rerun": false,
+    "model_execution": false,
+    "db_schema_api_crawl_changes": false,
+    "strategy_admission": false,
+    "merge_main_deploy": false
+  },
+  "draft_pr": "previous GraphQL Forbidden retained; not retried; prepared original body can be updated by root",
+  "raw_files": [
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/build.meta.json",
+      "bytes": 253,
+      "sha256": "1f40fcd24ce3def72dab0c6122a3a5655ff45e34793aa4272569a0844771301a"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/build.stdout",
+      "bytes": 5556,
+      "sha256": "94b55c4cc9eb4fdba51e9419da5ef7d4217c78fb04c6b9746b9fd2bc10598b15"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/compiled-server-manifest.json",
+      "bytes": 333261,
+      "sha256": "470ca6b33692ad9a6599560523d241227371635cd832f80edd9ad6d40a65087b"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/head-publication-green-inventory.json",
+      "bytes": 4147,
+      "sha256": "696e45a08c10abc61726b8b7f513bd435ac4237f964f8c0c7c210de928f69dd9"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/head-publication-green.meta.json",
+      "bytes": 384,
+      "sha256": "aa89c3751a21b58b8d80deafaa9e9607954c27167c64ed8ee05b9fadbe0288e2"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/head-publication-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/head-publication-green.stdout",
+      "bytes": 11735,
+      "sha256": "c2bf5787b06dc773e6018f3da1de59a6293d837e7f7197093a4f6ba15cb3766e"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/head-publication-red-inventory.json",
+      "bytes": 3932,
+      "sha256": "a9650cea3319a07a64ffccaf15f28f56bdb8e00d6ec34a9b5e78c5b8419ef5db"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/head-publication-red.meta.json",
+      "bytes": 356,
+      "sha256": "1723f3ed33caf09674cd068235aab05d27b019c13ee334290ad0a25a0a96399d"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/head-publication-red.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/head-publication-red.stdout",
+      "bytes": 15829,
+      "sha256": "065291bbeec2467f95e7334b67b6a423e7aed0d37087c9514ef42a4353a70510"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/lint.meta.json",
+      "bytes": 251,
+      "sha256": "8aa5eaad9e3e79c49ca6bd9a1dfa08927661ae8a665da42ec9e22ee91b6e856c"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/lint.stderr",
+      "bytes": 168,
+      "sha256": "917c70f24c9da1b5287c1d0a73e6bae2dea498fd8dc678b19a202369f061565d"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/lint.stdout",
+      "bytes": 4606,
+      "sha256": "1cca327af038b040e87b4bcc855d5fd32f885378cfd7a93188b30db2bfc67c87"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/ordinary-diagnostics-inventory.json",
+      "bytes": 11300,
+      "sha256": "7a518a2127ddd507e7061d0f751a0c9c792474e5318a7260ece827f9e8a0a20d"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/ordinary-diagnostics.meta.json",
+      "bytes": 557,
+      "sha256": "adb255fe27295bf3d8f7a52d7683a70bcdb5b0f61113a05ca2017d6a409fefcf"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/ordinary-diagnostics.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/ordinary-diagnostics.stdout",
+      "bytes": 31858,
+      "sha256": "54126df2bdb93a6dc674dfa4abf20ccb8b8566776cd826efe3b8b45f1bc660b2"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/red-discovery-revision-publisher-reader.test.ts.txt",
+      "bytes": 15360,
+      "sha256": "a71ff8fa6f6b8fa1ae1afc417980ce44ee991b1f9247e67976929337fae243cb"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/red-discovery-revision-publisher-reader.ts.txt",
+      "bytes": 21328,
+      "sha256": "335e17d1f35a5a82c141243709042101213e0f3b4795b55e367b6c1108d1c922"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/red-input-identity.json",
+      "bytes": 571,
+      "sha256": "5979dad455d77fb7b2cb47580e96c5fc2225ab519cdcc20dee7e939a91d5bd08"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/resource-runner.py.txt",
+      "bytes": 1159,
+      "sha256": "1769afbf9be6e2dd4d234699171c9ee7fd880bda8f712eb37a4ab4fce9a52137"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/retired-reader-build-cleanup.json",
+      "bytes": 406,
+      "sha256": "3a7f0513791176417f2995cc93f8c7792f105d4763d48b1566c49151a887cc2d"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/source-manifest.json",
+      "bytes": 2967,
+      "sha256": "766046accc4fc57d787b6cdcf79c349bccf0e9b79aa8826dabebaffc8cf628f5"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/source.delta.patch",
+      "bytes": 12442,
+      "sha256": "2e82b7592cff9c5faf4e7e9654a9775b6112553eeeacfbd12563b5b7b701ce9f"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/typecheck.meta.json",
+      "bytes": 256,
+      "sha256": "7c7d3fb2a653f2f5dd587f861d4ef2efb808a69fb7cd98baeb8774072b444386"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-12T06-00-publisher-reader-head-repair/workflow-single-argument-check.json",
+      "bytes": 323,
+      "sha256": "523cc4888e1e15b410f17ea502e063f1a2d03b5d7183688977b3b1d550ce3812"
+    }
+  ]
+}

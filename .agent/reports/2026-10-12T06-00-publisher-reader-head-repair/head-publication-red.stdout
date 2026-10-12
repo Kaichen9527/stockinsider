@@ -1,0 +1,407 @@
+TAP version 13
+# (node:412940) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:412940) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-discovery-publisher-reader-oct12/web/package.json.
+# Subtest: actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+ok 1 - actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+  ---
+  duration_ms: 7.997431
+  ...
+# Subtest: precise offset microseconds and invalid dates
+ok 2 - precise offset microseconds and invalid dates
+  ---
+  duration_ms: 0.353314
+  ...
+# Subtest: future revision collected_at 1us cannot replace known head
+ok 3 - future revision collected_at 1us cannot replace known head
+  ---
+  duration_ms: 3.718222
+  ...
+# Subtest: future revision recorded_at 1us cannot replace known head
+ok 4 - future revision recorded_at 1us cannot replace known head
+  ---
+  duration_ms: 2.425811
+  ...
+# Subtest: future authority approved_at cannot mask known authority
+ok 5 - future authority approved_at cannot mask known authority
+  ---
+  duration_ms: 3.083224
+  ...
+# Subtest: future authority recorded_at cannot mask known authority
+ok 6 - future authority recorded_at cannot mask known authority
+  ---
+  duration_ms: 1.755179
+  ...
+# Subtest: future authority valid_from cannot mask known authority
+ok 7 - future authority valid_from cannot mask known authority
+  ---
+  duration_ms: 1.931025
+  ...
+# Subtest: latest inactive source never revives prior active
+ok 8 - latest inactive source never revives prior active
+  ---
+  duration_ms: 2.023484
+  ...
+# Subtest: latest inactive publisher never revives prior active
+ok 9 - latest inactive publisher never revives prior active
+  ---
+  duration_ms: 1.760177
+  ...
+# Subtest: latest invalid acquisition cannot revive old complete
+ok 10 - latest invalid acquisition cannot revive old complete
+  ---
+  duration_ms: 2.24612
+  ...
+# Subtest: same-time contradictory revisions heads fail closed, both orders
+ok 11 - same-time contradictory revisions heads fail closed, both orders
+  ---
+  duration_ms: 1.671002
+  ...
+# Subtest: same-time contradictory publishers heads fail closed, both orders
+ok 12 - same-time contradictory publishers heads fail closed, both orders
+  ---
+  duration_ms: 1.778204
+  ...
+# Subtest: same-time contradictory sourceAuthorities heads fail closed, both orders
+ok 13 - same-time contradictory sourceAuthorities heads fail closed, both orders
+  ---
+  duration_ms: 1.419913
+  ...
+# Subtest: frozen population run mismatch is not complete
+ok 14 - frozen population run mismatch is not complete
+  ---
+  duration_ms: 0.491141
+  ...
+# Subtest: frozen population cutoff mismatch is not complete
+ok 15 - frozen population cutoff mismatch is not complete
+  ---
+  duration_ms: 0.686726
+  ...
+# Subtest: frozen population count mismatch is not complete
+ok 16 - frozen population count mismatch is not complete
+  ---
+  duration_ms: 0.401496
+  ...
+# Subtest: frozen population hash mismatch is not complete
+ok 17 - frozen population hash mismatch is not complete
+  ---
+  duration_ms: 0.511832
+  ...
+# Subtest: verification source_run_id binding mismatch
+ok 18 - verification source_run_id binding mismatch
+  ---
+  duration_ms: 1.298059
+  ...
+# Subtest: verification source_cutoff binding mismatch
+ok 19 - verification source_cutoff binding mismatch
+  ---
+  duration_ms: 1.710952
+  ...
+# Subtest: verification revision_id binding mismatch
+ok 20 - verification revision_id binding mismatch
+  ---
+  duration_ms: 1.201523
+  ...
+# Subtest: verification publisher_manifest_id binding mismatch
+ok 21 - verification publisher_manifest_id binding mismatch
+  ---
+  duration_ms: 1.494055
+  ...
+# Subtest: verification canonical_content_hash binding mismatch
+ok 22 - verification canonical_content_hash binding mismatch
+  ---
+  duration_ms: 1.239942
+  ...
+# Subtest: verification collected_at binding mismatch
+ok 23 - verification collected_at binding mismatch
+  ---
+  duration_ms: 1.357359
+  ...
+# Subtest: verification recorded_at binding mismatch
+ok 24 - verification recorded_at binding mismatch
+  ---
+  duration_ms: 1.116485
+  ...
+# Subtest: manifest root_hash cannot be asserted by count alone
+ok 25 - manifest root_hash cannot be asserted by count alone
+  ---
+  duration_ms: 1.302917
+  ...
+# Subtest: manifest page_hash cannot be asserted by count alone
+ok 26 - manifest page_hash cannot be asserted by count alone
+  ---
+  duration_ms: 0.913008
+  ...
+# Subtest: manifest payload cannot be asserted by count alone
+ok 27 - manifest payload cannot be asserted by count alone
+  ---
+  duration_ms: 0.857455
+  ...
+# Subtest: manifest rows_missing cannot be asserted by count alone
+ok 28 - manifest rows_missing cannot be asserted by count alone
+  ---
+  duration_ms: 1.218048
+  ...
+# Subtest: manifest institution cannot be asserted by count alone
+ok 29 - manifest institution cannot be asserted by count alone
+  ---
+  duration_ms: 1.246592
+  ...
+# Subtest: manifest authority_bytes cannot be asserted by count alone
+ok 30 - manifest authority_bytes cannot be asserted by count alone
+  ---
+  duration_ms: 1.468857
+  ...
+# Subtest: manifest run_binding cannot be asserted by count alone
+ok 31 - manifest run_binding cannot be asserted by count alone
+  ---
+  duration_ms: 1.024236
+  ...
+# Subtest: legacy raw mapping missing is unsupported, never UUID/hash/url join
+ok 32 - legacy raw mapping missing is unsupported, never UUID/hash/url join
+  ---
+  duration_ms: 2.616119
+  ...
+# Subtest: legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+ok 33 - legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+  ---
+  duration_ms: 0.901571
+  ...
+# Subtest: bounded populations defer every supplied input, not truncation success
+ok 34 - bounded populations defer every supplied input, not truncation success
+  ---
+  duration_ms: 151.102337
+  ...
+# Subtest: same revision UUID with conflicting family cannot produce two bindings
+ok 35 - same revision UUID with conflicting family cannot produce two bindings
+  ---
+  duration_ms: 1.393553
+  ...
+# Subtest: exact duplicate revision is accounted once as binding, deterministic projection
+ok 36 - exact duplicate revision is accounted once as binding, deterministic projection
+  ---
+  duration_ms: 2.087842
+  ...
+# Subtest: equal cutoff is included and valid_to equal cutoff is expired
+ok 37 - equal cutoff is included and valid_to equal cutoff is expired
+  ---
+  duration_ms: 1.076344
+  ...
+# Subtest: invalid published_at is explicitly rejected, not a chosen head
+ok 38 - invalid published_at is explicitly rejected, not a chosen head
+  ---
+  duration_ms: 0.949763
+  ...
+# Subtest: invalid collected_at is explicitly rejected, not a chosen head
+ok 39 - invalid collected_at is explicitly rejected, not a chosen head
+  ---
+  duration_ms: 0.937415
+  ...
+# Subtest: invalid recorded_at is explicitly rejected, not a chosen head
+ok 40 - invalid recorded_at is explicitly rejected, not a chosen head
+  ---
+  duration_ms: 0.880398
+  ...
+# Subtest: partial page with lower local count cannot match previously counted packet
+ok 41 - partial page with lower local count cannot match previously counted packet
+  ---
+  duration_ms: 0.354786
+  ...
+# Subtest: recomputation keeps supplied source clocks, does not substitute snapshot time
+ok 42 - recomputation keeps supplied source clocks, does not substitute snapshot time
+  ---
+  duration_ms: 1.143827
+  ...
+# Subtest: root section row count/manifest page membership must agree
+ok 43 - root section row count/manifest page membership must agree
+  ---
+  duration_ms: 0.903363
+  ...
+# Subtest: no URL or family/hash changes create root or creator proof
+ok 44 - no URL or family/hash changes create root or creator proof
+  ---
+  duration_ms: 0.635018
+  ...
+# Subtest: publisher class is the existing enum, not an invented news authority
+ok 45 - publisher class is the existing enum, not an invented news authority
+  ---
+  duration_ms: 1.044386
+  ...
+# Subtest: public_research institution required by original authority schema
+ok 46 - public_research institution required by original authority schema
+  ---
+  duration_ms: 0.564882
+  ...
+# Subtest: unbounded strings and depth fail before projection, no truncation success
+ok 47 - unbounded strings and depth fail before projection, no truncation success
+  ---
+  duration_ms: 45.592375
+  ...
+# Subtest: future same-UUID collected_at cannot poison known family/identity
+ok 48 - future same-UUID collected_at cannot poison known family/identity
+  ---
+  duration_ms: 1.511071
+  ...
+# Subtest: future same-UUID recorded_at cannot poison known family/identity
+ok 49 - future same-UUID recorded_at cannot poison known family/identity
+  ---
+  duration_ms: 1.35137
+  ...
+# Subtest: manifest full retained publisher head population, not merely one matching row
+ok 50 - manifest full retained publisher head population, not merely one matching row
+  ---
+  duration_ms: 1.23855
+  ...
+# Subtest: known latest head cutoff+1us blocks older complete family, both orders
+not ok 51 - known latest head cutoff+1us blocks older complete family, both orders
+  ---
+  duration_ms: 2.283687
+  location: '/workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts:164:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts:166:33)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+not ok 52 - known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+  ---
+  duration_ms: 1.498321
+  location: '/workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts:171:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts:173:33)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: known latest head before-cutoff-after-collection blocks older complete family, both orders
+not ok 53 - known latest head before-cutoff-after-collection blocks older complete family, both orders
+  ---
+  duration_ms: 7.639661
+  location: '/workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts:164:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(a.dispositions.some(d=>d.disposition==='latest_revision_publication_invalid'))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts:167:12)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+ok 54 - known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+  ---
+  duration_ms: 1.261213
+  ...
+# Subtest: known latest head invalid-clock blocks older complete family, both orders
+not ok 55 - known latest head invalid-clock blocks older complete family, both orders
+  ---
+  duration_ms: 1.495627
+  location: '/workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts:164:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(a.dispositions.some(d=>d.disposition==='latest_revision_publication_invalid'))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts:167:12)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+not ok 56 - known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+  ---
+  duration_ms: 1.485231
+  location: '/workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts:171:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'invalid_clock'
+    - 'conflicting_row_identity'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'conflicting_row_identity'
+  actual: 'invalid_clock'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts:173:67)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: known latest head with published null is allowed when verification also preserves null
+ok 57 - known latest head with published null is allowed when verification also preserves null
+  ---
+  duration_ms: 1.512213
+  ...
+# Subtest: known legal head at publication=collection remains usable with all microseconds
+ok 58 - known legal head at publication=collection remains usable with all microseconds
+  ---
+  duration_ms: 1.822501
+  ...
+1..58
+# tests 58
+# suites 0
+# pass 53
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 466.455486

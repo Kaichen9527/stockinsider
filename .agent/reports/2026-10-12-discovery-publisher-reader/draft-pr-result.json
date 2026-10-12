@@ -1,0 +1,10 @@
+{
+  "exit": 1,
+  "seconds": 0.05937600135803223,
+  "command": "gh pr create --repo Kaichen9527/stockinsider --head codex/discovery-revision-publisher-reader-oct12 --base main --draft --title <prepared title> --body-file <prepared body>",
+  "stdout_bytes": 0,
+  "stderr_bytes": 49,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "682deed6ccd21e66582c7f0e0efdffb3363feeac4c8b58f35a46d43dc240c725",
+  "retry": false
+}
