@@ -1,0 +1,396 @@
+{
+  "schema": "bounded-manual-pit-repair-evidence-v1",
+  "source": "ecd991afcb8d76ff451ff71f9825f7b38d444b9a",
+  "tree": "31af4a2a0c2b9502bf1fbc6c0cc6b826bd7337bd",
+  "webTree": "68f36363fa1671cd3b3c74fdf05ed2e7d3be3e5a",
+  "priorSource": "d3ce3c65ecdf37e892d144cb99ee1b9fad7feaac",
+  "baseMain": "8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14",
+  "ownedChanges": [
+    "web/src/lib/live-discovery-evidence-adapter.ts",
+    "web/src/lib/live-discovery-evidence-adapter.test.ts",
+    "docs/operations/2026-10-12/live-discovery-evidence-adapter-handoff.md"
+  ],
+  "red": {
+    "firstMatrix": {
+      "tests": 58,
+      "pass": 37,
+      "fail": 21,
+      "skip": 0,
+      "record": {
+        "runtimeSubject": "d3ce3c65ecdf37e892d144cb99ee1b9fad7feaac",
+        "testDelta": "fourclock future1us/invalid/sameUUID author+index/order and differentUUID nonpollution regressions",
+        "command": [
+          "/workspace/.tools/node22/node_modules/.bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "web/src/lib/live-discovery-evidence-adapter.test.ts"
+        ],
+        "exitCode": 1,
+        "wallSeconds": 0.5158415619516745,
+        "at": "2026-10-12T03:45:56.008115+00:00"
+      }
+    },
+    "afterSameTaskSteering": {
+      "tests": 60,
+      "pass": 38,
+      "fail": 22,
+      "skip": 0,
+      "record": {
+        "runtimeSubject": "d3ce3c65ecdf37e892d144cb99ee1b9fad7feaac",
+        "newSteering": "in-cutoff sameUUID differentcommentkey must not add positive evidence; exact replay remains once",
+        "command": [
+          "/workspace/.tools/node22/node_modules/.bin/node",
+          "--experimental-strip-types",
+          "--test",
+          "--test-concurrency=1",
+          "web/src/lib/live-discovery-evidence-adapter.test.ts"
+        ],
+        "exitCode": 1,
+        "wallSeconds": 0.5666275619878434
+      }
+    },
+    "reasonSecondRed": "new same-task in-cutoff UUID/key conflict and replay assertions; not relabelled original selection"
+  },
+  "repair": "all4 clocks and scope valid before knownUUID lookup/register; excluded rows reserve no ID/key; knownUUID semantic contradiction invalidates all its source and comment contributions and marks all matching known accounting entries conflicting_known_row_identity; exact known replay once; crossUUID comment conflict rule unchanged",
+  "matrix": "all4 >cutoff1us; sameUUID author/index swaps first/last; differentUUID future negative; invalidclock cannot stealknownID; futureUUID laterknown; sameUUID in-cutoff differentkey first/last; exactdup and prior full-key conflicts",
+  "validation": {
+    "focused": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/ptt-mention-provenance.test.ts",
+        "web/src/lib/candidate-research-policy.test.ts"
+      ],
+      "startAt": "2026-10-12T03:52:12.888199+00:00",
+      "durationSeconds": 1.0977848959737457,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 151293952,
+      "minimumFreeBytes": {
+        "/workspace": 9207189504,
+        "/tmp": 16959905792
+      }
+    },
+    "ordinary-workflow": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts",
+        "scripts/candidate-discovery-admission-ui.test.mjs"
+      ],
+      "startAt": "2026-10-12T03:52:13.986339+00:00",
+      "durationSeconds": 1.4074252739665098,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 170192896,
+      "minimumFreeBytes": {
+        "/workspace": 9207189504,
+        "/tmp": 16959885312
+      }
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startAt": "2026-10-12T03:52:15.394113+00:00",
+      "durationSeconds": 3.0778684400138445,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 526839808,
+      "minimumFreeBytes": {
+        "/workspace": 9207189504,
+        "/tmp": 16959864832
+      }
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startAt": "2026-10-12T03:52:18.472293+00:00",
+      "durationSeconds": 20.006194916029926,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 1129172992,
+      "minimumFreeBytes": {
+        "/workspace": 9207189504,
+        "/tmp": 16959840256
+      }
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startAt": "2026-10-12T03:52:38.478793+00:00",
+      "durationSeconds": 31.762796497961972,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 1631395840,
+      "minimumFreeBytes": {
+        "/workspace": 8904273920,
+        "/tmp": 16959815680
+      }
+    }
+  },
+  "testCounts": {
+    "focused": {
+      "tests": 100,
+      "pass": 100,
+      "fail": 0,
+      "skipped": 0
+    },
+    "ordinary-workflow": {
+      "tests": 88,
+      "pass": 88,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "overlap": "100 semantic and88 ordinary selections overlap; not summed",
+  "buildIdentity": {
+    "BUILD_ID": "eSLyjn2ZebwCdKSfBz08j",
+    "compiledServerFileCount": 1796,
+    "compiledManifestSha256": "70099710b17111b5d6fca9254654c392b694feabe55a11fc610f952b70d6ce3e",
+    "normalBuild": true,
+    "cleanCodeSubjectAtStart": "ecd991afcb8d76ff451ff71f9825f7b38d444b9a"
+  },
+  "versions": {
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "locks": "unchanged main exact lock; existing local hardlink dependencies",
+    "clock": "original real clocks unchanged; test future/invalid fields are explicit synthetic negative fixture values"
+  },
+  "resources": {
+    "manualMinutes": 20,
+    "goalBytes": 8589934592,
+    "peakSampledProcessGroupRssBytes": 1631395840,
+    "minimumWorkspaceFreeBytes": 8904273920,
+    "minimumTmpFreeBytes": 16959815680,
+    "method": "/proc process group RSS plus statvfs free bytes sampled0.25s"
+  },
+  "lint": {
+    "errors": 0,
+    "existingWarnings": 33,
+    "exit": 0
+  },
+  "rawManifest": [
+    {
+      "path": "build.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build.final.stdout",
+      "bytes": 5556,
+      "sha256": "c435c4be9f19126634103523aa92c241e573edee2f80e99cfb38b3f0df53deca"
+    },
+    {
+      "path": "build.resources.jsonl",
+      "bytes": 12707,
+      "sha256": "2126779c29557a735f6f2cf38eca8f52220e03dec8448d4e5912f68cfdfd73b4"
+    },
+    {
+      "path": "build.result.json",
+      "bytes": 338,
+      "sha256": "5b7bf24634774439629cd3895fed51ecbcb6ef57ca7585b8064203fdf2a297b9"
+    },
+    {
+      "path": "cleanup.json",
+      "bytes": 457,
+      "sha256": "fde1d08454b3c1a9e1efe021f14815f1b7bb09011c14c6e01fe71c5dcd539347"
+    },
+    {
+      "path": "compiled-server-manifest.json",
+      "bytes": 333261,
+      "sha256": "70099710b17111b5d6fca9254654c392b694feabe55a11fc610f952b70d6ce3e"
+    },
+    {
+      "path": "focused.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "focused.final.stdout",
+      "bytes": 22435,
+      "sha256": "2aa37b5cef66099f7155c60798ba12fc65ef2fb13f5697f26da2a27548c9fbf3"
+    },
+    {
+      "path": "focused.resources.jsonl",
+      "bytes": 443,
+      "sha256": "fb3fce48eb02eef10166f53f361ef9417b6fcb61b36b6570f968b89aa48fb2f6"
+    },
+    {
+      "path": "focused.result.json",
+      "bytes": 582,
+      "sha256": "11af6e648f0df5f9b99e73a19fbe6c924f4e05ceaa57391d1650919d687b58e6"
+    },
+    {
+      "path": "lint.final.stderr",
+      "bytes": 164,
+      "sha256": "4c4f6b3ef6cdd3d6e6dac94de8384200bf8f9f1665a0bfbd48e69aad1119c2bf"
+    },
+    {
+      "path": "lint.final.stdout",
+      "bytes": 4582,
+      "sha256": "4f985c31b4b292aa0959f2c432c06a2a51b79cfc368d43bae7a8916247c86ef7"
+    },
+    {
+      "path": "lint.resources.jsonl",
+      "bytes": 8061,
+      "sha256": "860f9d24a4d1c92088b2b46c4ceb383ac45c89dc0115bc22dc394c6c20755677"
+    },
+    {
+      "path": "lint.result.json",
+      "bytes": 337,
+      "sha256": "95e00b48983b5b65e6179c89b8744c98f0caa8401b4519573596f4223540757f"
+    },
+    {
+      "path": "ordinary-workflow.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ordinary-workflow.final.stdout",
+      "bytes": 20149,
+      "sha256": "37afd7905aa5c405dc5b2ab478ba6839cdaf6c547c2defacc400495918336918"
+    },
+    {
+      "path": "ordinary-workflow.resources.jsonl",
+      "bytes": 556,
+      "sha256": "2481c0885ba2d81faa6114e551af084f8cbfac235ae84db8e9610605eaaadc80"
+    },
+    {
+      "path": "ordinary-workflow.result.json",
+      "bytes": 536,
+      "sha256": "43427b8c280c2a931bbe6fd8ba8973f1633e09b099abda7dd253b3fbb7037c5b"
+    },
+    {
+      "path": "owned-next-cleanup.json",
+      "bytes": 528,
+      "sha256": "a008adc8db7ee33eb7fdc8836fa73ea8ba13c6e9227dd7aff54d52440781048a"
+    },
+    {
+      "path": "pit-final-red.json",
+      "bytes": 447,
+      "sha256": "c4242f80b9eb40f79da050c320725e70275fbb8da6440a927af118c3dfe99aec"
+    },
+    {
+      "path": "pit-final-red.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pit-final-red.stdout",
+      "bytes": 43826,
+      "sha256": "8d26f2eb639a01e997bbad1b0d54cf86de150c64955c08e3f9b4f5b476238881"
+    },
+    {
+      "path": "pit-green.json",
+      "bytes": 426,
+      "sha256": "a5cff0f0ef6f350341d2eb28fe2c627506edbae7350aeda74ac39f4d77f4c9ca"
+    },
+    {
+      "path": "pit-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pit-green.stdout",
+      "bytes": 22434,
+      "sha256": "49b67aa7897ec8a024a147589b8163f6fb92c4aba34feae16d507920ee13c1a5"
+    },
+    {
+      "path": "pit-red.json",
+      "bytes": 491,
+      "sha256": "a756516d5848d7207b335716e4a703264e45960dca0b4a5a6c0946028dff6bab"
+    },
+    {
+      "path": "pit-red.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pit-red.stdout",
+      "bytes": 42523,
+      "sha256": "0bd6cdfe6ce9a4c41ae30860ae0dfdb532143b6f9f90aa8b95aae1ab4967e042"
+    },
+    {
+      "path": "source-manifest.json",
+      "bytes": 2188,
+      "sha256": "fdd4c42c2b9bee080ec77425f3d89a0bdecaae0c1215a6dd5d007552461cbbd6"
+    },
+    {
+      "path": "stages.py",
+      "bytes": 2719,
+      "sha256": "cce503038ee10548b7901d72477d3bf5685d4daedccd8e44b9e3ffa1916b0177"
+    },
+    {
+      "path": "test-inventory.json",
+      "bytes": 15901,
+      "sha256": "a98f59fbe63666f6ea18aab8516ba37655db93b684036343d59b42542115d96a"
+    },
+    {
+      "path": "typecheck.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "typecheck.final.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "typecheck.resources.jsonl",
+      "bytes": 1227,
+      "sha256": "25e621b05facaf32156fadb1c5c7de7d9b0a9cbf38242791df430471d51e2439"
+    },
+    {
+      "path": "typecheck.result.json",
+      "bytes": 341,
+      "sha256": "5d9d64764e69819727325206ae17bd8f75be9e6ff4e712dbbe8cbb79ffe0e963"
+    }
+  ],
+  "cleanup": {
+    "activeOwnedHeavyProcesses": [],
+    "stopCheck": "after validation exited, non-zombie Node/npm/Postgres/chrome inventory empty",
+    "deletedPaths": [
+      "prior stopped rebuildable own web/.next; original d3ce artifact manifest preserved; detailed owned-next-cleanup.json"
+    ],
+    "uniqueEvidenceRemoved": false,
+    "freeBytes": {
+      "/workspace": 8897110016,
+      "/tmp": 16959451136
+    },
+    "sourceStatus": "",
+    "at": "2026-10-12T03:55:42.927856+00:00"
+  },
+  "workflowUnchanged": true,
+  "unchanged": [
+    "clock/cutoff/policy thresholds",
+    "source enabled states/identity/root interpretation",
+    "DB/API/scheduler/strategy/protected/main",
+    "originald3ce/65/53 and earlierRED receipts",
+    "AUO demo flags"
+  ],
+  "remainingScope": "stillunsupported as legitimate source/root/body/window authority gaps remain; no actualmodel/crawl/DB/HTTP/qualification/deploy; successor independent review pending",
+  "createdAt": "2026-10-12T03:55:42.939370+00:00"
+}

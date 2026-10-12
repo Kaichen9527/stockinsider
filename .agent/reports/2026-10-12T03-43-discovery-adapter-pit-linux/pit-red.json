@@ -1,0 +1,14 @@
+{
+  "runtimeSubject": "d3ce3c65ecdf37e892d144cb99ee1b9fad7feaac",
+  "testDelta": "fourclock future1us/invalid/sameUUID author+index/order and differentUUID nonpollution regressions",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/live-discovery-evidence-adapter.test.ts"
+  ],
+  "exitCode": 1,
+  "wallSeconds": 0.5158415619516745,
+  "at": "2026-10-12T03:45:56.008115+00:00"
+}

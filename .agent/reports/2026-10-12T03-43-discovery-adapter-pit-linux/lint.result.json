@@ -1,0 +1,18 @@
+{
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "lint"
+  ],
+  "startAt": "2026-10-12T03:52:18.472293+00:00",
+  "durationSeconds": 20.006194916029926,
+  "exitCode": 0,
+  "stopReason": null,
+  "peakProcessGroupRssBytes": 1129172992,
+  "minimumFreeBytes": {
+    "/workspace": 9207189504,
+    "/tmp": 16959840256
+  }
+}

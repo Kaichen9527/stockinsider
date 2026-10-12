@@ -1,0 +1,59 @@
+{
+  "source": "ecd991afcb8d76ff451ff71f9825f7b38d444b9a",
+  "files": [
+    {
+      "path": "web/src/lib/live-discovery-evidence-adapter.ts",
+      "bytes": 10995,
+      "sha256": "5180420c2797ccd4d223d34c8ba3dbb0d9f960e010732f704e8db36c390164e4",
+      "blob": "de9a9a713366de27c5c93985a4e87626622d3afc"
+    },
+    {
+      "path": "web/src/lib/live-discovery-evidence-adapter.test.ts",
+      "bytes": 13815,
+      "sha256": "e0881cde45a56c2f737377019a32e95deef730172e792ba2f58ebd38d00861fc",
+      "blob": "2030a02c290cf7c9a284126cee572607b37534f7"
+    },
+    {
+      "path": "docs/operations/2026-10-12/live-discovery-evidence-adapter-handoff.md",
+      "bytes": 7770,
+      "sha256": "a4c5d84b27ec7d2222c275eef199ad5c45b9ecf981eb5197765396ea227e3d32",
+      "blob": "9d99bc4a70b17fcd10f366fe2657d7618e327c2f"
+    },
+    {
+      "path": "web/src/lib/candidate-research.ts",
+      "bytes": 184298,
+      "sha256": "96dea77cb11614eec98d3f708ad9b901a7ff0ef1616daae93b40ef84e7177390",
+      "blob": "c798f94eb61dac401bd31cbd84c7eec960a02662"
+    },
+    {
+      "path": "web/src/lib/candidate-discovery-admission.ts",
+      "bytes": 12548,
+      "sha256": "a7df49806bc8b261b5444ddf8e730f65197c05fa299126fa5cc0212415aeb5d2",
+      "blob": "4f0fd0ac2d07b53787e495e32db6c92f535d4ab1"
+    },
+    {
+      "path": "web/src/lib/ptt-mention-provenance.ts",
+      "bytes": 5986,
+      "sha256": "3a7112be751eebcf1e6c76540ef5520682c9df02603335eac9a5f428d534884b",
+      "blob": "64040a203d3e578b6713035d4c16a366588f05ea"
+    },
+    {
+      "path": ".github/workflows/candidate-discovery-quality.yml",
+      "bytes": 1437,
+      "sha256": "7a918718cf162488b7233d8c8fce6c19d85a974715b529bacd764d4e8efc9537",
+      "blob": "468b60c809c0e5989ba8a1fafbd09c7cddbb81a7"
+    },
+    {
+      "path": "web/package-lock.json",
+      "bytes": 274088,
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+      "blob": "a41fd447e28f3b36829b689828c345e042619a38"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+    }
+  ]
+}
