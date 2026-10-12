@@ -1,0 +1,40 @@
+{
+  "schema": "real-host-preflight-red-v1",
+  "observedAt": "2026-10-11T23:59:14.383Z",
+  "subject": "f6e45b33a863cb96ad8a71299adac48b2b04a1bf",
+  "pass": 0,
+  "fail": 2,
+  "skip": 0,
+  "providerSuccessClaim": false,
+  "retainedFence": "recovery_required",
+  "diagnosis": "Live host probe sets CODEX_HOME == TMPDIR; current Codex refuses temporary-directory aliases. Split private sibling dirs produce status 0 / empty stderr.",
+  "manualRecovery": "pending stopped-process review",
+  "protectedPass": false,
+  "entries": [
+    {
+      "path": "stockinsider-f6-recovery-attempt-metadata-oct12.json",
+      "bytes": 637,
+      "sha256": "e5632219123238cc8de3f8f49796fb6c0f11d7f219c6025c949259deb770b560"
+    },
+    {
+      "path": "stockinsider-f6-root-live-oct12-result.json",
+      "bytes": 134,
+      "sha256": "9400306966754396fad277d4c2e5e1faa60fedcc7931c718abd27d97907f512f"
+    },
+    {
+      "path": "stockinsider-f6-root-live-oct12-start.json",
+      "bytes": 301,
+      "sha256": "d259f94d0adce5f9608d0352456ce881a768ec363a6336939befb8b1f66c7140"
+    },
+    {
+      "path": "stockinsider-f6-root-live-oct12.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "stockinsider-f6-root-live-oct12.stdout",
+      "bytes": 3473,
+      "sha256": "54115faa10f82b3c6a0158e37c385c53eff154391fbb0c3fa4e5c968e1bd1bee"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "subject": "f30beda55adc7c11ad42b1f2490e5742651173c9",
+  "source": "exact Git worktree, unmodified function/module evaluated with I/O mocks",
+  "cases": [
+    {
+      "scenario": "expired-and-old-object-missing",
+      "trace": [
+        "authority",
+        [
+          "readReuse",
+          false
+        ],
+        [
+          "listing",
+          "new"
+        ],
+        [
+          "listing",
+          "old"
+        ]
+      ],
+      "failure": "old object absent",
+      "expected": "expiry must select fresh path without old-object read; mock stops before auth",
+      "reproduced": true
+    },
+    {
+      "scenario": "expired-and-same-listing",
+      "trace": [
+        "authority",
+        [
+          "readReuse",
+          false
+        ],
+        [
+          "listing",
+          "new"
+        ],
+        [
+          "listing",
+          "old"
+        ],
+        "reuse"
+      ],
+      "failure": "reuse expired",
+      "expected": "expiry must select fresh path without old-object read; mock stops before auth",
+      "reproduced": true
+    },
+    {
+      "scenario": "real branded lifecycle ownership-loss reaches oracle caller",
+      "exit": 11,
+      "ownershipLost": true,
+      "modelCallsMocked": 1,
+      "removals": [
+        [
+          "/synthetic/owned-oracle",
+          {
+            "recursive": true,
+            "force": true
+          }
+        ]
+      ],
+      "expected": "retain owned directory and persistent recovery gate; no later roles or retry",
+      "reproduced": true
+    }
+  ],
+  "credentialsRead": false,
+  "providerInvoked": false,
+  "repoChanged": false
+}

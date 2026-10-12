@@ -1,0 +1,57 @@
+TAP version 13
+# Subtest: pinned Codex blocks filesystem DNS TCP UDP HTTP HTTPS loopback private IP proxy and Unix sockets across direct setsid and double-fork paths
+not ok 1 - pinned Codex blocks filesystem DNS TCP UDP HTTP HTTPS loopback private IP proxy and Unix sockets across direct setsid and double-fork paths
+  ---
+  duration_ms: 110.881625
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/model-runner-v3.test.js:606:3'
+  failureType: 'testCodeFailure'
+  error: 'routing or host preflight blocked'
+  code: 'ROUTING_BLOCKED'
+  stack: |-
+    assert (/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/artifacts.js:37:25)
+    validatedVersionOutput (/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/hostPreflight.js:212:3)
+    checkedVersion (/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/hostPreflight.js:225:10)
+    verifyCurrentNode (/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/hostPreflight.js:264:9)
+    probePermissions (/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/execution.js:418:3)
+    runRealPermissionProbe (/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/model-runner-v3.test.js:569:24)
+    TestContext.<anonymous> (/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/model-runner-v3.test.js:607:11)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+  ...
+# Subtest: pinned Codex propagates network denials through distinct ordinary process-group setsid fork double-fork and delayed descendants before an actual model attempt
+not ok 2 - pinned Codex propagates network denials through distinct ordinary process-group setsid fork double-fork and delayed descendants before an actual model attempt
+  ---
+  duration_ms: 183.699209
+  location: '/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/model-runner-v3.test.js:610:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    real model worker stderr: {"code":"IO_ERROR","exit":11,"message":"trusted runner I/O failed","protocol":"loop-model-error-v3.5"}
+    
+    
+    11 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 11
+  operator: 'strictEqual'
+  stack: |-
+    runIsolatedRealModelAttempt (/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/model-runner-v3.test.js:592:10)
+    TestContext.<anonymous> (/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12/scripts/model-runner-v3/model-runner-v3.test.js:611:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 351.094583

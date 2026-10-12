@@ -1,0 +1,37 @@
+{
+  "schema": "runner-final-wrapper-root-review-v1",
+  "observedAt": "2026-10-11T23:54:21.321192+00:00",
+  "subject": "f6e45b33a863cb96ad8a71299adac48b2b04a1bf",
+  "tree": "9d5d7c20a39bbeb738a1ed1cfa7e57e9626c7c97",
+  "rootFocused": {
+    "tests": 136,
+    "pass": 136,
+    "fail": 0,
+    "skip": 0
+  },
+  "independentFinalReview": "pending",
+  "liveModelInvoked": false,
+  "protectionChanged": false,
+  "entries": [
+    {
+      "path": "stockinsider-f30-independent-counterexamples-oct12.json",
+      "bytes": 1609,
+      "sha256": "200e19fca42597ddd39df6f1d0188a8357f93b723ae346aba23a386807941cfb"
+    },
+    {
+      "path": "stockinsider-f30-independent-review-oct12.json",
+      "bytes": 4327,
+      "sha256": "66b4eec65cb90fef74e8e685b20fc58aa07fe8dabf0047db352f1e1fc23ff6d5"
+    },
+    {
+      "path": "stockinsider-f30-independent-review-oct12.md",
+      "bytes": 5226,
+      "sha256": "fcc43e9349bdac0735631b97e7e9262f60b54d44570f280c00e09e08338ea6fd"
+    },
+    {
+      "path": "stockinsider-f6-root-focused-oct12.tap",
+      "bytes": 25512,
+      "sha256": "e37230330e78854e8d3500d6c6dc75cfdb2cbbdce4fad21ce0a163d1f520a45a"
+    }
+  ]
+}

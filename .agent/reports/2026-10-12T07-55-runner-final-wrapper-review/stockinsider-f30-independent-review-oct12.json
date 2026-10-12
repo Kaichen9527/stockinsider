@@ -1,0 +1,95 @@
+{
+  "subject": "f30beda55adc7c11ad42b1f2490e5742651173c9",
+  "tree": "36495327684494a2aa8b4798ce3d89615f1d6516",
+  "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "reviewedAt": "2026-10-11T23:44:27.223168+00:00",
+  "verdict": "REQUEST_CHANGES",
+  "unsigned": true,
+  "protectedApproval": false,
+  "findings": [
+    {
+      "id": "RTM-01",
+      "severity": "P2",
+      "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs",
+      "line": 1034,
+      "trigger": "Expired protected reuse record with absent prior subject object, or expired record with equal listing.",
+      "actual": "Reads old listing before expiry branch; throws on missing object or enters trustedReusableHostModelOracle which rejects expired record. Fresh oracle never reached.",
+      "impact": "Retained historical reuse metadata becomes a liveness dependency even when a fresh current trusted oracle is required.",
+      "repair": "Strictly parse record; branch on expiry before reading prior subject/listing. Expired records cannot provide reuse PASS and must select already-authorized fresh execution. Define unavailable unexpired artifact/object handling explicitly and test without auth."
+    },
+    {
+      "id": "RTM-02",
+      "severity": "P2",
+      "path": "scripts/model-runner-v3/real-model-attempt.js",
+      "line": 51,
+      "trigger": "executeModel rejects actual lifecycle branded ownershipLost IO_ERROR/11 after leader exit without natural output EOF.",
+      "actual": "Finally unconditionally recursively removes operation directory; new invocation has no durable recovery barrier.",
+      "impact": "Contradicts retained-resource/uncertain-child lifecycle contract, destroys forensic/cleanup ownership resources and allows a repeated oracle to allocate/start while previous child quiescence remains unknown.",
+      "repair": "Retain owned operation resources, persist a bounded private closed recovery record, return typed/redacted failure, block further roles and restart/retry until independently confirmed recovery; cleanup only when safe. Add actual branded-error caller plus fresh-process retry tests; do not swallow errors or alter old source acceptance."
+    }
+  ],
+  "tests": {
+    "portable": {
+      "pass": 106,
+      "fail": 0,
+      "skip": 0
+    },
+    "selectedOriginalCallers": {
+      "pass": 5,
+      "fail": 0,
+      "skip": 0
+    },
+    "adversarialReproductions": 3,
+    "retainedInfrastructureRed": [
+      {
+        "pass": 89,
+        "fail": 1,
+        "reason": "reviewer sparse tree missing unchanged GitHub action"
+      },
+      {
+        "pass": 100,
+        "fail": 2,
+        "reason": "nonpinned review Node reached two host tests despite intended name filter; host guards correctly rejected"
+      }
+    ]
+  },
+  "activeGraphSha256": "ad4e4d1910b320476c09d50736651d705701902d6c1478f9ee65fa3d5ab798dc",
+  "listingSha256": "80703945942d7823cdcaa34972dc7225b96fad83f82befe00d88d81c2648c86a",
+  "artifacts": [
+    {
+      "path": "/tmp/stockinsider-f30-independent-counterexamples-oct12.cjs",
+      "bytes": 3848,
+      "sha256": "ec5732598fa29627d8ca25c6f7f06bfbc263416b4c72a71a497d1ca36973a666"
+    },
+    {
+      "path": "/tmp/stockinsider-f30-independent-counterexamples-oct12.json",
+      "bytes": 1609,
+      "sha256": "200e19fca42597ddd39df6f1d0188a8357f93b723ae346aba23a386807941cfb"
+    },
+    {
+      "path": "/tmp/stockinsider-f30-independent-focused-oct12.tap",
+      "bytes": 17835,
+      "sha256": "26928f0cf8f28eb9c4fdf8aded3377de3bac10e6125e80703685c29a227ba856"
+    },
+    {
+      "path": "/tmp/stockinsider-f30-independent-focused-complete-oct12.tap",
+      "bytes": 20636,
+      "sha256": "8788bb473ee0f1c46e2c0c051a34708c94476a78e231ee179385921b4ab8ea92"
+    },
+    {
+      "path": "/tmp/stockinsider-f30-independent-pure-original-oct12.tap",
+      "bytes": 21095,
+      "sha256": "6916e2132f8c25013f31359b41a56cc8aab27f8f48a7553e68c0843d9e213304"
+    },
+    {
+      "path": "/tmp/stockinsider-f30-independent-selected-callers-oct12.tap",
+      "bytes": 1421,
+      "sha256": "33ea23f989c05a1d05f729d0cebdcc3506152ec715b6cb38e326c47a753915a9"
+    }
+  ],
+  "reportSha256": "fcc43e9349bdac0735631b97e7e9262f60b54d44570f280c00e09e08338ea6fd",
+  "passEvidenceRefsCreated": false,
+  "credentialsRead": false,
+  "providerInvoked": false,
+  "repoSourceChanged": false
+}
