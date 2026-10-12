@@ -1,0 +1,21 @@
+        ORDER BY authority.source_identity_id,authority.recorded_at DESC,authority.authority_id
+      ), family_heads AS (
+        SELECT d.*,row_number() OVER(PARTITION BY d.source_key,d.revision_family_key ORDER BY d.recorded_at DESC,d.revision_id) AS family_rank
+        FROM public.source_document_revisions_v3 d
+        JOIN public.source_revision_family_registry_v3 registry ON registry.source_key=d.source_key AND registry.revision_family_key=d.revision_family_key
+          AND registry.approved_source_identity_id=d.approved_source_identity_id AND registry.stable_connector_document_id=d.stable_connector_document_id
+        JOIN authority_heads authority ON authority.authority_id=d.source_identity_authority_id
+          AND authority.source_identity_id=d.approved_source_identity_id AND authority.source_key=d.source_key
+        WHERE d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
+          AND authority.status='active' AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
+      ), connector_bound AS (
+        SELECT f.*,row_number() OVER(PARTITION BY f.source_key ORDER BY f.collected_at DESC,f.revision_family_key,f.revision_id) AS connector_rank
+        FROM family_heads f WHERE f.family_rank=1 AND f.acquisition_status='complete'
+          AND (f.published_at IS NULL OR f.published_at<=f.collected_at)
+      )
+      SELECT coalesce(jsonb_agg(jsonb_build_array(source_key,revision_id,revision_family_key,approved_source_identity_id,stable_connector_document_id,published_at,collected_at,
+        raw_field_payload_algorithm_version,ingestion_content_revision_sha256,canonical_content_algorithm_version,ingestion_canonical_content_hash_v3)
+      ORDER BY source_key,collected_at DESC,revision_family_key,revision_id),'[]'::jsonb) INTO v_all FROM connector_bound WHERE connector_rank<=1000;
+      IF EXISTS(
+        WITH authority_heads AS MATERIALIZED (
+          SELECT DISTINCT ON(authority.source_identity_id) authority.*

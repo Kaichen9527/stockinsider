@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 13:55台灣時間：新reader獨立審查發現head復活錯序，已排定修補；金融最小分離同步盤點
+
+遠端main仍0997336d，PR374已正常合併終態，不重跑checks／merge／watch。既有Cloud前件cursor17 idle完成reader code64b71a91／deliveryc03265a8／tree251f7b6f；root真正核47raw、16source hash/blob並親跑52PASS／零fail/skip。Maker type/lint/build保留為其真實收據，不冒稱root新build或live資料。Draft PR單次GraphQL Forbidden未重試；本輪尚未新建PR或approval refs。
+
+真正獨立author_input_review_oct08 REQUEST_CHANGES P0=0/P1=0/P2=1，root另實際兩順序重現：已在cutoff前collected/recorded的新family head若published_at=cutoff+1µs，reader在選head前過濾發布日期，會把它標after_cutoff並復活舊revision。現有SQL先依collection/recorded選head再驗證published<=collected。原52綠含錯序預期，不能拿來closure；原測試／counterexample／SQL實際bytes均保存。修補後需重做真正獨立審查與正常必要checks；未批准不merge。
+
+Cloud原件idle後只派一件15分鐘docs-only金融盤點：以approved099核PR364 financial128/bound_violation最小可分離修補與安裝鏈，非重算或DB操作；active turn01a12eab／cursor18。其後單一序列最多20分鐘修reader P2，整合approved099、加正確反例與既有ordinary workflow新test參數，執行tests/types/lint/build並保存精確收據。未派重疊工作，root不改ownedsource。不要把排定修補冒稱已完成。
+
+正式仍169；本輪未重測必敗容量guard／傳包／切換／migration／刪cache。最近可用16,575,406,080bytes低既定19,998,441,472，舊待答容量問題不重問；已驗證Linux包仍8bcd，不含099。343全量與PTT2409均不重跑；AUO待真正部署後guarded匯入。新reader仍純injected projection，live完整母體／legacy mapping／origin/creator、Top20／文章與策略排程尚待完成。新收據`.agent/reports/2026-10-12T13-55-publisher-reader-independent-review/`。
+
 ## 2026-10-12 13:11台灣時間：PR374正常受保護檢查全部成功並已合併；部署容量仍不足
 
 PR374 exact ff2b15f7/tree31b29c0a的正常protected38205225068全七項bootstrap／requirements／architecture／exact／model／product／aggregate真正SUCCESS。Root看完終態、核對原active/bypass[]保護、精確head、所有普通checks與main8bcd後，標準gh --merge --match-head-commit真合併：0997336d0eb8ec43ea0899f22fe5a03cc774518f，05:06:44Z。Git實查兩parents正是8bcd與ff2b，tree31b29c0a/web68f36363；保護前後JSON一致，沒有admin／再次例外／直接pushmain。不要再跑PR374 checks或merge。

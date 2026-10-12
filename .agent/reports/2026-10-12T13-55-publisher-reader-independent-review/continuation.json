@@ -1,0 +1,39 @@
+{
+  "recorded_at": "2026-10-12T05:56:03.131380+00:00",
+  "main": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+  "production": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "reader_delivery": "c03265a84abfeef4271b5dcd33f187cf907afb90",
+  "maker_receipt_sha256": "6c1b53e7289ffae5185e6338cb1b355a4cbf20e9390999711beb0232938128df",
+  "verified_raw": 47,
+  "verified_source": 16,
+  "root_original_tests": {
+    "tests": 52,
+    "pass": 52,
+    "fail": 0,
+    "skip": 0
+  },
+  "review": {
+    "verdict": "REQUEST_CHANGES",
+    "P0": 0,
+    "P1": 0,
+    "P2": 1,
+    "protected": false
+  },
+  "root_probe": "actual bug reproduced both orders, not closure",
+  "cloud": {
+    "thread": "01a106b8-a883-7185-9962-f7372109a093",
+    "host": "durable",
+    "active_turn": "01a12eab-4a92-7363-930f-4561ec29a0d8",
+    "cursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:18",
+    "current": "15min docs-only financial minimal separation audit",
+    "queued_after_current": "20min reader P2 repair, integrate approved main099, additive ordinary CI test registration, tests/types/lint/build, final evidence, independent re-review required"
+  },
+  "no_operations": [
+    "no PR374 rerun/remerge",
+    "no new protected trigger",
+    "no VPS measurement/upload/deploy/migration",
+    "no Docker deletion",
+    "no full343 or PTT2409 recrawl",
+    "no research schedule enablement"
+  ]
+}

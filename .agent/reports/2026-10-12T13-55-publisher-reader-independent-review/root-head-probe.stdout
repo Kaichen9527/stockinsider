@@ -1,0 +1,51 @@
+{
+  "kind": "bug reproduction, not closure PASS",
+  "head": "c03265a84abfeef4271b5dcd33f187cf907afb90",
+  "expected": "known invalid latest head must not revive prior complete revision",
+  "observations": [
+    {
+      "reverse": false,
+      "status": "projected",
+      "reason": null,
+      "binding_ids": [
+        "00000000-0000-4000-8000-000000000002"
+      ],
+      "dispositions": [
+        {
+          "table": "revisions",
+          "identity": "10614f2830778caf53be24dfffe921afc733957d53e9a8bf29be6c09acb06c82",
+          "input_hash": "10614f2830778caf53be24dfffe921afc733957d53e9a8bf29be6c09acb06c82",
+          "disposition": "after_cutoff"
+        },
+        {
+          "table": "revisions",
+          "identity": "af2fa7207332914cb75d3c0f27589225804e8ba76cad565ee2451241d78667b8",
+          "input_hash": "af2fa7207332914cb75d3c0f27589225804e8ba76cad565ee2451241d78667b8",
+          "disposition": "publisher_bound_only"
+        }
+      ]
+    },
+    {
+      "reverse": true,
+      "status": "projected",
+      "reason": null,
+      "binding_ids": [
+        "00000000-0000-4000-8000-000000000002"
+      ],
+      "dispositions": [
+        {
+          "table": "revisions",
+          "identity": "10614f2830778caf53be24dfffe921afc733957d53e9a8bf29be6c09acb06c82",
+          "input_hash": "10614f2830778caf53be24dfffe921afc733957d53e9a8bf29be6c09acb06c82",
+          "disposition": "after_cutoff"
+        },
+        {
+          "table": "revisions",
+          "identity": "af2fa7207332914cb75d3c0f27589225804e8ba76cad565ee2451241d78667b8",
+          "input_hash": "af2fa7207332914cb75d3c0f27589225804e8ba76cad565ee2451241d78667b8",
+          "disposition": "publisher_bound_only"
+        }
+      ]
+    }
+  ]
+}

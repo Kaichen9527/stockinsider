@@ -1,0 +1,47 @@
+[
+  {
+    "path": "actual-existing-head-selection.sql.txt",
+    "bytes": 1994,
+    "sha256": "eb47ebefdcc734fe87793fe198af6675c5d6601418e783ea8fc0a1833ac78de5"
+  },
+  {
+    "path": "continuation.json",
+    "bytes": 1363,
+    "sha256": "61ad95196672b37c4b69e6b6aa7ded03d44bfd910de89b0363454321e401463c"
+  },
+  {
+    "path": "focused.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "focused.stdout",
+    "bytes": 9336,
+    "sha256": "e0957648112671f850908c39f9368ae6844a69be569e34856822669dcc9a88ed"
+  },
+  {
+    "path": "independent-review.md",
+    "bytes": 2188,
+    "sha256": "63a6b9c5578b7ee5ad8eb619d49a451f5753788fdaececd0f018b77d18a230f6"
+  },
+  {
+    "path": "root-head-probe.stderr",
+    "bytes": 177,
+    "sha256": "7a9047fe2638bc5cbe6efef9909fd62501dca19d656f8f505205038c6a6016e7"
+  },
+  {
+    "path": "root-head-probe.stdout",
+    "bytes": 1723,
+    "sha256": "8df82e50d9e41fdf0873ea6661cd500991b1c2c9416ed397b0e5eb177e0aa7a8"
+  },
+  {
+    "path": "root-known-invalid-head-probe.ts.txt",
+    "bytes": 5469,
+    "sha256": "5d9554b9e8048d50275c0211b636a6087831836392fbab06f5290352e329205d"
+  },
+  {
+    "path": "verification.json",
+    "bytes": 431,
+    "sha256": "cb7cf55943636e392f847d21baf85a3423d97073807388f162ef5a18bcac8395"
+  }
+]

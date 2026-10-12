@@ -1,0 +1,10 @@
+{
+  "head": "c03265a84abfeef4271b5dcd33f187cf907afb90",
+  "receipt_sha256": "6c1b53e7289ffae5185e6338cb1b355a4cbf20e9390999711beb0232938128df",
+  "raw_verified": 47,
+  "source_verified": 16,
+  "time": "2026-10-12T05:51:48.044213+00:00",
+  "root_build": false,
+  "live_read": false,
+  "preparation_first_attempt": "exec rejected nonexistent workdir before commands; no tests executed; corrected prepare under existing repo first"
+}
