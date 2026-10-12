@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {OWNERSHIP_PRELUDE,makeFinancialExistingSchemaProfile,assertFinancialExistingSchemaPlan,assertFinancialProfileFlags,assertFinancialProfileReviewBinding} from './financial-existing-schema-profile.mjs';
 import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
 import { FINANCIAL_TAIL, selectFinancialHistoryChain, assertFinancialReviewBinding, assertInstalledFinancialHistoryPlan, verifyFinancialHistoryPostconditions } from './financial-history-install-guard.mjs';
 
@@ -93,16 +94,20 @@ function parseArguments(argv) {
   for (let index=0; index<argv.length; index+=1) {
     const value=argv[index];
     if(value==='--apply')result.apply=true;
-    else if(value==='--financial-history-extension')result.financialHistoryExtension=true;
+    else if(value==='--financial-history-extension'){if(result.financialHistoryExtension)throw new Error('invalid_arguments');result.financialHistoryExtension=true;}
+    else if(value==='--financial-existing-schema-profile'){if(result.financialExistingSchemaProfile)throw new Error('invalid_arguments');result.financialExistingSchemaProfile=true;}
     else if(value==='--source-commit'&&SHA40.test(argv[index+1]??''))result.sourceCommit=argv[++index];
     else if(value==='--attestation-commit'&&SHA40.test(argv[index+1]??''))result.attestationCommit=argv[++index];
     else throw new Error('invalid_arguments');
   }
   if(!result.apply||!result.sourceCommit||!result.attestationCommit)throw new Error('invalid_arguments');
+  assertFinancialProfileFlags(result);
   return Object.freeze(result);
 }
 
 function reviewedMigrationPlan(options) {
+  assertFinancialProfileFlags(options);
+  const financialEnabled=options.financialHistoryExtension===true||options.financialExistingSchemaProfile===true;
   const head=execFileSync('/usr/bin/git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   const dirty=execFileSync('/usr/bin/git',['status','--porcelain=v1','--untracked-files=all'],
     {cwd:root,encoding:'utf8'}).trim();
@@ -119,15 +124,18 @@ function reviewedMigrationPlan(options) {
       throw new Error('non_additive_migration_rejected');
     return Object.freeze({relativePath,bytes,sha256:createHash('sha256').update(bytes).digest('hex')});
   });
-  const tailBytes=options.financialHistoryExtension ? fs.readFileSync(path.join(root,FINANCIAL_TAIL)) : null;
-  const migrations=selectFinancialHistoryChain(baseMigrations,tailBytes ? {relativePath:FINANCIAL_TAIL,bytes:tailBytes,sha256:createHash('sha256').update(tailBytes).digest('hex')} : null, options.financialHistoryExtension===true);
+  const tailBytes=financialEnabled ? fs.readFileSync(path.join(root,FINANCIAL_TAIL)) : null;
+  const migrations=selectFinancialHistoryChain(baseMigrations,tailBytes ? {relativePath:FINANCIAL_TAIL,bytes:tailBytes,sha256:createHash('sha256').update(tailBytes).digest('hex')} : null, financialEnabled);
   const chainSha256=createHash('sha256').update(JSON.stringify(migrations
     .map(({relativePath,sha256})=>[relativePath,sha256]))).digest('hex');
-  if(options.financialHistoryExtension) {
+  const preludeBytes=options.financialExistingSchemaProfile?fs.readFileSync(path.join(root,OWNERSHIP_PRELUDE)):null;
+  const financialExistingSchemaProfile=preludeBytes?makeFinancialExistingSchemaProfile(migrations,{relativePath:OWNERSHIP_PRELUDE,bytes:preludeBytes,sha256:createHash('sha256').update(preludeBytes).digest('hex')}):null;
+  if(financialEnabled) {
     const review=execFileSync('/usr/bin/git',['show',`${options.attestationCommit}:.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md`],{cwd:root,encoding:'utf8'});
     assertFinancialReviewBinding(review,chainSha256);
+    if(financialExistingSchemaProfile)assertFinancialProfileReviewBinding(review,financialExistingSchemaProfile.orderedProfileSha256);
   }
-  return Object.freeze({migrations:Object.freeze(migrations),chainSha256});
+  return Object.freeze({migrations:Object.freeze(migrations),chainSha256,...(financialExistingSchemaProfile?{financialExistingSchemaProfile}:{})});
 }
 
 async function verifyReviewedMigrationPostconditions(client, options) {
@@ -426,7 +434,7 @@ async function verifyReviewedMigrationPostconditions(client, options) {
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
-    if(options.financialHistoryExtension) await verifyFinancialHistoryPostconditions(client);
+    if(options.financialHistoryExtension||options.financialExistingSchemaProfile) await verifyFinancialHistoryPostconditions(client);
     return verified;
 }
 
@@ -452,7 +460,11 @@ async function applyReviewedMigrationPlanToClient(client,plan,options) {
     await client.query('BEGIN');
     transactionOpen=true;
     await client.query('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
-    await assertInstalledFinancialHistoryPlan(client,plan.migrations,options.financialHistoryExtension===true);
+    await assertInstalledFinancialHistoryPlan(client,plan.migrations,options.financialHistoryExtension===true||options.financialExistingSchemaProfile===true);
+    assertFinancialExistingSchemaPlan(plan,options);
+    for(const prelude of plan.financialExistingSchemaProfile?.preludes??[]) {
+      await client.query(migrationBodyInAtomicTransaction(prelude.bytes.toString('utf8')));
+    }
     // Freeze successor detection before replaying any older migration. Earlier
     // migrations can temporarily replace the authoritative function body and
     // must not erase evidence that the stronger successor was already installed.
@@ -470,7 +482,7 @@ async function applyReviewedMigrationPlanToClient(client,plan,options) {
     transactionOpen=false;
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
-      orderedChainSha256:plan.chainSha256,migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
+      orderedChainSha256:plan.chainSha256,...(plan.financialExistingSchemaProfile?{orderedProfileSha256:plan.financialExistingSchemaProfile.orderedProfileSha256,preludes:plan.financialExistingSchemaProfile.preludes.map(({relativePath,sha256})=>[relativePath,sha256])}:{}),migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
       supersededMigrations:Object.freeze(supersededMigrations),verified});
   } catch(error) {
     primaryFailed=true;

@@ -1,3 +1,4 @@
+import {OWNERSHIP_PRELUDE,makeFinancialExistingSchemaProfile} from './financial-existing-schema-profile.mjs';
 import { selectFinancialHistoryChain, orderedHash, FINANCIAL_TAIL } from './financial-history-install-guard.mjs';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
@@ -60,8 +61,9 @@ const migrationPaths = [
   'migrations/20260924_entry_plan_official_action_symbols.sql',
 ];
 const args=process.argv.slice(2);
-if(args.some(x=>x!=='--financial-history-extension') || args.length>1) throw new Error('invalid_arguments');
-const financialHistoryExtension=args.includes('--financial-history-extension');
+if(args.some(x=>!['--financial-history-extension','--financial-existing-schema-profile'].includes(x)) || args.length>1) throw new Error('invalid_arguments');
+const financialExistingSchemaProfile=args.includes('--financial-existing-schema-profile');
+const financialHistoryExtension=args.includes('--financial-history-extension')||financialExistingSchemaProfile;
 const baseMigrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));
   return {
@@ -74,6 +76,8 @@ const baseMigrations = migrationPaths.map((relativePath) => {
 const tailBytes=financialHistoryExtension ? fs.readFileSync(path.join(root,FINANCIAL_TAIL)) : null;
 const selected=selectFinancialHistoryChain(baseMigrations, financialHistoryExtension ? {relativePath:FINANCIAL_TAIL,bytes:tailBytes,sha256:createHash('sha256').update(tailBytes).digest('hex')} : null,financialHistoryExtension);
 const migrations=selected.map(r=>r.relativePath ? {migration:r.relativePath,bytes:r.bytes.length,sha256:r.sha256,additiveOnly:true}:r);
+const preludeBytes=financialExistingSchemaProfile?fs.readFileSync(path.join(root,OWNERSHIP_PRELUDE)):null;
+const existingProfile=financialExistingSchemaProfile?makeFinancialExistingSchemaProfile(selected.map(r=>r.relativePath?r:{relativePath:r.migration,sha256:r.sha256,bytes:fs.readFileSync(path.join(root,r.migration))}),{relativePath:OWNERSHIP_PRELUDE,bytes:preludeBytes,sha256:createHash('sha256').update(preludeBytes).digest('hex')}):null;
 const productionDatabaseMigrationAuthorized =
   authority?.authority?.v314?.productionDatabaseMigrationAuthorized === true;
 const orderedChainSha256 = createHash('sha256')
@@ -90,7 +94,8 @@ process.stdout.write(JSON.stringify({
     productionDatabaseMigrationAuthorized,
   },
   applyAuthorized: financialHistoryExtension ? false : productionDatabaseMigrationAuthorized,
-  ...(financialHistoryExtension ? {profile: 'financial-history-v1', reviewBindingRequired: `Financial history ordered chain SHA256: ${orderedHash(selected)}`} : {}),
+  ...(financialHistoryExtension ? {profile: financialExistingSchemaProfile?'financial-existing-schema-v1':'financial-history-v1', reviewBindingRequired: `Financial history ordered chain SHA256: ${orderedHash(selected)}`} : {}),
+  ...(existingProfile?{financialExistingSchemaProfile:{schema:existingProfile.schema,preludes:existingProfile.preludes.map(r=>({migration:r.relativePath,bytes:r.bytes.length,sha256:r.sha256})),orderedProfileSha256:existingProfile.orderedProfileSha256,steps:existingProfile.steps},profileReviewBindingRequired:`Financial existing-schema ordered profile SHA256: ${existingProfile.orderedProfileSha256}`} :{}),
   dedicatedApplyCommand: !financialHistoryExtension && productionDatabaseMigrationAuthorized
     ? 'npm run db:v3:apply-reviewed -- --source-commit <reviewed-commit> --attestation-commit <attestation-commit>'
     : null,
