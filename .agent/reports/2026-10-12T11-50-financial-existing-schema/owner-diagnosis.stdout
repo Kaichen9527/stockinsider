@@ -1,0 +1,15 @@
+TAP version 13
+# Subtest: captured existing-schema owner profile read-only diagnosis (no install)
+ok 1 - captured existing-schema owner profile read-only diagnosis (no install)
+  ---
+  duration_ms: 1541.142886
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1746.992007

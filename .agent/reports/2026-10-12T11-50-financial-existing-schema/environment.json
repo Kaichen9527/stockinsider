@@ -1,0 +1,11 @@
+{
+  "node": "22.14.0",
+  "next": "16.3.4",
+  "pgModule": "8.18.0",
+  "pgNative": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1)",
+  "USER": "agent",
+  "bootstrapDatabasePrincipal": "synthetic postgres, unchanged original restore method",
+  "proxyCa": "inherited unchanged; no values or credentials read/exported",
+  "newDependencies": false,
+  "noCloudConfigurationChange": true
+}

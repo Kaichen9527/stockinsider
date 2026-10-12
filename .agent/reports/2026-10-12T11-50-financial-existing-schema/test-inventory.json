@@ -1,0 +1,35 @@
+{
+  "owner-diagnosis": {
+    "counts": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0
+    },
+    "testNames": [
+      "captured existing-schema owner profile read-only diagnosis (no install)"
+    ],
+    "raw": {
+      "path": "owner-diagnosis.stdout",
+      "bytes": 321,
+      "sha256": "70dc36130c3f562d516c8cf6b36f6ce6eb78bb61a3fafb43b97408d859a2c663"
+    }
+  },
+  "native-first": {
+    "counts": {
+      "tests": 2,
+      "pass": 0,
+      "fail": 2,
+      "skipped": 0
+    },
+    "testNames": [
+      "financial-only exact49 installer on original captured existing schema",
+      "actual first apply through unchanged helper and pinned financial49"
+    ],
+    "raw": {
+      "path": "native-first.stdout",
+      "bytes": 2569,
+      "sha256": "107e101ada621c2e12f32cd0ba03290447352d250e34dc5da83318f3d5bfc8fa"
+    }
+  }
+}

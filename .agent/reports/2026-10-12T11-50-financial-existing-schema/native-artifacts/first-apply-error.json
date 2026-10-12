@@ -1,0 +1,6 @@
+{
+  "name": "error",
+  "message": "must be owner of function read_legacy_release_checkpoints_v3_19",
+  "code": "42501",
+  "routine": "aclcheck_error"
+}

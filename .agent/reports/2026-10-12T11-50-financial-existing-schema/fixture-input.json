@@ -1,0 +1,10 @@
+{
+  "source": "2e078dfdd74272d3d50dffdd4cc6c14df3152c78",
+  "path": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+  "gzBytes": 322909,
+  "gzSha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+  "schemaBytes": 2524877,
+  "schemaSha256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+  "bootstrapSha256": "6d08fbb7545b4a76aa740927a6519cd8eda1e90d6003d920b4ec3c08d5f4768a",
+  "snapshot": "schema-only, no data or credentials; original captured existing VPS schema"
+}

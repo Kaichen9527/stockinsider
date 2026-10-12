@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: financial-only exact49 installer on original captured existing schema
+    # Subtest: actual first apply through unchanged helper and pinned financial49
+    not ok 1 - actual first apply through unchanged helper and pinned financial49
+      ---
+      duration_ms: 412.848872
+      location: '/workspace/cloud-financial-existing-schema-oct12/scripts/opportunity-v3/financial-history-existing-schema-native.test.mjs:74:11'
+      failureType: 'testCodeFailure'
+      error: 'must be owner of function read_legacy_release_checkpoints_v3_19'
+      code: '42501'
+      name: 'error'
+      stack: |-
+        /workspace/cloud-attention-shadow-afa3-oct09/node_modules/pg/lib/client.js:624:17
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async client.query (file:///workspace/cloud-financial-existing-schema-oct12/scripts/opportunity-v3/financial-history-existing-schema-native.test.mjs:59:312)
+        async applyReviewedMigrationPlanToClient (file:///workspace/cloud-financial-existing-schema-oct12/scripts/opportunity-v3/apply-reviewed-migrations.mjs:466:7)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-existing-schema-oct12/scripts/opportunity-v3/financial-history-existing-schema-native.test.mjs:76:21)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-existing-schema-oct12/scripts/opportunity-v3/financial-history-existing-schema-native.test.mjs:74:3)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    1..1
+not ok 1 - financial-only exact49 installer on original captured existing schema
+  ---
+  duration_ms: 1890.098217
+  location: '/workspace/cloud-financial-existing-schema-oct12/scripts/opportunity-v3/financial-history-existing-schema-native.test.mjs:54:1'
+  failureType: 'testCodeFailure'
+  error: 'dependent_stages_blocked_by_first_apply'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-financial-existing-schema-oct12/scripts/opportunity-v3/financial-history-existing-schema-native.test.mjs:83:73)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2111.016196

@@ -1,0 +1,7 @@
+2026-10-12 11:57:29.655 UTC [434518] LOG:  starting PostgreSQL 17.11 (Debian 17.11-0+deb13u1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-12 11:57:29.655 UTC [434518] LOG:  listening on Unix socket "/tmp/si-financial-existing-0612/si-fin49-sjOqVT/.s.PGSQL.56488"
+2026-10-12 11:57:29.657 UTC [434521] LOG:  database system was shut down at 2026-10-12 11:57:29 UTC
+2026-10-12 11:57:29.660 UTC [434518] LOG:  database system is ready to accept connections
+2026-10-12 11:57:30.608 UTC [434529] WARNING:  there is no transaction in progress
+2026-10-12 11:57:30.615 UTC [434518] LOG:  received immediate shutdown request
+2026-10-12 11:57:30.618 UTC [434518] LOG:  database system is shut down

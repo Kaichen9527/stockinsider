@@ -1,0 +1,132 @@
+{
+  "kind": "read-only diagnosis, not apply authority",
+  "firstFailedMigration": "migrations/20260823_release_reconciliation_v3_19.sql",
+  "firstSqlState": "42501",
+  "observedFiveOwnersArePostgres": true,
+  "profiles": [
+    {
+      "signature": "append_legacy_expired_producer_diagnostic_v3_20(uuid,uuid,text,text,text,text,text,timestamp with time zone)",
+      "existingOwner": "postgres",
+      "sourceBridgeContainsObservedBodyHash": true,
+      "functionAndAclShapeMatchesBridgeChecks": true,
+      "observedLanguage": "plpgsql",
+      "observedResult": "void",
+      "observedArgNames": [
+        "p_run",
+        "p_job",
+        "p_stage",
+        "p_job_kind",
+        "p_input_hash",
+        "p_producer_sha",
+        "p_diagnostic_hash",
+        "p_recorded_at"
+      ]
+    },
+    {
+      "signature": "append_legacy_source_shard_v3_19(uuid,uuid,text,jsonb)",
+      "existingOwner": "postgres",
+      "sourceBridgeContainsObservedBodyHash": true,
+      "functionAndAclShapeMatchesBridgeChecks": true,
+      "observedLanguage": "plpgsql",
+      "observedResult": "jsonb",
+      "observedArgNames": [
+        "p_run",
+        "p_completed_source_job",
+        "p_source_result_hash",
+        "p_selected_rows"
+      ]
+    },
+    {
+      "signature": "complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)",
+      "existingOwner": "postgres",
+      "sourceBridgeContainsObservedBodyHash": true,
+      "functionAndAclShapeMatchesBridgeChecks": true,
+      "observedLanguage": "plpgsql",
+      "observedResult": "TABLE(status text, next_job jsonb)",
+      "observedArgNames": [
+        "p_run",
+        "p_job",
+        "p_token",
+        "p_result",
+        "p_json",
+        "p_hash",
+        "status",
+        "next_job"
+      ]
+    },
+    {
+      "signature": "read_legacy_release_checkpoints_v3_19()",
+      "existingOwner": "postgres",
+      "sourceBridgeContainsObservedBodyHash": true,
+      "functionAndAclShapeMatchesBridgeChecks": true,
+      "observedLanguage": "sql",
+      "observedResult": "jsonb",
+      "observedArgNames": null
+    },
+    {
+      "signature": "schedule_legacy_source_shard_successor_v3_19(uuid,uuid,uuid,text,integer,uuid)",
+      "existingOwner": "postgres",
+      "sourceBridgeContainsObservedBodyHash": true,
+      "functionAndAclShapeMatchesBridgeChecks": true,
+      "observedLanguage": "plpgsql",
+      "observedResult": "jsonb",
+      "observedArgNames": [
+        "p_run",
+        "p_completed_source_job",
+        "p_successor_job",
+        "p_source_result_hash",
+        "p_first_ordinal",
+        "p_first_revision"
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "rolname": "legacy_correctness_rpc_owner",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolbypassrls": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolreplication": false,
+      "public_create": false
+    },
+    {
+      "rolname": "opportunity_v3_rpc_owner",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolbypassrls": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolreplication": false,
+      "public_create": false
+    },
+    {
+      "rolname": "postgres",
+      "rolcanlogin": true,
+      "rolsuper": true,
+      "rolinherit": true,
+      "rolbypassrls": true,
+      "rolcreaterole": true,
+      "rolcreatedb": true,
+      "rolreplication": true,
+      "public_create": true
+    },
+    {
+      "rolname": "stockinsider_runtime_v319",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolbypassrls": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolreplication": false,
+      "public_create": false
+    }
+  ],
+  "proposedNextSlice": "independent financial-only existing-schema profile with exact reviewed five-function ownership prelude, under same lock and transaction; bind prelude bytes and new ordered digest to attestation before any future apply",
+  "noBridgeOrRoleAmendmentApplied": true,
+  "runtimeLoginCompatibility": "original bootstrap role stockinsider_runtime_v319 is NOLOGIN; pending peer amendment was not applied; current test uses synthetic postgres restoration only"
+}

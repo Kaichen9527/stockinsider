@@ -1,0 +1,8 @@
+{
+  "stage": "first financial49 apply",
+  "error": {
+    "name": "Error",
+    "message": "dependent_stages_blocked_by_first_apply"
+  },
+  "lastMigration": "migrations/20260823_release_reconciliation_v3_19.sql"
+}

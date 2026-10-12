@@ -1,0 +1,52 @@
+[
+  {
+    "signature": "append_legacy_expired_producer_diagnostic_v3_20(uuid,uuid,text,text,text,text,text,timestamp with time zone)",
+    "owner": "postgres",
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "body_sha256": "6b6876d60ff3b86f9df9911764cbcb0cca21a790f116de3568402d4439bd690a",
+    "prosecdef": true,
+    "proacl": "{postgres=X/postgres,legacy_correctness_rpc_owner=X/postgres}"
+  },
+  {
+    "signature": "append_legacy_source_shard_v3_19(uuid,uuid,text,jsonb)",
+    "owner": "postgres",
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "body_sha256": "7bd4f4282e2e758f042ad746185f417d3cfe0452afc3261aac656336b3b64ee2",
+    "prosecdef": true,
+    "proacl": "{postgres=X/postgres,opportunity_v3_rpc_owner=X/postgres}"
+  },
+  {
+    "signature": "complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)",
+    "owner": "postgres",
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "body_sha256": "8e70502c44b8ba09c655259ab7259fc20a07a8e0154d586735e6acf272b3f8a3",
+    "prosecdef": true,
+    "proacl": "{postgres=X/postgres,legacy_correctness_rpc_owner=X/postgres,service_role=X/postgres}"
+  },
+  {
+    "signature": "read_legacy_release_checkpoints_v3_19()",
+    "owner": "postgres",
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "body_sha256": "813934a6a5130d3aaf20ea9b39748427220b156b1a864c105d61f435cd21ed24",
+    "prosecdef": true,
+    "proacl": "{postgres=X/postgres,service_role=X/postgres}"
+  },
+  {
+    "signature": "schedule_legacy_source_shard_successor_v3_19(uuid,uuid,uuid,text,integer,uuid)",
+    "owner": "postgres",
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "body_sha256": "4128a1520a08699a38c1d82bd15d266fdc49c21ebdaa18e3a73b467868caed90",
+    "prosecdef": true,
+    "proacl": "{postgres=X/postgres,opportunity_v3_rpc_owner=X/postgres}"
+  }
+]

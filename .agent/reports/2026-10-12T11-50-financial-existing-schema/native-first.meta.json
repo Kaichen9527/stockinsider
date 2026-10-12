@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/financial-history-existing-schema-native.test.mjs"
+  ],
+  "start_utc": "2026-10-12T11:54:42Z",
+  "seconds": 2.2216861248016357,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 150695936,
+  "min_free_bytes": 8669462528
+}

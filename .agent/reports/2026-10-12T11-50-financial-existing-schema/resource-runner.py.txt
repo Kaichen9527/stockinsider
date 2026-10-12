@@ -1,0 +1,16 @@
+import subprocess,time,os,json,sys,threading
+root='/workspace/cloud-financial-existing-schema-oct12'; out=sys.argv[1]; cmd=sys.argv[2:]
+start=time.time(); p=subprocess.Popen(cmd,cwd=root,stdout=open(out+'.stdout','wb'),stderr=open(out+'.stderr','wb'),start_new_session=True,env={**os.environ,'PATH':'/workspace/.tools/node22/node_modules/.bin:/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin:'+os.environ['PATH'],'USER':__import__('pwd').getpwuid(os.geteuid()).pw_name,'TMPDIR':'/tmp/si-financial-existing-0612'})
+peak=0; free=2**63
+while p.poll() is None:
+ f=os.statvfs(root); free=min(free,f.f_bavail*f.f_frsize)
+ try:
+  rows=subprocess.check_output(['ps','-eo','pid,ppid,rss'],text=True).splitlines()[1:]; ps=[list(map(int,r.split())) for r in rows]; ids={p.pid}
+  for _ in range(8): ids.update(x[0] for x in ps if x[1] in ids)
+  peak=max(peak,sum(x[2]*1024 for x in ps if x[0] in ids))
+ except Exception: pass
+ if free<8589934592 or peak>8589934592 or time.time()-start>600:
+  os.killpg(p.pid,15); p.wait(); break
+ time.sleep(.25)
+json.dump({'command':cmd,'start_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime(start)),'seconds':time.time()-start,'exit':p.returncode,'peak_sampled_process_tree_rss_bytes':peak,'min_free_bytes':free},open(out+'.meta.json','w'),indent=2)
+sys.exit(p.returncode or 0)
