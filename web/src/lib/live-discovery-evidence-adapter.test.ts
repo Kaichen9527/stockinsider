@@ -5,12 +5,13 @@ import { createRequire } from 'node:module';
 import vm from 'node:vm';
 import { adaptLegacyDiscoveryEvidence, LIVE_DISCOVERY_BOUNDS } from './live-discovery-evidence-adapter.ts';
 import { buildPttMentionProvenance } from './ptt-mention-provenance.ts';
+import { collectPagedAuthorityRows } from './candidate-research-policy.ts';
 const stockId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
 const since = '2026-10-05T00:00:00.000000Z', asOf = '2026-10-12T00:00:00.123456Z';
 const parent = 'https://www.ptt.cc/bbs/Stock/M.1791737000.A.123.html';
 const id = (n: number) => `bbbbbbbb-bbbb-bbbb-bbbb-${String(n).padStart(12, '0')}`;
 const row = (n = 1, more: Record<string, unknown> = {}) => ({ id: id(n), stock_id: stockId,
-  platform: 'ptt', as_of: since, created_at: since, available_at: since, mentioned_at: since, provenance: {}, ...more });
+  platform: 'ptt', source_url: parent, as_of: since, created_at: since, available_at: since, mentioned_at: since, provenance: {}, ...more });
 const adapt = (rows: unknown[], more = {}) => adaptLegacyDiscoveryEvidence({ symbol: '2409', stockId, rows, since, asOf, rowsComplete: true, ...more });
 function reply(n: number, author = `author${n}`, excerpt = '我在回覆中提及2409', article = parent) {
   const ptt = buildPttMentionProvenance({ platform: 'ptt', documentUrl: `${article}#push-${n}`, symbol: '2409', metadata: {
@@ -18,7 +19,7 @@ function reply(n: number, author = `author${n}`, excerpt = '我在回覆中提�
     evidence_excerpt: excerpt, matched_symbols: ['2409'], matched_symbol_reason: 'comment_local_tw_symbol_or_name_proximity',
     retention_mode: 'metadata_local_excerpt', body_read_status: 'body_read_bounded',
   } });
-  return { ...row(n), provenance: { ptt } };
+  return { ...row(n), source_url: `${article}#push-${n}`, provenance: { ptt } };
 }
 test('real retained provenance maps scoped row identity, never URL/hash/publisher authority', () => {
   const r = adapt([row(1, { publisher_key: 'ptt:A', independent_content_hash: 'a'.repeat(64), source_url: parent,
@@ -102,6 +103,45 @@ test('server real initializer audits complete pre-link rows rather than eight di
     cutoff: since, sourceCutoff: asOf, discoveryRowsByStock: new Map([[stockId, Array.from({ length: 21 }, (_, i) => reply(i + 1))]]) };
   const code = ts.transpileModule(`exports.summary = (${expression});`, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
   vm.runInNewContext(code, ctx); assert.equal((ctx.exports.summary as { inputRows: number }).inputRows, 21);
+  assert.ok((ctx.exports.summary as { gaps: string[] }).gaps.includes('mention_window_incomplete'));
   assert.match(src, /id,stock_id,source_document_id,as_of/);
   assert.match(src, /discoveryEvidenceAudit,\s*symbol:/);
+});
+test('missing or mismatched row URL cannot borrow retained document provenance', () => {
+  for (const source_url of [undefined, parent, parent + '#push-2', 'https://other.example/post']) {
+    assert.equal(adapt([{ ...reply(1), source_url }]).summary.explicitPttAuthorsMax, 0);
+  }
+});
+test('two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders', () => {
+  const a = reply(1, 'alice'), b = { ...reply(1, 'bob'), id: id(2) };
+  for (const rows of [[a, b], [b, a]]) assert.equal(adapt(rows).summary.explicitPttAuthorsMax, 0);
+});
+test('conflicting text and correct hashes invalidate the whole key in both orders', () => {
+  const a = reply(1, 'alice', '2409新消息'), b = { ...reply(1, 'alice', '2409不同消息'), id: id(2) };
+  for (const rows of [[a, b], [b, a]]) assert.equal(adapt(rows).summary.explicitPttAuthorsMax, 0);
+});
+test('exact comment replay across UUIDs counts once, same author across keys still once', () => {
+  const a = reply(1, 'alice'), b = { ...reply(1, 'alice'), id: id(2) };
+  assert.equal(adapt([a, b, reply(3, 'alice')]).summary.explicitPttAuthorsMax, 1);
+});
+test('twenty authors containing one conflicting comment cannot be counted as twenty', () => {
+  const a = Array.from({ length: 20 }, (_, i) => reply(i + 1));
+  const b = { ...reply(1, 'another-author'), id: id(21) };
+  for (const rows of [[...a, b], [b, ...a]]) {
+    const r = adapt(rows); assert.equal(r.summary.explicitPttAuthorsMax, 19);
+    assert.equal(r.admission.status, 'unsupported');
+  }
+});
+test('same-row UUID conflict cannot hide behind row dedup', () => {
+  const a = reply(1, 'alice'), b = reply(1, 'bob');
+  for (const rows of [[a, b], [b, a]]) assert.equal(adapt(rows).summary.explicitPttAuthorsMax, 0);
+});
+test('actual page reader capped at100/request750 cannot prove total200 exhaustion', async () => {
+  const all = Array.from({ length: 200 }, (_, i) => row(i + 1));
+  const returned = await collectPagedAuthorityRows(async (from, to) => all.slice(from, Math.min(to + 1, from + 100)),
+    { pageSize: 750, maxRows: 1000, requireComplete: true });
+  assert.equal(returned.length, 100); // Existing reader is deliberately unchanged.
+  const source = readFileSync(new URL('./candidate-research.ts', import.meta.url), 'utf8');
+  assert.match(source, /since: cutoff, asOf: sourceCutoff, rowsComplete: false/);
+  assert.ok(adapt(returned, { rowsComplete: false }).summary.gaps.includes('mention_window_incomplete'));
 });

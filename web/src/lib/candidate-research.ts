@@ -2182,12 +2182,14 @@ export async function loadCandidateStageCards(options: { sourceCutoff?: string }
     const stage = stageByStock.get(stockId);
     const stock = rowRelation(stockMentions[0]?.stocks) || rowRelation(stage?.stocks);
     if (!stock) continue;
-    // Audit the unfiltered complete window before display dedup/8-link slicing.
-    // Historical limit5000 rows are not passed off as a complete current cohort.
+    // Audit unfiltered returned rows before display dedup/8-link slicing.
+    // A short response may be a server page cap, not exhaustion. No exact count
+    // or stable-cursor completion receipt exists here, so completeness is false.
+    // Historical limit5000 rows are not a complete current cohort either.
     const discoveryEvidenceAudit = /^\d{4}$/u.test(String(stock.symbol || ''))
       ? adaptLegacyDiscoveryEvidence({ symbol: String(stock.symbol), stockId,
         rows: discoveryRowsByStock.get(stockId) || [],
-        since: cutoff, asOf: sourceCutoff, rowsComplete: true }).summary : undefined;
+        since: cutoff, asOf: sourceCutoff, rowsComplete: false }).summary : undefined;
     const stageSession = stage?.session_date ? String(stage.session_date) : null;
     const latestTechnical = technicalByStock.get(stockId);
     const latestValuation = valuationByStock.get(stockId);
