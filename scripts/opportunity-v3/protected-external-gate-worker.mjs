@@ -871,7 +871,7 @@ const modelOracleSuccessorApprovals = Object.freeze({
 
 const modelOracleHostPinByListingSha256 = Object.freeze({
   // Initial migration: recognized only once this independently reviewed code is protected base.
-  '39feb8c4f66a697b21b499da3d1535b1112b31d53c095cc767c8090ea66c43f8': 'model-runner-host-pins-v3.25',
+  '080db93a9b98e75b4b2bcb14e4097e25cb745f449d2c6c3c0b022dc204afd027': 'model-runner-host-pins-v3.25',
   bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3.14',
   cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
   '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': 'model-runner-host-pins-v3.16',
@@ -1034,6 +1034,24 @@ export function trustedHostAuthenticationPath() {
   return path.join(absolute(os.userInfo().homedir, 'operating-system account home'), '.codex', 'auth.json');
 }
 
+export function prepareTrustedHostScratch(root) {
+  assert.equal(typeof root === 'string' && path.isAbsolute(root), true, 'host scratch absolute root');
+  const check = (directory) => {
+    const stat = lstatSync(directory);
+    assert.equal(stat.isDirectory() && !stat.isSymbolicLink() && stat.uid === process.getuid()
+      && (stat.mode & 0o077) === 0 && realpathSync(directory) === directory,
+    true, 'host scratch private canonical directory');
+  };
+  check(root);
+  for (const name of ['home', 'tmp']) {
+    const directory = path.join(root, name);
+    mkdirSync(directory, { mode: 0o700 }); // Exclusive: never adopt existing contents.
+    check(directory);
+  }
+  check(root);
+  return root;
+}
+
 function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
   const authority = trustedModelOracleAuthority(subjectRoot, attestation.subjectCommitSha);
   // Expiry prevents reuse, not a fresh independently executed live oracle.
@@ -1046,9 +1064,10 @@ function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
   const stat = lstatSync(authentication);
   assert.equal(stat.isFile() && !stat.isSymbolicLink() && stat.uid === process.getuid() && (stat.mode & 0o077) === 0,
     true, 'trusted host oracle authentication boundary');
-  const hostScratch = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-host-oracle-'));
+  const hostScratch = realpathSync(mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-host-oracle-')));
   try {
     chmodSync(hostScratch, 0o700);
+    prepareTrustedHostScratch(hostScratch);
     const oracleRoot = authority === 'protected_base' ? baseRoot : subjectRoot;
     return run(oracleRoot, nodeExecutable, [
       '--test', 'scripts/model-runner-v3/model-runner-v3.test.js',

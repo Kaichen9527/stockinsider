@@ -464,36 +464,80 @@ ordinaryTest('non-credential host probes retain only the verified private sandbo
   }
 });
 
-ordinaryTest('trusted live host probes admit only an explicit private cache scratch', () => {
-  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-host-oracle-'));
+ordinaryTest('trusted live host probes require private canonical sibling home and tmp', async () => {
+  const { prepareTrustedHostScratch } = await import('../opportunity-v3/protected-external-gate-worker.mjs');
+  const directory = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-host-oracle-')));
   const original = {
     [HOST_ORACLE_SCRATCH_ENV]: process.env[HOST_ORACLE_SCRATCH_ENV],
     OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH,
   };
   try {
-    fs.chmodSync(directory, 0o700);
     process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH = '0';
     process.env[HOST_ORACLE_SCRATCH_ENV] = directory;
+    expectExit(5, () => hostProbeEnvironment()); // Unprepared root is not an implicit HOME.
+    prepareTrustedHostScratch(directory);
+    const home = path.join(directory, 'home'), tmp = path.join(directory, 'tmp');
     assert.deepEqual(hostProbeEnvironment(), {
-      CODEX_HOME: directory,
-      HOME: directory,
-      LANG: 'C',
-      LC_ALL: 'C',
-      PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
-      TMPDIR: directory,
+      CODEX_HOME: home, HOME: home, TMPDIR: tmp,
+      LANG: 'C', LC_ALL: 'C', PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
     });
-    process.env[HOST_ORACLE_SCRATCH_ENV] = path.join(directory, 'missing');
+    assert.throws(() => prepareTrustedHostScratch(directory)); // No reuse of existing children.
+    for (const name of [directory, home, tmp]) {
+      fs.chmodSync(name, 0o755);
+      expectExit(5, () => hostProbeEnvironment());
+      fs.chmodSync(name, 0o700);
+    }
+    const originalGetuid = process.getuid;
+    try {
+      process.getuid = () => originalGetuid() + 1;
+      expectExit(5, () => hostProbeEnvironment());
+    } finally { process.getuid = originalGetuid; }
+    fs.rmdirSync(home); fs.symlinkSync(tmp, home);
     expectExit(5, () => hostProbeEnvironment());
+    fs.unlinkSync(home); fs.mkdirSync(home, { mode: 0o700 });
+    const alias = `${directory}-alias`;
+    fs.symlinkSync(directory, alias);
+    try {
+      process.env[HOST_ORACLE_SCRATCH_ENV] = alias;
+      expectExit(5, () => hostProbeEnvironment());
+      assert.throws(() => prepareTrustedHostScratch(alias));
+      // A symlink in a parent component is refused, not only a symlink leaf.
+      process.env[HOST_ORACLE_SCRATCH_ENV] = path.join(alias, 'home');
+      expectExit(5, () => hostProbeEnvironment());
+    } finally { fs.unlinkSync(alias); }
     delete process.env[HOST_ORACLE_SCRATCH_ENV];
-    assert.deepEqual(hostProbeEnvironment(), {
-      LANG: 'C',
-      LC_ALL: 'C',
-      PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
-    });
+    assert.deepEqual(hostProbeEnvironment(), { LANG: 'C', LC_ALL: 'C', PATH: '/usr/bin:/bin:/usr/sbin:/sbin' });
   } finally {
     for (const [key, value] of Object.entries(original)) {
-      if (value === undefined) delete process.env[key];
-      else process.env[key] = value;
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
+    }
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+ordinaryTest('actual pinned Codex version accepts prepared private host siblings without credentials', async () => {
+  const { prepareTrustedHostScratch } = await import('../opportunity-v3/protected-external-gate-worker.mjs');
+  const directory = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-host-version-')));
+  const original = {
+    [HOST_ORACLE_SCRATCH_ENV]: process.env[HOST_ORACLE_SCRATCH_ENV],
+    OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH,
+  };
+  try {
+    prepareTrustedHostScratch(directory);
+    process.env[HOST_ORACLE_SCRATCH_ENV] = directory;
+    process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH = '0';
+    const env = hostProbeEnvironment();
+    const pins = loadHostPins(path.join(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json'));
+    const codex = pins.executables.find(entry => entry.name === 'codex');
+    const result = spawnSync(codex.path, ['--version'], { env, encoding: 'utf8', timeout: 30_000, maxBuffer: 2 * 1024 * 1024 });
+    assert.equal(result.error, undefined);
+    assert.equal(result.signal, null);
+    assert.equal(result.status, 0);
+    assert.equal(result.stderr, '');
+    assert.equal(validatedVersionOutput(codex.path, result.stdout, result.stderr).trimEnd(), codex.version);
+  } finally {
+    for (const [key, value] of Object.entries(original)) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
     }
     fs.rmSync(directory, { recursive: true, force: true });
   }

@@ -162,7 +162,16 @@ function hostProbeEnvironment() {
     // the protected-base worker. An absent handle preserves direct host tests.
     if (requestedHostScratch === undefined) return environment;
     assert(hostScratch !== null, 5);
-    return { ...environment, CODEX_HOME: hostScratch, HOME: hostScratch, TMPDIR: hostScratch };
+    // Codex refuses helper binaries beneath TMPDIR. The trusted worker creates
+    // these fixed siblings; none may resolve through a symlink or shared root.
+    const home = path.join(hostScratch, 'home');
+    const temporary = path.join(hostScratch, 'tmp');
+    for (const directory of [hostScratch, home, temporary]) {
+      assert(privateSandboxDirectory(directory) !== null, 5);
+      try { assert(fs.realpathSync(directory) === directory, 5); }
+      catch { throw new RunnerError(5); }
+    }
+    return { ...environment, CODEX_HOME: home, HOME: home, TMPDIR: temporary };
   }
   // `codex sandbox` intentionally rewrites HOME and TMPDIR for its child. The
   // protected worker therefore passes its two pre-created, non-secret roots in
