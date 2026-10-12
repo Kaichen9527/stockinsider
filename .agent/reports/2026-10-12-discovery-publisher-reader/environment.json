@@ -1,0 +1,15 @@
+{
+  "Node": "22.14.0",
+  "Next": "16.3.4",
+  "dependency_reuse": "local hardlink directory copied from own exact-main-lock PR374 checkout; no install/no lock edits",
+  "configured_variable_names_present": [
+    "HTTPS_PROXY",
+    "HTTP_PROXY",
+    "NODE_EXTRA_CA_CERTS",
+    "SSL_CERT_FILE"
+  ],
+  "configuration_changes": false,
+  "live_db_http_crawl": false,
+  "clock_changes": false,
+  "no_model_execution": true
+}

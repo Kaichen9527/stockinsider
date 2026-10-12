@@ -1,0 +1,12 @@
+{
+  "time_utc": "2026-10-12T05:00:07Z",
+  "path": "/workspace/cloud-live-discovery-adapter-oct12/web/.next",
+  "retired_head": "ff2b15f7a85c3b8da5461dbe968d6a93822981ae",
+  "saved_manifest_sha256": "70099710b17111b5d6fca9254654c392b694feabe55a11fc610f952b70d6ce3e",
+  "verified_server_files": 1796,
+  "logical_bytes": 293305018,
+  "workspace_free_before": 8861487104,
+  "workspace_free_after": 9171562496,
+  "reason": "own stopped rebuildable build; original compiled manifest and receipts pushed/root-verified; unique raw evidence untouched",
+  "active_pr374_processes": 0
+}
