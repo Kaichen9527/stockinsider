@@ -1,0 +1,30 @@
+{
+  "schema": "owned-inactive-rebuildable-mac-cleanup-v1",
+  "at": "2026-10-12T00:27:25.154Z",
+  "repoHead": "1f154fe022d7dd1df5a7965ff3fb3366ee071586",
+  "targets": [
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/node_modules",
+      "dev": 16777231,
+      "ino": 213736800,
+      "uid": 501,
+      "trackedPaths": 0,
+      "lsofStatus": 1
+    },
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11/web/.next",
+      "dev": 16777231,
+      "ino": 213724014,
+      "uid": 501,
+      "trackedPaths": 0,
+      "lsofStatus": 1
+    }
+  ],
+  "packageLockSha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+  "beforeAvailable": 878190592,
+  "afterAvailable": 2134437888,
+  "measuredRecovered": 1256247296,
+  "uniqueResearchDataRemoved": false,
+  "iCloudTouched": false,
+  "runnerTouched": false
+}

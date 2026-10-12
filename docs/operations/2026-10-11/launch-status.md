@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 08:37台灣時間：受保護模型真正成功，修補產品身分鏡像漏項
+
+PR370/c0ad 的protected38187584169 requirements／architecture／exact-review／model-runner-code-gate均真正SUCCESS；產品traceability實際270PASS／2FAIL，HYB007與GOV004都被同一舊6758bytes常數阻擋。主線已批准v3.25 catalog實測6759bytes、SHA d0bed2c2d3db38d28145c903bdb0f9215f73266fbecf55826e25ee402dff5b64，原完整性oracle的長度／hash漏同步。沒有將這個FAIL改寫成功。
+
+Root在三個網站分支加入同一最小正常修補：只同步兩個fixed literals並加兩個installation mirror斷言，保留原tree／byte／hash／owner／count嚴格檢查，不改catalog、graph、model listing、產品或任何閾值。獨立reviewer對共同delta實測2PASS及同長度變造／截短拒絕，P0/P1/P2=0。新successors：370 6e2fd847/tree8c12226f；371 f62bf26b/tree32e9b6ab；372 e24ea452/treefc85ecf9。原PR heads暫仍c0ad／1f／e06，不重跑舊常數失敗；先在validation refs跑新精確canonical：38188590883／38188596692／38188602088。完成真輸出後才fresh exact refs及正常protected重試，工具一次例外不再使用。
+
+上一輪三個ordinary product-runtime完整成功，各155 canonical與31PCR全過，三個新direct-child evidence d56201d5／19533538／aa3d61ab已推且原head的三項protected review全過。PR372由ready事件產生重複run，已取消較舊38187762380，保留38187773990；其model gate也真正SUCCESS。PR371 model gate則在npm安裝依賴遇Mac ENOSPC，未進模型；不是新的trust錯誤。Root核對無程序引用／未追蹤可重建後，只清本App停用calendar review worktree的web/node_modules與web/.next，實際回收1,256,247,296bytes；研究、iCloud、runner和其他App未動。未在workflow仍running時反覆rerun；一次job rerun請求被GitHub拒絕且沒有啟動新job，改由修補後新head正常檢查。
+
+其他App最新回覆：SOHO Docker修正PR114已merge72f1c13，部署因容量停止；10/12已盤點，沒有確認可安全刪除至少4GB的非快取資料，不重問同問題或刪月內快取。VPS實際block device161,061,273,600bytes、root partition已用到磁碟末端，沒有未分配擴容；filesystem154,894,188,544bytes／可用16,591,421,440bytes。容量問題確為其他資料已占用，非150GiB未生效。已向人類非阻塞詢問增至少20GB或維持容量等空間；工程與GitHub驗證繼續，正式站仍169，343全量及PTT2409不重跑。
+
 ## 2026-10-12 08:08台灣時間：發布工具PR373已合併，網站保護完整恢復
 
 人類僅工具一次例外已實際完成：[PR373](https://github.com/Kaichen9527/stockinsider/pull/373) exact9b74e535 merge commit c6bc227ccaa5309226cbb833b35a35198491cb48。原ruleset20177392只短暫加入該owner的PR-only bypass，合併後立即恢復並GET逐欄核對active／bypass[]及所有原規則；沒有將任何原失敗改為PASS，也沒有網站例外。完整真實操作及原／恢復規則保存在本節收據。

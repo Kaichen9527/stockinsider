@@ -1,0 +1,36 @@
+{
+  "schema": "protected-result-mirror-repair-v1",
+  "at": "2026-10-12T00:38:57.159Z",
+  "main": "c6bc227ccaa5309226cbb833b35a35198491cb48",
+  "toolExceptionConsumed": true,
+  "originalRulesRestored": true,
+  "oldAppHeads": [
+    "c0ad855257297706d714727e461684f723ac5875",
+    "1f154fe022d7dd1df5a7965ff3fb3366ee071586",
+    "e06b14b8fc3f947c10f77b6d6c0c4d09f7efb2e8"
+  ],
+  "successors": [
+    "6e2fd847757dc3f14879419ced5c8e080a7654c3",
+    "f62bf26b9c938747c3a454ee2f9f351d4ac4523e",
+    "e24ea452be598941f7ed97a11db57b23077dff8f"
+  ],
+  "freshValidationRuns": [
+    38188590883,
+    38188596692,
+    38188602088
+  ],
+  "old370Protected": {
+    "requirements": "SUCCESS",
+    "architecture": "SUCCESS",
+    "exact": "SUCCESS",
+    "model": "SUCCESS",
+    "product": "270 PASS / 2 FAIL"
+  },
+  "old371Model": "ENOSPC during dependency install; no model validation reached",
+  "old372Model": "SUCCESS",
+  "duplicate372Cancelled": 38187762380,
+  "retained372": 38187773990,
+  "macRecoveredBytes": 1256247296,
+  "productionStill": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "fullCoreRepeated": false
+}
