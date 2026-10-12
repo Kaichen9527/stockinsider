@@ -12,10 +12,15 @@
     "requirements": "success",
     "architecture": "success",
     "exact-review": "success",
-    "model": "in_progress",
+    "model": "success",
     "product": "in_progress",
     "aggregate": "not_yet_created",
-    "approved": false
+    "approved": false,
+    "observedAt": "2026-10-12T04:59:15.234636+00:00",
+    "watchSession": 73398,
+    "watchLog": "/tmp/stockinsider-pr374-protected-watch-oct12.log",
+    "mergeHelper": "/tmp/stockinsider-pr374-normal-merge-oct12.py",
+    "mergeHelperExecuted": false
   },
   "nextVm": {
     "thread": "01a106b8-a883-7185-9962-f7372109a093",

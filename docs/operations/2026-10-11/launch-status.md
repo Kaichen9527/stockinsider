@@ -6,7 +6,7 @@ PR374 runtime ecd991af／final ff2b15f7/tree31b29c0a，root核對35raw／9source
 
 獨立reviewer以exact blobs真跑88個memory案例後給scoped CODE PASS、P0/P1/P2=0：四clock先檢查，future／非法列不污染UUID/key；合法同UUID換key/content整組排除，exact replay一次，同comment衝突排序不變。原ef5d/d3ce REQUEST_CHANGES及所有RED留存。Root另完成此有界增量的requirements／architecture review；並非完整來源、Top20、策略或投資資格通過。
 
-Fresh direct-child exact/PCR/attestation evidence e4e6201b已先push，僅3個既有evidence路徑。之後才將PR374標ready，以一個ready_for_review事件啟動正常protected38205225068，沒有rerun／重複dispatch／例外。requirements／architecture／exact三項已真SUCCESS，model與product仍in_progress，aggregate未完成；此刻未merge。需先確認全7項真SUCCESS與精確head，才標準merge commit，不能以三項review代替整體。
+Fresh direct-child exact/PCR/attestation evidence e4e6201b已先push，僅3個既有evidence路徑。之後才將PR374標ready，以一個ready_for_review事件啟動正常protected38205225068，沒有rerun／重複dispatch／例外。requirements／architecture／exact三項及model已真SUCCESS，product仍in_progress，aggregate未完成；此刻未merge。需先確認全7項真SUCCESS與精確head，才標準merge commit，不能以三項review代替整體。 已準備單次fail-closed merge helper（尚未執行），核對原active/bypass[]保護、七項真綠、其他普通checks、main8bcd與subjectff2b，才用gh --merge --match-head-commit；watch session73398只觀察，不合併或部署。
 
 Cloud前件idle14後只接下一件30分鐘`codex/discovery-revision-publisher-reader-oct12`：新main8bcd上補有界純revision／reviewed publisher投影helper/tests，沿用5691b523已查出的真欄位；可有明示synthetic正例，不虛構origin或creator。沒有新增schema/API/權限/writer/發布系統或改PR374檔；無DB/HTTP/crawl/策略/排程。turn01a12e71／cursor15 active，root不重疊修改或重派。Source-root獨立性仍需後續有證據的既有管線接線，不能因helper通過就稱已取得合格Top20。
 
