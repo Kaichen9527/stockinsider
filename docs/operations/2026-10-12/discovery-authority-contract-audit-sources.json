@@ -1,0 +1,91 @@
+{
+  "auditedHead": "8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14",
+  "at": "2026-10-12T02:52:55.915009+00:00",
+  "method": "read-only rg/git show/local file reads; no tests/network sources/DB",
+  "files": [
+    {
+      "path": "migrations/20260315_research_system_v2.sql",
+      "bytes": 7713,
+      "sha256": "54c070056addcfb7c1955355dcd841817bad73d362090b2cb71d7a7547dcb607",
+      "blob": "e6dfca0c2aa9430013ae3275bc7162d0ce475619"
+    },
+    {
+      "path": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "bytes": 1023746,
+      "sha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+      "blob": "c70c6b7366b7b70c2b506ad90427ac9f37d87dfe"
+    },
+    {
+      "path": "migrations/20260809_decision_integrity_v3_13.sql",
+      "bytes": 179700,
+      "sha256": "5e843da1049bc2f075d5f8bf901095b3047c42215fc87ada01a1a984d240f95b",
+      "blob": "f95598869db4d935cffb9d835fbcdce3787e090a"
+    },
+    {
+      "path": "migrations/20260830_source_ranking_v2.sql",
+      "bytes": 17381,
+      "sha256": "8bff800465680306da4aa2bf84321af564132adf021d4ff53fd001759d11f9ae",
+      "blob": "b6dd04a18dc74c4803065ebd99e1c7c137f5af58"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/source.ts",
+      "bytes": 9855,
+      "sha256": "eddae367b2c36b10b013f1d1c32cdbb0ca2570a89591be0910a6e4beba837824",
+      "blob": "716abf4d60fa337ed45266069f983d06b26c1145"
+    },
+    {
+      "path": "web/src/lib/opportunity-v3/ingestion.ts",
+      "bytes": 4107,
+      "sha256": "b98165c81bb8eebbeac73ba8e499ccc82d708d0e38a7bb5c7da172099e13b106",
+      "blob": "917e23952f29af094f6acbc88311696c2a8c50f6"
+    },
+    {
+      "path": "web/src/lib/research-v2.ts",
+      "bytes": 281771,
+      "sha256": "0ff13df86573d16922689858fba8ed845251f8fbb50f79c8ae4f20a6ee7b8c5d",
+      "blob": "a0d0264b624d032d11c38949f4886f8064be5fea"
+    },
+    {
+      "path": "web/src/lib/ptt-mention-provenance.ts",
+      "bytes": 5986,
+      "sha256": "3a7112be751eebcf1e6c76540ef5520682c9df02603335eac9a5f428d534884b",
+      "blob": "64040a203d3e578b6713035d4c16a366588f05ea"
+    },
+    {
+      "path": "scripts/runtime/official-source-acquisition.js",
+      "bytes": 35248,
+      "sha256": "f174ff27f694637529ce06b562da7687d1d29077a5598c2083d0af88b479946e",
+      "blob": "d1567221e603d63d0bef19e0a051532ca95fe9c9"
+    },
+    {
+      "path": "scripts/runtime/auth-source-worker-cli.js",
+      "bytes": 157538,
+      "sha256": "602948f0eb960a78a75a88b0ac6ffa080a8adb6755abe544b8530d93384b22ba",
+      "blob": "08982920dafeb64f7138fa05367748a948b85e79"
+    },
+    {
+      "path": "scripts/runtime/candidate-nomination-authority.js",
+      "bytes": 2612,
+      "sha256": "06e96e92bd3031431bb5fe9f467d133b5f092d5f690b269dc8b0e947e2f41f2b",
+      "blob": "7009b1ae3a8e1d4181553612bf890f51d1bf047d"
+    },
+    {
+      "path": "web/src/app/api/internal/source-document-revision-v3/route.ts",
+      "bytes": 802,
+      "sha256": "b188d3efd9926a1cbbed5a37eaf1eab165dd5f52a60d20e37b21189291c1eb76",
+      "blob": "0e733037d781cc5be896ff33b734bb2a47840fd9"
+    },
+    {
+      "path": "web/src/app/api/internal/source-identity-authority-v3/route.ts",
+      "bytes": 616,
+      "sha256": "21c1a7bf2017f4f22918fd3d6ca5793138c12a4439a4d8182c0cccb519761e7a",
+      "blob": "48c221ba161a300e37da139a3e361bd35016306f"
+    },
+    {
+      "path": "web/src/app/api/internal/publisher-verification-authority-v3/route.ts",
+      "bytes": 642,
+      "sha256": "cb3b77235dbc8856bb6cba45e76ffb4968da3794341d4ca1c67f006d6c8d8449",
+      "blob": "d442022eae80ff33a1e48f65b9516a240b0841c9"
+    }
+  ]
+}
