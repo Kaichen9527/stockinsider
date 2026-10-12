@@ -1,0 +1,15 @@
+{
+  "evidenceHeadBeforeDelivery": "9bdb1dc6827d17bb9dee031e6a541112dc30e7f8",
+  "branchPushed": true,
+  "draftPrStatus": "blocked",
+  "draftPrError": "Post \"https://api.github.com/graphql\": Forbidden",
+  "ghAuthStatusExit": 0,
+  "draftPrCommand": "gh pr create --draft --repo Kaichen9527/stockinsider --base main --head codex/live-discovery-evidence-adapter-oct12 --title ... --body-file /tmp/si-live-adapter-oct12-logs/pr-body.md",
+  "provenance": "actual one command attempt output recorded by exec tool; no retry/alternate API/review refs/attachment created",
+  "preparedCompareUrl": "https://github.com/Kaichen9527/stockinsider/compare/main...codex/live-discovery-evidence-adapter-oct12",
+  "sourceWorktreeCreationObservedAt": "2026-10-12T01:35:46.797457+00:00",
+  "handoffAt": "2026-10-12T01:51:23.250202+00:00",
+  "elapsedSinceWorktreeCreationSeconds": 936.452745,
+  "budgetCaveat": "file timestamp measures worktree creation onward, not exact chat start; within30min bounded increment",
+  "notLiveComplete": true
+}
