@@ -34,6 +34,9 @@ test('installation exact bytes, identity, normative mirrors and command table ar
  for(const row of inventory.cases)if(!['MR3-016','MR3-019','HYB-007'].includes(row.id))assert.deepEqual(row,base.cases.find(x=>x.id===row.id));
  const catalogBytes=readFileSync(change+'active-artifact-catalog-v3.json');
  for(const file of ['design.md','acceptance-evidence-contract.md'])assert.ok(readFileSync(change+file,'utf8').includes('"catalogBytes":'+catalogBytes.length+',"catalogSha256":"'+hash(catalogBytes)+'"'));
+ const traceability=readFileSync('scripts/opportunity-v3/acceptance-traceability.test.mjs','utf8');
+ assert.ok(traceability.includes('assert.equal(catalogBlob.bytes.length, '+catalogBytes.length+','), 'protected catalog length mirror');
+ assert.ok(traceability.includes("'"+hash(catalogBytes)+"'"), 'protected catalog digest mirror');
 });
 test('active pin loader rejects FIFO, symlink, truncation and growth without blocking or accepting a prefix',()=>{
  const dir=mkdtempSync(path.join(os.tmpdir(),'si-pin-loader-'));
