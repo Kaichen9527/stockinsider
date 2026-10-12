@@ -103,6 +103,22 @@ const v319ReviewSources = Object.freeze({
 });
 
 const graphBoundReviewSources = Object.freeze({
+  // One-time human-authorized initial tool migration. These independent reviews
+  // are unique direct children of the measured implementation, never self-approval.
+  'c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v325-digest',
+      path: `${changeRelative}/requirements-review-v325-digest.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v325-digest',
+      path: `${changeRelative}/architecture-review-v325-digest.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   // The final V3.14 catalog-identity closure propagates the corrected catalog
   // digest into its two canonical authority comments. It retains the same
   // independently reviewed signed-host and product authority.
