@@ -1,5 +1,13 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 09:27台灣時間：三個網站PR全部正常批准合併，準備精確main發布包
+
+三個應用protected均真SUCCESS：37038190772969／37138190779815／37238190723740，全部requirements／architecture／exact-review／model／product及aggregate通過，各自普通產品與專項diagnostic也成功。Root核對精確head、完整run、所有required jobs及原rules active/bypass[]後，標準gh pr merge --merge --match-head-commit依序實際完成：370→107e267ee73026d98dbd35713b2247c00f6eaeb3(01:26:31Z)、371→778ef0fdc0e5b3f3dbea9c3b21f3844c79eb768d(01:26:36Z)、372→8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14(01:26:41Z)。這是正式main新版本，沒有再次例外／admin／改保護或直接pushmain。完整before/after rules與3run/PR audit保留。
+
+已由既有artifact-only PR368 workflow建立只改三處sourcepin的4fa3d622/treeb750e2f6，目標正是正常合併main8bcd。尚未push或dispatch，先獨立審查；此workflow只有Linux建置/驗證/上傳產物，沒有部署／DB／策略權限。先前工具例外僅PR373且已消耗，後續都正常檢查。
+
+正式VPS仍169，不能宣稱已部署8bcd；容量前次實測16.59GB低20.4GB原guard，人類容量選擇仍待答覆。月內Docker不刪、其他App不動，股票歷史/證據/帳本保留。Mac兩個無引用未追蹤舊.next輸出已核對device/inode後清掉，實測另回收601,227,264bytes；當前模型檢查均正常完成。343全量與PTT2409未重跑，AUO3摘要仍待新版真正部署後才單次guarded匯入。完整研究及新排程仍非完成。新收據.agent/reports/2026-10-12T09-27-normal-application-merges/。
+
 ## 2026-10-12 09:11台灣時間：三個精確產品驗證完成，正常protected最後一輪已啟動
 
 3703338160a／371bc1b6aff／372680d0c9d各自ordinary product-runtime真SUCCESS：155PASS零fail/skip/todo、全部31PCR，types/lint/build/migration/browser通過。Optional evaluation diagnostic仍因缺真實elapsed cohorts blocked，不改歷史或當上線前置。原始完整parent logs、timestamp-stripped canonical及其hash均保存；fresh direct-child exact89d924d9／6c2a6182／ef4a36bb已先推，再更新網站PR heads。

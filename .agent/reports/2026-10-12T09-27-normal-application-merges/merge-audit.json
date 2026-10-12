@@ -1,0 +1,2231 @@
+{
+  "startedAt": "2026-10-12T01:26:21.228Z",
+  "mode": "normal protected merge commits only; no admin/bypass",
+  "subjects": [
+    {
+      "subject": {
+        "pr": 370,
+        "head": "3338160a43dd9c23e4ea4b079fd7761501c29786",
+        "run": 38190772969
+      },
+      "pr": {
+        "headRefOid": "3338160a43dd9c23e4ea4b079fd7761501c29786",
+        "mergeStateStatus": "CLEAN",
+        "state": "OPEN",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:17:32Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190774468/job/114622870382",
+            "name": "product-runtime",
+            "startedAt": "2026-10-12T01:09:18Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:30Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622866301",
+            "name": "stockinsider-v3-gate-bootstrap",
+            "startedAt": "2026-10-12T01:09:16Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:15Z",
+            "conclusion": "SKIPPED",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190774468/job/114622871044",
+            "name": "evaluation-governance",
+            "startedAt": "2026-10-12T01:09:16Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:54Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622919391",
+            "name": "requirements",
+            "startedAt": "2026-10-12T01:09:33Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:15Z",
+            "conclusion": "SKIPPED",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190774468/job/114622871059",
+            "name": "model-runner",
+            "startedAt": "2026-10-12T01:09:16Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:51Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622919449",
+            "name": "architecture",
+            "startedAt": "2026-10-12T01:09:33Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:17:37Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190774468/job/114624484466",
+            "name": "stockinsider-v3-diagnostic-product-runtime",
+            "startedAt": "2026-10-12T01:17:34Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:47Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622919397",
+            "name": "exact-review",
+            "startedAt": "2026-10-12T01:09:32Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:24:58Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622973972",
+            "name": "product-runtime-code-gate",
+            "startedAt": "2026-10-12T01:09:49Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:15:18Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622973967",
+            "name": "model-runner-code-gate",
+            "startedAt": "2026-10-12T01:11:46Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:25:17Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114625910058",
+            "name": "stockinsider-v3-gate-root",
+            "startedAt": "2026-10-12T01:25:00Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          }
+        ]
+      },
+      "protected": {
+        "conclusion": "success",
+        "headSha": "3338160a43dd9c23e4ea4b079fd7761501c29786",
+        "jobs": [
+          {
+            "completedAt": "2026-10-12T01:09:30Z",
+            "conclusion": "success",
+            "databaseId": 114622866301,
+            "name": "stockinsider-v3-gate-bootstrap",
+            "startedAt": "2026-10-12T01:09:16Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:18Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:09:18Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:21Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:18Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:26Z",
+                "conclusion": "success",
+                "name": "Verify protected authority invariants",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:21Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:26Z",
+                "conclusion": "success",
+                "name": "Fetch subject object without executing subject files",
+                "number": 4,
+                "startedAt": "2026-10-12T01:09:26Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:26Z",
+                "conclusion": "success",
+                "name": "Issue base-owned bootstrap attestation",
+                "number": 5,
+                "startedAt": "2026-10-12T01:09:26Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:27Z",
+                "conclusion": "success",
+                "name": "Publish immutable bootstrap handoff",
+                "number": 6,
+                "startedAt": "2026-10-12T01:09:26Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:27Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 12,
+                "startedAt": "2026-10-12T01:09:27Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:27Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 13,
+                "startedAt": "2026-10-12T01:09:27Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622866301"
+          },
+          {
+            "completedAt": "2026-10-12T01:09:54Z",
+            "conclusion": "success",
+            "databaseId": 114622919391,
+            "name": "requirements",
+            "startedAt": "2026-10-12T01:09:33Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:35Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:09:34Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:40Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:35Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:49Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:40Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:50Z",
+                "conclusion": "success",
+                "name": "Emit protected Requirements envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:09:49Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:51Z",
+                "conclusion": "success",
+                "name": "Publish immutable Requirements envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:09:50Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:51Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:09:51Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:51Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:09:51Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:51Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:09:51Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622919391"
+          },
+          {
+            "completedAt": "2026-10-12T01:09:47Z",
+            "conclusion": "success",
+            "databaseId": 114622919397,
+            "name": "exact-review",
+            "startedAt": "2026-10-12T01:09:32Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:34Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:09:33Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:36Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:34Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:43Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:36Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:44Z",
+                "conclusion": "success",
+                "name": "Emit protected exact-review envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:09:43Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:45Z",
+                "conclusion": "success",
+                "name": "Publish immutable exact-review envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:09:44Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:45Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:09:45Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:45Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:09:45Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:45Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:09:45Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622919397"
+          },
+          {
+            "completedAt": "2026-10-12T01:09:51Z",
+            "conclusion": "success",
+            "databaseId": 114622919449,
+            "name": "architecture",
+            "startedAt": "2026-10-12T01:09:33Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:34Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:09:33Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:38Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:34Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:46Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:38Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:47Z",
+                "conclusion": "success",
+                "name": "Emit protected Architecture envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:09:46Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:48Z",
+                "conclusion": "success",
+                "name": "Publish immutable Architecture envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:09:47Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:48Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:09:48Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:49Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:09:48Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:49Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:09:49Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622919449"
+          },
+          {
+            "completedAt": "2026-10-12T01:15:18Z",
+            "conclusion": "success",
+            "databaseId": 114622973967,
+            "name": "model-runner-code-gate",
+            "startedAt": "2026-10-12T01:11:46Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:11:51Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:11:48Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:11:53Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:11:51Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:12:02Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:11:53Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:15:06Z",
+                "conclusion": "success",
+                "name": "Execute pinned protected model-runner track and emit envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:12:02Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:15:09Z",
+                "conclusion": "success",
+                "name": "Publish immutable model-runner envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:15:06Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:15:09Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:15:09Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:15:09Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:15:09Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:15:10Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:15:09Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622973967"
+          },
+          {
+            "completedAt": "2026-10-12T01:24:58Z",
+            "conclusion": "success",
+            "databaseId": 114622973972,
+            "name": "product-runtime-code-gate",
+            "startedAt": "2026-10-12T01:09:49Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:51Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:09:50Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:53Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:51Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:10:01Z",
+                "conclusion": "success",
+                "name": "Install PostgreSQL tools required by the product acceptance owner",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:53Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:10:08Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 4,
+                "startedAt": "2026-10-12T01:10:01Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:24:54Z",
+                "conclusion": "success",
+                "name": "Execute full protected product/runtime track and emit envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:10:08Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:24:55Z",
+                "conclusion": "success",
+                "name": "Publish immutable product/runtime envelope",
+                "number": 6,
+                "startedAt": "2026-10-12T01:24:54Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:24:55Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 11,
+                "startedAt": "2026-10-12T01:24:55Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:24:55Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 12,
+                "startedAt": "2026-10-12T01:24:55Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:24:55Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 13,
+                "startedAt": "2026-10-12T01:24:55Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114622973972"
+          },
+          {
+            "completedAt": "2026-10-12T01:25:17Z",
+            "conclusion": "success",
+            "databaseId": 114625910058,
+            "name": "stockinsider-v3-gate-root",
+            "startedAt": "2026-10-12T01:25:00Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:25:02Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:25:01Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:25:02Z",
+                "conclusion": "success",
+                "name": "Reject incomplete or failed Code Gate prerequisites",
+                "number": 2,
+                "startedAt": "2026-10-12T01:25:02Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:25:04Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 3,
+                "startedAt": "2026-10-12T01:25:02Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:25:12Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 4,
+                "startedAt": "2026-10-12T01:25:04Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:25:13Z",
+                "conclusion": "success",
+                "name": "Retrieve all five required immutable external envelopes",
+                "number": 5,
+                "startedAt": "2026-10-12T01:25:12Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:25:14Z",
+                "conclusion": "success",
+                "name": "Assemble protected authoritative Code Gate aggregate",
+                "number": 6,
+                "startedAt": "2026-10-12T01:25:13Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:25:15Z",
+                "conclusion": "success",
+                "name": "Publish immutable authoritative Code Gate aggregate",
+                "number": 7,
+                "startedAt": "2026-10-12T01:25:14Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:25:15Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 13,
+                "startedAt": "2026-10-12T01:25:15Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:25:15Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 14,
+                "startedAt": "2026-10-12T01:25:15Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:25:15Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 15,
+                "startedAt": "2026-10-12T01:25:15Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190772969/job/114625910058"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "subject": {
+        "pr": 371,
+        "head": "bc1b6aff5315c0f0302cd1d2e74e7c1b238a4af3",
+        "run": 38190779815
+      },
+      "pr": {
+        "headRefOid": "bc1b6aff5315c0f0302cd1d2e74e7c1b238a4af3",
+        "mergeStateStatus": "CLEAN",
+        "state": "OPEN",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:55Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190781900/job/114622892407",
+            "name": "Candidate discovery admission and UI diagnostics",
+            "startedAt": "2026-10-12T01:09:25Z",
+            "status": "COMPLETED",
+            "workflowName": "Candidate discovery quality diagnostics"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:16:56Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190781946/job/114622892736",
+            "name": "product-runtime",
+            "startedAt": "2026-10-12T01:09:25Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:34Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622887248",
+            "name": "stockinsider-v3-gate-bootstrap",
+            "startedAt": "2026-10-12T01:09:23Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:23Z",
+            "conclusion": "SKIPPED",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190781946/job/114622893753",
+            "name": "evaluation-governance",
+            "startedAt": "2026-10-12T01:09:23Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:55Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622930102",
+            "name": "requirements",
+            "startedAt": "2026-10-12T01:09:36Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:23Z",
+            "conclusion": "SKIPPED",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190781946/job/114622893745",
+            "name": "model-runner",
+            "startedAt": "2026-10-12T01:09:23Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:51Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622930125",
+            "name": "architecture",
+            "startedAt": "2026-10-12T01:09:36Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:17:01Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190781946/job/114624369416",
+            "name": "stockinsider-v3-diagnostic-product-runtime",
+            "startedAt": "2026-10-12T01:16:58Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:54Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622930141",
+            "name": "exact-review",
+            "startedAt": "2026-10-12T01:09:36Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:22:37Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622994764",
+            "name": "product-runtime-code-gate",
+            "startedAt": "2026-10-12T01:09:57Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:17:54Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622994812",
+            "name": "model-runner-code-gate",
+            "startedAt": "2026-10-12T01:15:21Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:23:00Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114625458172",
+            "name": "stockinsider-v3-gate-root",
+            "startedAt": "2026-10-12T01:22:39Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          }
+        ]
+      },
+      "protected": {
+        "conclusion": "success",
+        "headSha": "bc1b6aff5315c0f0302cd1d2e74e7c1b238a4af3",
+        "jobs": [
+          {
+            "completedAt": "2026-10-12T01:09:34Z",
+            "conclusion": "success",
+            "databaseId": 114622887248,
+            "name": "stockinsider-v3-gate-bootstrap",
+            "startedAt": "2026-10-12T01:09:23Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:25Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:09:24Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:28Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:25Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:29Z",
+                "conclusion": "success",
+                "name": "Verify protected authority invariants",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:28Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:29Z",
+                "conclusion": "success",
+                "name": "Fetch subject object without executing subject files",
+                "number": 4,
+                "startedAt": "2026-10-12T01:09:29Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:29Z",
+                "conclusion": "success",
+                "name": "Issue base-owned bootstrap attestation",
+                "number": 5,
+                "startedAt": "2026-10-12T01:09:29Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:31Z",
+                "conclusion": "success",
+                "name": "Publish immutable bootstrap handoff",
+                "number": 6,
+                "startedAt": "2026-10-12T01:09:29Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:31Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 12,
+                "startedAt": "2026-10-12T01:09:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:31Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 13,
+                "startedAt": "2026-10-12T01:09:31Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622887248"
+          },
+          {
+            "completedAt": "2026-10-12T01:09:55Z",
+            "conclusion": "success",
+            "databaseId": 114622930102,
+            "name": "requirements",
+            "startedAt": "2026-10-12T01:09:36Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:37Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:09:37Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:41Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:37Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:50Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:41Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:51Z",
+                "conclusion": "success",
+                "name": "Emit protected Requirements envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:09:50Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:52Z",
+                "conclusion": "success",
+                "name": "Publish immutable Requirements envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:09:51Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:52Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:09:52Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:53Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:09:52Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:53Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:09:53Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622930102"
+          },
+          {
+            "completedAt": "2026-10-12T01:09:51Z",
+            "conclusion": "success",
+            "databaseId": 114622930125,
+            "name": "architecture",
+            "startedAt": "2026-10-12T01:09:36Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:37Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:09:36Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:40Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:37Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:47Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:40Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:48Z",
+                "conclusion": "success",
+                "name": "Emit protected Architecture envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:09:47Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:49Z",
+                "conclusion": "success",
+                "name": "Publish immutable Architecture envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:09:48Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:49Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:09:49Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:50Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:09:49Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:50Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:09:50Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622930125"
+          },
+          {
+            "completedAt": "2026-10-12T01:09:54Z",
+            "conclusion": "success",
+            "databaseId": 114622930141,
+            "name": "exact-review",
+            "startedAt": "2026-10-12T01:09:36Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:38Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:09:37Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:41Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:38Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:50Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:41Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:50Z",
+                "conclusion": "success",
+                "name": "Emit protected exact-review envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:09:50Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:51Z",
+                "conclusion": "success",
+                "name": "Publish immutable exact-review envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:09:50Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:52Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:09:51Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:52Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:09:52Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:52Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:09:52Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622930141"
+          },
+          {
+            "completedAt": "2026-10-12T01:22:37Z",
+            "conclusion": "success",
+            "databaseId": 114622994764,
+            "name": "product-runtime-code-gate",
+            "startedAt": "2026-10-12T01:09:57Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:58Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:09:58Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:10:01Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:58Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:10:15Z",
+                "conclusion": "success",
+                "name": "Install PostgreSQL tools required by the product acceptance owner",
+                "number": 3,
+                "startedAt": "2026-10-12T01:10:01Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:10:24Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 4,
+                "startedAt": "2026-10-12T01:10:15Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:30Z",
+                "conclusion": "success",
+                "name": "Execute full protected product/runtime track and emit envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:10:24Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:31Z",
+                "conclusion": "success",
+                "name": "Publish immutable product/runtime envelope",
+                "number": 6,
+                "startedAt": "2026-10-12T01:22:30Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:31Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 11,
+                "startedAt": "2026-10-12T01:22:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:31Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 12,
+                "startedAt": "2026-10-12T01:22:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:31Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 13,
+                "startedAt": "2026-10-12T01:22:31Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622994764"
+          },
+          {
+            "completedAt": "2026-10-12T01:17:54Z",
+            "conclusion": "success",
+            "databaseId": 114622994812,
+            "name": "model-runner-code-gate",
+            "startedAt": "2026-10-12T01:15:21Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:15:25Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:15:23Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:15:27Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:15:25Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:15:36Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:15:27Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:17:42Z",
+                "conclusion": "success",
+                "name": "Execute pinned protected model-runner track and emit envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:15:36Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:17:44Z",
+                "conclusion": "success",
+                "name": "Publish immutable model-runner envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:17:42Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:17:45Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:17:44Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:17:45Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:17:45Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:17:45Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:17:45Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114622994812"
+          },
+          {
+            "completedAt": "2026-10-12T01:23:00Z",
+            "conclusion": "success",
+            "databaseId": 114625458172,
+            "name": "stockinsider-v3-gate-root",
+            "startedAt": "2026-10-12T01:22:39Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:22:41Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:22:40Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:42Z",
+                "conclusion": "success",
+                "name": "Reject incomplete or failed Code Gate prerequisites",
+                "number": 2,
+                "startedAt": "2026-10-12T01:22:42Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:45Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 3,
+                "startedAt": "2026-10-12T01:22:42Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:54Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 4,
+                "startedAt": "2026-10-12T01:22:45Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:55Z",
+                "conclusion": "success",
+                "name": "Retrieve all five required immutable external envelopes",
+                "number": 5,
+                "startedAt": "2026-10-12T01:22:54Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:56Z",
+                "conclusion": "success",
+                "name": "Assemble protected authoritative Code Gate aggregate",
+                "number": 6,
+                "startedAt": "2026-10-12T01:22:55Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:57Z",
+                "conclusion": "success",
+                "name": "Publish immutable authoritative Code Gate aggregate",
+                "number": 7,
+                "startedAt": "2026-10-12T01:22:56Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:58Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 13,
+                "startedAt": "2026-10-12T01:22:57Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:58Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 14,
+                "startedAt": "2026-10-12T01:22:58Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:58Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 15,
+                "startedAt": "2026-10-12T01:22:58Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190779815/job/114625458172"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "subject": {
+        "pr": 372,
+        "head": "680d0c9d10ca185013d66f034e9fc03e1d7fcd69",
+        "run": 38190723740
+      },
+      "pr": {
+        "headRefOid": "680d0c9d10ca185013d66f034e9fc03e1d7fcd69",
+        "mergeStateStatus": "CLEAN",
+        "state": "OPEN",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:00Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190725269/job/114622721825",
+            "name": "PTT stock-local evidence and collector diagnostics",
+            "startedAt": "2026-10-12T01:08:31Z",
+            "status": "COMPLETED",
+            "workflowName": "PTT mention provenance diagnostics"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:16:31Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190725224/job/114622721573",
+            "name": "product-runtime",
+            "startedAt": "2026-10-12T01:08:31Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:08:39Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622717609",
+            "name": "stockinsider-v3-gate-bootstrap",
+            "startedAt": "2026-10-12T01:08:30Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:08:29Z",
+            "conclusion": "SKIPPED",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190725224/job/114622722613",
+            "name": "evaluation-governance",
+            "startedAt": "2026-10-12T01:08:30Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:08:58Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622751779",
+            "name": "requirements",
+            "startedAt": "2026-10-12T01:08:41Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:08:29Z",
+            "conclusion": "SKIPPED",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190725224/job/114622722594",
+            "name": "model-runner",
+            "startedAt": "2026-10-12T01:08:30Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:09:00Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622751853",
+            "name": "architecture",
+            "startedAt": "2026-10-12T01:08:41Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:16:36Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190725224/job/114624292021",
+            "name": "stockinsider-v3-diagnostic-product-runtime",
+            "startedAt": "2026-10-12T01:16:33Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:08:55Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622751819",
+            "name": "exact-review",
+            "startedAt": "2026-10-12T01:08:41Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:22:49Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622803014",
+            "name": "product-runtime-code-gate",
+            "startedAt": "2026-10-12T01:08:57Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:11:43Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622803018",
+            "name": "model-runner-code-gate",
+            "startedAt": "2026-10-12T01:08:58Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-10-12T01:23:07Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114625495512",
+            "name": "stockinsider-v3-gate-root",
+            "startedAt": "2026-10-12T01:22:51Z",
+            "status": "COMPLETED",
+            "workflowName": "Source-led opportunity V3 protected gate root"
+          }
+        ]
+      },
+      "protected": {
+        "conclusion": "success",
+        "headSha": "680d0c9d10ca185013d66f034e9fc03e1d7fcd69",
+        "jobs": [
+          {
+            "completedAt": "2026-10-12T01:08:39Z",
+            "conclusion": "success",
+            "databaseId": 114622717609,
+            "name": "stockinsider-v3-gate-bootstrap",
+            "startedAt": "2026-10-12T01:08:30Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:08:32Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:08:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:34Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:08:32Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:35Z",
+                "conclusion": "success",
+                "name": "Verify protected authority invariants",
+                "number": 3,
+                "startedAt": "2026-10-12T01:08:34Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:35Z",
+                "conclusion": "success",
+                "name": "Fetch subject object without executing subject files",
+                "number": 4,
+                "startedAt": "2026-10-12T01:08:35Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:35Z",
+                "conclusion": "success",
+                "name": "Issue base-owned bootstrap attestation",
+                "number": 5,
+                "startedAt": "2026-10-12T01:08:35Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:36Z",
+                "conclusion": "success",
+                "name": "Publish immutable bootstrap handoff",
+                "number": 6,
+                "startedAt": "2026-10-12T01:08:35Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:36Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 12,
+                "startedAt": "2026-10-12T01:08:36Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:36Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 13,
+                "startedAt": "2026-10-12T01:08:36Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622717609"
+          },
+          {
+            "completedAt": "2026-10-12T01:08:58Z",
+            "conclusion": "success",
+            "databaseId": 114622751779,
+            "name": "requirements",
+            "startedAt": "2026-10-12T01:08:41Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:08:42Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:08:41Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:45Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:08:42Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:55Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:08:45Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:55Z",
+                "conclusion": "success",
+                "name": "Emit protected Requirements envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:08:55Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:56Z",
+                "conclusion": "success",
+                "name": "Publish immutable Requirements envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:08:55Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:56Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:08:56Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:57Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:08:56Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:57Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:08:57Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622751779"
+          },
+          {
+            "completedAt": "2026-10-12T01:08:55Z",
+            "conclusion": "success",
+            "databaseId": 114622751819,
+            "name": "exact-review",
+            "startedAt": "2026-10-12T01:08:41Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:08:42Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:08:41Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:44Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:08:42Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:51Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:08:44Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:52Z",
+                "conclusion": "success",
+                "name": "Emit protected exact-review envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:08:51Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:53Z",
+                "conclusion": "success",
+                "name": "Publish immutable exact-review envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:08:52Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:53Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:08:53Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:53Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:08:53Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:53Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:08:53Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622751819"
+          },
+          {
+            "completedAt": "2026-10-12T01:09:00Z",
+            "conclusion": "success",
+            "databaseId": 114622751853,
+            "name": "architecture",
+            "startedAt": "2026-10-12T01:08:41Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:08:44Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:08:42Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:47Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:08:44Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:55Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:08:47Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:56Z",
+                "conclusion": "success",
+                "name": "Emit protected Architecture envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:08:55Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:57Z",
+                "conclusion": "success",
+                "name": "Publish immutable Architecture envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:08:56Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:57Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:08:57Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:57Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:08:57Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:08:57Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:08:57Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622751853"
+          },
+          {
+            "completedAt": "2026-10-12T01:22:49Z",
+            "conclusion": "success",
+            "databaseId": 114622803014,
+            "name": "product-runtime-code-gate",
+            "startedAt": "2026-10-12T01:08:57Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:08:58Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:08:57Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:01Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:08:58Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:15Z",
+                "conclusion": "success",
+                "name": "Install PostgreSQL tools required by the product acceptance owner",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:01Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:22Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 4,
+                "startedAt": "2026-10-12T01:09:15Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:44Z",
+                "conclusion": "success",
+                "name": "Execute full protected product/runtime track and emit envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:09:22Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:44Z",
+                "conclusion": "success",
+                "name": "Publish immutable product/runtime envelope",
+                "number": 6,
+                "startedAt": "2026-10-12T01:22:44Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:44Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 11,
+                "startedAt": "2026-10-12T01:22:44Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:45Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 12,
+                "startedAt": "2026-10-12T01:22:44Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:45Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 13,
+                "startedAt": "2026-10-12T01:22:45Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622803014"
+          },
+          {
+            "completedAt": "2026-10-12T01:11:43Z",
+            "conclusion": "success",
+            "databaseId": 114622803018,
+            "name": "model-runner-code-gate",
+            "startedAt": "2026-10-12T01:08:58Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:09:02Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:08:59Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:05Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 2,
+                "startedAt": "2026-10-12T01:09:02Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:09:15Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 3,
+                "startedAt": "2026-10-12T01:09:05Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:11:31Z",
+                "conclusion": "success",
+                "name": "Execute pinned protected model-runner track and emit envelope",
+                "number": 4,
+                "startedAt": "2026-10-12T01:09:15Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:11:34Z",
+                "conclusion": "success",
+                "name": "Publish immutable model-runner envelope",
+                "number": 5,
+                "startedAt": "2026-10-12T01:11:31Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:11:34Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 9,
+                "startedAt": "2026-10-12T01:11:34Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:11:35Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 10,
+                "startedAt": "2026-10-12T01:11:34Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:11:35Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 11,
+                "startedAt": "2026-10-12T01:11:35Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114622803018"
+          },
+          {
+            "completedAt": "2026-10-12T01:23:07Z",
+            "conclusion": "success",
+            "databaseId": 114625495512,
+            "name": "stockinsider-v3-gate-root",
+            "startedAt": "2026-10-12T01:22:51Z",
+            "status": "completed",
+            "steps": [
+              {
+                "completedAt": "2026-10-12T01:22:52Z",
+                "conclusion": "success",
+                "name": "Set up job",
+                "number": 1,
+                "startedAt": "2026-10-12T01:22:52Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:53Z",
+                "conclusion": "success",
+                "name": "Reject incomplete or failed Code Gate prerequisites",
+                "number": 2,
+                "startedAt": "2026-10-12T01:22:52Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:22:55Z",
+                "conclusion": "success",
+                "name": "Checkout only the protected pull-request base",
+                "number": 3,
+                "startedAt": "2026-10-12T01:22:53Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:23:02Z",
+                "conclusion": "success",
+                "name": "Retrieve bootstrap and prepare detached subject",
+                "number": 4,
+                "startedAt": "2026-10-12T01:22:55Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:23:03Z",
+                "conclusion": "success",
+                "name": "Retrieve all five required immutable external envelopes",
+                "number": 5,
+                "startedAt": "2026-10-12T01:23:02Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:23:04Z",
+                "conclusion": "success",
+                "name": "Assemble protected authoritative Code Gate aggregate",
+                "number": 6,
+                "startedAt": "2026-10-12T01:23:03Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:23:05Z",
+                "conclusion": "success",
+                "name": "Publish immutable authoritative Code Gate aggregate",
+                "number": 7,
+                "startedAt": "2026-10-12T01:23:04Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:23:05Z",
+                "conclusion": "success",
+                "name": "Post Retrieve bootstrap and prepare detached subject",
+                "number": 13,
+                "startedAt": "2026-10-12T01:23:05Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:23:06Z",
+                "conclusion": "success",
+                "name": "Post Checkout only the protected pull-request base",
+                "number": 14,
+                "startedAt": "2026-10-12T01:23:05Z",
+                "status": "completed"
+              },
+              {
+                "completedAt": "2026-10-12T01:23:06Z",
+                "conclusion": "success",
+                "name": "Complete job",
+                "number": 15,
+                "startedAt": "2026-10-12T01:23:06Z",
+                "status": "completed"
+              }
+            ],
+            "url": "https://github.com/Kaichen9527/stockinsider/actions/runs/38190723740/job/114625495512"
+          }
+        ],
+        "status": "completed"
+      }
+    }
+  ],
+  "merged": [
+    {
+      "pr": 370,
+      "headRefOid": "3338160a43dd9c23e4ea4b079fd7761501c29786",
+      "mergeCommit": {
+        "oid": "107e267ee73026d98dbd35713b2247c00f6eaeb3"
+      },
+      "mergedAt": "2026-10-12T01:26:31Z",
+      "state": "MERGED"
+    },
+    {
+      "pr": 371,
+      "headRefOid": "bc1b6aff5315c0f0302cd1d2e74e7c1b238a4af3",
+      "mergeCommit": {
+        "oid": "778ef0fdc0e5b3f3dbea9c3b21f3844c79eb768d"
+      },
+      "mergedAt": "2026-10-12T01:26:36Z",
+      "state": "MERGED"
+    },
+    {
+      "pr": 372,
+      "headRefOid": "680d0c9d10ca185013d66f034e9fc03e1d7fcd69",
+      "mergeCommit": {
+        "oid": "8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14"
+      },
+      "mergedAt": "2026-10-12T01:26:41Z",
+      "state": "MERGED"
+    }
+  ],
+  "rulesBefore": {
+    "id": 20177392,
+    "name": "stockinsider-v3-gate-root",
+    "target": "branch",
+    "source_type": "Repository",
+    "source": "Kaichen9527/stockinsider",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "exclude": [],
+        "include": [
+          "~DEFAULT_BRANCH"
+        ]
+      }
+    },
+    "rules": [
+      {
+        "type": "deletion"
+      },
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 0,
+          "dismiss_stale_reviews_on_push": false,
+          "required_reviewers": [],
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": false,
+          "require_extra_approval_for_unattributed_changes": true,
+          "allowed_merge_methods": [
+            "merge",
+            "squash",
+            "rebase"
+          ]
+        }
+      },
+      {
+        "type": "required_status_checks",
+        "parameters": {
+          "strict_required_status_checks_policy": false,
+          "do_not_enforce_on_create": false,
+          "required_status_checks": [
+            {
+              "context": "stockinsider-v3-gate-root",
+              "integration_id": 15368
+            }
+          ]
+        }
+      }
+    ],
+    "node_id": "RRS_lACqUmVwb3NpdG9yec5Fu2YfzgEz4fA",
+    "created_at": "2026-08-01T17:15:31.389+08:00",
+    "updated_at": "2026-10-12T08:07:59.507+08:00",
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/Kaichen9527/stockinsider/rulesets/20177392"
+      },
+      "html": {
+        "href": "https://github.com/Kaichen9527/stockinsider/rules/20177392"
+      }
+    }
+  },
+  "rulesAfter": {
+    "id": 20177392,
+    "name": "stockinsider-v3-gate-root",
+    "target": "branch",
+    "source_type": "Repository",
+    "source": "Kaichen9527/stockinsider",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "exclude": [],
+        "include": [
+          "~DEFAULT_BRANCH"
+        ]
+      }
+    },
+    "rules": [
+      {
+        "type": "deletion"
+      },
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 0,
+          "dismiss_stale_reviews_on_push": false,
+          "required_reviewers": [],
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": false,
+          "require_extra_approval_for_unattributed_changes": true,
+          "allowed_merge_methods": [
+            "merge",
+            "squash",
+            "rebase"
+          ]
+        }
+      },
+      {
+        "type": "required_status_checks",
+        "parameters": {
+          "strict_required_status_checks_policy": false,
+          "do_not_enforce_on_create": false,
+          "required_status_checks": [
+            {
+              "context": "stockinsider-v3-gate-root",
+              "integration_id": 15368
+            }
+          ]
+        }
+      }
+    ],
+    "node_id": "RRS_lACqUmVwb3NpdG9yec5Fu2YfzgEz4fA",
+    "created_at": "2026-08-01T17:15:31.389+08:00",
+    "updated_at": "2026-10-12T08:07:59.507+08:00",
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/Kaichen9527/stockinsider/rulesets/20177392"
+      },
+      "html": {
+        "href": "https://github.com/Kaichen9527/stockinsider/rules/20177392"
+      }
+    }
+  },
+  "finalMain": "8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14",
+  "completedAt": "2026-10-12T01:26:43.512Z"
+}

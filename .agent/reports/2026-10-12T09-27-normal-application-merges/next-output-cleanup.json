@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-12T01:15:50.630455+00:00",
+  "onlyRebuildableNextOutput": true,
+  "checked": [
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/research-agents-oct04/web/.next",
+      "device": 16777231,
+      "inode": 200411689,
+      "allocatedKiB": 431168,
+      "references": "lsof no open references",
+      "tracked": false
+    },
+    {
+      "path": "/Users/kaerchen/.cache/stockinsider-workspaces/research-author-result-oct09/web/.next",
+      "device": 16777231,
+      "inode": 210181834,
+      "allocatedKiB": 142068,
+      "references": "lsof no open references",
+      "tracked": false
+    }
+  ],
+  "availableBefore": 1696927744,
+  "availableAfter": 2298155008,
+  "observedRecoveredBytes": 601227264
+}

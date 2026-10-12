@@ -1,0 +1,35 @@
+import fs from 'node:fs';
+import cp from 'node:child_process';
+import assert from 'node:assert/strict';
+const [root,source]=process.argv.slice(2);
+assert.match(source,/^[0-9a-f]{40}$/u);
+const repo='Kaichen9527/stockinsider';
+const old='1f6f300b8172c3a415a03e7c0148ccc2a450caf6';
+const file='.github/workflows/merged-main-candidate-artifact.yml';
+const branch='codex/merged-main-candidate-artifact-oct11';
+const heads=[[370,'3338160a43dd9c23e4ea4b079fd7761501c29786'],[371,'bc1b6aff5315c0f0302cd1d2e74e7c1b238a4af3'],[372,'680d0c9d10ca185013d66f034e9fc03e1d7fcd69']];
+const git=(args,options={})=>cp.execFileSync('/usr/bin/git',['-C',root,...args],{encoding:'utf8',...options}).trim();
+const gh=args=>cp.execFileSync('gh',args,{encoding:'utf8'}).trim();
+assert.equal(JSON.parse(gh(['api','repos/'+repo+'/git/ref/heads/main'])).object.sha,source);
+assert.equal(JSON.parse(gh(['pr','view','368','--repo',repo,'--json','headRefOid'])).headRefOid,old);
+for(const [pr,head] of heads){
+ const status=JSON.parse(gh(['pr','view',String(pr),'--repo',repo,'--json','state,headRefOid,mergeCommit']));
+ assert.equal(status.state,'MERGED');assert.equal(status.headRefOid,head);
+ git(['merge-base','--is-ancestor',head,source]);
+}
+const before=cp.execFileSync('/usr/bin/git',['-C',root,'show',old+':'+file],{encoding:'utf8'});
+const prior='169aad1b6cfa747f78ae3464b614f43c0749d806';
+assert.equal(before.split(prior).length-1,3);
+const after=before.replaceAll(prior,source);
+assert.equal(after.split(source).length-1,3);
+const index='/private/tmp/stockinsider-artifact-source-'+process.pid+'.index';
+const env={...process.env,GIT_INDEX_FILE:index};
+git(['read-tree',old],{env});
+const blob=git(['hash-object','-w','--stdin'],{input:after});
+git(['update-index','--add','--cacheinfo','100644,'+blob+','+file],{env});
+const tree=git(['write-tree'],{env});
+const commit=git(['commit-tree',tree,'-p',old],{input:'ci: prepare exact normally merged candidate fixes as Linux artifact\n'});
+assert.deepEqual(git(['diff-tree','--no-commit-id','--name-only','-r',old,commit]).split('\n'),[file]);
+fs.unlinkSync(index);
+fs.writeFileSync('/tmp/stockinsider-final-main-artifact-prepared-oct12.json',JSON.stringify({source,previousWorkflow:old,workflowCommit:commit,tree,file,branch,sourcePinsChanged:3,reviewRequired:true,pushed:false,deployed:false})+'\n');
+console.log(commit);
