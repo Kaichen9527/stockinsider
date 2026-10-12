@@ -1,0 +1,22 @@
+[
+  {
+    "path": "stockinsider-pr375-normal-merge-audit-oct12.json",
+    "bytes": 32185,
+    "sha256": "a50059072fc15020e4ee659957efb11b9782f15d0b3ed4427e542099b969ac65"
+  },
+  {
+    "path": "stockinsider-pr375-normal-merge-oct12.py",
+    "bytes": 3231,
+    "sha256": "20cb3f7d728c12d775bf4b48dffeb909295767edf3b798532db6955d348d699c"
+  },
+  {
+    "path": "stockinsider-pr375-protected-terminal-oct12.json",
+    "bytes": 12559,
+    "sha256": "f3e72d7be730fafa168b4dda7000d78cff03b0958bc470fb1b128009469a76dd"
+  },
+  {
+    "path": "stockinsider-pr375-protected-model-pass-oct12.log",
+    "bytes": 36843,
+    "sha256": "a5e90c94549351dc06cbaffa55086804bc854af2f91d401fe77c67581090a8b2"
+  }
+]

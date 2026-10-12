@@ -1,5 +1,13 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 17:06台灣時間：PR375正常protected全部通過並已標準合併
+
+Protected38216491152 attempt2全七項bootstrap／requirements／architecture／exact／model／product／aggregate真SUCCESS；原attempt1 ENOSPC RED仍保留，Mac空間已實際改變才單次failed續跑，不是改失敗結果。Root核exact c82e0e4e、base099、全部普通checks／原active/bypass[]保護，沿已獨立審查的單次merge guard只替換PR/head/base/run/audit參數，真正常gh --merge --match-head-commit完成09:04:50Z。main4dddb8f01f518350c7d54b7995ee9358c1d945a7，實查parents099+c82/treeef47439e/web08c8f0db，前後rules完整JSON一致，無admin/bypass/mainpush。
+
+`/tmp/stockinsider-pr375-normal-merge-audit-oct12.json`已存在且終態成功，禁止再執行helper／重跑此protected。首次本機git fetch origin main後讀origin/main仍169，因refspec只更新FETCH_HEAD；root改以remote ls-remote及實際mergeSHA fetch核對，沒有把陳舊trackingref當正式main。新raw audit及7jobs／modelPASS log保存在`.agent/reports/2026-10-12T17-06-pr375-normal-merge/`。
+
+這是pure revision/publisher投影正確性修補，不代表live來源／Top20／文章或投資策略已完成。正式VPS仍169、舊容量准入及待答問題未變，沒有新VPS量測／部署／migration／刪cache或重算343。Staged8bcd包不含本次main，不冒稱最新。Cloud金融atomic extraction原turn01a12f58／cursor23 active不重派，金融slice1 root已驗真28raw／12source，完整installer仍待完成。正式新研究排程未啟用。
+
 ## 2026-10-12 17:03台灣時間：reader完整普通驗收成功；protected模型因Mac滿碟失敗，空間實際恢復後單次正常續跑
 
 PR375 frozen c82e0e4e/treeef47439e的ordinary38215277487/product114698459039真正SUCCESS：canonical155PASS／0FAIL／0SKIP／0TODO、全31PCR與type/lint/build/migration/browser成功。Root保存5234行完整GH原log及只去兩tab前綴的版本，fresh direct-child exact/PCR/attestation e3c53abd先push後一次ready事件啟動正常protected38216491152。原缺ref FAIL不刪或改成功。

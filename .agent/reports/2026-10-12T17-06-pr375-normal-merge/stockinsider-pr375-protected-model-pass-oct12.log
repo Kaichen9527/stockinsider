@@ -1,0 +1,210 @@
+model-runner-code-gate	Set up job	﻿2026-10-12T09:00:44.8141280Z Current runner version: '2.337.0'
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8145570Z Runner name: 'stockinsider-mac-arm64-kaerchen'
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8145990Z Runner group name: 'Default'
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8146480Z Machine name: 'Mac'
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8148120Z ##[group]GITHUB_TOKEN Permissions
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8149200Z Actions: read
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8149450Z Contents: read
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8149710Z Metadata: read
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8150030Z ##[endgroup]
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8151020Z Secret source: Actions
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8151450Z Cache mode: read
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.8151770Z Prepare workflow directory
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.9005020Z Prepare all required actions
+model-runner-code-gate	Set up job	2026-10-12T09:00:44.9033260Z Getting action download info
+model-runner-code-gate	Set up job	2026-10-12T09:00:45.9176080Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+model-runner-code-gate	Set up job	2026-10-12T09:00:46.6523270Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+model-runner-code-gate	Set up job	2026-10-12T09:00:47.7390920Z Complete job name: model-runner-code-gate
+model-runner-code-gate	Checkout only the protected pull-request base	﻿2026-10-12T09:00:47.7810310Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7811120Z with:
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7811500Z   fetch-depth: 0
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7811920Z   persist-credentials: false
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7812430Z   ref: 0997336d0eb8ec43ea0899f22fe5a03cc774518f
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7813010Z   repository: Kaichen9527/stockinsider
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7816990Z   token: ***
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7817370Z   ssh-strict: true
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7817760Z   ssh-user: git
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7818120Z   clean: true
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7818520Z   sparse-checkout-cone-mode: true
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7818990Z   fetch-tags: false
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7819390Z   show-progress: true
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7819790Z   lfs: false
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7820150Z   submodules: false
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7820550Z   set-safe-directory: true
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7821000Z   allow-unsafe-pr-checkout: false
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.7821560Z ##[endgroup]
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9804570Z Syncing repository: Kaichen9527/stockinsider
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9806170Z ##[group]Getting Git version info
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9807170Z Working directory is '/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/stockinsider/stockinsider'
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9808470Z [command]/opt/homebrew/bin/git version
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9854610Z git version 2.55.0
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9868720Z ##[endgroup]
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9873230Z Copying '/Users/kaerchen/.gitconfig' to '/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/be43477d-6d02-492c-a45c-acc5c7c48134/.gitconfig'
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9876770Z Temporarily overriding HOME='/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/be43477d-6d02-492c-a45c-acc5c7c48134' before making global git config changes
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9878380Z Adding repository directory to the temporary git global config as a safe directory
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9879860Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/stockinsider/stockinsider
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9953160Z [command]/opt/homebrew/bin/git config --local --get remote.origin.url
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9987590Z https://github.com/Kaichen9527/stockinsider
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9994210Z ##[group]Removing previously created refs, to avoid conflicts
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:47.9995410Z [command]/opt/homebrew/bin/git rev-parse --symbolic-full-name --verify --quiet HEAD
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.0034590Z HEAD
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.0084540Z ##[endgroup]
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.0085490Z [command]/opt/homebrew/bin/git submodule status
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.0727090Z ##[group]Cleaning the repository
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.0727840Z [command]/opt/homebrew/bin/git clean -ffdx
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.0978690Z [command]/opt/homebrew/bin/git reset --hard HEAD
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.1957310Z HEAD is now at 0997336d Merge pull request #374 from Kaichen9527/codex/live-discovery-evidence-adapter-oct12
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.1960530Z ##[endgroup]
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.1961880Z ##[group]Disabling automatic garbage collection
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.1964230Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.2008090Z ##[endgroup]
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.2008730Z ##[group]Setting up auth
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.2010490Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.2049770Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.2669210Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.2703460Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.3168110Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.3203570Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.3735590Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.3774770Z ##[endgroup]
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.3775110Z ##[group]Fetching the repository
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:48.3777800Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.4789400Z [command]/opt/homebrew/bin/git rev-parse --verify --quiet 0997336d0eb8ec43ea0899f22fe5a03cc774518f^{object}
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.4839460Z 0997336d0eb8ec43ea0899f22fe5a03cc774518f
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.4842740Z ##[endgroup]
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.4843110Z ##[group]Determining the checkout info
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.4843390Z ##[endgroup]
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.4845270Z [command]/opt/homebrew/bin/git sparse-checkout disable
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.4911620Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.4954590Z ##[group]Checking out the ref
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.4956360Z [command]/opt/homebrew/bin/git checkout --progress --force 0997336d0eb8ec43ea0899f22fe5a03cc774518f
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5042200Z HEAD is now at 0997336d Merge pull request #374 from Kaichen9527/codex/live-discovery-evidence-adapter-oct12
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5049250Z ##[endgroup]
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5110860Z [command]/opt/homebrew/bin/git log -1 --format=%H
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5154710Z 0997336d0eb8ec43ea0899f22fe5a03cc774518f
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5160520Z ##[group]Removing auth
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5161810Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5201580Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5731460Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5765900Z http.https://github.com/.extraheader
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5769490Z [command]/opt/homebrew/bin/git config --local --unset-all http.https://github.com/.extraheader
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.5807560Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.6318740Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.6354640Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+model-runner-code-gate	Checkout only the protected pull-request base	2026-10-12T09:00:49.6938840Z ##[endgroup]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	﻿2026-10-12T09:00:49.7077210Z Prepare all required actions
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:49.7077530Z Getting action download info
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:49.9916060Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:50.9159800Z Download action repository 'actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7610730Z ##[group]Run ./.github/actions/prepare-source-led-external-subject
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7611000Z with:
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7611230Z   bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7611660Z   subject-root: /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7611940Z ##[endgroup]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7643740Z ##[start-action display=Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020;id=__self.__actions_setup-node]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7688130Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7688380Z with:
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7688480Z   node-version: 22.14.0
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7688650Z   always-auth: false
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7688760Z   check-latest: false
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7689930Z   token: ***
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.7690060Z ##[endgroup]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.8540380Z Found in cache @ /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_tool/node/22.14.0/arm64
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.8542920Z (node:3584) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.8543320Z (Use `node --trace-deprecation ...` to show where the warning was created)
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:51.8543890Z ##[group]Environment details
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0805640Z node: v22.14.0
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0805820Z npm: 10.9.2
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0805950Z yarn: 1.17.3
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0806280Z ##[endgroup]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0853480Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=320]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0854860Z ##[start-action display=Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093;id=__self.__actions_download-artifact]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0877900Z ##[group]Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0878100Z with:
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0878300Z   name: stockinsider-v3-gate-bootstrap-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0878650Z   path: /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-gate-bootstrap
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0878920Z   merge-multiple: false
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0879040Z   repository: Kaichen9527/stockinsider
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0879160Z   run-id: 38216491152
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.0879260Z ##[endgroup]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.1695740Z Downloading single artifact
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.1798850Z (node:3588) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.1799380Z (Use `node --trace-deprecation ...` to show where the warning was created)
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.8758580Z Preparing to download the following artifacts:
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:52.8761230Z - stockinsider-v3-gate-bootstrap-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e (ID: 11731953864, Size: 662, Expected Digest: sha256:3a01cf5876141bc4a39cc88857e7db9505a00d54bc49c50af8a44258a2356bc0)
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:53.4119940Z Redirecting to blob download url: https://productionresultssa6.blob.core.windows.net/actions-results/1ce5019c-0ff4-837d-ac92-f87456ac1a04/workflow-job-run-b014a779-b26b-5188-b43d-74ad65ea5013/artifacts/86feae47768209ed2684e91d45059ca23b1ade05c2e7b929a881b643acd2bcb2.zip
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:53.4125460Z Starting download of artifact to: /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-gate-bootstrap
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.1815890Z (node:3588) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.1890340Z SHA256 digest of downloaded artifact is 3a01cf5876141bc4a39cc88857e7db9505a00d54bc49c50af8a44258a2356bc0
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.1891900Z Artifact download completed successfully.
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.1892750Z Total of 1 artifact(s) downloaded
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.1900890Z Download artifact has finished successfully
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.2021750Z ##[end-action id=__self.__actions_download-artifact;outcome=success;conclusion=success;duration_ms=2116]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.2042050Z ##[start-action display=Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject";id=__self.__run]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.2073910Z ##[group]Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject"
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.2075670Z ^[[36;1mnode scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject"^[[0m
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.2148710Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.2148960Z ##[endgroup]
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.3695830Z From https://github.com/Kaichen9527/stockinsider
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:54.3696220Z  * branch              c82e0e4ed3670d195a76830d81e5851c1b0bdf1e -> FETCH_HEAD
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:56.8065220Z Initialized empty Git repository in /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject/.git/
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:58.5293980Z From /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/stockinsider/stockinsider
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:58.5294410Z  * branch            c82e0e4ed3670d195a76830d81e5851c1b0bdf1e -> FETCH_HEAD
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:58.5294700Z  * branch            0997336d0eb8ec43ea0899f22fe5a03cc774518f -> FETCH_HEAD
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:58.5294970Z  * branch            0997336d0eb8ec43ea0899f22fe5a03cc774518f -> FETCH_HEAD
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:58.5302850Z  * [new ref]         origin/evidence/source-led-opportunity-v3-exact-review-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e -> origin/evidence/source-led-opportunity-v3-exact-review-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:58.5304920Z  * [new ref]         origin/evidence/source-led-opportunity-v3-requirements-v325-digest -> origin/evidence/source-led-opportunity-v3-requirements-v325-digest
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:58.5307130Z  * [new ref]         origin/evidence/source-led-opportunity-v3-architecture-v325-digest -> origin/evidence/source-led-opportunity-v3-architecture-v325-digest
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:58.7313540Z HEAD is now at c82e0e4 ci: include discovery helpers in full product diagnostics
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:59.0183500Z {"status":"prepared","subjectCommitSha":"c82e0e4ed3670d195a76830d81e5851c1b0bdf1e","subjectRoot":"/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject"}
+model-runner-code-gate	Retrieve bootstrap and prepare detached subject	2026-10-12T09:00:59.0231650Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=4818]
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	﻿2026-10-12T09:00:59.0255730Z ##[group]Run node scripts/opportunity-v3/protected-external-gate-worker.mjs track --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "$RUNNER_TEMP/stockinsider-v3-subject" --track model_runner --output "$RUNNER_TEMP/opportunity-gate-result-model-runner-code-gate-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e.json"
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	2026-10-12T09:00:59.0260260Z ^[[36;1mnode scripts/opportunity-v3/protected-external-gate-worker.mjs track --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "$RUNNER_TEMP/stockinsider-v3-subject" --track model_runner --output "$RUNNER_TEMP/opportunity-gate-result-model-runner-code-gate-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e.json"^[[0m
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	2026-10-12T09:00:59.0309150Z shell: /bin/bash -e {0}
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	2026-10-12T09:00:59.0309300Z ##[endgroup]
+model-runner-code-gate	Execute pinned protected model-runner track and emit envelope	2026-10-12T09:03:09.0921720Z {"check":"model-runner-code-gate","evidenceSha256":"cd6ef3bf03827c173a004b54e9cf8d774f2dd60bf7cf73911624c802eec11fd7","status":"pass","subjectCommitSha":"c82e0e4ed3670d195a76830d81e5851c1b0bdf1e"}
+model-runner-code-gate	Publish immutable model-runner envelope	﻿2026-10-12T09:03:09.0991410Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.0991650Z with:
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.0991910Z   name: opportunity-gate-result-model-runner-code-gate-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.0992460Z   path: /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/opportunity-gate-result-model-runner-code-gate-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e.json
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.0992880Z   if-no-files-found: error
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.0993020Z   retention-days: 90
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.0993140Z   compression-level: 6
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.0993270Z   overwrite: false
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.0993390Z   include-hidden-files: false
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.0993530Z ##[endgroup]
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.2818410Z (node:5788) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.2818910Z (Use `node --trace-deprecation ...` to show where the warning was created)
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.2838460Z With the provided path, there will be 1 file uploaded
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.2840390Z Artifact name is valid!
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:09.2840700Z Root directory input is valid!
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:10.1333150Z Beginning upload of artifact content to blob storage
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:10.1515800Z (node:5788) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:11.0259870Z Uploaded bytes 1349
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:11.2378980Z Finished uploading artifact content to blob storage!
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:11.2380150Z SHA256 digest of uploaded artifact zip is 8940574dbf21069fa829b4f3377d209e9c648c5f3a24ef2561d09d71cdcf5200
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:11.2381710Z Finalizing artifact upload
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:11.6929660Z Artifact opportunity-gate-result-model-runner-code-gate-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e.zip successfully finalized. Artifact ID 11736654745
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:11.6933000Z Artifact opportunity-gate-result-model-runner-code-gate-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e has been successfully uploaded! Final size is 1349 bytes. Artifact ID is 11736654745
+model-runner-code-gate	Publish immutable model-runner envelope	2026-10-12T09:03:11.6938440Z Artifact download URL: https://github.com/Kaichen9527/stockinsider/actions/runs/38216491152/artifacts/11736654745
+model-runner-code-gate	Post Retrieve bootstrap and prepare detached subject	﻿2026-10-12T09:03:11.7225900Z Post job cleanup.
+model-runner-code-gate	Post Retrieve bootstrap and prepare detached subject	2026-10-12T09:03:11.7250540Z ##[start-action display=Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020;id=__138918a3-b3f1-4198-8341-7ac79629ae76.__actions_setup-node]
+model-runner-code-gate	Post Retrieve bootstrap and prepare detached subject	2026-10-12T09:03:11.7313330Z Post job cleanup.
+model-runner-code-gate	Post Retrieve bootstrap and prepare detached subject	2026-10-12T09:03:11.8259470Z (node:5789) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+model-runner-code-gate	Post Retrieve bootstrap and prepare detached subject	2026-10-12T09:03:11.8260070Z (Use `node --trace-deprecation ...` to show where the warning was created)
+model-runner-code-gate	Post Retrieve bootstrap and prepare detached subject	2026-10-12T09:03:11.8296660Z ##[end-action id=__138918a3-b3f1-4198-8341-7ac79629ae76.__actions_setup-node;outcome=success;conclusion=success;duration_ms=104]
+model-runner-code-gate	Post Checkout only the protected pull-request base	﻿2026-10-12T09:03:11.8361020Z Post job cleanup.
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:11.8991450Z [command]/opt/homebrew/bin/git version
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:11.9048560Z git version 2.55.0
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:11.9060570Z Copying '/Users/kaerchen/.gitconfig' to '/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/847ab6dd-0887-474f-a2c1-58cbfa0d684c/.gitconfig'
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:11.9064300Z Temporarily overriding HOME='/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/847ab6dd-0887-474f-a2c1-58cbfa0d684c' before making global git config changes
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:11.9064900Z Adding repository directory to the temporary git global config as a safe directory
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:11.9066780Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/stockinsider/stockinsider
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:11.9113510Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:11.9153630Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:11.9699170Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:11.9735270Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:12.0294810Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+model-runner-code-gate	Post Checkout only the protected pull-request base	2026-10-12T09:03:12.0333650Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+model-runner-code-gate	Complete job	﻿2026-10-12T09:03:12.0941340Z Cleaning up orphan processes
+model-runner-code-gate	Complete job	2026-10-12T09:03:12.1168020Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
