@@ -1,0 +1,27 @@
+{
+  "reader": {
+    "command": [
+      "/usr/local/bin/node",
+      "scripts/run-node22.js",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "web/src/lib/discovery-revision-publisher-reader.test.ts"
+    ],
+    "exit": 0
+  },
+  "ordinary-equivalent": {
+    "command": [
+      "/usr/local/bin/node",
+      "scripts/run-node22.js",
+      "--experimental-strip-types",
+      "--test",
+      "--test-concurrency=1",
+      "web/src/lib/candidate-discovery-admission.test.ts",
+      "web/src/lib/live-discovery-evidence-adapter.test.ts",
+      "web/src/lib/discovery-revision-publisher-reader.test.ts",
+      "scripts/candidate-discovery-admission-ui.test.mjs"
+    ],
+    "exit": 1
+  }
+}

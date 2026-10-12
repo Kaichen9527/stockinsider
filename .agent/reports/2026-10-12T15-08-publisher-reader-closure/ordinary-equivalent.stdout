@@ -1,0 +1,485 @@
+TAP version 13
+# (node:55277) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual main card displays technical dated close and reference method, hides old price and upside
+ok 1 - actual main card displays technical dated close and reference method, hides old price and upside
+  ---
+  duration_ms: 21.358833
+  ...
+# Subtest: actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+ok 2 - actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+  ---
+  duration_ms: 2.273375
+  ...
+# Subtest: missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+ok 3 - missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+  ---
+  duration_ms: 1.320834
+  ...
+# Subtest: actual main defaults to existing clues while research admission remains explicitly pending
+ok 4 - actual main defaults to existing clues while research admission remains explicitly pending
+  ---
+  duration_ms: 20.510333
+  ...
+# Subtest: existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+ok 5 - existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+  ---
+  duration_ms: 2.837959
+  ...
+# Subtest: actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+ok 6 - actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+  ---
+  duration_ms: 23.286334
+  ...
+# Subtest: actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+ok 7 - actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+  ---
+  duration_ms: 4.915
+  ...
+# Subtest: saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+ok 8 - saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+  ---
+  duration_ms: 11.618875
+  ...
+# (node:55278) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only a pair with different canonical publishers and roots enters general research
+ok 9 - only a pair with different canonical publishers and roots enters general research
+  ---
+  duration_ms: 6.738542
+  ...
+# Subtest: same author across platforms
+ok 10 - same author across platforms
+  ---
+  duration_ms: 0.629583
+  ...
+# Subtest: syndicated original root
+ok 11 - syndicated original root
+  ---
+  duration_ms: 0.087
+  ...
+# Subtest: same-platform original authors with independent roots qualify; platform diversity is display-only
+ok 12 - same-platform original authors with independent roots qualify; platform diversity is display-only
+  ---
+  duration_ms: 0.625917
+  ...
+# Subtest: retracted root cannot be laundered by a current repost
+ok 13 - retracted root cannot be laundered by a current repost
+  ---
+  duration_ms: 0.691041
+  ...
+# Subtest: industry-only and unresolved aliases cannot count as direct company confirmation
+ok 14 - industry-only and unresolved aliases cannot count as direct company confirmation
+  ---
+  duration_ms: 0.694167
+  ...
+# Subtest: bounded legacy links, counters and missing PTT detail are unsupported
+ok 15 - bounded legacy links, counters and missing PTT detail are unsupported
+  ---
+  duration_ms: 0.51525
+  ...
+# Subtest: PTT 19/20 actual different stock-mention authors boundary
+ok 16 - PTT 19/20 actual different stock-mention authors boundary
+  ---
+  duration_ms: 2.865208
+  ...
+# Subtest: PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+ok 17 - PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+  ---
+  duration_ms: 0.912625
+  ...
+# Subtest: PTT requires stock in body, current article, and one post, not pooled reply totals
+ok 18 - PTT requires stock in body, current article, and one post, not pooled reply totals
+  ---
+  duration_ms: 1.792291
+  ...
+# Subtest: reasoned new official event can enter low-volume lane, never multi-source confirmation
+ok 19 - reasoned new official event can enter low-volume lane, never multi-source confirmation
+  ---
+  duration_ms: 0.684834
+  ...
+# Subtest: high-impact new lead requires explained known direct source; ordinary news is not official
+ok 20 - high-impact new lead requires explained known direct source; ordinary news is not official
+  ---
+  duration_ms: 0.24475
+  ...
+# Subtest: existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+ok 21 - existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+  ---
+  duration_ms: 2.128709
+  ...
+# Subtest: bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+ok 22 - bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+  ---
+  duration_ms: 0.946959
+  ...
+# Subtest: technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+ok 23 - technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+  ---
+  duration_ms: 6.06775
+  ...
+# Subtest: PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+ok 24 - PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+  ---
+  duration_ms: 1.523834
+  ...
+# Subtest: missing, future, malformed dates never manufacture a displayed current close
+ok 25 - missing, future, malformed dates never manufacture a displayed current close
+  ---
+  duration_ms: 0.149208
+  ...
+# Subtest: clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+ok 26 - clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+  ---
+  duration_ms: 1.766292
+  ...
+# Subtest: coverage states distinguish retired/blocked/duplicate without inventing source enablement
+ok 27 - coverage states distinguish retired/blocked/duplicate without inventing source enablement
+  ---
+  duration_ms: 0.539584
+  ...
+# Subtest: coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+ok 28 - coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+  ---
+  duration_ms: 0.364958
+  ...
+# (node:55279) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+ok 29 - actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+  ---
+  duration_ms: 27.507625
+  ...
+# Subtest: precise offset microseconds and invalid dates
+ok 30 - precise offset microseconds and invalid dates
+  ---
+  duration_ms: 0.653333
+  ...
+# Subtest: future revision collected_at 1us cannot replace known head
+ok 31 - future revision collected_at 1us cannot replace known head
+  ---
+  duration_ms: 6.195375
+  ...
+# Subtest: future revision recorded_at 1us cannot replace known head
+ok 32 - future revision recorded_at 1us cannot replace known head
+  ---
+  duration_ms: 6.277958
+  ...
+# Subtest: future authority approved_at cannot mask known authority
+ok 33 - future authority approved_at cannot mask known authority
+  ---
+  duration_ms: 3.955833
+  ...
+# Subtest: future authority recorded_at cannot mask known authority
+ok 34 - future authority recorded_at cannot mask known authority
+  ---
+  duration_ms: 6.38325
+  ...
+# Subtest: future authority valid_from cannot mask known authority
+ok 35 - future authority valid_from cannot mask known authority
+  ---
+  duration_ms: 5.492541
+  ...
+# Subtest: latest inactive source never revives prior active
+ok 36 - latest inactive source never revives prior active
+  ---
+  duration_ms: 2.31125
+  ...
+# Subtest: latest inactive publisher never revives prior active
+ok 37 - latest inactive publisher never revives prior active
+  ---
+  duration_ms: 2.266959
+  ...
+# Subtest: latest invalid acquisition cannot revive old complete
+ok 38 - latest invalid acquisition cannot revive old complete
+  ---
+  duration_ms: 6.866125
+  ...
+# Subtest: same-time contradictory revisions heads fail closed, both orders
+ok 39 - same-time contradictory revisions heads fail closed, both orders
+  ---
+  duration_ms: 3.384167
+  ...
+# Subtest: same-time contradictory publishers heads fail closed, both orders
+ok 40 - same-time contradictory publishers heads fail closed, both orders
+  ---
+  duration_ms: 3.705
+  ...
+# Subtest: same-time contradictory sourceAuthorities heads fail closed, both orders
+ok 41 - same-time contradictory sourceAuthorities heads fail closed, both orders
+  ---
+  duration_ms: 1.995375
+  ...
+# Subtest: frozen population run mismatch is not complete
+ok 42 - frozen population run mismatch is not complete
+  ---
+  duration_ms: 0.3915
+  ...
+# Subtest: frozen population cutoff mismatch is not complete
+ok 43 - frozen population cutoff mismatch is not complete
+  ---
+  duration_ms: 0.749917
+  ...
+# Subtest: frozen population count mismatch is not complete
+ok 44 - frozen population count mismatch is not complete
+  ---
+  duration_ms: 0.3885
+  ...
+# Subtest: frozen population hash mismatch is not complete
+ok 45 - frozen population hash mismatch is not complete
+  ---
+  duration_ms: 0.409458
+  ...
+# Subtest: verification source_run_id binding mismatch
+ok 46 - verification source_run_id binding mismatch
+  ---
+  duration_ms: 1.219167
+  ...
+# Subtest: verification source_cutoff binding mismatch
+ok 47 - verification source_cutoff binding mismatch
+  ---
+  duration_ms: 1.359834
+  ...
+# Subtest: verification revision_id binding mismatch
+ok 48 - verification revision_id binding mismatch
+  ---
+  duration_ms: 1.047167
+  ...
+# Subtest: verification publisher_manifest_id binding mismatch
+ok 49 - verification publisher_manifest_id binding mismatch
+  ---
+  duration_ms: 1.20775
+  ...
+# Subtest: verification canonical_content_hash binding mismatch
+ok 50 - verification canonical_content_hash binding mismatch
+  ---
+  duration_ms: 1.233166
+  ...
+# Subtest: verification collected_at binding mismatch
+ok 51 - verification collected_at binding mismatch
+  ---
+  duration_ms: 1.456959
+  ...
+# Subtest: verification recorded_at binding mismatch
+ok 52 - verification recorded_at binding mismatch
+  ---
+  duration_ms: 1.060125
+  ...
+# Subtest: manifest root_hash cannot be asserted by count alone
+ok 53 - manifest root_hash cannot be asserted by count alone
+  ---
+  duration_ms: 1.578541
+  ...
+# Subtest: manifest page_hash cannot be asserted by count alone
+ok 54 - manifest page_hash cannot be asserted by count alone
+  ---
+  duration_ms: 1.66325
+  ...
+# Subtest: manifest payload cannot be asserted by count alone
+ok 55 - manifest payload cannot be asserted by count alone
+  ---
+  duration_ms: 1.224292
+  ...
+# Subtest: manifest rows_missing cannot be asserted by count alone
+ok 56 - manifest rows_missing cannot be asserted by count alone
+  ---
+  duration_ms: 1.532083
+  ...
+# Subtest: manifest institution cannot be asserted by count alone
+ok 57 - manifest institution cannot be asserted by count alone
+  ---
+  duration_ms: 1.143583
+  ...
+# Subtest: manifest authority_bytes cannot be asserted by count alone
+ok 58 - manifest authority_bytes cannot be asserted by count alone
+  ---
+  duration_ms: 1.173459
+  ...
+# Subtest: manifest run_binding cannot be asserted by count alone
+ok 59 - manifest run_binding cannot be asserted by count alone
+  ---
+  duration_ms: 0.791417
+  ...
+# Subtest: legacy raw mapping missing is unsupported, never UUID/hash/url join
+ok 60 - legacy raw mapping missing is unsupported, never UUID/hash/url join
+  ---
+  duration_ms: 1.215041
+  ...
+# Subtest: legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+ok 61 - legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+  ---
+  duration_ms: 0.77925
+  ...
+# Subtest: bounded populations defer every supplied input, not truncation success
+ok 62 - bounded populations defer every supplied input, not truncation success
+  ---
+  duration_ms: 154.292125
+  ...
+# Subtest: same revision UUID with conflicting family cannot produce two bindings
+ok 63 - same revision UUID with conflicting family cannot produce two bindings
+  ---
+  duration_ms: 2.051083
+  ...
+# Subtest: exact duplicate revision is accounted once as binding, deterministic projection
+ok 64 - exact duplicate revision is accounted once as binding, deterministic projection
+  ---
+  duration_ms: 2.072791
+  ...
+# Subtest: equal cutoff is included and valid_to equal cutoff is expired
+ok 65 - equal cutoff is included and valid_to equal cutoff is expired
+  ---
+  duration_ms: 1.079834
+  ...
+# Subtest: invalid collected_at is explicitly rejected, not a chosen head
+ok 66 - invalid collected_at is explicitly rejected, not a chosen head
+  ---
+  duration_ms: 0.943
+  ...
+# Subtest: invalid recorded_at is explicitly rejected, not a chosen head
+ok 67 - invalid recorded_at is explicitly rejected, not a chosen head
+  ---
+  duration_ms: 0.829
+  ...
+# Subtest: partial page with lower local count cannot match previously counted packet
+ok 68 - partial page with lower local count cannot match previously counted packet
+  ---
+  duration_ms: 0.312
+  ...
+# Subtest: recomputation keeps supplied source clocks, does not substitute snapshot time
+ok 69 - recomputation keeps supplied source clocks, does not substitute snapshot time
+  ---
+  duration_ms: 1.009167
+  ...
+# Subtest: root section row count/manifest page membership must agree
+ok 70 - root section row count/manifest page membership must agree
+  ---
+  duration_ms: 0.778916
+  ...
+# Subtest: no URL or family/hash changes create root or creator proof
+ok 71 - no URL or family/hash changes create root or creator proof
+  ---
+  duration_ms: 0.54575
+  ...
+# Subtest: publisher class is the existing enum, not an invented news authority
+ok 72 - publisher class is the existing enum, not an invented news authority
+  ---
+  duration_ms: 0.503542
+  ...
+# Subtest: public_research institution required by original authority schema
+ok 73 - public_research institution required by original authority schema
+  ---
+  duration_ms: 0.469917
+  ...
+# Subtest: unbounded strings and depth fail before projection, no truncation success
+ok 74 - unbounded strings and depth fail before projection, no truncation success
+  ---
+  duration_ms: 34.51625
+  ...
+# Subtest: future same-UUID collected_at cannot poison known family/identity
+ok 75 - future same-UUID collected_at cannot poison known family/identity
+  ---
+  duration_ms: 1.33975
+  ...
+# Subtest: future same-UUID recorded_at cannot poison known family/identity
+ok 76 - future same-UUID recorded_at cannot poison known family/identity
+  ---
+  duration_ms: 1.147208
+  ...
+# Subtest: manifest full retained publisher head population, not merely one matching row
+ok 77 - manifest full retained publisher head population, not merely one matching row
+  ---
+  duration_ms: 1.071667
+  ...
+# Subtest: known latest head cutoff+1us blocks older complete family, both orders
+ok 78 - known latest head cutoff+1us blocks older complete family, both orders
+  ---
+  duration_ms: 1.156959
+  ...
+# Subtest: known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+ok 79 - known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+  ---
+  duration_ms: 1.075375
+  ...
+# Subtest: known latest head before-cutoff-after-collection blocks older complete family, both orders
+ok 80 - known latest head before-cutoff-after-collection blocks older complete family, both orders
+  ---
+  duration_ms: 1.243625
+  ...
+# Subtest: known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+ok 81 - known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+  ---
+  duration_ms: 1.029208
+  ...
+# Subtest: known latest head invalid-clock blocks older complete family, both orders
+ok 82 - known latest head invalid-clock blocks older complete family, both orders
+  ---
+  duration_ms: 1.286917
+  ...
+# Subtest: known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+ok 83 - known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+  ---
+  duration_ms: 0.957125
+  ...
+# Subtest: known latest head with published null is allowed when verification also preserves null
+ok 84 - known latest head with published null is allowed when verification also preserves null
+  ---
+  duration_ms: 1.186917
+  ...
+# Subtest: known legal head at publication=collection remains usable with all microseconds
+ok 85 - known legal head at publication=collection remains usable with all microseconds
+  ---
+  duration_ms: 1.573916
+  ...
+# Subtest: truly future collected_at with invalid publication remains unknown without UUID poisoning
+ok 86 - truly future collected_at with invalid publication remains unknown without UUID poisoning
+  ---
+  duration_ms: 1.213584
+  ...
+# Subtest: truly future recorded_at with invalid publication remains unknown without UUID poisoning
+ok 87 - truly future recorded_at with invalid publication remains unknown without UUID poisoning
+  ---
+  duration_ms: 1.104166
+  ...
+# Subtest: single known head with malformed publication is blocked with explicit family disposition
+ok 88 - single known head with malformed publication is blocked with explicit family disposition
+  ---
+  duration_ms: 1.048166
+  ...
+# (node:55287) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/stockinsider-publisher-reader-final-root-oct12/web/src/lib/candidate-research-policy.ts' imported from /private/tmp/stockinsider-publisher-reader-final-root-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:860:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:984:11)
+#     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///private/tmp/stockinsider-publisher-reader-final-root-oct12/web/src/lib/candidate-research-policy.ts'
+# }
+# Node.js v22.14.0
+# Subtest: web/src/lib/live-discovery-evidence-adapter.test.ts
+not ok 4 - web/src/lib/live-discovery-evidence-adapter.test.ts
+  ---
+  duration_ms: 489.885583
+  location: '/private/tmp/stockinsider-publisher-reader-final-root-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..89
+# tests 89
+# suites 0
+# pass 88
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3751.634667

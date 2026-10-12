@@ -1,0 +1,50 @@
+{
+  "observed_at": "2026-10-12T07:08:29.974113+00:00",
+  "main": "0997336d0eb8ec43ea0899f22fe5a03cc774518f",
+  "production": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "pr": 375,
+  "subject": "c82e0e4ed3670d195a76830d81e5851c1b0bdf1e",
+  "tree": "ef47439eb1c90d158516cc6e781a28a1bf41c0a9",
+  "web_tree": "08c8f0db7388a47b4cb663aa1c64ae7cc03e682f",
+  "independent_review": "CODE PASS60plus26overlap; CI delta10cases PASS; P0P1P2=0",
+  "root_tests": "60reader PASS; two incomplete ordinary local fixtures88PASS1moduleloadFAIL preserved, no thirdretry",
+  "github_candidate": {
+    "run": 38215277461,
+    "pass": 148,
+    "fail": 0,
+    "skip": 0
+  },
+  "github_product": {
+    "run": 38215277487,
+    "job": 114698459039,
+    "status": "in_progress",
+    "canonical_approval": false
+  },
+  "github_initial_protected": {
+    "run": 38215274931,
+    "conclusion": "failure",
+    "actual_cause": "missing exact review remote ref; model/product skipped, not CLI failure",
+    "rerun": false
+  },
+  "cloud": {
+    "thread": "01a106b8-a883-7185-9962-f7372109a093",
+    "host": "durable",
+    "cursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:20",
+    "active_turn": "01a12ee3-301f-7776-adb8-d1712b5cbb5a",
+    "task": "30min narrow financial SQL/native cases extraction on main099, no default installer mutation or productionapply"
+  },
+  "financial_audit": {
+    "head": "3fb0b0f08a4611f39d487d7b33fd0d62ccadd56d",
+    "root_verified_present": 29,
+    "verified_absent": 15,
+    "raw": 15,
+    "repository_gap": "main lifetime128 cap remains, not every343dataInsufficient explained by it"
+  },
+  "exact_evidence": "generator and source review text prepared, not executed/pushed before fresh canonical",
+  "no_operations": [
+    "no VPS heavypreflight/deploy/migration/cachecleanup",
+    "no full343/PTT rerun",
+    "no new researchschedule/strategyadoption",
+    "no PR374 repeat"
+  ]
+}

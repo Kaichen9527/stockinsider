@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 15:08台灣時間：reader P2獨立閉合並建立PR375；金融SQL狹窄抽取進行中
+
+Reader code3b4e21f7／deliverybfc2f1d7已真修known-invalid head錯序。獨立reviewer60reader＋26memory cases皆PASS（重疊不相加）、P0/P1/P2=0；root核30raw／13source並親跑60PASS。原53PASS5FAIL RED與先前52綠／P2均保留。Root額外ordinary等價暫存fixture兩次因缺原有依賴module失敗88PASS1FAIL，已保存並停止本機同類重試，不冒稱root148綠；真正GitHub新head專項38215277461已148PASS／零fail/skip。
+
+已建立並attach draft PR375。原ordinary full-product pathfilter不覆蓋新helper，root獨立c82e0e4e只加discovery-*.ts/live-discovery-*.ts兩個PR paths；另一reviewer真10glob案例、逐byte核對無jobs/permission/pins/commands改動後給零P0/P1/P2。最終head c82e0e4ed3670d195a76830d81e5851c1b0bdf1e/treeef47439e/web08c8f0db已push。自動ordinary38215277487/product114698459039仍running，未宣稱canonical155／31PCR已過。初次protected38215274931缺新exact remote ref而FAIL、model/product SKIP，是前置證據缺口而非舊CLI復發；未盲目rerun。先取真canonical及全部產品終態，再fresh exactrefs、一次ready事件正常protected，不合併未批准程式。準備中的generator未執行。
+
+金融最小盤點3fb0b0f0已完成，root核29present／15absent來源及15raw：main仍lifetime128 cap；不能說這就是全部343usable0原因或production已修。Cloud原cursor19 idle後只接下一件30分鐘金融SQL＋兩個native cases狹窄抽取，branchcodex/financial-history-native-extraction-oct12/base099，turn01a12ee3／cursor20 active。只抽unchanged approved金融SQL／最小native tests，不帶整PR364、default48planner/apply/authority/PCRcatalog、不DB/HTTP/crawl/VPS；缺atomic rollback依賴明示pending，完成後真獨立審查，再處理完整installer。活動中不重派／改ownedfiles。
+
+Main仍099、正式169、原容量差3.42GB／待答人類選擇保持；本輪未重測必敗heavy、重建Linux包／部署／migration／刪月內cache／重算343或重抓PTT2409。AUO未guardedimport，live來源／獨立origin與creator／Top20／完整文章與正式研究排程仍待完成。證據`.agent/reports/2026-10-12T15-08-publisher-reader-closure/`。
+
 ## 2026-10-12 13:55台灣時間：新reader獨立審查發現head復活錯序，已排定修補；金融最小分離同步盤點
 
 遠端main仍0997336d，PR374已正常合併終態，不重跑checks／merge／watch。既有Cloud前件cursor17 idle完成reader code64b71a91／deliveryc03265a8／tree251f7b6f；root真正核47raw、16source hash/blob並親跑52PASS／零fail/skip。Maker type/lint/build保留為其真實收據，不冒稱root新build或live資料。Draft PR單次GraphQL Forbidden未重試；本輪尚未新建PR或approval refs。

@@ -1,0 +1,10 @@
+{
+  "head": "3fb0b0f08a4611f39d487d7b33fd0d62ccadd56d",
+  "source_present_verified": 29,
+  "source_absence_verified": 15,
+  "raw_verified": 15,
+  "receipt_sha256": "da9e8a0e85a0663367134e5eae4c2bcd14c3ded0069c770a2810b3d6e327c843",
+  "production_read": false,
+  "production_apply": false,
+  "original_validation_error": "assumed single-ref source manifest; rejected absent main tail before completion. Corrected manifest per-entry commit/blob/absent fields; no runtime tests affected"
+}

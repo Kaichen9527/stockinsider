@@ -1,0 +1,23 @@
+{
+  "head": "bfc2f1d729177d7b5f3a48c660a5c67f61f766d8",
+  "tree": "5b066a233c9d192946fe9c57f430c40dc259c288",
+  "source_verified": 13,
+  "raw_verified": 30,
+  "maker_receipt_sha256": "fcc2b5021bba9771511f05718a37141da5ce8ff3ef4a169ac0da152f339dbed0",
+  "observed_at": "2026-10-12T06:54:21.920264+00:00",
+  "root_build": false,
+  "live_database": false,
+  "first_extraction_error": "wrong RadarTabs path; no tests executed; corrected to actual web/src/app/components/RadarTabs.tsx",
+  "dependency_reuse": "existing exact-lock modules read-only symlink for focused semantic tests only; no build or installation",
+  "root_semantic_result": {
+    "tests": 60,
+    "pass": 60,
+    "fail": 0,
+    "skip": 0
+  },
+  "additional_ordinary_attempts": {
+    "first": "88PASS/1FAIL due omitted unchanged ptt-mention-provenance.ts in incomplete local fixture",
+    "second": "88PASS/1FAIL due omitted unchanged candidate-research-policy.ts in incomplete local fixture",
+    "disposition": "both raw outputs preserved; no further local full-command retry; use genuine148 GHA/maker separately, no source defect claimed"
+  }
+}
