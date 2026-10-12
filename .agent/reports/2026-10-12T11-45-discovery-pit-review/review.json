@@ -1,0 +1,41 @@
+{
+  "schema": "manual-independent-pit-review-v1",
+  "observedAt": "2026-10-12T03:45:48.928728+00:00",
+  "source": "d3ce3c65ecdf37e892d144cb99ee1b9fad7feaac",
+  "runtime": "48e82005a5b1f8f3549a1d8a575dc1c85f101f9b",
+  "codeTree": "fe69a9fc3d2fce9e5b433a47eb9ca38cd56e7c12",
+  "deliveryTree": "f27f690a00b36933ec121f234d8a272fd37baf48",
+  "independentReviewer": "/root/author_input_review_oct08",
+  "result": "REQUEST_CHANGES",
+  "P0": 0,
+  "P1": 0,
+  "P2": 1,
+  "previousTwoFindings": "basic closures independently verified; original ef5d RED remains",
+  "finding": {
+    "file": "web/src/lib/live-discovery-evidence-adapter.ts",
+    "line": 74,
+    "problem": "duplicate UUID classification precedes cutoff and duplicate rows participate in PTT positive/conflict keys. Future received row changes historical count and permutation results. Known repeated UUID may create distinct comment evidence.",
+    "independentObserved": {
+      "baseline": 1,
+      "futureSameKeyLast": 0,
+      "futureSameKeyFirst": 1,
+      "futureDifferentKeyLast": 2
+    },
+    "rootActualProbe": "cutoff-order-probe.stdout additionally reproduces knownUuidDifferentKey2; exit0 asserts presence of bug, NOT closure PASS."
+  },
+  "rootValidation": "33raw/10source bytes/hash/blob verified;65focused and53ordinary selection truePASS0skip/overlap not118unique. GenuineGitHub38198342633 new test53PASS. Ordinary product38198342636SUCCESS separate from protected.",
+  "protected": "38198340989 missing exact review refsFAIL; product/model code gatesSKIP, do not rerun same input or claim tool failure.",
+  "contractAudit": {
+    "commit": "5691b523efe19ec9e9aa3f2981f4d097a351fe7f",
+    "finding": "Existing reviewed publisher/revision authority reusable; evidenceRootId=canonicalClaimHash is NOT independent-news origin authority. No invented creator/root/raw FK mapping. PTT parent body not retained."
+  },
+  "nextWork": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "hostId": "durable",
+    "cursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:13",
+    "turnId": "01a12e35-562c-7576-a24d-2190c6593c1c",
+    "state": "active",
+    "scope": "One20min successor: validate all clocks before duplicate/ids; excluded future/invalid cannot influence known source/key; duplicate UUID cannot create new positive comment; RED/closure regression in both orders, no protected rerun/source enablement/DB/crawl/strategy/deploy."
+  },
+  "deployment": "main8bcd approved artifact ready; VPS169 not changed. Capacity prior gap3.41GB awaits existing human choice. No deletion or new capacity measurement this turn."
+}

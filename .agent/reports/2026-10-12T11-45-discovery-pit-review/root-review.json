@@ -1,0 +1,39 @@
+{
+  "observedAt": "2026-10-12T03:41:10.689213+00:00",
+  "exactHead": "d3ce3c65ecdf37e892d144cb99ee1b9fad7feaac",
+  "rawVerified": 33,
+  "sourceVerified": 10,
+  "receiptSha256": "8dd303033108b3ef1beeb95cd9034b3dcfd501f527798c437e25cfa1296b7a97",
+  "stages": {
+    "focused": {
+      "command": [
+        "/usr/bin/arch",
+        "-arm64",
+        "/usr/local/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/ptt-mention-provenance.test.ts",
+        "web/src/lib/candidate-research-policy.test.ts"
+      ],
+      "exitCode": 0
+    },
+    "ordinary-selection": {
+      "command": [
+        "/usr/bin/arch",
+        "-arm64",
+        "/usr/local/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts",
+        "scripts/candidate-discovery-admission-ui.test.mjs"
+      ],
+      "exitCode": 0
+    }
+  },
+  "scope": "Source and workflow selection focused reruns only;65and53overlap/not118unique;existing deps read-only,no install/build/database/crawl/protected approval"
+}

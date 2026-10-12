@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 11:45台灣時間：兩項原P2基本修復；獨立負例發現重複列繞過資料截止日
+
+PR374 code48e82005／delivery d3ce3c65已真修rowsComplete:false、URL綁定與同comment-key衝突整鍵失效。Root核對33raw／10source hash/blob，親跑65項語義與53項ordinary選檔皆PASS零skip（兩組重疊、不相加）；GitHub普通38198342633也真53PASS，新test已在CI執行，普通product38198342636SUCCESS。這些不能取代獨立與protected批准。原ef5d兩P2／58綠／TS2737與新增18PASS6FAIL RED均保留。
+
+獨立複審再實際重現1項P2：duplicate UUID判斷早於cutoff，後續duplicate又參與PTT計數，received晚1µs的同UUID可將歷史作者1變0，反序卻1；若換comment index更變2。Root另親跑exact d3ce純資料probe確認上述四值，並確認合法同UUID不同key也變2。probe exit0代表成功重現錯誤，絕非closure PASS。沒有放寬任何point-in-time要求，也不假設unsupported就可接受錯誤audit。
+
+Cloud已完成只讀authority盤點5691b523：既有v3 revision／reviewed publisher可沿用，但canonicalClaimHash／URL／raw FK不能當新聞獨立根源或跨平台creator；PTT原parent body仍未留存。不是新來源啟用。其前件idle後只接一件20分鐘PIT／UUID修補及新反序負例，turn01a12e35／cursor13 active；先所有clock合法且可知，再去重／衝突，窗口外列不污染ids或comment key，重複UUID不得建立第二正向comment證據。Root不重疊source修改，修補後再真獨立審查。
+
+Protected38198340989因缺exact refs FAIL、code/model SKIP，不是舊CLI問題，未對相同輸入重跑。PR374仍draft／不批准不merge。main8bcd與已驗證artifact不變，正式VPS仍169；容量待人類前次選擇，月內Docker不刪，本輪不重測、不重建／重送343全量或PTT2409。新證據`.agent/reports/2026-10-12T11-45-discovery-pit-review/`。
+
 ## 2026-10-12 10:49台灣時間：來源audit已有真實58項驗證；獨立審查攔下兩項完整性錯誤
 
 Cloud來源adapter完成code943cf179／delivery ef5d4db2，root核對31raw及13source的bytes/hash/blob，親跑同一58項全PASS／零skip；VM types/lint/build證據如實保留。Root已成功建立並附上[draft PR374](https://github.com/Kaichen9527/stockinsider/pull/374)，原VM GraphQL Forbidden不重試。這份增量只提供真實legacy mention audit，尚無verified creator/news-root/withdrawal或PTT parent body，所以不是live准入、Top20或研究排程完成；RadarTabs仍unsupported。

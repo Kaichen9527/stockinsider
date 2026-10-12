@@ -1,0 +1,12 @@
+{
+  "subject": "d3ce3c65ecdf37e892d144cb99ee1b9fad7feaac",
+  "result": "REQUEST_CHANGES_REPRODUCED",
+  "values": {
+    "baseline": 1,
+    "futureSameKeyLast": 0,
+    "futureSameKeyFirst": 1,
+    "futureDifferentKeyLast": 2,
+    "knownUuidDifferentKey": 2
+  },
+  "notClosurePass": true
+}
