@@ -1,0 +1,11 @@
+{
+  "path": "/workspace/cloud-live-discovery-adapter-oct12/web/.next",
+  "beforeDiskAvailableBytes": 8897933312,
+  "savedOriginalManifestSha256": "b9563e676caf2d5024dc3e1388248552ef49738881355478b98b82b2062fbfbb",
+  "savedOriginalManifestPath": ".agent/reports/2026-10-12T01-33-live-discovery-evidence-adapter-linux/compiled-server-manifest.json",
+  "savedOriginalBuildId": "dUEveLejp_mbcF0v4Eq5K",
+  "stopCheck": "no active non-zombie Node/npm/PostgreSQL/chrome from previous test/build observed",
+  "classification": "own rebuildable Next output; original inputs and all unique evidence preserved",
+  "at": "2026-10-12T03:00:14.490993+00:00",
+  "afterDiskAvailableBytes": 9208102912
+}

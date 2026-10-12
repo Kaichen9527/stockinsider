@@ -1,0 +1,14 @@
+{
+  "activeOwnedHeavyProcesses": [],
+  "stopCheck": "after validation exited, non-zombie Node/npm/Postgres/chrome inventory empty",
+  "deletedPaths": [
+    "prior stopped rebuildable own web/.next; original d3ce artifact manifest preserved; detailed owned-next-cleanup.json"
+  ],
+  "uniqueEvidenceRemoved": false,
+  "freeBytes": {
+    "/workspace": 8897110016,
+    "/tmp": 16959451136
+  },
+  "sourceStatus": "",
+  "at": "2026-10-12T03:55:42.927856+00:00"
+}

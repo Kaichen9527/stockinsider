@@ -1,0 +1,16 @@
+{
+  "activeOwnedHeavyServicesAfterRun": [],
+  "method": "post-run ps non-zombie Node/npm/PostgreSQL/chrome inventory returned no rows",
+  "deletedPaths": [],
+  "noDeletionReason": "8GiB reserve maintained; preserve own RED/unique evidence",
+  "availableDiskBytes": {
+    "/workspace": 8921784320,
+    "/tmp": 16960598016
+  },
+  "dotenvInventory": {
+    "root": [
+      ".env.example"
+    ],
+    "web": []
+  }
+}

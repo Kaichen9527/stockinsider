@@ -1,0 +1,308 @@
+{
+  "schema": "bounded-manual-engineering-evidence-v1",
+  "base": "8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14",
+  "codeHead": "943cf179dbae6a85e250be0183feb7f708d5e058",
+  "codeTree": "024da72ce55ab2c15ea1ff6f7e76ff1101e8436c",
+  "webTree": "a3791c2e0aab0a30c7b671a09fef3e4087c21396",
+  "branch": "codex/live-discovery-evidence-adapter-oct12",
+  "ownership": [
+    "web/src/lib/live-discovery-evidence-adapter.ts",
+    "web/src/lib/live-discovery-evidence-adapter.test.ts",
+    "web/src/lib/candidate-research.ts",
+    "web/src/lib/types.ts",
+    "docs/operations/2026-10-12/live-discovery-evidence-adapter-handoff.md"
+  ],
+  "validation": {
+    "focused": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/ptt-mention-provenance.test.ts",
+        "web/src/lib/candidate-research-policy.test.ts"
+      ],
+      "startAt": "2026-10-12T01:46:52.502476+00:00",
+      "durationSeconds": 0.8373597810277715,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 153034752,
+      "minimumFreeBytes": {
+        "/workspace": 9231974400,
+        "/tmp": 16977129472
+      }
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startAt": "2026-10-12T01:46:53.340158+00:00",
+      "durationSeconds": 9.385826462996192,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 925831168,
+      "minimumFreeBytes": {
+        "/workspace": 9231974400,
+        "/tmp": 16977108992
+      }
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startAt": "2026-10-12T01:47:02.726357+00:00",
+      "durationSeconds": 20.894496758992318,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 1080422400,
+      "minimumFreeBytes": {
+        "/workspace": 9231974400,
+        "/tmp": 16977084416
+      }
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startAt": "2026-10-12T01:47:23.621151+00:00",
+      "durationSeconds": 32.77778268704424,
+      "exitCode": 0,
+      "stopReason": null,
+      "peakProcessGroupRssBytes": 1806516224,
+      "minimumFreeBytes": {
+        "/workspace": 8925429760,
+        "/tmp": 16960954368
+      }
+    }
+  },
+  "counts": {
+    "tests": 58,
+    "pass": 58,
+    "fail": 0,
+    "skipped": 0
+  },
+  "buildIdentity": {
+    "BUILD_ID": "dUEveLejp_mbcF0v4Eq5K",
+    "serverFileCount": 1796,
+    "manifestSha256": "b9563e676caf2d5024dc3e1388248552ef49738881355478b98b82b2062fbfbb",
+    "sourceProvenance": "build started on8bcd working tree containing exact943 code bytes; same files were committed during build, with no content changes; artifact bound to943 web tree by complete file manifest. Not claiming clean Git HEAD at build start."
+  },
+  "versions": {
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "webDeps": "local hardlink directory reused from same exact main lock; no installs/lock edits"
+  },
+  "originalRed": {
+    "typecheck": "TS2737 BigInt literal at ES2017; preserved before-bigint-fix files, replaced with BigInt(1000), no tsconfig edit",
+    "firstFocused": "54/54 initial subset before created_at regression; final related selection58/58, not summed"
+  },
+  "scopeLimitations": [
+    "data-backed legacy source adapter and existing server audit projection only",
+    "legacy identity/root/withdrawal and PTT parent-body gaps forcecomplete:false/unsupported",
+    "RadarTabs still admissionForLegacyCard; no completed live admission/Top20/scheduler",
+    "no actualDB/HTTP/crawl/343cohort/PTT2409 replay/model/productionVPS",
+    "sourceCutoff and DB received clocks separate; mutable legacy rows are not historical immutable snapshots",
+    "manual30min engineering task not product role/budget evidence"
+  ],
+  "lint": {
+    "exit": 0,
+    "errors": 0,
+    "existingWarnings": 33
+  },
+  "resources": {
+    "goalBytes": 8589934592,
+    "maxSampledProcessGroupRssBytes": 1806516224,
+    "minWorkspaceFreeBytes": 8925429760,
+    "minTmpFreeBytes": 16960954368,
+    "measurement": "process group /proc RSS and filesystem available bytes sampled0.25s; no other active heavy work observed"
+  },
+  "cleanup": {
+    "activeOwnedHeavyServicesAfterRun": [],
+    "method": "post-run ps non-zombie Node/npm/PostgreSQL/chrome inventory returned no rows",
+    "deletedPaths": [],
+    "noDeletionReason": "8GiB reserve maintained; preserve own RED/unique evidence",
+    "availableDiskBytes": {
+      "/workspace": 8921784320,
+      "/tmp": 16960598016
+    },
+    "dotenvInventory": {
+      "root": [
+        ".env.example"
+      ],
+      "web": []
+    }
+  },
+  "rawManifest": [
+    {
+      "path": "before-bigint-fix-focused.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "before-bigint-fix-focused.final.stdout",
+      "bytes": 14076,
+      "sha256": "7324a1d2c8fa4d78e40dfbe947f1ec357b734e92934ffedafcdfa9072d644a3f"
+    },
+    {
+      "path": "before-bigint-fix-focused.resources.jsonl",
+      "bytes": 334,
+      "sha256": "f42ce5d61c1c8ff0c102ec0364f917dbf44882084b1a0909ca37af650642ffd7"
+    },
+    {
+      "path": "before-bigint-fix-focused.result.json",
+      "bytes": 581,
+      "sha256": "85016ff94860a310190f20f4b7f06656f7d60f40ec87786844f1a196c127c19d"
+    },
+    {
+      "path": "before-bigint-fix-focused.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "before-bigint-fix-focused.stdout",
+      "bytes": 12597,
+      "sha256": "e41bb2b51f49d5abd4d5a3b4b103466c80ee2078d8a07bfef608411405b45a78"
+    },
+    {
+      "path": "before-bigint-fix-typecheck.final.stderr",
+      "bytes": 211,
+      "sha256": "99b113a5e4dfe492a77ca88793b7a346c063ec39bd231523011e7c59c3528547"
+    },
+    {
+      "path": "before-bigint-fix-typecheck.final.stdout",
+      "bytes": 321,
+      "sha256": "19f46476109a6e3ebd3aa0681cb41ec0a6239446b33493ae5764fc48462dcfb4"
+    },
+    {
+      "path": "before-bigint-fix-typecheck.resources.jsonl",
+      "bytes": 5938,
+      "sha256": "994e9ff55a0ccc74bdc4bc1002d514830391d921cac3e563cf05f2679ee3f341"
+    },
+    {
+      "path": "before-bigint-fix-typecheck.result.json",
+      "bytes": 342,
+      "sha256": "f8564f9422b3c12fe1d322227118d851d3bfe36c0e206eb44efbb87b6666e4c9"
+    },
+    {
+      "path": "build.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build.final.stdout",
+      "bytes": 5556,
+      "sha256": "f3e7257dac9f2b2b20e4ef0deb4d3d9190d8de5023fc82762672543dbc7d3945"
+    },
+    {
+      "path": "build.resources.jsonl",
+      "bytes": 13123,
+      "sha256": "1fafe32d0e582b484f3904a9ed872021cf714560580de8b1cb6bcd2b64d50ca4"
+    },
+    {
+      "path": "build.result.json",
+      "bytes": 337,
+      "sha256": "32886f935d43dc2b0581c71c0cfc278ada19f3334ec8654f9f297b3459855547"
+    },
+    {
+      "path": "cleanup.json",
+      "bytes": 411,
+      "sha256": "f8f541a085be406ba0e83c3918737300f7fc274d37894bea6ce29e7b926f32ef"
+    },
+    {
+      "path": "compiled-server-manifest.json",
+      "bytes": 333261,
+      "sha256": "b9563e676caf2d5024dc3e1388248552ef49738881355478b98b82b2062fbfbb"
+    },
+    {
+      "path": "focused.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "focused.final.stdout",
+      "bytes": 14076,
+      "sha256": "11a7945f22ab8dc0c1b141e49cc5b8b2da98af5749802fb0509496ceb610bd43"
+    },
+    {
+      "path": "focused.resources.jsonl",
+      "bytes": 334,
+      "sha256": "3ec0d82a1121e8e6f47a228eabf6de680e1c724814510f77a359c85a2c96c1dd"
+    },
+    {
+      "path": "focused.result.json",
+      "bytes": 582,
+      "sha256": "737268388100126a88697d83b357c81fd4c4d109e06e8d448029a08c1c7d4795"
+    },
+    {
+      "path": "lint.final.stderr",
+      "bytes": 164,
+      "sha256": "4c4f6b3ef6cdd3d6e6dac94de8384200bf8f9f1665a0bfbd48e69aad1119c2bf"
+    },
+    {
+      "path": "lint.final.stdout",
+      "bytes": 4582,
+      "sha256": "4f985c31b4b292aa0959f2c432c06a2a51b79cfc368d43bae7a8916247c86ef7"
+    },
+    {
+      "path": "lint.resources.jsonl",
+      "bytes": 8409,
+      "sha256": "6215af85ee6fa0029aa379ee702842fd987610b70295b037b0ae71949df2b946"
+    },
+    {
+      "path": "lint.result.json",
+      "bytes": 337,
+      "sha256": "9077901c12d03134f9cdc6bfcfcc5e0791ec9f3f1242781a9f676ce2f0981f07"
+    },
+    {
+      "path": "source-manifest.json",
+      "bytes": 2893,
+      "sha256": "2114ca991990dcab2b8e4b57b028e0b5ff3a2740cf5990e555771bbb16893512"
+    },
+    {
+      "path": "stages.py",
+      "bytes": 2469,
+      "sha256": "1b2db318b33f1ef6252cdc4c14fd945a20ad0abb9490e8733a2445f26e79f323"
+    },
+    {
+      "path": "test-inventory.json",
+      "bytes": 4697,
+      "sha256": "a840940ee0a24792e1434b0073774c02ce1a99d27d45840b908ee6d5dfd2e896"
+    },
+    {
+      "path": "typecheck.final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "typecheck.final.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "typecheck.resources.jsonl",
+      "bytes": 3795,
+      "sha256": "eae48e464b9179d0664048d49259a3b552f48b289a0cd2b26126df294064c831"
+    },
+    {
+      "path": "typecheck.result.json",
+      "bytes": 340,
+      "sha256": "b5be890f106227ee2fc21fcb770d1db756a37c29250a8e8da573b45b7b6c806b"
+    }
+  ],
+  "independentReview": "pending; maker only",
+  "createdAt": "2026-10-12T01:50:16.931446+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "path": "/workspace/cloud-live-discovery-adapter-oct12/web/.next",
+  "savedManifest": ".agent/reports/2026-10-12T02-53-discovery-adapter-p2-linux/compiled-server-manifest.json",
+  "manifestSha256": "0853c8b32c8824288890883e16c1b22df1fef2babbea1f6ad80ee48c24492429",
+  "oldBuildId": "lsCvyOJ9pk3g2kmLVQVEB",
+  "beforeFree": 8897273856,
+  "stopCheck": "all own Node/npm/PG/chrome stopped; old output rebuildable; original RED/receipts/source preserved",
+  "at": "2026-10-12T03:51:32.527159+00:00",
+  "afterFree": 9207246848
+}

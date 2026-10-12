@@ -1,0 +1,9 @@
+{
+  "onlyChange": "one appended test argument",
+  "oldBytes": 1375,
+  "oldSha256": "7fc1616cc8024faa977629331d15cff1790219416dfea117914c57c8a76a331c",
+  "newBytes": 1437,
+  "newSha256": "7a918718cf162488b7233d8c8fce6c19d85a974715b529bacd764d4e8efc9537",
+  "allOtherWorkflowBytesUnchanged": true,
+  "permissionsPinsTimeoutInstallUnchanged": true
+}
