@@ -1,0 +1,8 @@
+{
+  "kind": "engineering probe error, not product bound",
+  "toolPythonAssertion": "expected 10 columns incorrectly; actual SQL and pg_catalog have 9",
+  "consequence": "expected JSON refresh aborted; subsequent native-complete retained old expected JSON without new columnAcl fields, so baseline rejected",
+  "fix": "refresh expected JSON from actual captured 9-column catalog; no product predicate or SQL relaxed",
+  "originalNativeRedPreserved": "native-complete.stdout",
+  "initialVerifierSource": "6fec2fc54e9f35b02a65c7f6d6c6b1d298b292f6"
+}

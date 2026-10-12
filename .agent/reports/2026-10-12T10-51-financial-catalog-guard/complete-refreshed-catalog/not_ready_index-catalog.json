@@ -1,0 +1,358 @@
+{
+  "indexes": [
+    {
+      "live": true,
+      "name": "opportunity_financial_facts_v3_history_page_v1",
+      "owner": "opportunity_v3_rpc_owner",
+      "ready": true,
+      "valid": true,
+      "method": "btree",
+      "unique": false,
+      "primary": false,
+      "keyCount": 7,
+      "definition": "CREATE INDEX opportunity_financial_facts_v3_history_page_v1 ON public.opportunity_financial_facts_v3 USING btree (stock_id, fact_key, duration_kind, estimate_kind, estimate_horizon, recorded_at, fact_id)",
+      "columnCount": 7
+    },
+    {
+      "live": true,
+      "name": "opportunity_financial_facts_v3_period_revisions_v1",
+      "owner": "opportunity_v3_rpc_owner",
+      "ready": false,
+      "valid": true,
+      "method": "btree",
+      "unique": false,
+      "primary": false,
+      "keyCount": 7,
+      "definition": "CREATE INDEX opportunity_financial_facts_v3_period_revisions_v1 ON public.opportunity_financial_facts_v3 USING btree (stock_id, fact_key, duration_kind, estimate_kind, estimate_horizon, period_end, period_start)",
+      "columnCount": 7
+    }
+  ],
+  "functions": [
+    {
+      "acl": [
+        {
+          "grantee": "opportunity_v3_rpc_owner",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "name": "append_financial_fact_pre_history_v1",
+      "owner": "opportunity_v3_rpc_owner",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(fact_id uuid, recorded_at timestamp with time zone)",
+      "strict": false,
+      "language": "plpgsql",
+      "arguments": "input financial_fact_input_v3, caller_principal uuid",
+      "bodySha256": "be2f4bb28940b6f0d0c6a48e365a6eda3144ca2f4c91746402c61c514ff418b1",
+      "volatility": "v",
+      "securityDefiner": true
+    },
+    {
+      "acl": [
+        {
+          "grantee": "opportunity_v3_rpc_owner",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "service_role",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "name": "append_financial_fact_v3",
+      "owner": "opportunity_v3_rpc_owner",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(fact_id uuid, recorded_at timestamp with time zone)",
+      "strict": false,
+      "language": "plpgsql",
+      "arguments": "input financial_fact_input_v3, caller_principal uuid",
+      "bodySha256": "ee5843356767ef40eb9ac39eab973bbb6dda86eb3c24c9679d54c9badddab391",
+      "volatility": "v",
+      "securityDefiner": true
+    },
+    {
+      "acl": [
+        {
+          "grantee": "opportunity_v3_rpc_owner",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "name": "prepare_opportunity_financial_fact_series_v3",
+      "owner": "opportunity_v3_rpc_owner",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "strict": false,
+      "language": "plpgsql",
+      "arguments": "",
+      "bodySha256": "557f6cc65f4f67ad0b31a8b7993a8d7a82f00f07e2c17c0c53067dc3d4d0ffd3",
+      "volatility": "v",
+      "securityDefiner": true
+    },
+    {
+      "acl": [
+        {
+          "grantee": "opportunity_v3_rpc_owner",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "service_role",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "name": "read_financial_history_page_v1",
+      "owner": "opportunity_v3_rpc_owner",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "jsonb",
+      "strict": false,
+      "language": "plpgsql",
+      "arguments": "p_stock uuid, p_fact_key financial_fact_key_v3, p_duration financial_duration_kind_v3, p_kind financial_estimate_kind_v3, p_horizon financial_estimate_horizon_v3, p_period_from date, p_period_to date, p_cutoff timestamp with time zone, p_after uuid, p_limit integer, p_caller uuid",
+      "bodySha256": "0a7367125481f12eb46735568f5c161d752f5fd8f5c2351399090ec1b9e93551",
+      "volatility": "v",
+      "securityDefiner": true
+    }
+  ],
+  "observation": {
+    "acl": [
+      {
+        "grantee": "opportunity_v3_rpc_owner",
+        "grantable": false,
+        "privilege": "DELETE"
+      },
+      {
+        "grantee": "opportunity_v3_rpc_owner",
+        "grantable": false,
+        "privilege": "INSERT"
+      },
+      {
+        "grantee": "opportunity_v3_rpc_owner",
+        "grantable": false,
+        "privilege": "MAINTAIN"
+      },
+      {
+        "grantee": "opportunity_v3_rpc_owner",
+        "grantable": false,
+        "privilege": "REFERENCES"
+      },
+      {
+        "grantee": "opportunity_v3_rpc_owner",
+        "grantable": false,
+        "privilege": "SELECT"
+      },
+      {
+        "grantee": "opportunity_v3_rpc_owner",
+        "grantable": false,
+        "privilege": "TRIGGER"
+      },
+      {
+        "grantee": "opportunity_v3_rpc_owner",
+        "grantable": false,
+        "privilege": "TRUNCATE"
+      },
+      {
+        "grantee": "opportunity_v3_rpc_owner",
+        "grantable": false,
+        "privilege": "UPDATE"
+      },
+      {
+        "grantee": "service_role",
+        "grantable": false,
+        "privilege": "SELECT"
+      }
+    ],
+    "rls": true,
+    "kind": "r",
+    "owner": "opportunity_v3_rpc_owner",
+    "columns": [
+      {
+        "name": "observation_id",
+        "type": "uuid",
+        "number": 1,
+        "default": "extensions.gen_random_uuid()",
+        "notNull": true,
+        "identity": "",
+        "columnAcl": null,
+        "generated": "",
+        "typeSchema": "pg_catalog",
+        "typeModifier": -1
+      },
+      {
+        "name": "fact_id",
+        "type": "uuid",
+        "number": 2,
+        "default": null,
+        "notNull": true,
+        "identity": "",
+        "columnAcl": null,
+        "generated": "",
+        "typeSchema": "pg_catalog",
+        "typeModifier": -1
+      },
+      {
+        "name": "input_hash",
+        "type": "text",
+        "number": 3,
+        "default": null,
+        "notNull": true,
+        "identity": "",
+        "columnAcl": null,
+        "generated": "",
+        "typeSchema": "pg_catalog",
+        "typeModifier": -1
+      },
+      {
+        "name": "observation_kind",
+        "type": "text",
+        "number": 4,
+        "default": null,
+        "notNull": true,
+        "identity": "",
+        "columnAcl": null,
+        "generated": "",
+        "typeSchema": "pg_catalog",
+        "typeModifier": -1
+      },
+      {
+        "name": "caller_principal_id",
+        "type": "uuid",
+        "number": 5,
+        "default": null,
+        "notNull": false,
+        "identity": "",
+        "columnAcl": null,
+        "generated": "",
+        "typeSchema": "pg_catalog",
+        "typeModifier": -1
+      },
+      {
+        "name": "filing_published_at",
+        "type": "timestamptz",
+        "number": 6,
+        "default": null,
+        "notNull": true,
+        "identity": "",
+        "columnAcl": null,
+        "generated": "",
+        "typeSchema": "pg_catalog",
+        "typeModifier": -1
+      },
+      {
+        "name": "source_timestamp",
+        "type": "timestamptz",
+        "number": 7,
+        "default": null,
+        "notNull": true,
+        "identity": "",
+        "columnAcl": null,
+        "generated": "",
+        "typeSchema": "pg_catalog",
+        "typeModifier": -1
+      },
+      {
+        "name": "collected_at",
+        "type": "timestamptz",
+        "number": 8,
+        "default": null,
+        "notNull": true,
+        "identity": "",
+        "columnAcl": null,
+        "generated": "",
+        "typeSchema": "pg_catalog",
+        "typeModifier": -1
+      },
+      {
+        "name": "recorded_at",
+        "type": "timestamptz",
+        "number": 9,
+        "default": "clock_timestamp()",
+        "notNull": true,
+        "identity": "",
+        "columnAcl": null,
+        "generated": "",
+        "typeSchema": "pg_catalog",
+        "typeModifier": -1
+      }
+    ],
+    "forceRls": false,
+    "policies": [],
+    "triggers": [
+      {
+        "name": "opportunity_financial_observations_v1_immutable",
+        "type": 27,
+        "enabled": "O",
+        "function": "legacy_correctness_immutable_v3_11()",
+        "internal": false,
+        "definition": "CREATE TRIGGER opportunity_financial_observations_v1_immutable BEFORE DELETE OR UPDATE ON public.opportunity_financial_observations_v1 FOR EACH ROW EXECUTE FUNCTION legacy_correctness_immutable_v3_11()"
+      }
+    ],
+    "constraints": [
+      {
+        "name": "financial_observation_identity_v1",
+        "type": "u",
+        "deferred": false,
+        "validated": true,
+        "deferrable": false,
+        "definition": "UNIQUE (fact_id, input_hash)"
+      },
+      {
+        "name": "opportunity_financial_observations_v1_check",
+        "type": "c",
+        "deferred": false,
+        "validated": true,
+        "deferrable": false,
+        "definition": "CHECK (((filing_published_at <= source_timestamp) AND (source_timestamp <= collected_at) AND (collected_at <= recorded_at)))"
+      },
+      {
+        "name": "opportunity_financial_observations_v1_check1",
+        "type": "c",
+        "deferred": false,
+        "validated": true,
+        "deferrable": false,
+        "definition": "CHECK ((((observation_kind = 'legacy_fact'::text) AND (caller_principal_id IS NULL)) OR ((observation_kind = 'rpc_observation'::text) AND (caller_principal_id IS NOT NULL))))"
+      },
+      {
+        "name": "opportunity_financial_observations_v1_fact_id_fkey",
+        "type": "f",
+        "deferred": false,
+        "validated": true,
+        "deferrable": false,
+        "definition": "FOREIGN KEY (fact_id) REFERENCES opportunity_financial_facts_v3(fact_id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "opportunity_financial_observations_v1_input_hash_check",
+        "type": "c",
+        "deferred": false,
+        "validated": true,
+        "deferrable": false,
+        "definition": "CHECK ((input_hash ~ '^[0-9a-f]{64}$'::text))"
+      },
+      {
+        "name": "opportunity_financial_observations_v1_observation_kind_check",
+        "type": "c",
+        "deferred": false,
+        "validated": true,
+        "deferrable": false,
+        "definition": "CHECK ((observation_kind = ANY (ARRAY['legacy_fact'::text, 'rpc_observation'::text])))"
+      },
+      {
+        "name": "opportunity_financial_observations_v1_pkey",
+        "type": "p",
+        "deferred": false,
+        "validated": true,
+        "deferrable": false,
+        "definition": "PRIMARY KEY (observation_id)"
+      }
+    ]
+  }
+}

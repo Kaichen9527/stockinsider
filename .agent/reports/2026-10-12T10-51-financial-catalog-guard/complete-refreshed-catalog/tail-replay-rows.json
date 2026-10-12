@@ -1,0 +1,37 @@
+{
+  "facts": [
+    {
+      "unit": "TWD",
+      "value": 100,
+      "fact_id": "41af8f65-4f62-47c2-beea-fca3e6191e4b",
+      "fact_key": "net_asset_value",
+      "provider": "twse",
+      "stock_id": "71300000-0000-4000-8000-000000000083",
+      "period_end": "2025-01-01",
+      "source_ref": "twse-openapi:synthetic-atomic-rollback",
+      "recorded_at": "2026-10-12T11:02:28.903799+00:00",
+      "collected_at": "2025-01-02T01:00:00+00:00",
+      "period_start": null,
+      "duration_kind": "instant",
+      "estimate_kind": "reported",
+      "authority_tier": "official_filing",
+      "estimate_horizon": "reported_period",
+      "source_timestamp": "2025-01-02T00:00:00+00:00",
+      "filing_published_at": "2025-01-02T00:00:00+00:00",
+      "filing_restatement_id": null
+    }
+  ],
+  "observations": [
+    {
+      "fact_id": "41af8f65-4f62-47c2-beea-fca3e6191e4b",
+      "input_hash": "25869cf924743acf8533e032b8aef98c586ef2019b886ef9763698ce32614d2c",
+      "recorded_at": "2026-10-12T11:02:28.903799+00:00",
+      "collected_at": "2025-01-02T01:00:00+00:00",
+      "observation_id": "cb72e8de-f479-48bd-86fc-c06217b32d41",
+      "observation_kind": "legacy_fact",
+      "source_timestamp": "2025-01-02T00:00:00+00:00",
+      "caller_principal_id": null,
+      "filing_published_at": "2025-01-02T00:00:00+00:00"
+    }
+  ]
+}

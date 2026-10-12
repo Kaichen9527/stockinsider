@@ -1,0 +1,10 @@
+{
+  "node": "22.14.0",
+  "pg_module": "8.18.0",
+  "native_pg": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1)",
+  "next": "16.3.4",
+  "osUser": "agent",
+  "proxyCa": "inherited unchanged; no secret values read/exported",
+  "newDependencies": false,
+  "noConfigurationChange": true
+}

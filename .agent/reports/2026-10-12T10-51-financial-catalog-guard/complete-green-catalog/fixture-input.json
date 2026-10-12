@@ -1,0 +1,7 @@
+{
+  "source": "scripts/opportunity-v3/migration-contract.test.mjs",
+  "sourceSha256": "83953d8acc313b2b109b8ba6d5f4d52d1473a2fcd7223805d3183e8034fd108b",
+  "generatedSha256": "67f9d3e11302d86236aa1e13ba651e50dab8456fb4691124db0a4660893996d1",
+  "onlyFixtureImportRebased": true,
+  "profile": "unchanged synthetic legacy prerequisites + genuine original migration chain; not VPS full49"
+}

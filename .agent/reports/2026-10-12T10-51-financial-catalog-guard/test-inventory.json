@@ -1,0 +1,460 @@
+{
+  "pure-source-final": {
+    "counts": {
+      "tests": 22,
+      "pass": 21,
+      "fail": 1,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "transaction normalization preserves quoted PL/pgSQL and rejects embedded control",
+      "every explicitly reviewed migration is compatible with one atomic transaction",
+      "atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers",
+      "atomic scanner recognizes CR line endings rather than silently dropping real control",
+      "atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control",
+      "atomic scanner rejects control verbs and nontransactional DDL outside lexical islands",
+      "atomic scanner normalizes every unchanged base migration without claiming installer integration",
+      "atomic scanner rejects additional documented commands that cannot run in a transaction",
+      "default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49",
+      "omitted, wrong bytes/hash, reversed or reordered base/tail fail closed",
+      "extension flag alone is not review authority: exact hash must be in hash-bound review once",
+      "base-only cannot replay installed successor and partial residue cannot replay even with tail",
+      "missing/ambiguous state and any failed postcondition reject",
+      "busy guard performs no BEGIN/mutation and closes owned session",
+      "installed successor guard runs under lock+BEGIN before any base mutation",
+      "one shared transaction strips inner controls and commits after verification",
+      "forced failure and disconnect attempt rollback, do not commit, retain original error",
+      "postcondition failure rolls back already issued SQL and session failure preserves the primary failure",
+      "unbound extension cannot gain CLI authority and apply uses guarded exact review before connection",
+      "installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone",
+      "exact observed catalog rejects every function binding, schema/index/trigger field drift",
+      "catalog private predecessor full body originates in the unchanged recollection migration"
+    ],
+    "raw": {
+      "path": "pure-source-final.stdout",
+      "bytes": 6007,
+      "sha256": "f06f45a8e063892281517e9c8bf12f4b69341020f9bee63005d1238ba15bdcda"
+    }
+  },
+  "native-red": {
+    "counts": {
+      "tests": 5,
+      "pass": 1,
+      "fail": 4,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "financial catalog legal successor applies twice and captures actual catalog",
+      "financial catalog rejects search_path drift",
+      "financial catalog rejects missing_history_index drift",
+      "financial catalog rejects private_body drift",
+      "financial catalog rejects private_owner drift"
+    ],
+    "raw": {
+      "path": "native-red.stdout",
+      "bytes": 4718,
+      "sha256": "52fe13e6df9e2f89814080b336db9a9ea4507269d6dec8be5b29d5f6fc3175ee"
+    }
+  },
+  "native-green": {
+    "counts": {
+      "tests": 31,
+      "pass": 31,
+      "fail": 0,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "financial catalog legal successor applies twice and captures actual catalog",
+      "financial catalog rejects search_path drift",
+      "financial catalog rejects missing_history_index drift",
+      "financial catalog rejects private_body drift",
+      "financial catalog rejects private_owner drift",
+      "financial catalog rejects missing_period_index drift",
+      "financial catalog rejects missing_both_indexes drift",
+      "financial catalog rejects wrong_index_definition drift",
+      "financial catalog rejects column_nullability drift",
+      "financial catalog rejects column_type drift",
+      "financial catalog rejects missing_column drift",
+      "financial catalog rejects check_constraint drift",
+      "financial catalog rejects unique_constraint drift",
+      "financial catalog rejects foreign_key drift",
+      "financial catalog rejects rls drift",
+      "financial catalog rejects table_owner drift",
+      "financial catalog rejects table_acl drift",
+      "financial catalog rejects trigger_type drift",
+      "financial catalog rejects trigger_disabled drift",
+      "financial catalog rejects config_0 drift",
+      "financial catalog rejects invoker_0 drift",
+      "financial catalog rejects owner_0 drift",
+      "financial catalog rejects config_1 drift",
+      "financial catalog rejects invoker_1 drift",
+      "financial catalog rejects owner_1 drift",
+      "financial catalog rejects config_2 drift",
+      "financial catalog rejects invoker_2 drift",
+      "financial catalog rejects owner_2 drift",
+      "financial catalog rejects config_3 drift",
+      "financial catalog rejects invoker_3 drift",
+      "financial catalog rejects owner_3 drift"
+    ],
+    "raw": {
+      "path": "native-green.stdout",
+      "bytes": 5303,
+      "sha256": "1930577ee0ee7776e22da00d47bccc4b56725f2fe74c37d03e06458e7343c5a1"
+    }
+  },
+  "trigger-dependency-capture": {
+    "counts": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "financial catalog legal successor applies twice and captures actual catalog"
+    ],
+    "raw": {
+      "path": "trigger-dependency-capture.stdout",
+      "bytes": 946,
+      "sha256": "2a5840da06a056d4a456ed3619dfcdc860345d0b5e71f8272c253248d1e05cc3"
+    }
+  },
+  "native-complete": {
+    "counts": {
+      "tests": 34,
+      "pass": 0,
+      "fail": 34,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "financial catalog legal successor applies twice and captures actual catalog",
+      "financial catalog rejects search_path drift",
+      "financial catalog rejects missing_history_index drift",
+      "financial catalog rejects private_body drift",
+      "financial catalog rejects private_owner drift",
+      "financial catalog rejects missing_period_index drift",
+      "financial catalog rejects missing_both_indexes drift",
+      "financial catalog rejects wrong_index_definition drift",
+      "financial catalog rejects column_nullability drift",
+      "financial catalog rejects column_type drift",
+      "financial catalog rejects missing_column drift",
+      "financial catalog rejects check_constraint drift",
+      "financial catalog rejects unique_constraint drift",
+      "financial catalog rejects foreign_key drift",
+      "financial catalog rejects rls drift",
+      "financial catalog rejects table_owner drift",
+      "financial catalog rejects column_acl drift",
+      "financial catalog rejects table_acl drift",
+      "financial catalog rejects trigger_type drift",
+      "financial catalog rejects invalid_index drift",
+      "financial catalog rejects not_ready_index drift",
+      "financial catalog rejects trigger_disabled drift",
+      "financial catalog rejects config_0 drift",
+      "financial catalog rejects invoker_0 drift",
+      "financial catalog rejects owner_0 drift",
+      "financial catalog rejects config_1 drift",
+      "financial catalog rejects invoker_1 drift",
+      "financial catalog rejects owner_1 drift",
+      "financial catalog rejects config_2 drift",
+      "financial catalog rejects invoker_2 drift",
+      "financial catalog rejects owner_2 drift",
+      "financial catalog rejects config_3 drift",
+      "financial catalog rejects invoker_3 drift",
+      "financial catalog rejects owner_3 drift"
+    ],
+    "raw": {
+      "path": "native-complete.stdout",
+      "bytes": 42320,
+      "sha256": "6b5d655e8a5c1199380ad28ac38299d5ae93bff0bc32cd6eb27b4ef04fe9c68e"
+    }
+  },
+  "native-source-final": {
+    "counts": {
+      "tests": 37,
+      "pass": 37,
+      "fail": 0,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "financial catalog legal successor applies twice and captures actual catalog",
+      "financial catalog rejects search_path drift",
+      "financial catalog rejects missing_history_index drift",
+      "financial catalog rejects private_body drift",
+      "financial catalog rejects private_owner drift",
+      "financial catalog rejects missing_period_index drift",
+      "financial catalog rejects missing_both_indexes drift",
+      "financial catalog rejects wrong_index_definition drift",
+      "financial catalog rejects column_nullability drift",
+      "financial catalog rejects column_type drift",
+      "financial catalog rejects missing_column drift",
+      "financial catalog rejects check_constraint drift",
+      "financial catalog rejects unique_constraint drift",
+      "financial catalog rejects foreign_key drift",
+      "financial catalog rejects rls drift",
+      "financial catalog rejects table_owner drift",
+      "financial catalog rejects column_acl drift",
+      "financial catalog rejects unexpected_overload drift",
+      "financial catalog rejects table_acl drift",
+      "financial catalog rejects trigger_type drift",
+      "financial catalog rejects invalid_index drift",
+      "financial catalog rejects not_ready_index drift",
+      "financial catalog rejects immutable_function_body drift",
+      "financial catalog rejects column_collation drift",
+      "financial catalog rejects trigger_disabled drift",
+      "financial catalog rejects config_0 drift",
+      "financial catalog rejects invoker_0 drift",
+      "financial catalog rejects owner_0 drift",
+      "financial catalog rejects config_1 drift",
+      "financial catalog rejects invoker_1 drift",
+      "financial catalog rejects owner_1 drift",
+      "financial catalog rejects config_2 drift",
+      "financial catalog rejects invoker_2 drift",
+      "financial catalog rejects owner_2 drift",
+      "financial catalog rejects config_3 drift",
+      "financial catalog rejects invoker_3 drift",
+      "financial catalog rejects owner_3 drift"
+    ],
+    "raw": {
+      "path": "native-source-final.stdout",
+      "bytes": 6227,
+      "sha256": "baf4e1fbcd47e474f5c7b1d4d918cc03090f0e2c15e61b97b6068552254cbd29"
+    }
+  },
+  "pure-invoker-corrected": {
+    "counts": {
+      "tests": 23,
+      "pass": 23,
+      "fail": 0,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "transaction normalization preserves quoted PL/pgSQL and rejects embedded control",
+      "every explicitly reviewed migration is compatible with one atomic transaction",
+      "atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers",
+      "atomic scanner recognizes CR line endings rather than silently dropping real control",
+      "atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control",
+      "atomic scanner rejects control verbs and nontransactional DDL outside lexical islands",
+      "atomic scanner normalizes every unchanged base migration without claiming installer integration",
+      "atomic scanner rejects additional documented commands that cannot run in a transaction",
+      "default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49",
+      "omitted, wrong bytes/hash, reversed or reordered base/tail fail closed",
+      "extension flag alone is not review authority: exact hash must be in hash-bound review once",
+      "base-only cannot replay installed successor and partial residue cannot replay even with tail",
+      "missing/ambiguous state and any failed postcondition reject",
+      "busy guard performs no BEGIN/mutation and closes owned session",
+      "installed successor guard runs under lock+BEGIN before any base mutation",
+      "one shared transaction strips inner controls and commits after verification",
+      "forced failure and disconnect attempt rollback, do not commit, retain original error",
+      "postcondition failure rolls back already issued SQL and session failure preserves the primary failure",
+      "unbound extension cannot gain CLI authority and apply uses guarded exact review before connection",
+      "installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone",
+      "exact observed catalog rejects every function binding, schema/index/trigger field drift",
+      "catalog private predecessor full body originates in the unchanged recollection migration",
+      "immutable trigger dependency body originates in unchanged base SQL and stays security invoker"
+    ],
+    "raw": {
+      "path": "pure-invoker-corrected.stdout",
+      "bytes": 5287,
+      "sha256": "b97c741a9102845e6697f26b8a6516ebdd85dc9499390cb59aab87cef7e20d4f"
+    }
+  },
+  "catalog-column-acl-capture": {
+    "counts": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "financial catalog legal successor applies twice and captures actual catalog"
+    ],
+    "raw": {
+      "path": "catalog-column-acl-capture.stdout",
+      "bytes": 947,
+      "sha256": "3c9f6189d68e5adfdabaedb1a953a7e94f1bc0ccfa2d1b2e1c311b60d855fc87"
+    }
+  },
+  "native-complete-refreshed": {
+    "counts": {
+      "tests": 34,
+      "pass": 34,
+      "fail": 0,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "financial catalog legal successor applies twice and captures actual catalog",
+      "financial catalog rejects search_path drift",
+      "financial catalog rejects missing_history_index drift",
+      "financial catalog rejects private_body drift",
+      "financial catalog rejects private_owner drift",
+      "financial catalog rejects missing_period_index drift",
+      "financial catalog rejects missing_both_indexes drift",
+      "financial catalog rejects wrong_index_definition drift",
+      "financial catalog rejects column_nullability drift",
+      "financial catalog rejects column_type drift",
+      "financial catalog rejects missing_column drift",
+      "financial catalog rejects check_constraint drift",
+      "financial catalog rejects unique_constraint drift",
+      "financial catalog rejects foreign_key drift",
+      "financial catalog rejects rls drift",
+      "financial catalog rejects table_owner drift",
+      "financial catalog rejects column_acl drift",
+      "financial catalog rejects table_acl drift",
+      "financial catalog rejects trigger_type drift",
+      "financial catalog rejects invalid_index drift",
+      "financial catalog rejects not_ready_index drift",
+      "financial catalog rejects trigger_disabled drift",
+      "financial catalog rejects config_0 drift",
+      "financial catalog rejects invoker_0 drift",
+      "financial catalog rejects owner_0 drift",
+      "financial catalog rejects config_1 drift",
+      "financial catalog rejects invoker_1 drift",
+      "financial catalog rejects owner_1 drift",
+      "financial catalog rejects config_2 drift",
+      "financial catalog rejects invoker_2 drift",
+      "financial catalog rejects owner_2 drift",
+      "financial catalog rejects config_3 drift",
+      "financial catalog rejects invoker_3 drift",
+      "financial catalog rejects owner_3 drift"
+    ],
+    "raw": {
+      "path": "native-complete-refreshed.stdout",
+      "bytes": 5745,
+      "sha256": "0213fe29a8decef91c7a6f448d859afce5f521555d28384300c5e13ba2224606"
+    }
+  },
+  "native-frozen-matrix": {
+    "counts": {
+      "tests": 35,
+      "pass": 35,
+      "fail": 0,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "financial catalog legal successor applies twice and captures actual catalog",
+      "financial catalog rejects search_path drift",
+      "financial catalog rejects missing_history_index drift",
+      "financial catalog rejects private_body drift",
+      "financial catalog rejects private_owner drift",
+      "financial catalog rejects missing_period_index drift",
+      "financial catalog rejects missing_both_indexes drift",
+      "financial catalog rejects wrong_index_definition drift",
+      "financial catalog rejects column_nullability drift",
+      "financial catalog rejects column_type drift",
+      "financial catalog rejects missing_column drift",
+      "financial catalog rejects check_constraint drift",
+      "financial catalog rejects unique_constraint drift",
+      "financial catalog rejects foreign_key drift",
+      "financial catalog rejects rls drift",
+      "financial catalog rejects table_owner drift",
+      "financial catalog rejects column_acl drift",
+      "financial catalog rejects unexpected_overload drift",
+      "financial catalog rejects table_acl drift",
+      "financial catalog rejects trigger_type drift",
+      "financial catalog rejects invalid_index drift",
+      "financial catalog rejects not_ready_index drift",
+      "financial catalog rejects trigger_disabled drift",
+      "financial catalog rejects config_0 drift",
+      "financial catalog rejects invoker_0 drift",
+      "financial catalog rejects owner_0 drift",
+      "financial catalog rejects config_1 drift",
+      "financial catalog rejects invoker_1 drift",
+      "financial catalog rejects owner_1 drift",
+      "financial catalog rejects config_2 drift",
+      "financial catalog rejects invoker_2 drift",
+      "financial catalog rejects owner_2 drift",
+      "financial catalog rejects config_3 drift",
+      "financial catalog rejects invoker_3 drift",
+      "financial catalog rejects owner_3 drift"
+    ],
+    "raw": {
+      "path": "native-frozen-matrix.stdout",
+      "bytes": 5907,
+      "sha256": "ff0f5f595a9e0fdf440db9710ff1667bf085222ae2ca832d744f7cf5d60475f4"
+    }
+  },
+  "native-final": {
+    "counts": {
+      "tests": 33,
+      "pass": 33,
+      "fail": 0,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "financial catalog legal successor applies twice and captures actual catalog",
+      "financial catalog rejects search_path drift",
+      "financial catalog rejects missing_history_index drift",
+      "financial catalog rejects private_body drift",
+      "financial catalog rejects private_owner drift",
+      "financial catalog rejects missing_period_index drift",
+      "financial catalog rejects missing_both_indexes drift",
+      "financial catalog rejects wrong_index_definition drift",
+      "financial catalog rejects column_nullability drift",
+      "financial catalog rejects column_type drift",
+      "financial catalog rejects missing_column drift",
+      "financial catalog rejects check_constraint drift",
+      "financial catalog rejects unique_constraint drift",
+      "financial catalog rejects foreign_key drift",
+      "financial catalog rejects rls drift",
+      "financial catalog rejects table_owner drift",
+      "financial catalog rejects table_acl drift",
+      "financial catalog rejects trigger_type drift",
+      "financial catalog rejects invalid_index drift",
+      "financial catalog rejects not_ready_index drift",
+      "financial catalog rejects trigger_disabled drift",
+      "financial catalog rejects config_0 drift",
+      "financial catalog rejects invoker_0 drift",
+      "financial catalog rejects owner_0 drift",
+      "financial catalog rejects config_1 drift",
+      "financial catalog rejects invoker_1 drift",
+      "financial catalog rejects owner_1 drift",
+      "financial catalog rejects config_2 drift",
+      "financial catalog rejects invoker_2 drift",
+      "financial catalog rejects owner_2 drift",
+      "financial catalog rejects config_3 drift",
+      "financial catalog rejects invoker_3 drift",
+      "financial catalog rejects owner_3 drift"
+    ],
+    "raw": {
+      "path": "native-final.stdout",
+      "bytes": 5603,
+      "sha256": "9ccf73e46948127416c63e238f5b97a987ea656e1d0423b3cc7bde7023a9bd92"
+    }
+  },
+  "pure-final": {
+    "counts": {
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "skipped": 0
+    },
+    "actualTestNames": [
+      "transaction normalization preserves quoted PL/pgSQL and rejects embedded control",
+      "every explicitly reviewed migration is compatible with one atomic transaction",
+      "atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers",
+      "atomic scanner recognizes CR line endings rather than silently dropping real control",
+      "atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control",
+      "atomic scanner rejects control verbs and nontransactional DDL outside lexical islands",
+      "atomic scanner normalizes every unchanged base migration without claiming installer integration",
+      "atomic scanner rejects additional documented commands that cannot run in a transaction",
+      "default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49",
+      "omitted, wrong bytes/hash, reversed or reordered base/tail fail closed",
+      "extension flag alone is not review authority: exact hash must be in hash-bound review once",
+      "base-only cannot replay installed successor and partial residue cannot replay even with tail",
+      "missing/ambiguous state and any failed postcondition reject",
+      "busy guard performs no BEGIN/mutation and closes owned session",
+      "installed successor guard runs under lock+BEGIN before any base mutation",
+      "one shared transaction strips inner controls and commits after verification",
+      "forced failure and disconnect attempt rollback, do not commit, retain original error",
+      "postcondition failure rolls back already issued SQL and session failure preserves the primary failure",
+      "unbound extension cannot gain CLI authority and apply uses guarded exact review before connection",
+      "installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone",
+      "exact observed catalog rejects every function binding, schema/index/trigger field drift",
+      "catalog private predecessor full body originates in the unchanged recollection migration"
+    ],
+    "raw": {
+      "path": "pure-final.stdout",
+      "bytes": 5045,
+      "sha256": "85c943af5eaf3edc309d2eec88f72edbee57601a211fcc9349a0e567dd5bbbc9"
+    }
+  }
+}

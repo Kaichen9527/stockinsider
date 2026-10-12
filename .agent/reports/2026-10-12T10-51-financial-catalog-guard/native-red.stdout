@@ -1,0 +1,92 @@
+TAP version 13
+# (node:428704) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:428704) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-financial-atomic-installer-oct12/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-financial-atomic-installer-oct12/web/package.json.
+# Subtest: financial catalog legal successor applies twice and captures actual catalog
+ok 1 - financial catalog legal successor applies twice and captures actual catalog
+  ---
+  duration_ms: 64.28002
+  ...
+# Subtest: financial catalog rejects search_path drift
+not ok 2 - financial catalog rejects search_path drift
+  ---
+  duration_ms: 18.502266
+  location: '/workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:22:34'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:23:299
+    async withClient (file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:10:215)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: financial catalog rejects missing_history_index drift
+not ok 3 - financial catalog rejects missing_history_index drift
+  ---
+  duration_ms: 15.049645
+  location: '/workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:22:34'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:23:299
+    async withClient (file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:10:215)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: financial catalog rejects private_body drift
+not ok 4 - financial catalog rejects private_body drift
+  ---
+  duration_ms: 18.73617
+  location: '/workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:22:34'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:23:299
+    async withClient (file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:10:215)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: financial catalog rejects private_owner drift
+not ok 5 - financial catalog rejects private_owner drift
+  ---
+  duration_ms: 16.245399
+  location: '/workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:22:34'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:23:299
+    async withClient (file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-catalog-cases.mjs:10:215)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 1
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2957.943973

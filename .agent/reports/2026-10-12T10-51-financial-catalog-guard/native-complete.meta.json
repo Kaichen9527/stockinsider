@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "scripts/opportunity-v3/financial-history-catalog-native.test.mjs",
+    "green",
+    "/workspace/cloud-financial-atomic-installer-oct12/.agent/reports/2026-10-12T10-51-financial-catalog-guard/complete-green-catalog"
+  ],
+  "start_utc": "2026-10-12T11:01:10Z",
+  "seconds": 4.162494421005249,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 200339456,
+  "min_free_bytes": 8715935744
+}

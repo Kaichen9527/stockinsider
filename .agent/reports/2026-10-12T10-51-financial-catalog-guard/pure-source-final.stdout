@@ -1,0 +1,136 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 6.472979
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 70.794788
+  ...
+# Subtest: atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+ok 3 - atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+  ---
+  duration_ms: 1.233472
+  ...
+# Subtest: atomic scanner recognizes CR line endings rather than silently dropping real control
+ok 4 - atomic scanner recognizes CR line endings rather than silently dropping real control
+  ---
+  duration_ms: 0.397039
+  ...
+# Subtest: atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+ok 5 - atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+  ---
+  duration_ms: 0.41113
+  ...
+# Subtest: atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+ok 6 - atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+  ---
+  duration_ms: 0.824966
+  ...
+# Subtest: atomic scanner normalizes every unchanged base migration without claiming installer integration
+ok 7 - atomic scanner normalizes every unchanged base migration without claiming installer integration
+  ---
+  duration_ms: 91.624008
+  ...
+# Subtest: atomic scanner rejects additional documented commands that cannot run in a transaction
+ok 8 - atomic scanner rejects additional documented commands that cannot run in a transaction
+  ---
+  duration_ms: 0.403069
+  ...
+# Subtest: default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+ok 9 - default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+  ---
+  duration_ms: 78.032101
+  ...
+# Subtest: omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+ok 10 - omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+  ---
+  duration_ms: 0.639395
+  ...
+# Subtest: extension flag alone is not review authority: exact hash must be in hash-bound review once
+ok 11 - extension flag alone is not review authority: exact hash must be in hash-bound review once
+  ---
+  duration_ms: 0.468207
+  ...
+# Subtest: base-only cannot replay installed successor and partial residue cannot replay even with tail
+ok 12 - base-only cannot replay installed successor and partial residue cannot replay even with tail
+  ---
+  duration_ms: 1.348285
+  ...
+# Subtest: missing/ambiguous state and any failed postcondition reject
+ok 13 - missing/ambiguous state and any failed postcondition reject
+  ---
+  duration_ms: 0.41057
+  ...
+# Subtest: busy guard performs no BEGIN/mutation and closes owned session
+ok 14 - busy guard performs no BEGIN/mutation and closes owned session
+  ---
+  duration_ms: 0.414165
+  ...
+# Subtest: installed successor guard runs under lock+BEGIN before any base mutation
+ok 15 - installed successor guard runs under lock+BEGIN before any base mutation
+  ---
+  duration_ms: 0.277559
+  ...
+# Subtest: one shared transaction strips inner controls and commits after verification
+ok 16 - one shared transaction strips inner controls and commits after verification
+  ---
+  duration_ms: 1.654046
+  ...
+# Subtest: forced failure and disconnect attempt rollback, do not commit, retain original error
+ok 17 - forced failure and disconnect attempt rollback, do not commit, retain original error
+  ---
+  duration_ms: 0.906548
+  ...
+# Subtest: postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+ok 18 - postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+  ---
+  duration_ms: 0.667878
+  ...
+# Subtest: unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+ok 19 - unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+  ---
+  duration_ms: 0.314885
+  ...
+# Subtest: installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+ok 20 - installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+  ---
+  duration_ms: 0.237218
+  ...
+# Subtest: exact observed catalog rejects every function binding, schema/index/trigger field drift
+not ok 21 - exact observed catalog rejects every function binding, schema/index/trigger field drift
+  ---
+  duration_ms: 6.057973
+  location: '/workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-install-guard.test.mjs:90:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected exception.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'throws'
+  stack: |-
+    mutate (file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-install-guard.test.mjs:92:95)
+    TestContext.<anonymous> (file:///workspace/cloud-financial-atomic-installer-oct12/scripts/opportunity-v3/financial-history-install-guard.test.mjs:94:59)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: catalog private predecessor full body originates in the unchanged recollection migration
+ok 22 - catalog private predecessor full body originates in the unchanged recollection migration
+  ---
+  duration_ms: 0.225991
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 21
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 230.308324

@@ -1,0 +1,185 @@
+TAP version 13
+# (node:430184) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:430184) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-financial-atomic-installer-oct12/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-financial-atomic-installer-oct12/web/package.json.
+# Subtest: financial catalog legal successor applies twice and captures actual catalog
+ok 1 - financial catalog legal successor applies twice and captures actual catalog
+  ---
+  duration_ms: 138.40229
+  ...
+# Subtest: financial catalog rejects search_path drift
+ok 2 - financial catalog rejects search_path drift
+  ---
+  duration_ms: 48.472009
+  ...
+# Subtest: financial catalog rejects missing_history_index drift
+ok 3 - financial catalog rejects missing_history_index drift
+  ---
+  duration_ms: 40.195798
+  ...
+# Subtest: financial catalog rejects private_body drift
+ok 4 - financial catalog rejects private_body drift
+  ---
+  duration_ms: 47.153729
+  ...
+# Subtest: financial catalog rejects private_owner drift
+ok 5 - financial catalog rejects private_owner drift
+  ---
+  duration_ms: 44.616851
+  ...
+# Subtest: financial catalog rejects missing_period_index drift
+ok 6 - financial catalog rejects missing_period_index drift
+  ---
+  duration_ms: 32.81674
+  ...
+# Subtest: financial catalog rejects missing_both_indexes drift
+ok 7 - financial catalog rejects missing_both_indexes drift
+  ---
+  duration_ms: 32.767395
+  ...
+# Subtest: financial catalog rejects wrong_index_definition drift
+ok 8 - financial catalog rejects wrong_index_definition drift
+  ---
+  duration_ms: 53.489908
+  ...
+# Subtest: financial catalog rejects column_nullability drift
+ok 9 - financial catalog rejects column_nullability drift
+  ---
+  duration_ms: 39.063914
+  ...
+# Subtest: financial catalog rejects column_type drift
+ok 10 - financial catalog rejects column_type drift
+  ---
+  duration_ms: 38.205383
+  ...
+# Subtest: financial catalog rejects missing_column drift
+ok 11 - financial catalog rejects missing_column drift
+  ---
+  duration_ms: 35.620328
+  ...
+# Subtest: financial catalog rejects check_constraint drift
+ok 12 - financial catalog rejects check_constraint drift
+  ---
+  duration_ms: 28.277844
+  ...
+# Subtest: financial catalog rejects unique_constraint drift
+ok 13 - financial catalog rejects unique_constraint drift
+  ---
+  duration_ms: 31.221212
+  ...
+# Subtest: financial catalog rejects foreign_key drift
+ok 14 - financial catalog rejects foreign_key drift
+  ---
+  duration_ms: 31.431875
+  ...
+# Subtest: financial catalog rejects rls drift
+ok 15 - financial catalog rejects rls drift
+  ---
+  duration_ms: 30.98801
+  ...
+# Subtest: financial catalog rejects table_owner drift
+ok 16 - financial catalog rejects table_owner drift
+  ---
+  duration_ms: 35.678154
+  ...
+# Subtest: financial catalog rejects column_acl drift
+ok 17 - financial catalog rejects column_acl drift
+  ---
+  duration_ms: 36.342321
+  ...
+# Subtest: financial catalog rejects table_acl drift
+ok 18 - financial catalog rejects table_acl drift
+  ---
+  duration_ms: 27.346139
+  ...
+# Subtest: financial catalog rejects trigger_type drift
+ok 19 - financial catalog rejects trigger_type drift
+  ---
+  duration_ms: 35.478629
+  ...
+# Subtest: financial catalog rejects invalid_index drift
+ok 20 - financial catalog rejects invalid_index drift
+  ---
+  duration_ms: 30.445075
+  ...
+# Subtest: financial catalog rejects not_ready_index drift
+ok 21 - financial catalog rejects not_ready_index drift
+  ---
+  duration_ms: 37.173195
+  ...
+# Subtest: financial catalog rejects trigger_disabled drift
+ok 22 - financial catalog rejects trigger_disabled drift
+  ---
+  duration_ms: 30.88512
+  ...
+# Subtest: financial catalog rejects config_0 drift
+ok 23 - financial catalog rejects config_0 drift
+  ---
+  duration_ms: 29.956719
+  ...
+# Subtest: financial catalog rejects invoker_0 drift
+ok 24 - financial catalog rejects invoker_0 drift
+  ---
+  duration_ms: 22.863328
+  ...
+# Subtest: financial catalog rejects owner_0 drift
+ok 25 - financial catalog rejects owner_0 drift
+  ---
+  duration_ms: 24.261874
+  ...
+# Subtest: financial catalog rejects config_1 drift
+ok 26 - financial catalog rejects config_1 drift
+  ---
+  duration_ms: 26.913771
+  ...
+# Subtest: financial catalog rejects invoker_1 drift
+ok 27 - financial catalog rejects invoker_1 drift
+  ---
+  duration_ms: 28.880915
+  ...
+# Subtest: financial catalog rejects owner_1 drift
+ok 28 - financial catalog rejects owner_1 drift
+  ---
+  duration_ms: 30.795569
+  ...
+# Subtest: financial catalog rejects config_2 drift
+ok 29 - financial catalog rejects config_2 drift
+  ---
+  duration_ms: 35.310945
+  ...
+# Subtest: financial catalog rejects invoker_2 drift
+ok 30 - financial catalog rejects invoker_2 drift
+  ---
+  duration_ms: 31.38832
+  ...
+# Subtest: financial catalog rejects owner_2 drift
+ok 31 - financial catalog rejects owner_2 drift
+  ---
+  duration_ms: 28.172913
+  ...
+# Subtest: financial catalog rejects config_3 drift
+ok 32 - financial catalog rejects config_3 drift
+  ---
+  duration_ms: 33.006949
+  ...
+# Subtest: financial catalog rejects invoker_3 drift
+ok 33 - financial catalog rejects invoker_3 drift
+  ---
+  duration_ms: 27.299329
+  ...
+# Subtest: financial catalog rejects owner_3 drift
+ok 34 - financial catalog rejects owner_3 drift
+  ---
+  duration_ms: 28.020383
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4183.812754
