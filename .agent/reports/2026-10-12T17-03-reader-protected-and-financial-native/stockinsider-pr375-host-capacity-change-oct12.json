@@ -1,0 +1,10 @@
+{
+  "observedAt": "2026-10-12T09:00:32.195437+00:00",
+  "path": "/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work",
+  "availableBytes": 17846935552,
+  "totalBytes": 494384795648,
+  "failure": "PR375 model job114702479178 ENOSPC during npm ci; CLI prepare succeeded",
+  "cleanupByThisTurn": false,
+  "retryReason": "actual host free space changed from earlier ~1.5GB to >16GB; no identical-input retry while exhausted",
+  "runnerIdle": true
+}

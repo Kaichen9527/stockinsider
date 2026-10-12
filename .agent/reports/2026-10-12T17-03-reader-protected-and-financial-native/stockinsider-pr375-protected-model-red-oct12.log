@@ -1,0 +1,207 @@
+model-runner-code-gate	UNKNOWN STEP	﻿2026-10-12T07:13:24.4262330Z Current runner version: '2.337.0'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4265120Z Runner name: 'stockinsider-mac-arm64-kaerchen'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4265530Z Runner group name: 'Default'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4265940Z Machine name: 'Mac'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4267550Z ##[group]GITHUB_TOKEN Permissions
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4268320Z Actions: read
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4268580Z Contents: read
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4268840Z Metadata: read
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4269100Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4269960Z Secret source: Actions
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4270330Z Cache mode: read
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.4270610Z Prepare workflow directory
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.5011170Z Prepare all required actions
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:24.5033730Z Getting action download info
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:25.4535980Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:26.1604580Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:27.9703470Z Complete job name: model-runner-code-gate
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0008170Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0008450Z with:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0008560Z   fetch-depth: 0
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0008680Z   persist-credentials: false
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0008830Z   ref: 0997336d0eb8ec43ea0899f22fe5a03cc774518f
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0008990Z   repository: Kaichen9527/stockinsider
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0010270Z   token: ***
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0010390Z   ssh-strict: true
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0010510Z   ssh-user: git
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0010620Z   clean: true
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0010760Z   sparse-checkout-cone-mode: true
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0010900Z   fetch-tags: false
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0011030Z   show-progress: true
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0011150Z   lfs: false
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0011260Z   submodules: false
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0011390Z   set-safe-directory: true
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0011560Z   allow-unsafe-pr-checkout: false
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.0011780Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1803680Z Syncing repository: Kaichen9527/stockinsider
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1804380Z ##[group]Getting Git version info
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1804740Z Working directory is '/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/stockinsider/stockinsider'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1805200Z [command]/opt/homebrew/bin/git version
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1852170Z git version 2.55.0
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1874120Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1877310Z Copying '/Users/kaerchen/.gitconfig' to '/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/9b44a2cc-0c5f-4c9c-a5f0-aea422cb00a1/.gitconfig'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1881060Z Temporarily overriding HOME='/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/9b44a2cc-0c5f-4c9c-a5f0-aea422cb00a1' before making global git config changes
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1881640Z Adding repository directory to the temporary git global config as a safe directory
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1882920Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/stockinsider/stockinsider
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1942900Z [command]/opt/homebrew/bin/git config --local --get remote.origin.url
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1972430Z https://github.com/Kaichen9527/stockinsider
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1978370Z ##[group]Removing previously created refs, to avoid conflicts
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.1979830Z [command]/opt/homebrew/bin/git rev-parse --symbolic-full-name --verify --quiet HEAD
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.2016810Z HEAD
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.2063360Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.2064280Z [command]/opt/homebrew/bin/git submodule status
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.2586730Z ##[group]Cleaning the repository
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.2587900Z [command]/opt/homebrew/bin/git clean -ffdx
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.2865660Z [command]/opt/homebrew/bin/git reset --hard HEAD
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.3376030Z HEAD is now at 8bcd18e7 Merge pull request #372 from Kaichen9527/codex/ptt-mention-provenance-oct12
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.3381190Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.3382440Z ##[group]Disabling automatic garbage collection
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.3384400Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.3425500Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.3425760Z ##[group]Setting up auth
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.3427950Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.3466970Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.3948210Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.3981540Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.4467460Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.4507160Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.4983840Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.5022980Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.5023260Z ##[group]Fetching the repository
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:28.5026420Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9014410Z From https://github.com/Kaichen9527/stockinsider
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9014870Z  * [new branch]        codex/discovery-revision-publisher-reader-oct12 -> origin/codex/discovery-revision-publisher-reader-oct12
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9015390Z  * [new branch]        codex/financial-bound-minimal-audit-oct12 -> origin/codex/financial-bound-minimal-audit-oct12
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9015870Z  * [new branch]        codex/financial-history-native-extraction-oct12 -> origin/codex/financial-history-native-extraction-oct12
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9016370Z    73d0af83..2bf12da7  codex/research-release-review-evidence-oct11 -> origin/codex/research-release-review-evidence-oct11
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9017050Z  * [new branch]        evidence/source-led-opportunity-v3-exact-review-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e -> origin/evidence/source-led-opportunity-v3-exact-review-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9017590Z    8bcd18e7..0997336d  main       -> origin/main
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9023640Z [command]/opt/homebrew/bin/git rev-parse --verify --quiet 0997336d0eb8ec43ea0899f22fe5a03cc774518f^{object}
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9071280Z 0997336d0eb8ec43ea0899f22fe5a03cc774518f
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9073870Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9074100Z ##[group]Determining the checkout info
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9074350Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9076540Z [command]/opt/homebrew/bin/git sparse-checkout disable
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9136720Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9176540Z ##[group]Checking out the ref
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9178120Z [command]/opt/homebrew/bin/git checkout --progress --force 0997336d0eb8ec43ea0899f22fe5a03cc774518f
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9627710Z Previous HEAD position was 8bcd18e7 Merge pull request #372 from Kaichen9527/codex/ptt-mention-provenance-oct12
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9637200Z HEAD is now at 0997336d Merge pull request #374 from Kaichen9527/codex/live-discovery-evidence-adapter-oct12
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9647460Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9708650Z [command]/opt/homebrew/bin/git log -1 --format=%H
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9748190Z 0997336d0eb8ec43ea0899f22fe5a03cc774518f
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9754040Z ##[group]Removing auth
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9755320Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:29.9790580Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:30.0348840Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:30.0379880Z http.https://github.com/.extraheader
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:30.0385510Z [command]/opt/homebrew/bin/git config --local --unset-all http.https://github.com/.extraheader
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:30.0448030Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:30.0976270Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:30.1009620Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:30.1491550Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:30.1622310Z Prepare all required actions
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:30.1622580Z Getting action download info
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:30.4293860Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:31.3978640Z Download action repository 'actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3414410Z ##[group]Run ./.github/actions/prepare-source-led-external-subject
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3414610Z with:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3414830Z   bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3415210Z   subject-root: /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3415530Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3445480Z ##[start-action display=Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020;id=__self.__actions_setup-node]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3493040Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3493300Z with:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3493400Z   node-version: 22.14.0
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3493550Z   always-auth: false
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3493660Z   check-latest: false
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3494980Z   token: ***
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.3495100Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.4484210Z Found in cache @ /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_tool/node/22.14.0/arm64
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.4487010Z (node:63739) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.4487390Z (Use `node --trace-deprecation ...` to show where the warning was created)
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.4487970Z ##[group]Environment details
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6464080Z node: v22.14.0
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6464230Z npm: 10.9.2
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6464360Z yarn: 1.17.3
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6464690Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6499770Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=305]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6501230Z ##[start-action display=Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093;id=__self.__actions_download-artifact]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6526320Z ##[group]Run actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6526530Z with:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6526700Z   name: stockinsider-v3-gate-bootstrap-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6527040Z   path: /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-gate-bootstrap
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6527320Z   merge-multiple: false
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6527440Z   repository: Kaichen9527/stockinsider
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6528300Z   run-id: 38216491152
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.6528410Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.7445490Z Downloading single artifact
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.7551950Z (node:63743) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:32.7552420Z (Use `node --trace-deprecation ...` to show where the warning was created)
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:33.5043840Z Preparing to download the following artifacts:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:33.5045760Z - stockinsider-v3-gate-bootstrap-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e (ID: 11731953864, Size: 662, Expected Digest: sha256:3a01cf5876141bc4a39cc88857e7db9505a00d54bc49c50af8a44258a2356bc0)
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.0380460Z Redirecting to blob download url: https://productionresultssa6.blob.core.windows.net/actions-results/1ce5019c-0ff4-837d-ac92-f87456ac1a04/workflow-job-run-b014a779-b26b-5188-b43d-74ad65ea5013/artifacts/86feae47768209ed2684e91d45059ca23b1ade05c2e7b929a881b643acd2bcb2.zip
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.0386060Z Starting download of artifact to: /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-gate-bootstrap
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8586630Z (node:63743) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8619340Z SHA256 digest of downloaded artifact is 3a01cf5876141bc4a39cc88857e7db9505a00d54bc49c50af8a44258a2356bc0
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8620710Z Artifact download completed successfully.
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8621610Z Total of 1 artifact(s) downloaded
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8628390Z Download artifact has finished successfully
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8760640Z ##[end-action id=__self.__actions_download-artifact;outcome=success;conclusion=success;duration_ms=2225]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8785410Z ##[start-action display=Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject";id=__self.__run]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8825870Z ##[group]Run node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject"
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8828550Z ^[[36;1mnode scripts/opportunity-v3/protected-external-gate-worker.mjs prepare --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject"^[[0m
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8905170Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:34.8905420Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:35.0606950Z From https://github.com/Kaichen9527/stockinsider
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:35.0607290Z  * branch              c82e0e4ed3670d195a76830d81e5851c1b0bdf1e -> FETCH_HEAD
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:37.5415850Z Initialized empty Git repository in /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject/.git/
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.1489380Z From /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/stockinsider/stockinsider
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.1489790Z  * branch            c82e0e4ed3670d195a76830d81e5851c1b0bdf1e -> FETCH_HEAD
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.1490090Z  * branch            0997336d0eb8ec43ea0899f22fe5a03cc774518f -> FETCH_HEAD
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.1490370Z  * branch            0997336d0eb8ec43ea0899f22fe5a03cc774518f -> FETCH_HEAD
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.1499810Z  * [new ref]         origin/evidence/source-led-opportunity-v3-exact-review-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e -> origin/evidence/source-led-opportunity-v3-exact-review-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.1502910Z  * [new ref]         origin/evidence/source-led-opportunity-v3-requirements-v325-digest -> origin/evidence/source-led-opportunity-v3-requirements-v325-digest
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.1505500Z  * [new ref]         origin/evidence/source-led-opportunity-v3-architecture-v325-digest -> origin/evidence/source-led-opportunity-v3-architecture-v325-digest
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.3939400Z HEAD is now at c82e0e4 ci: include discovery helpers in full product diagnostics
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.6309190Z {"status":"prepared","subjectCommitSha":"c82e0e4ed3670d195a76830d81e5851c1b0bdf1e","subjectRoot":"/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject"}
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.6356250Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=4756]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.6380320Z ##[group]Run node scripts/opportunity-v3/protected-external-gate-worker.mjs track --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "$RUNNER_TEMP/stockinsider-v3-subject" --track model_runner --output "$RUNNER_TEMP/opportunity-gate-result-model-runner-code-gate-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e.json"
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.6381800Z ^[[36;1mnode scripts/opportunity-v3/protected-external-gate-worker.mjs track --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json" --subject-root "$RUNNER_TEMP/stockinsider-v3-subject" --track model_runner --output "$RUNNER_TEMP/opportunity-gate-result-model-runner-code-gate-c82e0e4ed3670d195a76830d81e5851c1b0bdf1e.json"^[[0m
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.6449790Z shell: /bin/bash -e {0}
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:39.6449920Z ##[endgroup]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1730070Z protected external gate worker failed: sandboxed npm --prefix web ci --ignore-scripts failed:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1730570Z stdout:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1730650Z 
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1730710Z stderr:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1731160Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1732010Z npm warn tar TAR_ENTRY_ERROR ENOSPC: no space left on device, open '/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject/web/node_modules/@line/bot-sdk/node_modules/undici-types/api.d.ts'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1733170Z npm warn tar TAR_ENTRY_ERROR ENOSPC: no space left on device, open '/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject/web/node_modules/@typescript-eslint/scope-manager/dist/scope/ModuleScope.js'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1733830Z npm warn tar TAR_ENTRY_ERROR ENOSPC: no space left on device, write
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1734560Z npm warn tar TAR_ENTRY_ERROR ENOSPC: no space left on device, open '/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject/web/node_modules/@supabase/auth-js/dist/main/GoTrueAdminApi.js.map'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1735640Z npm warn tar TAR_ENTRY_ERROR ENOSPC: no space left on device, open '/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/stockinsider-v3-subject/web/node_modules/axios/index.d.ts'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1736180Z npm warn tar TAR_ENTRY_ERROR ENOSPC: no space left on device, write
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1736820Z npm error A complete log of this run can be found in: /var/folders/pt/w507znp56lj7ks48kgc0_fqh0000gn/T/stockinsider-v3-external-gate-klirLL/.npm/_logs/2026-10-12T07_13_42_786Z-debug-0.log
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1737200Z 
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1737200Z 
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1737270Z 1 !== 0
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1737340Z 
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1763860Z ##[error]Process completed with exit code 1.
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1825240Z Post job cleanup.
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1827400Z ##[start-action display=Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020;id=__0b52723a-b1ca-49b2-8cf8-d036ae3ec065.__actions_setup-node]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1829150Z ##[end-action id=__0b52723a-b1ca-49b2-8cf8-d036ae3ec065.__actions_setup-node;outcome=skipped;conclusion=skipped;duration_ms=0]
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.1876630Z Post job cleanup.
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.3519150Z [command]/opt/homebrew/bin/git version
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.3565580Z git version 2.55.0
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.3577420Z Copying '/Users/kaerchen/.gitconfig' to '/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/a17c5779-3ef5-4cd8-8f30-792301eecb15/.gitconfig'
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.3581460Z Temporarily overriding HOME='/Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/_temp/a17c5779-3ef5-4cd8-8f30-792301eecb15' before making global git config changes
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.3582080Z Adding repository directory to the temporary git global config as a safe directory
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.3583720Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/kaerchen/.local/share/stockinsider-github-actions-runner/_work/stockinsider/stockinsider
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.3627280Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.3666030Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.4185140Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.4219320Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.4714090Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.4750270Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.5340890Z Cleaning up orphan processes
+model-runner-code-gate	UNKNOWN STEP	2026-10-12T07:13:47.5672920Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-12T09:02:52.390203+00:00",
+  "PR375": {
+    "head": "c82e0e4ed3670d195a76830d81e5851c1b0bdf1e",
+    "ordinaryRun": 38215277487,
+    "productJob": 114698459039,
+    "canonical": {
+      "pass": 155,
+      "fail": 0,
+      "skip": 0,
+      "PCRpass": 31
+    },
+    "freshDirectChildEvidence": "e3c53abdc796501c582486952b172ec8791dbfd2",
+    "readyOnce": true,
+    "protectedRun": 38216491152,
+    "attempt1": "model npm ci ENOSPC; original RED kept",
+    "attempt2": "requested --failed only after measured free space changed to17846935552 and runneridle; GHA upstream dependencies re-evaluated, current model running, no terminal PASS/merge claimed",
+    "merged": false
+  },
+  "financialNative": {
+    "delivery": "baf2bbeafd84837f6a08475460fd2f84cf6e091b",
+    "code": "d1c69e7f14081bc2d2bbd2d1649e8680b3497535",
+    "makerSelectedNativePass": 2,
+    "rawVerified": 28,
+    "sourceVerified": 12,
+    "rootScopedStaticReview": "zeroP0P1P2, no root native execution",
+    "separateAgentReview": "failed loading workspace requirements, not approval",
+    "fullInstaller": "pending"
+  },
+  "CloudNext": {
+    "branch": "codex/financial-history-atomic-extraction-oct12",
+    "turn": "01a12f58-4d55-74aa-b51f-7870b5692f66",
+    "cursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:22",
+    "status": "one new bounded task accepted; inProgress, no results yet"
+  },
+  "production": "unchanged169; no VPS write/prune/crawl/recompute",
+  "main": "0997336d0eb8ec43ea0899f22fe5a03cc774518f"
+}

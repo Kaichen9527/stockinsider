@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-12T09:01:47.051591+00:00",
+  "reviewer": "root independent of Cloud maker",
+  "subject": "baf2bbeafd84837f6a08475460fd2f84cf6e091b",
+  "staticExtractionChecks": {
+    "nativeCaseByteIdentical": true,
+    "entireBaseRetainedExceptSQLread": true,
+    "SQLByteIdenticalToPendingPR364": true
+  },
+  "scopedStaticFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "checked": "169line SQL +102line test diff; period-bound serialized lock, immutable clock/receipt, auth through predecessor, RLS/revoke/private wrapper, cutoff keyset; no live/schema install claim",
+  "notExecutedByRoot": [
+    "native PG",
+    "typecheck",
+    "lint",
+    "build",
+    "atomic rollback",
+    "full installer"
+  ],
+  "separateReviewerAttempt": "author_input_review_oct08 failed to load workspace requirements; not treated as review approval",
+  "productionApproved": false,
+  "protectedApproved": false
+}

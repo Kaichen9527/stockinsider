@@ -1,5 +1,17 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 17:03台灣時間：reader完整普通驗收成功；protected模型因Mac滿碟失敗，空間實際恢復後單次正常續跑
+
+PR375 frozen c82e0e4e/treeef47439e的ordinary38215277487/product114698459039真正SUCCESS：canonical155PASS／0FAIL／0SKIP／0TODO、全31PCR與type/lint/build/migration/browser成功。Root保存5234行完整GH原log及只去兩tab前綴的版本，fresh direct-child exact/PCR/attestation e3c53abd先push後一次ready事件啟動正常protected38216491152。原缺ref FAIL不刪或改成功。
+
+本次protected requirements／architecture／exact／product真SUCCESS，model在sandboxed npm ci出ENOSPC、aggregate真FAIL；不是舊CLI失效或reader測試失敗。09:00Z實際Mac runner磁碟可用17,846,935,552bytes且runner idle，已與先前約1.5GB不同；本輪沒有刪檔、無法歸因其他程序釋放原因。保留原RED及現測證據後，只發一次gh rerun --failed；GitHub依賴鏈重新評估，attempt2三review/product已真SUCCESS，model仍running／aggregate未終態。不得宣稱已合併或重跑未變滿碟輸入。先查attempt2真終態再正常merge，禁止admin／再次工具例外。
+
+Cloud金融native slice1已完成code d1c69e7f／deliverybaf2bbea，真PG兩個selected baseline與amendment案例PASS／零skip，正常types/lint/build成功；root真核28raw、12source及原SQL bytes，另核整份main測試僅新增read＋exact原案例、靜態review零P0/P1/P2。這不是root新跑native；另一獨立agent載入workspace失敗沒有review結果，不冒稱批准。Atomic rollback及完整installer尚待，不能raw套SQL或宣稱343修復。
+
+確認Cloud cursor21 idle後只接一件30分鐘atomic helper／pure tests／原pending rollback native extraction，branchcodex/financial-history-atomic-extraction-oct12/basebaf2；turn01a12f58／cursor22 inProgress，無成果宣稱。Default48plan/apply/authority/策略/排程不動，root不改ownedfiles；後續仍需狹窄49profile、installed-successorguard、postconditions及真existing-schema rehearsal。
+
+遠端main仍099、正式仍169；本輪未VPS重測必敗guard／傳包／切換／migration／刪cache／重算343／重抓PTT2409。原VPS容量差3.42GB及待答容量選擇不變，不把Mac17.8GB當VPS空間。新收據`.agent/reports/2026-10-12T17-03-reader-protected-and-financial-native/`。Reader仍pure projection而非liveTop20，完整來源／文章／正式研究排程未完。
+
 ## 2026-10-12 15:08台灣時間：reader P2獨立閉合並建立PR375；金融SQL狹窄抽取進行中
 
 Reader code3b4e21f7／deliverybfc2f1d7已真修known-invalid head錯序。獨立reviewer60reader＋26memory cases皆PASS（重疊不相加）、P0/P1/P2=0；root核30raw／13source並親跑60PASS。原53PASS5FAIL RED與先前52綠／P2均保留。Root額外ordinary等價暫存fixture兩次因缺原有依賴module失敗88PASS1FAIL，已保存並停止本機同類重試，不冒稱root148綠；真正GitHub新head專項38215277461已148PASS／零fail/skip。

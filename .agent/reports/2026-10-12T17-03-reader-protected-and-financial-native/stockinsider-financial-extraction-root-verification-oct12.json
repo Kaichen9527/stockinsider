@@ -1,0 +1,18 @@
+{
+  "head": "baf2bbeafd84837f6a08475460fd2f84cf6e091b",
+  "rawVerified": 28,
+  "sourceVerified": 12,
+  "SQLbyteExact": true,
+  "receiptSha256": "ea432b6e0dc1b8cce53a5365ff5e375cdcbf40b01a1cbf91d7d6d03ac62dc7fe",
+  "rootNativeExecution": false,
+  "makerFrozenNative": {
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "skip": 0,
+    "selected_scope": "base 129th-series rejection + original amendment160-month case only",
+    "other_canonical_cases": "not run; name-pattern exclusion, not claimed accepted"
+  },
+  "independentReview": "agent failed to load workspace requirements, no review result",
+  "production": false
+}
