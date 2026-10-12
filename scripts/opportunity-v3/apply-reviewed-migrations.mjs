@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
+import { FINANCIAL_TAIL, selectFinancialHistoryChain, assertFinancialReviewBinding, assertInstalledFinancialHistoryPlan, verifyFinancialHistoryPostconditions } from './financial-history-install-guard.mjs';
 
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -91,6 +93,7 @@ function parseArguments(argv) {
   for (let index=0; index<argv.length; index+=1) {
     const value=argv[index];
     if(value==='--apply')result.apply=true;
+    else if(value==='--financial-history-extension')result.financialHistoryExtension=true;
     else if(value==='--source-commit'&&SHA40.test(argv[index+1]??''))result.sourceCommit=argv[++index];
     else if(value==='--attestation-commit'&&SHA40.test(argv[index+1]??''))result.attestationCommit=argv[++index];
     else throw new Error('invalid_arguments');
@@ -110,39 +113,24 @@ function reviewedMigrationPlan(options) {
     '.loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json'),'utf8'));
   if(status?.authority?.v314?.productionDatabaseMigrationAuthorized!==true)
     throw new Error('production_migration_authority_missing');
-  const migrations=MIGRATIONS.map((relativePath)=>{
+  const baseMigrations=MIGRATIONS.map((relativePath)=>{
     const bytes=fs.readFileSync(path.join(root,relativePath));
     if(/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')))
       throw new Error('non_additive_migration_rejected');
     return Object.freeze({relativePath,bytes,sha256:createHash('sha256').update(bytes).digest('hex')});
   });
+  const tailBytes=options.financialHistoryExtension ? fs.readFileSync(path.join(root,FINANCIAL_TAIL)) : null;
+  const migrations=selectFinancialHistoryChain(baseMigrations,tailBytes ? {relativePath:FINANCIAL_TAIL,bytes:tailBytes,sha256:createHash('sha256').update(tailBytes).digest('hex')} : null, options.financialHistoryExtension===true);
   const chainSha256=createHash('sha256').update(JSON.stringify(migrations
     .map(({relativePath,sha256})=>[relativePath,sha256]))).digest('hex');
+  if(options.financialHistoryExtension) {
+    const review=execFileSync('/usr/bin/git',['show',`${options.attestationCommit}:.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md`],{cwd:root,encoding:'utf8'});
+    assertFinancialReviewBinding(review,chainSha256);
+  }
   return Object.freeze({migrations:Object.freeze(migrations),chainSha256});
 }
 
-async function applyReviewedMigrations(options) {
-  const plan=reviewedMigrationPlan(options);
-  const client=new Client({connectionString:resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url'),
-    application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
-  await client.connect();
-  let locked=false;
-  const supersededMigrations=[];
-  try {
-    await client.query("SELECT pg_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");
-    locked=true;
-    // Freeze successor detection before replaying any older migration. Earlier
-    // migrations can temporarily replace the authoritative function body and
-    // must not erase evidence that the stronger successor was already installed.
-    const v3192Superseded=await reviewedMigrationIsSuperseded(
-      client,V3192_PROJECTION_DOSSIER_MIGRATION);
-    for(const migration of plan.migrations) {
-      if(v3192Superseded && migration.relativePath===V3192_PROJECTION_DOSSIER_MIGRATION) {
-        supersededMigrations.push(migration.relativePath);
-        continue;
-      }
-      await client.query(migration.bytes.toString('utf8'));
-    }
+async function verifyReviewedMigrationPostconditions(client, options) {
     const verified=(await client.query(`SELECT jsonb_build_object(
       'v314Diagnostics',to_regclass('public.legacy_runtime_failure_diagnostics_v3_14') IS NOT NULL,
       'v314Chunks',to_regclass('public.legacy_official_ingestion_chunks_v3_14') IS NOT NULL,
@@ -438,14 +426,60 @@ async function applyReviewedMigrations(options) {
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
+    if(options.financialHistoryExtension) await verifyFinancialHistoryPostconditions(client);
+    return verified;
+}
+
+async function applyReviewedMigrations(options) {
+  const plan=reviewedMigrationPlan(options);
+  const client=new Client({connectionString:resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url'),
+    application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
+  await client.connect();
+  return applyReviewedMigrationPlanToClient(client,plan,options);
+}
+
+// The CLI enters only after exact-source, attestation and authority validation.
+// Kept separate to exercise transaction/error handling with isolated test clients.
+async function applyReviewedMigrationPlanToClient(client,plan,options) {
+  let locked=false;
+  let transactionOpen=false;
+  let primaryFailed=false;
+  const supersededMigrations=[];
+  try {
+    const lockResult=await client.query("SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked");
+    if(lockResult.rows[0]?.locked!==true) throw new Error('migration_install_busy');
+    locked=true;
+    await client.query('BEGIN');
+    transactionOpen=true;
+    await client.query('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
+    await assertInstalledFinancialHistoryPlan(client,plan.migrations,options.financialHistoryExtension===true);
+    // Freeze successor detection before replaying any older migration. Earlier
+    // migrations can temporarily replace the authoritative function body and
+    // must not erase evidence that the stronger successor was already installed.
+    const v3192Superseded=await reviewedMigrationIsSuperseded(
+      client,V3192_PROJECTION_DOSSIER_MIGRATION);
+    for(const migration of plan.migrations) {
+      if(v3192Superseded && migration.relativePath===V3192_PROJECTION_DOSSIER_MIGRATION) {
+        supersededMigrations.push(migration.relativePath);
+        continue;
+      }
+      await client.query(migrationBodyInAtomicTransaction(migration.bytes.toString('utf8')));
+    }
+    const verified=await verifyReviewedMigrationPostconditions(client, options);
+    await client.query('COMMIT');
+    transactionOpen=false;
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
       orderedChainSha256:plan.chainSha256,migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
       supersededMigrations:Object.freeze(supersededMigrations),verified});
+  } catch(error) {
+    primaryFailed=true;
+    throw error;
   } finally {
+    if(transactionOpen)try{await client.query('ROLLBACK');}catch{/* disconnect rolls back on the server */}
     if(locked)try{await client.query("SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");}
       catch{/* session close releases the lock */}
-    await client.end();
+    try{await client.end();}catch(error){if(!primaryFailed)throw error;}
   }
 }
 
@@ -456,4 +490,4 @@ if(import.meta.url===`file://${process.argv[1]}`) {
 }
 
 export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationIsSuperseded,
-  reviewedMigrationPlan };
+  reviewedMigrationPlan, applyReviewedMigrationPlanToClient };

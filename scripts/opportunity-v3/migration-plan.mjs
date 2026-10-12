@@ -1,3 +1,4 @@
+import { selectFinancialHistoryChain, orderedHash, FINANCIAL_TAIL } from './financial-history-install-guard.mjs';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -58,7 +59,10 @@ const migrationPaths = [
   'migrations/20260911_05_financial_fact_isolation_v10.sql',
   'migrations/20260924_entry_plan_official_action_symbols.sql',
 ];
-const migrations = migrationPaths.map((relativePath) => {
+const args=process.argv.slice(2);
+if(args.some(x=>x!=='--financial-history-extension') || args.length>1) throw new Error('invalid_arguments');
+const financialHistoryExtension=args.includes('--financial-history-extension');
+const baseMigrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));
   return {
     migration: relativePath,
@@ -67,6 +71,9 @@ const migrations = migrationPaths.map((relativePath) => {
     additiveOnly: !/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')),
   };
 });
+const tailBytes=financialHistoryExtension ? fs.readFileSync(path.join(root,FINANCIAL_TAIL)) : null;
+const selected=selectFinancialHistoryChain(baseMigrations, financialHistoryExtension ? {relativePath:FINANCIAL_TAIL,bytes:tailBytes,sha256:createHash('sha256').update(tailBytes).digest('hex')} : null,financialHistoryExtension);
+const migrations=selected.map(r=>r.relativePath ? {migration:r.relativePath,bytes:r.bytes.length,sha256:r.sha256,additiveOnly:true}:r);
 const productionDatabaseMigrationAuthorized =
   authority?.authority?.v314?.productionDatabaseMigrationAuthorized === true;
 const orderedChainSha256 = createHash('sha256')
@@ -82,8 +89,9 @@ process.stdout.write(JSON.stringify({
     sha256: createHash('sha256').update(authorityBytes).digest('hex'),
     productionDatabaseMigrationAuthorized,
   },
-  applyAuthorized: productionDatabaseMigrationAuthorized,
-  dedicatedApplyCommand: productionDatabaseMigrationAuthorized
+  applyAuthorized: financialHistoryExtension ? false : productionDatabaseMigrationAuthorized,
+  ...(financialHistoryExtension ? {profile: 'financial-history-v1', reviewBindingRequired: `Financial history ordered chain SHA256: ${orderedHash(selected)}`} : {}),
+  dedicatedApplyCommand: !financialHistoryExtension && productionDatabaseMigrationAuthorized
     ? 'npm run db:v3:apply-reviewed -- --source-commit <reviewed-commit> --attestation-commit <attestation-commit>'
     : null,
   nextCommand: 'npm run db:v3:verify',
