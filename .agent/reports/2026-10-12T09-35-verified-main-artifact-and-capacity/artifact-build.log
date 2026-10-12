@@ -1,0 +1,1604 @@
+﻿2026-10-12T01:29:06.1142992Z Current runner version: '2.337.0'
+2026-10-12T01:29:06.1164596Z ##[group]Runner Image Provisioner
+2026-10-12T01:29:06.1165461Z Hosted Compute Agent
+2026-10-12T01:29:06.1165967Z Version: 20261002.596
+2026-10-12T01:29:06.1166520Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-12T01:29:06.1167148Z Build Date: 2026-10-02T22:28:27Z
+2026-10-12T01:29:06.1167755Z Worker ID: {7cd6a283-f153-4ede-ae66-648201c561e9}
+2026-10-12T01:29:06.1168373Z Region: centralus
+2026-10-12T01:29:06.1168852Z Cloud: Azure
+2026-10-12T01:29:06.1169288Z ##[endgroup]
+2026-10-12T01:29:06.1170586Z ##[group]Operating System
+2026-10-12T01:29:06.1171146Z Ubuntu
+2026-10-12T01:29:06.1171643Z 24.04.5
+2026-10-12T01:29:06.1172085Z LTS
+2026-10-12T01:29:06.1172507Z ##[endgroup]
+2026-10-12T01:29:06.1173006Z ##[group]Runner Image
+2026-10-12T01:29:06.1173550Z Image: ubuntu-24.04
+2026-10-12T01:29:06.1174031Z Version: 20261004.327.1
+2026-10-12T01:29:06.1175117Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-12T01:29:06.1176404Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-12T01:29:06.1177222Z ##[endgroup]
+2026-10-12T01:29:06.1178183Z ##[group]GITHUB_TOKEN Permissions
+2026-10-12T01:29:06.1180240Z Contents: read
+2026-10-12T01:29:06.1180824Z Metadata: read
+2026-10-12T01:29:06.1181377Z ##[endgroup]
+2026-10-12T01:29:06.1183297Z Secret source: Actions
+2026-10-12T01:29:06.1184211Z Cache mode: write
+2026-10-12T01:29:06.1184843Z Prepare workflow directory
+2026-10-12T01:29:06.1576467Z Prepare all required actions
+2026-10-12T01:29:06.1624980Z Getting action download info
+2026-10-12T01:29:06.4009963Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-12T01:29:06.4929163Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-12T01:29:06.6006407Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-12T01:29:06.8562200Z Complete job name: prepare
+2026-10-12T01:29:06.9218396Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-12T01:29:06.9219266Z with:
+2026-10-12T01:29:06.9220022Z   ref: 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:29:06.9220642Z   fetch-depth: 1
+2026-10-12T01:29:06.9221145Z   persist-credentials: false
+2026-10-12T01:29:06.9221669Z   repository: Kaichen9527/stockinsider
+2026-10-12T01:29:06.9225252Z   token: ***
+2026-10-12T01:29:06.9225699Z   ssh-strict: true
+2026-10-12T01:29:06.9226144Z   ssh-user: git
+2026-10-12T01:29:06.9226567Z   clean: true
+2026-10-12T01:29:06.9227047Z   sparse-checkout-cone-mode: true
+2026-10-12T01:29:06.9227586Z   fetch-tags: false
+2026-10-12T01:29:06.9228026Z   show-progress: true
+2026-10-12T01:29:06.9228480Z   lfs: false
+2026-10-12T01:29:06.9228894Z   submodules: false
+2026-10-12T01:29:06.9229536Z   set-safe-directory: true
+2026-10-12T01:29:06.9230261Z   allow-unsafe-pr-checkout: false
+2026-10-12T01:29:06.9230953Z env:
+2026-10-12T01:29:06.9231575Z   REVIEWED_SOURCE: 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:29:06.9232204Z   NEXT_TELEMETRY_DISABLED: 1
+2026-10-12T01:29:06.9232679Z ##[endgroup]
+2026-10-12T01:29:07.0215975Z Syncing repository: Kaichen9527/stockinsider
+2026-10-12T01:29:07.0217953Z ##[group]Getting Git version info
+2026-10-12T01:29:07.0218831Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+2026-10-12T01:29:07.0220053Z [command]/usr/bin/git version
+2026-10-12T01:29:07.0293652Z git version 2.55.0
+2026-10-12T01:29:07.0313837Z ##[endgroup]
+2026-10-12T01:29:07.0341887Z Temporarily overriding HOME='/home/runner/work/_temp/13c7c776-b305-4852-afc7-3ad4704015ed' before making global git config changes
+2026-10-12T01:29:07.0345248Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-12T01:29:07.0347957Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-12T01:29:07.0401158Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+2026-10-12T01:29:07.0403570Z ##[group]Initializing the repository
+2026-10-12T01:29:07.0407599Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+2026-10-12T01:29:07.0513676Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:29:07.0514832Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:29:07.0515808Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:29:07.0516577Z hint: call:
+2026-10-12T01:29:07.0517025Z hint:
+2026-10-12T01:29:07.0517618Z hint: 	git config --global init.defaultBranch <name>
+2026-10-12T01:29:07.0518273Z hint:
+2026-10-12T01:29:07.0518854Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:29:07.0519973Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:29:07.0520796Z hint:
+2026-10-12T01:29:07.0521377Z hint: 	git branch -m <name>
+2026-10-12T01:29:07.0521886Z hint:
+2026-10-12T01:29:07.0522533Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:29:07.0526584Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+2026-10-12T01:29:07.0537751Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+2026-10-12T01:29:07.0587276Z ##[endgroup]
+2026-10-12T01:29:07.0588141Z ##[group]Disabling automatic garbage collection
+2026-10-12T01:29:07.0591692Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-12T01:29:07.0621415Z ##[endgroup]
+2026-10-12T01:29:07.0622228Z ##[group]Setting up auth
+2026-10-12T01:29:07.0629093Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T01:29:07.0658153Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T01:29:07.1016432Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T01:29:07.1046596Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T01:29:07.1221094Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T01:29:07.1251352Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T01:29:07.1440932Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-12T01:29:07.1478449Z ##[endgroup]
+2026-10-12T01:29:07.1490276Z ##[group]Fetching the repository
+2026-10-12T01:29:07.1491764Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:29:08.0586694Z From https://github.com/Kaichen9527/stockinsider
+2026-10-12T01:29:08.0588364Z  * branch            8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14 -> FETCH_HEAD
+2026-10-12T01:29:08.0591446Z ##[endgroup]
+2026-10-12T01:29:08.0592717Z ##[group]Determining the checkout info
+2026-10-12T01:29:08.0594094Z ##[endgroup]
+2026-10-12T01:29:08.0598816Z [command]/usr/bin/git sparse-checkout disable
+2026-10-12T01:29:08.0647923Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-12T01:29:08.0710932Z ##[group]Checking out the ref
+2026-10-12T01:29:08.0712966Z [command]/usr/bin/git checkout --progress --force 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:29:08.1695966Z Note: switching to '8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14'.
+2026-10-12T01:29:08.1697207Z 
+2026-10-12T01:29:08.1697924Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-12T01:29:08.1699729Z changes and commit them, and you can discard any commits you make in this
+2026-10-12T01:29:08.1701596Z state without impacting any branches by switching back to a branch.
+2026-10-12T01:29:08.1702768Z 
+2026-10-12T01:29:08.1703443Z If you want to create a new branch to retain commits you create, you may
+2026-10-12T01:29:08.1704942Z do so (now or later) by using -c with the switch command. Example:
+2026-10-12T01:29:08.1705841Z 
+2026-10-12T01:29:08.1706260Z   git switch -c <new-branch-name>
+2026-10-12T01:29:08.1707106Z 
+2026-10-12T01:29:08.1707550Z Or undo this operation with:
+2026-10-12T01:29:08.1708083Z 
+2026-10-12T01:29:08.1708508Z   git switch -
+2026-10-12T01:29:08.1708954Z 
+2026-10-12T01:29:08.1709865Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-12T01:29:08.1710964Z 
+2026-10-12T01:29:08.1711880Z HEAD is now at 8bcd18e Merge pull request #372 from Kaichen9527/codex/ptt-mention-provenance-oct12
+2026-10-12T01:29:08.1715799Z ##[endgroup]
+2026-10-12T01:29:08.1741655Z [command]/usr/bin/git log -1 --format=%H
+2026-10-12T01:29:08.1762701Z 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:29:08.1770640Z ##[group]Removing auth
+2026-10-12T01:29:08.1773730Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T01:29:08.1802984Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T01:29:08.1974105Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T01:29:08.2001045Z http.https://github.com/.extraheader
+2026-10-12T01:29:08.2007129Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-12T01:29:08.2052024Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T01:29:08.2222617Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T01:29:08.2247146Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T01:29:08.2416833Z ##[endgroup]
+2026-10-12T01:29:08.2748269Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-12T01:29:08.2750022Z with:
+2026-10-12T01:29:08.2751027Z   node-version-file: .nvmrc
+2026-10-12T01:29:08.2752080Z   cache: npm
+2026-10-12T01:29:08.2753404Z   cache-dependency-path: package-lock.json
+web/package-lock.json
+
+2026-10-12T01:29:08.2754877Z   always-auth: false
+2026-10-12T01:29:08.2755926Z   check-latest: false
+2026-10-12T01:29:08.2765219Z   token: ***
+2026-10-12T01:29:08.2766173Z env:
+2026-10-12T01:29:08.2767335Z   REVIEWED_SOURCE: 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:29:08.2768786Z   NEXT_TELEMETRY_DISABLED: 1
+2026-10-12T01:29:08.2770072Z ##[endgroup]
+2026-10-12T01:29:08.4026883Z Node version file is not JSON file
+2026-10-12T01:29:08.4028464Z Resolved .nvmrc as 22.14.0
+2026-10-12T01:29:08.4041843Z Attempting to download 22.14.0...
+2026-10-12T01:29:08.4148593Z (node:2167) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-12T01:29:08.4151563Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-12T01:29:09.3858561Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+2026-10-12T01:29:09.8566696Z Extracting ...
+2026-10-12T01:29:09.8656290Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/6a40ba21-7ebd-4e7b-8b3a-801111454998 -f /home/runner/work/_temp/fdd3e4c9-91e8-4aac-ba31-2674c1b184b9
+2026-10-12T01:29:10.9871712Z Adding to the cache ...
+2026-10-12T01:29:12.8635792Z ##[group]Environment details
+2026-10-12T01:29:13.0771466Z node: v22.14.0
+2026-10-12T01:29:13.0771992Z npm: 10.9.2
+2026-10-12T01:29:13.0772303Z yarn: 1.22.22
+2026-10-12T01:29:13.0773016Z ##[endgroup]
+2026-10-12T01:29:13.0791671Z [command]/opt/hostedtoolcache/node/22.14.0/x64/bin/npm config get cache
+2026-10-12T01:29:13.1542127Z /home/runner/.npm
+2026-10-12T01:29:13.2900212Z Cache hit for: node-cache-Linux-x64-npm-f53e82a65393b7798d266ffb8890e89a47f89a7be19f55670717741d13d14fe2
+2026-10-12T01:29:13.2991922Z (node:2167) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-12T01:29:14.4178672Z Received 121634816 of 253096938 (48.1%), 116.0 MBs/sec
+2026-10-12T01:29:15.3080531Z Received 253096938 of 253096938 (100.0%), 127.7 MBs/sec
+2026-10-12T01:29:15.3081640Z Cache Size: ~241 MB (253096938 B)
+2026-10-12T01:29:15.3200208Z [command]/usr/bin/tar -xf /home/runner/work/_temp/358bf28a-8448-423a-9292-23436539301e/cache.tzst -P -C /home/runner/work/stockinsider/stockinsider --use-compress-program unzstd
+2026-10-12T01:29:15.5716918Z Cache restored successfully
+2026-10-12T01:29:15.8431204Z Cache restored from key: node-cache-Linux-x64-npm-f53e82a65393b7798d266ffb8890e89a47f89a7be19f55670717741d13d14fe2
+2026-10-12T01:29:15.8839303Z ##[group]Run npm ci
+2026-10-12T01:29:15.8840049Z [36;1mnpm ci[0m
+2026-10-12T01:29:15.8840381Z [36;1mnpm --prefix web ci[0m
+2026-10-12T01:29:15.9161590Z shell: /usr/bin/bash -e {0}
+2026-10-12T01:29:15.9162054Z env:
+2026-10-12T01:29:15.9162428Z   REVIEWED_SOURCE: 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:29:15.9162811Z   NEXT_TELEMETRY_DISABLED: 1
+2026-10-12T01:29:15.9163136Z ##[endgroup]
+2026-10-12T01:29:16.8368032Z 
+2026-10-12T01:29:16.8377116Z added 39 packages, and audited 40 packages in 831ms
+2026-10-12T01:29:16.8377724Z 
+2026-10-12T01:29:16.8378077Z 7 packages are looking for funding
+2026-10-12T01:29:16.8378799Z   run `npm fund` for details
+2026-10-12T01:29:16.8384137Z 
+2026-10-12T01:29:16.8385190Z 1 high severity vulnerability
+2026-10-12T01:29:16.8385506Z 
+2026-10-12T01:29:16.8385776Z To address all issues, run:
+2026-10-12T01:29:16.8386148Z   npm audit fix
+2026-10-12T01:29:16.8386338Z 
+2026-10-12T01:29:16.8386484Z Run `npm audit` for details.
+2026-10-12T01:29:20.8667737Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-10-12T01:29:26.1159374Z 
+2026-10-12T01:29:26.1160354Z > web@0.1.0 postinstall
+2026-10-12T01:29:26.1161113Z > node scripts/sync-official-authority.mjs
+2026-10-12T01:29:26.1161396Z 
+2026-10-12T01:29:26.1587255Z Official authority build bridge verified (5 canonical modules).
+2026-10-12T01:29:26.1680816Z 
+2026-10-12T01:29:26.1682019Z added 432 packages, and audited 433 packages in 9s
+2026-10-12T01:29:26.1682497Z 
+2026-10-12T01:29:26.1682787Z 169 packages are looking for funding
+2026-10-12T01:29:26.1683291Z   run `npm fund` for details
+2026-10-12T01:29:26.2777676Z 
+2026-10-12T01:29:26.2778596Z 15 vulnerabilities (1 moderate, 13 high, 1 critical)
+2026-10-12T01:29:26.2778979Z 
+2026-10-12T01:29:26.2779252Z To address issues that do not require attention, run:
+2026-10-12T01:29:26.2780062Z   npm audit fix
+2026-10-12T01:29:26.2780270Z 
+2026-10-12T01:29:26.2780564Z To address all issues (including breaking changes), run:
+2026-10-12T01:29:26.2781258Z   npm audit fix --force
+2026-10-12T01:29:26.2781470Z 
+2026-10-12T01:29:26.2781706Z Run `npm audit` for details.
+2026-10-12T01:29:26.3478944Z ##[group]Run npm run test:tw-entry-plan
+2026-10-12T01:29:26.3479385Z [36;1mnpm run test:tw-entry-plan[0m
+2026-10-12T01:29:26.3480001Z [36;1mnode --test scripts/package-standalone-release.test.mjs[0m
+2026-10-12T01:29:26.3480512Z [36;1mnpm --prefix web run typecheck[0m
+2026-10-12T01:29:26.3480853Z [36;1mnpm --prefix web run lint[0m
+2026-10-12T01:29:26.3520494Z shell: /usr/bin/bash -e {0}
+2026-10-12T01:29:26.3520933Z env:
+2026-10-12T01:29:26.3521425Z   REVIEWED_SOURCE: 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:29:26.3521806Z   NEXT_TELEMETRY_DISABLED: 1
+2026-10-12T01:29:26.3522172Z ##[endgroup]
+2026-10-12T01:29:26.4545749Z 
+2026-10-12T01:29:26.4546530Z > test:tw-entry-plan
+2026-10-12T01:29:26.4550006Z > node web/scripts/sync-official-authority.mjs && node scripts/run-node22.js --experimental-strip-types --test web/scripts/sync-official-authority.test.mjs web/src/lib/tw-entry-plan.test.ts web/src/lib/tw-entry-plan-authority.test.ts web/src/lib/entry-plan-authority-backfill.test.ts web/src/lib/candidate-trade-plan.test.ts web/src/lib/candidate-trade-plan-transport.test.ts web/src/lib/candidate-detail-revision-store.test.ts web/src/lib/stage-classifier.test.ts web/src/lib/candidate-revision-context.test.ts web/src/lib/candidate-revision-query.test.ts web/src/lib/radar-stage-pagination.test.ts web/src/lib/radar-public-snapshot.test.ts web/src/lib/candidate-screened-universe.test.ts web/src/lib/candidate-trade-plan-coverage.test.ts web/src/lib/candidate-research-completion.test.ts
+2026-10-12T01:29:26.4552392Z 
+2026-10-12T01:29:26.4862994Z Official authority build bridge verified (5 canonical modules).
+2026-10-12T01:29:26.5571326Z TAP version 13
+2026-10-12T01:29:26.9238295Z # Subtest: official authority bridge generates exactly the canonical bytes from a clean source checkout
+2026-10-12T01:29:26.9267113Z ok 1 - official authority bridge generates exactly the canonical bytes from a clean source checkout
+2026-10-12T01:29:26.9350899Z   ---
+2026-10-12T01:29:26.9374951Z   duration_ms: 332.768028
+2026-10-12T01:29:26.9403325Z   ...
+2026-10-12T01:29:27.6846406Z # Subtest: official authority retries preserve generated mtimes; a canonical source change updates its exact copy
+2026-10-12T01:29:27.6911496Z ok 2 - official authority retries preserve generated mtimes; a canonical source change updates its exact copy
+2026-10-12T01:29:27.6941238Z   ---
+2026-10-12T01:29:27.6942059Z   duration_ms: 762.083223
+2026-10-12T01:29:27.6947180Z   ...
+2026-10-12T01:29:28.7018322Z # Subtest: official authority generation rejects missing sources and undeclared loader dependencies before writing
+2026-10-12T01:29:28.7020034Z ok 3 - official authority generation rejects missing sources and undeclared loader dependencies before writing
+2026-10-12T01:29:28.7025013Z   ---
+2026-10-12T01:29:28.7026047Z   duration_ms: 1017.418949
+2026-10-12T01:29:28.7026599Z   ...
+2026-10-12T01:29:28.7148337Z # Subtest: official authority build inputs cannot redirect generation through a symlink
+2026-10-12T01:29:28.7149930Z ok 4 - official authority build inputs cannot redirect generation through a symlink
+2026-10-12T01:29:28.7150842Z   ---
+2026-10-12T01:29:28.7151414Z   duration_ms: 12.328568
+2026-10-12T01:29:28.7151957Z   ...
+2026-10-12T01:29:28.7191478Z # Subtest: official authority bridge lifecycle hooks retain web-scoped standalone packaging and generated-input ignores
+2026-10-12T01:29:28.7211287Z ok 5 - official authority bridge lifecycle hooks retain web-scoped standalone packaging and generated-input ignores
+2026-10-12T01:29:28.7218341Z   ---
+2026-10-12T01:29:28.7218889Z   duration_ms: 3.518219
+2026-10-12T01:29:28.7219344Z   ...
+2026-10-12T01:29:28.7291098Z # (node:2307) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:29:28.7338858Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:29:28.7341584Z # (node:2307) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-detail-revision-store.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:29:28.7343517Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:29:28.7348173Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:29:28.7349454Z # Subtest: P1-09: repeated revision reads reuse exact content without another insert
+2026-10-12T01:29:28.7351525Z ok 6 - P1-09: repeated revision reads reuse exact content without another insert
+2026-10-12T01:29:28.7352301Z   ---
+2026-10-12T01:29:28.7352837Z   duration_ms: 1.764621
+2026-10-12T01:29:28.7353538Z   ...
+2026-10-12T01:29:28.7354398Z # Subtest: P1-06: new revision appends with predecessor and never updates saved content
+2026-10-12T01:29:28.7375496Z ok 7 - P1-06: new revision appends with predecessor and never updates saved content
+2026-10-12T01:29:28.7376385Z   ---
+2026-10-12T01:29:28.7377024Z   duration_ms: 0.313929
+2026-10-12T01:29:28.7377655Z   ...
+2026-10-12T01:29:28.7378656Z # Subtest: P1-09: concurrent identical insert reuses winner only after exact hash lookup
+2026-10-12T01:29:28.7379968Z ok 8 - P1-09: concurrent identical insert reuses winner only after exact hash lookup
+2026-10-12T01:29:28.7380779Z   ---
+2026-10-12T01:29:28.7381334Z   duration_ms: 2.430201
+2026-10-12T01:29:28.7382004Z   ...
+2026-10-12T01:29:28.7382992Z # Subtest: P1-09: an identity collision with different content fails and never overwrites
+2026-10-12T01:29:28.7403182Z ok 9 - P1-09: an identity collision with different content fails and never overwrites
+2026-10-12T01:29:28.7404118Z   ---
+2026-10-12T01:29:28.7405084Z   duration_ms: 0.723782
+2026-10-12T01:29:28.7405630Z   ...
+2026-10-12T01:29:28.7406595Z # (node:2313) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:29:28.7407801Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:29:28.7409734Z # (node:2313) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-research-completion.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:29:28.7411779Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:29:28.7413124Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:29:28.7414490Z # Subtest: research success alone cannot complete a running, failed, or missing pipeline
+2026-10-12T01:29:28.7415637Z ok 10 - research success alone cannot complete a running, failed, or missing pipeline
+2026-10-12T01:29:28.7416448Z   ---
+2026-10-12T01:29:28.7417028Z   duration_ms: 2.122754
+2026-10-12T01:29:28.7417578Z   ...
+2026-10-12T01:29:28.7418426Z # Subtest: matching successful research and successful pipeline complete their session
+2026-10-12T01:29:28.7419654Z ok 11 - matching successful research and successful pipeline complete their session
+2026-10-12T01:29:28.7420583Z   ---
+2026-10-12T01:29:28.7421127Z   duration_ms: 0.510705
+2026-10-12T01:29:28.7421715Z   ...
+2026-10-12T01:29:28.7422525Z # Subtest: unrequested and unrelated successful pipeline IDs cannot lend completion
+2026-10-12T01:29:28.7423672Z ok 12 - unrequested and unrelated successful pipeline IDs cannot lend completion
+2026-10-12T01:29:28.7424472Z   ---
+2026-10-12T01:29:28.7424944Z   duration_ms: 0.322629
+2026-10-12T01:29:28.7425563Z   ...
+2026-10-12T01:29:28.7426379Z # Subtest: research status, failure count, and exact pipeline binding remain mandatory
+2026-10-12T01:29:28.7427531Z ok 13 - research status, failure count, and exact pipeline binding remain mandatory
+2026-10-12T01:29:28.7428362Z   ---
+2026-10-12T01:29:28.7428860Z   duration_ms: 0.270469
+2026-10-12T01:29:28.7429399Z   ...
+2026-10-12T01:29:28.7430353Z # Subtest: pipeline lookup IDs deduplicate and preserve the 100-receipt bound
+2026-10-12T01:29:28.7431805Z ok 14 - pipeline lookup IDs deduplicate and preserve the 100-receipt bound
+2026-10-12T01:29:28.7432581Z   ---
+2026-10-12T01:29:28.7433097Z   duration_ms: 1.209294
+2026-10-12T01:29:28.7433622Z   ...
+2026-10-12T01:29:28.7434535Z # Subtest: an older ready session is historical while the latest ready session remains current
+2026-10-12T01:29:28.7435753Z ok 15 - an older ready session is historical while the latest ready session remains current
+2026-10-12T01:29:28.7436560Z   ---
+2026-10-12T01:29:28.7437202Z   duration_ms: 0.237004
+2026-10-12T01:29:28.7437727Z   ...
+2026-10-12T01:29:28.7438764Z # (node:2340) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:29:28.7440000Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:29:28.7441866Z # (node:2340) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-revision-context.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:29:28.7443725Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:29:28.7445046Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:29:28.7446585Z # Subtest: same-day revisions keep their own scores and risk after mutable inputs change
+2026-10-12T01:29:28.7450400Z ok 16 - same-day revisions keep their own scores and risk after mutable inputs change
+2026-10-12T01:29:28.7451284Z   ---
+2026-10-12T01:29:28.7451843Z   duration_ms: 1.653802
+2026-10-12T01:29:28.7452376Z   ...
+2026-10-12T01:29:28.7453234Z # Subtest: legacy and malformed contexts explicitly withhold scores and risk
+2026-10-12T01:29:28.7454240Z ok 17 - legacy and malformed contexts explicitly withhold scores and risk
+2026-10-12T01:29:28.7454979Z   ---
+2026-10-12T01:29:28.7455508Z   duration_ms: 0.38699
+2026-10-12T01:29:28.7456071Z   ...
+2026-10-12T01:29:28.7456915Z # Subtest: detail caller reads frozen provenance without mutable stage or tracking joins
+2026-10-12T01:29:28.7458053Z ok 18 - detail caller reads frozen provenance without mutable stage or tracking joins
+2026-10-12T01:29:28.7458860Z   ---
+2026-10-12T01:29:28.7459421Z   duration_ms: 5.356504
+2026-10-12T01:29:28.7460131Z   ...
+2026-10-12T01:29:28.7461048Z # (node:2341) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:29:28.7462230Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:29:28.7464069Z # (node:2341) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-revision-query.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:29:28.7465903Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:29:28.7467301Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:29:28.7468586Z # Subtest: candidate revision is explicit, non-ambiguous and never accepts an empty selector
+2026-10-12T01:29:28.7469901Z ok 19 - candidate revision is explicit, non-ambiguous and never accepts an empty selector
+2026-10-12T01:29:28.7470758Z   ---
+2026-10-12T01:29:28.7471345Z   duration_ms: 1.717373
+2026-10-12T01:29:28.7471923Z   ...
+2026-10-12T01:29:28.7472836Z # (node:2362) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:29:28.7474012Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:29:28.7475915Z # (node:2362) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-screened-universe.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:29:28.7477725Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:29:28.7479343Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:29:28.7480841Z # Subtest: a freshly built screen has the same bounded discovery membership before and after publication
+2026-10-12T01:29:28.7482127Z ok 20 - a freshly built screen has the same bounded discovery membership before and after publication
+2026-10-12T01:29:28.7483116Z   ---
+2026-10-12T01:29:28.7483659Z   duration_ms: 33.509233
+2026-10-12T01:29:28.7484347Z   ...
+2026-10-12T01:29:28.7485386Z # Subtest: unions every published window and screened bucket; filters explicit foreign markets and unrelated metadata
+2026-10-12T01:29:28.7486778Z ok 21 - unions every published window and screened bucket; filters explicit foreign markets and unrelated metadata
+2026-10-12T01:29:28.7487730Z   ---
+2026-10-12T01:29:28.7488233Z   duration_ms: 7.241338
+2026-10-12T01:29:28.7488753Z   ...
+2026-10-12T01:29:28.7489875Z # Subtest: selects only the latest valid known row per window, excluding both future publication and insertion
+2026-10-12T01:29:28.7491222Z ok 22 - selects only the latest valid known row per window, excluding both future publication and insertion
+2026-10-12T01:29:28.7492127Z   ---
+2026-10-12T01:29:28.7492610Z   duration_ms: 26.853199
+2026-10-12T01:29:28.7493120Z   ...
+2026-10-12T01:29:28.7494247Z # Subtest: missing tables are optional; denied, missing-column, and transport failures stay visible
+2026-10-12T01:29:28.7502759Z ok 23 - missing tables are optional; denied, missing-column, and transport failures stay visible
+2026-10-12T01:29:28.7503770Z   ---
+2026-10-12T01:29:28.7504383Z   duration_ms: 2.49402
+2026-10-12T01:29:28.7504991Z   ...
+2026-10-12T01:29:28.7506054Z # Subtest: canonical legacy checksum and public receipt/ETag inconsistencies fail closed
+2026-10-12T01:29:28.7507253Z ok 24 - canonical legacy checksum and public receipt/ETag inconsistencies fail closed
+2026-10-12T01:29:28.7508246Z   ---
+2026-10-12T01:29:28.7508807Z   duration_ms: 0.965886
+2026-10-12T01:29:28.7509382Z   ...
+2026-10-12T01:29:28.7510358Z # Subtest: public JSONB key reordering cannot be mistaken for a verifiable canonical digest
+2026-10-12T01:29:28.7512049Z ok 25 - public JSONB key reordering cannot be mistaken for a verifiable canonical digest
+2026-10-12T01:29:28.7512866Z   ---
+2026-10-12T01:29:28.7513379Z   duration_ms: 0.529233
+2026-10-12T01:29:28.7513988Z   ...
+2026-10-12T01:29:28.7514837Z # Subtest: checks every bounded tied head, including a conflict beyond the two-row sentinel
+2026-10-12T01:29:28.7516002Z ok 26 - checks every bounded tied head, including a conflict beyond the two-row sentinel
+2026-10-12T01:29:28.7516857Z   ---
+2026-10-12T01:29:28.7517359Z   duration_ms: 1.630452
+2026-10-12T01:29:28.7518002Z   ...
+2026-10-12T01:29:28.7518878Z # Subtest: payload and unique-symbol bounds throw instead of silently losing screened stocks
+2026-10-12T01:29:28.7520161Z ok 27 - payload and unique-symbol bounds throw instead of silently losing screened stocks
+2026-10-12T01:29:28.7521086Z   ---
+2026-10-12T01:29:28.7521615Z   duration_ms: 45.474901
+2026-10-12T01:29:28.7522152Z   ...
+2026-10-12T01:29:28.7523013Z # Subtest: rejects future payload knowledge and invalid cutoff before returning any seeds
+2026-10-12T01:29:28.7524146Z ok 28 - rejects future payload knowledge and invalid cutoff before returning any seeds
+2026-10-12T01:29:28.7524957Z   ---
+2026-10-12T01:29:28.7525515Z   duration_ms: 2.309617
+2026-10-12T01:29:28.7526033Z   ...
+2026-10-12T01:29:28.7526980Z # Subtest: the actual public publisher civil-date content shape remains readable without backdating knowledge
+2026-10-12T01:29:28.7528399Z ok 29 - the actual public publisher civil-date content shape remains readable without backdating knowledge
+2026-10-12T01:29:28.7529259Z   ---
+2026-10-12T01:29:28.7529958Z   duration_ms: 1.731155
+2026-10-12T01:29:28.7530506Z   ...
+2026-10-12T01:29:28.7532744Z # (node:2368) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:29:28.7534142Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:29:28.7536047Z # (node:2368) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-trade-plan-coverage.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:29:28.7537917Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:29:28.7539218Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:29:28.7540913Z # Subtest: whole-roster conservation keeps saved data gaps separate from evaluated and usable research zones
+2026-10-12T01:29:28.7542273Z ok 30 - whole-roster conservation keeps saved data gaps separate from evaluated and usable research zones
+2026-10-12T01:29:28.7543417Z   ---
+2026-10-12T01:29:28.7543965Z   duration_ms: 97.767608
+2026-10-12T01:29:28.7544590Z   ...
+2026-10-12T01:29:28.7545474Z # Subtest: waiting, blocked, avoid-chase and expired are complete evaluations without usable zones
+2026-10-12T01:29:28.7546758Z ok 31 - waiting, blocked, avoid-chase and expired are complete evaluations without usable zones
+2026-10-12T01:29:28.7547601Z   ---
+2026-10-12T01:29:28.7548099Z   duration_ms: 94.109233
+2026-10-12T01:29:28.7548715Z   ...
+2026-10-12T01:29:28.7549461Z # Subtest: typed failures account for stocks but cannot complete coverage
+2026-10-12T01:29:28.7550535Z ok 32 - typed failures account for stocks but cannot complete coverage
+2026-10-12T01:29:28.7551305Z   ---
+2026-10-12T01:29:28.7551775Z   duration_ms: 0.469068
+2026-10-12T01:29:28.7553143Z   ...
+2026-10-12T01:29:28.7554036Z # Subtest: saved success flags cannot substitute for exact immutable envelope bindings
+2026-10-12T01:29:28.7555177Z ok 33 - saved success flags cannot substitute for exact immutable envelope bindings
+2026-10-12T01:29:28.7555994Z   ---
+2026-10-12T01:29:28.7556532Z   duration_ms: 19.955098
+2026-10-12T01:29:28.7557071Z   ...
+2026-10-12T01:29:28.7558061Z # Subtest: missing and duplicate outcomes cannot silently disappear or be deduplicated as successful retries
+2026-10-12T01:29:28.7559334Z ok 34 - missing and duplicate outcomes cannot silently disappear or be deduplicated as successful retries
+2026-10-12T01:29:28.7560326Z   ---
+2026-10-12T01:29:28.7560952Z   duration_ms: 16.479665
+2026-10-12T01:29:28.7561508Z   ...
+2026-10-12T01:29:28.7562519Z # Subtest: duplicate expected entries, unexpected outcomes and invalid symbols are reported, never normalized away
+2026-10-12T01:29:28.7564014Z ok 35 - duplicate expected entries, unexpected outcomes and invalid symbols are reported, never normalized away
+2026-10-12T01:29:28.7564865Z   ---
+2026-10-12T01:29:28.7565502Z   duration_ms: 17.901984
+2026-10-12T01:29:28.7566065Z   ...
+2026-10-12T01:29:28.7567057Z # Subtest: input order does not change valid coverage or its deterministic publication bindings
+2026-10-12T01:29:28.7568342Z ok 36 - input order does not change valid coverage or its deterministic publication bindings
+2026-10-12T01:29:28.7569301Z   ---
+2026-10-12T01:29:28.7569947Z   duration_ms: 22.461437
+2026-10-12T01:29:28.7570521Z   ...
+2026-10-12T01:29:28.7571542Z # Subtest: empty work is explicitly empty with zero plans; an unexpected outcome prevents completion
+2026-10-12T01:29:28.7572907Z ok 37 - empty work is explicitly empty with zero plans; an unexpected outcome prevents completion
+2026-10-12T01:29:28.7573802Z   ---
+2026-10-12T01:29:28.7574377Z   duration_ms: 16.286574
+2026-10-12T01:29:28.7574923Z   ...
+2026-10-12T01:29:28.7576094Z # Subtest: aggregate summary is bounded data-only counts; invalid runtime outcomes and oversize rosters fail closed
+2026-10-12T01:29:28.7577700Z ok 38 - aggregate summary is bounded data-only counts; invalid runtime outcomes and oversize rosters fail closed
+2026-10-12T01:29:28.7578673Z   ---
+2026-10-12T01:29:28.7579233Z   duration_ms: 18.050621
+2026-10-12T01:29:28.7579922Z   ...
+2026-10-12T01:29:28.7581217Z # Subtest: publication accepts only current saved summaries and respects existing filters and non-Taiwan cards
+2026-10-12T01:29:28.7582913Z ok 39 - publication accepts only current saved summaries and respects existing filters and non-Taiwan cards
+2026-10-12T01:29:28.7583877Z   ---
+2026-10-12T01:29:28.7584396Z   duration_ms: 32.00875
+2026-10-12T01:29:28.7585050Z   ...
+2026-10-12T01:29:28.7586059Z # Subtest: publication rejects old latest revisions, missing summaries and valid-shaped but changed summaries
+2026-10-12T01:29:28.7587573Z ok 40 - publication rejects old latest revisions, missing summaries and valid-shaped but changed summaries
+2026-10-12T01:29:28.7588613Z   ---
+2026-10-12T01:29:28.7589116Z   duration_ms: 19.243923
+2026-10-12T01:29:28.7589943Z   ...
+2026-10-12T01:29:28.7590952Z # Subtest: found and waiting buckets may display the same saved stock without duplicating research outcomes
+2026-10-12T01:29:28.7592353Z ok 41 - found and waiting buckets may display the same saved stock without duplicating research outcomes
+2026-10-12T01:29:28.7593294Z   ---
+2026-10-12T01:29:28.7593857Z   duration_ms: 19.154746
+2026-10-12T01:29:28.7594427Z   ...
+2026-10-12T01:29:28.7631058Z # Subtest: every cross-bucket copy must match; revision or summary drift cannot hide behind a valid card
+2026-10-12T01:29:28.7632679Z ok 42 - every cross-bucket copy must match; revision or summary drift cannot hide behind a valid card
+2026-10-12T01:29:28.7638682Z   ---
+2026-10-12T01:29:28.7639339Z   duration_ms: 22.812514
+2026-10-12T01:29:28.7640146Z   ...
+2026-10-12T01:29:28.7641104Z # Subtest: outside-roster Taiwan cards still block publication even alongside valid cross-bucket copies
+2026-10-12T01:29:28.7642402Z ok 43 - outside-roster Taiwan cards still block publication even alongside valid cross-bucket copies
+2026-10-12T01:29:28.7643294Z   ---
+2026-10-12T01:29:28.7643892Z   duration_ms: 15.866488
+2026-10-12T01:29:28.7644616Z   ...
+2026-10-12T01:29:28.7645708Z # Subtest: incomplete research prevents publication even with no cards; missing saved binding cannot be supplied by a card
+2026-10-12T01:29:28.7647210Z ok 44 - incomplete research prevents publication even with no cards; missing saved binding cannot be supplied by a card
+2026-10-12T01:29:28.7648120Z   ---
+2026-10-12T01:29:28.7648733Z   duration_ms: 8.091938
+2026-10-12T01:29:28.7649268Z   ...
+2026-10-12T01:29:28.7650397Z # (node:2384) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:29:28.7651561Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:29:28.7653472Z # (node:2384) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-trade-plan-transport.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:29:28.7655378Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:29:28.7656679Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:29:28.7657900Z # {"fixtureRadarCardBytes":110431,"fixtureHomeCardBytes":182822}
+2026-10-12T01:29:28.7659072Z # Subtest: P1-06/P1-10: summary preserves the saved revision through compact pagination without embedded OHLCV
+2026-10-12T01:29:28.7660571Z ok 45 - P1-06/P1-10: summary preserves the saved revision through compact pagination without embedded OHLCV
+2026-10-12T01:29:28.7661507Z   ---
+2026-10-12T01:29:28.7662072Z   duration_ms: 17.812061
+2026-10-12T01:29:28.7662609Z   ...
+2026-10-12T01:29:28.7663603Z # Subtest: P1-10: representative 40-card Radar and 24-per-stage home transports retain existing budgets
+2026-10-12T01:29:28.7664874Z ok 46 - P1-10: representative 40-card Radar and 24-per-stage home transports retain existing budgets
+2026-10-12T01:29:28.7665725Z   ---
+2026-10-12T01:29:28.7666258Z   duration_ms: 47.000846
+2026-10-12T01:29:28.7666786Z   ...
+2026-10-12T01:29:28.7667754Z # Subtest: P1-06: detail reader and public summary transport cannot recalculate or write a plan
+2026-10-12T01:29:28.7669131Z ok 47 - P1-06: detail reader and public summary transport cannot recalculate or write a plan
+2026-10-12T01:29:28.7670177Z   ---
+2026-10-12T01:29:28.7670596Z   duration_ms: 1.070957
+2026-10-12T01:29:28.7671054Z   ...
+2026-10-12T01:29:28.7671925Z # (node:2395) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:29:28.7672855Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:29:28.7674070Z # (node:2395) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-trade-plan.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:29:28.7675271Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:29:28.7676066Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:29:28.7676912Z # Subtest: P1-06: immutable binding preserves base provenance and seals the exact detail revision
+2026-10-12T01:29:28.7677617Z ok 48 - P1-06: immutable binding preserves base provenance and seals the exact detail revision
+2026-10-12T01:29:28.7678153Z   ---
+2026-10-12T01:29:28.7678429Z   duration_ms: 70.681823
+2026-10-12T01:29:28.7678766Z   ...
+2026-10-12T01:29:28.7679280Z # Subtest: P1-06: hash corruption, wrong revision, stock, session or publication time fails closed
+2026-10-12T01:29:28.7680293Z ok 49 - P1-06: hash corruption, wrong revision, stock, session or publication time fails closed
+2026-10-12T01:29:28.7680900Z   ---
+2026-10-12T01:29:28.7681170Z   duration_ms: 35.908479
+2026-10-12T01:29:28.7681548Z   ...
+2026-10-12T01:29:28.7682115Z # Subtest: P1-06/P1-08: rehashed invalid geometry, authority or research status cannot masquerade as a valid plan
+2026-10-12T01:29:28.7682938Z ok 50 - P1-06/P1-08: rehashed invalid geometry, authority or research status cannot masquerade as a valid plan
+2026-10-12T01:29:28.7683487Z   ---
+2026-10-12T01:29:28.7683745Z   duration_ms: 35.398687
+2026-10-12T01:29:28.7684101Z   ...
+2026-10-12T01:29:28.7684684Z # Subtest: P1-09: identical retries keep revision identity while changed research metadata creates new lineage
+2026-10-12T01:29:28.7685494Z ok 51 - P1-09: identical retries keep revision identity while changed research metadata creates new lineage
+2026-10-12T01:29:28.7685991Z   ---
+2026-10-12T01:29:28.7686324Z   duration_ms: 65.655414
+2026-10-12T01:29:28.7686625Z   ...
+2026-10-12T01:29:28.7687094Z # Subtest: P1-09: old absent attachments and future contract versions stay unsupported
+2026-10-12T01:29:28.7687878Z ok 52 - P1-09: old absent attachments and future contract versions stay unsupported
+2026-10-12T01:29:28.7688315Z   ---
+2026-10-12T01:29:28.7688613Z   duration_ms: 18.24578
+2026-10-12T01:29:28.7688952Z   ...
+2026-10-12T01:29:28.7689442Z # Subtest: P1-06/P1-10: summary is a bounded revision-bound projection with no candles or prices
+2026-10-12T01:29:28.7771075Z ok 53 - P1-06/P1-10: summary is a bounded revision-bound projection with no candles or prices
+2026-10-12T01:29:28.7800180Z   ---
+2026-10-12T01:29:28.7810717Z   duration_ms: 8.953255
+2026-10-12T01:29:28.7840444Z   ...
+2026-10-12T01:29:28.7871039Z # Subtest: P1-05: missing authority can be published as explicit insufficient data without invented candles
+2026-10-12T01:29:28.7900600Z ok 54 - P1-05: missing authority can be published as explicit insufficient data without invented candles
+2026-10-12T01:29:28.7930295Z   ---
+2026-10-12T01:29:28.7951066Z   duration_ms: 8.758657
+2026-10-12T01:29:28.7952369Z   ...
+2026-10-12T01:29:28.7953672Z # Subtest: P1-10: worst-case reasons remain under the 1800-byte summary budget without truncating codes
+2026-10-12T01:29:28.7955012Z ok 55 - P1-10: worst-case reasons remain under the 1800-byte summary budget without truncating codes
+2026-10-12T01:29:28.7955840Z   ---
+2026-10-12T01:29:28.7956353Z   duration_ms: 10.368796
+2026-10-12T01:29:28.7956859Z   ...
+2026-10-12T01:29:32.2004107Z # (node:2402) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:29:32.2005408Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:29:32.2007188Z # (node:2402) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/entry-plan-authority-backfill.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:29:32.2008328Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:29:32.2009273Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:29:32.2020298Z # Subtest: authority completion summary includes every page and fails on invalid status
+2026-10-12T01:29:32.2021568Z ok 56 - authority completion summary includes every page and fails on invalid status
+2026-10-12T01:29:32.2022247Z   ---
+2026-10-12T01:29:32.2022780Z   duration_ms: 2.959692
+2026-10-12T01:29:32.2023186Z   ...
+2026-10-12T01:29:32.2024006Z # Subtest: authority-only request accepts no caller-supplied prices, roster or fabricated sessions
+2026-10-12T01:29:32.2025796Z ok 57 - authority-only request accepts no caller-supplied prices, roster or fabricated sessions
+2026-10-12T01:29:32.2026401Z   ---
+2026-10-12T01:29:32.2051017Z   duration_ms: 0.47826
+2026-10-12T01:29:32.2060626Z   ...
+2026-10-12T01:29:32.2074905Z # Subtest: frozen common-stock roster generates per-stock-month and exchange-range jobs with no candidate omissions
+2026-10-12T01:29:32.2076330Z ok 58 - frozen common-stock roster generates per-stock-month and exchange-range jobs with no candidate omissions
+2026-10-12T01:29:32.2077277Z   ---
+2026-10-12T01:29:32.2077642Z   duration_ms: 9.712108
+2026-10-12T01:29:32.2078174Z   ...
+2026-10-12T01:29:32.2078722Z # Subtest: official monthly price acquisition records the real source and retains OHLCV and turnover
+2026-10-12T01:29:32.2079501Z ok 59 - official monthly price acquisition records the real source and retains OHLCV and turnover
+2026-10-12T01:29:32.2080436Z   ---
+2026-10-12T01:29:32.2080829Z   duration_ms: 19.235975
+2026-10-12T01:29:32.2081392Z   ...
+2026-10-12T01:29:32.2082121Z # Subtest: official monthly source distinguishes a confirmed empty report from a failed or changed schema
+2026-10-12T01:29:32.2083021Z ok 60 - official monthly source distinguishes a confirmed empty report from a failed or changed schema
+2026-10-12T01:29:32.2083536Z   ---
+2026-10-12T01:29:32.2083946Z   duration_ms: 0.896807
+2026-10-12T01:29:32.2084288Z   ...
+2026-10-12T01:29:32.2084917Z # Subtest: calendar selects240 date heads beyond3000 revisions for both complete paginated dependencies
+2026-10-12T01:29:32.2085845Z ok 61 - calendar selects240 date heads beyond3000 revisions for both complete paginated dependencies
+2026-10-12T01:29:32.2086418Z   ---
+2026-10-12T01:29:32.2086683Z   duration_ms: 613.667134
+2026-10-12T01:29:32.2087088Z   ...
+2026-10-12T01:29:32.2087620Z # Subtest: cancelled latest date head never revives an older completed revision
+2026-10-12T01:29:32.2088316Z ok 62 - cancelled latest date head never revives an older completed revision
+2026-10-12T01:29:32.2088907Z   ---
+2026-10-12T01:29:32.2089258Z   duration_ms: 162.355674
+2026-10-12T01:29:32.2089651Z   ...
+2026-10-12T01:29:32.2090492Z # Subtest: boundary date is fully resolved across two full pages before returning240 heads
+2026-10-12T01:29:32.2091216Z ok 63 - boundary date is fully resolved across two full pages before returning240 heads
+2026-10-12T01:29:32.2091671Z   ---
+2026-10-12T01:29:32.2091947Z   duration_ms: 14.028666
+2026-10-12T01:29:32.2092306Z   ...
+2026-10-12T01:29:32.2092918Z # Subtest: late/future revisions are excluded at all three original cutoffs; future close and wrong provider do not revive dates
+2026-10-12T01:29:32.2093853Z ok 64 - late/future revisions are excluded at all three original cutoffs; future close and wrong provider do not revive dates
+2026-10-12T01:29:32.2094439Z   ---
+2026-10-12T01:29:32.2094724Z   duration_ms: 7.890776
+2026-10-12T01:29:32.2095261Z   ...
+2026-10-12T01:29:32.2095776Z # Subtest: calendar clocks and same-head conflicts retain microsecond precision
+2026-10-12T01:29:32.2096405Z ok 65 - calendar clocks and same-head conflicts retain microsecond precision
+2026-10-12T01:29:32.2096825Z   ---
+2026-10-12T01:29:32.2097171Z   duration_ms: 4.696145
+2026-10-12T01:29:32.2097467Z   ...
+2026-10-12T01:29:32.2097907Z # Subtest: short history rejects instead of accepting a prefix as240 sessions
+2026-10-12T01:29:32.2098621Z ok 66 - short history rejects instead of accepting a prefix as240 sessions
+2026-10-12T01:29:32.2099019Z   ---
+2026-10-12T01:29:32.2099338Z   duration_ms: 125.09559
+2026-10-12T01:29:32.2099673Z   ...
+2026-10-12T01:29:32.2100446Z # Subtest: row cap exhaustion and exactly-full final boundary require proof of end, never truncate success
+2026-10-12T01:29:32.2101234Z ok 67 - row cap exhaustion and exactly-full final boundary require proof of end, never truncate success
+2026-10-12T01:29:32.2101790Z   ---
+2026-10-12T01:29:32.2102086Z   duration_ms: 2985.875648
+2026-10-12T01:29:32.2102391Z   ...
+2026-10-12T01:29:32.2102859Z # Subtest: oversized page and UTF8 page/aggregate budgets fail closed
+2026-10-12T01:29:32.2103407Z ok 68 - oversized page and UTF8 page/aggregate budgets fail closed
+2026-10-12T01:29:32.2103823Z   ---
+2026-10-12T01:29:32.2104134Z   duration_ms: 521.953141
+2026-10-12T01:29:32.2104417Z   ...
+2026-10-12T01:30:02.2171158Z # Subtest: a stalled calendar query aborts within the fixed shared30-second deadline
+2026-10-12T01:30:02.2174149Z ok 69 - a stalled calendar query aborts within the fixed shared30-second deadline
+2026-10-12T01:30:02.2174889Z   ---
+2026-10-12T01:30:02.2176657Z   duration_ms: 30017.723595
+2026-10-12T01:30:02.2177221Z   ...
+2026-10-12T01:30:02.2253333Z # (node:2417) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:30:02.2254313Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:30:02.2255744Z # (node:2417) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/radar-public-snapshot.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:30:02.2257193Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:30:02.2258179Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:30:02.2259217Z # Subtest: public Radar snapshot persists the complete canonical stock plane for paged delivery
+2026-10-12T01:30:02.2260433Z ok 70 - public Radar snapshot persists the complete canonical stock plane for paged delivery
+2026-10-12T01:30:02.2260942Z   ---
+2026-10-12T01:30:02.2261368Z   duration_ms: 6.98363
+2026-10-12T01:30:02.2261709Z   ...
+2026-10-12T01:30:02.2262400Z # (node:2428) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:30:02.2263386Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:30:02.2264637Z # (node:2428) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/radar-stage-pagination.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:30:02.2265637Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:30:02.2266319Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:30:02.2267027Z # Subtest: compaction preserves candidate revision and stale authority for found and actionable
+2026-10-12T01:30:02.2267694Z ok 71 - compaction preserves candidate revision and stale authority for found and actionable
+2026-10-12T01:30:02.2268155Z   ---
+2026-10-12T01:30:02.2268410Z   duration_ms: 1.17486
+2026-10-12T01:30:02.2268707Z   ...
+2026-10-12T01:30:02.2269608Z # Subtest: stage pagination exposes every card from one immutable snapshot without exceeding page size
+2026-10-12T01:30:02.2270530Z ok 72 - stage pagination exposes every card from one immutable snapshot without exceeding page size
+2026-10-12T01:30:02.2271038Z   ---
+2026-10-12T01:30:02.2271291Z   duration_ms: 1.346152
+2026-10-12T01:30:02.2271561Z   ...
+2026-10-12T01:30:02.2271983Z # Subtest: stage pagination clamps invalid offsets and oversized pages
+2026-10-12T01:30:02.2272492Z ok 73 - stage pagination clamps invalid offsets and oversized pages
+2026-10-12T01:30:02.2272971Z   ---
+2026-10-12T01:30:02.2273214Z   duration_ms: 0.176431
+2026-10-12T01:30:02.2273518Z   ...
+2026-10-12T01:30:02.2273999Z # (node:2456) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:30:02.2274605Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:30:02.2275783Z # (node:2456) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/stage-classifier.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:30:02.2277098Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:30:02.2278176Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:30:02.2278955Z # Subtest: score weights match the approved four scorecards
+2026-10-12T01:30:02.2279618Z ok 74 - score weights match the approved four scorecards
+2026-10-12T01:30:02.2280186Z   ---
+2026-10-12T01:30:02.2280766Z   duration_ms: 1.077863
+2026-10-12T01:30:02.2281109Z   ...
+2026-10-12T01:30:02.2282245Z # Subtest: trend and breakout technical gates use explicit MA and overheat rules
+2026-10-12T01:30:02.2283065Z ok 75 - trend and breakout technical gates use explicit MA and overheat rules
+2026-10-12T01:30:02.2283657Z   ---
+2026-10-12T01:30:02.2284010Z   duration_ms: 0.44858
+2026-10-12T01:30:02.2284399Z   ...
+2026-10-12T01:30:02.2285177Z # Subtest: long MA breakouts require their own crossover and may persist one confirmation session
+2026-10-12T01:30:02.2286152Z ok 76 - long MA breakouts require their own crossover and may persist one confirmation session
+2026-10-12T01:30:02.2286781Z   ---
+2026-10-12T01:30:02.2287157Z   duration_ms: 0.889091
+2026-10-12T01:30:02.2287531Z   ...
+2026-10-12T01:30:02.2288119Z # Subtest: candidate reaches actionable only after two qualifying closes
+2026-10-12T01:30:02.2288859Z ok 77 - candidate reaches actionable only after two qualifying closes
+2026-10-12T01:30:02.2289447Z   ---
+2026-10-12T01:30:02.2289918Z   duration_ms: 0.458594
+2026-10-12T01:30:02.2290283Z   ...
+2026-10-12T01:30:02.2290945Z # Subtest: qualifying close streak advances only across distinct consecutive market sessions
+2026-10-12T01:30:02.2291836Z ok 78 - qualifying close streak advances only across distinct consecutive market sessions
+2026-10-12T01:30:02.2292436Z   ---
+2026-10-12T01:30:02.2292834Z   duration_ms: 0.301592
+2026-10-12T01:30:02.2293217Z   ...
+2026-10-12T01:30:02.2293846Z # Subtest: risk-off, breakdown, stale data and peer catch-down block actionable
+2026-10-12T01:30:02.2294620Z ok 79 - risk-off, breakdown, stale data and peer catch-down block actionable
+2026-10-12T01:30:02.2295213Z   ---
+2026-10-12T01:30:02.2295574Z   duration_ms: 1.784674
+2026-10-12T01:30:02.2295976Z   ...
+2026-10-12T01:30:02.2296598Z # Subtest: minimum research and conservative valuation gates distinguish found from waiting
+2026-10-12T01:30:02.2297486Z ok 80 - minimum research and conservative valuation gates distinguish found from waiting
+2026-10-12T01:30:02.2298196Z   ---
+2026-10-12T01:30:02.2298574Z   duration_ms: 0.513774
+2026-10-12T01:30:02.2298966Z   ...
+2026-10-12T01:30:02.2299730Z # (node:2468) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:30:02.2300841Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:30:02.2302428Z # (node:2468) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/tw-entry-plan-authority.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:30:02.2303409Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:30:02.2304154Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:30:02.2304846Z # Subtest: loads 240 proved observations and an official next session after a holiday and weekend
+2026-10-12T01:30:02.2306200Z ok 81 - loads 240 proved observations and an official next session after a holiday and weekend
+2026-10-12T01:30:02.2306622Z   ---
+2026-10-12T01:30:02.2306866Z   duration_ms: 164.924594
+2026-10-12T01:30:02.2307195Z   ...
+2026-10-12T01:30:02.2307646Z # Subtest: verified event chain rescales prior prices to the unchanged signal-session price
+2026-10-12T01:30:02.2308302Z ok 82 - verified event chain rescales prior prices to the unchanged signal-session price
+2026-10-12T01:30:02.2308748Z   ---
+2026-10-12T01:30:02.2308998Z   duration_ms: 172.032056
+2026-10-12T01:30:02.2309273Z   ...
+2026-10-12T01:30:02.2310015Z # Subtest: market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+2026-10-12T01:30:02.2311268Z ok 83 - market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate
+2026-10-12T01:30:02.2311937Z   ---
+2026-10-12T01:30:02.2312413Z   duration_ms: 214.08189
+2026-10-12T01:30:02.2312934Z   ...
+2026-10-12T01:30:02.2313513Z # Subtest: absent price/session/action authority and read failure never abort the candidate run
+2026-10-12T01:30:02.2314514Z ok 84 - absent price/session/action authority and read failure never abort the candidate run
+2026-10-12T01:30:02.2315158Z   ---
+2026-10-12T01:30:02.2315515Z   duration_ms: 40.380732
+2026-10-12T01:30:02.2315912Z   ...
+2026-10-12T01:30:02.2316564Z # Subtest: corporate-action hash corruption and changed daily factor fail closed
+2026-10-12T01:30:02.2317456Z ok 85 - corporate-action hash corruption and changed daily factor fail closed
+2026-10-12T01:30:02.2318107Z   ---
+2026-10-12T01:30:02.2318459Z   duration_ms: 42.58166
+2026-10-12T01:30:02.2318820Z   ...
+2026-10-12T01:30:02.2319559Z # Subtest: post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+2026-10-12T01:30:02.2320673Z ok 86 - post-cutoff source and post-cutoff annual acquisition cannot backfill a plan
+2026-10-12T01:30:02.2321300Z   ---
+2026-10-12T01:30:02.2321692Z   duration_ms: 144.011209
+2026-10-12T01:30:02.2322084Z   ...
+2026-10-12T01:30:02.2322728Z # Subtest: an absent weekday and conflicting calendar heads cannot be skipped
+2026-10-12T01:30:02.2323583Z ok 87 - an absent weekday and conflicting calendar heads cannot be skipped
+2026-10-12T01:30:02.2324178Z   ---
+2026-10-12T01:30:02.2324537Z   duration_ms: 99.399931
+2026-10-12T01:30:02.2325008Z   ...
+2026-10-12T01:30:02.2325777Z # Subtest: zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+2026-10-12T01:30:02.2326893Z ok 88 - zero observed events need all three explicit feed receipts, never an assumed identity adjustment
+2026-10-12T01:30:02.2327610Z   ---
+2026-10-12T01:30:02.2327970Z   duration_ms: 12.766425
+2026-10-12T01:30:02.2328399Z   ...
+2026-10-12T01:30:02.2329010Z # Subtest: shared market authority is acquired once for the immutable run cutoff
+2026-10-12T01:30:02.2330089Z ok 89 - shared market authority is acquired once for the immutable run cutoff
+2026-10-12T01:30:02.2330691Z   ---
+2026-10-12T01:30:02.2331048Z   duration_ms: 187.092119
+2026-10-12T01:30:02.2331512Z   ...
+2026-10-12T01:30:02.2332206Z # Subtest: an older raw observation remains valid against its own immutable calendar revision
+2026-10-12T01:30:02.2333202Z ok 90 - an older raw observation remains valid against its own immutable calendar revision
+2026-10-12T01:30:02.2333902Z   ---
+2026-10-12T01:30:02.2334258Z   duration_ms: 91.830675
+2026-10-12T01:30:02.2334672Z   ...
+2026-10-12T01:30:02.2335698Z # Subtest: a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+2026-10-12T01:30:02.2336764Z ok 91 - a cutoff-known ad-hoc official cancellation overrides the annual scheduled opening
+2026-10-12T01:30:02.2337464Z   ---
+2026-10-12T01:30:02.2337829Z   duration_ms: 91.367539
+2026-10-12T01:30:02.2338214Z   ...
+2026-10-12T01:30:02.2339015Z # Subtest: a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+2026-10-12T01:30:02.2340384Z ok 92 - a past ad-hoc cancellation does not create a false missing-price day in the 240-session window
+2026-10-12T01:30:02.2341119Z   ---
+2026-10-12T01:30:02.2341561Z   duration_ms: 89.029591
+2026-10-12T01:30:02.2341957Z   ...
+2026-10-12T01:30:02.2342613Z # Subtest: a recent share-changing action does not manufacture a comparable volume ratio
+2026-10-12T01:30:02.2343626Z ok 93 - a recent share-changing action does not manufacture a comparable volume ratio
+2026-10-12T01:30:02.2344241Z   ---
+2026-10-12T01:30:02.2344642Z   duration_ms: 17.448342
+2026-10-12T01:30:02.2345061Z   ...
+2026-10-12T01:30:02.2345928Z # (node:2480) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-12T01:30:02.2346953Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-12T01:30:02.2348518Z # (node:2480) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/tw-entry-plan.test.ts is not specified and it doesn't parse as CommonJS.
+2026-10-12T01:30:02.2350215Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-12T01:30:02.2351353Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-12T01:30:02.2352429Z # Subtest: P1-01: prior20 excludes the signal high and its exactly 1.5x volume
+2026-10-12T01:30:02.2353307Z ok 94 - P1-01: prior20 excludes the signal high and its exactly 1.5x volume
+2026-10-12T01:30:02.2353873Z   ---
+2026-10-12T01:30:02.2354324Z   duration_ms: 35.857026
+2026-10-12T01:30:02.2354726Z   ...
+2026-10-12T01:30:02.2355470Z # Subtest: P1-02: a confirmed signal retains unchanged formal market/overseas blockers
+2026-10-12T01:30:02.2357534Z ok 95 - P1-02: a confirmed signal retains unchanged formal market/overseas blockers
+2026-10-12T01:30:02.2358222Z   ---
+2026-10-12T01:30:02.2358606Z   duration_ms: 11.345444
+2026-10-12T01:30:02.2359026Z   ...
+2026-10-12T01:30:02.2359487Z # Subtest: P1-03: a touch without stabilization never confirms a pullback
+2026-10-12T01:30:02.2360502Z ok 96 - P1-03: a touch without stabilization never confirms a pullback
+2026-10-12T01:30:02.2360911Z   ---
+2026-10-12T01:30:02.2361167Z   duration_ms: 7.952455
+2026-10-12T01:30:02.2361422Z   ...
+2026-10-12T01:30:02.2362137Z # Subtest: P1-03: a stabilized uptrend pullback produces a bounded current-scale research zone
+2026-10-12T01:30:02.2362771Z ok 97 - P1-03: a stabilized uptrend pullback produces a bounded current-scale research zone
+2026-10-12T01:30:02.2363199Z   ---
+2026-10-12T01:30:02.2363476Z   duration_ms: 8.90875
+2026-10-12T01:30:02.2363760Z   ...
+2026-10-12T01:30:02.2364270Z # Subtest: P1-03: a valid breakout that is too far above resistance keeps the signal without a usable entry zone
+2026-10-12T01:30:02.2365121Z ok 98 - P1-03: a valid breakout that is too far above resistance keeps the signal without a usable entry zone
+2026-10-12T01:30:02.2365664Z   ---
+2026-10-12T01:30:02.2365983Z   duration_ms: 8.053408
+2026-10-12T01:30:02.2366375Z   ...
+2026-10-12T01:30:02.2366879Z # Subtest: P1-03: tick rounding that leaves U below L cannot publish an entry zone
+2026-10-12T01:30:02.2367490Z ok 99 - P1-03: tick rounding that leaves U below L cannot publish an entry zone
+2026-10-12T01:30:02.2368004Z   ---
+2026-10-12T01:30:02.2368298Z   duration_ms: 8.104435
+2026-10-12T01:30:02.2368645Z   ...
+2026-10-12T01:30:02.2369122Z # Subtest: P1-04: Taiwan ticks use the correct tier on both sides of every boundary
+2026-10-12T01:30:02.2370234Z ok 100 - P1-04: Taiwan ticks use the correct tier on both sides of every boundary
+2026-10-12T01:30:02.2370735Z   ---
+2026-10-12T01:30:02.2371146Z   duration_ms: 0.397151
+2026-10-12T01:30:02.2371508Z   ...
+2026-10-12T01:30:02.2372033Z # Subtest: P1-04: only the supplied official next session determines validity across closures
+2026-10-12T01:30:02.2372685Z ok 101 - P1-04: only the supplied official next session determines validity across closures
+2026-10-12T01:30:02.2373176Z   ---
+2026-10-12T01:30:02.2373520Z   duration_ms: 8.624983
+2026-10-12T01:30:02.2373916Z   ...
+2026-10-12T01:30:02.2374797Z # Subtest: P1-04: late knowledge cannot manufacture next-open eligibility; close-time publication is expired
+2026-10-12T01:30:02.2375855Z ok 102 - P1-04: late knowledge cannot manufacture next-open eligibility; close-time publication is expired
+2026-10-12T01:30:02.2376337Z   ---
+2026-10-12T01:30:02.2376635Z   duration_ms: 17.423333
+2026-10-12T01:30:02.2376918Z   ...
+2026-10-12T01:30:02.2377412Z # Subtest: P1-01/P1-05: insufficient, unfinished, missing-adjustment and conflicting inputs fail closed
+2026-10-12T01:30:02.2378149Z ok 103 - P1-01/P1-05: insufficient, unfinished, missing-adjustment and conflicting inputs fail closed
+2026-10-12T01:30:02.2378603Z   ---
+2026-10-12T01:30:02.2378923Z   duration_ms: 47.580461
+2026-10-12T01:30:02.2379225Z   ...
+2026-10-12T01:30:02.2379879Z # Subtest: P1-05: official session gaps, duplicate dates, impossible dates, bad OHLC and future observations fail closed
+2026-10-12T01:30:02.2380859Z ok 104 - P1-05: official session gaps, duplicate dates, impossible dates, bad OHLC and future observations fail closed
+2026-10-12T01:30:02.2381357Z   ---
+2026-10-12T01:30:02.2381614Z   duration_ms: 40.47687
+2026-10-12T01:30:02.2381874Z   ...
+2026-10-12T01:30:02.2382333Z # Subtest: P1-09: rebind/retry preserves semantic plan identity and frozen knowledge time
+2026-10-12T01:30:02.2382954Z ok 105 - P1-09: rebind/retry preserves semantic plan identity and frozen knowledge time
+2026-10-12T01:30:02.2383359Z   ---
+2026-10-12T01:30:02.2383642Z   duration_ms: 37.048869
+2026-10-12T01:30:02.2383904Z   ...
+2026-10-12T01:30:02.2384453Z # Subtest: missing liquidity/formal authority never changes a technical observation into actionable permission
+2026-10-12T01:30:02.2385247Z ok 106 - missing liquidity/formal authority never changes a technical observation into actionable permission
+2026-10-12T01:30:02.2385696Z   ---
+2026-10-12T01:30:02.2386004Z   duration_ms: 23.081065
+2026-10-12T01:30:02.2386336Z   ...
+2026-10-12T01:30:02.2386864Z # Subtest: zero-volume history cannot provide a breakout denominator and input size is bounded
+2026-10-12T01:30:02.2387488Z ok 107 - zero-volume history cannot provide a breakout denominator and input size is bounded
+2026-10-12T01:30:02.2388001Z   ---
+2026-10-12T01:30:02.2388257Z   duration_ms: 8.6008
+2026-10-12T01:30:02.2388515Z   ...
+2026-10-12T01:30:02.2388817Z 1..107
+2026-10-12T01:30:02.2389061Z # tests 107
+2026-10-12T01:30:02.2389684Z # suites 0
+2026-10-12T01:30:02.2390933Z # pass 107
+2026-10-12T01:30:02.2391330Z # fail 0
+2026-10-12T01:30:02.2391817Z # cancelled 0
+2026-10-12T01:30:02.2392130Z # skipped 0
+2026-10-12T01:30:02.2392497Z # todo 0
+2026-10-12T01:30:02.2392839Z # duration_ms 35694.098295
+2026-10-12T01:30:02.2738500Z TAP version 13
+2026-10-12T01:30:02.3158626Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.3159885Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.3160922Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.3161667Z # hint: call:
+2026-10-12T01:30:02.3162123Z # hint:
+2026-10-12T01:30:02.3162779Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.3163346Z # hint:
+2026-10-12T01:30:02.3164264Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.3165165Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.3165858Z # hint:
+2026-10-12T01:30:02.3166586Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.3167174Z # hint:
+2026-10-12T01:30:02.3167887Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.3271409Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.3272466Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.3273327Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.3274005Z # hint: call:
+2026-10-12T01:30:02.3274295Z # hint:
+2026-10-12T01:30:02.3274673Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.3275032Z # hint:
+2026-10-12T01:30:02.3275437Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.3276009Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.3276400Z # hint:
+2026-10-12T01:30:02.3276757Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.3277043Z # hint:
+2026-10-12T01:30:02.3277571Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.4102511Z # Subtest: packages only the standalone runtime and binds a full git identity
+2026-10-12T01:30:02.4106934Z ok 1 - packages only the standalone runtime and binds a full git identity
+2026-10-12T01:30:02.4107916Z   ---
+2026-10-12T01:30:02.4108423Z   duration_ms: 106.240405
+2026-10-12T01:30:02.4109043Z   ...
+2026-10-12T01:30:02.4195628Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.4196721Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.4197994Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.4198644Z # hint: call:
+2026-10-12T01:30:02.4199117Z # hint:
+2026-10-12T01:30:02.4199620Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.4204582Z # hint:
+2026-10-12T01:30:02.4205072Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.4205656Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.4206083Z # hint:
+2026-10-12T01:30:02.4206408Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.4206709Z # hint:
+2026-10-12T01:30:02.4207123Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.4292488Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.4293508Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.4294459Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.4295529Z # hint: call:
+2026-10-12T01:30:02.4296083Z # hint:
+2026-10-12T01:30:02.4296904Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.4297473Z # hint:
+2026-10-12T01:30:02.4298190Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.4299002Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.4299940Z # hint:
+2026-10-12T01:30:02.4300485Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.4300894Z # hint:
+2026-10-12T01:30:02.4301455Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.4736321Z # Subtest: release verification rejects a modified runtime file
+2026-10-12T01:30:02.4737099Z ok 2 - release verification rejects a modified runtime file
+2026-10-12T01:30:02.4737574Z   ---
+2026-10-12T01:30:02.4737843Z   duration_ms: 63.582607
+2026-10-12T01:30:02.4738193Z   ...
+2026-10-12T01:30:02.4806551Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.4807447Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.4808536Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.4809047Z # hint: call:
+2026-10-12T01:30:02.4809704Z # hint:
+2026-10-12T01:30:02.4810526Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.4813794Z # hint:
+2026-10-12T01:30:02.4814391Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.4815149Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.4815892Z # hint:
+2026-10-12T01:30:02.4816381Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.4816855Z # hint:
+2026-10-12T01:30:02.4817563Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.4907726Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.4908641Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.4909472Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.4910871Z # hint: call:
+2026-10-12T01:30:02.4911336Z # hint:
+2026-10-12T01:30:02.4911943Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.4912502Z # hint:
+2026-10-12T01:30:02.4913286Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.4914127Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.4914737Z # hint:
+2026-10-12T01:30:02.4915301Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.4915752Z # hint:
+2026-10-12T01:30:02.4916479Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.5371387Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.5373019Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.5374486Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.5375363Z # hint: call:
+2026-10-12T01:30:02.5375922Z # hint:
+2026-10-12T01:30:02.5376595Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.5377112Z # hint:
+2026-10-12T01:30:02.5377683Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.5378433Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.5378859Z # hint:
+2026-10-12T01:30:02.5379156Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.5379443Z # hint:
+2026-10-12T01:30:02.5380149Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.5469280Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.5470435Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.5471423Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.5472227Z # hint: call:
+2026-10-12T01:30:02.5472599Z # hint:
+2026-10-12T01:30:02.5473113Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.5473607Z # hint:
+2026-10-12T01:30:02.5474188Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.5474977Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.5475595Z # hint:
+2026-10-12T01:30:02.5476030Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.5476418Z # hint:
+2026-10-12T01:30:02.5477061Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.5865321Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.5866658Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.5867595Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.5868092Z # hint: call:
+2026-10-12T01:30:02.5869172Z # hint:
+2026-10-12T01:30:02.5870515Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.5871284Z # hint:
+2026-10-12T01:30:02.5871870Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.5872619Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.5873281Z # hint:
+2026-10-12T01:30:02.5873673Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.5874348Z # hint:
+2026-10-12T01:30:02.5875061Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.5966681Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.5967819Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.5969103Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.5970469Z # hint: call:
+2026-10-12T01:30:02.5970937Z # hint:
+2026-10-12T01:30:02.5971490Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.5971975Z # hint:
+2026-10-12T01:30:02.5972443Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.5973001Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.5973415Z # hint:
+2026-10-12T01:30:02.5973743Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.5974121Z # hint:
+2026-10-12T01:30:02.5974611Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.6393333Z # Subtest: accepts identical bundled static and public assets, but rejects mismatches
+2026-10-12T01:30:02.6394061Z ok 3 - accepts identical bundled static and public assets, but rejects mismatches
+2026-10-12T01:30:02.6394810Z   ---
+2026-10-12T01:30:02.6395106Z   duration_ms: 165.588145
+2026-10-12T01:30:02.6395475Z   ...
+2026-10-12T01:30:02.6675518Z # Subtest: verification CLI cannot skip a release symlink invocation
+2026-10-12T01:30:02.6676619Z ok 4 - verification CLI cannot skip a release symlink invocation
+2026-10-12T01:30:02.6677176Z   ---
+2026-10-12T01:30:02.6677627Z   duration_ms: 28.400248
+2026-10-12T01:30:02.6677991Z   ...
+2026-10-12T01:30:02.6959552Z # Subtest: packager CLI cannot skip a checkout symlink invocation
+2026-10-12T01:30:02.6961360Z ok 5 - packager CLI cannot skip a checkout symlink invocation
+2026-10-12T01:30:02.6961999Z   ---
+2026-10-12T01:30:02.6962525Z   duration_ms: 28.310462
+2026-10-12T01:30:02.6963018Z   ...
+2026-10-12T01:30:02.7015926Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.7016945Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.7017928Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.7018867Z # hint: call:
+2026-10-12T01:30:02.7019363Z # hint:
+2026-10-12T01:30:02.7020235Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.7020812Z # hint:
+2026-10-12T01:30:02.7021446Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.7022237Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.7022795Z # hint:
+2026-10-12T01:30:02.7023384Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.7023776Z # hint:
+2026-10-12T01:30:02.7024370Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.7117682Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.7118602Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.7119722Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.7120601Z # hint: call:
+2026-10-12T01:30:02.7121020Z # hint:
+2026-10-12T01:30:02.7121524Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.7122289Z # hint:
+2026-10-12T01:30:02.7122903Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.7123723Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.7124390Z # hint:
+2026-10-12T01:30:02.7124816Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.7125221Z # hint:
+2026-10-12T01:30:02.7125913Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.7513322Z # Subtest: rejects incomplete builds, short commit ids and traced backup or env files
+2026-10-12T01:30:02.7515085Z ok 6 - rejects incomplete builds, short commit ids and traced backup or env files
+2026-10-12T01:30:02.7515709Z   ---
+2026-10-12T01:30:02.7516178Z   duration_ms: 55.184172
+2026-10-12T01:30:02.7516561Z   ...
+2026-10-12T01:30:02.7581207Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.7582159Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.7583174Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.7583849Z # hint: call:
+2026-10-12T01:30:02.7584251Z # hint:
+2026-10-12T01:30:02.7584852Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.7585361Z # hint:
+2026-10-12T01:30:02.7586221Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.7587161Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.7587864Z # hint:
+2026-10-12T01:30:02.7588726Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.7589185Z # hint:
+2026-10-12T01:30:02.7590029Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.7678705Z # hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T01:30:02.7680057Z # hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T01:30:02.7681126Z # hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T01:30:02.7681768Z # hint: call:
+2026-10-12T01:30:02.7682372Z # hint:
+2026-10-12T01:30:02.7682968Z # hint: \\tgit config --global init.defaultBranch <name>
+2026-10-12T01:30:02.7683449Z # hint:
+2026-10-12T01:30:02.7684122Z # hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T01:30:02.7684910Z # hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T01:30:02.7685689Z # hint:
+2026-10-12T01:30:02.7686261Z # hint: \\tgit branch -m <name>
+2026-10-12T01:30:02.7686774Z # hint:
+2026-10-12T01:30:02.7687490Z # hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T01:30:02.7980455Z # Subtest: rejects mismatched source or packager identity and dirty tracked tooling
+2026-10-12T01:30:02.7981166Z ok 7 - rejects mismatched source or packager identity and dirty tracked tooling
+2026-10-12T01:30:02.7981575Z   ---
+2026-10-12T01:30:02.7981887Z   duration_ms: 47.013801
+2026-10-12T01:30:02.7982152Z   ...
+2026-10-12T01:30:02.8047586Z 1..7
+2026-10-12T01:30:02.8048208Z # tests 7
+2026-10-12T01:30:02.8048824Z # suites 0
+2026-10-12T01:30:02.8049311Z # pass 7
+2026-10-12T01:30:02.8049615Z # fail 0
+2026-10-12T01:30:02.8050198Z # cancelled 0
+2026-10-12T01:30:02.8050672Z # skipped 0
+2026-10-12T01:30:02.8050957Z # todo 0
+2026-10-12T01:30:02.8051287Z # duration_ms 539.551597
+2026-10-12T01:30:02.8796156Z 
+2026-10-12T01:30:02.8796982Z > web@0.1.0 pretypecheck
+2026-10-12T01:30:02.8797635Z > node scripts/sync-official-authority.mjs
+2026-10-12T01:30:02.8797941Z 
+2026-10-12T01:30:02.9098066Z Official authority build bridge verified (5 canonical modules).
+2026-10-12T01:30:02.9121721Z 
+2026-10-12T01:30:02.9122227Z > web@0.1.0 typecheck
+2026-10-12T01:30:02.9122713Z > tsc --noEmit --pretty false
+2026-10-12T01:30:02.9122934Z 
+2026-10-12T01:30:15.4992444Z 
+2026-10-12T01:30:15.4993242Z > web@0.1.0 prelint
+2026-10-12T01:30:15.4994065Z > node scripts/sync-official-authority.mjs
+2026-10-12T01:30:15.4994495Z 
+2026-10-12T01:30:15.5285559Z Official authority build bridge verified (5 canonical modules).
+2026-10-12T01:30:15.5308911Z 
+2026-10-12T01:30:28.7711749Z [BABEL] Note: The code generator has deoptimised the styling of /home/runner/work/stockinsider/stockinsider/web/src/lib/domain.ts as it exceeds the max of 500KB.
+2026-10-12T01:30:28.7712493Z > web@0.1.0 lint
+2026-10-12T01:30:28.7712794Z > eslint
+2026-10-12T01:30:28.7712943Z 
+2026-10-12T01:30:33.0475265Z 
+2026-10-12T01:30:33.0476280Z /home/runner/work/stockinsider/stockinsider/web/src/app/api/opportunity-v3/route.ts
+2026-10-12T01:30:33.0502805Z ##[warning]  26:22  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0508863Z 
+2026-10-12T01:30:33.0509225Z /home/runner/work/stockinsider/stockinsider/web/src/lib/domain.ts
+2026-10-12T01:30:33.0510922Z ##[warning]   8021:10  warning  'buildRevenueSignalSeedFallback' is defined but never used  @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0512821Z ##[warning]   8057:10  warning  'buildFundamentalSeedFallback' is defined but never used    @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0514309Z ##[warning]   8116:3   warning  '_symbol' is defined but never used                         @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0515731Z ##[warning]   8117:3   warning  '_fallbackAsOf' is defined but never used                   @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0517491Z ##[warning]   8147:3   warning  '_symbol' is defined but never used                         @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0518954Z ##[warning]   8148:3   warning  '_fallbackAsOf' is defined but never used                   @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0520588Z ##[warning]  12187:38  warning  '_seed' is defined but never used                           @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0521466Z 
+2026-10-12T01:30:33.0521864Z /home/runner/work/stockinsider/stockinsider/web/src/lib/opportunity-v3/compact-radar-read.ts
+2026-10-12T01:30:33.0523101Z ##[warning]  2:76  warning  'validateCompactRadarProjectionRow' is defined but never used  @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0524000Z 
+2026-10-12T01:30:33.0524353Z /home/runner/work/stockinsider/stockinsider/web/src/lib/radar-producer-payload.js
+2026-10-12T01:30:33.0525354Z ##[warning]  144:31  warning  '_connectorDetails' is assigned a value but never used  @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0526270Z 
+2026-10-12T01:30:33.0526628Z /home/runner/work/stockinsider/stockinsider/web/src/lib/radar-response-policy.ts
+2026-10-12T01:30:33.0527514Z ##[warning]  5:38  warning  '_state' is defined but never used  @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0528314Z 
+2026-10-12T01:30:33.0528654Z /home/runner/work/stockinsider/stockinsider/web/src/lib/research-v2.ts
+2026-10-12T01:30:33.0529671Z ##[warning]    54:7   warning  'BROKER_DISCOVERY_SEARCH_TERMS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0531614Z ##[warning]   394:10  warning  'resolveTimeoutMs' is defined but never used                        @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0533219Z ##[warning]   482:10  warning  'extractTwSymbolsWithContext' is defined but never used             @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0534711Z ##[warning]  1248:16  warning  'ensureDir' is defined but never used                               @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0536257Z ##[warning]  1252:10  warning  'extractJsonText' is defined but never used                         @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0537757Z ##[warning]  1262:10  warning  'firstNonEmpty' is defined but never used                           @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0539318Z ##[warning]  1277:10  warning  'parseFollowerCount' is defined but never used                      @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0541221Z ##[warning]  1383:10  warning  'sha256Hex' is defined but never used                               @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0542769Z ##[warning]  1569:10  warning  'extractMatchedTerms' is defined but never used                     @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0544319Z ##[warning]  1574:10  warning  'resolveContextSymbols' is defined but never used                   @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0546019Z ##[warning]  1609:10  warning  'computeDirectHitStrength' is defined but never used                @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0547721Z ##[warning]  1769:16  warning  'markLatestRunningConnectorFailed' is defined but never used        @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0549414Z ##[warning]  1962:16  warning  'ensureDefaultWatchlists' is defined but never used                 @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0551364Z ##[warning]  2572:10  warning  'parseCnyesForeignRatingRows' is defined but never used             @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0552884Z ##[warning]  2650:10  warning  'parseFactsetConsensusFromText' is defined but never used           @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0554332Z ##[warning]  2664:10  warning  'detectCrossThemeKeys' is defined but never used                    @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0555707Z ##[warning]  3163:84  warning  'stockError' is assigned a value but never used                     @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0557139Z ##[warning]  5455:16  warning  'fetchYoutubePlaylist' is defined but never used                    @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0558578Z ##[warning]  5483:16  warning  'fetchApplePodcastRssItems' is defined but never used               @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0560122Z ##[warning]  5570:16  warning  'fetchYoutubeTranscript' is defined but never used                  @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0561574Z ##[warning]  5586:16  warning  'fetchYoutubeAudioUrl' is defined but never used                    @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0562990Z ##[warning]  5605:16  warning  'transcribeWithWhisper' is defined but never used                   @typescript-eslint/no-unused-vars
+2026-10-12T01:30:33.0563845Z 
+2026-10-12T01:30:33.0564265Z ✖ 33 problems (0 errors, 33 warnings)
+2026-10-12T01:30:33.0564493Z 
+2026-10-12T01:30:33.2102309Z ##[group]Run npm --prefix web run build
+2026-10-12T01:30:33.2102727Z [36;1mnpm --prefix web run build[0m
+2026-10-12T01:30:33.2140885Z shell: /usr/bin/bash -e {0}
+2026-10-12T01:30:33.2141233Z env:
+2026-10-12T01:30:33.2141660Z   REVIEWED_SOURCE: 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:30:33.2142148Z   NEXT_TELEMETRY_DISABLED: 1
+2026-10-12T01:30:33.2142486Z ##[endgroup]
+2026-10-12T01:30:33.2985484Z 
+2026-10-12T01:30:33.2986344Z > web@0.1.0 prebuild
+2026-10-12T01:30:33.2987126Z > node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs
+2026-10-12T01:30:33.2987649Z 
+2026-10-12T01:30:33.3489062Z Official authority build bridge verified (5 canonical modules).
+2026-10-12T01:30:33.3517199Z 
+2026-10-12T01:30:33.3517612Z > web@0.1.0 build
+2026-10-12T01:30:33.3518059Z > next build
+2026-10-12T01:30:33.3518199Z 
+2026-10-12T01:30:33.6435233Z ▲ Next.js 16.3.4 (Turbopack)
+2026-10-12T01:30:33.6731392Z ✓ Running next.config.ts took 28ms
+2026-10-12T01:30:33.6762632Z ⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+2026-10-12T01:30:33.6835825Z 
+2026-10-12T01:30:33.7320196Z   Creating an optimized production build ...
+2026-10-12T01:30:48.4711595Z ✓ Compiled successfully in 14.6s
+2026-10-12T01:30:48.4731418Z   Running TypeScript ...
+2026-10-12T01:31:01.9380592Z   Finished TypeScript in 13.5s ...
+2026-10-12T01:31:01.9400584Z   Collecting page data using 3 workers ...
+2026-10-12T01:31:02.9171511Z   Generating static pages using 3 workers (0/91) ...
+2026-10-12T01:31:02.9491262Z   Generating static pages using 3 workers (22/91) 
+2026-10-12T01:31:02.9869252Z   Generating static pages using 3 workers (45/91) 
+2026-10-12T01:31:03.0578640Z   Generating static pages using 3 workers (68/91) 
+2026-10-12T01:31:03.1313867Z ✓ Generating static pages using 3 workers (91/91) in 214ms
+2026-10-12T01:31:03.1356824Z   Finalizing page optimization ...
+2026-10-12T01:31:03.7890134Z 
+2026-10-12T01:31:03.7920300Z Route (app)
+2026-10-12T01:31:03.7921250Z ┌ ƒ /
+2026-10-12T01:31:03.7921687Z ├ ○ /_not-found
+2026-10-12T01:31:03.7922488Z ├ ƒ /api/auth/threads/callback
+2026-10-12T01:31:03.7923242Z ├ ƒ /api/auth/threads/data-deletion
+2026-10-12T01:31:03.7923863Z ├ ƒ /api/auth/threads/deauthorize
+2026-10-12T01:31:03.7924392Z ├ ƒ /api/dashboard/daily
+2026-10-12T01:31:03.7924923Z ├ ƒ /api/internal/agent-guard-check
+2026-10-12T01:31:03.7925598Z ├ ƒ /api/internal/broker-report-ingest
+2026-10-12T01:31:03.7926232Z ├ ƒ /api/internal/candidate-dossier-bundle
+2026-10-12T01:31:03.7926700Z ├ ƒ /api/internal/candidate-dossier-outbox
+2026-10-12T01:31:03.7927222Z ├ ƒ /api/internal/candidate-dossier-submission
+2026-10-12T01:31:03.7927717Z ├ ƒ /api/internal/candidate-financial-documents
+2026-10-12T01:31:03.7928289Z ├ ƒ /api/internal/candidate-financial-documents/[receiptId]
+2026-10-12T01:31:03.7928909Z ├ ƒ /api/internal/candidate-financial-documents/pending
+2026-10-12T01:31:03.7929477Z ├ ƒ /api/internal/candidate-financial-documents/retry
+2026-10-12T01:31:03.7930332Z ├ ƒ /api/internal/candidate-financial-documents/worker
+2026-10-12T01:31:03.7930878Z ├ ƒ /api/internal/candidate-financial-queue-drain
+2026-10-12T01:31:03.7931396Z ├ ƒ /api/internal/candidate-history-backfill
+2026-10-12T01:31:03.7931853Z ├ ƒ /api/internal/candidate-research-run
+2026-10-12T01:31:03.7932286Z ├ ƒ /api/internal/deep-dive-build
+2026-10-12T01:31:03.7932730Z ├ ƒ /api/internal/dynamic-mention-scan
+2026-10-12T01:31:03.7933174Z ├ ƒ /api/internal/earnings-call-ingest
+2026-10-12T01:31:03.7933626Z ├ ƒ /api/internal/financial-fact-v3
+2026-10-12T01:31:03.7934073Z ├ ƒ /api/internal/finmind-token-bootstrap
+2026-10-12T01:31:03.7934520Z ├ ƒ /api/internal/governance-check
+2026-10-12T01:31:03.7934924Z ├ ƒ /api/internal/health-check
+2026-10-12T01:31:03.7935360Z ├ ƒ /api/internal/ingestion-run
+2026-10-12T01:31:03.7935789Z ├ ƒ /api/internal/instrument-roster-v3
+2026-10-12T01:31:03.7936184Z ├ ƒ /api/internal/line-diagnostics
+2026-10-12T01:31:03.7936893Z ├ ƒ /api/internal/line-dispatch
+2026-10-12T01:31:03.7937320Z ├ ƒ /api/internal/market-observation-v3
+2026-10-12T01:31:03.7937780Z ├ ƒ /api/internal/monitoring-check
+2026-10-12T01:31:03.7938223Z ├ ƒ /api/internal/mops-filing-ingest
+2026-10-12T01:31:03.7938664Z ├ ƒ /api/internal/official-calendar-backfill
+2026-10-12T01:31:03.7939140Z ├ ƒ /api/internal/official-financial-validate
+2026-10-12T01:31:03.7939642Z ├ ƒ /api/internal/official-market-index-backfill
+2026-10-12T01:31:03.7940419Z ├ ƒ /api/internal/official-price-backfill
+2026-10-12T01:31:03.7940910Z ├ ƒ /api/internal/opportunity-assistive-artifact-v3
+2026-10-12T01:31:03.7941488Z ├ ƒ /api/internal/opportunity-link-audit-v3/adjudication
+2026-10-12T01:31:03.7942069Z ├ ƒ /api/internal/opportunity-link-audit-v3/adjudicator-assignment
+2026-10-12T01:31:03.7942646Z ├ ƒ /api/internal/opportunity-link-audit-v3/reviewer-assignment
+2026-10-12T01:31:03.7943287Z ├ ƒ /api/internal/opportunity-link-audit-v3/reviewer-label
+2026-10-12T01:31:03.7943750Z ├ ƒ /api/internal/opportunity-run
+2026-10-12T01:31:03.7944246Z ├ ƒ /api/internal/opportunity-run/cron/enrich-rank
+2026-10-12T01:31:03.7944746Z ├ ƒ /api/internal/opportunity-run/cron/label-outcomes
+2026-10-12T01:31:03.7945324Z ├ ƒ /api/internal/opportunity-run/cron/shadow-evaluate
+2026-10-12T01:31:03.7945828Z ├ ƒ /api/internal/opportunity-run/cron/source-scan
+2026-10-12T01:31:03.7946299Z ├ ƒ /api/internal/opportunity-run/status/[runId]
+2026-10-12T01:31:03.7946793Z ├ ƒ /api/internal/opportunity-worker-v3
+2026-10-12T01:31:03.7947253Z ├ ƒ /api/internal/peer-relationship-authority-v3
+2026-10-12T01:31:03.7947742Z ├ ƒ /api/internal/peer-reviewer-authority-v3
+2026-10-12T01:31:03.7948226Z ├ ƒ /api/internal/pipeline-dispatch-run
+2026-10-12T01:31:03.7948639Z ├ ƒ /api/internal/pipeline-research-run
+2026-10-12T01:31:03.7949072Z ├ ƒ /api/internal/pipeline-run
+2026-10-12T01:31:03.7949513Z ├ ƒ /api/internal/podcast-sync
+2026-10-12T01:31:03.7950102Z ├ ƒ /api/internal/podcast-transcribe
+2026-10-12T01:31:03.7950541Z ├ ƒ /api/internal/price-authority-v3
+2026-10-12T01:31:03.7951143Z ├ ƒ /api/internal/provider-recovery-import
+2026-10-12T01:31:03.7951653Z ├ ƒ /api/internal/publisher-verification-authority-v3
+2026-10-12T01:31:03.7952165Z ├ ƒ /api/internal/radar-preliminary-publish
+2026-10-12T01:31:03.7952695Z ├ ƒ /api/internal/recommendation-run
+2026-10-12T01:31:03.7953096Z ├ ƒ /api/internal/report-build
+2026-10-12T01:31:03.7953485Z ├ ƒ /api/internal/report-ingest
+2026-10-12T01:31:03.7953953Z ├ ƒ /api/internal/research-inbox
+2026-10-12T01:31:03.7954356Z ├ ƒ /api/internal/research-report-build
+2026-10-12T01:31:03.7954802Z ├ ƒ /api/internal/revaluation-run
+2026-10-12T01:31:03.7955237Z ├ ƒ /api/internal/source-discovery
+2026-10-12T01:31:03.7955691Z ├ ƒ /api/internal/source-document-revision-v3
+2026-10-12T01:31:03.7956188Z ├ ƒ /api/internal/source-identity-authority-v3
+2026-10-12T01:31:03.7956590Z ├ ƒ /api/internal/source-sync
+2026-10-12T01:31:03.7957046Z ├ ƒ /api/internal/stock-alias-v3
+2026-10-12T01:31:03.7957475Z ├ ƒ /api/internal/stock-flow-observation-v3
+2026-10-12T01:31:03.7957959Z ├ ƒ /api/internal/stock-research-refresh
+2026-10-12T01:31:03.7958465Z ├ ƒ /api/internal/stock-sector-assignment-v3
+2026-10-12T01:31:03.7958872Z ├ ƒ /api/internal/story-scan
+2026-10-12T01:31:03.7959352Z ├ ƒ /api/internal/story-verify
+2026-10-12T01:31:03.7959945Z ├ ƒ /api/internal/taiwan-data-queue-drain
+2026-10-12T01:31:03.7960475Z ├ ƒ /api/internal/taiwan-data-refresh
+2026-10-12T01:31:03.7960862Z ├ ƒ /api/internal/theme-scan
+2026-10-12T01:31:03.7961587Z ├ ƒ /api/internal/thesis-rank
+2026-10-12T01:31:03.7962306Z ├ ƒ /api/internal/thesis-refresh
+2026-10-12T01:31:03.7962831Z ├ ƒ /api/internal/threads-canary
+2026-10-12T01:31:03.7963511Z ├ ƒ /api/internal/threads-oauth-start
+2026-10-12T01:31:03.7963941Z ├ ƒ /api/internal/threads-readiness
+2026-10-12T01:31:03.7964365Z ├ ƒ /api/internal/trading-session-v3
+2026-10-12T01:31:03.7964986Z ├ ƒ /api/internal/valuation-verification-v3
+2026-10-12T01:31:03.7965434Z ├ ƒ /api/internal/writer-release-activate
+2026-10-12T01:31:03.7965844Z ├ ƒ /api/line/bind
+2026-10-12T01:31:03.7966315Z ├ ƒ /api/opportunity-v3
+2026-10-12T01:31:03.7967280Z ├ ƒ /api/opportunity-v3/[runId]/[symbol]
+2026-10-12T01:31:03.7967669Z ├ ƒ /api/radar/daily
+2026-10-12T01:31:03.7968029Z ├ ƒ /api/radar/hot
+2026-10-12T01:31:03.7968404Z ├ ƒ /api/radar/weekly
+2026-10-12T01:31:03.7968731Z ├ ƒ /api/recommendations
+2026-10-12T01:31:03.7969118Z ├ ƒ /api/sources/entity/[id]
+2026-10-12T01:31:03.7969506Z ├ ƒ /api/sources/search
+2026-10-12T01:31:03.7970169Z ├ ƒ /api/stocks/[symbol]/candidate-detail
+2026-10-12T01:31:03.7970606Z ├ ƒ /api/stocks/[symbol]/deep-dive
+2026-10-12T01:31:03.7971037Z ├ ƒ /api/stocks/[symbol]/insight
+2026-10-12T01:31:03.7971415Z ├ ƒ /api/themes/[theme]
+2026-10-12T01:31:03.7971757Z ├ ƒ /api/webhook/line
+2026-10-12T01:31:03.7972137Z ├ ○ /data-deletion
+2026-10-12T01:31:03.7972491Z ├ ƒ /opportunity-v3
+2026-10-12T01:31:03.7972868Z ├ ƒ /opportunity-v3/[runId]/[symbol]
+2026-10-12T01:31:03.7973559Z ├ ƒ /preview/auo-2409
+2026-10-12T01:31:03.7973918Z ├ ○ /privacy
+2026-10-12T01:31:03.7974245Z ├ ƒ /sources
+2026-10-12T01:31:03.7974583Z ├ ƒ /stock/[symbol]
+2026-10-12T01:31:03.7975024Z ├ ƒ /stock/[symbol]/technical
+2026-10-12T01:31:03.7975416Z ├ ƒ /themes/[theme]
+2026-10-12T01:31:03.7975790Z ├ ƒ /trade-plan-fixture
+2026-10-12T01:31:03.7976223Z ├ ƒ /v3-correctness-fixture
+2026-10-12T01:31:03.7976607Z ├ ƒ /v313-decision-fixture
+2026-10-12T01:31:03.7977108Z ├ ƒ /v313-decision-fixture/detail
+2026-10-12T01:31:03.7977573Z ├ ƒ /v314-readonly-fixture
+2026-10-12T01:31:03.7978152Z ├ ƒ /v314-stale-decision-fixture
+2026-10-12T01:31:03.7978505Z └ ƒ /v317-research-fixture
+2026-10-12T01:31:03.7978694Z 
+2026-10-12T01:31:03.7978700Z 
+2026-10-12T01:31:03.7978849Z ƒ Proxy (Middleware)
+2026-10-12T01:31:03.7979027Z 
+2026-10-12T01:31:03.7979267Z ○  (Static)   prerendered as static content
+2026-10-12T01:31:03.7979692Z ƒ  (Dynamic)  server-rendered on demand
+2026-10-12T01:31:03.7980091Z 
+2026-10-12T01:31:03.8193075Z ##[group]Run cd web
+2026-10-12T01:31:03.8193446Z [36;1mcd web[0m
+2026-10-12T01:31:03.8193798Z [36;1mnpx playwright install --with-deps chromium[0m
+2026-10-12T01:31:03.8194427Z [36;1mnpx playwright test --config playwright.trade-plan.config.ts[0m
+2026-10-12T01:31:03.8231612Z shell: /usr/bin/bash -e {0}
+2026-10-12T01:31:03.8231990Z env:
+2026-10-12T01:31:03.8232337Z   REVIEWED_SOURCE: 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:31:03.8232772Z   NEXT_TELEMETRY_DISABLED: 1
+2026-10-12T01:31:03.8233069Z ##[endgroup]
+2026-10-12T01:31:04.5486540Z Installing dependencies...
+2026-10-12T01:31:04.5536828Z Switching to root user to install dependencies...
+2026-10-12T01:31:04.6391290Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-12T01:31:04.6803843Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-12T01:31:04.7249320Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-12T01:31:04.7263685Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-12T01:31:04.7291965Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-12T01:31:04.7310476Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-12T01:31:04.7364342Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [492 kB]
+2026-10-12T01:31:04.7514098Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [548 kB]
+2026-10-12T01:31:04.7603881Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [640 B]
+2026-10-12T01:31:04.7681297Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.3 kB]
+2026-10-12T01:31:04.8215012Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1375 kB]
+2026-10-12T01:31:04.8281777Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [306 kB]
+2026-10-12T01:31:04.8293735Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1702 kB]
+2026-10-12T01:31:04.8364867Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+2026-10-12T01:31:04.8390782Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1761 kB]
+2026-10-12T01:31:04.8481707Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [401 kB]
+2026-10-12T01:31:04.8502143Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [55.0 kB]
+2026-10-12T01:31:04.8516480Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.3 kB]
+2026-10-12T01:31:04.9050800Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1121 kB]
+2026-10-12T01:31:04.9103088Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [228 kB]
+2026-10-12T01:31:04.9538170Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1220 kB]
+2026-10-12T01:31:04.9591757Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [245 kB]
+2026-10-12T01:31:04.9611361Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1669 kB]
+2026-10-12T01:31:04.9683987Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [383 kB]
+2026-10-12T01:31:04.9705076Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [49.8 kB]
+2026-10-12T01:31:04.9714413Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.4 kB]
+2026-10-12T01:31:10.8653506Z Fetched 12.3 MB in 1s (10.2 MB/s)
+2026-10-12T01:31:11.6821552Z Reading package lists...
+2026-10-12T01:31:11.7059591Z Reading package lists...
+2026-10-12T01:31:11.8576940Z Building dependency tree...
+2026-10-12T01:31:11.8581329Z Reading state information...
+2026-10-12T01:31:12.0098525Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+2026-10-12T01:31:12.0099205Z libasound2t64 set to manually installed.
+2026-10-12T01:31:12.0099964Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-12T01:31:12.0100726Z libatk-bridge2.0-0t64 set to manually installed.
+2026-10-12T01:31:12.0101303Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-12T01:31:12.0101819Z libatk1.0-0t64 set to manually installed.
+2026-10-12T01:31:12.0102361Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-12T01:31:12.0102879Z libatspi2.0-0t64 set to manually installed.
+2026-10-12T01:31:12.0103302Z libcairo2 is already the newest version (1.18.0-3build1).
+2026-10-12T01:31:12.0103628Z libcairo2 set to manually installed.
+2026-10-12T01:31:12.0103997Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+2026-10-12T01:31:12.0104457Z libcups2t64 set to manually installed.
+2026-10-12T01:31:12.0104984Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+2026-10-12T01:31:12.0105508Z libdbus-1-3 set to manually installed.
+2026-10-12T01:31:12.0106051Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+2026-10-12T01:31:12.0106570Z libdrm2 set to manually installed.
+2026-10-12T01:31:12.0107068Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.4).
+2026-10-12T01:31:12.0107401Z libgbm1 set to manually installed.
+2026-10-12T01:31:12.0107750Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.9).
+2026-10-12T01:31:12.0108108Z libglib2.0-0t64 set to manually installed.
+2026-10-12T01:31:12.0108473Z libnspr4 is already the newest version (2:4.35-1.1build1).
+2026-10-12T01:31:12.0108799Z libnspr4 set to manually installed.
+2026-10-12T01:31:12.0109134Z libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+2026-10-12T01:31:12.0109463Z libnss3 set to manually installed.
+2026-10-12T01:31:12.0110048Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+2026-10-12T01:31:12.0110422Z libpango-1.0-0 set to manually installed.
+2026-10-12T01:31:12.0110785Z libx11-6 is already the newest version (2:1.8.7-1build1).
+2026-10-12T01:31:12.0111109Z libx11-6 set to manually installed.
+2026-10-12T01:31:12.0111438Z libxcb1 is already the newest version (1.15-1ubuntu2).
+2026-10-12T01:31:12.0111769Z libxcb1 set to manually installed.
+2026-10-12T01:31:12.0112123Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+2026-10-12T01:31:12.0112473Z libxcomposite1 set to manually installed.
+2026-10-12T01:31:12.0112845Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+2026-10-12T01:31:12.0113180Z libxdamage1 set to manually installed.
+2026-10-12T01:31:12.0113516Z libxext6 is already the newest version (2:1.3.4-1build2).
+2026-10-12T01:31:12.0113832Z libxext6 set to manually installed.
+2026-10-12T01:31:12.0114177Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+2026-10-12T01:31:12.0114510Z libxfixes3 set to manually installed.
+2026-10-12T01:31:12.0114862Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+2026-10-12T01:31:12.0115217Z libxkbcommon0 set to manually installed.
+2026-10-12T01:31:12.0115565Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+2026-10-12T01:31:12.0115899Z libxrandr2 set to manually installed.
+2026-10-12T01:31:12.0116246Z xvfb is already the newest version (2:21.1.12-1ubuntu1.8).
+2026-10-12T01:31:12.0116699Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+2026-10-12T01:31:12.0117171Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+2026-10-12T01:31:12.0117531Z libfontconfig1 set to manually installed.
+2026-10-12T01:31:12.0117879Z fonts-liberation is already the newest version (1:2.1.5-3).
+2026-10-12T01:31:12.0118275Z fonts-liberation set to manually installed.
+2026-10-12T01:31:12.0118633Z The following additional packages will be installed:
+2026-10-12T01:31:12.0118943Z   xfonts-encodings xfonts-utils
+2026-10-12T01:31:12.0119201Z Recommended packages:
+2026-10-12T01:31:12.0119459Z   fonts-ipafont-mincho fonts-tlwg-loma
+2026-10-12T01:31:12.0261905Z The following NEW packages will be installed:
+2026-10-12T01:31:12.0262556Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+2026-10-12T01:31:12.0268903Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+2026-10-12T01:31:12.0269321Z   xfonts-utils
+2026-10-12T01:31:12.0273704Z The following packages will be upgraded:
+2026-10-12T01:31:12.0278923Z   libfreetype6
+2026-10-12T01:31:12.0417680Z 1 upgraded, 9 newly installed, 0 to remove and 22 not upgraded.
+2026-10-12T01:31:12.0918008Z Need to get 21.5 MB of archives.
+2026-10-12T01:31:12.0918577Z After this operation, 79.5 MB of additional disk space will be used.
+2026-10-12T01:31:12.0919030Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-12T01:31:12.0920504Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+2026-10-12T01:31:12.1495821Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+2026-10-12T01:31:12.2368183Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+2026-10-12T01:31:12.2690256Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+2026-10-12T01:31:12.3256545Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+2026-10-12T01:31:12.4175708Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libfreetype6 amd64 2.13.2+dfsg-1ubuntu0.2 [403 kB]
+2026-10-12T01:31:12.4519028Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+2026-10-12T01:31:12.4924226Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+2026-10-12T01:31:12.5238562Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+2026-10-12T01:31:12.5604442Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+2026-10-12T01:31:12.7956280Z Fetched 21.5 MB in 1s (40.5 MB/s)
+2026-10-12T01:31:12.8153045Z Selecting previously unselected package fonts-ipafont-gothic.
+2026-10-12T01:31:12.8338579Z (Reading database ... 
+2026-10-12T01:31:12.8338962Z (Reading database ... 5%
+2026-10-12T01:31:12.8339317Z (Reading database ... 10%
+2026-10-12T01:31:12.8339611Z (Reading database ... 15%
+2026-10-12T01:31:12.8340189Z (Reading database ... 20%
+2026-10-12T01:31:12.8340556Z (Reading database ... 25%
+2026-10-12T01:31:12.8340879Z (Reading database ... 30%
+2026-10-12T01:31:12.8341211Z (Reading database ... 35%
+2026-10-12T01:31:12.8341483Z (Reading database ... 40%
+2026-10-12T01:31:12.8341701Z (Reading database ... 45%
+2026-10-12T01:31:12.8341925Z (Reading database ... 50%
+2026-10-12T01:31:12.8379856Z (Reading database ... 55%
+2026-10-12T01:31:12.9339441Z (Reading database ... 60%
+2026-10-12T01:31:13.1781154Z (Reading database ... 65%
+2026-10-12T01:31:13.3430384Z (Reading database ... 70%
+2026-10-12T01:31:13.5309627Z (Reading database ... 75%
+2026-10-12T01:31:13.6894774Z (Reading database ... 80%
+2026-10-12T01:31:13.9294478Z (Reading database ... 85%
+2026-10-12T01:31:14.1320150Z (Reading database ... 90%
+2026-10-12T01:31:14.2748851Z (Reading database ... 95%
+2026-10-12T01:31:14.2749330Z (Reading database ... 100%
+2026-10-12T01:31:14.2750121Z (Reading database ... 203191 files and directories currently installed.)
+2026-10-12T01:31:14.2792873Z Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+2026-10-12T01:31:14.2866173Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-12T01:31:14.5446223Z Selecting previously unselected package fonts-freefont-ttf.
+2026-10-12T01:31:14.5558544Z Preparing to unpack .../1-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+2026-10-12T01:31:14.5567158Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-12T01:31:14.6523851Z Selecting previously unselected package fonts-tlwg-loma-otf.
+2026-10-12T01:31:14.6633670Z Preparing to unpack .../2-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+2026-10-12T01:31:14.6643232Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-12T01:31:14.6799537Z Selecting previously unselected package fonts-unifont.
+2026-10-12T01:31:14.6909040Z Preparing to unpack .../3-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+2026-10-12T01:31:14.6919415Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+2026-10-12T01:31:14.8806560Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-10-12T01:31:14.8918251Z Preparing to unpack .../4-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+2026-10-12T01:31:14.9003046Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-12T01:31:15.4392448Z Preparing to unpack .../5-libfreetype6_2.13.2+dfsg-1ubuntu0.2_amd64.deb ...
+2026-10-12T01:31:15.4425431Z Unpacking libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.2) over (2.13.2+dfsg-1ubuntu0.1) ...
+2026-10-12T01:31:15.4633933Z Selecting previously unselected package xfonts-encodings.
+2026-10-12T01:31:15.4759652Z Preparing to unpack .../6-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+2026-10-12T01:31:15.4768010Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-12T01:31:15.4981069Z Selecting previously unselected package xfonts-utils.
+2026-10-12T01:31:15.5105083Z Preparing to unpack .../7-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+2026-10-12T01:31:15.5111774Z Unpacking xfonts-utils (1:7.7+6build3) ...
+2026-10-12T01:31:15.5390130Z Selecting previously unselected package xfonts-cyrillic.
+2026-10-12T01:31:15.5505352Z Preparing to unpack .../8-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+2026-10-12T01:31:15.5512910Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-12T01:31:15.5745341Z Selecting previously unselected package xfonts-scalable.
+2026-10-12T01:31:15.5868058Z Preparing to unpack .../9-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+2026-10-12T01:31:15.5875996Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-12T01:31:15.6289929Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-12T01:31:15.6400481Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-12T01:31:15.6418260Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-12T01:31:15.6435324Z Setting up libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.2) ...
+2026-10-12T01:31:15.6454812Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-12T01:31:15.6476164Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-12T01:31:15.6541691Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+2026-10-12T01:31:15.6558555Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+2026-10-12T01:31:15.6580763Z Setting up xfonts-utils (1:7.7+6build3) ...
+2026-10-12T01:31:15.6629996Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-12T01:31:15.6887511Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-12T01:31:15.7193405Z Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+2026-10-12T01:31:15.9219089Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-10-12T01:31:15.9241772Z Not building database; man-db/auto-update is not 'true'.
+2026-10-12T01:31:15.9255844Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+2026-10-12T01:31:16.4943655Z 
+2026-10-12T01:31:16.4944595Z Running kernel seems to be up-to-date.
+2026-10-12T01:31:16.4945114Z 
+2026-10-12T01:31:16.4945342Z Restarting services...
+2026-10-12T01:31:16.5005342Z  systemctl restart php8.3-fpm.service
+2026-10-12T01:31:16.5819240Z 
+2026-10-12T01:31:16.5831175Z No containers need to be restarted.
+2026-10-12T01:31:16.5831500Z 
+2026-10-12T01:31:16.5831732Z No user sessions are running outdated binaries.
+2026-10-12T01:31:16.5831993Z 
+2026-10-12T01:31:16.5832332Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-12T01:31:17.3782390Z Downloading Chrome for Testing 145.0.7632.6 (playwright chromium v1208) from https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip
+2026-10-12T01:31:17.6053797Z |                                                                                |   0% of 167.3 MiB
+2026-10-12T01:31:17.8511454Z |■■■■■■■■                                                                        |  10% of 167.3 MiB
+2026-10-12T01:31:17.9184726Z |■■■■■■■■■■■■■■■■                                                                |  20% of 167.3 MiB
+2026-10-12T01:31:17.9919956Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 167.3 MiB
+2026-10-12T01:31:18.0949509Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 167.3 MiB
+2026-10-12T01:31:18.1635851Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 167.3 MiB
+2026-10-12T01:31:18.2833661Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 167.3 MiB
+2026-10-12T01:31:18.3554569Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 167.3 MiB
+2026-10-12T01:31:18.4348454Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 167.3 MiB
+2026-10-12T01:31:18.5099252Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 167.3 MiB
+2026-10-12T01:31:18.5713685Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 167.3 MiB
+2026-10-12T01:31:21.2087277Z Chrome for Testing 145.0.7632.6 (playwright chromium v1208) downloaded to /home/runner/.cache/ms-playwright/chromium-1208
+2026-10-12T01:31:21.2090338Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+2026-10-12T01:31:21.4591895Z |                                                                                |   0% of 2.3 MiB
+2026-10-12T01:31:21.5089410Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+2026-10-12T01:31:21.5368944Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+2026-10-12T01:31:21.5559516Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+2026-10-12T01:31:21.5729464Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+2026-10-12T01:31:21.5903123Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+2026-10-12T01:31:21.5961115Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+2026-10-12T01:31:21.6020676Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+2026-10-12T01:31:21.6153700Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+2026-10-12T01:31:21.6194962Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+2026-10-12T01:31:21.6246136Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+2026-10-12T01:31:21.6711536Z FFmpeg (playwright ffmpeg v1011) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+2026-10-12T01:31:21.6715013Z Downloading Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) from https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-headless-shell-linux64.zip
+2026-10-12T01:31:21.8828141Z |                                                                                |   0% of 110.9 MiB
+2026-10-12T01:31:22.1057988Z |■■■■■■■■                                                                        |  10% of 110.9 MiB
+2026-10-12T01:31:22.1545220Z |■■■■■■■■■■■■■■■■                                                                |  20% of 110.9 MiB
+2026-10-12T01:31:22.1999653Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 110.9 MiB
+2026-10-12T01:31:22.2463213Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 110.9 MiB
+2026-10-12T01:31:22.3093243Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 110.9 MiB
+2026-10-12T01:31:22.3619279Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 110.9 MiB
+2026-10-12T01:31:22.4157689Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 110.9 MiB
+2026-10-12T01:31:22.4668141Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 110.9 MiB
+2026-10-12T01:31:22.5208034Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 110.9 MiB
+2026-10-12T01:31:22.5718492Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 110.9 MiB
+2026-10-12T01:31:24.4914711Z Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1208
+2026-10-12T01:31:31.1542914Z 
+2026-10-12T01:31:31.1543632Z Running 4 tests using 1 worker
+2026-10-12T01:31:31.1543848Z 
+2026-10-12T01:31:33.3813108Z   ✓  1 e2e/trade-plan.spec.ts:3:5 › P1-02/P1-06/P1-10: same-plan chart, blocked raw signal and responsive layers (1.2s)
+2026-10-12T01:31:34.1221873Z   ✓  2 e2e/trade-plan.spec.ts:29:5 › P1-05/P1-09: no synthetic candles for missing OHLCV or old publication (725ms)
+2026-10-12T01:31:35.0291629Z   ✓  3 e2e/trade-plan.spec.ts:39:5 › P1-04/P1-07/P1-08: expired, preliminary and stale snapshots never imply current eligibility (898ms)
+2026-10-12T01:31:37.8498987Z   ✓  4 e2e/trade-plan.spec.ts:53:5 › source-signal current research navigation preserves exact historical decision links (2.8s)
+2026-10-12T01:31:37.9094336Z 
+2026-10-12T01:31:37.9097857Z   4 passed (12.3s)
+2026-10-12T01:31:37.9351072Z ##[group]Run set -euo pipefail
+2026-10-12T01:31:37.9351398Z [36;1mset -euo pipefail[0m
+2026-10-12T01:31:37.9351692Z [36;1mtest "$(git rev-parse HEAD)" = "$REVIEWED_SOURCE"[0m
+2026-10-12T01:31:37.9352079Z [36;1mtest -z "$(git status --porcelain --untracked-files=no)"[0m
+2026-10-12T01:31:37.9352460Z [36;1mdestination="$RUNNER_TEMP/reviewed-standalone"[0m
+2026-10-12T01:31:37.9352931Z [36;1mexport_dir="$RUNNER_TEMP/standalone-export"[0m
+2026-10-12T01:31:37.9353246Z [36;1mmkdir -p "$destination" "$export_dir"[0m
+2026-10-12T01:31:37.9353920Z [36;1mnode scripts/package-standalone-release.mjs "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE" "$destination" "$REVIEWED_SOURCE" "$REVIEWED_SOURCE" > "$export_dir/package.json"[0m
+2026-10-12T01:31:37.9354796Z [36;1mnode scripts/verify-standalone-release.mjs "$destination/$REVIEWED_SOURCE" > "$export_dir/verification.json"[0m
+2026-10-12T01:31:37.9355507Z [36;1mcp "$destination/$REVIEWED_SOURCE/release-manifest.json" "$export_dir/release-manifest.json"[0m
+2026-10-12T01:31:37.9356094Z [36;1mgit rev-parse HEAD HEAD^{tree} HEAD:web > "$export_dir/source-identity.txt"[0m
+2026-10-12T01:31:37.9356632Z [36;1mtar -czf "$export_dir/stockinsider-linux.tar.gz" -C "$destination" "$REVIEWED_SOURCE"[0m
+2026-10-12T01:31:37.9357367Z [36;1m(cd "$export_dir" && sha256sum stockinsider-linux.tar.gz release-manifest.json package.json verification.json source-identity.txt > SHA256SUMS)[0m
+2026-10-12T01:31:37.9397285Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-12T01:31:37.9397623Z env:
+2026-10-12T01:31:37.9397900Z   REVIEWED_SOURCE: 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:31:37.9398230Z   NEXT_TELEMETRY_DISABLED: 1
+2026-10-12T01:31:37.9398462Z ##[endgroup]
+2026-10-12T01:31:43.3986311Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-12T01:31:43.3986718Z with:
+2026-10-12T01:31:43.3987109Z   name: reviewed-linux-standalone-8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14-38192054066
+2026-10-12T01:31:43.3987610Z   path: /home/runner/work/_temp/standalone-export/
+2026-10-12T01:31:43.3987938Z   if-no-files-found: error
+2026-10-12T01:31:43.3988183Z   retention-days: 14
+2026-10-12T01:31:43.3988409Z   compression-level: 0
+2026-10-12T01:31:43.3988633Z   overwrite: false
+2026-10-12T01:31:43.3988863Z   include-hidden-files: false
+2026-10-12T01:31:43.3989103Z env:
+2026-10-12T01:31:43.3989363Z   REVIEWED_SOURCE: 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+2026-10-12T01:31:43.3989707Z   NEXT_TELEMETRY_DISABLED: 1
+2026-10-12T01:31:43.3990209Z ##[endgroup]
+2026-10-12T01:31:43.5486360Z (node:3835) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-12T01:31:43.5487126Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-12T01:31:43.5535228Z With the provided path, there will be 6 files uploaded
+2026-10-12T01:31:43.5539196Z Artifact name is valid!
+2026-10-12T01:31:43.5539719Z Root directory input is valid!
+2026-10-12T01:31:43.8407000Z Beginning upload of artifact content to blob storage
+2026-10-12T01:31:43.8913814Z (node:3835) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-12T01:31:44.3268793Z Uploaded bytes 8388608
+2026-10-12T01:31:44.3980147Z Uploaded bytes 16777216
+2026-10-12T01:31:44.6056230Z Uploaded bytes 25165824
+2026-10-12T01:31:44.7500069Z Uploaded bytes 28166456
+2026-10-12T01:31:44.7959272Z Finished uploading artifact content to blob storage!
+2026-10-12T01:31:44.7960523Z SHA256 digest of uploaded artifact zip is f40ee1412e74e31415acc0208f1d669c6a8d096ac97093f4405109d4de4c4ea3
+2026-10-12T01:31:44.7961604Z Finalizing artifact upload
+2026-10-12T01:31:45.0588500Z Artifact reviewed-linux-standalone-8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14-38192054066.zip successfully finalized. Artifact ID 11720774791
+2026-10-12T01:31:45.0589917Z Artifact reviewed-linux-standalone-8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14-38192054066 has been successfully uploaded! Final size is 28166456 bytes. Artifact ID is 11720774791
+2026-10-12T01:31:45.0593774Z Artifact download URL: https://github.com/Kaichen9527/stockinsider/actions/runs/38192054066/artifacts/11720774791
+2026-10-12T01:31:45.0744927Z Post job cleanup.
+2026-10-12T01:31:45.1801685Z (node:3848) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-12T01:31:45.1803052Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-12T01:31:45.1804805Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-f53e82a65393b7798d266ffb8890e89a47f89a7be19f55670717741d13d14fe2, not saving cache.
+2026-10-12T01:31:45.1907958Z Post job cleanup.
+2026-10-12T01:31:45.2646846Z [command]/usr/bin/git version
+2026-10-12T01:31:45.2686037Z git version 2.55.0
+2026-10-12T01:31:45.2721857Z Temporarily overriding HOME='/home/runner/work/_temp/07febff8-8925-4df5-9c5d-1d8c9d4defa2' before making global git config changes
+2026-10-12T01:31:45.2722617Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-12T01:31:45.2728478Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-12T01:31:45.2761278Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T01:31:45.2789613Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T01:31:45.2967516Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T01:31:45.2993713Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T01:31:45.3175296Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T01:31:45.3199912Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T01:31:45.3489711Z Cleaning up orphan processes
+2026-10-12T01:31:45.3806370Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

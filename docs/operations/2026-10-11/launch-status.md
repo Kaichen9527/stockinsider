@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 09:35台灣時間：精確main Linux發布包已驗證；VPS鎖內容量仍不足，VM接續真准入adapter
+
+正常批准合併main8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14/tree70833148/webd9af68f1已完成既有PR368 artifact-only workflow。4fa3d622僅3sourcepins，獨立CODE P0/P1/P2=0；push後自動pull_request run38192054066/prepare114626723373真SUCCESS，沒有再dispatch。實際107計算+7打包+4瀏覽器、types/lint/build全過。下載27,563,760byte Linux包、全部SHA256SUMS/三Git identity一致；安全檢查3100archive成員無symlink/special/path traversal後，既有verifier對2,585檔/79,322,648bytes逐項hash/mode/manifest/source都真PASS。archive SHA1a9032529df500fb4c1daf5a21be7ce98c0bb0f18c60ae70f9d5fec0169e1db0，manifest073badff1165a7931b58af21a6432c016c7b70559cb7c90c18d7cc414a91c310。產物在GitHub，binary不入Git history或VPS暫存。
+
+01:33:47Z三把原OS鎖內只讀preflight真exit1：available16,588,021,760bytes，原WAL/tmp/deployment/growth總額3,892,314,112、原硬底16,106,127,360，投影12,695,707,648；RAM投影1,831,419,904通過1,610,612,736底線。此精確預建包保持所有既有預算不變，實際最低19,998,441,472bytes（約20.00GB），缺3,410,419,712bytes。更正前文20.4GB概稱為一般重型工作，這次無migration/build/資料補齊的binary budget是上述精確值；沒有降低准入。正式仍169，未傳包/切換/重跑migration/寫資料。人類前次容量選擇仍待答覆，不重問或擅清月內/共享Docker。未將『已merge／包已驗證』冒稱『已deploy』。
+
+不因容量停止獨立工程：先確認Cloud cursor8 idle後，已只派一件30分鐘codex/live-discovery-evidence-adapter-oct12，由新main8bcd補實際來源→DiscoveryEvidence adapter及必要最小server projection/tests；先核root/跨平台identity/PTT逐則代號，無證據保持unsupported、不把8links/counts當完整母體，不改policy閾值/DBschema/寫入/策略/排程/部署，不重跑343全量/PTT2409。Cloud真active turn01a12dc0-12f9-7081-bb72-d40c87d127a6/cursor4b5b5e24-a000-4c65-b012-1e9514020d4f:9；root不重疊修改或重派。先wait其精確終態，不能宣稱adapter已完成。
+
+完整研究文章作者/獨立審查、第二公司、實際多平台來源、策略驗證與正式研究排程仍待完成；AUO仍示範方向。新完整證據.agent/reports/2026-10-12T09-35-verified-main-artifact-and-capacity/。
+
 ## 2026-10-12 09:27台灣時間：三個網站PR全部正常批准合併，準備精確main發布包
 
 三個應用protected均真SUCCESS：37038190772969／37138190779815／37238190723740，全部requirements／architecture／exact-review／model／product及aggregate通過，各自普通產品與專項diagnostic也成功。Root核對精確head、完整run、所有required jobs及原rules active/bypass[]後，標準gh pr merge --merge --match-head-commit依序實際完成：370→107e267ee73026d98dbd35713b2247c00f6eaeb3(01:26:31Z)、371→778ef0fdc0e5b3f3dbea9c3b21f3844c79eb768d(01:26:36Z)、372→8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14(01:26:41Z)。這是正式main新版本，沒有再次例外／admin／改保護或直接pushmain。完整before/after rules與3run/PR audit保留。
