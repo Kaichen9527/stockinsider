@@ -37,6 +37,10 @@ test('installation exact bytes, identity, normative mirrors and command table ar
  const traceability=readFileSync('scripts/opportunity-v3/acceptance-traceability.test.mjs','utf8');
  assert.ok(traceability.includes('assert.equal(catalogBlob.bytes.length, '+catalogBytes.length+','), 'protected catalog length mirror');
  assert.ok(traceability.includes("'"+hash(catalogBytes)+"'"), 'protected catalog digest mirror');
+ const hostAmendment=readFileSync(change+'host-pin-compatibility-amendment.md','utf8');
+ const hostMirrors=[...traceability.matchAll(/assert\.match\(hostAmendment, \/([^\n]+)\/([a-z]*)\);/gu)];
+ assert.equal(hostMirrors.length,3,'all protected host-amendment literal mirrors checked');
+ for(const [,pattern,flags] of hostMirrors)assert.match(hostAmendment,new RegExp(pattern,flags));
 });
 test('active pin loader rejects FIFO, symlink, truncation and growth without blocking or accepting a prefix',()=>{
  const dir=mkdtempSync(path.join(os.tmpdir(),'si-pin-loader-'));

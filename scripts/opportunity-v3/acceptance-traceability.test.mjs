@@ -1186,7 +1186,7 @@ function activeGraphOracle() {
   const hostAmendment = readFileSync(path.join(change, 'host-pin-compatibility-amendment.md'), 'utf8');
   assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]25`/u);
   assert.match(hostAmendment, /codex-cli 0[.]162[.]0-alpha[.]17[.]2/u);
-  assert.match(hostAmendment, /exact pin/u);
+  assert.match(hostAmendment, /^## Exact pin and one-time boundary$/mu);
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
   const hostPins = JSON.parse(hostPinBytes);
   const hostPinCanonical = canonicalJson(hostPins);
