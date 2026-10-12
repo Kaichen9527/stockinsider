@@ -29,3 +29,11 @@ Acceptance:synthetic rows generated through the actual PTT helper plus the actua
 ## Successor repair attribution
 
 Original ef5d/943 and58PASS/TS2737RED are immutable history. Independent review requested changes P0=0/P1=0/P2=2:page completeness assumed from helper name, and unbound/ambiguous PTT comment provenance. New regression assertions first ran on original runtime:24tests18PASS6FAIL. Repairs scoped to adapter/server audit/tests and one new test argument in ordinary candidate-discovery-quality.yml; paths, action pins, read permissions, Node/install/timeout/protected workflow unchanged. No attempt to repair all pagination or claim live completeness. The preceding read-only authority-contract audit is separate evidence branch5691b523 and changes no code.
+
+## PIT / known UUID successor
+
+Original d3ce/48e and its65/53green receipts remain unchanged. Independent review reproduced duplicate-before-cutoff and unconditional UUID insertion contamination:future/invalid rows could reserve known UUIDs or enter comment conflict maps. This successor checks every available_at/created_at/as_of/mentioned_at against the unchanged cutoff BEFORE UUID lookup, and registers only scope-valid known rows. Excluded future/invalid rows have explicit accounting reasons and cannot touch known identity/comment registries. Raw workload bounds remain fail-closed.
+
+A UUID also has a bounded semantic record fingerprint (source URL/platform/PTT comment key/content/status; clocks are separately scoped). Exact known replay remains once. In-cutoff contradictory rows with the same UUID are all marked conflicting_known_row_identity; their sources and all touched comment-key author contributions are excluded, independent of order. Cross-UUID same-key author/text/hash conflicts still invalidate the whole key. No accounting-excluded duplicate can introduce a second positive key.
+
+New matrices cover four clock fields future1microsecond, author/index substitution, future-first/last, differentUUID negatives, invalid-clock sameUUID and futureUUID followed by a known row, plus legitimate in-cutoff UUID/key conflict and exact replay. Initial original-runtime tests58total37PASS21FAIL; after same-task steering, final original-runtime60total38PASS22FAIL. These two RED subjects/selections are preserved, not relabelled as final green.

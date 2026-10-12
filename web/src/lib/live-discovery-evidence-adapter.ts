@@ -44,8 +44,8 @@ export function adaptLegacyDiscoveryEvidence(input: {
   // Resolve a comment key over ALL received rows before counting authors.
   // Different row UUIDs (or repeated UUIDs) cannot make one comment two people.
   const commentKeys = new Map<string, { parent: string; author: string | null;
-    fingerprint: string; conflict: boolean; blocked: boolean }>();
-  const ids = new Set<string>();
+    fingerprint: string; conflict: boolean; blocked: boolean; rowIds: Set<string> }>();
+  const knownRows = new Map<string, { fingerprint: string; conflict: boolean }>();
   let bytes = 0, bounded = input.rows.length <= LIVE_DISCOVERY_BOUNDS.rows;
   if (!bounded) gaps.add('mention_row_bound_exceeded');
   for (const row of bounded ? input.rows : []) {
@@ -71,9 +71,17 @@ export function adaptLegacyDiscoveryEvidence(input: {
     const availableTime = instant(available), receivedTime = instant(received), evaluationTime = instant(evaluation), mentionedTime = instant(mentioned);
     if (!uuid(id) || stock !== input.stockId || !platform || !platforms.has(platform)
       || availableTime === null || receivedTime === null || evaluationTime === null || mentionedTime === null) reason = 'invalid_row_or_clock';
-    else if (ids.has(id)) reason = 'duplicate_row_identity';
     else if (availableTime < start || availableTime > end || receivedTime > end || evaluationTime > end || mentionedTime > end) reason = 'outside_known_window';
-    if (uuid(id)) ids.add(id);
+    // Excluded clocks must never reserve a UUID or enter either conflict map.
+    // Only in-cutoff, scope-valid records can assert a known row identity.
+    else if (knownRows.has(id.toLowerCase())) reason = 'duplicate_row_identity';
+    if (uuid(id) && ['mapped_unresolved', 'duplicate_row_identity'].includes(reason)) {
+      const key = id.toLowerCase();
+      const fingerprint = JSON.stringify([stock, platform, view.sourceUrl, view.ptt, own(provenance, 'retracted') === true]);
+      const prior = knownRows.get(key);
+      if (prior) prior.conflict ||= prior.fingerprint !== fingerprint;
+      else knownRows.set(key, { fingerprint, conflict: false });
+    }
     accounting.push({ rowId: uuid(id) ? id : null, disposition: reason });
     if (reason !== 'mapped_unresolved') gaps.add(reason);
     if (!['mapped_unresolved', 'duplicate_row_identity'].includes(reason)) continue;
@@ -106,17 +114,26 @@ export function adaptLegacyDiscoveryEvidence(input: {
     if (prior) {
       prior.conflict ||= prior.fingerprint !== fingerprint;
       prior.blocked ||= !valid;
-    } else commentKeys.set(key, { parent, author, fingerprint, conflict: false, blocked: !valid });
+      prior.rowIds.add(view.id!.toLowerCase());
+    } else commentKeys.set(key, { parent, author, fingerprint, conflict: false, blocked: !valid,
+      rowIds: new Set([view.id!.toLowerCase()]) });
+  }
+  for (const item of accounting) {
+    if (item.rowId && knownRows.get(item.rowId.toLowerCase())?.conflict
+      && ['mapped_unresolved', 'duplicate_row_identity'].includes(item.disposition)) {
+      item.disposition = 'conflicting_known_row_identity'; gaps.add('conflicting_known_row_identity');
+    }
   }
   for (const item of commentKeys.values()) {
     if (item.conflict) gaps.add('ptt_comment_key_conflict');
-    if (item.conflict || item.blocked || !item.author) continue;
+    if (item.conflict || item.blocked || !item.author || [...item.rowIds].some(id => knownRows.get(id)?.conflict)) continue;
     const authors = replies.get(item.parent) || new Set<string>();
     authors.add(item.author); replies.set(item.parent, authors);
   }
   // Current legacy schema cannot establish complete source/root heads. Do not
   // fill in body from title/summary or use parent URL as an independent root.
-  const evidence: DiscoveryEvidence = { complete: false, sources: bounded ? sources : [], pttArticles: null };
+  const knownSources = sources.filter(source => !knownRows.get(source.sourceId.slice('candidate-mention:'.length).toLowerCase())?.conflict);
+  const evidence: DiscoveryEvidence = { complete: false, sources: bounded ? knownSources : [], pttArticles: null };
   const admission = admitDiscoveryCandidate(input.symbol, evidence);
   const summary: LiveDiscoveryEvidenceSummary = { adapter: LIVE_DISCOVERY_ADAPTER, status: 'unsupported',
     sourceCutoff: input.asOf, windowStart: input.since, inputRows: input.rows.length, accountedRows: input.rows.length,

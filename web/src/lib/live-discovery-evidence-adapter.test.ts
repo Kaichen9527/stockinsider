@@ -145,3 +145,47 @@ test('actual page reader capped at100/request750 cannot prove total200 exhaustio
   assert.match(source, /since: cutoff, asOf: sourceCutoff, rowsComplete: false/);
   assert.ok(adapt(returned, { rowsComplete: false }).summary.gaps.includes('mention_window_incomplete'));
 });
+const afterCutoff = '2026-10-12T00:00:00.123457Z';
+const clockFields = ['available_at', 'created_at', 'as_of', 'mentioned_at'] as const;
+function sameKnownResult(baselineRows: unknown[], excluded: unknown, first: boolean, disposition: string) {
+  const baseline = adapt(baselineRows), rows = first ? [excluded, ...baselineRows] : [...baselineRows, excluded];
+  const actual = adapt(rows), excludedIndex = first ? 0 : rows.length - 1;
+  assert.equal(actual.accounting[excludedIndex].disposition, disposition);
+  assert.deepEqual(actual.evidence.sources, baseline.evidence.sources);
+  assert.equal(actual.summary.explicitPttAuthorsMax, baseline.summary.explicitPttAuthorsMax);
+  assert.deepEqual(actual.accounting.filter((_, index) => index !== excludedIndex), baseline.accounting);
+  assert.equal(actual.summary.excludedRows, baseline.summary.excludedRows + 1);
+  assert.ok(actual.summary.gaps.includes(disposition));
+}
+for (const clock of clockFields) for (const shape of ['changed-author', 'changed-index'] as const)
+  for (const first of [true, false]) test(`${clock} future1us sameUUID ${shape} ${first ? 'first' : 'last'} cannot affect known evidence`, () => {
+    const excluded = { ...reply(shape === 'changed-index' ? 2 : 1, 'bob'), id: id(1), [clock]: afterCutoff };
+    sameKnownResult([reply(1, 'alice')], excluded, first, 'outside_known_window');
+  });
+for (const clock of clockFields) for (const first of [true, false]) {
+  test(`${clock} future differentUUID ${first ? 'first' : 'last'} cannot affect known comment`, () => {
+    sameKnownResult([reply(1, 'alice')], { ...reply(1, 'bob'), id: id(2), [clock]: afterCutoff }, first, 'outside_known_window');
+  });
+  test(`${clock} invalid sameUUID ${first ? 'first' : 'last'} cannot steal known UUID`, () => {
+    sameKnownResult([reply(1, 'alice')], { ...reply(2, 'bob'), id: id(1), [clock]: 'not-a-clock' }, first, 'invalid_row_or_clock');
+  });
+}
+test('a future-only UUID must not mark a later known row with that UUID as duplicate', () => {
+  const baseline = [reply(1, 'alice'), reply(2, 'charlie')];
+  for (const first of [true, false])
+    sameKnownResult(baseline, { ...reply(2, 'bob'), created_at: afterCutoff }, first, 'outside_known_window');
+});
+test('in-cutoff sameUUID different comment keys invalidate the whole UUID in both orders', () => {
+  const a = reply(1, 'alice'), b = { ...reply(2, 'bob'), id: id(1) };
+  for (const rows of [[a, b], [b, a]]) {
+    const r = adapt(rows); assert.equal(r.summary.explicitPttAuthorsMax, 0);
+    assert.deepEqual(r.evidence.sources, []);
+    assert.ok(r.summary.gaps.includes('conflicting_known_row_identity'));
+    assert.deepEqual(r.accounting.map(x => x.disposition), ['conflicting_known_row_identity', 'conflicting_known_row_identity']);
+  }
+});
+test('sameUUID exact comment/content replay cannot add an author from its excluded duplicate', () => {
+  const a = reply(1, 'alice'), r = adapt([a, { ...a }]);
+  assert.equal(r.summary.explicitPttAuthorsMax, 1); assert.equal(r.evidence.sources.length, 1);
+  assert.deepEqual(r.accounting.map(x => x.disposition), ['mapped_unresolved', 'duplicate_row_identity']);
+});
