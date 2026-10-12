@@ -1,0 +1,32 @@
+{
+  "observedAt": "2026-10-12T01:01:55.412Z",
+  "toolExceptionConsumedBy": 373,
+  "main": "c6bc227ccaa5309226cbb833b35a35198491cb48",
+  "protectionRestored": true,
+  "successors": [
+    {
+      "pr": 370,
+      "head": "3338160a43dd9c23e4ea4b079fd7761501c29786",
+      "tree": "2d67d5ecad2db71f24a5631f5c720f6ec4e9a164",
+      "ordinaryRun": 38190165221
+    },
+    {
+      "pr": 371,
+      "head": "bc1b6aff5315c0f0302cd1d2e74e7c1b238a4af3",
+      "tree": "25679473dd66e681a47c9a9e4d20e2396c407bbc",
+      "ordinaryRun": 38190168068
+    },
+    {
+      "pr": 372,
+      "head": "680d0c9d10ca185013d66f034e9fc03e1d7fcd69",
+      "tree": "6f3302450ebe54559ddf16e9d0095d713b46231f",
+      "ordinaryRun": 38190170920
+    }
+  ],
+  "independentScopedReview": "PASS; all3 identical deltas; installation2PASS/0FAIL/0SKIP; not full protected",
+  "priorProtectedModelsAllSuccess": true,
+  "priorProductFailure": "270PASS/2FAIL in shared exact heading assertion; catalog length/hash passed after first correction",
+  "production": "169aad1 unchanged",
+  "noFullRecrawl": true,
+  "noDockerDeletion": true
+}

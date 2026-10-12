@@ -1,5 +1,13 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 09:00台灣時間：三個正常模型閘門成功，精確標題鏡像修復驗證中
+
+工具PR373的一次例外已消耗，main c6bc227c、原ruleset active及bypass[]仍完整。三個上一輪應用protected的requirements／architecture／exact-review／model-runner-code-gate均真SUCCESS；產品270PASS／2FAIL在共同host amendment小寫exact pin斷言，不是新模型或應用錯誤。原RED保留；6759bytes/hash修補後已通過對應檢查。
+
+Root只將標題檢查綁定已批准原文完整大寫標題，保留兩側行錨點，另實際驗證全部三個amendment literals。三分支delta完全相同，獨立審查P0/P1/P2=0、2PASS零skip，大小寫／前後綴負例拒絕。新exact heads3703338160a／371bc1b6aff／372680d0c9d，ordinary38190165221／38190168068／38190170920在validation refs進行；取得真155canonical及31PCR後才fresh exact證據和正常protected，不重跑已知舊head失敗。既有已推immutable證據保留，只移除逐byte核對一致的未追蹤工作副本。
+
+Cloud任務確認idle，無重複派工。正式站169、343全量及PTT2409不重跑，月內Docker不刪；VPS容量等待人類前次選擇，工程不停止。新收據.agent/reports/2026-10-12T09-00-exact-heading-successors/。
+
 ## 2026-10-12 08:37台灣時間：受保護模型真正成功，修補產品身分鏡像漏項
 
 PR370/c0ad 的protected38187584169 requirements／architecture／exact-review／model-runner-code-gate均真正SUCCESS；產品traceability實際270PASS／2FAIL，HYB007與GOV004都被同一舊6758bytes常數阻擋。主線已批准v3.25 catalog實測6759bytes、SHA d0bed2c2d3db38d28145c903bdb0f9215f73266fbecf55826e25ee402dff5b64，原完整性oracle的長度／hash漏同步。沒有將這個FAIL改寫成功。

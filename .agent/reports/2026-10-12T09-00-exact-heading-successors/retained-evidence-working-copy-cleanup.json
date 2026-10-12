@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-10-12T01:01:24.233Z",
+  "note": "Only byte-equal untracked working copies removed; immutable pushed evidence refs retained",
+  "checked": [
+    {
+      "root": "/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12",
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+      "evidence": "671bfa3a082641d97db230fe5acac7a563f3df46",
+      "bytes": 6476
+    },
+    {
+      "root": "/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12",
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+      "evidence": "671bfa3a082641d97db230fe5acac7a563f3df46",
+      "bytes": 24824
+    },
+    {
+      "root": "/Users/kaerchen/.cache/stockinsider-workspaces/runner-trust-root-review-oct12",
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json",
+      "evidence": "671bfa3a082641d97db230fe5acac7a563f3df46",
+      "bytes": 461
+    },
+    {
+      "root": "/Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11",
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+      "evidence": "398fe63bd9bcac8e36872376da1648b3b26ae66d",
+      "bytes": 4707
+    },
+    {
+      "root": "/Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11",
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+      "evidence": "398fe63bd9bcac8e36872376da1648b3b26ae66d",
+      "bytes": 24824
+    },
+    {
+      "root": "/Users/kaerchen/.cache/stockinsider-workspaces/calendar-inbox-release-review-oct11",
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json",
+      "evidence": "398fe63bd9bcac8e36872376da1648b3b26ae66d",
+      "bytes": 461
+    },
+    {
+      "root": "/Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12",
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+      "evidence": "cdeb21907e22c7a87fbdf71c98f49947b1763c89",
+      "bytes": 4959
+    },
+    {
+      "root": "/Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12",
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+      "evidence": "cdeb21907e22c7a87fbdf71c98f49947b1763c89",
+      "bytes": 24824
+    },
+    {
+      "root": "/Users/kaerchen/.cache/stockinsider-workspaces/ptt-provenance-root-review-oct12",
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json",
+      "evidence": "cdeb21907e22c7a87fbdf71c98f49947b1763c89",
+      "bytes": 461
+    }
+  ]
+}
