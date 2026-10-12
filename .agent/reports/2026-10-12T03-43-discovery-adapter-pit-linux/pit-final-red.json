@@ -1,0 +1,13 @@
+{
+  "runtimeSubject": "d3ce3c65ecdf37e892d144cb99ee1b9fad7feaac",
+  "newSteering": "in-cutoff sameUUID differentcommentkey must not add positive evidence; exact replay remains once",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/live-discovery-evidence-adapter.test.ts"
+  ],
+  "exitCode": 1,
+  "wallSeconds": 0.5666275619878434
+}

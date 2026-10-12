@@ -1,0 +1,14 @@
+{
+  "activeOwnedHeavyServices": [],
+  "check": "after stages exited, ps non-zombie Node/npm/PostgreSQL/chrome inventory empty",
+  "deletedPaths": [
+    "/workspace/cloud-live-discovery-adapter-oct12/web/.next (previous stopped/rebuildable48 parent artifact only; detailed owned-next-cleanup.json preserved)"
+  ],
+  "otherWorkspacesUnchanged": true,
+  "uniqueEvidenceDeleted": false,
+  "finalDiskAvailableBytes": {
+    "/workspace": 8898011136,
+    "/tmp": 16960073728
+  },
+  "at": "2026-10-12T03:04:47.496037+00:00"
+}

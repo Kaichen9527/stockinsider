@@ -1,0 +1,18 @@
+{
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "typecheck"
+  ],
+  "startAt": "2026-10-12T01:46:53.340158+00:00",
+  "durationSeconds": 9.385826462996192,
+  "exitCode": 0,
+  "stopReason": null,
+  "peakProcessGroupRssBytes": 925831168,
+  "minimumFreeBytes": {
+    "/workspace": 9231974400,
+    "/tmp": 16977108992
+  }
+}

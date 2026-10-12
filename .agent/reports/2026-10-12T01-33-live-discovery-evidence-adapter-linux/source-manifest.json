@@ -1,0 +1,80 @@
+[
+  {
+    "path": "web/src/lib/live-discovery-evidence-adapter.ts",
+    "bytes": 8556,
+    "sha256": "e6d8ac2307fbf8cbddc2fe8b7757e6919efb7ff1ed6fb46020dbaa322564bf12",
+    "blob": "6628ebab2799a5fb33d0f58b910241517e71d4f6"
+  },
+  {
+    "path": "web/src/lib/live-discovery-evidence-adapter.test.ts",
+    "bytes": 7983,
+    "sha256": "87a4c9b5838adda41270b7280d940335be9b1778f859ad76b43d283665d5ff89",
+    "blob": "d7e32ac071fce269f38d439780011c1710920663"
+  },
+  {
+    "path": "web/src/lib/candidate-research.ts",
+    "bytes": 184147,
+    "sha256": "020fdb619e3e919c05914f9bbf35ab608e79ee33b3ad4bb71c35e72ca64214fb",
+    "blob": "60d820b4ef1c68fc8123fb938c6cf7794c408c33"
+  },
+  {
+    "path": "web/src/lib/types.ts",
+    "bytes": 77016,
+    "sha256": "2ca981f74875400c84a70f25ba05f785c0df92edc769832ffd199eebaca5755a",
+    "blob": "ae41d30cf5de87037fac175fda7583937b05599e"
+  },
+  {
+    "path": "docs/operations/2026-10-12/live-discovery-evidence-adapter-handoff.md",
+    "bytes": 4828,
+    "sha256": "a68331807e5e3dfa479f72016f650edc3f3ea297a0e808a9deb533eda31b4d3b",
+    "blob": "ba9cd4d8c52dfe4aa71e8f3d5650790be31dbb5a"
+  },
+  {
+    "path": "web/src/lib/candidate-discovery-admission.ts",
+    "bytes": 12548,
+    "sha256": "a7df49806bc8b261b5444ddf8e730f65197c05fa299126fa5cc0212415aeb5d2",
+    "blob": "4f0fd0ac2d07b53787e495e32db6c92f535d4ab1"
+  },
+  {
+    "path": "web/src/lib/ptt-mention-provenance.ts",
+    "bytes": 5986,
+    "sha256": "3a7112be751eebcf1e6c76540ef5520682c9df02603335eac9a5f428d534884b",
+    "blob": "64040a203d3e578b6713035d4c16a366588f05ea"
+  },
+  {
+    "path": "web/src/lib/candidate-research-policy.ts",
+    "bytes": 10391,
+    "sha256": "d37ca05450ca4f29c395e0f7aa71acab1b57a6537165c74e9f66581b725d9946",
+    "blob": "ebdd585704717aff5bc24bcc427e5209636e91bd"
+  },
+  {
+    "path": "web/package-lock.json",
+    "bytes": 274088,
+    "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+    "blob": "a41fd447e28f3b36829b689828c345e042619a38"
+  },
+  {
+    "path": "package-lock.json",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+  },
+  {
+    "path": "migrations/20260830_source_ranking_v2.sql",
+    "bytes": 17381,
+    "sha256": "8bff800465680306da4aa2bf84321af564132adf021d4ff53fd001759d11f9ae",
+    "blob": "b6dd04a18dc74c4803065ebd99e1c7c137f5af58"
+  },
+  {
+    "path": "migrations/20260901_source_research_shadow_v2.sql",
+    "bytes": 16015,
+    "sha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+    "blob": "2fbc579a08efbfdfe09b16c07b4ebf2b55061c43"
+  },
+  {
+    "path": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+    "bytes": 1023746,
+    "sha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+    "blob": "c70c6b7366b7b70c2b506ad90427ac9f37d87dfe"
+  }
+]

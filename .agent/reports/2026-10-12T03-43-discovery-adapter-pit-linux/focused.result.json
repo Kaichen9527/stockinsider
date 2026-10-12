@@ -1,0 +1,21 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/live-discovery-evidence-adapter.test.ts",
+    "web/src/lib/candidate-discovery-admission.test.ts",
+    "web/src/lib/ptt-mention-provenance.test.ts",
+    "web/src/lib/candidate-research-policy.test.ts"
+  ],
+  "startAt": "2026-10-12T03:52:12.888199+00:00",
+  "durationSeconds": 1.0977848959737457,
+  "exitCode": 0,
+  "stopReason": null,
+  "peakProcessGroupRssBytes": 151293952,
+  "minimumFreeBytes": {
+    "/workspace": 9207189504,
+    "/tmp": 16959905792
+  }
+}

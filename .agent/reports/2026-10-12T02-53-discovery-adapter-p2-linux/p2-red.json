@@ -1,0 +1,14 @@
+{
+  "runtimeSubject": "ef5d4db22381fd364700f8a3fe65c7b398326467",
+  "testDelta": "new owned URL/comment-key/completeness regression assertions",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/live-discovery-evidence-adapter.test.ts"
+  ],
+  "exitCode": 1,
+  "wallSeconds": 0.5661306640249677,
+  "at": "2026-10-12T02:55:56.175800+00:00"
+}

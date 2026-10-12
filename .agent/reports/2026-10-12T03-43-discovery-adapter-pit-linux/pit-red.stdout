@@ -1,0 +1,1113 @@
+TAP version 13
+# (node:405580) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:405580) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-live-discovery-adapter-oct12/web/package.json.
+# Subtest: real retained provenance maps scoped row identity, never URL/hash/publisher authority
+ok 1 - real retained provenance maps scoped row identity, never URL/hash/publisher authority
+  ---
+  duration_ms: 2.314854
+  ...
+# Subtest: 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+ok 2 - 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+  ---
+  duration_ms: 2.906427
+  ...
+# Subtest: authors are counted once within one conversation, never pooled across posts
+ok 3 - authors are counted once within one conversation, never pooled across posts
+  ---
+  duration_ms: 1.337038
+  ...
+# Subtest: non-explicit reply 👍👍👍 does not count
+ok 4 - non-explicit reply 👍👍👍 does not count
+  ---
+  duration_ms: 0.217878
+  ...
+# Subtest: non-explicit reply 推 does not count
+ok 5 - non-explicit reply 推 does not count
+  ---
+  duration_ms: 0.188655
+  ...
+# Subtest: non-explicit reply 台積電 does not count
+ok 6 - non-explicit reply 台積電 does not count
+  ---
+  duration_ms: 0.151799
+  ...
+# Subtest: non-explicit reply 12409 does not count
+ok 7 - non-explicit reply 12409 does not count
+  ---
+  duration_ms: 0.288666
+  ...
+# Subtest: non-explicit reply a2409 does not count
+ok 8 - non-explicit reply a2409 does not count
+  ---
+  duration_ms: 0.259772
+  ...
+# Subtest: non-explicit reply 2409x does not count
+ok 9 - non-explicit reply 2409x does not count
+  ---
+  duration_ms: 0.622139
+  ...
+# Subtest: hash mismatch, missing author/parent/index and read failure do not count
+ok 10 - hash mismatch, missing author/parent/index and read failure do not count
+  ---
+  duration_ms: 0.794259
+  ...
+# Subtest: withheld/retracted mention never becomes active evidence; missing root heads block all admission
+ok 11 - withheld/retracted mention never becomes active evidence; missing root heads block all admission
+  ---
+  duration_ms: 0.45737
+  ...
+# Subtest: cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+ok 12 - cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+  ---
+  duration_ms: 0.204829
+  ...
+# Subtest: backdated availability cannot admit a newly received row into an older observation
+ok 13 - backdated availability cannot admit a newly received row into an older observation
+  ---
+  duration_ms: 0.17853
+  ...
+# Subtest: same instant offset notation, exact date validation and invalid clocks
+ok 14 - same instant offset notation, exact date validation and invalid clocks
+  ---
+  duration_ms: 0.248265
+  ...
+# Subtest: stable accounting retains duplicates, foreign stock and incomplete window as gaps
+ok 15 - stable accounting retains duplicates, foreign stock and incomplete window as gaps
+  ---
+  duration_ms: 0.16572
+  ...
+# Subtest: bound exhaustion reports unexamined rows, never truncation-success
+ok 16 - bound exhaustion reports unexamined rows, never truncation-success
+  ---
+  duration_ms: 1.0073
+  ...
+# Subtest: untrusted getters, prototype and object index cannot execute or acquire authority
+ok 17 - untrusted getters, prototype and object index cannot execute or acquire authority
+  ---
+  duration_ms: 0.283879
+  ...
+# Subtest: server real initializer audits complete pre-link rows rather than eight display sources
+ok 18 - server real initializer audits complete pre-link rows rather than eight display sources
+  ---
+  duration_ms: 277.245042
+  ...
+# Subtest: missing or mismatched row URL cannot borrow retained document provenance
+ok 19 - missing or mismatched row URL cannot borrow retained document provenance
+  ---
+  duration_ms: 0.43741
+  ...
+# Subtest: two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders
+ok 20 - two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders
+  ---
+  duration_ms: 0.331681
+  ...
+# Subtest: conflicting text and correct hashes invalidate the whole key in both orders
+ok 21 - conflicting text and correct hashes invalidate the whole key in both orders
+  ---
+  duration_ms: 0.307825
+  ...
+# Subtest: exact comment replay across UUIDs counts once, same author across keys still once
+ok 22 - exact comment replay across UUIDs counts once, same author across keys still once
+  ---
+  duration_ms: 0.250067
+  ...
+# Subtest: twenty authors containing one conflicting comment cannot be counted as twenty
+ok 23 - twenty authors containing one conflicting comment cannot be counted as twenty
+  ---
+  duration_ms: 1.522187
+  ...
+# Subtest: same-row UUID conflict cannot hide behind row dedup
+ok 24 - same-row UUID conflict cannot hide behind row dedup
+  ---
+  duration_ms: 0.345802
+  ...
+# Subtest: actual page reader capped at100/request750 cannot prove total200 exhaustion
+ok 25 - actual page reader capped at100/request750 cannot prove total200 exhaustion
+  ---
+  duration_ms: 1.976323
+  ...
+# Subtest: available_at future1us sameUUID changed-author first cannot affect known evidence
+not ok 26 - available_at future1us sameUUID changed-author first cannot affect known evidence
+  ---
+  duration_ms: 1.836582
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: available_at future1us sameUUID changed-author last cannot affect known evidence
+not ok 27 - available_at future1us sameUUID changed-author last cannot affect known evidence
+  ---
+  duration_ms: 0.434165
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'duplicate_row_identity'
+    - 'outside_known_window'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'outside_known_window'
+  actual: 'duplicate_row_identity'
+  operator: 'strictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:153:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: available_at future1us sameUUID changed-index first cannot affect known evidence
+not ok 28 - available_at future1us sameUUID changed-index first cannot affect known evidence
+  ---
+  duration_ms: 0.659736
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: available_at future1us sameUUID changed-index last cannot affect known evidence
+not ok 29 - available_at future1us sameUUID changed-index last cannot affect known evidence
+  ---
+  duration_ms: 0.288947
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'duplicate_row_identity'
+    - 'outside_known_window'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'outside_known_window'
+  actual: 'duplicate_row_identity'
+  operator: 'strictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:153:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: created_at future1us sameUUID changed-author first cannot affect known evidence
+not ok 30 - created_at future1us sameUUID changed-author first cannot affect known evidence
+  ---
+  duration_ms: 0.624693
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: created_at future1us sameUUID changed-author last cannot affect known evidence
+not ok 31 - created_at future1us sameUUID changed-author last cannot affect known evidence
+  ---
+  duration_ms: 0.291269
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'duplicate_row_identity'
+    - 'outside_known_window'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'outside_known_window'
+  actual: 'duplicate_row_identity'
+  operator: 'strictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:153:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: created_at future1us sameUUID changed-index first cannot affect known evidence
+not ok 32 - created_at future1us sameUUID changed-index first cannot affect known evidence
+  ---
+  duration_ms: 0.343459
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: created_at future1us sameUUID changed-index last cannot affect known evidence
+not ok 33 - created_at future1us sameUUID changed-index last cannot affect known evidence
+  ---
+  duration_ms: 0.402438
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'duplicate_row_identity'
+    - 'outside_known_window'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'outside_known_window'
+  actual: 'duplicate_row_identity'
+  operator: 'strictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:153:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: as_of future1us sameUUID changed-author first cannot affect known evidence
+not ok 34 - as_of future1us sameUUID changed-author first cannot affect known evidence
+  ---
+  duration_ms: 0.530441
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: as_of future1us sameUUID changed-author last cannot affect known evidence
+not ok 35 - as_of future1us sameUUID changed-author last cannot affect known evidence
+  ---
+  duration_ms: 0.341485
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'duplicate_row_identity'
+    - 'outside_known_window'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'outside_known_window'
+  actual: 'duplicate_row_identity'
+  operator: 'strictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:153:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: as_of future1us sameUUID changed-index first cannot affect known evidence
+not ok 36 - as_of future1us sameUUID changed-index first cannot affect known evidence
+  ---
+  duration_ms: 0.307114
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: as_of future1us sameUUID changed-index last cannot affect known evidence
+not ok 37 - as_of future1us sameUUID changed-index last cannot affect known evidence
+  ---
+  duration_ms: 0.361906
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'duplicate_row_identity'
+    - 'outside_known_window'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'outside_known_window'
+  actual: 'duplicate_row_identity'
+  operator: 'strictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:153:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: mentioned_at future1us sameUUID changed-author first cannot affect known evidence
+not ok 38 - mentioned_at future1us sameUUID changed-author first cannot affect known evidence
+  ---
+  duration_ms: 0.327775
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: mentioned_at future1us sameUUID changed-author last cannot affect known evidence
+not ok 39 - mentioned_at future1us sameUUID changed-author last cannot affect known evidence
+  ---
+  duration_ms: 0.291821
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'duplicate_row_identity'
+    - 'outside_known_window'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'outside_known_window'
+  actual: 'duplicate_row_identity'
+  operator: 'strictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:153:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: mentioned_at future1us sameUUID changed-index first cannot affect known evidence
+not ok 40 - mentioned_at future1us sameUUID changed-index first cannot affect known evidence
+  ---
+  duration_ms: 0.354195
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: mentioned_at future1us sameUUID changed-index last cannot affect known evidence
+not ok 41 - mentioned_at future1us sameUUID changed-index last cannot affect known evidence
+  ---
+  duration_ms: 0.256016
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:161:38'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'duplicate_row_identity'
+    - 'outside_known_window'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'outside_known_window'
+  actual: 'duplicate_row_identity'
+  operator: 'strictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:153:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:163:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: available_at future differentUUID first cannot affect known comment
+ok 42 - available_at future differentUUID first cannot affect known comment
+  ---
+  duration_ms: 0.528267
+  ...
+# Subtest: available_at invalid sameUUID first cannot steal known UUID
+not ok 43 - available_at invalid sameUUID first cannot steal known UUID
+  ---
+  duration_ms: 0.598273
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:169:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:170:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: available_at future differentUUID last cannot affect known comment
+ok 44 - available_at future differentUUID last cannot affect known comment
+  ---
+  duration_ms: 0.377299
+  ...
+# Subtest: available_at invalid sameUUID last cannot steal known UUID
+ok 45 - available_at invalid sameUUID last cannot steal known UUID
+  ---
+  duration_ms: 0.31164
+  ...
+# Subtest: created_at future differentUUID first cannot affect known comment
+ok 46 - created_at future differentUUID first cannot affect known comment
+  ---
+  duration_ms: 0.237629
+  ...
+# Subtest: created_at invalid sameUUID first cannot steal known UUID
+not ok 47 - created_at invalid sameUUID first cannot steal known UUID
+  ---
+  duration_ms: 0.309937
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:169:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:170:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: created_at future differentUUID last cannot affect known comment
+ok 48 - created_at future differentUUID last cannot affect known comment
+  ---
+  duration_ms: 0.336659
+  ...
+# Subtest: created_at invalid sameUUID last cannot steal known UUID
+ok 49 - created_at invalid sameUUID last cannot steal known UUID
+  ---
+  duration_ms: 0.209747
+  ...
+# Subtest: as_of future differentUUID first cannot affect known comment
+ok 50 - as_of future differentUUID first cannot affect known comment
+  ---
+  duration_ms: 0.208976
+  ...
+# Subtest: as_of invalid sameUUID first cannot steal known UUID
+not ok 51 - as_of invalid sameUUID first cannot steal known UUID
+  ---
+  duration_ms: 0.376878
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:169:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:170:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: as_of future differentUUID last cannot affect known comment
+ok 52 - as_of future differentUUID last cannot affect known comment
+  ---
+  duration_ms: 0.254313
+  ...
+# Subtest: as_of invalid sameUUID last cannot steal known UUID
+ok 53 - as_of invalid sameUUID last cannot steal known UUID
+  ---
+  duration_ms: 0.307645
+  ...
+# Subtest: mentioned_at future differentUUID first cannot affect known comment
+ok 54 - mentioned_at future differentUUID first cannot affect known comment
+  ---
+  duration_ms: 0.239201
+  ...
+# Subtest: mentioned_at invalid sameUUID first cannot steal known UUID
+not ok 55 - mentioned_at invalid sameUUID first cannot steal known UUID
+  ---
+  duration_ms: 0.351431
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:169:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001',
+    -     status: 'current'
+    -   }
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:170:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: mentioned_at future differentUUID last cannot affect known comment
+ok 56 - mentioned_at future differentUUID last cannot affect known comment
+  ---
+  duration_ms: 0.248295
+  ...
+# Subtest: mentioned_at invalid sameUUID last cannot steal known UUID
+ok 57 - mentioned_at invalid sameUUID last cannot steal known UUID
+  ---
+  duration_ms: 0.199782
+  ...
+# Subtest: a future-only UUID must not mark a later known row with that UUID as duplicate
+not ok 58 - a future-only UUID must not mark a later known row with that UUID as duplicate
+  ---
+  duration_ms: 0.493775
+  location: '/workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:173:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+    
+      [
+        {
+          identityResolved: false,
+          kind: 'public',
+          mentionedSymbols: [
+    ...
+        },
+    -   {
+    -     identityResolved: false,
+    -     kind: 'public',
+    -     mentionedSymbols: [
+    -       '2409'
+    -     ],
+    -     platform: 'ptt',
+    -     publisherId: null,
+    -     rootId: null,
+    -     sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000002',
+    -     status: 'current'
+    -   }
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+    1:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000002'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  actual:
+    0:
+      sourceId: 'candidate-mention:bbbbbbbb-bbbb-bbbb-bbbb-000000000001'
+      platform: 'ptt'
+      publisherId: ~
+      rootId: ~
+      identityResolved: false
+      status: 'current'
+      kind: 'public'
+      mentionedSymbols:
+        0: '2409'
+  operator: 'deepStrictEqual'
+  stack: |-
+    sameKnownResult (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:154:10)
+    TestContext.<anonymous> (file:///workspace/cloud-live-discovery-adapter-oct12/web/src/lib/live-discovery-evidence-adapter.test.ts:176:5)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..58
+# tests 58
+# suites 0
+# pass 37
+# fail 21
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 458.27831
