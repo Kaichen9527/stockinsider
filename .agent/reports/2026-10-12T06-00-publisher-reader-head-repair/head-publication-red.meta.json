@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "web/src/lib/discovery-revision-publisher-reader.test.ts"
+  ],
+  "start_utc": "2026-10-12T06:02:38Z",
+  "seconds": 0.5660974979400635,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 123551744,
+  "min_free_bytes": 9143840768
+}

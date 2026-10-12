@@ -1,0 +1,194 @@
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import { sha256Canonical } from './opportunity-v3/canonical.ts';
+import { discoveryClock, discoveryPopulationHash, readDiscoveryRevisionPublishers,
+  type ReaderInput, type PublisherAuthority } from './discovery-revision-publisher-reader.ts';
+const id = (n: number) => `00000000-0000-4000-8000-${n.toString().padStart(12, '0')}`;
+const cut = '2026-10-08T12:00:00.123456Z', old = '2026-10-08T11:00:00.123456Z';
+const later = '2026-10-08T12:01:00.123456Z';
+const native = (p: PublisherAuthority) => [p.authority_id,p.publisher_identity_id,p.source_class,p.domains,
+  p.feed_identity,p.institution_identity,p.valid_from,p.valid_to,p.approved_at,p.approving_principal_id,p.status,p.recorded_at];
+function manifest(x: ReaderInput) {
+  const m = x.tables.manifests[0];
+  const payload = native(x.tables.publishers[0]);
+  const ph = sha256Canonical(payload);
+  const p=x.tables.publishers[0];const terminal=p.status==='active'&&(p.valid_to===null||discoveryClock(p.valid_to)>discoveryClock(cut))?'effective_active':'revoked_or_expired';
+  const identity = sha256Canonical(['opportunity-manifest-row-identity-v3.3', m.manifest_kind, 'rows', 0, ph]);
+  const page = ['opportunity-manifest-page-v3.3',m.manifest_kind,m.contract_version,cut,'rows',0,0,[[0,identity,terminal,payload]]];
+  m.root_json = ['opportunity-manifest-root-v3.3',m.manifest_kind,m.contract_version,cut,[['rowCount',1],['sourceCutoff',cut]],
+    [['rows',1,[[0,0,1,identity,identity,sha256Canonical(page)]]]]];
+  m.manifest_hash = sha256Canonical(m.root_json);
+  x.tables.manifestRows = [{manifest_id:m.manifest_id,section_key:'rows',row_ordinal:0,identity_key:identity,
+    terminal_code:terminal,payload_json:payload,payload_hash:ph,recorded_at:later}];
+}
+function counted(x: ReaderInput) {
+  for (const name of Object.keys(x.tables) as (keyof ReaderInput['tables'])[]) x.population.tables[name] = {
+    exact_count:x.tables[name].length,projection_sha256:discoveryPopulationHash(x.tables[name])};
+  return x;
+}
+/** Synthetic, real relation/native manifest shapes; no live authority or model execution. */
+function fixture(): ReaderInput {
+  const x: ReaderInput = {run:{run_id:id(1),source_cutoff:cut,status:'success',sealed_at:later},snapshot_at:later,
+    publisher_manifest_input:{run_id:id(1),manifest_id:id(7),input_role:'publisher_verification_allowlist',ordinal:0,recorded_at:later},
+    population:{run_id:id(1),source_cutoff:cut,tables:{} as ReaderInput['population']['tables']},tables:{
+      revisions:[{revision_id:id(2),revision_family_key:'a'.repeat(64),source_key:'ptt',source_identity_authority_id:id(3),
+        approved_source_identity_id:id(4),stable_connector_document_id:'original-article',published_at:old,collected_at:old,recorded_at:old,
+        acquisition_status:'complete',adapter_version:'source-adapter-v3.3',ingestion_canonical_content_hash_v3:'b'.repeat(64)}],
+      sourceAuthorities:[{authority_id:id(3),source_identity_id:id(4),source_key:'ptt',source_class:'community',distribution_identity:'retained-profile',
+        valid_from:old,valid_to:null,status:'active',approved_at:old,approving_principal_id:id(8),recorded_at:old}],
+      publishers:[{authority_id:id(5),publisher_identity_id:id(6),source_class:'official',domains:['example.test'],feed_identity:null,institution_identity:null,
+        valid_from:old,valid_to:null,status:'active',approved_at:old,approving_principal_id:id(8),recorded_at:old}],
+      verifications:[{verification_id:id(9),source_run_id:id(1),source_cutoff:cut,revision_id:id(2),publisher_manifest_id:id(7),publisher_identity_id:id(6),
+        institution_identity:null,canonical_document_id:'reviewed-document-id',canonical_content_hash:'b'.repeat(64),published_at:old,collected_at:old,evidence_ref:'public-summary:synthetic',recorded_at:later}],
+      registry:[{source_key:'ptt',revision_family_key:'a'.repeat(64),approved_source_identity_id:id(4),stable_connector_document_id:'original-article',registered_at:old}],
+      manifests:[{manifest_id:id(7),manifest_kind:'publisher_verification_allowlist',contract_version:'source-publisher-allowlist-v3.0',source_cutoff:cut,
+        status:'complete',row_count:1,root_json:[],manifest_hash:'',recorded_at:later,terminal_at:later}],manifestRows:[]}};
+  manifest(x); return counted(x);
+}
+const read = (x: ReaderInput) => readDiscoveryRevisionPublishers(counted(x));
+function invariant(x: ReaderInput) {
+  const a=read(x), y=structuredClone(x);
+  for(const rows of Object.values(y.tables)) rows.reverse();
+  assert.deepEqual(read(y),a); assert.equal(a.accounting.input_rows,a.accounting.terminal_rows); return a;
+}
+test('actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof',()=>{
+  const a=invariant(fixture());assert.equal(a.status,'projected');assert.equal(a.bindings.length,1);
+  assert.equal(a.bindings[0].independent_news_root,null);assert.equal(a.bindings[0].cross_platform_creator,null);
+  assert.equal(a.investment_admission,false);assert.equal(a.live_population_verified,false);
+});
+test('precise offset microseconds and invalid dates',()=>{
+  assert.equal(discoveryClock(cut),discoveryClock('2026-10-08T20:00:00.123456+08:00'));
+  assert.equal(discoveryClock('2026-10-08T12:00:00.123457Z')-discoveryClock(cut),BigInt(1));
+  for(const clock of ['2026-02-30T00:00:00Z','2026-10-08T24:00:00Z','2026-10-08T12:00:00.1234567Z','2026-10-08T12:00:00','2026-10-08T12:00:00+24:00']) assert.throws(()=>discoveryClock(clock));
+});
+for(const clock of ['collected_at','recorded_at'] as const) test(`future revision ${clock} 1us cannot replace known head`,()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),[clock]:'2026-10-08T12:00:00.123457Z'});
+  const a=invariant(x);assert.equal(a.bindings.length,1);assert.ok(a.dispositions.some(d=>d.disposition==='after_cutoff'));
+});
+for(const clock of ['approved_at','recorded_at','valid_from'] as const) test(`future authority ${clock} cannot mask known authority`,()=>{
+  const x=fixture();x.tables.publishers.push({...x.tables.publishers[0],authority_id:id(20),status:'inactive',
+    [clock]:'2026-10-08T12:00:00.123457Z',recorded_at:clock==='valid_from'?old:'2026-10-08T12:00:00.123457Z'});
+  if(clock==='valid_from') x.tables.publishers[1].recorded_at=old;
+  assert.equal(invariant(x).bindings.length,1);
+});
+for(const kind of ['source','publisher']) test(`latest inactive ${kind} never revives prior active`,()=>{
+  const x=fixture();
+  if(kind==='source')x.tables.sourceAuthorities.push({...x.tables.sourceAuthorities[0],authority_id:id(20),status:'inactive',recorded_at:cut});
+  else x.tables.publishers.push({...x.tables.publishers[0],authority_id:id(20),status:'inactive',recorded_at:cut});
+  assert.equal(invariant(x).bindings.length,0);
+});
+test('latest invalid acquisition cannot revive old complete',()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),recorded_at:cut,
+    acquisition_status:'required_field_missing',ingestion_canonical_content_hash_v3:null});
+  const a=invariant(x);assert.equal(a.bindings.length,0);assert.ok(a.dispositions.some(d=>d.disposition==='latest_revision_not_complete'));
+});
+for(const table of ['revisions','publishers','sourceAuthorities'] as const) test(`same-time contradictory ${table} heads fail closed, both orders`,()=>{
+  const x=fixture();x.tables[table].push({...x.tables[table][0],...(table==='revisions'?{revision_id:id(20)}:{authority_id:id(20)}),recorded_at:old} as never);
+  assert.equal(invariant(x).reason,'contradictory_head');
+});
+for(const change of ['run','cutoff','count','hash']) test(`frozen population ${change} mismatch is not complete`,()=>{
+  const x=fixture();if(change==='run')x.population.run_id=id(30);if(change==='cutoff')x.population.source_cutoff=old;
+  if(change==='count')x.population.tables.revisions.exact_count=2;if(change==='hash')x.population.tables.revisions.projection_sha256='0'.repeat(64);
+  assert.equal(readDiscoveryRevisionPublishers(x).status,'unsupported');
+});
+for(const key of ['source_run_id','source_cutoff','revision_id','publisher_manifest_id','canonical_content_hash','collected_at','recorded_at'] as const) test(`verification ${key} binding mismatch`,()=>{
+  const x=fixture();x.tables.verifications[0][key]=key==='source_cutoff'?old:key==='collected_at'?cut:key==='recorded_at'?'2026-10-08T12:01:00.123457Z':id(30);
+  assert.equal(invariant(x).bindings.length,0);
+});
+for(const kind of ['root_hash','page_hash','payload','rows_missing','institution','authority_bytes','run_binding']) test(`manifest ${kind} cannot be asserted by count alone`,()=>{
+  const x=fixture();if(kind==='root_hash')x.tables.manifests[0].manifest_hash='0'.repeat(64);
+  if(kind==='page_hash'){const root=x.tables.manifests[0].root_json as unknown[][];(root[5][0] as unknown[])[2]=[[0,0,1,'x','x','0'.repeat(64)]];x.tables.manifests[0].manifest_hash=sha256Canonical(root);}
+  if(kind==='payload')x.tables.manifestRows[0].payload_hash='0'.repeat(64);
+  if(kind==='rows_missing')x.tables.manifestRows=[];
+  if(kind==='institution')x.tables.verifications[0].institution_identity='different-institution';
+  if(kind==='authority_bytes')x.tables.publishers[0].domains=['other.test'];
+  if(kind==='run_binding')x.publisher_manifest_input.run_id=id(30);
+  assert.equal(invariant(x).status,'unsupported');
+});
+for(const ids of [[id(2)],[id(2),id(2)]]) test(`legacy raw mapping ${ids.length===1?'missing':'ambiguous'} is unsupported, never UUID/hash/url join`,()=>{
+  const x=fixture();x.legacy_raw_document_ids=ids;assert.equal(invariant(x).reason,'legacy_raw_revision_mapping_unavailable');
+});
+test('bounded populations defer every supplied input, not truncation success',()=>{
+  const x=fixture();x.tables.registry=Array.from({length:4097},()=>({...x.tables.registry[0]}));
+  const a=invariant(x);assert.equal(a.reason,'input_bound');assert.equal(a.bindings.length,0);assert.equal(a.accounting.bound_deferred,a.accounting.input_rows);
+});
+test('same revision UUID with conflicting family cannot produce two bindings',()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_family_key:'c'.repeat(64)});
+  assert.equal(invariant(x).reason,'conflicting_row_identity');
+});
+test('exact duplicate revision is accounted once as binding, deterministic projection',()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0]});assert.equal(invariant(x).bindings.length,1);
+});
+test('equal cutoff is included and valid_to equal cutoff is expired',()=>{
+  const x=fixture();x.tables.revisions[0].recorded_at=cut;assert.equal(read(x).bindings.length,1);
+  x.tables.publishers[0].valid_to=cut;manifest(x);assert.equal(read(x).bindings.length,0);
+});
+for(const clock of ['collected_at','recorded_at'] as const) test(`invalid ${clock} is explicitly rejected, not a chosen head`,()=>{
+  const x=fixture();x.tables.revisions[0][clock]='not-a-clock';assert.equal(invariant(x).reason,'invalid_clock');
+});
+test('partial page with lower local count cannot match previously counted packet',()=>{
+  const x=fixture();x.tables.revisions=[];assert.equal(readDiscoveryRevisionPublishers(x).reason,'population_incomplete');
+});
+test('recomputation keeps supplied source clocks, does not substitute snapshot time',()=>{
+  const x=fixture(),a=read(x);assert.equal(a.bindings[0].collected_at,old);assert.equal(a.source_cutoff,cut);
+  x.snapshot_at='2026-10-08T12:02:00Z';assert.equal(read(x).projection_hash,a.projection_hash);
+});
+test('root section row count/manifest page membership must agree',()=>{
+  const x=fixture();const root=x.tables.manifests[0].root_json as unknown[][];root[5]=[['rows',2,[]]];
+  x.tables.manifests[0].manifest_hash=sha256Canonical(root);assert.equal(invariant(x).reason,'manifest_page_chain_mismatch');
+});
+test('no URL or family/hash changes create root or creator proof',()=>{
+  const x=fixture();x.tables.verifications[0].canonical_document_id='https://example.test/root';
+  const a=read(x);assert.equal(a.bindings[0].independent_news_root,null);assert.equal(a.bindings[0].cross_platform_creator,null);
+});
+test('publisher class is the existing enum, not an invented news authority',()=>{
+  const x=fixture();x.tables.publishers[0].source_class='news';manifest(x);assert.equal(read(x).reason,'invalid_authority');
+});
+test('public_research institution required by original authority schema',()=>{
+  const x=fixture();x.tables.publishers[0].source_class='public_research';manifest(x);assert.equal(read(x).reason,'invalid_authority');
+});
+test('unbounded strings and depth fail before projection, no truncation success',()=>{
+  const x=fixture();x.tables.verifications[0].canonical_document_id='x'.repeat(4194305);assert.equal(read(x).reason,'input_bound');
+});
+for(const clock of ['collected_at','recorded_at'] as const) test(`future same-UUID ${clock} cannot poison known family/identity`,()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_family_key:'c'.repeat(64),[clock]:'2026-10-08T12:00:00.123457Z'});
+  assert.equal(invariant(x).bindings.length,1);
+});
+test('manifest full retained publisher head population, not merely one matching row',()=>{
+  const x=fixture();x.tables.publishers.push({...x.tables.publishers[0],publisher_identity_id:id(50),authority_id:id(51)});
+  assert.equal(invariant(x).reason,'publisher_manifest_binding_mismatch');
+});
+
+// Independent review counterexample: known collection/recording selects head FIRST.
+for(const [label,published] of [['cutoff+1us','2026-10-08T12:00:00.123457Z'],['before-cutoff-after-collection','2026-10-08T11:00:00.123457Z'],['invalid-clock','bad-clock']] as const) {
+  test(`known latest head ${label} blocks older complete family, both orders`,()=>{
+    const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),recorded_at:cut,published_at:published});
+    const a=invariant(x);assert.equal(a.bindings.length,0);
+    assert.ok(a.dispositions.some(d=>d.disposition==='latest_revision_publication_invalid'));
+    assert.ok(a.dispositions.some(d=>d.disposition==='superseded_revision'));
+    assert.ok(!a.dispositions.some(d=>d.table==='revisions'&&d.disposition==='after_cutoff'));
+  });
+  test(`known same-UUID conflicting ${label} cannot revive old revision, both orders`,()=>{
+    const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],recorded_at:cut,published_at:published});
+    const a=invariant(x);assert.equal(a.bindings.length,0);assert.equal(a.reason,'conflicting_row_identity');
+  });
+}
+test('known latest head with published null is allowed when verification also preserves null',()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),recorded_at:cut,published_at:null});
+  x.tables.verifications[0].revision_id=id(20);x.tables.verifications[0].published_at=null;
+  const a=invariant(x);assert.equal(a.bindings.length,1);assert.equal(a.bindings[0].revision_id,id(20));assert.equal(a.bindings[0].published_at,null);
+});
+test('known legal head at publication=collection remains usable with all microseconds',()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_id:id(20),recorded_at:cut});
+  x.tables.verifications[0].revision_id=id(20);assert.equal(invariant(x).bindings[0].revision_id,id(20));
+});
+
+for(const clock of ['collected_at','recorded_at'] as const) test(`truly future ${clock} with invalid publication remains unknown without UUID poisoning`,()=>{
+  const x=fixture();x.tables.revisions.push({...x.tables.revisions[0],revision_family_key:'c'.repeat(64),published_at:'invalid-publication',
+    [clock]:'2026-10-08T12:00:00.123457Z'});
+  const a=invariant(x);assert.equal(a.bindings.length,1);assert.ok(a.dispositions.some(d=>d.disposition==='after_cutoff'));
+});
+test('single known head with malformed publication is blocked with explicit family disposition',()=>{
+  const x=fixture();x.tables.revisions[0].published_at='invalid-publication';
+  const a=invariant(x);assert.equal(a.bindings.length,0);assert.ok(a.dispositions.some(d=>d.disposition==='latest_revision_publication_invalid'));
+});

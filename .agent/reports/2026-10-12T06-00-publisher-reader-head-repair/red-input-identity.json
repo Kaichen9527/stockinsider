@@ -1,0 +1,17 @@
+{
+  "parent_merge": "76e981cb110b0bc28a36572bc999267a095da628",
+  "runtime_original_source": "64b71a91c45fd1fc73f0937c608290d31d60bddd",
+  "negative_cases_changed_only": true,
+  "files": [
+    {
+      "path": "web/src/lib/discovery-revision-publisher-reader.ts",
+      "bytes": 21328,
+      "sha256": "335e17d1f35a5a82c141243709042101213e0f3b4795b55e367b6c1108d1c922"
+    },
+    {
+      "path": "web/src/lib/discovery-revision-publisher-reader.test.ts",
+      "bytes": 15360,
+      "sha256": "a71ff8fa6f6b8fa1ae1afc417980ce44ee991b1f9247e67976929337fae243cb"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "recorded_at": "2026-10-12T05:07:54Z",
+  "manual_increment_started_at": "2026-10-12T04:49:10Z",
+  "start_evidence": "new branch creation reflog; no model role/budget claim",
+  "source_head": "64b71a91c45fd1fc73f0937c608290d31d60bddd",
+  "source_tree": "f4ffefd7bbe1de48048b2734c347dbdf2433b76d",
+  "source_webtree": "9e4a0533487d388322ed5549095455d475d34f93",
+  "primary_evidence_commit": "e77a96c6432ea34e56d1ecdd415a8eaf2d4254cb",
+  "primary_receipt_sha256": "6c1b53e7289ffae5185e6338cb1b355a4cbf20e9390999711beb0232938128df",
+  "source_diff_check_exit": 0,
+  "full_evidence_diff_check": "contains original raw trailing whitespace/CR build output; intentionally not normalized",
+  "push": "branch creation/evidence e77 confirmed by actual git push",
+  "draft_pr": "not created: one actual GraphQL Forbidden; no retry; prepared body retained",
+  "no_own_active_heavy_processes": true,
+  "stopped_services": "none started; test/type/lint/build children exited",
+  "workspace_free_bytes": 8861216768,
+  "tmp_free_bytes": 16942010368,
+  "bounds_met": true,
+  "scope": "pure read projection only; no live DB/API/crawl/production writer or merge/deploy; no independent/protected approval",
+  "extra_raw": [
+    {
+      "path": ".agent/reports/2026-10-12-discovery-publisher-reader/draft-pr.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-12-discovery-publisher-reader/draft-pr.stderr",
+      "bytes": 49,
+      "sha256": "682deed6ccd21e66582c7f0e0efdffb3363feeac4c8b58f35a46d43dc240c725"
+    },
+    {
+      "path": ".agent/reports/2026-10-12-discovery-publisher-reader/draft-pr-result.json",
+      "bytes": 474,
+      "sha256": "257516b8d9d6f316dfdfc2737a4a78ed202a2339ac00782282e467961d50c156"
+    },
+    {
+      "path": ".agent/reports/2026-10-12-discovery-publisher-reader/prepared-pr-body.md",
+      "bytes": 966,
+      "sha256": "e13d9b887170ec6393ebff7c11afe9db4616d9b0620a9168e46c348882dc0b86"
+    }
+  ]
+}

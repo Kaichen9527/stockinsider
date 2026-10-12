@@ -1,0 +1,275 @@
+TAP version 13
+# (node:409248) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:409248) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-discovery-publisher-reader-oct12/web/src/lib/discovery-revision-publisher-reader.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-discovery-publisher-reader-oct12/web/package.json.
+# Subtest: actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+ok 1 - actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+  ---
+  duration_ms: 6.18114
+  ...
+# Subtest: precise offset microseconds and invalid dates
+ok 2 - precise offset microseconds and invalid dates
+  ---
+  duration_ms: 0.371761
+  ...
+# Subtest: future revision published_at 1us cannot replace known head
+ok 3 - future revision published_at 1us cannot replace known head
+  ---
+  duration_ms: 3.151717
+  ...
+# Subtest: future revision collected_at 1us cannot replace known head
+ok 4 - future revision collected_at 1us cannot replace known head
+  ---
+  duration_ms: 1.837253
+  ...
+# Subtest: future revision recorded_at 1us cannot replace known head
+ok 5 - future revision recorded_at 1us cannot replace known head
+  ---
+  duration_ms: 2.315425
+  ...
+# Subtest: future authority approved_at cannot mask known authority
+ok 6 - future authority approved_at cannot mask known authority
+  ---
+  duration_ms: 1.642569
+  ...
+# Subtest: future authority recorded_at cannot mask known authority
+ok 7 - future authority recorded_at cannot mask known authority
+  ---
+  duration_ms: 2.054511
+  ...
+# Subtest: future authority valid_from cannot mask known authority
+ok 8 - future authority valid_from cannot mask known authority
+  ---
+  duration_ms: 1.488817
+  ...
+# Subtest: latest inactive source never revives prior active
+ok 9 - latest inactive source never revives prior active
+  ---
+  duration_ms: 2.045778
+  ...
+# Subtest: latest inactive publisher never revives prior active
+ok 10 - latest inactive publisher never revives prior active
+  ---
+  duration_ms: 1.783202
+  ...
+# Subtest: latest invalid acquisition cannot revive old complete
+ok 11 - latest invalid acquisition cannot revive old complete
+  ---
+  duration_ms: 1.784744
+  ...
+# Subtest: same-time contradictory revisions heads fail closed, both orders
+ok 12 - same-time contradictory revisions heads fail closed, both orders
+  ---
+  duration_ms: 1.802861
+  ...
+# Subtest: same-time contradictory publishers heads fail closed, both orders
+ok 13 - same-time contradictory publishers heads fail closed, both orders
+  ---
+  duration_ms: 1.336908
+  ...
+# Subtest: same-time contradictory sourceAuthorities heads fail closed, both orders
+ok 14 - same-time contradictory sourceAuthorities heads fail closed, both orders
+  ---
+  duration_ms: 1.62957
+  ...
+# Subtest: frozen population run mismatch is not complete
+ok 15 - frozen population run mismatch is not complete
+  ---
+  duration_ms: 0.47031
+  ...
+# Subtest: frozen population cutoff mismatch is not complete
+ok 16 - frozen population cutoff mismatch is not complete
+  ---
+  duration_ms: 0.420234
+  ...
+# Subtest: frozen population count mismatch is not complete
+ok 17 - frozen population count mismatch is not complete
+  ---
+  duration_ms: 0.371761
+  ...
+# Subtest: frozen population hash mismatch is not complete
+ok 18 - frozen population hash mismatch is not complete
+  ---
+  duration_ms: 0.433555
+  ...
+# Subtest: verification source_run_id binding mismatch
+ok 19 - verification source_run_id binding mismatch
+  ---
+  duration_ms: 1.522217
+  ...
+# Subtest: verification source_cutoff binding mismatch
+ok 20 - verification source_cutoff binding mismatch
+  ---
+  duration_ms: 1.197717
+  ...
+# Subtest: verification revision_id binding mismatch
+ok 21 - verification revision_id binding mismatch
+  ---
+  duration_ms: 1.334404
+  ...
+# Subtest: verification publisher_manifest_id binding mismatch
+ok 22 - verification publisher_manifest_id binding mismatch
+  ---
+  duration_ms: 1.216476
+  ...
+# Subtest: verification canonical_content_hash binding mismatch
+ok 23 - verification canonical_content_hash binding mismatch
+  ---
+  duration_ms: 1.396669
+  ...
+# Subtest: verification collected_at binding mismatch
+ok 24 - verification collected_at binding mismatch
+  ---
+  duration_ms: 1.1462
+  ...
+# Subtest: verification recorded_at binding mismatch
+ok 25 - verification recorded_at binding mismatch
+  ---
+  duration_ms: 1.406433
+  ...
+# Subtest: manifest root_hash cannot be asserted by count alone
+ok 26 - manifest root_hash cannot be asserted by count alone
+  ---
+  duration_ms: 0.929813
+  ...
+# Subtest: manifest page_hash cannot be asserted by count alone
+ok 27 - manifest page_hash cannot be asserted by count alone
+  ---
+  duration_ms: 0.876312
+  ...
+# Subtest: manifest payload cannot be asserted by count alone
+ok 28 - manifest payload cannot be asserted by count alone
+  ---
+  duration_ms: 1.08684
+  ...
+# Subtest: manifest rows_missing cannot be asserted by count alone
+ok 29 - manifest rows_missing cannot be asserted by count alone
+  ---
+  duration_ms: 0.898757
+  ...
+# Subtest: manifest institution cannot be asserted by count alone
+ok 30 - manifest institution cannot be asserted by count alone
+  ---
+  duration_ms: 1.996353
+  ...
+# Subtest: manifest authority_bytes cannot be asserted by count alone
+ok 31 - manifest authority_bytes cannot be asserted by count alone
+  ---
+  duration_ms: 1.208334
+  ...
+# Subtest: manifest run_binding cannot be asserted by count alone
+ok 32 - manifest run_binding cannot be asserted by count alone
+  ---
+  duration_ms: 1.055773
+  ...
+# Subtest: legacy raw mapping missing is unsupported, never UUID/hash/url join
+ok 33 - legacy raw mapping missing is unsupported, never UUID/hash/url join
+  ---
+  duration_ms: 0.932688
+  ...
+# Subtest: legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+ok 34 - legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+  ---
+  duration_ms: 0.839126
+  ...
+# Subtest: bounded populations defer every supplied input, not truncation success
+ok 35 - bounded populations defer every supplied input, not truncation success
+  ---
+  duration_ms: 135.218729
+  ...
+# Subtest: same revision UUID with conflicting family cannot produce two bindings
+ok 36 - same revision UUID with conflicting family cannot produce two bindings
+  ---
+  duration_ms: 1.688909
+  ...
+# Subtest: exact duplicate revision is accounted once as binding, deterministic projection
+ok 37 - exact duplicate revision is accounted once as binding, deterministic projection
+  ---
+  duration_ms: 1.539203
+  ...
+# Subtest: equal cutoff is included and valid_to equal cutoff is expired
+ok 38 - equal cutoff is included and valid_to equal cutoff is expired
+  ---
+  duration_ms: 1.214383
+  ...
+# Subtest: invalid published_at is explicitly rejected, not a chosen head
+ok 39 - invalid published_at is explicitly rejected, not a chosen head
+  ---
+  duration_ms: 1.057797
+  ...
+# Subtest: invalid collected_at is explicitly rejected, not a chosen head
+ok 40 - invalid collected_at is explicitly rejected, not a chosen head
+  ---
+  duration_ms: 1.07952
+  ...
+# Subtest: invalid recorded_at is explicitly rejected, not a chosen head
+ok 41 - invalid recorded_at is explicitly rejected, not a chosen head
+  ---
+  duration_ms: 0.968031
+  ...
+# Subtest: partial page with lower local count cannot match previously counted packet
+ok 42 - partial page with lower local count cannot match previously counted packet
+  ---
+  duration_ms: 0.373954
+  ...
+# Subtest: recomputation keeps supplied source clocks, does not substitute snapshot time
+ok 43 - recomputation keeps supplied source clocks, does not substitute snapshot time
+  ---
+  duration_ms: 1.131597
+  ...
+# Subtest: root section row count/manifest page membership must agree
+ok 44 - root section row count/manifest page membership must agree
+  ---
+  duration_ms: 0.917135
+  ...
+# Subtest: no URL or family/hash changes create root or creator proof
+ok 45 - no URL or family/hash changes create root or creator proof
+  ---
+  duration_ms: 0.705675
+  ...
+# Subtest: publisher class is the existing enum, not an invented news authority
+ok 46 - publisher class is the existing enum, not an invented news authority
+  ---
+  duration_ms: 0.570551
+  ...
+# Subtest: public_research institution required by original authority schema
+ok 47 - public_research institution required by original authority schema
+  ---
+  duration_ms: 0.567847
+  ...
+# Subtest: unbounded strings and depth fail before projection, no truncation success
+ok 48 - unbounded strings and depth fail before projection, no truncation success
+  ---
+  duration_ms: 38.843047
+  ...
+# Subtest: future same-UUID published_at cannot poison known family/identity
+ok 49 - future same-UUID published_at cannot poison known family/identity
+  ---
+  duration_ms: 1.453694
+  ...
+# Subtest: future same-UUID collected_at cannot poison known family/identity
+ok 50 - future same-UUID collected_at cannot poison known family/identity
+  ---
+  duration_ms: 1.206872
+  ...
+# Subtest: future same-UUID recorded_at cannot poison known family/identity
+ok 51 - future same-UUID recorded_at cannot poison known family/identity
+  ---
+  duration_ms: 1.150467
+  ...
+# Subtest: manifest full retained publisher head population, not merely one matching row
+ok 52 - manifest full retained publisher head population, not merely one matching row
+  ---
+  duration_ms: 1.197508
+  ...
+1..52
+# tests 52
+# suites 0
+# pass 52
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 381.907759
