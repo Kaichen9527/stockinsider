@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import {vpsPeerMigrationConnection} from './vps-migration-peer.mjs';
+import {executeFinancialVpsOperatorPrerequisite} from './financial-vps-operator-action.mjs';
+import {assertOperatorFlags,financialOperatorActionIdentity,assertOperatorPlan,assertOperatorReviewBinding} from './financial-vps-operator-binding.mjs';
 import {OWNERSHIP_PRELUDE,makeFinancialExistingSchemaProfile,assertFinancialExistingSchemaPlan,assertFinancialProfileFlags,assertFinancialProfileReviewBinding} from './financial-existing-schema-profile.mjs';
 import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
 import { FINANCIAL_TAIL, selectFinancialHistoryChain, assertFinancialReviewBinding, assertInstalledFinancialHistoryPlan, verifyFinancialHistoryPostconditions } from './financial-history-install-guard.mjs';
@@ -96,17 +99,21 @@ function parseArguments(argv) {
     if(value==='--apply')result.apply=true;
     else if(value==='--financial-history-extension'){if(result.financialHistoryExtension)throw new Error('invalid_arguments');result.financialHistoryExtension=true;}
     else if(value==='--financial-existing-schema-profile'){if(result.financialExistingSchemaProfile)throw new Error('invalid_arguments');result.financialExistingSchemaProfile=true;}
+    else if(value==='--private-vps-peer-operator'){if(result.privateVpsPeerOperator)throw Error('invalid_arguments');result.privateVpsPeerOperator=true;}
+    else if(value==='--bootstrap-vps-runtime-role'){if(result.bootstrapVpsRuntimeRole)throw Error('invalid_arguments');result.bootstrapVpsRuntimeRole=true;}
     else if(value==='--source-commit'&&SHA40.test(argv[index+1]??''))result.sourceCommit=argv[++index];
     else if(value==='--attestation-commit'&&SHA40.test(argv[index+1]??''))result.attestationCommit=argv[++index];
     else throw new Error('invalid_arguments');
   }
   if(!result.apply||!result.sourceCommit||!result.attestationCommit)throw new Error('invalid_arguments');
   assertFinancialProfileFlags(result);
+  assertOperatorFlags(result);
   return Object.freeze(result);
 }
 
 function reviewedMigrationPlan(options) {
   assertFinancialProfileFlags(options);
+  assertOperatorFlags(options);
   const financialEnabled=options.financialHistoryExtension===true||options.financialExistingSchemaProfile===true;
   const head=execFileSync('/usr/bin/git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   const dirty=execFileSync('/usr/bin/git',['status','--porcelain=v1','--untracked-files=all'],
@@ -130,12 +137,14 @@ function reviewedMigrationPlan(options) {
     .map(({relativePath,sha256})=>[relativePath,sha256]))).digest('hex');
   const preludeBytes=options.financialExistingSchemaProfile?fs.readFileSync(path.join(root,OWNERSHIP_PRELUDE)):null;
   const financialExistingSchemaProfile=preludeBytes?makeFinancialExistingSchemaProfile(migrations,{relativePath:OWNERSHIP_PRELUDE,bytes:preludeBytes,sha256:createHash('sha256').update(preludeBytes).digest('hex')}):null;
+  const operatorPrerequisite=options.bootstrapVpsRuntimeRole?financialOperatorActionIdentity():null;
   if(financialEnabled) {
     const review=execFileSync('/usr/bin/git',['show',`${options.attestationCommit}:.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md`],{cwd:root,encoding:'utf8'});
     assertFinancialReviewBinding(review,chainSha256);
     if(financialExistingSchemaProfile)assertFinancialProfileReviewBinding(review,financialExistingSchemaProfile.orderedProfileSha256);
+    if(operatorPrerequisite)assertOperatorReviewBinding(review,operatorPrerequisite);
   }
-  return Object.freeze({migrations:Object.freeze(migrations),chainSha256,...(financialExistingSchemaProfile?{financialExistingSchemaProfile}:{})});
+  return Object.freeze({migrations:Object.freeze(migrations),chainSha256,...(financialExistingSchemaProfile?{financialExistingSchemaProfile}:{}),...(operatorPrerequisite?{operatorPrerequisite}:{})});
 }
 
 async function verifyReviewedMigrationPostconditions(client, options) {
@@ -440,7 +449,8 @@ async function verifyReviewedMigrationPostconditions(client, options) {
 
 async function applyReviewedMigrations(options) {
   const plan=reviewedMigrationPlan(options);
-  const client=new Client({connectionString:resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url'),
+  const connection=options.privateVpsPeerOperator?vpsPeerMigrationConnection():{connectionString:resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url')};
+  const client=new Client({...connection,
     application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
   await client.connect();
   return applyReviewedMigrationPlanToClient(client,plan,options);
@@ -448,11 +458,12 @@ async function applyReviewedMigrations(options) {
 
 // The CLI enters only after exact-source, attestation and authority validation.
 // Kept separate to exercise transaction/error handling with isolated test clients.
-async function applyReviewedMigrationPlanToClient(client,plan,options) {
+async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorPrerequisiteExecutor=executeFinancialVpsOperatorPrerequisite}={}) {
   let locked=false;
   let transactionOpen=false;
   let primaryFailed=false;
   const supersededMigrations=[];
+  let operatorAction=null;
   try {
     const lockResult=await client.query("SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked");
     if(lockResult.rows[0]?.locked!==true) throw new Error('migration_install_busy');
@@ -462,6 +473,8 @@ async function applyReviewedMigrationPlanToClient(client,plan,options) {
     await client.query('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
     await assertInstalledFinancialHistoryPlan(client,plan.migrations,options.financialHistoryExtension===true||options.financialExistingSchemaProfile===true);
     assertFinancialExistingSchemaPlan(plan,options);
+    assertOperatorPlan(plan,options);
+    if(options.bootstrapVpsRuntimeRole)operatorAction=await operatorPrerequisiteExecutor(client);
     for(const prelude of plan.financialExistingSchemaProfile?.preludes??[]) {
       await client.query(migrationBodyInAtomicTransaction(prelude.bytes.toString('utf8')));
     }
@@ -482,7 +495,7 @@ async function applyReviewedMigrationPlanToClient(client,plan,options) {
     transactionOpen=false;
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
-      orderedChainSha256:plan.chainSha256,...(plan.financialExistingSchemaProfile?{orderedProfileSha256:plan.financialExistingSchemaProfile.orderedProfileSha256,preludes:plan.financialExistingSchemaProfile.preludes.map(({relativePath,sha256})=>[relativePath,sha256])}:{}),migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
+      orderedChainSha256:plan.chainSha256,...(operatorAction?{operatorPrerequisite:{...plan.operatorPrerequisite,result:operatorAction}}:{}),...(plan.financialExistingSchemaProfile?{orderedProfileSha256:plan.financialExistingSchemaProfile.orderedProfileSha256,preludes:plan.financialExistingSchemaProfile.preludes.map(({relativePath,sha256})=>[relativePath,sha256])}:{}),migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
       supersededMigrations:Object.freeze(supersededMigrations),verified});
   } catch(error) {
     primaryFailed=true;
