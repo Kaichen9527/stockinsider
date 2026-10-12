@@ -1,0 +1,11 @@
+{
+  "buildSubject": "ffa71c44b1c0c957de1fe0f858426db587d2a42e",
+  "finalTestSubject": "04384e9c3b2aab0d54a1ebd622dac64b9cdb5157",
+  "buildId": "GEECSVkE4LnJIliZtDUra",
+  "buildSubjectWebTree": "869ad0662b486108c1d74ae3736a1baca6b825e2",
+  "finalWebTree": "869ad0662b486108c1d74ae3736a1baca6b825e2",
+  "normalBuild": true,
+  "nextVersion": "16.3.4",
+  "serverFiles": 1794,
+  "manifestSha256": "b993ccf4dd78725a3c64defcdd072498386f477e1539c365a23501528aa3d1df"
+}

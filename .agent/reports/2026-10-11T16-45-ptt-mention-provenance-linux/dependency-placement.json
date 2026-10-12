@@ -1,0 +1,25 @@
+{
+  "reason": "Turbopack rejects a node_modules symlink outside the project filesystem root",
+  "initialPlacement": "owned symlink to exact-lock existing dependencies",
+  "correction": "local directory tree hardlinks to existing immutable dependency files; no npm install, package or lock changes",
+  "source": "/workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules",
+  "destination": "/workspace/cloud-ptt-provenance-oct12/web/node_modules",
+  "command": [
+    "/bin/cp",
+    "-al",
+    "/workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules",
+    "/workspace/cloud-ptt-provenance-oct12/web/node_modules"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "",
+  "beforeFreeBytes": 9598029824,
+  "afterFreeBytes": 9586847744,
+  "guardedPackageJsonHashes": {
+    "next/package.json": "c4ef8a1c8da320a162485f96d35df7745da90e6becc36882d6e81be9df66eec1",
+    "typescript/package.json": "822ef7ca6452205657b6288b066481ecf508bfbf43455d715cf7d3ec457561e6",
+    "react/package.json": "c383aced6a67c8d06f02996015c0a163e78532a330a96dff1ccfd107b00ab326",
+    "react-dom/package.json": "d926f158e1be15885aaeac259c39567a46f6525fbdd14c380528486c31459996"
+  },
+  "sharedSourceMutated": false
+}

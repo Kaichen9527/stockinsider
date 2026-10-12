@@ -1,0 +1,22 @@
+{
+  "stage": "typecheck",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "typecheck"
+  ],
+  "startedAt": "2026-10-11T16:53:26.652024+00:00",
+  "endedAt": "2026-10-11T16:53:41.629134+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 14.9771158460062,
+  "sampledAggregatePeakRssBytes": 1156317184,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9598775296,
+  "diskAvailableAfterBytes": 9598328832,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

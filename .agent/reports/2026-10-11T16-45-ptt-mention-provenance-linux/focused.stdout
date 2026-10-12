@@ -1,0 +1,165 @@
+TAP version 13
+# (node:377521) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:377521) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-ptt-provenance-oct12/web/src/lib/ptt-mention-provenance.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-ptt-provenance-oct12/web/package.json.
+# Subtest: actual upsert boundary retains stock-local reply provenance for two authors without ID substitution
+ok 1 - actual upsert boundary retains stock-local reply provenance for two authors without ID substitution
+  ---
+  duration_ms: 56.772942
+  ...
+# Subtest: actual mention boundary leaves non-PTT provenance unchanged
+ok 2 - actual mention boundary leaves non-PTT provenance unchanged
+  ---
+  duration_ms: 25.047486
+  ...
+# Subtest: actual body-fetch failure stores title-only status and never manufactures reply records
+ok 3 - actual body-fetch failure stores title-only status and never manufactures reply records
+  ---
+  duration_ms: 31.756042
+  ...
+# Subtest: actual bounded collector retains minimum per-comment matches, no post body or full-coverage claim
+ok 4 - actual bounded collector retains minimum per-comment matches, no post body or full-coverage claim
+  ---
+  duration_ms: 24.26237
+  ...
+# Subtest: actual fetched shell reports missing body instead of full text
+ok 5 - actual fetched shell reports missing body instead of full text
+  ---
+  duration_ms: 20.524782
+  ...
+# (node:377532) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:377532) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-ptt-provenance-oct12/web/src/lib/ptt-mention-provenance.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-ptt-provenance-oct12/web/package.json.
+# Subtest: reply retains bounded local lineage and exact excerpt hash without independent authority
+ok 6 - reply retains bounded local lineage and exact excerpt hash without independent authority
+  ---
+  duration_ms: 2.813301
+  ...
+# Subtest: article keeps no body or pooled reply evidence
+ok 7 - article keeps no body or pooled reply evidence
+  ---
+  duration_ms: 0.25803
+  ...
+# Subtest: missing parent_document_url stays partial
+ok 8 - missing parent_document_url stays partial
+  ---
+  duration_ms: 0.261045
+  ...
+# Subtest: missing author_name stays partial
+ok 9 - missing author_name stays partial
+  ---
+  duration_ms: 0.128925
+  ...
+# Subtest: missing comment_index stays partial
+ok 10 - missing comment_index stays partial
+  ---
+  duration_ms: 0.173562
+  ...
+# Subtest: same article authors remain local observations, never separate news roots
+ok 11 - same article authors remain local observations, never separate news roots
+  ---
+  duration_ms: 0.528709
+  ...
+# Subtest: non PTT metadata is not projected
+ok 12 - non PTT metadata is not projected
+  ---
+  duration_ms: 0.173002
+  ...
+# Subtest: stock-specific matched symbols do not inherit article or other stock context
+ok 13 - stock-specific matched symbols do not inherit article or other stock context
+  ---
+  duration_ms: 0.296348
+  ...
+# Subtest: title_only_fetch_failed body read cannot prove full text or local body basis
+ok 14 - title_only_fetch_failed body read cannot prove full text or local body basis
+  ---
+  duration_ms: 0.408077
+  ...
+# Subtest: title_only_body_missing body read cannot prove full text or local body basis
+ok 15 - title_only_body_missing body read cannot prove full text or local body basis
+  ---
+  duration_ms: 0.315907
+  ...
+# Subtest: unknown body read cannot prove full text or local body basis
+ok 16 - unknown body read cannot prove full text or local body basis
+  ---
+  duration_ms: 0.15263
+  ...
+# Subtest: malicious metadata never copies fulltext, credentials or overbound excerpt
+ok 17 - malicious metadata never copies fulltext, credentials or overbound excerpt
+  ---
+  duration_ms: 0.867501
+  ...
+# Subtest: getters and prototype inheritance cannot supply authority
+ok 18 - getters and prototype inheritance cannot supply authority
+  ---
+  duration_ms: 0.202075
+  ...
+# Subtest: foreign parent, invalid URL and index mismatch reject local linkage
+ok 19 - foreign parent, invalid URL and index mismatch reject local linkage
+  ---
+  duration_ms: 0.3044
+  ...
+# Subtest: metadata-only retention cannot export even a small reply excerpt
+ok 20 - metadata-only retention cannot export even a small reply excerpt
+  ---
+  duration_ms: 0.102234
+  ...
+# (node:377543) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:377543) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-ptt-provenance-oct12/web/src/lib/ptt-policy.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-ptt-provenance-oct12/web/package.json.
+# Subtest: PTT article deletion races are skipped without masking provider failures
+ok 21 - PTT article deletion races are skipped without masking provider failures
+  ---
+  duration_ms: 0.731926
+  ...
+# (node:377554) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:377554) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-ptt-provenance-oct12/web/src/lib/source-content-semantics.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-ptt-provenance-oct12/web/package.json.
+# Subtest: invalidated source mentions remain auditable but leave discovery
+ok 22 - invalidated source mentions remain auditable but leave discovery
+  ---
+  duration_ms: 1.090258
+  ...
+# Subtest: legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+ok 23 - legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery
+  ---
+  duration_ms: 0.201284
+  ...
+# Subtest: PTT institutional ranking is chip evidence instead of discovery
+ok 24 - PTT institutional ranking is chip evidence instead of discovery
+  ---
+  duration_ms: 2.459887
+  ...
+# Subtest: publisher and content identities are canonical and stance is three-valued
+ok 25 - publisher and content identities are canonical and stance is three-valued
+  ---
+  duration_ms: 2.027203
+  ...
+# Subtest: source concentration dedupes content and caps thin platform coverage
+ok 26 - source concentration dedupes content and caps thin platform coverage
+  ---
+  duration_ms: 1.070999
+  ...
+# Subtest: source links rotate platforms and limit one platform
+ok 27 - source links rotate platforms and limit one platform
+  ---
+  duration_ms: 0.333895
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 958.937592

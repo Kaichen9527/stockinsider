@@ -1,0 +1,25 @@
+{
+  "stage": "focused",
+  "command": [
+    "/workspace/.tools/node22/node_modules/.bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/ptt-mention-provenance.test.ts",
+    "scripts/ptt-mention-provenance-boundary.test.mjs",
+    "web/src/lib/ptt-policy.test.ts",
+    "web/src/lib/source-content-semantics.test.ts"
+  ],
+  "startedAt": "2026-10-11T16:50:23.051645+00:00",
+  "endedAt": "2026-10-11T16:50:24.219681+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 1.1680401579942554,
+  "sampledAggregatePeakRssBytes": 162631680,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9598910464,
+  "diskAvailableAfterBytes": 9598910464,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

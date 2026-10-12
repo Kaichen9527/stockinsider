@@ -1,0 +1,22 @@
+{
+  "stage": "build-local-deps",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "build"
+  ],
+  "startedAt": "2026-10-11T16:55:50.838990+00:00",
+  "endedAt": "2026-10-11T16:56:26.689640+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 35.85065323399613,
+  "sampledAggregatePeakRssBytes": 1843347456,
+  "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+  "diskAvailableBeforeBytes": 9586864128,
+  "diskAvailableAfterBytes": 9277448192,
+  "guardTermination": null,
+  "remainingObservedChildren": [],
+  "inheritedProxyAndCA": true,
+  "credentialValuesCopied": false
+}

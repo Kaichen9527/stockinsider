@@ -1,0 +1,533 @@
+{
+  "schema": "ptt-mention-provenance-linux-maker-evidence-v1",
+  "sourceIdentity": {
+    "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "codeCommit": "04384e9c3b2aab0d54a1ebd622dac64b9cdb5157",
+    "codeTree": "921c8dca4b2f681e3d8a5192acd8184203a0a170",
+    "webTree": "869ad0662b486108c1d74ae3736a1baca6b825e2",
+    "branch": "codex/ptt-mention-provenance-oct12",
+    "changedFiles": [
+      "scripts/ptt-mention-provenance-boundary.test.mjs",
+      "web/src/lib/ptt-mention-provenance.test.ts",
+      "web/src/lib/ptt-mention-provenance.ts",
+      "web/src/lib/research-v2.ts"
+    ]
+  },
+  "manualEngineeringWindow": {
+    "startedAtUtc": "2026-10-11T16:45:40Z",
+    "deadlineUtc": "2026-10-11T17:15:40Z",
+    "startedAtClient": "2026-10-12T00:45:40+08:00",
+    "recordedAtUtc": "2026-10-11T17:00:10.206019+00:00",
+    "limitMinutes": 30,
+    "notModelRoleBudget": true
+  },
+  "phases": [
+    {
+      "stage": "focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/ptt-mention-provenance.test.ts",
+        "scripts/ptt-mention-provenance-boundary.test.mjs",
+        "web/src/lib/ptt-policy.test.ts",
+        "web/src/lib/source-content-semantics.test.ts"
+      ],
+      "startedAt": "2026-10-11T16:50:23.051645+00:00",
+      "endedAt": "2026-10-11T16:50:24.219681+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.1680401579942554,
+      "sampledAggregatePeakRssBytes": 162631680,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9598910464,
+      "diskAvailableAfterBytes": 9598910464,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "baseline",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/ptt-mention-provenance-boundary.test.mjs"
+      ],
+      "startedAt": "2026-10-11T16:52:17.935457+00:00",
+      "endedAt": "2026-10-11T16:52:18.575632+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 0.640178851026576,
+      "sampledAggregatePeakRssBytes": 165355520,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9598910464,
+      "diskAvailableAfterBytes": 9598910464,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "focused-final",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/ptt-mention-provenance.test.ts",
+        "scripts/ptt-mention-provenance-boundary.test.mjs",
+        "web/src/lib/ptt-policy.test.ts",
+        "web/src/lib/source-content-semantics.test.ts"
+      ],
+      "startedAt": "2026-10-11T16:53:12.004328+00:00",
+      "endedAt": "2026-10-11T16:53:13.007374+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.003071593993809,
+      "sampledAggregatePeakRssBytes": 172093440,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9598775296,
+      "diskAvailableAfterBytes": 9598775296,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-11T16:53:26.652024+00:00",
+      "endedAt": "2026-10-11T16:53:41.629134+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 14.9771158460062,
+      "sampledAggregatePeakRssBytes": 1156317184,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9598775296,
+      "diskAvailableAfterBytes": 9598328832,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-11T16:54:05.165613+00:00",
+      "endedAt": "2026-10-11T16:54:27.199429+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 22.033825866004918,
+      "sampledAggregatePeakRssBytes": 1400475648,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9598328832,
+      "diskAvailableAfterBytes": 9598328832,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T16:54:34.283965+00:00",
+      "endedAt": "2026-10-11T16:54:35.233180+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 0.9492242239648476,
+      "sampledAggregatePeakRssBytes": 174260224,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9598328832,
+      "diskAvailableAfterBytes": 9598046208,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "build-local-deps",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-11T16:55:50.838990+00:00",
+      "endedAt": "2026-10-11T16:56:26.689640+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 35.85065323399613,
+      "sampledAggregatePeakRssBytes": 1843347456,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9586864128,
+      "diskAvailableAfterBytes": 9277448192,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    },
+    {
+      "stage": "focused-real-matcher",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/ptt-mention-provenance.test.ts",
+        "scripts/ptt-mention-provenance-boundary.test.mjs",
+        "web/src/lib/ptt-policy.test.ts",
+        "web/src/lib/source-content-semantics.test.ts"
+      ],
+      "startedAt": "2026-10-11T16:57:44.526077+00:00",
+      "endedAt": "2026-10-11T16:57:45.689727+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 1.163657539000269,
+      "sampledAggregatePeakRssBytes": 161697792,
+      "rssMethod": "100ms aggregate process group and recursive live descendants, may miss short or reparented processes",
+      "diskAvailableBeforeBytes": 9277423616,
+      "diskAvailableAfterBytes": 9277423616,
+      "guardTermination": null,
+      "remainingObservedChildren": [],
+      "inheritedProxyAndCA": true,
+      "credentialValuesCopied": false
+    }
+  ],
+  "results": {
+    "baseline": {
+      "source": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "testVersion": "ffa71c44 before script-only real-matcher amendment",
+      "testSourceOverride": "PTT_PROVENANCE_TEST_SOURCE=main169 (fixed immutable test-only baseline)",
+      "tests": 5,
+      "pass": 1,
+      "fail": 4,
+      "skip": 0,
+      "syntheticAdapters": true
+    },
+    "final": {
+      "source": "04384e9c3b2aab0d54a1ebd622dac64b9cdb5157",
+      "tests": 30,
+      "newHelperAndBoundary": 23,
+      "unchangedAdjacent": 7,
+      "pass": 30,
+      "fail": 0,
+      "skip": 0
+    },
+    "typecheck": {
+      "exitCode": 0
+    },
+    "lint": {
+      "exitCode": 0,
+      "errors": 0,
+      "existingWarnings": 33
+    },
+    "normalBuild": {
+      "initialSymlinkPlacementFailurePreserved": true,
+      "placementCorrectedOnly": true,
+      "passed": true,
+      "identity": {
+        "buildSubject": "ffa71c44b1c0c957de1fe0f858426db587d2a42e",
+        "finalTestSubject": "04384e9c3b2aab0d54a1ebd622dac64b9cdb5157",
+        "buildId": "GEECSVkE4LnJIliZtDUra",
+        "buildSubjectWebTree": "869ad0662b486108c1d74ae3736a1baca6b825e2",
+        "finalWebTree": "869ad0662b486108c1d74ae3736a1baca6b825e2",
+        "normalBuild": true,
+        "nextVersion": "16.3.4",
+        "serverFiles": 1794,
+        "manifestSha256": "b993ccf4dd78725a3c64defcdd072498386f477e1539c365a23501528aa3d1df"
+      }
+    },
+    "actualCrawlOrDbWrite": false,
+    "actualSourceFullTextRead": false,
+    "syntheticSourceTextsOnly": true
+  },
+  "limitsAndAttribution": {
+    "repoFkOnly": "20260830 candidate source_document_id references source_raw_documents, existing null retained; no production schema was read",
+    "sourceExcerptHashNotRawResponseHash": true,
+    "noFullPostRetained": true,
+    "replyCompletenessAlwaysPartial": true,
+    "parentUrlNotIndependentRoot": true,
+    "platformAuthorNotResolvedAcrossPlatforms": true,
+    "newRowsOnlyNoHistoricalBackfill": true,
+    "noResearchAdmissionOrNewQueue": true,
+    "noStrategyOrProtectedApproval": true,
+    "noIndependentReviewClaim": true,
+    "newTestsNotRegisteredInCanonicalCommands": true,
+    "boundaryFunctionsActualSourceButAdaptersSynthetic": true
+  },
+  "resources": {
+    "sampledAggregatePeakRssBytes": 1843347456,
+    "method": "100ms aggregate process group/recursive observed children; can miss brief/reparented children",
+    "minRecordedFreeBytes": 9277423616,
+    "currentFreeBytes": 9276903424,
+    "reserveBytes": 8589934592,
+    "rssLimitBytes": 8589934592
+  },
+  "environment": {
+    "node": "22.14.0",
+    "next": "16.3.4",
+    "depsReusedFromIdenticalMainLock": true,
+    "dependencyPlacement": {
+      "reason": "Turbopack rejects a node_modules symlink outside the project filesystem root",
+      "initialPlacement": "owned symlink to exact-lock existing dependencies",
+      "correction": "local directory tree hardlinks to existing immutable dependency files; no npm install, package or lock changes",
+      "source": "/workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules",
+      "destination": "/workspace/cloud-ptt-provenance-oct12/web/node_modules",
+      "command": [
+        "/bin/cp",
+        "-al",
+        "/workspace/cloud-reviewer-result-http-vm-oct09/web/node_modules",
+        "/workspace/cloud-ptt-provenance-oct12/web/node_modules"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "beforeFreeBytes": 9598029824,
+      "afterFreeBytes": 9586847744,
+      "guardedPackageJsonHashes": {
+        "next/package.json": "c4ef8a1c8da320a162485f96d35df7745da90e6becc36882d6e81be9df66eec1",
+        "typescript/package.json": "822ef7ca6452205657b6288b066481ecf508bfbf43455d715cf7d3ec457561e6",
+        "react/package.json": "c383aced6a67c8d06f02996015c0a163e78532a330a96dff1ccfd107b00ab326",
+        "react-dom/package.json": "d926f158e1be15885aaeac259c39567a46f6525fbdd14c380528486c31459996"
+      },
+      "sharedSourceMutated": false
+    },
+    "proxyAndCAPreservedNoValueExport": true,
+    "dotenvFilenameInventory": [
+      ".env.example"
+    ],
+    "noSecretFilesRead": true
+  },
+  "cleanup": {
+    "remainingObservedChildren": [],
+    "noServicesStarted": true,
+    "noOtherWorktreeEdited": true,
+    "uniqueEvidenceDeleted": false,
+    "ownedScratchRetained": "/tmp/si-ptt-provenance-cuxo602g",
+    "ownedRebuildableNextRetainedUntilReceiptSaved": true
+  },
+  "rawAndManifestFiles": [
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/baseline.json",
+      "bytes": 764,
+      "sha256": "8bc8ab5a98888c9fcd7b4c557b75651c8f455e06135fc0672ac2a88bba5302ae"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/baseline.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/baseline.stdout",
+      "bytes": 4347,
+      "sha256": "2c03855756090569f48f512038baf3ef3fdc8c43eb26a2a27d4d665bfe3ae069"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/baseline.time",
+      "bytes": 910,
+      "sha256": "2b991e67abe6315039c637c585e0e9413038e3d83f619c81498b820237350d0e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build-identity.json",
+      "bytes": 461,
+      "sha256": "825399f6f199dc6aaa6dcd17c8aad96805d6f3dec33c91c0a35647e15b69086e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build-local-deps.json",
+      "bytes": 648,
+      "sha256": "b00aed5c1e403deb3c8d1d1859a5df190e2ca9bafa3a7c7f8415acb0254db52b"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build-local-deps.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build-local-deps.stdout",
+      "bytes": 5556,
+      "sha256": "7dd12975202212e18cc163d723f18cd5d2fda787f7334a8b90441b98c1fbb2a1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build-local-deps.time",
+      "bytes": 760,
+      "sha256": "639119e31dd41c112acd0a699d40ec626d4b5144422a80756f45b3352bfc661d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build.json",
+      "bytes": 637,
+      "sha256": "94008a03a0039e3bf48c6ac198c7624c018e3a987c992bdb8b5395b08ba6e7b1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build.stderr",
+      "bytes": 2713,
+      "sha256": "df4ba229435b15f477d41d486da7b9c55d73ae0c28c1d45c211c5cf63356bef1"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build.stdout",
+      "bytes": 332,
+      "sha256": "b7a6d6a43d3fff0e8762f8259d44e0ef8e82af97701f6e09495fe44d07422dcf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/build.time",
+      "bytes": 789,
+      "sha256": "81811e0be93bd087274cfa976703b75fa78aed0b2d25c9305c711fe6c15e09c9"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/compiled-server-manifest.json",
+      "bytes": 332873,
+      "sha256": "b993ccf4dd78725a3c64defcdd072498386f477e1539c365a23501528aa3d1df"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/dependency-placement.json",
+      "bytes": 1198,
+      "sha256": "65e03f3b936fac4e618c469d4d8444f5a8fe4b7cf64229d80091f3eb6247da66"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-final.json",
+      "bytes": 909,
+      "sha256": "a43c568243c1827b1a9cffacd0e7fa983d60dcfb67a66534cf8f4126b4eade0d"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-final.stdout",
+      "bytes": 8009,
+      "sha256": "f92016a270dafea18ecadad94ab2c7b581402802ae5ab237f83606d828716b38"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-final.time",
+      "bytes": 993,
+      "sha256": "c7fe06be395ec28d912b5590019ea6ad5746977a91026ebb70c18e2856a901a4"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-real-matcher.json",
+      "bytes": 916,
+      "sha256": "bf04c4537d8261f09fd8cda88bea2140417b63773bbd96c937f7a9638d7f58ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-real-matcher.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-real-matcher.stdout",
+      "bytes": 8196,
+      "sha256": "efd51f24d85d0e3737fc3f627aaaa930020ff2710b3c2a87f697f68620a4ec9e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused-real-matcher.time",
+      "bytes": 992,
+      "sha256": "179d5eff677c75f28f6584eab97ce98ed1a069d4a36809a93fd94544c36953b8"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused.json",
+      "bytes": 904,
+      "sha256": "1bf811b27a7cdff6733f798236b0df72c1af046168f82abbe5b5fa1a9d359941"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused.stdout",
+      "bytes": 7603,
+      "sha256": "c7a48db3bd177fd739b2a600063e0ce87340a13275ed2e07e62d504702dc5e08"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/focused.time",
+      "bytes": 994,
+      "sha256": "97b5df70aa9efdce258d252cd7d15e467b5a0b30b6211ee05e25fcc7a2327b5c"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/handoff.md",
+      "bytes": 3991,
+      "sha256": "5aef825ef1b0164ccd497cc100c002ae809f533b5baea8d9ebb9c369aa450480"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/lint.json",
+      "bytes": 636,
+      "sha256": "6d3cfdf76c11e4f9bea3f306065505d464f076728f3cfcab222844576ca01985"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/lint.stderr",
+      "bytes": 156,
+      "sha256": "ba1b60e29dbd3b57b0c0e2a709b426addc654f02936f5dd4246a88ed830b9730"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/lint.stdout",
+      "bytes": 4534,
+      "sha256": "e148cc227b2b65e26684c81747405a4802ed55b0ad2e392e19540a2f54baeda0"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/lint.time",
+      "bytes": 756,
+      "sha256": "a299ab4614a3a3f2b845c51899ae70d31976dc157dbbabc2fdf0ad3d0f2716d2"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/next-panic-7332cce8870cee5c07bf071907748191.log",
+      "bytes": 886,
+      "sha256": "25f1238e5d5dc28a6a4341fb709b55a3ce6f01f284ed01fb0ba21ed157067bcf"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/run.py",
+      "bytes": 3308,
+      "sha256": "bf024659b296d4c61426c0ab65551a7f4e164cc156d0401f12c19581a620762a"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/source-manifest.json",
+      "bytes": 3448,
+      "sha256": "73c49b2cf5441464f527615f01b2949264a6dc9b96fa19838530feebf759ca3e"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/test-inventory.json",
+      "bytes": 2180,
+      "sha256": "27a2599dd157550e777fd0cd1c5bd392c0ed81b210948e357b3b11342400c811"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/typecheck.json",
+      "bytes": 644,
+      "sha256": "98df8c662e4933538ee7aa024f302c6ed121e593f4f8f884a6c50b598d2e9380"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/typecheck.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/typecheck.stdout",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": ".agent/reports/2026-10-11T16-45-ptt-mention-provenance-linux/typecheck.time",
+      "bytes": 759,
+      "sha256": "ec8fb92ca7a15a397887dc8219e39ff51a52436c71fcabfe37bcf15b8706733b"
+    }
+  ],
+  "phaseSourceAttribution": {
+    "focused": "Uncommitted intermediate 27-case development selection; exact initial file hashes were not captured. Preserved as historical output only, not final source-bound acceptance.",
+    "baseline": "Original research-v2 function bytes fixed to main169; owned harness at ffa71c44 used synthetic adapters and matcher stub in this red probe. This was not PG or real crawling.",
+    "focused-final": "ffa71c44 source/test subject; 29/29.",
+    "typecheckLintBuild": "ffa71c44 source, ordinary build webtree 869ad0662b486108c1d74ae3736a1baca6b825e2",
+    "focused-real-matcher": "04384e9c final subject;30/30, original extractor included; only scripts boundary test changed after the ordinary build."
+  }
+}

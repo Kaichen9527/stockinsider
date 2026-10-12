@@ -1,0 +1,40 @@
+name: PTT mention provenance diagnostics
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/ptt-mention-provenance-quality.yml'
+      - 'scripts/ptt-mention-provenance-boundary.test.mjs'
+      - 'web/src/lib/research-v2.ts'
+      - 'web/src/lib/ptt-mention-provenance*'
+      - 'web/src/lib/ptt-policy*'
+      - 'web/src/lib/source-content-semantics*'
+      - 'web/package.json'
+      - 'web/package-lock.json'
+
+permissions:
+  contents: read
+
+jobs:
+  ptt-mention-provenance-quality:
+    name: PTT stock-local evidence and collector diagnostics
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Set up pinned Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Install locked web test dependencies without lifecycle scripts
+        run: npm --prefix web ci --ignore-scripts
+      - name: Test PTT local provenance and actual collector boundaries
+        run: >-
+          node --experimental-strip-types --test --test-concurrency=1
+          web/src/lib/ptt-mention-provenance.test.ts
+          scripts/ptt-mention-provenance-boundary.test.mjs
+          web/src/lib/ptt-policy.test.ts
+          web/src/lib/source-content-semantics.test.ts
