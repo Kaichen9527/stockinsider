@@ -1,0 +1,40 @@
+{
+  "observedAt": "2026-10-12T04:44:36.950916+00:00",
+  "exactHead": "ff2b15f7a85c3b8da5461dbe968d6a93822981ae",
+  "rawVerified": 35,
+  "sourceVerified": 9,
+  "receiptSha256": "d8b4d6aa5823560b2dc85e0d43abea5f9a302ffe1fecac33bae6b61bc6457b1b",
+  "stages": {
+    "focused": {
+      "command": [
+        "/usr/bin/arch",
+        "-arm64",
+        "/usr/local/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/ptt-mention-provenance.test.ts",
+        "web/src/lib/candidate-research-policy.test.ts"
+      ],
+      "exitCode": 0
+    },
+    "ordinary-selection": {
+      "command": [
+        "/usr/bin/arch",
+        "-arm64",
+        "/usr/local/bin/node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/candidate-discovery-admission.test.ts",
+        "web/src/lib/live-discovery-evidence-adapter.test.ts",
+        "scripts/candidate-discovery-admission-ui.test.mjs"
+      ],
+      "exitCode": 0
+    }
+  },
+  "scope": "100focused/88ordinary selections overlap; no install/build/DB/crawl/protected approval",
+  "originalReceiptParserFailure": "source-manifest is object with files; initial reader TypeError before source extraction; corrected shape, original remains reported"
+}

@@ -1,0 +1,662 @@
+Candidate discovery admission and UI diagnostics	Set up job	﻿2026-10-12T03:55:52.4936740Z Current runner version: '2.337.0'
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4964799Z ##[group]Runner Image Provisioner
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4965781Z Hosted Compute Agent
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4966458Z Version: 20261002.596
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4967231Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4968040Z Build Date: 2026-10-02T22:28:27Z
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4968874Z Worker ID: {59012e6b-e2de-4c53-8d2a-b9cdcc3bde6f}
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4969730Z Region: eastus
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4970427Z Cloud: Azure
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4971104Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4972686Z ##[group]Operating System
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4974426Z Ubuntu
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4975167Z 24.04.5
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4975786Z LTS
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4976452Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4977129Z ##[group]Runner Image
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4977864Z Image: ubuntu-24.04
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4978601Z Version: 20261004.327.1
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4979800Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4981697Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4982797Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4984440Z ##[group]GITHUB_TOKEN Permissions
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4986878Z Contents: read
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4987646Z Metadata: read
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4988313Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4990634Z Secret source: Actions
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4991720Z Cache mode: write
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.4992620Z Prepare workflow directory
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.5328920Z Prepare all required actions
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.5379974Z Getting action download info
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.7533723Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:52.8469308Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Candidate discovery admission and UI diagnostics	Set up job	2026-10-12T03:55:53.0370929Z Complete job name: Candidate discovery admission and UI diagnostics
+Candidate discovery admission and UI diagnostics	Checkout pull request	﻿2026-10-12T03:55:53.1151876Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1152976Z with:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1153448Z   persist-credentials: false
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1154214Z   repository: Kaichen9527/stockinsider
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1157947Z   token: ***
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1158405Z   ssh-strict: true
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1158864Z   ssh-user: git
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1159298Z   clean: true
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1159755Z   sparse-checkout-cone-mode: true
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1160296Z   fetch-depth: 1
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1160747Z   fetch-tags: false
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1161203Z   show-progress: true
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1161663Z   lfs: false
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1162086Z   submodules: false
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1162544Z   set-safe-directory: true
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1163076Z   allow-unsafe-pr-checkout: false
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.1163847Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2162392Z Syncing repository: Kaichen9527/stockinsider
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2164839Z ##[group]Getting Git version info
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2165932Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2167225Z [command]/usr/bin/git version
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2267261Z git version 2.55.0
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2289500Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2312945Z Temporarily overriding HOME='/home/runner/work/_temp/e06414b8-5d41-460b-9d5e-dfce2f0b4efe' before making global git config changes
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2315633Z Adding repository directory to the temporary git global config as a safe directory
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2317673Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2365593Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2370475Z ##[group]Initializing the repository
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2374519Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2507254Z hint: Using 'master' as the name for the initial branch. This default branch name
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2509479Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2510977Z hint: to use in all of your new repositories, which will suppress this warning,
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2512256Z hint: call:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2512892Z hint:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2513700Z hint: 	git config --global init.defaultBranch <name>
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2514907Z hint:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2515826Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2517401Z hint: 'development'. The just-created branch can be renamed via this command:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2518616Z hint:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2519261Z hint: 	git branch -m <name>
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2520006Z hint:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2521014Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2528088Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2538830Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2594857Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2596160Z ##[group]Disabling automatic garbage collection
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2598818Z [command]/usr/bin/git config --local gc.auto 0
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2631524Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2632641Z ##[group]Setting up auth
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2638962Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.2672608Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.3068416Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.3107410Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.3338718Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.3376838Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.3600786Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.3640974Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.3641974Z ##[group]Fetching the repository
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:53.3651496Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b2640fcfd86116c1fffacdf1d471f405808c80e6:refs/remotes/pull/374/merge
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.0121179Z From https://github.com/Kaichen9527/stockinsider
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.0145587Z  * [new ref]         b2640fcfd86116c1fffacdf1d471f405808c80e6 -> pull/374/merge
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.0157311Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.0158621Z ##[group]Determining the checkout info
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.0160292Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.0161313Z [command]/usr/bin/git sparse-checkout disable
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.0204557Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.0243981Z ##[group]Checking out the ref
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.0248385Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/374/merge
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1697619Z Note: switching to 'refs/remotes/pull/374/merge'.
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1704859Z 
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1706261Z You are in 'detached HEAD' state. You can look around, make experimental
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1708398Z changes and commit them, and you can discard any commits you make in this
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1710491Z state without impacting any branches by switching back to a branch.
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1711765Z 
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1712715Z If you want to create a new branch to retain commits you create, you may
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1715458Z do so (now or later) by using -c with the switch command. Example:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1716438Z 
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1716807Z   git switch -c <new-branch-name>
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1717378Z 
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1717735Z Or undo this operation with:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1718244Z 
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1718546Z   git switch -
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1719028Z 
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1719680Z Turn off this advice by setting config variable advice.detachedHead to false
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1720619Z 
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1721733Z HEAD is now at b2640fc Merge ff2b15f7a85c3b8da5461dbe968d6a93822981ae into 8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1725586Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1770421Z [command]/usr/bin/git log -1 --format=%H
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1801710Z b2640fcfd86116c1fffacdf1d471f405808c80e6
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1818889Z ##[group]Removing auth
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1821019Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.1859606Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.2093797Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.2124740Z http.https://github.com/.extraheader
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.2132366Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.2168853Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.2394520Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.2427862Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Candidate discovery admission and UI diagnostics	Checkout pull request	2026-10-12T03:55:54.2652105Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	﻿2026-10-12T03:55:54.3081447Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:54.3083042Z with:
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:54.3083923Z   node-version: 22.14.0
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:54.3085132Z   always-auth: false
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:54.3086136Z   check-latest: false
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:54.3094622Z   token: ***
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:54.3095551Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:54.4503287Z Attempting to download 22.14.0...
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:54.4613299Z (node:2374) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:54.4616449Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:54.8418146Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:55.2607402Z Extracting ...
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:55.2763228Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/4011f5b1-83bc-4ea3-924d-32743839b995 -f /home/runner/work/_temp/6a5478db-be91-4f46-9375-f7c753094852
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:56.4844660Z Adding to the cache ...
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:58.5801906Z ##[group]Environment details
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:58.7997375Z node: v22.14.0
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:58.7998121Z npm: 10.9.2
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:58.7998486Z yarn: 1.22.22
+Candidate discovery admission and UI diagnostics	Set up pinned Node 22	2026-10-12T03:55:58.7999352Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	﻿2026-10-12T03:55:58.8192326Z ##[group]Run npm --prefix web ci --ignore-scripts
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:55:58.8192789Z ^[[36;1mnpm --prefix web ci --ignore-scripts^[[0m
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:55:58.8470599Z shell: /usr/bin/bash -e {0}
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:55:58.8470948Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:00.4428848Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.4956288Z 
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.4957344Z added 432 packages, and audited 433 packages in 18s
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.4957908Z 
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.4958375Z 169 packages are looking for funding
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.4963846Z   run `npm fund` for details
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.6159891Z 
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.6160944Z 11 vulnerabilities (10 high, 1 critical)
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.6161550Z 
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.6162172Z To address issues that do not require attention, run:
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.6162970Z   npm audit fix
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.6163284Z 
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.6163803Z To address all issues (including breaking changes), run:
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.6165052Z   npm audit fix --force
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.6165418Z 
+Candidate discovery admission and UI diagnostics	Install locked web test dependencies without lifecycle scripts	2026-10-12T03:56:16.6165708Z Run `npm audit` for details.
+Candidate discovery admission and UI diagnostics	Sync canonical official modules	﻿2026-10-12T03:56:16.6947696Z ##[group]Run node web/scripts/sync-official-authority.mjs
+Candidate discovery admission and UI diagnostics	Sync canonical official modules	2026-10-12T03:56:16.6948197Z ^[[36;1mnode web/scripts/sync-official-authority.mjs^[[0m
+Candidate discovery admission and UI diagnostics	Sync canonical official modules	2026-10-12T03:56:16.7015174Z shell: /usr/bin/bash -e {0}
+Candidate discovery admission and UI diagnostics	Sync canonical official modules	2026-10-12T03:56:16.7015453Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Sync canonical official modules	2026-10-12T03:56:16.7428711Z Official authority build bridge verified (5 canonical modules).
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	﻿2026-10-12T03:56:16.7483901Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 web/src/lib/candidate-discovery-admission.test.ts web/src/lib/live-discovery-evidence-adapter.test.ts scripts/candidate-discovery-admission-ui.test.mjs
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:16.7486145Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 web/src/lib/candidate-discovery-admission.test.ts web/src/lib/live-discovery-evidence-adapter.test.ts scripts/candidate-discovery-admission-ui.test.mjs^[[0m
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:16.7550300Z shell: /usr/bin/bash -e {0}
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:16.7550751Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:16.8014772Z TAP version 13
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:16.8885786Z # (node:2442) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:16.8895254Z # (Use `node --trace-warnings ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:16.8926128Z # (node:2442) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-discovery-admission.ts is not specified and it doesn't parse as CommonJS.
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:16.8935266Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:16.8936969Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5326307Z # Subtest: actual main card displays technical dated close and reference method, hides old price and upside
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5345931Z ok 1 - actual main card displays technical dated close and reference method, hides old price and upside
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5374689Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5375220Z   duration_ms: 11.078538
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5375682Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5376794Z # Subtest: actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5378445Z ok 2 - actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5379436Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5379844Z   duration_ms: 1.589499
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5380331Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5381431Z # Subtest: missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5383077Z ok 3 - missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5384273Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5384736Z   duration_ms: 1.346688
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5385158Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5386145Z # Subtest: actual main defaults to existing clues while research admission remains explicitly pending
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5387688Z ok 4 - actual main defaults to existing clues while research admission remains explicitly pending
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5388579Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5388952Z   duration_ms: 12.30403
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5389379Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5390499Z # Subtest: existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5392715Z ok 5 - existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5393723Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5394419Z   duration_ms: 1.597966
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5394866Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5395885Z # Subtest: actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5397451Z ok 6 - actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5398386Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5398777Z   duration_ms: 29.539884
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5399199Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5400436Z # Subtest: actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5402179Z ok 7 - actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5403091Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5403776Z   duration_ms: 4.036907
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5420421Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5421620Z # Subtest: saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5423394Z ok 8 - saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5432941Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5433386Z   duration_ms: 9.86587
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.5433813Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6284276Z # (node:2453) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6285675Z # (Use `node --trace-warnings ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6506805Z # (node:2453) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-discovery-admission.test.ts is not specified and it doesn't parse as CommonJS.
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6533364Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6536467Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6915657Z # Subtest: only a pair with different canonical publishers and roots enters general research
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6917210Z ok 9 - only a pair with different canonical publishers and roots enters general research
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6944605Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6969060Z   duration_ms: 2.288381
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6984830Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6985606Z # Subtest: same author across platforms
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6986470Z ok 10 - same author across platforms
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6987178Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6987732Z   duration_ms: 0.178853
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6988321Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6988974Z # Subtest: syndicated original root
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6989796Z ok 11 - syndicated original root
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6990628Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6991194Z   duration_ms: 0.122749
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6991824Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6993074Z # Subtest: same-platform original authors with independent roots qualify; platform diversity is display-only
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6995268Z ok 12 - same-platform original authors with independent roots qualify; platform diversity is display-only
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6996271Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6996693Z   duration_ms: 0.247912
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6997122Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6997796Z # Subtest: retracted root cannot be laundered by a current repost
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6998959Z ok 13 - retracted root cannot be laundered by a current repost
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6999577Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.6999947Z   duration_ms: 0.387572
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7000328Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7001185Z # Subtest: industry-only and unresolved aliases cannot count as direct company confirmation
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7002500Z ok 14 - industry-only and unresolved aliases cannot count as direct company confirmation
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7003249Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7003966Z   duration_ms: 0.18816
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7004580Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7005261Z # Subtest: bounded legacy links, counters and missing PTT detail are unsupported
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7006327Z ok 15 - bounded legacy links, counters and missing PTT detail are unsupported
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7007025Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7007380Z   duration_ms: 0.247451
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7007766Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7008464Z # Subtest: PTT 19/20 actual different stock-mention authors boundary
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7009424Z ok 16 - PTT 19/20 actual different stock-mention authors boundary
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7010050Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7010403Z   duration_ms: 0.579429
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7010792Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7011836Z # Subtest: PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7013489Z ok 17 - PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7015039Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7015453Z   duration_ms: 0.587634
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7015830Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7016690Z # Subtest: PTT requires stock in body, current article, and one post, not pooled reply totals
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7018011Z ok 18 - PTT requires stock in body, current article, and one post, not pooled reply totals
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7018787Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7019138Z   duration_ms: 0.531009
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7019508Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7020476Z # Subtest: reasoned new official event can enter low-volume lane, never multi-source confirmation
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7021842Z ok 19 - reasoned new official event can enter low-volume lane, never multi-source confirmation
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7022672Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7023043Z   duration_ms: 0.284089
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7023442Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7027492Z # Subtest: high-impact new lead requires explained known direct source; ordinary news is not official
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7029099Z ok 20 - high-impact new lead requires explained known direct source; ordinary news is not official
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7029980Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7030350Z   duration_ms: 0.134661
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7030765Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7031738Z # Subtest: existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7033194Z ok 21 - existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7034248Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7034607Z   duration_ms: 0.673505
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7035008Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7035967Z # Subtest: bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7037490Z ok 22 - bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7038337Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7038668Z   duration_ms: 0.584569
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7039041Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7040007Z # Subtest: technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7041582Z ok 23 - technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7042450Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7042844Z   duration_ms: 0.561966
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7043296Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7044605Z # Subtest: PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7046223Z ok 24 - PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7047150Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7047516Z   duration_ms: 2.090823
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7047915Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7048472Z # Subtest: missing, future, malformed dates never manufacture a displayed current close
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7049153Z ok 25 - missing, future, malformed dates never manufacture a displayed current close
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7049577Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7049987Z   duration_ms: 0.169155
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7050198Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7050739Z # Subtest: clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7051564Z ok 26 - clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7052035Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7052230Z   duration_ms: 1.150302
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7052437Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7052942Z # Subtest: coverage states distinguish retired/blocked/duplicate without inventing source enablement
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7053721Z ok 27 - coverage states distinguish retired/blocked/duplicate without inventing source enablement
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7054435Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7054946Z   duration_ms: 0.558009
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7055179Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7055698Z # Subtest: coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7057196Z ok 28 - coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7057699Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7058044Z   duration_ms: 0.502746
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7058630Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7922742Z # (node:2464) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.7927516Z # (Use `node --trace-warnings ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.8199056Z # (node:2464) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/live-discovery-evidence-adapter.test.ts is not specified and it doesn't parse as CommonJS.
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.8205327Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:17.8235521Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2565920Z # Subtest: real retained provenance maps scoped row identity, never URL/hash/publisher authority
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2568147Z ok 29 - real retained provenance maps scoped row identity, never URL/hash/publisher authority
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2581040Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2581660Z   duration_ms: 2.829739
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2582330Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2583574Z # Subtest: 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2585790Z ok 30 - 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2586944Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2587529Z   duration_ms: 4.017381
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2588082Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2589107Z # Subtest: authors are counted once within one conversation, never pooled across posts
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2590544Z ok 31 - authors are counted once within one conversation, never pooled across posts
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2591482Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2591975Z   duration_ms: 1.801415
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2592641Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2593644Z # Subtest: non-explicit reply 👍👍👍 does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2595049Z ok 32 - non-explicit reply 👍👍👍 does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2595625Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2595971Z   duration_ms: 0.294849
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2596355Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2596968Z # Subtest: non-explicit reply 推 does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2597725Z ok 33 - non-explicit reply 推 does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2598225Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2598563Z   duration_ms: 0.298055
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2598950Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2599563Z # Subtest: non-explicit reply 台積電 does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2600414Z ok 34 - non-explicit reply 台積電 does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2600873Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2601080Z   duration_ms: 0.231201
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2601293Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2601582Z # Subtest: non-explicit reply 12409 does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2601995Z ok 35 - non-explicit reply 12409 does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2602638Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2602832Z   duration_ms: 0.222715
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2603052Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2603341Z # Subtest: non-explicit reply a2409 does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2603730Z ok 36 - non-explicit reply a2409 does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2604321Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2604682Z   duration_ms: 0.224929
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2605066Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2605612Z # Subtest: non-explicit reply 2409x does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2606313Z ok 37 - non-explicit reply 2409x does not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2606815Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2607148Z   duration_ms: 0.623641
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2607515Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2608473Z # Subtest: hash mismatch, missing author/parent/index and read failure do not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2609694Z ok 38 - hash mismatch, missing author/parent/index and read failure do not count
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2610428Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2610776Z   duration_ms: 1.036249
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2611450Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2620507Z # Subtest: withheld/retracted mention never becomes active evidence; missing root heads block all admission
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2622227Z ok 39 - withheld/retracted mention never becomes active evidence; missing root heads block all admission
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2634758Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2664801Z   duration_ms: 0.317992
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2694553Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2715565Z # Subtest: cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2717432Z ok 40 - cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2718540Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2718894Z   duration_ms: 0.242312
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2719280Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2720152Z # Subtest: backdated availability cannot admit a newly received row into an older observation
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2721463Z ok 41 - backdated availability cannot admit a newly received row into an older observation
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2722272Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2722610Z   duration_ms: 0.712376
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2722981Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2723737Z # Subtest: same instant offset notation, exact date validation and invalid clocks
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2725173Z ok 42 - same instant offset notation, exact date validation and invalid clocks
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2725921Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2744859Z   duration_ms: 0.255586
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2745300Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2746221Z # Subtest: stable accounting retains duplicates, foreign stock and incomplete window as gaps
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2747600Z ok 43 - stable accounting retains duplicates, foreign stock and incomplete window as gaps
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2748443Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2748805Z   duration_ms: 0.206545
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2749198Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2749974Z # Subtest: bound exhaustion reports unexamined rows, never truncation-success
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2751130Z ok 44 - bound exhaustion reports unexamined rows, never truncation-success
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2751869Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2752243Z   duration_ms: 0.335454
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2752646Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2753529Z # Subtest: untrusted getters, prototype and object index cannot execute or acquire authority
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2794450Z ok 45 - untrusted getters, prototype and object index cannot execute or acquire authority
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2795310Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2795682Z   duration_ms: 0.302163
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2796096Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2797036Z # Subtest: server real initializer audits complete pre-link rows rather than eight display sources
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2798501Z ok 46 - server real initializer audits complete pre-link rows rather than eight display sources
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2799365Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2799718Z   duration_ms: 332.15423
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2800112Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2800901Z # Subtest: missing or mismatched row URL cannot borrow retained document provenance
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2802506Z ok 47 - missing or mismatched row URL cannot borrow retained document provenance
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2803250Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2803624Z   duration_ms: 0.525208
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2804528Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2805519Z # Subtest: two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2807004Z ok 48 - two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2807873Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2808214Z   duration_ms: 0.461309
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2808595Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2809356Z # Subtest: conflicting text and correct hashes invalidate the whole key in both orders
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2810509Z ok 49 - conflicting text and correct hashes invalidate the whole key in both orders
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2811244Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2811588Z   duration_ms: 0.415624
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2811958Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2813040Z # Subtest: exact comment replay across UUIDs counts once, same author across keys still once
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2814578Z ok 50 - exact comment replay across UUIDs counts once, same author across keys still once
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2815351Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2815680Z   duration_ms: 0.384666
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2816048Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2816842Z # Subtest: twenty authors containing one conflicting comment cannot be counted as twenty
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2818049Z ok 51 - twenty authors containing one conflicting comment cannot be counted as twenty
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2818791Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2819133Z   duration_ms: 3.001849
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2819508Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2820097Z # Subtest: same-row UUID conflict cannot hide behind row dedup
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2820940Z ok 52 - same-row UUID conflict cannot hide behind row dedup
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2821494Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2821819Z   duration_ms: 0.41363
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2822178Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2822962Z # Subtest: actual page reader capped at100/request750 cannot prove total200 exhaustion
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2824397Z ok 53 - actual page reader capped at100/request750 cannot prove total200 exhaustion
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2825162Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2825499Z   duration_ms: 2.904608
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2825874Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2826720Z # Subtest: available_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2828022Z ok 54 - available_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2828799Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2829142Z   duration_ms: 1.029778
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2829519Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2830333Z # Subtest: available_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2831673Z ok 55 - available_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2834648Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2836334Z   duration_ms: 0.493769
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2836908Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2837938Z # Subtest: available_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2839429Z ok 56 - available_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2840367Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2840842Z   duration_ms: 0.370169
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2841349Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2842309Z # Subtest: available_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2843739Z ok 57 - available_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2844895Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2845344Z   duration_ms: 0.319805
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2845824Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2846765Z # Subtest: created_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2848144Z ok 58 - created_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2849044Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2849550Z   duration_ms: 0.414732
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2850428Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2851464Z # Subtest: created_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2852994Z ok 59 - created_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2854256Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2854841Z   duration_ms: 0.39731
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2855408Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2856443Z # Subtest: created_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2857945Z ok 60 - created_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2858915Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2859392Z   duration_ms: 0.339773
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2859887Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2860883Z # Subtest: created_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2862366Z ok 61 - created_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2863570Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2864391Z   duration_ms: 0.317652
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2864961Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2865982Z # Subtest: as_of future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2867341Z ok 62 - as_of future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2868202Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2868673Z   duration_ms: 0.327169
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2869191Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2870109Z # Subtest: as_of future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2871551Z ok 63 - as_of future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2872482Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2872966Z   duration_ms: 0.335504
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2873486Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2874665Z # Subtest: as_of future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2876229Z ok 64 - as_of future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2877217Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2877782Z   duration_ms: 0.30083
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2878331Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2879359Z # Subtest: as_of future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2880926Z ok 65 - as_of future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2881827Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2882354Z   duration_ms: 0.290931
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2882900Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2883970Z # Subtest: mentioned_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2885815Z ok 66 - mentioned_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2886944Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2887584Z   duration_ms: 0.318904
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2888040Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2888974Z # Subtest: mentioned_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2890349Z ok 67 - mentioned_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2891178Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2891533Z   duration_ms: 0.297734
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2891950Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2892862Z # Subtest: mentioned_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2894476Z ok 68 - mentioned_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2895285Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2895645Z   duration_ms: 0.286804
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2896035Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2896896Z # Subtest: mentioned_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2898238Z ok 69 - mentioned_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2899013Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2899357Z   duration_ms: 0.318152
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2899735Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2900498Z # Subtest: available_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2901927Z ok 70 - available_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2902649Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2902974Z   duration_ms: 0.333191
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2903392Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2904332Z # Subtest: available_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2905378Z ok 71 - available_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2906032Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2906402Z   duration_ms: 0.323182
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2906788Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2907567Z # Subtest: available_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2915440Z ok 72 - available_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2937240Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2941582Z   duration_ms: 0.34905
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2941990Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2942656Z # Subtest: available_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2943487Z ok 73 - available_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2944559Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2944796Z   duration_ms: 0.309998
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2945081Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2945866Z # Subtest: created_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2946895Z ok 74 - created_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2947540Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2947872Z   duration_ms: 0.300329
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2948234Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2948901Z # Subtest: created_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2949773Z ok 75 - created_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2950309Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2950602Z   duration_ms: 0.316339
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2950929Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2951559Z # Subtest: created_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2952511Z ok 76 - created_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2953133Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2953442Z   duration_ms: 0.289409
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2953787Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2954609Z # Subtest: created_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2955454Z ok 77 - created_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2956007Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2956308Z   duration_ms: 0.295871
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2956644Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2957263Z # Subtest: as_of future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2958137Z ok 78 - as_of future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2958725Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2959015Z   duration_ms: 0.32213
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2959348Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2959878Z # Subtest: as_of invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2960641Z ok 79 - as_of invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2961171Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2961474Z   duration_ms: 0.290972
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2961819Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2962477Z # Subtest: as_of future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2963391Z ok 80 - as_of future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2963968Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2964461Z   duration_ms: 0.293507
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2964830Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2965393Z # Subtest: as_of invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2966192Z ok 81 - as_of invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2966721Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2967031Z   duration_ms: 0.31701
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2967379Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2968087Z # Subtest: mentioned_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2969137Z ok 82 - mentioned_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2969776Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2970087Z   duration_ms: 0.299037
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2970439Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2971077Z # Subtest: mentioned_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2972431Z ok 83 - mentioned_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2973020Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2973333Z   duration_ms: 0.287345
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2973683Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2974541Z # Subtest: mentioned_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2975574Z ok 84 - mentioned_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2976213Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2976524Z   duration_ms: 0.311871
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2976877Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2977499Z # Subtest: mentioned_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2978393Z ok 85 - mentioned_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2978937Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2979232Z   duration_ms: 0.293347
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2979562Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2980282Z # Subtest: a future-only UUID must not mark a later known row with that UUID as duplicate
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2981896Z ok 86 - a future-only UUID must not mark a later known row with that UUID as duplicate
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2982561Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2982849Z   duration_ms: 0.745017
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2983187Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2984163Z # Subtest: in-cutoff sameUUID different comment keys invalidate the whole UUID in both orders
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2985417Z ok 87 - in-cutoff sameUUID different comment keys invalidate the whole UUID in both orders
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2986198Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2986512Z   duration_ms: 0.459465
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2986862Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2987716Z # Subtest: sameUUID exact comment/content replay cannot add an author from its excluded duplicate
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2989034Z ok 88 - sameUUID exact comment/content replay cannot add an author from its excluded duplicate
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2989801Z   ---
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2990111Z   duration_ms: 0.281124
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.2990468Z   ...
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.3007120Z 1..88
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.3007396Z # tests 88
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.3007948Z # suites 0
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.3008357Z # pass 88
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.3008792Z # fail 0
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.3009268Z # cancelled 0
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.3009684Z # skipped 0
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.3010185Z # todo 0
+Candidate discovery admission and UI diagnostics	Test candidate admission and actual card rendering	2026-10-12T03:56:18.3010601Z # duration_ms 1512.52191
+Candidate discovery admission and UI diagnostics	Post Set up pinned Node 22	﻿2026-10-12T03:56:18.3157054Z Post job cleanup.
+Candidate discovery admission and UI diagnostics	Post Set up pinned Node 22	2026-10-12T03:56:18.4365463Z (node:2475) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Candidate discovery admission and UI diagnostics	Post Set up pinned Node 22	2026-10-12T03:56:18.4366415Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	﻿2026-10-12T03:56:18.4564364Z Post job cleanup.
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.5433729Z [command]/usr/bin/git version
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.5478032Z git version 2.55.0
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.5519699Z Temporarily overriding HOME='/home/runner/work/_temp/431eb854-8e3b-4ce1-ab70-bfe42a0bffac' before making global git config changes
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.5521532Z Adding repository directory to the temporary git global config as a safe directory
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.5526587Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.5565171Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.5611779Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.5861536Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.5897899Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.6247624Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Candidate discovery admission and UI diagnostics	Post Checkout pull request	2026-10-12T03:56:18.6305967Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Candidate discovery admission and UI diagnostics	Complete job	﻿2026-10-12T03:56:18.6737206Z Cleaning up orphan processes
+Candidate discovery admission and UI diagnostics	Complete job	2026-10-12T03:56:18.7095106Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

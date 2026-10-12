@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-10-12T04:51:21.912109+00:00",
+  "exactEvidence": "e4e6201bd914f88e61ee1f1e5a84a02a16b9c4ce",
+  "evidenceParent": "ff2b15f7a85c3b8da5461dbe968d6a93822981ae",
+  "evidenceTree": "69362fcf165ed3041ce09ad639b8ee4ca6bb8fa6",
+  "canonical": "Genuine ordinary38201703224/job114656319357:155PASS31PCR; actual combined log normalized only by removing gh tab prefixes/timestamps, full raw retained.",
+  "focused": "root100/88 selectionsPASS0fail0skip,overlap;35raw/9source verified",
+  "normalProtected": {
+    "run": 38205225068,
+    "createdAt": "2026-10-12T04:47:34Z",
+    "trigger": "One ready_for_review event AFTER fresh exact ref pushed, no rerun or duplicate dispatch",
+    "requirements": "success",
+    "architecture": "success",
+    "exact-review": "success",
+    "model": "in_progress",
+    "product": "in_progress",
+    "aggregate": "not_yet_created",
+    "approved": false
+  },
+  "nextVm": {
+    "thread": "01a106b8-a883-7185-9962-f7372109a093",
+    "host": "durable",
+    "cursor": "4b5b5e24-a000-4c65-b012-1e9514020d4f:15",
+    "turn": "01a12e71-2b46-774d-9292-436cafd6175b",
+    "status": "active",
+    "branch": "codex/discovery-revision-publisher-reader-oct12",
+    "base": "8bcd18e77fee8e43c1a936cd4b3834c7bff5dd14",
+    "scope": "30min new pure bounded reader/tests using actual existing revision/publisher authority fields; no DB/API/schema/role/writer/CI/protected/PR374-owned edits/crawl/strategy; synthetic positive binding explicitly not live data; origin independence not granted."
+  },
+  "production": "Still169, approved8bcdartifact ready but originalcapacitygap3.41GB pending existing human choice; no repeatedVPSmeasure/fullcore/PTT/Dockerprune."
+}
