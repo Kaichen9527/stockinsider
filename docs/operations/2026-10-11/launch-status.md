@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-12 20:55台灣時間：真VPS結構安裝重現舊函式擁有者阻擋，已接續精確金融既有結構profile
+
+Cloud code032bbcf1／evidence503bdee8完成真captured schema restore及原49 firstapply，root實核48raw／75source hash/blob，receipt98c80237。實際native0PASS2FAIL為同一42501子項與父項：20260823_release_reconciliation_v3_19.sql以legacy owner重建postgres-owned checkpoint reader，financial tail尚未到達。完整記錄範圍內before/after1,436,239bytes／4dacab49一致回滾；另restore-only只讀診斷1PASS確認5個既有bridge targets原owner/body/config/ACL，不是安裝成功。Type/lint/normalbuild為maker真證據，root未新跑native/build；原RED保留，沒有用synthetic37項替完整安裝。
+
+Root閱讀原installer及PR364單一ownershipbridge／peer來源後，明確收斂下一修補為獨立financial-existing-schema opt-in profile：default48及原49hash/list/169SQL不變，另外釘prelude d86fb28d與combined[prelude,...49]profilehash（實際50步，不能稱原49）。同一advisorylock/BEGIN內mutation前先拒絕未知successor/partialresidue與錯hash/order/authority，再執行原5函式profile驗證的精確ownertransfer及49+postconditions，共享rollback。新增unique exactreview profileliteral仍經原hash-bound directchild批准，旗標不等授權；不帶整76bundle、不新增LOGIN/role/member或永久grant，正式operator transport仍須自身驗收。
+
+Cloud cursor7確認idle後只接單件30分鐘，branchcodex/financial-existing-schema-owner-profile-oct12/base503bdee8，turn01a1302e-b82f-7785-888b-7012489c6a42／cursor83271615-2ee9-4bed-bd38-321f1348ab62:8 inProgress。先pure negatives，再原captured結構新profile first/twice及真正native負例；新錯誤保存不偷偷加role/grant/prelude或放寬期待，活動中不重派／改ownedsource。Root scoped診斷增量review零P0/P1/P2，完整安裝、正常protected與正式發布尚未批准。
+
+本輪main4ddd／正式169、最近VPS空間及舊guard不變，無新VPS量測／必敗heavy／傳包／SQL／cache刪除，343與PTT2409均不重跑。來源／Top20／文章／正式研究排程仍待。證據`.agent/reports/2026-10-12T20-55-financial-existing-schema-owner-profile/`。
+
 ## 2026-10-12 19:50台灣時間：金融catalog缺口真native閉合，接續原VPS schema-only完整49驗收
 
 Cloud code3db3e1d5／evidence0dd1f36d已完成原P2修補。Root真核283raw／70source hash/blob，receipt27f1dd13，親跑完整pure23PASS／零fail/skip；讀取原native1PASS4FAIL（search_path／missingindex／privatebody-owner）及修後37PASS矩陣。新finite pg_catalog投影＋實際合法schema捕獲descriptor釘住5functions body/owner/config/security/ACL、9columns/7constraints/完整trigger、兩indexes真定義與valid/ready/live及RLS；root scoped獨立review零P0/P1/P2，閉合原缺欄位問題。原RED和兩個maker probe錯誤均保留，不拿修後輸出覆寫。Root沒有新跑native/build，37項仍用原synthetic prerequisite fixture，不是新49installer正式驗收。

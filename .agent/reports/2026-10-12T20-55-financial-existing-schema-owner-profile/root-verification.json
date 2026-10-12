@@ -1,0 +1,44 @@
+{
+  "subject": "503bdee801dca0d0ad5c11bc759b48f28883d654",
+  "code": "032bbcf12193b31bc3603341fc9cfe42466db652",
+  "rawCount": 48,
+  "sourceCount": 75,
+  "receiptSha256": "98c8023742b4b91c45c4fac960e3df8f2a80312a0a687e8f2cbb1bc6996befd8",
+  "nativeFirst": {
+    "raw": "native-first.stdout",
+    "pass": 0,
+    "fail": 2,
+    "skip": 0,
+    "firstError": {
+      "name": "error",
+      "message": "must be owner of function read_legacy_release_checkpoints_v3_19",
+      "code": "42501",
+      "routine": "aclcheck_error"
+    },
+    "failedMigration": "migrations/20260823_release_reconciliation_v3_19.sql",
+    "parentFailure": "dependent_stages_blocked_by_first_apply; same underlying native failure, not second independent defect",
+    "firstApplySucceeded": false,
+    "financialTailReached": false,
+    "commitPerformed": false,
+    "rollbackProjection": {
+      "scope": "all public function definitions/owners/config/ACL, table owners/ACL/RLS, roles, memberships and public schema ACL; no claim of all column/index/constraint fields",
+      "bytes": 1436239,
+      "beforeAfterByteIdentical": true,
+      "sha256": "4dacab49c50d4d92bb4c91f704fff0b769b7db306d0394e8c5c202d51949ae59"
+    },
+    "sourceProvenance": "initial new test was WIP before diagnostic-mode/artifact/name additions; original installer/SQL bytes are exact frozen0dd; later test is not relabelled as the first command source"
+  },
+  "diagnosis": {
+    "raw": "owner-diagnosis.stdout",
+    "pass": 1,
+    "fail": 0,
+    "skip": 0,
+    "scope": "separate restore-only read-only catalog diagnosis; no installer call/retry/bridge/role amendment",
+    "fiveTargetsOwnedByPostgres": true,
+    "allFiveObservedBodyHashesInBridgeSource": true,
+    "targetOwnersNoLoginNoSuperNoPublicCreate": true,
+    "originalRuntimeCompatibilityRoleRemainsNoLogin": true
+  },
+  "rootNativeExecuted": false,
+  "rootBuildExecuted": false
+}
