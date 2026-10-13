@@ -1,0 +1,6 @@
+{
+  "ssh_exit_code": 0,
+  "observed_at": "2026-10-13T20:27:25.262254+00:00",
+  "remote_mutation": false,
+  "production_query": "bounded aggregate metadata only; repeatable read read only; rollback"
+}

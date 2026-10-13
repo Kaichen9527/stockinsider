@@ -1,5 +1,14 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 04:25台灣時間：來源同快照讀取接線啟動，正式母體前置已唯讀核對
+
+Remote main仍aa111a54／progress5215c3d5，工作樹乾淨；PR376已終態，未重跑checks/ready/merge/helper。Root compact先確認Cloud cursor21真正idle，再只接一件30分鐘codex/discovery-frozen-snapshot-reader-oct14/baseaa111，turn01a136f1-fefb-7726-8ab8-a7a3e701c4a6／cursor83271615-2ee9-4bed-bd38-321f1348ab62:23 active。Owned最小既有reader的專用PG client read adapter、pure/native tests與handoff；Root只report/review，沒有重疊修改。這是待交付工程，不冒稱已完成或live合格母體。
+
+Root20:27:25Z真VPS PG170011唯讀repeatable-read transaction、statement5s/lock2s/ROLLBACK，固定aggregate metadata顯示revisions3449／registry3441／sourceauthorities92；publisherauthorities0／publicationverifications0／opportunityruns0／publisherallowlistmanifest及input0。沒有匯出正文、private principals或憑證，沒有DB寫入。這釘住當時缺少frozenrun/publisher前置，不是停機，也不能造authority或把syntheticnative正例當正式live。新adapter需真同snapshot count+rows、保留microseconds/invalidhead、完整性與bounds拒絕；root/creator/投資資格維持false，既有policy/SQL/financialruntime/roles/authority/pins/API/UI/workflow不改。
+
+未做新native/build/capacity量測、heavy准入、部署、cache刪除、343/PTT/crawl或正式研究排程。正式容量待答與169現況維持最後已核，金融merge不等正式安裝；下一輪先compactwait本件真結果，不重派。證據`.agent/reports/2026-10-14T04-25-discovery-snapshot-continuation/`。
+
+
 ## 2026-10-14 03:20台灣時間：金融PR376正常protected全通過並已標準合併
 
 Ready事件新protected38445962328已於18:36:51Z終態SUCCESS，bootstrap/requirements/architecture/exact/model/product/aggregate全7真SUCCESS。Root重新核ordinary financial38423044805／product38423044617成功、fresh exactref52b/sourcefbc/base4ddd與active rules20177392/bypass[]，沿單次guard標準gh pr merge --merge --match-head-commit，真19:16:41Z完成，無admin/bypass/directmainpush；保護完整JSON合併前後相同。

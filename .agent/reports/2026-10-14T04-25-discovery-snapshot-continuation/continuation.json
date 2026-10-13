@@ -1,0 +1,32 @@
+{
+  "bounded_task": {
+    "base": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+    "branch": "codex/discovery-frozen-snapshot-reader-oct14",
+    "minutes": 30,
+    "no_remote_access_for_maker": true,
+    "ownership": "minimal injected dedicated PG client read adapter; pure/native tests; handoff/evidence",
+    "root_ownership": "reports/review only",
+    "scope": "existing discovery reader coherent repeatable-read read-only population acquisition; no production wiring or authority creation"
+  },
+  "cloud_after": {
+    "cursor": "83271615-2ee9-4bed-bd38-321f1348ab62:23",
+    "status": "inProgress",
+    "thread": "active",
+    "turn": "01a136f1-fefb-7726-8ab8-a7a3e701c4a6"
+  },
+  "cloud_before": {
+    "cursor": "83271615-2ee9-4bed-bd38-321f1348ab62:21",
+    "status": "completed",
+    "thread": "idle",
+    "turn": "01a135db-a3a2-7435-b860-321853c27fc4"
+  },
+  "production_capacity_newly_measured": false,
+  "production_db_mutated": false,
+  "production_deployed": false,
+  "progress_before": "5215c3d53e7e46b979b91eee025837c47b018c4a",
+  "progress_worktree_before": "clean",
+  "remote_main": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+  "root_native_build_tests_this_turn": false,
+  "source_engineering_complete": false,
+  "terminal_prs_reexecuted": false
+}

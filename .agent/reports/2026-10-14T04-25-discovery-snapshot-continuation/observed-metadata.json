@@ -1,0 +1,19 @@
+{
+  "counts": {
+    "publisher_manifest_inputs": 0,
+    "publisher_manifests": 0,
+    "publishers": 0,
+    "registry": 3441,
+    "revisions": 3449,
+    "runs": 0,
+    "source_authorities": 92,
+    "verifications": 0
+  },
+  "database": "stockinsider",
+  "isolation": "repeatable read",
+  "observed_at": "2026-10-13T22:27:25.222922+02:00",
+  "read_only": "on",
+  "run_groups": [],
+  "server_version": "170011",
+  "snapshot": "161646:161646:"
+}

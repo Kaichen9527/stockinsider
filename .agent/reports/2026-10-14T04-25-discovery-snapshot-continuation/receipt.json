@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "bytes": 2000,
+      "path": "README.md",
+      "sha256": "0f3b3e5cce5134df7217d463b57950e3ee9f38f02dde1039e73fd96f83d6d5ee"
+    },
+    {
+      "bytes": 1266,
+      "path": "continuation.json",
+      "sha256": "7f593576054c1dfea2da4b006d9d8ff4ef44dd0fbc4c63a3a67916201e70b650"
+    },
+    {
+      "bytes": 200,
+      "path": "execution.json",
+      "sha256": "56e4d85fc2948b49f6a161e8b87fc18ad382bb59b80fe8316f3387bc647a9c62"
+    },
+    {
+      "bytes": 442,
+      "path": "observed-metadata.json",
+      "sha256": "b3ff6e8b366adaebe91be6016c1383ab744d8ed0418fb82e3f387e1592a9bd8f"
+    },
+    {
+      "bytes": 1746,
+      "path": "remote-readonly.py",
+      "sha256": "c505cbe8856ff222af259beb4007c01c9cb1b5b267dc21e4a4458955917319e8"
+    },
+    {
+      "bytes": 0,
+      "path": "ssh.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 478,
+      "path": "ssh.stdout",
+      "sha256": "3e298f2b3f540d3ab05c0bfb5f52c5ae0139ef93d1670bc0a631822e24c863a6"
+    },
+    {
+      "bytes": 1410,
+      "path": "vps-discovery-counts.sql",
+      "sha256": "e3cfbc1ab68b12e11a617dbc2476cc997a7b2b6f2a28d23b386619f392e027d8"
+    }
+  ]
+}
