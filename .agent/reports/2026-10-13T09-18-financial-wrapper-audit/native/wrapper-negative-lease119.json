@@ -1,0 +1,10 @@
+{
+  "writerTransaction": {
+    "pid": 484398,
+    "xid": "751"
+  },
+  "target": "public.claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer)",
+  "outerPresent": true,
+  "rejectedKey": "finalClaimHandoff",
+  "value": false
+}

@@ -1,0 +1,140 @@
+{
+  "writerTransaction": {
+    "pid": 484398,
+    "xid": "751"
+  },
+  "function": {
+    "oid": "18212",
+    "signature": "legacy_correctness_immutable_v3_11()",
+    "owner": "legacy_correctness_rpc_owner",
+    "prosecdef": false,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "proargnames": null,
+    "proacl": "{=X/legacy_correctness_rpc_owner,legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,anon=X/legacy_correctness_rpc_owner,authenticated=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+    "result": "trigger",
+    "body_sha256": "d2939e0ac56c169c32c85128cbe03988b08a5cf6ec1ddd12e1133a6b57695d6f",
+    "acl": [
+      {
+        "grantee": "PUBLIC",
+        "grantor": "legacy_correctness_rpc_owner",
+        "grantable": false,
+        "privilege": "EXECUTE"
+      },
+      {
+        "grantee": "anon",
+        "grantor": "legacy_correctness_rpc_owner",
+        "grantable": false,
+        "privilege": "EXECUTE"
+      },
+      {
+        "grantee": "authenticated",
+        "grantor": "legacy_correctness_rpc_owner",
+        "grantable": false,
+        "privilege": "EXECUTE"
+      },
+      {
+        "grantee": "service_role",
+        "grantor": "legacy_correctness_rpc_owner",
+        "grantable": false,
+        "privilege": "EXECUTE"
+      },
+      {
+        "grantee": "legacy_correctness_rpc_owner",
+        "grantor": "legacy_correctness_rpc_owner",
+        "grantable": false,
+        "privilege": "EXECUTE"
+      }
+    ],
+    "effectiveexecute": {
+      "anon": true,
+      "service_role": true,
+      "authenticated": true
+    }
+  },
+  "observationColumns": [
+    {
+      "attname": "observation_id",
+      "attacl": null,
+      "type": "uuid",
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": true,
+      "service_update": false
+    },
+    {
+      "attname": "fact_id",
+      "attacl": null,
+      "type": "uuid",
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": true,
+      "service_update": false
+    },
+    {
+      "attname": "input_hash",
+      "attacl": null,
+      "type": "text",
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": true,
+      "service_update": false
+    },
+    {
+      "attname": "observation_kind",
+      "attacl": null,
+      "type": "text",
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": true,
+      "service_update": false
+    },
+    {
+      "attname": "caller_principal_id",
+      "attacl": null,
+      "type": "uuid",
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": true,
+      "service_update": false
+    },
+    {
+      "attname": "filing_published_at",
+      "attacl": null,
+      "type": "timestamp with time zone",
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": true,
+      "service_update": false
+    },
+    {
+      "attname": "source_timestamp",
+      "attacl": null,
+      "type": "timestamp with time zone",
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": true,
+      "service_update": false
+    },
+    {
+      "attname": "collected_at",
+      "attacl": null,
+      "type": "timestamp with time zone",
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": true,
+      "service_update": false
+    },
+    {
+      "attname": "recorded_at",
+      "attacl": null,
+      "type": "timestamp with time zone",
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": true,
+      "service_update": false
+    }
+  ],
+  "permissionsModified": false
+}

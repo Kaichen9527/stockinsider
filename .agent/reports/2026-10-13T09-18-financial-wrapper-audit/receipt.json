@@ -1,0 +1,336 @@
+{
+  "schema": "financial-installer-wrapper-target-audit-engineering-v1",
+  "source": {
+    "head": "8dbd88b8ae8ee4518ad6f69f976f38a3238ba8aa",
+    "tree": "3e8d7a111c5c517df5396b5e1dde43b59a375fbb",
+    "webTree": "08c8f0db7388a47b4cb663aa1c64ae7cc03e682f",
+    "base": "b2f1b6c30758a4e4ff9a28d938cc06c2b86976fa",
+    "branch": "codex/financial-installer-wrapper-audit-oct13"
+  },
+  "window": {
+    "start": "2026-10-13T09:18:12Z",
+    "deadline": "2026-10-13T09:48:12Z",
+    "sealed": "2026-10-13T09:36:05Z",
+    "manualEngineering": true,
+    "notProductRoleBudgetProof": true
+  },
+  "productChange": {
+    "onlyTwoApprovedFunctionTargetReplacements": true,
+    "allOtherPredicatesLeaseBodyOwnerSecdefAclChecksUnchanged": true,
+    "financialSqlLists48_49_50HashesRolesAclCatalogAuthorityPinsLocksUnchanged": true,
+    "targetsAlreadyInPR364Exact2e": true
+  },
+  "native": {
+    "pass": 12,
+    "fail": 2,
+    "skip": 0,
+    "total": 14,
+    "raw": "native-run.stdout",
+    "sourceCommit": "74f7f2e8118a3aacb53f160ba2d2f6aa2b4d1f71",
+    "currentNativeBlobSameAsRun": true,
+    "newWrapperNegatives": 4,
+    "correctedPredicates": {
+      "finalClaimHandoff": true,
+      "v320KolRetentionBridge": true
+    },
+    "remainingFalsePredicates": [
+      "v320KolClaimPayloadCompaction"
+    ],
+    "firstCommitted": false,
+    "parentFailureIncluded": true,
+    "businessInstallerRuns": 1,
+    "subsequentSameInputRerun": false,
+    "rollbackScope": "public function body/owner/config/ACL; table owner/ACL/RLS; role attrs/connlimit/config/validUntil/membership and public schemaACL. Not exhaustive columns/indexes or failed-first data proof. Forced rollback nonempty facts was separately tested."
+  },
+  "writerFindings": {
+    "actualFailedWriter": {
+      "pid": 484398,
+      "xid": "751"
+    },
+    "compactionFalseComponents": [
+      "ownerExpectedLegacy"
+    ],
+    "actualCompactionOwner": [
+      "opportunity_v3_rpc_owner"
+    ],
+    "verifierChildren": 7,
+    "allVerifierChildrenTrue": true,
+    "publicAlreadyExecuteNongrantable": true,
+    "allAclGrantorsOwner": true,
+    "routineEffectivePrivilegeScopeOnly": true,
+    "expectedTwoVsCapturedFiveNotAutomaticallyWiderPrivilege": true,
+    "exactAclExpectationStillUnchanged": true,
+    "protectedFiniteDescriptorOrReconciliationRequiresSeparateReview": true,
+    "writerLineageRecords": 64,
+    "writerTransactions": [
+      [
+        484395,
+        "750"
+      ],
+      [
+        484398,
+        "751"
+      ]
+    ],
+    "rollback": {
+      "bytes": 1438549,
+      "beforeSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "afterSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "equal": true
+    },
+    "capturedDefinitionArtifactsAreNotFailedWriterProof": true
+  },
+  "immutableAcl": {
+    "actualWriter": {
+      "pid": 484398,
+      "xid": "751"
+    },
+    "actualRoutine": {
+      "oid": "18212",
+      "signature": "legacy_correctness_immutable_v3_11()",
+      "owner": "legacy_correctness_rpc_owner",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "proargnames": null,
+      "proacl": "{=X/legacy_correctness_rpc_owner,legacy_correctness_rpc_owner=X/legacy_correctness_rpc_owner,anon=X/legacy_correctness_rpc_owner,authenticated=X/legacy_correctness_rpc_owner,service_role=X/legacy_correctness_rpc_owner}",
+      "result": "trigger",
+      "body_sha256": "d2939e0ac56c169c32c85128cbe03988b08a5cf6ec1ddd12e1133a6b57695d6f",
+      "acl": [
+        {
+          "grantee": "PUBLIC",
+          "grantor": "legacy_correctness_rpc_owner",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "anon",
+          "grantor": "legacy_correctness_rpc_owner",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "authenticated",
+          "grantor": "legacy_correctness_rpc_owner",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "service_role",
+          "grantor": "legacy_correctness_rpc_owner",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        },
+        {
+          "grantee": "legacy_correctness_rpc_owner",
+          "grantor": "legacy_correctness_rpc_owner",
+          "grantable": false,
+          "privilege": "EXECUTE"
+        }
+      ],
+      "effectiveexecute": {
+        "anon": true,
+        "service_role": true,
+        "authenticated": true
+      }
+    },
+    "observationColumns": [
+      {
+        "attname": "observation_id",
+        "attacl": null,
+        "type": "uuid",
+        "anon_select": false,
+        "authenticated_select": false,
+        "service_select": true,
+        "service_update": false
+      },
+      {
+        "attname": "fact_id",
+        "attacl": null,
+        "type": "uuid",
+        "anon_select": false,
+        "authenticated_select": false,
+        "service_select": true,
+        "service_update": false
+      },
+      {
+        "attname": "input_hash",
+        "attacl": null,
+        "type": "text",
+        "anon_select": false,
+        "authenticated_select": false,
+        "service_select": true,
+        "service_update": false
+      },
+      {
+        "attname": "observation_kind",
+        "attacl": null,
+        "type": "text",
+        "anon_select": false,
+        "authenticated_select": false,
+        "service_select": true,
+        "service_update": false
+      },
+      {
+        "attname": "caller_principal_id",
+        "attacl": null,
+        "type": "uuid",
+        "anon_select": false,
+        "authenticated_select": false,
+        "service_select": true,
+        "service_update": false
+      },
+      {
+        "attname": "filing_published_at",
+        "attacl": null,
+        "type": "timestamp with time zone",
+        "anon_select": false,
+        "authenticated_select": false,
+        "service_select": true,
+        "service_update": false
+      },
+      {
+        "attname": "source_timestamp",
+        "attacl": null,
+        "type": "timestamp with time zone",
+        "anon_select": false,
+        "authenticated_select": false,
+        "service_select": true,
+        "service_update": false
+      },
+      {
+        "attname": "collected_at",
+        "attacl": null,
+        "type": "timestamp with time zone",
+        "anon_select": false,
+        "authenticated_select": false,
+        "service_select": true,
+        "service_update": false
+      },
+      {
+        "attname": "recorded_at",
+        "attacl": null,
+        "type": "timestamp with time zone",
+        "anon_select": false,
+        "authenticated_select": false,
+        "service_select": true,
+        "service_update": false
+      }
+    ],
+    "expectedVsActual": "two entries versus five; PUBLIC already EXECUTE nongrantable, direct ordinary entries same owner grantor and EXECUTE nongrantable",
+    "permissionsModified": false,
+    "expectedCatalogModified": false,
+    "proposalsOnly": [
+      "exact two finite descriptors with all other fields including grantor/body/owner/invoker/config/columns fixed",
+      "explicit protected reconciliation after before/after effective privilege checks"
+    ],
+    "neitherProposalImplemented": true
+  },
+  "pure": {
+    "pass": 35,
+    "fail": 0,
+    "skip": 0,
+    "raw": "pure-corrected.stdout",
+    "inputHead": "8dbd88b8ae8ee4518ad6f69f976f38a3238ba8aa",
+    "historicalRed": {
+      "pass": 34,
+      "fail": 1,
+      "raw": "pure.stdout",
+      "inputHead": "21524883bd6f330af9afa3b1ab72b8ad7ca27368",
+      "reason": "source-audit substring counter searched whole module rather than intended finalClaimHandoff clause; fix test-only clause scoping, full-file equality unchanged"
+    }
+  },
+  "typecheck": {
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "typecheck"
+    ],
+    "start_utc": "2026-10-13T09:28:05Z",
+    "seconds": 2.809687376022339,
+    "exit": 0,
+    "peak_sampled_process_tree_rss_bytes": 496193536,
+    "min_free_bytes": 8900141056
+  },
+  "lint": {
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "lint"
+    ],
+    "start_utc": "2026-10-13T09:29:15Z",
+    "seconds": 21.758788585662842,
+    "exit": 0,
+    "peak_sampled_process_tree_rss_bytes": 1040031744,
+    "min_free_bytes": 8900124672
+  },
+  "build": {
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "build"
+    ],
+    "start_utc": "2026-10-13T09:31:36Z",
+    "seconds": 48.88502216339111,
+    "exit": 0,
+    "peak_sampled_process_tree_rss_bytes": 1813397504,
+    "min_free_bytes": 8590110720,
+    "sourceHead": "8dbd88b8ae8ee4518ad6f69f976f38a3238ba8aa",
+    "BUILD_ID": "ZkIjVL5BpLeTbpLTcVCFw",
+    "normalBuild": true,
+    "serverFiles": 1796,
+    "serverManifestSHA256": "c388a74923932a739aebf541ae6a0b08bb1e2b0b6dd0d186435fa8c65801d394",
+    "currentRebuildableCacheRetiredAfterBuildAndArtifactVerification": true
+  },
+  "versions": {
+    "node": "v22.14.0",
+    "pg": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1)",
+    "pgDependency": "8.18.0",
+    "next": "16.3.4",
+    "osDerivedUSER": "agent"
+  },
+  "locks": {
+    "package-lock.json": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "web/package-lock.json": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+  },
+  "fixture": {
+    "capturedSchemaGzipSHA256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "capturedSchemaDecodedSHA256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+    "syntheticLocalPrincipalStockAndFinancialRpcRows": true,
+    "engineeringInjectedExecutorNotFormalPeerHbaAttestation": true,
+    "noCurrentVpsReadOrWrite": true
+  },
+  "pending": [
+    "third owner predicate reconciliation requires separate review",
+    "immutable dependency exact ACL finite descriptor or protected reconciliation decision",
+    "first successful commit/second replay/post-install nonempty preservation",
+    "installed partial/config/disconnect/concurrent-lock remaining acceptance",
+    "formal fixed peer CLI/HBA/exact attestation/protected/capacity/deployment"
+  ],
+  "limits": {
+    "diskReserveBytes": 8589934592,
+    "taskRSSTargetBytes": 8589934592,
+    "resourceMethod": "250ms process-tree RSS/free; detached PostgreSQL and short peaks not full cgroup-total measurement",
+    "singleHeavy": true
+  },
+  "cleanup": {
+    "time": "2026-10-13T09:36:05Z",
+    "ownedActiveServices": [],
+    "ownedPgDirs": [],
+    "workspaceFreeBytes": 8742719488,
+    "tmpFreeBytes": 16834150400
+  },
+  "rawFiles": 57,
+  "rawBytes": 5006441,
+  "sourceFiles": 223,
+  "rawManifestSHA256": "0f58d661cf174d5ce052b57956aaa5df4932baab4f8258da616378c22d6e1558",
+  "sourceManifestSHA256": "3132bfdc9f281a9eb48c97cab0f8b96330b074fce682e75107a106880240ed6d",
+  "independentApprovalClaimed": false
+}

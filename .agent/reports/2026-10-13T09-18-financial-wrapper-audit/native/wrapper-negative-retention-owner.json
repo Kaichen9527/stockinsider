@@ -1,0 +1,10 @@
+{
+  "writerTransaction": {
+    "pid": 484398,
+    "xid": "751"
+  },
+  "target": "public.claim_legacy_producer_job_pre_source_terminal_projection_v3_20_2(uuid,uuid,uuid,integer)",
+  "outerPresent": true,
+  "rejectedKey": "v320KolRetentionBridge",
+  "value": false
+}

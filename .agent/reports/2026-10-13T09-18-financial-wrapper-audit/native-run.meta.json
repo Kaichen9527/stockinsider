@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/financial-installer-wrapper-audit-native.test.mjs"
+  ],
+  "start_utc": "2026-10-13T09:23:22Z",
+  "seconds": 3.0035712718963623,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 179781632,
+  "min_free_bytes": 8900259840
+}

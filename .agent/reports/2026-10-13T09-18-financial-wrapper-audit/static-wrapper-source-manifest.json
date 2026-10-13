@@ -1,0 +1,27 @@
+[
+  {
+    "path": "migrations/20260828_final_claim_handoff_lease_v3_19_16.sql",
+    "sha256": "f27aa2757d47aeb7c2328569dbd364c1ef93978f746ed3cae83e35233356bebf",
+    "bytes": 5416
+  },
+  {
+    "path": "migrations/20260828_kol_first_runtime_recovery_v3_20.sql",
+    "sha256": "987eafaa934c375437ca5495891148d3619f101fa538d379b221c37921edfbc2",
+    "bytes": 24653
+  },
+  {
+    "path": "migrations/20260830_v320_kol_retention_bridge.sql",
+    "sha256": "9e8bd294444f16ce8ab0e1b094e47d701ad56c253ff7b9991c0b38248a6d5040",
+    "bytes": 13772
+  },
+  {
+    "path": "migrations/20260830_v320_kol_claim_payload_compaction.sql",
+    "sha256": "25adad2dd860b71bf0833f2634a5a8795c5ba0b32348db709251451a9004cb75",
+    "bytes": 7691
+  },
+  {
+    "path": "migrations/20260911_v320_source_terminal_projection_authority.sql",
+    "sha256": "d4638c3d322fc3df0511803c75e28250adc96a1032d1aed219e68b4461579728",
+    "bytes": 6471
+  }
+]

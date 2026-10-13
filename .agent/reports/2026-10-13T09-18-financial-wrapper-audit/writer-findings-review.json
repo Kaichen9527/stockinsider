@@ -1,0 +1,38 @@
+{
+  "actualFailedWriter": {
+    "pid": 484398,
+    "xid": "751"
+  },
+  "compactionFalseComponents": [
+    "ownerExpectedLegacy"
+  ],
+  "actualCompactionOwner": [
+    "opportunity_v3_rpc_owner"
+  ],
+  "verifierChildren": 7,
+  "allVerifierChildrenTrue": true,
+  "publicAlreadyExecuteNongrantable": true,
+  "allAclGrantorsOwner": true,
+  "routineEffectivePrivilegeScopeOnly": true,
+  "expectedTwoVsCapturedFiveNotAutomaticallyWiderPrivilege": true,
+  "exactAclExpectationStillUnchanged": true,
+  "protectedFiniteDescriptorOrReconciliationRequiresSeparateReview": true,
+  "writerLineageRecords": 64,
+  "writerTransactions": [
+    [
+      484395,
+      "750"
+    ],
+    [
+      484398,
+      "751"
+    ]
+  ],
+  "rollback": {
+    "bytes": 1438549,
+    "beforeSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+    "afterSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+    "equal": true
+  },
+  "capturedDefinitionArtifactsAreNotFailedWriterProof": true
+}
