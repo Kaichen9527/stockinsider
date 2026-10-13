@@ -61,7 +61,7 @@ test('financial installer corrected postconditions and full captured-schema engi
  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'si-fin49-')),data=path.join(directory,'pg'),port=56000+process.pid%1000;
  let running=false;const clients=new Set();const trace=[];const pending=['successful first profile50 commit','apply twice','nonempty seed and full catalog/data','forced failure after genuine predecessor replacement','partial residue/changed config','disconnect','competing install lock'];
  const connect=async()=>{const c=new Client({host:directory,port,user:'postgres',database:'postgres',statement_timeout:30000,query_timeout:35000});clients.add(c);await c.connect();return c;};
- const traced=client=>{const query=client.query.bind(client);client.query=async(...args)=>{const text=typeof args[0]==='string'?args[0]:args[0]?.text;const row={at:new Date().toISOString(),sha256:sha(text??''),migration:bodyPaths.get(sha(text??''))??null,kind:(text??'').slice(0,60)};trace.push(row);try{return await query(...args);}catch(e){row.error=errorValue(e);save('query-trace.json',trace);throw e;}};return client;};
+ const traced=client=>{const query=client.query.bind(client);client.query=async(...args)=>{const text=typeof args[0]==='string'?args[0]:args[0]?.text;const row={at:new Date().toISOString(),sha256:sha(text??''),migration:bodyPaths.get(sha(text??''))??null,kind:(text??'').slice(0,60)};trace.push(row);try{const result=await query(...args);if(text?.includes("'v314Diagnostics'")){save('full-postcondition-predicate-values.json',result.rows?.[0]?.result??null);save('financial-catalog-before-original-postcondition-rejection.json',await readFinancialHistoryCatalog({query}));save('role-before-original-postcondition-rejection.json',await snapshotVpsRuntimeRole({query}));}return result;}catch(e){row.error=errorValue(e);save('query-trace.json',trace);throw e;}};return client;};
  let stage='initdb';
  try {
   execFileSync(path.join(bin,'initdb'),['-D',data,'-U','postgres','-A','trust','--no-instructions'],{stdio:'pipe'});
@@ -128,10 +128,10 @@ test('financial installer corrected postconditions and full captured-schema engi
   const beforeReplacementDefinition=(await a.query("SELECT pg_get_functiondef('public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure) AS body")).rows[0].body;
   await t.test('forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts',async()=>{
    const writer=traced(await connect());const realQuery=writer.query.bind(writer);let replacementReached=false;
-   writer.query=async(...args)=>{const result=await realQuery(...args);if(args[0]===replacementSql){
+   writer.query=async(...args)=>{const immediateBefore=args[0]===replacementSql?(await realQuery("SELECT pg_get_functiondef('public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure) AS body")).rows[0].body:null;const result=await realQuery(...args);if(args[0]===replacementSql){
     replacementReached=true;const body=(await realQuery("SELECT pg_get_functiondef('public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure) AS body")).rows[0].body;
-    const role=await snapshotVpsRuntimeRole(writer);assert.equal(role.login,true);assert.equal(role.connectionLimit,6);assert.notEqual(body,beforeReplacementDefinition);
-    save('forced-replacement-witness.json',{replacementReached,body,role});throw Error('synthetic_forced_failure_after_genuine_replacement');}return result;};
+    const role=await snapshotVpsRuntimeRole(writer);assert.equal(role.login,true);assert.equal(role.connectionLimit,6);assert.notEqual(body,immediateBefore);
+    save('forced-replacement-witness.json',{replacementReached,bodyBeforeMigration:immediateBefore,bodyAfterMigration:body,capturedBaselineBody:beforeReplacementDefinition,role});throw Error('synthetic_forced_failure_after_genuine_replacement');}return result;};
    await assert.rejects(applyReviewedMigrationPlanToClient(writer,plan,options,operatorDeps),/synthetic_forced_failure_after_genuine_replacement/u);
    assert.equal(replacementReached,true);assert.deepEqual((await a.query(snapshotSql)).rows[0].snapshot,before);assert.deepEqual(await facts(),seededFacts);
    save('forced-rollback-snapshot.json',(await a.query(snapshotSql)).rows[0].snapshot);
