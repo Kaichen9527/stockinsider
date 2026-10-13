@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/financial-installer-finite-profile-native.test.mjs"
+  ],
+  "start_utc": "2026-10-13T15:25:21Z",
+  "seconds": 4.471369743347168,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 187105280,
+  "min_free_bytes": 8937570304
+}

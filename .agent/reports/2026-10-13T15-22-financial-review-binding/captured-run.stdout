@@ -1,0 +1,151 @@
+TAP version 13
+# Subtest: financial installer approved finite immutable ACL and complete captured-schema transaction
+    # Subtest: real PG marker predicate count0 expressionfalse -> false
+    ok 1 - real PG marker predicate count0 expressionfalse -> false
+      ---
+      duration_ms: 7.399799
+      ...
+    # Subtest: real PG marker predicate count1 expressiontrue -> false
+    ok 2 - real PG marker predicate count1 expressiontrue -> false
+      ---
+      duration_ms: 2.430809
+      ...
+    # Subtest: real PG marker predicate count2 expressiontrue -> true
+    ok 3 - real PG marker predicate count2 expressiontrue -> true
+      ---
+      duration_ms: 2.117115
+      ...
+    # Subtest: real PG marker predicate count3 expressiontrue -> false
+    ok 4 - real PG marker predicate count3 expressiontrue -> false
+      ---
+      duration_ms: 1.885165
+      ...
+    # Subtest: real PG marker predicate count2 expressionfalse -> false
+    ok 5 - real PG marker predicate count2 expressionfalse -> false
+      ---
+      duration_ms: 3.22623
+      ...
+    # Subtest: actual nonempty membership rejects before operator role mutation and rolls back
+    ok 6 - actual nonempty membership rejects before operator role mutation and rolls back
+      ---
+      duration_ms: 60.097918
+      ...
+    # Subtest: actual original bootstrap and exact LOGIN6 replay preserve authority; outer rollback
+    ok 7 - actual original bootstrap and exact LOGIN6 replay preserve authority; outer rollback
+      ---
+      duration_ms: 121.777078
+      ...
+    # Subtest: forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts
+    ok 8 - forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts
+      ---
+      duration_ms: 540.325707
+      ...
+    # Subtest: actual first apply through new opt-in profile and unchanged 49 chain
+    ok 9 - actual first apply through new opt-in profile and unchanged 49 chain
+      ---
+      duration_ms: 563.773499
+      ...
+    # Subtest: full actual postcondition query parses/executes; every original predicate true
+    ok 10 - full actual postcondition query parses/executes; every original predicate true
+      ---
+      duration_ms: 7.811084
+      ...
+    # Subtest: second actual operator+profile50 apply preserves full financial catalog and nonempty rows
+    ok 11 - second actual operator+profile50 apply preserves full financial catalog and nonempty rows
+      ---
+      duration_ms: 448.002616
+      ...
+    # Subtest: actual legal two/five immutable ACLs have same effective routine/table/column privileges
+    ok 12 - actual legal two/five immutable ACLs have same effective routine/table/column privileges
+      ---
+      duration_ms: 13.167729
+      ...
+    # Subtest: actual finite immutable descriptor rejects unknown-grantee and rolls back
+    ok 13 - actual finite immutable descriptor rejects unknown-grantee and rolls back
+      ---
+      duration_ms: 7.941406
+      ...
+    # Subtest: actual finite immutable descriptor rejects grantable and rolls back
+    ok 14 - actual finite immutable descriptor rejects grantable and rolls back
+      ---
+      duration_ms: 7.058323
+      ...
+    # Subtest: actual finite immutable descriptor rejects missing-public and rolls back
+    ok 15 - actual finite immutable descriptor rejects missing-public and rolls back
+      ---
+      duration_ms: 7.260308
+      ...
+    # Subtest: actual finite immutable descriptor rejects partial-four and rolls back
+    ok 16 - actual finite immutable descriptor rejects partial-four and rolls back
+      ---
+      duration_ms: 8.427856
+      ...
+    # Subtest: actual finite immutable descriptor rejects partial-three and rolls back
+    ok 17 - actual finite immutable descriptor rejects partial-three and rolls back
+      ---
+      duration_ms: 7.916198
+      ...
+    # Subtest: actual finite immutable descriptor rejects wrong-owner and rolls back
+    ok 18 - actual finite immutable descriptor rejects wrong-owner and rolls back
+      ---
+      duration_ms: 7.654568
+      ...
+    # Subtest: actual finite immutable descriptor rejects security-definer and rolls back
+    ok 19 - actual finite immutable descriptor rejects security-definer and rolls back
+      ---
+      duration_ms: 7.688139
+      ...
+    # Subtest: actual finite immutable descriptor rejects config and rolls back
+    ok 20 - actual finite immutable descriptor rejects config and rolls back
+      ---
+      duration_ms: 9.592913
+      ...
+    # Subtest: actual finite immutable descriptor rejects wrong-body and rolls back
+    ok 21 - actual finite immutable descriptor rejects wrong-body and rolls back
+      ---
+      duration_ms: 10.209951
+      ...
+    # Subtest: actual finite immutable descriptor rejects wrong-grantor and rolls back
+    ok 22 - actual finite immutable descriptor rejects wrong-grantor and rolls back
+      ---
+      duration_ms: 9.58709
+      ...
+    # Subtest: actual wrong compaction function owner rejects original full query
+    ok 23 - actual wrong compaction function owner rejects original full query
+      ---
+      duration_ms: 6.755592
+      ...
+    # Subtest: installed partial rejects before operator/prelude/base mutations
+    ok 24 - installed partial rejects before operator/prelude/base mutations
+      ---
+      duration_ms: 33.670005
+      ...
+    # Subtest: installed config rejects before operator/prelude/base mutations
+    ok 25 - installed config rejects before operator/prelude/base mutations
+      ---
+      duration_ms: 48.418089
+      ...
+    # Subtest: real writer disconnect after predecessor replacement makes server rollback
+    ok 26 - real writer disconnect after predecessor replacement makes server rollback
+      ---
+      duration_ms: 359.875623
+      ...
+    # Subtest: competing actual shared lock rejects with no BEGIN or mutation
+    ok 27 - competing actual shared lock rejects with no BEGIN or mutation
+      ---
+      duration_ms: 33.024305
+      ...
+    1..27
+ok 1 - financial installer approved finite immutable ACL and complete captured-schema transaction
+  ---
+  duration_ms: 4036.863126
+  ...
+1..1
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4257.171525

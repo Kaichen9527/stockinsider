@@ -1,0 +1,15 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "--test-name-pattern=^V3\\.16\\.16 (preserves true recollection|financial fact append)|^financial (history amendment|atomic replay rollback)",
+    "scripts/opportunity-v3/migration-contract.test.mjs"
+  ],
+  "start_utc": "2026-10-13T15:26:52Z",
+  "seconds": 3.301576852798462,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 166375424,
+  "min_free_bytes": 8937521152
+}

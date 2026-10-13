@@ -1,0 +1,1 @@
+Code 996e054fb92283dc4ede45c38b6b8928eeda04de; original RED 37/1/0, successor pure38/captured28/HBA1/financial4 all zero failure/skip. Typecheck/lint/normal build pass; lint 33 existing warnings. New BUILD_ID qOcuNUFydrW0mvxne1-0F (1796 server files). Old captured/CI equality is not reused. Formal peer/attestation/protected/deployment pending.
