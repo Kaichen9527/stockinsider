@@ -384,7 +384,7 @@ async function verifyReviewedMigrationPostconditions(client, options) {
             'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
           ))-length(replace(pg_get_functiondef(
             'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
-          ),'legacyRadarCompatibility','')))/length('legacyRadarCompatibility'))=2
+          ),'legacyRadarCompatibility','')))/length('legacyRadarCompatibility')=2
           AND position('v_source_result.result_json->''legacyRadarCompatibility''' IN pg_get_functiondef(
             'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
           ))>0)
