@@ -1,0 +1,214 @@
+{
+  "schema": "financial-installer-finite-profile-captured-native-engineering-v1",
+  "source": {
+    "head": "6bba84fcd90329ede52ef8c5f91079baf5142639",
+    "tree": "708d69d9d2c67fe88d9f21f3ed5e9917b379ab05",
+    "webTree": "08c8f0db7388a47b4cb663aa1c64ae7cc03e682f",
+    "base": "f9b2ea98f4e3b2ac9be7ef601e0084b4b953f365",
+    "branch": "codex/financial-installer-finite-profile-closure-oct13"
+  },
+  "window": {
+    "start": "2026-10-13T11:12:07Z",
+    "deadline": "2026-10-13T11:42:07Z",
+    "sealed": "2026-10-13T11:33:33Z",
+    "manualEngineering": true,
+    "notProductRoleBudgetProof": true
+  },
+  "changes": {
+    "oneCompactionOwnerLiteralCorrectionOnly": "opportunity_v3_rpc_owner",
+    "sqlChainProfiles48_49_50OperatorHbaAuthorityPinsRolesUnchanged": true,
+    "fiveFunctionAclGrantorsProjectedAndPinned": true,
+    "expectedOtherFieldsExact": true,
+    "onlyImmutableTwoOrFiveExactAclSetsAccepted": true,
+    "completeSetValidatedBeforeOnlyThatAclNormalization": true,
+    "noArbitraryFilterUnknownEntryOrCountOnly": true
+  },
+  "native": {
+    "pass": 28,
+    "fail": 0,
+    "skip": 0,
+    "totalIncludesParent": true,
+    "raw": "native-run.stdout",
+    "inputSourceCommit": "2c48ecfe7ed045ee784cc83fa34ca2e1f6761e0b",
+    "runtimeAndNativeBlobsUnchangedByLaterDocCommit": true,
+    "fullLocalEngineeringAcceptance": {
+      "firstApplyCommitted": true,
+      "secondApplyCommitted": true,
+      "fullOriginalQueryExecuted": true,
+      "nonemptyRpcRowsPreserved": true,
+      "financialCatalogExact": true,
+      "forcedRollback": true,
+      "partialConfigRejectBeforeMutation": true,
+      "realDisconnectRollback": true,
+      "competingLockReject": true,
+      "formalPeerTransportVerified": false,
+      "productionAttestation": false
+    },
+    "actualCommitCount": 2,
+    "firstRoleBootstrapNoOp": false,
+    "secondRoleBootstrapNoOp": true,
+    "fullOriginalPredicates": {
+      "restClaim": true,
+      "v314Chunks": true,
+      "claimHandoff": true,
+      "candidateRead": true,
+      "partialResume": true,
+      "evaluationClock": true,
+      "v314Diagnostics": true,
+      "calendarRecovery": true,
+      "projectionSelect": true,
+      "boundedChunkApply": true,
+      "decisionRevisions": true,
+      "finalClaimHandoff": true,
+      "providerAcquisition": true,
+      "rosterChunkSnapshot": true,
+      "v320RuntimeRecovery": true,
+      "analysisPayloadReuse": true,
+      "releaseReconciliation": true,
+      "calendarRecoveryHelper": true,
+      "runtimeHealthBootstrap": true,
+      "v320KolRetentionBridge": true,
+      "candidateFactPlaneBound": true,
+      "v320KolProjectionMarker": true,
+      "candidateLedgerRetention": true,
+      "reusedAcquisitionLineage": true,
+      "analysisPayloadExactReuse": true,
+      "financialFactRecollection": true,
+      "runtimeDiagnosticContract": true,
+      "sameTransactionVisibility": true,
+      "transactionTimeDependency": true,
+      "candidateRetentionAuthority": true,
+      "evaluationSchemaCompatibility": true,
+      "v320KolClaimPayloadCompaction": true,
+      "v320KolRetentionOwnerBoundary": true,
+      "projectionEvaluationSupersession": true,
+      "decisionRevisionDossierProjection": true,
+      "retainedCandidateJsonbCardinality": true
+    },
+    "finiteAclNativeNegativeScope": [
+      "unknown grantee",
+      "grantable",
+      "missing PUBLIC",
+      "partial3",
+      "partial4",
+      "owner",
+      "SECDEF",
+      "config",
+      "body",
+      "actual wrong grantor with temporary option/duplicate coupled invalid shape"
+    ],
+    "isolatedGrantorOnlyNegative": "pure test; native wrong-grantor case is explicitly coupled",
+    "historicalSynthetic37NativeAndEarlierRedsNotAdded": true
+  },
+  "pure": {
+    "pass": 38,
+    "fail": 0,
+    "skip": 0,
+    "raw": "pure.stdout",
+    "inputSourceCommit": "2c48ecfe7ed045ee784cc83fa34ca2e1f6761e0b"
+  },
+  "typecheck": {
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "typecheck"
+    ],
+    "start_utc": "2026-10-13T11:22:52Z",
+    "seconds": 2.8167734146118164,
+    "exit": 0,
+    "peak_sampled_process_tree_rss_bytes": 502226944,
+    "min_free_bytes": 8896077824
+  },
+  "lint": {
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "lint"
+    ],
+    "start_utc": "2026-10-13T11:25:14Z",
+    "seconds": 24.149262189865112,
+    "exit": 0,
+    "peak_sampled_process_tree_rss_bytes": 1121476608,
+    "min_free_bytes": 9213509632
+  },
+  "build": {
+    "command": [
+      "npm",
+      "--prefix",
+      "web",
+      "run",
+      "build"
+    ],
+    "start_utc": "2026-10-13T11:27:34Z",
+    "seconds": 49.72767734527588,
+    "exit": 0,
+    "peak_sampled_process_tree_rss_bytes": 1869877248,
+    "min_free_bytes": 8903421952,
+    "sourceHead": "6bba84fcd90329ede52ef8c5f91079baf5142639",
+    "BUILD_ID": "NTcniIUZyEdLPfwZhNc10",
+    "normalBuild": true,
+    "serverFiles": 1796,
+    "serverManifestSHA256": "4cb3b707545d84f18b449d3d763002016fa29819be5959185fa50e0ef1beb059"
+  },
+  "versions": {
+    "node": "v22.14.0",
+    "pg": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1)",
+    "pgDependency": "8.18.0",
+    "next": "16.3.4",
+    "osDerivedUSER": "agent"
+  },
+  "locks": {
+    "package-lock.json": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "web/package-lock.json": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+  },
+  "fixture": {
+    "kind": "genuine captured VPS schema-only + unchanged local bootstrap, synthetic principal/stock/real RPC financial rows, isolated PostgreSQL17 trust engineering transport",
+    "gzipSHA256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "decodedSHA256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+    "formalPrivatePeerAndHbaVerified": false,
+    "productionAttestation": false,
+    "noVpsReadOrWrite": true
+  },
+  "profile": {
+    "chainSteps": 49,
+    "selectedSqlProfileSteps": 50,
+    "operatorActionSeparate": true,
+    "chainSHA256": "cec630ce83aea1f7bdcafae815990e2e964ebbf599a3441e08d978e4427f46cd",
+    "profileSHA256": "acdee42a8ca130d259541b5c0b4b14e228c355528b60a2ac4ea3ef9633d611d9",
+    "operatorActionSHA256": "97697bc3f8a2c3c1bd4676c579eaa9b33e4273c9e98e0a0045998698b736a42b",
+    "supersededBodies": [
+      "migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql"
+    ],
+    "fiftySelectedDoesNotMeanFiftyExecutedBodies": true
+  },
+  "remainingFormal": [
+    "real fixed private-peer operator CLI/effective HBA",
+    "actual exact direct-child hash-bound review/attestation and protected approval",
+    "production capacity/transport/operator authorization",
+    "production migration/343 usable-source validation/deployment"
+  ],
+  "inheritedFlagClarification": "remaining-stages full49Acceptance:false is formal production status; pending=[] plus full-engineering-acceptance.json records completed captured-schema engineering stages",
+  "limits": {
+    "diskReserveBytes": 8589934592,
+    "taskRSSTargetBytes": 8589934592,
+    "resourceMethod": "250ms process-tree RSS/free; detached PG and short peaks not cgroup-total guarantee",
+    "singleHeavy": true
+  },
+  "cleanup": {
+    "time": "2026-10-13T11:33:33Z",
+    "ownedActiveServices": [],
+    "ownedPgDirs": [],
+    "workspaceFreeBytes": 8903008256,
+    "tmpFreeBytes": 16834146304
+  },
+  "rawFiles": 60,
+  "rawBytes": 3052481,
+  "sourceFiles": 225,
+  "rawManifestSHA256": "49d5cc1bbfa4fffbabacfdc1cce9c08cb867cfe2acca42a9cac26b231a79b876",
+  "sourceManifestSHA256": "f3b404f3914f3d565968be70744d88f306d8bf132945febda52309e4d62684dc",
+  "independentApprovalClaimed": false
+}

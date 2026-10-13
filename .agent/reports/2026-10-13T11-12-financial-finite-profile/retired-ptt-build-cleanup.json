@@ -1,0 +1,13 @@
+{
+  "target": "/workspace/cloud-ptt-provenance-oct12/web/.next",
+  "priorEvidenceHEAD": "0587293fa9cd6bdb995b7318e70008ac116021f2",
+  "priorBuildId": "rljBNVoM7HviTv4-GBdt3",
+  "compiledFilesVerified": 1794,
+  "savedTrackedManifestSHA256": "2a9cdd7064900db18680dc033c20bb9e63560f4ef3af8a503151aa90a18ee260",
+  "activeNodePgInOldTree": [],
+  "rebuildableBytes": 300563849,
+  "freeBeforeBytes": 8896073728,
+  "freeAfterBytes": 9213526016,
+  "sourceRawReceiptsNotDeleted": true,
+  "time": "2026-10-13T11:25:14Z"
+}

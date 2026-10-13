@@ -1,0 +1,6 @@
+{
+  "oldOtherFieldsExactlyEqual": true,
+  "addedFunctionAclGrantorFields": 8,
+  "expectedGrantorsAllKnownOwner": true,
+  "noOtherExpectedChange": true
+}

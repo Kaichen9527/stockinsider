@@ -1,0 +1,13 @@
+{
+  "firstApplyCommitted": true,
+  "secondApplyCommitted": true,
+  "fullOriginalQueryExecuted": true,
+  "nonemptyRpcRowsPreserved": true,
+  "financialCatalogExact": true,
+  "forcedRollback": true,
+  "partialConfigRejectBeforeMutation": true,
+  "realDisconnectRollback": true,
+  "competingLockReject": true,
+  "formalPeerTransportVerified": false,
+  "productionAttestation": false
+}

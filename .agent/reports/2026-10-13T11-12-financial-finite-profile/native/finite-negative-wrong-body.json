@@ -1,0 +1,46 @@
+{
+  "acl": [
+    {
+      "grantee": "anon",
+      "grantor": "legacy_correctness_rpc_owner",
+      "grantable": false,
+      "privilege": "EXECUTE"
+    },
+    {
+      "grantee": "authenticated",
+      "grantor": "legacy_correctness_rpc_owner",
+      "grantable": false,
+      "privilege": "EXECUTE"
+    },
+    {
+      "grantee": "legacy_correctness_rpc_owner",
+      "grantor": "legacy_correctness_rpc_owner",
+      "grantable": false,
+      "privilege": "EXECUTE"
+    },
+    {
+      "grantee": "service_role",
+      "grantor": "legacy_correctness_rpc_owner",
+      "grantable": false,
+      "privilege": "EXECUTE"
+    },
+    {
+      "grantee": "PUBLIC",
+      "grantor": "legacy_correctness_rpc_owner",
+      "grantable": false,
+      "privilege": "EXECUTE"
+    }
+  ],
+  "name": "legacy_correctness_immutable_v3_11",
+  "owner": "legacy_correctness_rpc_owner",
+  "config": [
+    "search_path=\"\""
+  ],
+  "result": "trigger",
+  "strict": false,
+  "language": "plpgsql",
+  "arguments": "",
+  "bodySha256": "2a710aba9fc4bfe24f7b17017bf95764b76d1262efd65abcba83b0a3a5f5ab20",
+  "volatility": "v",
+  "securityDefiner": false
+}

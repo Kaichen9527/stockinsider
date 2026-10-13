@@ -1,0 +1,5 @@
+{
+  "oldSHA256": "95e7759e3292e8aa3c057f6c67d456b234e4c2e8f8bd94c19ea34a59db3525c0",
+  "newSHA256": "a7fb42c93786040e0f831430d1e8b869a7dde464cd3b59312db7e7c4285cf31d",
+  "addedFieldsOnly": "function ACL grantor = each known function owner; no body/owner/config/table/index/constraint changes"
+}
