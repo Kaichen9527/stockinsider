@@ -1,5 +1,5 @@
 import { sha256Canonical } from './opportunity-v3/canonical.ts';
-import { discoveryClock, discoveryPopulationHash, 
+import { discoveryClock, discoveryPopulationHash,
   type ReaderInput, type PublisherAuthority } from './discovery-revision-publisher-reader.ts';
 const id = (n: number) => `00000000-0000-4000-8000-${n.toString().padStart(12, '0')}`;
 const cut = '2026-10-08T12:00:00.123456Z', old = '2026-10-08T11:00:00.123456Z';

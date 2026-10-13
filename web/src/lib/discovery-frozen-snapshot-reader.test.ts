@@ -41,3 +41,10 @@ test('invalid UUID does no I/O; owned client cannot be reused',async()=>{
 test('database timestamps are requested as fixed UTC microsecond text, never JS Date',async()=>{
  const m=mock();const a=await readDiscoveryFrozenSnapshot(m.client,fixture().run.run_id);assert.equal(a.projection?.source_cutoff,'2026-10-08T12:00:00.123456Z');assert.ok(m.calls.some(c=>c.sql.includes('HH24:MI:SS.US')));assert.ok(m.calls.some(c=>c.sql.includes("AT TIME ZONE 'UTC'")));
 });
+
+test('primary DB failure survives failed cleanup without exposing either private error',async()=>{
+ const m=mock({fail:true});m.client.end=async()=>{throw Error('PRIVATE_CLOSE_ERROR');};const a=await readDiscoveryFrozenSnapshot(m.client,fixture().run.run_id);assert.equal(a.reason,'read_failed');assert.equal(a.cleanup,'failed');assert.ok(!JSON.stringify(a).includes('PRIVATE'));
+});
+test('stalled owned end returns bounded pending cleanup and cannot report a successful read',{timeout:12000},async()=>{
+ const m=mock();m.client.end=()=>new Promise(()=>{});const start=performance.now();const a=await readDiscoveryFrozenSnapshot(m.client,fixture().run.run_id);assert.equal(a.status,'unsupported');assert.equal(a.projection,null);assert.equal(a.cleanup,'pending');assert.equal(a.reason,'cleanup_unconfirmed');assert.ok(performance.now()-start>=9500);assert.ok(performance.now()-start<11500);
+});
