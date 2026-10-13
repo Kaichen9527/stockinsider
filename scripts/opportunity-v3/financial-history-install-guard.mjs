@@ -15,7 +15,9 @@ export function selectFinancialHistoryChain(base, tail, enabled = false) {
 // The exact-review resolver verifies the evidence hash and direct-child attestation.
 // This additional literal is required inside that hash-bound review, not supplied by a flag.
 export function assertFinancialReviewBinding(review, hash) {
-  if (!/^[0-9a-f]{64}$/u.test(hash) || review.split(/\r?\n/u).filter(x => x === `Financial history ordered chain SHA256: ${hash}`).length !== 1)
+  const prefix='Financial history ordered chain SHA256:';
+  const rows=review.split(/\r?\n/u).filter(line => line.trimStart().startsWith(prefix));
+  if (!/^[0-9a-f]{64}$/u.test(hash) || rows.length !== 1 || rows[0] !== `${prefix} ${hash}`)
     throw new Error('financial_chain_review_binding_missing');
 }
 const freezeCatalog = value => { if(value && typeof value==='object'){Object.values(value).forEach(freezeCatalog);Object.freeze(value);}return value;};

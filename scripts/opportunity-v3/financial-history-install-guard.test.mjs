@@ -23,8 +23,17 @@ test('omitted, wrong bytes/hash, reversed or reordered base/tail fail closed',()
  for(const args of [[base,null,true],[base,{...tail,sha256:'0'.repeat(64)},true],[base,{...tail,bytes:Buffer.from('BEGIN; COMMIT;')},true],[base.toReversed(),tail,true],[base.slice(1),tail,true]]) assert.throws(()=>selectFinancialHistoryChain(...args),/mismatch/u);
 });
 test('extension flag alone is not review authority: exact hash must be in hash-bound review once',()=>{
- const hash=orderedHash(chain);assertFinancialReviewBinding(`Review\nFinancial history ordered chain SHA256: ${hash}\n`,hash);
- for(const review of ['',`Financial history ordered chain SHA256: ${BASE_CHAIN_SHA256}`,`Financial history ordered chain SHA256: ${hash}\nFinancial history ordered chain SHA256: ${hash}`]) assert.throws(()=>assertFinancialReviewBinding(review,hash),/binding_missing/u);
+ const hash=orderedHash(chain),prefix='Financial history ordered chain SHA256:',correct=`${prefix} ${hash}`,wrong=`${prefix} ${'0'.repeat(64)}`;
+ for(const ending of ['\n','\r\n']) assertFinancialReviewBinding(`Review${ending}${correct}${ending}`,hash);
+ const rejected=[
+  ['', 'missing'],[wrong,'wrong-only'],[`${prefix} ${BASE_CHAIN_SHA256}`,'base-only'],
+  [correct+'\n'+wrong,'correct then conflicting'],[wrong+'\n'+correct,'conflicting then correct'],
+  [correct+'\n'+correct,'duplicate correct'],
+  [correct+'\n  '+correct,'indented duplicate last'],['  '+correct+'\n'+correct,'indented duplicate first'],
+  [correct+'\n\t'+wrong,'indented conflicting last'],['\t'+wrong+'\n'+correct,'indented conflicting first'],
+  ['  '+correct,'indented only'],[correct+' ','trailing space only'],
+ ];
+ for(const [review,label] of rejected)assert.throws(()=>assertFinancialReviewBinding(review,hash),/financial_chain_review_binding_missing/u,label);
  assert.equal(parseArguments(['--apply','--source-commit','1'.repeat(40),'--attestation-commit','2'.repeat(40),'--financial-history-extension']).financialHistoryExtension,true);
 });
 test('base-only cannot replay installed successor and partial residue cannot replay even with tail',async()=>{
