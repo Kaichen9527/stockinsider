@@ -23,7 +23,7 @@ test('fixed RR/RO query order, sole UUID parameters, exact populations and priva
  assert.deepEqual(m.calls.slice(0,4).map(c=>c.sql),['CONNECT','BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY',"SET LOCAL statement_timeout='2000ms'","SET LOCAL lock_timeout='500ms'"]);
  assert.deepEqual(m.calls.slice(-2).map(c=>c.sql),['ROLLBACK','END']);assert.equal(m.closed,true);
  assert.ok(!JSON.stringify(a).includes('approving_principal_id'));assert.ok(!JSON.stringify(a).includes('retained-profile'));
- const firstPopulation=m.calls.findIndex(c=>c.sql.includes(' LIMIT 4097'));assert.equal(m.calls.slice(0,firstPopulation).filter(c=>c.sql.startsWith('SELECT count')).length,7);
+ const firstPopulation=m.calls.findIndex(c=>c.sql.includes(' LIMIT 4097'));assert.equal(m.calls.slice(0,firstPopulation).filter(c=>c.sql.startsWith('SELECT count(*)::text AS exact_count')).length,7);
  for(const c of m.calls)if(c.values)assert.equal(c.values.length,1);
  const run=m.calls.find(c=>c.sql.includes('FROM public.opportunity_runs'));assert.deepEqual(run?.values,[fixture().run.run_id]);
  assert.ok(m.calls.filter(c=>c.sql.includes('source_document_revisions_v3')).every(c=>!c.sql.includes(' WHERE ')));

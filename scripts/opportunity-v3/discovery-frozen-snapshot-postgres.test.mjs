@@ -67,6 +67,10 @@ test('real captured v3 coherent RR readonly discovery acquisition (synthetic dat
    c.query=async(...args)=>{const a=await q(...args);if(args[0]==="SET LOCAL lock_timeout='500ms'")try{await q("INSERT INTO public.source_entities(id,platform) VALUES($1,'ptt')",[id(77)]);}catch(e){code=e.code;}return a;};
    const a=await readDiscoveryFrozenSnapshot(c,id(1));assert.equal(code,'25006');assert.equal(a.status,'unsupported');assert.equal(a.cleanup,'confirmed');assert.equal((await w.query('SELECT count(*) FROM public.source_entities WHERE id=$1',[id(77)])).rows[0].count,'0');save('readonly-mutation.json',{code,result:a});
   });
+  await t.test('existing anon role with active RLS cannot masquerade as a complete population',async()=>{
+   const c=client(),connect=c.connect.bind(c);c.connect=async()=>{await connect();await c.query('SET ROLE anon');};
+   const a=await readDiscoveryFrozenSnapshot(c,id(1));assert.equal(a.reason,'population_visibility_unknown');assert.equal(a.projection,null);assert.equal(a.cleanup,'confirmed');save('rls-visibility-rejected.json',a);
+  });
   await t.test('actual server disconnect never succeeds and closes owned client',async()=>{
    const c=client(),q=c.query.bind(c);let fired=false;
    c.query=async(...args)=>{if(!fired&&typeof args[0]==='string'&&args[0].includes('FROM public.opportunity_runs')){fired=true;await w.query('SELECT pg_terminate_backend($1)',[c.processID]);}return q(...args);};c.on('error',()=>{});
