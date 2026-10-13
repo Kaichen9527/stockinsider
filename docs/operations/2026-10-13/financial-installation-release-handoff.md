@@ -43,3 +43,5 @@ That final receipt records 28 local captured-schema engineering passes: first/se
 ## Release limitations
 
 Independent review, actual ordinary/protected checks, production capacity and formal fixed peer CLI/operator acceptance remain pending. No production installation or 343-company usable-data recovery has occurred. No authority, role execution, protected approval or investment readiness is asserted by this engineering candidate.
+
+The adjacent `financial-installation-history-receipts.json` records exact historical receipt paths, byte lengths and SHA256 for every reference above; it contains references only, not historical raw content. This candidate's build was executed at sealed assembly code `9735bc3179d567d5c541e6edd51836efd9d347d3`; later receipt-reference documentation has identical web/runtime inputs and does not claim a second build.
