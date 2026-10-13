@@ -1,0 +1,38 @@
+[
+  {
+    "path": "scripts/opportunity-v3/financial-history-install-guard.mjs",
+    "blob": "ad1e77cd53a74c21395df46970a3a51540cecfec"
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-existing-schema-profile.mjs",
+    "blob": "ff4ab0cb4cd92eaa76e9e715cac319462d24c273"
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-vps-operator-binding.mjs",
+    "blob": "e06e66addfe4f27e0a507f50baac077626d37958"
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-vps-operator-action.mjs",
+    "blob": "5b984b65611f47b52fc8374fb297220c1a61e8d1"
+  },
+  {
+    "path": "scripts/opportunity-v3/vps-migration-peer.mjs",
+    "blob": "825d28b093f3c0173701c190fa78a6cebd3c0d6e"
+  },
+  {
+    "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "blob": "1bae6eb8cd7653dac4f03ab3a08c5797c4df17f7"
+  },
+  {
+    "path": "scripts/opportunity-v3/migration-plan.mjs",
+    "blob": "c6a5b74953588fce7a63ebf728fffaaa09aaf1c4"
+  },
+  {
+    "path": "scripts/opportunity-v3/atomic-migration-chain.mjs",
+    "blob": "93a3e200399e9e055eb8c85e61dcff51cfc98197"
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-history-catalog.expected.json",
+    "blob": "294e769a233b2915d2b082e3915b6cd7ce737804"
+  }
+]

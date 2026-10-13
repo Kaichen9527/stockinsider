@@ -1,0 +1,17 @@
+{
+  "schema": "single-normal-failed-rerun-v1",
+  "pr": 377,
+  "run": 38477285989,
+  "old_attempt": 1,
+  "subject": "e9c56d7cacb17f0ce5a5ea202cff09c7c49df610",
+  "base": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+  "changed_input": "genuine direct-child exact evidence596a published and remotely verified",
+  "evidence": "596a81c42947c01af90204e6dd72fd5b113e619a",
+  "rules_active": true,
+  "bypass_actors": [],
+  "requested_at": "2026-10-13T23:24:43.471848+00:00",
+  "status": "requested",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": ""
+}

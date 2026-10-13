@@ -1,0 +1,1 @@
+Root verification initially referenced nonexistent scripts/opportunity-v3/apply-candidate-migrations.mjs; git rev-parse returned128 and no complete comparison receipt was claimed. rg located the existing apply-reviewed-migrations.mjs; the corrected exact-blob comparison is separately recorded. No product/source change or test failure occurred.

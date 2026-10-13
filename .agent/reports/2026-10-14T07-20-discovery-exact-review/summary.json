@@ -1,0 +1,57 @@
+{
+  "source": "e9c56d7cacb17f0ce5a5ea202cff09c7c49df610",
+  "evidence": "596a81c42947c01af90204e6dd72fd5b113e619a",
+  "base": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+  "canonical_section_sha256": "426f47e8b7a4c8859a0de5a3cf0ff15b6ed4d63ca0ade41c83fc286003de3d74",
+  "canonical155": true,
+  "distinct_pcr31": true,
+  "browser9": true,
+  "full_range_review": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "genuine_direct_child": true,
+  "exact_ref_published": true,
+  "readonly_plan_pass": true,
+  "connectionAttempted": false,
+  "protected_attempt": 2,
+  "protected_status": "in_progress",
+  "protected_job_states": [
+    {
+      "name": "requirements",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "architecture",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "exact-review",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "stockinsider-v3-gate-bootstrap",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "product-runtime-code-gate",
+      "status": "in_progress",
+      "conclusion": ""
+    },
+    {
+      "name": "model-runner-code-gate",
+      "status": "in_progress",
+      "conclusion": ""
+    }
+  ],
+  "ready_merge_or_deploy": false,
+  "cloud_cursor": "83271615-2ee9-4bed-bd38-321f1348ab62:26",
+  "cloud_idle": true,
+  "cloud_redispatched": false,
+  "production_change": false
+}

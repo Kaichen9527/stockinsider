@@ -1,0 +1,21 @@
+{
+  "evidence": "596a81c42947c01af90204e6dd72fd5b113e619a",
+  "files": [
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+      "sha256": "f7843bf1e2cd87a707a18095343a91d23f4d32382fa05230ed5170ff12db67be",
+      "bytes": 7672
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+      "sha256": "cdfcf3defba877f5eef10560451e27ffa0e3aa7d2445500b030497aa27135031",
+      "bytes": 24824
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json",
+      "sha256": "dd4a0fa0ef105c514c7bb207a644cd9da919137a17b6eae0cff0e33c8d9ad022",
+      "bytes": 457
+    }
+  ],
+  "only_own_exact_untracked_evidence_copies_relocated": true
+}

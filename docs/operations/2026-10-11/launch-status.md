@@ -1,5 +1,18 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 07:25台灣時間：PR377新head產品普通檢查全綠，fresh exact證據已發布
+
+Remote mainaa111/progress90e49/工作樹乾淨與Cloud cursor26真idle先核，未重派。Product38477285982/job115570987074真22:27:37Z SUCCESS，Root實核新head e9c原完整job log、canonical155全PASS零fail/skip/todo/31distinctPCR、typeslintnormalbuild/migration/performance/9browser；timestamp-stripped canonical sectionSHA426f47e8b7a4c8859a0de5a3cf0ff15b6ed4d63ca0ade41c83fc286003de3d74。Checkoutmerge3ffd/fulltree2176d218仍等於head，原discovery76+10/candidate164/financial38+28+1+4 ordinary已綠不重跑，不沿376舊收據。
+
+Root full-range requirements/architecture/code integration review零P0/P1/P2，真正directchild596a81c42947c01af90204e6dd72fd5b113e619a已push subject-addressed refs/heads/evidence/source-led-opportunity-v3-exact-review-e9c56d7cacb17f0ce5a5ea202cff09c7c49df610，只新增review/PCR/attestation三檔；新PCR依本head真155section/31namedcases生成，whole-secondRFC3339保持，generator只精確改baseaa111與commitlabel，不global改日期/formatreference。Root clean reviewedMigrationPlan(e9c/596a/profile/operator)只讀真PASS/connectionAttempted:false，原49/50/actionhash保持，不是formalpeer或正式role復原。
+
+原GH rawlog讀取因terminal escape-sequence輸出保護拒絕已保存，之後明示flag僅寫檔解析，未執行log內容；Root首次readonly比對誤填不存在apply-candidate-migrations.mjs的patherror亦保存，rg核實後改原apply-reviewed-migrations.mjs完成exactblob比較，沒有產品修補或把錯路徑稱PASS。自有三份untracked evidence實際byte核對596a後保存/移置，原source樹保持乾淨；未動其他檔或批准策略。
+
+Initialprotected38477285989 attempt1缺freshref FAIL/原RED保留。在真遠端596a/directchild/sourcee9c/baseaa111/四ordinarySUCCESS/rules20177392active/bypass[]核實後23:24:43Z只一次gh rerun --failed；audit/tmp/stockinsider-pr377-protected-fresh-ref-rerun-oct14.json存在禁止再跑。Attempt2 bootstrap/requirements/exact已真SUCCESS，architecture亦已發布envelope但本次初讀job仍收尾，model/productqueued或執行、aggregate待；以新snapshotJSON為準，不能稱七項全過。先只讀終態，勿重派heavy/不再rerun/不ready。全必要正常PASS後才ready自然事件新protected，再核完整正常終態，禁止改workflow繞過。
+
+PR377仍draft/open、未ready/merge/deploy；Cloudcursor26仍idle。金融376終態不重跑，正式169/最後run-publisher0/原capacityguard待答維持最後已核，本輪無VPS/DB-role-ACL/capacity/cache/343/PTT/策略/研究排程變更。新證據`.agent/reports/2026-10-14T07-20-discovery-exact-review/`。
+
+
 ## 2026-10-14 06:25台灣時間：最小來源PR377已建立，PG17同快照普通驗收真通過
 
 Remote mainaa111／progressb8fe／工作樹乾淨先核，Cloud cursor26真idle，assembly turn01a13727 completed不重派。Newbranch codex/discovery-snapshot-release-oct14/code3b7e45ee7f73fa438c2d9d4083b870ef76183d56/deliverye9c56d7cacb17f0ce5a5ea202cff09c7c49df610，Root實核11raw/10source/5exactcopy/16transitiveinputs及完整webtree b44f239410c03a32720c2155b72c3b7f96b05782與原5fab相同，receipt1d8dbada59e24a4f96cd241c1147f1c67251f9945be512495f8b05b6c59692cf，親跑assembled76pure全PASS零fail/skip/todo。Scoped assembly/ordinaryworkflow review零新P0/P1/P2；Root未新native/build，原native10/typeslintbuild僅精確input等效，不冒稱重跑。
