@@ -1,0 +1,27 @@
+{
+  "commonPinnedActionsNodeInstallSignedPgdgSectionExactCopy": true,
+  "financialWorkflowUnchanged": true,
+  "candidateOnlyOneTestArgument": true,
+  "canonicalWorkflowPackagesLocksUnchanged": true,
+  "paths": [
+    ".github/workflows/discovery-snapshot-quality.yml",
+    "web/src/lib/discovery-frozen-snapshot-reader.ts",
+    "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+    "web/src/lib/discovery-frozen-snapshot-fixture.test-helper.ts",
+    "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs",
+    "web/src/lib/discovery-revision-publisher-reader.ts",
+    "web/src/lib/discovery-revision-publisher-reader.test.ts",
+    "web/src/lib/opportunity-v3/canonical.ts",
+    "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+    "scripts/opportunity-v3/fixtures/publication-install-README.md",
+    "deployment/vps/bootstrap-stockinsider-postgres.sql",
+    "package.json",
+    "package-lock.json",
+    "web/package.json",
+    "web/package-lock.json",
+    ".nvmrc"
+  ],
+  "oneJobSerial": true,
+  "noSecretsPersistedCheckoutCredentialsDeploymentOrProtectedChanges": true,
+  "actualNewGithubRuns": "pending, not initiated here"
+}
