@@ -113,7 +113,7 @@ export async function readDiscoveryFrozenSnapshot(client: DiscoverySnapshotClien
     if (transaction) { try { await wait(client.query('ROLLBACK')); } catch { reason=reason??'rollback_unconfirmed'; } }
     const closing=Promise.resolve().then(()=>client.end());
     closing.then(()=>{cleanup='confirmed';},()=>{cleanup='failed';});
-    try { await wait(closing); cleanup='confirmed'; } catch { reason=reason??'cleanup_unconfirmed'; }
+    try { await wait(closing); cleanup='confirmed'; } catch (error) { reason=reason??(cleanup==='confirmed' && error instanceof ReadFailure ? error.reason : 'cleanup_unconfirmed'); }
   }
   if (reason || cleanup!=='confirmed' || !result) return {status:'unsupported' as const,reason:reason??'cleanup_unconfirmed',projection:null,cleanup};
   return {status:result.projection.status,reason:result.projection.reason,...result,cleanup};
