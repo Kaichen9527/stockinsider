@@ -1,0 +1,163 @@
+[
+  {
+    "path": "migrations/20261005_financial_history_admission_v1.sql",
+    "bytes": 11994,
+    "sha256": "5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27",
+    "frozenSha256": "5494165e6163d9e63e1649f0214865f5ad4c9ffb262e00dd6073cc1be4124e27",
+    "identical": true
+  },
+  {
+    "path": "migrations/20261005_release_function_ownership_bridge_v1.sql",
+    "bytes": 5282,
+    "sha256": "d86fb28d4b23b95b1b1c97d9eedf418f8162610171e72dccc9b5a88f1fada747",
+    "frozenSha256": "d86fb28d4b23b95b1b1c97d9eedf418f8162610171e72dccc9b5a88f1fada747",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "bytes": 39430,
+    "sha256": "276a5cf14e8ff0d9bc60928fc8258a1716a4e696e10a2fabd14bba029ea3408a",
+    "frozenSha256": "276a5cf14e8ff0d9bc60928fc8258a1716a4e696e10a2fabd14bba029ea3408a",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/migration-plan.mjs",
+    "bytes": 7114,
+    "sha256": "3e628ce72d3b7411fedada3c5cb219203473da1b543bc4b98009d4291bf539d8",
+    "frozenSha256": "3e628ce72d3b7411fedada3c5cb219203473da1b543bc4b98009d4291bf539d8",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/atomic-migration-chain.mjs",
+    "bytes": 3241,
+    "sha256": "d7f372c93f8ff4dcdbc4b34295e03e6c4e04722591a3111e719b3f79409e14fd",
+    "frozenSha256": "d7f372c93f8ff4dcdbc4b34295e03e6c4e04722591a3111e719b3f79409e14fd",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "bytes": 5303,
+    "sha256": "bd5b021093fdab95ff2337206ce38ee2de05dc672ab5cac7ce756078d222882c",
+    "frozenSha256": "bd5b021093fdab95ff2337206ce38ee2de05dc672ab5cac7ce756078d222882c",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-history-install-guard.mjs",
+    "bytes": 10569,
+    "sha256": "803c6cf5a8d5c0995a7c19da16ea108dcf01b789e76ba76c89a28d5f87a578a9",
+    "frozenSha256": "803c6cf5a8d5c0995a7c19da16ea108dcf01b789e76ba76c89a28d5f87a578a9",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-history-install-guard.test.mjs",
+    "bytes": 11428,
+    "sha256": "fd6a9dc91de0a0f5114cf0b050278e873fb5460d88bc28325437816bad9fb127",
+    "frozenSha256": "fd6a9dc91de0a0f5114cf0b050278e873fb5460d88bc28325437816bad9fb127",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-history-catalog.mjs",
+    "bytes": 4657,
+    "sha256": "6277ea786b0c6fa5841f3b06ee852b647c8f6070fbdf2414500ffb0ba4f1d1b9",
+    "frozenSha256": "6277ea786b0c6fa5841f3b06ee852b647c8f6070fbdf2414500ffb0ba4f1d1b9",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-history-catalog.expected.json",
+    "bytes": 12199,
+    "sha256": "a7fb42c93786040e0f831430d1e8b869a7dde464cd3b59312db7e7c4285cf31d",
+    "frozenSha256": "a7fb42c93786040e0f831430d1e8b869a7dde464cd3b59312db7e7c4285cf31d",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-existing-schema-profile.mjs",
+    "bytes": 2916,
+    "sha256": "7141aaf6a705acaa4bfc76ef3744af871f507a803530c526d18928e567e6a7ae",
+    "frozenSha256": "7141aaf6a705acaa4bfc76ef3744af871f507a803530c526d18928e567e6a7ae",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-existing-schema-profile.test.mjs",
+    "bytes": 5066,
+    "sha256": "bcc4c6a2c663ea71e5896d2e717357428af66257a16a4b642d545e03d26ff1b3",
+    "frozenSha256": "eb08689225abf691a04dcc7f8adbdc48f8ab7f9a55bdee886ab7bc3d266481ec",
+    "identical": false
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-vps-operator-action.mjs",
+    "bytes": 3456,
+    "sha256": "c2140ca65eb87068e934b18f4f2cc5efb4c9851ba717362a57013972a9f1585f",
+    "frozenSha256": "c2140ca65eb87068e934b18f4f2cc5efb4c9851ba717362a57013972a9f1585f",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-vps-operator-binding.mjs",
+    "bytes": 2537,
+    "sha256": "a237bef3aee765a2dc1166e202f6656b9a40c87620905fedf04cbdcf0f384844",
+    "frozenSha256": "a237bef3aee765a2dc1166e202f6656b9a40c87620905fedf04cbdcf0f384844",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs",
+    "bytes": 11193,
+    "sha256": "9ab382e3a1daa73f88f4a9ff9bad0a43a7c47900d1aa62baa870f80a3431816e",
+    "frozenSha256": "9ab382e3a1daa73f88f4a9ff9bad0a43a7c47900d1aa62baa870f80a3431816e",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs",
+    "bytes": 2744,
+    "sha256": "54a657f4401a9d0981bdf72836801ce56b53b7cf7ce577f9d4025ebf75403510",
+    "frozenSha256": "54a657f4401a9d0981bdf72836801ce56b53b7cf7ce577f9d4025ebf75403510",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs",
+    "bytes": 3039,
+    "sha256": "37a778c6dcb857f1e96c38bdbb72c69ccba68d394410f2569c7f91ba452c3e5f",
+    "frozenSha256": "2195afa1eb9d6b1ef26e86880800851f95b899a0ab6f4a4941a53dfccddd9f6e",
+    "identical": false
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs",
+    "bytes": 2244,
+    "sha256": "f833627fc62b004332bf6de9b23315cee83ec152681294c0d5648a0164aa19d8",
+    "frozenSha256": "f833627fc62b004332bf6de9b23315cee83ec152681294c0d5648a0164aa19d8",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-installer-finite-profile-native.test.mjs",
+    "bytes": 28375,
+    "sha256": "77bbcddfe4dfc455f437c25793c32241b5a8c83b254676b83b4e6b5f46849049",
+    "frozenSha256": "77bbcddfe4dfc455f437c25793c32241b5a8c83b254676b83b4e6b5f46849049",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/migration-contract.test.mjs",
+    "bytes": 516977,
+    "sha256": "83953d8acc313b2b109b8ba6d5f4d52d1473a2fcd7223805d3183e8034fd108b",
+    "frozenSha256": "83953d8acc313b2b109b8ba6d5f4d52d1473a2fcd7223805d3183e8034fd108b",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/vps-migration-peer.mjs",
+    "bytes": 6693,
+    "sha256": "a488b4b25141ac5f23b6a859d2366ec2c91907441b10fd3ed810bd6c5dc695c9",
+    "frozenSha256": "a488b4b25141ac5f23b6a859d2366ec2c91907441b10fd3ed810bd6c5dc695c9",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/fixtures/publication-install-README.md",
+    "bytes": 3034,
+    "sha256": "51cb32fb8fe8e40a7fd0d27c4605156140732a03c708bcefc675217659ee37c7",
+    "frozenSha256": "51cb32fb8fe8e40a7fd0d27c4605156140732a03c708bcefc675217659ee37c7",
+    "identical": true
+  },
+  {
+    "path": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+    "bytes": 322909,
+    "sha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "frozenSha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "identical": true
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "commit": "baf2bbeafd84837f6a08475460fd2f84cf6e091b",
+    "path": ".agent/reports/2026-10-12T06-53-financial-history-extraction/receipt.json",
+    "bytes": 11463,
+    "sha256": "ea432b6e0dc1b8cce53a5365ff5e375cdcbf40b01a1cbf91d7d6d03ac62dc7fe"
+  },
+  {
+    "commit": "b48b3b0b9e9ac5464609ef6a2e2acf735a3834b2",
+    "path": ".agent/reports/2026-10-12T09-01-financial-atomic-extraction/receipt.json",
+    "bytes": 23841,
+    "sha256": "9d16cab93614efed1cab5c1b3603a417b226688d3015bc7817f3ba452b11ac34"
+  },
+  {
+    "commit": "6fec2fc54e9f35b02a65c7f6d6c6b1d298b292f6",
+    "path": ".agent/reports/2026-10-12T09-48-financial-atomic-installer/receipt.json",
+    "bytes": 12101,
+    "sha256": "63ec4927314d6a281a538fad0ca957b44295ce35ab5f06177cdac728edf39960"
+  },
+  {
+    "commit": "0dd1f36dfe80660b073aa5102f42671cec577e3a",
+    "path": ".agent/reports/2026-10-12T10-51-financial-catalog-guard/receipt.json",
+    "bytes": 55673,
+    "sha256": "27f1dd13cada25db1142b97bdc00357f0aa92f774d4959a15c390398de456c06"
+  },
+  {
+    "commit": "503bdee801dca0d0ad5c11bc759b48f28883d654",
+    "path": ".agent/reports/2026-10-12T11-50-financial-existing-schema/receipt.json",
+    "bytes": 14907,
+    "sha256": "98c8023742b4b91c45c4fac960e3df8f2a80312a0a687e8f2cbb1bc6996befd8"
+  },
+  {
+    "commit": "8cdc6ac5fb5a1e234808ca3f0de22ab1f1752d23",
+    "path": ".agent/reports/2026-10-12T12-55-financial-owner-profile/receipt.json",
+    "bytes": 6180,
+    "sha256": "63bf000b8398dadb6734484f20109ffbe1a46f9061a1967faf3755acd7d3c64c"
+  },
+  {
+    "commit": "7d6bd219b72a3867f305842245f39f89818a7686",
+    "path": ".agent/reports/2026-10-12T13-52-financial-vps-operator/receipt.json",
+    "bytes": 8121,
+    "sha256": "ae52f5afa42ea0f66d2908970d80da643be3e2d161a61958e0c96050dccd1e28"
+  },
+  {
+    "commit": "b2f1b6c30758a4e4ff9a28d938cc06c2b86976fa",
+    "path": ".agent/reports/2026-10-13T08-16-financial-postcondition-native/receipt.json",
+    "bytes": 7790,
+    "sha256": "84ebfc3c3efdc09b7b5f8a2d1f20af05e2716d95348c28bd6c3bfd0e85769c0a"
+  },
+  {
+    "commit": "f9b2ea98f4e3b2ac9be7ef601e0084b4b953f365",
+    "path": ".agent/reports/2026-10-13T09-18-financial-wrapper-audit/receipt.json",
+    "bytes": 10862,
+    "sha256": "439a0796aefad1dc29659fc6ec66814625bbe2ac7e1bd7c6d3faabafe1aca073"
+  },
+  {
+    "commit": "215d191cc11118fcdd10338586a7700b6f38c42b",
+    "path": ".agent/reports/2026-10-13T11-12-financial-finite-profile/receipt.json",
+    "bytes": 7609,
+    "sha256": "f162ee716386dbaa16a4d42d6b434e4774ffc746e3cc23ce1e56e38556ddb045"
+  }
+]

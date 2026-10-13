@@ -1,0 +1,295 @@
+{
+  "schema": "financial-chain-review-literal-successor-v1",
+  "source": {
+    "head": "996e054fb92283dc4ede45c38b6b8928eeda04de",
+    "tree": "3cee1cd884d375a3c250037305f8d05c9c536963",
+    "webTree": "08c8f0db7388a47b4cb663aa1c64ae7cc03e682f",
+    "branch": "codex/financial-installation-release-oct13",
+    "parent": "8fc10fe1edf970abfb9b73fc38e2c4b0d8d1fcaf",
+    "changedProductFiles": 2,
+    "handoffOnlyThirdFile": true,
+    "sourceManifest": "final-source-manifest.json",
+    "sourceFiles": 75
+  },
+  "window": {
+    "start": "2026-10-13T15:22:40Z",
+    "deadline": "2026-10-13T15:52:40Z",
+    "sealed": "2026-10-13T15:32:21Z",
+    "manualEngineeringNotProductRoleBudget": true
+  },
+  "repair": {
+    "function": "assertFinancialReviewBinding",
+    "samePrefixRowsCollectedBeforeUniqueExactComparison": true,
+    "hashValidationAndErrorCodeUnchanged": true,
+    "allOtherGuardBytesUnchanged": true,
+    "default48Financial49Profile50SqlCatalogOperatorHbaAuthorityPinsWorkflowsUnchanged": true,
+    "matrixInsideOriginalCase": {
+      "legalSingleExactLF_CRLF": 2,
+      "rejectedLiteralForms": 12
+    },
+    "newCaseCountNotInvented": true
+  },
+  "originalRed": {
+    "runtimeSubject": "8fc10fe1",
+    "testWip": "red-test-WIP.txt",
+    "baseline": "baseline-source.json",
+    "firstFailure": "Missing expected exception: correct then conflicting",
+    "pure": {
+      "pass": 37,
+      "fail": 1,
+      "skip": 0
+    },
+    "raw": "red-pure.stdout",
+    "rootSeparateRedProbe": "reported by root at /tmp/stockinsider-financial-review-binding-negative-oct13.*; not claimed locally executed"
+  },
+  "phases": {
+    "red-pure": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+        "scripts/opportunity-v3/financial-history-install-guard.test.mjs",
+        "scripts/opportunity-v3/financial-existing-schema-profile.test.mjs",
+        "scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs",
+        "scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs",
+        "scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs"
+      ],
+      "start_utc": "2026-10-13T15:23:49Z",
+      "seconds": 1.1106388568878174,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 59260928,
+      "min_free_bytes": 8940802048,
+      "counts": {
+        "tests": 38,
+        "pass": 37,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "red-pure.stdout",
+      "stderr": "red-pure.stderr"
+    },
+    "pure": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+        "scripts/opportunity-v3/financial-history-install-guard.test.mjs",
+        "scripts/opportunity-v3/financial-existing-schema-profile.test.mjs",
+        "scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs",
+        "scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs",
+        "scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs"
+      ],
+      "start_utc": "2026-10-13T15:24:47Z",
+      "seconds": 1.4016079902648926,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 102350848,
+      "min_free_bytes": 8940732416,
+      "counts": {
+        "tests": 38,
+        "pass": 38,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "pure.stdout",
+      "stderr": "pure.stderr"
+    },
+    "captured-run": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/financial-installer-finite-profile-native.test.mjs"
+      ],
+      "start_utc": "2026-10-13T15:25:21Z",
+      "seconds": 4.471369743347168,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 187105280,
+      "min_free_bytes": 8937570304,
+      "counts": {
+        "tests": 28,
+        "pass": 28,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "captured-run.stdout",
+      "stderr": "captured-run.stderr"
+    },
+    "hba": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs"
+      ],
+      "start_utc": "2026-10-13T15:25:56Z",
+      "seconds": 1.1032536029815674,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 116662272,
+      "min_free_bytes": 8937553920,
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "hba.stdout",
+      "stderr": "hba.stderr"
+    },
+    "financial-native": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^V3\\.16\\.16 (preserves true recollection|financial fact append)|^financial (history amendment|atomic replay rollback)",
+        "scripts/opportunity-v3/migration-contract.test.mjs"
+      ],
+      "start_utc": "2026-10-13T15:26:52Z",
+      "seconds": 3.301576852798462,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 166375424,
+      "min_free_bytes": 8937521152,
+      "counts": {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "financial-native.stdout",
+      "stderr": "financial-native.stderr"
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-13T15:27:39Z",
+      "seconds": 3.088519334793091,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 511860736,
+      "min_free_bytes": 9247514624,
+      "counts": {},
+      "stdout": "typecheck.stdout",
+      "stderr": "typecheck.stderr"
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start_utc": "2026-10-13T15:28:19Z",
+      "seconds": 22.476373434066772,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1142808576,
+      "min_free_bytes": 9247502336,
+      "counts": {},
+      "stdout": "lint.stdout",
+      "stderr": "lint.stderr"
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start_utc": "2026-10-13T15:29:14Z",
+      "seconds": 53.508832931518555,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1893240832,
+      "min_free_bytes": 8937406464,
+      "counts": {},
+      "stdout": "build.stdout",
+      "stderr": "build.stderr"
+    },
+    "tool-versions": {
+      "command": [
+        "node",
+        "/tmp/financial-release-versions.mjs"
+      ],
+      "start_utc": "2026-10-13T15:31:13Z",
+      "seconds": 0.2760133743286133,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 15360000,
+      "min_free_bytes": 8937385984,
+      "counts": {},
+      "stdout": "tool-versions.stdout",
+      "stderr": "tool-versions.stderr"
+    }
+  },
+  "freshCapturedNative": {
+    "pass": 28,
+    "fail": 0,
+    "skip": 0,
+    "rerunOnThisChangedSource": true,
+    "scope": "captured PG17.11 schema-only and synthetic local engineering principal/facts with trust executor, not production transport",
+    "fullEngineering": {
+      "firstApplyCommitted": true,
+      "secondApplyCommitted": true,
+      "fullOriginalQueryExecuted": true,
+      "nonemptyRpcRowsPreserved": true,
+      "financialCatalogExact": true,
+      "forcedRollback": true,
+      "partialConfigRejectBeforeMutation": true,
+      "realDisconnectRollback": true,
+      "competingLockReject": true,
+      "formalPeerTransportVerified": false,
+      "productionAttestation": false
+    },
+    "prior74ByteEqualityNotClaimedForSuccessor": true,
+    "inputAudit": "source-manifest.json"
+  },
+  "build": {
+    "kind": "normal npm --prefix web run build",
+    "subject": "996e054fb92283dc4ede45c38b6b8928eeda04de",
+    "buildId": "qOcuNUFydrW0mvxne1-0F",
+    "serverFiles": 1796,
+    "manifest": "compiled-server-manifest.json",
+    "newBuildNotOldArtifact": true
+  },
+  "resource": {
+    "method": "250ms sampled child process-tree RSS and workspace free; detached PG and brief peaks excluded, not a cgroup measurement",
+    "peakSampledRssBytes": 1893240832,
+    "minSampledWorkspaceFreeBytes": 8937385984,
+    "reserveBytes": 8589934592,
+    "cleanup": "cleanup.json"
+  },
+  "priorRootReportedCI": {
+    "financial38413285207": "PG17.11 38/28/1/4 PASS, prior8fc only",
+    "product38413284898": "SUCCESS, prior8fc only",
+    "protected38413287561": "FAIL missing new exact review ref; preserved not rerun"
+  },
+  "pending": [
+    "root independent exact successor review",
+    "new-head ordinary/product/protected results after normal push; not claimed old CI pass",
+    "formal fixed private peer/operator transport, production attestation and deployment approval/capacity"
+  ],
+  "notPerformed": [
+    "new PR",
+    "ready_for_review",
+    "exact-review refs or signatures",
+    "CI rerun",
+    "merge/deploy",
+    "VPS/remoteDB/HTTP/crawl/343/PTT",
+    "strategy/schedule/model execution",
+    "Chromium403 retry"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "head": "8fc10fe1edf970abfb9b73fc38e2c4b0d8d1fcaf",
+  "clean": true,
+  "start": "2026-10-13T15:22:40Z",
+  "deadline": "2026-10-13T15:52:40Z",
+  "workspaceFreeBytes": 8940810240,
+  "tmpFreeBytes": 16834117632,
+  "source": [
+    {
+      "path": "scripts/opportunity-v3/financial-history-install-guard.mjs",
+      "bytes": 10569,
+      "sha256": "803c6cf5a8d5c0995a7c19da16ea108dcf01b789e76ba76c89a28d5f87a578a9",
+      "blob": "c2f346dbafac86059a12042d98adf64d8307265b"
+    },
+    {
+      "path": "scripts/opportunity-v3/financial-history-install-guard.test.mjs",
+      "bytes": 11428,
+      "sha256": "fd6a9dc91de0a0f5114cf0b050278e873fb5460d88bc28325437816bad9fb127",
+      "blob": "5886e0c21fbdc3f134a52d773c6fae252d85b21b"
+    }
+  ]
+}

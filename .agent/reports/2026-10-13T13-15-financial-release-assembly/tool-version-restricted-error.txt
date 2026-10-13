@@ -1,0 +1,15 @@
+Verbatim relevant diagnostic output from exec tool chunk efebff (2026-10-13T13:27:39Z).
+The initial version inventory was issued in restricted execution instead of the supported child-spawn context. It was not a test/build failure. The executable actually printed its version before Node reported EPERM. The complete original tool output remains in this task's tool transcript; this file is the error extract, not an invented raw stderr capture.
+
+Error: spawnSync pg_config EPERM
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'spawnSync pg_config',
+  path: 'pg_config',
+  spawnargs: [ '--version' ],
+  status: 0,
+  output: [ null, 'PostgreSQL 17.11 (Debian 17.11-0+deb13u1)\n', '' ],
+  pid: 496840,
+  stdout: 'PostgreSQL 17.11 (Debian 17.11-0+deb13u1)\n',
+  stderr: ''
+Node.js v22.14.0

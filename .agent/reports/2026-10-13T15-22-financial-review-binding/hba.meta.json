@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs"
+  ],
+  "start_utc": "2026-10-13T15:25:56Z",
+  "seconds": 1.1032536029815674,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 116662272,
+  "min_free_bytes": 8937553920
+}
