@@ -1,0 +1,47 @@
+[
+  {
+    "path": "independent-review-and-design.md",
+    "bytes": 3480,
+    "sha256": "cca7dd7d4603d36018a13d234afc6d2783d8682f8a2d7b87a885a567a699fcaf"
+  },
+  {
+    "path": "maker-failed-writer-compaction-components.json",
+    "bytes": 355,
+    "sha256": "43727bf2fa1fa278fc948ee5760863895da80f0f6d74197dea252dab671ec9f3"
+  },
+  {
+    "path": "maker-failed-writer-immutable-acl-effective-audit.json",
+    "bytes": 3693,
+    "sha256": "b8fbd681b5b05922977565faaef170695c25bbf2621a36848c152ef712101ac4"
+  },
+  {
+    "path": "maker-failed-writer-verifier-child-predicates.json",
+    "bytes": 3438,
+    "sha256": "012e67a888d67cd5ceb03ae3a021b340db528b5a6ecc557ed534024f838e5f38"
+  },
+  {
+    "path": "maker-native-run.stdout",
+    "bytes": 5092,
+    "sha256": "73345d66e19afcfc760ed54aefffcde287eca43cb8399bc7113cb2c619977da6"
+  },
+  {
+    "path": "maker-receipt.json",
+    "bytes": 10862,
+    "sha256": "439a0796aefad1dc29659fc6ec66814625bbe2ac7e1bd7c6d3faabafe1aca073"
+  },
+  {
+    "path": "root-pure.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "root-pure.stdout",
+    "bytes": 8227,
+    "sha256": "8913fe5aaf889367df4bfe82f43bf34607fd518dcfc78acf9669dfae96af455c"
+  },
+  {
+    "path": "root-verification.json",
+    "bytes": 1407,
+    "sha256": "76c80f183efaebd8ba1c9d24f65e44a138eaa1c14a7d1f969083431d5dfb2ab7"
+  }
+]

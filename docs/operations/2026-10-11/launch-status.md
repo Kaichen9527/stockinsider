@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-13 19:15台灣時間：兩wrapper查核真閉合，最後owner錯置與等效有限ACL形狀接續修正
+
+Cloud code8dbd88b8／evidencef9b2ea98已終態，root實核57raw／223source hash/blob、receipt439a0796並親跑35pure全PASS零fail/skip/todo。Maker真native12PASS2FAIL中，兩correctlayer predicate及四SAVEPOINT負例通過；真writer PID484398/xid751確認剩餘false只ownerExpectedLegacy，其他components與7delegation子項全部true。原compactionmigration與pending2e078dfd明確owner唯一opportunity_v3_rpc_owner，不能誤查legacy或OR接受兩個。Root scoped兩lookup review零新P0/P1/P2，不是完整installer批准，firstcommit/replay仍未完成。
+
+真writer immutable依賴SECURITY INVOKER/原body/config/owner不變，五ACL全同owner grantor、不可轉授EXECUTE且PUBLIC已開；原2-entry預期本就讓anon/auth/service有效EXECUTE。Observation columns權限保持隔離。Root選下一最小唯讀契約修訂：只接受此一依賴的精確{owner,PUBLIC}或{owner,PUBLIC,anon,authenticated,service_role}兩集合，補actualgrantor並釘ownergrantor，驗完整集合才normalize原2-entry再全catalog exactcompare；其他function/table/column/RLS/trigger/index/body/config完全不放寬，未知/partial/grantable/錯grantor仍拒絕。不GRANT/REVOKE或修改正式角色。
+
+Cloud cursor15確認idle後只派單件30分鐘codex/financial-installer-finite-profile-closure-oct13/basef9b2ea98，turn01a134f6-4015-708b-bf5f-a8b54011ada3／cursor83271615-2ee9-4bed-bd38-321f1348ab62:16 active。Owned唯一ownerliteral及上述finitevalidator/grantorprojection/ADR/tests；先sealedcode，須真capturedschema firstCOMMIT/replay/fullcatalog/非空RPC/forcedrollback/drift/disconnect/競爭鎖，未完據實pending，正式peerCLI/protected另驗。活動不重派／改ownedsource。
+
+Main4ddd／正式169／既有capacityguard不變，無VPS新量測／DB變更／部署／cache刪除／343或PTT重送。來源／Top20／文章／策略／正式研究排程仍待。證據`.agent/reports/2026-10-13T19-15-financial-finite-profile-review/`。
+
 ## 2026-10-13 17:20台灣時間：SQL語法真閉合；原wrapper查核位置及金融ACL差異待精確收斂
 
 Cloud sourceae156a01／evidenceb2f1b6c3已終態，root真核90raw／221source hash/blob、receipt84ebfc3c並逐byte證明product只刪一括號，scoped此修補零新P0/P1/P2；root未新跑native/build。Maker真PG5marker語義／完整query已排除42601，forced genuine predecessor replacement＋role/catalog/非空RPCfacts回滾通過；最新native8PASS2FAIL仍因三個原predicate為false而拒絕firstcommit，與33pure/types/lint/normalbuild真綠分開，不稱完整安裝成功。Failedfirstapply資料列未另匯出，比對證據範圍保持；forcedrollbackfacts相同已獨立證明。

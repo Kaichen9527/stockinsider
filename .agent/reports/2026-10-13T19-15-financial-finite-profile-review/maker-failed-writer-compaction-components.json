@@ -1,0 +1,17 @@
+{
+  "writerTransaction": {
+    "pid": 484398,
+    "xid": "751"
+  },
+  "components": {
+    "exists": true,
+    "delegation": true,
+    "sourceCutoff": true,
+    "securityDefiner": true,
+    "noCoarseUniverse": true,
+    "ownerExpectedLegacy": false,
+    "serviceCannotVerify": true,
+    "runtimeCannotExecute": true,
+    "serviceCannotExecute": true
+  }
+}

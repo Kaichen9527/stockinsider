@@ -1,0 +1,104 @@
+TAP version 13
+# Subtest: financial installer corrected wrapper targets and writer-transaction authority audit
+    # Subtest: real PG marker predicate count0 expressionfalse -> false
+    ok 1 - real PG marker predicate count0 expressionfalse -> false
+      ---
+      duration_ms: 2.903362
+      ...
+    # Subtest: real PG marker predicate count1 expressiontrue -> false
+    ok 2 - real PG marker predicate count1 expressiontrue -> false
+      ---
+      duration_ms: 1.78881
+      ...
+    # Subtest: real PG marker predicate count2 expressiontrue -> true
+    ok 3 - real PG marker predicate count2 expressiontrue -> true
+      ---
+      duration_ms: 1.380104
+      ...
+    # Subtest: real PG marker predicate count3 expressiontrue -> false
+    ok 4 - real PG marker predicate count3 expressiontrue -> false
+      ---
+      duration_ms: 1.399252
+      ...
+    # Subtest: real PG marker predicate count2 expressionfalse -> false
+    ok 5 - real PG marker predicate count2 expressionfalse -> false
+      ---
+      duration_ms: 1.306061
+      ...
+    # Subtest: actual nonempty membership rejects before operator role mutation and rolls back
+    ok 6 - actual nonempty membership rejects before operator role mutation and rolls back
+      ---
+      duration_ms: 48.684371
+      ...
+    # Subtest: actual original bootstrap and exact LOGIN6 replay preserve authority; outer rollback
+    ok 7 - actual original bootstrap and exact LOGIN6 replay preserve authority; outer rollback
+      ---
+      duration_ms: 89.213327
+      ...
+    # Subtest: forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts
+    ok 8 - forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts
+      ---
+      duration_ms: 436.851796
+      ...
+    # Subtest: actual first apply through new opt-in profile and unchanged 49 chain
+        # Subtest: correct wrapper rejects lease119 while public outer remains
+        ok 1 - correct wrapper rejects lease119 while public outer remains
+          ---
+          duration_ms: 5.888738
+          ...
+        # Subtest: correct wrapper rejects retention-marker-removed while public outer remains
+        ok 2 - correct wrapper rejects retention-marker-removed while public outer remains
+          ---
+          duration_ms: 7.072825
+          ...
+        # Subtest: correct wrapper rejects retention-owner while public outer remains
+        ok 3 - correct wrapper rejects retention-owner while public outer remains
+          ---
+          duration_ms: 5.88396
+          ...
+        # Subtest: correct wrapper rejects retention-security-invoker while public outer remains
+        ok 4 - correct wrapper rejects retention-security-invoker while public outer remains
+          ---
+          duration_ms: 5.345508
+          ...
+        1..4
+    not ok 9 - actual first apply through new opt-in profile and unchanged 49 chain
+      ---
+      duration_ms: 648.358734
+      location: '/workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-wrapper-audit-native.test.mjs:197:11'
+      failureType: 'testCodeFailure'
+      error: 'migration_postcondition_failed'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        verifyReviewedMigrationPostconditions (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/apply-reviewed-migrations.mjs:445:77)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async applyReviewedMigrationPlanToClient (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/apply-reviewed-migrations.mjs:493:20)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-wrapper-audit-native.test.mjs:199:21)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-wrapper-audit-native.test.mjs:197:3)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    1..9
+not ok 1 - financial installer corrected wrapper targets and writer-transaction authority audit
+  ---
+  duration_ms: 2600.818843
+  location: '/workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-wrapper-audit-native.test.mjs:59:1'
+  failureType: 'testCodeFailure'
+  error: 'dependent_stages_blocked_by_first_apply'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-wrapper-audit-native.test.mjs:206:73)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 14
+# suites 0
+# pass 12
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2782.194138

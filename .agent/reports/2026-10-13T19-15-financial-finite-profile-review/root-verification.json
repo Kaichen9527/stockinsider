@@ -1,0 +1,47 @@
+{
+  "subject": "f9b2ea98f4e3b2ac9be7ef601e0084b4b953f365",
+  "codeSubject": "8dbd88b8ae8ee4518ad6f69f976f38a3238ba8aa",
+  "rawCount": 57,
+  "sourceCount": 223,
+  "receiptSha256": "439a0796aefad1dc29659fc6ec66814625bbe2ac7e1bd7c6d3faabafe1aca073",
+  "rootNativeExecuted": false,
+  "rootBuildExecuted": false,
+  "writerFindings": {
+    "actualFailedWriter": {
+      "pid": 484398,
+      "xid": "751"
+    },
+    "compactionFalseComponents": [
+      "ownerExpectedLegacy"
+    ],
+    "actualCompactionOwner": [
+      "opportunity_v3_rpc_owner"
+    ],
+    "verifierChildren": 7,
+    "allVerifierChildrenTrue": true,
+    "publicAlreadyExecuteNongrantable": true,
+    "allAclGrantorsOwner": true,
+    "routineEffectivePrivilegeScopeOnly": true,
+    "expectedTwoVsCapturedFiveNotAutomaticallyWiderPrivilege": true,
+    "exactAclExpectationStillUnchanged": true,
+    "protectedFiniteDescriptorOrReconciliationRequiresSeparateReview": true,
+    "writerLineageRecords": 64,
+    "writerTransactions": [
+      [
+        484395,
+        "750"
+      ],
+      [
+        484398,
+        "751"
+      ]
+    ],
+    "rollback": {
+      "bytes": 1438549,
+      "beforeSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "afterSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "equal": true
+    },
+    "capturedDefinitionArtifactsAreNotFailedWriterProof": true
+  }
+}
