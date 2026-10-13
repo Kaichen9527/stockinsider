@@ -33,7 +33,8 @@
         {
           "grantee": "opportunity_v3_rpc_owner",
           "grantable": false,
-          "privilege": "EXECUTE"
+          "privilege": "EXECUTE",
+          "grantor": "opportunity_v3_rpc_owner"
         }
       ],
       "name": "append_financial_fact_pre_history_v1",
@@ -54,12 +55,14 @@
         {
           "grantee": "opportunity_v3_rpc_owner",
           "grantable": false,
-          "privilege": "EXECUTE"
+          "privilege": "EXECUTE",
+          "grantor": "opportunity_v3_rpc_owner"
         },
         {
           "grantee": "service_role",
           "grantable": false,
-          "privilege": "EXECUTE"
+          "privilege": "EXECUTE",
+          "grantor": "opportunity_v3_rpc_owner"
         }
       ],
       "name": "append_financial_fact_v3",
@@ -80,12 +83,14 @@
         {
           "grantee": "legacy_correctness_rpc_owner",
           "grantable": false,
-          "privilege": "EXECUTE"
+          "privilege": "EXECUTE",
+          "grantor": "legacy_correctness_rpc_owner"
         },
         {
           "grantee": "PUBLIC",
           "grantable": false,
-          "privilege": "EXECUTE"
+          "privilege": "EXECUTE",
+          "grantor": "legacy_correctness_rpc_owner"
         }
       ],
       "name": "legacy_correctness_immutable_v3_11",
@@ -106,7 +111,8 @@
         {
           "grantee": "opportunity_v3_rpc_owner",
           "grantable": false,
-          "privilege": "EXECUTE"
+          "privilege": "EXECUTE",
+          "grantor": "opportunity_v3_rpc_owner"
         }
       ],
       "name": "prepare_opportunity_financial_fact_series_v3",
@@ -127,12 +133,14 @@
         {
           "grantee": "opportunity_v3_rpc_owner",
           "grantable": false,
-          "privilege": "EXECUTE"
+          "privilege": "EXECUTE",
+          "grantor": "opportunity_v3_rpc_owner"
         },
         {
           "grantee": "service_role",
           "grantable": false,
-          "privilege": "EXECUTE"
+          "privilege": "EXECUTE",
+          "grantor": "opportunity_v3_rpc_owner"
         }
       ],
       "name": "read_financial_history_page_v1",

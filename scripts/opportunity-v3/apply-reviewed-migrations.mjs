@@ -410,7 +410,7 @@ async function verifyReviewedMigrationPostconditions(client, options) {
       ,'v320KolClaimPayloadCompaction',to_regprocedure(
           'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
         AND public.verify_legacy_claim_delegation_chain_v3_20()
-        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
           AND pg_get_functiondef(oid) LIKE '%sourceCutoff%'
           AND pg_get_functiondef(oid) NOT LIKE '%coarseUniverseRows%'
           FROM pg_proc WHERE oid=

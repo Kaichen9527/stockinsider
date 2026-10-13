@@ -6,7 +6,7 @@ export const financialHistoryCatalogSql = `SELECT jsonb_build_object(
    'owner',pg_get_userbyid(p.proowner),'language',(SELECT lanname FROM pg_language WHERE oid=p.prolang),
    'config',p.proconfig,'securityDefiner',p.prosecdef,'volatility',p.provolatile,'strict',p.proisstrict,
    'acl',(SELECT jsonb_agg(jsonb_build_object('grantee',CASE WHEN a.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee) END,
-     'privilege',a.privilege_type,'grantable',a.is_grantable) ORDER BY a.grantee=0,CASE WHEN a.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee) END,a.privilege_type)
+     'privilege',a.privilege_type,'grantable',a.is_grantable,'grantor',pg_get_userbyid(a.grantor)) ORDER BY a.grantee=0,CASE WHEN a.grantee=0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee) END,a.privilege_type)
      FROM aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a)) ORDER BY p.proname)
    FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.proname IN(
      'prepare_opportunity_financial_fact_series_v3','append_financial_fact_v3',

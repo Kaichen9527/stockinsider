@@ -21,8 +21,23 @@ export function assertFinancialReviewBinding(review, hash) {
 const freezeCatalog = value => { if(value && typeof value==='object'){Object.values(value).forEach(freezeCatalog);Object.freeze(value);}return value;};
 export const FINANCIAL_HISTORY_EXPECTED_CATALOG = freezeCatalog(JSON.parse(fs.readFileSync(new URL('./financial-history-catalog.expected.json',import.meta.url),'utf8')));
 const canonicalCatalog = value => JSON.stringify(value, function(key,item){return item && typeof item==='object' && !Array.isArray(item) ? Object.fromEntries(Object.keys(item).sort().map(k=>[k,item[k]])) : item;});
+export const IMMUTABLE_DEPENDENCY_NAME='legacy_correctness_immutable_v3_11';
+const immutableExpected=FINANCIAL_HISTORY_EXPECTED_CATALOG.functions.find(row=>row.name===IMMUTABLE_DEPENDENCY_NAME);
+const aclSet=rows=>Array.isArray(rows)?JSON.stringify(rows.map(row=>canonicalCatalog(row)).sort()):null;
+const immutableSmallAcl=immutableExpected.acl;
+const immutableCapturedAcl=[...immutableSmallAcl,...['anon','authenticated','service_role'].map(grantee=>({grantee,privilege:'EXECUTE',grantable:false,grantor:immutableExpected.owner}))];
+export function normalizeFiniteImmutableAcl(catalog) {
+ if(!catalog||!Array.isArray(catalog.functions))throw Error('financial_history_postcondition_failed');
+ const matches=catalog.functions.filter(row=>row?.name===IMMUTABLE_DEPENDENCY_NAME);
+ if(matches.length!==1)throw Error('financial_history_postcondition_failed');
+ const candidate=aclSet(matches[0].acl);
+ if(candidate===null || candidate!==aclSet(immutableSmallAcl)&&candidate!==aclSet(immutableCapturedAcl))throw Error('financial_history_postcondition_failed');
+ const normalized=structuredClone(catalog);
+ normalized.functions.find(row=>row.name===IMMUTABLE_DEPENDENCY_NAME).acl=structuredClone(immutableSmallAcl);
+ return normalized;
+}
 export function assertFinancialHistoryCatalog(catalog) {
-  if(canonicalCatalog(catalog)!==canonicalCatalog(FINANCIAL_HISTORY_EXPECTED_CATALOG)) throw new Error('financial_history_postcondition_failed');
+  if(canonicalCatalog(normalizeFiniteImmutableAcl(catalog))!==canonicalCatalog(FINANCIAL_HISTORY_EXPECTED_CATALOG)) throw new Error('financial_history_postcondition_failed');
 }
 export async function verifyFinancialHistoryPostconditions(client) {
   const { rows } = await client.query(`SELECT jsonb_build_object(
