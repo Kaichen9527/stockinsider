@@ -1,0 +1,63 @@
+{
+  "subject": "b2f1b6c30758a4e4ff9a28d938cc06c2b86976fa",
+  "codeSubject": "ae156a0184f81fbdaef66c6a9f517a3f0fe9f867",
+  "rawCount": 90,
+  "sourceCount": 221,
+  "receiptSha256": "84ebfc3c3efdc09b7b5f8a2d1f20af05e2716d95348c28bd6c3bfd0e85769c0a",
+  "oneByteChangeVerified": true,
+  "rootNativeExecuted": false,
+  "rootBuildExecuted": false,
+  "makerLatestNative": {
+    "pass": 8,
+    "fail": 2,
+    "skip": 0,
+    "tests": 10,
+    "raw": "native-predicate-diagnostic-run.stdout",
+    "inputSourceCommit": "2b424c098d87a5b7aef82dfd3f8f29d62436a035",
+    "parentFailureIncluded": true,
+    "firstApplyCommitted": false,
+    "allFiveMarkerSemanticsPassed": true,
+    "membershipRejectionAndExactBootstrapReplayPassed": true,
+    "realForcedPredecessorReplacementRollbackPassed": true,
+    "fullOriginalQueryActuallyExecuted": true,
+    "falseOriginalPredicates": [
+      "finalClaimHandoff",
+      "v320KolRetentionBridge",
+      "v320KolClaimPayloadCompaction"
+    ]
+  },
+  "financialCatalogObserved": {
+    "exactExpectedMatch": false,
+    "exactDifferences": [
+      {
+        "path": "/functions/2/acl/length",
+        "actual": 5,
+        "expected": 2
+      },
+      {
+        "path": "/functions/2/acl/0/grantee",
+        "actual": "anon",
+        "expected": "legacy_correctness_rpc_owner"
+      },
+      {
+        "path": "/functions/2/acl/1/grantee",
+        "actual": "authenticated",
+        "expected": "PUBLIC"
+      }
+    ],
+    "problemFunction": "legacy_correctness_immutable_v3_11",
+    "actualACLGrantees": [
+      "anon",
+      "authenticated",
+      "legacy_correctness_rpc_owner",
+      "service_role",
+      "PUBLIC"
+    ],
+    "expectedACLGrantees": [
+      "legacy_correctness_rpc_owner",
+      "PUBLIC"
+    ],
+    "recordedInsideFailedTransactionBeforeRollback": true,
+    "noACLOrExpectedChange": true
+  }
+}

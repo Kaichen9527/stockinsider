@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-13 17:20台灣時間：SQL語法真閉合；原wrapper查核位置及金融ACL差異待精確收斂
+
+Cloud sourceae156a01／evidenceb2f1b6c3已終態，root真核90raw／221source hash/blob、receipt84ebfc3c並逐byte證明product只刪一括號，scoped此修補零新P0/P1/P2；root未新跑native/build。Maker真PG5marker語義／完整query已排除42601，forced genuine predecessor replacement＋role/catalog/非空RPCfacts回滾通過；最新native8PASS2FAIL仍因三個原predicate為false而拒絕firstcommit，與33pure/types/lint/normalbuild真綠分開，不稱完整安裝成功。Failedfirstapply資料列未另匯出，比對證據範圍保持；forcedrollbackfacts相同已獨立證明。
+
+Root核原48migration與pendingPR3642e078dfd：finalClaimHandoff的lease120s應查pre_kol_authority_v3_20、retentionbridgebody應查pre_source_terminal_projection_v3_20_2，保留原existence/body/owner/security/ACL條件，這兩個正確target已在pending來源。第三compaction須在同writer未rollback時逐子predicate/lineage診斷；三個saved captured-definition目前是原snapshot／rollback observer view，不能冒稱失敗交易內finalowner。金融immutable依賴的actualwriterACL5項對expected2項是另一真差異；PUBLIC已EXECUTE，不可直接把多三explicit entries等同權限增加，也不准未審查就改期待或grant/revoke。
+
+Cloud cursor13真idle後只派單件30分鐘codex/financial-installer-wrapper-audit-oct13/baseb2f1b6c3，turn01a1348d-e643-752a-b254-f5aa5c3cce32／cursor83271615-2ee9-4bed-bd38-321f1348ab62:14 inProgress。只改兩exact OIDlookup並真PG反例，下一次changedinput run捕獲writer當時剩餘根因；ACL先做effective-rights有限profile審查提案，不改permission/catalogexpected，不重跑原未改失敗。活動不重派／改ownedsource。
+
+Main4ddd／正式169／前次VPS空間guard不變，本輪無VPS新量測／SQL／部署／cache刪除／343或PTT重跑。正常protected及正式peerCLI未驗收；完整來源／Top20／文章／策略／研究排程仍待。新證據`.agent/reports/2026-10-13T17-20-financial-wrapper-reconciliation/`。
+
 ## 2026-10-13 16:20台灣時間：operator前置已接且33純測試通過，完整安裝抵達原postcondition語法錯誤
 
 Cloud codeba80121a／evidence7d6bd219已終態，root真核73raw／220source hash/blob，receipt ae52f5af並親跑33pure全PASS零fail/skip/todo。新增explicit privatepeer/operatoraction及實際sourcehash-bound literal、原authority/guard/同交易rolebootstrap、emptymembership與合法LOGIN6no-op接線；root scoped operator review零新P0/P1/P2，沒有把完整installer批准。原48/49/50SQL與hash／金融catalog期待不動。

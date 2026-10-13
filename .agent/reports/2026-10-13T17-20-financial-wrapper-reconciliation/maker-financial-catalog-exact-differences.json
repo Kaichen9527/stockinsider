@@ -1,0 +1,17 @@
+[
+  {
+    "path": "/functions/2/acl/length",
+    "actual": 5,
+    "expected": 2
+  },
+  {
+    "path": "/functions/2/acl/0/grantee",
+    "actual": "anon",
+    "expected": "legacy_correctness_rpc_owner"
+  },
+  {
+    "path": "/functions/2/acl/1/grantee",
+    "actual": "authenticated",
+    "expected": "PUBLIC"
+  }
+]

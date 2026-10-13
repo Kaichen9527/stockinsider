@@ -1,0 +1,47 @@
+[
+  {
+    "path": "current-predicate-targets.txt",
+    "bytes": 3071,
+    "sha256": "68845398f8d2ab0a6a934f0d0dee18a43abc329dd46fd6bdcc7dcc2d21133d48"
+  },
+  {
+    "path": "independent-review.md",
+    "bytes": 3665,
+    "sha256": "48b28c7bd5474f018ef50348470ffdd2df7f2c6076f623b24b72a6f22d9d3f74"
+  },
+  {
+    "path": "maker-financial-catalog-exact-differences.json",
+    "bytes": 313,
+    "sha256": "4caf6ab0216cfdb176fd72dcbb4ed41f7ea105f1d8b784b8dd15228c51339928"
+  },
+  {
+    "path": "maker-forced-replacement-witness.json",
+    "bytes": 13571,
+    "sha256": "bce5241047c68009706ad2ad90c0a5af83874c53aed80f71a9c1f454fc608af4"
+  },
+  {
+    "path": "maker-full-postcondition-predicate-values.json",
+    "bytes": 1203,
+    "sha256": "18b90909616ca52ae74c800ee95a8c8de10e97505049b4b8bf0c8b75744a4877"
+  },
+  {
+    "path": "maker-native-predicate-diagnostic-run.stdout",
+    "bytes": 4160,
+    "sha256": "385b11829a05c43cf8445974d6ed1a353f253f8908fbfb70bf35c11e4faf3334"
+  },
+  {
+    "path": "maker-receipt.json",
+    "bytes": 7790,
+    "sha256": "84ebfc3c3efdc09b7b5f8a2d1f20af05e2716d95348c28bd6c3bfd0e85769c0a"
+  },
+  {
+    "path": "pending-reference-predicate-targets.txt",
+    "bytes": 3103,
+    "sha256": "4046712ebcee03a9eacb13fa20d50046441cd767a190c5029f28a18ed970bc4f"
+  },
+  {
+    "path": "root-verification.json",
+    "bytes": 1833,
+    "sha256": "e215e6716f8c705a7042a6251e3ad5bf4a855f1f9fd476a08d5c9c7888c370f4"
+  }
+]
