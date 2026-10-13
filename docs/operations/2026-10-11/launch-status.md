@@ -1,5 +1,17 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 01:25台灣時間：binding缺口真閉合，新head普通CI全綠與fresh exactref已完成
+
+Cloud code996e054f／evidence fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55終態，cursor21真idle。Root實核78raw/75finalsource、receiptee24a4a8，原RED37PASS1FAIL與root獨立反例保持；修後Root親跑38pure零fail/skip/todo並對新module重跑原單一negative真PASS。Runtime只改prefix所有rows先枚舉再uniqueexact比較，另外test＋handoff，原48/49/50SQL/hash/defaultauthority/catalog/roles/HBA/operator/pins/workflows/web全部保持。Root full-range獨立code-integration review P0/P1/P2=0，未讓maker自簽，原8fc REQUEST_CHANGES不改成PASS。
+
+Maker此新source真38pure/28captured/1HBA/4financial/typeslintnormalbuildPASS、33既有warning/BUILD_IDqOcuNUFydrW0mvxne1-0F，沒有沿舊74byte等效引用。新head普通financial38423044805真PG17.11/38/28/1/4各零fail/skip/todo，product38423044617/job115385113558真canonical155全PASS/PCR31/type/lint/build/migration/performance/9browser。Root實際核兩log，checkoutmergeee6c6da0834d2e0357c6dad5a9c9c21670d63a7d fulltree6835188433bf52f98d0b7f6cb892c15bc9519d8a與fbc完全相同；root未新native/build，各重疊歷史不加總。
+
+Genuine fresh directchild evidence52b48944cc64b0f459e33e27ea5027aa7d18d476已push subject-addressed append-only exactref，只新增review/PCR/attestation三檔；新PCR以實際155canonicalsection hash11bdf37e+31namedcases生成。Review含唯一financial49/profile50/operatoractionliteral及原authority，正式peer/capacity/deploy仍明示pending。Root只讀reviewedMigrationPlan對clean exactsource/新evidence/profile/action真PASS，沒有connection或DB mutation。Root舊共用helper最初錯改formatreference檔名ENOENT、及第一次unpublished evidence d6ef使用毫秒timestamp被原resolver拒絕schema_mismatch，均保留WIP/實際錯誤摘要/原attestation；只修新evidence timestamp為原要求RFC3339整秒，未改resolver或政策，不把失敗改綠、不發布badref。
+
+原新headprotected38423039798 attempt1 missingref RED保存。只有真freshref發布核實後於17:18Z一次gh rerun --failed，audit/tmp/stockinsider-pr376-protected-fresh-ref-rerun-oct14.json存在禁止重複。Attempt2目前bootstrap/requirements/architecture/exact-review已真SUCCESS，model/product仍inProgress，aggregate未完成；尚未宣稱protected全PASS。PR376仍draft、未ready/merge/部署。後續先讀真終態；ready_for_review會依原workflow觸發新protected run，勿與活動heavy重疊或再手動rerun相同input。此原正常事件行為不可改workflow繞過。
+
+Main仍4ddd／正式VPS169、容量guard/待答選擇不變；沒有VPS/role/SQL/ACL/capacity/cache/343/PTT/策略或正式研究排程變更。Cloud已idle不重派相同修補。證據`.agent/reports/2026-10-14T00-20-financial-binding-closure/`。
+
 ## 2026-10-13 23:30台灣時間：PR376產品普通檢查真綠，exact審查攔下單一重複binding缺口
 
 Remote main4ddd／progress6aec／release8fc保持。Root compact核Cloud cursor19真idle後讀exacthead所有金融helper／SQL／peer／catalog／原native來源；普通product38413284898已於14:34:29Z SUCCESS，實際combinedjob canonical section155PASS零fail/skip/todo、31 distinct PCR，types/lint/normalbuild/migration/performance與9browser真完成，merge96f tree仍等於head8fc。這是8fc的普通診斷結果，不是protected PASS、新修後head結果或正式peerCLI驗收；本輪沒有重跑已綠financialquality。

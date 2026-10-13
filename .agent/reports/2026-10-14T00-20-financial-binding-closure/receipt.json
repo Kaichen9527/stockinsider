@@ -1,0 +1,81 @@
+{
+  "utc": "2026-10-13T17:19:22.656333+00:00",
+  "code": "996e054fb92283dc4ede45c38b6b8928eeda04de",
+  "subject": "fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55",
+  "tree": "6835188433bf52f98d0b7f6cb892c15bc9519d8a",
+  "makerReceiptSha256": "ee24a4a8a0e24e20fa00b68122e9904cbfdc7544585118c5a213b3a4fe1ad86c",
+  "verifiedRaw": 78,
+  "verifiedFinalSource": 75,
+  "rootPure": {
+    "pass": 38,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "rootR1OriginalNegativeNowPass": true,
+  "rootReview": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "independentOfCloudMaker": true,
+    "verdict": "PASS exact code integration; formal production private-peer/capacity/deploy pending"
+  },
+  "freshOrdinary": {
+    "financial": 38423044805,
+    "PG": "17.11",
+    "pure": 38,
+    "capturedNative": 28,
+    "HBA": 1,
+    "financialNative": 4,
+    "product": 38423044617,
+    "canonical": 155,
+    "PCR": 31,
+    "browser": 9,
+    "zeroFailuresOrSkipsInNamedSuites": true,
+    "mergeCommit": "ee6c6da0834d2e0357c6dad5a9c9c21670d63a7d",
+    "mergeTreeEqualsSubject": true
+  },
+  "freshDirectChildEvidence": "52b48944cc64b0f459e33e27ea5027aa7d18d476",
+  "originalProtectedMissingRefRun": 38423039798,
+  "changedEvidenceThenSingleFailedRerunRequested": true,
+  "protectedFinal": "pending",
+  "rootNativeBuildRun": false,
+  "productionMutation": false,
+  "protectedLatest": {
+    "attempt": 2,
+    "status": "in_progress",
+    "conclusion": "",
+    "jobs": [
+      [
+        "architecture",
+        "completed",
+        "success"
+      ],
+      [
+        "requirements",
+        "completed",
+        "success"
+      ],
+      [
+        "exact-review",
+        "completed",
+        "success"
+      ],
+      [
+        "stockinsider-v3-gate-bootstrap",
+        "completed",
+        "success"
+      ],
+      [
+        "model-runner-code-gate",
+        "completed",
+        "success"
+      ],
+      [
+        "product-runtime-code-gate",
+        "in_progress",
+        ""
+      ]
+    ]
+  }
+}

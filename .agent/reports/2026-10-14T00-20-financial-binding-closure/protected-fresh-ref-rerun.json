@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-13T17:18:04.752015+00:00",
+  "source": "fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55",
+  "newEvidence": "52b48944cc64b0f459e33e27ea5027aa7d18d476",
+  "reviewRef": "refs/heads/evidence/source-led-opportunity-v3-exact-review-fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55",
+  "runBefore": {
+    "attempt": 1,
+    "conclusion": "failure",
+    "headSha": "fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55",
+    "status": "completed"
+  },
+  "inputChanged": "new genuinely reviewed direct-child exact ref; original missing-ref RED preserved",
+  "phase": "rerun-requested",
+  "push": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": "remote: \nremote: Create a pull request for 'evidence/source-led-opportunity-v3-exact-review-fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55' on GitHub by visiting:        \nremote:      https://github.com/Kaichen9527/stockinsider/pull/new/evidence/source-led-opportunity-v3-exact-review-fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55        \nremote: \nTo github.com:Kaichen9527/stockinsider.git\n * [new branch]        52b48944cc64b0f459e33e27ea5027aa7d18d476 -> evidence/source-led-opportunity-v3-exact-review-fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55\n"
+  },
+  "remoteVerified": "52b48944cc64b0f459e33e27ea5027aa7d18d476\trefs/heads/evidence/source-led-opportunity-v3-exact-review-fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55",
+  "rerun": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+}

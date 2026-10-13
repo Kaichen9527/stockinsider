@@ -1,0 +1,19 @@
+{
+  "preservedOriginalToolResults": [
+    {
+      "stage": "first wrapper construction before PCR writer",
+      "exit": 1,
+      "error": "ENOENT /tmp/stockinsider-pcr-format-reference-oct14.json",
+      "cause": "global filename date replacement incorrectly changed existing format-only reference path; corrected to existing oct12 reference without modifying subject runtime"
+    },
+    {
+      "stage": "read-only reviewedMigrationPlan against unpublished d6ef593bc3eb18cf4aad3d59f4459473d2839367",
+      "exit": 1,
+      "error": "RuntimeInstallationError attestation_schema_mismatch",
+      "cause": "shared old evidence helper emitted reviewedAt ISO milliseconds; existing runtime resolver requires RFC3339 whole seconds",
+      "correction": "new direct-child evidence52b48944 with current genuine review time at whole-second precision; no parser/policy/subject change; original d6ef object and attestation retained",
+      "formalConnectionAttempted": false
+    }
+  ],
+  "noOriginalFailedProductResultRewritten": true
+}
