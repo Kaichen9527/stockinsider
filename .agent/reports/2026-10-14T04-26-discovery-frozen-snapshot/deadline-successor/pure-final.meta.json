@@ -1,0 +1,15 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+    "web/src/lib/discovery-revision-publisher-reader.test.ts"
+  ],
+  "start_utc": "2026-10-13T20:52:15Z",
+  "seconds": 20.734472513198853,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 120016896,
+  "min_free_bytes": 8935190528
+}

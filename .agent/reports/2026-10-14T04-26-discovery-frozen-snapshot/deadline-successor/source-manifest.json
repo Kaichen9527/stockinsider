@@ -1,0 +1,32 @@
+[
+  {
+    "path": "docs/operations/2026-10-14/discovery-frozen-snapshot-reader-handoff.md",
+    "bytes": 4467,
+    "sha256": "22b3b927a98807694adf672af105ff0cdbed6428877aa686af8393a3c2a92738",
+    "blob": "6f3e2b0bbb63dc82aaa80b549cf034c6c1444680"
+  },
+  {
+    "path": "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs",
+    "bytes": 12596,
+    "sha256": "d04c717db57677d58ad8f8c0a62a63164ac5605e8693d1aba21b488cf2a81f18",
+    "blob": "6faa47af440786f998735fe43154973ec814caee"
+  },
+  {
+    "path": "web/src/lib/discovery-frozen-snapshot-fixture.test-helper.ts",
+    "bytes": 4236,
+    "sha256": "b859618c294e9b646c35a95c694a35836697338c0c6ef9c72b3fe0848dd4ea0b",
+    "blob": "ac15271a00c3c66bd2273f4adb5ca44bff1e0e9d"
+  },
+  {
+    "path": "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+    "bytes": 6895,
+    "sha256": "c58e91392e35a02e9d9056870c091797785a770c2262b3125080674672820a28",
+    "blob": "e6d5676b78ea9cbb1cb288702b624844845bd1f0"
+  },
+  {
+    "path": "web/src/lib/discovery-frozen-snapshot-reader.ts",
+    "bytes": 12373,
+    "sha256": "62c29ca5ceb240ddd5ea848e149948f2e3174511ff3ccb02b1dda1fda486d037",
+    "blob": "0b1c1f47591cfefea0821f4cd2607f948ec6b070"
+  }
+]

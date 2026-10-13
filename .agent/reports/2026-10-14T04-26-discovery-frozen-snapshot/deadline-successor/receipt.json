@@ -1,0 +1,231 @@
+{
+  "schema": "discovery-snapshot-deadline-final-successor-v1",
+  "source": {
+    "head": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+    "tree": "52db5906546f77f1e6f7dec90a14dd9404aa5ff1",
+    "webTree": "b44f239410c03a32720c2155b72c3b7f96b05782",
+    "base": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+    "branch": "codex/discovery-frozen-snapshot-reader-oct14",
+    "changedCodeFiles": 5,
+    "originalPureCanonicalFinancialSqlSchemaRolesWorkflowUnchanged": true
+  },
+  "window": {
+    "originalStartUtc": "2026-10-13T20:26:43Z",
+    "originalDeadlineUtc": "2026-10-13T20:56:43Z",
+    "sealedUtc": "2026-10-13T20:55:39Z",
+    "notResetOrProductRoleBudget": true
+  },
+  "priorEvidence": {
+    "commit": "ad23625ad7c217dc75f152c2fcb4f2ff7fa4da6f",
+    "receipt": "../receipt.json",
+    "receiptSha256": "a0d2aaaf8305296a45af32d8fa6f7c6be5f675953305b70f2e544bda12be4708",
+    "unchangedHistorical75_10AndBuildNotRelabeled": true
+  },
+  "repair": {
+    "preQueryAndPrePostWaitMonotonicDeadlineChecks": true,
+    "lateConfirmedCleanupKeepsDeadlineReason": true,
+    "oldAdLateCloseProbeFails": true,
+    "firstSuccessor75Pass1FailReasonClassificationRedRetained": true,
+    "same10SecondDeadlineNoAssertionRelaxation": true
+  },
+  "phases": {
+    "red": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^late synchronous cleanup",
+        "web/src/lib/discovery-frozen-snapshot-reader.test.ts"
+      ],
+      "start_utc": "2026-10-13T20:50:59Z",
+      "seconds": 10.503366947174072,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 107569152,
+      "min_free_bytes": 8935313408,
+      "counts": {
+        "tests": 1,
+        "pass": 0,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "red.stdout",
+      "stderr": "red.stderr"
+    },
+    "pure": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+        "web/src/lib/discovery-revision-publisher-reader.test.ts"
+      ],
+      "start_utc": "2026-10-13T20:51:24Z",
+      "seconds": 20.780985832214355,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 132882432,
+      "min_free_bytes": 8935243776,
+      "counts": {
+        "tests": 76,
+        "pass": 75,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "pure.stdout",
+      "stderr": "pure.stderr"
+    },
+    "pure-final": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+        "web/src/lib/discovery-revision-publisher-reader.test.ts"
+      ],
+      "start_utc": "2026-10-13T20:52:15Z",
+      "seconds": 20.734472513198853,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 120016896,
+      "min_free_bytes": 8935190528,
+      "counts": {
+        "tests": 76,
+        "pass": 76,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "pure-final.stdout",
+      "stderr": "pure-final.stderr"
+    },
+    "native-run": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs"
+      ],
+      "start_utc": "2026-10-13T20:52:56Z",
+      "seconds": 4.0971128940582275,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 142958592,
+      "min_free_bytes": 9245233152,
+      "counts": {
+        "tests": 10,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "native-run.stdout",
+      "stderr": "native-run.stderr"
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-13T20:53:11Z",
+      "seconds": 3.102271795272827,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 523653120,
+      "min_free_bytes": 9245224960,
+      "counts": {},
+      "stdout": "typecheck.stdout",
+      "stderr": "typecheck.stderr"
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start_utc": "2026-10-13T20:53:33Z",
+      "seconds": 20.271649599075317,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1122201600,
+      "min_free_bytes": 9245208576,
+      "counts": {},
+      "stdout": "lint.stdout",
+      "stderr": "lint.stderr"
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start_utc": "2026-10-13T20:54:10Z",
+      "seconds": 48.22377061843872,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1897025536,
+      "min_free_bytes": 8935071744,
+      "counts": {},
+      "stdout": "build.stdout",
+      "stderr": "build.stderr"
+    }
+  },
+  "finalCounts": {
+    "pure": {
+      "pass": 76,
+      "fail": 0,
+      "skip": 0,
+      "newAdapter": 16,
+      "unchangedReader": 60
+    },
+    "native": {
+      "pass": 10,
+      "fail": 0,
+      "skip": 0,
+      "includesParent": true,
+      "freshRuntimeSubject": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+      "9ChildCases": true,
+      "capturedSchemaOnlyWithSyntheticSeedNotLive": true
+    }
+  },
+  "build": {
+    "subject": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+    "kind": "normal",
+    "id": "qMFmQWaQTx8UniDlXk7nv",
+    "serverFiles": 1796,
+    "manifest": "compiled-server-manifest.json"
+  },
+  "boundsContract": "parent handoff/scope retained; same RR readonly dedicated client, fixed SQL/allowlist/count/byte preflight/RLS visibility, six-digit UTC clocks, all retained heads, normal/error ROLLBACK/end; private packet never returned/logged",
+  "capabilities": {
+    "live_population_verified": false,
+    "investment_admission": false,
+    "independent_news_root": null,
+    "cross_platform_creator": null
+  },
+  "resources": {
+    "method": "250ms sampled process-tree RSS/workspace free; detached/brief child peaks excluded, not cgroup measurement",
+    "peakSampledRssBytes": 1897025536,
+    "minSampledWorkspaceFreeBytes": 8935071744,
+    "reserveBytes": 8589934592,
+    "cleanup": "cleanup.json"
+  },
+  "pending": [
+    "root independent review/new exact ordinary/protected results",
+    "ordinary CI additional exact test argument suggested not applied",
+    "authorized production dedicated client injection",
+    "genuine frozen run/publisher authority/manifest prerequisites: root reported no run",
+    "live population/origin/creator/candidate UI wiring"
+  ],
+  "notPerformed": [
+    "PR/reviewrefs/self signature/merge/deploy/CI rerun",
+    "VPS/remoteDB/HTTP/crawl/343/PTT/financial28",
+    "schema/roles/grants/policy/strategy/authority/financial/workflow edits",
+    "Chromium403 retry"
+  ]
+}

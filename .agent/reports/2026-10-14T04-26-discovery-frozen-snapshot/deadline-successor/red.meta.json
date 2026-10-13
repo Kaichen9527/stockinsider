@@ -1,0 +1,15 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "--test-name-pattern=^late synchronous cleanup",
+    "web/src/lib/discovery-frozen-snapshot-reader.test.ts"
+  ],
+  "start_utc": "2026-10-13T20:50:59Z",
+  "seconds": 10.503366947174072,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 107569152,
+  "min_free_bytes": 8935313408
+}
