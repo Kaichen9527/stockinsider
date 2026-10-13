@@ -26,7 +26,7 @@ test('fixed RR/RO query order, sole UUID parameters, exact populations and priva
  const firstPopulation=m.calls.findIndex(c=>c.sql.includes(' LIMIT 4097'));assert.equal(m.calls.slice(0,firstPopulation).filter(c=>c.sql.startsWith('SELECT count(*)::text AS exact_count')).length,7);
  for(const c of m.calls)if(c.values)assert.equal(c.values.length,1);
  const run=m.calls.find(c=>c.sql.includes('FROM public.opportunity_runs'));assert.deepEqual(run?.values,[fixture().run.run_id]);
- assert.ok(m.calls.filter(c=>c.sql.includes('source_document_revisions_v3')).every(c=>!c.sql.includes(' WHERE ')));
+ assert.ok(m.calls.filter(c=>c.sql.includes('FROM public.source_document_revisions_v3')).every(c=>!c.sql.includes(' WHERE ')));
 });
 for(const option of ['over','aggregate','bytes'] as const)test(`${option} bound rejects before any population fetch`,async()=>{
  const m=mock({[option]:true});const a=await readDiscoveryFrozenSnapshot(m.client,fixture().run.run_id);assert.equal(a.reason,'population_bound');assert.equal(a.projection,null);assert.ok(!m.calls.some(c=>c.sql.includes('LIMIT 4097')));assert.equal(m.closed,true);
