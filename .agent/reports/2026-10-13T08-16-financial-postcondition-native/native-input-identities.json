@@ -1,0 +1,23 @@
+{
+  "native-run": {
+    "sourceCommit": "3f41a60658ed5ec80e212da7b88f838129475a55",
+    "pass": 4,
+    "fail": 2,
+    "skip": 0,
+    "reason": "quoted-expression fixture and missing captured required stock fields"
+  },
+  "native-fixture-corrected-run": {
+    "sourceCommit": "dc3dabcaed379b71729f0e8cec8752af17cfb34b",
+    "pass": 7,
+    "fail": 3,
+    "skip": 0,
+    "reason": "wrong forced witness baseline comparison plus first original postcondition rejection"
+  },
+  "native-predicate-diagnostic-run": {
+    "sourceCommit": "2b424c098d87a5b7aef82dfd3f8f29d62436a035",
+    "pass": 8,
+    "fail": 2,
+    "skip": 0,
+    "reason": "first original postcondition rejection; parent failure included; no commit"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "pending": [
+    "successful first profile50 commit",
+    "apply twice",
+    "nonempty seed and full catalog/data",
+    "forced failure after genuine predecessor replacement",
+    "partial residue/changed config",
+    "disconnect",
+    "competing install lock"
+  ],
+  "productionAuthorityExercised": false,
+  "keychainRead": false,
+  "attestationCreated": false,
+  "roleAmendmentApplied": false,
+  "formalPeerVerified": false,
+  "ownershipBridgeApplied": false,
+  "full49Acceptance": false
+}

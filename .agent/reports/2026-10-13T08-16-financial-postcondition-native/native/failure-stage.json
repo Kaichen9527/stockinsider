@@ -1,0 +1,14 @@
+{
+  "stage": "unchanged bootstrap/schema restore",
+  "error": {
+    "name": "error",
+    "message": "null value in column \"name\" of relation \"stocks\" violates not-null constraint",
+    "code": "23502",
+    "detail": "Failing row contains (71300000-0000-4000-8000-000000000083, 9183, null, null, null, 2026-10-13 08:20:43.73052+00, 2026-10-13 08:20:43.73052+00).",
+    "schema": "public",
+    "table": "stocks",
+    "routine": "ExecConstraints"
+  },
+  "firstNativeFailure": null,
+  "lastMigration": null
+}

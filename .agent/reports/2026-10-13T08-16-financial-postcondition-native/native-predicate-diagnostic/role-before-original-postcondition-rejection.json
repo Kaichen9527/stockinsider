@@ -1,0 +1,17 @@
+{
+  "oid": "16396",
+  "name": "stockinsider_runtime_v319",
+  "login": true,
+  "super": false,
+  "config": null,
+  "inherit": false,
+  "createDb": false,
+  "bypassRls": false,
+  "createRole": false,
+  "validUntil": null,
+  "memberships": [],
+  "replication": false,
+  "passwordAbsent": true,
+  "connectionLimit": 6,
+  "objectAuthority": "07331d564d5cb01bf69baa95959967fcd7c3167a6e69fdf3d64b1bac43b1b8c0"
+}

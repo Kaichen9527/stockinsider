@@ -1,0 +1,224 @@
+{
+  "schema": "financial-installer-postcondition-native-engineering-v1",
+  "source": {
+    "head": "ae156a0184f81fbdaef66c6a9f517a3f0fe9f867",
+    "tree": "c269fb50ea7e0cf45ef15da800bda5d04304d0ae",
+    "webTree": "08c8f0db7388a47b4cb663aa1c64ae7cc03e682f",
+    "base": "7d6bd219b72a3867f305842245f39f89818a7686",
+    "branch": "codex/financial-installer-postcondition-native-oct13"
+  },
+  "window": {
+    "start": "2026-10-13T08:16:45Z",
+    "deadline": "2026-10-13T08:46:45Z",
+    "sealed": "2026-10-13T08:33:12Z",
+    "manualEngineering": true,
+    "notProductRoleBudgetProof": true
+  },
+  "productChange": {
+    "deletedBytes": 1,
+    "allOriginalPredicatesPreserved": true,
+    "oldQuerySHA256": "d4e1f1f9f106af0b953a8a1f92e6fc69effcd87f92073eef6097dbbd81fc3a84",
+    "correctedQuerySHA256": "a4f0adc971178d31273376a72958d86bc74a3a01046ddd69802d88d921b09508",
+    "sameCorrectMarkerExpressionAsPR364Exact2e": true,
+    "runtimeRolesSqlProfilesExpectedCatalogAuthorityPinsLocksUnchanged": true
+  },
+  "nativeInputs": {
+    "native-run": {
+      "sourceCommit": "3f41a60658ed5ec80e212da7b88f838129475a55",
+      "pass": 4,
+      "fail": 2,
+      "skip": 0,
+      "reason": "quoted-expression fixture and missing captured required stock fields"
+    },
+    "native-fixture-corrected-run": {
+      "sourceCommit": "dc3dabcaed379b71729f0e8cec8752af17cfb34b",
+      "pass": 7,
+      "fail": 3,
+      "skip": 0,
+      "reason": "wrong forced witness baseline comparison plus first original postcondition rejection"
+    },
+    "native-predicate-diagnostic-run": {
+      "sourceCommit": "2b424c098d87a5b7aef82dfd3f8f29d62436a035",
+      "pass": 8,
+      "fail": 2,
+      "skip": 0,
+      "reason": "first original postcondition rejection; parent failure included; no commit"
+    }
+  },
+  "results": {
+    "latestNative": {
+      "pass": 8,
+      "fail": 2,
+      "skip": 0,
+      "tests": 10,
+      "raw": "native-predicate-diagnostic-run.stdout",
+      "inputSourceCommit": "2b424c098d87a5b7aef82dfd3f8f29d62436a035",
+      "parentFailureIncluded": true,
+      "firstApplyCommitted": false,
+      "allFiveMarkerSemanticsPassed": true,
+      "membershipRejectionAndExactBootstrapReplayPassed": true,
+      "realForcedPredecessorReplacementRollbackPassed": true,
+      "fullOriginalQueryActuallyExecuted": true,
+      "falseOriginalPredicates": [
+        "finalClaimHandoff",
+        "v320KolRetentionBridge",
+        "v320KolClaimPayloadCompaction"
+      ]
+    },
+    "pure": {
+      "pass": 33,
+      "fail": 0,
+      "skip": 0,
+      "raw": "pure.stdout",
+      "inputSourceCommit": "74808171531087f914d390c3f1248907c84e5091"
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-13T08:28:22Z",
+      "seconds": 2.8305001258850098,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 501997568,
+      "min_free_bytes": 8906305536
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start_utc": "2026-10-13T08:29:03Z",
+      "seconds": 22.649836540222168,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1077112832,
+      "min_free_bytes": 8906293248
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start_utc": "2026-10-13T08:30:23Z",
+      "seconds": 51.547502756118774,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1746354176,
+      "min_free_bytes": 8596205568
+    }
+  },
+  "build": {
+    "sourceHead": "ae156a0184f81fbdaef66c6a9f517a3f0fe9f867",
+    "BUILD_ID": "aq9nGofTcc9KA3TeezF9o",
+    "serverFiles": 1796,
+    "serverManifestSHA256": "77d60bb5865bae1746a7f893dbda906e440a2aac9f969e75c8aeff2e42032a6a",
+    "normalBuild": true
+  },
+  "versions": {
+    "node": "v22.14.0",
+    "pg": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1)",
+    "pgDependency": "8.18.0",
+    "next": "16.3.4",
+    "osDerivedUSER": "agent"
+  },
+  "locks": {
+    "package-lock.json": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "web/package-lock.json": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+  },
+  "fixture": {
+    "kind": "captured VPS schema-only, unchanged bootstrap and synthetic explicit principal/stock/financial RPC input; not live/currentVPS or formal peer",
+    "gzipSHA256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "decodedSHA256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+    "formalPeerTransportVerified": false,
+    "productionAttestation": false
+  },
+  "rollback": {
+    "native-fixture-corrected": {
+      "bytes": 1438549,
+      "beforeSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "afterSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "equal": true
+    },
+    "native-predicate-diagnostic": {
+      "bytes": 1438549,
+      "beforeSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "afterSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "equal": true
+    }
+  },
+  "rollbackScope": "public functions/body/owner/config/ACL, table owner/ACL/RLS, role attrs/connlimit/config/validUntil and memberships/schemaACL; not exhaustive full catalog. Nonempty actual-RPC facts equality explicitly proved after forced rollback; failed-firstapply rows were not separately exported/asserted.",
+  "observedFinancialCatalog": {
+    "exactExpectedMatch": false,
+    "exactDifferences": [
+      {
+        "path": "/functions/2/acl/length",
+        "actual": 5,
+        "expected": 2
+      },
+      {
+        "path": "/functions/2/acl/0/grantee",
+        "actual": "anon",
+        "expected": "legacy_correctness_rpc_owner"
+      },
+      {
+        "path": "/functions/2/acl/1/grantee",
+        "actual": "authenticated",
+        "expected": "PUBLIC"
+      }
+    ],
+    "problemFunction": "legacy_correctness_immutable_v3_11",
+    "actualACLGrantees": [
+      "anon",
+      "authenticated",
+      "legacy_correctness_rpc_owner",
+      "service_role",
+      "PUBLIC"
+    ],
+    "expectedACLGrantees": [
+      "legacy_correctness_rpc_owner",
+      "PUBLIC"
+    ],
+    "recordedInsideFailedTransactionBeforeRollback": true,
+    "noACLOrExpectedChange": true
+  },
+  "pending": [
+    "first successful commit",
+    "second apply/data preservation after install",
+    "fullfinancialcatalog acceptance after exact captured ACL prerequisite review",
+    "installed partial/config rejection",
+    "actual writer disconnect/server rollback",
+    "competing shared lock",
+    "independent reconciliation of untouched finalClaimHandoff/v320KolRetentionBridge/v320KolClaimPayloadCompaction predicates",
+    "formal fixed peer CLI/effectiveHBA/exact attestation/protected/capacity/deployment"
+  ],
+  "limits": {
+    "diskReserveBytes": 8589934592,
+    "taskRSSTargetBytes": 8589934592,
+    "resourceMethod": "250ms process-tree RSS/free bytes; detached PG and brief peaks not guaranteed by this sampling, whole cgroup includes unrelated workloads",
+    "singleHeavy": true
+  },
+  "cleanup": {
+    "time": "2026-10-13T08:33:12Z",
+    "ownedActiveServices": [],
+    "ownedPgDirs": [],
+    "workspaceFreeBytes": 8595783680,
+    "tmpFreeBytes": 16834150400,
+    "cgroupCurrentBytes": 26610335744,
+    "cgroupMaxBytes": 34359738368,
+    "cgroupNotThisTasksRSS": true
+  },
+  "rawFiles": 90,
+  "rawBytes": 7414026,
+  "sourceFiles": 221,
+  "rawManifestSHA256": "e952f56b1b65dd6d215334b66028d283180b5994f97f72df11ae5eeda15c4771",
+  "sourceManifestSHA256": "f6df324db9ad24e20bf8d45316e035b6ddcd5a23add72a39e51d94bec44980c9",
+  "independentApprovalClaimed": false
+}

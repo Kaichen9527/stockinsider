@@ -1,0 +1,10 @@
+{
+  "time": "2026-10-13T08:33:12Z",
+  "ownedActiveServices": [],
+  "ownedPgDirs": [],
+  "workspaceFreeBytes": 8595783680,
+  "tmpFreeBytes": 16834150400,
+  "cgroupCurrentBytes": 26610335744,
+  "cgroupMaxBytes": 34359738368,
+  "cgroupNotThisTasksRSS": true
+}

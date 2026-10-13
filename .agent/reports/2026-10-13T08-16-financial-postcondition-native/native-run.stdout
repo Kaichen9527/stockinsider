@@ -1,0 +1,71 @@
+TAP version 13
+# Subtest: financial installer corrected postconditions and full captured-schema engineering transaction
+    # Subtest: real PG marker predicate count0 expressionfalse -> false
+    ok 1 - real PG marker predicate count0 expressionfalse -> false
+      ---
+      duration_ms: 3.915784
+      ...
+    # Subtest: real PG marker predicate count1 expressiontrue -> false
+    ok 2 - real PG marker predicate count1 expressiontrue -> false
+      ---
+      duration_ms: 3.024626
+      ...
+    # Subtest: real PG marker predicate count2 expressiontrue -> true
+    not ok 3 - real PG marker predicate count2 expressiontrue -> true
+      ---
+      duration_ms: 2.493864
+      location: '/workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:85:133'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        false !== true
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:92:99)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:85:125)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: real PG marker predicate count3 expressiontrue -> false
+    ok 4 - real PG marker predicate count3 expressiontrue -> false
+      ---
+      duration_ms: 2.866262
+      ...
+    # Subtest: real PG marker predicate count2 expressionfalse -> false
+    ok 5 - real PG marker predicate count2 expressionfalse -> false
+      ---
+      duration_ms: 1.58988
+      ...
+    1..5
+not ok 1 - financial installer corrected postconditions and full captured-schema engineering transaction
+  ---
+  duration_ms: 1743.642546
+  location: '/workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:59:1'
+  failureType: 'testCodeFailure'
+  error: 'null value in column "name" of relation "stocks" violates not-null constraint'
+  code: '23502'
+  name: 'error'
+  stack: |-
+    /workspace/cloud-attention-shadow-afa3-oct09/node_modules/pg/lib/client.js:624:17
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:96:3)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 6
+# suites 0
+# pass 4
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1965.947056

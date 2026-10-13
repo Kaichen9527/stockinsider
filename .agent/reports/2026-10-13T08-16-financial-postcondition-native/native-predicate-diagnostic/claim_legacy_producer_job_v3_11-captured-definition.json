@@ -1,0 +1,13 @@
+{
+  "acl": [
+    "postgres=X/postgres",
+    "service_role=X/postgres",
+    "stockinsider_runtime_v319=X/postgres"
+  ],
+  "name": "claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)",
+  "owner": "postgres",
+  "config": [
+    "search_path=\"\""
+  ],
+  "definition": "CREATE OR REPLACE FUNCTION public.claim_legacy_producer_job_v3_11(p_run uuid, p_job uuid, p_token uuid, p_lease integer)\n RETURNS legacy_producer_claim_v3_11\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nDECLARE\n  v_claim public.legacy_producer_claim_v3_11;\n  v_cutoff timestamptz;\n  v_prior_ledger jsonb;\nBEGIN\n  v_claim:=public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(\n    p_run,p_job,p_token,p_lease);\n  IF v_claim.run_id IS NULL OR v_claim.read_kind IS DISTINCT FROM 'candidate_funnel_input' THEN\n    RETURN v_claim;\n  END IF;\n\n  SELECT run.source_cutoff INTO STRICT v_cutoff\n  FROM public.legacy_producer_runs_v3_11 run WHERE run.run_id=v_claim.run_id;\n  v_prior_ledger:=public.read_v320_revalidated_kol_retention_internal(v_cutoff);\n\n  v_claim.read_json:=v_claim.read_json||jsonb_build_object(\n    'candidateLedgerContract','candidate-ledger-v3.20.1',\n    'candidateAuthorityContract','candidate-authority-v3.20.1',\n    'kolRetentionAuthorityContract','v3.20.1',\n    'priorLedger',v_prior_ledger);\n  v_claim.read_canonical:=convert_to(v_claim.read_json::text,'utf8');\n  v_claim.read_hash:=encode(extensions.digest(v_claim.read_canonical,'sha256'),'hex');\n  IF octet_length(v_claim.read_canonical)>3145728 THEN\n    RAISE EXCEPTION USING ERRCODE='PT413',MESSAGE='bound_violation';\n  END IF;\n  RETURN v_claim;\nEND $function$\n"
+}

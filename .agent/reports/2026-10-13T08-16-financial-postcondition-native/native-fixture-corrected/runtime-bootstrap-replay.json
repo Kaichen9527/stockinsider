@@ -1,0 +1,36 @@
+{
+  "predecessor": {
+    "oid": "16396",
+    "name": "stockinsider_runtime_v319",
+    "login": false,
+    "super": false,
+    "config": null,
+    "inherit": false,
+    "createDb": false,
+    "bypassRls": false,
+    "createRole": false,
+    "validUntil": null,
+    "memberships": [],
+    "replication": false,
+    "passwordAbsent": true,
+    "connectionLimit": -1,
+    "objectAuthority": "d9960adf58ceb9d639de4e2d45ed7ccb25a1410520083844e6cd5229a9d7bed3"
+  },
+  "changed": {
+    "oid": "16396",
+    "name": "stockinsider_runtime_v319",
+    "login": true,
+    "super": false,
+    "config": null,
+    "inherit": false,
+    "createDb": false,
+    "bypassRls": false,
+    "createRole": false,
+    "validUntil": null,
+    "memberships": [],
+    "replication": false,
+    "passwordAbsent": true,
+    "connectionLimit": 6,
+    "objectAuthority": "d9960adf58ceb9d639de4e2d45ed7ccb25a1410520083844e6cd5229a9d7bed3"
+  }
+}

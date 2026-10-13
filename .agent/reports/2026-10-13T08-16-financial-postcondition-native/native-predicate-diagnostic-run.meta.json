@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs"
+  ],
+  "start_utc": "2026-10-13T08:23:26Z",
+  "seconds": 3.034497022628784,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 175755264,
+  "min_free_bytes": 8906375168
+}

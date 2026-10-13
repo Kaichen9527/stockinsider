@@ -1,0 +1,558 @@
+[
+  {
+    "at": "2026-10-13T08:21:55.417Z",
+    "sha256": "191f6c3587eb99bc57bf2f477e9343049fc1cd185df32d6a19fb3ec458bf20a5",
+    "migration": null,
+    "kind": "SELECT pg_try_advisory_lock(hashtextextended('stockinsider-r"
+  },
+  {
+    "at": "2026-10-13T08:21:55.418Z",
+    "sha256": "a8402858d4f1e1d27afee976520485ebb4b96a5387355b823f0d0b8079729032",
+    "migration": null,
+    "kind": "BEGIN"
+  },
+  {
+    "at": "2026-10-13T08:21:55.418Z",
+    "sha256": "bcd2639091d097d5a154e2fb2084b848c78c86b652b6ab9f9f7fa5c2c1685137",
+    "migration": null,
+    "kind": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED"
+  },
+  {
+    "at": "2026-10-13T08:21:55.418Z",
+    "sha256": "035ab3619f94124d2258042d26a70465efb0266962bfaf17e8f0715f83dbdc87",
+    "migration": null,
+    "kind": "SELECT\n    to_regclass('public.opportunity_financial_observa"
+  },
+  {
+    "at": "2026-10-13T08:21:55.429Z",
+    "sha256": "c218cb96b5cd70ca6c2af122a1ba811575906e2370776cd98b826483d2307c5c",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object('oid',r.oid,'name',r.rolname,\n    "
+  },
+  {
+    "at": "2026-10-13T08:21:55.485Z",
+    "sha256": "c218cb96b5cd70ca6c2af122a1ba811575906e2370776cd98b826483d2307c5c",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object('oid',r.oid,'name',r.rolname,\n    "
+  },
+  {
+    "at": "2026-10-13T08:21:55.494Z",
+    "sha256": "aad9f6618503a04d8f2d0ec230541766dbec500925e1d22b6739f9d289433289",
+    "migration": null,
+    "kind": "ALTER ROLE stockinsider_runtime_v319 LOGIN NOINHERIT CONNECT"
+  },
+  {
+    "at": "2026-10-13T08:21:55.494Z",
+    "sha256": "c218cb96b5cd70ca6c2af122a1ba811575906e2370776cd98b826483d2307c5c",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object('oid',r.oid,'name',r.rolname,\n    "
+  },
+  {
+    "at": "2026-10-13T08:21:55.502Z",
+    "sha256": "c218cb96b5cd70ca6c2af122a1ba811575906e2370776cd98b826483d2307c5c",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object('oid',r.oid,'name',r.rolname,\n    "
+  },
+  {
+    "at": "2026-10-13T08:21:55.510Z",
+    "sha256": "c53d8a545fb8e25363be8d9ab39877e4915df3133271d553794348f16436b8f9",
+    "migration": "migrations/20261005_release_function_ownership_bridge_v1.sql",
+    "kind": "\nDO $ownership_bridge$\nDECLARE\n  v_profile record; v_functio"
+  },
+  {
+    "at": "2026-10-13T08:21:55.516Z",
+    "sha256": "1c8889374639925db3ffa07f637722fd07dbe550371194f277835c819a8cd247",
+    "migration": null,
+    "kind": "SELECT CASE\n    WHEN to_regprocedure(\n      'public.complete"
+  },
+  {
+    "at": "2026-10-13T08:21:55.575Z",
+    "sha256": "34b48cbb8b00653806864c47cc0dafd453dca350fade577608685dbabc34a9be",
+    "migration": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+    "kind": "\n\nDO $preflight$\nDECLARE\n  v_bytes bytea;\n  v_uuid text;\nBEG"
+  },
+  {
+    "at": "2026-10-13T08:21:55.776Z",
+    "sha256": "eaa37e9b6038f89452a9d53af6bd79ee35e386c5a64a6b43b37b0fc8c604b44d",
+    "migration": "migrations/20260809_product_value_recovery_v3_12.sql",
+    "kind": "-- V3.12 product-value recovery: bridge reviewed legacy obse"
+  },
+  {
+    "at": "2026-10-13T08:21:55.781Z",
+    "sha256": "80a1722820d7d825fc3a07abf223cd2c1409ff4dba8c366b1d4d6060703be608",
+    "migration": "migrations/20260809_decision_integrity_v3_13.sql",
+    "kind": "-- V3.13 decision integrity: append official point-in-time f"
+  },
+  {
+    "at": "2026-10-13T08:21:55.805Z",
+    "sha256": "098610ad275b8d04b3bc6f549014968cb46a0e1042f96793ffe19e763fb73d9d",
+    "migration": "migrations/20260811_actionability_recovery_v3_14.sql",
+    "kind": "\n\n-- V3.13 deliberately revokes CREATE after installation.  "
+  },
+  {
+    "at": "2026-10-13T08:21:55.823Z",
+    "sha256": "2d198c00813a867e68149b769475f2c68389abe284a6fd534f31bee1a6a92e07",
+    "migration": "migrations/20260813_opportunity_recovery_v3_15.sql",
+    "kind": "\n\nALTER TYPE public.source_key_v3 ADD VALUE IF NOT EXISTS 'o"
+  },
+  {
+    "at": "2026-10-13T08:21:55.828Z",
+    "sha256": "ed5ea23da81758e17a4061be90787030316b1c0cb7b9f041a23cbc2fdfb0bde7",
+    "migration": "migrations/20260814_official_ingestion_chunk_apply_v3_15.sql",
+    "kind": "-- StockInsider V3.15 production repair: apply bounded offic"
+  },
+  {
+    "at": "2026-10-13T08:21:55.830Z",
+    "sha256": "f7f328374bf2b481fc2211ee653c2447b8fc0584a780bdd8056ffb6365a328c8",
+    "migration": "migrations/20260816_claim_handoff_lease_v3_16.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_ow"
+  },
+  {
+    "at": "2026-10-13T08:21:55.831Z",
+    "sha256": "51763a685fbb377fab4d7ffce1a33eb232106c0a28307f8fa66cb9106a6785f7",
+    "migration": "migrations/20260816_official_ingestion_partial_resume_v3_16.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_ow"
+  },
+  {
+    "at": "2026-10-13T08:21:55.831Z",
+    "sha256": "afbf4947bc9ea6025dbf7c97b377c6aeba1c7b291be12c4d9aee25bda30412df",
+    "migration": "migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;"
+  },
+  {
+    "at": "2026-10-13T08:21:55.833Z",
+    "sha256": "963e344b64a94c5606058aeb83237aea2c0de04d49558722ff6f8ea0bcda7c9e",
+    "migration": "migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql",
+    "kind": "\n\nALTER FUNCTION public.resolve_legacy_trading_session_depen"
+  },
+  {
+    "at": "2026-10-13T08:21:55.834Z",
+    "sha256": "6fcf7bff04d60dae1cf545036597b4a8042d15108ccc7b09ad77fb05e3dfc290",
+    "migration": "migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql",
+    "kind": "\n\n-- PostgreSQL requires the new owner to retain CREATE on t"
+  },
+  {
+    "at": "2026-10-13T08:21:55.836Z",
+    "sha256": "55cfb8f9a432790acad7d8350338bdf74a2c5ef224c936c9ebf31ed2187660f3",
+    "migration": "migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql",
+    "kind": "\n\n-- PostgreSQL requires the target owner to hold CREATE on "
+  },
+  {
+    "at": "2026-10-13T08:21:55.837Z",
+    "sha256": "e4b9fa624ff2f3e4a60a84beb40d125b8c712a61e340dcb597227173d63b4a92",
+    "migration": "migrations/20260816_analysis_payload_reuse_v3_16_15.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_ow"
+  },
+  {
+    "at": "2026-10-13T08:21:55.839Z",
+    "sha256": "51f8cbf3915cb7ad650ba8794615ead9cf7f8770a48f66c363e67e7588ef44df",
+    "migration": "migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;"
+  },
+  {
+    "at": "2026-10-13T08:21:55.839Z",
+    "sha256": "51760e3353841f0113318b75fb19ca80e5e273b63ca49462c7d991f44bb1dc9c",
+    "migration": null,
+    "kind": "SELECT pg_get_functiondef('public.append_financial_fact_v3(p"
+  },
+  {
+    "at": "2026-10-13T08:21:55.840Z",
+    "sha256": "c218cb96b5cd70ca6c2af122a1ba811575906e2370776cd98b826483d2307c5c",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object('oid',r.oid,'name',r.rolname,\n    "
+  },
+  {
+    "at": "2026-10-13T08:21:55.852Z",
+    "sha256": "587fa628a9fe4642ac0e22825a97e81d388af674f7251a9fb699f96901dcb710",
+    "migration": null,
+    "kind": "ROLLBACK"
+  },
+  {
+    "at": "2026-10-13T08:21:55.854Z",
+    "sha256": "b6263222023173926d2216bd0bccb82a56b8ee5093bd4430a0ae04e4c2ba6bd7",
+    "migration": null,
+    "kind": "SELECT pg_advisory_unlock(hashtextextended('stockinsider-rev"
+  },
+  {
+    "at": "2026-10-13T08:21:55.866Z",
+    "sha256": "191f6c3587eb99bc57bf2f477e9343049fc1cd185df32d6a19fb3ec458bf20a5",
+    "migration": null,
+    "kind": "SELECT pg_try_advisory_lock(hashtextextended('stockinsider-r"
+  },
+  {
+    "at": "2026-10-13T08:21:55.870Z",
+    "sha256": "a8402858d4f1e1d27afee976520485ebb4b96a5387355b823f0d0b8079729032",
+    "migration": null,
+    "kind": "BEGIN"
+  },
+  {
+    "at": "2026-10-13T08:21:55.870Z",
+    "sha256": "bcd2639091d097d5a154e2fb2084b848c78c86b652b6ab9f9f7fa5c2c1685137",
+    "migration": null,
+    "kind": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED"
+  },
+  {
+    "at": "2026-10-13T08:21:55.870Z",
+    "sha256": "035ab3619f94124d2258042d26a70465efb0266962bfaf17e8f0715f83dbdc87",
+    "migration": null,
+    "kind": "SELECT\n    to_regclass('public.opportunity_financial_observa"
+  },
+  {
+    "at": "2026-10-13T08:21:55.875Z",
+    "sha256": "c218cb96b5cd70ca6c2af122a1ba811575906e2370776cd98b826483d2307c5c",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object('oid',r.oid,'name',r.rolname,\n    "
+  },
+  {
+    "at": "2026-10-13T08:21:55.886Z",
+    "sha256": "c218cb96b5cd70ca6c2af122a1ba811575906e2370776cd98b826483d2307c5c",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object('oid',r.oid,'name',r.rolname,\n    "
+  },
+  {
+    "at": "2026-10-13T08:21:55.895Z",
+    "sha256": "aad9f6618503a04d8f2d0ec230541766dbec500925e1d22b6739f9d289433289",
+    "migration": null,
+    "kind": "ALTER ROLE stockinsider_runtime_v319 LOGIN NOINHERIT CONNECT"
+  },
+  {
+    "at": "2026-10-13T08:21:55.895Z",
+    "sha256": "c218cb96b5cd70ca6c2af122a1ba811575906e2370776cd98b826483d2307c5c",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object('oid',r.oid,'name',r.rolname,\n    "
+  },
+  {
+    "at": "2026-10-13T08:21:55.903Z",
+    "sha256": "c218cb96b5cd70ca6c2af122a1ba811575906e2370776cd98b826483d2307c5c",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object('oid',r.oid,'name',r.rolname,\n    "
+  },
+  {
+    "at": "2026-10-13T08:21:55.911Z",
+    "sha256": "c53d8a545fb8e25363be8d9ab39877e4915df3133271d553794348f16436b8f9",
+    "migration": "migrations/20261005_release_function_ownership_bridge_v1.sql",
+    "kind": "\nDO $ownership_bridge$\nDECLARE\n  v_profile record; v_functio"
+  },
+  {
+    "at": "2026-10-13T08:21:55.919Z",
+    "sha256": "1c8889374639925db3ffa07f637722fd07dbe550371194f277835c819a8cd247",
+    "migration": null,
+    "kind": "SELECT CASE\n    WHEN to_regprocedure(\n      'public.complete"
+  },
+  {
+    "at": "2026-10-13T08:21:55.953Z",
+    "sha256": "34b48cbb8b00653806864c47cc0dafd453dca350fade577608685dbabc34a9be",
+    "migration": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+    "kind": "\n\nDO $preflight$\nDECLARE\n  v_bytes bytea;\n  v_uuid text;\nBEG"
+  },
+  {
+    "at": "2026-10-13T08:21:56.147Z",
+    "sha256": "eaa37e9b6038f89452a9d53af6bd79ee35e386c5a64a6b43b37b0fc8c604b44d",
+    "migration": "migrations/20260809_product_value_recovery_v3_12.sql",
+    "kind": "-- V3.12 product-value recovery: bridge reviewed legacy obse"
+  },
+  {
+    "at": "2026-10-13T08:21:56.152Z",
+    "sha256": "80a1722820d7d825fc3a07abf223cd2c1409ff4dba8c366b1d4d6060703be608",
+    "migration": "migrations/20260809_decision_integrity_v3_13.sql",
+    "kind": "-- V3.13 decision integrity: append official point-in-time f"
+  },
+  {
+    "at": "2026-10-13T08:21:56.174Z",
+    "sha256": "098610ad275b8d04b3bc6f549014968cb46a0e1042f96793ffe19e763fb73d9d",
+    "migration": "migrations/20260811_actionability_recovery_v3_14.sql",
+    "kind": "\n\n-- V3.13 deliberately revokes CREATE after installation.  "
+  },
+  {
+    "at": "2026-10-13T08:21:56.190Z",
+    "sha256": "2d198c00813a867e68149b769475f2c68389abe284a6fd534f31bee1a6a92e07",
+    "migration": "migrations/20260813_opportunity_recovery_v3_15.sql",
+    "kind": "\n\nALTER TYPE public.source_key_v3 ADD VALUE IF NOT EXISTS 'o"
+  },
+  {
+    "at": "2026-10-13T08:21:56.194Z",
+    "sha256": "ed5ea23da81758e17a4061be90787030316b1c0cb7b9f041a23cbc2fdfb0bde7",
+    "migration": "migrations/20260814_official_ingestion_chunk_apply_v3_15.sql",
+    "kind": "-- StockInsider V3.15 production repair: apply bounded offic"
+  },
+  {
+    "at": "2026-10-13T08:21:56.196Z",
+    "sha256": "f7f328374bf2b481fc2211ee653c2447b8fc0584a780bdd8056ffb6365a328c8",
+    "migration": "migrations/20260816_claim_handoff_lease_v3_16.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_ow"
+  },
+  {
+    "at": "2026-10-13T08:21:56.197Z",
+    "sha256": "51763a685fbb377fab4d7ffce1a33eb232106c0a28307f8fa66cb9106a6785f7",
+    "migration": "migrations/20260816_official_ingestion_partial_resume_v3_16.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_ow"
+  },
+  {
+    "at": "2026-10-13T08:21:56.198Z",
+    "sha256": "afbf4947bc9ea6025dbf7c97b377c6aeba1c7b291be12c4d9aee25bda30412df",
+    "migration": "migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;"
+  },
+  {
+    "at": "2026-10-13T08:21:56.200Z",
+    "sha256": "963e344b64a94c5606058aeb83237aea2c0de04d49558722ff6f8ea0bcda7c9e",
+    "migration": "migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql",
+    "kind": "\n\nALTER FUNCTION public.resolve_legacy_trading_session_depen"
+  },
+  {
+    "at": "2026-10-13T08:21:56.200Z",
+    "sha256": "6fcf7bff04d60dae1cf545036597b4a8042d15108ccc7b09ad77fb05e3dfc290",
+    "migration": "migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql",
+    "kind": "\n\n-- PostgreSQL requires the new owner to retain CREATE on t"
+  },
+  {
+    "at": "2026-10-13T08:21:56.203Z",
+    "sha256": "55cfb8f9a432790acad7d8350338bdf74a2c5ef224c936c9ebf31ed2187660f3",
+    "migration": "migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql",
+    "kind": "\n\n-- PostgreSQL requires the target owner to hold CREATE on "
+  },
+  {
+    "at": "2026-10-13T08:21:56.204Z",
+    "sha256": "e4b9fa624ff2f3e4a60a84beb40d125b8c712a61e340dcb597227173d63b4a92",
+    "migration": "migrations/20260816_analysis_payload_reuse_v3_16_15.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_ow"
+  },
+  {
+    "at": "2026-10-13T08:21:56.205Z",
+    "sha256": "51f8cbf3915cb7ad650ba8794615ead9cf7f8770a48f66c363e67e7588ef44df",
+    "migration": "migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;"
+  },
+  {
+    "at": "2026-10-13T08:21:56.205Z",
+    "sha256": "87e5fe90bd35b5ca5122a0ad3214ea5b2f2067ffd5608559065e49f46ec4e0af",
+    "migration": "migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_ow"
+  },
+  {
+    "at": "2026-10-13T08:21:56.206Z",
+    "sha256": "f584c0fb306864aeab42d1e41bddceed091d46b342cd5aeef5fc87f94fb151db",
+    "migration": "migrations/20260817_runtime_health_bootstrap_v3_16_19.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_ow"
+  },
+  {
+    "at": "2026-10-13T08:21:56.207Z",
+    "sha256": "6c77f9c309aac9c0260be003496e7eda3004e65fcc9f5a48e6837bdfce5b5fb8",
+    "migration": "migrations/20260817_evaluation_clock_v3_16_20.sql",
+    "kind": "\n\nGRANT USAGE, CREATE ON SCHEMA public TO legacy_correctness"
+  },
+  {
+    "at": "2026-10-13T08:21:56.208Z",
+    "sha256": "bd0bc9f8f68990a49b5268dabcc99103653464d41e5e68c1bb5923df2ee8b7c2",
+    "migration": "migrations/20260817_provider_acquisition_v3_16_21.sql",
+    "kind": "\n\nGRANT USAGE, CREATE ON SCHEMA public TO legacy_correctness"
+  },
+  {
+    "at": "2026-10-13T08:21:56.210Z",
+    "sha256": "1be18f0624b23500129e278203deecd96c396ddd3c4a6370c53f686290c5d879",
+    "migration": "migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;"
+  },
+  {
+    "at": "2026-10-13T08:21:56.212Z",
+    "sha256": "4cf1bc8ded773420b8dce43a7b7f343fd03fc63350151f2ec85e6c46ff21b8b8",
+    "migration": "migrations/20260817_projection_evaluation_supersession_v3_16_21.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_ow"
+  },
+  {
+    "at": "2026-10-13T08:21:56.213Z",
+    "sha256": "055387888332905fb35910469896070b0c95d99a1523b95a1c933a9d613539ee",
+    "migration": "migrations/20260822_candidate_ledger_retention_v3_18.sql",
+    "kind": "\n\n-- V3.18 keeps the complete immutable candidate object fro"
+  },
+  {
+    "at": "2026-10-13T08:21:56.214Z",
+    "sha256": "f13d248bf97ef7270b39d5925314a88aeab099ed4bda26e4d86dd1e3a4a93e9a",
+    "migration": "migrations/20260823_release_reconciliation_v3_19.sql",
+    "kind": "\n\n-- V3.19 records release progress separately from producer"
+  },
+  {
+    "at": "2026-10-13T08:21:56.219Z",
+    "sha256": "f58049b77f65d91bc9577be893e37c9229db172b5a5293a5d0d9d07ba76e791b",
+    "migration": "migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql",
+    "kind": "\n\n-- The runtime has emitted this closed typed outcome since"
+  },
+  {
+    "at": "2026-10-13T08:21:56.220Z",
+    "sha256": "344d24bca7aab1ba32e3f6937757d7552527db56ca9e2787d272fc6d27e981de",
+    "migration": "migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;"
+  },
+  {
+    "at": "2026-10-13T08:21:56.222Z",
+    "sha256": "6a1c5356d7627b826b51bd36fcfd212d1977d466493c7e2509c54ec5e35c7752",
+    "migration": "migrations/20260828_legacy_evaluation_schema_v3_19_6.sql",
+    "kind": "\n\nGRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;"
+  },
+  {
+    "at": "2026-10-13T08:21:56.222Z",
+    "sha256": "217d2765994f44f74a5a10837e390916d68ed90c117eb4eb5af8383f0f9c2fd0",
+    "migration": "migrations/20260828_reused_acquisition_lineage_v3_19_7.sql",
+    "kind": "\n\nGRANT USAGE, CREATE ON SCHEMA public TO legacy_correctness"
+  },
+  {
+    "at": "2026-10-13T08:21:56.224Z",
+    "sha256": "a6bf1cfcdef77d1dda99200793d7a8b6ec8a6be9865fd0c402f03f393b88d76e",
+    "migration": "migrations/20260828_candidate_retention_authority_v3_19_10.sql",
+    "kind": "\n\n-- V3.18 preserves the full prior candidate object so cita"
+  },
+  {
+    "at": "2026-10-13T08:21:56.225Z",
+    "sha256": "4b964a286f11f72e3f36830fb337f899ebedf2a25c53ac87ebffbae20379b54c",
+    "migration": "migrations/20260828_full_candidate_retention_authority_v3_19_11.sql",
+    "kind": "\n\n-- V3.19.7 restored current-run acquisition lineage by rep"
+  },
+  {
+    "at": "2026-10-13T08:21:56.226Z",
+    "sha256": "6cd3f0b925d3404e35ec2a6116521b03cebdeb872f4112aa0c6796796bcf9104",
+    "migration": "migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql",
+    "kind": "\n\n-- V3.19.11 used max(jsonb) while selecting the sole succe"
+  },
+  {
+    "at": "2026-10-13T08:21:56.228Z",
+    "sha256": "96894301d16cbfebd44d9ccae163a6edc2f962228fb5e985c06a73e48f0ea54f",
+    "migration": "migrations/20260828_final_claim_handoff_lease_v3_19_16.sql",
+    "kind": "\n\n-- Every claim wrapper added after V3.16 can materialize a"
+  },
+  {
+    "at": "2026-10-13T08:21:56.230Z",
+    "sha256": "ce54f0e2f6b52f90124891b6e7d1b12a7d95bc007cc45e0403c9338b310a362d",
+    "migration": "migrations/20260828_kol_first_runtime_recovery_v3_20.sql",
+    "kind": "\n\n-- A lease expiry is an operational terminal state, not a "
+  },
+  {
+    "at": "2026-10-13T08:21:56.235Z",
+    "sha256": "7c2a3c0d24842fb329e0ade754823b5fd2237b0312547e380a34116612a1bb12",
+    "migration": "migrations/20260829_v320_source_completion_cardinality_repair.sql",
+    "kind": "\n\n-- V3.20 widened the source matrix from three connectors t"
+  },
+  {
+    "at": "2026-10-13T08:21:56.238Z",
+    "sha256": "fec29a477957cca5c74794572c34265c6e9d14705885d474a3ab4b35bad352d2",
+    "migration": "migrations/20260829_v320_kol_source_authority_seed.sql",
+    "kind": "\n\n-- V3.20 widened the frozen acquisition matrix to five con"
+  },
+  {
+    "at": "2026-10-13T08:21:56.245Z",
+    "sha256": "6aed4d3acd6fb35ec39e8d6011735685255e9e5f46c2f75a19969a756da47cf1",
+    "migration": "migrations/20260829_v320_kol_projection_marker.sql",
+    "kind": "\n\n-- Preserve source_sync's immutable KOL-first marker when "
+  },
+  {
+    "at": "2026-10-13T08:21:56.246Z",
+    "sha256": "c8497edc6689775be27485113d610aafce9bbd0c13b22b9825e2f128ea22c2d8",
+    "migration": "migrations/20260830_v320_kol_retention_bridge.sql",
+    "kind": "\n\n-- V3.20 deliberately stopped using the previous Radar pay"
+  },
+  {
+    "at": "2026-10-13T08:21:56.248Z",
+    "sha256": "689f42ac7ce753edc3de343027e6eaf53cf98a7132aa9528a110f7b8433d8356",
+    "migration": "migrations/20260830_v320_expired_unclaimed_run_reaper.sql",
+    "kind": "-- V3.20.2: a worker can be interrupted after the run lease "
+  },
+  {
+    "at": "2026-10-13T08:21:56.248Z",
+    "sha256": "da2d2262ac5bfd46a9083f8dd2a0c6bca9fbb1de3679a9efe299619e8b839573",
+    "migration": "migrations/20260830_v320_kol_claim_payload_compaction.sql",
+    "kind": "\n\n-- V3.15 appended an active-market coarse universe to ever"
+  },
+  {
+    "at": "2026-10-13T08:21:56.249Z",
+    "sha256": "66e135973b65b0878f39a907ad826b32c348584e6b014937abfd220d1c8f239a",
+    "migration": "migrations/20260830_v320_kol_retention_owner_boundary.sql",
+    "kind": "\n\n-- V3.20.3: the KOL retention reader belongs to the legacy"
+  },
+  {
+    "at": "2026-10-13T08:21:56.251Z",
+    "sha256": "41e3706bd3937dc5484c711753ddd87b717ef332dac17455d60e303d781a81da",
+    "migration": "migrations/20260909_official_financial_validation_receipts.sql",
+    "kind": "\nALTER TABLE public.opportunity_financial_facts_v3 ADD COLUM"
+  },
+  {
+    "at": "2026-10-13T08:21:56.253Z",
+    "sha256": "6a567654b8fe3951d08e5ada8d94ffff1997961494f1c7650040d87bdb706918",
+    "migration": "migrations/20260911_v320_source_terminal_projection_authority.sql",
+    "kind": "\n\n-- Make the final compact projection consume the immutable"
+  },
+  {
+    "at": "2026-10-13T08:21:56.255Z",
+    "sha256": "06c1e220b31d56860788eac680a1d9a372a3e732812d3fd33216c178d9b08214",
+    "migration": "migrations/20260911_candidate_financial_fact_manifest_v8.sql",
+    "kind": "\n\nALTER TABLE public.candidate_financial_document_receipts_v"
+  },
+  {
+    "at": "2026-10-13T08:21:56.259Z",
+    "sha256": "67f93e367d281864daa35c0e04a24adda7ce85c54e93c32fac6a8002f86185fa",
+    "migration": "migrations/20260911_02_financial_field_work_fairness.sql",
+    "kind": "\nALTER TABLE public.candidate_financial_acquisition_jobs_v4\n"
+  },
+  {
+    "at": "2026-10-13T08:21:56.261Z",
+    "sha256": "c3fcba6e1f5ecbb3605109f6a25002b61f4c402c8b340e76b4e91a6f6d4ac5c6",
+    "migration": "migrations/20260911_03_financial_document_job_links.sql",
+    "kind": "\nCREATE TABLE IF NOT EXISTS public.candidate_financial_docum"
+  },
+  {
+    "at": "2026-10-13T08:21:56.264Z",
+    "sha256": "29cd64492ef1ceed50fbdbf2a75ee16182a1e908a91afac068dc6378151b0e94",
+    "migration": "migrations/20260911_04_taiwan_candidate_refresh_queue.sql",
+    "kind": "\n\n-- Resolve each authority stream before applying its curre"
+  },
+  {
+    "at": "2026-10-13T08:21:56.266Z",
+    "sha256": "543212201dc208cd697003bf1af6ce3c5da30ecdc2e52a259084602de8d2c4b9",
+    "migration": "migrations/20260911_candidate_history_backfill_v1.sql",
+    "kind": "\n\nCREATE TABLE IF NOT EXISTS public.candidate_history_backfi"
+  },
+  {
+    "at": "2026-10-13T08:21:56.268Z",
+    "sha256": "e3d05ddf581745bebfeecedc62eda2ac2055329c9c65a2dcd3892381ae14b9f8",
+    "migration": "migrations/20260911_05_financial_fact_isolation_v10.sql",
+    "kind": "\n\nALTER TABLE public.candidate_financial_parser_evidence_v8\n"
+  },
+  {
+    "at": "2026-10-13T08:21:56.274Z",
+    "sha256": "41f402a67a29f8c42fb0d0ee0aa6c7eee5ddca0103730e2fb2e7098704f2ae11",
+    "migration": "migrations/20260924_entry_plan_official_action_symbols.sql",
+    "kind": "-- The exchange corporate-action feed includes ordinary shar"
+  },
+  {
+    "at": "2026-10-13T08:21:56.278Z",
+    "sha256": "1851d1410348b5ec6c90ff95ea08702fea1c42f90263fb746c7d5ab0bcea9129",
+    "migration": "migrations/20261005_financial_history_admission_v1.sql",
+    "kind": "\nGRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;\n"
+  },
+  {
+    "at": "2026-10-13T08:21:56.282Z",
+    "sha256": "a4f0adc971178d31273376a72958d86bc74a3a01046ddd69802d88d921b09508",
+    "migration": null,
+    "kind": "SELECT jsonb_build_object(\n      'v314Diagnostics',to_regcla"
+  },
+  {
+    "at": "2026-10-13T08:21:56.286Z",
+    "sha256": "587fa628a9fe4642ac0e22825a97e81d388af674f7251a9fb699f96901dcb710",
+    "migration": null,
+    "kind": "ROLLBACK"
+  },
+  {
+    "at": "2026-10-13T08:21:56.288Z",
+    "sha256": "b6263222023173926d2216bd0bccb82a56b8ee5093bd4430a0ae04e4c2ba6bd7",
+    "migration": null,
+    "kind": "SELECT pg_advisory_unlock(hashtextextended('stockinsider-rev"
+  },
+  {
+    "at": "2026-10-13T08:21:56.351Z",
+    "sha256": "587fa628a9fe4642ac0e22825a97e81d388af674f7251a9fb699f96901dcb710",
+    "migration": null,
+    "kind": "ROLLBACK",
+    "error": {
+      "name": "Error",
+      "message": "Client was closed and is not queryable"
+    }
+  }
+]

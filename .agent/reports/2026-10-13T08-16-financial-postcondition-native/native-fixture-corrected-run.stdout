@@ -1,0 +1,216 @@
+TAP version 13
+# Subtest: financial installer corrected postconditions and full captured-schema engineering transaction
+    # Subtest: real PG marker predicate count0 expressionfalse -> false
+    ok 1 - real PG marker predicate count0 expressionfalse -> false
+      ---
+      duration_ms: 4.269144
+      ...
+    # Subtest: real PG marker predicate count1 expressiontrue -> false
+    ok 2 - real PG marker predicate count1 expressiontrue -> false
+      ---
+      duration_ms: 1.745945
+      ...
+    # Subtest: real PG marker predicate count2 expressiontrue -> true
+    ok 3 - real PG marker predicate count2 expressiontrue -> true
+      ---
+      duration_ms: 1.391971
+      ...
+    # Subtest: real PG marker predicate count3 expressiontrue -> false
+    ok 4 - real PG marker predicate count3 expressiontrue -> false
+      ---
+      duration_ms: 1.292691
+      ...
+    # Subtest: real PG marker predicate count2 expressionfalse -> false
+    ok 5 - real PG marker predicate count2 expressionfalse -> false
+      ---
+      duration_ms: 1.26554
+      ...
+    # Subtest: actual nonempty membership rejects before operator role mutation and rolls back
+    ok 6 - actual nonempty membership rejects before operator role mutation and rolls back
+      ---
+      duration_ms: 56.417405
+      ...
+    # Subtest: actual original bootstrap and exact LOGIN6 replay preserve authority; outer rollback
+    ok 7 - actual original bootstrap and exact LOGIN6 replay preserve authority; outer rollback
+      ---
+      duration_ms: 110.956746
+      ...
+    # Subtest: forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts
+    not ok 8 - forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts
+      ---
+      duration_ms: 447.662434
+      location: '/workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:129:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        The input did not match the regular expression /synthetic_forced_failure_after_genuine_replacement/u. Input:
+        
+        'AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:\n' +
+          '\n' +
+          "'CREATE OR REPLACE FUNCTION public.append_financial_fact_v3(input financial_fact_input_v3, caller_principal uuid)\\n' +\n" +
+          "  ' RETURNS TABLE(fact_id uuid, recorded_at timestamp with time zone)\\n' +\n" +
+          "  ' LANGUAGE plpgsql\\n' +\n" +
+          "  ' SECURITY DEFINER\\n' +\n" +
+          `  " SET search_path TO ''\\n" +\n` +
+          "  'AS $function$\\n' +\n" +
+          "  'DECLARE v_now timestamptz:=clock_timestamp();v_existing uuid;v_existing_recorded_at timestamptz;v_hash text;\\n' +\n" +
+          "  'BEGIN\\n' +\n" +
+          `  "  IF NOT public.internal_principal_role_is_exact_v3_internal(caller_principal,'opportunity_runner',v_now)\\n" +\n` +
+          `  "  THEN RAISE EXCEPTION USING ERRCODE='PT403',MESSAGE='principal_role_unavailable';END IF;\\n" +\n` +
+          "  '  IF (input).collected_at<(input).source_timestamp OR (input).collected_at>v_now\\n' +\n" +
+          `  "  THEN RAISE EXCEPTION USING ERRCODE='PT422',MESSAGE='invalid_authority_request';END IF;\\n" +\n` +
+          "  '\\n' +\n" +
+          `  "  -- Use the predecessor's exact series lock.  This serializes the lookup with\\n" +\n` +
+          "  '  -- both another recollection and a genuine new revision; using a narrower\\n' +\n" +
+          "  '  -- recollection-only key would permit two first observers to miss each other.\\n' +\n" +
+          `  "  PERFORM pg_advisory_xact_lock(hashtextextended(concat_ws('|',\\n" +\n` +
+          `  "    (input).stock_id,(input).fact_key,coalesce((input).period_start::text,''),\\n" +\n` +
+          "  '    (input).period_end,(input).duration_kind),0));\\n' +\n" +
+          "  '  SELECT fact.fact_id,fact.recorded_at INTO v_existing,v_existing_recorded_at\\n' +\n" +
+          "  '  FROM public.opportunity_financial_facts_v3 fact\\n' +\n" +
+          "  '  WHERE fact.stock_id=(input).stock_id AND fact.fact_key=(input).fact_key\\n' +\n" +
+          "  '    AND fact.period_start IS NOT DISTINCT FROM (input).period_start\\n' +\n" +
+          "  '    AND fact.period_end=(input).period_end AND fact.duration_kind=(input).duration_kind\\n' +\n" +
+          "  '    AND fact.value=(input).value AND fact.unit=(input).unit AND fact.provider=(input).provider\\n' +\n" +
+          "  '    AND fact.authority_tier=(input).authority_tier AND fact.estimate_kind=(input).estimate_kind\\n' +\n" +
+          "  '    AND fact.estimate_horizon=(input).estimate_horizon\\n' +\n" +
+          "  '    AND fact.filing_published_at=(input).filing_published_at\\n' +\n" +
+          "  '    AND fact.source_timestamp=(input).source_timestamp\\n' +\n" +
+          "  '    AND fact.filing_restatement_id IS NOT DISTINCT FROM (input).filing_restatement_id\\n' +\n" +
+          "  '    AND fact.source_ref=(input).source_ref AND fact.collected_at<=(input).collected_at\\n' +\n" +
+          "  '  ORDER BY fact.collected_at,fact.recorded_at,fact.fact_id LIMIT 1;\\n' +\n" +
+          "  '  IF v_existing IS NOT NULL THEN\\n' +\n" +
+          "  '    v_hash:=encode(extensions.digest(convert_to(regexp_replace(jsonb_build_array(\\n' +\n" +
+          "  '      (input).stock_id,(input).fact_key,(input).period_start,(input).period_end,(input).duration_kind,\\n' +\n" +
+          "  '      (input).value,(input).unit,(input).provider,(input).authority_tier,(input).estimate_kind,\\n' +\n" +
+          "  '      (input).estimate_horizon,(input).filing_published_at,(input).source_timestamp,\\n' +\n" +
+          "  '      (input).collected_at,(input).filing_restatement_id,(input).source_ref\\n' +\n" +
+          `  "    )::text,', ', ',', 'g'),'utf8'),'sha256'),'hex');\\n" +\n` +
+          "  '    INSERT INTO public.opportunity_rpc_audit_v3(function_name,caller_principal_id,subject_kind,subject_id,\\n' +\n" +
+          "  '      input_hash,disposition,recorded_at)\\n' +\n" +
+          `  "    VALUES('append_financial_fact_v3',caller_principal,'financial_fact',v_existing,v_hash,\\n" +\n` +
+          `  "      'idempotent'::public.opportunity_rpc_audit_disposition_v3,v_now);\\n" +\n` +
+          "  '    RETURN QUERY SELECT v_existing,v_existing_recorded_at;\\n' +\n" +
+          "  '    RETURN;\\n' +\n" +
+          "  '  END IF;\\n' +\n" +
+          "  '  RETURN QUERY SELECT appended.fact_id,appended.recorded_at\\n' +\n" +
+          "  '  FROM public.append_financial_fact_pre_v3_16_16(input,caller_principal) appended;\\n' +\n" +
+          "  'END $function$\\n'\n"
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      actual:
+      error: |-
+        Expected "actual" to be strictly unequal to:
+        
+        'CREATE OR REPLACE FUNCTION public.append_financial_fact_v3(input financial_fact_input_v3, caller_principal uuid)\n' +
+          ' RETURNS TABLE(fact_id uuid, recorded_at timestamp with time zone)\n' +
+          ' LANGUAGE plpgsql\n' +
+          ' SECURITY DEFINER\n' +
+          " SET search_path TO ''\n" +
+          'AS $function$\n' +
+          'DECLARE v_now timestamptz:=clock_timestamp();v_existing uuid;v_existing_recorded_at timestamptz;v_hash text;\n' +
+          'BEGIN\n' +
+          "  IF NOT public.internal_principal_role_is_exact_v3_internal(caller_principal,'opportunity_runner',v_now)\n" +
+          "  THEN RAISE EXCEPTION USING ERRCODE='PT403',MESSAGE='principal_role_unavailable';END IF;\n" +
+          '  IF (input).collected_at<(input).source_timestamp OR (input).collected_at>v_now\n' +
+          "  THEN RAISE EXCEPTION USING ERRCODE='PT422',MESSAGE='invalid_authority_request';END IF;\n" +
+          '\n' +
+          "  -- Use the predecessor's exact series lock.  This serializes the lookup with\n" +
+          '  -- both another recollection and a genuine new revision; using a narrower\n' +
+          '  -- recollection-only key would permit two first observers to miss each other.\n' +
+          "  PERFORM pg_advisory_xact_lock(hashtextextended(concat_ws('|',\n" +
+          "    (input).stock_id,(input).fact_key,coalesce((input).period_start::text,''),\n" +
+          '    (input).period_end,(input).duration_kind),0));\n' +
+          '  SELECT fact.fact_id,fact.recorded_at INTO v_existing,v_existing_recorded_at\n' +
+          '  FROM public.opportunity_financial_facts_v3 fact\n' +
+          '  WHERE fact.stock_id=(input).stock_id AND fact.fact_key=(input).fact_key\n' +
+          '    AND fact.period_start IS NOT DISTINCT FROM (input).period_start\n' +
+          '    AND fact.period_end=(input).period_end AND fact.duration_kind=(input).duration_kind\n' +
+          '    AND fact.value=(input).value AND fact.unit=(input).unit AND fact.provider=(input).provider\n' +
+          '    AND fact.authority_tier=(input).authority_tier AND fact.estimate_kind=(input).estimate_kind\n' +
+          '    AND fact.estimate_horizon=(input).estimate_horizon\n' +
+          '    AND fact.filing_published_at=(input).filing_published_at\n' +
+          '    AND fact.source_timestamp=(input).source_timestamp\n' +
+          '    AND fact.filing_restatement_id IS NOT DISTINCT FROM (input).filing_restatement_id\n' +
+          '    AND fact.source_ref=(input).source_ref AND fact.collected_at<=(input).collected_at\n' +
+          '  ORDER BY fact.collected_at,fact.recorded_at,fact.fact_id LIMIT 1;\n' +
+          '  IF v_existing IS NOT NULL THEN\n' +
+          '    v_hash:=encode(extensions.digest(convert_to(regexp_replace(jsonb_build_array(\n' +
+          '      (input).stock_id,(input).fact_key,(input).period_start,(input).period_end,(input).duration_kind,\n' +
+          '      (input).value,(input).unit,(input).provider,(input).authority_tier,(input).estimate_kind,\n' +
+          '      (input).estimate_horizon,(input).filing_published_at,(input).source_timestamp,\n' +
+          '      (input).collected_at,(input).filing_restatement_id,(input).source_ref\n' +
+          "    )::text,', ', ',', 'g'),'utf8'),'sha256'),'hex');\n" +
+          '    INSERT INTO public.opportunity_rpc_audit_v3(function_name,caller_principal_id,subject_kind,subject_id,\n' +
+          '      input_hash,disposition,recorded_at)\n' +
+          "    VALUES('append_financial_fact_v3',caller_principal,'financial_fact',v_existing,v_hash,\n" +
+          "      'idempotent'::public.opportunity_rpc_audit_disposition_v3,v_now);\n" +
+          '    RETURN QUERY SELECT v_existing,v_existing_recorded_at;\n' +
+          '    RETURN;\n' +
+          '  END IF;\n' +
+          '  RETURN QUERY SELECT appended.fact_id,appended.recorded_at\n' +
+          '  FROM public.append_financial_fact_pre_v3_16_16(input,caller_principal) appended;\n' +
+          'END $function$\n'
+        
+      stack: |-
+        writer.query (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:133:127)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async applyReviewedMigrationPlanToClient (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/apply-reviewed-migrations.mjs:491:7)
+        async waitForActual (node:assert:875:5)
+        async Function.rejects (node:assert:996:25)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:135:4)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:129:3)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      operator: 'rejects'
+      stack: |-
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:135:4)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:129:3)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: actual first apply through new opt-in profile and unchanged 49 chain
+    not ok 9 - actual first apply through new opt-in profile and unchanged 49 chain
+      ---
+      duration_ms: 485.882943
+      location: '/workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:139:11'
+      failureType: 'testCodeFailure'
+      error: 'migration_postcondition_failed'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        verifyReviewedMigrationPostconditions (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/apply-reviewed-migrations.mjs:445:77)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async applyReviewedMigrationPlanToClient (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/apply-reviewed-migrations.mjs:493:20)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:141:21)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:139:3)
+        async Test.run (node:internal/test_runner/test:980:9)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    1..9
+not ok 1 - financial installer corrected postconditions and full captured-schema engineering transaction
+  ---
+  duration_ms: 2614.659106
+  location: '/workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:59:1'
+  failureType: 'testCodeFailure'
+  error: 'dependent_stages_blocked_by_first_apply'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/financial-installer-postcondition-native.test.mjs:148:73)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 10
+# suites 0
+# pass 7
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2807.613208

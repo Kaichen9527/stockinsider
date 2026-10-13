@@ -1,0 +1,14 @@
+{
+  "native-fixture-corrected": {
+    "bytes": 1438549,
+    "beforeSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+    "afterSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+    "equal": true
+  },
+  "native-predicate-diagnostic": {
+    "bytes": 1438549,
+    "beforeSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+    "afterSHA256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+    "equal": true
+  }
+}

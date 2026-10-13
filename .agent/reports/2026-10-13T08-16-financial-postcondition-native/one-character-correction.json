@@ -1,0 +1,8 @@
+{
+  "beforeSourceSHA256": "e8f9f2fb5b1b31535093f42f12c0f9dbbb469b103179f1c4a7b7af28b5e19338",
+  "afterSourceSHA256": "f55cabc90924ba6ecb59609df957acb60b936d853b816bb932549f478a7580a4",
+  "deletedBytes": 1,
+  "beforeQuerySHA256": "d4e1f1f9f106af0b953a8a1f92e6fc69effcd87f92073eef6097dbbd81fc3a84",
+  "originalReportedPosition": 24449,
+  "sameCorrectExpressionAsExact2e": true
+}
