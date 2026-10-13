@@ -17,3 +17,5 @@ Shared wall deadline is10seconds; statements2seconds, locks500ms. Timeout racing
 Root's separately reported VPS snapshot20:27:25Z had no runs/publisher authorities/verifications/allowlist input; the adapter must return `run_missing`. This task does not connect to VPS or create those prerequisites.
 
 Ordinary CI suggestion (not applied): add `web/src/lib/discovery-frozen-snapshot-reader.test.ts` to the existing candidate-discovery diagnostic node command; a separate PG17 native invocation requires `DISCOVERY_SNAPSHOT_ARTIFACTS` as a new private absolute leaf and `scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs`. Workflow edits require root review. Production dedicated-client wiring, authorized frozen run/publisher creation, independently reviewed origin/creator and live complete population remain pending.
+
+Deadline successor: explicit pre-query and pre/post wait monotonic checks prevent synchronous work/resolved promises from winning against an expired zero-delay timer. The initial late-close counterexample and earlier receipt remain historical; successor tests/build are separately labelled. No deadline extension or assertion relaxation.

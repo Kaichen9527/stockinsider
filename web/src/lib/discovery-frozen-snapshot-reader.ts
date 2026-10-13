@@ -40,11 +40,13 @@ export async function readDiscoveryFrozenSnapshot(client: DiscoverySnapshotClien
   let reason: string | null = null;
   let result: { projection: ReturnType<typeof readDiscoveryRevisionPublishers>; snapshot: { identity: string; source_cutoff: string; scope: Record<string, string>; counts: Record<string, number>; digests: Record<string, string> } } | null = null;
   const wait = async <T,>(promise: Promise<T>): Promise<T> => {
+    if (performance.now()>=end) fail('read_deadline');
     let timer: ReturnType<typeof setTimeout> | undefined;
-    try { return await Promise.race([promise, new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new ReadFailure('read_deadline')), Math.max(0, end-performance.now())); })]); }
+    try { const value=await Promise.race([promise, new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new ReadFailure('read_deadline')), Math.max(0, end-performance.now())); })]); if (performance.now()>=end) fail('read_deadline'); return value; }
     finally { if (timer) clearTimeout(timer); }
   };
   const query = async (sql: string, values?: unknown[]) => {
+    if (performance.now()>=end) fail('read_deadline');
     const response = await wait(client.query(sql, values));
     if (!Array.isArray(response.rows)) fail('read_incomplete');
     return response.rows;

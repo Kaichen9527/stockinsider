@@ -48,3 +48,7 @@ test('primary DB failure survives failed cleanup without exposing either private
 test('stalled owned end returns bounded pending cleanup and cannot report a successful read',{timeout:12000},async()=>{
  const m=mock();m.client.end=()=>new Promise(()=>{});const start=performance.now();const a=await readDiscoveryFrozenSnapshot(m.client,fixture().run.run_id);assert.equal(a.status,'unsupported');assert.equal(a.projection,null);assert.equal(a.cleanup,'pending');assert.equal(a.reason,'cleanup_unconfirmed');assert.ok(performance.now()-start>=9500);assert.ok(performance.now()-start<11500);
 });
+test('late synchronous cleanup settlement cannot beat an expired monotonic deadline',{timeout:15000},async()=>{
+ const m=mock();m.client.end=()=>{const until=performance.now()+10100;while(performance.now()<until){}return Promise.resolve();};
+ const a=await readDiscoveryFrozenSnapshot(m.client,fixture().run.run_id);assert.equal(a.status,'unsupported');assert.equal(a.projection,null);assert.equal(a.reason,'read_deadline');
+});
