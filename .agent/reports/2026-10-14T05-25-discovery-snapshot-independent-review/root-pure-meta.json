@@ -1,0 +1,25 @@
+{
+  "subject": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+  "delivery": "bd77cb44940995cbae023f80099e648b77ef8bec",
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+    "web/src/lib/discovery-revision-publisher-reader.test.ts"
+  ],
+  "cwd": "/tmp/stockinsider-discovery-snapshot-root-review-oct14",
+  "node": "v22.14.0",
+  "arch": "arm64",
+  "tests": 76,
+  "pass": 76,
+  "fail": 0,
+  "skip": 0,
+  "todo": 0,
+  "new_adapter_cases": 16,
+  "existing_reader_cases": 60,
+  "native_or_build_executed_by_root": false
+}

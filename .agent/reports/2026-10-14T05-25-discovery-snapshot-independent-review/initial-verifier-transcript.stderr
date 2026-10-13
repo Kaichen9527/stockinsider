@@ -1,0 +1,3 @@
+Traceback (most recent call last):
+  File "<stdin>", line 11, in <module>
+AssertionError: /tmp/stockinsider-discovery-snapshot-root-review-oct14/docs/operations/2026-10-14/discovery-frozen-snapshot-reader-handoff.md

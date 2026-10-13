@@ -1,0 +1,1 @@
+Original root verifier incorrectly compared historical d6b source-manifest handoff bytes to final 5fab working-tree handoff; AssertionError before completing all manifests. Root pure invocation was independent and continued. Historical entries are verified against recorded exact source commit, not relabeled as final. No maker result was invalidated by this verifier input error.

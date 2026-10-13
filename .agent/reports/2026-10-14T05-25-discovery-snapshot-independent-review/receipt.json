@@ -1,0 +1,45 @@
+{
+  "subject": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+  "files": [
+    {
+      "path": "continuation.json",
+      "bytes": 497,
+      "sha256": "d0db9b158fe79d8a33f75a29c191e0003ee78b633a9430fca09dcc9ccc1f14a4"
+    },
+    {
+      "path": "initial-verifier-failure.txt",
+      "bytes": 381,
+      "sha256": "f8b82e583a3925999a84cd20881e0ae5cd7bec07333cc2da979a65cd37ace24d"
+    },
+    {
+      "path": "initial-verifier-transcript.stderr",
+      "bytes": 216,
+      "sha256": "13002667e03f1ceb9c7f58d854aa99774cd7d179ba6a6ce512167041fb2fbfc2"
+    },
+    {
+      "path": "maker-manifest-verification.json",
+      "bytes": 1093,
+      "sha256": "6dbf5b6b1e68d67b05f2075ab9382a511298222434f605dd5de2af4baf372e4f"
+    },
+    {
+      "path": "review.md",
+      "bytes": 3973,
+      "sha256": "52d9702e29892657b0362ad1003d8e5547425204d9d71a3193596a888d46e154"
+    },
+    {
+      "path": "root-pure-meta.json",
+      "bytes": 668,
+      "sha256": "3bd22cdb71a96d7d5bf6011eee75711de86e2ba0b6738010239c959ea35d0b6f"
+    },
+    {
+      "path": "root-pure.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "root-pure.stdout",
+      "bytes": 15527,
+      "sha256": "30bbd39a2257d90fc2ba7b1c5be115a1d09da8f1102455bddc10a0247a1e5203"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "subject": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+  "delivery": "bd77cb44940995cbae023f80099e648b77ef8bec",
+  "checks": [
+    {
+      "manifest": ".agent/reports/2026-10-14T04-26-discovery-frozen-snapshot/raw-manifest.json",
+      "subject": "d6b25d31748bba26f6c576b9081317816cbccd5c",
+      "verified": 81
+    },
+    {
+      "manifest": ".agent/reports/2026-10-14T04-26-discovery-frozen-snapshot/source-manifest.json",
+      "subject": "d6b25d31748bba26f6c576b9081317816cbccd5c",
+      "verified": 22
+    },
+    {
+      "manifest": ".agent/reports/2026-10-14T04-26-discovery-frozen-snapshot/deadline-successor/raw-manifest.json",
+      "subject": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+      "verified": 37
+    },
+    {
+      "manifest": ".agent/reports/2026-10-14T04-26-discovery-frozen-snapshot/deadline-successor/source-manifest.json",
+      "subject": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+      "verified": 5
+    }
+  ],
+  "receipt_sha256": "53b3563697e5fe018a1a70c5d1a0b7eac1eed269b48286522c050490f9b818b0",
+  "existing_runtime_workflows_sql_locks_unchanged": true
+}

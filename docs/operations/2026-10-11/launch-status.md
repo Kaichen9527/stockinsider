@@ -1,5 +1,16 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 05:25台灣時間：同快照來源讀取候選完成並獨立核對，最小CI組裝接續
+
+Remote mainaa111／progresscbf與工作樹乾淨先核，Cloud cursor24真idle，前turn01a136f1 completed。Source5fab9e730a5beab74bd77c0e12eab21f62d64cb6/evidencebd77cb44940995cbae023f80099e648b77ef8bec已交付，final5新檔330行；Root逐exactsubject核final37raw/5source及historical81raw/22source，receipt53b3563697e5fe018a1a70c5d1a0b7eac1eed269b48286522c050490f9b818b0，親跑76pure（新16＋原60）全PASS零fail/skip/todo，scoped source acquisition review零新P0/P1/P2。Root最初誤把historical d6b handoff比final工作樹的AssertionError保留，改依原commit驗證，不改原RED。
+
+Maker final真PG17.11 native10PASS含9child+parent、types/lint/normalbuildPASS/33warnings/BUILD_IDqMFmQWaQTx8UniDlXk7nv；Root未新native/build。真正同RR/RO snapshot counts+rows、microseconds、第二writer提交後snapshot一致與下一snapshot拒舊head、missing/ambiguous/incomplete/bounds/RLS/readonly mutation/timeout/disconnect已核收據；revocation與invalidrevision在同一native例一起加入，不冒稱單獨native revocation證明。專用client/no config/固定SQL/全retainedhead保留、RLS visibility拒絕、deadline/rollback/end已接，pendingcleanup不能成功。這只是local工程，不是live身份/Top20；原pure/schema/金融/authority/pins/workflow不動，所有deadline/fixture原RED留歷史。
+
+Cloud真idle後只接下一20min codex/discovery-snapshot-release-oct14/baseaa111，turn01a13727-827e-74e1-8ac5-9c42df424f49/cursor83271615-2ee9-4bed-bd38-321f1348ab62:25 active。Owned逐file exactcopy5fab五final檔＋最小receiptindex、candidatequality只加一pure參數、新contentsread PG17 ordinaryworkflow；不帶125檔raw歷史、不整branchmerge、不改protected或金融runtime。Exactruntime/native/deps全同才明示引用既有native/build等效，新GHA仍pending；Root只review/report，下一輪先compactwait，不重派或重疊。
+
+正式20:27:25Z最後唯讀run/publisher/verification/allowlist均0之證據保持，沒有創authority/run、VPS新量測/DB寫入/capacity重測/PR/部署/343/PTT/crawl/策略/研究排程/cache操作。金融PR376終態不重跑；容量待答/原reserve不變。新證據`.agent/reports/2026-10-14T05-25-discovery-snapshot-independent-review/`。
+
+
 ## 2026-10-14 04:25台灣時間：來源同快照讀取接線啟動，正式母體前置已唯讀核對
 
 Remote main仍aa111a54／progress5215c3d5，工作樹乾淨；PR376已終態，未重跑checks/ready/merge/helper。Root compact先確認Cloud cursor21真正idle，再只接一件30分鐘codex/discovery-frozen-snapshot-reader-oct14/baseaa111，turn01a136f1-fefb-7726-8ab8-a7a3e701c4a6／cursor83271615-2ee9-4bed-bd38-321f1348ab62:23 active。Owned最小既有reader的專用PG client read adapter、pure/native tests與handoff；Root只report/review，沒有重疊修改。這是待交付工程，不冒稱已完成或live合格母體。
