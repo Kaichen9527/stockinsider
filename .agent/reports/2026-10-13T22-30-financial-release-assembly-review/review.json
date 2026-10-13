@@ -1,0 +1,53 @@
+{
+  "reviewer": "root",
+  "utc": "2026-10-13T14:26:46.522034+00:00",
+  "scope": "narrow release assembly against approved main; existing frozen runtime/source reviews retained separately; not formal exact attestation or full production installer approval",
+  "base": "4dddb8f01f518350c7d54b7995ee9358c1d945a7",
+  "code": "08e2e8c93781e9f22320f3a66435d4bffbb5e3ad",
+  "head": "8fc10fe1edf970abfb9b73fc38e2c4b0d8d1fcaf",
+  "receiptSha256": "59c7634f077a456b47cd2e44c7742d06ca5b7ab1145dc11d425d23e3e53e3531",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "verified": {
+    "raw": 33,
+    "source": 37,
+    "assemblyEntries": 23,
+    "nativeEquivalentInputs": 74,
+    "portableHistoricalFixtures": 3,
+    "rootPure": {
+      "pass": 38,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0
+    }
+  },
+  "observations": [
+    "Two portable pure test changes replace historical report/git dependencies with exact original fixtures; wrapper adds SHA assertion. No acceptance predicate weakened.",
+    "Original default48/financial49/profile50/operator action identities and SQL bytes preserved. Prior local captured native28 belongs to sealed prior execution; root did not rerun native/build.",
+    "New ordinary read-only PG17 workflow uses existing SHA-pinned checkout/setup-node, exact Node22 lock installs and known PGDG signing identity. Real GitHub execution pending. No protected workflow/authority/pin/web changes.",
+    "git diff --check source code is clean. Delivery raw build/lint/type logs retain original trailing whitespace/newline; not altered to satisfy whitespace check.",
+    "User explicitly limits this step to exact source assembly and draft PR; broad ship version/changelog/reformat/routing/telemetry/build reruns were not applied. Repository has no VERSION file. Handoff/ADR docs already assembled; no production action implied."
+  ],
+  "pr": 376,
+  "pending": [
+    "canonical product CI 38413284898 still in progress",
+    "fresh exact review/attestation refs and normal protected gate",
+    "formal fixed private peer CLI",
+    "capacity admission and production migration/deployment"
+  ],
+  "notPerformed": [
+    "native/build by root",
+    "CI rerun",
+    "ready/merge",
+    "VPS/remoteDB/HTTP/crawl",
+    "role/SQL/permission mutation",
+    "343/PTT rerun",
+    "strategy or formal research scheduling"
+  ],
+  "ordinaryFinancialQuality": "actual GHA 38413285207 SUCCESS; PG17.11/38pure/28captured/1HBA/4financial, individually 0fail/skip/todo",
+  "initialProtected": "38413287561 FAIL missing new exact-head review ref; original RED saved; no rerun",
+  "redactionFalsePositives": "Updated body numeric GitHub Actions run identifiers were flagged as national phone numbers. Exact identifiers verified against GitHub run JSON/URLs; no phone or PII was present."
+}

@@ -1,0 +1,40 @@
+{
+  "run": 38413285207,
+  "attempt": 1,
+  "postgres": "17.11",
+  "head": "8fc10fe1edf970abfb9b73fc38e2c4b0d8d1fcaf",
+  "mergeCommit": "96f319ac139baa7893705ff621cc7181894bd488",
+  "headAndMergeTree": "6c16106c6f78d0baf482e44d99a3215783be4f62",
+  "suites": {
+    "Run all six pure financial installer suites": {
+      "tests": 38,
+      "pass": 38,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0
+    },
+    "Run captured-schema financial transaction acceptance": {
+      "tests": 28,
+      "pass": 28,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0
+    },
+    "Verify disk versus effective loaded HBA": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0
+    },
+    "Verify original lifetime bound, amended history and atomic rollback": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0
+    }
+  },
+  "notAggregated": true,
+  "formalPeerAcceptance": false
+}

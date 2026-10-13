@@ -1,0 +1,14 @@
+{
+  "sourceCommit": "08e2e8c93781e9f22320f3a66435d4bffbb5e3ad",
+  "deliveryCommit": "8fc10fe1edf970abfb9b73fc38e2c4b0d8d1fcaf",
+  "verified": {
+    "raw": 33,
+    "source": 37,
+    "assembly": 23,
+    "nativeEquivalentInputs": 74
+  },
+  "receiptSha256": "59c7634f077a456b47cd2e44c7742d06ca5b7ab1145dc11d425d23e3e53e3531",
+  "portableFixturesExact": true,
+  "nativeRerunByRoot": false,
+  "buildRunByRoot": false
+}

@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-13 22:30台灣時間：最小金融發布PR376已建立，普通PG17實際驗收全綠
+
+Cloud assembly code08e2e8c／delivery8fc10fe1（approvedmain4ddd之上）已完成，cursor19真idle、turn01a13566終態，未重派。Root實核33raw／37source／23assemblyentries／74capturednative傳遞inputs與3portable歷史fixtures，receipt59c7634f；親跑assembled38pure全PASS零fail/skip/todo。只有兩pure test將歷史report/git依賴換成exact committedfixtures，wrapper另釘SHA，runtime/native/SQL/profile/authority/pins/webbytes保持。Root scoped組裝／普通workflow／handoff review零新P0/P1/P2；並未當作完整formalinstaller批准或root新native/build。Maker本branch38pure／4financialnative／1HBA／typeslintnormalbuild真PASS，33既有warnings。先前28native只在74inputs逐byte一致下引用，不冒稱assembly時重跑。
+
+Root已建並attach草稿PR376，head8fc10fe1edf970abfb9b73fc38e2c4b0d8d1fcaf/base4ddd。新ordinary Financial installation quality diagnostics run38413285207 attempt1真SUCCESS；官方簽章PGDG安裝PG17.11、38pure／28capturednative／1HBA／4financial各自零fail/skip/todo。PR測試merge96f319ac139baa7893705ff621cc7181894bd488 tree6c16106c6f78d0baf482e44d99a3215783be4f62與head tree完全相同，保留實際checkout身份。這次28為新GHA執行，不能與local歷史28/37相加，仍非正式fixedpeerCLI證明。Root已保存實際runJSON/stdout與逐suite核對。
+
+原product普通run38413284898仍inProgress，候選revision/historicaldate及Chromium安裝已SUCCESS，canonical155/31PCR/typeslintbuild/browser尚未稱全PASS。初始protected38413287561 attempt1 bootstrapSUCCESS後，requirements/architecture/exact因新head exact-review ref不存在而真FAIL，aggregateFAIL、model/product未跑；原RED已保存，不重跑相同輸入、不偽造freshref/attestation、不繞保護。接續先compact核product終態，再為exacthead完成真freshreview/directchild refs及正常protected，PR仍draft，未ready/merge。
+
+Main仍4ddd／正式VPS169，未VPS量測／SQL-role-ACL變更／capacity重測／部署／cache刪除／343或PTT重送。原容量待答與固定guard不變；完整來源／Top20／文章／策略／正式研究排程仍待。新證據`.agent/reports/2026-10-13T22-30-financial-release-assembly-review/`，PR https://github.com/Kaichen9527/stockinsider/pull/376。
+
 ## 2026-10-13 21:20台灣時間：完整金融安裝鏈在真還原結構完成兩次COMMIT與28項原生驗收
 
 Cloud code6bba84fc／evidence215d191c已終態，root實核60raw／225source hash/blob、receiptf162ee71、親跑38pure全PASS零fail/skip/todo。Root逐JSON證明expected只增已知owner grantor欄，獨立審閱唯一ownerliteral與精確2/5 ACL集合先驗再全canonicalcompare，scoped零P0/P1/P2；其他body/owner/security/config/columns/RLS/constraints/trigger/index／4functions與SQL48/49/50hash完全保持。Root未新跑native/build，不冒稱自己的執行。

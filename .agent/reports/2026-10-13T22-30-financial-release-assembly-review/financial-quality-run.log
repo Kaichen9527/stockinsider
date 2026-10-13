@@ -1,0 +1,743 @@
+financial-installation-quality	Set up job	﻿2026-10-13T14:25:58.7540656Z Current runner version: '2.337.0'
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7558831Z ##[group]Runner Image Provisioner
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7559488Z Hosted Compute Agent
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7559936Z Version: 20261002.596
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7560369Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7560850Z Build Date: 2026-10-02T22:28:27Z
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7561400Z Worker ID: {8176f9fa-c038-47c3-b821-b36fb4133e74}
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7561871Z Region: centralus
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7562245Z Cloud: Azure
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7562606Z ##[endgroup]
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7563530Z ##[group]Operating System
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7563980Z Ubuntu
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7564332Z 24.04.5
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7564676Z LTS
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7565035Z ##[endgroup]
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7565401Z ##[group]Runner Image
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7565854Z Image: ubuntu-24.04
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7566242Z Version: 20261004.327.1
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7566963Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7568335Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7569060Z ##[endgroup]
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7569799Z ##[group]GITHUB_TOKEN Permissions
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7571365Z Contents: read
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7571757Z Metadata: read
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7572157Z ##[endgroup]
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7573602Z Secret source: Actions
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7574225Z Cache mode: write
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7574688Z Prepare workflow directory
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7847443Z Prepare all required actions
+financial-installation-quality	Set up job	2026-10-13T14:25:58.7897201Z Getting action download info
+financial-installation-quality	Set up job	2026-10-13T14:25:59.1126698Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+financial-installation-quality	Set up job	2026-10-13T14:25:59.2108247Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+financial-installation-quality	Set up job	2026-10-13T14:25:59.3850111Z Complete job name: financial-installation-quality
+financial-installation-quality	Checkout candidate without persisted credentials	﻿2026-10-13T14:25:59.4374680Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4375488Z with:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4375851Z   persist-credentials: false
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4376363Z   repository: Kaichen9527/stockinsider
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4379304Z   token: ***
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4379646Z   ssh-strict: true
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4380032Z   ssh-user: git
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4380377Z   clean: true
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4380745Z   sparse-checkout-cone-mode: true
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4381208Z   fetch-depth: 1
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4381545Z   fetch-tags: false
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4381926Z   show-progress: true
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4382282Z   lfs: false
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4382610Z   submodules: false
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4382995Z   set-safe-directory: true
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4383392Z   allow-unsafe-pr-checkout: false
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.4383951Z ##[endgroup]
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5137793Z Syncing repository: Kaichen9527/stockinsider
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5139787Z ##[group]Getting Git version info
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5140613Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5141442Z [command]/usr/bin/git version
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5212437Z git version 2.55.0
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5250126Z ##[endgroup]
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5260266Z Temporarily overriding HOME='/home/runner/work/_temp/ac863c13-d773-43b5-a872-5dfd7cad2eb0' before making global git config changes
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5261371Z Adding repository directory to the temporary git global config as a safe directory
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5262289Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5296555Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5301840Z ##[group]Initializing the repository
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5305685Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5402830Z hint: Using 'master' as the name for the initial branch. This default branch name
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5404643Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5405863Z hint: to use in all of your new repositories, which will suppress this warning,
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5406610Z hint: call:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5407124Z hint:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5408028Z hint: 	git config --global init.defaultBranch <name>
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5408758Z hint:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5409408Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5410380Z hint: 'development'. The just-created branch can be renamed via this command:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5411291Z hint:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5411804Z hint: 	git branch -m <name>
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5412289Z hint:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5412970Z hint: Disable this message with "git config set advice.defaultBranchName false"
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5414356Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5421333Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5465983Z ##[endgroup]
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5466900Z ##[group]Disabling automatic garbage collection
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5468828Z [command]/usr/bin/git config --local gc.auto 0
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5493221Z ##[endgroup]
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5494416Z ##[group]Setting up auth
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5497021Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5520317Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5793021Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5817045Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5956200Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.5979135Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.6117258Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.6146028Z ##[endgroup]
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.6146745Z ##[group]Fetching the repository
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:25:59.6154427Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +96f319ac139baa7893705ff621cc7181894bd488:refs/remotes/pull/376/merge
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.6464400Z From https://github.com/Kaichen9527/stockinsider
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.6466015Z  * [new ref]         96f319ac139baa7893705ff621cc7181894bd488 -> pull/376/merge
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.6491313Z ##[endgroup]
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.6492543Z ##[group]Determining the checkout info
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.6493558Z ##[endgroup]
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.6494139Z [command]/usr/bin/git sparse-checkout disable
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.6538828Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.6558282Z ##[group]Checking out the ref
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.6560421Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/376/merge
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7448633Z Note: switching to 'refs/remotes/pull/376/merge'.
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7449781Z 
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7450312Z You are in 'detached HEAD' state. You can look around, make experimental
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7451824Z changes and commit them, and you can discard any commits you make in this
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7453295Z state without impacting any branches by switching back to a branch.
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7454117Z 
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7454981Z If you want to create a new branch to retain commits you create, you may
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7456626Z do so (now or later) by using -c with the switch command. Example:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7457681Z 
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7458068Z   git switch -c <new-branch-name>
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7458811Z 
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7459212Z Or undo this operation with:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7459798Z 
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7460133Z   git switch -
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7460662Z 
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7461429Z Turn off this advice by setting config variable advice.detachedHead to false
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7462426Z 
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7463654Z HEAD is now at 96f319a Merge 8fc10fe1edf970abfb9b73fc38e2c4b0d8d1fcaf into 4dddb8f01f518350c7d54b7995ee9358c1d945a7
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7468038Z ##[endgroup]
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7495214Z [command]/usr/bin/git log -1 --format=%H
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7513925Z 96f319ac139baa7893705ff621cc7181894bd488
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7521405Z ##[group]Removing auth
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7524528Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7551258Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7697072Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7716264Z http.https://github.com/.extraheader
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7721376Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7748571Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7892090Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.7913356Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+financial-installation-quality	Checkout candidate without persisted credentials	2026-10-13T14:26:00.8060787Z ##[endgroup]
+financial-installation-quality	Set up pinned Node 22	﻿2026-10-13T14:26:00.8327320Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:00.8328610Z with:
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:00.8329299Z   node-version: 22.14.0
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:00.8330037Z   always-auth: false
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:00.8330759Z   check-latest: false
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:00.8336542Z   token: ***
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:00.8337260Z ##[endgroup]
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:00.9356482Z Attempting to download 22.14.0...
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:00.9437427Z (node:2199) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:00.9439879Z (Use `node --trace-deprecation ...` to show where the warning was created)
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:01.7839927Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:02.3291211Z Extracting ...
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:02.3376145Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/ad6fae63-6cdc-4d8e-aa12-a1cf2f7519ef -f /home/runner/work/_temp/1690c833-2481-47f2-b981-4ef167bed7a5
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:03.2634492Z Adding to the cache ...
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:05.2942329Z ##[group]Environment details
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:05.4675672Z node: v22.14.0
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:05.4676967Z npm: 10.9.2
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:05.4677668Z yarn: 1.22.22
+financial-installation-quality	Set up pinned Node 22	2026-10-13T14:26:05.4679031Z ##[endgroup]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	﻿2026-10-13T14:26:05.4804045Z ##[group]Run set -euo pipefail
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4804518Z ^[[36;1mset -euo pipefail^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4804794Z ^[[36;1mkey="$RUNNER_TEMP/pgdg.asc"^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4805387Z ^[[36;1mcurl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc -o "$key"^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4805982Z ^[[36;1mfingerprint=$(gpg --batch --show-keys --with-colons "$key" | awk -F: '$1=="fpr" {print $10; exit}')^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4806449Z ^[[36;1mtest "$fingerprint" = B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4807096Z ^[[36;1msudo install -d -m 0755 /usr/share/postgresql-common/pgdg^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4807808Z ^[[36;1msudo install -m 0644 "$key" /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4808813Z ^[[36;1mprintf '%s\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4809688Z ^[[36;1msudo apt-get update^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4810060Z ^[[36;1msudo apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4810464Z ^[[36;1mbin=/usr/lib/postgresql/17/bin^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4810808Z ^[[36;1mfor tool in pg_config initdb pg_ctl psql; do test -x "$bin/$tool"; done^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4811174Z ^[[36;1m"$bin/pg_config" --version | grep -E '^PostgreSQL 17\.'^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4811472Z ^[[36;1mecho "$bin" >> "$GITHUB_PATH"^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4811787Z ^[[36;1mecho "USER=$(id -un)" >> "$GITHUB_ENV"^[[0m
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4975335Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.4975714Z ##[endgroup]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.7843725Z gpg: directory '/home/runner/.gnupg' created
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.7844604Z gpg: keybox '/home/runner/.gnupg/pubring.kbx' created
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.8047344Z gpg: /home/runner/.gnupg/trustdb.gpg: trustdb created
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.8806597Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.9042217Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.9056382Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.9099086Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.9110539Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.9226837Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.9701037Z Get:7 https://apt.postgresql.org/pub/repos/apt noble-pgdg InRelease [189 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:05.9891649Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.0259876Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.0298113Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1702 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.0382639Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.0404913Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1805 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.0488851Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [411 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.0510331Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [50.7 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.0523020Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.0 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.0531676Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [748 B]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.0799519Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1144 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1094242Z Get:25 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [571 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1182403Z Get:26 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [640 B]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1216302Z Get:27 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.3 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1243945Z Get:28 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [513 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1337791Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [230 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1348564Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1221 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1391622Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1405660Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1482134Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1488305Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [45.4 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1500566Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.1 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:06.1569516Z Get:29 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 Packages [900 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:11.8091833Z Fetched 13.6 MB in 1s (11.8 MB/s)
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.5637831Z Reading package lists...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.5904163Z Reading package lists...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.7665794Z Building dependency tree...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.7672080Z Reading state information...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.9212426Z Suggested packages:
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.9212798Z   postgresql-doc-17
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.9370268Z The following NEW packages will be installed:
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.9370796Z   postgresql-17 postgresql-client-17
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.9970130Z 0 upgraded, 2 newly installed, 0 to remove and 29 not upgraded.
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.9970649Z Need to get 19.0 MB of archives.
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.9971084Z After this operation, 69.4 MB of additional disk space will be used.
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:12.9971705Z Get:1 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 postgresql-client-17 amd64 17.11-1.pgdg24.04+2 [2053 kB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.0853737Z Get:2 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 postgresql-17 amd64 17.11-1.pgdg24.04+2 [16.9 MB]
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.3545648Z Preconfiguring packages ...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4032932Z Fetched 19.0 MB in 0s (80.8 MB/s)
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4207649Z Selecting previously unselected package postgresql-client-17.
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4365110Z (Reading database ... 
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4365927Z (Reading database ... 5%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4366501Z (Reading database ... 10%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4367005Z (Reading database ... 15%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4367267Z (Reading database ... 20%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4367692Z (Reading database ... 25%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4368009Z (Reading database ... 30%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4368277Z (Reading database ... 35%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4368517Z (Reading database ... 40%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4368754Z (Reading database ... 45%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4368991Z (Reading database ... 50%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.4412081Z (Reading database ... 55%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.5651813Z (Reading database ... 60%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.7550851Z (Reading database ... 65%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:13.9587369Z (Reading database ... 70%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.1222099Z (Reading database ... 75%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.3040993Z (Reading database ... 80%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.4670612Z (Reading database ... 85%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.6534907Z (Reading database ... 90%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.8095108Z (Reading database ... 95%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.8095603Z (Reading database ... 100%
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.8096332Z (Reading database ... 203191 files and directories currently installed.)
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.8135574Z Preparing to unpack .../postgresql-client-17_17.11-1.pgdg24.04+2_amd64.deb ...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.8239595Z Unpacking postgresql-client-17 (17.11-1.pgdg24.04+2) ...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.9848466Z Selecting previously unselected package postgresql-17.
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.9951569Z Preparing to unpack .../postgresql-17_17.11-1.pgdg24.04+2_amd64.deb ...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:14.9974846Z Unpacking postgresql-17 (17.11-1.pgdg24.04+2) ...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:15.9034613Z Setting up postgresql-client-17 (17.11-1.pgdg24.04+2) ...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:16.1971278Z update-alternatives: using /usr/share/postgresql/17/man/man1/psql.1.gz to provide /usr/share/man/man1/psql.1.gz (psql.1.gz) in auto mode
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:16.2184695Z Setting up postgresql-17 (17.11-1.pgdg24.04+2) ...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:16.8823581Z Processing triggers for postgresql-common (293.pgdg24.04+1) ...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:16.9969777Z Building PostgreSQL dictionaries from installed myspell/hunspell packages...
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.0336103Z   en_us
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.1508708Z Removing obsolete dictionary files:
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.6507938Z 
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.6508913Z Running kernel seems to be up-to-date.
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.6509249Z 
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.6509502Z No services need to be restarted.
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.6509699Z 
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.6509870Z No containers need to be restarted.
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.6510031Z 
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.6510254Z No user sessions are running outdated binaries.
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.6510499Z 
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:17.6510732Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+financial-installation-quality	Install PostgreSQL 17 using the existing official signing identity	2026-10-13T14:26:18.4897045Z PostgreSQL 17.11 (Ubuntu 17.11-1.pgdg24.04+2)
+financial-installation-quality	Install locked dependencies without lifecycle scripts	﻿2026-10-13T14:26:18.4964315Z ##[group]Run npm ci --ignore-scripts
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:18.4964718Z ^[[36;1mnpm ci --ignore-scripts^[[0m
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:18.4965027Z ^[[36;1mnpm --prefix web ci --ignore-scripts^[[0m
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:18.5004723Z shell: /usr/bin/bash -e {0}
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:18.5005017Z env:
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:18.5005323Z   USER: runner
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:18.5005593Z ##[endgroup]
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5152495Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5153253Z added 39 packages, and audited 40 packages in 972ms
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5153581Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5153765Z 7 packages are looking for funding
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5154333Z   run `npm fund` for details
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5162175Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5162554Z 1 high severity vulnerability
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5162779Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5162993Z To address all issues, run:
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5163245Z   npm audit fix
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5163392Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:19.5163484Z Run `npm audit` for details.
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:20.5372932Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:32.9479386Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:32.9480368Z added 432 packages, and audited 433 packages in 13s
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:32.9480760Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:32.9480908Z 169 packages are looking for funding
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:32.9481199Z   run `npm fund` for details
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:33.0340867Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:33.0341807Z 11 vulnerabilities (10 high, 1 critical)
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:33.0342056Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:33.0342256Z To address issues that do not require attention, run:
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:33.0342639Z   npm audit fix
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:33.0342793Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:33.0342969Z To address all issues (including breaking changes), run:
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:33.0343273Z   npm audit fix --force
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:33.0343428Z 
+financial-installation-quality	Install locked dependencies without lifecycle scripts	2026-10-13T14:26:33.0343565Z Run `npm audit` for details.
+financial-installation-quality	Run all six pure financial installer suites	﻿2026-10-13T14:26:33.0585429Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/atomic-migration-chain.test.mjs scripts/opportunity-v3/financial-history-install-guard.test.mjs scripts/opportunity-v3/financial-existing-schema-profile.test.mjs scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.0587948Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/atomic-migration-chain.test.mjs scripts/opportunity-v3/financial-history-install-guard.test.mjs scripts/opportunity-v3/financial-existing-schema-profile.test.mjs scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs^[[0m
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.0625562Z shell: /usr/bin/bash -e {0}
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.0626005Z env:
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.0626242Z   USER: runner
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.0626489Z ##[endgroup]
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.0970365Z TAP version 13
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2573301Z # Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2576778Z ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2577292Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2577790Z   duration_ms: 3.125382
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2578056Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2578439Z # Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2579092Z ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2579568Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2579882Z   duration_ms: 56.513457
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2580167Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2580680Z # Subtest: atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2609007Z ok 3 - atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2609498Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2609837Z   duration_ms: 0.676022
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2610057Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2610530Z # Subtest: atomic scanner recognizes CR line endings rather than silently dropping real control
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2611053Z ok 4 - atomic scanner recognizes CR line endings rather than silently dropping real control
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2611386Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2611622Z   duration_ms: 0.162172
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2611888Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2612306Z # Subtest: atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2612875Z ok 5 - atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2613220Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2613461Z   duration_ms: 0.23176
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2613700Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2614084Z # Subtest: atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2614606Z ok 6 - atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2614927Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2615155Z   duration_ms: 0.230132
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2615405Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2615806Z # Subtest: atomic scanner normalizes every unchanged base migration without claiming installer integration
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2616372Z ok 7 - atomic scanner normalizes every unchanged base migration without claiming installer integration
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2616717Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2616956Z   duration_ms: 72.974848
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2617175Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2617770Z # Subtest: atomic scanner rejects additional documented commands that cannot run in a transaction
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2618597Z ok 8 - atomic scanner rejects additional documented commands that cannot run in a transaction
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2619145Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2619550Z   duration_ms: 0.270032
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.2620276Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4633961Z # Subtest: default48 and ordinary financial49 outputs remain byte-equivalent; profile separately reports 50 steps
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4635498Z ok 9 - default48 and ordinary financial49 outputs remain byte-equivalent; profile separately reports 50 steps
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4640490Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4640989Z   duration_ms: 137.00876
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4641489Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4642007Z # Subtest: missing/wrong prelude bytes/hash/order/chain and profile omission reject
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4642568Z ok 10 - missing/wrong prelude bytes/hash/order/chain and profile omission reject
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4642984Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4643258Z   duration_ms: 6.24083
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4643580Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4644084Z # Subtest: profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4644647Z ok 11 - profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4645113Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4645386Z   duration_ms: 0.800133
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4645710Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4646178Z # Subtest: actual installer checks successor and profile under lock/BEGIN before any prelude query
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4647063Z ok 12 - actual installer checks successor and profile under lock/BEGIN before any prelude query
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4647672Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4648103Z   duration_ms: 0.711721
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.4648414Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5917075Z # Subtest: default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5918581Z ok 13 - default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5919335Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5919752Z   duration_ms: 46.985366
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5920175Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5920830Z # Subtest: omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5921666Z ok 14 - omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5922311Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5922718Z   duration_ms: 0.534511
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5923107Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5923872Z # Subtest: extension flag alone is not review authority: exact hash must be in hash-bound review once
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5924918Z ok 15 - extension flag alone is not review authority: exact hash must be in hash-bound review once
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5925547Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5925966Z   duration_ms: 0.410519
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5926400Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5927085Z # Subtest: base-only cannot replay installed successor and partial residue cannot replay even with tail
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5928395Z ok 16 - base-only cannot replay installed successor and partial residue cannot replay even with tail
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5929053Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5929692Z   duration_ms: 1.335096
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5930172Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5930790Z # Subtest: missing/ambiguous state and any failed postcondition reject
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5931548Z ok 17 - missing/ambiguous state and any failed postcondition reject
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5932576Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5933091Z   duration_ms: 0.363997
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5933531Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5934174Z # Subtest: busy guard performs no BEGIN/mutation and closes owned session
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5934861Z ok 18 - busy guard performs no BEGIN/mutation and closes owned session
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5935397Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5936273Z   duration_ms: 0.486123
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5936726Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5937369Z # Subtest: installed successor guard runs under lock+BEGIN before any base mutation
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5938321Z ok 19 - installed successor guard runs under lock+BEGIN before any base mutation
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5938798Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5939255Z   duration_ms: 0.223963
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5939649Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5940377Z # Subtest: one shared transaction strips inner controls and commits after verification
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5941644Z ok 20 - one shared transaction strips inner controls and commits after verification
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5942184Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5942619Z   duration_ms: 1.578985
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5943013Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5943622Z # Subtest: forced failure and disconnect attempt rollback, do not commit, retain original error
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5944520Z ok 21 - forced failure and disconnect attempt rollback, do not commit, retain original error
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5945112Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5945562Z   duration_ms: 0.961238
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5945952Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5946706Z # Subtest: postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5947891Z ok 22 - postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5948668Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5949041Z   duration_ms: 1.272454
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5949416Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5950059Z # Subtest: unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5950962Z ok 23 - unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5951887Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5952284Z   duration_ms: 0.308402
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5952670Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5953334Z # Subtest: installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5954285Z ok 24 - installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5954897Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5955284Z   duration_ms: 0.275226
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5955687Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5956381Z # Subtest: exact observed catalog rejects every function binding, schema/index/trigger field drift
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5957322Z ok 25 - exact observed catalog rejects every function binding, schema/index/trigger field drift
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5958154Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5958539Z   duration_ms: 14.014139
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5958939Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5959708Z # Subtest: catalog private predecessor full body originates in the unchanged recollection migration
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5960781Z ok 26 - catalog private predecessor full body originates in the unchanged recollection migration
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5961415Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5961813Z   duration_ms: 0.195048
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5962452Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5963181Z # Subtest: immutable trigger dependency body originates in unchanged base SQL and stays security invoker
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5964115Z ok 27 - immutable trigger dependency body originates in unchanged base SQL and stays security invoker
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5964772Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5965198Z   duration_ms: 2.98202
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.5965594Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6398469Z # Subtest: only complete immutable two/five ACL sets normalize; input unchanged and row order irrelevant
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6399519Z ok 28 - only complete immutable two/five ACL sets normalize; input unchanged and row order irrelevant
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6400172Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6400488Z   duration_ms: 3.612301
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6400777Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6401651Z # Subtest: immutable unknown/duplicate/grantor/grantable/missing-PUBLIC/partial3-4 ACL shapes fail closed
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6402557Z ok 29 - immutable unknown/duplicate/grantor/grantable/missing-PUBLIC/partial3-4 ACL shapes fail closed
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6403141Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6403368Z   duration_ms: 1.495873
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6403583Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6404082Z # Subtest: finite immutable ACL never relaxes body/owner/SECDEF/config/signature/other functions/table columns
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6404676Z ok 30 - finite immutable ACL never relaxes body/owner/SECDEF/config/signature/other functions/table columns
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6405060Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6405272Z   duration_ms: 3.915287
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6405763Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6738930Z # Subtest: product delta is exactly the two approved wrapper OID targets plus one approved compaction owner; every other check unchanged
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6740085Z ok 31 - product delta is exactly the two approved wrapper OID targets plus one approved compaction owner; every other check unchanged
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6740821Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6741116Z   duration_ms: 0.999123
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6741406Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6742144Z # Subtest: approved latest migration delegates via retained terminal wrapper and compaction owner is explicitly opportunity owner
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6742925Z ok 32 - approved latest migration delegates via retained terminal wrapper and compaction owner is explicitly opportunity owner
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6743562Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6743868Z   duration_ms: 0.167705
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.6744312Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7325555Z # Subtest: VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7326943Z ok 33 - VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7328633Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7329001Z   duration_ms: 1.380096
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7329464Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7330219Z # Subtest: VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7331338Z ok 34 - VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7332141Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7332912Z   duration_ms: 1.442278
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7333307Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7388674Z # Subtest: actual pg authentication handlers never consult pgpass or transmit credentials
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7393134Z ok 35 - actual pg authentication handlers never consult pgpass or transmit credentials
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7412266Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7418813Z   duration_ms: 3.797861
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7419428Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7420254Z # Subtest: operator action closes source wrapper/peer/binding identity and separate profile review literal
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7421466Z ok 36 - operator action closes source wrapper/peer/binding identity and separate profile review literal
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7422135Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7422494Z   duration_ms: 1.576374
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7422845Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7423641Z # Subtest: runtime role membership/password/config/high privilege drift rejects before ALTER; replay preserves exact attributes
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7424808Z ok 37 - runtime role membership/password/config/high privilege drift rejects before ALTER; replay preserves exact attributes
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7425504Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7425793Z   duration_ms: 0.719373
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7426298Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7426835Z # Subtest: successor and exact action identity checks precede any operator/prelude mutation; error rolls back
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7427947Z ok 38 - successor and exact action identity checks precede any operator/prelude mutation; error rolls back
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7428546Z   ---
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7428859Z   duration_ms: 2.355193
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7429210Z   ...
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7461114Z 1..38
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7461526Z # tests 38
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7461840Z # suites 0
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7462130Z # pass 38
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7462503Z # fail 0
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7462824Z # cancelled 0
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7463065Z # skipped 0
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7463273Z # todo 0
+financial-installation-quality	Run all six pure financial installer suites	2026-10-13T14:26:33.7463487Z # duration_ms 659.050505
+financial-installation-quality	Run captured-schema financial transaction acceptance	﻿2026-10-13T14:26:33.7532565Z ##[group]Run set -euo pipefail
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:33.7532863Z ^[[36;1mset -euo pipefail^[[0m
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:33.7533152Z ^[[36;1mexport TMPDIR=$(mktemp -d /tmp/si-fin-ci-XXXXXX)^[[0m
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:33.7533575Z ^[[36;1mexport FINANCIAL_EXISTING_SCHEMA_ARTIFACTS="$RUNNER_TEMP/financial-captured-native"^[[0m
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:33.7534228Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/financial-installer-finite-profile-native.test.mjs^[[0m
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:33.7571057Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:33.7571393Z env:
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:33.7571591Z   USER: runner
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:33.7571837Z ##[endgroup]
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:33.7923096Z TAP version 13
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6629702Z # Subtest: financial installer approved finite immutable ACL and complete captured-schema transaction
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6639294Z     # Subtest: real PG marker predicate count0 expressionfalse -> false
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6639993Z     ok 1 - real PG marker predicate count0 expressionfalse -> false
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6640764Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6641067Z       duration_ms: 2.389563
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6641448Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6643245Z     # Subtest: real PG marker predicate count1 expressiontrue -> false
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6645102Z     ok 2 - real PG marker predicate count1 expressiontrue -> false
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6646844Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6647147Z       duration_ms: 2.150308
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6647742Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6661612Z     # Subtest: real PG marker predicate count2 expressiontrue -> true
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6662735Z     ok 3 - real PG marker predicate count2 expressiontrue -> true
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6663298Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6663796Z       duration_ms: 1.689076
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6664215Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6676565Z     # Subtest: real PG marker predicate count3 expressiontrue -> false
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6677362Z     ok 4 - real PG marker predicate count3 expressiontrue -> false
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6677948Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6678300Z       duration_ms: 1.407095
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6678613Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6689976Z     # Subtest: real PG marker predicate count2 expressionfalse -> false
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6690710Z     ok 5 - real PG marker predicate count2 expressionfalse -> false
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6691124Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6691490Z       duration_ms: 1.448319
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.6691795Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.7483391Z     # Subtest: actual nonempty membership rejects before operator role mutation and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.7484594Z     ok 6 - actual nonempty membership rejects before operator role mutation and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.7485202Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.7485874Z       duration_ms: 38.709025
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.7486357Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.8202402Z     # Subtest: actual original bootstrap and exact LOGIN6 replay preserve authority; outer rollback
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.8205780Z     ok 7 - actual original bootstrap and exact LOGIN6 replay preserve authority; outer rollback
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.8206508Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.8206798Z       duration_ms: 71.727683
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:35.8207113Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.1755109Z     # Subtest: forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.1755922Z     ok 8 - forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.1756317Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.1756604Z       duration_ms: 353.738059
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.1756913Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.5446165Z     # Subtest: actual first apply through new opt-in profile and unchanged 49 chain
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.5446958Z     ok 9 - actual first apply through new opt-in profile and unchanged 49 chain
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.5447338Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.5447832Z       duration_ms: 369.309246
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.5448122Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.5593388Z     # Subtest: full actual postcondition query parses/executes; every original predicate true
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.5594449Z     ok 10 - full actual postcondition query parses/executes; every original predicate true
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.5595048Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.5595387Z       duration_ms: 4.865462
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.5595701Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9019855Z     # Subtest: second actual operator+profile50 apply preserves full financial catalog and nonempty rows
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9020766Z     ok 11 - second actual operator+profile50 apply preserves full financial catalog and nonempty rows
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9021199Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9021425Z       duration_ms: 341.127378
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9021672Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9092358Z     # Subtest: actual legal two/five immutable ACLs have same effective routine/table/column privileges
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9093129Z     ok 12 - actual legal two/five immutable ACLs have same effective routine/table/column privileges
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9094198Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9094533Z       duration_ms: 8.459317
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9094799Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9161635Z     # Subtest: actual finite immutable descriptor rejects unknown-grantee and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9162627Z     ok 13 - actual finite immutable descriptor rejects unknown-grantee and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9163128Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9163414Z       duration_ms: 6.449068
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9163709Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9219459Z     # Subtest: actual finite immutable descriptor rejects grantable and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9220555Z     ok 14 - actual finite immutable descriptor rejects grantable and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9221072Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9221520Z       duration_ms: 5.817592
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9221898Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9278638Z     # Subtest: actual finite immutable descriptor rejects missing-public and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9279572Z     ok 15 - actual finite immutable descriptor rejects missing-public and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9280043Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9280361Z       duration_ms: 5.787492
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9280617Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9338583Z     # Subtest: actual finite immutable descriptor rejects partial-four and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9339567Z     ok 16 - actual finite immutable descriptor rejects partial-four and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9340063Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9340678Z       duration_ms: 5.946443
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9341026Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9396914Z     # Subtest: actual finite immutable descriptor rejects partial-three and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9397921Z     ok 17 - actual finite immutable descriptor rejects partial-three and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9398396Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9398679Z       duration_ms: 5.782434
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9398983Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9457431Z     # Subtest: actual finite immutable descriptor rejects wrong-owner and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9458364Z     ok 18 - actual finite immutable descriptor rejects wrong-owner and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9458837Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9459125Z       duration_ms: 5.935032
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9459456Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9518320Z     # Subtest: actual finite immutable descriptor rejects security-definer and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9519217Z     ok 19 - actual finite immutable descriptor rejects security-definer and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9526105Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9526428Z       duration_ms: 6.044515
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9526740Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9606973Z     # Subtest: actual finite immutable descriptor rejects config and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9608280Z     ok 20 - actual finite immutable descriptor rejects config and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9608594Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9608886Z       duration_ms: 7.498758
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9609122Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9667266Z     # Subtest: actual finite immutable descriptor rejects wrong-body and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9668816Z     ok 21 - actual finite immutable descriptor rejects wrong-body and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9669391Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9669869Z       duration_ms: 7.234014
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9670229Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9733513Z     # Subtest: actual finite immutable descriptor rejects wrong-grantor and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9734363Z     ok 22 - actual finite immutable descriptor rejects wrong-grantor and rolls back
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9735128Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9735554Z       duration_ms: 6.561114
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9735948Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9782517Z     # Subtest: actual wrong compaction function owner rejects original full query
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9783175Z     ok 23 - actual wrong compaction function owner rejects original full query
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9783674Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9783959Z       duration_ms: 4.872043
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:36.9784244Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.0219444Z     # Subtest: installed partial rejects before operator/prelude/base mutations
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.0220437Z     ok 24 - installed partial rejects before operator/prelude/base mutations
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.0221195Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.0221665Z       duration_ms: 24.23705
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.0222343Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.0527841Z     # Subtest: installed config rejects before operator/prelude/base mutations
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.0528538Z     ok 25 - installed config rejects before operator/prelude/base mutations
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.0529006Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.0529882Z       duration_ms: 30.536832
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.0530271Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.3230931Z     # Subtest: real writer disconnect after predecessor replacement makes server rollback
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.3232005Z     ok 26 - real writer disconnect after predecessor replacement makes server rollback
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.3232577Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.3232937Z       duration_ms: 270.419377
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.3233339Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.3455548Z     # Subtest: competing actual shared lock rejects with no BEGIN or mutation
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.3456500Z     ok 27 - competing actual shared lock rejects with no BEGIN or mutation
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.3457023Z       ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.3457335Z       duration_ms: 21.812855
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.3457899Z       ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7231448Z     1..27
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7234866Z ok 1 - financial installer approved finite immutable ACL and complete captured-schema transaction
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7235701Z   ---
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7238012Z   duration_ms: 3803.167457
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7238366Z   ...
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7413478Z 1..1
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7413873Z # tests 28
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7414274Z # suites 0
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7414547Z # pass 28
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7414801Z # fail 0
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7415243Z # cancelled 0
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7415533Z # skipped 0
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7415832Z # todo 0
+financial-installation-quality	Run captured-schema financial transaction acceptance	2026-10-13T14:26:37.7416160Z # duration_ms 3957.25491
+financial-installation-quality	Verify disk versus effective loaded HBA	﻿2026-10-13T14:26:37.7490563Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:37.7491320Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs^[[0m
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:37.7526648Z shell: /usr/bin/bash -e {0}
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:37.7526940Z env:
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:37.7527216Z   USER: runner
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:37.7527432Z ##[endgroup]
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:37.7846045Z TAP version 13
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9754811Z # Subtest: native PostgreSQL distinguishes a reject file on disk from effective loaded HBA
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9758301Z ok 1 - native PostgreSQL distinguishes a reject file on disk from effective loaded HBA
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9759194Z   ---
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9759650Z   duration_ms: 2154.360987
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9760111Z   ...
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9815583Z 1..1
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9816116Z # tests 1
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9816568Z # suites 0
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9817065Z # pass 1
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9817703Z # fail 0
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9818323Z # cancelled 0
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9819064Z # skipped 0
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9819485Z # todo 0
+financial-installation-quality	Verify disk versus effective loaded HBA	2026-10-13T14:26:39.9819977Z # duration_ms 2204.424837
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	﻿2026-10-13T14:26:40.0765019Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 --test-name-pattern='^V3\.16\.16 (preserves true recollection|financial fact append)|^financial (history amendment|atomic replay rollback)' scripts/opportunity-v3/migration-contract.test.mjs
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.0766790Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 --test-name-pattern='^V3\.16\.16 (preserves true recollection|financial fact append)|^financial (history amendment|atomic replay rollback)' scripts/opportunity-v3/migration-contract.test.mjs^[[0m
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.0805116Z shell: /usr/bin/bash -e {0}
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.0805485Z env:
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.0805776Z   USER: runner
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.0806053Z ##[endgroup]
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.2055943Z TAP version 13
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.2650161Z # (node:4412) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.2668955Z # (Use `node --trace-warnings ...` to show where the warning was created)
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.2670745Z # (node:4412) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.2672135Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:40.2673465Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8441191Z # Subtest: V3.16.16 preserves true recollection time without consuming a financial fact revision
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8444008Z ok 1 - V3.16.16 preserves true recollection time without consuming a financial fact revision
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8444815Z   ---
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8445101Z   duration_ms: 1.344257
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8445353Z   ...
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8449438Z # Subtest: V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8450457Z ok 2 - V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8450985Z   ---
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8451323Z   duration_ms: 45.461322
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8451717Z   ...
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8452375Z # Subtest: financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8453231Z ok 3 - financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8453756Z   ---
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8454112Z   duration_ms: 122.754659
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8454522Z   ...
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8455134Z # Subtest: financial atomic replay rollback retains installed successor after predecessor replacement and forced failure
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8455980Z ok 4 - financial atomic replay rollback retains installed successor after predecessor replacement and forced failure
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8456525Z   ---
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8456884Z   duration_ms: 112.468583
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8457281Z   ...
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8542616Z 1..4
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8542977Z # tests 4
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8543249Z # suites 0
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8543480Z # pass 4
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8543778Z # fail 0
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8544031Z # cancelled 0
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8544351Z # skipped 0
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8544587Z # todo 0
+financial-installation-quality	Verify original lifetime bound, amended history and atomic rollback	2026-10-13T14:26:43.8544835Z # duration_ms 3656.353375
+financial-installation-quality	Post Set up pinned Node 22	﻿2026-10-13T14:26:43.9030473Z Post job cleanup.
+financial-installation-quality	Post Set up pinned Node 22	2026-10-13T14:26:43.9972221Z (node:4621) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+financial-installation-quality	Post Set up pinned Node 22	2026-10-13T14:26:43.9973022Z (Use `node --trace-deprecation ...` to show where the warning was created)
+financial-installation-quality	Post Checkout candidate without persisted credentials	﻿2026-10-13T14:26:44.0229859Z Post job cleanup.
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.0937292Z [command]/usr/bin/git version
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.0969856Z git version 2.55.0
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.0996566Z Temporarily overriding HOME='/home/runner/work/_temp/cc0898be-d623-40e5-a9b0-b283ddc02cd8' before making global git config changes
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.0997934Z Adding repository directory to the temporary git global config as a safe directory
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.1001672Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.1033483Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.1059841Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.1221387Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.1246449Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.1415611Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+financial-installation-quality	Post Checkout candidate without persisted credentials	2026-10-13T14:26:44.1442558Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+financial-installation-quality	Complete job	﻿2026-10-13T14:26:44.1758615Z Cleaning up orphan processes
+financial-installation-quality	Complete job	2026-10-13T14:26:44.1976807Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
