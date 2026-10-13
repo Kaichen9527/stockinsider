@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "/tmp/financial-release-versions.mjs"
+  ],
+  "start_utc": "2026-10-13T13:28:36Z",
+  "seconds": 0.28102779388427734,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 24363008,
+  "min_free_bytes": 8941154304
+}

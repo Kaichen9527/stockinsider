@@ -1,0 +1,257 @@
+{
+  "schema": "narrow-financial-installation-release-assembly-v1",
+  "source": {
+    "head": "08e2e8c93781e9f22320f3a66435d4bffbb5e3ad",
+    "tree": "4b7530ac18609e164b2372523ff8d7b2b4037841",
+    "webTree": "08c8f0db7388a47b4cb663aa1c64ae7cc03e682f",
+    "branch": "codex/financial-installation-release-oct13",
+    "approvedBase": "4dddb8f01f518350c7d54b7995ee9358c1d945a7",
+    "frozenRuntime": "6bba84fcd90329ede52ef8c5f91079baf5142639",
+    "buildSubject": "9735bc3179d567d5c541e6edd51836efd9d347d3",
+    "laterCodeCommitDocsOnly": true
+  },
+  "window": {
+    "start": "2026-10-13T13:15:02Z",
+    "deadline": "2026-10-13T13:45:02Z",
+    "sealed": "2026-10-13T13:30:28Z",
+    "manualEngineeringNotProductRoleBudget": true
+  },
+  "assembly": {
+    "manifest": "assembly-manifest.json",
+    "runtimeSqlNativeBytesPreserved": true,
+    "portableTestOnlyDeltas": [
+      "financial-existing-schema-profile.test.mjs: exact baseline JSON paths",
+      "financial-installer-wrapper-targets.test.mjs: exact historical text fixture and SHA assertion"
+    ],
+    "portableFixtures": [
+      {
+        "path": "scripts/opportunity-v3/fixtures/financial-installation/original-default48.json",
+        "bytes": 9481,
+        "sha256": "5c350e04bb358f0616d451128a47fd9f68313f4e5603cee3e11e43115d9dfc07"
+      },
+      {
+        "path": "scripts/opportunity-v3/fixtures/financial-installation/original-financial49.json",
+        "bytes": 9722,
+        "sha256": "e311d2b2250d956b8c695a1129685b7b0fd8400380a8e29eeca707468e3e35cc"
+      },
+      {
+        "path": "scripts/opportunity-v3/fixtures/financial-installation/wrapper-baseline.mjs.txt",
+        "bytes": 39398,
+        "sha256": "f55cabc90924ba6ecb59609df957acb60b936d853b816bb932549f478a7580a4"
+      }
+    ],
+    "missingImports": [],
+    "excludedObsoleteNativeEntrypoints": [
+      "financial-existing-schema-owner-profile-native.test.mjs",
+      "financial-history-catalog-native.test.mjs",
+      "financial-history-existing-schema-native.test.mjs",
+      "financial-installer-postcondition-native.test.mjs",
+      "financial-installer-wrapper-audit-native.test.mjs",
+      "financial-vps-operator-native.test.mjs"
+    ],
+    "historicalRawNotImported": true,
+    "originalCanonicalWorkflowCommandsPackagesLocksUnchanged": true,
+    "no48_49_50OrOperatorHashChange": true
+  },
+  "phases": {
+    "pure": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+        "scripts/opportunity-v3/financial-history-install-guard.test.mjs",
+        "scripts/opportunity-v3/financial-existing-schema-profile.test.mjs",
+        "scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs",
+        "scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs",
+        "scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs"
+      ],
+      "start_utc": "2026-10-13T13:20:05Z",
+      "seconds": 1.0946531295776367,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 59727872,
+      "min_free_bytes": 8941985792,
+      "counts": {
+        "tests": 38,
+        "pass": 38,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "pure.stdout",
+      "stderr": "pure.stderr"
+    },
+    "financial-native": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=^V3\\.16\\.16 (preserves true recollection|financial fact append)|^financial (history amendment|atomic replay rollback)",
+        "scripts/opportunity-v3/migration-contract.test.mjs"
+      ],
+      "start_utc": "2026-10-13T13:21:13Z",
+      "seconds": 3.0473074913024902,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 174395392,
+      "min_free_bytes": 8941965312,
+      "counts": {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "financial-native.stdout",
+      "stderr": "financial-native.stderr"
+    },
+    "hba": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs"
+      ],
+      "start_utc": "2026-10-13T13:20:49Z",
+      "seconds": 1.0995168685913086,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 101257216,
+      "min_free_bytes": 8941973504,
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "hba.stdout",
+      "stderr": "hba.stderr"
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-13T13:23:34Z",
+      "seconds": 2.81856369972229,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 526106624,
+      "min_free_bytes": 9251577856,
+      "counts": {},
+      "stdout": "typecheck.stdout",
+      "stderr": "typecheck.stderr"
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start_utc": "2026-10-13T13:24:22Z",
+      "seconds": 22.639200448989868,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1091760128,
+      "min_free_bytes": 9251561472,
+      "counts": {},
+      "stdout": "lint.stdout",
+      "stderr": "lint.stderr"
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start_utc": "2026-10-13T13:24:52Z",
+      "seconds": 51.97796845436096,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1950420992,
+      "min_free_bytes": 8941555712,
+      "counts": {},
+      "stdout": "build.stdout",
+      "stderr": "build.stderr"
+    },
+    "tool-versions": {
+      "command": [
+        "node",
+        "/tmp/financial-release-versions.mjs"
+      ],
+      "start_utc": "2026-10-13T13:28:36Z",
+      "seconds": 0.28102779388427734,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 24363008,
+      "min_free_bytes": 8941154304,
+      "counts": {},
+      "stdout": "tool-versions.stdout",
+      "stderr": "tool-versions.stderr"
+    }
+  },
+  "priorCapturedNative": {
+    "pass": 28,
+    "fail": 0,
+    "skip": 0,
+    "rerun": false,
+    "scope": "prior local captured-schema engineering; byte-equivalent 74 transitive inputs including actual original native source",
+    "equivalenceManifest": "captured-native-input-equivalence.json",
+    "evidenceCommit": "215d191cc11118fcdd10338586a7700b6f38c42b",
+    "receiptSha256": "f162ee716386dbaa16a4d42d6b434e4774ffc746e3cc23ce1e56e38556ddb045"
+  },
+  "build": {
+    "kind": "normal npm --prefix web run build",
+    "next": "16.3.4",
+    "buildId": "sfgmYQ5cEhhOkLv-HEWhg",
+    "serverFiles": 1796,
+    "manifest": "compiled-server-manifest.json",
+    "newBuildNotReused": true
+  },
+  "resources": {
+    "method": "250ms sampled child process-tree RSS and workspace disk; excludes detached/brief child peaks, not cgroup measurement",
+    "maxSampledProcessTreeRssBytes": 1950420992,
+    "minSampledWorkspaceFreeBytes": 8941154304,
+    "diskReserveBytes": 8589934592,
+    "rssGoalBytes": 8589934592,
+    "cleanup": "cleanup.json"
+  },
+  "diagnosticLimitation": {
+    "restrictedToolVersionInventory": "spawnSync pg_config EPERM; error extract +original task tool transcript retained; supported execution context then measured actual versions",
+    "notTestFailure": true
+  },
+  "workflow": {
+    "path": ".github/workflows/financial-installation-quality.yml",
+    "ordinaryReadonlyOnly": true,
+    "expectedPG": "17.x",
+    "signedRepositoryKeyFingerprint": "B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8",
+    "configuredTests": {
+      "pure": 38,
+      "capturedNative": 28,
+      "hba": 1,
+      "financialNative": 4
+    },
+    "actualGithubExecution": "pending; not started or rerun here"
+  },
+  "pending": [
+    "independent review of narrow assembly and two portable pure-test dependency deltas",
+    "actual ordinary/protected checks for new exact head",
+    "formal fixed private peer CLI/operator transport and production attestation",
+    "real production capacity and authorized installation; no 343 usable-data recovery claim"
+  ],
+  "notPerformed": [
+    "PR creation",
+    "merge/main",
+    "deployment",
+    "VPS/remoteDB/HTTP/crawl",
+    "model/author/reviewer execution or signature",
+    "strategy adoption",
+    "Chromium403 retry",
+    "canonical155/fullPCR rerun"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "scripts/opportunity-v3/financial-history-install-guard.test.mjs",
+    "scripts/opportunity-v3/financial-existing-schema-profile.test.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs",
+    "scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs",
+    "scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs"
+  ],
+  "start_utc": "2026-10-13T13:20:05Z",
+  "seconds": 1.0946531295776367,
+  "exit": 0,
+  "peak_sampled_process_tree_rss_bytes": 59727872,
+  "min_free_bytes": 8941985792
+}

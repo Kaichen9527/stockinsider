@@ -1,0 +1,28 @@
+{
+  "missingRelativeImports": [],
+  "files": [
+    "migrations/20261005_financial_history_admission_v1.sql",
+    "migrations/20261005_release_function_ownership_bridge_v1.sql",
+    "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "scripts/opportunity-v3/migration-plan.mjs",
+    "scripts/opportunity-v3/atomic-migration-chain.mjs",
+    "scripts/opportunity-v3/atomic-migration-chain.test.mjs",
+    "scripts/opportunity-v3/financial-history-install-guard.mjs",
+    "scripts/opportunity-v3/financial-history-install-guard.test.mjs",
+    "scripts/opportunity-v3/financial-history-catalog.mjs",
+    "scripts/opportunity-v3/financial-history-catalog.expected.json",
+    "scripts/opportunity-v3/financial-existing-schema-profile.mjs",
+    "scripts/opportunity-v3/financial-existing-schema-profile.test.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-action.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-binding.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs",
+    "scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs",
+    "scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs",
+    "scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs",
+    "scripts/opportunity-v3/financial-installer-finite-profile-native.test.mjs",
+    "scripts/opportunity-v3/migration-contract.test.mjs",
+    "scripts/opportunity-v3/vps-migration-peer.mjs",
+    "scripts/opportunity-v3/fixtures/publication-install-README.md",
+    "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz"
+  ]
+}

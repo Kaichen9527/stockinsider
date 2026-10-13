@@ -1,0 +1,200 @@
+TAP version 13
+# Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+  ---
+  duration_ms: 4.263885
+  ...
+# Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+  ---
+  duration_ms: 79.142458
+  ...
+# Subtest: atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+ok 3 - atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+  ---
+  duration_ms: 1.044546
+  ...
+# Subtest: atomic scanner recognizes CR line endings rather than silently dropping real control
+ok 4 - atomic scanner recognizes CR line endings rather than silently dropping real control
+  ---
+  duration_ms: 0.810313
+  ...
+# Subtest: atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+ok 5 - atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+  ---
+  duration_ms: 0.40467
+  ...
+# Subtest: atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+ok 6 - atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+  ---
+  duration_ms: 0.37767
+  ...
+# Subtest: atomic scanner normalizes every unchanged base migration without claiming installer integration
+ok 7 - atomic scanner normalizes every unchanged base migration without claiming installer integration
+  ---
+  duration_ms: 79.808095
+  ...
+# Subtest: atomic scanner rejects additional documented commands that cannot run in a transaction
+ok 8 - atomic scanner rejects additional documented commands that cannot run in a transaction
+  ---
+  duration_ms: 0.519894
+  ...
+# Subtest: default48 and ordinary financial49 outputs remain byte-equivalent; profile separately reports 50 steps
+ok 9 - default48 and ordinary financial49 outputs remain byte-equivalent; profile separately reports 50 steps
+  ---
+  duration_ms: 213.808774
+  ...
+# Subtest: missing/wrong prelude bytes/hash/order/chain and profile omission reject
+ok 10 - missing/wrong prelude bytes/hash/order/chain and profile omission reject
+  ---
+  duration_ms: 6.120088
+  ...
+# Subtest: profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed
+ok 11 - profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed
+  ---
+  duration_ms: 0.671284
+  ...
+# Subtest: actual installer checks successor and profile under lock/BEGIN before any prelude query
+ok 12 - actual installer checks successor and profile under lock/BEGIN before any prelude query
+  ---
+  duration_ms: 0.657102
+  ...
+# Subtest: default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+ok 13 - default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+  ---
+  duration_ms: 75.667315
+  ...
+# Subtest: omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+ok 14 - omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+  ---
+  duration_ms: 0.735761
+  ...
+# Subtest: extension flag alone is not review authority: exact hash must be in hash-bound review once
+ok 15 - extension flag alone is not review authority: exact hash must be in hash-bound review once
+  ---
+  duration_ms: 0.525212
+  ...
+# Subtest: base-only cannot replay installed successor and partial residue cannot replay even with tail
+ok 16 - base-only cannot replay installed successor and partial residue cannot replay even with tail
+  ---
+  duration_ms: 1.850072
+  ...
+# Subtest: missing/ambiguous state and any failed postcondition reject
+ok 17 - missing/ambiguous state and any failed postcondition reject
+  ---
+  duration_ms: 0.461537
+  ...
+# Subtest: busy guard performs no BEGIN/mutation and closes owned session
+ok 18 - busy guard performs no BEGIN/mutation and closes owned session
+  ---
+  duration_ms: 0.441536
+  ...
+# Subtest: installed successor guard runs under lock+BEGIN before any base mutation
+ok 19 - installed successor guard runs under lock+BEGIN before any base mutation
+  ---
+  duration_ms: 0.336738
+  ...
+# Subtest: one shared transaction strips inner controls and commits after verification
+ok 20 - one shared transaction strips inner controls and commits after verification
+  ---
+  duration_ms: 1.945016
+  ...
+# Subtest: forced failure and disconnect attempt rollback, do not commit, retain original error
+ok 21 - forced failure and disconnect attempt rollback, do not commit, retain original error
+  ---
+  duration_ms: 1.194372
+  ...
+# Subtest: postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+ok 22 - postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+  ---
+  duration_ms: 0.803042
+  ...
+# Subtest: unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+ok 23 - unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+  ---
+  duration_ms: 1.158499
+  ...
+# Subtest: installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+ok 24 - installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+  ---
+  duration_ms: 0.37791
+  ...
+# Subtest: exact observed catalog rejects every function binding, schema/index/trigger field drift
+ok 25 - exact observed catalog rejects every function binding, schema/index/trigger field drift
+  ---
+  duration_ms: 18.889671
+  ...
+# Subtest: catalog private predecessor full body originates in the unchanged recollection migration
+ok 26 - catalog private predecessor full body originates in the unchanged recollection migration
+  ---
+  duration_ms: 0.402187
+  ...
+# Subtest: immutable trigger dependency body originates in unchanged base SQL and stays security invoker
+ok 27 - immutable trigger dependency body originates in unchanged base SQL and stays security invoker
+  ---
+  duration_ms: 3.681176
+  ...
+# Subtest: only complete immutable two/five ACL sets normalize; input unchanged and row order irrelevant
+ok 28 - only complete immutable two/five ACL sets normalize; input unchanged and row order irrelevant
+  ---
+  duration_ms: 4.797311
+  ...
+# Subtest: immutable unknown/duplicate/grantor/grantable/missing-PUBLIC/partial3-4 ACL shapes fail closed
+ok 29 - immutable unknown/duplicate/grantor/grantable/missing-PUBLIC/partial3-4 ACL shapes fail closed
+  ---
+  duration_ms: 1.872326
+  ...
+# Subtest: finite immutable ACL never relaxes body/owner/SECDEF/config/signature/other functions/table columns
+ok 30 - finite immutable ACL never relaxes body/owner/SECDEF/config/signature/other functions/table columns
+  ---
+  duration_ms: 5.742847
+  ...
+# Subtest: product delta is exactly the two approved wrapper OID targets plus one approved compaction owner; every other check unchanged
+ok 31 - product delta is exactly the two approved wrapper OID targets plus one approved compaction owner; every other check unchanged
+  ---
+  duration_ms: 1.23896
+  ...
+# Subtest: approved latest migration delegates via retained terminal wrapper and compaction owner is explicitly opportunity owner
+ok 32 - approved latest migration delegates via retained terminal wrapper and compaction owner is explicitly opportunity owner
+  ---
+  duration_ms: 0.249617
+  ...
+# Subtest: VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+ok 33 - VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+  ---
+  duration_ms: 2.503448
+  ...
+# Subtest: VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+ok 34 - VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+  ---
+  duration_ms: 1.826707
+  ...
+# Subtest: actual pg authentication handlers never consult pgpass or transmit credentials
+ok 35 - actual pg authentication handlers never consult pgpass or transmit credentials
+  ---
+  duration_ms: 5.110964
+  ...
+# Subtest: operator action closes source wrapper/peer/binding identity and separate profile review literal
+ok 36 - operator action closes source wrapper/peer/binding identity and separate profile review literal
+  ---
+  duration_ms: 3.111406
+  ...
+# Subtest: runtime role membership/password/config/high privilege drift rejects before ALTER; replay preserves exact attributes
+ok 37 - runtime role membership/password/config/high privilege drift rejects before ALTER; replay preserves exact attributes
+  ---
+  duration_ms: 0.748911
+  ...
+# Subtest: successor and exact action identity checks precede any operator/prelude mutation; error rolls back
+ok 38 - successor and exact action identity checks precede any operator/prelude mutation; error rolls back
+  ---
+  duration_ms: 2.92198
+  ...
+1..38
+# tests 38
+# suites 0
+# pass 38
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 961.574557
