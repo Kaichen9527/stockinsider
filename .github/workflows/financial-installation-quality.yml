@@ -1,0 +1,73 @@
+name: Financial installation quality diagnostics
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/financial-installation-quality.yml'
+      - 'scripts/opportunity-v3/**'
+      - 'migrations/**'
+      - 'deployment/vps/bootstrap-stockinsider-postgres.sql'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.nvmrc'
+      - 'web/package.json'
+      - 'web/package-lock.json'
+permissions:
+  contents: read
+jobs:
+  financial-installation-quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout candidate without persisted credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Set up pinned Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.14.0'
+      - name: Install PostgreSQL 17 using the existing official signing identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          key="$RUNNER_TEMP/pgdg.asc"
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc -o "$key"
+          fingerprint=$(gpg --batch --show-keys --with-colons "$key" | awk -F: '$1=="fpr" {print $10; exit}')
+          test "$fingerprint" = B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+          sudo install -d -m 0755 /usr/share/postgresql-common/pgdg
+          sudo install -m 0644 "$key" /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc
+          printf '%s\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17
+          bin=/usr/lib/postgresql/17/bin
+          for tool in pg_config initdb pg_ctl psql; do test -x "$bin/$tool"; done
+          "$bin/pg_config" --version | grep -E '^PostgreSQL 17\.'
+          echo "$bin" >> "$GITHUB_PATH"
+          echo "USER=$(id -un)" >> "$GITHUB_ENV"
+      - name: Install locked dependencies without lifecycle scripts
+        run: |
+          npm ci --ignore-scripts
+          npm --prefix web ci --ignore-scripts
+      - name: Run all six pure financial installer suites
+        run: >-
+          node --experimental-strip-types --test --test-concurrency=1
+          scripts/opportunity-v3/atomic-migration-chain.test.mjs
+          scripts/opportunity-v3/financial-history-install-guard.test.mjs
+          scripts/opportunity-v3/financial-existing-schema-profile.test.mjs
+          scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs
+          scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs
+          scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs
+      - name: Run captured-schema financial transaction acceptance
+        shell: bash
+        run: |
+          set -euo pipefail
+          export TMPDIR=$(mktemp -d /tmp/si-fin-ci-XXXXXX)
+          export FINANCIAL_EXISTING_SCHEMA_ARTIFACTS="$RUNNER_TEMP/financial-captured-native"
+          node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/financial-installer-finite-profile-native.test.mjs
+      - name: Verify disk versus effective loaded HBA
+        run: node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs
+      - name: Verify original lifetime bound, amended history and atomic rollback
+        run: >-
+          node --experimental-strip-types --test --test-concurrency=1
+          --test-name-pattern='^V3\.16\.16 (preserves true recollection|financial fact append)|^financial (history amendment|atomic replay rollback)'
+          scripts/opportunity-v3/migration-contract.test.mjs

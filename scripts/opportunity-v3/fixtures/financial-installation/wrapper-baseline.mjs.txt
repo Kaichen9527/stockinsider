@@ -1,0 +1,518 @@
+#!/usr/bin/env node
+import {vpsPeerMigrationConnection} from './vps-migration-peer.mjs';
+import {executeFinancialVpsOperatorPrerequisite} from './financial-vps-operator-action.mjs';
+import {assertOperatorFlags,financialOperatorActionIdentity,assertOperatorPlan,assertOperatorReviewBinding} from './financial-vps-operator-binding.mjs';
+import {OWNERSHIP_PRELUDE,makeFinancialExistingSchemaProfile,assertFinancialExistingSchemaPlan,assertFinancialProfileFlags,assertFinancialProfileReviewBinding} from './financial-existing-schema-profile.mjs';
+import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
+import { FINANCIAL_TAIL, selectFinancialHistoryChain, assertFinancialReviewBinding, assertInstalledFinancialHistoryPlan, verifyFinancialHistoryPostconditions } from './financial-history-install-guard.mjs';
+
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
+
+const require = createRequire(import.meta.url);
+const { Client } = require('pg');
+const { canonicalJson } = require('../runtime/codec');
+const { resolvePostgresConnectionReference } = require('../runtime/credential-resolver');
+const { resolveReviewedRuntimeRelease } = require('../runtime/reviewed-runtime-release');
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const SHA40 = /^[0-9a-f]{40}$/u;
+const MIGRATIONS = Object.freeze([
+  'migrations/20260724_source_led_opportunity_engine_v3.sql',
+  'migrations/20260809_product_value_recovery_v3_12.sql',
+  'migrations/20260809_decision_integrity_v3_13.sql',
+  'migrations/20260811_actionability_recovery_v3_14.sql',
+  'migrations/20260813_opportunity_recovery_v3_15.sql',
+  'migrations/20260814_official_ingestion_chunk_apply_v3_15.sql',
+  'migrations/20260816_claim_handoff_lease_v3_16.sql',
+  'migrations/20260816_official_ingestion_partial_resume_v3_16.sql',
+  'migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql',
+  'migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql',
+  'migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql',
+  'migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql',
+  'migrations/20260816_analysis_payload_reuse_v3_16_15.sql',
+  'migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql',
+  'migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql',
+  'migrations/20260817_runtime_health_bootstrap_v3_16_19.sql',
+  'migrations/20260817_evaluation_clock_v3_16_20.sql',
+  'migrations/20260817_provider_acquisition_v3_16_21.sql',
+  'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql',
+  'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql',
+  'migrations/20260822_candidate_ledger_retention_v3_18.sql',
+  'migrations/20260823_release_reconciliation_v3_19.sql',
+  'migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql',
+  'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql',
+  'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql',
+  'migrations/20260828_legacy_evaluation_schema_v3_19_6.sql',
+  'migrations/20260828_reused_acquisition_lineage_v3_19_7.sql',
+  'migrations/20260828_candidate_retention_authority_v3_19_10.sql',
+  'migrations/20260828_full_candidate_retention_authority_v3_19_11.sql',
+  'migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql',
+  'migrations/20260828_final_claim_handoff_lease_v3_19_16.sql',
+  'migrations/20260828_kol_first_runtime_recovery_v3_20.sql',
+  'migrations/20260829_v320_source_completion_cardinality_repair.sql',
+  'migrations/20260829_v320_kol_source_authority_seed.sql',
+  'migrations/20260829_v320_kol_projection_marker.sql',
+  'migrations/20260830_v320_kol_retention_bridge.sql',
+  'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
+  'migrations/20260830_v320_kol_claim_payload_compaction.sql',
+  'migrations/20260830_v320_kol_retention_owner_boundary.sql',
+  // Requires the financial-acquisition and evidence-contract planes already
+  // present on the reviewed production database; fails closed if absent.
+  'migrations/20260909_official_financial_validation_receipts.sql',
+  'migrations/20260911_v320_source_terminal_projection_authority.sql',
+  'migrations/20260911_candidate_financial_fact_manifest_v8.sql',
+  'migrations/20260911_02_financial_field_work_fairness.sql',
+  'migrations/20260911_03_financial_document_job_links.sql',
+  'migrations/20260911_04_taiwan_candidate_refresh_queue.sql',
+  'migrations/20260911_candidate_history_backfill_v1.sql',
+  'migrations/20260911_05_financial_fact_isolation_v10.sql',
+  'migrations/20260924_entry_plan_official_action_symbols.sql',
+]);
+const V3192_PROJECTION_DOSSIER_MIGRATION =
+  'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
+
+async function reviewedMigrationIsSuperseded(client, relativePath) {
+  if (relativePath !== V3192_PROJECTION_DOSSIER_MIGRATION) return false;
+  const result = await client.query(`SELECT CASE
+    WHEN to_regprocedure(
+      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)') IS NULL
+      THEN false
+    ELSE position('jsonb_typeof(v_item#>''{bundle,json,researchDossier}'')' IN pg_get_functiondef(
+      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+      AND position('''dossierId''' IN pg_get_functiondef(
+      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+      AND position('decision_revision_identity_conflict' IN pg_get_functiondef(
+      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+    END AS superseded`);
+  return result.rows[0]?.superseded === true;
+}
+
+function parseArguments(argv) {
+  const result = { apply:false,sourceCommit:null,attestationCommit:null };
+  for (let index=0; index<argv.length; index+=1) {
+    const value=argv[index];
+    if(value==='--apply')result.apply=true;
+    else if(value==='--financial-history-extension'){if(result.financialHistoryExtension)throw new Error('invalid_arguments');result.financialHistoryExtension=true;}
+    else if(value==='--financial-existing-schema-profile'){if(result.financialExistingSchemaProfile)throw new Error('invalid_arguments');result.financialExistingSchemaProfile=true;}
+    else if(value==='--private-vps-peer-operator'){if(result.privateVpsPeerOperator)throw Error('invalid_arguments');result.privateVpsPeerOperator=true;}
+    else if(value==='--bootstrap-vps-runtime-role'){if(result.bootstrapVpsRuntimeRole)throw Error('invalid_arguments');result.bootstrapVpsRuntimeRole=true;}
+    else if(value==='--source-commit'&&SHA40.test(argv[index+1]??''))result.sourceCommit=argv[++index];
+    else if(value==='--attestation-commit'&&SHA40.test(argv[index+1]??''))result.attestationCommit=argv[++index];
+    else throw new Error('invalid_arguments');
+  }
+  if(!result.apply||!result.sourceCommit||!result.attestationCommit)throw new Error('invalid_arguments');
+  assertFinancialProfileFlags(result);
+  assertOperatorFlags(result);
+  return Object.freeze(result);
+}
+
+function reviewedMigrationPlan(options) {
+  assertFinancialProfileFlags(options);
+  assertOperatorFlags(options);
+  const financialEnabled=options.financialHistoryExtension===true||options.financialExistingSchemaProfile===true;
+  const head=execFileSync('/usr/bin/git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
+  const dirty=execFileSync('/usr/bin/git',['status','--porcelain=v1','--untracked-files=all'],
+    {cwd:root,encoding:'utf8'}).trim();
+  if(head!==options.sourceCommit||dirty!=='')throw new Error('source_tree_dirty');
+  resolveReviewedRuntimeRelease({repositoryRoot:root,sourceCommit:options.sourceCommit,
+    attestationCommit:options.attestationCommit});
+  const status=JSON.parse(fs.readFileSync(path.join(root,
+    '.loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json'),'utf8'));
+  if(status?.authority?.v314?.productionDatabaseMigrationAuthorized!==true)
+    throw new Error('production_migration_authority_missing');
+  const baseMigrations=MIGRATIONS.map((relativePath)=>{
+    const bytes=fs.readFileSync(path.join(root,relativePath));
+    if(/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')))
+      throw new Error('non_additive_migration_rejected');
+    return Object.freeze({relativePath,bytes,sha256:createHash('sha256').update(bytes).digest('hex')});
+  });
+  const tailBytes=financialEnabled ? fs.readFileSync(path.join(root,FINANCIAL_TAIL)) : null;
+  const migrations=selectFinancialHistoryChain(baseMigrations,tailBytes ? {relativePath:FINANCIAL_TAIL,bytes:tailBytes,sha256:createHash('sha256').update(tailBytes).digest('hex')} : null, financialEnabled);
+  const chainSha256=createHash('sha256').update(JSON.stringify(migrations
+    .map(({relativePath,sha256})=>[relativePath,sha256]))).digest('hex');
+  const preludeBytes=options.financialExistingSchemaProfile?fs.readFileSync(path.join(root,OWNERSHIP_PRELUDE)):null;
+  const financialExistingSchemaProfile=preludeBytes?makeFinancialExistingSchemaProfile(migrations,{relativePath:OWNERSHIP_PRELUDE,bytes:preludeBytes,sha256:createHash('sha256').update(preludeBytes).digest('hex')}):null;
+  const operatorPrerequisite=options.bootstrapVpsRuntimeRole?financialOperatorActionIdentity():null;
+  if(financialEnabled) {
+    const review=execFileSync('/usr/bin/git',['show',`${options.attestationCommit}:.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md`],{cwd:root,encoding:'utf8'});
+    assertFinancialReviewBinding(review,chainSha256);
+    if(financialExistingSchemaProfile)assertFinancialProfileReviewBinding(review,financialExistingSchemaProfile.orderedProfileSha256);
+    if(operatorPrerequisite)assertOperatorReviewBinding(review,operatorPrerequisite);
+  }
+  return Object.freeze({migrations:Object.freeze(migrations),chainSha256,...(financialExistingSchemaProfile?{financialExistingSchemaProfile}:{}),...(operatorPrerequisite?{operatorPrerequisite}:{})});
+}
+
+async function verifyReviewedMigrationPostconditions(client, options) {
+    const verified=(await client.query(`SELECT jsonb_build_object(
+      'v314Diagnostics',to_regclass('public.legacy_runtime_failure_diagnostics_v3_14') IS NOT NULL,
+      'v314Chunks',to_regclass('public.legacy_official_ingestion_chunks_v3_14') IS NOT NULL,
+      'decisionRevisions',to_regclass('public.legacy_decision_revisions_v3_13') IS NOT NULL,
+      'candidateRead',to_regprocedure('public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb)') IS NOT NULL,
+      'projectionSelect',to_regprocedure('public.select_opportunity_public_projection_v3(timestamptz)') IS NOT NULL
+      ,'runtimeDiagnosticContract',(SELECT position('projection_supersession_conflict' in
+        pg_get_constraintdef(constraint_row.oid))>0
+        FROM pg_constraint constraint_row
+        WHERE constraint_row.conrelid='public.legacy_runtime_failure_diagnostics_v3_14'::regclass
+          AND constraint_row.conname='legacy_runtime_failure_diagnostics_v3_14_invariant_code_check')
+      ,'restClaim',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
+      ,'boundedChunkApply',to_regprocedure('public.append_legacy_official_ingestion_chunk_rest_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz)') IS NOT NULL
+      ,'claimHandoff',to_regprocedure('public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
+      ,'finalClaimHandoff',to_regprocedure('public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND (SELECT position('v_claim.lease_expires_at:=v_now+interval ''120 seconds''' IN pg_get_functiondef(oid))>0
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
+      ,'partialResume',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
+      ,'transactionTimeDependency',to_regprocedure('public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)') IS NOT NULL
+      ,'sameTransactionVisibility',(SELECT provolatile='v' FROM pg_proc
+        WHERE oid='public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)'::regprocedure)
+      ,'calendarRecovery',(SELECT provolatile='v' AND prosecdef FROM pg_proc
+        WHERE oid='public.resolve_legacy_scheduled_occurrence_v3_11(text,text)'::regprocedure)
+      ,'calendarRecoveryHelper',(SELECT provolatile='s' AND prosecdef FROM pg_proc
+        WHERE oid='public.resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(text)'::regprocedure)
+      ,'candidateFactPlaneBound',to_regprocedure(
+        'public.read_legacy_candidate_fact_plane_v3_16_11_internal(timestamptz,jsonb)') IS NOT NULL
+        AND NOT has_function_privilege('legacy_correctness_rpc_owner',
+          'public.read_legacy_candidate_fact_plane_v3_16_11_internal(timestamptz,jsonb)','EXECUTE')
+        AND has_function_privilege('legacy_correctness_rpc_owner',
+          'public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb)','EXECUTE')
+      ,'analysisPayloadReuse',to_regprocedure(
+        'public.claim_legacy_producer_job_authoritative_v3_16_15(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+        AND has_function_privilege('legacy_correctness_rpc_owner',
+          'public.enrich_legacy_analysis_prior_payloads_v3_16_15(jsonb)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.enrich_legacy_analysis_prior_payloads_v3_16_15(jsonb)','EXECUTE')
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' FROM pg_proc
+          WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' FROM pg_proc
+          WHERE oid='public.enrich_legacy_analysis_prior_payloads_v3_16_15(jsonb)'::regprocedure)
+      ,'financialFactRecollection',to_regprocedure(
+        'public.append_financial_fact_pre_v3_16_16(public.financial_fact_input_v3,uuid)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.append_financial_fact_pre_v3_16_16(public.financial_fact_input_v3,uuid)','EXECUTE')
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' FROM pg_proc
+          WHERE oid='public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure)
+      ,'analysisPayloadExactReuse',to_regprocedure(
+        'public.claim_legacy_producer_job_authoritative_v3_16_18(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+        AND has_function_privilege('legacy_correctness_rpc_owner',
+          'public.resolve_legacy_analysis_prior_payloads_v3_16_18(jsonb)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.resolve_legacy_analysis_prior_payloads_v3_16_18(jsonb)','EXECUTE')
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' FROM pg_proc
+          WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' FROM pg_proc
+          WHERE oid='public.resolve_legacy_analysis_prior_payloads_v3_16_18(jsonb)'::regprocedure)
+      ,'runtimeHealthBootstrap',(SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner'
+          AND prosecdef
+        FROM pg_proc WHERE oid='public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)'::regprocedure)
+        AND has_function_privilege('service_role',
+          'public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('anon',
+          'public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('authenticated',
+          'public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)','EXECUTE')
+      ,'evaluationClock',to_regprocedure(
+        'public.claim_legacy_producer_job_evaluation_clock_base_v3_16_20(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_evaluation_clock_base_v3_16_20(uuid,uuid,uuid,integer)','EXECUTE')
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          FROM pg_proc WHERE oid=
+            'public.claim_legacy_producer_job_evaluation_clock_base_v3_16_20(uuid,uuid,uuid,integer)'::regprocedure)
+      ,'providerAcquisition',to_regclass(
+        'public.legacy_provider_acquisition_revisions_v3_16_21') IS NOT NULL
+        AND to_regclass('public.legacy_provider_acquisition_conflicts_v3_16_21') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.read_legacy_provider_acquisition_v3_16_21(text,text,timestamptz)','EXECUTE')
+        AND has_function_privilege('service_role',
+          'public.freeze_legacy_provider_acquisition_v3_16_21(uuid,uuid,uuid,text,text,text,timestamptz,timestamptz,text,integer,jsonb,text,text,text,boolean)','EXECUTE')
+        AND NOT has_table_privilege('service_role',
+          'public.legacy_provider_acquisition_revisions_v3_16_21','INSERT')
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_provider_acquisition_base_v3_16_21(uuid,uuid,uuid,integer)','EXECUTE')
+      ,'rosterChunkSnapshot',(SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner'
+          AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%instrument_roster_chunk_snapshot_v3_16_21%'
+          AND pg_get_functiondef(oid) NOT LIKE '%public.resolve_legacy_instrument_symbol_authority_v3_13(%'
+          AND pg_get_functiondef(oid) LIKE '%public.resolve_legacy_instrument_symbol_authority_v3_13_internal(%'
+        FROM pg_proc WHERE oid=
+          'public.apply_legacy_official_ingestion_chunk_base_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.apply_legacy_official_ingestion_chunk_base_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz)','EXECUTE')
+      ,'projectionEvaluationSupersession',(SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner'
+          AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%projection_same_producer_nondeterminism%'
+          AND pg_get_functiondef(oid) LIKE '%projection_evaluation_time_conflict%'
+        FROM pg_proc WHERE oid='public.guard_legacy_radar_projection_insert_v3_13()'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.guard_legacy_radar_projection_insert_v3_13()','EXECUTE')
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'candidateLedgerRetention',to_regprocedure(
+        'public.claim_legacy_producer_job_candidate_retention_base_v3_18(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND to_regprocedure(
+          'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND to_regprocedure(
+          'public.claim_legacy_producer_job_full_candidate_authority_base_v3_19_11(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_candidate_retention_base_v3_18(uuid,uuid,uuid,integer)','EXECUTE')
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%candidateLedgerContract%'
+          AND pg_get_functiondef(oid) LIKE '%sourceAvailable%'
+          AND pg_get_functiondef(oid) LIKE '%legacy_producer_job_results_v3_11%'
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'candidateRetentionAuthority',to_regprocedure(
+          'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)','EXECUTE')
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%candidateAuthorityContract%'
+          AND pg_get_functiondef(oid) LIKE '%enrich_legacy_retained_candidate_authority_v3_19_11_internal%'
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
+        AND to_regprocedure(
+          'public.enrich_legacy_retained_candidate_authority_v3_19_11_internal(uuid,jsonb)') IS NOT NULL
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%legacy_candidate_discovery_ledger_v3_11%'
+          AND pg_get_functiondef(oid) LIKE '%candidate_retention_authority_conflict%'
+          FROM pg_proc WHERE oid=
+            'public.enrich_legacy_retained_candidate_authority_v3_19_11_internal(uuid,jsonb)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.enrich_legacy_retained_candidate_authority_v3_19_11_internal(uuid,jsonb)','EXECUTE')
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'retainedCandidateJsonbCardinality',to_regprocedure(
+          'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)') IS NOT NULL
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%jsonb_agg(result.result_json->''candidates''%'
+          AND pg_get_functiondef(oid) NOT LIKE '%max(result.result_json->''candidates'')%'
+          AND pg_get_functiondef(oid) LIKE '%candidate_retention_full_result_cardinality%'
+          FROM pg_proc WHERE oid=
+            'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)','EXECUTE')
+        AND position('candidate-ledger-v3.19.12' IN pg_get_functiondef(
+          'public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure))>0
+        AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR (
+          has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_full_candidate_authority_base_v3_19_11(uuid,uuid,uuid,integer)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)','EXECUTE')))
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'releaseReconciliation',to_regclass('public.legacy_release_checkpoints_v3_19') IS NOT NULL
+        AND to_regprocedure('public.read_legacy_release_checkpoints_v3_19()') IS NOT NULL
+        AND has_function_privilege('service_role','public.read_legacy_release_checkpoints_v3_19()','EXECUTE')
+        AND NOT has_table_privilege('service_role','public.legacy_release_checkpoints_v3_19','INSERT')
+        AND to_regclass('public.legacy_source_sync_cursors_v3_19') IS NOT NULL
+        AND to_regprocedure('public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)') IS NOT NULL
+        AND position('legacy_source_sync_cursors_v3_19' IN pg_get_functiondef(
+          'public.read_legacy_discovery_authority_v3_11(uuid,text,text)'::regprocedure))>0
+        AND position('v319_same_run_successor_conflict' IN pg_get_functiondef(
+          'public.schedule_legacy_source_shard_successor_v3_19(uuid,uuid,uuid,text,integer,uuid)'::regprocedure))>0
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'decisionRevisionDossierProjection',position('researchDossier' IN pg_get_functiondef(
+          'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+        AND position('dossierId' IN pg_get_functiondef(
+          'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+        AND position('decision_revision_projection_mismatch' IN pg_get_functiondef(
+          'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
+          FROM pg_proc WHERE oid=
+            'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure)
+        AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
+      ,'evaluationSchemaCompatibility',(SELECT
+          position('legacy-radar-v3.13.0' IN pg_get_constraintdef(constraint_row.oid))>0
+          AND position('legacy-radar-v3.14.0' IN pg_get_constraintdef(constraint_row.oid))>0
+          AND position('legacy-radar-v3.17.0' IN pg_get_constraintdef(constraint_row.oid))>0
+          AND position('legacy-radar-v3.18.0' IN pg_get_constraintdef(constraint_row.oid))>0
+          AND position('legacy-radar-v3.19.0' IN pg_get_constraintdef(constraint_row.oid))>0
+          AND position('legacy-radar-v3.20.0' IN pg_get_constraintdef(constraint_row.oid))>0
+        FROM pg_constraint constraint_row
+        WHERE constraint_row.conrelid=
+            'public.legacy_decision_revision_evaluations_v3_13'::regclass
+          AND constraint_row.conname='legacy_evaluation_schema_v314_check'
+          AND constraint_row.contype='c')
+        AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
+      ,'reusedAcquisitionLineage',to_regprocedure(
+          'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)') IS NOT NULL
+        AND to_regprocedure('public.verify_legacy_claim_delegation_chain_v3_20()') IS NOT NULL
+        AND public.verify_legacy_claim_delegation_chain_v3_20()
+        AND position('coarseProviderAcquisition' IN pg_get_functiondef(
+          'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)'::regprocedure))>0
+        AND position('providerAcquisition' IN pg_get_functiondef(
+          'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)'::regprocedure))>0
+        AND NOT has_function_privilege('service_role',
+          'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.verify_legacy_claim_delegation_chain_v3_20()','EXECUTE')
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'v320RuntimeRecovery',to_regprocedure(
+          'public.terminalize_legacy_expired_producer_run_v3_20(uuid,uuid,text,text,text)') IS NOT NULL
+        AND to_regprocedure('public.reap_legacy_expired_producer_run_v3_20(text,text,text)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.terminalize_legacy_expired_producer_run_v3_20(uuid,uuid,text,text,text)','EXECUTE')
+        AND has_function_privilege('service_role',
+          'public.reap_legacy_expired_producer_run_v3_20(text,text,text)','EXECUTE')
+        AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR
+          has_function_privilege('stockinsider_runtime_v319',
+            'public.terminalize_legacy_expired_producer_run_v3_20(uuid,uuid,text,text,text)','EXECUTE')
+          AND has_function_privilege('stockinsider_runtime_v319',
+          'public.reap_legacy_expired_producer_run_v3_20(text,text,text)','EXECUTE'))
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'v320KolProjectionMarker',(SELECT
+          (length(pg_get_functiondef(
+            'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
+          ))-length(replace(pg_get_functiondef(
+            'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
+          ),'legacyRadarCompatibility','')))/length('legacyRadarCompatibility')=2
+          AND position('v_source_result.result_json->''legacyRadarCompatibility''' IN pg_get_functiondef(
+            'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
+          ))>0)
+      ,'v320KolRetentionBridge',to_regprocedure(
+        'public.read_v320_revalidated_kol_retention_internal(timestamptz)') IS NOT NULL
+        AND to_regprocedure(
+          'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%read_v320_revalidated_kol_retention_internal%'
+          AND pg_get_functiondef(oid) LIKE '%kolRetentionAuthorityContract%'
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)','EXECUTE')
+        AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR (
+          has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)','EXECUTE')))
+      ,'v320KolClaimPayloadCompaction',to_regprocedure(
+          'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND public.verify_legacy_claim_delegation_chain_v3_20()
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%sourceCutoff%'
+          AND pg_get_functiondef(oid) NOT LIKE '%coarseUniverseRows%'
+          FROM pg_proc WHERE oid=
+            'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.verify_legacy_claim_delegation_chain_v3_20()','EXECUTE')
+        AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR
+          NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)','EXECUTE'))
+      ,'v320KolRetentionOwnerBoundary',to_regprocedure(
+          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)') IS NOT NULL
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%source_document_revisions_v3%'
+          FROM pg_proc WHERE oid=
+            'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)'::regprocedure)
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%read_v320_authorized_investanchors_revision_ids_internal%'
+          AND pg_get_functiondef(oid) NOT LIKE '%source_document_revisions_v3%'
+          FROM pg_proc WHERE oid=
+            'public.read_v320_revalidated_kol_retention_internal(timestamptz)'::regprocedure)
+        AND has_function_privilege('legacy_correctness_rpc_owner',
+          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
+        AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+    ) result`)).rows[0]?.result;
+    if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
+    if(options.financialHistoryExtension||options.financialExistingSchemaProfile) await verifyFinancialHistoryPostconditions(client);
+    return verified;
+}
+
+async function applyReviewedMigrations(options) {
+  const plan=reviewedMigrationPlan(options);
+  const connection=options.privateVpsPeerOperator?vpsPeerMigrationConnection():{connectionString:resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url')};
+  const client=new Client({...connection,
+    application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
+  await client.connect();
+  return applyReviewedMigrationPlanToClient(client,plan,options);
+}
+
+// The CLI enters only after exact-source, attestation and authority validation.
+// Kept separate to exercise transaction/error handling with isolated test clients.
+async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorPrerequisiteExecutor=executeFinancialVpsOperatorPrerequisite}={}) {
+  let locked=false;
+  let transactionOpen=false;
+  let primaryFailed=false;
+  const supersededMigrations=[];
+  let operatorAction=null;
+  try {
+    const lockResult=await client.query("SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked");
+    if(lockResult.rows[0]?.locked!==true) throw new Error('migration_install_busy');
+    locked=true;
+    await client.query('BEGIN');
+    transactionOpen=true;
+    await client.query('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
+    await assertInstalledFinancialHistoryPlan(client,plan.migrations,options.financialHistoryExtension===true||options.financialExistingSchemaProfile===true);
+    assertFinancialExistingSchemaPlan(plan,options);
+    assertOperatorPlan(plan,options);
+    if(options.bootstrapVpsRuntimeRole)operatorAction=await operatorPrerequisiteExecutor(client);
+    for(const prelude of plan.financialExistingSchemaProfile?.preludes??[]) {
+      await client.query(migrationBodyInAtomicTransaction(prelude.bytes.toString('utf8')));
+    }
+    // Freeze successor detection before replaying any older migration. Earlier
+    // migrations can temporarily replace the authoritative function body and
+    // must not erase evidence that the stronger successor was already installed.
+    const v3192Superseded=await reviewedMigrationIsSuperseded(
+      client,V3192_PROJECTION_DOSSIER_MIGRATION);
+    for(const migration of plan.migrations) {
+      if(v3192Superseded && migration.relativePath===V3192_PROJECTION_DOSSIER_MIGRATION) {
+        supersededMigrations.push(migration.relativePath);
+        continue;
+      }
+      await client.query(migrationBodyInAtomicTransaction(migration.bytes.toString('utf8')));
+    }
+    const verified=await verifyReviewedMigrationPostconditions(client, options);
+    await client.query('COMMIT');
+    transactionOpen=false;
+    return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
+      sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
+      orderedChainSha256:plan.chainSha256,...(operatorAction?{operatorPrerequisite:{...plan.operatorPrerequisite,result:operatorAction}}:{}),...(plan.financialExistingSchemaProfile?{orderedProfileSha256:plan.financialExistingSchemaProfile.orderedProfileSha256,preludes:plan.financialExistingSchemaProfile.preludes.map(({relativePath,sha256})=>[relativePath,sha256])}:{}),migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
+      supersededMigrations:Object.freeze(supersededMigrations),verified});
+  } catch(error) {
+    primaryFailed=true;
+    throw error;
+  } finally {
+    if(transactionOpen)try{await client.query('ROLLBACK');}catch{/* disconnect rolls back on the server */}
+    if(locked)try{await client.query("SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");}
+      catch{/* session close releases the lock */}
+    try{await client.end();}catch(error){if(!primaryFailed)throw error;}
+  }
+}
+
+if(import.meta.url===`file://${process.argv[1]}`) {
+  applyReviewedMigrations(parseArguments(process.argv.slice(2)))
+    .then((result)=>process.stdout.write(`${canonicalJson(result)}\n`))
+    .catch(()=>{process.stderr.write('reviewed V3 migration apply failed\n');process.exitCode=1;});
+}
+
+export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationIsSuperseded,
+  reviewedMigrationPlan, applyReviewedMigrationPlanToClient };

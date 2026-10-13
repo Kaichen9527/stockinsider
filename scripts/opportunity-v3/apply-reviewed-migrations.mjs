@@ -1,4 +1,10 @@
 #!/usr/bin/env node
+import {vpsPeerMigrationConnection} from './vps-migration-peer.mjs';
+import {executeFinancialVpsOperatorPrerequisite} from './financial-vps-operator-action.mjs';
+import {assertOperatorFlags,financialOperatorActionIdentity,assertOperatorPlan,assertOperatorReviewBinding} from './financial-vps-operator-binding.mjs';
+import {OWNERSHIP_PRELUDE,makeFinancialExistingSchemaProfile,assertFinancialExistingSchemaPlan,assertFinancialProfileFlags,assertFinancialProfileReviewBinding} from './financial-existing-schema-profile.mjs';
+import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
+import { FINANCIAL_TAIL, selectFinancialHistoryChain, assertFinancialReviewBinding, assertInstalledFinancialHistoryPlan, verifyFinancialHistoryPostconditions } from './financial-history-install-guard.mjs';
 
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -91,15 +97,24 @@ function parseArguments(argv) {
   for (let index=0; index<argv.length; index+=1) {
     const value=argv[index];
     if(value==='--apply')result.apply=true;
+    else if(value==='--financial-history-extension'){if(result.financialHistoryExtension)throw new Error('invalid_arguments');result.financialHistoryExtension=true;}
+    else if(value==='--financial-existing-schema-profile'){if(result.financialExistingSchemaProfile)throw new Error('invalid_arguments');result.financialExistingSchemaProfile=true;}
+    else if(value==='--private-vps-peer-operator'){if(result.privateVpsPeerOperator)throw Error('invalid_arguments');result.privateVpsPeerOperator=true;}
+    else if(value==='--bootstrap-vps-runtime-role'){if(result.bootstrapVpsRuntimeRole)throw Error('invalid_arguments');result.bootstrapVpsRuntimeRole=true;}
     else if(value==='--source-commit'&&SHA40.test(argv[index+1]??''))result.sourceCommit=argv[++index];
     else if(value==='--attestation-commit'&&SHA40.test(argv[index+1]??''))result.attestationCommit=argv[++index];
     else throw new Error('invalid_arguments');
   }
   if(!result.apply||!result.sourceCommit||!result.attestationCommit)throw new Error('invalid_arguments');
+  assertFinancialProfileFlags(result);
+  assertOperatorFlags(result);
   return Object.freeze(result);
 }
 
 function reviewedMigrationPlan(options) {
+  assertFinancialProfileFlags(options);
+  assertOperatorFlags(options);
+  const financialEnabled=options.financialHistoryExtension===true||options.financialExistingSchemaProfile===true;
   const head=execFileSync('/usr/bin/git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   const dirty=execFileSync('/usr/bin/git',['status','--porcelain=v1','--untracked-files=all'],
     {cwd:root,encoding:'utf8'}).trim();
@@ -110,39 +125,29 @@ function reviewedMigrationPlan(options) {
     '.loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json'),'utf8'));
   if(status?.authority?.v314?.productionDatabaseMigrationAuthorized!==true)
     throw new Error('production_migration_authority_missing');
-  const migrations=MIGRATIONS.map((relativePath)=>{
+  const baseMigrations=MIGRATIONS.map((relativePath)=>{
     const bytes=fs.readFileSync(path.join(root,relativePath));
     if(/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')))
       throw new Error('non_additive_migration_rejected');
     return Object.freeze({relativePath,bytes,sha256:createHash('sha256').update(bytes).digest('hex')});
   });
+  const tailBytes=financialEnabled ? fs.readFileSync(path.join(root,FINANCIAL_TAIL)) : null;
+  const migrations=selectFinancialHistoryChain(baseMigrations,tailBytes ? {relativePath:FINANCIAL_TAIL,bytes:tailBytes,sha256:createHash('sha256').update(tailBytes).digest('hex')} : null, financialEnabled);
   const chainSha256=createHash('sha256').update(JSON.stringify(migrations
     .map(({relativePath,sha256})=>[relativePath,sha256]))).digest('hex');
-  return Object.freeze({migrations:Object.freeze(migrations),chainSha256});
+  const preludeBytes=options.financialExistingSchemaProfile?fs.readFileSync(path.join(root,OWNERSHIP_PRELUDE)):null;
+  const financialExistingSchemaProfile=preludeBytes?makeFinancialExistingSchemaProfile(migrations,{relativePath:OWNERSHIP_PRELUDE,bytes:preludeBytes,sha256:createHash('sha256').update(preludeBytes).digest('hex')}):null;
+  const operatorPrerequisite=options.bootstrapVpsRuntimeRole?financialOperatorActionIdentity():null;
+  if(financialEnabled) {
+    const review=execFileSync('/usr/bin/git',['show',`${options.attestationCommit}:.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md`],{cwd:root,encoding:'utf8'});
+    assertFinancialReviewBinding(review,chainSha256);
+    if(financialExistingSchemaProfile)assertFinancialProfileReviewBinding(review,financialExistingSchemaProfile.orderedProfileSha256);
+    if(operatorPrerequisite)assertOperatorReviewBinding(review,operatorPrerequisite);
+  }
+  return Object.freeze({migrations:Object.freeze(migrations),chainSha256,...(financialExistingSchemaProfile?{financialExistingSchemaProfile}:{}),...(operatorPrerequisite?{operatorPrerequisite}:{})});
 }
 
-async function applyReviewedMigrations(options) {
-  const plan=reviewedMigrationPlan(options);
-  const client=new Client({connectionString:resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url'),
-    application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
-  await client.connect();
-  let locked=false;
-  const supersededMigrations=[];
-  try {
-    await client.query("SELECT pg_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");
-    locked=true;
-    // Freeze successor detection before replaying any older migration. Earlier
-    // migrations can temporarily replace the authoritative function body and
-    // must not erase evidence that the stronger successor was already installed.
-    const v3192Superseded=await reviewedMigrationIsSuperseded(
-      client,V3192_PROJECTION_DOSSIER_MIGRATION);
-    for(const migration of plan.migrations) {
-      if(v3192Superseded && migration.relativePath===V3192_PROJECTION_DOSSIER_MIGRATION) {
-        supersededMigrations.push(migration.relativePath);
-        continue;
-      }
-      await client.query(migration.bytes.toString('utf8'));
-    }
+async function verifyReviewedMigrationPostconditions(client, options) {
     const verified=(await client.query(`SELECT jsonb_build_object(
       'v314Diagnostics',to_regclass('public.legacy_runtime_failure_diagnostics_v3_14') IS NOT NULL,
       'v314Chunks',to_regclass('public.legacy_official_ingestion_chunks_v3_14') IS NOT NULL,
@@ -159,7 +164,7 @@ async function applyReviewedMigrations(options) {
       ,'claimHandoff',to_regprocedure('public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
       ,'finalClaimHandoff',to_regprocedure('public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)') IS NOT NULL
         AND (SELECT position('v_claim.lease_expires_at:=v_now+interval ''120 seconds''' IN pg_get_functiondef(oid))>0
-          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer)'::regprocedure)
       ,'partialResume',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
       ,'transactionTimeDependency',to_regprocedure('public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)') IS NOT NULL
       ,'sameTransactionVisibility',(SELECT provolatile='v' FROM pg_proc
@@ -379,7 +384,7 @@ async function applyReviewedMigrations(options) {
             'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
           ))-length(replace(pg_get_functiondef(
             'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
-          ),'legacyRadarCompatibility','')))/length('legacyRadarCompatibility'))=2
+          ),'legacyRadarCompatibility','')))/length('legacyRadarCompatibility')=2
           AND position('v_source_result.result_json->''legacyRadarCompatibility''' IN pg_get_functiondef(
             'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
           ))>0)
@@ -390,7 +395,7 @@ async function applyReviewedMigrations(options) {
         AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
           AND pg_get_functiondef(oid) LIKE '%read_v320_revalidated_kol_retention_internal%'
           AND pg_get_functiondef(oid) LIKE '%kolRetentionAuthorityContract%'
-          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_source_terminal_projection_v3_20_2(uuid,uuid,uuid,integer)'::regprocedure)
         AND NOT has_function_privilege('service_role',
           'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
         AND NOT has_function_privilege('service_role',
@@ -405,7 +410,7 @@ async function applyReviewedMigrations(options) {
       ,'v320KolClaimPayloadCompaction',to_regprocedure(
           'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
         AND public.verify_legacy_claim_delegation_chain_v3_20()
-        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
           AND pg_get_functiondef(oid) LIKE '%sourceCutoff%'
           AND pg_get_functiondef(oid) NOT LIKE '%coarseUniverseRows%'
           FROM pg_proc WHERE oid=
@@ -438,14 +443,68 @@ async function applyReviewedMigrations(options) {
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
+    if(options.financialHistoryExtension||options.financialExistingSchemaProfile) await verifyFinancialHistoryPostconditions(client);
+    return verified;
+}
+
+async function applyReviewedMigrations(options) {
+  const plan=reviewedMigrationPlan(options);
+  const connection=options.privateVpsPeerOperator?vpsPeerMigrationConnection():{connectionString:resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url')};
+  const client=new Client({...connection,
+    application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
+  await client.connect();
+  return applyReviewedMigrationPlanToClient(client,plan,options);
+}
+
+// The CLI enters only after exact-source, attestation and authority validation.
+// Kept separate to exercise transaction/error handling with isolated test clients.
+async function applyReviewedMigrationPlanToClient(client,plan,options,{operatorPrerequisiteExecutor=executeFinancialVpsOperatorPrerequisite}={}) {
+  let locked=false;
+  let transactionOpen=false;
+  let primaryFailed=false;
+  const supersededMigrations=[];
+  let operatorAction=null;
+  try {
+    const lockResult=await client.query("SELECT pg_try_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0)) AS locked");
+    if(lockResult.rows[0]?.locked!==true) throw new Error('migration_install_busy');
+    locked=true;
+    await client.query('BEGIN');
+    transactionOpen=true;
+    await client.query('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
+    await assertInstalledFinancialHistoryPlan(client,plan.migrations,options.financialHistoryExtension===true||options.financialExistingSchemaProfile===true);
+    assertFinancialExistingSchemaPlan(plan,options);
+    assertOperatorPlan(plan,options);
+    if(options.bootstrapVpsRuntimeRole)operatorAction=await operatorPrerequisiteExecutor(client);
+    for(const prelude of plan.financialExistingSchemaProfile?.preludes??[]) {
+      await client.query(migrationBodyInAtomicTransaction(prelude.bytes.toString('utf8')));
+    }
+    // Freeze successor detection before replaying any older migration. Earlier
+    // migrations can temporarily replace the authoritative function body and
+    // must not erase evidence that the stronger successor was already installed.
+    const v3192Superseded=await reviewedMigrationIsSuperseded(
+      client,V3192_PROJECTION_DOSSIER_MIGRATION);
+    for(const migration of plan.migrations) {
+      if(v3192Superseded && migration.relativePath===V3192_PROJECTION_DOSSIER_MIGRATION) {
+        supersededMigrations.push(migration.relativePath);
+        continue;
+      }
+      await client.query(migrationBodyInAtomicTransaction(migration.bytes.toString('utf8')));
+    }
+    const verified=await verifyReviewedMigrationPostconditions(client, options);
+    await client.query('COMMIT');
+    transactionOpen=false;
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
-      orderedChainSha256:plan.chainSha256,migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
+      orderedChainSha256:plan.chainSha256,...(operatorAction?{operatorPrerequisite:{...plan.operatorPrerequisite,result:operatorAction}}:{}),...(plan.financialExistingSchemaProfile?{orderedProfileSha256:plan.financialExistingSchemaProfile.orderedProfileSha256,preludes:plan.financialExistingSchemaProfile.preludes.map(({relativePath,sha256})=>[relativePath,sha256])}:{}),migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
       supersededMigrations:Object.freeze(supersededMigrations),verified});
+  } catch(error) {
+    primaryFailed=true;
+    throw error;
   } finally {
+    if(transactionOpen)try{await client.query('ROLLBACK');}catch{/* disconnect rolls back on the server */}
     if(locked)try{await client.query("SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");}
       catch{/* session close releases the lock */}
-    await client.end();
+    try{await client.end();}catch(error){if(!primaryFailed)throw error;}
   }
 }
 
@@ -456,4 +515,4 @@ if(import.meta.url===`file://${process.argv[1]}`) {
 }
 
 export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationIsSuperseded,
-  reviewedMigrationPlan };
+  reviewedMigrationPlan, applyReviewedMigrationPlanToClient };
