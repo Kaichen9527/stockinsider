@@ -164,7 +164,7 @@ async function verifyReviewedMigrationPostconditions(client, options) {
       ,'claimHandoff',to_regprocedure('public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
       ,'finalClaimHandoff',to_regprocedure('public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)') IS NOT NULL
         AND (SELECT position('v_claim.lease_expires_at:=v_now+interval ''120 seconds''' IN pg_get_functiondef(oid))>0
-          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer)'::regprocedure)
       ,'partialResume',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
       ,'transactionTimeDependency',to_regprocedure('public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)') IS NOT NULL
       ,'sameTransactionVisibility',(SELECT provolatile='v' FROM pg_proc
@@ -395,7 +395,7 @@ async function verifyReviewedMigrationPostconditions(client, options) {
         AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
           AND pg_get_functiondef(oid) LIKE '%read_v320_revalidated_kol_retention_internal%'
           AND pg_get_functiondef(oid) LIKE '%kolRetentionAuthorityContract%'
-          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_source_terminal_projection_v3_20_2(uuid,uuid,uuid,integer)'::regprocedure)
         AND NOT has_function_privilege('service_role',
           'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
         AND NOT has_function_privilege('service_role',
