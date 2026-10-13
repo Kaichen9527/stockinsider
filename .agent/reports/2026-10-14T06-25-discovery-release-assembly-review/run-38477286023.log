@@ -1,0 +1,743 @@
+financial-installation-quality	UNKNOWN STEP	﻿2026-10-13T22:21:56.4412417Z Current runner version: '2.337.0'
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4439133Z ##[group]Runner Image Provisioner
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4439978Z Hosted Compute Agent
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4440552Z Version: 20261002.596
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4441806Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4442574Z Build Date: 2026-10-02T22:28:27Z
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4443307Z Worker ID: {baf1b342-4966-4cbf-a759-6f961568bc04}
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4444035Z Region: eastus
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4444610Z Cloud: Azure
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4445236Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4447147Z ##[group]Operating System
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4447893Z Ubuntu
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4448447Z 24.04.5
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4448986Z LTS
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4449543Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4450085Z ##[group]Runner Image
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4450923Z Image: ubuntu-24.04
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4451715Z Version: 20261004.327.1
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4453255Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4454990Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4456231Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4457433Z ##[group]GITHUB_TOKEN Permissions
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4459659Z Contents: read
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4460409Z Metadata: read
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4461195Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4463732Z Secret source: Actions
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4464735Z Cache mode: write
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4465945Z Prepare workflow directory
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4806923Z Prepare all required actions
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.4856263Z Getting action download info
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.7194188Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:56.8160225Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.0138799Z Complete job name: financial-installation-quality
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.0993109Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.0994212Z with:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.0994659Z   persist-credentials: false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.0995212Z   repository: Kaichen9527/stockinsider
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.0999226Z   token: ***
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.0999659Z   ssh-strict: true
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1000306Z   ssh-user: git
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1000921Z   clean: true
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1001636Z   sparse-checkout-cone-mode: true
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1002180Z   fetch-depth: 1
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1002623Z   fetch-tags: false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1003069Z   show-progress: true
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1003519Z   lfs: false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1003935Z   submodules: false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1004393Z   set-safe-directory: true
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1004906Z   allow-unsafe-pr-checkout: false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.1005846Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2158779Z Syncing repository: Kaichen9527/stockinsider
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2161764Z ##[group]Getting Git version info
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2162957Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2164599Z [command]/usr/bin/git version
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2297480Z git version 2.55.0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2326860Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2345255Z Temporarily overriding HOME='/home/runner/work/_temp/85bd28ab-d5d6-43fd-86d5-0a46f8167ff3' before making global git config changes
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2348424Z Adding repository directory to the temporary git global config as a safe directory
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2351290Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2417495Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2420231Z ##[group]Initializing the repository
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2427150Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2562719Z hint: Using 'master' as the name for the initial branch. This default branch name
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2564206Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2565158Z hint: to use in all of your new repositories, which will suppress this warning,
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2565892Z hint: call:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2566429Z hint:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2567150Z hint: 	git config --global init.defaultBranch <name>
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2568052Z hint:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2568747Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2569677Z hint: 'development'. The just-created branch can be renamed via this command:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2570419Z hint:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2571033Z hint: 	git branch -m <name>
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2571532Z hint:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2572162Z hint: Disable this message with "git config set advice.defaultBranchName false"
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2573193Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2575153Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2628467Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2629394Z ##[group]Disabling automatic garbage collection
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2633707Z [command]/usr/bin/git config --local gc.auto 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2671190Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2672071Z ##[group]Setting up auth
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2690018Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.2754181Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.3219878Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.3259391Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.3497285Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.3537853Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.3778326Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.3822363Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.3823609Z ##[group]Fetching the repository
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:57.3832899Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3ffd275ccc972bbfd7db1044191a4ba4740e90db:refs/remotes/pull/377/merge
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.1251140Z From https://github.com/Kaichen9527/stockinsider
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.1273136Z  * [new ref]         3ffd275ccc972bbfd7db1044191a4ba4740e90db -> pull/377/merge
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.1276184Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.1277539Z ##[group]Determining the checkout info
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.1278921Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.1279731Z [command]/usr/bin/git sparse-checkout disable
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.1336239Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.1381507Z ##[group]Checking out the ref
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.1387002Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/377/merge
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3032464Z Note: switching to 'refs/remotes/pull/377/merge'.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3033769Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3034729Z You are in 'detached HEAD' state. You can look around, make experimental
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3036953Z changes and commit them, and you can discard any commits you make in this
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3039221Z state without impacting any branches by switching back to a branch.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3040522Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3041757Z If you want to create a new branch to retain commits you create, you may
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3044435Z do so (now or later) by using -c with the switch command. Example:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3045765Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3046391Z   git switch -c <new-branch-name>
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3047338Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3047986Z Or undo this operation with:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3048939Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3049490Z   git switch -
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3050263Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3051568Z Turn off this advice by setting config variable advice.detachedHead to false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3052669Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3053771Z HEAD is now at 3ffd275 Merge e9c56d7cacb17f0ce5a5ea202cff09c7c49df610 into aa111a54c7108f043eebc1a5b0682391fc88aef9
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3059167Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3102116Z [command]/usr/bin/git log -1 --format=%H
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3131085Z 3ffd275ccc972bbfd7db1044191a4ba4740e90db
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3143222Z ##[group]Removing auth
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3147154Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3185169Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3422635Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3454029Z http.https://github.com/.extraheader
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3462180Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3500647Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3736755Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.3772344Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.4013169Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.4470644Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.4472533Z with:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.4473390Z   node-version: 22.14.0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.4474373Z   always-auth: false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.4475321Z   check-latest: false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.4485063Z   token: ***
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.4485962Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.6057674Z Attempting to download 22.14.0...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.6177088Z (node:2417) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:58.6178882Z (Use `node --trace-deprecation ...` to show where the warning was created)
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:59.1164518Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:59.4704176Z Extracting ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:21:59.4831962Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/cffa1628-d36b-49f5-8d72-05f7e65334b6 -f /home/runner/work/_temp/f06ed0b4-652a-4b31-b149-ee4f1f7e4469
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:00.6909764Z Adding to the cache ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:02.7941235Z ##[group]Environment details
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0206674Z node: v22.14.0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0207127Z npm: 10.9.2
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0207513Z yarn: 1.22.22
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0208207Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0421526Z ##[group]Run set -euo pipefail
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0421971Z ^[[36;1mset -euo pipefail^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0422251Z ^[[36;1mkey="$RUNNER_TEMP/pgdg.asc"^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0422930Z ^[[36;1mcurl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc -o "$key"^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0423808Z ^[[36;1mfingerprint=$(gpg --batch --show-keys --with-colons "$key" | awk -F: '$1=="fpr" {print $10; exit}')^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0424425Z ^[[36;1mtest "$fingerprint" = B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0425170Z ^[[36;1msudo install -d -m 0755 /usr/share/postgresql-common/pgdg^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0425751Z ^[[36;1msudo install -m 0644 "$key" /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0427647Z ^[[36;1mprintf '%s\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0428768Z ^[[36;1msudo apt-get update^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0429214Z ^[[36;1msudo apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0429696Z ^[[36;1mbin=/usr/lib/postgresql/17/bin^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0430094Z ^[[36;1mfor tool in pg_config initdb pg_ctl psql; do test -x "$bin/$tool"; done^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0430570Z ^[[36;1m"$bin/pg_config" --version | grep -E '^PostgreSQL 17\.'^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0431196Z ^[[36;1mecho "$bin" >> "$GITHUB_PATH"^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0431509Z ^[[36;1mecho "USER=$(id -un)" >> "$GITHUB_ENV"^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0738085Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.0738625Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.5527427Z gpg: directory '/home/runner/.gnupg' created
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.5528110Z gpg: keybox '/home/runner/.gnupg/pubring.kbx' created
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.5553832Z gpg: /home/runner/.gnupg/trustdb.gpg: trustdb created
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.6603785Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.6979281Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.6982351Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.6997408Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.7090643Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.7119161Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.8092771Z Get:7 https://apt.postgresql.org/pub/repos/apt noble-pgdg InRelease [189 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.8322516Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [640 B]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.8433076Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [575 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.8527297Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [517 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.8619924Z Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.3 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.8842145Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.8926957Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.8952730Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1702 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.9041163Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.9071540Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1805 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.9187843Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [411 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.9222630Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [50.7 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.9231773Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.0 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:03.9526296Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [748 B]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:04.0249028Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1145 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:04.0768724Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [230 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:04.0793959Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1221 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:04.0887910Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:04.0922988Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:04.1005344Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:04.1040574Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [45.4 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:04.1050429Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.1 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:04.1197523Z Get:29 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 Packages [900 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:07.3769760Z Fetched 13.6 MB in 1s (9291 kB/s)
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.2493007Z Reading package lists...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.2804704Z Reading package lists...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.4673700Z Building dependency tree...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.4681007Z Reading state information...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.6120955Z Suggested packages:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.6121731Z   postgresql-doc-17
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.6293617Z The following NEW packages will be installed:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.6294441Z   postgresql-17 postgresql-client-17
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.7632112Z 0 upgraded, 2 newly installed, 0 to remove and 29 not upgraded.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.7633144Z Need to get 19.0 MB of archives.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.7634150Z After this operation, 69.4 MB of additional disk space will be used.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.7636033Z Get:1 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 postgresql-client-17 amd64 17.11-1.pgdg24.04+2 [2053 kB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:08.8127955Z Get:2 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 postgresql-17 amd64 17.11-1.pgdg24.04+2 [16.9 MB]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.1723947Z Preconfiguring packages ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2224926Z Fetched 19.0 MB in 0s (59.7 MB/s)
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2450970Z Selecting previously unselected package postgresql-client-17.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2751850Z (Reading database ... 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2752554Z (Reading database ... 5%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2753253Z (Reading database ... 10%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2753982Z (Reading database ... 15%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2754616Z (Reading database ... 20%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2755474Z (Reading database ... 25%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2756297Z (Reading database ... 30%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2756816Z (Reading database ... 35%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2757341Z (Reading database ... 40%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2757803Z (Reading database ... 45%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2758126Z (Reading database ... 50%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.2802996Z (Reading database ... 55%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.3698098Z (Reading database ... 60%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.5561022Z (Reading database ... 65%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.7624350Z (Reading database ... 70%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:09.9624041Z (Reading database ... 75%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.1092321Z (Reading database ... 80%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.2660032Z (Reading database ... 85%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.3867848Z (Reading database ... 90%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.5319308Z (Reading database ... 95%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.5319849Z (Reading database ... 100%
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.5320391Z (Reading database ... 203191 files and directories currently installed.)
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.5371436Z Preparing to unpack .../postgresql-client-17_17.11-1.pgdg24.04+2_amd64.deb ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.5395768Z Unpacking postgresql-client-17 (17.11-1.pgdg24.04+2) ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.7103303Z Selecting previously unselected package postgresql-17.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.7233130Z Preparing to unpack .../postgresql-17_17.11-1.pgdg24.04+2_amd64.deb ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:10.7263743Z Unpacking postgresql-17 (17.11-1.pgdg24.04+2) ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:11.5317083Z Setting up postgresql-client-17 (17.11-1.pgdg24.04+2) ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:11.9205702Z update-alternatives: using /usr/share/postgresql/17/man/man1/psql.1.gz to provide /usr/share/man/man1/psql.1.gz (psql.1.gz) in auto mode
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:11.9489376Z Setting up postgresql-17 (17.11-1.pgdg24.04+2) ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:12.8469304Z Processing triggers for postgresql-common (293.pgdg24.04+1) ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:12.9625595Z Building PostgreSQL dictionaries from installed myspell/hunspell packages...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:12.9753918Z   en_us
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:13.0107471Z Removing obsolete dictionary files:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:13.6692748Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:13.6693545Z Running kernel seems to be up-to-date.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:13.6693940Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:13.6694202Z No services need to be restarted.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:13.6694502Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:13.6694751Z No containers need to be restarted.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:13.6695083Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:13.6695401Z No user sessions are running outdated binaries.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:13.6695780Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:14.6161646Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:14.6162301Z PostgreSQL 17.11 (Ubuntu 17.11-1.pgdg24.04+2)
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:14.6228018Z ##[group]Run npm ci --ignore-scripts
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:14.6228366Z ^[[36;1mnpm ci --ignore-scripts^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:14.6228665Z ^[[36;1mnpm --prefix web ci --ignore-scripts^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:14.6295266Z shell: /usr/bin/bash -e {0}
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:14.6295548Z env:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:14.6295757Z   USER: runner
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:14.6295979Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8513168Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8514178Z added 39 packages, and audited 40 packages in 1s
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8514668Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8514959Z 7 packages are looking for funding
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8515463Z   run `npm fund` for details
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8527940Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8528199Z 1 high severity vulnerability
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8528529Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8528729Z To address all issues, run:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8529003Z   npm audit fix
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8529142Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:15.8529268Z Run `npm audit` for details.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:17.4479877Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.7513502Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.7514374Z added 432 packages, and audited 433 packages in 18s
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.7514866Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.7515143Z 169 packages are looking for funding
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.7515647Z   run `npm fund` for details
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.8819803Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.8820541Z 11 vulnerabilities (10 high, 1 critical)
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.8821208Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.8821577Z To address issues that do not require attention, run:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.8821995Z   npm audit fix
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.8822157Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.8822533Z To address all issues (including breaking changes), run:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.8823162Z   npm audit fix --force
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.8823435Z 
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:33.8823654Z Run `npm audit` for details.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.0111178Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/atomic-migration-chain.test.mjs scripts/opportunity-v3/financial-history-install-guard.test.mjs scripts/opportunity-v3/financial-existing-schema-profile.test.mjs scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.0117467Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/atomic-migration-chain.test.mjs scripts/opportunity-v3/financial-history-install-guard.test.mjs scripts/opportunity-v3/financial-existing-schema-profile.test.mjs scripts/opportunity-v3/financial-vps-operator-prerequisite.test.mjs scripts/opportunity-v3/financial-installer-wrapper-targets.test.mjs scripts/opportunity-v3/financial-immutable-finite-acl.test.mjs^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.0199480Z shell: /usr/bin/bash -e {0}
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.0199748Z env:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.0199936Z   USER: runner
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.0200131Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.1010903Z TAP version 13
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3746486Z # Subtest: transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3752280Z ok 1 - transaction normalization preserves quoted PL/pgSQL and rejects embedded control
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3753097Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3763854Z   duration_ms: 4.546318
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3764525Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3765571Z # Subtest: every explicitly reviewed migration is compatible with one atomic transaction
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3766996Z ok 2 - every explicitly reviewed migration is compatible with one atomic transaction
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3767819Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3768358Z   duration_ms: 115.536891
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3768935Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3769760Z # Subtest: atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3771196Z ok 3 - atomic scanner does not hide COMMIT inside dollar-containing unquoted identifiers
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3771932Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3772268Z   duration_ms: 0.890703
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3772634Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3773464Z # Subtest: atomic scanner recognizes CR line endings rather than silently dropping real control
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3778252Z ok 4 - atomic scanner recognizes CR line endings rather than silently dropping real control
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3779300Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3779903Z   duration_ms: 0.27339
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3780340Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3781639Z # Subtest: atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3783284Z ok 5 - atomic scanner preserves E-string, nested comment and dollar bodies containing apparent control
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3784182Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3784551Z   duration_ms: 0.399546
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3784956Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3785890Z # Subtest: atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3792085Z ok 6 - atomic scanner rejects control verbs and nontransactional DDL outside lexical islands
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3793121Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3793790Z   duration_ms: 0.388516
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3794435Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3799079Z # Subtest: atomic scanner normalizes every unchanged base migration without claiming installer integration
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3800988Z ok 7 - atomic scanner normalizes every unchanged base migration without claiming installer integration
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3802059Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3802426Z   duration_ms: 102.06429
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3802808Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3808195Z # Subtest: atomic scanner rejects additional documented commands that cannot run in a transaction
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3809811Z ok 8 - atomic scanner rejects additional documented commands that cannot run in a transaction
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3811073Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3812020Z   duration_ms: 0.347529
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.3812654Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6857279Z # Subtest: default48 and ordinary financial49 outputs remain byte-equivalent; profile separately reports 50 steps
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6859379Z ok 9 - default48 and ordinary financial49 outputs remain byte-equivalent; profile separately reports 50 steps
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6860234Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6860554Z   duration_ms: 211.822707
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6861668Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6871967Z # Subtest: missing/wrong prelude bytes/hash/order/chain and profile omission reject
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6873240Z ok 10 - missing/wrong prelude bytes/hash/order/chain and profile omission reject
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6873919Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6874239Z   duration_ms: 6.324205
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6874590Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6875328Z # Subtest: profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6876543Z ok 11 - profile flag conflict/duplicates and absent/duplicate/wrong literal fail closed
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6877252Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6877586Z   duration_ms: 0.826683
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6877947Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6878787Z # Subtest: actual installer checks successor and profile under lock/BEGIN before any prelude query
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6880510Z ok 12 - actual installer checks successor and profile under lock/BEGIN before any prelude query
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6881572Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6881927Z   duration_ms: 0.809931
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.6882292Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8815200Z # Subtest: default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8816672Z ok 13 - default 48 ordered bytes/digest are unchanged; opt-in has exactly the pinned tail49
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8817521Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8818017Z   duration_ms: 68.332444
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8818581Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8819945Z # Subtest: omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8821348Z ok 14 - omitted, wrong bytes/hash, reversed or reordered base/tail fail closed
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8822007Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8822236Z   duration_ms: 0.758406
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8822459Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8842137Z # Subtest: extension flag alone is not review authority: exact hash must be in hash-bound review once
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8843632Z ok 15 - extension flag alone is not review authority: exact hash must be in hash-bound review once
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8844490Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8844857Z   duration_ms: 0.828076
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8845265Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8846260Z # Subtest: base-only cannot replay installed successor and partial residue cannot replay even with tail
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8847794Z ok 16 - base-only cannot replay installed successor and partial residue cannot replay even with tail
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8848684Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8909138Z   duration_ms: 2.150163
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8909660Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8910431Z # Subtest: missing/ambiguous state and any failed postcondition reject
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8911775Z ok 17 - missing/ambiguous state and any failed postcondition reject
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8912428Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8912791Z   duration_ms: 0.575464
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8913207Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8913928Z # Subtest: busy guard performs no BEGIN/mutation and closes owned session
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8915089Z ok 18 - busy guard performs no BEGIN/mutation and closes owned session
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8915812Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8916196Z   duration_ms: 0.673377
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8916630Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8917457Z # Subtest: installed successor guard runs under lock+BEGIN before any base mutation
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8918660Z ok 19 - installed successor guard runs under lock+BEGIN before any base mutation
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8919410Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8919780Z   duration_ms: 0.362006
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8920178Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8921975Z # Subtest: one shared transaction strips inner controls and commits after verification
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8923328Z ok 20 - one shared transaction strips inner controls and commits after verification
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8924128Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8924452Z   duration_ms: 2.168327
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8924801Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8925576Z # Subtest: forced failure and disconnect attempt rollback, do not commit, retain original error
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8926776Z ok 21 - forced failure and disconnect attempt rollback, do not commit, retain original error
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8927519Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8927855Z   duration_ms: 1.139697
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8928192Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8929165Z # Subtest: postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8931006Z ok 22 - postcondition failure rolls back already issued SQL and session failure preserves the primary failure
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8931961Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8932330Z   duration_ms: 0.872889
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8932722Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8933690Z # Subtest: unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8935199Z ok 23 - unbound extension cannot gain CLI authority and apply uses guarded exact review before connection
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8936344Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8936687Z   duration_ms: 0.366985
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8937072Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8938079Z # Subtest: installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8939590Z ok 24 - installed function body fingerprints bind complete pinned SQL bodies, not marker strings alone
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8940496Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8941258Z   duration_ms: 0.328243
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8941672Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8942569Z # Subtest: exact observed catalog rejects every function binding, schema/index/trigger field drift
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8943774Z ok 25 - exact observed catalog rejects every function binding, schema/index/trigger field drift
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8944572Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8944892Z   duration_ms: 22.159855
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8945286Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8946257Z # Subtest: catalog private predecessor full body originates in the unchanged recollection migration
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8947786Z ok 26 - catalog private predecessor full body originates in the unchanged recollection migration
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8948620Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8948978Z   duration_ms: 0.293257
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8949367Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8950339Z # Subtest: immutable trigger dependency body originates in unchanged base SQL and stays security invoker
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8951985Z ok 27 - immutable trigger dependency body originates in unchanged base SQL and stays security invoker
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8952865Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8953186Z   duration_ms: 3.564855
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.8953521Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9580019Z # Subtest: only complete immutable two/five ACL sets normalize; input unchanged and row order irrelevant
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9582472Z ok 28 - only complete immutable two/five ACL sets normalize; input unchanged and row order irrelevant
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9583844Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9584633Z   duration_ms: 5.394931
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9585086Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9588075Z # Subtest: immutable unknown/duplicate/grantor/grantable/missing-PUBLIC/partial3-4 ACL shapes fail closed
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9589728Z ok 29 - immutable unknown/duplicate/grantor/grantable/missing-PUBLIC/partial3-4 ACL shapes fail closed
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9591290Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9591665Z   duration_ms: 2.264116
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9592068Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9602380Z # Subtest: finite immutable ACL never relaxes body/owner/SECDEF/config/signature/other functions/table columns
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9604373Z ok 30 - finite immutable ACL never relaxes body/owner/SECDEF/config/signature/other functions/table columns
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9605664Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9606699Z   duration_ms: 7.343298
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:34.9607394Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0080606Z # Subtest: product delta is exactly the two approved wrapper OID targets plus one approved compaction owner; every other check unchanged
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0083611Z ok 31 - product delta is exactly the two approved wrapper OID targets plus one approved compaction owner; every other check unchanged
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0084571Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0084905Z   duration_ms: 1.453262
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0085413Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0088484Z # Subtest: approved latest migration delegates via retained terminal wrapper and compaction owner is explicitly opportunity owner
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0090426Z ok 32 - approved latest migration delegates via retained terminal wrapper and compaction owner is explicitly opportunity owner
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0091507Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0091844Z   duration_ms: 0.258894
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0092214Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0915540Z # Subtest: VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0917262Z ok 33 - VPS peer transport is explicit, fixed and does not accept credentials or PG environment overrides
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0918674Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0919080Z   duration_ms: 2.157808
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0919514Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0920971Z # Subtest: VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0923322Z ok 34 - VPS database requires authenticated peer identity and an effective HBA reject, with stable profiles
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0924278Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0924648Z   duration_ms: 2.394279
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.0925066Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1000530Z # Subtest: actual pg authentication handlers never consult pgpass or transmit credentials
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1002159Z ok 35 - actual pg authentication handlers never consult pgpass or transmit credentials
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1009144Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1009894Z   duration_ms: 6.210623
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1010380Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1011429Z # Subtest: operator action closes source wrapper/peer/binding identity and separate profile review literal
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1012668Z ok 36 - operator action closes source wrapper/peer/binding identity and separate profile review literal
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1013317Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1013645Z   duration_ms: 2.635219
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1013978Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1032334Z # Subtest: runtime role membership/password/config/high privilege drift rejects before ALTER; replay preserves exact attributes
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1038321Z ok 37 - runtime role membership/password/config/high privilege drift rejects before ALTER; replay preserves exact attributes
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1039325Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1039664Z   duration_ms: 1.123266
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1040030Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1041233Z # Subtest: successor and exact action identity checks precede any operator/prelude mutation; error rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1042418Z ok 38 - successor and exact action identity checks precede any operator/prelude mutation; error rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1042905Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1043105Z   duration_ms: 2.500298
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1043328Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1111039Z 1..38
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1111489Z # tests 38
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1112156Z # suites 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1112735Z # pass 38
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1113348Z # fail 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1113885Z # cancelled 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1114479Z # skipped 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1115016Z # todo 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1115666Z # duration_ms 1025.274421
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1195956Z ##[group]Run set -euo pipefail
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1196281Z ^[[36;1mset -euo pipefail^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1196599Z ^[[36;1mexport TMPDIR=$(mktemp -d /tmp/si-fin-ci-XXXXXX)^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1197127Z ^[[36;1mexport FINANCIAL_EXISTING_SCHEMA_ARTIFACTS="$RUNNER_TEMP/financial-captured-native"^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1197981Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/financial-installer-finite-profile-native.test.mjs^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1263034Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1263391Z env:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1263575Z   USER: runner
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1263769Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:35.1734870Z TAP version 13
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0222299Z # Subtest: financial installer approved finite immutable ACL and complete captured-schema transaction
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0223992Z     # Subtest: real PG marker predicate count0 expressionfalse -> false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0232019Z     ok 1 - real PG marker predicate count0 expressionfalse -> false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0232734Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0233105Z       duration_ms: 3.144539
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0233545Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0240932Z     # Subtest: real PG marker predicate count1 expressiontrue -> false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0242254Z     ok 2 - real PG marker predicate count1 expressiontrue -> false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0243124Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0246232Z       duration_ms: 2.365803
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0246697Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0262010Z     # Subtest: real PG marker predicate count2 expressiontrue -> true
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0263602Z     ok 3 - real PG marker predicate count2 expressiontrue -> true
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0264421Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0264639Z       duration_ms: 2.348635
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0264872Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0284534Z     # Subtest: real PG marker predicate count3 expressiontrue -> false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0289927Z     ok 4 - real PG marker predicate count3 expressiontrue -> false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0290536Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0291073Z       duration_ms: 1.969384
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0291321Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0304332Z     # Subtest: real PG marker predicate count2 expressionfalse -> false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0306146Z     ok 5 - real PG marker predicate count2 expressionfalse -> false
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0306795Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0307144Z       duration_ms: 2.148851
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.0307527Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.1345214Z     # Subtest: actual nonempty membership rejects before operator role mutation and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.1346672Z     ok 6 - actual nonempty membership rejects before operator role mutation and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.1347415Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.1347887Z       duration_ms: 56.444964
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.1348308Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.2475510Z     # Subtest: actual original bootstrap and exact LOGIN6 replay preserve authority; outer rollback
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.2476520Z     ok 7 - actual original bootstrap and exact LOGIN6 replay preserve authority; outer rollback
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.2476990Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.2477201Z       duration_ms: 112.572946
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.2477435Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.7179050Z     # Subtest: forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.7180520Z     ok 8 - forced failure after genuine predecessor replacement rolls back role/catalog/ACL/nonempty facts
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.7181672Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.7182021Z       duration_ms: 468.828517
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:37.7182460Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.2231769Z     # Subtest: actual first apply through new opt-in profile and unchanged 49 chain
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.2233290Z     ok 9 - actual first apply through new opt-in profile and unchanged 49 chain
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.2237462Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.2237981Z       duration_ms: 505.558463
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.2238574Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.2458511Z     # Subtest: full actual postcondition query parses/executes; every original predicate true
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.2460517Z     ok 10 - full actual postcondition query parses/executes; every original predicate true
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.2461586Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.2461819Z       duration_ms: 8.884835
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.2462059Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.6883149Z     # Subtest: second actual operator+profile50 apply preserves full financial catalog and nonempty rows
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.6884548Z     ok 11 - second actual operator+profile50 apply preserves full financial catalog and nonempty rows
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.6885155Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.6885383Z       duration_ms: 442.653051
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.6885631Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7006091Z     # Subtest: actual legal two/five immutable ACLs have same effective routine/table/column privileges
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7007541Z     ok 12 - actual legal two/five immutable ACLs have same effective routine/table/column privileges
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7008465Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7008850Z       duration_ms: 11.352907
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7009284Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7097800Z     # Subtest: actual finite immutable descriptor rejects unknown-grantee and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7099109Z     ok 13 - actual finite immutable descriptor rejects unknown-grantee and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7099834Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7100124Z       duration_ms: 8.637764
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7100369Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7191729Z     # Subtest: actual finite immutable descriptor rejects grantable and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7193151Z     ok 14 - actual finite immutable descriptor rejects grantable and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7193894Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7194262Z       duration_ms: 9.271758
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7194685Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7274702Z     # Subtest: actual finite immutable descriptor rejects missing-public and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7279880Z     ok 15 - actual finite immutable descriptor rejects missing-public and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7280623Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7281203Z       duration_ms: 8.239951
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7281455Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7364952Z     # Subtest: actual finite immutable descriptor rejects partial-four and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7365954Z     ok 16 - actual finite immutable descriptor rejects partial-four and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7366417Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7366644Z       duration_ms: 8.42711
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7366906Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7445506Z     # Subtest: actual finite immutable descriptor rejects partial-three and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7446717Z     ok 17 - actual finite immutable descriptor rejects partial-three and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7448824Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7449050Z       duration_ms: 8.408406
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7449306Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7529505Z     # Subtest: actual finite immutable descriptor rejects wrong-owner and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7530586Z     ok 18 - actual finite immutable descriptor rejects wrong-owner and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7541205Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7541750Z       duration_ms: 8.339156
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7542163Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7621303Z     # Subtest: actual finite immutable descriptor rejects security-definer and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7624334Z     ok 19 - actual finite immutable descriptor rejects security-definer and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7624854Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7625197Z       duration_ms: 9.045605
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7625512Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7725877Z     # Subtest: actual finite immutable descriptor rejects config and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7727264Z     ok 20 - actual finite immutable descriptor rejects config and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7728479Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7729151Z       duration_ms: 9.908823
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7729588Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7824488Z     # Subtest: actual finite immutable descriptor rejects wrong-body and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7825845Z     ok 21 - actual finite immutable descriptor rejects wrong-body and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7826694Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7827085Z       duration_ms: 10.099425
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7827505Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7917753Z     # Subtest: actual finite immutable descriptor rejects wrong-grantor and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7919284Z     ok 22 - actual finite immutable descriptor rejects wrong-grantor and rolls back
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7920317Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7920997Z       duration_ms: 8.920231
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7921655Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7971644Z     # Subtest: actual wrong compaction function owner rejects original full query
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7973530Z     ok 23 - actual wrong compaction function owner rejects original full query
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7974545Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7975091Z       duration_ms: 5.868883
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.7975562Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.8554085Z     # Subtest: installed partial rejects before operator/prelude/base mutations
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.8555603Z     ok 24 - installed partial rejects before operator/prelude/base mutations
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.8556263Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.8556608Z       duration_ms: 32.817493
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.8557006Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.8962759Z     # Subtest: installed config rejects before operator/prelude/base mutations
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.8963805Z     ok 25 - installed config rejects before operator/prelude/base mutations
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.8964477Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.8965519Z       duration_ms: 40.662881
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:38.8965913Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.2586613Z     # Subtest: real writer disconnect after predecessor replacement makes server rollback
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.2587839Z     ok 26 - real writer disconnect after predecessor replacement makes server rollback
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.2588520Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.2588955Z       duration_ms: 362.474043
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.2589485Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.2903783Z     # Subtest: competing actual shared lock rejects with no BEGIN or mutation
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.2905447Z     ok 27 - competing actual shared lock rejects with no BEGIN or mutation
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.2906550Z       ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.2907091Z       duration_ms: 30.594147
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.2907726Z       ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5365032Z     1..27
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5366622Z ok 1 - financial installer approved finite immutable ACL and complete captured-schema transaction
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5367972Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5368779Z   duration_ms: 4182.231921
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5369094Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5633796Z 1..1
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5634400Z # tests 28
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5634906Z # suites 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5635387Z # pass 28
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5635889Z # fail 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5636362Z # cancelled 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5636883Z # skipped 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5637404Z # todo 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5637969Z # duration_ms 4401.731065
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5721673Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5722806Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/financial-vps-operator-hba-native.test.mjs^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5786812Z shell: /usr/bin/bash -e {0}
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5787070Z env:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5787259Z   USER: runner
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.5787462Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:39.6248608Z TAP version 13
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6107545Z # Subtest: native PostgreSQL distinguishes a reject file on disk from effective loaded HBA
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6115125Z ok 1 - native PostgreSQL distinguishes a reject file on disk from effective loaded HBA
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6116368Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6117025Z   duration_ms: 932.506545
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6117489Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6200279Z 1..1
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6201738Z # tests 1
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6202877Z # suites 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6203565Z # pass 1
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6205349Z # fail 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6206251Z # cancelled 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6207056Z # skipped 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6208766Z # todo 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6209360Z # duration_ms 1007.360496
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6289036Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 --test-name-pattern='^V3\.16\.16 (preserves true recollection|financial fact append)|^financial (history amendment|atomic replay rollback)' scripts/opportunity-v3/migration-contract.test.mjs
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6291374Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 --test-name-pattern='^V3\.16\.16 (preserves true recollection|financial fact append)|^financial (history amendment|atomic replay rollback)' scripts/opportunity-v3/migration-contract.test.mjs^[[0m
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6356707Z shell: /usr/bin/bash -e {0}
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6356983Z env:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6357201Z   USER: runner
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6357414Z ##[endgroup]
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.6821967Z TAP version 13
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.7752553Z # (node:4644) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.7761671Z # (Use `node --trace-warnings ...` to show where the warning was created)
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.7792607Z # (node:4644) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.7793938Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:40.7795207Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1834516Z # Subtest: V3.16.16 preserves true recollection time without consuming a financial fact revision
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1843116Z ok 1 - V3.16.16 preserves true recollection time without consuming a financial fact revision
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1843998Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1844393Z   duration_ms: 2.180769
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1844821Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1848471Z # Subtest: V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1850326Z ok 2 - V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1851679Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1852062Z   duration_ms: 79.300927
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1852457Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1854581Z # Subtest: financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1856530Z ok 3 - financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1857752Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1858143Z   duration_ms: 209.193983
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1858718Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1860140Z # Subtest: financial atomic replay rollback retains installed successor after predecessor replacement and forced failure
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1862254Z ok 4 - financial atomic replay rollback retains installed successor after predecessor replacement and forced failure
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1863271Z   ---
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1863671Z   duration_ms: 159.211566
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.1864125Z   ...
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.2004539Z 1..4
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.2004947Z # tests 4
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.2005317Z # suites 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.2005682Z # pass 4
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.2006323Z # fail 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.2006987Z # cancelled 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.2007605Z # skipped 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.2008222Z # todo 0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.2008918Z # duration_ms 3530.338995
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.2220405Z Post job cleanup.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.3523041Z (node:4852) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.3524292Z (Use `node --trace-deprecation ...` to show where the warning was created)
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.3789169Z Post job cleanup.
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.4817712Z [command]/usr/bin/git version
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.4868150Z git version 2.55.0
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.4915677Z Temporarily overriding HOME='/home/runner/work/_temp/b89c30f4-2cda-4b16-9102-5cf0de7d9028' before making global git config changes
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.4917245Z Adding repository directory to the temporary git global config as a safe directory
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.4921150Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.4968002Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.5006841Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.5282095Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.5320154Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.5628663Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.5689738Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.6203923Z Cleaning up orphan processes
+financial-installation-quality	UNKNOWN STEP	2026-10-13T22:22:44.6554244Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

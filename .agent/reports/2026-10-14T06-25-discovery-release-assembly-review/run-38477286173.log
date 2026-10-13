@@ -1,0 +1,796 @@
+discovery-snapshot-quality	UNKNOWN STEP	﻿2026-10-13T22:21:56.3323151Z Current runner version: '2.337.0'
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3340441Z ##[group]Runner Image Provisioner
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3340972Z Hosted Compute Agent
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3341303Z Version: 20261002.596
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3341717Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3342151Z Build Date: 2026-10-02T22:28:27Z
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3342568Z Worker ID: {27592a13-8f61-4dd4-afa4-a208f9eba85f}
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3342999Z Region: southcentralus
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3343322Z Cloud: Azure
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3343683Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3344400Z ##[group]Operating System
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3344770Z Ubuntu
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3345359Z 24.04.5
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3345659Z LTS
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3346000Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3346340Z ##[group]Runner Image
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3346716Z Image: ubuntu-24.04
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3347082Z Version: 20261004.327.1
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3347844Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3348677Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3349226Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3349876Z ##[group]GITHUB_TOKEN Permissions
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3351066Z Contents: read
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3351410Z Metadata: read
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3351732Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3352998Z Secret source: Actions
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3353553Z Cache mode: write
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3354002Z Prepare workflow directory
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3550888Z Prepare all required actions
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.3582153Z Getting action download info
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.5828349Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.6781447Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8299963Z Complete job name: discovery-snapshot-quality
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8759647Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8760137Z with:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8760374Z   persist-credentials: false
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8760661Z   repository: Kaichen9527/stockinsider
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8762560Z   token: ***
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8762783Z   ssh-strict: true
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8763017Z   ssh-user: git
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8763240Z   clean: true
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8763483Z   sparse-checkout-cone-mode: true
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8763755Z   fetch-depth: 1
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8763986Z   fetch-tags: false
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8764223Z   show-progress: true
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8764458Z   lfs: false
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8764679Z   submodules: false
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8765139Z   set-safe-directory: true
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8765486Z   allow-unsafe-pr-checkout: false
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.8765939Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9408666Z Syncing repository: Kaichen9527/stockinsider
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9409995Z ##[group]Getting Git version info
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9410389Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9410949Z [command]/usr/bin/git version
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9476052Z git version 2.55.0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9487706Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9497849Z Temporarily overriding HOME='/home/runner/work/_temp/f0703925-fe6f-48e7-a1f8-df1a3c145b64' before making global git config changes
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9499116Z Adding repository directory to the temporary git global config as a safe directory
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9501055Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9540029Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9543123Z ##[group]Initializing the repository
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9545837Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9623236Z hint: Using 'master' as the name for the initial branch. This default branch name
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9624201Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9626744Z hint: to use in all of your new repositories, which will suppress this warning,
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9627617Z hint: call:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9627941Z hint:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9628383Z hint: 	git config --global init.defaultBranch <name>
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9628870Z hint:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9629336Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9630086Z hint: 'development'. The just-created branch can be renamed via this command:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9630700Z hint:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9631036Z hint: 	git branch -m <name>
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9631422Z hint:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9631919Z hint: Disable this message with "git config set advice.defaultBranchName false"
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9632815Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9634265Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9687096Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9687570Z ##[group]Disabling automatic garbage collection
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9691451Z [command]/usr/bin/git config --local gc.auto 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9718514Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9718990Z ##[group]Setting up auth
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9723885Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:56.9751202Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:57.0029676Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:57.0057300Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:57.0223171Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:57.0249766Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:57.0413983Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:57.0445265Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:57.0445813Z ##[group]Fetching the repository
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:57.0450815Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3ffd275ccc972bbfd7db1044191a4ba4740e90db:refs/remotes/pull/377/merge
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.1818815Z From https://github.com/Kaichen9527/stockinsider
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.1819469Z  * [new ref]         3ffd275ccc972bbfd7db1044191a4ba4740e90db -> pull/377/merge
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.1821389Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.1821945Z ##[group]Determining the checkout info
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.1822514Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.1822872Z [command]/usr/bin/git sparse-checkout disable
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.1866267Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.1893442Z ##[group]Checking out the ref
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.1896849Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/377/merge
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3083508Z Note: switching to 'refs/remotes/pull/377/merge'.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3083933Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3084153Z You are in 'detached HEAD' state. You can look around, make experimental
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3084604Z changes and commit them, and you can discard any commits you make in this
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3086207Z state without impacting any branches by switching back to a branch.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3086495Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3086702Z If you want to create a new branch to retain commits you create, you may
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3087474Z do so (now or later) by using -c with the switch command. Example:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3087713Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3087830Z   git switch -c <new-branch-name>
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3088006Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3088124Z Or undo this operation with:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3088307Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3088406Z   git switch -
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3088580Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3088785Z Turn off this advice by setting config variable advice.detachedHead to false
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3089073Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3089390Z HEAD is now at 3ffd275 Merge e9c56d7cacb17f0ce5a5ea202cff09c7c49df610 into aa111a54c7108f043eebc1a5b0682391fc88aef9
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3096990Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3134466Z [command]/usr/bin/git log -1 --format=%H
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3156273Z 3ffd275ccc972bbfd7db1044191a4ba4740e90db
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3163088Z ##[group]Removing auth
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3165686Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3192260Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3370015Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3394617Z http.https://github.com/.extraheader
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3400213Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3431163Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3611109Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3639509Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.3817033Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.4081844Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.4082315Z with:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.4082565Z   node-version: 22.14.0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.4082826Z   always-auth: false
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.4083076Z   check-latest: false
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.4085888Z   token: ***
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.4086068Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.4980723Z Attempting to download 22.14.0...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.5048038Z (node:2182) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:58.5048554Z (Use `node --trace-deprecation ...` to show where the warning was created)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:59.2690100Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:59.7695848Z Extracting ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:21:59.7789426Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/0ad0f33c-3e8f-4a18-8ac1-d96edc09480e -f /home/runner/work/_temp/856deea0-35e1-4bf9-941b-38da76777556
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:00.6415596Z Adding to the cache ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.7372471Z ##[group]Environment details
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8786313Z node: v22.14.0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8786679Z npm: 10.9.2
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8787822Z yarn: 1.22.22
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8788613Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8937301Z ##[group]Run set -euo pipefail
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8937569Z ^[[36;1mset -euo pipefail^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8937722Z ^[[36;1mkey="$RUNNER_TEMP/pgdg.asc"^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8938079Z ^[[36;1mcurl --fail --silent --show-error --location --proto '=https' --tlsv1.2 https://www.postgresql.org/media/keys/ACCC4CF8.asc -o "$key"^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8938532Z ^[[36;1mfingerprint=$(gpg --batch --show-keys --with-colons "$key" | awk -F: '$1=="fpr" {print $10; exit}')^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8938885Z ^[[36;1mtest "$fingerprint" = B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8939346Z ^[[36;1msudo install -d -m 0755 /usr/share/postgresql-common/pgdg^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8939629Z ^[[36;1msudo install -m 0644 "$key" /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8940312Z ^[[36;1mprintf '%s\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' 'Suites: noble-pgdg' 'Architectures: amd64' 'Components: main' 'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' | sudo tee /etc/apt/sources.list.d/pgdg.sources >/dev/null^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8940881Z ^[[36;1msudo apt-get update^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8941123Z ^[[36;1msudo apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8941378Z ^[[36;1mbin=/usr/lib/postgresql/17/bin^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8941592Z ^[[36;1mfor tool in pg_config initdb pg_ctl psql; do test -x "$bin/$tool"; done^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8941843Z ^[[36;1m"$bin/pg_config" --version | grep -E '^PostgreSQL 17\.'^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8942042Z ^[[36;1mecho "$bin" >> "$GITHUB_PATH"^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.8942208Z ^[[36;1mecho "USER=$(id -un)" >> "$GITHUB_ENV"^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.9154241Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:08.9154471Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.4658290Z gpg: directory '/home/runner/.gnupg' created
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.4658667Z gpg: keybox '/home/runner/.gnupg/pubring.kbx' created
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.4919689Z gpg: /home/runner/.gnupg/trustdb.gpg: trustdb created
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.5701147Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.6076714Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.6453336Z Get:7 https://apt.postgresql.org/pub/repos/apt noble-pgdg InRelease [189 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.6617666Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [517 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.6763360Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [575 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.6822766Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.3 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.6859961Z Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [640 B]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.7243126Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.7283040Z Get:12 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 Packages [900 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.7291601Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.7313318Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.7326912Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.8056989Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.8127020Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.8136474Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1702 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.8204162Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.8223591Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1805 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.8289576Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [411 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.8314063Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [50.7 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.8325799Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.0 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.8529609Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [748 B]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.8913853Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1145 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.9443316Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [230 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.9458186Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1221 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.9505366Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.9523647Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.9583124Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.9600431Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [45.4 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:09.9609437Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.1 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:14.8198533Z Fetched 13.6 MB in 1s (12.1 MB/s)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.3389109Z Reading package lists...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.3643179Z Reading package lists...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.5169489Z Building dependency tree...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.5175659Z Reading state information...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.6288741Z Suggested packages:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.6289015Z   postgresql-doc-17
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.6416797Z The following NEW packages will be installed:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.6417170Z   postgresql-17 postgresql-client-17
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.8405289Z 0 upgraded, 2 newly installed, 0 to remove and 29 not upgraded.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.8405733Z Need to get 19.0 MB of archives.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.8406012Z After this operation, 69.4 MB of additional disk space will be used.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.8406557Z Get:1 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 postgresql-client-17 amd64 17.11-1.pgdg24.04+2 [2053 kB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:15.9407510Z Get:2 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 postgresql-17 amd64 17.11-1.pgdg24.04+2 [16.9 MB]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.1852518Z Preconfiguring packages ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2278019Z Fetched 19.0 MB in 0s (49.5 MB/s)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2432498Z Selecting previously unselected package postgresql-client-17.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2648127Z (Reading database ... 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2648415Z (Reading database ... 5%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2648649Z (Reading database ... 10%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2648872Z (Reading database ... 15%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2649300Z (Reading database ... 20%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2649513Z (Reading database ... 25%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2649751Z (Reading database ... 30%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2650074Z (Reading database ... 35%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2650288Z (Reading database ... 40%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2650567Z (Reading database ... 45%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2650860Z (Reading database ... 50%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.2694639Z (Reading database ... 55%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.3734684Z (Reading database ... 60%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.5795898Z (Reading database ... 65%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.7807612Z (Reading database ... 70%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:16.9673124Z (Reading database ... 75%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.0859219Z (Reading database ... 80%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.1980908Z (Reading database ... 85%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.3302194Z (Reading database ... 90%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.4363693Z (Reading database ... 95%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.4363929Z (Reading database ... 100%
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.4364175Z (Reading database ... 203191 files and directories currently installed.)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.4400338Z Preparing to unpack .../postgresql-client-17_17.11-1.pgdg24.04+2_amd64.deb ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.4418992Z Unpacking postgresql-client-17 (17.11-1.pgdg24.04+2) ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.5954378Z Selecting previously unselected package postgresql-17.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.6055112Z Preparing to unpack .../postgresql-17_17.11-1.pgdg24.04+2_amd64.deb ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:17.6090671Z Unpacking postgresql-17 (17.11-1.pgdg24.04+2) ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:18.3801370Z Setting up postgresql-client-17 (17.11-1.pgdg24.04+2) ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:18.6738827Z update-alternatives: using /usr/share/postgresql/17/man/man1/psql.1.gz to provide /usr/share/man/man1/psql.1.gz (psql.1.gz) in auto mode
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:18.7301719Z Setting up postgresql-17 (17.11-1.pgdg24.04+2) ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:19.3884361Z Processing triggers for postgresql-common (293.pgdg24.04+1) ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:19.4633470Z Building PostgreSQL dictionaries from installed myspell/hunspell packages...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:19.4797555Z   en_us
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:19.5263483Z Removing obsolete dictionary files:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.0004846Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.0005592Z Running kernel seems to be up-to-date.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.0005861Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.0005994Z No services need to be restarted.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.0006162Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.0006291Z No containers need to be restarted.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.0006401Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.0006509Z No user sessions are running outdated binaries.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.0006635Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.0006802Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.8363655Z PostgreSQL 17.11 (Ubuntu 17.11-1.pgdg24.04+2)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.8413796Z ##[group]Run npm ci --ignore-scripts
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.8414008Z ^[[36;1mnpm ci --ignore-scripts^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.8414174Z ^[[36;1mnpm --prefix web ci --ignore-scripts^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.8470510Z shell: /usr/bin/bash -e {0}
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.8470656Z env:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.8470763Z   USER: runner
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:20.8470958Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6624229Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6624836Z added 39 packages, and audited 40 packages in 778ms
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6625216Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6625347Z 7 packages are looking for funding
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6625600Z   run `npm fund` for details
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6633084Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6633211Z 1 high severity vulnerability
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6633356Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6633452Z To address all issues, run:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6633655Z   npm audit fix
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6633757Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:21.6633854Z Run `npm audit` for details.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:22.4032257Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0020034Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0020745Z added 432 packages, and audited 433 packages in 10s
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0021028Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0021164Z 169 packages are looking for funding
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0021429Z   run `npm fund` for details
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0773314Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0773988Z 11 vulnerabilities (10 high, 1 critical)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0774248Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0774458Z To address issues that do not require attention, run:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0774745Z   npm audit fix
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0774859Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0775238Z To address all issues (including breaking changes), run:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0775542Z   npm audit fix --force
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0775673Z 
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.0775775Z Run `npm audit` for details.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.1296793Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 web/src/lib/discovery-frozen-snapshot-reader.test.ts web/src/lib/discovery-revision-publisher-reader.test.ts
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.1297977Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 web/src/lib/discovery-frozen-snapshot-reader.test.ts web/src/lib/discovery-revision-publisher-reader.test.ts^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.1352619Z shell: /usr/bin/bash -e {0}
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.1352769Z env:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.1352881Z   USER: runner
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.1352999Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.1773936Z TAP version 13
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.2191543Z # (node:4181) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.2192345Z # (Use `node --trace-warnings ...` to show where the warning was created)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.2357201Z # (node:4181) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/discovery-frozen-snapshot-reader.test.ts is not specified and it doesn't parse as CommonJS.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.2385903Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.2415821Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3000028Z # Subtest: fixed RR/RO query order, sole UUID parameters, exact populations and private packet never escapes
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3002396Z ok 1 - fixed RR/RO query order, sole UUID parameters, exact populations and private packet never escapes
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3003086Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3003469Z   duration_ms: 8.568198
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3003716Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3004231Z # Subtest: over bound rejects before any population fetch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3006808Z ok 2 - over bound rejects before any population fetch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3007105Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3007328Z   duration_ms: 0.855608
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3007582Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3007897Z # Subtest: aggregate bound rejects before any population fetch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3008442Z ok 3 - aggregate bound rejects before any population fetch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3008794Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3008975Z   duration_ms: 1.836773
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3009173Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3009470Z # Subtest: bytes bound rejects before any population fetch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3009882Z ok 4 - bytes bound rejects before any population fetch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3010213Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3010388Z   duration_ms: 0.592775
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3010605Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3010980Z # Subtest: missing has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3011561Z ok 5 - missing has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3011937Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3012113Z   duration_ms: 0.498775
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3012333Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3012715Z # Subtest: ambiguous has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3013205Z ok 6 - ambiguous has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3013570Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3013752Z   duration_ms: 0.799424
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3013959Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3035489Z # Subtest: truncated has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3036066Z ok 7 - truncated has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3036390Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3036569Z   duration_ms: 0.839595
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3036759Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3037137Z # Subtest: wrongSnapshot has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3037678Z ok 8 - wrongSnapshot has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3038006Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3038173Z   duration_ms: 1.500602
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3038358Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3039184Z # Subtest: badVisibility has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3039511Z ok 9 - badVisibility has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3039713Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3039826Z   duration_ms: 0.685383
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3039947Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3040165Z # Subtest: badIsolation has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3040483Z ok 10 - badIsolation has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3040683Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3040790Z   duration_ms: 0.748407
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3040910Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3041109Z # Subtest: fail has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3041396Z ok 11 - fail has no false success, sanitized error and confirmed cleanup
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3041590Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3041715Z   duration_ms: 1.61345
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3041977Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3042166Z # Subtest: invalid UUID does no I/O; owned client cannot be reused
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3042429Z ok 12 - invalid UUID does no I/O; owned client cannot be reused
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3042608Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3042712Z   duration_ms: 1.873428
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3042957Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3043195Z # Subtest: database timestamps are requested as fixed UTC microsecond text, never JS Date
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3043542Z ok 13 - database timestamps are requested as fixed UTC microsecond text, never JS Date
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3043760Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3043869Z   duration_ms: 1.704657
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3043989Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3044229Z # Subtest: primary DB failure survives failed cleanup without exposing either private error
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3044584Z ok 14 - primary DB failure survives failed cleanup without exposing either private error
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3044801Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3045178Z   duration_ms: 0.39451
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:32.3045300Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.3961211Z # Subtest: stalled owned end returns bounded pending cleanup and cannot report a successful read
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.3962037Z ok 15 - stalled owned end returns bounded pending cleanup and cannot report a successful read
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.3962467Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.3962862Z   duration_ms: 9999.953039
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.3963044Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.3963303Z # Subtest: late synchronous cleanup settlement cannot beat an expired monotonic deadline
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.3963656Z ok 16 - late synchronous cleanup settlement cannot beat an expired monotonic deadline
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.3963868Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.3963981Z   duration_ms: 10101.986275
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.3964105Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.4503448Z # (node:4194) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.4509139Z # (Use `node --trace-warnings ...` to show where the warning was created)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.4682028Z # (node:4194) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/discovery-revision-publisher-reader.test.ts is not specified and it doesn't parse as CommonJS.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.4683303Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.4685017Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6868301Z # Subtest: actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6869572Z ok 17 - actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6870218Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6870555Z   duration_ms: 6.429758
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6870938Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6871369Z # Subtest: precise offset microseconds and invalid dates
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6871910Z ok 18 - precise offset microseconds and invalid dates
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6872328Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6873160Z   duration_ms: 0.362266
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6873528Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6874007Z # Subtest: future revision collected_at 1us cannot replace known head
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6874632Z ok 19 - future revision collected_at 1us cannot replace known head
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6875251Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6875559Z   duration_ms: 3.287884
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6875888Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6876346Z # Subtest: future revision recorded_at 1us cannot replace known head
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6876951Z ok 20 - future revision recorded_at 1us cannot replace known head
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6877397Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6877708Z   duration_ms: 2.119253
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6878034Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6878505Z # Subtest: future authority approved_at cannot mask known authority
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6879099Z ok 21 - future authority approved_at cannot mask known authority
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6879542Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6879844Z   duration_ms: 2.944857
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6880173Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6880643Z # Subtest: future authority recorded_at cannot mask known authority
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6881250Z ok 22 - future authority recorded_at cannot mask known authority
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6881698Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6882310Z   duration_ms: 2.059373
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6882646Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6883120Z # Subtest: future authority valid_from cannot mask known authority
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6883742Z ok 23 - future authority valid_from cannot mask known authority
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6884186Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6884493Z   duration_ms: 1.905511
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6884819Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6885421Z # Subtest: latest inactive source never revives prior active
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6886195Z ok 24 - latest inactive source never revives prior active
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6897134Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6897513Z   duration_ms: 1.914454
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6897855Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6898318Z # Subtest: latest inactive publisher never revives prior active
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6898905Z ok 25 - latest inactive publisher never revives prior active
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6899332Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6899649Z   duration_ms: 2.112093
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6899970Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6900416Z # Subtest: latest invalid acquisition cannot revive old complete
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6900993Z ok 26 - latest invalid acquisition cannot revive old complete
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6901406Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6901706Z   duration_ms: 2.483592
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6902025Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6902509Z # Subtest: same-time contradictory revisions heads fail closed, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6903163Z ok 27 - same-time contradictory revisions heads fail closed, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6903617Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6903920Z   duration_ms: 1.819091
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6904243Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6904725Z # Subtest: same-time contradictory publishers heads fail closed, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6905545Z ok 28 - same-time contradictory publishers heads fail closed, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6906007Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6906310Z   duration_ms: 1.814354
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6906632Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6907147Z # Subtest: same-time contradictory sourceAuthorities heads fail closed, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6907862Z ok 29 - same-time contradictory sourceAuthorities heads fail closed, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6908341Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6908648Z   duration_ms: 1.192927
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6908972Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6909397Z # Subtest: frozen population run mismatch is not complete
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6910083Z ok 30 - frozen population run mismatch is not complete
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6910527Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6910834Z   duration_ms: 0.442828
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6911158Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6911581Z # Subtest: frozen population cutoff mismatch is not complete
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6912114Z ok 31 - frozen population cutoff mismatch is not complete
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6912524Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6913096Z   duration_ms: 0.615006
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6913439Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6913878Z # Subtest: frozen population count mismatch is not complete
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6914427Z ok 32 - frozen population count mismatch is not complete
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6914852Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6915300Z   duration_ms: 0.385011
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6915604Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6916055Z # Subtest: frozen population hash mismatch is not complete
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6916649Z ok 33 - frozen population hash mismatch is not complete
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6917047Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6917330Z   duration_ms: 0.386783
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6917633Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6918019Z # Subtest: verification source_run_id binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6918498Z ok 34 - verification source_run_id binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6918878Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6919164Z   duration_ms: 1.26788
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6919471Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6919864Z # Subtest: verification source_cutoff binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6920333Z ok 35 - verification source_cutoff binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6920714Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6921008Z   duration_ms: 1.434481
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6921324Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6927535Z # Subtest: verification revision_id binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6955549Z ok 36 - verification revision_id binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6961330Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6961741Z   duration_ms: 1.115922
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6962126Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6962594Z # Subtest: verification publisher_manifest_id binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6963197Z ok 37 - verification publisher_manifest_id binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6963634Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6963953Z   duration_ms: 1.09491
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6964290Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6964742Z # Subtest: verification canonical_content_hash binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6965520Z ok 38 - verification canonical_content_hash binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6965953Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6966279Z   duration_ms: 0.839895
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6966615Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6967020Z # Subtest: verification collected_at binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6967566Z ok 39 - verification collected_at binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6967977Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6968285Z   duration_ms: 0.945455
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6968614Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6969017Z # Subtest: verification recorded_at binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6969520Z ok 40 - verification recorded_at binding mismatch
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6969922Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6970227Z   duration_ms: 0.739313
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6970544Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6970982Z # Subtest: manifest root_hash cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6971544Z ok 41 - manifest root_hash cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6971926Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6972211Z   duration_ms: 0.850801
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6972519Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6972926Z # Subtest: manifest page_hash cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6973474Z ok 42 - manifest page_hash cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6973897Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6974202Z   duration_ms: 0.610971
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6974592Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6975156Z # Subtest: manifest payload cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6975722Z ok 43 - manifest payload cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6976150Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6976455Z   duration_ms: 0.7434
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6976780Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6977226Z # Subtest: manifest rows_missing cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6977818Z ok 44 - manifest rows_missing cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6978257Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6978561Z   duration_ms: 0.57764
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6978889Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6979338Z # Subtest: manifest institution cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6980214Z ok 45 - manifest institution cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6980671Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6980979Z   duration_ms: 0.791813
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6981307Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6981776Z # Subtest: manifest authority_bytes cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6982398Z ok 46 - manifest authority_bytes cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6982851Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6983145Z   duration_ms: 0.883321
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6983451Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6983880Z # Subtest: manifest run_binding cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6984458Z ok 47 - manifest run_binding cannot be asserted by count alone
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6985005Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6985316Z   duration_ms: 0.635698
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6985646Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6986179Z # Subtest: legacy raw mapping missing is unsupported, never UUID/hash/url join
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6986817Z ok 48 - legacy raw mapping missing is unsupported, never UUID/hash/url join
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6987268Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6987569Z   duration_ms: 0.757411
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6987879Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6988355Z # Subtest: legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6989015Z ok 49 - legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6989817Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6990211Z   duration_ms: 0.55048
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6990436Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6990810Z # Subtest: bounded populations defer every supplied input, not truncation success
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6991157Z ok 50 - bounded populations defer every supplied input, not truncation success
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6991522Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6991701Z   duration_ms: 101.333283
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6991900Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6992265Z # Subtest: same revision UUID with conflicting family cannot produce two bindings
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6992812Z ok 51 - same revision UUID with conflicting family cannot produce two bindings
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6993153Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6993333Z   duration_ms: 1.170714
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6993520Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6993929Z # Subtest: exact duplicate revision is accounted once as binding, deterministic projection
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6994555Z ok 52 - exact duplicate revision is accounted once as binding, deterministic projection
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6995071Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6995247Z   duration_ms: 1.113738
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6995436Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6995769Z # Subtest: equal cutoff is included and valid_to equal cutoff is expired
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6996255Z ok 53 - equal cutoff is included and valid_to equal cutoff is expired
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6996556Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6996724Z   duration_ms: 0.784722
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6996912Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6997248Z # Subtest: invalid collected_at is explicitly rejected, not a chosen head
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6997739Z ok 54 - invalid collected_at is explicitly rejected, not a chosen head
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6998050Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6998224Z   duration_ms: 0.679313
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6998408Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6998732Z # Subtest: invalid recorded_at is explicitly rejected, not a chosen head
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6999211Z ok 55 - invalid recorded_at is explicitly rejected, not a chosen head
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6999524Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6999696Z   duration_ms: 0.604721
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.6999885Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7000264Z # Subtest: partial page with lower local count cannot match previously counted packet
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7000836Z ok 56 - partial page with lower local count cannot match previously counted packet
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7001201Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7001369Z   duration_ms: 0.233762
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7001559Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7001962Z # Subtest: recomputation keeps supplied source clocks, does not substitute snapshot time
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7002566Z ok 57 - recomputation keeps supplied source clocks, does not substitute snapshot time
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7002927Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7003352Z   duration_ms: 0.728337
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7003544Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7003865Z # Subtest: root section row count/manifest page membership must agree
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7004327Z ok 58 - root section row count/manifest page membership must agree
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7004631Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7004798Z   duration_ms: 0.579042
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7005138Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7005447Z # Subtest: no URL or family/hash changes create root or creator proof
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7005892Z ok 59 - no URL or family/hash changes create root or creator proof
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7006181Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7006350Z   duration_ms: 0.428485
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7006539Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7035781Z # Subtest: publisher class is the existing enum, not an invented news authority
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7036477Z ok 60 - publisher class is the existing enum, not an invented news authority
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7036889Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7037109Z   duration_ms: 0.378891
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7037385Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7037788Z # Subtest: public_research institution required by original authority schema
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7038404Z ok 61 - public_research institution required by original authority schema
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7039197Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7045526Z   duration_ms: 0.578482
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7045755Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7046156Z # Subtest: unbounded strings and depth fail before projection, no truncation success
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7046697Z ok 62 - unbounded strings and depth fail before projection, no truncation success
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7047035Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7047207Z   duration_ms: 14.335209
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7047340Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7047558Z # Subtest: future same-UUID collected_at cannot poison known family/identity
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7047943Z ok 63 - future same-UUID collected_at cannot poison known family/identity
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7048254Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7048423Z   duration_ms: 1.20096
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7048620Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7048951Z # Subtest: future same-UUID recorded_at cannot poison known family/identity
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7049427Z ok 64 - future same-UUID recorded_at cannot poison known family/identity
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7049740Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7049906Z   duration_ms: 0.856651
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7050090Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7050475Z # Subtest: manifest full retained publisher head population, not merely one matching row
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7051049Z ok 65 - manifest full retained publisher head population, not merely one matching row
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7051398Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7051568Z   duration_ms: 0.848638
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7051754Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7052116Z # Subtest: known latest head cutoff+1us blocks older complete family, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7052637Z ok 66 - known latest head cutoff+1us blocks older complete family, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7052962Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7053125Z   duration_ms: 0.898874
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7053319Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7053702Z # Subtest: known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7054271Z ok 67 - known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7054621Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7054782Z   duration_ms: 0.76329
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7055080Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7055614Z # Subtest: known latest head before-cutoff-after-collection blocks older complete family, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7056298Z ok 68 - known latest head before-cutoff-after-collection blocks older complete family, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7056741Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7056910Z   duration_ms: 1.289523
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7057104Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7057588Z # Subtest: known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7058754Z ok 69 - known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7059224Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7059392Z   duration_ms: 0.731532
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7059583Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7059950Z # Subtest: known latest head invalid-clock blocks older complete family, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7060542Z ok 70 - known latest head invalid-clock blocks older complete family, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7060935Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7061100Z   duration_ms: 0.916191
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7061291Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7061691Z # Subtest: known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7062340Z ok 71 - known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7062741Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7062910Z   duration_ms: 0.71018
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7063095Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7063512Z # Subtest: known latest head with published null is allowed when verification also preserves null
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7064182Z ok 72 - known latest head with published null is allowed when verification also preserves null
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7064598Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7064767Z   duration_ms: 0.904303
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7065066Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7065310Z # Subtest: known legal head at publication=collection remains usable with all microseconds
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7065764Z ok 73 - known legal head at publication=collection remains usable with all microseconds
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7066007Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7066179Z   duration_ms: 1.280839
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7066361Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7066784Z # Subtest: truly future collected_at with invalid publication remains unknown without UUID poisoning
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7067436Z ok 74 - truly future collected_at with invalid publication remains unknown without UUID poisoning
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7067815Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7067977Z   duration_ms: 0.908288
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7068163Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7068585Z # Subtest: truly future recorded_at with invalid publication remains unknown without UUID poisoning
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7069211Z ok 75 - truly future recorded_at with invalid publication remains unknown without UUID poisoning
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7069589Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7069752Z   duration_ms: 1.325418
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7069939Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7070362Z # Subtest: single known head with malformed publication is blocked with explicit family disposition
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7071004Z ok 76 - single known head with malformed publication is blocked with explicit family disposition
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7071408Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7071575Z   duration_ms: 0.817793
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7071756Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7171375Z 1..76
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7171552Z # tests 76
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7171672Z # suites 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7171796Z # pass 76
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7185722Z # fail 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7193410Z # cancelled 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7193582Z # skipped 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7193741Z # todo 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7193968Z # duration_ms 20547.249912
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7234309Z ##[group]Run set -euo pipefail
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7234497Z ^[[36;1mset -euo pipefail^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7234683Z ^[[36;1mexport TMPDIR=$(mktemp -d /tmp/si-discovery-ci-XXXXXX)^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7235161Z ^[[36;1mexport DISCOVERY_SNAPSHOT_ARTIFACTS="$RUNNER_TEMP/discovery-snapshot-native"^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7235591Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs^[[0m
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7290049Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7290235Z env:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7290350Z   USER: runner
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7290464Z ##[endgroup]
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.7619868Z TAP version 13
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.8276765Z # (node:4219) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.8305943Z # (Use `node --trace-warnings ...` to show where the warning was created)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.8316912Z # (node:4219) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/discovery-frozen-snapshot-reader.ts is not specified and it doesn't parse as CommonJS.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.8327850Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:52.8328813Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4016017Z # Subtest: real captured v3 coherent RR readonly discovery acquisition (synthetic data, no live approval)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4016885Z     # Subtest: nonempty complete run/manifest positive and exact microseconds, public flags stay false
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4018367Z     ok 1 - nonempty complete run/manifest positive and exact microseconds, public flags stay false
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4019036Z       ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4019233Z       duration_ms: 22.39658
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4019491Z       ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4064180Z     # Subtest: missing run remains unsupported
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4068418Z     ok 2 - missing run remains unsupported
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4068702Z       ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4068831Z       duration_ms: 5.329115
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4069249Z       ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4232654Z     # Subtest: real ambiguous input and incomplete manifest reject without inventing bindings
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4233233Z     ok 3 - real ambiguous input and incomplete manifest reject without inventing bindings
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4233659Z       ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4233855Z       duration_ms: 16.418108
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4234043Z       ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4460805Z     # Subtest: second connection commit inside counted read does not change RR population; next snapshot sees invalid/revoked head
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4461704Z     ok 4 - second connection commit inside counted read does not change RR population; next snapshot sees invalid/revoked head
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4462178Z       ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4462402Z       duration_ms: 22.558559
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4462609Z       ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4516857Z     # Subtest: actual PG read-only mutation rejected and rollback cleanup confirmed
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4517480Z     ok 5 - actual PG read-only mutation rejected and rollback cleanup confirmed
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4517820Z       ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4518014Z       duration_ms: 5.451624
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4518268Z       ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4571269Z     # Subtest: existing anon role with active RLS cannot masquerade as a complete population
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4575526Z     ok 6 - existing anon role with active RLS cannot masquerade as a complete population
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4575802Z       ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4575932Z       duration_ms: 5.370171
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4576067Z       ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4622150Z     # Subtest: actual server disconnect never succeeds and closes owned client
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4622797Z     ok 7 - actual server disconnect never succeeds and closes owned client
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4623691Z       ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4623929Z       duration_ms: 5.066584
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:54.4624179Z       ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.4675745Z     # Subtest: actual PG statement timeout is bounded, sanitized and rolled back
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.4676423Z     ok 8 - actual PG statement timeout is bounded, sanitized and rolled back
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.4677796Z       ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.4677947Z       duration_ms: 2004.975161
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.4678078Z       ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.5226102Z     # Subtest: real retained registry above4096 is rejected before population transfer
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.5226896Z     ok 9 - real retained registry above4096 is rejected before population transfer
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.5227201Z       ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.5227351Z       duration_ms: 54.987382
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.5227555Z       ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7740579Z     1..9
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7741250Z ok 1 - real captured v3 coherent RR readonly discovery acquisition (synthetic data, no live approval)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7741637Z   ---
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7741801Z   duration_ms: 3907.492024
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7741931Z   ...
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7871647Z 1..1
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7871842Z # tests 10
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7872015Z # suites 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7872143Z # pass 10
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7872260Z # fail 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7872376Z # cancelled 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7875443Z # skipped 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7892423Z # todo 0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7892633Z # duration_ms 4032.379601
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.7975959Z Post job cleanup.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.8801008Z (node:4268) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.8801518Z (Use `node --trace-deprecation ...` to show where the warning was created)
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.9026394Z Post job cleanup.
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.9596264Z [command]/usr/bin/git version
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.9619768Z git version 2.55.0
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.9643939Z Temporarily overriding HOME='/home/runner/work/_temp/61574cd1-0147-4c36-a5d0-b6fb301a6cb7' before making global git config changes
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.9644687Z Adding repository directory to the temporary git global config as a safe directory
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.9647809Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.9679584Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.9715996Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.9911611Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:56.9948021Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:57.0138344Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:57.0171123Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:57.0465516Z Cleaning up orphan processes
+discovery-snapshot-quality	UNKNOWN STEP	2026-10-13T22:22:57.0667664Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

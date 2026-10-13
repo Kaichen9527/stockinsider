@@ -1,0 +1,24 @@
+{
+  "source": "3b7e45ee7f73fa438c2d9d4083b870ef76183d56",
+  "delivery": "e9c56d7cacb17f0ce5a5ea202cff09c7c49df610",
+  "node": "v22.14.0",
+  "architecture": "arm64",
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+    "web/src/lib/discovery-revision-publisher-reader.test.ts"
+  ],
+  "test_counts": {
+    "tests": 76,
+    "pass": 76,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0
+  },
+  "native_build_executed": false
+}

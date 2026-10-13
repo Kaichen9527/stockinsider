@@ -1,0 +1,400 @@
+TAP version 13
+# (node:75255) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:75255) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/discovery-frozen-snapshot-reader.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-release-root-review-oct14/web/package.json.
+# Subtest: fixed RR/RO query order, sole UUID parameters, exact populations and private packet never escapes
+ok 1 - fixed RR/RO query order, sole UUID parameters, exact populations and private packet never escapes
+  ---
+  duration_ms: 8.288584
+  ...
+# Subtest: over bound rejects before any population fetch
+ok 2 - over bound rejects before any population fetch
+  ---
+  duration_ms: 0.321166
+  ...
+# Subtest: aggregate bound rejects before any population fetch
+ok 3 - aggregate bound rejects before any population fetch
+  ---
+  duration_ms: 0.334542
+  ...
+# Subtest: bytes bound rejects before any population fetch
+ok 4 - bytes bound rejects before any population fetch
+  ---
+  duration_ms: 0.316833
+  ...
+# Subtest: missing has no false success, sanitized error and confirmed cleanup
+ok 5 - missing has no false success, sanitized error and confirmed cleanup
+  ---
+  duration_ms: 0.485084
+  ...
+# Subtest: ambiguous has no false success, sanitized error and confirmed cleanup
+ok 6 - ambiguous has no false success, sanitized error and confirmed cleanup
+  ---
+  duration_ms: 0.201709
+  ...
+# Subtest: truncated has no false success, sanitized error and confirmed cleanup
+ok 7 - truncated has no false success, sanitized error and confirmed cleanup
+  ---
+  duration_ms: 0.484667
+  ...
+# Subtest: wrongSnapshot has no false success, sanitized error and confirmed cleanup
+ok 8 - wrongSnapshot has no false success, sanitized error and confirmed cleanup
+  ---
+  duration_ms: 0.857584
+  ...
+# Subtest: badVisibility has no false success, sanitized error and confirmed cleanup
+ok 9 - badVisibility has no false success, sanitized error and confirmed cleanup
+  ---
+  duration_ms: 0.346875
+  ...
+# Subtest: badIsolation has no false success, sanitized error and confirmed cleanup
+ok 10 - badIsolation has no false success, sanitized error and confirmed cleanup
+  ---
+  duration_ms: 0.576833
+  ...
+# Subtest: fail has no false success, sanitized error and confirmed cleanup
+ok 11 - fail has no false success, sanitized error and confirmed cleanup
+  ---
+  duration_ms: 0.282417
+  ...
+# Subtest: invalid UUID does no I/O; owned client cannot be reused
+ok 12 - invalid UUID does no I/O; owned client cannot be reused
+  ---
+  duration_ms: 1.116417
+  ...
+# Subtest: database timestamps are requested as fixed UTC microsecond text, never JS Date
+ok 13 - database timestamps are requested as fixed UTC microsecond text, never JS Date
+  ---
+  duration_ms: 1.434875
+  ...
+# Subtest: primary DB failure survives failed cleanup without exposing either private error
+ok 14 - primary DB failure survives failed cleanup without exposing either private error
+  ---
+  duration_ms: 0.256833
+  ...
+# Subtest: stalled owned end returns bounded pending cleanup and cannot report a successful read
+ok 15 - stalled owned end returns bounded pending cleanup and cannot report a successful read
+  ---
+  duration_ms: 10003.289083
+  ...
+# Subtest: late synchronous cleanup settlement cannot beat an expired monotonic deadline
+ok 16 - late synchronous cleanup settlement cannot beat an expired monotonic deadline
+  ---
+  duration_ms: 10104.035375
+  ...
+# (node:75369) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:75369) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/discovery-revision-publisher-reader.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-release-root-review-oct14/web/package.json.
+# Subtest: actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+ok 17 - actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+  ---
+  duration_ms: 4.012333
+  ...
+# Subtest: precise offset microseconds and invalid dates
+ok 18 - precise offset microseconds and invalid dates
+  ---
+  duration_ms: 0.329541
+  ...
+# Subtest: future revision collected_at 1us cannot replace known head
+ok 19 - future revision collected_at 1us cannot replace known head
+  ---
+  duration_ms: 1.551875
+  ...
+# Subtest: future revision recorded_at 1us cannot replace known head
+ok 20 - future revision recorded_at 1us cannot replace known head
+  ---
+  duration_ms: 0.989291
+  ...
+# Subtest: future authority approved_at cannot mask known authority
+ok 21 - future authority approved_at cannot mask known authority
+  ---
+  duration_ms: 1.071209
+  ...
+# Subtest: future authority recorded_at cannot mask known authority
+ok 22 - future authority recorded_at cannot mask known authority
+  ---
+  duration_ms: 0.854292
+  ...
+# Subtest: future authority valid_from cannot mask known authority
+ok 23 - future authority valid_from cannot mask known authority
+  ---
+  duration_ms: 0.839667
+  ...
+# Subtest: latest inactive source never revives prior active
+ok 24 - latest inactive source never revives prior active
+  ---
+  duration_ms: 0.868875
+  ...
+# Subtest: latest inactive publisher never revives prior active
+ok 25 - latest inactive publisher never revives prior active
+  ---
+  duration_ms: 0.933667
+  ...
+# Subtest: latest invalid acquisition cannot revive old complete
+ok 26 - latest invalid acquisition cannot revive old complete
+  ---
+  duration_ms: 1.167334
+  ...
+# Subtest: same-time contradictory revisions heads fail closed, both orders
+ok 27 - same-time contradictory revisions heads fail closed, both orders
+  ---
+  duration_ms: 0.858041
+  ...
+# Subtest: same-time contradictory publishers heads fail closed, both orders
+ok 28 - same-time contradictory publishers heads fail closed, both orders
+  ---
+  duration_ms: 0.866459
+  ...
+# Subtest: same-time contradictory sourceAuthorities heads fail closed, both orders
+ok 29 - same-time contradictory sourceAuthorities heads fail closed, both orders
+  ---
+  duration_ms: 0.683458
+  ...
+# Subtest: frozen population run mismatch is not complete
+ok 30 - frozen population run mismatch is not complete
+  ---
+  duration_ms: 0.300834
+  ...
+# Subtest: frozen population cutoff mismatch is not complete
+ok 31 - frozen population cutoff mismatch is not complete
+  ---
+  duration_ms: 0.195917
+  ...
+# Subtest: frozen population count mismatch is not complete
+ok 32 - frozen population count mismatch is not complete
+  ---
+  duration_ms: 0.199292
+  ...
+# Subtest: frozen population hash mismatch is not complete
+ok 33 - frozen population hash mismatch is not complete
+  ---
+  duration_ms: 0.209792
+  ...
+# Subtest: verification source_run_id binding mismatch
+ok 34 - verification source_run_id binding mismatch
+  ---
+  duration_ms: 0.789083
+  ...
+# Subtest: verification source_cutoff binding mismatch
+ok 35 - verification source_cutoff binding mismatch
+  ---
+  duration_ms: 0.681625
+  ...
+# Subtest: verification revision_id binding mismatch
+ok 36 - verification revision_id binding mismatch
+  ---
+  duration_ms: 0.6095
+  ...
+# Subtest: verification publisher_manifest_id binding mismatch
+ok 37 - verification publisher_manifest_id binding mismatch
+  ---
+  duration_ms: 0.813333
+  ...
+# Subtest: verification canonical_content_hash binding mismatch
+ok 38 - verification canonical_content_hash binding mismatch
+  ---
+  duration_ms: 0.606959
+  ...
+# Subtest: verification collected_at binding mismatch
+ok 39 - verification collected_at binding mismatch
+  ---
+  duration_ms: 0.673333
+  ...
+# Subtest: verification recorded_at binding mismatch
+ok 40 - verification recorded_at binding mismatch
+  ---
+  duration_ms: 0.578958
+  ...
+# Subtest: manifest root_hash cannot be asserted by count alone
+ok 41 - manifest root_hash cannot be asserted by count alone
+  ---
+  duration_ms: 0.662333
+  ...
+# Subtest: manifest page_hash cannot be asserted by count alone
+ok 42 - manifest page_hash cannot be asserted by count alone
+  ---
+  duration_ms: 0.453
+  ...
+# Subtest: manifest payload cannot be asserted by count alone
+ok 43 - manifest payload cannot be asserted by count alone
+  ---
+  duration_ms: 0.516083
+  ...
+# Subtest: manifest rows_missing cannot be asserted by count alone
+ok 44 - manifest rows_missing cannot be asserted by count alone
+  ---
+  duration_ms: 0.404958
+  ...
+# Subtest: manifest institution cannot be asserted by count alone
+ok 45 - manifest institution cannot be asserted by count alone
+  ---
+  duration_ms: 0.60675
+  ...
+# Subtest: manifest authority_bytes cannot be asserted by count alone
+ok 46 - manifest authority_bytes cannot be asserted by count alone
+  ---
+  duration_ms: 0.615667
+  ...
+# Subtest: manifest run_binding cannot be asserted by count alone
+ok 47 - manifest run_binding cannot be asserted by count alone
+  ---
+  duration_ms: 0.423
+  ...
+# Subtest: legacy raw mapping missing is unsupported, never UUID/hash/url join
+ok 48 - legacy raw mapping missing is unsupported, never UUID/hash/url join
+  ---
+  duration_ms: 0.545958
+  ...
+# Subtest: legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+ok 49 - legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+  ---
+  duration_ms: 0.419875
+  ...
+# Subtest: bounded populations defer every supplied input, not truncation success
+ok 50 - bounded populations defer every supplied input, not truncation success
+  ---
+  duration_ms: 60.335625
+  ...
+# Subtest: same revision UUID with conflicting family cannot produce two bindings
+ok 51 - same revision UUID with conflicting family cannot produce two bindings
+  ---
+  duration_ms: 0.651292
+  ...
+# Subtest: exact duplicate revision is accounted once as binding, deterministic projection
+ok 52 - exact duplicate revision is accounted once as binding, deterministic projection
+  ---
+  duration_ms: 0.654
+  ...
+# Subtest: equal cutoff is included and valid_to equal cutoff is expired
+ok 53 - equal cutoff is included and valid_to equal cutoff is expired
+  ---
+  duration_ms: 0.521834
+  ...
+# Subtest: invalid collected_at is explicitly rejected, not a chosen head
+ok 54 - invalid collected_at is explicitly rejected, not a chosen head
+  ---
+  duration_ms: 0.695458
+  ...
+# Subtest: invalid recorded_at is explicitly rejected, not a chosen head
+ok 55 - invalid recorded_at is explicitly rejected, not a chosen head
+  ---
+  duration_ms: 0.43375
+  ...
+# Subtest: partial page with lower local count cannot match previously counted packet
+ok 56 - partial page with lower local count cannot match previously counted packet
+  ---
+  duration_ms: 0.148375
+  ...
+# Subtest: recomputation keeps supplied source clocks, does not substitute snapshot time
+ok 57 - recomputation keeps supplied source clocks, does not substitute snapshot time
+  ---
+  duration_ms: 0.468833
+  ...
+# Subtest: root section row count/manifest page membership must agree
+ok 58 - root section row count/manifest page membership must agree
+  ---
+  duration_ms: 0.388625
+  ...
+# Subtest: no URL or family/hash changes create root or creator proof
+ok 59 - no URL or family/hash changes create root or creator proof
+  ---
+  duration_ms: 0.260917
+  ...
+# Subtest: publisher class is the existing enum, not an invented news authority
+ok 60 - publisher class is the existing enum, not an invented news authority
+  ---
+  duration_ms: 0.241542
+  ...
+# Subtest: public_research institution required by original authority schema
+ok 61 - public_research institution required by original authority schema
+  ---
+  duration_ms: 0.22725
+  ...
+# Subtest: unbounded strings and depth fail before projection, no truncation success
+ok 62 - unbounded strings and depth fail before projection, no truncation success
+  ---
+  duration_ms: 19.909167
+  ...
+# Subtest: future same-UUID collected_at cannot poison known family/identity
+ok 63 - future same-UUID collected_at cannot poison known family/identity
+  ---
+  duration_ms: 0.657167
+  ...
+# Subtest: future same-UUID recorded_at cannot poison known family/identity
+ok 64 - future same-UUID recorded_at cannot poison known family/identity
+  ---
+  duration_ms: 0.578792
+  ...
+# Subtest: manifest full retained publisher head population, not merely one matching row
+ok 65 - manifest full retained publisher head population, not merely one matching row
+  ---
+  duration_ms: 0.555167
+  ...
+# Subtest: known latest head cutoff+1us blocks older complete family, both orders
+ok 66 - known latest head cutoff+1us blocks older complete family, both orders
+  ---
+  duration_ms: 0.598083
+  ...
+# Subtest: known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+ok 67 - known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+  ---
+  duration_ms: 0.512292
+  ...
+# Subtest: known latest head before-cutoff-after-collection blocks older complete family, both orders
+ok 68 - known latest head before-cutoff-after-collection blocks older complete family, both orders
+  ---
+  duration_ms: 0.55975
+  ...
+# Subtest: known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+ok 69 - known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+  ---
+  duration_ms: 0.513
+  ...
+# Subtest: known latest head invalid-clock blocks older complete family, both orders
+ok 70 - known latest head invalid-clock blocks older complete family, both orders
+  ---
+  duration_ms: 0.616375
+  ...
+# Subtest: known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+ok 71 - known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+  ---
+  duration_ms: 0.516209
+  ...
+# Subtest: known latest head with published null is allowed when verification also preserves null
+ok 72 - known latest head with published null is allowed when verification also preserves null
+  ---
+  duration_ms: 0.601208
+  ...
+# Subtest: known legal head at publication=collection remains usable with all microseconds
+ok 73 - known legal head at publication=collection remains usable with all microseconds
+  ---
+  duration_ms: 0.618125
+  ...
+# Subtest: truly future collected_at with invalid publication remains unknown without UUID poisoning
+ok 74 - truly future collected_at with invalid publication remains unknown without UUID poisoning
+  ---
+  duration_ms: 0.586
+  ...
+# Subtest: truly future recorded_at with invalid publication remains unknown without UUID poisoning
+ok 75 - truly future recorded_at with invalid publication remains unknown without UUID poisoning
+  ---
+  duration_ms: 0.571708
+  ...
+# Subtest: single known head with malformed publication is blocked with explicit family disposition
+ok 76 - single known head with malformed publication is blocked with explicit family disposition
+  ---
+  duration_ms: 0.526542
+  ...
+1..76
+# tests 76
+# suites 0
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 20431.090042

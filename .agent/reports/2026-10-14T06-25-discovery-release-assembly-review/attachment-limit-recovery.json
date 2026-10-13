@@ -1,0 +1,32 @@
+{
+  "failedAction": "attach PR377",
+  "error": "thread attachment identity count exceeds 100",
+  "artifactCountBefore": 100,
+  "oldestMergedAttachment": {
+    "id": "01a0b7f3-89e3-76c3-8d73-8092e4aa7fd6",
+    "attachmentType": "pull_request",
+    "identityKey": "[\"github.com\",\"kaichen9527\",\"stockinsider\",276]",
+    "payload": {
+      "url": "https://github.com/Kaichen9527/stockinsider/pull/276",
+      "root": null,
+      "headBranch": null
+    },
+    "createdAt": 1789792586
+  },
+  "verifiedGithubState": {
+    "number": 276,
+    "state": "MERGED",
+    "mergedAt": "2026-09-24T00:50:39Z",
+    "url": "https://github.com/Kaichen9527/stockinsider/pull/276",
+    "headRefOid": "d24977824a0ff00beef6a26b53e6c8078144841b",
+    "baseRefOid": "3852578bd0b0dcbd564836792926a46d757423cf",
+    "title": "Refocus AUO preview on catalysts, earnings bridge, and entry conditions"
+  },
+  "resolution": "Unlink only the oldest terminal PR UI attachment, preserving this exact pointer, GitHub PR, source, history and evidence; attach active PR377. No PR content/state or checkout removal.",
+  "resolutionConfirmed": {
+    "artifactCountAfter": 100,
+    "pr377Attached": true,
+    "oldMergedPr276UnlinkedOnly": true,
+    "githubContentOrStateChanged": false
+  }
+}

@@ -1,0 +1,1052 @@
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	﻿2026-10-13T22:21:56.4169217Z Current runner version: '2.337.0'
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4197289Z ##[group]Runner Image Provisioner
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4198226Z Hosted Compute Agent
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4198977Z Version: 20261002.596
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4199741Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4200652Z Build Date: 2026-10-02T22:28:27Z
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4201578Z Worker ID: {9e52addb-14f4-4414-bc7f-2ac5b2b6c820}
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4202446Z Region: eastus
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4203148Z Cloud: Azure
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4203821Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4206500Z ##[group]Operating System
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4207359Z Ubuntu
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4207974Z 24.04.5
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4208988Z LTS
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4209608Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4210298Z ##[group]Runner Image
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4211119Z Image: ubuntu-24.04
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4211799Z Version: 20261004.327.1
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4213468Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4215414Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4217036Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4218313Z ##[group]GITHUB_TOKEN Permissions
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4220758Z Contents: read
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4221430Z Metadata: read
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4222206Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4224581Z Secret source: Actions
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4225972Z Cache mode: write
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4226844Z Prepare workflow directory
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4593123Z Prepare all required actions
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.4648621Z Getting action download info
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.6077866Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:56.7753059Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.0381423Z Complete job name: Candidate discovery admission and UI diagnostics
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1061227Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1062025Z with:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1062375Z   persist-credentials: false
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1062787Z   repository: Kaichen9527/stockinsider
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1066028Z   token: ***
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1066373Z   ssh-strict: true
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1066715Z   ssh-user: git
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1067046Z   clean: true
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1067393Z   sparse-checkout-cone-mode: true
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1067806Z   fetch-depth: 1
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1068137Z   fetch-tags: false
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1068484Z   show-progress: true
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1068832Z   lfs: false
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1069153Z   submodules: false
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1069504Z   set-safe-directory: true
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1069902Z   allow-unsafe-pr-checkout: false
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1070449Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1872201Z Syncing repository: Kaichen9527/stockinsider
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1874320Z ##[group]Getting Git version info
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1875228Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.1876716Z [command]/usr/bin/git version
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2074643Z git version 2.55.0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2090859Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2103047Z Temporarily overriding HOME='/home/runner/work/_temp/dccdcddd-20a5-49d4-b72d-7d1a7ff1ded2' before making global git config changes
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2104789Z Adding repository directory to the temporary git global config as a safe directory
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2107780Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2154193Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2158381Z ##[group]Initializing the repository
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2161314Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2279558Z hint: Using 'master' as the name for the initial branch. This default branch name
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2281206Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2284343Z hint: to use in all of your new repositories, which will suppress this warning,
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2285214Z hint: call:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2285695Z hint:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2286540Z hint: 	git config --global init.defaultBranch <name>
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2287147Z hint:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2287693Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2288437Z hint: 'development'. The just-created branch can be renamed via this command:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2289019Z hint:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2289356Z hint: 	git branch -m <name>
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2289737Z hint:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2290227Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2291066Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2293052Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2345459Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2346431Z ##[group]Disabling automatic garbage collection
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2348495Z [command]/usr/bin/git config --local gc.auto 0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2388340Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2389334Z ##[group]Setting up auth
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2394964Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.2426285Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.3386366Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.3418407Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.3637693Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.3655543Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.3865322Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.3906395Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.3907941Z ##[group]Fetching the repository
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:57.3913978Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3ffd275ccc972bbfd7db1044191a4ba4740e90db:refs/remotes/pull/377/merge
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.6123747Z From https://github.com/Kaichen9527/stockinsider
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.6124618Z  * [new ref]         3ffd275ccc972bbfd7db1044191a4ba4740e90db -> pull/377/merge
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.6127023Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.6127553Z ##[group]Determining the checkout info
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.6128389Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.6133179Z [command]/usr/bin/git sparse-checkout disable
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.6182970Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.6213422Z ##[group]Checking out the ref
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.6217649Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/377/merge
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7516699Z Note: switching to 'refs/remotes/pull/377/merge'.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7517083Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7517329Z You are in 'detached HEAD' state. You can look around, make experimental
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7517833Z changes and commit them, and you can discard any commits you make in this
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7518360Z state without impacting any branches by switching back to a branch.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7518648Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7518854Z If you want to create a new branch to retain commits you create, you may
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7519629Z do so (now or later) by using -c with the switch command. Example:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7519902Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7520049Z   git switch -c <new-branch-name>
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7520284Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7520481Z Or undo this operation with:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7520711Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7520900Z   git switch -
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7521146Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7521445Z Turn off this advice by setting config variable advice.detachedHead to false
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7521839Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7527314Z HEAD is now at 3ffd275 Merge e9c56d7cacb17f0ce5a5ea202cff09c7c49df610 into aa111a54c7108f043eebc1a5b0682391fc88aef9
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7529046Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7568715Z [command]/usr/bin/git log -1 --format=%H
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7592317Z 3ffd275ccc972bbfd7db1044191a4ba4740e90db
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7600148Z ##[group]Removing auth
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7603161Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7631930Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7824441Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7848383Z http.https://github.com/.extraheader
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7854100Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.7884918Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.8077889Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.8104624Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.8294045Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.8584601Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.8585176Z with:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.8585567Z   node-version: 22.14.0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.8586171Z   always-auth: false
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.8586565Z   check-latest: false
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.8588862Z   token: ***
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.8589226Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.9696493Z Attempting to download 22.14.0...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.9780470Z (node:2172) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:58.9782022Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:59.4604363Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:59.7969138Z Extracting ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:21:59.8062373Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/760d3dd3-09e7-42e0-8f2c-73fc119ad666 -f /home/runner/work/_temp/09c65588-032c-41ad-a71b-30e547b0b40b
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:00.7792609Z Adding to the cache ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:02.8661803Z ##[group]Environment details
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:03.0474773Z node: v22.14.0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:03.0475129Z npm: 10.9.2
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:03.0476858Z yarn: 1.22.22
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:03.0477611Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:03.0617128Z ##[group]Run npm --prefix web ci --ignore-scripts
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:03.0617579Z ^[[36;1mnpm --prefix web ci --ignore-scripts^[[0m
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:03.0846407Z shell: /usr/bin/bash -e {0}
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:03.0846680Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:04.2489426Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.7980619Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.7981470Z added 432 packages, and audited 433 packages in 14s
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.7981829Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.7982043Z 169 packages are looking for funding
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.7982788Z   run `npm fund` for details
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9069928Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9070407Z 11 vulnerabilities (10 high, 1 critical)
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9070740Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9071054Z To address issues that do not require attention, run:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9071476Z   npm audit fix
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9071642Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9071982Z To address all issues (including breaking changes), run:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9072417Z   npm audit fix --force
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9072596Z 
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9072765Z Run `npm audit` for details.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9841712Z ##[group]Run node web/scripts/sync-official-authority.mjs
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9842105Z ^[[36;1mnode web/scripts/sync-official-authority.mjs^[[0m
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9902719Z shell: /usr/bin/bash -e {0}
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:16.9902952Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.0258859Z Official authority build bridge verified (5 canonical modules).
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.0314522Z ##[group]Run node --experimental-strip-types --test --test-concurrency=1 web/src/lib/candidate-discovery-admission.test.ts web/src/lib/live-discovery-evidence-adapter.test.ts web/src/lib/discovery-revision-publisher-reader.test.ts web/src/lib/discovery-frozen-snapshot-reader.test.ts scripts/candidate-discovery-admission-ui.test.mjs
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.0316958Z ^[[36;1mnode --experimental-strip-types --test --test-concurrency=1 web/src/lib/candidate-discovery-admission.test.ts web/src/lib/live-discovery-evidence-adapter.test.ts web/src/lib/discovery-revision-publisher-reader.test.ts web/src/lib/discovery-frozen-snapshot-reader.test.ts scripts/candidate-discovery-admission-ui.test.mjs^[[0m
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.0377615Z shell: /usr/bin/bash -e {0}
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.0377860Z ##[endgroup]
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.0803216Z TAP version 13
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.1517617Z # (node:2242) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.1518969Z # (Use `node --trace-warnings ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.1520790Z # (node:2242) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-discovery-admission.ts is not specified and it doesn't parse as CommonJS.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.1522418Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.1523656Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6441837Z # Subtest: actual main card displays technical dated close and reference method, hides old price and upside
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6456926Z ok 1 - actual main card displays technical dated close and reference method, hides old price and upside
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6457556Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6457801Z   duration_ms: 8.225178
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6457998Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6458468Z # Subtest: actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6459115Z ok 2 - actual card exposes every bounded source link including Threads, IG and InvestAnchors when present
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6459492Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6459658Z   duration_ms: 1.175633
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6459878Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6460295Z # Subtest: missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6460906Z ok 3 - missing technical close cannot fall back to valuation currentPrice; stale reference not a target
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6461271Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6461506Z   duration_ms: 1.011964
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6461688Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6462070Z # Subtest: actual main defaults to existing clues while research admission remains explicitly pending
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6462702Z ok 4 - actual main defaults to existing clues while research admission remains explicitly pending
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6463064Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6463231Z   duration_ms: 9.225845
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6463745Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6464209Z # Subtest: existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6464893Z ok 5 - existing waiting/actionable data are retained; discovery screen does not reclassify or delete positions
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6465271Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6467785Z   duration_ms: 1.116897
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6467981Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6486743Z # Subtest: actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6490876Z ok 6 - actual main SSR with272 complete hits renders20 clue cards plus bounded paging, retains input
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6491795Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6492264Z   duration_ms: 22.064428
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6492743Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6494037Z # Subtest: actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6495465Z ok 7 - actual source coverage renders ledger retirement, blocked Threads and Telegram duplicate without empty enabled cards
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6496382Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6496674Z   duration_ms: 3.097632
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6496858Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6497351Z # Subtest: saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6498121Z ok 8 - saved source-health compactor actually preserves existing Instagram retirement without fabricating rows
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6498562Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6498727Z   duration_ms: 8.447895
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.6498923Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7168004Z # (node:2253) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7171133Z # (Use `node --trace-warnings ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7398169Z # (node:2253) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/candidate-discovery-admission.test.ts is not specified and it doesn't parse as CommonJS.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7399995Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7401127Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7792894Z # Subtest: only a pair with different canonical publishers and roots enters general research
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7793953Z ok 9 - only a pair with different canonical publishers and roots enters general research
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7794542Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7794810Z   duration_ms: 2.397214
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7795088Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7795487Z # Subtest: same author across platforms
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7796088Z ok 10 - same author across platforms
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7796483Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7796776Z   duration_ms: 0.187254
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7797123Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7797658Z # Subtest: syndicated original root
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7798066Z ok 11 - syndicated original root
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7798373Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7798610Z   duration_ms: 0.119105
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7798875Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7799583Z # Subtest: same-platform original authors with independent roots qualify; platform diversity is display-only
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7800673Z ok 12 - same-platform original authors with independent roots qualify; platform diversity is display-only
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7801294Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7801534Z   duration_ms: 0.278208
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7801798Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7830671Z # Subtest: retracted root cannot be laundered by a current repost
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7831415Z ok 13 - retracted root cannot be laundered by a current repost
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7831984Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7832256Z   duration_ms: 0.419836
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7832588Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7833231Z # Subtest: industry-only and unresolved aliases cannot count as direct company confirmation
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7834506Z ok 14 - industry-only and unresolved aliases cannot count as direct company confirmation
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7835118Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7835377Z   duration_ms: 0.198761
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7835845Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7836419Z # Subtest: bounded legacy links, counters and missing PTT detail are unsupported
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7837333Z ok 15 - bounded legacy links, counters and missing PTT detail are unsupported
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7837845Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7838169Z   duration_ms: 0.274442
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7838415Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7838841Z # Subtest: PTT 19/20 actual different stock-mention authors boundary
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7839574Z ok 16 - PTT 19/20 actual different stock-mention authors boundary
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7840046Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7840306Z   duration_ms: 0.61395
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7840630Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7841577Z # Subtest: PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7842754Z ok 17 - PTT duplicate authors, reactions, irrelevant text, unverified mentions and substrings never inflate 20
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7843410Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7843657Z   duration_ms: 0.488486
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7843964Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7844476Z # Subtest: PTT requires stock in body, current article, and one post, not pooled reply totals
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7845292Z ok 18 - PTT requires stock in body, current article, and one post, not pooled reply totals
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7848785Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7849009Z   duration_ms: 0.423581
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7849272Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7849889Z # Subtest: reasoned new official event can enter low-volume lane, never multi-source confirmation
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7850864Z ok 19 - reasoned new official event can enter low-volume lane, never multi-source confirmation
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7851474Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7851728Z   duration_ms: 0.190679
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7851985Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7852594Z # Subtest: high-impact new lead requires explained known direct source; ordinary news is not official
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7853623Z ok 20 - high-impact new lead requires explained known direct source; ordinary news is not official
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7854205Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7854453Z   duration_ms: 0.095179
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7854763Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7855472Z # Subtest: existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7856733Z ok 21 - existing ordered inputs retain every audit row; 15+5 cap and weekly5 are not a new scheduler
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7857705Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7858194Z   duration_ms: 0.55236
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7858628Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7859424Z # Subtest: bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7860560Z ok 22 - bounds fail closed without truncate-success; invalid platform and duplicate symbols reject
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7861296Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7861689Z   duration_ms: 0.464912
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7862105Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7862901Z # Subtest: technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7864046Z ok 23 - technical.close and exact completed session govern freshness, not availableAt or seven-day TTL
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7864799Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7865178Z   duration_ms: 1.072343
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7865581Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7866550Z # Subtest: PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7867750Z ok 24 - PB/TTM are reference methods, never forward targets; stale and unknown method hide target and upside
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7868541Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7869107Z   duration_ms: 0.267392
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7869412Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7869986Z # Subtest: missing, future, malformed dates never manufacture a displayed current close
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7871146Z ok 25 - missing, future, malformed dates never manufacture a displayed current close
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7871634Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7871866Z   duration_ms: 0.108589
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7872112Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7872723Z # Subtest: clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7873602Z ok 26 - clue pagination accounts for all 272 existing hits, maximum20 per page, no qualification or mutation
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7874119Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7874325Z   duration_ms: 0.930484
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7874557Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7875123Z # Subtest: coverage states distinguish retired/blocked/duplicate without inventing source enablement
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7876347Z ok 27 - coverage states distinguish retired/blocked/duplicate without inventing source enablement
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7877400Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7877668Z   duration_ms: 0.325948
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7877931Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7878574Z # Subtest: coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7879566Z ok 28 - coverage empty, partial, metadata, duplicates and contradictory rows cannot claim full success
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7880107Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7880339Z   duration_ms: 0.30665
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.7880610Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.8535097Z # (node:2264) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.8551761Z # (Use `node --trace-warnings ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.8675534Z # (node:2264) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/discovery-frozen-snapshot-reader.test.ts is not specified and it doesn't parse as CommonJS.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.8677442Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.8678611Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9475501Z # Subtest: fixed RR/RO query order, sole UUID parameters, exact populations and private packet never escapes
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9478788Z ok 29 - fixed RR/RO query order, sole UUID parameters, exact populations and private packet never escapes
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9479655Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9480140Z   duration_ms: 11.23173
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9480642Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9481215Z # Subtest: over bound rejects before any population fetch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9481937Z ok 30 - over bound rejects before any population fetch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9482486Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9482890Z   duration_ms: 0.784781
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9483330Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9483912Z # Subtest: aggregate bound rejects before any population fetch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9484740Z ok 31 - aggregate bound rejects before any population fetch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9485322Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9485883Z   duration_ms: 0.820904
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9486335Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9486897Z # Subtest: bytes bound rejects before any population fetch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9487631Z ok 32 - bytes bound rejects before any population fetch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9488174Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9488575Z   duration_ms: 0.781335
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9489011Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9489712Z # Subtest: missing has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9490626Z ok 33 - missing has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9491256Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9491660Z   duration_ms: 0.693607
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9492102Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9492818Z # Subtest: ambiguous has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9493754Z ok 34 - ambiguous has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9494395Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9495234Z   duration_ms: 1.176926
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9495636Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9496461Z # Subtest: truncated has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9497411Z ok 35 - truncated has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9498051Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9498453Z   duration_ms: 1.157938
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9500728Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9501491Z # Subtest: wrongSnapshot has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9502517Z ok 36 - wrongSnapshot has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9503169Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9503568Z   duration_ms: 1.93678
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9504000Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9527202Z # Subtest: badVisibility has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9528403Z ok 37 - badVisibility has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9528840Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9529026Z   duration_ms: 0.740386
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9529274Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9529633Z # Subtest: badIsolation has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9530179Z ok 38 - badIsolation has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9530537Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9530717Z   duration_ms: 0.722019
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9530914Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9531222Z # Subtest: fail has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9531842Z ok 39 - fail has no false success, sanitized error and confirmed cleanup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9532305Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9532551Z   duration_ms: 0.957294
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9532792Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9533243Z # Subtest: invalid UUID does no I/O; owned client cannot be reused
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9533827Z ok 40 - invalid UUID does no I/O; owned client cannot be reused
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9534200Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9534453Z   duration_ms: 2.789831
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9534775Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9535215Z # Subtest: database timestamps are requested as fixed UTC microsecond text, never JS Date
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9536077Z ok 41 - database timestamps are requested as fixed UTC microsecond text, never JS Date
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9536500Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9536747Z   duration_ms: 3.003614
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9537068Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9537524Z # Subtest: primary DB failure survives failed cleanup without exposing either private error
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9538256Z ok 42 - primary DB failure survives failed cleanup without exposing either private error
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9538674Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9538925Z   duration_ms: 0.483158
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:17.9539104Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.0445708Z # Subtest: stalled owned end returns bounded pending cleanup and cannot report a successful read
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.0447594Z ok 43 - stalled owned end returns bounded pending cleanup and cannot report a successful read
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.0448196Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.0448460Z   duration_ms: 9999.9176
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.0448744Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.0449220Z # Subtest: late synchronous cleanup settlement cannot beat an expired monotonic deadline
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.0449758Z ok 44 - late synchronous cleanup settlement cannot beat an expired monotonic deadline
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.0450077Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.0450248Z   duration_ms: 10102.470654
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.0450434Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.1130381Z # (node:2277) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.1156604Z # (Use `node --trace-warnings ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.1451035Z # (node:2277) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/discovery-revision-publisher-reader.test.ts is not specified and it doesn't parse as CommonJS.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.1456209Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.1457976Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4308676Z # Subtest: actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4309724Z ok 45 - actual v3-shaped synthetic reviewed publisher binding, no root/creator/admission proof
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4310413Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4310692Z   duration_ms: 8.10425
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4331550Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4332046Z # Subtest: precise offset microseconds and invalid dates
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4332624Z ok 46 - precise offset microseconds and invalid dates
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4333002Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4333245Z   duration_ms: 0.35508
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4333424Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4334139Z # Subtest: future revision collected_at 1us cannot replace known head
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4334580Z ok 47 - future revision collected_at 1us cannot replace known head
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4334903Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4335072Z   duration_ms: 3.069121
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4335251Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4335534Z # Subtest: future revision recorded_at 1us cannot replace known head
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4336136Z ok 48 - future revision recorded_at 1us cannot replace known head
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4336549Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4336784Z   duration_ms: 2.064402
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4337054Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4337498Z # Subtest: future authority approved_at cannot mask known authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4338155Z ok 49 - future authority approved_at cannot mask known authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4338579Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4338822Z   duration_ms: 2.971467
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4339086Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4438994Z # Subtest: future authority recorded_at cannot mask known authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4484696Z ok 50 - future authority recorded_at cannot mask known authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4496542Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4496841Z   duration_ms: 2.394161
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4497186Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4497664Z # Subtest: future authority valid_from cannot mask known authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4498310Z ok 51 - future authority valid_from cannot mask known authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4498725Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4498988Z   duration_ms: 1.791477
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4499268Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4499687Z # Subtest: latest inactive source never revives prior active
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4500288Z ok 52 - latest inactive source never revives prior active
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4500681Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4500942Z   duration_ms: 1.799959
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4501217Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4501652Z # Subtest: latest inactive publisher never revives prior active
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4502237Z ok 53 - latest inactive publisher never revives prior active
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4502618Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4502876Z   duration_ms: 1.684691
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4503144Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4503584Z # Subtest: latest invalid acquisition cannot revive old complete
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4504189Z ok 54 - latest invalid acquisition cannot revive old complete
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4504595Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4504844Z   duration_ms: 2.766257
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4505115Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4505609Z # Subtest: same-time contradictory revisions heads fail closed, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4506464Z ok 55 - same-time contradictory revisions heads fail closed, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4506850Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4507049Z   duration_ms: 2.144074
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4507280Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4507695Z # Subtest: same-time contradictory publishers heads fail closed, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4508401Z ok 56 - same-time contradictory publishers heads fail closed, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4508848Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4509081Z   duration_ms: 1.623841
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4509353Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4509897Z # Subtest: same-time contradictory sourceAuthorities heads fail closed, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4511214Z ok 57 - same-time contradictory sourceAuthorities heads fail closed, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4511662Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4511879Z   duration_ms: 1.292114
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4512131Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4512485Z # Subtest: frozen population run mismatch is not complete
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4512964Z ok 58 - frozen population run mismatch is not complete
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4513294Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4513491Z   duration_ms: 0.46361
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4513719Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4514091Z # Subtest: frozen population cutoff mismatch is not complete
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4514610Z ok 59 - frozen population cutoff mismatch is not complete
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4515000Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4515232Z   duration_ms: 0.607761
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4515497Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4516190Z # Subtest: frozen population count mismatch is not complete
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4516693Z ok 60 - frozen population count mismatch is not complete
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4517116Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4517348Z   duration_ms: 0.444762
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4517587Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4517942Z # Subtest: frozen population hash mismatch is not complete
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4518413Z ok 61 - frozen population hash mismatch is not complete
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4518815Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4519063Z   duration_ms: 0.432134
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4519316Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4519682Z # Subtest: verification source_run_id binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4520109Z ok 62 - verification source_run_id binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4520419Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4520618Z   duration_ms: 1.331362
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4520856Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4521252Z # Subtest: verification source_cutoff binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4521757Z ok 63 - verification source_cutoff binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4522128Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4522391Z   duration_ms: 1.497456
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4522665Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4523053Z # Subtest: verification revision_id binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4523566Z ok 64 - verification revision_id binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4523931Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4524165Z   duration_ms: 1.134804
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4524421Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4524906Z # Subtest: verification publisher_manifest_id binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4525495Z ok 65 - verification publisher_manifest_id binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4526172Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4526426Z   duration_ms: 1.350491
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4526698Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4527129Z # Subtest: verification canonical_content_hash binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4527736Z ok 66 - verification canonical_content_hash binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4528143Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4528396Z   duration_ms: 1.212838
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4528654Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4529061Z # Subtest: verification collected_at binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4529596Z ok 67 - verification collected_at binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4529973Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4537036Z   duration_ms: 1.423187
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4537390Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4537825Z # Subtest: verification recorded_at binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4538368Z ok 68 - verification recorded_at binding mismatch
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4538747Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4539003Z   duration_ms: 1.168494
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4539277Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4539650Z # Subtest: manifest root_hash cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4540187Z ok 69 - manifest root_hash cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4540580Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4540807Z   duration_ms: 1.481052
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4541090Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4541493Z # Subtest: manifest page_hash cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4542081Z ok 70 - manifest page_hash cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4542494Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4542728Z   duration_ms: 0.914962
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4543225Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4543655Z # Subtest: manifest payload cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4544256Z ok 71 - manifest payload cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4544644Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4544895Z   duration_ms: 0.876435
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4545172Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4545604Z # Subtest: manifest rows_missing cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4546389Z ok 72 - manifest rows_missing cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4546807Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4547057Z   duration_ms: 1.035969
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4547326Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4547762Z # Subtest: manifest institution cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4548422Z ok 73 - manifest institution cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4548850Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4549078Z   duration_ms: 1.191047
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4549508Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4549991Z # Subtest: manifest authority_bytes cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4550677Z ok 74 - manifest authority_bytes cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4551137Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4551392Z   duration_ms: 1.257014
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4551667Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4552072Z # Subtest: manifest run_binding cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4552672Z ok 75 - manifest run_binding cannot be asserted by count alone
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4553092Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4553328Z   duration_ms: 0.846752
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4553590Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4554096Z # Subtest: legacy raw mapping missing is unsupported, never UUID/hash/url join
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4554855Z ok 76 - legacy raw mapping missing is unsupported, never UUID/hash/url join
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4555317Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4555574Z   duration_ms: 1.154202
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4556246Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4556791Z # Subtest: legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4557578Z ok 77 - legacy raw mapping ambiguous is unsupported, never UUID/hash/url join
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4558087Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4558345Z   duration_ms: 0.866912
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4558623Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4559174Z # Subtest: bounded populations defer every supplied input, not truncation success
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4560029Z ok 78 - bounded populations defer every supplied input, not truncation success
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4560536Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4560785Z   duration_ms: 135.850246
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4561074Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4561595Z # Subtest: same revision UUID with conflicting family cannot produce two bindings
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4562373Z ok 79 - same revision UUID with conflicting family cannot produce two bindings
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4562844Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4563102Z   duration_ms: 1.301849
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4563379Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4563970Z # Subtest: exact duplicate revision is accounted once as binding, deterministic projection
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4564853Z ok 80 - exact duplicate revision is accounted once as binding, deterministic projection
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4565358Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4565609Z   duration_ms: 1.354637
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4566074Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4566546Z # Subtest: equal cutoff is included and valid_to equal cutoff is expired
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4567254Z ok 81 - equal cutoff is included and valid_to equal cutoff is expired
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4567685Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4567929Z   duration_ms: 1.040376
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4568200Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4568708Z # Subtest: invalid collected_at is explicitly rejected, not a chosen head
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4569418Z ok 82 - invalid collected_at is explicitly rejected, not a chosen head
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4569872Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4570100Z   duration_ms: 0.940539
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4570390Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4570869Z # Subtest: invalid recorded_at is explicitly rejected, not a chosen head
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4571589Z ok 83 - invalid recorded_at is explicitly rejected, not a chosen head
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4572304Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4572563Z   duration_ms: 1.454633
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4572839Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4573381Z # Subtest: partial page with lower local count cannot match previously counted packet
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4574188Z ok 84 - partial page with lower local count cannot match previously counted packet
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4574689Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4574945Z   duration_ms: 0.363833
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4575212Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4575876Z # Subtest: recomputation keeps supplied source clocks, does not substitute snapshot time
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4576755Z ok 85 - recomputation keeps supplied source clocks, does not substitute snapshot time
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4577279Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4577516Z   duration_ms: 1.02265
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4577792Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4578604Z # Subtest: root section row count/manifest page membership must agree
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4579279Z ok 86 - root section row count/manifest page membership must agree
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4579719Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4579971Z   duration_ms: 0.859871
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4580250Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4580693Z # Subtest: no URL or family/hash changes create root or creator proof
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4581329Z ok 87 - no URL or family/hash changes create root or creator proof
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4581720Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4581936Z   duration_ms: 0.584367
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4582199Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4582709Z # Subtest: publisher class is the existing enum, not an invented news authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4583368Z ok 88 - publisher class is the existing enum, not an invented news authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4584850Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4585034Z   duration_ms: 0.541734
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4585210Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4585525Z # Subtest: public_research institution required by original authority schema
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4586623Z ok 89 - public_research institution required by original authority schema
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4587091Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4587268Z   duration_ms: 0.516838
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4587440Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4587800Z # Subtest: unbounded strings and depth fail before projection, no truncation success
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4588276Z ok 90 - unbounded strings and depth fail before projection, no truncation success
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4588577Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4588733Z   duration_ms: 30.668055
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4588908Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4589197Z # Subtest: future same-UUID collected_at cannot poison known family/identity
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4589613Z ok 91 - future same-UUID collected_at cannot poison known family/identity
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4589887Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4590059Z   duration_ms: 1.414976
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4590228Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4590521Z # Subtest: future same-UUID recorded_at cannot poison known family/identity
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4590948Z ok 92 - future same-UUID recorded_at cannot poison known family/identity
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4591228Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4591382Z   duration_ms: 1.191998
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4591554Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4591885Z # Subtest: manifest full retained publisher head population, not merely one matching row
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4592376Z ok 93 - manifest full retained publisher head population, not merely one matching row
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4592761Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4593013Z   duration_ms: 1.163246
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4593264Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4593643Z # Subtest: known latest head cutoff+1us blocks older complete family, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4594339Z ok 94 - known latest head cutoff+1us blocks older complete family, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4594806Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4595032Z   duration_ms: 1.229083
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4595285Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4596000Z # Subtest: known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4596854Z ok 95 - known same-UUID conflicting cutoff+1us cannot revive old revision, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4597573Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4597811Z   duration_ms: 1.061005
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4598068Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4598663Z # Subtest: known latest head before-cutoff-after-collection blocks older complete family, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4599547Z ok 96 - known latest head before-cutoff-after-collection blocks older complete family, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4600052Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4600257Z   duration_ms: 1.129827
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4600491Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4601094Z # Subtest: known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4602058Z ok 97 - known same-UUID conflicting before-cutoff-after-collection cannot revive old revision, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4602608Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4602818Z   duration_ms: 1.005645
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4603048Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4603652Z # Subtest: known latest head invalid-clock blocks older complete family, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4604405Z ok 98 - known latest head invalid-clock blocks older complete family, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4604844Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4605054Z   duration_ms: 1.538556
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4605286Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4606005Z # Subtest: known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4606814Z ok 99 - known same-UUID conflicting invalid-clock cannot revive old revision, both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4607288Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4607498Z   duration_ms: 1.643771
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4607738Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4608287Z # Subtest: known latest head with published null is allowed when verification also preserves null
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4609110Z ok 100 - known latest head with published null is allowed when verification also preserves null
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4609598Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4609824Z   duration_ms: 1.652263
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4610052Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4610566Z # Subtest: known legal head at publication=collection remains usable with all microseconds
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4611335Z ok 101 - known legal head at publication=collection remains usable with all microseconds
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4611807Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4612016Z   duration_ms: 1.278885
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4612261Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4612874Z # Subtest: truly future collected_at with invalid publication remains unknown without UUID poisoning
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4613819Z ok 102 - truly future collected_at with invalid publication remains unknown without UUID poisoning
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4614373Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4614599Z   duration_ms: 1.204797
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4614856Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4615457Z # Subtest: truly future recorded_at with invalid publication remains unknown without UUID poisoning
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4616535Z ok 103 - truly future recorded_at with invalid publication remains unknown without UUID poisoning
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4617072Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4617290Z   duration_ms: 1.162365
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4617539Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4618148Z # Subtest: single known head with malformed publication is blocked with explicit family disposition
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4619040Z ok 104 - single known head with malformed publication is blocked with explicit family disposition
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4619562Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4619783Z   duration_ms: 1.108045
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.4620026Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.5292900Z # (node:2288) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.5294504Z # (Use `node --trace-warnings ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.5519660Z # (node:2288) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/live-discovery-evidence-adapter.test.ts is not specified and it doesn't parse as CommonJS.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.5523622Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.5525292Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8852307Z # Subtest: real retained provenance maps scoped row identity, never URL/hash/publisher authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8853926Z ok 105 - real retained provenance maps scoped row identity, never URL/hash/publisher authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8854743Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8855199Z   duration_ms: 2.169762
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8855646Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8856726Z # Subtest: 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8858007Z ok 106 - 20 retained code-explicit local authors remain unsupported without parent body/revision authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8858818Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8859249Z   duration_ms: 2.729353
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8860191Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8860976Z # Subtest: authors are counted once within one conversation, never pooled across posts
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8861844Z ok 107 - authors are counted once within one conversation, never pooled across posts
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8862294Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8862582Z   duration_ms: 1.227791
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8862879Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8863503Z # Subtest: non-explicit reply 👍👍👍 does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8864022Z ok 108 - non-explicit reply 👍👍👍 does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8864377Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8864656Z   duration_ms: 0.211931
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8864950Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8865358Z # Subtest: non-explicit reply 推 does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8866064Z ok 109 - non-explicit reply 推 does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8866513Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8866752Z   duration_ms: 0.173334
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8867011Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8867444Z # Subtest: non-explicit reply 台積電 does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8867973Z ok 110 - non-explicit reply 台積電 does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8868289Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8868453Z   duration_ms: 0.19115
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8868621Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8868834Z # Subtest: non-explicit reply 12409 does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8869124Z ok 111 - non-explicit reply 12409 does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8869336Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8869485Z   duration_ms: 0.157712
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8869657Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8869873Z # Subtest: non-explicit reply a2409 does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8884097Z ok 112 - non-explicit reply a2409 does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8884501Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8884758Z   duration_ms: 0.153535
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8885035Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8885686Z # Subtest: non-explicit reply 2409x does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8886766Z ok 113 - non-explicit reply 2409x does not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8887149Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8887399Z   duration_ms: 0.370203
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8887675Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8894465Z # Subtest: hash mismatch, missing author/parent/index and read failure do not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8895704Z ok 114 - hash mismatch, missing author/parent/index and read failure do not count
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8896605Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8896982Z   duration_ms: 0.763039
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8897345Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8898150Z # Subtest: withheld/retracted mention never becomes active evidence; missing root heads block all admission
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8899332Z ok 115 - withheld/retracted mention never becomes active evidence; missing root heads block all admission
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8900082Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8900454Z   duration_ms: 0.261744
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8900830Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8901595Z # Subtest: cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8902755Z ok 116 - cutoff comparison preserves one microsecond and original clocks; later acquisition is excluded
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8903475Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8903839Z   duration_ms: 0.166494
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8904564Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8905269Z # Subtest: backdated availability cannot admit a newly received row into an older observation
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8906394Z ok 117 - backdated availability cannot admit a newly received row into an older observation
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8907026Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8907379Z   duration_ms: 0.127336
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8907748Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8908375Z # Subtest: same instant offset notation, exact date validation and invalid clocks
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8916726Z ok 118 - same instant offset notation, exact date validation and invalid clocks
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8918877Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8919307Z   duration_ms: 0.1702
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8919748Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8945160Z # Subtest: stable accounting retains duplicates, foreign stock and incomplete window as gaps
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8946761Z ok 119 - stable accounting retains duplicates, foreign stock and incomplete window as gaps
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8947538Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8947964Z   duration_ms: 0.712645
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8948416Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8949113Z # Subtest: bound exhaustion reports unexamined rows, never truncation-success
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8950068Z ok 120 - bound exhaustion reports unexamined rows, never truncation-success
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8950714Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8951110Z   duration_ms: 0.253712
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8951534Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8952305Z # Subtest: untrusted getters, prototype and object index cannot execute or acquire authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8953396Z ok 121 - untrusted getters, prototype and object index cannot execute or acquire authority
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8954116Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8954531Z   duration_ms: 0.228545
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8954949Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8955472Z # Subtest: server real initializer audits complete pre-link rows rather than eight display sources
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8956414Z ok 122 - server real initializer audits complete pre-link rows rather than eight display sources
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8956877Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8957152Z   duration_ms: 257.283959
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8957442Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8957903Z # Subtest: missing or mismatched row URL cannot borrow retained document provenance
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8958508Z ok 123 - missing or mismatched row URL cannot borrow retained document provenance
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8958950Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8959235Z   duration_ms: 0.42251
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8959520Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.8960034Z # Subtest: two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9069109Z ok 124 - two UUIDs claiming one comment with conflicting authors invalidate the whole key in both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9069540Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9069898Z   duration_ms: 0.316173
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9070171Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9070769Z # Subtest: conflicting text and correct hashes invalidate the whole key in both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9071495Z ok 125 - conflicting text and correct hashes invalidate the whole key in both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9071921Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9072157Z   duration_ms: 0.322173
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9072476Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9073069Z # Subtest: exact comment replay across UUIDs counts once, same author across keys still once
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9078726Z ok 126 - exact comment replay across UUIDs counts once, same author across keys still once
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9079308Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9079689Z   duration_ms: 0.264078
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9080087Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9080742Z # Subtest: twenty authors containing one conflicting comment cannot be counted as twenty
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9081748Z ok 127 - twenty authors containing one conflicting comment cannot be counted as twenty
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9103759Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9104116Z   duration_ms: 2.179396
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9104421Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9104825Z # Subtest: same-row UUID conflict cannot hide behind row dedup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9105925Z ok 128 - same-row UUID conflict cannot hide behind row dedup
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9106381Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9106659Z   duration_ms: 0.341631
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9106941Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9107410Z # Subtest: actual page reader capped at100/request750 cannot prove total200 exhaustion
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9108034Z ok 129 - actual page reader capped at100/request750 cannot prove total200 exhaustion
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9108476Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9108769Z   duration_ms: 2.10719
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9109069Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9109565Z # Subtest: available_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9110310Z ok 130 - available_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9110812Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9111106Z   duration_ms: 0.807153
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9111435Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9112111Z # Subtest: available_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9112847Z ok 131 - available_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9113319Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9113631Z   duration_ms: 0.365807
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9113934Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9114426Z # Subtest: available_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9115116Z ok 132 - available_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9115592Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9116107Z   duration_ms: 0.258238
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9116486Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9117126Z # Subtest: available_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9118104Z ok 133 - available_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9118461Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9118639Z   duration_ms: 0.229267
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9118843Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9119208Z # Subtest: created_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9119785Z ok 134 - created_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9120126Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9120307Z   duration_ms: 0.319569
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9120493Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9120856Z # Subtest: created_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9121419Z ok 135 - created_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9121760Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9121929Z   duration_ms: 0.288162
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9122100Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9122462Z # Subtest: created_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9122980Z ok 136 - created_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9123327Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9123496Z   duration_ms: 0.226102
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9123679Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9124020Z # Subtest: created_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9124538Z ok 137 - created_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9124877Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9125040Z   duration_ms: 0.232351
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9125227Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9125568Z # Subtest: as_of future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9126275Z ok 138 - as_of future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9126594Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9126764Z   duration_ms: 0.23171
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9126952Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9127293Z # Subtest: as_of future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9127804Z ok 139 - as_of future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9128119Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9128285Z   duration_ms: 0.214955
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9128652Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9128979Z # Subtest: as_of future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9129492Z ok 140 - as_of future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9129802Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9129952Z   duration_ms: 0.202587
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9130117Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9130436Z # Subtest: as_of future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9130916Z ok 141 - as_of future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9131235Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9131389Z   duration_ms: 0.220554
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9131554Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9131924Z # Subtest: mentioned_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9132640Z ok 142 - mentioned_at future1us sameUUID changed-author first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9132979Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9133157Z   duration_ms: 0.208225
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9133352Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9133749Z # Subtest: mentioned_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9134327Z ok 143 - mentioned_at future1us sameUUID changed-author last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9134677Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9134859Z   duration_ms: 0.197069
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9135048Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9135425Z # Subtest: mentioned_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9136203Z ok 144 - mentioned_at future1us sameUUID changed-index first cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9136556Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9136730Z   duration_ms: 0.201456
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9136924Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9137291Z # Subtest: mentioned_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9137851Z ok 145 - mentioned_at future1us sameUUID changed-index last cannot affect known evidence
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9138213Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9138382Z   duration_ms: 0.191151
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9138557Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9138902Z # Subtest: available_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9139379Z ok 146 - available_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9139681Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9139850Z   duration_ms: 0.267933
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9140029Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9140326Z # Subtest: available_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9140764Z ok 147 - available_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9141049Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9141202Z   duration_ms: 0.233843
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9141387Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9141701Z # Subtest: available_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9142179Z ok 148 - available_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9142485Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9142655Z   duration_ms: 0.243808
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9142842Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9143132Z # Subtest: available_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9143556Z ok 149 - available_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9143840Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9143993Z   duration_ms: 0.34804
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9144177Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9144499Z # Subtest: created_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9144962Z ok 150 - created_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9145254Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9145418Z   duration_ms: 0.256316
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9145594Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9145987Z # Subtest: created_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9146438Z ok 151 - created_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9146724Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9147062Z   duration_ms: 0.209016
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9147282Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9147618Z # Subtest: created_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9148059Z ok 152 - created_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9148369Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9148522Z   duration_ms: 0.203668
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9148705Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9148971Z # Subtest: created_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9149357Z ok 153 - created_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9149610Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9149761Z   duration_ms: 0.219793
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9149929Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9150200Z # Subtest: as_of future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9150613Z ok 154 - as_of future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9150902Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9151152Z   duration_ms: 0.205942
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9151365Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9151789Z # Subtest: as_of invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9152336Z ok 155 - as_of invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9152728Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9152986Z   duration_ms: 0.195326
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9153265Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9153743Z # Subtest: as_of future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9154450Z ok 156 - as_of future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9154914Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9155095Z   duration_ms: 0.194345
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9155277Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9155581Z # Subtest: as_of invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9156159Z ok 157 - as_of invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9156421Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9156574Z   duration_ms: 0.19774
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9156744Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9157065Z # Subtest: mentioned_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9157515Z ok 158 - mentioned_at future differentUUID first cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9157800Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9157951Z   duration_ms: 0.215195
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9158119Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9158394Z # Subtest: mentioned_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9158790Z ok 159 - mentioned_at invalid sameUUID first cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9159054Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9159205Z   duration_ms: 0.207394
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9159376Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9159672Z # Subtest: mentioned_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9160106Z ok 160 - mentioned_at future differentUUID last cannot affect known comment
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9160395Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9160546Z   duration_ms: 0.195437
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9160718Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9161133Z # Subtest: mentioned_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9161804Z ok 161 - mentioned_at invalid sameUUID last cannot steal known UUID
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9162182Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9162402Z   duration_ms: 0.188436
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9162665Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9163201Z # Subtest: a future-only UUID must not mark a later known row with that UUID as duplicate
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9164008Z ok 162 - a future-only UUID must not mark a later known row with that UUID as duplicate
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9164500Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9164709Z   duration_ms: 0.499893
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9164950Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9165465Z # Subtest: in-cutoff sameUUID different comment keys invalidate the whole UUID in both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9166395Z ok 163 - in-cutoff sameUUID different comment keys invalidate the whole UUID in both orders
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9166974Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9167293Z   duration_ms: 0.325918
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9167640Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9168473Z # Subtest: sameUUID exact comment/content replay cannot add an author from its excluded duplicate
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9169673Z ok 164 - sameUUID exact comment/content replay cannot add an author from its excluded duplicate
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9170410Z   ---
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9170753Z   duration_ms: 0.207985
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9171103Z   ...
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9210907Z 1..164
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9261189Z # tests 164
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9261623Z # suites 0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9261852Z # pass 164
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9262055Z # fail 0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9262267Z # cancelled 0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9262524Z # skipped 0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9262759Z # todo 0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9263005Z # duration_ms 21852.979765
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:38.9351460Z Post job cleanup.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.0344854Z (node:2299) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.0345485Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.0516038Z Post job cleanup.
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1276754Z [command]/usr/bin/git version
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1313135Z git version 2.55.0
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1342201Z Temporarily overriding HOME='/home/runner/work/_temp/03800640-f423-4511-92bc-54d606e0af4f' before making global git config changes
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1343667Z Adding repository directory to the temporary git global config as a safe directory
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1347373Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1382806Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1415130Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1636742Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1666080Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1887277Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.1927346Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.2265993Z Cleaning up orphan processes
+Candidate discovery admission and UI diagnostics	UNKNOWN STEP	2026-10-13T22:22:39.2534895Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

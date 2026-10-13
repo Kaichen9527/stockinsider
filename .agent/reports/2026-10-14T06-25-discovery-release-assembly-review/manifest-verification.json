@@ -1,0 +1,16 @@
+{
+  "source": "3b7e45ee7f73fa438c2d9d4083b870ef76183d56",
+  "delivery": "e9c56d7cacb17f0ce5a5ea202cff09c7c49df610",
+  "base": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+  "frozen": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+  "raw": 11,
+  "source_files": 10,
+  "copied_exact_files": 5,
+  "transitive_exact_dependencies": 16,
+  "web_tree": "b44f239410c03a32720c2155b72c3b7f96b05782",
+  "receipt_sha256": "1d8dbada59e24a4f96cd241c1147f1c67251f9945be512495f8b05b6c59692cf",
+  "pgdg_setup_exactly_matches_approved_financial_workflow": true,
+  "candidate_workflow_single_argument_only": true,
+  "historical_receipts_verified": 2,
+  "new_root_native_build": false
+}

@@ -1,5 +1,18 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 06:25台灣時間：最小來源PR377已建立，PG17同快照普通驗收真通過
+
+Remote mainaa111／progressb8fe／工作樹乾淨先核，Cloud cursor26真idle，assembly turn01a13727 completed不重派。Newbranch codex/discovery-snapshot-release-oct14/code3b7e45ee7f73fa438c2d9d4083b870ef76183d56/deliverye9c56d7cacb17f0ce5a5ea202cff09c7c49df610，Root實核11raw/10source/5exactcopy/16transitiveinputs及完整webtree b44f239410c03a32720c2155b72c3b7f96b05782與原5fab相同，receipt1d8dbada59e24a4f96cd241c1147f1c67251f9945be512495f8b05b6c59692cf，親跑assembled76pure全PASS零fail/skip/todo。Scoped assembly/ordinaryworkflow review零新P0/P1/P2；Root未新native/build，原native10/typeslintbuild僅精確input等效，不冒稱重跑。
+
+只有candidatequality加一pure參數與新contentsread/no-secret/deploy PG17 ordinaryworkflow；官方PGDG簽章/安裝段與已批准financialworkflow逐byte相同，pins/Node22.14/精確lock保持，未帶125檔歷史raw或改protected/financial/SQL/authority。Root已建草稿PR377 https://github.com/Kaichen9527/stockinsider/pull/377 ，head e9c/baseaa111。App首次attach遇100identity上限；先保存最舊已MERGED PR276之exactpointer/metadata，僅unlink其UI attachment後attach377成功，GitHub PR/歷史/程式/證據均未改，無需人類操作。
+
+新ordinary discovery38477286173真SUCCESS/PG17.11/76pure及10capturednative各0fail/skip/todo；candidate38477285994真164PASS；financial38477286023真38pure/28captured/1HBA/4financial各0fail/skip/todo。Root實核各完整log與checkoutmerge3ffd275ccc972bbfd7db1044191a4ba4740e90db，fulltree2176d218cfae07801c5d8bb59fdf98b269ee6c2c與e9chead相同。這是本head新GHA執行，不沿舊結果也不將重疊suite加總或當formalpeer/live母體。
+
+普通product38477285982/job115570987074仍inProgress，不能沿PR376 canonical155/PCR31/type/lint/build/browser稱本head全過。初始protected38477285989 attempt1 bootstrapSUCCESS，requirements/architecture/exact因缺refs/heads/evidence/source-led-opportunity-v3-exact-review-e9c56d7cacb17f0ce5a5ea202cff09c7c49df610真FAIL，aggregateFAIL/modelproductskip；原RED/fulljobJSON/log保留，不rerun相同input、不偽造ref。下一輪先唯讀product真終態與新canonicalsection，再真正fresh exactreview/directchild refs及正常protected。PR377仍draft，未ready/merge/deploy，Cloud仍idle不派重複工程。
+
+正式169及當時run/publisher0、容量reserve/待答選擇維持最後已核；本輪沒有VPS/遠端DB/authorityrole/HTTP/crawl/343/PTT/策略/正式排程/cache變更。金融PR376終態不重跑。新證據`.agent/reports/2026-10-14T06-25-discovery-release-assembly-review/`。
+
+
 ## 2026-10-14 05:25台灣時間：同快照來源讀取候選完成並獨立核對，最小CI組裝接續
 
 Remote mainaa111／progresscbf與工作樹乾淨先核，Cloud cursor24真idle，前turn01a136f1 completed。Source5fab9e730a5beab74bd77c0e12eab21f62d64cb6/evidencebd77cb44940995cbae023f80099e648b77ef8bec已交付，final5新檔330行；Root逐exactsubject核final37raw/5source及historical81raw/22source，receipt53b3563697e5fe018a1a70c5d1a0b7eac1eed269b48286522c050490f9b818b0，親跑76pure（新16＋原60）全PASS零fail/skip/todo，scoped source acquisition review零新P0/P1/P2。Root最初誤把historical d6b handoff比final工作樹的AssertionError保留，改依原commit驗證，不改原RED。
