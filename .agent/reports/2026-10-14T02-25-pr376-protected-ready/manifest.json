@@ -1,0 +1,27 @@
+[
+  {
+    "path": "attempt2-pass.log",
+    "bytes": 1240905,
+    "sha256": "44d47f22d2cd5758dbd5e624b891b6d1a4be380b537c4d1fc41f1e4e0b07e80c"
+  },
+  {
+    "path": "pr-body-ready.md",
+    "bytes": 3383,
+    "sha256": "8e079f69558903f0999259602b2ba1af3c7b24049a7a028d4f3b8427a6f11cde"
+  },
+  {
+    "path": "ready-audit.json",
+    "bytes": 23446,
+    "sha256": "5b69dc9717652da38e391037d977f406c8fe5d55bd96fe574178d1d5cf0ba27a"
+  },
+  {
+    "path": "ready-protected-current.json",
+    "bytes": 10088,
+    "sha256": "54a3f6f790d6ed517266aaccadcfe926049d4a95e7c44fbbb082d2cbc2b1b681"
+  },
+  {
+    "path": "receipt.json",
+    "bytes": 603,
+    "sha256": "ffd9c0ee4f02ea2cca96d912aad11f23a4296a4de8584bf26ff004d3f1bc626f"
+  }
+]

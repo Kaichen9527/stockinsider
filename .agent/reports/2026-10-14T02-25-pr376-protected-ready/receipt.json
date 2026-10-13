@@ -1,0 +1,24 @@
+{
+  "utc": "2026-10-13T18:22:45.908095+00:00",
+  "pr": 376,
+  "source": "fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55",
+  "base": "4dddb8f01f518350c7d54b7995ee9358c1d945a7",
+  "completedProtected": {
+    "run": 38423039798,
+    "attempt": 2,
+    "requiredJobs": 7,
+    "allActualSuccess": true
+  },
+  "readyRequestedExactlyOnce": true,
+  "rules": {
+    "id": 20177392,
+    "enforcement": "active",
+    "bypassActors": []
+  },
+  "newNormalReadyEventRun": 38445962328,
+  "newRunStatus": "in_progress",
+  "newRunConclusion": "",
+  "manualRerunOfGreen": false,
+  "merge": false,
+  "productionMutation": false
+}
