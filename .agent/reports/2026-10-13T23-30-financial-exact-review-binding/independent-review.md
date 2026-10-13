@@ -1,0 +1,13 @@
+# Exact-head financial review — REQUEST_CHANGES
+
+Subject: 8fc10fe1edf970abfb9b73fc38e2c4b0d8d1fcaf; base 4dddb8f01f518350c7d54b7995ee9358c1d945a7. Reviewer: root, independent of Cloud maker. This is a genuine new full-range review finding, not an exact-review PASS or formal production transport approval. Prior scoped assembly zero-findings result remains historical and scoped.
+
+[P2] (confidence 10/10) scripts/opportunity-v3/financial-history-install-guard.mjs:18 — the chain-review binder counts only matching correct lines, so a second conflicting or indented binding is silently ignored. The authorized extra review literal must be unique and reject duplicate bindings. Specific motivating code: `review.split(/\r?\n/u).filter(x => x === `Financial history ordered chain SHA256: ${hash}`).length !== 1`.
+
+Root ran binding-negative.mjs against the exact final module. It passes one correct literal plus a second all-zero hash to assertFinancialReviewBinding and expects the documented binding error. Actual exit1 is ERR_ASSERTION / Missing expected exception, proving acceptance of an ambiguous review. This is pure metadata-boundary evidence; no DB connection, role change or unauthorized migration was demonstrated.
+
+Minimal correction: mirror the existing profile/operator binder pattern, enumerate every trimStart().startsWith(prefix) row, require exactly one row and exact unindented expected literal. Preserve hash validation, chain/profile/SQL/action identities, authority and all other predicates. Add correct+conflicting in both orders and indented second-line negatives; single valid LF/CRLF remains valid. Root did not modify maker source.
+
+After compact confirmed Cloud cursor19 idle, root authorized one bounded 30-minute repair on the existing release branch, owning only this guard/binding tests/new handoff and evidence. New turn01a135db-a3a2-7435-b860-321853c27fc4/cursor20 is inProgress. Same-head protected rerun/ready/merge remains prohibited; no exact PASS ref was created. Changed transitive guard input means a future new-head native result cannot be inferred from the previous byte-equivalence record.
+
+The ordinary product run38413284898 for old exact8fc completed SUCCESS: its actual captured canonical stdout has155PASS/0FAIL/0SKIP/0TODO and31 distinct named PCR cases. Typecheck/lint/build/migration/performance/browser diagnostic chain completed,9 browser cases passed. Test checkout merge96f319ac tree equals8fc. These are real ordinary results for old8fc, not a protected PASS, new repaired-head evidence, investment qualification or formal private-peer execution. Initial protected missing-ref RED remains unchanged.

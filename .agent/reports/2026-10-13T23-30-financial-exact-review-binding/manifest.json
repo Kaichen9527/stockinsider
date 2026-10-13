@@ -1,0 +1,47 @@
+[
+  {
+    "path": "binding-negative.mjs",
+    "bytes": 668,
+    "sha256": "487d2336b4eef58896284c4f748ef1efd14bb67863028f340508ac5235c446eb"
+  },
+  {
+    "path": "binding-negative.stderr",
+    "bytes": 629,
+    "sha256": "0e53a3ca8f473cf441ab23765e8f0038900b7d1e8ecf95fdd4c1de521425ab3a"
+  },
+  {
+    "path": "binding-negative.stdout",
+    "bytes": 391,
+    "sha256": "22b59f17195af8453b653d8c133156d3b8043484c799552375b9986ae9f70820"
+  },
+  {
+    "path": "canonical-product-section.stdout",
+    "bytes": 36794,
+    "sha256": "e48d00d0d89d5483b159fe59526d8a3bdd1c948ad6a2be531276517a1f3ecd90"
+  },
+  {
+    "path": "independent-review.md",
+    "bytes": 2658,
+    "sha256": "876b13195d8d8e62eed26433f6b3315649a29f5559ecb4df7d9fdde3cb3fa921"
+  },
+  {
+    "path": "product-job.log",
+    "bytes": 874315,
+    "sha256": "d1acca604bca3f242b1a3408ff06014da2c8e61d23b16a4293ff0f66f90d885f"
+  },
+  {
+    "path": "product-run.json",
+    "bytes": 4335,
+    "sha256": "750d98fb293fd1bc5776645db2af489a0392dbd38ba0dc69cf3a95aea13c39b3"
+  },
+  {
+    "path": "receipt.json",
+    "bytes": 978,
+    "sha256": "09ce863debfca1d2bf391c50ad7a36f1a70b9192e2d097edd571e784974eaf78"
+  },
+  {
+    "path": "reviewed-financial-history-install-guard.mjs",
+    "bytes": 10569,
+    "sha256": "803c6cf5a8d5c0995a7c19da16ea108dcf01b789e76ba76c89a28d5f87a578a9"
+  }
+]

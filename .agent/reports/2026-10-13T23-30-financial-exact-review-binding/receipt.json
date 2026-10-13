@@ -1,0 +1,30 @@
+{
+  "utc": "2026-10-13T15:24:11.116724+00:00",
+  "subject": "8fc10fe1edf970abfb9b73fc38e2c4b0d8d1fcaf",
+  "tree": "6c16106c6f78d0baf482e44d99a3215783be4f62",
+  "ordinaryRun": 38413284898,
+  "productJob": 115350935881,
+  "conclusion": "success",
+  "canonical": {
+    "pass": 155,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "PCRDistinctNamed": 31,
+    "sectionSha256": "e48d00d0d89d5483b159fe59526d8a3bdd1c948ad6a2be531276517a1f3ecd90",
+    "capture": "timestamp/step-prefix-stripped section of actual combined job output; not isolated fresh execution"
+  },
+  "reviewVerdict": "REQUEST_CHANGES",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 1
+  },
+  "negativeExit": 1,
+  "codeSourceSha256": "803c6cf5a8d5c0995a7c19da16ea108dcf01b789e76ba76c89a28d5f87a578a9",
+  "cloudTurn": "01a135db-a3a2-7435-b860-321853c27fc4",
+  "cloudCursor": "83271615-2ee9-4bed-bd38-321f1348ab62:20",
+  "formalProtectedPass": false,
+  "exactRefCreated": false,
+  "noProductionMutation": true
+}

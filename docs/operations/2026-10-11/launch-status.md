@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-13 23:30台灣時間：PR376產品普通檢查真綠，exact審查攔下單一重複binding缺口
+
+Remote main4ddd／progress6aec／release8fc保持。Root compact核Cloud cursor19真idle後讀exacthead所有金融helper／SQL／peer／catalog／原native來源；普通product38413284898已於14:34:29Z SUCCESS，實際combinedjob canonical section155PASS零fail/skip/todo、31 distinct PCR，types/lint/normalbuild/migration/performance與9browser真完成，merge96f tree仍等於head8fc。這是8fc的普通診斷結果，不是protected PASS、新修後head結果或正式peerCLI驗收；本輪沒有重跑已綠financialquality。
+
+Root fresh full-range review REQUEST_CHANGES：P0=0/P1=0/P2=1，financial-history-install-guard.mjs:18的assertFinancialReviewBinding只count完全等於正確literal的rows，正確hash＋另一錯hash或indented第二binding被忽略，違反unique exact-review額外binding約束。Root以exact8fc module真跑獨立negative，期待正確＋全零hash第二binding拒絕，原exit1／Missing expected exception保存。這是metadata守門缺口，不冒稱實際越權DB／role mutation。先前scopedassembly零finding保持歷史範圍，不能代此完整審查PASS；尚未建立exact-ref/attestation、ready/merge或rerun初始protected。
+
+唯一Cloud已接單件30分鐘最小修補，仍branchcodex/financial-installation-release-oct13/base8fc，owned只chain binder＋對應pure test＋新handoff/evidence。turn01a135db-a3a2-7435-b860-321853c27fc4／cursor83271615-2ee9-4bed-bd38-321f1348ab62:20 inProgress（thread status短暫idle但latestTurn active，按active不重派）。要求mirror原profile/operator enumerate全部trimStart prefix rows、唯一row exactmatch；兩順序conflicting／縮排duplicate負例，單一LF/CRLF合法。原48/49/50hash／SQL／catalog／角色／HBA／authority／pins／workflow不改，maker不自簽獨立批准。Guard為原native傳遞input已變，後續新head須真最新native或ordinaryGHA自身執行，不沿舊74-byte等效冒稱；typeslintnormalbuild與source/RED/evidence分開封存push。
+
+PR376仍draft，初始protected38413287561 missingref原RED不改、不對相同輸入重跑。Root只report/review，不重疊ownedsource。正式169／既有容量guard與待答選擇不變，無VPS重測／正式DB-role-ACL變更／部署／cache刪除／343或PTT重送／策略或研究排程啟用。新證據`.agent/reports/2026-10-13T23-30-financial-exact-review-binding/`，receipt09ce863debfca1d2bf391c50ad7a36f1a70b9192e2d097edd571e784974eaf78。
+
 ## 2026-10-13 22:30台灣時間：最小金融發布PR376已建立，普通PG17實際驗收全綠
 
 Cloud assembly code08e2e8c／delivery8fc10fe1（approvedmain4ddd之上）已完成，cursor19真idle、turn01a13566終態，未重派。Root實核33raw／37source／23assemblyentries／74capturednative傳遞inputs與3portable歷史fixtures，receipt59c7634f；親跑assembled38pure全PASS零fail/skip/todo。只有兩pure test將歷史report/git依賴換成exact committedfixtures，wrapper另釘SHA，runtime/native/SQL/profile/authority/pins/webbytes保持。Root scoped組裝／普通workflow／handoff review零新P0/P1/P2；並未當作完整formalinstaller批准或root新native/build。Maker本branch38pure／4financialnative／1HBA／typeslintnormalbuild真PASS，33既有warnings。先前28native只在74inputs逐byte一致下引用，不冒稱assembly時重跑。
