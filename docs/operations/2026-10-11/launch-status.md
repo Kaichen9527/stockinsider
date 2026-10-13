@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-14 03:20台灣時間：金融PR376正常protected全通過並已標準合併
+
+Ready事件新protected38445962328已於18:36:51Z終態SUCCESS，bootstrap/requirements/architecture/exact/model/product/aggregate全7真SUCCESS。Root重新核ordinary financial38423044805／product38423044617成功、fresh exactref52b/sourcefbc/base4ddd與active rules20177392/bypass[]，沿單次guard標準gh pr merge --merge --match-head-commit，真19:16:41Z完成，無admin/bypass/directmainpush；保護完整JSON合併前後相同。
+
+Remote main現aa111a54c7108f043eebc1a5b0682391fc88aef9，真parents4dddb8f01f518350c7d54b7995ee9358c1d945a7＋fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55；tree6835188433bf52f98d0b7f6cb892c15bc9519d8a與已審來源完全相同，web08c8f0db7388a47b4cb663aa1c64ae7cc03e682f。Fetch exactmergeSHA核對，不採可能陳舊origin/main。Audit/tmp/stockinsider-pr376-normal-merge-audit-oct14.json存在且成功，禁止重跑PR376 checks/watch/ready/merge/helper；先前failedbinding／missingrefs／metadata格式RED維持原歷史。PR375 helper亦仍禁用。
+
+這是金融history/atomic既有結構與operator候選程式真正合併，不是正式DB安裝、LOGIN6復原、343usable0解決、live來源/Top20/文章/策略/研究排程完成。原directchild52b精確批准的是sourcefbc，不冒稱它直接attest mergeaa111；雖tree相同，正式安裝應明示exactapprovedsourcefbc或對新main取得其真精確evidence，不能只改metadata。Root沒有本輪native/build/VPS量測／正式role/SQL/ACL變更／部署。
+
+Formal fixedprivatepeerCLI／production capacity／migration/deploy仍各自待驗；最後已核正式169與容量guard/待答選擇不變，不重跑同input必敗heavy或已套SQL的main169-deploy.sh，不重問容量／擅付費。Staged8bcd包仍只代表原target，不能冒稱含4ddd/aa111/金融新程式；實際發布時需明示approvedtarget或準備新包，不能重建舊包冒新。沒有343/PTT重跑、來源抓取、正式研究排程啟用或cache刪除。Cloud cursor21保持idle未重派。合併證據`.agent/reports/2026-10-14T03-20-pr376-normal-merge/`。
+
 ## 2026-10-14 02:25台灣時間：PR376原protected七項真通過，ready正常事件檢查接續中
 
 Root先核remote main4ddd/progress711及工作樹乾淨，Cloud cursor21仍真idle未重派。38423039798 attempt2已於17:34:20Z終態SUCCESS，bootstrap/requirements/architecture/exact/model/product/aggregate全七真SUCCESS；原attempt1缺ref FAIL與8fc缺ref FAIL保持。Root保存完整attempt2 log、真7job JSON及exactsourcefbc/base4ddd/rules20177392 active/bypass[]核對，不重跑綠run。

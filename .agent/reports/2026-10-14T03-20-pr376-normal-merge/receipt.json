@@ -1,0 +1,28 @@
+{
+  "utc": "2026-10-13T19:19:22.792691+00:00",
+  "pr": 376,
+  "main": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+  "parents": [
+    "4dddb8f01f518350c7d54b7995ee9358c1d945a7",
+    "fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55"
+  ],
+  "tree": "6835188433bf52f98d0b7f6cb892c15bc9519d8a",
+  "webTree": "08c8f0db7388a47b4cb663aa1c64ae7cc03e682f",
+  "mergedAt": "2026-10-13T19:16:41Z",
+  "normalProtectedRun": 38445962328,
+  "all7ActualSuccess": true,
+  "ordinaryFinancialRun": 38423044805,
+  "ordinaryProductRun": 38423044617,
+  "rulesUnchanged": true,
+  "bypassActors": [],
+  "sourceApprovedForInstaller": "fbc1e9b4445d388b8f954e1a3827afa4ecfb6c55",
+  "sourceDirectChildReview": "52b48944cc64b0f459e33e27ea5027aa7d18d476",
+  "reviewAttestsMergeCommit": false,
+  "mergeTreeEqualsReviewedSource": true,
+  "mergeMethod": "standard merge commit with exact-head match; no admin, bypass or direct main push",
+  "deployment": "not performed",
+  "productionRoleMutation": false,
+  "capacityGate": "unchanged pending",
+  "formalFixedPeerCli": "pending",
+  "researchSchedule": "unaccepted/off"
+}

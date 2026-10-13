@@ -1,0 +1,27 @@
+[
+  {
+    "path": "normal-merge-audit.json",
+    "bytes": 32369,
+    "sha256": "334e3c77c17f2487411178d7ad7b2edc2e9d66289177011ad09c2401bc957383"
+  },
+  {
+    "path": "normal-merge-guard.py",
+    "bytes": 4224,
+    "sha256": "008cf7a970bc9829dbb694aa927433036e7a81a55276ee29b1714975d26074df"
+  },
+  {
+    "path": "pr-body-approved.md",
+    "bytes": 3397,
+    "sha256": "31f9d15c01bf375e3556239c2f3eff5533a7f3a0366ea648648ad1a61cdf4c4e"
+  },
+  {
+    "path": "ready-protected-terminal-pass.log",
+    "bytes": 1363575,
+    "sha256": "8b2134a140ca9c983a7ed37b132ef4112518bbde290299c2e4f0959b5ddfd37e"
+  },
+  {
+    "path": "receipt.json",
+    "bytes": 1080,
+    "sha256": "5a315884446ed7e4abd88e679faa89b39cc8a3859323aa2147c467da5d1a7652"
+  }
+]
