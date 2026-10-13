@@ -1,0 +1,12 @@
+{
+  "observedAtUtc": "2026-10-13T08:18:22.152067+00:00",
+  "method": "single SSH df -B1 /; read-only, no heavy preflight",
+  "filesystemBytes": 154894188544,
+  "usedBytes": 138406961152,
+  "availableBytes": 16470450176,
+  "unchangedBinaryGuardMinimumBytes": 19998441472,
+  "gapBytes": 3527991296,
+  "heavyAttempted": false,
+  "cleanupAttempted": false,
+  "paidExpansionAttempted": false
+}

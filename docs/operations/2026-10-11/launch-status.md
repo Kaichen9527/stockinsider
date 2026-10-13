@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-13 16:20台灣時間：operator前置已接且33純測試通過，完整安裝抵達原postcondition語法錯誤
+
+Cloud codeba80121a／evidence7d6bd219已終態，root真核73raw／220source hash/blob，receipt ae52f5af並親跑33pure全PASS零fail/skip/todo。新增explicit privatepeer/operatoraction及實際sourcehash-bound literal、原authority/guard/同交易rolebootstrap、emptymembership與合法LOGIN6no-op接線；root scoped operator review零新P0/P1/P2，沒有把完整installer批准。原48/49/50SQL與hash／金融catalog期待不動。
+
+Maker真HBA1PASS只是隔離PG的file-versus-loaded拒絕驗證，並非formal固定peerCLI。修正OIDstring後真capturedschema native2PASS2FAIL：membership拒絕及實際bootstrap/no-op replay通過，完整postconditionSQL42601 character24449為同一子父失敗。這次已到financialtail後驗證，全部仍rollback未commit；originalrun1OID／sandboxEPERM／精確WIPblob與原RED保存。Root查actualquery及pendingPR3642e078dfd：v320KolProjectionMarker的length('legacyRadarCompatibility'))=2多一個右括號，原pending來源已是)=2；只准刪此一字元並用真PG正負語義與完整query驗證，不減少任何原驗收條件。
+
+Cloud cursor11真idle後只派下一單件30分鐘codex/financial-installer-postcondition-native-oct13/base7d6bd219，turn01a13455-b10f-73d9-abd4-7605282de8f5／cursor83271615-2ee9-4bed-bd38-321f1348ab62:12 active。先封存source，再修語法並完成first/replay/fullcatalog/nonemptyRPC/forcedrollback/drift/disconnect/competinglock；未完成據實pending、正式peerCLI不由trusthelper代替，活動不重派／改ownedsource。
+
+本輪輕量SSHdf確認VPS154,894,188,544bytes，可用16,470,450,176，距未降原binaryguard19,998,441,472差3,527,991,296。未啟動必敗heavy／傳包／migration／部署／刪cache／付費擴容／重問容量選擇；main4ddd／正式169及343/PTT終態不變。來源／Top20／文章／正式研究排程仍待，證據`.agent/reports/2026-10-13T16-20-financial-operator-postcondition-review/`。
+
 ## 2026-10-12 21:55台灣時間：擁有者profile已通過27純測試；真VPS只讀確認runtime角色前置差異
 
 Cloud code8d5d036c／evidence8cdc6ac5的獨立financial-existing-schema profile完成，root真核69raw／157source hash/blob，receipt63bf000b，親跑27pure全PASS零fail/skip，scoped source review零P0/P1/P2。Default48／原49輸出與hash不變，另外50SQL selectionprofile acdee42a及originalbridge d86fb28d，unique hash-bound exactreview／原successorguard／同交易rollback接線保持。Maker真bridge-only6PASS含5子項+父項，與fullnative5PASS2FAIL重疊不相加；新profile已越過原42501，後續同一P0001 runtime_role_contract_invalid子父失敗、真beforeafter回滾保留。First-run WIP module未另外封存，不能把finalsource冒稱當時精確source；正式CLI／完整安裝尚未驗收。

@@ -1,0 +1,52 @@
+[
+  {
+    "path": "independent-review.md",
+    "bytes": 3857,
+    "sha256": "c7f07a630a8ec21668566043c2996de8a9ed5491ce68f6f4470336da67d9dc4b"
+  },
+  {
+    "path": "maker-hba-native.stdout",
+    "bytes": 333,
+    "sha256": "6057da5bd347a5ddc9ef36231c259b2005fef8d9e1f7cfd95f5d6bace8fccec1"
+  },
+  {
+    "path": "maker-native-oid-corrected-run.stdout",
+    "bytes": 3139,
+    "sha256": "1a2d4d1c7892beb497f1f50eb9fec437e9ccbecea19cff87f62d103cf3e778d5"
+  },
+  {
+    "path": "maker-receipt.json",
+    "bytes": 8121,
+    "sha256": "ae52f5afa42ea0f66d2908970d80da643be3e2d161a61958e0c96050dccd1e28"
+  },
+  {
+    "path": "pending-reference-marker-query.sql.txt",
+    "bytes": 646,
+    "sha256": "88e2e419c9a55b5104b57f017646d46d30dc4ecbcf046d37cdde8de72a7cc5e2"
+  },
+  {
+    "path": "reviewed-inherited-marker-query.sql.txt",
+    "bytes": 647,
+    "sha256": "c0a82a342094f15aaaee819c959ebacd60345fea5b96877fa4b8e076de1ac819"
+  },
+  {
+    "path": "root-pure.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "root-pure.stdout",
+    "bytes": 7700,
+    "sha256": "afe68274be39d1cea67c760bb7cd80c664d5e3a4ba4d1b8dc67efe07b4c19d03"
+  },
+  {
+    "path": "root-verification.json",
+    "bytes": 247,
+    "sha256": "28053b1424c32c2dc6828257705e5ed49ab9da6defcda70bf2dafe57ecdb345c"
+  },
+  {
+    "path": "vps-capacity-observation.json",
+    "bytes": 389,
+    "sha256": "57e4c45b8f1b35037772c437f9fc99fd831b3c1e7cadb3f8c36e489ee593e07f"
+  }
+]

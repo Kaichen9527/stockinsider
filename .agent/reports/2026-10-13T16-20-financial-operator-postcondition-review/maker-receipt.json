@@ -1,0 +1,216 @@
+{
+  "schema": "financial-vps-operator-prerequisite-engineering-v1",
+  "source": {
+    "head": "ba80121ae34860ab85956495bc51a777ff848d58",
+    "tree": "91da8c5a3f82cf2d96c7420d3fff3ffa778f11a6",
+    "webTree": "08c8f0db7388a47b4cb663aa1c64ae7cc03e682f",
+    "base": "8cdc6ac5fb5a1e234808ca3f0de22ab1f1752d23",
+    "branch": "codex/financial-vps-operator-prerequisite-oct12"
+  },
+  "window": {
+    "start": "2026-10-12T13:52:34Z",
+    "deadline": "2026-10-12T14:22:34Z",
+    "sealed": "2026-10-12T14:07:31Z",
+    "manualEngineering": true,
+    "productRoleBudgetEvidence": false
+  },
+  "operatorActionIdentity": {
+    "schema": "financial-vps-operator-prerequisite-v1",
+    "action": "bootstrapVpsRuntimeRole",
+    "profileSha256": "acdee42a8ca130d259541b5c0b4b14e228c355528b60a2ac4ea3ef9633d611d9",
+    "sources": [
+      {
+        "relativePath": "scripts/opportunity-v3/vps-migration-peer.mjs",
+        "sha256": "a488b4b25141ac5f23b6a859d2366ec2c91907441b10fd3ed810bd6c5dc695c9"
+      },
+      {
+        "relativePath": "scripts/opportunity-v3/financial-vps-operator-action.mjs",
+        "sha256": "c2140ca65eb87068e934b18f4f2cc5efb4c9851ba717362a57013972a9f1585f"
+      },
+      {
+        "relativePath": "scripts/opportunity-v3/financial-vps-operator-binding.mjs",
+        "sha256": "a237bef3aee765a2dc1166e202f6656b9a40c87620905fedf04cbdcf0f384844"
+      }
+    ],
+    "actionSha256": "97697bc3f8a2c3c1bd4676c579eaa9b33e4273c9e98e0a0045998698b736a42b"
+  },
+  "profile": {
+    "originalChainSteps": 49,
+    "originalProfileSqlSteps": 50,
+    "chainSHA256": "cec630ce83aea1f7bdcafae815990e2e964ebbf599a3441e08d978e4427f46cd",
+    "profileSHA256": "acdee42a8ca130d259541b5c0b4b14e228c355528b60a2ac4ea3ef9633d611d9",
+    "operatorActionIncludedInOriginalProfileHash": false,
+    "originalPeerSHA256": "a488b4b25141ac5f23b6a859d2366ec2c91907441b10fd3ed810bd6c5dc695c9"
+  },
+  "results": {
+    "pureFinal": {
+      "pass": 33,
+      "fail": 0,
+      "skip": 0,
+      "raw": "pure-final.stdout"
+    },
+    "initialPureSandboxRed": {
+      "pass": 2,
+      "fail": 2,
+      "fileLevelCounts": true,
+      "raw": "pure.stdout",
+      "reason": "child spawn EPERM; explicit supported sandbox execution used after diagnosis"
+    },
+    "nativeRun1": {
+      "pass": 1,
+      "fail": 3,
+      "skip": 0,
+      "raw": "native-run.stdout",
+      "source": "run1 exact WIP source .mjs.txt snapshots and manifest",
+      "reason": "PG jsonb OID decimal string rejected by erroneous number check before mutation"
+    },
+    "nativeRun2": {
+      "pass": 2,
+      "fail": 2,
+      "skip": 0,
+      "raw": "native-oid-corrected-run.stdout",
+      "source": "run2 exact WIP action/binding/native/apply .mjs.txt snapshots; final test differs only diagnostic-mode removal, pending-label and error-position recording; native failure not relabelled final rerun",
+      "reason": "inherited postcondition SQL42601 character24449; original SQL byte-identical to base8cdc",
+      "parentFailureIncluded": true,
+      "firstApplyCommitted": false,
+      "testsPassed": [
+        "nonempty membership mutation rejected with before-after same and rollback",
+        "actual original runtime bootstrap and exact LOGIN6 no-op replay preserve complete role profile and outer rollback"
+      ]
+    },
+    "nativeHba": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "raw": "hba-native.stdout",
+      "scope": "original actual disk versus loaded HBA reject negative on synthetic disposable trust cluster; not full fixed peer transport"
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-12T14:02:36Z",
+      "seconds": 3.1120805740356445,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 517980160,
+      "min_free_bytes": 8915263488
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start_utc": "2026-10-12T14:03:29Z",
+      "seconds": 24.42948627471924,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1133408256,
+      "min_free_bytes": 8915247104
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start_utc": "2026-10-12T14:05:01Z",
+      "seconds": 52.48333549499512,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1740980224,
+      "min_free_bytes": 8604983296
+    }
+  },
+  "build": {
+    "sourceHead": "ba80121ae34860ab85956495bc51a777ff848d58",
+    "BUILD_ID": "Y4rJle2-QfUAnEdIdm3kX",
+    "normalBuild": true,
+    "serverFiles": 1796,
+    "serverManifestSHA256": "90da6b2615bbc0184cf4a527fb8c9722f7f95362363cf1d99b427eaaf8c5a136"
+  },
+  "versions": {
+    "node": "v22.14.0",
+    "pg": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1)",
+    "pgDependency": "8.18.0",
+    "next": "16.3.4",
+    "USER": "agent"
+  },
+  "locks": {
+    "package-lock.json": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "web/package-lock.json": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651"
+  },
+  "fixture": {
+    "kind": "actual captured schema-only dump + unchanged local bootstrap; global roles are separate operator prerequisite",
+    "gzipSHA256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "decodedSHA256": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+    "syntheticPrincipalAndRoleMutations": true,
+    "noCurrentVpsReadOrWrite": true
+  },
+  "rollback": {
+    "initial": {
+      "bytes": 1438549,
+      "beforeSha256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "afterSha256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "equal": true
+    },
+    "corrected": {
+      "bytes": 1438549,
+      "beforeSha256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "afterSha256": "28bfbf7eb84ce8ea5a4897e62737b1343b36b7539a64fd35cff93d72c3141306",
+      "equal": true
+    }
+  },
+  "rollbackScope": "public function definitions/owner/config/ACL; table owner/ACL/RLS; roles attrs/connlimit/config/validUntil/membership; schemaACL. Not exhaustive full catalog/rows, no nonempty seed yet. Separate real role snapshots prove objectAuthority digest and memberships unchanged except permitted initial LOGIN/6 during rolled-back action.",
+  "formalOperatorCapability": {
+    "platform": "linux",
+    "osUsername": "agent",
+    "pgEnvironmentNames": [],
+    "defaultContextRejected": "vps_peer_migration_operator_context_required",
+    "connectionAttempted": false,
+    "formalPeerTransportVerified": false
+  },
+  "rootReportedVpsObservation": {
+    "readByRoot": "2026-10-12T13:50Z",
+    "role": "NOLOGIN/NOINHERIT/connectionLimit -1/no memberships",
+    "notThisAgentsLiveProof": true
+  },
+  "pending": [
+    "separate inherited postcondition syntactic correction review",
+    "successful first commit",
+    "second apply",
+    "nonempty real-RPC seed/fullcatalog/data preservation",
+    "forced failure after real predecessor replacement",
+    "partial/config drift after install",
+    "disconnect",
+    "competing installer lock",
+    "formal fixed private peer/effective HBA CLI",
+    "actual clean exact attestation/authority/keychain or operator prerequisite/protected/capacity review"
+  ],
+  "limits": {
+    "rssTargetBytes": 8589934592,
+    "minFreeBytes": 8589934592,
+    "sampling": "250ms process tree RSS/filesystem free, detached PG/brief peaks not cgroup-total guarantee",
+    "noProductionOrModelExecution": true
+  },
+  "cleanup": {
+    "time": "2026-10-12T14:07:31Z",
+    "ownedActiveServices": [],
+    "ownedClusterDirectories": [],
+    "unrelatedZombiesNotTouched": 1320,
+    "workspaceFreeBytes": 8604585984,
+    "tmpFreeBytes": 16834170880
+  },
+  "rawFiles": 73,
+  "rawBytes": 6012337,
+  "sourceFiles": 220,
+  "rawManifestSHA256": "0639d794be4778ae1417b08f29fc56f85dc720f7c8225bab272d4801dd5aa237",
+  "sourceManifestSHA256": "65ff13c39de4a4d315811c2ca735496cae3c51173cf4ff2be81aa20d3533be22",
+  "independentApprovalClaimed": false
+}
