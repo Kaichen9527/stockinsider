@@ -83,19 +83,20 @@ test('financial installer corrected postconditions and full captured-schema engi
   const markerPredicate=fullQuery.slice(markerStart,fullQuery.indexOf(",'v320KolRetentionBridge',",markerStart)).trim();
   const originalFunction=(await a.query('SELECT pg_get_functiondef($1::regprocedure) AS definition,prosrc FROM pg_proc WHERE oid=$1::regprocedure',[functionName])).rows[0];
   for(const [count,hasExpression,expected] of [[0,false,false],[1,true,false],[2,true,true],[3,true,false],[2,false,false]])await t.test(`real PG marker predicate count${count} expression${hasExpression} -> ${expected}`,async()=>{
-   const expr=hasExpression?"PERFORM 'v_source_result.result_json->''legacyRadarCompatibility''';":"";
+   const expr=hasExpression?"IF false THEN PERFORM v_source_result.result_json->'legacyRadarCompatibility'; END IF;":"";
    const comments='legacyRadarCompatibility '.repeat(count-(hasExpression?1:0));
-   const body=`BEGIN /* ${comments} */ ${expr} RETURN '{}'::jsonb; END;`;
+   const body=`DECLARE v_source_result record; BEGIN /* ${comments} */ ${expr} RETURN '{}'::jsonb; END;`;
    assert.equal(originalFunction.definition.split(originalFunction.prosrc).length,2);
    await a.query('BEGIN');try{
     await a.query(originalFunction.definition.replace(originalFunction.prosrc,body));
+    const actualCount=(await a.query("SELECT (length(pg_get_functiondef($1::regprocedure))-length(replace(pg_get_functiondef($1::regprocedure),'legacyRadarCompatibility','')))/length('legacyRadarCompatibility') AS count",[functionName])).rows[0].count;assert.equal(actualCount,count);
     const result=(await a.query(`SELECT ${markerPredicate} AS accepted`)).rows[0].accepted;assert.equal(result,expected);
     save(`marker-${count}-${hasExpression}.json`,{count,hasExpression,expected,result,predicateSha256:sha(markerPredicate)});
    }finally{await a.query('ROLLBACK');}
   });
   await a.query(`INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875003','opportunity_runner','2026-01-01',NULL,'active',repeat('9',64),clock_timestamp());
-   INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-000000000083','9183');
+   INSERT INTO public.stocks(id,symbol,name,market) VALUES('71300000-0000-4000-8000-000000000083','9183','Synthetic financial installer fixture','TW');
    SELECT * FROM public.append_financial_fact_v3(ROW(
     '71300000-0000-4000-8000-000000000083','net_asset_value',NULL,'2025-01-01','instant',100,
     'TWD','twse','official_filing','reported','reported_period','2025-01-02T00:00:00Z',
