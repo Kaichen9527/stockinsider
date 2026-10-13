@@ -1,0 +1,67 @@
+[
+  {
+    "path": "independent-review.md",
+    "bytes": 3455,
+    "sha256": "ac8c28ecc6d0ba01a66d1717c52b34aa6a929fdac082748c1d793fd101ee2fa6"
+  },
+  {
+    "path": "maker-complete-original-postcondition-result.json",
+    "bytes": 1200,
+    "sha256": "020c2b786582bb44aaeeeddb3f1eab83b4681ec760bcce26d947f26b26a9cbf8"
+  },
+  {
+    "path": "maker-disconnect-witness.json",
+    "bytes": 68,
+    "sha256": "c9b06ee8f811af4d0e3dde984708eeb7880452fb58417fc33f4dd8aebfd2ed73"
+  },
+  {
+    "path": "maker-first-apply-result.json",
+    "bytes": 10804,
+    "sha256": "07253effdc4a57cce2b7ee3e84847f1957ba72790147b920262c2739e61ac7c6"
+  },
+  {
+    "path": "maker-full-engineering-acceptance.json",
+    "bytes": 382,
+    "sha256": "186570cc77bb0ec8b4eafbbcd6494537c334c612a9335c71cb93ecab0707354e"
+  },
+  {
+    "path": "maker-native-run.stdout",
+    "bytes": 6227,
+    "sha256": "f9cbd8f1d63a0e21bab045f5564f9a1f71ab34baed352f53424bc93ac027f10b"
+  },
+  {
+    "path": "maker-receipt.json",
+    "bytes": 7609,
+    "sha256": "f162ee716386dbaa16a4d42d6b434e4774ffc746e3cc23ce1e56e38556ddb045"
+  },
+  {
+    "path": "maker-remaining-stages.json",
+    "bytes": 243,
+    "sha256": "5ccd8359f8591148ba86565c38559f5fdce7d848ae359d8a1d42224ef9afe72a"
+  },
+  {
+    "path": "maker-second-apply-result.json",
+    "bytes": 10803,
+    "sha256": "e2e5241265c78d94e9bdd7309d030f6ca25a3d0b953fab86101165abc4c2a654"
+  },
+  {
+    "path": "maker-two-five-legal-acl-proof.json",
+    "bytes": 3730,
+    "sha256": "b00db7e2ddad6c713c13da93c7c32434919d4be964a26ae48f1c22e138de7778"
+  },
+  {
+    "path": "root-pure.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "root-pure.stdout",
+    "bytes": 9041,
+    "sha256": "fb03ec53e0bf4c714084ca203010cbf46ba76c84529c1cc6c733e4bc1fd83321"
+  },
+  {
+    "path": "root-verification.json",
+    "bytes": 3024,
+    "sha256": "fef8e8313f1ee499b5843ea961be47a41de282f491e8769df3acedf730a5202d"
+  }
+]

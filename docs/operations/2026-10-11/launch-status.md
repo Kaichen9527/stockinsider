@@ -1,5 +1,15 @@
 # 上線進度：2026-10-11（最新補充置頂）
 
+## 2026-10-13 21:20台灣時間：完整金融安裝鏈在真還原結構完成兩次COMMIT與28項原生驗收
+
+Cloud code6bba84fc／evidence215d191c已終態，root實核60raw／225source hash/blob、receiptf162ee71、親跑38pure全PASS零fail/skip/todo。Root逐JSON證明expected只增已知owner grantor欄，獨立審閱唯一ownerliteral與精確2/5 ACL集合先驗再全canonicalcompare，scoped零P0/P1/P2；其他body/owner/security/config/columns/RLS/constraints/trigger/index／4functions與SQL48/49/50hash完全保持。Root未新跑native/build，不冒稱自己的執行。
+
+Maker真capturedVPS schema-only／PG17 native28PASS零fail/skip，已完成first及second COMMIT、全36原predicate／有限catalog、非空realRPC facts/observations保留、rolebootstrap/replay no-op、forced及真disconnect serverrollback、partial/config mutation前拒絕、競爭鎖與ACL正負例。Sealed2c48ecfe runtime/native與final6bba bytes一致；28含parent，不與歷史37相加。Nativewronggrantor為真grantor漂移但伴grantoption/duplicate shape，isolatedgrantor-only由pure測，範圍明示。原所有RED保持、臨時PG已清理。pending=[]代表localengineering完成；formalpeer/attestation/protected/capacity/正式migration及部署仍未驗收，沒有改正式DB。
+
+Cloud cursor17真idle後只派下一單件30分鐘codex/financial-installation-release-oct13，以approvedmain4ddd重組最小finalruntime/tests/fixture/ADR及普通CI，不帶已取代失敗native入口或整歷史progress。原證據branches保留精確引用；38pure/最新28native/HBA1與financialhistory基準進ordinaryPG17檢查，canonical155/31PCR及protected不改。turn01a13566-ad63-74b3-ad9f-ad3e2b780bfd／cursor83271615-2ee9-4bed-bd38-321f1348ab62:18 active，root不重疊assembly/CI；完成真獨立review後再draftPR及正常必要checks，未先PR/merge/deploy。
+
+Main4ddd／正式169／既有capacityguard不變，本輪未VPS新量測／DB寫入／部署／cache刪除／343或PTT重送。完整來源／Top20／文章／策略／正式研究排程仍待。重要新證據`.agent/reports/2026-10-13T21-20-financial-installation-native-complete/`。
+
 ## 2026-10-13 19:15台灣時間：兩wrapper查核真閉合，最後owner錯置與等效有限ACL形狀接續修正
 
 Cloud code8dbd88b8／evidencef9b2ea98已終態，root實核57raw／223source hash/blob、receipt439a0796並親跑35pure全PASS零fail/skip/todo。Maker真native12PASS2FAIL中，兩correctlayer predicate及四SAVEPOINT負例通過；真writer PID484398/xid751確認剩餘false只ownerExpectedLegacy，其他components與7delegation子項全部true。原compactionmigration與pending2e078dfd明確owner唯一opportunity_v3_rpc_owner，不能誤查legacy或OR接受兩個。Root scoped兩lookup review零新P0/P1/P2，不是完整installer批准，firstcommit/replay仍未完成。

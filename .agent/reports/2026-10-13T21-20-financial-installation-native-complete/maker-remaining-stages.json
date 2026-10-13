@@ -1,0 +1,10 @@
+{
+  "pending": [],
+  "productionAuthorityExercised": false,
+  "keychainRead": false,
+  "attestationCreated": false,
+  "roleAmendmentApplied": true,
+  "formalPeerVerified": false,
+  "ownershipBridgeApplied": true,
+  "full49Acceptance": false
+}
