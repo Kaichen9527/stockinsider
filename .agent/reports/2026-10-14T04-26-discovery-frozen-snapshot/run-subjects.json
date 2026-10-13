@@ -1,0 +1,16 @@
+{
+  "pure": "exploratory unsealed WIP: strip-only parameter-property RED; creation command retained in task tool transcript, not final evidence",
+  "pure-2": "exploratory unsealed WIP: 72/72 (before RLS/cleanup matrix), not final proof",
+  "native-r1": "exploratory unsealed WIP: creator seed rejected actual captured constraint; not adapter failure; no final proof",
+  "native-r2": "exploratory unsealed WIP: 8/8 before additional native cases, not final proof",
+  "pure-final": "5212a3ada8a7df6e018c3858e888f5efd18b7f7e; catalog count included in population test counter RED",
+  "native-final": "5212a3ada8a7df6e018c3858e888f5efd18b7f7e; 9/9",
+  "pure-final-2": "20c285e57f3ae34ccc6313b28fc5a583fb8cd7e6; catalog WHERE classified as population filter RED",
+  "native-final-2": "20c285e57f3ae34ccc6313b28fc5a583fb8cd7e6; 10/10; runtime/native fixture bytes identical to final successor",
+  "pure-final-3": "d6b25d31748bba26f6c576b9081317816cbccd5c; 75/75",
+  "typecheck": "early WIP, not relabeled final",
+  "typecheck-final": "d6b25d31748bba26f6c576b9081317816cbccd5c",
+  "lint": "d6b25d31748bba26f6c576b9081317816cbccd5c",
+  "build": "d6b25d31748bba26f6c576b9081317816cbccd5c",
+  "nativeEquivalence": "native-input-test-only-successor.json"
+}

@@ -1,0 +1,6 @@
+{
+  "message": "new row for relation \"source_entities\" violates check constraint \"source_entities_entity_type_check\"",
+  "code": "23514",
+  "detail": "Failing row contains (00000000-0000-4000-8000-000000000004, ptt, creator, Synthetic fixture only, fixture-4, null, active, {}, 2026-10-13 20:33:24.212304+00, 2026-10-13 20:33:24.212304+00).",
+  "stack": "error: new row for relation \"source_entities\" violates check constraint \"source_entities_entity_type_check\"\n    at /workspace/cloud-attention-shadow-afa3-oct09/node_modules/pg/lib/client.js:624:17\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async insert (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs:26:63)\n    at async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs:28:24)\n    at async Test.run (node:internal/test_runner/test:980:9)\n    at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)"
+}

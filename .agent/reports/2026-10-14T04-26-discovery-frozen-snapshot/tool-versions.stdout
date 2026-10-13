@@ -1,0 +1,13 @@
+{
+  "node": "v22.14.0",
+  "nodeExecutable": "/workspace/.tools/node22/node_modules/node/bin/node",
+  "next": "16.3.4",
+  "pgLibrary": "8.18.0",
+  "user": "agent",
+  "osUser": "agent",
+  "pgClientDefaultUser": "agent",
+  "pgConfig": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1)",
+  "pgBin": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin",
+  "initdb": "initdb (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)",
+  "psql": "psql (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)"
+}

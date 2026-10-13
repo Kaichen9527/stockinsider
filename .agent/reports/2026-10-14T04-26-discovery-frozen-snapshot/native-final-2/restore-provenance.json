@@ -1,0 +1,10 @@
+{
+  "gzipSha": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+  "decodedSha": "a82e3b089ee0523a9de3b1a84c0e799d878fa47bb6ec892a51af8c8e037c3731",
+  "bootstrapSha": "6d08fbb7545b4a76aa740927a6519cd8eda1e90d6003d920b4ec3c08d5f4768a",
+  "executedSchemaSha": "9c6bb50ac4f3d4126dbe40df110eba08704511a74eba2376c9fd326390ad7969",
+  "onlyExistingRestoreRebase": true,
+  "shadowRelations": false,
+  "formalPeer": false,
+  "syntheticSeed": true
+}

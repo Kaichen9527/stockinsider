@@ -1,0 +1,103 @@
+{
+  "ambiguous": {
+    "status": "unsupported",
+    "reason": "manifest_input_missing_or_ambiguous",
+    "projection": null,
+    "cleanup": "confirmed"
+  },
+  "incomplete": {
+    "status": "unsupported",
+    "reason": "manifest_integrity_mismatch",
+    "projection": {
+      "version": "discovery-revision-publisher-read-v1",
+      "run_id": "00000000-0000-4000-8000-000000000035",
+      "source_cutoff": "2026-10-08T12:00:00.123456Z",
+      "status": "unsupported",
+      "reason": "manifest_integrity_mismatch",
+      "live_population_verified": false,
+      "investment_admission": false,
+      "independent_origin_verified": false,
+      "bindings": [],
+      "dispositions": [
+        {
+          "table": "sourceAuthorities",
+          "identity": "05a9244ee67f2d912707385645c4c3558a9d36452a78740ac2854ded4c78e9c5",
+          "input_hash": "05a9244ee67f2d912707385645c4c3558a9d36452a78740ac2854ded4c78e9c5",
+          "disposition": "deferred_packet_rejected"
+        },
+        {
+          "table": "manifests",
+          "identity": "23685d0149080ca7914f1720a0add0cc5d6782ed1c5e7aebf5986b4b03cc9081",
+          "input_hash": "23685d0149080ca7914f1720a0add0cc5d6782ed1c5e7aebf5986b4b03cc9081",
+          "disposition": "deferred_packet_rejected"
+        },
+        {
+          "table": "registry",
+          "identity": "3e69b48aaa2b464ca00b92b635aaaa7b963ebf96a34400702f3d8f160f7de9a0",
+          "input_hash": "3e69b48aaa2b464ca00b92b635aaaa7b963ebf96a34400702f3d8f160f7de9a0",
+          "disposition": "deferred_packet_rejected"
+        },
+        {
+          "table": "publishers",
+          "identity": "8fc576ad72560570f0db34df2e1d0e577b0a60bf96644a7999c73ed2a411f2fc",
+          "input_hash": "8fc576ad72560570f0db34df2e1d0e577b0a60bf96644a7999c73ed2a411f2fc",
+          "disposition": "deferred_packet_rejected"
+        },
+        {
+          "table": "revisions",
+          "identity": "af2fa7207332914cb75d3c0f27589225804e8ba76cad565ee2451241d78667b8",
+          "input_hash": "af2fa7207332914cb75d3c0f27589225804e8ba76cad565ee2451241d78667b8",
+          "disposition": "deferred_packet_rejected"
+        }
+      ],
+      "accounting": {
+        "input_rows": 5,
+        "terminal_rows": 5,
+        "bound_deferred": 0,
+        "aggregate_deferred_uninspected": 0,
+        "supplied_table_counts": {
+          "revisions": 1,
+          "sourceAuthorities": 1,
+          "publishers": 1,
+          "verifications": 0,
+          "registry": 1,
+          "manifests": 1,
+          "manifestRows": 0
+        }
+      },
+      "projection_hash": "257a922c8f5a8e2aa46d81e7596cd4828144dface9b148f94903ed042bca33c8"
+    },
+    "snapshot": {
+      "identity": "744:744:",
+      "source_cutoff": "2026-10-08T12:00:00.123456Z",
+      "scope": {
+        "revisions": "public.source_document_revisions_v3:all_retained",
+        "sourceAuthorities": "public.source_identity_authorities_v3:all_retained",
+        "publishers": "public.publisher_verification_authorities_v3:all_retained",
+        "registry": "public.source_revision_family_registry_v3:all_retained",
+        "verifications": "public.source_publication_verifications_v3:exact_run",
+        "manifests": "public.opportunity_manifests_v3:exact_manifest",
+        "manifestRows": "public.opportunity_manifest_rows_v3:exact_manifest"
+      },
+      "counts": {
+        "revisions": 1,
+        "sourceAuthorities": 1,
+        "publishers": 1,
+        "registry": 1,
+        "verifications": 0,
+        "manifests": 1,
+        "manifestRows": 0
+      },
+      "digests": {
+        "revisions": "778749b9e645306160b21479606d9f4af146a6081eaca71ea47c6ed687e423ca",
+        "sourceAuthorities": "9a914850a1336dd87bb98a6e88510a0373ee55d1a819d759383fc530aed925a4",
+        "publishers": "e0fe3e2edeea4d0575d3e7e9a44bd28854290456a4a9f2630d4a411615d51c3d",
+        "registry": "de9bad63bf81f3eeef583b314f6cde8d4a466237c06f3c4c850e6e10995541eb",
+        "verifications": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "manifests": "1364052399c69379910bd84dc8a2b4bfd9b87d19ea4ed17f38ebde7ff62a9462",
+        "manifestRows": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "cleanup": "confirmed"
+  }
+}

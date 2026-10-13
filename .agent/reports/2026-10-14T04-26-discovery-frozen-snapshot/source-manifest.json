@@ -1,0 +1,156 @@
+[
+  {
+    "path": ".github/workflows/candidate-discovery-quality.yml",
+    "bytes": 1503,
+    "sha256": "09d00728ca5cf22812f215ff8b3211a68887253588ca723275127568155c98bf",
+    "blob": "aed644d7cfc3729066325e0e2a49c54c64d69853",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": ".github/workflows/financial-installation-quality.yml",
+    "bytes": 3980,
+    "sha256": "f330d468ee0ec35b6f30c888576eb221fb8e45099a2ac05cc2e9688ae909fff4",
+    "blob": "934821e44764d5f2e59a1d58f0daf38b28f9f904",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": ".nvmrc",
+    "bytes": 8,
+    "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+    "blob": "7d41c735d7127c4a2530ebe846b14ffbf38b8031",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "deployment/vps/bootstrap-stockinsider-postgres.sql",
+    "bytes": 1979,
+    "sha256": "6d08fbb7545b4a76aa740927a6519cd8eda1e90d6003d920b4ec3c08d5f4768a",
+    "blob": "c58d12585d312701d47b5789d0572f8453424697",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "docs/operations/2026-10-14/discovery-frozen-snapshot-reader-handoff.md",
+    "bytes": 4128,
+    "sha256": "99e63634a1cfdbda9749b53c45ceded10a0cdff031cb3c00c07fd80f99f010c2",
+    "blob": "616b5d00113dbbe7ff3ee7635db420243aa6c266",
+    "unchangedFromApprovedBase": false
+  },
+  {
+    "path": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+    "bytes": 1023746,
+    "sha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7",
+    "blob": "c70c6b7366b7b70c2b506ad90427ac9f37d87dfe",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "package-lock.json",
+    "bytes": 31809,
+    "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+    "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "package.json",
+    "bytes": 24733,
+    "sha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc",
+    "blob": "f25f4bebad793fb7eabc03e2320e4472553a0fb9",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "scripts/opportunity-v3/apply-reviewed-migrations.mjs",
+    "bytes": 39430,
+    "sha256": "276a5cf14e8ff0d9bc60928fc8258a1716a4e696e10a2fabd14bba029ea3408a",
+    "blob": "1bae6eb8cd7653dac4f03ab3a08c5797c4df17f7",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs",
+    "bytes": 12596,
+    "sha256": "d04c717db57677d58ad8f8c0a62a63164ac5605e8693d1aba21b488cf2a81f18",
+    "blob": "6faa47af440786f998735fe43154973ec814caee",
+    "unchangedFromApprovedBase": false
+  },
+  {
+    "path": "scripts/opportunity-v3/financial-history-install-guard.mjs",
+    "bytes": 10664,
+    "sha256": "6013653100f312f37266d9f80fb2ff7fd0f6b632517447972a4eba06632a2199",
+    "blob": "ad1e77cd53a74c21395df46970a3a51540cecfec",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "scripts/opportunity-v3/fixtures/publication-install-README.md",
+    "bytes": 3034,
+    "sha256": "51cb32fb8fe8e40a7fd0d27c4605156140732a03c708bcefc675217659ee37c7",
+    "blob": "fbe2dc230d1ca6cad9ce11f726a8d1c06f1f3966",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "scripts/opportunity-v3/fixtures/vps-schema-20261011.sql.gz",
+    "bytes": 322909,
+    "sha256": "2e9fc2f8a795a13490c12a90a2d9c974e19c1e93f9593d443d834978e0a19c60",
+    "blob": "627d6f6b248e679927494a33494c1bec477a5257",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "scripts/opportunity-v3/migration-plan.mjs",
+    "bytes": 7114,
+    "sha256": "3e628ce72d3b7411fedada3c5cb219203473da1b543bc4b98009d4291bf539d8",
+    "blob": "c6a5b74953588fce7a63ebf728fffaaa09aaf1c4",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "web/package-lock.json",
+    "bytes": 274088,
+    "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+    "blob": "a41fd447e28f3b36829b689828c345e042619a38",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "web/package.json",
+    "bytes": 1943,
+    "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+    "blob": "446f308a2990f45dcd3dca14030068f878fae490",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "web/src/lib/discovery-frozen-snapshot-fixture.test-helper.ts",
+    "bytes": 4236,
+    "sha256": "b859618c294e9b646c35a95c694a35836697338c0c6ef9c72b3fe0848dd4ea0b",
+    "blob": "ac15271a00c3c66bd2273f4adb5ca44bff1e0e9d",
+    "unchangedFromApprovedBase": false
+  },
+  {
+    "path": "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+    "bytes": 6466,
+    "sha256": "2289ee0ad9508c24cc8311be45ec11de04e970c03e9884f2b644757184173903",
+    "blob": "fdad996b67eb4555358fc98d365ff65adfddc491",
+    "unchangedFromApprovedBase": false
+  },
+  {
+    "path": "web/src/lib/discovery-frozen-snapshot-reader.ts",
+    "bytes": 12112,
+    "sha256": "2a69b47bccf4b5cc1d0aaed1f5a185f8f94e508622b3a2358f5e857541321c2f",
+    "blob": "9b9c2b0340ebe100b8818a64dafd11c30b64c785",
+    "unchangedFromApprovedBase": false
+  },
+  {
+    "path": "web/src/lib/discovery-revision-publisher-reader.test.ts",
+    "bytes": 16150,
+    "sha256": "14645f2c8e750505394a29b29f19132d35573e6388323e5a6085b5be372c01b4",
+    "blob": "f7995623e5295ce7d53156fe350a0e28aab707ff",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "web/src/lib/discovery-revision-publisher-reader.ts",
+    "bytes": 21736,
+    "sha256": "8905a18155cd7092891a4890eda1a2796dce58780399b92b2f596d9cdfb5234b",
+    "blob": "012f703645ddb3d9b581d146b5311bfbc043352b",
+    "unchangedFromApprovedBase": true
+  },
+  {
+    "path": "web/src/lib/opportunity-v3/canonical.ts",
+    "bytes": 2199,
+    "sha256": "477a34da818b8ef0618e5a61ebb173a368cd9018e2fa4a8aa2c895d9c52f0e24",
+    "blob": "430174979e522a35585d8f44d7cba798f995d32d",
+    "unchangedFromApprovedBase": true
+  }
+]

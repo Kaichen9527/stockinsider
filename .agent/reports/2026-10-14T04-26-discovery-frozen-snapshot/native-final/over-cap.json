@@ -1,0 +1,6 @@
+{
+  "status": "unsupported",
+  "reason": "population_bound",
+  "projection": null,
+  "cleanup": "confirmed"
+}

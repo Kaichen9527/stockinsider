@@ -1,0 +1,1 @@
+Final source d6b25d31748bba26f6c576b9081317816cbccd5c; pure75=adapter15+unchangedreader60; native10=9children+parent on native20c285 with identical final runtime/fixture. No live client or formal authority; all false/null capabilities retained. Type/lint/normal build pass; buildVL-gG8q6H8EZkH79Ke4e-. Exploratory WIP/fixture/classification RED preserved, not final proof.

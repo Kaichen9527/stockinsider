@@ -1,0 +1,14 @@
+{
+  "base": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+  "changedPaths": [
+    "docs/operations/2026-10-14/discovery-frozen-snapshot-reader-handoff.md",
+    "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs",
+    "web/src/lib/discovery-frozen-snapshot-fixture.test-helper.ts",
+    "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+    "web/src/lib/discovery-frozen-snapshot-reader.ts"
+  ],
+  "noOriginalReaderCanonicalSchemaRoleFinancialWorkflowApiUiChanges": true,
+  "newOrdinaryCIWiringNotApplied": true,
+  "productionRunMissingRootObservation": "root-reported separate VPS read20:27:25Z; no own VPS access",
+  "exploratoryWipNotExactSealedSourceLimitation": true
+}

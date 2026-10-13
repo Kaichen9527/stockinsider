@@ -1,0 +1,242 @@
+{
+  "before": {
+    "status": "projected",
+    "reason": null,
+    "projection": {
+      "version": "discovery-revision-publisher-read-v1",
+      "run_id": "00000000-0000-4000-8000-000000000001",
+      "source_cutoff": "2026-10-08T12:00:00.123456Z",
+      "status": "projected",
+      "reason": null,
+      "live_population_verified": false,
+      "investment_admission": false,
+      "independent_origin_verified": false,
+      "bindings": [
+        {
+          "revision_id": "00000000-0000-4000-8000-000000000002",
+          "publisher_identity_id": "00000000-0000-4000-8000-000000000006",
+          "publisher_authority_id": "00000000-0000-4000-8000-000000000005",
+          "verification_id": "00000000-0000-4000-8000-000000000009",
+          "publisher_manifest_id": "00000000-0000-4000-8000-000000000007",
+          "canonical_document_id": "reviewed-document-id",
+          "canonical_content_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "published_at": "2026-10-08T11:00:00.123456Z",
+          "collected_at": "2026-10-08T11:00:00.123456Z",
+          "independent_news_root": null,
+          "cross_platform_creator": null
+        }
+      ],
+      "dispositions": [
+        {
+          "table": "sourceAuthorities",
+          "identity": "05a9244ee67f2d912707385645c4c3558a9d36452a78740ac2854ded4c78e9c5",
+          "input_hash": "05a9244ee67f2d912707385645c4c3558a9d36452a78740ac2854ded4c78e9c5",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "registry",
+          "identity": "3e69b48aaa2b464ca00b92b635aaaa7b963ebf96a34400702f3d8f160f7de9a0",
+          "input_hash": "3e69b48aaa2b464ca00b92b635aaaa7b963ebf96a34400702f3d8f160f7de9a0",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "publishers",
+          "identity": "8fc576ad72560570f0db34df2e1d0e577b0a60bf96644a7999c73ed2a411f2fc",
+          "input_hash": "8fc576ad72560570f0db34df2e1d0e577b0a60bf96644a7999c73ed2a411f2fc",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "manifests",
+          "identity": "c996bd34fef95299d72ced9e3de496ad238e0633c1c5280a94f5d66978e660f8",
+          "input_hash": "c996bd34fef95299d72ced9e3de496ad238e0633c1c5280a94f5d66978e660f8",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "verifications",
+          "identity": "d9402f506779ae9dbdc6cd40d13f6c95c281e1cc6e7ea210deb1091b7d9574a8",
+          "input_hash": "d9402f506779ae9dbdc6cd40d13f6c95c281e1cc6e7ea210deb1091b7d9574a8",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "manifestRows",
+          "identity": "fd1db54ae14649786ffc156cb409fe5e0bae76d14ba504023032f575fe147915",
+          "input_hash": "fd1db54ae14649786ffc156cb409fe5e0bae76d14ba504023032f575fe147915",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "revisions",
+          "identity": "af2fa7207332914cb75d3c0f27589225804e8ba76cad565ee2451241d78667b8",
+          "input_hash": "af2fa7207332914cb75d3c0f27589225804e8ba76cad565ee2451241d78667b8",
+          "disposition": "publisher_bound_only"
+        }
+      ],
+      "accounting": {
+        "input_rows": 7,
+        "terminal_rows": 7,
+        "bound_deferred": 0,
+        "aggregate_deferred_uninspected": 0,
+        "supplied_table_counts": {
+          "revisions": 1,
+          "sourceAuthorities": 1,
+          "publishers": 1,
+          "verifications": 1,
+          "registry": 1,
+          "manifests": 1,
+          "manifestRows": 1
+        }
+      },
+      "projection_hash": "adb57c95111ce675d37ac5d111c2ee81879e689c44564f0eaf62a908c45b1fc3"
+    },
+    "snapshot": {
+      "identity": "744:744:",
+      "source_cutoff": "2026-10-08T12:00:00.123456Z",
+      "scope": {
+        "revisions": "public.source_document_revisions_v3:all_retained",
+        "sourceAuthorities": "public.source_identity_authorities_v3:all_retained",
+        "publishers": "public.publisher_verification_authorities_v3:all_retained",
+        "registry": "public.source_revision_family_registry_v3:all_retained",
+        "verifications": "public.source_publication_verifications_v3:exact_run",
+        "manifests": "public.opportunity_manifests_v3:exact_manifest",
+        "manifestRows": "public.opportunity_manifest_rows_v3:exact_manifest"
+      },
+      "counts": {
+        "revisions": 1,
+        "sourceAuthorities": 1,
+        "publishers": 1,
+        "registry": 1,
+        "verifications": 1,
+        "manifests": 1,
+        "manifestRows": 1
+      },
+      "digests": {
+        "revisions": "778749b9e645306160b21479606d9f4af146a6081eaca71ea47c6ed687e423ca",
+        "sourceAuthorities": "9a914850a1336dd87bb98a6e88510a0373ee55d1a819d759383fc530aed925a4",
+        "publishers": "e0fe3e2edeea4d0575d3e7e9a44bd28854290456a4a9f2630d4a411615d51c3d",
+        "registry": "de9bad63bf81f3eeef583b314f6cde8d4a466237c06f3c4c850e6e10995541eb",
+        "verifications": "b91650d1a383997ef5e49ff797b330cfcbdbf8dccd0f08eb709a2e2c40681828",
+        "manifests": "1b5da7fa092d1c858dc4943e71aae8a1a9b11266b849d56139aac5ae9a7f4050",
+        "manifestRows": "601aa98b01d2e144b35fb72788dc00c5915d1b53ee05a6f8c6ecfec8a9239dff"
+      }
+    },
+    "cleanup": "confirmed"
+  },
+  "after": {
+    "status": "projected",
+    "reason": null,
+    "projection": {
+      "version": "discovery-revision-publisher-read-v1",
+      "run_id": "00000000-0000-4000-8000-000000000001",
+      "source_cutoff": "2026-10-08T12:00:00.123456Z",
+      "status": "projected",
+      "reason": null,
+      "live_population_verified": false,
+      "investment_admission": false,
+      "independent_origin_verified": false,
+      "bindings": [],
+      "dispositions": [
+        {
+          "table": "sourceAuthorities",
+          "identity": "05a9244ee67f2d912707385645c4c3558a9d36452a78740ac2854ded4c78e9c5",
+          "input_hash": "05a9244ee67f2d912707385645c4c3558a9d36452a78740ac2854ded4c78e9c5",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "registry",
+          "identity": "3e69b48aaa2b464ca00b92b635aaaa7b963ebf96a34400702f3d8f160f7de9a0",
+          "input_hash": "3e69b48aaa2b464ca00b92b635aaaa7b963ebf96a34400702f3d8f160f7de9a0",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "publishers",
+          "identity": "8fc576ad72560570f0db34df2e1d0e577b0a60bf96644a7999c73ed2a411f2fc",
+          "input_hash": "8fc576ad72560570f0db34df2e1d0e577b0a60bf96644a7999c73ed2a411f2fc",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "sourceAuthorities",
+          "identity": "a4fccfce417e9849199a4e2239c957364ddbfc1f1729216d96b61d5b1cf702be",
+          "input_hash": "a4fccfce417e9849199a4e2239c957364ddbfc1f1729216d96b61d5b1cf702be",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "manifests",
+          "identity": "c996bd34fef95299d72ced9e3de496ad238e0633c1c5280a94f5d66978e660f8",
+          "input_hash": "c996bd34fef95299d72ced9e3de496ad238e0633c1c5280a94f5d66978e660f8",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "verifications",
+          "identity": "d9402f506779ae9dbdc6cd40d13f6c95c281e1cc6e7ea210deb1091b7d9574a8",
+          "input_hash": "d9402f506779ae9dbdc6cd40d13f6c95c281e1cc6e7ea210deb1091b7d9574a8",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "manifestRows",
+          "identity": "fd1db54ae14649786ffc156cb409fe5e0bae76d14ba504023032f575fe147915",
+          "input_hash": "fd1db54ae14649786ffc156cb409fe5e0bae76d14ba504023032f575fe147915",
+          "disposition": "accounted_support"
+        },
+        {
+          "table": "revisions",
+          "identity": "6a5b64f64eedef9ca20c6275d8ed4e29d4e383501f538d9054ea3f63cf6a31e3",
+          "input_hash": "6a5b64f64eedef9ca20c6275d8ed4e29d4e383501f538d9054ea3f63cf6a31e3",
+          "disposition": "latest_revision_not_complete"
+        },
+        {
+          "table": "revisions",
+          "identity": "af2fa7207332914cb75d3c0f27589225804e8ba76cad565ee2451241d78667b8",
+          "input_hash": "af2fa7207332914cb75d3c0f27589225804e8ba76cad565ee2451241d78667b8",
+          "disposition": "superseded_revision"
+        }
+      ],
+      "accounting": {
+        "input_rows": 9,
+        "terminal_rows": 9,
+        "bound_deferred": 0,
+        "aggregate_deferred_uninspected": 0,
+        "supplied_table_counts": {
+          "revisions": 2,
+          "sourceAuthorities": 2,
+          "publishers": 1,
+          "verifications": 1,
+          "registry": 1,
+          "manifests": 1,
+          "manifestRows": 1
+        }
+      },
+      "projection_hash": "4e8d47d1b4c2588f671af1990c538e0f224810116e22d4900638c8bdc2361bfa"
+    },
+    "snapshot": {
+      "identity": "745:745:",
+      "source_cutoff": "2026-10-08T12:00:00.123456Z",
+      "scope": {
+        "revisions": "public.source_document_revisions_v3:all_retained",
+        "sourceAuthorities": "public.source_identity_authorities_v3:all_retained",
+        "publishers": "public.publisher_verification_authorities_v3:all_retained",
+        "registry": "public.source_revision_family_registry_v3:all_retained",
+        "verifications": "public.source_publication_verifications_v3:exact_run",
+        "manifests": "public.opportunity_manifests_v3:exact_manifest",
+        "manifestRows": "public.opportunity_manifest_rows_v3:exact_manifest"
+      },
+      "counts": {
+        "revisions": 2,
+        "sourceAuthorities": 2,
+        "publishers": 1,
+        "registry": 1,
+        "verifications": 1,
+        "manifests": 1,
+        "manifestRows": 1
+      },
+      "digests": {
+        "revisions": "5d8d5380f6cfcc623044a1c3966511900b06bc60d1848c5449ac7001bca1854d",
+        "sourceAuthorities": "52c4c6a146e00b5d48be25040358bee2a0fcd3ee9171395deb9581d70ea1f001",
+        "publishers": "e0fe3e2edeea4d0575d3e7e9a44bd28854290456a4a9f2630d4a411615d51c3d",
+        "registry": "de9bad63bf81f3eeef583b314f6cde8d4a466237c06f3c4c850e6e10995541eb",
+        "verifications": "b91650d1a383997ef5e49ff797b330cfcbdbf8dccd0f08eb709a2e2c40681828",
+        "manifests": "1b5da7fa092d1c858dc4943e71aae8a1a9b11266b849d56139aac5ae9a7f4050",
+        "manifestRows": "601aa98b01d2e144b35fb72788dc00c5915d1b53ee05a6f8c6ecfec8a9239dff"
+      }
+    },
+    "cleanup": "confirmed"
+  }
+}

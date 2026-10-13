@@ -1,0 +1,61 @@
+TAP version 13
+# (node:513734) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:513734) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-financial-owner-profile-oct12/web/src/lib/discovery-frozen-snapshot-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-financial-owner-profile-oct12/web/package.json.
+# Subtest: real captured v3 coherent RR readonly discovery acquisition (synthetic data, no live approval)
+    # Subtest: nonempty complete run/manifest positive and exact microseconds, public flags stay false
+    ok 1 - nonempty complete run/manifest positive and exact microseconds, public flags stay false
+      ---
+      duration_ms: 32.981814
+      ...
+    # Subtest: missing run remains unsupported
+    ok 2 - missing run remains unsupported
+      ---
+      duration_ms: 8.581664
+      ...
+    # Subtest: real ambiguous input and incomplete manifest reject without inventing bindings
+    ok 3 - real ambiguous input and incomplete manifest reject without inventing bindings
+      ---
+      duration_ms: 29.770708
+      ...
+    # Subtest: second connection commit inside counted read does not change RR population; next snapshot sees invalid/revoked head
+    ok 4 - second connection commit inside counted read does not change RR population; next snapshot sees invalid/revoked head
+      ---
+      duration_ms: 43.803018
+      ...
+    # Subtest: actual PG read-only mutation rejected and rollback cleanup confirmed
+    ok 5 - actual PG read-only mutation rejected and rollback cleanup confirmed
+      ---
+      duration_ms: 11.20933
+      ...
+    # Subtest: actual server disconnect never succeeds and closes owned client
+    ok 6 - actual server disconnect never succeeds and closes owned client
+      ---
+      duration_ms: 11.205314
+      ...
+    # Subtest: actual PG statement timeout is bounded, sanitized and rolled back
+    ok 7 - actual PG statement timeout is bounded, sanitized and rolled back
+      ---
+      duration_ms: 2006.227605
+      ...
+    # Subtest: real retained registry above4096 is rejected before population transfer
+    ok 8 - real retained registry above4096 is rejected before population transfer
+      ---
+      duration_ms: 92.903258
+      ...
+    1..8
+ok 1 - real captured v3 coherent RR readonly discovery acquisition (synthetic data, no live approval)
+  ---
+  duration_ms: 3603.281568
+  ...
+1..1
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3744.336923

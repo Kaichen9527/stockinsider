@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs"
+  ],
+  "start_utc": "2026-10-13T20:33:22Z",
+  "seconds": 1.6620936393737793,
+  "exit": 1,
+  "peak_sampled_process_tree_rss_bytes": 160796672,
+  "min_free_bytes": 8936632320
+}

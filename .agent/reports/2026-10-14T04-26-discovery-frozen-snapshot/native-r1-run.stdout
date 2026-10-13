@@ -1,0 +1,32 @@
+TAP version 13
+# (node:513165) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:513165) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/cloud-financial-owner-profile-oct12/web/src/lib/discovery-frozen-snapshot-fixture.test-helper.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/cloud-financial-owner-profile-oct12/web/package.json.
+# Subtest: real captured v3 coherent RR readonly discovery acquisition (synthetic data, no live approval)
+not ok 1 - real captured v3 coherent RR readonly discovery acquisition (synthetic data, no live approval)
+  ---
+  duration_ms: 1419.647854
+  location: '/workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs:12:1'
+  failureType: 'testCodeFailure'
+  error: 'new row for relation "source_entities" violates check constraint "source_entities_entity_type_check"'
+  code: '23514'
+  name: 'error'
+  stack: |-
+    /workspace/cloud-attention-shadow-afa3-oct09/node_modules/pg/lib/client.js:624:17
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async insert (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs:26:63)
+    async TestContext.<anonymous> (file:///workspace/cloud-financial-owner-profile-oct12/scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs:28:24)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1559.167285

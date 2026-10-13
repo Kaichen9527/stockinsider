@@ -1,0 +1,425 @@
+{
+  "schema": "discovery-frozen-snapshot-local-engineering-v1",
+  "source": {
+    "head": "d6b25d31748bba26f6c576b9081317816cbccd5c",
+    "tree": "9e70eba6e93d135141b7d600dd0589999d858be9",
+    "webTree": "99d699bf9961a052d3a0eb0f3dca91f606ac6a52",
+    "base": "aa111a54c7108f043eebc1a5b0682391fc88aef9",
+    "branch": "codex/discovery-frozen-snapshot-reader-oct14",
+    "manifest": "source-manifest.json",
+    "sourceFiles": 22,
+    "changedFiles": 5,
+    "originalPureReaderCanonicalAndAllExistingFinancialWorkflowSchemaRoleCodeUnchanged": true
+  },
+  "window": {
+    "startUtc": "2026-10-13T20:26:43Z",
+    "deadlineUtc": "2026-10-13T20:56:43Z",
+    "startTaipei": "2026-10-14T04:26:43+08:00",
+    "sealedUtc": "2026-10-13T20:48:05Z",
+    "manualEngineeringNotRoleBudget": true
+  },
+  "readerContract": {
+    "newUnconnectedDedicatedClientOwnership": true,
+    "oneRepeatableReadReadOnlySnapshot": true,
+    "actualSnapshotIdentityCheckedBeforeAfter": true,
+    "readOnlyIsolationAndNineTableRlsVisibilityChecked": true,
+    "fixedSqlColumnsParameterizedRunManifestIdsOnly": true,
+    "fullRetainedRevisionSourcePublisherRegistryScopes": true,
+    "exactRunVerificationExactBoundManifestRows": true,
+    "sameSnapshotDbCountAndBytePreflightBeforeTransferAndRechecked": true,
+    "limits": {
+      "tableRows": 4096,
+      "aggregateRows": 16384,
+      "serializedInputStreamOutputBytes": 4194304,
+      "statementMs": 2000,
+      "lockMs": 500,
+      "sharedWallMs": 10000
+    },
+    "timestampUtcTextSixMicros": true,
+    "privatePacketNeverReturnedOrLogged": true,
+    "livePopulationVerified": false,
+    "investmentAdmission": false,
+    "independentRootCreator": null,
+    "rollbackOnNormalFailure": true,
+    "cleanupConfirmedPendingFailedExplicit": true,
+    "timeoutDoesNotClaimToCancelIo": true
+  },
+  "finalTests": {
+    "pure": {
+      "subject": "d6b25d31748bba26f6c576b9081317816cbccd5c",
+      "pass": 75,
+      "fail": 0,
+      "skip": 0,
+      "newAdapter": 15,
+      "unchangedReader": 60,
+      "raw": "pure-final-3.stdout"
+    },
+    "native": {
+      "subject": "20c285e57f3ae34ccc6313b28fc5a583fb8cd7e6",
+      "finalRuntimeNativeFixtureByteEquivalent": true,
+      "equivalence": "native-input-test-only-successor.json",
+      "pass": 10,
+      "fail": 0,
+      "skip": 0,
+      "includesParent": true,
+      "scope": "9 child cases +1parent; original captured PG17.11 schema-only/bootstrap with explicit synthetic content/authority/run and trust test transport",
+      "raw": "native-final-2-run.stdout",
+      "covered": [
+        "nonempty complete run/manifest",
+        "six microseconds",
+        "missing run",
+        "ambiguous input and incomplete manifest",
+        "two connections real invalid revision +source revocation commit during RR; next snapshot prevents revival",
+        "actual read-only25006",
+        "existing anon RLS visibility rejected without grants",
+        "real server disconnect",
+        "actual statement timeout57014",
+        "real4097+retained registry overcap"
+      ]
+    },
+    "typecheck": "PASS exact final",
+    "lint": {
+      "exit": 0,
+      "errors": 0,
+      "existingWarnings": 33
+    },
+    "normalBuild": "PASS exact final"
+  },
+  "phases": {
+    "pure": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+        "web/src/lib/discovery-revision-publisher-reader.test.ts"
+      ],
+      "start_utc": "2026-10-13T20:30:44Z",
+      "seconds": 0.8197910785675049,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 173883392,
+      "min_free_bytes": 8936689664,
+      "counts": {
+        "tests": 61,
+        "pass": 60,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "pure.stdout",
+      "stderr": "pure.stderr"
+    },
+    "pure-2": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+        "web/src/lib/discovery-revision-publisher-reader.test.ts"
+      ],
+      "start_utc": "2026-10-13T20:31:30Z",
+      "seconds": 0.8201436996459961,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 181997568,
+      "min_free_bytes": 8936669184,
+      "counts": {
+        "tests": 72,
+        "pass": 72,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "pure-2.stdout",
+      "stderr": "pure-2.stderr"
+    },
+    "native-r1-run": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs"
+      ],
+      "start_utc": "2026-10-13T20:33:22Z",
+      "seconds": 1.6620936393737793,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 160796672,
+      "min_free_bytes": 8936632320,
+      "counts": {
+        "tests": 1,
+        "pass": 0,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "native-r1-run.stdout",
+      "stderr": "native-r1-run.stderr"
+    },
+    "native-r2-run": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs"
+      ],
+      "start_utc": "2026-10-13T20:34:33Z",
+      "seconds": 3.8171496391296387,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 142831616,
+      "min_free_bytes": 8936517632,
+      "counts": {
+        "tests": 8,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "native-r2-run.stdout",
+      "stderr": "native-r2-run.stderr"
+    },
+    "pure-final": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+        "web/src/lib/discovery-revision-publisher-reader.test.ts"
+      ],
+      "start_utc": "2026-10-13T20:37:28Z",
+      "seconds": 10.668180704116821,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 127782912,
+      "min_free_bytes": 8936378368,
+      "counts": {
+        "tests": 75,
+        "pass": 74,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "pure-final.stdout",
+      "stderr": "pure-final.stderr"
+    },
+    "native-final-run": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs"
+      ],
+      "start_utc": "2026-10-13T20:38:06Z",
+      "seconds": 3.840891122817993,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 142557184,
+      "min_free_bytes": 8936312832,
+      "counts": {
+        "tests": 9,
+        "pass": 9,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "native-final-run.stdout",
+      "stderr": "native-final-run.stderr"
+    },
+    "pure-final-2": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+        "web/src/lib/discovery-revision-publisher-reader.test.ts"
+      ],
+      "start_utc": "2026-10-13T20:39:12Z",
+      "seconds": 10.722484350204468,
+      "exit": 1,
+      "peak_sampled_process_tree_rss_bytes": 130707456,
+      "min_free_bytes": 8936239104,
+      "counts": {
+        "tests": 75,
+        "pass": 74,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "pure-final-2.stdout",
+      "stderr": "pure-final-2.stderr"
+    },
+    "native-final-2-run": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/opportunity-v3/discovery-frozen-snapshot-postgres.test.mjs"
+      ],
+      "start_utc": "2026-10-13T20:40:10Z",
+      "seconds": 3.8666775226593018,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 129085440,
+      "min_free_bytes": 8936169472,
+      "counts": {
+        "tests": 10,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "native-final-2-run.stdout",
+      "stderr": "native-final-2-run.stderr"
+    },
+    "pure-final-3": {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-concurrency=1",
+        "web/src/lib/discovery-frozen-snapshot-reader.test.ts",
+        "web/src/lib/discovery-revision-publisher-reader.test.ts"
+      ],
+      "start_utc": "2026-10-13T20:40:56Z",
+      "seconds": 10.623791694641113,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 120954880,
+      "min_free_bytes": 8936120320,
+      "counts": {
+        "tests": 75,
+        "pass": 75,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "stdout": "pure-final-3.stdout",
+      "stderr": "pure-final-3.stderr"
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-13T20:33:38Z",
+      "seconds": 15.810866832733154,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1213960192,
+      "min_free_bytes": 8936611840,
+      "counts": {},
+      "stdout": "typecheck.stdout",
+      "stderr": "typecheck.stderr"
+    },
+    "typecheck-final": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "start_utc": "2026-10-13T20:41:41Z",
+      "seconds": 15.07371711730957,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1203744768,
+      "min_free_bytes": 9246191616,
+      "counts": {},
+      "stdout": "typecheck-final.stdout",
+      "stderr": "typecheck-final.stderr"
+    },
+    "lint": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "start_utc": "2026-10-13T20:42:40Z",
+      "seconds": 21.44682765007019,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1046990848,
+      "min_free_bytes": 9246179328,
+      "counts": {},
+      "stdout": "lint.stdout",
+      "stderr": "lint.stderr"
+    },
+    "build": {
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "start_utc": "2026-10-13T20:43:39Z",
+      "seconds": 49.31952714920044,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 1789861888,
+      "min_free_bytes": 8936054784,
+      "counts": {},
+      "stdout": "build.stdout",
+      "stderr": "build.stderr"
+    },
+    "tool-versions": {
+      "command": [
+        "node",
+        "/tmp/financial-release-versions.mjs"
+      ],
+      "start_utc": "2026-10-13T20:46:08Z",
+      "seconds": 0.2740936279296875,
+      "exit": 0,
+      "peak_sampled_process_tree_rss_bytes": 23662592,
+      "min_free_bytes": 8936017920,
+      "counts": {},
+      "stdout": "tool-versions.stdout",
+      "stderr": "tool-versions.stderr"
+    }
+  },
+  "redHistory": {
+    "stripOnlyParameterPropertySyntax": "preserved pure exit1; fixed explicit class field",
+    "capturedSourceEntityCreatorConstraint23514": "preserved native-r1 exit1; inspected actual allowed enum, corrected synthetic fixture only",
+    "rlsCatalogCount8versus7": "preserved pure-final exit1; classify only exact population count SQL",
+    "rlsCatalogWhereMistakenAsPopulationFilter": "preserved pure-final-2 exit1; population FROM relation classification only",
+    "exploratoryWipLimitation": "earliest runs were unsealed WIP; creation/change commands retained in task transcript, not advertised as final exact-head proof. run-subjects.json distinguishes them. All final proof uses sealed source or byte-identical test-only successor."
+  },
+  "build": {
+    "subject": "d6b25d31748bba26f6c576b9081317816cbccd5c",
+    "buildId": "VL-gG8q6H8EZkH79Ke4e-",
+    "serverFiles": 1796,
+    "manifest": "compiled-server-manifest.json",
+    "normalNotReused": true
+  },
+  "resources": {
+    "method": "250ms sampled child process-tree RSS and workspace free; detached/brief child peaks excluded, not cgroup measurement",
+    "peakSampledRssBytes": 1789861888,
+    "minSampledWorkspaceFreeBytes": 8936017920,
+    "reserveBytes": 8589934592,
+    "cleanup": "cleanup.json"
+  },
+  "rootSeparateProductionObservation": {
+    "at": "2026-10-13T20:27:25Z",
+    "reportedByRootNotThisVM": "revisions3449 registry3441 sourceAuthorities92; publishers/verifications/runs/allowlist0; adapter must remain run_missing; no authority/run creation authorized"
+  },
+  "pending": [
+    "independent code review and ordinary/protected evidence for this new source",
+    "ordinary CI exact additional test argument suggested in handoff, not applied",
+    "authorized server/operator dedicated client construction and production connection",
+    "genuine frozen run/publisher manifest/authority prerequisites",
+    "live complete population/origin/creator/news-root decisions and candidate-card wiring"
+  ],
+  "notPerformed": [
+    "PR creation",
+    "review refs/signatures/self approval",
+    "VPS/remoteDB/HTTP/crawl/343/PTT",
+    "financial28 or376375 checks rerun",
+    "schema/role/grant/policy/financial/workflow modifications",
+    "scheduling/model/strategy/deployment/merge",
+    "Chromium403 retry"
+  ]
+}
