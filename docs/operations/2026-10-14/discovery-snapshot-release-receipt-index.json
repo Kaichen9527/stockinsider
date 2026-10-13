@@ -1,0 +1,22 @@
+{
+  "source": "5fab9e730a5beab74bd77c0e12eab21f62d64cb6",
+  "receipts": [
+    {
+      "commit": "bd77cb44940995cbae023f80099e648b77ef8bec",
+      "path": ".agent/reports/2026-10-14T04-26-discovery-frozen-snapshot/deadline-successor/receipt.json",
+      "bytes": 7030,
+      "sha256": "53b3563697e5fe018a1a70c5d1a0b7eac1eed269b48286522c050490f9b818b0"
+    },
+    {
+      "commit": "ad23625ad7c217dc75f152c2fcb4f2ff7fa4da6f",
+      "path": ".agent/reports/2026-10-14T04-26-discovery-frozen-snapshot/receipt.json",
+      "bytes": 13570,
+      "sha256": "a0d2aaaf8305296a45af32d8fa6f7c6be5f675953305b70f2e544bda12be4708"
+    }
+  ],
+  "historyBranchesPreserved": true,
+  "historicalRawNotCopied": true,
+  "deadlineRedRetainedAt": "bd77cb44:.agent/reports/2026-10-14T04-26-discovery-frozen-snapshot/deadline-successor/red.stdout",
+  "initialWipAndFixtureRedRetainedAt": "ad23625a:.agent/reports/2026-10-14T04-26-discovery-frozen-snapshot",
+  "historicalCountsNotRelabeled": true
+}
