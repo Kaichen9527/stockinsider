@@ -1,0 +1,181 @@
+{
+  "at": "2026-10-14T19:28:27.598449+00:00",
+  "kind": "root-source-and-public-witness-review-not-private-native-approval",
+  "files": [
+    {
+      "path": "memory-readonly-1910.json",
+      "bytes": 251,
+      "sha256": "f13ca9c3e4c7749777f034bff4eb0e93f3421908fc4e3dab04254b19d8344cc2"
+    },
+    {
+      "path": "native-public-root/check.py",
+      "bytes": 5773,
+      "sha256": "fdab0227a952375620c93502bc8d1117715215572c1b6bd44821edbb26259209"
+    },
+    {
+      "path": "native-public-root/check.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-public-root/check.stdout",
+      "bytes": 1107,
+      "sha256": "01cdfe8d7c3ad8b49719c2d24027481d489bdb15d368c9b716c0e6e04b7737cb"
+    },
+    {
+      "path": "native-public-root/cleanup-verification.json",
+      "bytes": 3248,
+      "sha256": "8014e25a3c0f953a5ab8b3ba45f1b915e4e6087e404db5afc560d5a04785ecc5"
+    },
+    {
+      "path": "native-public-root/execution-resources.json",
+      "bytes": 3760,
+      "sha256": "a74902c126ab83da005e94b28ec6c8d36e77a050c36026c74a041af9383eb14d"
+    },
+    {
+      "path": "native-public-root/public-safe-witness.json",
+      "bytes": 57137,
+      "sha256": "c3996b4af05d782dc7907b4a0c5ca35fc8ad84b32510ea892af643fa5072831d"
+    },
+    {
+      "path": "native-public-root/raw-inventory.json",
+      "bytes": 15638,
+      "sha256": "07576ea808528f9cd3b658f460b8b6bbf1d0ffd9c1201f7847767a228b592d53"
+    },
+    {
+      "path": "native-public-root/receipt.json",
+      "bytes": 2839,
+      "sha256": "652e3c0092293064ddf2b359e01102c8ba3e025cb58cc95ef77afb196021cf24"
+    },
+    {
+      "path": "native-public-root/root-verification.json",
+      "bytes": 1433,
+      "sha256": "38abeff610b416aad82243a70cbfa1ee2de86626066293cf9b72fba9431bc347"
+    },
+    {
+      "path": "native-public-root/source-inventory.json",
+      "bytes": 65760,
+      "sha256": "5c111b996cccf9ae067ab3a46d4d4614ed4e54c6e2ba678f34b8ff78dc2ebd08"
+    },
+    {
+      "path": "normalization-root/delta.patch",
+      "bytes": 3926,
+      "sha256": "0417f211490e4d964539c35af00043ecb9769a42db8ddfd6657215dbe1e1b928"
+    },
+    {
+      "path": "normalization-root/exact-native.test.mjs",
+      "bytes": 9547,
+      "sha256": "96e17cc9ab510513abfc547468a33a249087ade9f712168f20fef41148fae106"
+    },
+    {
+      "path": "normalization-root/exact-native.test.mjs.txt",
+      "bytes": 9547,
+      "sha256": "96e17cc9ab510513abfc547468a33a249087ade9f712168f20fef41148fae106"
+    },
+    {
+      "path": "normalization-root/maker-raw-inventory.json",
+      "bytes": 3513,
+      "sha256": "db5d400623380e91323f2655bde73db44b84863ac632e91f39f378309fb1d127"
+    },
+    {
+      "path": "normalization-root/maker-receipt.json",
+      "bytes": 2326,
+      "sha256": "91028f2891615e1b45d3f3ba52876f4c2e5dc22ab09f4b3796c55bb6d0f9b936"
+    },
+    {
+      "path": "normalization-root/maker-source-inventory.json",
+      "bytes": 66049,
+      "sha256": "aee4b2a33e23a4066087e733d227b81b9f0a97152cae09d48394b3204c3a6322"
+    },
+    {
+      "path": "normalization-root/normalization-probes.mjs",
+      "bytes": 4047,
+      "sha256": "68cdad565e22da1df12686448d269421b3d9105207456d324aa0c1ad9fdce6b3"
+    },
+    {
+      "path": "normalization-root/root-13-probes.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "normalization-root/root-13-probes.stdout",
+      "bytes": 1897,
+      "sha256": "22575549b2f36cf08463b7be0b145d13db68756c528af33b8a201baf5cf61bee"
+    },
+    {
+      "path": "normalization-root/root-independent-contract.mjs",
+      "bytes": 1023,
+      "sha256": "8fd79e7e822cc76352c13a3ce6288ad0f7e30c8e267b089c62e3892a41a4c5e4"
+    },
+    {
+      "path": "normalization-root/root-independent-contract.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "normalization-root/root-independent-contract.stdout",
+      "bytes": 203,
+      "sha256": "d6fcd7d5bb1fa0a141f6937eee93833fd1f5d217df33e24f3475697ad3f65586"
+    },
+    {
+      "path": "normalization-root/root-verification.json",
+      "bytes": 572,
+      "sha256": "86aa6a801dc355552668aec0d58129d3d7eb29f8795834dd82b9421eda11b78c"
+    },
+    {
+      "path": "normalization-root/verify-source.py",
+      "bytes": 1898,
+      "sha256": "7c4d1ba5a53a48f440ffe98f2d196705a21d96b43ad0792e6272a5fd064ff2eb"
+    },
+    {
+      "path": "normalization-root/verify.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "normalization-root/verify.stdout",
+      "bytes": 502,
+      "sha256": "44df918ce025d97aada2186dca2b395d04c2c369d24d49bc920528fbb2ef70ae"
+    },
+    {
+      "path": "previous-automation-prompt.txt",
+      "bytes": 14937,
+      "sha256": "d143985bff1115fbaa6a50feaf8eca4d1317749e34abd3dc32478f553a0f3fd6"
+    },
+    {
+      "path": "review.md",
+      "bytes": 3705,
+      "sha256": "72b4453ad59bcbf567c413563d098914bd1889b60ab7cbf53945957306992d1d"
+    },
+    {
+      "path": "unexecuted-deploy-draft/deploy.sh",
+      "bytes": 8142,
+      "sha256": "33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973"
+    },
+    {
+      "path": "unexecuted-deploy-draft/draft-corrections.json",
+      "bytes": 429,
+      "sha256": "55f3a12a02d89bbdb2f257f4508bd1c998b1839c0995dc0113752dc1810267a8"
+    },
+    {
+      "path": "unexecuted-deploy-draft/original-unexecuted-draft.sh",
+      "bytes": 8117,
+      "sha256": "3477250aed46d730cc35956e2c8888e5ebfce9fb659145f197674db41aeca41c"
+    },
+    {
+      "path": "unexecuted-deploy-draft/syntax.json",
+      "bytes": 69,
+      "sha256": "4216dbaca9ac2f4afddec8432f85eb102d96525d2415b2270fb155ab8a718c04"
+    }
+  ],
+  "sourceCode": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+  "nativeEvidence": "0ea482ce1a1bdb28d1c7fe595e56f2c71ebda9ea",
+  "normalizationScopedFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "rootNativeExecuted": false,
+  "deployment": false,
+  "fullGoalComplete": false
+}

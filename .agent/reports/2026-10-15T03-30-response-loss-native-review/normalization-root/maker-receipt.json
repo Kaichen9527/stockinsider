@@ -1,0 +1,61 @@
+{
+  "kind": "maker-source-only-fix-evidence",
+  "subject": "d33d6328763ee2591a41d849ff4bfadf75c2ff2e",
+  "tree": "3711de152746c2746c1be98fc5fc739d65d0f792",
+  "base": "462aae78f3ade860b5d5eb49a094a3750c24dd4c",
+  "branch": "codex/research-response-loss-row-normalization-oct15",
+  "startedAt": "2026-10-14T18:40:43Z",
+  "sealedAt": "2026-10-14T18:45:17.857486+00:00",
+  "deadline": "2026-10-14T18:55:43Z",
+  "sourceCount": 263,
+  "rawCount": 22,
+  "rawBytes": 28146,
+  "sourceInventorySha256": "aee4b2a33e23a4066087e733d227b81b9f0a97152cae09d48394b3204c3a6322",
+  "rawInventorySha256": "db5d400623380e91323f2655bde73db44b84863ac632e91f39f378309fb1d127",
+  "originalRegression": {
+    "exit": 1,
+    "preserved": true,
+    "nativeFailure": false
+  },
+  "correctedVerification": {
+    "exactFunctionHermeticGroupsPassed": 13,
+    "failed": 0,
+    "syntaxChecksPassed": 1,
+    "node": "22.14.0",
+    "nativeChildren": 2,
+    "nativeParent": 1,
+    "nativeStatus": "NOT_RUN"
+  },
+  "resources": {
+    "at": "2026-10-14T18:41:54.152266+00:00",
+    "maxChildRssKiB": 27976,
+    "method": "wait4 highwater for sequential syntax/isolated builtins probes",
+    "free": {
+      "/workspace": 8603979776,
+      "/tmp": 15375089664
+    },
+    "startedServices": [],
+    "deletedPaths": []
+  },
+  "finalResources": {
+    "at": "2026-10-14T18:45:17.857486+00:00",
+    "free": {
+      "/workspace": 8603934720,
+      "/tmp": 15374929920
+    },
+    "startedServices": [],
+    "ownedChildProcessesRemaining": 0,
+    "cleanup": "No services, sockets or PG were started; all synchronous command children completed. No cache/data deleted."
+  },
+  "scope": "Two-line native-test normalization and callsite correction; complete x.selected binding deep equality before stripping metadata; full persisted row/hash/clock comparisons remain. No product/SQL/relay/fixture/source fingerprint edits.",
+  "independentApproval": false,
+  "productionAuthorized": false,
+  "pending": [
+    "Root independent delta review",
+    "Separate heavy release",
+    "Actual two response-loss native children and parent",
+    "Held successful PG response/observer commit/zero bytes forwarded/actual query rejection and cleanup",
+    "Missing-root exact reconciliation and native accounting",
+    "Whole closure/four callers/Q-R/cash citations/formal publication"
+  ]
+}
