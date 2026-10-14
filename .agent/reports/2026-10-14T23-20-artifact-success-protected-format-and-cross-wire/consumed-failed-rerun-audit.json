@@ -1,0 +1,25 @@
+{
+  "schema": "single-failed-rerun-with-genuine-fresh-ref-v1",
+  "run": 38580440510,
+  "beforeAttempt": 1,
+  "source": "e902021ee9df537d4a8da2a2eaff3921084d44d7",
+  "evidence": "977df0abea1e7384ebb8a2c2c7d3676b6e9d3bb4",
+  "rulesActiveBypassEmpty": true,
+  "ordinaryArtifactRun": 38580440366,
+  "command": [
+    "gh",
+    "run",
+    "rerun",
+    "38580440510",
+    "--repo",
+    "Kaichen9527/stockinsider",
+    "--failed"
+  ],
+  "startedAt": "2026-10-14T14:53:46.210798+00:00",
+  "result": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "completedAt": "2026-10-14T14:53:48.283181+00:00"
+}

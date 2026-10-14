@@ -1,0 +1,25 @@
+diff --git a/.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md b/.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md
+index 89c94d04..8de99798 100644
+--- a/.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md
++++ b/.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md
+@@ -4,10 +4,10 @@ Result: `PASS`
+ 
+ P0=0 P1=0 P2=0
+ 
+-- Final reviewed source: `e902021ee9df537d4a8da2a2eaff3921084d44d7`
+-- Full range: `5189547f76bf24c002b8e8b11669081ba67ad2c6..e902021ee9df537d4a8da2a2eaff3921084d44d7`
++- Final reviewed repair/tree: `e902021ee9df537d4a8da2a2eaff3921084d44d7` / `f1d217954ef7c9d0f759d1649879d34646faa0d8`
++- Full final range: `5189547f76bf24c002b8e8b11669081ba67ad2c6..e902021ee9df537d4a8da2a2eaff3921084d44d7`
+ - Source tree: `f1d217954ef7c9d0f759d1649879d34646faa0d8`; web tree: `c516655efaac8260b1bcf5938f8f4d65ab61ad44`
+-- Unchanged active graph: `c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a`
++- Active graph: `c8576f1b60613ab0b424c9a6315ee64dee9c3d14d81c49dae10834bd66bc7e0a`
+ 
+ This is unsigned model-agent code-integration evidence. Root authored the two added workflow/handoff files. Cloud independently reviewed their complete exact-source delta, requested two realP2 changes at93f6b60a5ad9d326d7ef9d67b6a673162a2a2fda, and independently approved the corrected exact source atf4309e9af61cf4f9767e8a627105c3586d02f192. Root verified47raw/72reportfiles/23source hashes for that closure and inspected actual hosted output, source identities and downloaded release bytes. Root is not represented as independently approving its own files. The aggregate is not a human signature, formal research-author/reviewer/publisher execution, strategy approval or production installation permission.
+ 
+diff --git a/.loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json b/.loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json
+index eebf75d1..9e67395f 100644
+--- a/.loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json
++++ b/.loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json
+@@ -1 +1 @@
+-{"baseSha":"5189547f76bf24c002b8e8b11669081ba67ad2c6","evidenceSha256":"d2c77dd28c47494f6f877740ecb7a4b7621b8124d108998c4f59684e4e3a7cd0","headSha":"e902021ee9df537d4a8da2a2eaff3921084d44d7","p0":0,"p1":0,"range":"5189547f76bf24c002b8e8b11669081ba67ad2c6..e902021ee9df537d4a8da2a2eaff3921084d44d7","reviewedAt":"2026-10-14T14:48:51Z","schema":"stockinsider-exact-review-attestation-v1","treeSha":"f1d217954ef7c9d0f759d1649879d34646faa0d8","verdict":"PASS"}
++{"baseSha":"5189547f76bf24c002b8e8b11669081ba67ad2c6","evidenceSha256":"e4470458626f7b52efa79e6a55328d2df8d20d0fd2b5adad1d2ece00a302dd5b","headSha":"e902021ee9df537d4a8da2a2eaff3921084d44d7","p0":0,"p1":0,"range":"5189547f76bf24c002b8e8b11669081ba67ad2c6..e902021ee9df537d4a8da2a2eaff3921084d44d7","reviewedAt":"2026-10-14T14:48:51Z","schema":"stockinsider-exact-review-attestation-v1","treeSha":"f1d217954ef7c9d0f759d1649879d34646faa0d8","verdict":"PASS"}

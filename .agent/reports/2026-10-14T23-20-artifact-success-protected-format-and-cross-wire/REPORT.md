@@ -1,0 +1,12 @@
+## 2026-10-14 23:20台灣時間：真DD Linux包已完成且Root全驗；PR381 protected格式RED保存，append-only ref不可覆寫；新cross-wire六例單件實跑活動
+
+PR381 draft/open/head e902021ee9df537d4a8da2a2eaff3921084d44d7/base5189547f。獨立closure f4309e9a/receiptb56fa1e0 Root核47raw/72files/23source，兩原P2已真閉合；原RED不改綠。新ordinary38580440366/job115908603379真SUCCESS，actualcheckoutc3995978/fulltreef1d21795同head，真新155canonical/PCR31/TAP42f2ff7c，DD自身107/7/4+typeslintnormalbuild與packagedcredential-free500/404/staticSHA/confirmedshutdown各自歸因，不互冒。
+
+新artifact11904225538 ZIP28254621bytes/SHA c3006c864a95d8cebb022d32d848baccec7ba99cfe95b9a1a6f446e7e002caed；tar398e71768ea0e7a5935282432c0edfcb2f47c953712b715562def95c3745add4，3101安全members/manifest2586files79354761bytes。Root核ZIPCRC/allSHA256SUMS/safeextract/原exactDDfullverifier，完整包/tmp/stockinsider-final-reviewed-dd-artifact-oct14/dd59817f750684b093965f539dd4de466be13077。正式source=dd/directchild=c2b，不能冒main/未mergeprotocol/正式部署。成功同target不得重建。
+
+Genuine e902 directchild977df0abea1e7384ebb8a2c2c7d3676b6e9d3bb4已正常push source-addressedref，初缺refFAIL保存；單次failedrerun audit/tmp/stockinsider-pr381-protected-fresh-ref-rerun-oct14.json已消耗。Attempt2真FAIL：exact-review reviewed commit/tree，req/arch/bootstrapSUCCESS/modelproductSKIP/aggregateFAIL。根因review Markdown三label不符原worker exactgrammar，不是ENOENT/ENOSPC/缺ref。原resolver只讀PASS不替worker。Localcorrected siblingcd79278dbff631db471a55b11b2e9ca47f77bef2只存proposal，未發布/未正式批准。Worker明訂subject-addressed append-only，977不得force-update/覆寫，沒有forcepush。下一真source需實作已驗sameartifactreuse而非重建DD，獨立review/新subject新freshref/真checks全部重得；不改parser/policy/skipCI/空commit。PR尚未ready/merge，終態370..380helper不可碰。
+
+Cross-wire source-only7951cb3be14715891868dcf08a3acd57a3c98dbb/evidence23d3efb8/receipt19d5a951 Root實核19raw/21source/node--check3/scoped source review0新P0P1P2，當時六例NOT_RUN。Cloud前turncompleted+cursor60trueidle後只一件20min codex/research-versioned-cross-wire-execution-oct14/base7951，turn01a13aff-6ea4-770f-97cb-f78ebdcf1c5d/cursor57859559-a812-4f98-bcdc-46a2a9f908f6:61 inProgress。Owned實際六新case/matrix/helper及evidence，Root不重疊；兩反wire/雙序mixed4slot第五拒絕/max30與29測charge，mandatoryearlyFD/真9tableaudit/逐casePGlog-cleanup。Byte成功measurement不算reachable-byte-rejection/wouldcharge閉合。20min/failfast/原SQL-profile-role-grant-caps不改，所有原RED與pending保留；原green2case不再跑。Root只light編reuseworkflow，不pushsource/觸發GHA直到本heavy真終態，不重派。
+
+Main5189、正式169/NOLOGIN-1/容量缺4030730240最後真觀測保持，無VPS/remoteDB/roleACL/HTTP/crawl/PTT/策略/部署/cache。Goal全部三階段active，local/native/package不是正式peer/文章/Top20/策略/研究排程驗收。詳報.agent/reports/2026-10-14T23-20-artifact-success-protected-format-and-cross-wire/。
+

@@ -1,0 +1,48 @@
+{
+  "source": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+  "delivery": "23d3efb8d15fde8692a7425133260227b784555e",
+  "makerReceiptSHA256": "19d5a9515f68a4424194c248d5674779f30f156a6c7b5c0709069f949ace93e8",
+  "rawVerified": 19,
+  "sourceVerified": 21,
+  "rootSyntax": [
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+      "command": [
+        "arch",
+        "-arm64",
+        "/usr/local/bin/node",
+        "--check",
+        "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs"
+      ],
+      "exit": 0
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legal-fixture-native.test.mjs",
+      "command": [
+        "arch",
+        "-arm64",
+        "/usr/local/bin/node",
+        "--check",
+        "scripts/opportunity-v3/research-versioned-legal-fixture-native.test.mjs"
+      ],
+      "exit": 0
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-cross-wire-native.test.mjs",
+      "command": [
+        "arch",
+        "-arm64",
+        "/usr/local/bin/node",
+        "--check",
+        "scripts/opportunity-v3/research-versioned-cross-wire-native.test.mjs"
+      ],
+      "exit": 0
+    }
+  ],
+  "scopedStaticReview": "no confirmed new P0/P1/P2 in test-only extraction/matrix",
+  "actualTestsRun": false,
+  "byteRejectionReachability": "pending, measurement success is not byte-bound closure",
+  "originalSQLAppAndPermissionProfileUnchanged": true,
+  "originalGreenCasesNotAutoImported": true,
+  "formalApproval": false
+}

@@ -1,0 +1,17 @@
+{
+  "source": "e902021ee9df537d4a8da2a2eaff3921084d44d7",
+  "publishedEvidence": "977df0abea1e7384ebb8a2c2c7d3676b6e9d3bb4",
+  "correctedGrammarProposal": "cd79278dbff631db471a55b11b2e9ca47f77bef2",
+  "proposalPublished": false,
+  "canonicalRefRewritten": false,
+  "forcePushPerformed": false,
+  "reason": "protected-external-gate-worker reviewSource explicitly requires subject-addressed append-only evidence; do not replace existing source proof",
+  "originalFailure": "exact-review reviewed commit/tree",
+  "labelCorrections": [
+    "Final reviewed repair/tree",
+    "Full final range",
+    "Active graph"
+  ],
+  "localPreservationBranch": "codex/pr381-review-format-proposal-oct14",
+  "nextRequired": "new actual source version supporting verified same-target artifact reuse; new independent review, real checks and genuine new-subject directchild"
+}

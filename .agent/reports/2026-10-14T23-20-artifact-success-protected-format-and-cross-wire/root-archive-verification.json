@@ -1,0 +1,21 @@
+{
+  "artifactId": 11904225538,
+  "run": 38580440366,
+  "source": "dd59817f750684b093965f539dd4de466be13077",
+  "tarSHA256": "398e71768ea0e7a5935282432c0edfcb2f47c953712b715562def95c3745add4",
+  "tarMembers": 3101,
+  "regularFiles": 2587,
+  "regularBytes": 79955758,
+  "verifierSHA256": "1e4bb10d2ee694eefd0493653a71d54b8d94deade74fa66a86b579b25ebe930b",
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "/tmp/stockinsider-pr381-hosted-artifact-oct14/approved-source-verifier.mjs",
+    "/tmp/stockinsider-final-reviewed-dd-artifact-oct14/dd59817f750684b093965f539dd4de466be13077"
+  ],
+  "exit": 0,
+  "rootBuild": false,
+  "rootBoot": false,
+  "rootDeployment": false
+}

@@ -1,0 +1,11 @@
+[
+  "2026-10-14T14:53:58.4844500Z  * [new branch]        codex/financial-failure-rpc-hotfix -> origin/codex/financial-failure-rpc-hotfix",
+  "2026-10-14T14:53:58.4906183Z  * [new branch]        codex/gdelt-invalidated-mention-filter -> origin/codex/gdelt-invalidated-mention-filter",
+  "2026-10-14T14:53:58.5116709Z  * [new branch]        codex/official-calendar-fail-fast -> origin/codex/official-calendar-fail-fast",
+  "2026-10-14T14:53:58.5223133Z  * [new branch]        codex/ptt-missing-article-policy -> origin/codex/ptt-missing-article-policy",
+  "2026-10-14T14:53:58.5894246Z  * [new branch]        codex/v318-idle-pool-error-containment-20260823 -> origin/codex/v318-idle-pool-error-containment-20260823",
+  "2026-10-14T14:54:06.0199773Z - stockinsider-v3-gate-bootstrap-e902021ee9df537d4a8da2a2eaff3921084d44d7 (ID: 11901454457, Size: 662, Expected Digest: sha256:9870e8c6462d1677cd550643cb1a8d7d5d5b09143bdef997bf1df881b128cb0a)",
+  "2026-10-14T14:54:06.6610783Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}",
+  "2026-10-14T14:54:09.5005490Z protected external gate worker failed: exact-review reviewed commit/tree",
+  "2026-10-14T14:54:09.5055687Z ##[error]Process completed with exit code 1."
+]
