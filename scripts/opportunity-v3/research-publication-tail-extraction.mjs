@@ -7,7 +7,8 @@ export const TAIL_DESCRIPTOR_SHA256='9410e8f3391c372439fc1f970214c69f1cfd9cb0a4c
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const raw=fs.readFileSync(new URL('./research-publication-tail-descriptor.json',import.meta.url));
 if(sha(raw)!==TAIL_DESCRIPTOR_SHA256)throw Error('publication_tail_descriptor_changed');
-export const publicationTailDescriptor=Object.freeze(JSON.parse(raw));
+const parsed=JSON.parse(raw);
+export const publicationTailDescriptor=Object.freeze({...parsed,entries:Object.freeze(parsed.entries.map(e=>Object.freeze(e)))});
 export function assertPublicationTailSelection(rows){
  const expected=publicationTailDescriptor.entries;
  if(!Array.isArray(rows)||rows.length!==26||new Set(rows.map(r=>r.relativePath)).size!==26)throw Error('publication_tail_selection_invalid');
