@@ -1,0 +1,10 @@
+{
+  "evidence": "d2640246c5b7136fcf8e2420156508987632929e",
+  "subject": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+  "receiptSha256": "9c25e4eed0a3f6d4b4d730ccb2d2d35922aca5afb8c32aa5f943d0396fcaa2b9",
+  "allEvidenceInventoryFilesVerified": 51,
+  "exactCandidateSourceFilesVerified": 2,
+  "rootReexecutedPeerProbes": false,
+  "fullNativeRawIndependentlyVerified": false,
+  "formalApproval": false
+}

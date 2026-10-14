@@ -1,0 +1,343 @@
+{
+  "kind": "unsigned-scoped-independent-code-review",
+  "subject": "c68864cd4125b2dc5e9249312ef9188bfdedcb82",
+  "tree": "8ab201731bcf2a1a99e71393ac9a7e18d01ed36c",
+  "predecessor": "e902021ee9df537d4a8da2a2eaff3921084d44d7",
+  "reviewCommit": "509a2e2895b28d30888d932ead5755d439b7f0aa",
+  "verdict": "APPROVE-scoped",
+  "findings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "scope": "Root two-file artifact reuse delta only, no formal approval",
+  "startedAt": "2026-10-14T15:26:44Z",
+  "deadline": "2026-10-14T15:41:44Z",
+  "completedAt": "2026-10-14T15:34:05.824144+00:00",
+  "checks": {
+    "isolatedExactPredicates": {
+      "pass": 36,
+      "fail": 0
+    },
+    "realGitResolver": {
+      "pass": 3,
+      "fail": 0
+    },
+    "syntax": {
+      "shell": 10,
+      "node": 3,
+      "python": 1
+    },
+    "YAML": "parsed",
+    "diffCheck": "PASS",
+    "hostedWorkflow": "NOT_RUN",
+    "actualArchiveDownloadOrExtraction": "NOT_RUN",
+    "nativeRerun": false
+  },
+  "reviewerProbeREDPreserved": [
+    "overbroad first-nine-step equality harness",
+    "sandbox spawnSync /usr/bin/git EPERM"
+  ],
+  "sourceFiles": [
+    {
+      "path": ".github/workflows/reviewed-publication-tail-artifact.yml",
+      "bytes": 23507,
+      "sha256": "f0e0b82561082d106de19703e8448ed3b9f0b97328148b530211df85e6359cc9",
+      "blob": "2950c2c274888d809d85a8172c20b57f773d9a87"
+    },
+    {
+      "path": "docs/operations/2026-10-14/reviewed-publication-artifact-handoff.md",
+      "bytes": 6318,
+      "sha256": "5aa236fc464940434c256d1e8d68349697a46dde4df5afb3bfd6d40df71172ed",
+      "blob": "1b896be494154ecfcecb6de3306df94dfcd44c74"
+    }
+  ],
+  "supportingSourceRows": 10,
+  "evidenceInventory": [
+    {
+      "path": "REVIEW.md",
+      "bytes": 7760,
+      "sha256": "dd56f87a0d0028889603a309a004cba993e74212b754b0eb9fbe87dd2d54b3e9"
+    },
+    {
+      "path": "derive-witness.py",
+      "bytes": 4755,
+      "sha256": "0c3b51c6df5c5be9e26b71948330bb41c886479a6463c9f444a09db46564ad70"
+    },
+    {
+      "path": "exact-extractor.py",
+      "bytes": 6363,
+      "sha256": "4eb9947788759da20bab67a9b0540bb1faabb3cc0751ebb739ae32c4cb13b16a"
+    },
+    {
+      "path": "native-public-safe-witness.json",
+      "bytes": 44868,
+      "sha256": "d655498bab1d032d07090ee24efc87d08cc0d831e8f323e1c40addb2510c705d"
+    },
+    {
+      "path": "node-11-0.mjs",
+      "bytes": 3876,
+      "sha256": "33d887b010ebb98598f30a5598f969520fa58b54974fc000e4919da123a3caf3"
+    },
+    {
+      "path": "node-5-0.mjs",
+      "bytes": 2693,
+      "sha256": "405538429bb4836e3c5d4375ce6baa74372b7829a72fb03174065fd90da5bb78"
+    },
+    {
+      "path": "node-8-0.mjs",
+      "bytes": 1408,
+      "sha256": "1a040536ccd4e7e2616bbb548bb1e7decfa2fe722f61d44861d25f1c2cd62129"
+    },
+    {
+      "path": "probe.py",
+      "bytes": 5262,
+      "sha256": "ef267a41cd5599ad7a16f366e789e2f39accf6b118d95d9339b50bb9957a04fc"
+    },
+    {
+      "path": "raw/initial-review-harness-red.json",
+      "bytes": 207,
+      "sha256": "cd04c34e7422057f1ca60925a38ea786ba6e321ad8fa2841e99dbb465a0627b8"
+    },
+    {
+      "path": "raw/node-11-0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/node-5-0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/node-8-0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/node-syntax.json",
+      "bytes": 156,
+      "sha256": "9d30dd15a49abe79a72d4b0aefb0ddce20593872e4e86682e775a9b23cf966df"
+    },
+    {
+      "path": "raw/predicate-results.json",
+      "bytes": 5048,
+      "sha256": "73ec44b990f9f7feb9b8b3c852a04fc19a08ddb61831bfb4222d3719ff9442ed"
+    },
+    {
+      "path": "raw/predicate.stderr",
+      "bytes": 206,
+      "sha256": "242d496c801a8a8f8e63cf13395db15d99f53f74693d7089137563b0990d6bb6"
+    },
+    {
+      "path": "raw/predicate.stdout",
+      "bytes": 75,
+      "sha256": "64b0bdb3b6274aa397ac7a73a39eedec5e3a80c326f9d603afa30d0600c2444e"
+    },
+    {
+      "path": "raw/resolver-native.result.json",
+      "bytes": 258,
+      "sha256": "195941cf3de81acdaf24e25bb8739ad4ae52f732b6d6793b6af206b4094da4f5"
+    },
+    {
+      "path": "raw/resolver-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/resolver-native.stdout",
+      "bytes": 460,
+      "sha256": "90fff176f42abb5ee05ee58c1e5e42773c793b331d78f040b69e9064b2739c38"
+    },
+    {
+      "path": "raw/resolver.stderr",
+      "bytes": 1032,
+      "sha256": "3015ee6ad8d3b6d09f9d8acb2729b4901c7e489aa7798265c987508eaecf2284"
+    },
+    {
+      "path": "raw/resolver.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/sandbox-subprocess-diagnostic.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/sandbox-subprocess-diagnostic.stdout",
+      "bytes": 126,
+      "sha256": "d5911e522e4e397c78159303eeb15938a6833047740774081a8c5101ed5e947b"
+    },
+    {
+      "path": "raw/syntax-02.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/syntax-03.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/syntax-04.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/syntax-05.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/syntax-07.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/syntax-08.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/syntax-09.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/syntax-10.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/syntax-11.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/syntax-12.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/witness.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/witness.stdout",
+      "bytes": 95,
+      "sha256": "d0064c5f510827ed994dd45d97035bdb715188ca6f7a0829a898473613df2cf5"
+    },
+    {
+      "path": "resolver-probe.cjs",
+      "bytes": 953,
+      "sha256": "cc51c16e874b84eb52cfbc51ec1239142a33148c92eaaaaf744c381015c3900b"
+    },
+    {
+      "path": "source-seal.json",
+      "bytes": 944,
+      "sha256": "df0944d40b858a590d407f2ba9c3dc4954c1f2177e9a4f5a9d41c031176d4d66"
+    },
+    {
+      "path": "step-02.sh",
+      "bytes": 1087,
+      "sha256": "8ea1c4492350ba84e20e550d85319d681719b074c45aebac489af6cc807ad902"
+    },
+    {
+      "path": "step-03.sh",
+      "bytes": 27,
+      "sha256": "6d71bf0411f14fc881ef21dc94f68e6c483f78209ea687e47271cdb3c49cf8d5"
+    },
+    {
+      "path": "step-04.sh",
+      "bytes": 59,
+      "sha256": "a7c0b2a03c657a0ef163b29613529254d7115594e7eb6b6dce79d69a7a72a94d"
+    },
+    {
+      "path": "step-05.sh",
+      "bytes": 3025,
+      "sha256": "c6c6edabd2e3c5fc2ab83d68e635dfbeb0da5aaef5e1ae661114ab157e49d018"
+    },
+    {
+      "path": "step-07.sh",
+      "bytes": 352,
+      "sha256": "7831f65d0174f70b10015549114c5739e355ceb675ec627c8b0b05b5fb8ed84c"
+    },
+    {
+      "path": "step-08.sh",
+      "bytes": 1502,
+      "sha256": "91abc3a1ab7877f3feb2c8c20d05dd1e0723937ab8723b9cdf0b73027e7a4acd"
+    },
+    {
+      "path": "step-09.sh",
+      "bytes": 389,
+      "sha256": "8ed9b1fab6d6e649c2750683e459bcff2dde5ecbc8f23038565df7f897fb886a"
+    },
+    {
+      "path": "step-10.sh",
+      "bytes": 6708,
+      "sha256": "bd7845556eb4877927431b81683890bb71600e46eb6c925c684e4507c86b135a"
+    },
+    {
+      "path": "step-11.sh",
+      "bytes": 3934,
+      "sha256": "0a48a8aac2ba6f512a50e93822fc1351b12bfef079aff7b137b471fbbb733dea"
+    },
+    {
+      "path": "step-12.sh",
+      "bytes": 324,
+      "sha256": "83db5dd9772945221e9f4eb460b125f5e1cbdd534758b3340e3c1f7ecf5dcbf2"
+    },
+    {
+      "path": "subject.diff",
+      "bytes": 27916,
+      "sha256": "b7e2103e343a2093a6f8a9bbac5a1de8499e139e85507e3f50d43154b1941d0b"
+    },
+    {
+      "path": "syntax.json",
+      "bytes": 492,
+      "sha256": "dfc8aff3343cc9437618f06a40173fa1fe7e30770dca0a910ed5a7cced642c17"
+    },
+    {
+      "path": "workflow.json",
+      "bytes": 21816,
+      "sha256": "322d26f93b000b3ec2b6e569f733eddfb1f25df2818098301ae9cdb1e46c7a59"
+    },
+    {
+      "path": "supporting-source-manifest.json",
+      "bytes": 2795,
+      "sha256": "34cdd6c77b120df94738131368e4574afbd48f0bee57b7e24b572e31ff3fde75"
+    }
+  ],
+  "evidenceFileCount": 51,
+  "evidenceBytes": 156971,
+  "nativeWitness": {
+    "makerDerived": true,
+    "independentlyRawVerifiedByRoot": false,
+    "rawPublic": false,
+    "rawLocalRoot": "/tmp/cross-wire-exec-o14",
+    "rawCount": 93,
+    "rawBytes": 5805306,
+    "witnessSha256": "d655498bab1d032d07090ee24efc87d08cc0d831e8f323e1c40addb2510c705d",
+    "missingSnapshotFieldsExplicit": true,
+    "byteBoundaryStillPending": true
+  },
+  "resources": {
+    "freeBytes": {
+      "/workspace": 8605728768,
+      "/tmp": 15394611200
+    },
+    "method": "disk admission and final statvfs; light processes only, no continuous RSS sampling",
+    "peakRSS": "NOT_MEASURED",
+    "servicesStarted": 0,
+    "nativeOrBuildRuns": 0,
+    "cacheDeleted": false
+  },
+  "pending": [
+    "fresh hosted current-builder155/31 and artifact API authorization/availability",
+    "real fixed ZIP full verifier/new boot/upload on candidate runner",
+    "protected/formal production authorization",
+    "native separately retained missing after snapshots and byte-bound rejection; no rerun"
+  ]
+}

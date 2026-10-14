@@ -1,0 +1,58 @@
+{
+  "source": "7951cb3be14715891868dcf08a3acd57a3c98dbb",
+  "status": "SOURCE_DERIVATION_NOT_NATIVE",
+  "rootGrowthMultiplicity": {
+    "firstPreparationNewSourceSeal": 60,
+    "firstSealedMaterial": 30,
+    "secondPreparationNewSourceSeal": 58,
+    "secondSealedMaterial": 29,
+    "sum": 177
+  },
+  "candidates": [
+    {
+      "symbol": "2409",
+      "baselineActualAggregate": 462917,
+      "asciiRootExtraBytes": 400,
+      "predictedRootLengthDelta": 70800,
+      "sourceDerivedAggregate": 533717,
+      "guard": 524288
+    },
+    {
+      "symbol": "2383",
+      "baselineActualAggregate": 304278,
+      "asciiRootExtraBytes": 1300,
+      "predictedRootLengthDelta": 230100,
+      "sourceDerivedAggregate": 534378,
+      "guard": 524288
+    }
+  ],
+  "limitations": [
+    "Source-only differential derives each selected root copied into preparation payload and new source seal; final material copies it once. Must confirm actual new-seal charging from real RPC.",
+    "Original byte-rejection error does not return actual final material or exact charge; clocks and non-root metadata are not held identical across runs, so these sums are predictions, not exact rejected would-charge.",
+    "Root length must remain <=4096 under original source fence; original same-publisher .invalid synthetic locator does not establish independent news or future author-packet <=800 compatibility.",
+    "No SQL/runtime/grant/roles/expected/caps changes or test rerun performed.",
+    "Any actual next test must use new bounded input and save FD/9table/ledger rollback and original P0001; formal status remains pending."
+  ],
+  "files": [
+    {
+      "path": "migrations/20261009_research_complete_input_v2.sql",
+      "sha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c"
+    },
+    {
+      "path": "migrations/20261014_research_versioned_input_candidate_v3.sql",
+      "sha256": "f089f44375f80da89be49215cad35626998bcb5775166efc23e93af224ec284f"
+    },
+    {
+      "path": "migrations/20261009_research_publication_source_fence_v2.sql",
+      "sha256": "b2db643e99f8ee1fcca4b8755f1e272996a84e1a228d785554d0643293880621"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-legal-fixture-helper.mjs",
+      "sha256": "92848b6cce2828f2f4a10ddeb855508aee3414f31c8f1d48cf6866d40d03a490"
+    },
+    {
+      "path": "scripts/opportunity-v3/research-versioned-cross-wire-native.test.mjs",
+      "sha256": "a7fd88533072f78c325f3672464f9f4a5f896b065600db9d3503ef5faaac6555"
+    }
+  ]
+}

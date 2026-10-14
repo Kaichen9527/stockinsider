@@ -1,0 +1,26 @@
+[
+  {
+    "member": "3_requirements.txt",
+    "line": "2026-10-14T15:37:07.1662594Z protected external gate worker failed: Command failed: /usr/bin/git fetch --no-tags origin refs/heads/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82:refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82 refs/heads/evidence/source-led-opportunity-v3-requirements-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v325-digest refs/heads/evidence/source-led-opportunity-v3-architecture-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v325-digest"
+  },
+  {
+    "member": "requirements/3_Retrieve bootstrap and prepare detached subject.txt",
+    "line": "2026-10-14T15:37:07.1662568Z protected external gate worker failed: Command failed: /usr/bin/git fetch --no-tags origin refs/heads/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82:refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82 refs/heads/evidence/source-led-opportunity-v3-requirements-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v325-digest refs/heads/evidence/source-led-opportunity-v3-architecture-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v325-digest"
+  },
+  {
+    "member": "4_architecture.txt",
+    "line": "2026-10-14T15:37:00.2556242Z protected external gate worker failed: Command failed: /usr/bin/git fetch --no-tags origin refs/heads/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82:refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82 refs/heads/evidence/source-led-opportunity-v3-requirements-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v325-digest refs/heads/evidence/source-led-opportunity-v3-architecture-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v325-digest"
+  },
+  {
+    "member": "architecture/3_Retrieve bootstrap and prepare detached subject.txt",
+    "line": "2026-10-14T15:37:00.2556196Z protected external gate worker failed: Command failed: /usr/bin/git fetch --no-tags origin refs/heads/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82:refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82 refs/heads/evidence/source-led-opportunity-v3-requirements-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v325-digest refs/heads/evidence/source-led-opportunity-v3-architecture-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v325-digest"
+  },
+  {
+    "member": "5_exact-review.txt",
+    "line": "2026-10-14T15:37:02.8720175Z protected external gate worker failed: Command failed: /usr/bin/git fetch --no-tags origin refs/heads/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82:refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82 refs/heads/evidence/source-led-opportunity-v3-requirements-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v325-digest refs/heads/evidence/source-led-opportunity-v3-architecture-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v325-digest"
+  },
+  {
+    "member": "exact-review/3_Retrieve bootstrap and prepare detached subject.txt",
+    "line": "2026-10-14T15:37:02.8720162Z protected external gate worker failed: Command failed: /usr/bin/git fetch --no-tags origin refs/heads/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82:refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-c68864cd4125b2dc5e9249312ef9188bfdedcb82 refs/heads/evidence/source-led-opportunity-v3-requirements-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v325-digest refs/heads/evidence/source-led-opportunity-v3-architecture-v325-digest:refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v325-digest"
+  }
+]
