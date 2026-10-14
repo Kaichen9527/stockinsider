@@ -1,0 +1,97 @@
+name: DD binary operator candidate diagnostics
+
+on:
+  pull_request:
+    paths:
+      - 'docs/operations/2026-10-15/dd-binary-operator-candidate/**'
+      - 'docs/operations/2026-10-15/dd-binary-operator-release/**'
+      - '.github/workflows/dd-binary-operator-quality.yml'
+      - 'deployment/vps/**'
+      - 'scripts/contabo-host-resource-check.mjs'
+      - 'scripts/contabo-capacity-guard.mjs'
+      - 'scripts/verify-standalone-release.mjs'
+  push:
+    branches: ['codex/**']
+    paths:
+      - 'docs/operations/2026-10-15/dd-binary-operator-candidate/**'
+      - 'docs/operations/2026-10-15/dd-binary-operator-release/**'
+      - '.github/workflows/dd-binary-operator-quality.yml'
+      - 'deployment/vps/**'
+      - 'scripts/contabo-host-resource-check.mjs'
+      - 'scripts/contabo-capacity-guard.mjs'
+      - 'scripts/verify-standalone-release.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-operator-quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Check supported unprivileged Linux environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          evidence="$(mktemp -d "$RUNNER_TEMP/dd-operator-quality.XXXXXX")"
+          echo "DD_OPERATOR_EVIDENCE=$evidence" >> "$GITHUB_ENV"
+          python3 -I -B - <<'PY' | tee "$evidence/environment.json"
+          import ctypes, json, os, pathlib, platform, shutil, sys
+          assert sys.implementation.name == 'cpython' and sys.version_info >= (3, 12), 'unsupported_python'
+          assert platform.system() == 'Linux' and os.name == 'posix', 'linux_required'
+          assert os.geteuid() != 0, 'unprivileged_probes_required'
+          assert sys.flags.optimize == 0 and not os.environ.get('PYTHONOPTIMIZE'), 'assertions_required'
+          assert pathlib.Path('/proc/self/stat').is_file() and pathlib.Path('/bin/bash').is_file(), 'proc_bash_required'
+          libc = ctypes.CDLL(None, use_errno=True)
+          subreaper = ctypes.c_int()
+          assert libc.prctl(37, ctypes.byref(subreaper), 0, 0, 0) == 0, 'linux_subreaper_required'
+          free = {p: shutil.disk_usage(p).free for p in (os.getcwd(), '/tmp')}
+          assert all(n >= 8 * 1024**3 for n in free.values()), 'disk_reserve_required'
+          print(json.dumps({'python': sys.version, 'platform': platform.platform(), 'proc': True, 'uid': os.geteuid(), 'freeBytes': free, 'subreaperSupported': True}))
+          PY
+          git rev-parse HEAD HEAD^{tree} > "$evidence/source.txt"
+          sha256sum docs/operations/2026-10-15/dd-binary-operator-candidate/* .github/workflows/dd-binary-operator-quality.yml > "$evidence/inputs.sha256"
+      - name: Syntax and 35 isolated candidate probes in sequence
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate=docs/operations/2026-10-15/dd-binary-operator-candidate
+          # Parse only: never execute/source the deployment entrypoint or real activation helper.
+          bash -n "$candidate/deploy.sh" 2>&1 | tee "$DD_OPERATOR_EVIDENCE/bash-n.log"
+          python3 -I -B -u "$candidate/isolated-probes.py" \
+            2> >(tee "$DD_OPERATOR_EVIDENCE/probes.stderr.log" >&2) \
+            | tee "$DD_OPERATOR_EVIDENCE/probes.stdout.json-stream"
+          python3 -I -B - "$DD_OPERATOR_EVIDENCE/probes.stdout.json-stream" <<'PY' | tee "$DD_OPERATOR_EVIDENCE/summary.json"
+          import json, pathlib, sys
+          text = pathlib.Path(sys.argv[1]).read_text()
+          decoder = json.JSONDecoder()
+          records = []
+          while text.strip():
+              value, end = decoder.raw_decode(text.lstrip())
+              records.append(value)
+              text = text.lstrip()[end:]
+          assert records and all(isinstance(row, dict) for row in records), 'json_records_required'
+          assert all(set(row) == {'shellProbe'} for row in records[:-1]), 'unexpected_intermediate_record'
+          summary = records[-1]
+          assert set(summary) == {'scope', 'count', 'results', 'formalApproval'}, 'closed_summary_required'
+          assert summary['scope'] == 'isolated candidate components only; no production procedure or approved activation executed'
+          assert summary['formalApproval'] is False and summary['count'] == 35, 'exact_scope_count_required'
+          rows = summary['results']
+          assert isinstance(rows, list) and len(rows) == 35, 'all_groups_required'
+          assert all(set(row) == {'name', 'status'} and isinstance(row['name'], str) and row['name'] and row['status'] == 'PASS' for row in rows), 'all_groups_must_pass'
+          assert len({row['name'] for row in rows}) == 35, 'unique_groups_required'
+          assert len(records[:-1]) == 10, 'all_dummy_shell_ordering_records_required'
+          print(json.dumps({'groups': 35, 'passed': 35, 'failed': 0, 'dummyShellRecords': 10, 'formalApproval': False}))
+          PY
+      - name: Retain isolated diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: dd-operator-quality-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.DD_OPERATOR_EVIDENCE }}
+          if-no-files-found: error
+          retention-days: 14
