@@ -1,0 +1,212 @@
+[
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/after-grain-fix.meta.json",
+    "bytes": 269,
+    "sha256": "62e8f0057c8e346e5730e97aee45325f2712bb160b774ba17cec62d36b45c555"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/after-grain-fix.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/after-grain-fix.stdout",
+    "bytes": 3869,
+    "sha256": "ad428e1ba787371c03accdf8988378c2dcdf307a50a3bf56acb8b69db4652924"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/attachment-limit-recovery.json",
+    "bytes": 591,
+    "sha256": "1a764369f85ef607c1b3c60fe5a56226a7ed9fed9a393cd31f2d023d482943ab"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/attachments-before379.json",
+    "bytes": 27737,
+    "sha256": "cc4fc67434062e58d23c8c0e601554fa2c35ee030786a6f6ad700c82227b16cc"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/core-tsconfig.json",
+    "bytes": 354,
+    "sha256": "a09ee4e93dec1843e61e8f30eb3a7fcd70157b96a45bd9555652f68d55b29453"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/final-source-manifest.json",
+    "bytes": 1614,
+    "sha256": "937f4590e47ba5695aa203d892d51af99e4a7355ef5d7bf5dba7531c06aa6421"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/followup-scope.json",
+    "bytes": 1108,
+    "sha256": "9869649e3622cb6b8d5b563eca45cd9c9889cf54172373924f57687228cda294"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/initial-red-tool-record.json",
+    "bytes": 12355,
+    "sha256": "183941aecadf1a071ba59e4c628e87dd066f8fce7035b1157b0c5bb621134581"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/initial-red.meta.json",
+    "bytes": 462,
+    "sha256": "7ce75a83607021b560acbcb80b87c6042312568351d6a007bdaa12e87db9cd00"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/initial-red.tool-output.txt",
+    "bytes": 10819,
+    "sha256": "b20fe1e0263dd912debf49e3ed11a19247249236202f8a9abaa3fcef7c586b01"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/initial-source-0.txt",
+    "bytes": 11245,
+    "sha256": "157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/initial-source-1.txt",
+    "bytes": 8413,
+    "sha256": "fa67c47c836f2622ffee4544e0a86abc7c5222fac5bfc81077ec6a6e216fa649"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/initial-source-2.txt",
+    "bytes": 13297,
+    "sha256": "170cad66e3d0485152790fa1657fa6056a0bdf73df920fee348d454f7ecb0326"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/initial-source-manifest.json",
+    "bytes": 636,
+    "sha256": "90571a12b2558c602030ba38f36976f5d3adabcadbb9e2c58ec17d67d0885130"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/jobs-38516725291.json",
+    "bytes": 13997,
+    "sha256": "7807ade25780a466fa2cf9db0b6a4e6f495b00e6bde84f1d1fceb37c021920a4"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/jobs-38516725320.json",
+    "bytes": 2566,
+    "sha256": "fd9c51253a10db26b83787eb5f55748335faf5e99b33df28a01352e8dd1ab144"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/jobs-38516725401.json",
+    "bytes": 5126,
+    "sha256": "cfdf53013821487ab2d2d71629a1d234a2319f77d41a9efbd13418764651eee8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/jobs-38516725449.json",
+    "bytes": 2247,
+    "sha256": "24e4979d189775b78784ec44b6d8d810b10b4880bb8ccbe3ec50ecca6da68cc0"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/local-toolchain.json",
+    "bytes": 642,
+    "sha256": "bf9a13e55848eac8a108957d68d348528b62023ec9e3291213fc48626a3d5f68"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/logs-38516725291.txt",
+    "bytes": 1206337,
+    "sha256": "6a5309016bce30f779c98bb02956762e814b852ff85c941e747822d072ccbfab"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/logs-38516725291.zip",
+    "bytes": 210237,
+    "sha256": "b4d97c54ab3dede3955abd7dac32805c510116b8c43d261bf3fb39391169f40a"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/logs-38516725320.txt",
+    "bytes": 154119,
+    "sha256": "f938a43f3cd580883bd7e5c324712500709619d82950add0378454156691776d"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/logs-38516725320.zip",
+    "bytes": 35612,
+    "sha256": "c7b781fc5ff583fd557ff16720f77cbcaccf4a6abdd5e766dd1e3161ee6fd230"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/logs-38516725449.txt",
+    "bytes": 42071,
+    "sha256": "3b02b19628896cfd79b61d761acb7faad27562a2d95c8bf0051f96b3692de1e8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/logs-38516725449.zip",
+    "bytes": 14732,
+    "sha256": "4d8e5e8202f5a10d324e5737004783aa1da783eedb94d30de3f7a1b118930e44"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/module-typecheck.meta.json",
+    "bytes": 461,
+    "sha256": "9524879207f60edda5929f01357bf301e151554a3472ac5d7d58132d86c5b3c7"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/module-typecheck.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/module-typecheck.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/previous-automation-prompt.txt",
+    "bytes": 12627,
+    "sha256": "77f1758c168faf77599c44dd5eb06e9e151c05f88362351e374ea3913d7f4914"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/red-recovery-limit.txt",
+    "bytes": 506,
+    "sha256": "cabf268640ff2a3df5ba136372339fa834d5482a16efba0e3797f56425b0bc4e"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/report.md",
+    "bytes": 4565,
+    "sha256": "aed32ff9b064cf09bd2518bf4ded9d965a2f1fb0e831947cc14760ba4d7c347b"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/reviewer-followup-thread.json",
+    "bytes": 9695,
+    "sha256": "1a6d4dd1fbd2a5381ead0438ef5c1cd34e8a48d382a3e9f6c12699eebdd2ac99"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/reviewer-thread-before-followup.json",
+    "bytes": 24461,
+    "sha256": "6684879dee36b782648aa5b27cfd66903d3b0f1ff7d57110377d7ccf851610c7"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/run-38516725291.json",
+    "bytes": 13182,
+    "sha256": "c9aa00915d40e2805636f905d36cbd0243b6bb1567538407c3a0481b69283ab9"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/run-38516725320.json",
+    "bytes": 13158,
+    "sha256": "d9d4f4a60ce59c244952a3f48f537f4b39e8c42959df54e6c4da95d261b5ba88"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/run-38516725401.json",
+    "bytes": 13140,
+    "sha256": "3b84b1b81a56ec4568c868d8224597a999bbbabf61e3d6c6552c9f3a8a799e76"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/run-38516725449.json",
+    "bytes": 13169,
+    "sha256": "7ef625cc475426c7ae235b96cf64d5c62ee1534f18859796767b3365f9887792"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/scope.json",
+    "bytes": 464,
+    "sha256": "b40ad8d55c47d246a42a0ddf1516ab218e1e8cdcafffe2dbbd2e05d07996182a"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/source-manifest.json",
+    "bytes": 1491,
+    "sha256": "87ea4ea85e9e0e6514b9fa0e5a27b49a436868788fa80d0fddbf02eaa35a99e4"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/stockinsider-historical-cash-core-followup-review-b7796da8-oct14.md",
+    "bytes": 8184,
+    "sha256": "6c20f63950b04c30fbb22a65f93ae4d4fdf37e9c80b40857065527ce1186e32c"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-historical-cash-core/stockinsider-historical-cash-core-independent-review-b89e3dde-oct14.md",
+    "bytes": 14426,
+    "sha256": "bbca3d9267806385021d9cbb7ca9de99835a8c50c50e285c74f5a79a0572e5f7"
+  }
+]

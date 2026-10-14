@@ -1,0 +1,23 @@
+{
+  "packages": {
+    "typescript": {
+      "actual": "5.9.3",
+      "lock": "5.9.3"
+    },
+    "eslint": {
+      "actual": "9.39.3",
+      "lock": "9.39.3"
+    },
+    "next": {
+      "actual": "16.3.8",
+      "lock": "16.3.4"
+    },
+    "eslint-config-next": {
+      "actual": "16.3.8",
+      "lock": "16.3.4"
+    }
+  },
+  "initialPrecheck": "Stopped before type/lint because shared Next16.3.8 differs from main16.3.4. No dependency or lock changed.",
+  "lintAndFullQuality": "pending genuine exact-lock environment",
+  "moduleOnlyTypecheck": "TypeScript5.9.3 matches main lock; this module imports no Next/types/environment dependencies"
+}

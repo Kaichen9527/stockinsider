@@ -1,0 +1,118 @@
+# Historical cash core: independent exact-source review
+
+**Verdict: scoped CODE PASS. P0=0, P1=0, P2=0 findings in this five-file calculation-leaf change.** Full repository type/lint/build, new-head ordinary CI, protected gates and release approval remain **PENDING**. This verdict does not approve v3 admission, source authenticity, role execution, publication, strategy or deployment.
+
+Reviewed at `2026-10-14T05:16:58Z` on `/tmp/stockinsider-discovery-release-root-review-oct14`:
+
+- Head: `b89e3dde9d885c92041c5164313b36be30258746`.
+- Base / actual merge base: `69b9734c5766b2e196e8133d63df1f1148959046`.
+- Branch subject: `codex/research-historical-cash-core-oct14`.
+- Exact diff: five added files, 779 insertions, no existing file modifications. HEAD and clean status were checked directly. No fetched/moving base substituted for the specified base.
+- Historical numeric reference: `732bb12e947945b0bd71574cafe6ca6509d9ea51`, read through `git show`; no historical code execution or worktree changes.
+
+## Findings and scope
+
+No actionable P0/P1/P2 finding was established. The implementation is a fixed arithmetic leaf; the absence of the remaining v3 adapter/publication pieces is explicitly deferred scope, not a completed integration claim.
+
+The review is independent of the maker's reported green results and of my earlier design proposal. I read the complete five-file diff, reran the candidate suite, checked the original packet/derived-result values, performed independent integer/rational checks and adversarial probes, and ran the strict module-only compiler check myself. I did not accept the maker's self-review as evidence of correctness.
+
+The `review` skill was consulted. Its required repository path `.agents/skills/gstack/review/checklist.md` (and Greptile companion) is absent in this worktree, so the full skill workflow was stopped at that prerequisite. This report is the direct, task-scoped read-only review fallback, not a claim that the full gstack workflow ran. Auto-fix, update/fetch/sync, telemetry and review-registry writes were not performed; the task permits only this `/tmp` report. No specialist or other chat was spawned/messaged.
+
+## Actual checks and results
+
+| Check actually performed | Result |
+| --- | --- |
+| Exact HEAD, base ancestry, five-file name/status/diff inspection | Correct subjects; additions only |
+| `git diff --check BASE HEAD` | Exit 0 |
+| Node runtime | `v22.14.0` |
+| Candidate Node suite, same command as workflow | 14 pass; 0 fail/cancelled/skipped/todo |
+| Original packet SHA, all cash operands and capital values | Exact match: 85 paired rows / 170 numeric cells, plus all selected capital fields |
+| Original derived-results SHA and all expected rows/capital objects | Exact match, four half-year rows |
+| Independent BigInt cash/profit bridges, proxies and rational rounding checks | Pass, all four periods |
+| Additional targeted boundary/accessor/alias/null-prototype probes | 94 checks pass after correcting one reviewer probe construction error described below |
+| Strict module-only TypeScript 5.9.3, target ES2017 | Exit 0 |
+| Candidate workflow action pins versus approved-base workflow | Same pinned checkout/setup-node commits; no secret/write/deploy steps |
+| WIP-to-candidate production core and fixture comparison | Core unchanged; fixture grain normalized and provenance explanation added |
+
+Commands executed from the exact checkout:
+
+```sh
+node --experimental-strip-types --test --test-concurrency=1 scripts/research-historical-cash-core.test.mjs
+node web/node_modules/typescript/lib/tsc.js --noEmit --strict --target ES2017 --module ESNext --moduleResolution bundler --lib ES2020 --types node --typeRoots web/node_modules/@types --skipLibCheck web/src/lib/research-historical-cash-core.ts
+git diff --check 69b9734c5766b2e196e8133d63df1f1148959046 b89e3dde9d885c92041c5164313b36be30258746
+```
+
+The compiler command checks this module, not the app, and skips library declaration checking. It neither proves Next compatibility nor replaces full exact-lock quality/build. Node emitted the expected experimental type-stripping and module-type detection warnings; no package/tsconfig adjustment was made.
+
+### Independent numeric evidence
+
+The Node read-only comparison retrieved `source-packet.json`, `derived-results.json` and the historical Python Decimal source from source732bb12. It asserted the fixture's entire facts object equals the selected packet issuer's metric→values mapping, period order/unit/consolidated flag match, every selected AUO capital property matches, and the complete expected row/capital objects equal the historical derived-results objects. Only the documented descriptive grain→closed enum normalization differs.
+
+- Packet SHA256: `b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3`.
+- Original derived-results SHA256: `af4bf32b0d1e8becb97166ef7e75f7a17caf1495caeb5ed3674c6cb0fa76e14a`.
+- Fixture numeric inputs and expected outputs were not regenerated by the TypeScript core during this review.
+
+I separately used BigInt formulas for `CFO + signed PPE + signed intangible`, the additional lease-principal sensitivity, operating+investing+financing+FX cash change, opening+change→closing, and owners+NCI→group profit. For the four positive observed group-profit denominators, integer rounding of `(CFO × 10^9 + denominator/2) / denominator` matched the retained nine-decimal strings. These probes do not claim to revalidate source publication, retained PDF lines or raw PDF bytes.
+
+| Company / period | CFO | CFO + PPE + intangible | After lease sensitivity | Net borrowing |
+| --- | ---: | ---: | ---: | ---: |
+| 2409 / 2026H1 | 6,877,414 | 1,134,612 | 731,929 | -8,058,238 |
+| 2409 / 2025H1 | 5,118,098 | -5,692,596 | -6,082,425 | -5,947,733 |
+| 2383 / 2026H1 | 5,044,825 | -5,661,917 | -5,688,590 | 7,654,912 |
+| 2383 / 2025H1 | 3,327,358 | -1,687,888 | -1,708,417 | 5,546,829 |
+
+Amounts are signed TWD-thousands; the table is arithmetic evidence, not investment guidance or verified source admission.
+
+### Reviewer probe correction retained
+
+The first additional probe command completed all packet/expected comparisons and independent four-period arithmetic checks, then failed with `Missing expected exception`. My alleged positive-overflow case had two MAX_SAFE_INTEGER borrowings but only one repayment removed; its exact net was **MAX_SAFE_INTEGER**, not overflow. The core correctly accepted it. This was a reviewer test-construction error, not a production defect.
+
+The corrected read-only probe explicitly asserts that boundary succeeds, then removes **both** repayments so the exact net is `2 × MAX_SAFE_INTEGER` and asserts rejection. No source, candidate test or expected fixture changed. The resulting 94 checks comprise:
+
+- 1 exact cancellation case using noncash `MAX_SAFE_INTEGER + 2 − 2`, plus two large borrowings and two equal repayments;
+- 1 boundary net-borrowing success and 1 true positive-overflow rejection;
+- 1 negative after-lease-output overflow rejection;
+- 85 second-column accessor rejections, each confirming its getter was not invoked;
+- 3 root/period/capital accessor rejections, also without getter invocation;
+- 1 post-return caller-mutation check proving output operands do not alias caller arrays;
+- 1 supported null-prototype input/facts/capital equivalence check.
+
+The earlier failed reviewer probe remains described here; it is not relabeled as an all-green first attempt. The maker's historical 8-pass/6-fail fixture-grain run was not rerun. A direct `git diff 0d763e51 b89e3dde -- core fixture` confirmed the core has no changes and the fixture changes only the two grain strings plus sourceGrain/normalization metadata.
+
+## Code boundary review
+
+Line numbers refer to `web/src/lib/research-historical-cash-core.ts` at the exact reviewed head.
+
+- **Closed finite input:** lines 5–26 pin periods, 52/33 metric names and capital keys. Lines 39–48 reject extra/symbol keys, unexpected prototypes and accessor/non-enumerable record properties. Lines 54–59 copy exactly two safe numeric values without invoking index getters. Lines 74–98 bind symbol/unit/consolidation/grain/periods and selected capital. `Record<string,...>` is an internal convenience after exact validation, not an arbitrary accepted metric set.
+- **Exact integer arithmetic:** lines 50–64 reject non-number/nonfinite/fractional/unsafe/-0 operands, sum through BigInt and reject an unsafe final sum before Number conversion. Fixed arrays bound work. The capital multiplication at line 93 also uses exact BigInt and requires equality to a previously safe integer paid-capital input. Division uses nonzero integer denominators, so supported ratios remain finite; zero group profit produces typed null at lines 133–136.
+- **Cash/profit bridges:** lines 108–120 preserve signed outlays/repayments, positive gross borrowing/disposal/cash balances, AUO component sums, EMC reported subtotals, pretax/CFO/cash movement and consolidated profit identities. Negative NCI is allowed; group profit is the ratio denominator, not owners profit. No annualization, Q2 isolation or EPS operation is present.
+- **Proxy separation:** lines 121–132 exclude disposal proceeds, M&A and ROU acquisition from the PPE/intangible proxy. Lease principal appears in a separately named sensitivity; ROU remains a separate value. Original signed inputs, including gain adjustments and disposal proceeds, remain visible in the copied operand object, not silently netted into the proxy.
+- **Capital semantics:** lines 88–95 and 140–145 use June30 paid-capital/par and issued-share units, reconcile owners+NCI equity and retain unknown treasury-share count. No weighted/diluted or October share basis is inferred. `currentPB`, October outstanding shares and target remain null.
+- **No authority or I/O:** the module contains no imports, filesystem/network/DB calls or clock/hash claims. Lines 150–155 explicitly state not-IFRS-FCF/FCFE/maintenance-capex/forecast, `sourceVerification:'not_performed'`, all qualification/dispatch/publication flags false and forecastCash null. Existing runtime consumers do not invoke this new leaf: `git grep calculateHistoricalCash HEAD` resolves only its definition and the new tests.
+- **Output independence:** validated facts are copied into per-period primitives; capital is copied; lines 67–71 recursively freeze the result. No shared input object is mutated or retained as a mutable output alias. Existing tests and the additional post-return mutation probe corroborate this.
+
+The documented EMC selected receivables/notes/inventory/payables are partial components, not a complete working-capital sum. Lines 112–114 reconcile the reported totals; lines 137–138 explicitly label partial coverage. The suite intentionally demonstrates that changing a selected AR value can leave the totals valid. This is within the leaf's stated contract: a later byte-bound projector must authenticate **all** rows and clocks. An arithmetically self-consistent fabricated packet can pass this core, as the handoff correctly warns. Neither tests nor this verdict convert arithmetic consistency into financial authenticity. This review also does not claim arbitrary in-process JavaScript Proxy traps are sandboxed; the future ingress/projector must supply its own bounded plain-data material.
+
+## Workflow and non-effects
+
+`.github/workflows/research-historical-cash-quality.yml` lines 2–14 uses `pull_request` with finite path filters, not `pull_request_target`, schedules or dispatch. Lines 15–16 grant only contents:read; lines 19–20 use hosted Ubuntu and a five-minute timeout. Lines 22–28 pin both actions to the same commits as approved-base `financial-installation-quality.yml`, disable persisted checkout credentials and pin Node22.14. Lines 29–32 run only a literal version assertion and dependency-free local test command. No caller-controlled shell interpolation, npm install/lifecycle, credentials, service container, secret reference, artifact upload, deployment, signing/protected approval or write permission is introduced.
+
+This ordinary workflow tests GitHub's pull-request checkout, not an independently verified exact-head CI result. It was read, not dispatched. No result from another PR/head was reused.
+
+The five added files do not change old 8-file/64-observation caps, old v2 inventory/mapping/replay, existing calculator/consumer code, SQL/default48/49/50, authority/pins, schema expectations, protected/oracle workflow, package locks, tsconfig, API, UI or Cloud's separately owned 26-tail guard/native work. No new source authority or privileges are introduced indirectly through an existing caller because this leaf has no such caller yet.
+
+## Exact five-file identities
+
+| File | Git blob | Raw bytes | SHA256 |
+| --- | --- | ---: | --- |
+| `.github/workflows/research-historical-cash-quality.yml` | `2285fffc0e4a066b3c0ec4968567bafd2126ef9a` | 1,186 | `8fb73bfa86104026548dbe9ebdfe6c3b566415393d3d345ac9ca4472699c89c5` |
+| `docs/operations/2026-10-14/historical-cash-core-handoff.md` | `157b8ba5659ffe965984dd6816dda85ee52d718f` | 3,821 | `d9a2884cb29b2fa3a131d69ba6fca42f0e8490f3539fc5a25673b2cd72c4c06e` |
+| `scripts/fixtures/research-historical-cash/operands-and-decimal-vectors.json` | `088e920e42e777b6ae149cd7162fca3163eb255d` | 13,463 | `d581bd42715ff491552dc7e21ab94ac3536609e72feae55750143f68c446d0cb` |
+| `scripts/research-historical-cash-core.test.mjs` | `c8f59a826032166a7e7c685678d4662d54ea660a` | 8,413 | `fa67c47c836f2622ffee4544e0a86abc7c5222fac5bfc81077ec6a6e216fa649` |
+| `web/src/lib/research-historical-cash-core.ts` | `37aa911d5289faabf9a604d0768fe821a43b6487` | 11,245 | `157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790` |
+
+## Remaining gates
+
+Scoped review is DONE; full release is PENDING. Obtain genuine new-head ordinary/full exact-lock type/lint/build and protected results. Separately review/implement v3 profile byte/clock/provenance binding, schema/mapping, legacy replay preservation, cash citation consumers, native PG/HTTP/quota/fence behavior and real new author/reviewer reservations. This report supplies no human/third-party signature or formal author/reviewer execution evidence.
+
+No source changes, prior expectation edits, dependencies installed, PG/build/HTTP/VPS calls, CI reruns, merge/push/deploy or protected writes were performed. Only this report was written.

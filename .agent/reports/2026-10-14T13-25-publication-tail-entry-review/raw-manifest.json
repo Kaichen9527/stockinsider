@@ -1,0 +1,27 @@
+[
+  {
+    "path": ".agent/reports/2026-10-14T13-25-publication-tail-entry-review/baseline-verification.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-publication-tail-entry-review/baseline-verification.stdout",
+    "bytes": 191,
+    "sha256": "08f8e89c6074f48f8530ffd9d924bdf015c36b0f0ae449b43fbc4ea3a0f6c502"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-publication-tail-entry-review/review.md",
+    "bytes": 4475,
+    "sha256": "ed6df2f7c3ead676ab496c75e976000603e679f38018db26b66371e4aaa126db"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-publication-tail-entry-review/verification.json",
+    "bytes": 1168,
+    "sha256": "507435887ae2af6c1786793934c5f5c9d6bb147ddcf726d1dca80041d648b8c8"
+  },
+  {
+    "path": ".agent/reports/2026-10-14T13-25-publication-tail-entry-review/verify-captured-baseline.mjs",
+    "bytes": 1112,
+    "sha256": "b3e1ebad531ef1759973eed086c07888786ac358bf381673b5a08e9751307051"
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-14T05:01:02.245385+00:00",
+  "files": [
+    {
+      "path": "web/src/lib/research-historical-cash-core.ts",
+      "bytes": 11245,
+      "sha256": "157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790"
+    },
+    {
+      "path": "scripts/research-historical-cash-core.test.mjs",
+      "bytes": 8413,
+      "sha256": "fa67c47c836f2622ffee4544e0a86abc7c5222fac5bfc81077ec6a6e216fa649"
+    },
+    {
+      "path": "scripts/fixtures/research-historical-cash/operands-and-decimal-vectors.json",
+      "bytes": 13297,
+      "sha256": "170cad66e3d0485152790fa1657fa6056a0bdf73df920fee348d454f7ecb0326"
+    }
+  ]
+}

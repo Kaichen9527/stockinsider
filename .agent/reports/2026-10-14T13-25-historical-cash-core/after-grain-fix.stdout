@@ -1,0 +1,85 @@
+TAP version 13
+# (node:84360) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:84360) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-release-root-review-oct14/web/package.json.
+# Subtest: 2409 retained two-period cash and capital independently match Python Decimal
+ok 1 - 2409 retained two-period cash and capital independently match Python Decimal
+  ---
+  duration_ms: 1.471
+  ...
+# Subtest: 2383 retained two-period cash and capital independently match Python Decimal
+ok 2 - 2383 retained two-period cash and capital independently match Python Decimal
+  ---
+  duration_ms: 0.6205
+  ...
+# Subtest: fixed company, period, unit, grain and exact operand inventory reject substituted scope
+ok 3 - fixed company, period, unit, grain and exact operand inventory reject substituted scope
+  ---
+  duration_ms: 0.83775
+  ...
+# Subtest: every fixed operand refuses fractional, unsafe or nonfinite numeric values
+ok 4 - every fixed operand refuses fractional, unsafe or nonfinite numeric values
+  ---
+  duration_ms: 17.700333
+  ...
+# Subtest: all actual AUO noncash and working-capital components are reconciled, not only totals
+ok 5 - all actual AUO noncash and working-capital components are reconciled, not only totals
+  ---
+  duration_ms: 1.009834
+  ...
+# Subtest: EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+ok 6 - EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+  ---
+  duration_ms: 0.305458
+  ...
+# Subtest: all applicable cash and group-profit bridges reject inconsistent reported operands
+ok 7 - all applicable cash and group-profit bridges reject inconsistent reported operands
+  ---
+  duration_ms: 0.9105
+  ...
+# Subtest: cash acquisition and debt repayment signs reject rather than flipping expenses
+ok 8 - cash acquisition and debt repayment signs reject rather than flipping expenses
+  ---
+  duration_ms: 0.286084
+  ...
+# Subtest: disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+ok 9 - disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+  ---
+  duration_ms: 0.513666
+  ...
+# Subtest: signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+ok 10 - signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+  ---
+  duration_ms: 0.253292
+  ...
+# Subtest: June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+ok 11 - June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+  ---
+  duration_ms: 0.369041
+  ...
+# Subtest: safe-integer sums cannot silently overflow even when each operand is safe
+ok 12 - safe-integer sums cannot silently overflow even when each operand is safe
+  ---
+  duration_ms: 0.083625
+  ...
+# Subtest: accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+ok 13 - accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+  ---
+  duration_ms: 0.196958
+  ...
+# Subtest: result is deeply frozen; calculation does not mutate caller operands
+ok 14 - result is deeply frozen; calculation does not mutate caller operands
+  ---
+  duration_ms: 0.166
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 105.313083

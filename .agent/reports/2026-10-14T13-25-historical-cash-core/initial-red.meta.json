@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-10-14T04:59:12.543Z",
+  "exitCode": 1,
+  "combinedOutput": true,
+  "sourceCommitRecordedAfterRun": "0d763e51",
+  "sourceBytesSealedBeforeRepair": true,
+  "rerunToRecoverRed": false,
+  "failureCause": "Fixture descriptive grain not normalized to the closed enum; six positive cases reject before math.",
+  "authoritativeRawRecord": "initial-red-tool-record.json",
+  "parsedOutputNewlineCount": 173,
+  "parsedLiteralNewlineEscapeCount": 0
+}

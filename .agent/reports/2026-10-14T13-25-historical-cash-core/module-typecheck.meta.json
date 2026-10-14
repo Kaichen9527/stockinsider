@@ -1,0 +1,15 @@
+{
+  "command": [
+    "arch",
+    "-arm64",
+    "/usr/local/bin/node",
+    "/tmp/stockinsider-discovery-release-root-review-oct14/web/node_modules/typescript/bin/tsc",
+    "-p",
+    "/tmp/stockinsider-historical-cash-core-evidence-oct14/core-tsconfig.json",
+    "--pretty",
+    "false"
+  ],
+  "startedAt": "2026-10-14T05:06:06.360459+00:00",
+  "exit": 0,
+  "scope": "new pure module only, matching TypeScript; no Next imports, not a full typecheck/build/lint"
+}

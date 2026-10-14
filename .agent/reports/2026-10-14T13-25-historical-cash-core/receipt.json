@@ -1,0 +1,8 @@
+{
+  "schema": "root-candidate-review-receipt-v1",
+  "report": ".agent/reports/2026-10-14T13-25-historical-cash-core/report.md",
+  "fileCount": 42,
+  "manifestSha256": "af8dd4c9903e1165b6fcceee6c48fb6a7888a9431d37ecc863b5b84d7baa0c3a",
+  "formalProductionApproved": false,
+  "goalComplete": false
+}

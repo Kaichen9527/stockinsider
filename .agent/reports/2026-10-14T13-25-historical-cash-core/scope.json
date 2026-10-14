@@ -1,0 +1,14 @@
+{
+  "source": "b89e3dde9d885c92041c5164313b36be30258746",
+  "purePass": 14,
+  "pureFail": 0,
+  "pureSkip": 0,
+  "pureTodo": 0,
+  "moduleOnlyTypecheck": "PASS TypeScript5.9.3/ES2017/no Next or external types",
+  "localFullTypeLintBuild": "PENDING shared Next16.3.8 differs main16.3.4; no Mac fullbuild/dependency change",
+  "nativeExecuted": false,
+  "formalV3Integrated": false,
+  "independentReview": "PENDING",
+  "productionChanged": false,
+  "sourceFiles": 5
+}

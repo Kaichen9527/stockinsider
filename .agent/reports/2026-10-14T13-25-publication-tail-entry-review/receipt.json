@@ -1,0 +1,8 @@
+{
+  "schema": "root-candidate-review-receipt-v1",
+  "report": ".agent/reports/2026-10-14T13-25-publication-tail-entry-review/review.md",
+  "fileCount": 5,
+  "manifestSha256": "3f65c070ee1706d5b8518548192448aba9ce56d0c3291d7e798487e1134ca343",
+  "formalProductionApproved": false,
+  "goalComplete": false
+}

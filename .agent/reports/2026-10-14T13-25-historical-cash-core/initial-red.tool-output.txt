@@ -1,0 +1,173 @@
+TAP version 13
+# (node:83192) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:83192) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-discovery-release-root-review-oct14/web/package.json.
+# Subtest: 2409 retained two-period cash and capital independently match Python Decimal
+not ok 1 - 2409 retained two-period cash and capital independently match Python Decimal
+  ---
+  duration_ms: 1.011666
+  location: '/private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:9:35'
+  failureType: 'testCodeFailure'
+  error: 'historical_cash_input_invalid'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    ensure (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:37:21)
+    validate (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:75:3)
+    calculateHistoricalCash (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:105:17)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:10:51)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.start (node:internal/test_runner/test:877:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: 2383 retained two-period cash and capital independently match Python Decimal
+not ok 2 - 2383 retained two-period cash and capital independently match Python Decimal
+  ---
+  duration_ms: 0.056833
+  location: '/private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:9:35'
+  failureType: 'testCodeFailure'
+  error: 'historical_cash_input_invalid'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    ensure (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:37:21)
+    validate (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:75:3)
+    calculateHistoricalCash (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:105:17)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:10:51)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: fixed company, period, unit, grain and exact operand inventory reject substituted scope
+ok 3 - fixed company, period, unit, grain and exact operand inventory reject substituted scope
+  ---
+  duration_ms: 0.688291
+  ...
+# Subtest: every fixed operand refuses fractional, unsafe or nonfinite numeric values
+ok 4 - every fixed operand refuses fractional, unsafe or nonfinite numeric values
+  ---
+  duration_ms: 9.399292
+  ...
+# Subtest: all actual AUO noncash and working-capital components are reconciled, not only totals
+ok 5 - all actual AUO noncash and working-capital components are reconciled, not only totals
+  ---
+  duration_ms: 0.433292
+  ...
+# Subtest: EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+not ok 6 - EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+  ---
+  duration_ms: 0.11975
+  location: '/private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:41:1'
+  failureType: 'testCodeFailure'
+  error: 'historical_cash_input_invalid'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    ensure (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:37:21)
+    validate (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:75:3)
+    calculateHistoricalCash (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:105:17)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:43:53)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: all applicable cash and group-profit bridges reject inconsistent reported operands
+ok 7 - all applicable cash and group-profit bridges reject inconsistent reported operands
+  ---
+  duration_ms: 0.424125
+  ...
+# Subtest: cash acquisition and debt repayment signs reject rather than flipping expenses
+ok 8 - cash acquisition and debt repayment signs reject rather than flipping expenses
+  ---
+  duration_ms: 0.164541
+  ...
+# Subtest: disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+not ok 9 - disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+  ---
+  duration_ms: 0.2515
+  location: '/private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:56:1'
+  failureType: 'testCodeFailure'
+  error: 'historical_cash_input_invalid'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    ensure (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:37:21)
+    validate (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:75:3)
+    calculateHistoricalCash (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:105:17)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:58:16)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+not ok 10 - signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+  ---
+  duration_ms: 0.282959
+  location: '/private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:64:1'
+  failureType: 'testCodeFailure'
+  error: 'historical_cash_input_invalid'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    ensure (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:37:21)
+    validate (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:75:3)
+    calculateHistoricalCash (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:105:17)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:66:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+ok 11 - June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+  ---
+  duration_ms: 0.294083
+  ...
+# Subtest: safe-integer sums cannot silently overflow even when each operand is safe
+ok 12 - safe-integer sums cannot silently overflow even when each operand is safe
+  ---
+  duration_ms: 0.0555
+  ...
+# Subtest: accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+ok 13 - accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+  ---
+  duration_ms: 0.588
+  ...
+# Subtest: result is deeply frozen; calculation does not mutate caller operands
+not ok 14 - result is deeply frozen; calculation does not mutate caller operands
+  ---
+  duration_ms: 0.066583
+  location: '/private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:81:1'
+  failureType: 'testCodeFailure'
+  error: 'historical_cash_input_invalid'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    ensure (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:37:21)
+    validate (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:75:3)
+    calculateHistoricalCash (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/web/src/lib/research-historical-cash-core.ts:105:17)
+    TestContext.<anonymous> (file:///private/tmp/stockinsider-discovery-release-root-review-oct14/scripts/research-historical-cash-core.test.mjs:82:22)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 8
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 97.407959

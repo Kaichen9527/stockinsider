@@ -1,0 +1,38 @@
+{
+  "base": "69b9734c5766b2e196e8133d63df1f1148959046",
+  "source": "b89e3dde9d885c92041c5164313b36be30258746",
+  "sourceTree": "745e5392d9ed13b47b7bac03f49f4e6ea862ebbd",
+  "webTree": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "files": [
+    {
+      "path": ".github/workflows/research-historical-cash-quality.yml",
+      "bytes": 1186,
+      "sha256": "8fb73bfa86104026548dbe9ebdfe6c3b566415393d3d345ac9ca4472699c89c5",
+      "blob": "2285fffc0e4a066b3c0ec4968567bafd2126ef9a"
+    },
+    {
+      "path": "docs/operations/2026-10-14/historical-cash-core-handoff.md",
+      "bytes": 3821,
+      "sha256": "d9a2884cb29b2fa3a131d69ba6fca42f0e8490f3539fc5a25673b2cd72c4c06e",
+      "blob": "157b8ba5659ffe965984dd6816dda85ee52d718f"
+    },
+    {
+      "path": "scripts/fixtures/research-historical-cash/operands-and-decimal-vectors.json",
+      "bytes": 13463,
+      "sha256": "d581bd42715ff491552dc7e21ab94ac3536609e72feae55750143f68c446d0cb",
+      "blob": "088e920e42e777b6ae149cd7162fca3163eb255d"
+    },
+    {
+      "path": "scripts/research-historical-cash-core.test.mjs",
+      "bytes": 8413,
+      "sha256": "fa67c47c836f2622ffee4544e0a86abc7c5222fac5bfc81077ec6a6e216fa649",
+      "blob": "c8f59a826032166a7e7c685678d4662d54ea660a"
+    },
+    {
+      "path": "web/src/lib/research-historical-cash-core.ts",
+      "bytes": 11245,
+      "sha256": "157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790",
+      "blob": "37aa911d5289faabf9a604d0768fe821a43b6487"
+    }
+  ]
+}

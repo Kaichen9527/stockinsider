@@ -1,0 +1,9 @@
+{
+  "reviewedPriorSource": "b89e3dde9d885c92041c5164313b36be30258746",
+  "source": "b7796da8a92b99284b133a7a622e490a23bad11b",
+  "ordinaryPathGap": "Original source-led product paths did not include new standalone cash core; identified before PR, no absent CI called PASS.",
+  "followup": "Four finite ordinary path entries and two handoff lines, no core/test/fixture/action/jobs/commands changes; fresh independent followup pending.",
+  "reviewerProbeRed": "Reviewer positive-overflow construction initially evaluated exactly MAX_SAFE_INTEGER, correctly accepted; corrected actual overflow separately passed. Original report retains error.",
+  "rootGuardHarnessRed": "First guard manifest verifier assumed every manifest was a list; source-manifest is a dict with files. AssertionError before completion preserved in report; corrected descriptor-aware verification passed115raw/123source/115unchanged. No product change.",
+  "patchToolRed": "First two-file apply_patch was atomically rejected because handoff context text differed; git diff confirmed no partial changes. Reapplied exact current context."
+}

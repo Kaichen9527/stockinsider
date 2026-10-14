@@ -1,0 +1,531 @@
+﻿2026-10-14T05:27:24.9434244Z Current runner version: '2.337.0'
+2026-10-14T05:27:24.9452469Z ##[group]Runner Image Provisioner
+2026-10-14T05:27:24.9453010Z Hosted Compute Agent
+2026-10-14T05:27:24.9453427Z Version: 20261002.596
+2026-10-14T05:27:24.9453806Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-14T05:27:24.9454229Z Build Date: 2026-10-02T22:28:27Z
+2026-10-14T05:27:24.9454695Z Worker ID: {5fb634cb-5e63-49ee-b4c2-b638d1a8fda0}
+2026-10-14T05:27:24.9455269Z Region: centralus
+2026-10-14T05:27:24.9455588Z Cloud: Azure
+2026-10-14T05:27:24.9455956Z ##[endgroup]
+2026-10-14T05:27:24.9456748Z ##[group]Operating System
+2026-10-14T05:27:24.9457166Z Ubuntu
+2026-10-14T05:27:24.9457490Z 24.04.5
+2026-10-14T05:27:24.9457800Z LTS
+2026-10-14T05:27:24.9458164Z ##[endgroup]
+2026-10-14T05:27:24.9458501Z ##[group]Runner Image
+2026-10-14T05:27:24.9458930Z Image: ubuntu-24.04
+2026-10-14T05:27:24.9459292Z Version: 20261004.327.1
+2026-10-14T05:27:24.9460104Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-14T05:27:24.9460998Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-14T05:27:24.9461570Z ##[endgroup]
+2026-10-14T05:27:24.9462216Z ##[group]GITHUB_TOKEN Permissions
+2026-10-14T05:27:24.9463475Z Contents: read
+2026-10-14T05:27:24.9463823Z Metadata: read
+2026-10-14T05:27:24.9464182Z ##[endgroup]
+2026-10-14T05:27:24.9465710Z Secret source: Actions
+2026-10-14T05:27:24.9466267Z Cache mode: write
+2026-10-14T05:27:24.9466736Z Prepare workflow directory
+2026-10-14T05:27:24.9678276Z Prepare all required actions
+2026-10-14T05:27:24.9709759Z Getting action download info
+2026-10-14T05:27:25.2052842Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-14T05:27:25.2766612Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-14T05:27:25.4413120Z Complete job name: historical-cash-arithmetic-quality
+2026-10-14T05:27:25.4890608Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-14T05:27:25.4891136Z with:
+2026-10-14T05:27:25.4891387Z   persist-credentials: false
+2026-10-14T05:27:25.4891684Z   repository: Kaichen9527/stockinsider
+2026-10-14T05:27:25.4893718Z   token: ***
+2026-10-14T05:27:25.4893952Z   ssh-strict: true
+2026-10-14T05:27:25.4894192Z   ssh-user: git
+2026-10-14T05:27:25.4894426Z   clean: true
+2026-10-14T05:27:25.4894675Z   sparse-checkout-cone-mode: true
+2026-10-14T05:27:25.4895148Z   fetch-depth: 1
+2026-10-14T05:27:25.4895390Z   fetch-tags: false
+2026-10-14T05:27:25.4895636Z   show-progress: true
+2026-10-14T05:27:25.4895883Z   lfs: false
+2026-10-14T05:27:25.4896112Z   submodules: false
+2026-10-14T05:27:25.4896365Z   set-safe-directory: true
+2026-10-14T05:27:25.4896645Z   allow-unsafe-pr-checkout: false
+2026-10-14T05:27:25.4897093Z ##[endgroup]
+2026-10-14T05:27:25.5587510Z Syncing repository: Kaichen9527/stockinsider
+2026-10-14T05:27:25.5589434Z ##[group]Getting Git version info
+2026-10-14T05:27:25.5590060Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T05:27:25.5590996Z [command]/usr/bin/git version
+2026-10-14T05:27:25.5636342Z git version 2.55.0
+2026-10-14T05:27:25.5651962Z ##[endgroup]
+2026-10-14T05:27:25.5661954Z Temporarily overriding HOME='/home/runner/work/_temp/a1b0225c-a044-46ad-b259-ddeaa0e31a76' before making global git config changes
+2026-10-14T05:27:25.5676015Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T05:27:25.5677116Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T05:27:25.5716799Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T05:27:25.5724137Z ##[group]Initializing the repository
+2026-10-14T05:27:25.5729679Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+2026-10-14T05:27:25.5822710Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-14T05:27:25.5824005Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-14T05:27:25.5824981Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-14T05:27:25.5826006Z hint: call:
+2026-10-14T05:27:25.5832760Z hint:
+2026-10-14T05:27:25.5833916Z hint: 	git config --global init.defaultBranch <name>
+2026-10-14T05:27:25.5834308Z hint:
+2026-10-14T05:27:25.5834630Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-14T05:27:25.5835421Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-14T05:27:25.5836035Z hint:
+2026-10-14T05:27:25.5836365Z hint: 	git branch -m <name>
+2026-10-14T05:27:25.5836751Z hint:
+2026-10-14T05:27:25.5837255Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-14T05:27:25.5838118Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+2026-10-14T05:27:25.5839668Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+2026-10-14T05:27:25.5889351Z ##[endgroup]
+2026-10-14T05:27:25.5890369Z ##[group]Disabling automatic garbage collection
+2026-10-14T05:27:25.5892852Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-14T05:27:25.5921179Z ##[endgroup]
+2026-10-14T05:27:25.5921764Z ##[group]Setting up auth
+2026-10-14T05:27:25.5926932Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T05:27:25.5958979Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T05:27:25.6257848Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T05:27:25.6286153Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T05:27:25.6453302Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T05:27:25.6481814Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T05:27:25.6650606Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-14T05:27:25.6684631Z ##[endgroup]
+2026-10-14T05:27:25.6685484Z ##[group]Fetching the repository
+2026-10-14T05:27:25.6691910Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c0e5468ffe45f29c8d7cb95ec97212f3448bd2f8:refs/remotes/pull/379/merge
+2026-10-14T05:27:26.5819999Z From https://github.com/Kaichen9527/stockinsider
+2026-10-14T05:27:26.5821433Z  * [new ref]         c0e5468ffe45f29c8d7cb95ec97212f3448bd2f8 -> pull/379/merge
+2026-10-14T05:27:26.5824148Z ##[endgroup]
+2026-10-14T05:27:26.5825345Z ##[group]Determining the checkout info
+2026-10-14T05:27:26.5826494Z ##[endgroup]
+2026-10-14T05:27:26.5828714Z [command]/usr/bin/git sparse-checkout disable
+2026-10-14T05:27:26.5876971Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-14T05:27:26.5909675Z ##[group]Checking out the ref
+2026-10-14T05:27:26.5911680Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/379/merge
+2026-10-14T05:27:26.7140061Z Note: switching to 'refs/remotes/pull/379/merge'.
+2026-10-14T05:27:26.7140962Z 
+2026-10-14T05:27:26.7141678Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-14T05:27:26.7143173Z changes and commit them, and you can discard any commits you make in this
+2026-10-14T05:27:26.7144727Z state without impacting any branches by switching back to a branch.
+2026-10-14T05:27:26.7145770Z 
+2026-10-14T05:27:26.7146338Z If you want to create a new branch to retain commits you create, you may
+2026-10-14T05:27:26.7148167Z do so (now or later) by using -c with the switch command. Example:
+2026-10-14T05:27:26.7148979Z 
+2026-10-14T05:27:26.7149353Z   git switch -c <new-branch-name>
+2026-10-14T05:27:26.7149978Z 
+2026-10-14T05:27:26.7150449Z Or undo this operation with:
+2026-10-14T05:27:26.7151110Z 
+2026-10-14T05:27:26.7151510Z   git switch -
+2026-10-14T05:27:26.7152029Z 
+2026-10-14T05:27:26.7152899Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-14T05:27:26.7154061Z 
+2026-10-14T05:27:26.7155555Z HEAD is now at c0e5468 Merge b7796da8a92b99284b133a7a622e490a23bad11b into 69b9734c5766b2e196e8133d63df1f1148959046
+2026-10-14T05:27:26.7159779Z ##[endgroup]
+2026-10-14T05:27:26.7196055Z [command]/usr/bin/git log -1 --format=%H
+2026-10-14T05:27:26.7221235Z c0e5468ffe45f29c8d7cb95ec97212f3448bd2f8
+2026-10-14T05:27:26.7229991Z ##[group]Removing auth
+2026-10-14T05:27:26.7232615Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T05:27:26.7262155Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T05:27:26.7445314Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T05:27:26.7470651Z http.https://github.com/.extraheader
+2026-10-14T05:27:26.7476551Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-14T05:27:26.7508284Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T05:27:26.7685164Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T05:27:26.7712015Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T05:27:26.7887684Z ##[endgroup]
+2026-10-14T05:27:26.8147216Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-14T05:27:26.8148255Z with:
+2026-10-14T05:27:26.8148796Z   node-version: 22.14.0
+2026-10-14T05:27:26.8149409Z   always-auth: false
+2026-10-14T05:27:26.8150011Z   check-latest: false
+2026-10-14T05:27:26.8155781Z   token: ***
+2026-10-14T05:27:26.8156322Z ##[endgroup]
+2026-10-14T05:27:26.9152989Z Attempting to download 22.14.0...
+2026-10-14T05:27:26.9226279Z (node:2165) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T05:27:26.9228031Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T05:27:27.6437382Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+2026-10-14T05:27:28.1962390Z Extracting ...
+2026-10-14T05:27:28.2049325Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/ca15ebca-f813-412d-bb10-bc2f539e6605 -f /home/runner/work/_temp/626b568a-513c-4121-9bf3-13e1b1bfd0da
+2026-10-14T05:27:29.0478809Z Adding to the cache ...
+2026-10-14T05:27:30.6109321Z ##[group]Environment details
+2026-10-14T05:27:30.7819318Z node: v22.14.0
+2026-10-14T05:27:30.7820158Z npm: 10.9.2
+2026-10-14T05:27:30.7820325Z yarn: 1.22.22
+2026-10-14T05:27:30.7820760Z ##[endgroup]
+2026-10-14T05:27:30.7991096Z ##[group]Run test "$(node --version)" = v22.14.0
+2026-10-14T05:27:30.7991371Z [36;1mtest "$(node --version)" = v22.14.0[0m
+2026-10-14T05:27:30.7991711Z [36;1mnode --experimental-strip-types --test --test-concurrency=1 scripts/research-historical-cash-core.test.mjs[0m
+2026-10-14T05:27:30.8224272Z shell: /usr/bin/bash -e {0}
+2026-10-14T05:27:30.8224510Z ##[endgroup]
+2026-10-14T05:27:30.8605372Z TAP version 13
+2026-10-14T05:27:30.9136644Z # (node:2207) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-14T05:27:30.9140016Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-14T05:27:30.9154801Z # (node:2207) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/research-historical-cash-core.ts is not specified and it doesn't parse as CommonJS.
+2026-10-14T05:27:30.9185883Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-14T05:27:30.9186791Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-14T05:27:30.9576960Z # Subtest: 2409 retained two-period cash and capital independently match Python Decimal
+2026-10-14T05:27:30.9605065Z ok 1 - 2409 retained two-period cash and capital independently match Python Decimal
+2026-10-14T05:27:30.9615953Z   ---
+2026-10-14T05:27:30.9617588Z   duration_ms: 1.548836
+2026-10-14T05:27:30.9622162Z   ...
+2026-10-14T05:27:30.9624500Z # Subtest: 2383 retained two-period cash and capital independently match Python Decimal
+2026-10-14T05:27:30.9625670Z ok 2 - 2383 retained two-period cash and capital independently match Python Decimal
+2026-10-14T05:27:30.9626311Z   ---
+2026-10-14T05:27:30.9626596Z   duration_ms: 0.976465
+2026-10-14T05:27:30.9627018Z   ...
+2026-10-14T05:27:30.9627758Z # Subtest: fixed company, period, unit, grain and exact operand inventory reject substituted scope
+2026-10-14T05:27:30.9628795Z ok 3 - fixed company, period, unit, grain and exact operand inventory reject substituted scope
+2026-10-14T05:27:30.9629266Z   ---
+2026-10-14T05:27:30.9629453Z   duration_ms: 0.959911
+2026-10-14T05:27:30.9629701Z   ...
+2026-10-14T05:27:30.9630144Z # Subtest: every fixed operand refuses fractional, unsafe or nonfinite numeric values
+2026-10-14T05:27:30.9630869Z ok 4 - every fixed operand refuses fractional, unsafe or nonfinite numeric values
+2026-10-14T05:27:30.9631278Z   ---
+2026-10-14T05:27:30.9631487Z   duration_ms: 22.546161
+2026-10-14T05:27:30.9631744Z   ...
+2026-10-14T05:27:30.9632465Z # Subtest: all actual AUO noncash and working-capital components are reconciled, not only totals
+2026-10-14T05:27:30.9633858Z ok 5 - all actual AUO noncash and working-capital components are reconciled, not only totals
+2026-10-14T05:27:30.9634455Z   ---
+2026-10-14T05:27:30.9634691Z   duration_ms: 1.568385
+2026-10-14T05:27:30.9635073Z   ...
+2026-10-14T05:27:30.9635717Z # Subtest: EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+2026-10-14T05:27:30.9636607Z ok 6 - EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+2026-10-14T05:27:30.9637152Z   ---
+2026-10-14T05:27:30.9637344Z   duration_ms: 0.540735
+2026-10-14T05:27:30.9637565Z   ...
+2026-10-14T05:27:30.9638036Z # Subtest: all applicable cash and group-profit bridges reject inconsistent reported operands
+2026-10-14T05:27:30.9638812Z ok 7 - all applicable cash and group-profit bridges reject inconsistent reported operands
+2026-10-14T05:27:30.9639237Z   ---
+2026-10-14T05:27:30.9639485Z   duration_ms: 1.61875
+2026-10-14T05:27:30.9639712Z   ...
+2026-10-14T05:27:30.9640136Z # Subtest: cash acquisition and debt repayment signs reject rather than flipping expenses
+2026-10-14T05:27:30.9640769Z ok 8 - cash acquisition and debt repayment signs reject rather than flipping expenses
+2026-10-14T05:27:30.9641148Z   ---
+2026-10-14T05:27:30.9641327Z   duration_ms: 0.584809
+2026-10-14T05:27:30.9642059Z   ...
+2026-10-14T05:27:30.9642525Z # Subtest: disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+2026-10-14T05:27:30.9643196Z ok 9 - disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+2026-10-14T05:27:30.9643584Z   ---
+2026-10-14T05:27:30.9643762Z   duration_ms: 0.713079
+2026-10-14T05:27:30.9643962Z   ...
+2026-10-14T05:27:30.9644455Z # Subtest: signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+2026-10-14T05:27:30.9645378Z ok 10 - signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+2026-10-14T05:27:30.9646103Z   ---
+2026-10-14T05:27:30.9646288Z   duration_ms: 0.332159
+2026-10-14T05:27:30.9646504Z   ...
+2026-10-14T05:27:30.9647036Z # Subtest: June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+2026-10-14T05:27:30.9647909Z ok 11 - June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+2026-10-14T05:27:30.9648318Z   ---
+2026-10-14T05:27:30.9648441Z   duration_ms: 0.631228
+2026-10-14T05:27:30.9648567Z   ...
+2026-10-14T05:27:30.9648817Z # Subtest: safe-integer sums cannot silently overflow even when each operand is safe
+2026-10-14T05:27:30.9649187Z ok 12 - safe-integer sums cannot silently overflow even when each operand is safe
+2026-10-14T05:27:30.9649398Z   ---
+2026-10-14T05:27:30.9649509Z   duration_ms: 0.192774
+2026-10-14T05:27:30.9649631Z   ...
+2026-10-14T05:27:30.9649919Z # Subtest: accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+2026-10-14T05:27:30.9650349Z ok 13 - accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+2026-10-14T05:27:30.9650602Z   ---
+2026-10-14T05:27:30.9650711Z   duration_ms: 0.290887
+2026-10-14T05:27:30.9650834Z   ...
+2026-10-14T05:27:30.9651079Z # Subtest: result is deeply frozen; calculation does not mutate caller operands
+2026-10-14T05:27:30.9655416Z ok 14 - result is deeply frozen; calculation does not mutate caller operands
+2026-10-14T05:27:30.9655787Z   ---
+2026-10-14T05:27:30.9655968Z   duration_ms: 0.373429
+2026-10-14T05:27:30.9656198Z   ...
+2026-10-14T05:27:30.9697874Z 1..14
+2026-10-14T05:27:30.9698086Z # tests 14
+2026-10-14T05:27:30.9698271Z # suites 0
+2026-10-14T05:27:30.9698448Z # pass 14
+2026-10-14T05:27:30.9698623Z # fail 0
+2026-10-14T05:27:30.9698794Z # cancelled 0
+2026-10-14T05:27:30.9698980Z # skipped 0
+2026-10-14T05:27:30.9699151Z # todo 0
+2026-10-14T05:27:30.9699399Z # duration_ms 117.317982
+2026-10-14T05:27:30.9816875Z Post job cleanup.
+2026-10-14T05:27:31.0624127Z (node:2219) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T05:27:31.0624644Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T05:27:31.0804507Z Post job cleanup.
+2026-10-14T05:27:31.1395548Z [command]/usr/bin/git version
+2026-10-14T05:27:31.1427208Z git version 2.55.0
+2026-10-14T05:27:31.1450300Z Temporarily overriding HOME='/home/runner/work/_temp/a5d9e3d3-55c0-4441-9814-4c7cbda42605' before making global git config changes
+2026-10-14T05:27:31.1451143Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T05:27:31.1453215Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T05:27:31.1486165Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T05:27:31.1513746Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T05:27:31.1721204Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T05:27:31.1755574Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T05:27:31.1980880Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T05:27:31.2018211Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T05:27:31.2327641Z Cleaning up orphan processes
+2026-10-14T05:27:31.2533674Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
+2026-10-14T05:27:22.7180000Z Evaluating historical-cash-arithmetic-quality.if
+2026-10-14T05:27:22.7180000Z Evaluating: success()
+2026-10-14T05:27:22.7180000Z Result: true
+2026-10-14T05:27:22.7800000Z Requested labels: ubuntu-24.04
+2026-10-14T05:27:22.7800000Z Job defined at: Kaichen9527/stockinsider/.github/workflows/research-historical-cash-quality.yml@refs/pull/379/merge
+2026-10-14T05:27:22.7800000Z Waiting for a runner to pick up this job...
+2026-10-14T05:27:22.8860000Z Job is waiting for a hosted runner to come online.
+2026-10-14T05:27:22.8860000Z Job is about to start running on the hosted runner: GitHub Actions 1000010054
+﻿2026-10-14T05:27:24.9433670Z Current runner version: '2.337.0'
+2026-10-14T05:27:24.9452447Z ##[group]Runner Image Provisioner
+2026-10-14T05:27:24.9453008Z Hosted Compute Agent
+2026-10-14T05:27:24.9453346Z Version: 20261002.596
+2026-10-14T05:27:24.9453804Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-14T05:27:24.9454227Z Build Date: 2026-10-02T22:28:27Z
+2026-10-14T05:27:24.9454693Z Worker ID: {5fb634cb-5e63-49ee-b4c2-b638d1a8fda0}
+2026-10-14T05:27:24.9455267Z Region: centralus
+2026-10-14T05:27:24.9455586Z Cloud: Azure
+2026-10-14T05:27:24.9455954Z ##[endgroup]
+2026-10-14T05:27:24.9456745Z ##[group]Operating System
+2026-10-14T05:27:24.9457162Z Ubuntu
+2026-10-14T05:27:24.9457488Z 24.04.5
+2026-10-14T05:27:24.9457798Z LTS
+2026-10-14T05:27:24.9458162Z ##[endgroup]
+2026-10-14T05:27:24.9458498Z ##[group]Runner Image
+2026-10-14T05:27:24.9458926Z Image: ubuntu-24.04
+2026-10-14T05:27:24.9459290Z Version: 20261004.327.1
+2026-10-14T05:27:24.9459930Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-14T05:27:24.9460996Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-14T05:27:24.9461568Z ##[endgroup]
+2026-10-14T05:27:24.9462214Z ##[group]GITHUB_TOKEN Permissions
+2026-10-14T05:27:24.9463471Z Contents: read
+2026-10-14T05:27:24.9463821Z Metadata: read
+2026-10-14T05:27:24.9464181Z ##[endgroup]
+2026-10-14T05:27:24.9465705Z Secret source: Actions
+2026-10-14T05:27:24.9466265Z Cache mode: write
+2026-10-14T05:27:24.9466735Z Prepare workflow directory
+2026-10-14T05:27:24.9678241Z Prepare all required actions
+2026-10-14T05:27:24.9709730Z Getting action download info
+2026-10-14T05:27:25.2052806Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-14T05:27:25.2766581Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-14T05:27:25.4413072Z Complete job name: historical-cash-arithmetic-quality
+
+﻿2026-10-14T05:27:25.4890576Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-14T05:27:25.4891132Z with:
+2026-10-14T05:27:25.4891385Z   persist-credentials: false
+2026-10-14T05:27:25.4891682Z   repository: Kaichen9527/stockinsider
+2026-10-14T05:27:25.4893716Z   token: ***
+2026-10-14T05:27:25.4893950Z   ssh-strict: true
+2026-10-14T05:27:25.4894191Z   ssh-user: git
+2026-10-14T05:27:25.4894424Z   clean: true
+2026-10-14T05:27:25.4894673Z   sparse-checkout-cone-mode: true
+2026-10-14T05:27:25.4895146Z   fetch-depth: 1
+2026-10-14T05:27:25.4895387Z   fetch-tags: false
+2026-10-14T05:27:25.4895633Z   show-progress: true
+2026-10-14T05:27:25.4895882Z   lfs: false
+2026-10-14T05:27:25.4896110Z   submodules: false
+2026-10-14T05:27:25.4896363Z   set-safe-directory: true
+2026-10-14T05:27:25.4896644Z   allow-unsafe-pr-checkout: false
+2026-10-14T05:27:25.4897091Z ##[endgroup]
+2026-10-14T05:27:25.5587447Z Syncing repository: Kaichen9527/stockinsider
+2026-10-14T05:27:25.5589359Z ##[group]Getting Git version info
+2026-10-14T05:27:25.5590057Z Working directory is '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T05:27:25.5590993Z [command]/usr/bin/git version
+2026-10-14T05:27:25.5636330Z git version 2.55.0
+2026-10-14T05:27:25.5651949Z ##[endgroup]
+2026-10-14T05:27:25.5661937Z Temporarily overriding HOME='/home/runner/work/_temp/a1b0225c-a044-46ad-b259-ddeaa0e31a76' before making global git config changes
+2026-10-14T05:27:25.5675988Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T05:27:25.5677111Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T05:27:25.5716778Z Deleting the contents of '/home/runner/work/stockinsider/stockinsider'
+2026-10-14T05:27:25.5724129Z ##[group]Initializing the repository
+2026-10-14T05:27:25.5729670Z [command]/usr/bin/git init /home/runner/work/stockinsider/stockinsider
+2026-10-14T05:27:25.5822613Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-14T05:27:25.5823999Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-14T05:27:25.5824978Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-14T05:27:25.5826003Z hint: call:
+2026-10-14T05:27:25.5832754Z hint:
+2026-10-14T05:27:25.5833895Z hint: 	git config --global init.defaultBranch <name>
+2026-10-14T05:27:25.5834306Z hint:
+2026-10-14T05:27:25.5834627Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-14T05:27:25.5835417Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-14T05:27:25.5836032Z hint:
+2026-10-14T05:27:25.5836362Z hint: 	git branch -m <name>
+2026-10-14T05:27:25.5836748Z hint:
+2026-10-14T05:27:25.5837252Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-14T05:27:25.5838115Z Initialized empty Git repository in /home/runner/work/stockinsider/stockinsider/.git/
+2026-10-14T05:27:25.5839654Z [command]/usr/bin/git remote add origin https://github.com/Kaichen9527/stockinsider
+2026-10-14T05:27:25.5889335Z ##[endgroup]
+2026-10-14T05:27:25.5890347Z ##[group]Disabling automatic garbage collection
+2026-10-14T05:27:25.5892843Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-14T05:27:25.5921168Z ##[endgroup]
+2026-10-14T05:27:25.5921761Z ##[group]Setting up auth
+2026-10-14T05:27:25.5926911Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T05:27:25.5958940Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T05:27:25.6257729Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T05:27:25.6285687Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T05:27:25.6453233Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T05:27:25.6481763Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T05:27:25.6650531Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-14T05:27:25.6684584Z ##[endgroup]
+2026-10-14T05:27:25.6685475Z ##[group]Fetching the repository
+2026-10-14T05:27:25.6691883Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c0e5468ffe45f29c8d7cb95ec97212f3448bd2f8:refs/remotes/pull/379/merge
+2026-10-14T05:27:26.5819850Z From https://github.com/Kaichen9527/stockinsider
+2026-10-14T05:27:26.5821424Z  * [new ref]         c0e5468ffe45f29c8d7cb95ec97212f3448bd2f8 -> pull/379/merge
+2026-10-14T05:27:26.5824145Z ##[endgroup]
+2026-10-14T05:27:26.5825327Z ##[group]Determining the checkout info
+2026-10-14T05:27:26.5826483Z ##[endgroup]
+2026-10-14T05:27:26.5828709Z [command]/usr/bin/git sparse-checkout disable
+2026-10-14T05:27:26.5876931Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-14T05:27:26.5909650Z ##[group]Checking out the ref
+2026-10-14T05:27:26.5911674Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/379/merge
+2026-10-14T05:27:26.7139928Z Note: switching to 'refs/remotes/pull/379/merge'.
+2026-10-14T05:27:26.7140956Z 
+2026-10-14T05:27:26.7141669Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-14T05:27:26.7143148Z changes and commit them, and you can discard any commits you make in this
+2026-10-14T05:27:26.7144709Z state without impacting any branches by switching back to a branch.
+2026-10-14T05:27:26.7145747Z 
+2026-10-14T05:27:26.7146335Z If you want to create a new branch to retain commits you create, you may
+2026-10-14T05:27:26.7148135Z do so (now or later) by using -c with the switch command. Example:
+2026-10-14T05:27:26.7148973Z 
+2026-10-14T05:27:26.7149342Z   git switch -c <new-branch-name>
+2026-10-14T05:27:26.7149974Z 
+2026-10-14T05:27:26.7150443Z Or undo this operation with:
+2026-10-14T05:27:26.7151107Z 
+2026-10-14T05:27:26.7151507Z   git switch -
+2026-10-14T05:27:26.7152025Z 
+2026-10-14T05:27:26.7152892Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-14T05:27:26.7154058Z 
+2026-10-14T05:27:26.7155550Z HEAD is now at c0e5468 Merge b7796da8a92b99284b133a7a622e490a23bad11b into 69b9734c5766b2e196e8133d63df1f1148959046
+2026-10-14T05:27:26.7159765Z ##[endgroup]
+2026-10-14T05:27:26.7196028Z [command]/usr/bin/git log -1 --format=%H
+2026-10-14T05:27:26.7221206Z c0e5468ffe45f29c8d7cb95ec97212f3448bd2f8
+2026-10-14T05:27:26.7229970Z ##[group]Removing auth
+2026-10-14T05:27:26.7232598Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T05:27:26.7262063Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T05:27:26.7445223Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T05:27:26.7470623Z http.https://github.com/.extraheader
+2026-10-14T05:27:26.7476536Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-14T05:27:26.7508260Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T05:27:26.7685083Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T05:27:26.7711972Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-14T05:27:26.7887607Z ##[endgroup]
+
+﻿2026-10-14T05:27:26.8147179Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-14T05:27:26.8148252Z with:
+2026-10-14T05:27:26.8148792Z   node-version: 22.14.0
+2026-10-14T05:27:26.8149405Z   always-auth: false
+2026-10-14T05:27:26.8150008Z   check-latest: false
+2026-10-14T05:27:26.8155776Z   token: ***
+2026-10-14T05:27:26.8156320Z ##[endgroup]
+2026-10-14T05:27:26.9152870Z Attempting to download 22.14.0...
+2026-10-14T05:27:26.9226243Z (node:2165) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T05:27:26.9228027Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-14T05:27:27.6437312Z Acquiring 22.14.0 - x64 from https://github.com/actions/node-versions/releases/download/22.14.0-13265982013/node-22.14.0-linux-x64.tar.gz
+2026-10-14T05:27:28.1962304Z Extracting ...
+2026-10-14T05:27:28.2049122Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/ca15ebca-f813-412d-bb10-bc2f539e6605 -f /home/runner/work/_temp/626b568a-513c-4121-9bf3-13e1b1bfd0da
+2026-10-14T05:27:29.0478727Z Adding to the cache ...
+2026-10-14T05:27:30.6109221Z ##[group]Environment details
+2026-10-14T05:27:30.7819230Z node: v22.14.0
+2026-10-14T05:27:30.7820148Z npm: 10.9.2
+2026-10-14T05:27:30.7820320Z yarn: 1.22.22
+2026-10-14T05:27:30.7820756Z ##[endgroup]
+
+﻿2026-10-14T05:27:30.7991070Z ##[group]Run test "$(node --version)" = v22.14.0
+2026-10-14T05:27:30.7991367Z [36;1mtest "$(node --version)" = v22.14.0[0m
+2026-10-14T05:27:30.7991707Z [36;1mnode --experimental-strip-types --test --test-concurrency=1 scripts/research-historical-cash-core.test.mjs[0m
+2026-10-14T05:27:30.8224215Z shell: /usr/bin/bash -e {0}
+2026-10-14T05:27:30.8224507Z ##[endgroup]
+2026-10-14T05:27:30.8605277Z TAP version 13
+2026-10-14T05:27:30.9136564Z # (node:2207) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+2026-10-14T05:27:30.9139993Z # (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-14T05:27:30.9154780Z # (node:2207) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/runner/work/stockinsider/stockinsider/web/src/lib/research-historical-cash-core.ts is not specified and it doesn't parse as CommonJS.
+2026-10-14T05:27:30.9185722Z # Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-10-14T05:27:30.9186786Z # To eliminate this warning, add "type": "module" to /home/runner/work/stockinsider/stockinsider/web/package.json.
+2026-10-14T05:27:30.9576878Z # Subtest: 2409 retained two-period cash and capital independently match Python Decimal
+2026-10-14T05:27:30.9605004Z ok 1 - 2409 retained two-period cash and capital independently match Python Decimal
+2026-10-14T05:27:30.9615909Z   ---
+2026-10-14T05:27:30.9617569Z   duration_ms: 1.548836
+2026-10-14T05:27:30.9621864Z   ...
+2026-10-14T05:27:30.9624490Z # Subtest: 2383 retained two-period cash and capital independently match Python Decimal
+2026-10-14T05:27:30.9625665Z ok 2 - 2383 retained two-period cash and capital independently match Python Decimal
+2026-10-14T05:27:30.9626295Z   ---
+2026-10-14T05:27:30.9626591Z   duration_ms: 0.976465
+2026-10-14T05:27:30.9627014Z   ...
+2026-10-14T05:27:30.9627750Z # Subtest: fixed company, period, unit, grain and exact operand inventory reject substituted scope
+2026-10-14T05:27:30.9628745Z ok 3 - fixed company, period, unit, grain and exact operand inventory reject substituted scope
+2026-10-14T05:27:30.9629262Z   ---
+2026-10-14T05:27:30.9629450Z   duration_ms: 0.959911
+2026-10-14T05:27:30.9629698Z   ...
+2026-10-14T05:27:30.9630141Z # Subtest: every fixed operand refuses fractional, unsafe or nonfinite numeric values
+2026-10-14T05:27:30.9630861Z ok 4 - every fixed operand refuses fractional, unsafe or nonfinite numeric values
+2026-10-14T05:27:30.9631274Z   ---
+2026-10-14T05:27:30.9631483Z   duration_ms: 22.546161
+2026-10-14T05:27:30.9631740Z   ...
+2026-10-14T05:27:30.9632460Z # Subtest: all actual AUO noncash and working-capital components are reconciled, not only totals
+2026-10-14T05:27:30.9633853Z ok 5 - all actual AUO noncash and working-capital components are reconciled, not only totals
+2026-10-14T05:27:30.9634452Z   ---
+2026-10-14T05:27:30.9634687Z   duration_ms: 1.568385
+2026-10-14T05:27:30.9635069Z   ...
+2026-10-14T05:27:30.9635703Z # Subtest: EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+2026-10-14T05:27:30.9636603Z ok 6 - EMC reported asset/liability and adjustment subtotals reconcile without inventing component coverage
+2026-10-14T05:27:30.9637149Z   ---
+2026-10-14T05:27:30.9637341Z   duration_ms: 0.540735
+2026-10-14T05:27:30.9637563Z   ...
+2026-10-14T05:27:30.9638033Z # Subtest: all applicable cash and group-profit bridges reject inconsistent reported operands
+2026-10-14T05:27:30.9638808Z ok 7 - all applicable cash and group-profit bridges reject inconsistent reported operands
+2026-10-14T05:27:30.9639233Z   ---
+2026-10-14T05:27:30.9639481Z   duration_ms: 1.61875
+2026-10-14T05:27:30.9639708Z   ...
+2026-10-14T05:27:30.9640133Z # Subtest: cash acquisition and debt repayment signs reject rather than flipping expenses
+2026-10-14T05:27:30.9640766Z ok 8 - cash acquisition and debt repayment signs reject rather than flipping expenses
+2026-10-14T05:27:30.9641145Z   ---
+2026-10-14T05:27:30.9641325Z   duration_ms: 0.584809
+2026-10-14T05:27:30.9641528Z   ...
+2026-10-14T05:27:30.9642522Z # Subtest: disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+2026-10-14T05:27:30.9643192Z ok 9 - disposal proceeds do not fund the cash-acquisition proxy and ROU stays separate
+2026-10-14T05:27:30.9643582Z   ---
+2026-10-14T05:27:30.9643759Z   duration_ms: 0.713079
+2026-10-14T05:27:30.9643959Z   ...
+2026-10-14T05:27:30.9644451Z # Subtest: signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+2026-10-14T05:27:30.9645375Z ok 10 - signed negative NCI is retained, and a zero group-profit denominator is explicitly unavailable
+2026-10-14T05:27:30.9646100Z   ---
+2026-10-14T05:27:30.9646285Z   duration_ms: 0.332159
+2026-10-14T05:27:30.9646501Z   ...
+2026-10-14T05:27:30.9647029Z # Subtest: June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+2026-10-14T05:27:30.9647897Z ok 11 - June capital uses issued shares, exact capital/par, group equity and unknown treasury share count
+2026-10-14T05:27:30.9648315Z   ---
+2026-10-14T05:27:30.9648438Z   duration_ms: 0.631228
+2026-10-14T05:27:30.9648565Z   ...
+2026-10-14T05:27:30.9648814Z # Subtest: safe-integer sums cannot silently overflow even when each operand is safe
+2026-10-14T05:27:30.9649184Z ok 12 - safe-integer sums cannot silently overflow even when each operand is safe
+2026-10-14T05:27:30.9649396Z   ---
+2026-10-14T05:27:30.9649507Z   duration_ms: 0.192774
+2026-10-14T05:27:30.9649629Z   ...
+2026-10-14T05:27:30.9649917Z # Subtest: accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+2026-10-14T05:27:30.9650346Z ok 13 - accessors, exotic objects, symbols and tuple extensions are refused without invoking getters
+2026-10-14T05:27:30.9650600Z   ---
+2026-10-14T05:27:30.9650709Z   duration_ms: 0.290887
+2026-10-14T05:27:30.9650832Z   ...
+2026-10-14T05:27:30.9651077Z # Subtest: result is deeply frozen; calculation does not mutate caller operands
+2026-10-14T05:27:30.9655393Z ok 14 - result is deeply frozen; calculation does not mutate caller operands
+2026-10-14T05:27:30.9655784Z   ---
+2026-10-14T05:27:30.9655965Z   duration_ms: 0.373429
+2026-10-14T05:27:30.9656195Z   ...
+2026-10-14T05:27:30.9697856Z 1..14
+2026-10-14T05:27:30.9698083Z # tests 14
+2026-10-14T05:27:30.9698268Z # suites 0
+2026-10-14T05:27:30.9698445Z # pass 14
+2026-10-14T05:27:30.9698621Z # fail 0
+2026-10-14T05:27:30.9698790Z # cancelled 0
+2026-10-14T05:27:30.9698977Z # skipped 0
+2026-10-14T05:27:30.9699149Z # todo 0
+2026-10-14T05:27:30.9699395Z # duration_ms 117.317982
+
+﻿2026-10-14T05:27:30.9816856Z Post job cleanup.
+2026-10-14T05:27:31.0624051Z (node:2219) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-14T05:27:31.0624641Z (Use `node --trace-deprecation ...` to show where the warning was created)
+
+﻿2026-10-14T05:27:31.0804486Z Post job cleanup.
+2026-10-14T05:27:31.1395475Z [command]/usr/bin/git version
+2026-10-14T05:27:31.1427183Z git version 2.55.0
+2026-10-14T05:27:31.1450284Z Temporarily overriding HOME='/home/runner/work/_temp/a5d9e3d3-55c0-4441-9814-4c7cbda42605' before making global git config changes
+2026-10-14T05:27:31.1451138Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-14T05:27:31.1453211Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/stockinsider/stockinsider
+2026-10-14T05:27:31.1486147Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-14T05:27:31.1513715Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-14T05:27:31.1721131Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-14T05:27:31.1754747Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-14T05:27:31.1980832Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-14T05:27:31.2018159Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+
+﻿2026-10-14T05:27:31.2327617Z Cleaning up orphan processes
+2026-10-14T05:27:31.2533644Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

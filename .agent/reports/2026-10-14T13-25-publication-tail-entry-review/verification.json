@@ -1,0 +1,32 @@
+{
+  "source": "0fe5d5a90ae95949eec1fb3dd9433359db466d88",
+  "evidence": "5aad27050b43d62ebe3929a9b9c2ee22c60e7fda",
+  "verifiedCounts": {
+    "raw-manifest.json": 115,
+    "source-manifest.json": 123,
+    "unchanged-original-inputs.json": 115
+  },
+  "captureVerification": {
+    "captureMatchesSealedBaseline": true,
+    "namespaceSha256": "fafc386489208b90dc22ad63c9ae57e89c55c419e9be9df99a1772f49304fa57",
+    "scopeCounts": {
+      "tables": 253,
+      "functions": 242,
+      "roles": 30,
+      "types": 120
+    }
+  },
+  "makerReceiptSha256": "e747f200a2acdd3091222def7da606064877bf976926b51ea52f7444f97a8b77",
+  "rootNativeRun": false,
+  "rootBuildRun": false,
+  "rootPure": {
+    "pass": 9,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "toolChunk": "dd6239",
+    "stdoutLocation": "original current chat tool output; no re-execution for capture"
+  },
+  "rootHarnessError": "First verifier treated source-manifest object as list; asserted before completion. Corrected files schema only, no source change.",
+  "nativePending": "Isolated fragments for prerequisites2..5 not each proven. Original task full fragment matrix still pending despite24 nativePASS."
+}
