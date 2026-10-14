@@ -1,0 +1,208 @@
+{
+  "scope": "local actualFS synthetic fixed inputs; original three SQL functions only in rolled-back transaction; not full install/prepare/seal/shared quota proof",
+  "startedAt": "2026-10-14T11:04:05.320Z",
+  "user": "agent",
+  "version": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n",
+  "cases": [
+    {
+      "symbol": "2409",
+      "case": "actualFS full normalized material/schema/PGjsonb/tagged byte/hash equality",
+      "pass": true,
+      "json_bytes": 181561,
+      "jsonb_text_bytes": 190608,
+      "tagged_bytes": 225105,
+      "tagged_sha256": "1a00343208033ba81ee142ad0eb8fcdbe9cde0f89fdd8844114e4c16ca229301",
+      "schemaSha256": "0553fbb9049626662d58a799a3671cd1b68159e4e7782889d2a6980a4c7335ef"
+    },
+    {
+      "symbol": "2409",
+      "case": "unknown",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_schema_keys"
+      }
+    },
+    {
+      "symbol": "2409",
+      "case": "flag",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_schema_constant"
+      }
+    },
+    {
+      "symbol": "2409",
+      "case": "futurecash",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_schema_constant"
+      }
+    },
+    {
+      "symbol": "2409",
+      "case": "quarter_length",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_schema_array"
+      }
+    },
+    {
+      "symbol": "2409",
+      "case": "basis",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_schema_constant"
+      }
+    },
+    {
+      "symbol": "2409",
+      "case": "clock",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_clock_binding"
+      }
+    },
+    {
+      "symbol": "2383",
+      "case": "actualFS full normalized material/schema/PGjsonb/tagged byte/hash equality",
+      "pass": true,
+      "json_bytes": 110105,
+      "jsonb_text_bytes": 115309,
+      "tagged_bytes": 134820,
+      "tagged_sha256": "05e1a3a4055b79c4a82daf8e3e55d49c5e2c248593e2f57830fa0b7a1aba9bc4",
+      "schemaSha256": "953260a5ac54eead4c6365507f410d08fd5aed8a9b40e635c24dbc142a76f706"
+    },
+    {
+      "symbol": "2383",
+      "case": "unknown",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_schema_keys"
+      }
+    },
+    {
+      "symbol": "2383",
+      "case": "flag",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_schema_constant"
+      }
+    },
+    {
+      "symbol": "2383",
+      "case": "futurecash",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_schema_constant"
+      }
+    },
+    {
+      "symbol": "2383",
+      "case": "quarter_length",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_schema_array"
+      }
+    },
+    {
+      "symbol": "2383",
+      "case": "basis",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_schema_constant"
+      }
+    },
+    {
+      "symbol": "2383",
+      "case": "clock",
+      "pass": true,
+      "expectedRejection": {
+        "code": "P0001",
+        "message": "complete_clock_binding"
+      }
+    }
+  ],
+  "commands": [
+    {
+      "command": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/postgres",
+      "args": [
+        "--version"
+      ],
+      "start": "2026-10-14T11:04:05.320Z",
+      "exit": 0,
+      "stdout": "postgres (PostgreSQL) 17.11 (Debian 17.11-0+deb13u1)\n"
+    },
+    {
+      "command": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/initdb",
+      "args": [
+        "-D",
+        "/tmp/v3pg-x4KWFw/data",
+        "-A",
+        "trust",
+        "--no-locale",
+        "-E",
+        "UTF8",
+        "--no-sync"
+      ],
+      "start": "2026-10-14T11:04:05.565Z",
+      "exit": 0,
+      "stdout": "The files belonging to this database system will be owned by user \"agent\".\nThis user must also own the server process.\n\nThe database cluster will be initialized with locale \"C\".\nThe default text search configuration will be set to \"english\".\n\nData page checksums are disabled.\n\ncreating directory /tmp/v3pg-x4KWFw/data ... ok\ncreating subdirectories ... ok\nselecting dynamic shared memory implementation ... posix\nselecting default \"max_connections\" ... 100\nselecting default \"shared_buffers\" ... 128MB\nselecting default time zone ... Etc/UTC\ncreating configuration files ... ok\nrunning bootstrap script ... ok\nperforming post-bootstrap initialization ... ok\n\nSync to disk skipped.\nThe data directory might become corrupt if the operating system crashes.\n\nSuccess. You can now start the database server using:\n\n    /workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl -D /tmp/v3pg-x4KWFw/data -l logfile start\n\n"
+    },
+    {
+      "command": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+      "args": [
+        "-D",
+        "/tmp/v3pg-x4KWFw/data",
+        "-w",
+        "start",
+        "-l",
+        "/tmp/v3pg-x4KWFw/postgres.log",
+        "-o",
+        "-F -k /tmp/v3pg-x4KWFw/sock -p 55480 -c listen_addresses=''"
+      ],
+      "start": "2026-10-14T11:04:05.962Z",
+      "exit": 0,
+      "stdout": "waiting for server to start.... done\nserver started\n"
+    },
+    {
+      "command": "/workspace/cloud-acceptance-0faebfd/tools/root/usr/lib/postgresql/17/bin/pg_ctl",
+      "args": [
+        "-D",
+        "/tmp/v3pg-x4KWFw/data",
+        "-m",
+        "immediate",
+        "-w",
+        "stop"
+      ],
+      "start": "2026-10-14T11:04:06.551Z",
+      "exit": 0,
+      "stdout": "waiting for server to shut down.... done\nserver stopped\n"
+    }
+  ],
+  "originalSql": {
+    "source": "15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb:migrations/20261009_research_complete_input_v2.sql",
+    "wholeSha256": "fa15705e9eed6717f9fdb5f80b3f5ba0731a320ae46e8a3216c6b145dec8b84c",
+    "extractedSha256": "ceb2c2cb10c2e1a52d70fc01850ce506b72a93fb12627046599cfc80549e9cc1",
+    "bytes": 3027
+  },
+  "rollbackConfirmed": true,
+  "pass": 14,
+  "fail": 0,
+  "cleanup": {
+    "ownedFixtureRemoved": true,
+    "ownedStoppedClusterRemoved": true,
+    "noProductionConnection": true
+  },
+  "finishedAt": "2026-10-14T11:04:06.669Z"
+}

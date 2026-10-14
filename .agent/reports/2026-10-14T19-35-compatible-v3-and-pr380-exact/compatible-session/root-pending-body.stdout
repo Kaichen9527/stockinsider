@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "case": "expired budget invokes neither preparation callback nor open",
+      "assertions": 0,
+      "opened": 0
+    },
+    {
+      "case": "late owned project completion cannot return timed-out result or escape common fence; late buffer write wiped on actual settlement",
+      "facadesBlocked": 4,
+      "reentryAfterActualSettlement": true,
+      "closedFd": true,
+      "ownedRawZero": true
+    }
+  ],
+  "cleanup": {
+    "cleanupComplete": true,
+    "recoveryRequired": false,
+    "pendingOperations": 0,
+    "unconfirmedHandles": 0,
+    "ownedBuffers": 0,
+    "cleanupFailed": false,
+    "kernelIoCancellationConfirmed": false
+  },
+  "syntheticDeadlineOverride": true,
+  "realFileHandles": true,
+  "formalRPCOrAuthority": false
+}

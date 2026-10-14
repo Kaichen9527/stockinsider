@@ -1,0 +1,52 @@
+[
+  {
+    "file": "scripts/fixtures/research-compatible-financial/2383-financial-material.schema.json",
+    "bytes": 150202,
+    "sha256": "fffeae9e2499bf13caadaf64b774bcfb59af304603c2b9da4c061a27b10285d1"
+  },
+  {
+    "file": "scripts/fixtures/research-compatible-financial/2409-financial-material.schema.json",
+    "bytes": 263273,
+    "sha256": "1cae155206c8a04852fc108a87e7da91b09db1190838dbd8f377186935979690"
+  },
+  {
+    "file": "scripts/fixtures/research-compatible-financial/legacy-complete-canonical.ts",
+    "bytes": 4362,
+    "sha256": "c4176839a8a09f6ede0d97b63f77a86fd54da8b5b55f0c42fc3013cf6a9b166e"
+  },
+  {
+    "file": "scripts/fixtures/research-compatible-financial/pinned-original-source.json.gz",
+    "bytes": 179728,
+    "sha256": "d094728eee0197a3343d7943c1600e7ffc62e1aff3ecb06f69380ff4a72ac96f"
+  },
+  {
+    "file": "scripts/fixtures/research-historical-cash/new-reader-execution-closure.json",
+    "bytes": 3646,
+    "sha256": "e4e124ab3f58833f6602d7a9ef40ba697438854aaa1af26c242a3deb55870429"
+  },
+  {
+    "file": "scripts/research-compatible-financial-reader.test.mjs",
+    "bytes": 10863,
+    "sha256": "7452d2a4c76164d08a07bb8d04ed20bf48ac52f74d815499ab85eb25657ce5dd"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-inventory.ts",
+    "bytes": 3601,
+    "sha256": "263643e3d8af3464ddc7b70f2bff91f604d131be1ca773918040b3ce54ff1c8d"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "bytes": 14703,
+    "sha256": "d5fb31908d84753fbf83afed80093661167f77efe8ea980b4d1170e42971a4a8"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-reader.ts",
+    "bytes": 3000,
+    "sha256": "6ad78b1197cb925646ca8de40b6a8412631c532a1b2cb4a0669ac6a28c7428a0"
+  },
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "bytes": 7586,
+    "sha256": "c3a28c3c11800cdb20cfb2271b4ac7b0674078b00b6f5edb8a67f98f08ba7c41"
+  }
+]

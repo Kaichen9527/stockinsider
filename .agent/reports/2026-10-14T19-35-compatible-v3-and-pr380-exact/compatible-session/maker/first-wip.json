@@ -1,0 +1,32 @@
+[
+  {
+    "file": "web/src/lib/research-financial-io-engine.ts",
+    "bytes": 7586,
+    "sha256": "c3a28c3c11800cdb20cfb2271b4ac7b0674078b00b6f5edb8a67f98f08ba7c41"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-inventory.ts",
+    "bytes": 3601,
+    "sha256": "263643e3d8af3464ddc7b70f2bff91f604d131be1ca773918040b3ce54ff1c8d"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-projection.ts",
+    "bytes": 14703,
+    "sha256": "d5fb31908d84753fbf83afed80093661167f77efe8ea980b4d1170e42971a4a8"
+  },
+  {
+    "file": "web/src/lib/research-compatible-financial-reader.ts",
+    "bytes": 3000,
+    "sha256": "6ad78b1197cb925646ca8de40b6a8412631c532a1b2cb4a0669ac6a28c7428a0"
+  },
+  {
+    "file": "scripts/research-compatible-financial-reader.test.mjs",
+    "bytes": 10869,
+    "sha256": "470ce072aad82cfa5446e86ad1a760bbc11975b6248b897a60af7cf57bfab2e8"
+  },
+  {
+    "file": "scripts/fixtures/research-historical-cash/new-reader-execution-closure.json",
+    "bytes": 3646,
+    "sha256": "e4e124ab3f58833f6602d7a9ef40ba697438854aaa1af26c242a3deb55870429"
+  }
+]

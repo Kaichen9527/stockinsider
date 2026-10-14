@@ -1,0 +1,16 @@
+{
+  "observedAt": "2026-10-14T11:09:17.282788+00:00",
+  "remainingOwnedProcesses": [],
+  "ownedFixtureRootsRemaining": [],
+  "pgProof": {
+    "ownedFixtureRemoved": true,
+    "ownedStoppedClusterRemoved": true,
+    "noProductionConnection": true
+  },
+  "cacheDeleted": false,
+  "dependencyInstalled": false,
+  "currentFreeBytes": {
+    "/workspace": 8616017920,
+    "/tmp": 15436218368
+  }
+}

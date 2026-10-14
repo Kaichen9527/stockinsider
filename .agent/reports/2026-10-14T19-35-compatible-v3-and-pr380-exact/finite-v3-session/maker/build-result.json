@@ -1,0 +1,26 @@
+{
+  "stage": "build",
+  "command": [
+    "npm",
+    "--prefix",
+    "web",
+    "run",
+    "build"
+  ],
+  "cwd": "/tmp/si-pubtail-o14",
+  "startedAt": "2026-10-14T11:02:12.841376+00:00",
+  "durationSeconds": 31.919515371322632,
+  "exit": 0,
+  "boundStop": null,
+  "peakSampledProcessTreeRssBytes": 961449984,
+  "sampleIntervalSeconds": 0.25,
+  "samples": 115,
+  "minFreeBytes": {
+    "/workspace": 8616194048,
+    "/tmp": 15438671872
+  },
+  "beforeFreeBytes": {
+    "/workspace": 8616210432,
+    "/tmp": 15439921152
+  }
+}

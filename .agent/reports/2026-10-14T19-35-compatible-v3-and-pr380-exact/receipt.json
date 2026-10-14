@@ -1,0 +1,10 @@
+{
+  "createdAt": "2026-10-14T11:34:40.405595+00:00",
+  "files": 145,
+  "bytes": 2311252,
+  "manifestSha256": "643592ba8794847fd986ea3fe35ff83380c772c528afd9b0ac8ddb6cc5593de9",
+  "goalComplete": false,
+  "rootPgBuildRun": false,
+  "pr380Merged": false,
+  "cloudIdleCursor": "57859559-a812-4f98-bcdc-46a2a9f908f6:42"
+}

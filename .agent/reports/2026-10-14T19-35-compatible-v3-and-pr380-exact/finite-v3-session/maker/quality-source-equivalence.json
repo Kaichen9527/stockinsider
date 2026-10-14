@@ -1,0 +1,127 @@
+{
+  "builtWip": "final-runtime-wip.json",
+  "sourceCommit": "72f639801d4000f375bea879de5139f6b1232580",
+  "sameRuntime": [
+    {
+      "file": "web/src/lib/research-v3-finite-material.ts",
+      "wipSha256": "0fc6a6121a963f22b125a4a6f5c506dde06f791204970ef0a3d33c5442671985",
+      "codeSha256": "0fc6a6121a963f22b125a4a6f5c506dde06f791204970ef0a3d33c5442671985",
+      "equal": true
+    },
+    {
+      "file": "web/src/lib/research-v3-material-canonical.ts",
+      "wipSha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "codeSha256": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5",
+      "equal": true
+    },
+    {
+      "file": "web/src/lib/research-v3-material-schemas/2383-normalized.json",
+      "wipSha256": "953260a5ac54eead4c6365507f410d08fd5aed8a9b40e635c24dbc142a76f706",
+      "codeSha256": "953260a5ac54eead4c6365507f410d08fd5aed8a9b40e635c24dbc142a76f706",
+      "equal": true
+    },
+    {
+      "file": "web/src/lib/research-v3-material-schemas/2383-raw.json",
+      "wipSha256": "f5cdc777e2ae819355693d8b142ccddf1c21751722e2bf5646c0f9416f7c9aa9",
+      "codeSha256": "f5cdc777e2ae819355693d8b142ccddf1c21751722e2bf5646c0f9416f7c9aa9",
+      "equal": true
+    },
+    {
+      "file": "web/src/lib/research-v3-material-schemas/2409-normalized.json",
+      "wipSha256": "0553fbb9049626662d58a799a3671cd1b68159e4e7782889d2a6980a4c7335ef",
+      "codeSha256": "0553fbb9049626662d58a799a3671cd1b68159e4e7782889d2a6980a4c7335ef",
+      "equal": true
+    },
+    {
+      "file": "web/src/lib/research-v3-material-schemas/2409-raw.json",
+      "wipSha256": "31c1ce3bfbc494856975ca63f736f6cb4da6fb4936f6e8e68f1ee297d300eaea",
+      "codeSha256": "31c1ce3bfbc494856975ca63f736f6cb4da6fb4936f6e8e68f1ee297d300eaea",
+      "equal": true
+    },
+    {
+      "file": "scripts/fixtures/research-historical-cash/new-reader-execution-closure.json",
+      "wipSha256": "f24f3627ed8141c7d1bbded9619884dd12282e2264d03ade6b6a3c4f424b3457",
+      "codeSha256": "f24f3627ed8141c7d1bbded9619884dd12282e2264d03ade6b6a3c4f424b3457",
+      "equal": true
+    },
+    {
+      "file": "web/src/lib/research-cash-financial-reader.ts",
+      "wipSha256": "fd3f5531bfa876c0b887367546f07bc7acbdef98d3c59d01478b04ffc5e2108c",
+      "codeSha256": "fd3f5531bfa876c0b887367546f07bc7acbdef98d3c59d01478b04ffc5e2108c",
+      "equal": true
+    },
+    {
+      "file": "web/src/lib/research-financial-io-engine.ts",
+      "wipSha256": "2344e936b108dcde99ca0742c0aac135b377ecebe3a97f0bce253c6be74406df",
+      "codeSha256": "2344e936b108dcde99ca0742c0aac135b377ecebe3a97f0bce253c6be74406df",
+      "equal": true
+    }
+  ],
+  "postQualityChanges": [
+    "new body-cleanup regression and its timing correction",
+    "handoff documentation"
+  ],
+  "unchanged": [
+    {
+      "file": "web/src/lib/research-financial-clock.ts",
+      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": "web/src/lib/research-business-calculator.ts",
+      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": "web/src/lib/research-scenario-cash-material.ts",
+      "sha256": "20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": "web/src/lib/research-historical-cash-pins.ts",
+      "sha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": "web/src/lib/research-historical-cash-projection.ts",
+      "sha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": "web/src/lib/research-financial-io-owner.ts",
+      "sha256": "19620af839492ac4232ccf6bdbfcd47b8429263ba3bfdcf90fdb7601dd13a4fe",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": "web/src/lib/research-compatible-financial-reader.ts",
+      "sha256": "6ad78b1197cb925646ca8de40b6a8412631c532a1b2cb4a0669ac6a28c7428a0",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": "web/src/lib/research-compatible-financial-inventory.ts",
+      "sha256": "263643e3d8af3464ddc7b70f2bff91f604d131be1ca773918040b3ce54ff1c8d",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": "web/src/lib/research-compatible-financial-projection.ts",
+      "sha256": "d5fb31908d84753fbf83afed80093661167f77efe8ea980b4d1170e42971a4a8",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": "package-lock.json",
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": "web/package-lock.json",
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    },
+    {
+      "file": ".nvmrc",
+      "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+      "unchangedFrom": "878df119bff02e99e603a02f8957832f280f6cd7"
+    }
+  ],
+  "canonicalOriginal15d4ByteExact": "a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5"
+}

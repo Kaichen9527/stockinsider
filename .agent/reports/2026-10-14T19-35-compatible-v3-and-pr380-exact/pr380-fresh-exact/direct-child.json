@@ -1,0 +1,36 @@
+{
+  "subject": "dd59817f750684b093965f539dd4de466be13077",
+  "evidenceCommit": "c2b146adb6d03814f2bd9a7af72baf003bb48812",
+  "evidenceTree": "c4d9ab598aa4311aa029db3a781ef436600e13b6",
+  "parent": "dd59817f750684b093965f539dd4de466be13077",
+  "evidenceOnlyPaths": [
+    "A\t.loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+    "A\t.loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+    "A\t.loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json"
+  ],
+  "files": [
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md",
+      "blob": "406f9c3884415d06a3c4b2c551cf6eeefd305c7b",
+      "bytes": 13292,
+      "sha256": "2ef3ab1ce60a7cda77c84df6676febe7f958ec0f509b78e2f052dee6a247258e"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/pcr-fulfillment-record-v1.json",
+      "blob": "7f5ebb88b537d8dab93d8ab10f33b104ab4e8d9d",
+      "bytes": 24824,
+      "sha256": "c4c2ee92396e3bb708a63351f782dd623fbccc914e16030ffcdacf97348b4cd3"
+    },
+    {
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json",
+      "blob": "4ef6262e545e046f7ae21d7b02e0c22612f33798",
+      "bytes": 457,
+      "sha256": "e0fed54595dda6ad3be4dfe8a9f4714b9912c754b13842ea28bdff99b9f8ebd3"
+    }
+  ],
+  "sourceWorktreeClean": true,
+  "unsignedModelReview": true,
+  "disjointAuthorshipIndependenceDisclosed": true,
+  "published": false,
+  "formalPeerOrProductionApproved": false
+}

@@ -1,0 +1,43 @@
+{
+  "subject": "72f639801d4000f375bea879de5139f6b1232580",
+  "evidence": "ce64c0c5e35e2f8413e362c26500bee883146fbe",
+  "rawVerified": 59,
+  "sourceVerified": 37,
+  "leafFilesVerified": 23,
+  "leafHash": "a0a8d9263e5b932b6fc4bf5571ab91207d844b6ddc3109275d171bcbb302ae1a",
+  "schemaReconstructed": [
+    {
+      "symbol": "2409",
+      "kind": "raw",
+      "exactAllConstantsAndClocks": true
+    },
+    {
+      "symbol": "2409",
+      "kind": "normalized",
+      "exactAllConstantsAndClocks": true
+    },
+    {
+      "symbol": "2383",
+      "kind": "raw",
+      "exactAllConstantsAndClocks": true
+    },
+    {
+      "symbol": "2383",
+      "kind": "normalized",
+      "exactAllConstantsAndClocks": true
+    }
+  ],
+  "originalCanonicalByteExact": true,
+  "originalPgThreeFunctionsByteExact": true,
+  "normalizationAllFieldsCompared": true,
+  "buildRuntimeEquivalence": 9,
+  "makerPg14ScopeOnlyVerified": true,
+  "rootActualTests": 104,
+  "rootPgOrBuildRun": false,
+  "formalProtocolApproved": false,
+  "preservedOwnInspectionErrors": [
+    "JSON list summarized as dict AttributeError",
+    "guessed descriptor folder absent",
+    "original source files not in selected worktree; verified git show instead"
+  ]
+}

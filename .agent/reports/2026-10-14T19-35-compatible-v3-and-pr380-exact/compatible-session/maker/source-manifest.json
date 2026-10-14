@@ -1,0 +1,193 @@
+{
+  "head": "878df119bff02e99e603a02f8957832f280f6cd7",
+  "tree": "04fbb752ef763aef0cb2f53792c5b5108ea181ba",
+  "webTree": "a17a9f6d63eefbac1568813e28aa9b93d7384ba9",
+  "files": [
+    {
+      "file": ".nvmrc",
+      "bytes": 8,
+      "sha256": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+      "blob": "7d41c735d7127c4a2530ebe846b14ffbf38b8031"
+    },
+    {
+      "file": "docs/operations/2026-10-14/compatible-financial-session-handoff.md",
+      "bytes": 7478,
+      "sha256": "1982cf2085a03c0c9e06142614959e358ba8aae0f1eb28e19154c7fff069e845",
+      "blob": "7a7565432d886d3be891e80a59cedefa51f1531c"
+    },
+    {
+      "file": "package-lock.json",
+      "bytes": 31809,
+      "sha256": "4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38",
+      "blob": "576ca62506b95d23da7088c47ecf9c6173c9355c"
+    },
+    {
+      "file": "package.json",
+      "bytes": 24733,
+      "sha256": "0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc",
+      "blob": "f25f4bebad793fb7eabc03e2320e4472553a0fb9"
+    },
+    {
+      "file": "scripts/fixtures/research-compatible-financial/2383-financial-material.schema.json",
+      "bytes": 150202,
+      "sha256": "fffeae9e2499bf13caadaf64b774bcfb59af304603c2b9da4c061a27b10285d1",
+      "blob": "372de0151022fb1e19007d1d58e20b1e19f7bb01"
+    },
+    {
+      "file": "scripts/fixtures/research-compatible-financial/2409-financial-material.schema.json",
+      "bytes": 263273,
+      "sha256": "1cae155206c8a04852fc108a87e7da91b09db1190838dbd8f377186935979690",
+      "blob": "ef38527fcb6db56e5fb75d3d0ed57c0625e18ae7"
+    },
+    {
+      "file": "scripts/fixtures/research-compatible-financial/README.md",
+      "bytes": 1063,
+      "sha256": "1e8762ff192ac53e6ceb716cb3b0ce8f4bf83dd6364c26822a391e84de295404",
+      "blob": "707fa8f8b8b71d348650a0894c66650fe9c416bd"
+    },
+    {
+      "file": "scripts/fixtures/research-compatible-financial/legacy-complete-canonical.ts",
+      "bytes": 4362,
+      "sha256": "c4176839a8a09f6ede0d97b63f77a86fd54da8b5b55f0c42fc3013cf6a9b166e",
+      "blob": "df1167880405954c24d50485864521e8f85581a0"
+    },
+    {
+      "file": "scripts/fixtures/research-compatible-financial/pinned-original-source.json.gz",
+      "bytes": 179728,
+      "sha256": "d094728eee0197a3343d7943c1600e7ffc62e1aff3ecb06f69380ff4a72ac96f",
+      "blob": "ab2c6da651899a70eebbafec888a0088b55c81ca"
+    },
+    {
+      "file": "scripts/fixtures/research-historical-cash/new-reader-execution-closure.json",
+      "bytes": 3645,
+      "sha256": "13cdfbcbda84f5a99d763bada46237e6a431ea58bb4bfca65776e717d01edcce",
+      "blob": "1d03805e7eae7077999c5531bdebaac814477f0f"
+    },
+    {
+      "file": "scripts/fixtures/research-historical-cash/pinned-source-15d4ef54.json.gz",
+      "bytes": 202500,
+      "sha256": "afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f",
+      "blob": "00d9e80495ddb25048925ecb00a758356494bb94"
+    },
+    {
+      "file": "scripts/research-cash-single-owner-reader.test.mjs",
+      "bytes": 17278,
+      "sha256": "85164586239a826fe4fcae9b7a95df285b635c7d9dbccd0e887d11e82c7dd47c",
+      "blob": "98d0b47a65bada4442608250d899fd895b443e53"
+    },
+    {
+      "file": "scripts/research-compatible-financial-reader.test.mjs",
+      "bytes": 14126,
+      "sha256": "ab4cf890b5ef7e17ed71cd385201726edc5ff88d7dd0f6704a6c7fd2a5f3f1e4",
+      "blob": "a7b610125aaf7c4fdb06da83896aa41d85cd007c"
+    },
+    {
+      "file": "scripts/research-historical-cash-core.test.mjs",
+      "bytes": 8413,
+      "sha256": "fa67c47c836f2622ffee4544e0a86abc7c5222fac5bfc81077ec6a6e216fa649",
+      "blob": "c8f59a826032166a7e7c685678d4662d54ea660a"
+    },
+    {
+      "file": "scripts/research-historical-cash-projection.test.mjs",
+      "bytes": 13006,
+      "sha256": "cb090b563166ccf6ed8d4f6a57bbe9b434d45351a08c8dd16572896eb3dd41d6",
+      "blob": "443251836c3a974e80b77302a1b3ed8565eb2cd8"
+    },
+    {
+      "file": "scripts/research-scenario-cash-material.test.mjs",
+      "bytes": 7733,
+      "sha256": "bf29047e6f2031ebe0e873bebf77d21f99d782e74fb0ee612ccf5cba969dc73a",
+      "blob": "4dcd4577a90a8d7a2cf00f878715a051808d230f"
+    },
+    {
+      "file": "scripts/research-scenario-cash-reader.test.mjs",
+      "bytes": 6270,
+      "sha256": "df9a69c1ae4a49d3daa41b30f46fb17b6adfec070967006c367b89feef6c9252",
+      "blob": "65ad0cb6a34ade4ba40538a915453fb08674ab10"
+    },
+    {
+      "file": "web/package-lock.json",
+      "bytes": 274088,
+      "sha256": "353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651",
+      "blob": "a41fd447e28f3b36829b689828c345e042619a38"
+    },
+    {
+      "file": "web/package.json",
+      "bytes": 1943,
+      "sha256": "c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e",
+      "blob": "446f308a2990f45dcd3dca14030068f878fae490"
+    },
+    {
+      "file": "web/src/lib/research-business-calculator.ts",
+      "bytes": 14206,
+      "sha256": "1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb",
+      "blob": "81f4cb09ae2849fdf2dbde497f6675736c995f90"
+    },
+    {
+      "file": "web/src/lib/research-cash-financial-reader.ts",
+      "bytes": 4943,
+      "sha256": "5eeff3f3f6f191e3f83544f830cc5fc3200521f25307e766bd8c34441c693e7a",
+      "blob": "b1c4fa4d1174738941fb4f2b6f655e5803a441dd"
+    },
+    {
+      "file": "web/src/lib/research-compatible-financial-inventory.ts",
+      "bytes": 3601,
+      "sha256": "263643e3d8af3464ddc7b70f2bff91f604d131be1ca773918040b3ce54ff1c8d",
+      "blob": "b9aafdc681ac9cea4deb49e4bb2198a182d652dd"
+    },
+    {
+      "file": "web/src/lib/research-compatible-financial-projection.ts",
+      "bytes": 14703,
+      "sha256": "d5fb31908d84753fbf83afed80093661167f77efe8ea980b4d1170e42971a4a8",
+      "blob": "6b3d9ca859cccfa8c36437217267134941719add"
+    },
+    {
+      "file": "web/src/lib/research-compatible-financial-reader.ts",
+      "bytes": 3000,
+      "sha256": "6ad78b1197cb925646ca8de40b6a8412631c532a1b2cb4a0669ac6a28c7428a0",
+      "blob": "20adbad0265c5ce341d29564028d6efa3b7ade58"
+    },
+    {
+      "file": "web/src/lib/research-financial-clock.ts",
+      "bytes": 807,
+      "sha256": "769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f",
+      "blob": "bf6301733d6c5150093e94a870e7c6f54f1d8042"
+    },
+    {
+      "file": "web/src/lib/research-financial-io-engine.ts",
+      "bytes": 7586,
+      "sha256": "c3a28c3c11800cdb20cfb2271b4ac7b0674078b00b6f5edb8a67f98f08ba7c41",
+      "blob": "e80992c15551997a52dd081a8c41ced02259e561"
+    },
+    {
+      "file": "web/src/lib/research-financial-io-owner.ts",
+      "bytes": 4972,
+      "sha256": "19620af839492ac4232ccf6bdbfcd47b8429263ba3bfdcf90fdb7601dd13a4fe",
+      "blob": "84f9068837a2bb06fe7f06ec88d447784899103a"
+    },
+    {
+      "file": "web/src/lib/research-historical-cash-core.ts",
+      "bytes": 11245,
+      "sha256": "157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790",
+      "blob": "37aa911d5289faabf9a604d0768fe821a43b6487"
+    },
+    {
+      "file": "web/src/lib/research-historical-cash-pins.ts",
+      "bytes": 7034,
+      "sha256": "311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5",
+      "blob": "5a9f2aeedfcbf5a57cbec25cffe3f5fc34ade92e"
+    },
+    {
+      "file": "web/src/lib/research-historical-cash-projection.ts",
+      "bytes": 11131,
+      "sha256": "244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719",
+      "blob": "af9928e8dcfc945c53f53d26fe9d6645729d251e"
+    },
+    {
+      "file": "web/src/lib/research-scenario-cash-material.ts",
+      "bytes": 19506,
+      "sha256": "20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b",
+      "blob": "dee2ff1f19830269cb8055a5de1a4395d2d1f4a5"
+    }
+  ]
+}

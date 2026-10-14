@@ -1,0 +1,26 @@
+{
+  "subject": "878df119bff02e99e603a02f8957832f280f6cd7",
+  "evidence": "2677106ebb3f87dc4a767c36ab80c28543e81ec9",
+  "receipt": "5f96b328a8aeeb21a42666556d9c49b5749960f6c939b497b666fac075dbb6a0",
+  "rawVerified": 39,
+  "sourceEntriesVerified": 31,
+  "projectionBodyOnlyDeclarationAdapted": true,
+  "oldFinancialMaterialSubschemasExact": 2,
+  "newLeafFilesVerified": 17,
+  "newLeaf": "f5ad9a4d5ffcdf4cf4a741bba33bf684e807b3fb458165d46fa6372be9a42635",
+  "compiledFilesIndividuallyReadByRoot": false,
+  "rootBuildOrNativePG": false,
+  "originalArchiveRawFilesVerified": 14,
+  "testCanonicalOnlyImportRelocated": true,
+  "root84ActualPass": 84,
+  "rootAdditionalActualFDCases": 2,
+  "genericPendingProjectionCaseNotCountedAsProductionRPCProof": true,
+  "verdict": "scoped_CODE_PASS",
+  "newFindings": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
+  "reviewerRootModifiedCandidate": false,
+  "fullFormalReleaseApproved": false
+}

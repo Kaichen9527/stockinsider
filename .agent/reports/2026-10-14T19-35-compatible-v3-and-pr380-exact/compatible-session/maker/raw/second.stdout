@@ -1,0 +1,108 @@
+TAP version 13
+# (node:560772) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:560772) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/web/src/lib/research-compatible-financial-reader.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/web/package.json.
+# (node:560772) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/si-pubtail-o14/scripts/fixtures/research-compatible-financial/legacy-complete-canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/si-pubtail-o14/package.json.
+# Subtest: 2409 fixed old whole-session schema/numeric/clock and FD/raw lifetime
+ok 1 - 2409 fixed old whole-session schema/numeric/clock and FD/raw lifetime
+  ---
+  duration_ms: 67.928501
+  ...
+# Subtest: 2409 new cash model is never substituted for original model
+ok 2 - 2409 new cash model is never substituted for original model
+  ---
+  duration_ms: 3.282324
+  ...
+# Subtest: 2383 fixed old whole-session schema/numeric/clock and FD/raw lifetime
+ok 3 - 2383 fixed old whole-session schema/numeric/clock and FD/raw lifetime
+  ---
+  duration_ms: 25.234109
+  ...
+# Subtest: 2383 new cash model is never substituted for original model
+ok 4 - 2383 new cash model is never substituted for original model
+  ---
+  duration_ms: 5.912554
+  ...
+# Subtest: unknown profile/symbol rejects before assertion and IO; fixed inventory is immutable
+ok 5 - unknown profile/symbol rejects before assertion and IO; fixed inventory is immutable
+  ---
+  duration_ms: 0.554838
+  ...
+# Subtest: pre reject context refuses and confirms cleanup
+ok 6 - pre reject context refuses and confirms cleanup
+  ---
+  duration_ms: 0.56285
+  ...
+# Subtest: pre malformed context refuses and confirms cleanup
+ok 7 - pre malformed context refuses and confirms cleanup
+  ---
+  duration_ms: 0.317049
+  ...
+# Subtest: post reject context refuses and confirms cleanup
+ok 8 - post reject context refuses and confirms cleanup
+  ---
+  duration_ms: 16.005089
+  ...
+# Subtest: post malformed context refuses and confirms cleanup
+ok 9 - post malformed context refuses and confirms cleanup
+  ---
+  duration_ms: 13.491133
+  ...
+# Subtest: post changed context refuses and confirms cleanup
+ok 10 - post changed context refuses and confirms cleanup
+  ---
+  duration_ms: 17.681799
+  ...
+# Subtest: compat held post assertion excludes legacy/cash/scenario; then real success
+ok 11 - compat held post assertion excludes legacy/cash/scenario; then real success
+  ---
+  duration_ms: 72.245456
+  ...
+# Subtest: legacy acquisition excludes compatible session
+ok 12 - legacy acquisition excludes compatible session
+  ---
+  duration_ms: 22.997723
+  ...
+# Subtest: historicalCash acquisition excludes compatible session
+ok 13 - historicalCash acquisition excludes compatible session
+  ---
+  duration_ms: 40.456504
+  ...
+# Subtest: scenarioCash acquisition excludes compatible session
+ok 14 - scenarioCash acquisition excludes compatible session
+  ---
+  duration_ms: 40.206889
+  ...
+# Subtest: pre assertion deadline retains shared owner until real settlement; no late opens
+ok 15 - pre assertion deadline retains shared owner until real settlement; no late opens
+  ---
+  duration_ms: 323.526468
+  ...
+# Subtest: post assertion deadline retains shared owner until real settlement; no late opens
+ok 16 - post assertion deadline retains shared owner until real settlement; no late opens
+  ---
+  duration_ms: 316.956921
+  ...
+# Subtest: post assertion namespace replacement refuses after real computation and wipes raw
+ok 17 - post assertion namespace replacement refuses after real computation and wipes raw
+  ---
+  duration_ms: 13.450212
+  ...
+# Subtest: compatible close pending forbids success and all facades until confirmed close
+ok 18 - compatible close pending forbids success and all facades until confirmed close
+  ---
+  duration_ms: 319.862709
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1508.187366

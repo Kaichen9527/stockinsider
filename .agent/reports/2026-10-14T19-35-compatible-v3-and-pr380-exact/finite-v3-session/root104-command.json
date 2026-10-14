@@ -1,0 +1,13 @@
+[
+  "/usr/local/bin/node",
+  "--experimental-strip-types",
+  "--test",
+  "--test-concurrency=1",
+  "scripts/research-historical-cash-core.test.mjs",
+  "scripts/research-historical-cash-projection.test.mjs",
+  "scripts/research-cash-single-owner-reader.test.mjs",
+  "scripts/research-scenario-cash-material.test.mjs",
+  "scripts/research-scenario-cash-reader.test.mjs",
+  "scripts/research-compatible-financial-reader.test.mjs",
+  "scripts/research-v3-finite-material-session.test.mjs"
+]

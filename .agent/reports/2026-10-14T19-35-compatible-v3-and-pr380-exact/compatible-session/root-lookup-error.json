@@ -1,0 +1,6 @@
+{
+  "error": "readonly guessed research-compatible-input-session.ts path absent",
+  "actualPath": "web/src/lib/research-compatible-financial-reader.ts",
+  "productFailure": false,
+  "sourceUnchanged": true
+}
