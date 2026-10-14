@@ -1,0 +1,132 @@
+
+scripts/opportunity-v3/v314-actionability-recovery.test.mjs
+30:   return migrationEvidenceResult.stdout;
+31: }
+32: let browserEvidenceOutput=null;
+33: function v314BrowserEvidence(){
+34:   browserEvidenceOutput??=execFileSync(process.execPath,[path.join(root,'web/node_modules/@playwright/test/cli.js'),'test',
+35:     'v314-readonly-visibility.spec.ts','--config=playwright.v3-correctness.config.ts'],{
+36:     cwd:path.join(root,'web'),encoding:'utf8',env:independentEnvironment(),timeout:180000,maxBuffer:16*1024*1024});
+37:   return browserEvidenceOutput;
+38: }
+39: 
+
+scripts/opportunity-v3/product-correctness.test.mjs
+1760:     assert.match(gateRunner, /PATH: `\$\{directory\}\$\{path[.]delimiter\}\/usr\/local\/bin:\/usr\/bin:\/bin`/u);
+1761:     assert.match(gateRunner, /HOME: traceHome/u);
+1762:     assert.match(gateRunner, /TMPDIR: traceTemp/u);
+1763:     assert.match(workflow, /PLAYWRIGHT_BROWSERS_PATH: "0"/u);
+1764:     assert.match(workflow, /[.]\/node_modules\/[.]bin\/playwright install --with-deps chromium/u);
+1765:     const output = execFileSync('npm', ['--prefix', 'web', 'run', 'test:e2e:v3-correctness'], {
+1766:       cwd: root,
+1767:       encoding: 'utf8',
+1768:       env: { ...process.env, FORCE_COLOR: '0', NO_COLOR: '1' },
+1769:     });
+1770:     assert.match(output, /9 passed/u);
+1771:     assert.doesNotMatch(output, /skipped/u);
+1772:   },
+1773:   'PCR-025': () => {
+1774:     const select = runtime('bias-technical-history.js').selectBiasTechnicalHistory;
+
+.github/workflows/source-led-opportunity-v3.yml
+65:     timeout-minutes: 30
+66:     env:
+67:       PLAYWRIGHT_BROWSERS_PATH: "0"
+68:       STOCKINSIDER_DOCUMENT_PARSER_PYTHON: ${{ github.workspace }}/.parser-env/bin/python
+69:       STOCKINSIDER_DOCUMENT_PARSER_SCRIPT: ${{ github.workspace }}/scripts/candidate_financial_document_parser.py
+70:     steps:
+71:       - uses: actions/checkout@v4
+72:       - uses: actions/setup-node@v4
+73:         with:
+74:           node-version-file: '.nvmrc'
+75:           cache: npm
+76:           cache-dependency-path: |
+77:             package-lock.json
+78:             web/package-lock.json
+79:       - name: Install PostgreSQL
+80:         run: |
+81:           sudo apt-get update
+82:           sudo apt-get install --yes postgresql
+83:           postgres_bin="$(pg_config --bindir)"
+84:           test -x "$postgres_bin/initdb"
+85:           test -x "$postgres_bin/pg_ctl"
+86:           echo "$postgres_bin" >> "$GITHUB_PATH"
+87:       - name: Install root dependencies
+88:         run: npm ci
+89:       - uses: actions/setup-python@v5
+90:         with:
+91:           python-version: '3.12'
+92:       - name: Install isolated offline parser test dependencies
+93:         run: |
+94:           python -m venv .parser-env
+95:           .parser-env/bin/pip install -r scripts/requirements-candidate-financial-document-parser.txt
+96:           .parser-env/bin/python scripts/test_candidate_financial_parser_socket.py
+97:           .parser-env/bin/python scripts/test_candidate_financial_document_parser.py
+98:       - name: Install web dependencies
+99:         working-directory: web
+100:         run: npm ci
+101:       - name: Verify candidate revision and historical date contracts
+102:         run: npm run test:candidate-revision-history
+103:       - name: Install project-local Playwright Chromium
+104:         working-directory: web
+105:         run: ./node_modules/.bin/playwright install --with-deps chromium
+106:       - name: Run diagnostic product/runtime suite (not authoritative Code Gate evidence)
+107:         run: npm run diagnostic:source-led-opportunity-v3:product-runtime
+108: 
+109:   evaluation-governance:
+
+web/package.json
+1: {
+2:   "name": "web",
+3:   "version": "0.1.0",
+4:   "private": true,
+5:   "engines": {
+6:     "node": ">=22"
+7:   },
+8:   "scripts": {
+9:     "postinstall": "node scripts/sync-official-authority.mjs",
+10:     "predev": "node scripts/sync-official-authority.mjs",
+11:     "prebuild": "node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs",
+12:     "dev": "next dev",
+13:     "build": "next build",
+14:     "start": "next start",
+15:     "prelint": "node scripts/sync-official-authority.mjs",
+16:     "lint": "eslint",
+17:     "pretypecheck": "node scripts/sync-official-authority.mjs",
+18:     "typecheck": "tsc --noEmit --pretty false",
+19:     "test:e2e": "playwright test",
+20:     "test:e2e:investor": "playwright test investor.spec.ts",
+21:     "test:e2e:governance": "playwright test governance-contracts.spec.ts",
+22:     "test:e2e:radar": "playwright test radar-buckets.spec.ts",
+23:     "test:e2e:deep-dive": "playwright test deep-dive-story.spec.ts",
+24:     "test:e2e:threads": "playwright test threads-quality.spec.ts",
+
+web/playwright.v3-correctness.config.ts
+1: import { defineConfig } from '@playwright/test';
+2: 
+3: const baseURL = process.env.E2E_BASE_URL || 'http://127.0.0.1:3101';
+4: const skipWebServer = process.env.PLAYWRIGHT_SKIP_WEBSERVER === '1';
+5: const port = new URL(baseURL).port || '3101';
+6: const internalKey = process.env.E2E_INTERNAL_API_KEY || 'stockinsider-v3-e2e-internal-key';
+7: process.env.E2E_INTERNAL_API_KEY = internalKey;
+8: process.env.OPPORTUNITY_V3_UI_FIXTURE = 'enabled';
+9: process.env.RADAR_PUBLIC_SNAPSHOTS_ENABLED = 'disabled';
+10: 
+11: export default defineConfig({
+12:   testDir: './e2e',
+13:   testMatch: ['v3-correctness.spec.ts', 'radar-layering.spec.ts', 'v314-readonly-visibility.spec.ts', 'v317-source-led-actionability.spec.ts', 'deep-dive-story.spec.ts'],
+14:   timeout: 90_000,
+15:   workers: 1,
+16:   reporter: [['list']],
+17:   use: { baseURL },
+18:   webServer: skipWebServer ? undefined : {
+19:     command: `bash -lc 'npm run build; mkdir -p .next/standalone/.next; cp -R .next/static .next/standalone/.next/static; if [ -d public ]; then cp -R public .next/standalone/public; fi; set -a; source ../.env 2>/dev/null || true; set +a; PORT=${port} HOSTNAME=127.0.0.1 DATA_MODE=demo SOURCE_LED_OPPORTUNITY_V3=disabled OPPORTUNITY_V3_UI_FIXTURE=enabled node .next/standalone/server.js'`,
+20:     env: { ...process.env, INTERNAL_API_KEY: internalKey, DATA_MODE: 'demo', SOURCE_LED_OPPORTUNITY_V3: 'disabled', OPPORTUNITY_V3_UI_FIXTURE: 'enabled', RADAR_PUBLIC_SNAPSHOTS_ENABLED: 'disabled' },
+21:     // Readiness must not hit the dynamic homepage: that route intentionally
+22:     // reads live data and can stay pending while the fixture server is healthy.
+23:     // A static policy page proves the Next server is accepting requests.
+24:     url: new URL('/privacy', baseURL).toString(),
+25:     reuseExistingServer: false,
+26:     timeout: 120_000,
+27:   },
+28: });

@@ -1,0 +1,11 @@
+{"kind":"extracted_exact_parser","name":"complete","accepted":true,"error":null}
+{"kind":"extracted_exact_parser","name":"only31","accepted":true,"error":null}
+{"kind":"extracted_exact_parser","name":"duplicateResultIds","accepted":true,"error":null}
+{"kind":"extracted_exact_parser","name":"contradictoryNotOk","accepted":true,"error":null}
+{"kind":"extracted_exact_parser","name":"duplicatePlan","accepted":true,"error":null}
+{"kind":"extracted_exact_parser","name":"wrongPCR","accepted":false,"error":"Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  [\n    'PCR-001',\n    'PCR-002',\n    'PCR-003',\n    'PCR-004',\n...\n    'PCR-030',\n+   'PCR-030'\n-   'PCR-031'\n  ]\n"}
+{"kind":"extracted_exact_parser","name":"summaryFail","accepted":false,"error":"Expected values to be strictly equal:\n\n1 !== 0\n"}
+{"kind":"extracted_exact_parser","name":"summarySkip","accepted":false,"error":"Expected values to be strictly equal:\n\n1 !== 0\n"}
+{"kind":"extracted_exact_parser","name":"doubleSummary","accepted":false,"error":"Expected values to be strictly equal:\n\n2 !== 1\n"}
+{"kind":"workflow_order","canonicalOffset":1691,"browserInstallOffset":7503,"browserProvisionBeforeCanonical":false}
+{"kind":"no_launch_no_network_registry_probe","version":"1.58.2","path":"/tmp/reviewed-artifact-workflow-review-o14/empty-browser-cache/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell","error":"Executable doesn't exist at /tmp/reviewed-artifact-workflow-review-o14/empty-browser-cache/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"}

@@ -1,0 +1,181 @@
+[
+  {
+    "label": "syntax-step-02",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-02.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.612859+00:00",
+    "durationSeconds": 0.0018890909850597382,
+    "exit": 0,
+    "childrenMaxRssKiB": 9344
+  },
+  {
+    "label": "syntax-step-03",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-03.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.614785+00:00",
+    "durationSeconds": 0.0015487379860132933,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-05",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-05.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.616348+00:00",
+    "durationSeconds": 0.0014486369909718633,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-06",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-06.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.617810+00:00",
+    "durationSeconds": 0.002327142981812358,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-07",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-07.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.620150+00:00",
+    "durationSeconds": 0.0013899990590289235,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-08",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-08.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.621556+00:00",
+    "durationSeconds": 0.0012700969818979502,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-09",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-09.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.622839+00:00",
+    "durationSeconds": 0.0013610949972644448,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-10",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-10.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.624215+00:00",
+    "durationSeconds": 0.0013521109940484166,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-11",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-11.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.625580+00:00",
+    "durationSeconds": 0.0014857329661026597,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-12",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-12.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.627080+00:00",
+    "durationSeconds": 0.0013113990426063538,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-step-13",
+    "argv": [
+      "bash",
+      "-n",
+      "/tmp/reviewed-artifact-workflow-review-o14/step-13.sh"
+    ],
+    "startedAt": "2026-10-14T13:58:38.628433+00:00",
+    "durationSeconds": 0.0014747959794476628,
+    "exit": 0,
+    "childrenMaxRssKiB": 9472
+  },
+  {
+    "label": "syntax-inline-03-0",
+    "argv": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "/tmp/reviewed-artifact-workflow-review-o14/inline-03-0.mjs"
+    ],
+    "startedAt": "2026-10-14T13:58:38.630146+00:00",
+    "durationSeconds": 0.0334656989434734,
+    "exit": 0,
+    "childrenMaxRssKiB": 22988
+  },
+  {
+    "label": "syntax-inline-06-0",
+    "argv": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "/tmp/reviewed-artifact-workflow-review-o14/inline-06-0.mjs"
+    ],
+    "startedAt": "2026-10-14T13:58:38.663662+00:00",
+    "durationSeconds": 0.025148823973722756,
+    "exit": 0,
+    "childrenMaxRssKiB": 22992
+  },
+  {
+    "label": "syntax-inline-12-0",
+    "argv": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "--check",
+      "/tmp/reviewed-artifact-workflow-review-o14/inline-12-0.mjs"
+    ],
+    "startedAt": "2026-10-14T13:58:38.688854+00:00",
+    "durationSeconds": 0.024044648045673966,
+    "exit": 0,
+    "childrenMaxRssKiB": 22992
+  },
+  {
+    "label": "probe-actual",
+    "argv": [
+      "/workspace/.tools/node22/node_modules/node/bin/node",
+      "/tmp/reviewed-artifact-workflow-review-o14/probe.mjs"
+    ],
+    "startedAt": "2026-10-14T13:58:38.712944+00:00",
+    "durationSeconds": 0.2741926279850304,
+    "exit": 1,
+    "childrenMaxRssKiB": 74692
+  }
+]

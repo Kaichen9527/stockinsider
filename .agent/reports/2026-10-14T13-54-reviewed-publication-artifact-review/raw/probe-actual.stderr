@@ -1,0 +1,15 @@
+/tmp/si-pubtail-o14/scripts/runtime/reviewed-runtime-release.js:18
+function fail(reason) { throw new RuntimeInstallationError(reason); }
+                              ^
+
+RuntimeInstallationError: attestation_commit_unavailable
+    at fail (/tmp/si-pubtail-o14/scripts/runtime/reviewed-runtime-release.js:18:31)
+    at resolveReviewedRuntimeRelease (/tmp/si-pubtail-o14/scripts/runtime/reviewed-runtime-release.js:75:5)
+    at file:///tmp/reviewed-artifact-workflow-review-o14/probe.mjs:25:61
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
+  code: 'attestation_commit_unavailable'
+}
+
+Node.js v22.14.0

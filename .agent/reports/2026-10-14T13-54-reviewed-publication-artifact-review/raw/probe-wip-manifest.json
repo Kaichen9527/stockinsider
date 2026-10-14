@@ -1,0 +1,91 @@
+{
+  "sealedAt": "2026-10-14T13:58:26.329680+00:00",
+  "subject": "df18448dfd26627cd26e0156db0a8ea66e2b886a",
+  "files": [
+    {
+      "path": "inline-03-0.mjs",
+      "bytes": 2137,
+      "sha256": "0a8b74e53df869397342c98c5214575c94430c39688b738f2c66d716a1c8bee7"
+    },
+    {
+      "path": "inline-06-0.mjs",
+      "bytes": 1275,
+      "sha256": "0449ac39bd23481da475bce3960c9d40873c3a4861c40962ae3fb07ca1cda152"
+    },
+    {
+      "path": "inline-12-0.mjs",
+      "bytes": 3804,
+      "sha256": "9e340082bfc5cfb9a0481b8de561a03a378c4fee0b24b8b6b7762e3e492c93d2"
+    },
+    {
+      "path": "probe.mjs",
+      "bytes": 3344,
+      "sha256": "b0633259e205300bf262b870ec9770255aafd54c0806e4c4486832662d13e514"
+    },
+    {
+      "path": "step-02.sh",
+      "bytes": 27,
+      "sha256": "6d71bf0411f14fc881ef21dc94f68e6c483f78209ea687e47271cdb3c49cf8d5"
+    },
+    {
+      "path": "step-03.sh",
+      "bytes": 2468,
+      "sha256": "68268fc6780309a511a04724084652efe623f9e7c431aff286e034b62a474362"
+    },
+    {
+      "path": "step-05.sh",
+      "bytes": 352,
+      "sha256": "7831f65d0174f70b10015549114c5739e355ceb675ec627c8b0b05b5fb8ed84c"
+    },
+    {
+      "path": "step-06.sh",
+      "bytes": 1368,
+      "sha256": "0ef8c06e3c2b28652321cfb4046e24a616404c5ada8894cd23c6c8a9331d43ec"
+    },
+    {
+      "path": "step-07.sh",
+      "bytes": 27,
+      "sha256": "6d71bf0411f14fc881ef21dc94f68e6c483f78209ea687e47271cdb3c49cf8d5"
+    },
+    {
+      "path": "step-08.sh",
+      "bytes": 214,
+      "sha256": "a96d25c37402fe3b5d34db57ca1d94af4159c572d7f442c46116b91d855f5f97"
+    },
+    {
+      "path": "step-09.sh",
+      "bytes": 112,
+      "sha256": "4451b626a24652724d5060defde9116cfa691ac38ee5a36a69b8b53def26d5f4"
+    },
+    {
+      "path": "step-10.sh",
+      "bytes": 26,
+      "sha256": "8dc2c26594aa4d3b3428683a7408350a01143c02f24446e3251787174e9f1999"
+    },
+    {
+      "path": "step-11.sh",
+      "bytes": 689,
+      "sha256": "3dbbc6a6b06139e18375f76b433a2d6e555027db5380d7005957b5560417e42e"
+    },
+    {
+      "path": "step-12.sh",
+      "bytes": 3861,
+      "sha256": "a345246484a568407069b4a03cd997d2955bec8e768c10cf1047548e39af0bb9"
+    },
+    {
+      "path": "step-13.sh",
+      "bytes": 462,
+      "sha256": "63de6654dba0846526ae9060e17bf19fd28497cdcc7e2b5e1ed79cf9549411d7"
+    },
+    {
+      "path": "steps.json",
+      "bytes": 12271,
+      "sha256": "36ddc10680f77509a07cdc6eb12924aa27870638e971b270d79baa2bee72549f"
+    },
+    {
+      "path": "task.md",
+      "bytes": 815,
+      "sha256": "c9f80204c5c328f6b3c5b3705a3f024080e41fa9b0d9d2b09282b60d1c75b154"
+    }
+  ]
+}

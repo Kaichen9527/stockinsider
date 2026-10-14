@@ -1,0 +1,6 @@
+{"label":"original_resolver_real_git","result":{"commitSha":"dd59817f750684b093965f539dd4de466be13077","treeSha":"6a9a08af70fb94b50ed2b5eee6aaf3686f648b99","reviewAttestationSha256":"e0fed54595dda6ad3be4dfe8a9f4714b9912c754b13842ea28bdff99b9f8ebd3","workerSha256":"11213ec448f09e699606105f78834f7a3bed184c44037657adb9914c152ebde6","configSha256":"1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2"}}
+{"name":"wrongSource","error":"attestation_commit_not_direct_child"}
+{"name":"missingAttestation","error":"attestation_commit_unavailable"}
+{"name":"extraDiff","error":"attestation_commit_has_extra_diff","overrideProbe":true}
+{"name":"wrongTree","error":"Command failed: /usr/bin/git ls-tree ffffffffffffffffffffffffffffffffffffffff -- .loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-final.md\nfatal: not a tree object\n","overrideProbe":true}
+{"name":"changedReview","error":"review_evidence_unbound","overrideProbe":true}
