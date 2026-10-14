@@ -1,0 +1,1 @@
+Same task original deadline retained. source32 was a wording typo; actual sourceDocumentIds <=30 remains unchanged. Correction delivered while original turn01a13b43 was inProgress; compact68 confirms same turn.

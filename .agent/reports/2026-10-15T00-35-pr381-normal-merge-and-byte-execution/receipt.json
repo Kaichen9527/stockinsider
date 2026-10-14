@@ -1,0 +1,79 @@
+{
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 4211,
+      "sha256": "e3a1ae78a56c8ca2c2175fa41061572afb377b8462eaa223c56b12314ece569e"
+    },
+    {
+      "path": "after-pr.json",
+      "bytes": 362,
+      "sha256": "d19ec8caacf6cda539eb256a33156813ecbecf3d68c3578bc988d2b2ade8a705"
+    },
+    {
+      "path": "after-rules.json",
+      "bytes": 1685,
+      "sha256": "a1d3a322a4d2389b4205e57829a11e81fa340622ddbaeb3ee07e697389ae872d"
+    },
+    {
+      "path": "before-head-runs.json",
+      "bytes": 593,
+      "sha256": "e3cebab57803b92ce6536d2ccf06a72d7f98dc3f2e401d51996efede8eaa5b0a"
+    },
+    {
+      "path": "before-pr.json",
+      "bytes": 303,
+      "sha256": "910f0b70918abebaa17528e031a837327b214dd528e9ce73ad660512b35981b7"
+    },
+    {
+      "path": "before-rules.json",
+      "bytes": 1685,
+      "sha256": "a1d3a322a4d2389b4205e57829a11e81fa340622ddbaeb3ee07e697389ae872d"
+    },
+    {
+      "path": "consumed-normal-merge-audit.json",
+      "bytes": 665,
+      "sha256": "b3a836aa6e6744ccb1a74ca803fed0c3ab6bb5a7d3f2bd78bfb00212f06ab02a"
+    },
+    {
+      "path": "consumed-normal-merge-guard.py",
+      "bytes": 5216,
+      "sha256": "fed7cb4c7d7bf64ce351f7dd987aff5309e6141f452dd28219670b1e3c2b9ca9"
+    },
+    {
+      "path": "final-ready-protected-logs.zip",
+      "bytes": 358547,
+      "sha256": "b4fbe13d131bac9bb394a4561dcfdc70dbd2f296596454e5e9cdad8a2eab0f74"
+    },
+    {
+      "path": "final-ready-protected-run.json",
+      "bytes": 18489,
+      "sha256": "f74174ddf4c46e2a977b1186dfce637756e6360aafdd71a7b8c8e55b1e7926e0"
+    },
+    {
+      "path": "log-verification.json",
+      "bytes": 180,
+      "sha256": "0128c7db007835886546f705d92b9cb26e6695cfb13a76b4b2376bc325762f4b"
+    },
+    {
+      "path": "main-postmerge-runs.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "merge-verification.json",
+      "bytes": 623,
+      "sha256": "9783430aeed0fec1c0f07e4db4dba55fceb0d2bdd9fcf8c51d0c932fed38f1bc"
+    },
+    {
+      "path": "next-byte-execution-task.txt",
+      "bytes": 3355,
+      "sha256": "ccc3259ea79e360b734301b6c3ee19e71d1e593e2f1d06c9b2eee925a96d6c5c"
+    },
+    {
+      "path": "task-wording-correction.txt",
+      "bytes": 211,
+      "sha256": "d83421cafa9b7278bd286802669418aa23f67468c58c48d30d8290c0eca4ac39"
+    }
+  ]
+}

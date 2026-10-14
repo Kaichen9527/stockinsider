@@ -1,0 +1,17 @@
+{
+  "merged": true,
+  "mergeCommit": "8c58e297e92422c1c3f52856a36bff12b1868100",
+  "parents": [
+    "5189547f76bf24c002b8e8b11669081ba67ad2c6",
+    "c68864cd4125b2dc5e9249312ef9188bfdedcb82"
+  ],
+  "tree": "8ab201731bcf2a1a99e71393ac9a7e18d01ed36c",
+  "webTree": "c516655efaac8260b1bcf5938f8f4d65ab61ad44",
+  "mergedAt": "2026-10-14T16:29:11Z",
+  "remoteMain": "8c58e297e92422c1c3f52856a36bff12b1868100",
+  "protectedRun": 38595486518,
+  "sevenTrueProtectedJobs": true,
+  "rulesCompleteJSONUnchanged": true,
+  "directChildAttestsSourceNotMerge": "c83f103c3ddd1e582b4544c168bc46a2a80c056c",
+  "deploymentPerformed": false
+}
