@@ -40,6 +40,11 @@
       "file": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
       "bytes": 6599,
       "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
     }
   ],
   "upstreamApprovedEvidenceSubject": "1b25393ad4b3790e6ca427bb3f6ab93fc622abd1",
@@ -52,5 +57,18 @@
     "../2026-10-08-auo-working-draft/corporate-action-relay.json",
     "../../../web/src/lib/auo-deep-dive-v1.ts"
   ],
-  "approvalLimits": "Data unsigned scope only. New forecasts, prose, commercial assumptions and trading conclusions not independently approved."
+  "approvalLimits": "Data unsigned scope only. New forecasts, prose, commercial assumptions and trading conclusions not independently approved.",
+  "historicalCashSuccessor": {
+    "recordedAt": "2026-10-14T02:55:43.702674+00:00",
+    "sourcePacketManifest": {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
+    },
+    "newAvailability": "2026-10-14T02:34:47.456437+00:00",
+    "oldSourceClocksUnchanged": true,
+    "verificationAttribution": "root source packet/PDF rehash, independent Python arithmetic executed by VM maker; not formal article/source approval",
+    "rootReceiptSha256": "ae9a24f469c1f7f235dbc36a0708a3211cf04619d85b77e90e2b3613fac70957",
+    "noNewHttpOrRawPdfRequest": true
+  }
 }

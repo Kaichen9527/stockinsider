@@ -135,6 +135,57 @@ export function buildModel(financial,historical,monthly,market,asOf,context={}){
   return {...result,canonicalHash:researchCanonicalHash(result)};
 }
 
+export const CASH_PACKET_CANONICAL_HASH="4371e93dc0b5e5f504413545b299d16f526c52ee42f0bfc00c9965ab148b65e3";
+export const CASH_PACKET_FILE='docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json';
+export const CASH_PACKET_SHA256='b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3';
+export async function loadCashFlowPacket(){
+ const bytes=await readFile(path.join(root,CASH_PACKET_FILE));assert.ok(bytes.length<=262144,'cash packet bound');
+ assert.equal(createHash('sha256').update(bytes).digest('hex'),CASH_PACKET_SHA256,'cash source hash');
+ return {packet:JSON.parse(bytes),manifest:{file:CASH_PACKET_FILE,bytes:bytes.length,sha256:CASH_PACKET_SHA256}};
+}
+/** Historical group cash only. No Q2 isolation, annualization, future cash or valuation approval. */
+export function historicalCashFlow(packet,symbol,availableAt){
+ assert.equal(researchCanonicalHash(packet),CASH_PACKET_CANONICAL_HASH,'cash packet canonical binding');
+ assert.ok(sourceControllerInstant(packet.extractionAvailableAt)<=sourceControllerInstant(availableAt),'cash extraction not yet available');
+ assert.equal(packet.status,'research_addendum_not_published');
+ assert.deepEqual(packet.policy,{historicalOct08ModelsUnchanged:true,newExtractionBackdated:false,valuationApproved:false,published:false,investmentAdmission:false});
+ const issuers=packet.issuers.filter(x=>x.stock===symbol);assert.equal(issuers.length,1);const issuer=issuers[0];
+ assert.equal(issuer.consolidated,true);assert.equal(issuer.unit,'TWD_thousands');assert.equal(issuer.grain,'six-month cumulative flow, not standalone Q2');assert.deepEqual(issuer.periods,['2026-01-01/2026-06-30','2025-01-01/2025-06-30']);
+ assert.equal(issuer.source.sha256,symbol==='2409'?'94d74c75de96a6ec7b38d4d6c8a9f5d2d92750bf618543429b326ff6c95dcdb2':'245b41f9f54c9542ffac64141d546fde0f28d0537d9f36307028b081318e0f20');
+ assert.ok(sourceControllerInstant(issuer.source.observedAt)<=sourceControllerInstant(packet.extractionAvailableAt));
+ const facts=issuer.facts;for(const fact of Object.values(facts)){assert.equal(fact.values.length,2);assert.ok(fact.values.every(Number.isSafeInteger));assert.ok(Number.isInteger(fact.pdfPage)&&fact.pdfPage>0);assert.ok(typeof fact.sourceLine==='string'&&fact.sourceLine.length<1000);}
+ const rows=issuer.periods.map((period,i)=>{
+  const v=k=>{assert.ok(facts[k],`missing cash operand ${k}`);return facts[k].values[i];};
+  const nonCash=symbol==='2409'?sum(['depreciation','amortization','fvGain','interestExpenseAdjustment','interestIncomeAdjustment','dividendIncomeAdjustment','shareCompensation','equityMethodAdjustment','ppeDisposalGainAdjustment','rouDisposalLoss','heldForSaleGainAdjustment','investmentGainAdjustment','impairment','unrealizedFx','otherAdjustment'].map(v)):v('nonCashAdjustments');
+  const wc=symbol==='2409'?sum(['receivables','relatedReceivables','inventory','contractCosts','otherOperatingAssets','contractLiabilities','payables','relatedPayables','provisions','otherOperatingLiabilities'].map(v)):v('workingCapital');
+  assert.equal(v('pretax')+nonCash+wc,v('generatedCash'),'pretax/group cash bridge');
+  assert.equal(v('generatedCash')+v('interestReceived')+v('interestPaid')+v('taxPaid')+(symbol==='2409'?v('dividendReceived'):0),v('operatingCash'),'CFO bridge');
+  assert.equal(v('ownersNetProfit')+v('nonControllingNetProfit'),v('netProfit'),'group denominator');
+  assert.equal(v('operatingCash')+v('investingCash')+v('financingCash')+v('fxCash'),v('cashChange'));assert.equal(v('openingCash')+v('cashChange'),v('closingCash'));
+  assert.ok(v('ppeCash')<=0&&v('intangibleCash')<=0&&v('leasePrincipal')<=0,'signed cash outlays');assert.ok(v('netProfit')>0);
+  const netBorrowing=sum((symbol==='2409'?['shortBorrowings','shortRepayments','longBorrowings','longRepayments']:['shortBorrowingsNet','longBorrowings','longRepayments']).map(v));
+  return {period,grain:issuer.grain,unit:'TWD_thousands',cfo:v('operatingCash'),groupNetProfit:v('netProfit'),cfoDividedByGroupNetProfit:v('operatingCash')/v('netProfit'),pretax:v('pretax'),nonCashAdjustments:nonCash,workingCapitalCashEffect:wc,receivablesCashEffect:v('receivables'),inventoryCashEffect:v('inventory'),payablesCashEffect:v('payables'),ppeCashAcquisition:v('ppeCash'),intangibleCashAcquisition:v('intangibleCash'),cfoLessPpeCashOutlay:v('operatingCash')+v('ppeCash'),cfoLessPpeAndIntangibleCashOutlay:v('operatingCash')+v('ppeCash')+v('intangibleCash'),leasePrincipalSeparate:v('leasePrincipal'),rouCashAcquisitionSeparate:symbol==='2383'?v('rouCash'):null,assetDisposalGainAlreadyRemoved:symbol==='2409'?v('heldForSaleGainAdjustment'):null,disposalProceedsExcluded:v('ppeDisposalCash')+(symbol==='2409'?v('heldForSaleDisposalCash'):0),netBorrowingCash:netBorrowing,investingCash:v('investingCash'),financingCash:v('financingCash'),fxCash:v('fxCash'),cashChange:v('cashChange'),openingCash:v('openingCash'),closingCash:v('closingCash')};
+ });
+ const capital=symbol==='2409'?packet.auoJune30Capital:null;
+ if(capital){assert.equal(capital.instant,'2026-06-30');assert.equal(capital.paidCapitalTwdThousands/capital.parTwd,capital.issuedSharesThousands);assert.equal(capital.treasuryCarryingAmountTwdThousands,0);assert.equal(capital.treasurySharesThousands,null);assert.equal(capital.ownersEquityTwdThousands+capital.nonControllingEquityTwdThousands,capital.groupEquityTwdThousands);}
+ return {schemaVersion:'historical-group-cash-bridge-v1',symbol,sourcePacketSha256:CASH_PACKET_SHA256,extractionAvailableAt:packet.extractionAvailableAt,originalSource:issuer.source,rawPdfRehashAttribution:{actor:'root retained-PDF rehash; not VM raw verification',at:issuer.rawPdfReverifiedAt},rows,sourceFacts:Object.fromEntries(Object.entries(facts).map(([key,f])=>[key,{pdfPage:f.pdfPage,label:f.label,sourceLine:f.sourceLine,values:f.values,sourceJsonPointer:`/issuers/${packet.issuers.indexOf(issuer)}/facts/${key}/values`}])),proxyDefinition:'CFO plus signed PPE and intangible cash acquisitions only; disposal proceeds excluded; not IFRS FCF, FCFE, maintenance capex or forecast',noFutureCash:true,forecastCash:null,valuationApproved:false,technicalAdmission:false,historicalCapital:capital?{...capital,ownersEquityPerIssuedCommonShareTwd:capital.ownersEquityTwdThousands/capital.issuedSharesThousands,octoberOutstandingShares:null,currentPB:null,targetPrice:null}:null};
+}
+export function integrateHistoricalCashFlow(model,packet,successorAt,inputManifest){
+ const {canonicalHash,...original}=model;assert.ok(sourceControllerInstant(model.asOf)<=sourceControllerInstant(successorAt));
+ const h=historicalCashFlow(packet,model.symbol,successorAt);
+ assert.ok(Array.isArray(inputManifest)&&inputManifest.some(r=>r.file===CASH_PACKET_FILE&&r.sha256===CASH_PACKET_SHA256),'cash manifest binding');
+ const body={...original,asOf:successorAt,originalModelAsOf:model.asOf,originalModelCanonicalHash:canonicalHash,inputManifest,historicalCashFlow:h};
+ return {...body,canonicalHash:researchCanonicalHash(body)};
+}
+export function renderHistoricalCashTable(model){
+ assert.ok(model.historicalCashFlow,'historical cash supplement required');
+ const h=model.historicalCashFlow,n=x=>x===null?'unknown':(x/1000).toFixed(3);
+ let table='|同期間合併歷史現金（百萬元）|2026H1|2025H1|\n|---|---:|---:|\n';
+ for(const [label,key]of [['營業現金CFO','cfo'],['合併淨利（含NCI）','groupNetProfit'],['非現金等調整','nonCashAdjustments'],['營運資金現金影響','workingCapitalCashEffect'],['PPE取得現金（負號）','ppeCashAcquisition'],['無形資產取得現金（負號）','intangibleCashAcquisition'],['CFO減PPE與無形現金代理','cfoLessPpeAndIntangibleCashOutlay'],['ROU取得現金另列','rouCashAcquisitionSeparate'],['租賃本金另列','leasePrincipalSeparate'],['借款取得／償還淨現金','netBorrowingCash'],['現金變動','cashChange'],['期末現金','closingCash']])table+=`|${label}|${h.rows.map(r=>n(r[key])).join('|')}|\n`;
+ table+=`|CFO／合併淨利（倍）|${h.rows.map(r=>r.cfoDividedByGroupNetProfit.toFixed(6)).join('|')}|\n`;
+ return table;
+}
+
 export function renderArticle(model,template){
   const actualQ2=model.segmentActuals.find(row=>row.period==='2026Q2'),actualH1=model.segmentActuals.find(row=>row.period==='2026H1');
   const number=x=>x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -145,15 +196,15 @@ export function renderArticle(model,template){
   model.scenarios.forEach((row,i)=>{annual+=`|${['悲觀','中性','樂觀'][i]}|${number(row.calendar2026.revenue)}|${number(row.calendar2026.dilutedEpsConditional)}|${number(row.calendar2027.revenue)}|${number(row.calendar2027.dilutedEpsConditional)}|${number(row.nextFourUnreported.dilutedEpsConditional)}|\n`;});
   let quarters='|情境／季|收入|毛利|費用|OP|淨業外|稅|NCI|歸母|條件稀釋EPS|\n|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n';
   for(const scenario of model.scenarios)for(const q of scenario.quarters)quarters+=`|${scenario.id}/${q.period}|${[q.revenue,q.grossProfit,q.operatingExpenses,q.operatingProfit,q.nonOperating,q.taxExpense,q.nonControllingNetProfit,q.ownersNetProfit,q.dilutedEpsConditional].map(number).join('|')}|\n`;
-  const rendered=template.replace('{{QUARTERS}}',quarters).replace('{{SEGMENTS}}',segments).replace('{{ANNUAL}}',annual)
+  const rendered=template.replace('{{HISTORICAL_CASH}}',renderHistoricalCashTable(model)).replace('{{QUARTERS}}',quarters).replace('{{SEGMENTS}}',segments).replace('{{ANNUAL}}',annual)
     .replace('{{BULL27_EPS}}',number(model.scenarios.find(s=>s.id==='bull').calendar2027.dilutedEpsConditional))
     .replace('{{BASE27_OP}}',number(model.scenarios.find(s=>s.id==='base').calendar2027.operatingProfit));
   assert.ok(!rendered.includes('{{'),'unresolved article token');return rendered;
 }
 export async function loadInputs(){const files=['docs/research/2026-10-08-auo-full-financial/financial-relay.json','docs/research/2026-10-08-auo-full-financial/historical-income-relay.json','docs/research/2026-10-08-auo/dataset.json','docs/research/2026-10-08-auo-market/dataset.json',...['guidance','ownership','technology-context'].map(name=>`docs/research/2026-10-08-auo-full-financial/${name}-relay.json`)];const raw=await Promise.all(files.map(f=>readFile(path.join(root,f))));return {values:raw.slice(0,4).map(b=>JSON.parse(b)),context:Object.fromEntries(['guidance','ownership','technology'].map((name,i)=>[name,JSON.parse(raw[i+4])])),manifest:files.map((file,i)=>({file,bytes:raw[i].length,sha256:createHash('sha256').update(raw[i]).digest('hex')}))};}
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-  const {values,manifest,context}=await loadInputs();const model=buildModel(...values,process.argv[2]??new Date().toISOString(),context);
-  await writeFile(path.join(directory,'model-results.json'),JSON.stringify({...model,inputManifest:manifest},null,2)+'\n');
+  const {values,manifest,context}=await loadInputs();const cash=await loadCashFlowPacket();const model=integrateHistoricalCashFlow(buildModel(...values,'2026-10-08T10:20:00Z',context),cash.packet,process.argv[2]??cash.packet.extractionAvailableAt,[...manifest,cash.manifest]);
+  await writeFile(path.join(directory,'model-results.json'),JSON.stringify(model,null,2)+'\n');
   await writeFile(path.join(directory,'article.md'),renderArticle(model,await readFile(path.join(directory,'article-template.md'),'utf8')));
   console.log(JSON.stringify({canonicalHash:model.canonicalHash,scenarios:model.scenarios.map(s=>({id:s.id,eps2026:s.calendar2026.dilutedEpsConditional,eps2027:s.calendar2027.dilutedEpsConditional,forward4:s.nextFourUnreported.dilutedEpsConditional})),sourceInputHashes:manifest.map(m=>m.sha256)}));
 }

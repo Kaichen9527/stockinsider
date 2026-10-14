@@ -1,0 +1,11 @@
+# Historical cash integration successor — maker handoff
+
+Base evidence subject: `243db636b1eaea0141ad91aa45f4b6e7b6a8132d`. Frozen input: `732bb12e947945b0bd71574cafe6ca6509d9ea51`, packet SHA256 `b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3`. All twelve addendum files remain byte-identical. This evidence base contains unapproved history and must not be merged wholesale into main.
+
+`buildModel` keeps its original Oct8 cutoff and every original forecast/price/share/normalization/media/technical field. The CLI wraps that legacy result with `historicalCashFlow`, full original manifest plus the packet, original model cutoff/hash, and a new canonical hash. Oct14 extraction availability is `2026-10-14T02:34:47.456437+00:00`; it does not change original source clocks or make Oct8 prices current.
+
+Both issuers have two consolidated H1 cash bridges in signed TWD thousands. CFO ratios use group net profit including NCI. The proxy subtracts only cash PPE and intangible purchases, excludes disposal proceeds, and separately records lease principal and ROU cash (AUO unextracted ROU stays unknown). It is not IFRS FCF/FCFE, maintenance capex, standalone Q2, or future cash. AUO June30 owners-equity/issued-share basis is 20.457839363; zero treasury carrying value is not a treasury share count, the 2025 cancellation table is not a 2026 register, and October outstanding shares/PB/target price remain unknown.
+
+Root rehashed the original PDFs; this VM checks the sealed relay bytes and arithmetic. No raw PDF transfer/reverification, new acquisition, formal model job/reservation/preparation/publisher/reviewer ID, investment/technical approval, or publication took place. Each company's existing Python verifier independently reads the packet and uses Decimal arithmetic; running it is maker verification, not independent article review.
+
+Raw execution, exact WIP/source identities, original-field equality and capacity records are under `.agent/reports/2026-10-14T10-43-cashflow-model-integration/` in the separate evidence commit. Original models are preserved there and on the frozen base; old review and failure receipts are not relabeled. New article/model review and guarded publication remain pending. No PR or protected approval ref is created by this task.

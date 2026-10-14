@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { buildModel,loadInputs,forecastQuarter,scenarioInputs,renderArticle,conditionalEps,weightedOrdinaryShares } from '../docs/research/2026-10-08-auo-four-segment-model/recompute.mjs';
-const {values,context}=await loadInputs();const cutoff='2026-10-08T10:20:00Z';const model=buildModel(...values,cutoff,context);
+import { buildModel,loadInputs,forecastQuarter,scenarioInputs,renderArticle,conditionalEps,weightedOrdinaryShares,loadCashFlowPacket,integrateHistoricalCashFlow,historicalCashFlow } from '../docs/research/2026-10-08-auo-four-segment-model/recompute.mjs';
+const {values,context,manifest}=await loadInputs();const cutoff='2026-10-08T10:20:00Z';const model=buildModel(...values,cutoff,context);
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-6,`${a} / ${b}`);
 test('official exact four-segment H1/Q2 includes Other and reconciles',()=>{
   for(const s of model.segmentActuals)assert.equal(s.revenue.length,4);
@@ -56,7 +56,7 @@ test('same evidence and cutoff regenerate same canonical model',()=>{assert.equa
 test('unpublished working article renders both tables and forecast claims from the same result',async()=>{
   const template=await readFile(new URL('../docs/research/2026-10-08-auo-four-segment-model/article-template.md',import.meta.url),'utf8');
   const article=await readFile(new URL('../docs/research/2026-10-08-auo-four-segment-model/article.md',import.meta.url),'utf8');
-  assert.equal(renderArticle(model,template),article);assert.ok(article.includes('Other'));assert.ok(article.includes('樂觀2027條件EPS約0.96'));
+  assert.equal(renderArticle(supplemented,template),article);assert.ok(article.includes('Other'));assert.ok(article.includes('樂觀2027條件EPS約0.96'));
   const body=article.split('<details>')[0],characters=[...body].filter(c=>c>='\u4e00'&&c<='\u9fff').length;
   assert.ok(characters>=4000 && characters<=6000,`main-body Chinese characters ${characters}`);
   const defined=new Set([...article.matchAll(/^\[([A-Z]+)\]:/gmu)].map(m=>m[1]));
@@ -76,3 +76,23 @@ test('positive earnings include potential awards; losses exclude only potential 
 test('issued ordinary shares remain in loss denominator with actual-period weight',()=>{near(conditionalEps(-110,weightedOrdinaryShares(100,20,.5),10).dilutedEpsConditional,-1);near(weightedOrdinaryShares(100,20,1),120);near(weightedOrdinaryShares(100,20,0),100);assert.notEqual(weightedOrdinaryShares(100,20,.25),weightedOrdinaryShares(100,20,.75));assert.throws(()=>weightedOrdinaryShares(100,20,1.01));});
 test('quarter and annual loss use their own profit and potential share weights',()=>{const s=model.scenarios[0];for(const q of s.quarters.slice(2)){near(q.ordinaryWeightedSharesMillionAssumed,7547.099);near(q.antiDilutiveExcludedMillion,7547.099*.01);}near(s.calendar2027.antiDilutiveExcludedMillion,7547.099*.01);near(s.nextFourUnreported.antiDilutiveExcludedMillion,7547.099*.005);assert.ok(model.scenarios[1].calendar2027.potentialIncludedMillion>0);});
 test('patent, annual and nine-month citations link directly to their primary sources',async()=>{const t=await readFile(new URL('../docs/research/2026-10-08-auo-four-segment-model/article-template.md',import.meta.url),'utf8');assert.match(t,/證據链。\[P\]/);assert.match(t,/\[H\]: https:\/\/www.auo.com.*4Q2025_TC.pdf/);assert.match(t,/\[HH\]: https:\/\/www.auo.com.*3Q2025_TC.pdf/);assert.ok(!/\[(N|I)\]: \.\.\//.test(t));});
+
+const cash=await loadCashFlowPacket();const supplemented=integrateHistoricalCashFlow(model,cash.packet,cash.packet.extractionAvailableAt,[...manifest,cash.manifest]);
+test('historical cash integration retains every original forecast/price field and binds full manifest',()=>{
+ const original=model;for(const [key,value] of Object.entries(original))if(!['asOf','canonicalHash'].includes(key))assert.deepEqual(supplemented[key],value,key);
+ assert.equal(supplemented.originalModelAsOf,original.asOf);assert.equal(supplemented.originalModelCanonicalHash,original.canonicalHash);
+ assert.equal(supplemented.inputManifest.length,manifest.length+1);assert.equal(supplemented.historicalCashFlow.noFutureCash,true);assert.equal(supplemented.historicalCashFlow.forecastCash,null);
+ assert.equal(supplemented.historicalCashFlow.technicalAdmission,false);assert.equal(supplemented.historicalCashFlow.valuationApproved,false);
+});
+test('both signed H1 bridges use group denominator and exclude disposal and lease cash from proxy',()=>{
+ const h=supplemented.historicalCashFlow;assert.equal(h.rows.length,2);assert.equal(h.extractionAvailableAt,cash.packet.extractionAvailableAt);
+ for(const row of h.rows){assert.equal(row.unit,'TWD_thousands');assert.match(row.grain,/not standalone Q2/);assert.equal(row.cfoLessPpeAndIntangibleCashOutlay,row.cfo+row.ppeCashAcquisition+row.intangibleCashAcquisition);near(row.cfoDividedByGroupNetProfit,row.cfo/row.groupNetProfit);assert.equal(row.openingCash+row.cashChange,row.closingCash);assert.equal(row.cfo+row.investingCash+row.financingCash+row.fxCash,row.cashChange);}
+ for(const locator of Object.values(h.sourceFacts)){assert.ok(locator.pdfPage>0);assert.match(locator.sourceJsonPointer,/^\/issuers\/\d\/facts\//);assert.equal(locator.values.length,2);}
+ assert.deepEqual(h.rows.map(r=>r.cfoLessPpeAndIntangibleCashOutlay),[1134612,-5692596]);near(h.historicalCapital.ownersEquityPerIssuedCommonShareTwd,20.457839363);assert.equal(h.historicalCapital.treasurySharesThousands,null);assert.equal(h.historicalCapital.currentPB,null);assert.equal(h.rows[0].assetDisposalGainAlreadyRemoved,-1991238);
+});
+test('packet mutation sign/unit/grain/hash/clocks and pre-availability successor fail closed',()=>{
+ assert.throws(()=>historicalCashFlow(cash.packet,model.symbol,'2026-10-08T12:12:00Z'),/not yet available/);
+ for(const change of [p=>p.issuers[0].unit='TWD_million',p=>p.issuers[0].grain='Q2',p=>p.issuers[0].facts.ppeCash.values[0]*=-1,p=>p.issuers[0].source.sha256='0'.repeat(64),p=>p.extractionAvailableAt='2026-10-08T00:00:00Z']){const p=structuredClone(cash.packet);change(p);assert.throws(()=>historicalCashFlow(p,model.symbol,cash.packet.extractionAvailableAt),/canonical binding/);}
+});
+
+test("successor stored result exactly recomputes with complete packet manifest",async()=>{const stored=JSON.parse(await readFile(new URL("../docs/research/2026-10-08-auo-four-segment-model/model-results.json",import.meta.url),"utf8"));assert.deepEqual(stored,supplemented);});

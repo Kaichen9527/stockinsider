@@ -47,4 +47,30 @@ for row in m['inputManifest']:
 article=(folder/'article.md').read_text();body=article.split('<details>')[0]
 characters=sum('\u4e00'<=c<='\u9fff'for c in body);assert 4000<=characters<=6000;checks+=1
 references=set(re.findall(r'^\[([A-Z]+)\]:',article,re.M));assert set(re.findall(r'\[([A-Z]+)\]',body))<=references;checks+=1
-print(json.dumps({'independentDecimalChecks':checks,'mainBodyChineseCharacters':characters,'citationDefinitions':len(references),'quarterBridges':18,'sourceInputHashes':7,'historicalPITEligible':False,'normalizedOrValuationApproved':False}))
+# New independent historical cash checks: raw fixed packet, Decimal arithmetic only.
+packet_path=root/'docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json'
+raw=packet_path.read_bytes();assert hashlib.sha256(raw).hexdigest()=='b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3';checks+=1
+packet=json.loads(raw,parse_float=D);issuer=next(x for x in packet['issuers']if x['stock']==m['symbol']);h=m['historicalCashFlow'];facts=issuer['facts'];original_checks=checks
+assert h['extractionAvailableAt']==packet['extractionAvailableAt']==m['asOf'];assert h['originalSource']==issuer['source'];assert h['noFutureCash']and h['forecastCash']is None and not h['valuationApproved']and not h['technicalAdmission'];checks+=3
+for i,row in enumerate(h['rows']):
+ def v(k):return D(facts[k]['values'][i])
+ noncash=sum(v(k)for k in ['depreciation','amortization','fvGain','interestExpenseAdjustment','interestIncomeAdjustment','dividendIncomeAdjustment','shareCompensation','equityMethodAdjustment','ppeDisposalGainAdjustment','rouDisposalLoss','heldForSaleGainAdjustment','investmentGainAdjustment','impairment','unrealizedFx','otherAdjustment'])if m['symbol']=='2409'else v('nonCashAdjustments')
+ wc=sum(v(k)for k in ['receivables','relatedReceivables','inventory','contractCosts','otherOperatingAssets','contractLiabilities','payables','relatedPayables','provisions','otherOperatingLiabilities'])if m['symbol']=='2409'else v('workingCapital')
+ check(v('pretax')+noncash+wc,v('generatedCash'));check(v('generatedCash')+v('interestReceived')+v('interestPaid')+v('taxPaid')+(v('dividendReceived')if m['symbol']=='2409'else 0),row['cfo'])
+ check(v('ownersNetProfit')+v('nonControllingNetProfit'),row['groupNetProfit']);check(v('operatingCash')/v('netProfit'),row['cfoDividedByGroupNetProfit'])
+ check(noncash,row['nonCashAdjustments']);check(wc,row['workingCapitalCashEffect'])
+ check(v('operatingCash')+v('ppeCash')+v('intangibleCash'),row['cfoLessPpeAndIntangibleCashOutlay']);check(v('operatingCash')+v('ppeCash'),row['cfoLessPpeCashOutlay'])
+ for field,key in [('ppeCashAcquisition','ppeCash'),('intangibleCashAcquisition','intangibleCash'),('receivablesCashEffect','receivables'),('inventoryCashEffect','inventory'),('payablesCashEffect','payables'),('leasePrincipalSeparate','leasePrincipal'),('investingCash','investingCash'),('financingCash','financingCash'),('fxCash','fxCash'),('openingCash','openingCash'),('closingCash','closingCash')]:check(v(key),row[field])
+ check(sum(v(k)for k in (['shortBorrowings','shortRepayments','longBorrowings','longRepayments']if m['symbol']=='2409'else ['shortBorrowingsNet','longBorrowings','longRepayments'])),row['netBorrowingCash'])
+ check(v('operatingCash')+v('investingCash')+v('financingCash')+v('fxCash'),row['cashChange']);check(v('openingCash')+v('cashChange'),row['closingCash'])
+ check(v('ppeDisposalCash')+(v('heldForSaleDisposalCash')if m['symbol']=='2409'else 0),row['disposalProceedsExcluded'])
+ assert row['period']==issuer['periods'][i]and row['unit']=='TWD_thousands'and row['grain']==issuer['grain'];checks+=1
+ if m['symbol']=='2409':check(v('heldForSaleGainAdjustment'),row['assetDisposalGainAlreadyRemoved']);assert row['rouCashAcquisitionSeparate']is None;checks+=1
+ else:check(v('rouCash'),row['rouCashAcquisitionSeparate'])
+for key,fact in facts.items():
+ locator=h['sourceFacts'][key];assert locator['values']==fact['values']and locator['pdfPage']==fact['pdfPage']and locator['sourceLine']==fact['sourceLine'];assert locator['sourceJsonPointer']==f"/issuers/{packet['issuers'].index(issuer)}/facts/{key}/values";checks+=1
+if m['symbol']=='2409':
+ capital=packet['auoJune30Capital'];check(D(capital['ownersEquityTwdThousands'])/D(capital['issuedSharesThousands']),h['historicalCapital']['ownersEquityPerIssuedCommonShareTwd']);assert h['historicalCapital']['treasurySharesThousands']is None and h['historicalCapital']['currentPB']is None and h['historicalCapital']['octoberOutstandingShares']is None;checks+=1
+cash_decimal_checks=checks-original_checks
+
+print(json.dumps({'independentDecimalChecks':checks,'mainBodyChineseCharacters':characters,'citationDefinitions':len(references),'quarterBridges':18,'sourceInputHashes':len(m['inputManifest']),'historicalCashDecimalChecks':cash_decimal_checks,'historicalPITEligible':False,'normalizedOrValuationApproved':False}))

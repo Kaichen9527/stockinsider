@@ -33,5 +33,50 @@
   "VMHTTPFetchSucceeded": false,
   "periodScope": "current observed evidence, exact historicalpublicationinstants absent",
   "failureHistory": "originalSeptembermarkettimeout+separate retry and KGIerror retained; Pocket200shellnotbody; same-rootPTTnotindependent; Aug28X0.00 retained",
-  "nextSources": "no podcast/source increment mixed"
+  "nextSources": "no podcast/source increment mixed",
+  "historicalCashSuccessor": {
+    "recordedAt": "2026-10-14T02:55:43.705281+00:00",
+    "sourcePacketManifest": {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
+    },
+    "newAvailability": "2026-10-14T02:34:47.456437+00:00",
+    "oldSourceClocksUnchanged": true,
+    "verificationAttribution": "root source packet/PDF rehash, independent Python arithmetic executed by VM maker; not formal article/source approval",
+    "rootReceiptSha256": "ae9a24f469c1f7f235dbc36a0708a3211cf04619d85b77e90e2b3613fac70957",
+    "noNewHttpOrRawPdfRequest": true
+  },
+  "inputManifest": [
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/financial-relay.json",
+      "bytes": 33734,
+      "sha256": "e4057879306d45e7c1be62a17c8047644806881fe01f5ffd7903f5523aa84ac0"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/market-relay.json",
+      "bytes": 110526,
+      "sha256": "fdb0712fe490aaeb719d382d689bfbe4e17213c8a79957c6d238c642d61c7de5"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/context-relay.json",
+      "bytes": 10693,
+      "sha256": "8f3b7778866ebcfd91f4d1c2c3a756fdf56173f8323ecf52faba9ed66d1800a5"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/financial-notes-relay.json",
+      "bytes": 3630,
+      "sha256": "07136fe1b389b512232b5637b5fa3d7cb1f02f77f170a9ba7746139b37593275"
+    },
+    {
+      "file": "docs/research/2026-10-08-emc-official-evidence/current-media-relay.json",
+      "bytes": 3671,
+      "sha256": "59c90fb0661f54da7cd1432e54acabe3a85fa74983f8d27aeef7d1ecff73975d"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
+    }
+  ]
 }

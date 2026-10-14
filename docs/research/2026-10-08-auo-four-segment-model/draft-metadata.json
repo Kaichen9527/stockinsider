@@ -6,7 +6,7 @@
   "reviewAttribution": "root reports Astra unsigned scoped DATA pass, not approval of this model/article",
   "evidenceCutoffAt": "2026-10-08T10:20:00Z",
   "authoredAndVerifiedAt": "2026-10-08T12:00:37.360909+00:00",
-  "mainBodyChineseCharacters": 4123,
+  "mainBodyChineseCharacters": 4650,
   "published": false,
   "historicalPITEligible": false,
   "productionImported": false,
@@ -16,8 +16,8 @@
   "researchQualified": false,
   "strategyApproved": false,
   "targetPrice": null,
-  "modelCanonicalHash": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
-  "articleSha256": "5fd8f5a7a6043bd614efb7e781ad68372b83cf35c6a4853e8f8ae2418415905e",
+  "modelCanonicalHash": "8027bfa234faf4bdfdc8b71330f4b3d7b71242c1fb9417c5b9f139affe8ea909",
+  "articleSha256": "accb32669966843b008a345bfe732a13d41af3b008fcbfe2f716d6d580c8cda2",
   "futureSharesVerified": false,
   "forecastBasis": "reportedH1 plus explicit Q3/Q4 hypotheses, calendar2027, forward four unreported quarters kept separate",
   "EMCRemaining": "Approved4d3f709 evidence not mixed; next separate increment",
@@ -26,5 +26,16 @@
   "reviewResult": "Astra unsigned request changes: potential shares anti-dilution and citation targets; successor pending independent review",
   "nativeMergedSubject": "8e0437e65ffd8d4ac5ca22c057b96879fe58b2ee",
   "nativeReview": "Astra unsigned scoped code approval relayed by root; not protected",
-  "shareSemantics": "ordinary unchanged; potential award sensitivity excluded for loss, independent quarter/year weighting"
+  "shareSemantics": "ordinary unchanged; potential award sensitivity excluded for loss, independent quarter/year weighting",
+  "historicalCashSuccessor": {
+    "sourceSubject": "732bb12e947945b0bd71574cafe6ca6509d9ea51",
+    "sourcePacketSha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3",
+    "availableAt": "2026-10-14T02:34:47.456437+00:00",
+    "originalModelAsOf": "2026-10-08T10:20:00Z",
+    "originalCanonicalHash": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
+    "newIndependentArticleReview": "pending; maker execution of independent-language verifier is not reviewer approval",
+    "historicalPITEligible": false,
+    "forecastCash": null,
+    "rawPdfVerificationAttribution": "root retained PDF rehash; VM did not receive/reverify raw PDF"
+  }
 }

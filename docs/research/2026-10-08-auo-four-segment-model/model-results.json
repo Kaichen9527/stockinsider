@@ -1,7 +1,7 @@
 {
   "schemaVersion": "auo-four-segment-research-model-v1",
   "symbol": "2409",
-  "asOf": "2026-10-08T10:20:00Z",
+  "asOf": "2026-10-14T02:34:47.456437+00:00",
   "unit": "TWD_million; EPS TWD/share",
   "status": "draft/incomplete",
   "historicalPITEligible": false,
@@ -2292,7 +2292,8 @@
     "No calibrated PE, target price, certified current P/B, approved entry or model/lease IDs"
   ],
   "calculationComponent": "existing auo-deep-dive-model.calculateQuarter / requiredEarningsAtMultiple / calculateCommercializationBridge",
-  "canonicalHash": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
+  "originalModelAsOf": "2026-10-08T10:20:00Z",
+  "originalModelCanonicalHash": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
   "inputManifest": [
     {
       "file": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
@@ -2328,6 +2329,655 @@
       "file": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
       "bytes": 6599,
       "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
+    },
+    {
+      "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+      "bytes": 30651,
+      "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
     }
-  ]
+  ],
+  "historicalCashFlow": {
+    "schemaVersion": "historical-group-cash-bridge-v1",
+    "symbol": "2409",
+    "sourcePacketSha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3",
+    "extractionAvailableAt": "2026-10-14T02:34:47.456437+00:00",
+    "originalSource": {
+      "label": "2026q2-consolidated-tc",
+      "url": "https://www.auo.com/upload/media/ir/Financial_Information/2Q2026_TC.pdf",
+      "attemptedAt": "2026-10-08T09:36:32.144541+00:00",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 1578813,
+      "sha256": "94d74c75de96a6ec7b38d4d6c8a9f5d2d92750bf618543429b326ff6c95dcdb2",
+      "observedAt": "2026-10-08T09:36:32.926634+00:00",
+      "rawFile": "2026q2-consolidated-tc.pdf",
+      "textSha256": "5f69f4fba20a68e5ad98d9935d6f6feef25b384de72570b5e442a18fac792a6d"
+    },
+    "rawPdfRehashAttribution": {
+      "actor": "root retained-PDF rehash; not VM raw verification",
+      "at": "2026-10-14T02:34:47.456437+00:00"
+    },
+    "rows": [
+      {
+        "period": "2026-01-01/2026-06-30",
+        "grain": "six-month cumulative flow, not standalone Q2",
+        "unit": "TWD_thousands",
+        "cfo": 6877414,
+        "groupNetProfit": 1080601,
+        "cfoDividedByGroupNetProfit": 6.364434236133411,
+        "pretax": 2249593,
+        "nonCashAdjustments": 12294544,
+        "workingCapitalCashEffect": -6614055,
+        "receivablesCashEffect": -1355982,
+        "inventoryCashEffect": -4642777,
+        "payablesCashEffect": 2555934,
+        "ppeCashAcquisition": -5550174,
+        "intangibleCashAcquisition": -192628,
+        "cfoLessPpeCashOutlay": 1327240,
+        "cfoLessPpeAndIntangibleCashOutlay": 1134612,
+        "leasePrincipalSeparate": -402683,
+        "rouCashAcquisitionSeparate": null,
+        "assetDisposalGainAlreadyRemoved": -1991238,
+        "disposalProceedsExcluded": 2999975,
+        "netBorrowingCash": -8058238,
+        "investingCash": -2059522,
+        "financingCash": -8758567,
+        "fxCash": 2115789,
+        "cashChange": -1824886,
+        "openingCash": 55616637,
+        "closingCash": 53791751
+      },
+      {
+        "period": "2025-01-01/2025-06-30",
+        "grain": "six-month cumulative flow, not standalone Q2",
+        "unit": "TWD_thousands",
+        "cfo": 5118098,
+        "groupNetProfit": 5163501,
+        "cfoDividedByGroupNetProfit": 0.9912069349846161,
+        "pretax": 6620130,
+        "nonCashAdjustments": 10616939,
+        "workingCapitalCashEffect": -10298354,
+        "receivablesCashEffect": -1297769,
+        "inventoryCashEffect": 761018,
+        "payablesCashEffect": -597381,
+        "ppeCashAcquisition": -10810694,
+        "intangibleCashAcquisition": 0,
+        "cfoLessPpeCashOutlay": -5692596,
+        "cfoLessPpeAndIntangibleCashOutlay": -5692596,
+        "leasePrincipalSeparate": -389829,
+        "rouCashAcquisitionSeparate": null,
+        "assetDisposalGainAlreadyRemoved": 6236,
+        "disposalProceedsExcluded": 919341,
+        "netBorrowingCash": -5947733,
+        "investingCash": -7561587,
+        "financingCash": -8231290,
+        "fxCash": -3420869,
+        "cashChange": -14095648,
+        "openingCash": 68446514,
+        "closingCash": 54350866
+      }
+    ],
+    "sourceFacts": {
+      "pretax": {
+        "pdfPage": 8,
+        "label": "本期稅前淨利",
+        "sourceLine": "本期稅前淨利                    $    2,249,593      6,620,130",
+        "values": [
+          2249593,
+          6620130
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/pretax/values"
+      },
+      "depreciation": {
+        "pdfPage": 8,
+        "label": "折舊費用",
+        "sourceLine": "折舊費用                        13,078,942     13,877,319",
+        "values": [
+          13078942,
+          13877319
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/depreciation/values"
+      },
+      "amortization": {
+        "pdfPage": 8,
+        "label": "攤銷費用",
+        "sourceLine": "攤銷費用                         1,458,846      1,175,136",
+        "values": [
+          1458846,
+          1175136
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/amortization/values"
+      },
+      "fvGain": {
+        "pdfPage": 8,
+        "label": "透過損益按公允價值衡量之金融工具之淨利益",
+        "sourceLine": "透過損益按公允價值衡量之金融工具之淨利益            (52,196)       (98,304)",
+        "values": [
+          -52196,
+          -98304
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/fvGain/values"
+      },
+      "interestExpenseAdjustment": {
+        "pdfPage": 8,
+        "label": "利息費用",
+        "sourceLine": "利息費用                         1,302,614      1,522,339",
+        "values": [
+          1302614,
+          1522339
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/interestExpenseAdjustment/values"
+      },
+      "interestIncomeAdjustment": {
+        "pdfPage": 8,
+        "label": "利息收入",
+        "sourceLine": "利息收入                          (493,554)      (628,250)",
+        "values": [
+          -493554,
+          -628250
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/interestIncomeAdjustment/values"
+      },
+      "dividendIncomeAdjustment": {
+        "pdfPage": 8,
+        "label": "股利收入",
+        "sourceLine": "股利收入                           -                  (204)",
+        "values": [
+          0,
+          -204
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/dividendIncomeAdjustment/values"
+      },
+      "shareCompensation": {
+        "pdfPage": 8,
+        "label": "股份基礎給付酬勞成本",
+        "sourceLine": "股份基礎給付酬勞成本                       17,580       -",
+        "values": [
+          17580,
+          0
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/shareCompensation/values"
+      },
+      "equityMethodAdjustment": {
+        "pdfPage": 8,
+        "label": "採用權益法認列之關聯企業及合資損益之份額",
+        "sourceLine": "採用權益法認列之關聯企業及合資損益之份額          (431,357)       193,973",
+        "values": [
+          -431357,
+          193973
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/equityMethodAdjustment/values"
+      },
+      "ppeDisposalGainAdjustment": {
+        "pdfPage": 8,
+        "label": "處分及報廢不動產、廠房及設備利益",
+        "sourceLine": "處分及報廢不動產、廠房及設備利益                (71,052)   (2,376,910)",
+        "values": [
+          -71052,
+          -2376910
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/ppeDisposalGainAdjustment/values"
+      },
+      "rouDisposalLoss": {
+        "pdfPage": 8,
+        "label": "處分使用權資產損失",
+        "sourceLine": "處分使用權資產損失                           718       -",
+        "values": [
+          718,
+          0
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/rouDisposalLoss/values"
+      },
+      "heldForSaleGainAdjustment": {
+        "pdfPage": 8,
+        "label": "處分待出售非流動資產損益",
+        "sourceLine": "處分待出售非流動資產損益                (1,991,238)          6,236",
+        "values": [
+          -1991238,
+          6236
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/heldForSaleGainAdjustment/values"
+      },
+      "investmentGainAdjustment": {
+        "pdfPage": 8,
+        "label": "處分投資利益淨額",
+        "sourceLine": "處分投資利益淨額                      (113,145)    (2,164,382)",
+        "values": [
+          -113145,
+          -2164382
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/investmentGainAdjustment/values"
+      },
+      "impairment": {
+        "pdfPage": 8,
+        "label": "資產減損損失",
+        "sourceLine": "資產減損損失                            6,309       418,950",
+        "values": [
+          6309,
+          418950
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/impairment/values"
+      },
+      "unrealizedFx": {
+        "pdfPage": 8,
+        "label": "未實現外幣兌換利益",
+        "sourceLine": "未實現外幣兌換利益                     (357,173)    (1,307,963)",
+        "values": [
+          -357173,
+          -1307963
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/unrealizedFx/values"
+      },
+      "otherAdjustment": {
+        "pdfPage": 8,
+        "label": "其他 ",
+        "sourceLine": "其他                              (60,750)        (1,001)",
+        "values": [
+          -60750,
+          -1001
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/otherAdjustment/values"
+      },
+      "receivables": {
+        "pdfPage": 8,
+        "label": "應收票據及帳款",
+        "sourceLine": "應收票據及帳款                     (1,355,982)    (1,297,769)",
+        "values": [
+          -1355982,
+          -1297769
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/receivables/values"
+      },
+      "relatedReceivables": {
+        "pdfPage": 8,
+        "label": "應收關係人款項",
+        "sourceLine": "應收關係人款項                         63,642         90,981",
+        "values": [
+          63642,
+          90981
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/relatedReceivables/values"
+      },
+      "inventory": {
+        "pdfPage": 8,
+        "label": "存貨",
+        "sourceLine": "存貨                          (4,642,777)       761,018",
+        "values": [
+          -4642777,
+          761018
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/inventory/values"
+      },
+      "contractCosts": {
+        "pdfPage": 8,
+        "label": "履行合約成本",
+        "sourceLine": "履行合約成本                      (1,201,494)    (1,432,280)",
+        "values": [
+          -1201494,
+          -1432280
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/contractCosts/values"
+      },
+      "otherOperatingAssets": {
+        "pdfPage": 8,
+        "label": "其他營業資產",
+        "sourceLine": "其他營業資產                        (139,221)    (1,012,344)",
+        "values": [
+          -139221,
+          -1012344
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/otherOperatingAssets/values"
+      },
+      "contractLiabilities": {
+        "pdfPage": 8,
+        "label": "合約負債",
+        "sourceLine": "合約負債                           270,657     (1,136,533)",
+        "values": [
+          270657,
+          -1136533
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/contractLiabilities/values"
+      },
+      "payables": {
+        "pdfPage": 8,
+        "label": "應付票據及帳款",
+        "sourceLine": "應付票據及帳款                      2,555,934       (597,381)",
+        "values": [
+          2555934,
+          -597381
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/payables/values"
+      },
+      "relatedPayables": {
+        "pdfPage": 8,
+        "label": "應付關係人款項",
+        "sourceLine": "應付關係人款項                        217,903       (873,924)",
+        "values": [
+          217903,
+          -873924
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/relatedPayables/values"
+      },
+      "provisions": {
+        "pdfPage": 8,
+        "label": "負債準備",
+        "sourceLine": "負債準備                            80,058       (141,052)",
+        "values": [
+          80058,
+          -141052
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/provisions/values"
+      },
+      "otherOperatingLiabilities": {
+        "pdfPage": 8,
+        "label": "其他營業負債",
+        "sourceLine": "其他營業負債                      (2,462,775)    (4,659,070)",
+        "values": [
+          -2462775,
+          -4659070
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/otherOperatingLiabilities/values"
+      },
+      "generatedCash": {
+        "pdfPage": 8,
+        "label": "營運產生之現金流入",
+        "sourceLine": "營運產生之現金流入                      7,930,082      6,938,715",
+        "values": [
+          7930082,
+          6938715
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/generatedCash/values"
+      },
+      "interestReceived": {
+        "pdfPage": 8,
+        "label": "收取之利息",
+        "sourceLine": "收取之利息                            460,072        671,627",
+        "values": [
+          460072,
+          671627
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/interestReceived/values"
+      },
+      "dividendReceived": {
+        "pdfPage": 8,
+        "label": "收取之股利",
+        "sourceLine": "收取之股利                            462,268        215,718",
+        "values": [
+          462268,
+          215718
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/dividendReceived/values"
+      },
+      "interestPaid": {
+        "pdfPage": 8,
+        "label": "支付之利息",
+        "sourceLine": "支付之利息                         (1,324,703)    (1,564,397)",
+        "values": [
+          -1324703,
+          -1564397
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/interestPaid/values"
+      },
+      "taxPaid": {
+        "pdfPage": 8,
+        "label": "支付之所得稅",
+        "sourceLine": "支付之所得稅                          (650,305)    (1,143,565)",
+        "values": [
+          -650305,
+          -1143565
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/taxPaid/values"
+      },
+      "operatingCash": {
+        "pdfPage": 8,
+        "label": "營業活動之淨現金流入",
+        "sourceLine": "營業活動之淨現金流入                    6,877,414      5,118,098",
+        "values": [
+          6877414,
+          5118098
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/operatingCash/values"
+      },
+      "ppeCash": {
+        "pdfPage": 9,
+        "label": "取得不動產、廠房及設備",
+        "sourceLine": "取得不動產、廠房及設備                       (5,550,174)    (10,810,694)",
+        "values": [
+          -5550174,
+          -10810694
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/ppeCash/values"
+      },
+      "intangibleCash": {
+        "pdfPage": 9,
+        "label": "取得無形資產",
+        "sourceLine": "取得無形資產                              (192,628)        -",
+        "values": [
+          -192628,
+          0
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/intangibleCash/values"
+      },
+      "ppeDisposalCash": {
+        "pdfPage": 9,
+        "label": "處分不動產、廠房及設備",
+        "sourceLine": "處分不動產、廠房及設備                          715,200         918,024",
+        "values": [
+          715200,
+          918024
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/ppeDisposalCash/values"
+      },
+      "heldForSaleDisposalCash": {
+        "pdfPage": 9,
+        "label": "處分待出售非流動資產價款",
+        "sourceLine": "處分待出售非流動資產價款                       2,284,775            1,317",
+        "values": [
+          2284775,
+          1317
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/heldForSaleDisposalCash/values"
+      },
+      "subsidiaryDisposalCash": {
+        "pdfPage": 9,
+        "label": "處分子公司(扣除除列之子公司現金)",
+        "sourceLine": "處分子公司(扣除除列之子公司現金)                    948,835            2,128",
+        "values": [
+          948835,
+          2128
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/subsidiaryDisposalCash/values"
+      },
+      "investingCash": {
+        "pdfPage": 9,
+        "label": "投資活動之淨現金流出",
+        "sourceLine": "投資活動之淨現金流出                       (2,059,522)     (7,561,587)",
+        "values": [
+          -2059522,
+          -7561587
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/investingCash/values"
+      },
+      "shortBorrowings": {
+        "pdfPage": 9,
+        "label": "舉借短期借款",
+        "sourceLine": "舉借短期借款                            15,106,352       8,959,519",
+        "values": [
+          15106352,
+          8959519
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/shortBorrowings/values"
+      },
+      "shortRepayments": {
+        "pdfPage": 9,
+        "label": "償還短期借款",
+        "sourceLine": "償還短期借款                           (12,645,528)     (8,095,644)",
+        "values": [
+          -12645528,
+          -8095644
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/shortRepayments/values"
+      },
+      "longBorrowings": {
+        "pdfPage": 9,
+        "label": "舉借長期借款",
+        "sourceLine": "舉借長期借款                            23,864,824      23,582,292",
+        "values": [
+          23864824,
+          23582292
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/longBorrowings/values"
+      },
+      "longRepayments": {
+        "pdfPage": 9,
+        "label": "償還長期借款",
+        "sourceLine": "償還長期借款                           (34,383,886)    (30,393,900)",
+        "values": [
+          -34383886,
+          -30393900
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/longRepayments/values"
+      },
+      "leasePrincipal": {
+        "pdfPage": 9,
+        "label": "租賃本金償還",
+        "sourceLine": "租賃本金償還                              (402,683)       (389,829)",
+        "values": [
+          -402683,
+          -389829
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/leasePrincipal/values"
+      },
+      "financingCash": {
+        "pdfPage": 9,
+        "label": "籌資活動之淨現金流出",
+        "sourceLine": "籌資活動之淨現金流出                       (8,758,567)     (8,231,290)",
+        "values": [
+          -8758567,
+          -8231290
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/financingCash/values"
+      },
+      "fxCash": {
+        "pdfPage": 9,
+        "label": "匯率變動對現金及約當現金之影響",
+        "sourceLine": "匯率變動對現金及約當現金之影響                     2,115,789      (3,420,869)",
+        "values": [
+          2115789,
+          -3420869
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/fxCash/values"
+      },
+      "cashChange": {
+        "pdfPage": 9,
+        "label": "本期現金及約當現金減少數",
+        "sourceLine": "本期現金及約當現金減少數                       (1,824,886)    (14,095,648)",
+        "values": [
+          -1824886,
+          -14095648
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/cashChange/values"
+      },
+      "openingCash": {
+        "pdfPage": 9,
+        "label": "期初現金及約當現金餘額",
+        "sourceLine": "期初現金及約當現金餘額                        55,616,637      68,446,514",
+        "values": [
+          55616637,
+          68446514
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/openingCash/values"
+      },
+      "closingCash": {
+        "pdfPage": 9,
+        "label": "期末現金及約當現金餘額",
+        "sourceLine": "期末現金及約當現金餘額                   $    53,791,751      54,350,866",
+        "values": [
+          53791751,
+          54350866
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/closingCash/values"
+      },
+      "revenue": {
+        "pdfPage": 6,
+        "label": "營業收入",
+        "sourceLine": "4000   營業收入淨額(附註六(廿一)及七)              $ 70,891,194 100           69,236,749 100 139,922,549 100 141,338,620 100",
+        "values": [
+          139922549,
+          141338620
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/revenue/values"
+      },
+      "netProfit": {
+        "pdfPage": 6,
+        "label": "本期淨利",
+        "sourceLine": "8200   本期淨利                                2,120,051         3    1,904,314         3    1,080,601         1    5,163,501         4",
+        "values": [
+          1080601,
+          5163501
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/netProfit/values"
+      },
+      "ownersNetProfit": {
+        "pdfPage": 6,
+        "label": "母公司業主",
+        "sourceLine": "8610    母公司業主                         $    1,343,092         2    1,947,871         3      199,555     -        5,241,612         4",
+        "values": [
+          199555,
+          5241612
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/ownersNetProfit/values"
+      },
+      "nonControllingNetProfit": {
+        "pdfPage": 6,
+        "label": "非控制權益",
+        "sourceLine": "8620    非控制權益                                776,959         1      (43,557)    -          881,046         1      (78,111)    -",
+        "values": [
+          881046,
+          -78111
+        ],
+        "sourceJsonPointer": "/issuers/0/facts/nonControllingNetProfit/values"
+      }
+    },
+    "proxyDefinition": "CFO plus signed PPE and intangible cash acquisitions only; disposal proceeds excluded; not IFRS FCF, FCFE, maintenance capex or forecast",
+    "noFutureCash": true,
+    "forecastCash": null,
+    "valuationApproved": false,
+    "technicalAdmission": false,
+    "historicalCapital": {
+      "instant": "2026-06-30",
+      "ownersEquityTwdThousands": 154397339,
+      "nonControllingEquityTwdThousands": 12504849,
+      "groupEquityTwdThousands": 166902188,
+      "paidCapitalTwdThousands": 75470990,
+      "parTwd": 10,
+      "issuedSharesThousands": 7547099,
+      "treasuryCarryingAmountTwdThousands": 0,
+      "treasurySharesThousands": null,
+      "scope": "June 30 historical share/equity basis only; no current October outstanding-share or P/B claim",
+      "evidence": [
+        {
+          "pdfPage": 7,
+          "printedPage": "6",
+          "observation": "2026-06-30 ending equity row has dash in treasury-stock column; owners equity 154,397,339; common capital 75,470,990; no 2026H1 treasury transaction rows"
+        },
+        {
+          "pdfPage": 38,
+          "printedPage": "36",
+          "observation": "paid capital 75,470,990 TWD thousand; par 10 TWD; 2025 cancellation 120,782 thousand shares"
+        },
+        {
+          "pdfPage": 40,
+          "printedPage": "38",
+          "observation": "treasury rollforward shown is 2025H1, NOT a new 2026 share count; considered with June 2026 equity statement"
+        }
+      ],
+      "treasuryShareCountStatus": "No direct 2026 share-register count extracted; zero carrying amount on June30 equity statement is verified. Derived historical metric explicitly uses issued common shares.",
+      "ownersEquityPerIssuedCommonShareTwd": 20.457839363177825,
+      "octoberOutstandingShares": null,
+      "currentPB": null,
+      "targetPrice": null
+    }
+  },
+  "canonicalHash": "8027bfa234faf4bdfdc8b71330f4b3d7b71242c1fb9417c5b9f139affe8ea909"
 }

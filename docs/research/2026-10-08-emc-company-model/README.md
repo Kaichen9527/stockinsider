@@ -23,3 +23,9 @@ Private focused/Decimal/types/lint/normalbuild receipts and failure chronology a
 ## P3 sensitivity correction
 
 The 2027-base PE sensitivity now consistently uses assumed diluted weighted shares360.112605m; its shareBasis field labels the future assumption. PE40 requires rounded owners income54017m versus the original basic-basis53748m. Main article, scenario EPS and evidence remain unchanged. The original a7a96c2 snapshot and its unsigned scoped working-draft review remain historical; this successor correction awaits review.
+
+## 2026-10-14 historical cash successor
+
+The Oct8 model and price clocks remain in `originalModelAsOf` and the original input relays. The CLI now appends a pinned Oct14 packet as `historicalCashFlow` and binds the complete input manifest into the successor canonical hash. Both H1 cash bridges are cumulative consolidated flows, not Q2 or future cash. The CFO/PPE/intangible proxy excludes disposal proceeds and separately records lease cash; it is not IFRS FCF/FCFE, maintenance capex, or a forecast. Original scenarios, normalization, reverse sensitivities, and share assumptions are unchanged.
+
+Root reverified the retained PDFs; this VM rehashes the relay packet and performs arithmetic, not raw-PDF verification. New article/model review remains pending; no formal job, reservation, prepared input, publisher, or reviewer identity was created. Run `recompute.mjs` without an argument for the fixed extraction availability, then `verify-output.py` for the independent Decimal calculations. Historical receipts remain on the base evidence branch, not relabeled as successor approval.

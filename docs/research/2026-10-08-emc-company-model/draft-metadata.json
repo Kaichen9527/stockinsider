@@ -10,9 +10,9 @@
   "review": "root-relayed Astra unsigned scoped DATA pass; exactmodel/article review pending",
   "cutoffAt": "2026-10-08T12:12:00Z",
   "authoredAndCheckedAt": "2026-10-08T12:16:10.051875+00:00",
-  "modelCanonicalHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
-  "articleSha256": "762f27593c28114644e9b7fb90b8a6d8a392b855a2bd5d44e2025fc114159822",
-  "mainBodyHan": 4468,
+  "modelCanonicalHash": "ac94e0370cf844291cab963852762b0597f53af43af74592f0a0c9fbdc56246a",
+  "articleSha256": "65a5c805e45487dfa6daa91d5c8d7f5d5aae4a10ed7f6aa250cb6b11710b3064",
+  "mainBodyHan": 4948,
   "published": false,
   "historicalPITEligible": false,
   "productionImported": false,
@@ -25,5 +25,16 @@
   "futureSharesVerified": false,
   "preview": "not yet integrated, next bounded scope",
   "correction": "base2027 diluted share basis for reversePriceSensitivity; main article and EPS unchanged",
-  "correctionRecordedAt": "2026-10-08T12:34:57.629020+00:00"
+  "correctionRecordedAt": "2026-10-08T12:34:57.629020+00:00",
+  "historicalCashSuccessor": {
+    "sourceSubject": "732bb12e947945b0bd71574cafe6ca6509d9ea51",
+    "sourcePacketSha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3",
+    "availableAt": "2026-10-14T02:34:47.456437+00:00",
+    "originalModelAsOf": "2026-10-08T12:12:00Z",
+    "originalCanonicalHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
+    "newIndependentArticleReview": "pending; maker execution of independent-language verifier is not reviewer approval",
+    "historicalPITEligible": false,
+    "forecastCash": null,
+    "rawPdfVerificationAttribution": "root retained PDF rehash; VM did not receive/reverify raw PDF"
+  }
 }

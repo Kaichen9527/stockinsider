@@ -1,45 +1,45 @@
 {
-  "canonicalModelHash": "19ddd96b6e63809f1f554d37fb2753d4ea20967cd2bafb785ff403ffff17c9be",
+  "canonicalModelHash": "ac94e0370cf844291cab963852762b0597f53af43af74592f0a0c9fbdc56246a",
   "files": [
     {
       "file": "docs/research/2026-10-08-emc-company-model/README.md",
-      "bytes": 4274,
-      "sha256": "bbd0a3d136e13c0985d01223e0cca0d71f73797be77ec7cf49e3151b117eff60"
+      "bytes": 5362,
+      "sha256": "5d4bb16afe92d2b13cde1dca2941e447b10fb1b41512b7e93a028a2364f48ca7"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/article-template.md",
-      "bytes": 18274,
-      "sha256": "5e607a501832aefa644c2b757668504fc93a637ccaaac675fd53184e811a64f3"
+      "bytes": 20264,
+      "sha256": "402cd96e8e4ce94696ffc7d11703e621d6ac769f9a6380bac59760af3557c829"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/article.md",
-      "bytes": 20855,
-      "sha256": "762f27593c28114644e9b7fb90b8a6d8a392b855a2bd5d44e2025fc114159822"
+      "bytes": 23472,
+      "sha256": "65a5c805e45487dfa6daa91d5c8d7f5d5aae4a10ed7f6aa250cb6b11710b3064"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/draft-metadata.json",
-      "bytes": 1192,
-      "sha256": "e26f29ebe7b97a5410bc70c89b1461b686d311d5545dd75537b1ba2b4a1ec857"
+      "bytes": 1872,
+      "sha256": "e62a3c50c6d90a8e49d1d946abafbe0e9e171abcfda99f2b8967e303c21535c4"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/model-results.json",
-      "bytes": 54602,
-      "sha256": "be5903c2d08ebe683a90f77f23c10735846589bc1e54740caa51ed8744f0d55c"
+      "bytes": 70529,
+      "sha256": "846546059cd875ff993efe0a7cbba216dd8ad10123491441ac75b9120bfde3c4"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/recompute.mjs",
-      "bytes": 17073,
-      "sha256": "e34d5d25f0214b1a0581faa723d684e33bcbc0ee8c76690b1507ecd9d33ddaab"
+      "bytes": 17302,
+      "sha256": "afabc54338d350af6755732c853ee6401f5a4388b2e82685044919009ff16e4c"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/source-ledger.json",
-      "bytes": 1720,
-      "sha256": "634706a92e05e3c05ff6e88853dd77d2c63436a40aab0551ccc83910104713b7"
+      "bytes": 3667,
+      "sha256": "e0e349ebdc09fd584b2b0b77be8e9738027d322623244fef0628a644b89648bf"
     },
     {
       "file": "docs/research/2026-10-08-emc-company-model/verify-output.py",
-      "bytes": 4599,
-      "sha256": "f7a3865ce0d6aa9998dcb4c7d010985cf53e845590681cf50435aaae8a06a040"
+      "bytes": 8707,
+      "sha256": "7ff98e9a5f0fe5018d2b8de99561c1abcb6e9cd3ac94b7f53f79578d5b7b1216"
     },
     {
       "file": "scripts/lib/research-model-article.mjs",
@@ -48,8 +48,12 @@
     },
     {
       "file": "scripts/research-emc-company-model.test.mjs",
-      "bytes": 7410,
-      "sha256": "de9ceda82c9bc10c8186a119a92fd6c97226875ef4ab5ed050b4f0963003af36"
+      "bytes": 10396,
+      "sha256": "2cf81ee08939b21c2259e2d46abbcc4984735adbbba56d28dde138a4b0ee912b"
     }
-  ]
+  ],
+  "historicalCashSourcePacket": {
+    "file": "docs/research/2026-10-14-cashflow-capital-addendum/source-packet.json",
+    "sha256": "b3cdd1b865ef31e7df7db715697e6137a0eb5112139d88e8af337ae3f15030a3"
+  }
 }

@@ -25,3 +25,9 @@ Old32.2/36.6 paper references are preserved with raw daily first-target observat
 ## 2026-10-08 修訂
 
 Independent Astra 對 eed55b15 指出反稀釋及引用錯向，原版本/原收據保留於 Git。新模型區分 ordinary / potential shares；potential 是無分子調整獎酬敏感度，不是已發行新普通股。虧損或零收益排除潛在股，年度與四季各自以整期利益及加權潛在股判定；issued ordinary 股數即使虧損仍按在外期間納入。未來實際股份/轉換工具與 numerator adjustment 仍未核實。專利、FY/Q3及每項海外/媒體線索已拆成原始連結。native8e0437已正常 merge，Astra unsigned scoped code approval（非protected），本次另重跑 native。
+
+## 2026-10-14 historical cash successor
+
+The Oct8 model and price clocks remain in `originalModelAsOf` and the original input relays. The CLI now appends a pinned Oct14 packet as `historicalCashFlow` and binds the complete input manifest into the successor canonical hash. Both H1 cash bridges are cumulative consolidated flows, not Q2 or future cash. The CFO/PPE/intangible proxy excludes disposal proceeds and separately records lease cash; it is not IFRS FCF/FCFE, maintenance capex, or a forecast. Original scenarios, normalization, reverse sensitivities, and share assumptions are unchanged.
+
+Root reverified the retained PDFs; this VM rehashes the relay packet and performs arithmetic, not raw-PDF verification. New article/model review remains pending; no formal job, reservation, prepared input, publisher, or reviewer identity was created. Run `recompute.mjs` without an argument for the fixed extraction availability, then `verify-output.py` for the independent Decimal calculations. Historical receipts remain on the base evidence branch, not relabeled as successor approval.
