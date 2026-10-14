@@ -1,0 +1,7 @@
+{
+  "scope": "Root documentation persistence harness; not product/native",
+  "exit": 1,
+  "error": "Non-UTF-8 source byte on line26; original script bytes retained",
+  "consequence": "No report or progress mutation occurred; subsequent add missing-path/commit no-changes outputs retained in tool transcript",
+  "repair": "ASCII JSON transport for Unicode content; no product changes"
+}

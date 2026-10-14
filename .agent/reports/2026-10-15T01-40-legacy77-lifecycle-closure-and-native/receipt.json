@@ -1,0 +1,93 @@
+{
+  "subject": "c7d6665068774c346e28303adeb06634abf5d556",
+  "evidence": "9d68b4d62b1af0fcbe221ed2e5689534e0b9da42",
+  "scope": "private helper lifecycle delta only",
+  "P0": 0,
+  "P1": 0,
+  "P2": 0,
+  "rootHermeticCases": 5,
+  "rootIndependentMockContract": "PASS",
+  "rootNativeExecuted": false,
+  "files": [
+    {
+      "path": "inventory-verification.json",
+      "bytes": 322,
+      "sha256": "864ad709b473d7897a277fec735b790a2f951fe871971fd727afcfd78e352f78"
+    },
+    {
+      "path": "maker-raw-inventory.json",
+      "bytes": 4320,
+      "sha256": "e6efdbe78b323306fd6717bfe3f7015ef6c3a2a928d861b72e1cc47c762b186c"
+    },
+    {
+      "path": "maker-receipt.json",
+      "bytes": 2960,
+      "sha256": "ec20a786811137ac54acf8fa3e0115439c62f4a11c90f301642a206a490fbc3f"
+    },
+    {
+      "path": "maker-resources.json",
+      "bytes": 508,
+      "sha256": "e0bb839f25f9b6031707b894ded21eb0ab68176a16ba094a86cadc3997d95f4f"
+    },
+    {
+      "path": "maker-source-inventory.json",
+      "bytes": 64148,
+      "sha256": "97425c8c15dc6c85659c70b7571202a3f1f5556d829b3d92c91594020cced859"
+    },
+    {
+      "path": "persist-review-original-encoding-error.py.bin",
+      "bytes": 7106,
+      "sha256": "d654f0fc8e2fbfa3201be00335913a425e378d1e2e9dab5c3f63471841e40681"
+    },
+    {
+      "path": "research-legacy77-child-lifecycle.test.mjs",
+      "bytes": 6826,
+      "sha256": "805f66b72691503fca1191fb0cdd1684bf96db1b31ac718a7a5c7932acb39634"
+    },
+    {
+      "path": "research-legacy77-realm-fixture.mjs",
+      "bytes": 6194,
+      "sha256": "553d7ccb06a1f05c173829f99e29b00fc6f4d2239538f7742a6a98e6d2a06c51"
+    },
+    {
+      "path": "review.md",
+      "bytes": 2378,
+      "sha256": "5cc0e42514c89b89197c99d2448cd96fae3a0d099066767e8cbe76d160ab0ab0"
+    },
+    {
+      "path": "root-harness-encoding-error.json",
+      "bytes": 386,
+      "sha256": "e847e95b4fe27a25a074862b47c44ae685f12cdf29df615bd5b05638aaa7c1ab"
+    },
+    {
+      "path": "root-independent-contract.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "root-independent-contract.stdout",
+      "bytes": 223,
+      "sha256": "916fb26bd98cfd37a0c2c79f27a2b31b23cdc061acb0b53573edfdf0a8bd35c7"
+    },
+    {
+      "path": "root-lifecycle-contract.mjs",
+      "bytes": 2561,
+      "sha256": "1a5e33796121158df8fa76e0e777d146ff17581c1b14b4cff2aacc511bc956d3"
+    },
+    {
+      "path": "root-maker-probes.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "root-maker-probes.stdout",
+      "bytes": 1022,
+      "sha256": "87553ad3e593f131855e2a32c5db578520a8a3afef80487d4625d97ca19eecf3"
+    },
+    {
+      "path": "source-delta.txt",
+      "bytes": 194,
+      "sha256": "a23bd7527f7b8ce42a85a57578fd556088ed7f8286b769f4f761d248e9b7f528"
+    }
+  ]
+}

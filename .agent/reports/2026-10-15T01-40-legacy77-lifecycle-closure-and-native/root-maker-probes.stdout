@@ -1,0 +1,35 @@
+TAP version 13
+# Subtest: error while child alive must not claim termination or return before close
+ok 1 - error while child alive must not claim termination or return before close
+  ---
+  duration_ms: 2.095625
+  ...
+# Subtest: spawn failure has close but no invented exit or running child
+ok 2 - spawn failure has close but no invented exit or running child
+  ---
+  duration_ms: 1.004542
+  ...
+# Subtest: exit before late stdout drain waits for actual close
+ok 3 - exit before late stdout drain waits for actual close
+  ---
+  duration_ms: 0.935333
+  ...
+# Subtest: normal exit and close records confirmed terminal success
+ok 4 - normal exit and close records confirmed terminal success
+  ---
+  duration_ms: 0.596125
+  ...
+# Subtest: closed child still waits for outstanding real-query promise settlement
+ok 5 - closed child still waits for outstanding real-query promise settlement
+  ---
+  duration_ms: 3.301958
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 20.770417

@@ -1,0 +1,3 @@
+A	docs/operations/2026-10-15/legacy77-child-lifecycle-handoff.md
+A	scripts/opportunity-v3/research-legacy77-child-lifecycle.test.mjs
+M	scripts/opportunity-v3/research-legacy77-realm-fixture.mjs

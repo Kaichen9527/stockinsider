@@ -1,0 +1,15 @@
+{
+  "subject": "c7d6665068774c346e28303adeb06634abf5d556",
+  "evidence": "9d68b4d62b1af0fcbe221ed2e5689534e0b9da42",
+  "inventory": {
+    "source-inventory.json": {
+      "files": 257,
+      "bytes": 9329361
+    },
+    "raw-inventory.json": {
+      "files": 27,
+      "bytes": 62168
+    }
+  },
+  "receiptVerified": true
+}
