@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { gunzipSync } from 'node:zlib';
 import { createHash } from 'node:crypto';
@@ -14,8 +15,8 @@ const gzip=fs.readFileSync(new URL('./fixtures/research-historical-cash/pinned-s
 assert.equal(createHash('sha256').update(gzip).digest('hex'),'afedf2d089958abf289a9e407f789621b34e0f33a8c096ddb0835475fb0f518f');
 const fixture=JSON.parse(gunzipSync(gzip,{maxOutputLength:2000000}));
 const originals=new Map(fixture.files.map(f=>[f.pin.path,Buffer.from(f.rawBase64,'base64')]));
-const root=fs.mkdtempSync('/workspace/.cash-owner-fixture-');fs.chmodSync(root,0o700);
-for(const [name,raw]of originals){fs.mkdirSync(path.dirname(path.join(root,name)),{recursive:true,mode:0o700});fs.writeFileSync(path.join(root,name),raw,{mode:0o600});}
+const root=fs.mkdtempSync(path.join(fs.realpathSync(os.homedir()),'.stockinsider-cash-owner-fixture-'));fs.chmodSync(root,0o700);
+try{for(const [name,raw]of originals){fs.mkdirSync(path.dirname(path.join(root,name)),{recursive:true,mode:0o700});fs.writeFileSync(path.join(root,name),raw,{mode:0o600});}}catch(error){fs.rmSync(root,{recursive:true,force:true});throw error;}
 const io={lstat:fsp.lstat,open:fsp.open};const reader=create(root),profile=pins.profile;
 const sha=v=>createHash('sha256').update(v).digest('hex');
 const legacyPin=pins.companies['2383'].files[0];
