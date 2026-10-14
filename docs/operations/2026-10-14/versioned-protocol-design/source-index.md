@@ -1,0 +1,77 @@
+# Exact source index
+
+Design-only overlay; not an assembled or approved execution closure. Full hashes and static edges are in the evidence directory `.agent/reports/2026-10-14T11-40-versioned-protocol-design/`. No runtime changed.
+
+| Subject | File | Git blob | SHA256 |
+|---|---|---|---|
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/app/api/internal/research-deep-job/route.ts | 083b5c06b2d4c81ebba2b4a823b1de112cd58e9b | d70ceae33eb8613da1b891a0790ff21a2a90bd67fedc73a7d7d9074668cba42a |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-complete-input.ts | f315e8ad3af3428893ae6eedd45421f4086a8cd2 | 787858e79cc6ed1e87011ca1f9ab6fc144ee8e6d18d9b3a9ff7d52cf72f5a95d |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-author-assignment.ts | 5dec5203555d1352f7f67cf64eb6585f3b389a3c | f3398447a07df929652e07ea3044bf8334e3e922f3344ad5802d39ea54b7d051 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-author-packet.ts | 01f1813d4ae703d5ddec3ca14df1570a4e74dcbd | 50cabf662e17609f75a8bbddbe9d711b540dfa70a170ee67febabd563e1647a5 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-author-result.ts | 9002b4acae907f13dde377cc9b8c861c6b5dd986 | 71b47dfe6a666498829e2bd6665e5688ca18de73e8e0938870e645983e5060e7 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-author-handoff.ts | 1559412f343e453a02ea7c9e3241421abf29add7 | 6a6f0593cc3ddec00bad46e89e56dc78fa1e9aff045f638040f93783bcaaabce |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-reviewer-assignment.ts | 87fdc1cb4cd1dfe601826ff824870c9d4048689b | afa530253f7b6086bdaf600d58ad571e828512f9e4ef0a11b952c085b81a31ba |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-reviewer-result.ts | f971183846e85e74757f1800d6ad2fffc732f0ee | 96befdc6902834b7b7c62559cea6ac7b40bc0b4ddbcaca829c1f7eff0c1a8abd |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-atomic-publication.ts | 09e89ed901a2d468b4a649a1f5212dabddcbb358 | b981bde6e86ec3a52b2c47cf287493851c58af8fa28f3f577b3069839db577f0 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-business-article.ts | 0d8f30b39c4eb855329b417be8b932da9cabc1f0 | e589fd67c08831d650b80cbd091113508c428d2b1a217be31150b682ce37b7cc |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-financial-supplement.ts | db88fc9330b14f7f3489668886949b2cc3dc6777 | 2f8d8150a3071109d3db2dee9c1df7dadcd97322357c21e8a45fd469df22372d |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-deep-author-input.ts | c959684541854be703ee91d213bb3adc72914978 | 4e4dd8e2f792071cf974631d08ffa852ad87b2c5e9edd11a3ccee71b27eeaf94 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-deep-claim-context.ts | 3d27095c13fb1926467e55f739b95f7193fe1aa1 | c6016ca331d77cff78b05c26642ebbb8ce040a285293eebdca9fecf20f3b680c |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-v3-finite-material.ts | 54396ac5d8954b138603a6eae45d1ff5a4243177 | 0fc6a6121a963f22b125a4a6f5c506dde06f791204970ef0a3d33c5442671985 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-cash-financial-reader.ts | e9cbb8743b7bd3936859c230e1f9591035e150f6 | fd3f5531bfa876c0b887367546f07bc7acbdef98d3c59d01478b04ffc5e2108c |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-compatible-financial-reader.ts | 20adbad0265c5ce341d29564028d6efa3b7ade58 | 6ad78b1197cb925646ca8de40b6a8412631c532a1b2cb4a0669ac6a28c7428a0 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/internal-auth.ts | 0fd74428dd60f0b434babf5d55d19f70bc0534de | 71174062e76c7f346a2aeb4fcdc820c36b95eba53feebccc26f10f8177cb8d63 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/supabase-server.ts | 414e09a21be6a920769b231adea68e6498f1a1cb | b4f2c6e48ea0621d43ee24b88d45ee2a142f67c01594250d94996ecc58e1befa |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-financial-file-reader.ts | 356aba3e06fd1e3961143c14b0886e813987a510 | 298fd61c27900818bd31c63f1ca332722043caa37e7e4ba7cc3edf79ca5d2e49 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-complete-schema-bundles.ts | 086c3ffa84bba3187e870c8e35692fe740f5ed33 | ca5bc876d5820c3f910a4847c84f504a952896f7affe5d9e88a9f224df3b0d98 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-complete-mapping.json | 98284f2ff243d1efb2f094eab5961a7b04649f89 | ba44549b7efdc14a0c61523dadd950321fd7f85e72b30059415a555629baf704 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-financial-inventory.ts | 959089196afc0e678e02b6ca7fb6face0012df0d | f21e111b4427105ad5220bab3f1a95e7bf5129189df6caefcef9c21ce5a5b9b5 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-complete-canonical.ts | 59895e540b67258eea998ee7a2e2ab9eb4b8cf6f | a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-execution-binding.ts | 26d098ada66049054200df995320ceec98b5e69e | 9eafe02982c595598cf2070c52c75be0941f8ddfb03cc961e14cf276695d2ff8 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-financial-clock.ts | bf6301733d6c5150093e94a870e7c6f54f1d8042 | 769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-business-calculator.ts | 81f4cb09ae2849fdf2dbde497f6675736c995f90 | 1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/public-source-url.ts | 6c58c75d99928ab95107a21690e3cb108c539a53 | f1f4a47c2984a59be316b94586796171adda680e64910c981b5cede88260dcea |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-editorial-review.ts | d4f7a2b9cd7b9c5eace4ccde5d86875a849e441d | 3e04cc1f90c58a8d5514308538b051e1f34481290d1ac6882e59bfbd2ab7a5f2 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-deep-article.ts | 6aaea20af8f70bc317131cc99f0dd8837bac6fec | 3ef5cb7ccaa3b8dde09fefe1abfa9b894496ee85f3058a6b405d3aac122c11e2 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/candidate-dossier-contract.ts | 0e561c4ea1ac24791e12a166687956ccf9b335bd | 33920f44ffa719802476da3171baf5d8806c81877f6ae9eedfd64ecea8427887 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-agent-qualification.ts | 3b0618f0b1d4944b0dcdbb5d06c365520dd767b8 | 690de1fb4265366c0431da990fbe2519057562600727de6f44340060c9d34da0 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-source-association.ts | 973514e09dd684a68e0e98751bb52f286f4ef2af | 59d5b00d7b2126eca5dc125093346770d3ae43179a5180d281afb16207667cc7 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-v3-material-schemas/2409-raw.json | 6c32d1e19d717d25780f1bb02b9f64ee1da637b8 | 31c1ce3bfbc494856975ca63f736f6cb4da6fb4936f6e8e68f1ee297d300eaea |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-v3-material-schemas/2383-raw.json | fe5fc1dd0d4d5602bd7687ff9e4c2ab5497ec7d8 | f5cdc777e2ae819355693d8b142ccddf1c21751722e2bf5646c0f9416f7c9aa9 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-v3-material-schemas/2409-normalized.json | 9b394ffd6618acee6f722cf79f6cd73bfd1e584b | 0553fbb9049626662d58a799a3671cd1b68159e4e7782889d2a6980a4c7335ef |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-v3-material-schemas/2383-normalized.json | dfa1194a0f2e87568ca48ddf2e88917a9830c279 | 953260a5ac54eead4c6365507f410d08fd5aed8a9b40e635c24dbc142a76f706 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-v3-material-canonical.ts | 59895e540b67258eea998ee7a2e2ab9eb4b8cf6f | a13719881d27ddd1295a0adf3a0e25affc4b3e6e77a5691ca82d2f46263b1df5 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-historical-cash-pins.ts | 5a9f2aeedfcbf5a57cbec25cffe3f5fc34ade92e | 311197751735e628418f2ca0e80097c12f4fddc8f290453a534b1299495753a5 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-historical-cash-projection.ts | af9928e8dcfc945c53f53d26fe9d6645729d251e | 244a9c7924df87b22020e6b3eac7eda674f7db4e79356fe8bf205344e5ebd719 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-scenario-cash-material.ts | dee2ff1f19830269cb8055a5de1a4395d2d1f4a5 | 20e91231d1be736ef3a8defaf79edd357fe4e349749d520c8689b50b37a4c44b |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-financial-io-owner.ts | 84f9068837a2bb06fe7f06ec88d447784899103a | 19620af839492ac4232ccf6bdbfcd47b8429263ba3bfdcf90fdb7601dd13a4fe |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-financial-io-engine.ts | 7fdf6c24947b0c72c0bc45a8a43c1269cd543576 | 2344e936b108dcde99ca0742c0aac135b377ecebe3a97f0bce253c6be74406df |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-compatible-financial-inventory.ts | b9aafdc681ac9cea4deb49e4bb2198a182d652dd | 263643e3d8af3464ddc7b70f2bff91f604d131be1ca773918040b3ce54ff1c8d |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-compatible-financial-projection.ts | 6b3d9ca859cccfa8c36437217267134941719add | d5fb31908d84753fbf83afed80093661167f77efe8ea980b4d1170e42971a4a8 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/data-plane-runtime.ts | 2eb1f6e218a762f4853837b865185f81a39a9691 | e9830c526ba5ef7d721c4931e5da668f32901e765a94c86017fba08fca61eccc |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-source-clock.ts | c5380eec563db43e3b3396a68d0c45feb8731315 | 219b6367df8c9da6ff9184028c646ba344c0554255adb2a85f6ba89ab2f7b933 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-source-roots.ts | ce31a37567a90d5e9e50be1d519db190afb0f60a | aa3471022cb87235f3cdb84c7e674d0af799b858735774025b6eebb3a3e6110f |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/src/lib/research-historical-cash-core.ts | 37aa911d5289faabf9a604d0768fe821a43b6487 | 157fbe7b680bf94a601d0ba785d06582c8b9c817c285ee97cf113f454c2b8790 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-source-registry.ts | cacec5d28bf9ebbcc7dd7b6d834178d8be26c5a2 | 64cf50ad4f4dc65310fcef6916f9f2c5be48830fa8fd3b7e700446bce9965e61 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-agent-priority.ts | f1f6f183e10f3093e4f3e443bd387de562c098ea | 2f6e9be35bca12d3042ad668fef75447936b1427dffdd69ae621cc9540081318 |
+| 72f639801d4000f375bea879de5139f6b1232580 | .nvmrc | 7d41c735d7127c4a2530ebe846b14ffbf38b8031 | c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87 |
+| 72f639801d4000f375bea879de5139f6b1232580 | package.json | f25f4bebad793fb7eabc03e2320e4472553a0fb9 | 0695f7dfd4108ab24a4115c9a369183e1709095117705cabefe85abf31330cdc |
+| 72f639801d4000f375bea879de5139f6b1232580 | package-lock.json | 576ca62506b95d23da7088c47ecf9c6173c9355c | 4f3de8b8e4abc81d46d624b205460a924be3f24f8331987ebeb6b4a70559ed38 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/package.json | 446f308a2990f45dcd3dca14030068f878fae490 | c13ef35658418d71aa10ee18bcf76bc37daa4b115329e881db666636975e8d1e |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/package-lock.json | a41fd447e28f3b36829b689828c345e042619a38 | 353205cfba83f6dd4e01c23b910c4c91bf5e35bc10ef9974a8bca27aaf40c651 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/tsconfig.json | 2e1433a9d842c16e6cbc9b49d74a7f7012419487 | f399e24188640b031f844ec7c0285e65450e697b2daa5790e1cb801818fcc955 |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/next.config.ts | c95299afa0526428c2ecdfb5d41a72e7df333c27 | c82b6ea00336a41b73a0d40a0130e548fc563d679c6ea4bc5dfe917184cb4fcd |
+| 72f639801d4000f375bea879de5139f6b1232580 | web/scripts/sync-official-authority.mjs | 6510554d4787ef4a178207d260194341b619e7e0 | d1e30d7e538d98ce5e5a012a0e007bb137bf7df829491d3b4ec5b5a316c5644d |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/package-lock.json | f62dd3cd9195d739ca3fab5f2b5b4d6b65209ac2 | b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/candidate-dossier-contract.ts | 0e561c4ea1ac24791e12a166687956ccf9b335bd | 33920f44ffa719802476da3171baf5d8806c81877f6ae9eedfd64ecea8427887 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/public-source-url.ts | 6c58c75d99928ab95107a21690e3cb108c539a53 | f1f4a47c2984a59be316b94586796171adda680e64910c981b5cede88260dcea |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-business-calculator.ts | 81f4cb09ae2849fdf2dbde497f6675736c995f90 | 1e75d28e4817504e5511d2780af7dd7ccd91374530c288d31a33f34c15764dfb |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-complete-2383.schema.json | 2a175ccbbfa41b63d3b53674c05d463217300140 | e0bc5f27a4263d151395fd2fa35a69e868b2d94836b7e26173be545300d6d043 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-complete-2409.schema.json | d86403ba399bcf6adc0a85e175c8d15e88d8ab51 | efedd65c7afcf9031cd34fe6a12d4f70c78dcc1d80cadbddfa87f11b23e57932 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-discovery-evidence.ts | 700a591b931201fd9a336bbaa293482509c947f9 | 832e279429951e548bc12e8a0dd578a9c38c4e7ffa18e3e2e2bc649941517896 |
+| 15d4ef54ec3f0fc8ab0e5c71111ed2baf2843ccb | web/src/lib/research-financial-clock.ts | bf6301733d6c5150093e94a870e7c6f54f1d8042 | 769d3e0559aa5c2f43502b1c58bbe5ccb10395ed61e415c29ad1f418c915713f |
+| 72f639801d4000f375bea879de5139f6b1232580 | scripts/runtime/codec.js | 1683982f54a10c401cd0f7b521abc073bdb05ea1 | c1cd7bc6b391ee88137c792ab6b6b280e2f5ccad77d8e6e815b754d73d76cfbb |
+| 72f639801d4000f375bea879de5139f6b1232580 | scripts/runtime/official-market-authority-v314.js | 2c51103c241702c08f1219fc77cbc57c57626929 | c98d646163200ac28f2d835e6b19b44b4d38014e84110658a07d8267cf8ba9ce |
+| 72f639801d4000f375bea879de5139f6b1232580 | scripts/runtime/official-calendar-v314.js | 8a0ef915ed246e0d959639e814d5a50653140efd | 220147e99e54ecda8fdaad10f6bee026591f88dc144c3a19f886ab78dc2b668a |
+| 72f639801d4000f375bea879de5139f6b1232580 | scripts/runtime/official-mops-v314.js | 059dddce59b875af2dc257870abfcbbc24936af2 | 9b154a6fc245b976507640aaea9b113c4396ac003a89483ef73b42c2eaaadb3c |
+| 72f639801d4000f375bea879de5139f6b1232580 | scripts/runtime/official-twse-valuation.js | 330820e0d0fb1ad15855657b0d42494b7e6fc55d | a298fe9c55e51fd50ca61155af1c2facecdfc5825abc80352424fe3d7c1eac32 |
