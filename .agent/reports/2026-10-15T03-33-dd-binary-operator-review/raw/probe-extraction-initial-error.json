@@ -1,0 +1,6 @@
+{
+  "exit": 1,
+  "stage": "config write-block extraction before execution",
+  "error": "AssertionError: guessed splitlines()[24:28] did not start with install -o root",
+  "effect": "No activation write-block executed; receiver 3 cases already completed; review harness error, not product finding"
+}

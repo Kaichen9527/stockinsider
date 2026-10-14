@@ -1,0 +1,10 @@
+{
+  "command": [
+    "bash",
+    "-n",
+    "/tmp/dd-operator-review-o15/deploy.sh"
+  ],
+  "exit": 0,
+  "stdout": "",
+  "stderr": ""
+}

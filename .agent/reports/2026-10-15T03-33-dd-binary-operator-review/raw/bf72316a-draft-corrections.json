@@ -1,0 +1,11 @@
+{
+  "originalSha256": "3477250aed46d730cc35956e2c8888e5ebfce9fb659145f197674db41aeca41c",
+  "correctedSha256": "33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973",
+  "firstDraftDefects": [
+    "joined old-current/target-absent guards",
+    "python-heredoc consumes archive stdin"
+  ],
+  "formalReview": false,
+  "productionExecution": false,
+  "status": "unexecuted draft; independent procedure review required"
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "name": "normal_failure_control",
+    "exit": 42,
+    "stdout": "MOCK_POINTER_RESTORE\nMOCK_ACTIVATE\nMOCK_WRITER\nMOCK_SERVICE\nprevious_current_and_writer_restored\n",
+    "stderr": "owned_ram_cleanup_failed\n",
+    "probeSha256": "76d38c1214ac062fda3308f703a0c42907a33f9bdb5423cdb15cf24e58c86aff"
+  },
+  {
+    "name": "term_after_current_changed",
+    "exit": -15,
+    "stdout": "",
+    "stderr": "owned_ram_cleanup_failed\n",
+    "probeSha256": "9872d4a96a587f05d1add8ac530b51821af06e447c1034ced33b836211e92202"
+  },
+  {
+    "name": "cleanup_failure_after_success",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "owned_ram_cleanup_failed\n",
+    "probeSha256": "ccc815b25578439c0bb622bc012e22a5d9f40d1c41310f4a9414b358669599db"
+  }
+]

@@ -1,0 +1,172 @@
+{
+  "at": "2026-10-14T19:34:02.500383+00:00",
+  "files": [
+    {
+      "subject": "bf72316a6f8e0d251351ed50acb441d87186352a",
+      "path": ".agent/reports/2026-10-15T03-30-response-loss-native-review/unexecuted-deploy-draft/deploy.sh",
+      "bytes": 8142,
+      "sha256": "33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973",
+      "blob": "6157aedb3d3dae704713d14fb52957c3c4873591"
+    },
+    {
+      "subject": "bf72316a6f8e0d251351ed50acb441d87186352a",
+      "path": ".agent/reports/2026-10-15T03-30-response-loss-native-review/unexecuted-deploy-draft/original-unexecuted-draft.sh",
+      "bytes": 8117,
+      "sha256": "3477250aed46d730cc35956e2c8888e5ebfce9fb659145f197674db41aeca41c",
+      "blob": "abd46aae41c365af08867aa2b8ecd0aa0183c96d"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "deployment/vps/activate-writer-release.sh",
+      "bytes": 2811,
+      "sha256": "0719de5667f23f571357f2db7750297de7f7f405d2d8c06bc2d39105b237e243",
+      "blob": "4866bdc1b012840a2cb64f8e9a266f8af56998fb",
+      "localName": "dd59817f-activate-writer-release.sh"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "scripts/verify-standalone-release.mjs",
+      "bytes": 3901,
+      "sha256": "1e4bb10d2ee694eefd0493653a71d54b8d94deade74fa66a86b579b25ebe930b",
+      "blob": "6e1d6b2d07125201326fbe783fad0b970890e363",
+      "localName": "dd59817f-verify-standalone-release.mjs"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "scripts/package-standalone-release.mjs",
+      "bytes": 8664,
+      "sha256": "a9ebafd241a6c0d6bb0a82b4e1704790d6220abb3238090b8eed7329474592c8",
+      "blob": "9642738b5404b3e9a8cc8691d4787d8e2c49a223",
+      "localName": "dd59817f-package-standalone-release.mjs"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "scripts/call_internal_api.mjs",
+      "bytes": 3879,
+      "sha256": "1827ae0af4266887d44c00b8d0e3e149c29625da6e765b6e9323461b927eeb70",
+      "blob": "84dfdbf47c38d7936454ca90c70c3c8020365937",
+      "localName": "dd59817f-call_internal_api.mjs"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "web/src/app/api/internal/writer-release-activate/route.ts",
+      "bytes": 3391,
+      "sha256": "92e5e72c57617ab219a8f9241039b265d3f6da6ea6f176fbdd2fbfd787d3e3b9",
+      "blob": "f32dc21a6f20fba6cf941b659cae81d8ec88c5a6",
+      "localName": "dd59817f-route.ts"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "deployment/vps/systemd/stockinsider-web-standalone.service",
+      "bytes": 1312,
+      "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb",
+      "blob": "0b4147366ab040772d66485115619c3c9c08f440",
+      "localName": "dd59817f-stockinsider-web-standalone.service"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "deployment/vps/systemd/stockinsider-internal-worker.service",
+      "bytes": 1374,
+      "sha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e",
+      "blob": "35dfb8decee33e266b5273111a2c6a4841ff38e4",
+      "localName": "dd59817f-stockinsider-internal-worker.service"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "migrations/20260911_contabo_data_plane_v1.sql",
+      "bytes": 19041,
+      "sha256": "2c2fd3413e2c633d70ccb171885837118a50e82a986e947fcf1dd3100c109ec1",
+      "blob": "f3fa038cf6695f9ff8a8b422b1b3a64ed6da565a",
+      "localName": "dd59817f-20260911_contabo_data_plane_v1.sql"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "migrations/20260901_source_research_shadow_v2.sql",
+      "bytes": 16015,
+      "sha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795",
+      "blob": "2fbc579a08efbfdfe09b16c07b4ebf2b55061c43",
+      "localName": "dd59817f-20260901_source_research_shadow_v2.sql"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "migrations/20260831_candidate_shadow_performance.sql",
+      "bytes": 17125,
+      "sha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01",
+      "blob": "416f5df11dcb5135591e5abddeafbaa8f9a5d9cf",
+      "localName": "dd59817f-20260831_candidate_shadow_performance.sql"
+    },
+    {
+      "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "path": "deployment/vps/activate-writer-release.sh",
+      "bytes": 2811,
+      "sha256": "0719de5667f23f571357f2db7750297de7f7f405d2d8c06bc2d39105b237e243",
+      "blob": "4866bdc1b012840a2cb64f8e9a266f8af56998fb",
+      "localName": "169aad1b-activate-writer-release.sh"
+    },
+    {
+      "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "path": "scripts/verify-standalone-release.mjs",
+      "bytes": 3901,
+      "sha256": "1e4bb10d2ee694eefd0493653a71d54b8d94deade74fa66a86b579b25ebe930b",
+      "blob": "6e1d6b2d07125201326fbe783fad0b970890e363",
+      "localName": "169aad1b-verify-standalone-release.mjs"
+    },
+    {
+      "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "path": "scripts/contabo-host-resource-check.mjs",
+      "bytes": 3891,
+      "sha256": "27f042bdbe34e3ca3dd8f4527c39d99746b60acedffd6f526e38a96120608fde",
+      "blob": "f7597d979a1dce95a95823e44daee325c8c4af13",
+      "localName": "169aad1b-contabo-host-resource-check.mjs"
+    },
+    {
+      "subject": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+      "path": "scripts/contabo-capacity-guard.mjs",
+      "bytes": 2072,
+      "sha256": "8b33b9f19a4d72b7ce2fab173a97dc9e3172774af9ce5de154d01f239f1c741c",
+      "blob": "189a017a54e952d93966583a6db9beef6b1b1f6e",
+      "localName": "169aad1b-contabo-capacity-guard.mjs"
+    },
+    {
+      "subject": "bf72316a6f8e0d251351ed50acb441d87186352a",
+      "path": ".agent/reports/2026-10-15T03-30-response-loss-native-review/review.md",
+      "bytes": 3705,
+      "sha256": "72b4453ad59bcbf567c413563d098914bd1889b60ab7cbf53945957306992d1d",
+      "blob": "8280bbc392666cc4d7b2fa335731680d3b735a35",
+      "localName": "bf72316a-review.md"
+    },
+    {
+      "subject": "bf72316a6f8e0d251351ed50acb441d87186352a",
+      "path": ".agent/reports/2026-10-15T03-30-response-loss-native-review/memory-readonly-1910.json",
+      "bytes": 251,
+      "sha256": "f13ca9c3e4c7749777f034bff4eb0e93f3421908fc4e3dab04254b19d8344cc2",
+      "blob": "4e7f3c9d673aed25490cadb933cd2deb2c769f8c",
+      "localName": "bf72316a-memory-readonly-1910.json"
+    },
+    {
+      "subject": "bf72316a6f8e0d251351ed50acb441d87186352a",
+      "path": ".agent/reports/2026-10-15T03-30-response-loss-native-review/unexecuted-deploy-draft/draft-corrections.json",
+      "bytes": 429,
+      "sha256": "55f3a12a02d89bbdb2f257f4508bd1c998b1839c0995dc0113752dc1810267a8",
+      "blob": "637c26f211856c6569e63e528fc9867f3494d520",
+      "localName": "bf72316a-draft-corrections.json"
+    },
+    {
+      "subject": "c2b146adb6d03814f2bd9a7af72baf003bb48812",
+      "path": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/runtime-review-attestation.json",
+      "bytes": 457,
+      "sha256": "e0fed54595dda6ad3be4dfe8a9f4714b9912c754b13842ea28bdff99b9f8ebd3",
+      "blob": "4ef6262e545e046f7ae21d7b02e0c22612f33798",
+      "localName": "c2b146ad-runtime-review-attestation.json"
+    },
+    {
+      "subject": "dd59817f750684b093965f539dd4de466be13077",
+      "path": "web/src/lib/internal-auth.ts",
+      "bytes": 1774,
+      "sha256": "71174062e76c7f346a2aeb4fcdc820c36b95eba53feebccc26f10f8177cb8d63",
+      "blob": "0fd74428dd60f0b434babf5d55d19f70bc0534de",
+      "localName": "dd59817f-internal-auth.ts"
+    }
+  ],
+  "sealedAdditionalAt": "2026-10-14T19:35:45.959921+00:00"
+}

@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-14T19:34:02.500383+00:00",
+  "files": [
+    {
+      "subject": "bf72316a6f8e0d251351ed50acb441d87186352a",
+      "path": ".agent/reports/2026-10-15T03-30-response-loss-native-review/unexecuted-deploy-draft/deploy.sh",
+      "bytes": 8142,
+      "sha256": "33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973",
+      "blob": "6157aedb3d3dae704713d14fb52957c3c4873591"
+    },
+    {
+      "subject": "bf72316a6f8e0d251351ed50acb441d87186352a",
+      "path": ".agent/reports/2026-10-15T03-30-response-loss-native-review/unexecuted-deploy-draft/original-unexecuted-draft.sh",
+      "bytes": 8117,
+      "sha256": "3477250aed46d730cc35956e2c8888e5ebfce9fb659145f197674db41aeca41c",
+      "blob": "abd46aae41c365af08867aa2b8ecd0aa0183c96d"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "startedAt": "2026-10-14T19:33:23Z",
+  "deadline": "2026-10-14T19:53:23Z",
+  "commands": [
+    "git status / cat-file / ls-remote authorized refs / fetch main and progress / switch new review branch",
+    "git show / rev-parse exact read-only repository inputs",
+    "bash -n sealed deploy.sh (parse only)",
+    "three isolated exact finish() extractions with inert mocks, own Bash self-TERM only",
+    "three exact Python receiver extractions with synthetic input, owned scratch outputs deleted",
+    "exact activation three-line write extraction with mocked install and synthetic scratch config",
+    "Python/Node-free builtin hashing/inventory/report generation"
+  ],
+  "notExecuted": [
+    "deploy.sh",
+    "original-unexecuted-draft.sh",
+    "main169 deploy template",
+    "PG/app/socket/SSH/HTTP/CI/build/browser/npm",
+    "production files or credentials"
+  ],
+  "initialLocalObjectMisses": [
+    "bf72316a",
+    "8c58e297"
+  ],
+  "probeExtractionError": "retained probe-extraction-initial-error.json; fixed source marker extraction only",
+  "nativeOrDeploymentPassCount": 0,
+  "hermeticExecutions": 7,
+  "syntaxChecks": 1,
+  "noProductEdits": true
+}

@@ -1,0 +1,226 @@
+{
+  "count": 44,
+  "bytes": 131603,
+  "files": [
+    {
+      "path": "raw/169aad1b-activate-writer-release.sh",
+      "bytes": 2811,
+      "sha256": "0719de5667f23f571357f2db7750297de7f7f405d2d8c06bc2d39105b237e243"
+    },
+    {
+      "path": "raw/169aad1b-contabo-capacity-guard.mjs",
+      "bytes": 2072,
+      "sha256": "8b33b9f19a4d72b7ce2fab173a97dc9e3172774af9ce5de154d01f239f1c741c"
+    },
+    {
+      "path": "raw/169aad1b-contabo-host-resource-check.mjs",
+      "bytes": 3891,
+      "sha256": "27f042bdbe34e3ca3dd8f4527c39d99746b60acedffd6f526e38a96120608fde"
+    },
+    {
+      "path": "raw/169aad1b-verify-standalone-release.mjs",
+      "bytes": 3901,
+      "sha256": "1e4bb10d2ee694eefd0493653a71d54b8d94deade74fa66a86b579b25ebe930b"
+    },
+    {
+      "path": "raw/bf72316a-draft-corrections.json",
+      "bytes": 429,
+      "sha256": "55f3a12a02d89bbdb2f257f4508bd1c998b1839c0995dc0113752dc1810267a8"
+    },
+    {
+      "path": "raw/bf72316a-memory-readonly-1910.json",
+      "bytes": 251,
+      "sha256": "f13ca9c3e4c7749777f034bff4eb0e93f3421908fc4e3dab04254b19d8344cc2"
+    },
+    {
+      "path": "raw/bf72316a-review.md",
+      "bytes": 3705,
+      "sha256": "72b4453ad59bcbf567c413563d098914bd1889b60ab7cbf53945957306992d1d"
+    },
+    {
+      "path": "raw/c2b146ad-runtime-review-attestation.json",
+      "bytes": 457,
+      "sha256": "e0fed54595dda6ad3be4dfe8a9f4714b9912c754b13842ea28bdff99b9f8ebd3"
+    },
+    {
+      "path": "raw/cleanup_failure_after_success.probe.sh",
+      "bytes": 1492,
+      "sha256": "ccc815b25578439c0bb622bc012e22a5d9f40d1c41310f4a9414b358669599db"
+    },
+    {
+      "path": "raw/cleanup_failure_after_success.stderr",
+      "bytes": 25,
+      "sha256": "44e0531878ed46904b6ad8c8b4b7e72e7de5fef8ab98b2209a1ac68a3e6ef46c"
+    },
+    {
+      "path": "raw/cleanup_failure_after_success.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/command-scope.json",
+      "bytes": 1162,
+      "sha256": "ccff8be2f5ce8cfaf512e74a5aba00374a74307462b5b590fcf7e975acd7c4ab"
+    },
+    {
+      "path": "raw/config-restore-result.json",
+      "bytes": 558,
+      "sha256": "12e275fa1f14c75f120332588f8f90fb859acb59a19321c78a9c45df82e2db37"
+    },
+    {
+      "path": "raw/config-restore.probe.sh",
+      "bytes": 442,
+      "sha256": "0a3742cfdc34ff6ac03fe6efca05dc9c198da312ae1ad96a2edfa45f8fee6c4f"
+    },
+    {
+      "path": "raw/dd59817f-20260831_candidate_shadow_performance.sql",
+      "bytes": 17125,
+      "sha256": "4c5f11147642c170d0cebfb9a3d057f281387c16968f741834f96b9c35228d01"
+    },
+    {
+      "path": "raw/dd59817f-20260901_source_research_shadow_v2.sql",
+      "bytes": 16015,
+      "sha256": "fd675ed980969ef85967694c41e31b60106e192e8b8e06df8a379342ffeb1795"
+    },
+    {
+      "path": "raw/dd59817f-20260911_contabo_data_plane_v1.sql",
+      "bytes": 19041,
+      "sha256": "2c2fd3413e2c633d70ccb171885837118a50e82a986e947fcf1dd3100c109ec1"
+    },
+    {
+      "path": "raw/dd59817f-activate-writer-release.sh",
+      "bytes": 2811,
+      "sha256": "0719de5667f23f571357f2db7750297de7f7f405d2d8c06bc2d39105b237e243"
+    },
+    {
+      "path": "raw/dd59817f-call_internal_api.mjs",
+      "bytes": 3879,
+      "sha256": "1827ae0af4266887d44c00b8d0e3e149c29625da6e765b6e9323461b927eeb70"
+    },
+    {
+      "path": "raw/dd59817f-internal-auth.ts",
+      "bytes": 1774,
+      "sha256": "71174062e76c7f346a2aeb4fcdc820c36b95eba53feebccc26f10f8177cb8d63"
+    },
+    {
+      "path": "raw/dd59817f-package-standalone-release.mjs",
+      "bytes": 8664,
+      "sha256": "a9ebafd241a6c0d6bb0a82b4e1704790d6220abb3238090b8eed7329474592c8"
+    },
+    {
+      "path": "raw/dd59817f-route.ts",
+      "bytes": 3391,
+      "sha256": "92e5e72c57617ab219a8f9241039b265d3f6da6ea6f176fbdd2fbfd787d3e3b9"
+    },
+    {
+      "path": "raw/dd59817f-stockinsider-internal-worker.service",
+      "bytes": 1374,
+      "sha256": "165fe9f25e933c06783570d3eddcf3ef450a9842d225499268e9cff3f00b932e"
+    },
+    {
+      "path": "raw/dd59817f-stockinsider-web-standalone.service",
+      "bytes": 1312,
+      "sha256": "fa55cd9efbe061e500b405fb5bfc9ea0a89e0d1ad1a915e2b135d25a0d3380cb"
+    },
+    {
+      "path": "raw/dd59817f-verify-standalone-release.mjs",
+      "bytes": 3901,
+      "sha256": "1e4bb10d2ee694eefd0493653a71d54b8d94deade74fa66a86b579b25ebe930b"
+    },
+    {
+      "path": "raw/deploy.sh",
+      "bytes": 8142,
+      "sha256": "33d031f78ae2a2bee60ca14f72c2a1a1b03926134ed7fb5ee726381a4b5e6973"
+    },
+    {
+      "path": "raw/exact-receiver.py",
+      "bytes": 662,
+      "sha256": "6e2c6ecf67663a1bd83d744db3a3adab14d6994892408235ffcc71de75aa3c28"
+    },
+    {
+      "path": "raw/git-relations.json",
+      "bytes": 361,
+      "sha256": "472cfda99aa2c830ead4c87c046e0815eaa1c21b74d11c9125de7cc06b9c38b2"
+    },
+    {
+      "path": "raw/hermetic-results.json",
+      "bytes": 749,
+      "sha256": "0e69e8427139856780bd5d201f228f74edcd38f407fc4226f6e00abb6705c187"
+    },
+    {
+      "path": "raw/normal_failure_control.probe.sh",
+      "bytes": 1492,
+      "sha256": "76d38c1214ac062fda3308f703a0c42907a33f9bdb5423cdb15cf24e58c86aff"
+    },
+    {
+      "path": "raw/normal_failure_control.stderr",
+      "bytes": 25,
+      "sha256": "44e0531878ed46904b6ad8c8b4b7e72e7de5fef8ab98b2209a1ac68a3e6ef46c"
+    },
+    {
+      "path": "raw/normal_failure_control.stdout",
+      "bytes": 97,
+      "sha256": "d08e4b0ce2cb333a39acbe6bac97d6e0cd865add93de24deaf53db79c0addfeb"
+    },
+    {
+      "path": "raw/original-unexecuted-draft.sh",
+      "bytes": 8117,
+      "sha256": "3477250aed46d730cc35956e2c8888e5ebfce9fb659145f197674db41aeca41c"
+    },
+    {
+      "path": "raw/probe-extraction-initial-error.json",
+      "bytes": 299,
+      "sha256": "c547fe728f715554c3ff436965f007f66c3c71ed493f8d057afe9101544ff3c0"
+    },
+    {
+      "path": "raw/receiver-results.json",
+      "bytes": 500,
+      "sha256": "3dc4bd0562d4dc936f5615a5bf0005f38df3b5b40c0a48ea8d251b7b8dc33d6d"
+    },
+    {
+      "path": "raw/resources.json",
+      "bytes": 309,
+      "sha256": "5271db960870745a745e1892b7f854391f4b7c75c92756603551920ab10d61ef"
+    },
+    {
+      "path": "raw/source-inventory.json",
+      "bytes": 7784,
+      "sha256": "d44c8fc16957392e40b2bd0e870dbcf7651b72bb9ebb4ec29997038809181609"
+    },
+    {
+      "path": "raw/source-seal.json",
+      "bytes": 777,
+      "sha256": "82ef987d196cf24994147277f27f439cbd9388423a8593c8e737dbba556698a6"
+    },
+    {
+      "path": "raw/syntax.json",
+      "bytes": 134,
+      "sha256": "e89eeb2545455fbf5ea6daeac0cc32c3a6535425c864a88727cb5ec7fc0d8e07"
+    },
+    {
+      "path": "raw/synthetic-drop.conf",
+      "bytes": 75,
+      "sha256": "2f5454d63b5c8deb2194828487201f29a9024eba2a1573e3e63b311672d84123"
+    },
+    {
+      "path": "raw/synthetic-writer.env",
+      "bytes": 72,
+      "sha256": "44c8ecd459867205e14f7e81116d4934c2ea88417794a493bf031ba6aa03dfb9"
+    },
+    {
+      "path": "raw/term_after_current_changed.probe.sh",
+      "bytes": 1500,
+      "sha256": "9872d4a96a587f05d1add8ac530b51821af06e447c1034ced33b836211e92202"
+    },
+    {
+      "path": "raw/term_after_current_changed.stderr",
+      "bytes": 25,
+      "sha256": "44e0531878ed46904b6ad8c8b4b7e72e7de5fef8ab98b2209a1ac68a3e6ef46c"
+    },
+    {
+      "path": "raw/term_after_current_changed.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

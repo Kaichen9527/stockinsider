@@ -1,0 +1,26 @@
+[
+  {
+    "name": "exact",
+    "inputBytes": 27574426,
+    "exit": 0,
+    "stdout": "artifact_stream_exact_bytes=27574426\n",
+    "stderr": "",
+    "outputBytes": 27574426
+  },
+  {
+    "name": "truncated",
+    "inputBytes": 17,
+    "exit": 1,
+    "stdout": "",
+    "stderr": "artifact_stream_truncated\n",
+    "outputBytes": 17
+  },
+  {
+    "name": "oversize",
+    "inputBytes": 27574427,
+    "exit": 1,
+    "stdout": "",
+    "stderr": "artifact_stream_oversize\n",
+    "outputBytes": 27574272
+  }
+]

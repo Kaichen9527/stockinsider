@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-14T19:36:14.170681+00:00",
+  "free": {
+    "/workspace": 8595890176,
+    "/tmp": 15374594048
+  },
+  "scope": "light source/hash and isolated process probes; no application/PG/network socket or production services",
+  "noOwnedServicesStarted": true,
+  "nativeBuildOrDeployExecuted": false
+}
